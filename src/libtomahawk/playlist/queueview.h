@@ -25,6 +25,7 @@
 
 #include "dllmacro.h"
 
+class QTimer;
 class PlaylistView;
 
 namespace Ui
@@ -44,6 +45,8 @@ public:
 
     QSize sizeHint() const { return QSize( 0, 200 ); }
 
+    virtual bool eventFilter( QObject* , QEvent* );
+
 public slots:
     virtual void onShown( QWidget*, bool animated );
     virtual void onHidden( QWidget*, bool animated );
@@ -53,6 +56,7 @@ public slots:
 
 private:
     Ui::QueueView* ui;
+    QTimer* m_dragTimer;
 };
 
 #endif // QUEUEVIEW_H
