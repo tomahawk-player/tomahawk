@@ -761,7 +761,9 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = "from no one";
     } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
-    } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
+    } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" ||
+               selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ||
+               selectedType() == "Adventurousness" ) {
         QString modifier;
         qreal sliderVal = m_data.second.toReal();
         // divide into avpproximate chunks
