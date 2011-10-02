@@ -290,7 +290,12 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
     } else if( m_categoryType == SourcesModel::StationsCategory ) {
         // seed the playlist with these song or artist filters
-        QString name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        QString name;
+        if ( sender() && sender()->property( "dragsource" ).toString() == "artist" )
+            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( ( tracks.first()->artist() ) );
+        else
+            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+
         dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
         newpl->setMode( OnDemand );
 
