@@ -200,6 +200,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_resolversModel = new ResolversModel( this );
     ui->scriptList->setModel( m_resolversModel );
     ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    connect( m_resolversModel, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
 
 #ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
