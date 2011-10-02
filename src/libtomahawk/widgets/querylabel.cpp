@@ -566,6 +566,26 @@ QueryLabel::startDrag()
     queryStream << qlonglong( &m_query );
 
     mimeData->setData( "application/tomahawk.query.list", queryData );
+
+    if ( m_hoverType != None )
+    {
+        QString extra;
+        switch( m_hoverType )
+        {
+            case Artist:
+                extra = "artist";
+                break;
+            case Album:
+                extra = "album";
+                break;
+            case Track:
+                extra = "track";
+                break;
+            default:
+                break;
+        }
+        mimeData->setData( "application/tomahawk.dragsource.type", extra.toUtf8() );
+    }
     QDrag *drag = new QDrag( this );
     drag->setMimeData( mimeData );
     drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
