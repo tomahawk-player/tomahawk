@@ -44,7 +44,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         if ( m_collapseCount.contains( item->type() ) )
         {
             m_collapseCount[ item->type() ].append( item );
-            qDebug() << "Adding item:" << item << "TO COLLAPSE ONLY";
+//             qDebug() << "Adding item:" << item << "TO COLLAPSE ONLY";
             return; // we're done, no new rows
         }
         else
@@ -118,26 +118,26 @@ JobStatusModel::itemFinished()
     if ( !m_items.contains( item ) && !m_collapseCount.contains( item->type() ) )
         return;
 
-    foreach( JobStatusItem* item, m_items )
-    {
-        qDebug() << "ITEM #:" << item;
-    }
-    foreach( const QString& str, m_collapseCount.keys() )
-    {
-        tDebug() << "\t" << str;
-        foreach( JobStatusItem* chain, m_collapseCount[ str ] )
-            qDebug() << "\t\t" << chain;
-    }
+//     foreach( JobStatusItem* item, m_items )
+//     {
+//         qDebug() << "ITEM #:" << item;
+//     }
+//     foreach( const QString& str, m_collapseCount.keys() )
+//     {
+//         tDebug() << "\t" << str;
+//         foreach( JobStatusItem* chain, m_collapseCount[ str ] )
+//             qDebug() << "\t\t" << chain;
+//     }
     if ( m_collapseCount.contains( item->type() ) )
     {
         const int indexOf = m_items.indexOf( m_collapseCount[ item->type() ].first() );
-        tDebug() << "index in main list of collapsed irst item:" << indexOf;
+//         tDebug() << "index in main list of collapsed irst item:" << indexOf;
         if ( m_collapseCount[ item->type() ].first() == item &&
              m_items.contains( m_collapseCount[ item->type() ].first() ) && m_collapseCount[ item->type() ].size() > 1 )
         {
             // the placeholder we use that links m_items and m_collapsecount is done, so choose another one
             m_items.replace( m_items.indexOf( m_collapseCount[ item->type() ].first() ), m_collapseCount[ item->type() ][ 1 ] );
-            qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
+//             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
         }
         m_collapseCount[ item->type() ].removeAll( item );
         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
@@ -154,7 +154,7 @@ JobStatusModel::itemFinished()
 
     // Remove row completely
     const int idx = m_items.indexOf( item );
-    tDebug() << "Got index of item:" << idx;
+//     tDebug() << "Got index of item:" << idx;
     Q_ASSERT( idx >= 0 );
 
     beginRemoveRows( QModelIndex(), idx, idx );

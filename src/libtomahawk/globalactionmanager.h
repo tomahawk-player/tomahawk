@@ -64,6 +64,7 @@ public slots:
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 
     void handleOpenTrack( const Tomahawk::query_ptr& qry );
+    void handlePlayTrack( const Tomahawk::query_ptr& qry );
 
 signals:
     void shortLinkReady( QUrl longUrl, QUrl shortUrl ) const;
@@ -77,6 +78,7 @@ private slots:
 
     void xspfCreated( const QByteArray& xspf );
 
+    void playOrQueueNow( const Tomahawk::query_ptr& );
     void playNow( const Tomahawk::query_ptr& );
 
 private:

@@ -183,6 +183,7 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     DropJob *dj = new DropJob();
     dj->setDropTypes( DropJob::Track );
+    dj->setDropAction( DropJob::Append );
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
 

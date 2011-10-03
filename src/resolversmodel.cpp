@@ -28,7 +28,6 @@
 
 #include "utils/logger.h"
 
-
 ResolversModel::ResolversModel( QObject* parent )
     : QAbstractListModel( parent )
 {
@@ -135,6 +134,11 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
     Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
     connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     endInsertRows();
+
+    if ( res->configUI() )
+        emit openConfig( res->filePath() );
+    else
+        m_waitingForLoad << resolver;
 }
 
 void
@@ -177,6 +181,12 @@ ResolversModel::resolverChanged()
         qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << res->configUI();
         const QModelIndex idx = index( Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( res ), 0, QModelIndex() );
         emit dataChanged( idx, idx );
+
+        if ( m_waitingForLoad.contains( res->filePath() ) )
+        {
+            m_waitingForLoad.remove( res->filePath() );
+            emit openConfig( res->filePath() );
+        }
     }
 }
 

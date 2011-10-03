@@ -363,6 +363,13 @@ GlobalActionManager::handleOpenTrack ( const query_ptr& q )
     }
 }
 
+void
+GlobalActionManager::handlePlayTrack( const query_ptr& qry )
+{
+    playNow( qry );
+}
+
+
 
 bool
 GlobalActionManager::handleQueueCommand( const QUrl& url )
@@ -697,11 +704,8 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
         query_ptr q = Query::get( artist, title, album );
         if( !urlStr.isEmpty() )
             q->setResultHint( urlStr );
-        Pipeline::instance()->resolve( q, true );
 
-        m_waitingToPlay = q;
-        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
-
+        playNow( q );
         return true;
     }
 
@@ -717,14 +721,25 @@ GlobalActionManager::playSpotify( const QUrl& url )
 
     QString spotifyUrl = url.hasQueryItem( "spotifyURI" ) ? url.queryItemValue( "spotifyURI" ) : url.queryItemValue( "spotifyURL" );
     SpotifyParser* p = new SpotifyParser( spotifyUrl, this );
-    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playNow( Tomahawk::query_ptr ) ) );
+    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playOrQueueNow( Tomahawk::query_ptr ) ) );
 
     return true;
 }
 
-
 void
 GlobalActionManager::playNow( const query_ptr& q )
+{
+
+    Pipeline::instance()->resolve( q, true );
+
+    m_waitingToPlay = q;
+    q->setProperty( "playNow", true );
+    connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+}
+
+
+void
+GlobalActionManager::playOrQueueNow( const query_ptr& q )
 {
     Pipeline::instance()->resolve( q, true );
 
@@ -743,7 +758,7 @@ GlobalActionManager::playRdio( const QUrl& url )
     QString rdioUrl = url.hasQueryItem( "rdioURI" ) ? url.queryItemValue( "spotifyURI" ) : url.queryItemValue( "rdioURL" );
     RdioParser* p = new RdioParser( this );
     p->parse( rdioUrl );
-    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playNow( Tomahawk::query_ptr ) ) );
+    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playOrQueueNow( Tomahawk::query_ptr ) ) );
 
     return true;
 }
@@ -921,7 +936,17 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
     {
         // play it!
 //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
-        AudioEngine::instance()->play();
+        if ( sender() && sender()->property( "playNow" ).toBool() )
+        {
+            if ( AudioEngine::instance()->playlist() )
+                AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+            else
+            {
+                ViewManager::instance()->queue()->model()->append( m_waitingToPlay );
+                AudioEngine::instance()->play();
+            }
+        } else
+            AudioEngine::instance()->play();
 
         m_waitingToPlay.clear();
     }

@@ -88,10 +88,19 @@ SpotifyParser::lookupUrl( const QString& link )
 
 
 void
-SpotifyParser::lookupSpotifyBrowse( const QString& link )
+SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
 {
-    tLog() << "Parsing Spotify Browse URI:" << link;
-    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( link ) );
+    tLog() << "Parsing Spotify Browse URI:" << linkRaw;
+    QString browseUri = linkRaw;
+    if ( browseUri.contains( "open.spotify.com/" ) ) // convert to a URI
+    {
+        browseUri.replace( "http://open.spotify.com/", "" );
+        browseUri.replace( "/", ":" );
+        browseUri = "spotify:" + browseUri;
+    }
+
+
+    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( browseUri ) );
     tDebug() << "Looking up URL..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
@@ -99,13 +108,13 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
 
     DropJob::DropType type;
 
-    if ( link.contains( "spotify:user" ) )
+    if ( browseUri.contains( "spotify:user" ) )
         type = DropJob::Playlist;
-    if ( link.contains( "spotify:artist" ) )
+    if ( browseUri.contains( "spotify:artist" ) )
         type = DropJob::Artist;
-    if ( link.contains( "spotify:album" ) )
+    if ( browseUri.contains( "spotify:album" ) )
         type = DropJob::Album;
-    if ( link.contains( "spotify:track" ) )
+    if ( browseUri.contains( "spotify:track" ) )
         type = DropJob::Track;
 
     m_browseJob = new DropJobNotifier( pixmap(), "Spotify", type, reply );
