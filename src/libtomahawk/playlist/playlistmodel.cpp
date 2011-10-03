@@ -368,10 +368,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
 
     DropJob* dj = new DropJob();
 
-    if ( !DropJob::acceptsMimeData( data, DropJob::Track | DropJob::Album | DropJob::Artist ) )
+    if ( !DropJob::acceptsMimeData( data, DropJob::Track | DropJob::Playlist | DropJob::Album | DropJob::Artist ) )
         return false;
 
-    dj->setDropTypes( DropJob::Track | DropJob::Artist | DropJob::Album );
+    dj->setDropTypes( DropJob::Track | DropJob::Playlist | DropJob::Artist | DropJob::Album );
     dj->setDropAction( DropJob::Append );
 
     // On mac, drags from outside the app are still Qt::MoveActions instead of Qt::CopyAction by default
