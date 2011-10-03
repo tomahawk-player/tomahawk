@@ -38,8 +38,8 @@ DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJo
     : JobStatusItem()
     , m_type( "unknown" )
     , m_job( 0 )
-    , m_service ( service )
     , m_pixmap ( servicePixmap )
+    , m_service ( service )
 {
 
     if( type == DropJob::Playlist )
