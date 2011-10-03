@@ -417,7 +417,7 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Playlist,  DropJob::Create ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Artist | DropJob::Album | DropJob::Playlist,  DropJob::Create ) )
     {
            m_dragging = true;
            m_dropRect = QRect();
@@ -491,7 +491,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             event->ignore();
         }
     }
-    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist, DropJob::Create ) )
+    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
     {
         event->setDropAction( Qt::CopyAction );
         event->accept();
