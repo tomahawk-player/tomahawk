@@ -69,24 +69,16 @@ SpotifyParser::lookupUrl( const QString& link )
 {
     if( link.contains( "track" ) )
     {
-        qDebug() << "Loooking up track" << link;
         m_trackMode = true;
         lookupTrack( link );
     }
     else if( link.contains( "playlist" ) ||  link.contains( "album" ) || link.contains( "artist" ) )
     {
-
-        qDebug() << "Loooking up browse" << link;
-
-        if( !m_createNewPlaylist ){
-
-            qDebug() << "Do not create new pl!";
+        if( !m_createNewPlaylist )
             m_trackMode = true;
-        }else{
-
-            qDebug() << "create new pl!";
+        else
             m_trackMode = false;
-        }
+
         lookupSpotifyBrowse( link );
     }
     else
