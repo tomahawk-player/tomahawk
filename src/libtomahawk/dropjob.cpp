@@ -371,54 +371,50 @@ DropJob::tracksFromMixedData( const QMimeData *data )
 }
 
 void
-DropJob::handleXspf( const QString& fileUrl )
+DropJob::handleXspfs( const QString& fileUrls )
 {
-    tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrl;
+    tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrls;
+
+    QStringList urls = fileUrls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
     if ( dropAction() == Default )
         setDropAction( Create );
 
-    QFile xspfFile( QUrl::fromUserInput( fileUrl ).toLocalFile() );
-
-    if ( xspfFile.exists() )
+    foreach ( const QString& url, urls )
     {
-        XSPFLoader* l = new XSPFLoader( true, this );
-        tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
-        l->load( xspfFile );
+        QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
+
+        if ( xspfFile.exists() )
+        {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
+            l->load( xspfFile );
+        }
+        else
+            tLog( LOGINFO ) << "Error Loading local xspf " << xspfFile.fileName();
     }
-    else
-        tLog( LOGINFO ) << "Error Loading local xspf " << xspfFile.fileName();
-
-
 
 }
 
 void
-DropJob::handleSpotifyUrl( const QString& url )
+DropJob::handleSpotifyUrls( const QString& urlsRaw )
 {
-    qDebug() << "Got spotify browse uri!!" << url;
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    qDebug() << "Got spotify browse uris!!" << urls;
 
     /// Lets allow parsing all spotify uris here, if parse server is not available
     /// fallback to spotify metadata for tracks /hugo
-    QString browseUri = url;
-    if ( url.contains( "open.spotify.com/" ) ) // convert to a URI
-    {
-        browseUri.replace( "http://open.spotify.com/", "" );
-        browseUri.replace( "/", ":" );
-        browseUri = "spotify:" + browseUri;
-    }
-
     if ( dropAction() == Default )
         setDropAction( Create );
 
-    tDebug() << "Got a spotify browse uri in dropjob!" << browseUri;
-    SpotifyParser* spot = new SpotifyParser( browseUri, dropAction() == Create, this );
+    tDebug() << "Got a spotify browse uri in dropjob!" << urls;
+    SpotifyParser* spot = new SpotifyParser( urls, dropAction() == Create, this );
     spot->setSingleMode( false );
 
     /// This currently supports draging and dropping a spotify playlist and artist
     if ( dropAction() == Append )
     {
-        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << browseUri;
+        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
     }
 
@@ -429,11 +425,11 @@ void
 DropJob::handleAllUrls( const QString& urls )
 {
     if ( urls.contains( "xspf" ) )
-        handleXspf( urls );
+        handleXspfs( urls );
     else if ( urls.contains( "spotify" ) /// Handle all the spotify uris on internal server, if not avail. fallback to spotify
               && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
               && s_canParseSpotifyPlaylists )
-        handleSpotifyUrl( urls );
+        handleSpotifyUrls( urls );
     else
         handleTrackUrls ( urls );
 }
