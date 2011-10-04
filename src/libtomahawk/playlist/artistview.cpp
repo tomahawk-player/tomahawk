@@ -164,11 +164,6 @@ ArtistView::onItemActivated( const QModelIndex& index )
             m_model->setCurrentItem( item->index );
             AudioEngine::instance()->playItem( m_proxyModel, item->result() );
         }
-        else if ( !item->query().isNull() && item->query()->results().count() )
-        {
-            m_model->setCurrentItem( item->index );
-            AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
-        }
     }
 }
 
@@ -337,6 +332,8 @@ ArtistView::onCustomContextMenu( const QPoint& pos )
 
         if ( item && !item->result().isNull() )
             queries << item->result()->toQuery();
+        else if ( item && !item->query().isNull() )
+            queries << item->query();
         if ( item && !item->artist().isNull() )
             artists << item->artist();
         if ( item && !item->album().isNull() )

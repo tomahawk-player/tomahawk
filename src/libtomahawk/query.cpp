@@ -36,6 +36,9 @@
 
 using namespace Tomahawk;
 
+static QHash< QString, QWeakPointer< Query > > s_queries;
+static QMutex s_mutex;
+
 
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
@@ -44,6 +47,8 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
         autoResolve = false;
 
     query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
+    QMutexLocker lock( &s_mutex );
+    s_queries.insert( q->id(), q );
 
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
@@ -97,7 +102,16 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    qDebug() << Q_FUNC_INFO << toString();
+    tDebug() << Q_FUNC_INFO << toString();
+
+    if ( !id().isEmpty() )
+    {
+        QMutexLocker lock( &s_mutex );
+        if ( s_queries.contains( id() ) )
+        {
+            s_queries.remove( id() );
+        }
+    }
 }
 
 
@@ -166,8 +180,13 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::refreshResults()
 {
-    setResolveFinished( false );
-    Pipeline::instance()->resolve( id() );
+    tDebug() << "Re-resolving query:" << toString() << s_queries.contains( id() );
+
+    if ( m_resolveFinished )
+    {
+        m_resolveFinished = false;
+        Pipeline::instance()->resolve( s_queries.value( id() ) );
+    }
 }
 
 
@@ -323,49 +342,46 @@ Query::clearResults()
 void
 Query::checkResults()
 {
-    bool becameSolved = false;
-    bool becameUnsolved = true;
+    bool playable = false;
+    bool solved = false;
+
     {
         QMutexLocker lock( &m_mutex );
-
-        m_playable = false;
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, m_results )
         {
             if ( rp->score() > 0.0 && rp->collection().isNull() )
             {
-                m_playable = true;
+                playable = true;
             }
-            if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
+            else if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
             {
-                m_playable = true;
+                playable = true;
+            }
 
-                if ( rp->score() > 0.99 )
-                {
-                    becameUnsolved = false;
-
-                    if ( !m_solved )
-                    {
-                        m_solved = true;
-                        becameSolved = true;
-                    }
-                }
+            if ( rp->score() > 0.99 )
+            {
+                solved = true;
             }
         }
     }
 
-    if ( m_solved && becameUnsolved )
+    if ( m_playable && !playable )
     {
-        m_solved = false;
-        m_resolveFinished = false;
-        emit solvedStateChanged( false );
-
         refreshResults();
     }
 
-    if ( becameSolved )
-        emit solvedStateChanged( true );
+    if ( m_playable != playable )
+    {
+        m_playable = playable;
+        emit playableStateChanged( m_playable );
+    }
+    if ( m_solved != solved )
+    {
+        m_solved = solved;
+        emit solvedStateChanged( m_solved );
+    }
 }
 
 

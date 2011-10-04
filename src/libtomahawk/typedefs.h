@@ -21,6 +21,7 @@
 
 #include <QSharedPointer>
 #include <QUuid>
+#include <QPair>
 
 //template <typename T> class QSharedPointer;
 
@@ -66,6 +67,7 @@ namespace Tomahawk
 
 typedef int AudioErrorCode;
 typedef int AudioState;
+typedef QList< QPair< QString, QString > > PairList;
 
 // creates 36char ascii guid without {} around it
 inline static QString uuid()

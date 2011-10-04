@@ -38,6 +38,10 @@ bool DropJob::s_canParseSpotifyPlaylists = false;
 DropJob::DropJob( QObject *parent )
     : QObject( parent )
     , m_queryCount( 0 )
+    , m_onlyLocal( false )
+    , m_getWholeArtists( false )
+    , m_getWholeAlbums( false )
+    , m_top10( false )
     , m_dropAction( Default )
 {
 }
@@ -61,6 +65,7 @@ DropJob::mimeTypes()
               << "application/tomahawk.metadata.album"
               << "application/tomahawk.mixed"
               << "text/plain";
+
     return mimeTypes;
 }
 
@@ -111,11 +116,15 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     {
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
+        if ( url.contains( "spotify" ) && url.contains( "album" ) )
+            return true;
     }
 
     if ( acceptedType.testFlag( Artist ) )
     {
         if ( url.contains( "itunes" ) && url.contains( "artist" ) ) // YES itunes is fucked up and song links have album/ in the url.
+            return true;
+        if ( url.contains( "spotify" ) && url.contains( "artist" ) )
             return true;
     }
 
@@ -362,48 +371,50 @@ DropJob::tracksFromMixedData( const QMimeData *data )
 }
 
 void
-DropJob::handleXspf( const QString& fileUrl )
+DropJob::handleXspfs( const QString& fileUrls )
 {
-    tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrl;
+    tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrls;
+
+    QStringList urls = fileUrls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
     if ( dropAction() == Default )
         setDropAction( Create );
 
-    // Doing like so on *nix, dont know really how files are
-    // passed on others.
-    // TODO look in to!
-//     QString newFile = fileUrl;
-//     newFile.replace("file://", "");
-//     QFile xspfFile(newFile);
-//     XSPFLoader* l = new XSPFLoader( createNewPlaylist, this );
-//     tDebug( LOGINFO ) << "Loading local xspf:" << newFile;
-//     l->load( xspfFile );
+    foreach ( const QString& url, urls )
+    {
+        QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
+
+        if ( xspfFile.exists() )
+        {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
+            l->load( xspfFile );
+        }
+        else
+            tLog( LOGINFO ) << "Error Loading local xspf " << xspfFile.fileName();
+    }
 
 }
 
 void
-DropJob::handleSpPlaylist( const QString& url )
+DropJob::handleSpotifyUrls( const QString& urlsRaw )
 {
-    qDebug() << "Got spotify playlist!!" << url;
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    qDebug() << "Got spotify browse uris!!" << urls;
 
-    QString playlistUri = url;
-    if ( url.contains( "open.spotify.com/user" ) ) // convert to a URI
-    {
-        playlistUri.replace("http://open.spotify.com/", "");
-        playlistUri.replace( "/", ":" );
-        playlistUri = "spotify:" + playlistUri;
-    }
-
+    /// Lets allow parsing all spotify uris here, if parse server is not available
+    /// fallback to spotify metadata for tracks /hugo
     if ( dropAction() == Default )
         setDropAction( Create );
 
-    tDebug() << "Got a spotify playlist uri in dropjob!" << playlistUri;
-    SpotifyParser* spot = new SpotifyParser( playlistUri, dropAction() == Create, this );
+    tDebug() << "Got a spotify browse uri in dropjob!" << urls;
+    SpotifyParser* spot = new SpotifyParser( urls, dropAction() == Create, this );
+    spot->setSingleMode( false );
 
-    //This currently supports draging and dropping a spotify playlist
+    /// This currently supports draging and dropping a spotify playlist and artist
     if ( dropAction() == Append )
     {
-        tDebug() << Q_FUNC_INFO << "Asking for spotify playlist contents from" << playlistUri;
+        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
     }
 
@@ -414,9 +425,11 @@ void
 DropJob::handleAllUrls( const QString& urls )
 {
     if ( urls.contains( "xspf" ) )
-        handleXspf( urls );
-    else if ( urls.contains( "spotify" ) && urls.contains( "playlist" ) && s_canParseSpotifyPlaylists )
-        handleSpPlaylist( urls );
+        handleXspfs( urls );
+    else if ( urls.contains( "spotify" ) /// Handle all the spotify uris on internal server, if not avail. fallback to spotify
+              && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
+              && s_canParseSpotifyPlaylists )
+        handleSpotifyUrls( urls );
     else
         handleTrackUrls ( urls );
 }
@@ -425,14 +438,7 @@ DropJob::handleAllUrls( const QString& urls )
 void
 DropJob::handleTrackUrls( const QString& urls )
 {
-    // TODO REMOVE HACK
-    if ( urls.contains( "open.spotify.com/user") ||
-         urls.contains( "spotify:user" ) )
-    {
-        Q_ASSERT( false );
-//             handleSpPlaylist( urls, dropAction() );
-    }
-    else if ( urls.contains( "itunes.apple.com") )
+    if ( urls.contains( "itunes.apple.com") )
     {
         QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
@@ -452,7 +458,7 @@ DropJob::handleTrackUrls( const QString& urls )
     }
     else if ( urls.contains( "rdio.com" ) )
     {
-        QStringList tracks = urls.split( "\n" );
+        QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
         tDebug() << "Got a list of rdio urls!" << tracks;
         RdioParser* rdio = new RdioParser( this );
@@ -461,11 +467,11 @@ DropJob::handleTrackUrls( const QString& urls )
 
         rdio->parse( tracks );
     } else if ( urls.contains( "bit.ly" ) ||
-                urls.contains( "j.mp" ) ||
-                urls.contains( "t.co" ) ||
-                urls.contains( "rd.io" ) )
+        urls.contains( "j.mp" ) ||
+        urls.contains( "t.co" ) ||
+        urls.contains( "rd.io" ) )
     {
-        QStringList tracks = urls.split( "\n" );
+        QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
         tDebug() << "Got a list of shortened urls!" << tracks;
         ShortenedLinkParser* parser = new ShortenedLinkParser( tracks, this );

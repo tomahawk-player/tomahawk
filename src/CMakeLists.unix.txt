@@ -6,11 +6,6 @@ ADD_DEFINITIONS( -fPIC )
 
 SET( QXTWEB_LIBRARIES qxtweb-standalone )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-     ${OS_SPECIFIC_LINK_LIBRARIES}
-     tomahawk_breakpad
-)
-
 IF( APPLE )
     INCLUDE( "CMakeLists.osx.txt" )
 ENDIF( APPLE )

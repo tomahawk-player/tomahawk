@@ -108,6 +108,7 @@ signals:
 
     void resultsChanged();
     void solvedStateChanged( bool state );
+    void playableStateChanged( bool state );
     void resolvingFinished( bool hasResults );
 
 public slots:

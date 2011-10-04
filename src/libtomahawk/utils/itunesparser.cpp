@@ -23,6 +23,9 @@
 #include "utils/tomahawkutils.h"
 #include "query.h"
 #include "sourcelist.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+
 #include <qjson/parser.h>
 
 #include <QtNetwork/QNetworkAccessManager>
@@ -30,6 +33,8 @@
 #include <QRegExp>
 
 using namespace Tomahawk;
+
+QPixmap* ItunesParser::s_pixmap = 0;
 
 ItunesParser::ItunesParser( const QStringList& urls, QObject* parent )
     : QObject ( parent )
@@ -58,7 +63,6 @@ ItunesParser::~ItunesParser()
 void
 ItunesParser::lookupItunesUri( const QString& link )
 {
-
     // Itunes uri parsing, using regex
     // (\d+)(?:\?i=*)(\d+) = AlbumId and trackId
     // (\d+)(?:\s*) = id
@@ -68,37 +72,45 @@ ItunesParser::lookupItunesUri( const QString& link )
 
     // Doing a parse on regex in 2 stages,
     // first, look if we have both album and track id
-     int pos = rxAlbumTrack.indexIn( link );
-     if ( pos > -1 ) {
-         id = rxAlbumTrack.cap( 1 );
-         trackId = rxAlbumTrack.cap( 2 );
-     }
-     else
-     {
-         // Second, if we dont have trackId, check for just Id
-         int pos = rxId.indexIn( link );
-         if ( pos > -1 )
-         {
-             id = rxId.cap( 1 );
-         }
-         else
-             return;
+    int pos = rxAlbumTrack.indexIn( link );
+    if ( pos > -1 )
+    {
+        id = rxAlbumTrack.cap( 1 );
+        trackId = rxAlbumTrack.cap( 2 );
+    }
+    else
+    {
+        // Second, if we dont have trackId, check for just Id
+        int pos = rxId.indexIn( link );
+        if ( pos > -1 )
+        {
+            id = rxId.cap( 1 );
+        }
+        else
+            return;
 
-     }
-
-    qDebug() << "Got Itunes link with id " << id << "and trackid" <<trackId;
+    }
     tLog() << "Parsing itunes track:" << link;
 
     QUrl url;
+    DropJob::DropType type;
     if( link.contains( "artist" ) )
+    {
+        type = DropJob::Artist;
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song&limit=30" ).arg( id ) );
-    else
+    }else
+    {
+        type = ( trackId.isEmpty() ? DropJob::Album : DropJob::Track );
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
-
+    }
     qDebug() << "Looking up..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( itunesResponseLookupFinished() ) );
+
+    DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Itunes" ), type, reply );
+    JobStatusView::instance()->model()->addJob( j );
+
     m_queries.insert( reply );
 
 }
@@ -174,4 +186,13 @@ ItunesParser::checkTrackFinished()
         deleteLater();
     }
 
+}
+
+QPixmap
+ItunesParser::pixmap() const
+{
+    if ( !s_pixmap )
+        s_pixmap = new QPixmap( RESPATH "images/itunes.png" );
+
+    return *s_pixmap;
 }

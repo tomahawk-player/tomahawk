@@ -538,6 +538,7 @@ AudioControls::dropEvent( QDropEvent* e )
     if ( DropJob::acceptsMimeData( e->mimeData() ) )
     {
         DropJob *dj = new DropJob();
+        dj->setDropAction( DropJob::Append );
         connect( dj, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
         dj->tracksFromMimeData( e->mimeData() );
 
@@ -551,8 +552,8 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 {
     if ( !tracks.isEmpty() )
     {
-        // queue and play the first if nothign is playing
-        GlobalActionManager::instance()->handleOpenTrack( tracks.first() );
+        // queue and play the first no matter what
+        GlobalActionManager::instance()->handlePlayTrack( tracks.first() );
 
         // just queue the rest
         for ( int i = 1; i < tracks.size(); i++ )

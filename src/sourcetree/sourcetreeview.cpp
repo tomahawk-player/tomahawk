@@ -43,14 +43,16 @@
 #include "utils/logger.h"
 #include "items/genericpageitems.h"
 #include "items/temporarypageitem.h"
-#include <database/databasecommand_socialaction.h>
-#include <database/database.h>
+#include "database/databasecommand_socialaction.h"
+#include "database/database.h"
+#include "LatchManager.h"
 
 using namespace Tomahawk;
 
 
 SourceTreeView::SourceTreeView( QWidget* parent )
     : QTreeView( parent )
+    , m_latchManager( new LatchManager( this ) )
     , m_dragging( false )
 {
     setFrameShape( QFrame::NoFrame );
@@ -78,8 +80,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
-    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( doLatchOn( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( doLatchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
 
     setItemDelegate( m_delegate );
 
@@ -102,15 +104,15 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( playlistChanged() ) );
-
     // Light-blue sourcetree on osx
 #ifdef Q_WS_MAC
     setStyleSheet( "SourceTreeView:active { background: #DDE4EB; } "
                    "SourceTreeView        { background: #EDEDED; } " );
 #endif
 
+    connect( this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( latchRequest( Tomahawk::source_ptr ) ) );
+    connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
+    connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
 }
 
 SourceTreeView::~SourceTreeView()
@@ -144,17 +146,12 @@ SourceTreeView::setupMenus()
         source_ptr source = item->source();
         if ( !source.isNull() )
         {
-            PlaylistInterface* pi = AudioEngine::instance()->playlist();
-            if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
+            if ( m_latchManager->isLatched( source ) )
             {
-                SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
-                if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() && !AudioEngine::instance()->state() == AudioEngine::Stopped )
-                {
-                    m_latchOnAction->setText( tr( "&Catch Up" ) );
-                    m_latchMenu.addSeparator();
-                    m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
-                    connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
-                }
+                m_latchOnAction->setText( tr( "&Catch Up" ) );
+                m_latchMenu.addSeparator();
+                m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
+                connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
             }
         }
     }
@@ -189,7 +186,7 @@ SourceTreeView::setupMenus()
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( m_latchOnAction,        SIGNAL( triggered() ), SLOT( latchOn() ) );
+    connect( m_latchOnAction,        SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ) );
 }
 
 
@@ -203,7 +200,7 @@ SourceTreeView::showOfflineSources( bool offlineSourcesShown )
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
 {
-    if ( !index.isValid() )
+    if ( !index.isValid() || !index.flags().testFlag( Qt::ItemIsEnabled ) )
         return;
 
     SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
@@ -338,7 +335,7 @@ SourceTreeView::addToLocal()
 
 
 void
-SourceTreeView::latchOn()
+SourceTreeView::latchOnOrCatchUp()
 {
     if ( !m_contextMenuIndex.isValid() )
         return;
@@ -350,100 +347,10 @@ SourceTreeView::latchOn()
     CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     source_ptr source = item->source();
 
-    doLatchOn( source );
-}
-
-void
-SourceTreeView::doLatchOn( const source_ptr& source )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    PlaylistInterface* pi = AudioEngine::instance()->playlist();
-
-    bool catchUp = false;
-    if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
-    {
-        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
-        if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
-        {
-            //it's a catch-up -- logic in audioengine should take care of it
-            AudioEngine::instance()->next();
-            catchUp = true;
-            m_latch = sourcepi->getSharedPointer();
-        }
-    }
-
-    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
-    cmd->setSource( SourceList::instance()->getLocal() );
-    cmd->setAction( "latchOn");
-    cmd->setComment( source->userName() );
-    cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
-    if ( !catchUp )
-    {
-        m_waitingToPlayLatch = source;
-        AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
-    }
-}
-
-void
-SourceTreeView::doLatchOff( const source_ptr& source )
-{
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
-
-
-    AudioEngine::instance()->stop();
-    AudioEngine::instance()->setPlaylist( 0 );
-}
-
-
-void
-SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
-{
-    Q_UNUSED( newInterface );
-    // If we were latched on and changed, send the listening along stop
-    if ( m_latch.isNull() )
-    {
-        if ( m_waitingToPlayLatch.isNull() )
-            return;
-
-        m_latch = m_waitingToPlayLatch->getPlaylistInterface();
-        m_waitingToPlayLatch.clear();
-
-        return;
-    }
-
-    const PlaylistInterface* pi = AudioEngine::instance()->playlist();
-    bool listeningAlong = false;
-    source_ptr newSource;
-
-    if ( pi && dynamic_cast< const SourcePlaylistInterface* >( pi ) )
-    {
-        const SourcePlaylistInterface* sourcepi = dynamic_cast< const SourcePlaylistInterface* >( pi );
-        if ( !AudioEngine::instance()->state() == AudioEngine::Stopped )
-        {
-            listeningAlong = true;
-            newSource = sourcepi->source();
-        }
-    }
-
-    SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
-    Q_ASSERT( origsourcepi );
-    const source_ptr source = origsourcepi->source();
-
-    // if we're currently listening along to the same source, no change
-    if ( listeningAlong && ( !origsourcepi->source().isNull() && origsourcepi->source()->id() == newSource->id() ) )
-        return;
-
-    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
-    cmd->setSource( SourceList::instance()->getLocal() );
-    cmd->setAction( "latchOff");
-    cmd->setComment( source->userName() );
-    cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
-    m_latch.clear();
+    if ( m_latchManager->isLatched( source ) )
+        emit catchUpRequest();
+    else
+        emit latchRequest( source );
 }
 
 void
@@ -460,7 +367,7 @@ SourceTreeView::latchOff()
     const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
 
-    doLatchOff( source );
+    emit unlatchRequest( source );
 }
 
 
@@ -510,7 +417,7 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Playlist,  DropJob::Create ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Artist | DropJob::Album | DropJob::Playlist,  DropJob::Create ) )
     {
            m_dragging = true;
            m_dropRect = QRect();
@@ -574,17 +481,17 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 
         if ( accept )
         {
-            //qDebug() << Q_FUNC_INFO << "Accepting";
+            //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
             event->accept();
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << "Ignoring";
+//             tDebug() << Q_FUNC_INFO << "Ignoring";
             event->ignore();
         }
     }
-    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist, DropJob::Create ) )
+    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
     {
         event->setDropAction( Qt::CopyAction );
         event->accept();

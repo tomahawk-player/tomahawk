@@ -39,7 +39,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 26
+#define CURRENT_SCHEMA_VERSION 27
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -128,14 +128,6 @@ DatabaseImpl::loadIndex()
 {
     connect( m_fuzzyIndex, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     m_fuzzyIndex->loadLuceneIndex();
-}
-
-
-void
-DatabaseImpl::updateSearchIndex()
-{
-    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

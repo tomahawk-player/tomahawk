@@ -22,10 +22,10 @@
 #include <QString>
 #include <string.h>
 
+#define CRASH_REPORTER_BINARY "CrashReporter"
+
 #ifndef WIN32
 #include <unistd.h>
-
-#define CRASH_REPORTER_BINARY "CrashReporter"
 
 
 static bool
@@ -93,17 +93,20 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     // DON'T USE THE HEAP!!!
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    const char* productName = static_cast<BreakPad*>(that)->productName();
+// broken in mingw, hardcode it for now
 
+    //     const char* productName = static_cast<BreakPad*>(that)->productName();s
     // convert productName to widechars, which sadly means the product name must be Latin1
-    wchar_t wcProductName[ 256 ];
-    char* out = (char*)wcProductName;
-    const char* in = productName - 1;
-    do {
-        *out++ = *++in; //latin1 chars fit in first byte of each wchar
-        *out++ = '\0';  //every second byte is NULL
-    }
-    while (*in);
+
+    wchar_t product_name[ 256 ] = L"tomahawk";;
+
+//     char* out = (char*)product_name;
+//     const char* in = productName - 1;
+//     do {
+//         *out++ = *++in; //latin1 chars fit in first byte of each wchar
+//         *out++ = '\0';  //every second byte is NULL
+//     }
+//     while (*in);
 
     wchar_t command[MAX_PATH * 3 + 6];
     wcscpy( command, CRASH_REPORTER_BINARY L" \"" );
@@ -111,19 +114,19 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     wcscat( command, L"\" \"" );
     wcscat( command, minidump_id );
     wcscat( command, L"\" \"" );
-    wcscat( command, wcProductName );
+    wcscat( command, product_name );
     wcscat( command, L"\"" );
 
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
     ZeroMemory( &si, sizeof( si ) );
-    si.cb = sizeof( si );
+    si.cb = sizeof(si);
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOWNORMAL;
-    ZeroMemory( &pi, sizeof( pi ) );
+    ZeroMemory( &pi, sizeof(pi) );
 
-    if ( CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) )
+    if (CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
     {
         CloseHandle( pi.hProcess );
         CloseHandle( pi.hThread );

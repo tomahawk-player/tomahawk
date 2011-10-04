@@ -47,6 +47,7 @@ DatabaseCommand_DeleteFiles::postCommitHook()
     connect( this, SIGNAL( notify( QStringList ) ),
              coll,   SLOT( delTracks( QStringList ) ), Qt::QueuedConnection );
 
+    tDebug() << "Notifying of deleted tracks:" << m_files.size();
     emit notify( m_files );
 
     if( source()->isLocal() )
@@ -60,82 +61,117 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 //    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !source().isNull() );
 
-    int deleted = 0;
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery delquery = dbi->newquery();
     QString lastPath;
 
-    if ( m_dir.path() != QString( "." ) && source()->isLocal() )
+    if ( source()->isLocal() )
     {
-        qDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
-        TomahawkSqlQuery dirquery = dbi->newquery();
-
-        dirquery.prepare( QString( "SELECT id, url FROM file WHERE source %1 AND url LIKE ?" )
-                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
-        delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND id = ?" )
-                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
-
-        dirquery.bindValue( 0, "file://" + m_dir.canonicalPath() + "/%" );
-        dirquery.exec();
-
-        while ( dirquery.next() )
+        if ( m_dir.path() != QString( "." ) )
         {
-            QFileInfo fi( dirquery.value( 1 ).toString().mid( 7 ) ); // remove file://
-            if ( fi.canonicalPath() != m_dir.canonicalPath() )
+            qDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
+            TomahawkSqlQuery dirquery = dbi->newquery();
+
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE ?" ) );
+            dirquery.bindValue( 0, "file://" + m_dir.canonicalPath() + "/%" );
+            dirquery.exec();
+
+            while ( dirquery.next() )
             {
-                if ( lastPath != fi.canonicalPath() )
-                    qDebug() << "Skipping subdir:" << fi.canonicalPath();
+                QFileInfo fi( dirquery.value( 1 ).toString().mid( 7 ) ); // remove file://
+                if ( fi.canonicalPath() != m_dir.canonicalPath() )
+                {
+                    if ( lastPath != fi.canonicalPath() )
+                        qDebug() << "Skipping subdir:" << fi.canonicalPath();
 
-                lastPath = fi.canonicalPath();
-                continue;
+                    lastPath = fi.canonicalPath();
+                    continue;
+                }
+
+                m_files << dirquery.value( 1 ).toString();
+                m_ids << dirquery.value( 0 ).toUInt();
             }
-
-            m_ids << dirquery.value( 0 ).toUInt();
-            m_files << dirquery.value( 1 ).toString();
         }
-
-        foreach ( const QVariant& id, m_ids )
+        else if ( !m_ids.isEmpty() )
         {
-            delquery.bindValue( 0, id.toUInt() );
-            if( !delquery.exec() )
-            {
-                qDebug() << "Failed to delete file:"
-                    << delquery.lastError().databaseText()
-                    << delquery.lastError().driverText()
-                    << delquery.boundValues();
-                continue;
-            }
+            TomahawkSqlQuery dirquery = dbi->newquery();
 
-            deleted++;
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( ? )" ) );
+
+            QString idstring;
+            foreach( const QVariant& id, m_ids )
+                idstring.append( id.toString() + ", " );
+            idstring.chop( 2 ); //remove the trailing ", "
+            
+            dirquery.bindValue( 0, idstring );
+            dirquery.exec();
+            while ( dirquery.next() )
+                m_files << dirquery.value( 1 ).toString();
+        }
+        else if ( m_deleteAll )
+        {
+            TomahawkSqlQuery dirquery = dbi->newquery();
+            
+            dirquery.prepare( QString( "SELECT url FROM file WHERE source IS NULL" ) );
+            
+            dirquery.exec();
+            while ( dirquery.next() )
+                m_files << dirquery.value( 0 ).toString();
         }
     }
-    else if ( !m_ids.isEmpty() && source()->isLocal() )
+    else
     {
-        delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
-                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
+        if ( m_deleteAll )
+        {
+            TomahawkSqlQuery dirquery = dbi->newquery();
+            
+            dirquery.prepare( QString( "SELECT url FROM file WHERE source = %1" ).arg( source()->id() ) );
+            
+            dirquery.exec();
+            while ( dirquery.next() )
+                m_ids << dirquery.value( 0 ).toString();
+        }
 
         foreach( const QVariant& id, m_ids )
-        {
-//            qDebug() << "Deleting" << id.toUInt() << "from db for source" << srcid;
-
-            const QString url = QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
-            m_files << url;
-
-            delquery.bindValue( 0, id.toUInt() );
-            if( !delquery.exec() )
-            {
-                qDebug() << "Failed to delete file:"
-                    << delquery.lastError().databaseText()
-                    << delquery.lastError().driverText()
-                    << delquery.boundValues();
-                continue;
-            }
-
-            deleted++;
-        }
+            m_files << QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
     }
 
-//    qDebug() << "Deleted" << deleted << m_ids << m_files;
+    if ( m_deleteAll )
+    {
+        delquery.prepare( QString( "DELETE FROM file WHERE source %1" )
+        .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
+
+        if( !delquery.exec() )
+        {
+            qDebug() << "Failed to delete file:"
+            << delquery.lastError().databaseText()
+            << delquery.lastError().driverText()
+            << delquery.boundValues();
+        }
+
+        emit done( m_files, source()->collection() );
+        return;
+    }
+    else if ( !m_ids.isEmpty() )
+    {
+        delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND %2 IN ( ? )" )
+                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
+                             .arg( source()->isLocal() ? "id" : "url"  ) );
+
+        QString idstring;
+        foreach( const QVariant& id, m_ids )
+                idstring.append( '"' + id.toString() + "\", " );
+        idstring.chop( 3 ); //remove the trailing "\", "
+
+        delquery.bindValue( 0, idstring );
+        if( !delquery.exec() )
+        {
+            qDebug() << "Failed to delete file:"
+                << delquery.lastError().databaseText()
+                << delquery.lastError().driverText()
+                << delquery.boundValues();
+        }
+    }
 
     emit done( m_files, source()->collection() );
 }

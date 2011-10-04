@@ -242,3 +242,16 @@ TreeModelItem::albumName() const
 
     return QString();
 }
+
+
+const Tomahawk::result_ptr&
+TreeModelItem::result() const
+{
+    if ( m_result.isNull() && !m_query.isNull() )
+    {
+        if ( m_query->results().count() )
+            return m_query->results().first();
+    }
+
+    return m_result;
+}

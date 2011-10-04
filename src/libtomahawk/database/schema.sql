@@ -228,6 +228,14 @@ CREATE TABLE IF NOT EXISTS track_attributes (
 CREATE INDEX track_attrib_id ON track_attributes(id);
 CREATE INDEX track_attrib_k  ON track_attributes(k);
 
+-- Collection attributes, tied to a source. An example might be an echonest song catalog
+
+CREATE TABLE IF NOT EXISTS collection_attributes (
+    id INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED, -- source id, null for local source
+    k TEXT NOT NULL,
+    v TEXT NOT NULL
+);
+
 -- social attributes connected to the track.
 -- like love, hate, comments, recommendations
 --  love=[comment], hate=[comment], comment=Some text
@@ -283,4 +291,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '26');
+INSERT INTO settings(k,v) VALUES('schema_version', '27');

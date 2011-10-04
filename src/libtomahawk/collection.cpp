@@ -259,6 +259,7 @@ Collection::delTracks( const QStringList& files )
         i++;
     }
 
+    tDebug() << "Emitting tracks removed:" << tracks.size();
     emit tracksRemoved( tracks );
 }
 

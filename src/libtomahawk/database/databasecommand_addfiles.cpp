@@ -214,14 +214,13 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         query->addResults( results );
 
         m_queries << query;
-
         added++;
     }
-    qDebug() << "Inserted" << added;
+    qDebug() << "Inserted" << added << "tracks to database";
 
     // TODO building the index could be a separate job, outside this transaction
     if ( added )
-        dbi->updateSearchIndex();
+        source()->updateIndexWhenSynced();
 
     qDebug() << "Committing" << added << "tracks...";
     emit done( m_files, source()->collection() );

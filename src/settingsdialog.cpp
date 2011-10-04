@@ -136,6 +136,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
     ui->scannerTimeSpinBox->setValue( s->scannerTime() );
+    ui->enableEchonestCatalog->setChecked( s->enableEchonestCatalogs() );
+
     connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
@@ -198,6 +200,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_resolversModel = new ResolversModel( this );
     ui->scriptList->setModel( m_resolversModel );
     ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    connect( m_resolversModel, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
 
 #ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
@@ -239,6 +242,7 @@ SettingsDialog::~SettingsDialog()
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
         s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
+        s->setEnableEchonestCatalogs( ui->enableEchonestCatalog->isChecked() );
 
 	s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
@@ -509,7 +513,6 @@ SettingsDialog::onLastFmFinished()
     }
 #endif
 }
-
 
 void
 SettingsDialog::addScriptResolver()

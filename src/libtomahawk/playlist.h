@@ -295,6 +295,7 @@ private:
     QQueue<RevisionQueueItem> m_revisionQueue;
 
     bool m_locallyChanged;
+    bool m_deleted;
     bool m_busy;
 };
 

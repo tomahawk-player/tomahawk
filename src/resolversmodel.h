@@ -22,7 +22,7 @@
 
 #include <QModelIndex>
 #include <QStringList>
-
+#include <QSet>
 
 class ResolversModel : public QAbstractListModel
 {
@@ -49,11 +49,16 @@ public:
     void removeResolver( const QString& resolver );
 
     void saveScriptResolvers();
+
+signals:
+    void openConfig( const QString& filePath );
+
 private slots:
     void resolverChanged();
 
 private:
     void addInstalledResolvers();
+    QSet<QString> m_waitingForLoad;
 };
 
 #endif // RESOLVERSMODEL_H

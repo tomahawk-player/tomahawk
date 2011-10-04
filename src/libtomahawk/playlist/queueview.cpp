@@ -33,6 +33,7 @@ using namespace Tomahawk;
 QueueView::QueueView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , ui( new Ui::QueueView )
+    , m_dragTimer( 0 )
 {
     ui->setupUi( this );
     TomahawkUtils::unmarginLayout( layout() );
@@ -47,6 +48,8 @@ QueueView::QueueView( AnimatedSplitter* parent )
     ui->queue->overlay()->setEnabled( false );
 
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
+
+    ui->toggleButton->installEventFilter( this );
 }
 
 
@@ -62,6 +65,33 @@ QueueView::queue() const
     return ui->queue;
 }
 
+bool
+QueueView::eventFilter( QObject* obj, QEvent* ev )
+{
+    if ( obj == ui->toggleButton )
+    {
+        if ( ev->type() == QEvent::DragEnter )
+        {
+            ev->accept();
+
+            if ( m_dragTimer == 0 )
+            {
+                m_dragTimer = new QTimer( this );
+                m_dragTimer->setInterval( 1000 );
+                m_dragTimer->setSingleShot( true );
+                connect( m_dragTimer, SIGNAL( timeout() ), this, SLOT( show() ) );
+                m_dragTimer->start();
+            }
+        }
+        else if ( ev->type() == QEvent::DragLeave || ev->type() == QEvent::Drop )
+        {
+            delete m_dragTimer;
+            m_dragTimer = 0;
+        }
+    }
+
+    return QObject::eventFilter( obj, ev );
+}
 
 void
 QueueView::hide()

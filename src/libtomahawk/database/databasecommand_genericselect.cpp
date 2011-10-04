@@ -32,9 +32,18 @@ DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sql
     , m_sqlSelect( sqlSelect )
     , m_queryType( type )
     , m_limit( limit )
+    , m_raw( false )
 {
 }
 
+DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, bool rawData, QObject* parent )
+    : DatabaseCommand( parent )
+    , m_sqlSelect( sqlSelect )
+    , m_queryType( type )
+    , m_limit( -1 )
+    , m_raw( rawData )
+{
+}
 
 void
 DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
@@ -47,6 +56,26 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
     QList< query_ptr > queries;
     QList< artist_ptr > arts;
     QList< album_ptr > albs;
+
+    if ( m_raw )
+    {
+        QList< QStringList > rawDataItems;
+
+        while( query.next() )
+        {
+
+            QStringList rawRow;
+            int count = 0;
+            while ( query.value( count ).isValid() )
+            {
+                rawRow << query.value( count ).toString();
+                ++count;
+            }
+            rawDataItems << rawRow;
+        }
+        emit rawData( rawDataItems );
+        return;
+    }
 
     // Expecting
     while ( query.next() )

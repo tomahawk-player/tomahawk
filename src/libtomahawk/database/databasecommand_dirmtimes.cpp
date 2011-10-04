@@ -89,4 +89,5 @@ DatabaseCommand_DirMtimes::execUpdate( DatabaseImpl* dbi )
     }
 
     qDebug() << "Saved mtimes for" << m_tosave.size() << "dirs.";
+    emit done( QMap< QString, unsigned int >() );
 }

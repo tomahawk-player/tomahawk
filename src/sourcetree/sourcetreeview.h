@@ -31,6 +31,11 @@ class SourcesModel;
 class SourcesProxyModel;
 class SourceDelegate;
 
+namespace Tomahawk
+{
+    class LatchManager;
+}
+
 class SourceTreeView : public QTreeView
 {
 Q_OBJECT
@@ -50,6 +55,10 @@ signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
 
+    void latchRequest( const Tomahawk::source_ptr& source );
+    void unlatchRequest( const Tomahawk::source_ptr& source );
+    void catchUpRequest();
+
 private slots:
     void onItemExpanded( const QModelIndex& idx );
     void onItemActivated( const QModelIndex& index );
@@ -61,12 +70,8 @@ private slots:
     void copyPlaylistLink();
     void addToLocal();
 
-    void latchOn();
-    void doLatchOn( const Tomahawk::source_ptr& idx );
+    void latchOnOrCatchUp();
     void latchOff();
-    void doLatchOff( const Tomahawk::source_ptr& idx );
-
-    void playlistChanged( Tomahawk::PlaylistInterface* = 0 );
 
     void onCustomContextMenu( const QPoint& pos );
 
@@ -91,6 +96,7 @@ private:
     SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;
     SourceDelegate* m_delegate;
+    Tomahawk::LatchManager* m_latchManager;
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
@@ -102,9 +108,6 @@ private:
     QAction* m_addToLocalAction;
     QAction* m_latchOnAction;
     QAction* m_latchOffAction;
-
-    Tomahawk::source_ptr m_waitingToPlayLatch;
-    Tomahawk::playlistinterface_ptr m_latch;
 
     bool m_dragging;
     QRect m_dropRect;

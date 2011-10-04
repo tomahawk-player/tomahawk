@@ -76,6 +76,9 @@ public:
     bool showOfflineSources() const;
     void setShowOfflineSources( bool show );
 
+    bool enableEchonestCatalogs() const;
+    void setEnableEchonestCatalogs( bool enable );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );

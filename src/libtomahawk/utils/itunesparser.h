@@ -24,6 +24,7 @@
 #include "dllmacro.h"
 #include "typedefs.h"
 #include "query.h"
+#include "dropjobnotifier.h"
 
 #include <QObject>
 #include <QSet>
@@ -56,6 +57,7 @@ private slots:
     void itunesResponseLookupFinished();
 
 private:
+    QPixmap pixmap() const;
     void lookupItunesUri( const QString& track );
     void checkTrackFinished();
 
@@ -64,6 +66,9 @@ private:
     QSet< QNetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
+
+    DropJobNotifier* m_browseJob;
+    static QPixmap* s_pixmap;
 };
 
 }

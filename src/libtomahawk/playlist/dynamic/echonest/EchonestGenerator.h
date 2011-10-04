@@ -25,6 +25,7 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/DynamicControl.h"
+#include "database/databasecommand_collectionattributes.h"
 
 #include "dllmacro.h"
 
@@ -32,6 +33,25 @@ namespace Tomahawk
 {
 
 class EchonestSteerer;
+
+class CatalogManager : public QObject
+{
+    Q_OBJECT
+public:
+    CatalogManager( QObject* parent );
+
+    QHash< QString, QString > catalogs() const;
+
+signals:
+   void catalogsUpdated();
+
+private slots:
+    void doCatalogUpdate();
+    void collectionAttributes( const PairList& );
+
+private:
+    QHash< QString, QString > m_catalogs;
+};
 
 class DLLEXPORT EchonestFactory : public GeneratorFactoryInterface
 {
@@ -61,6 +81,8 @@ public:
 
     static QStringList styles();
     static QStringList moods();
+    static QStringList userCatalogs();
+    static QByteArray catalogId( const QString& collectionId );
 
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
@@ -80,6 +102,7 @@ private slots:
 
     void stylesReceived();
     void moodsReceived();
+    void knownCatalogsChanged();
 
     void songLookupFinished();
 private:
@@ -100,6 +123,8 @@ private:
     static QStringList s_moods;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
+
+    static CatalogManager* s_catalogs;
 
     // used for the intermediary song id lookup
     QSet< QNetworkReply* > m_waiting;

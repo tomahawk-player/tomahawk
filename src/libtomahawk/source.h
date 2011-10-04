@@ -30,9 +30,10 @@
 
 #include "dllmacro.h"
 
-class DatabaseCommand_LogPlayback;
 class ControlConnection;
+class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
+class DatabaseCommand_UpdateSearchIndex;
 
 namespace Tomahawk
 {
@@ -45,6 +46,7 @@ friend class ::DBSyncConnection;
 friend class ::ControlConnection;
 friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_SocialAction;
+friend class ::DatabaseCommand_AddFiles;
 
 public:
     enum AvatarStyle { Original, FancyStyle };
@@ -109,6 +111,7 @@ private slots:
     void dbLoaded( unsigned int id, const QString& fname );
     QString lastCmdGuid() const { return m_lastCmdGuid; }
     void setLastCmdGuid( const QString& guid ) { m_lastCmdGuid = guid; }
+    void updateIndexWhenSynced();
 
     void setOffline();
     void setOnline();
@@ -131,6 +134,7 @@ private:
     QString m_friendlyname;
     int m_id;
     bool m_scrubFriendlyName;
+    bool m_updateIndexWhenSynced;
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;

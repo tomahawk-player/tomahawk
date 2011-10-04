@@ -21,9 +21,14 @@
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
 #include "utils/tomahawkutils.h"
+#include "tomahawksettings.h"
+#include "database/databasecommand_collectionattributes.h"
+#include "database/database.h"
 #include "utils/logger.h"
+#include "sourcelist.h"
 #include <QFile>
 #include <QDir>
+#include <EchonestCatalogSynchronizer.h>
 
 using namespace Tomahawk;
 
@@ -32,6 +37,8 @@ QStringList EchonestGenerator::s_moods = QStringList();
 QStringList EchonestGenerator::s_styles = QStringList();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
+
+CatalogManager* EchonestGenerator::s_catalogs = 0;
 
 
 EchonestFactory::EchonestFactory()
@@ -56,9 +63,52 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList
 EchonestFactory::typeSelectors() const
 {
-    return QStringList() << "Artist" << "Artist Description" << "Song" << "Mood" << "Style" << "Variety" << "Tempo" << "Duration" << "Loudness"
+    QStringList types =  QStringList() << "Artist" << "Artist Description" << "User Radio" << "Song" << "Mood" << "Style" << "Adventurousness" << "Variety" << "Tempo" << "Duration" << "Loudness"
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
+
+    return types;
+}
+
+CatalogManager::CatalogManager( QObject* parent )
+    : QObject( parent )
+{
+    connect( EchonestCatalogSynchronizer::instance(), SIGNAL( knownCatalogsChanged() ), this, SLOT( doCatalogUpdate() ) );
+    connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( doCatalogUpdate() ) );
+
+    doCatalogUpdate();
+}
+
+void
+CatalogManager::collectionAttributes( const PairList& data )
+{
+    QPair<QString, QString> part;
+    m_catalogs.clear();
+
+    foreach ( part, data )
+    {
+        if ( SourceList::instance()->get( part.first.toInt() ).isNull() )
+            continue;
+
+        const QString name = SourceList::instance()->get( part.first.toInt() )->friendlyName();
+        m_catalogs.insert( name, part.second );
+    }
+
+    emit catalogsUpdated();
+}
+
+void
+CatalogManager::doCatalogUpdate()
+{
+    QSharedPointer< DatabaseCommand > cmd( new DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog ) );
+    connect( cmd.data(), SIGNAL( collectionAttributes( PairList ) ), this, SLOT( collectionAttributes( PairList ) ) );
+    Database::instance()->enqueue( cmd );
+}
+
+QHash< QString, QString >
+CatalogManager::catalogs() const
+{
+    return m_catalogs;
 }
 
 
@@ -72,6 +122,13 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_logo.load( RESPATH "/images/echonest_logo.png" );
 
     loadStylesAndMoods();
+
+    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
+    // not dealing with that right now.
+    if ( s_catalogs == 0 )
+        s_catalogs = new CatalogManager( this );
+
+    connect( s_catalogs, SIGNAL( catalogsUpdated() ), this, SLOT( knownCatalogsChanged() ) );
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
@@ -93,6 +150,16 @@ EchonestGenerator::createControl( const QString& type )
 QPixmap EchonestGenerator::logo()
 {
     return m_logo;
+}
+
+void
+EchonestGenerator::knownCatalogsChanged()
+{
+    // Refresh all contrls
+    foreach( const dyncontrol_ptr& control, m_controls )
+    {
+        control.staticCast< EchonestControl >()->updateWidgetsFromData();
+    }
 }
 
 
@@ -357,6 +424,18 @@ EchonestGenerator::resetSteering()
 }
 
 
+QByteArray
+EchonestGenerator::catalogId(const QString &collectionId)
+{
+    return s_catalogs->catalogs().value( collectionId ).toUtf8();
+}
+
+QStringList
+EchonestGenerator::userCatalogs()
+{
+    return s_catalogs->catalogs().keys();
+}
+
 bool
 EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
 {
@@ -389,12 +468,18 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
      *
      */
 
-    /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
-    /// 2. artist-description: If all the artist entries are Description. If some were but not all, error out.
-    /// 3. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
-    /// 4. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
-    if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
+    /// 1. catalog-radio: If any the entries are catalog types.
+    /// 2. artist: If all the artist controls are Limit-To. If some were but not all, error out.
+    /// 3. artist-description: If all the artist entries are Description. If some were but not all, error out.
+    /// 4. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
+    /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
+    bool someCatalog = false;
+    foreach( const dyncontrol_ptr& control, m_controls ) {
+        if ( control->selectedType() == "User Radio" )
+            someCatalog = true;
+    }
+    if( someCatalog )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )

@@ -30,6 +30,8 @@
 #include "utils/logger.h"
 #include "dropjob.h"
 
+#include <echonest/Playlist.h>
+
 using namespace Tomahawk;
 
 
@@ -251,6 +253,9 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 
     // Create a new playlist seeded with these items
     DropJob *dj = new DropJob();
+    if ( data->hasFormat( "application/tomahawk.dragsource.type" ) )
+        dj->setProperty( "dragsource", QString::fromUtf8( data->data( "application/tomahawk.dragsource.type" ) ) );
+
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     if ( dropType() == DropTypeAllFromArtist )
         dj->setGetWholeArtists( true );
@@ -284,17 +289,34 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         // Give a shot to try to rename it. The playlist has to be created first. ugly.
         QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
     } else if( m_categoryType == SourcesModel::StationsCategory ) {
-        // seed the playlist with these song filters
-        QString name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        // seed the playlist with these song or artist filters
+        QString name;
+        if ( sender() && sender()->property( "dragsource" ).toString() == "artist" )
+            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( ( tracks.first()->artist() ) );
+        else
+            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+
         dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
         newpl->setMode( OnDemand );
 
-        // now we want to add each query as a song filter...
+        // now we want to add each query as a song or similar artist filter...
         QList< dyncontrol_ptr > contrls;
-        foreach( const Tomahawk::query_ptr& q, tracks ) {
-            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
-            contrls << c;
+        if ( sender() && sender()->property( "dragsource" ).toString() == "artist" )
+        {
+            foreach( const Tomahawk::query_ptr& q, tracks ) {
+                dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
+                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
+                c->setInput( QString( "%1" ).arg( q->artist() ) );
+                contrls << c;
+            }
+        }
+        else
+        {
+            foreach( const Tomahawk::query_ptr& q, tracks ) {
+                dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
+                c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+                contrls << c;
+            }
         }
 
         newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );

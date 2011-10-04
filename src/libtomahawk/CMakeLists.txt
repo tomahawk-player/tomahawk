@@ -33,6 +33,9 @@ set( libSources
     contextmenu.cpp
     dropjob.cpp
     playlistinterface.cpp
+    LatchManager.cpp
+
+    EchonestCatalogSynchronizer.cpp
 
     accounts/accountmanager.cpp
 
@@ -96,6 +99,10 @@ set( libSources
     database/databasecommand_socialaction.cpp
     database/databasecommand_loadsocialactions.cpp
     database/databasecommand_genericselect.cpp
+    database/databasecommand_setcollectionattributes.cpp
+    database/databasecommand_collectionattributes.cpp
+    database/databasecommand_trackattributes.cpp
+    database/databasecommand_settrackattributes.cpp
     database/database.cpp
 
     infobar/infobar.cpp
@@ -188,6 +195,8 @@ set( libSources
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
+    utils/qnr_iodevicestream.cpp
+    utils/dropjobnotifier.cpp
 
     widgets/checkdirtree.cpp
     widgets/querylabel.cpp
@@ -248,6 +257,7 @@ set( libHeaders
     contextmenu.h
     dropjob.h
     AtticaManager.h
+    LatchManager.h
 
     artist.h
     album.h
@@ -255,6 +265,8 @@ set( libHeaders
 
     accounts/account.h
     accounts/accountmanager.h
+
+    EchonestCatalogSynchronizer.h
 
     sip/SipPlugin.h
     sip/SipHandler.h
@@ -316,6 +328,10 @@ set( libHeaders
     database/databasecommand_socialaction.h
     database/databasecommand_loadsocialactions.h
     database/databasecommand_genericselect.h
+    database/databasecommand_setcollectionattributes.h
+    database/databasecommand_collectionattributes.h
+    database/databasecommand_trackattributes.h
+    database/databasecommand_settrackattributes.h
 
     infobar/infobar.h
 
@@ -402,6 +418,8 @@ set( libHeaders
     utils/itunesparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
+    utils/qnr_iodevicestream.h
+    utils/dropjobnotifier.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h

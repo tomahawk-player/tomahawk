@@ -57,6 +57,7 @@
 #include "pipeline.h"
 #include "utils/spotifyparser.h"
 #include "dropjob.h"
+#include "EchonestCatalogSynchronizer.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -269,6 +270,8 @@ TomahawkApp::init()
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
 
+    // Set up echonest catalog synchronizer
+    Tomahawk::EchonestCatalogSynchronizer::instance();
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
     QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/playlist/test" ) ) );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
@@ -369,6 +372,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
     qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
+    qRegisterMetaType< PairList >("PairList");
 
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
