@@ -27,30 +27,11 @@
 #include <QMenu>
 #include <QNetworkProxy>
 
+#include "accounts/account.h"
+
 #include "dllmacro.h"
 
 class SipPlugin;
-
-class DLLEXPORT SipPluginFactory : public QObject
-{
-    Q_OBJECT
-public:
-    SipPluginFactory() {}
-    virtual ~SipPluginFactory() {}
-
-    // display name for plugin
-    virtual QString prettyName() const = 0;
-    // internal name
-    virtual QString factoryId() const = 0;
-    // if the user can create multiple
-    virtual QIcon icon() const { return QIcon(); }
-    virtual bool isUnique() const { return false; }
-
-    virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
-
-protected:
-    QString generateId();
-};
 
 class DLLEXPORT SipPlugin : public QObject
 {
@@ -61,23 +42,20 @@ public:
     enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
     SipPlugin();
-    explicit SipPlugin( const QString& pluginId, QObject* parent = 0 );
+    explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
     virtual ~SipPlugin();
 
     // plugin id is "pluginfactoryname_someuniqueid".  get it from SipPluginFactory::generateId
     QString pluginId() const;
 
     virtual bool isValid() const = 0;
-    virtual const QString name() const = 0;
-    virtual const QString friendlyName() const = 0;
-    virtual const QString accountName() const = 0;
+    virtual const QString friendlyName() const;
+    virtual const QString serviceName() const;
     virtual ConnectionState connectionState() const = 0;
     virtual QString errorMessage() const;
     virtual QMenu* menu();
-    virtual QWidget* configWidget();
-    virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
-
+    virtual Tomahawk::Accounts::Account* account() const;
     // peer infos
     virtual const QStringList peersOnline() const;
 
@@ -85,6 +63,7 @@ public slots:
     virtual bool connectPlugin() = 0;
     virtual void disconnectPlugin() = 0;
     virtual void checkSettings() = 0;
+    virtual void configurationChanged() = 0;
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
@@ -124,11 +103,9 @@ private slots:
     void onPeerOffline( const QString &peerId );
 
 private:
-    QString m_pluginId;
+    Tomahawk::Accounts::Account *m_account;
     QString m_cachedError;
     QStringList m_peersOnline;
 };
-
-Q_DECLARE_INTERFACE( SipPluginFactory, "tomahawk.SipFactory/1.0" )
 
 #endif

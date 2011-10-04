@@ -20,6 +20,8 @@
 
 #include "twitterconfigwidget.h"
 
+#include "sip/SipPlugin.h"
+
 #include <QtCore/QtPlugin>
 
 namespace Tomahawk
@@ -65,6 +67,18 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
         setAccountFriendlyName( QString( "@%1" ).arg( credentials()[ "username" ].toString() ) );
     syncConfig();
     emit configurationChanged();
+}
+
+
+SipPlugin*
+TwitterAccount::sipPlugin()
+{
+    if ( m_twitterSipPlugin.isNull() )
+    {
+        m_twitterSipPlugin = QWeakPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
+        return m_twitterSipPlugin.data();
+    }
+    return m_twitterSipPlugin.data();
 }
 
 

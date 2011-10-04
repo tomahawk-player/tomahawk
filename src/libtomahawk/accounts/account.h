@@ -27,13 +27,18 @@
 
 #include "typedefs.h"
 #include "dllmacro.h"
-#include "infosystem/infosystem.h"
-#include "sip/SipPlugin.h"
 #include "tomahawksettings.h"
+
+class SipPlugin;
 
 namespace Tomahawk
 {
 
+namespace InfoSystem
+{
+    class InfoPlugin;
+}
+    
 namespace Accounts
 {
 
@@ -52,12 +57,14 @@ class DLLEXPORT Account : public QObject
 public:
     explicit Account( const QString &accountId )
         : QObject()
+        , m_enabled( false )
         , m_autoConnect( false )
         , m_accountId( accountId ) {}
     virtual ~Account() {}
 
     virtual QString accountServiceName() const { return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
     virtual QString accountFriendlyName() const { return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
+    virtual bool enabled() const { return m_enabled; }
     virtual bool autoConnect() const { return m_autoConnect; }
     virtual QString accountId() const { return m_accountId; }
 
@@ -90,12 +97,9 @@ public:
         return set;
     }
 
-signals:
-    void configurationChanged();
-
-protected:
     virtual void setAccountServiceName( const QString &serviceName ) { m_accountServiceName = serviceName; }
     virtual void setAccountFriendlyName( const QString &friendlyName )  { m_accountFriendlyName = friendlyName; }
+    virtual void setEnabled( bool enabled ) { m_enabled = enabled; }
     virtual void setAutoConnect( bool autoConnect ) { m_autoConnect = autoConnect; }
     virtual void setAccountId( const QString &accountId )  { m_accountId = accountId; }
     virtual void setCredentials( const QVariantHash &credentialHash ) { m_credentials = credentialHash; }
@@ -103,7 +107,7 @@ protected:
     virtual void setConfiguration( const QVariantHash &configuration ) { m_configuration = configuration; }
 
     virtual void setAcl( const QVariantMap &acl ) { m_acl = acl; }
-    
+
     virtual void setTypes( const QSet< AccountType > types )
     {
         m_types = QStringList();
@@ -128,6 +132,7 @@ protected:
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
         m_accountFriendlyName = s->value( "accountFriendlyName", QString() ).toString();
+        m_enabled = s->value( "enabled", false ).toBool();
         m_autoConnect = s->value( "autoConnect", false ).toBool();
         m_credentials = s->value( "credentials", QVariantHash() ).toHash();
         m_configuration = s->value( "configuration", QVariantHash() ).toHash();
@@ -136,12 +141,13 @@ protected:
         s->endGroup();
         s->sync();
     }
-    
+
     virtual void syncConfig()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
         s->setValue( "accountFriendlyName", m_accountFriendlyName );
+        s->setValue( "enabled", m_enabled );
         s->setValue( "autoConnect", m_autoConnect );
         s->setValue( "credentials", m_credentials );
         s->setValue( "configuration", m_configuration );
@@ -152,15 +158,20 @@ protected:
 
         emit configurationChanged();
     }
-    
+
     QString m_accountServiceName;
     QString m_accountFriendlyName;
+    bool m_enabled;
     bool m_autoConnect;
     QString m_accountId;
     QVariantHash m_credentials;
     QVariantHash m_configuration;
     QVariantMap m_acl;
     QStringList m_types;
+
+signals:
+    void configurationChanged();
+
 };
 
 class DLLEXPORT AccountFactory : public QObject

@@ -523,8 +523,7 @@ TomahawkApp::initSIP()
 #endif
 
         tDebug( LOGINFO ) << "Connecting SIP classes";
-        //SipHandler::instance()->refreshProxy();
-        SipHandler::instance()->loadFromConfig();
+        SipHandler::instance()->loadFromAccountManager();
     }
 }
 

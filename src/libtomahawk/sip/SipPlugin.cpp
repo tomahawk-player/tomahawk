@@ -19,24 +19,15 @@
 
 #include "sip/SipPlugin.h"
 
-#include <QUuid>
-
 #include "utils/logger.h"
 
-
-QString
-SipPluginFactory::generateId()
-{
-    QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
-    return factoryId() + "_" + uniq;
-}
 
 SipPlugin::SipPlugin() : QObject() {}
 SipPlugin::~SipPlugin() {}
 
-SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
+SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
     : QObject( parent )
-    , m_pluginId( pluginId )
+    , m_account( account )
 {
     connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
     connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
@@ -48,7 +39,21 @@ SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
 QString
 SipPlugin::pluginId() const
 {
-    return m_pluginId;
+    return m_account->accountId();
+}
+
+
+const QString
+SipPlugin::friendlyName() const
+{
+    return m_account->accountFriendlyName();
+}
+
+
+const QString
+SipPlugin::serviceName() const
+{
+    return m_account->accountServiceName();
 }
 
 
@@ -59,10 +64,10 @@ SipPlugin::menu()
 }
 
 
-QWidget*
-SipPlugin::configWidget()
+Tomahawk::Accounts::Account*
+SipPlugin::account() const
 {
-    return 0;
+    return m_account;
 }
 
 
@@ -76,7 +81,7 @@ SipPlugin::errorMessage() const
 QIcon
 SipPlugin::icon() const
 {
-    return QIcon();
+    return m_account->icon();
 }
 
 

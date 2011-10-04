@@ -39,9 +39,8 @@ public:
 
     QList< SipPluginFactory* > pluginFactories() const;
     QList< SipPlugin* > allPlugins() const;
-    QList< SipPlugin* > enabledPlugins() const;
     QList< SipPlugin* > connectedPlugins() const;
-    void loadFromConfig();
+    void loadFromAccountManager();
 
     void addSipPlugin( SipPlugin* p, bool enable = true );
     void removeSipPlugin( SipPlugin* p );

@@ -19,8 +19,6 @@
 #ifndef TWITTER_H
 #define TWITTER_H
 
-#include "twitterconfigwidget.h"
-
 #include <QTimer>
 #include <QWeakPointer>
 #include <QSet>
@@ -36,48 +34,28 @@
 
 #include "../sipdllmacro.h"
 #include "sip/SipPlugin.h"
+#include "accounts/account.h"
 #include "tomahawkoauthtwitter.h"
 
 #define MYNAME "SIPTWITTER"
 
-class SIPDLLEXPORT TwitterFactory : public SipPluginFactory
-{
-    Q_OBJECT
-    Q_INTERFACES( SipPluginFactory )
-
-public:
-    TwitterFactory() {}
-    virtual ~TwitterFactory() {}
-
-    virtual QString prettyName() const { return "Twitter"; }
-    virtual QString factoryId() const { return "siptwitter"; }
-    virtual QIcon icon() const;
-    virtual SipPlugin* createPlugin( const QString& pluginId = QString() );
-};
-
-class SIPDLLEXPORT TwitterPlugin : public SipPlugin
+class SIPDLLEXPORT TwitterSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
 public:
-    TwitterPlugin( const QString& pluginId );
+    TwitterSipPlugin( Tomahawk::Accounts::Account *account );
 
-    virtual ~TwitterPlugin() {}
+    virtual ~TwitterSipPlugin() {}
 
     virtual bool isValid() const;
-    virtual const QString name() const;
-    virtual const QString accountName() const;
-    virtual const QString friendlyName() const;
     virtual ConnectionState connectionState() const;
-    virtual QIcon icon() const;
-    virtual QWidget* configWidget();
 
 public slots:
     virtual bool connectPlugin();
     void disconnectPlugin();
-    void checkSettings();
     void refreshProxy();
-    void deletePlugin();
+    void configurationChanged();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -97,7 +75,6 @@ public slots:
     }
 
 private slots:
-    void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
     void connectTimerFired();
@@ -117,26 +94,14 @@ private slots:
     void profilePicReply();
 
 private:
-    inline void syncConfig() { setTwitterCachedPeers( m_cachedPeers ); }
+    inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->syncConfig(); }
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
     // handle per-plugin config
-    QString twitterSavedDbid() const;
-    void setTwitterSavedDbid( const QString& dbid );
-    QString twitterScreenName() const;
-    void setTwitterScreenName( const QString& screenName );
     QString twitterOAuthToken() const;
     void setTwitterOAuthToken( const QString& oauthtoken );
     QString twitterOAuthTokenSecret() const;
     void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
-    qint64 twitterCachedFriendsSinceId() const;
-    void setTwitterCachedFriendsSinceId( qint64 sinceid );
-    qint64 twitterCachedMentionsSinceId() const;
-    void setTwitterCachedMentionsSinceId( qint64 sinceid );
-    qint64 twitterCachedDirectMessagesSinceId() const;
-    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
-    QVariantHash twitterCachedPeers() const;
-    void setTwitterCachedPeers( const QVariantHash &cachedPeers );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
@@ -145,6 +110,9 @@ private:
     QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
     QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
 
+    QVariantHash m_configuration;
+    QVariantHash m_credentials;
+    
     bool m_isAuthed;
     QTimer m_checkTimer;
     QTimer m_connectTimer;

@@ -24,6 +24,7 @@
 #include "twitterconfigwidget.h"
 #include "tomahawkoauthtwitter.h"
 
+#include "sip/twitter/twittersip.h"
 #include "accounts/account.h"
 
 #define MYNAME "ACCOUNTTWITTER"
@@ -64,7 +65,7 @@ public:
     bool isAuthenticated() { return m_isAuthenticated; }
 
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
-    SipPlugin* sipPlugin() { return 0; }
+    SipPlugin* sipPlugin();
 
     QWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
@@ -75,6 +76,7 @@ private slots:
 private:
     bool m_isAuthenticated;
     QWeakPointer< TwitterConfigWidget > m_configWidget;
+    QWeakPointer< TwitterSipPlugin > m_twitterSipPlugin;
 
     // for settings access
     friend class TwitterConfigWidget;
