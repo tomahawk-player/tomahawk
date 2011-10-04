@@ -223,8 +223,8 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
       previous_iph_ = _set_invalid_parameter_handler(HandleInvalidParameter);
 #endif  // _MSC_VER >= 1400
 
-    if (handler_types & HANDLER_PURECALL)
-      previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
+//     if (handler_types & HANDLER_PURECALL)
+//       previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
 
     LeaveCriticalSection(&handler_stack_critical_section_);
   }
@@ -250,8 +250,8 @@ ExceptionHandler::~ExceptionHandler() {
       _set_invalid_parameter_handler(previous_iph_);
 #endif  // _MSC_VER >= 1400
 
-    if (handler_types_ & HANDLER_PURECALL)
-      _set_purecall_handler(previous_pch_);
+//     if (handler_types_ & HANDLER_PURECALL)
+//       _set_purecall_handler(previous_pch_);
 
     if (handler_stack_->back() == this) {
       handler_stack_->pop_back();
@@ -380,7 +380,7 @@ class AutoExceptionHandler {
 #if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(handler_->previous_iph_);
 #endif  // _MSC_VER >= 1400
-    _set_purecall_handler(handler_->previous_pch_);
+//     _set_purecall_handler(handler_->previous_pch_);
   }
 
   ~AutoExceptionHandler() {
@@ -389,7 +389,7 @@ class AutoExceptionHandler {
 #if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(ExceptionHandler::HandleInvalidParameter);
 #endif  // _MSC_VER >= 1400
-    _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
+//     _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
 
     --ExceptionHandler::handler_stack_index_;
     LeaveCriticalSection(&ExceptionHandler::handler_stack_critical_section_);
@@ -775,7 +775,7 @@ bool ExceptionHandler::WriteMinidumpWithException(
         if (exinfo) {
           // Find a memory region of 256 bytes centered on the
           // faulting instruction pointer.
-          const ULONG64 instruction_pointer = 
+          const ULONG64 instruction_pointer =
 #if defined(_M_IX86)
             exinfo->ContextRecord->Eip;
 #elif defined(_M_AMD64)
@@ -854,7 +854,7 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
     callback_context->finished = true;
     return TRUE;
   }
-    
+
     // Include all modules.
   case IncludeModuleCallback:
   case ModuleCallback:
