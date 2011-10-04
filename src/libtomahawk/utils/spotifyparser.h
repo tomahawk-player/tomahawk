@@ -74,7 +74,7 @@ private:
     void lookupSpotifyBrowse( const QString& playlist );
     void checkTrackFinished();
     void checkBrowseFinished();
-
+    int  m_limit;
     bool m_single;
     bool m_trackMode;
     bool m_createNewPlaylist;

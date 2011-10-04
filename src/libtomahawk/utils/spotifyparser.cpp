@@ -43,6 +43,7 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
+    , m_limit ( 40 )
 
 {
     foreach ( const QString& url, Urls )
@@ -55,6 +56,7 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
+    , m_limit ( 40 )
 {
     lookupUrl( Url );
 }
@@ -100,12 +102,6 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
     }
 
 
-    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( browseUri ) );
-    tDebug() << "Looking up URL..." << url.toString();
-
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( spotifyBrowseFinished() ) );
-
     DropJob::DropType type;
 
     if ( browseUri.contains( "spotify:user" ) )
@@ -116,6 +112,18 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
         type = DropJob::Album;
     if ( browseUri.contains( "spotify:track" ) )
         type = DropJob::Track;
+
+    QUrl url;
+
+    if( type != DropJob::Artist )
+         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( browseUri ) );
+    else
+         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( browseUri )
+                                                                        .arg ( m_limit ) );
+    tDebug() << "Looking up URL..." << url.toString();
+
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    connect( reply, SIGNAL( finished() ), this, SLOT( spotifyBrowseFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Spotify", type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
