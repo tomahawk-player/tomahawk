@@ -78,8 +78,11 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->breadCrumbRight->setModel(m_crumbModelLeft);
     ui->breadCrumbRight->setUseAnimation(true);*/
 
-    m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
-    m_tracksModel->setStyle( TrackModel::Short );
+
+    m_tracksModel = new TreeModel( ui->tracksViewLeft );
+    ui->tracksViewLeft->setTreeModel( m_tracksModel );
+
+
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -207,17 +210,20 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "albums" )
             {
-
-                setLeftViewTracks();
-                m_tracksModel->clear();
+                setLeftViewArtists();
+                m_artistsModel->clear();
 
                 const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
 
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
-                    query_ptr query = Query::get( album.artist, QString(), album.album, uuid() );
-                    m_tracksModel->append( query );
+                    //query_ptr query = Query::get( album.artist, QString(), album.album, uuid() );
+                    artist_ptr artistPtr = Artist::get( album.artist );
+                    //album_ptr albumPtr = Album::get( 0, album.album, artistPtr );
+
+                    m_artistsModel->addArtists( artistPtr );
+                    //m_albumsModel->append( query );
                 }
             }
             else if( type == "tracks" )
@@ -255,9 +261,7 @@ WhatsHotWidget::infoSystemFinished( QString target )
 void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
-
-
-    tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb current changed" << index.data();
+    tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex(index);
     if( !item )
         return;
@@ -265,7 +269,6 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
         return;
 
 
-    // Get the base eg. source identifier
     QList<QModelIndex> indexes;
     while (index.parent().isValid())
     {
@@ -288,9 +291,6 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
-    qDebug() << Q_FUNC_INFO << "RequestData custom" << requestData.customData;
-    qDebug() << Q_FUNC_INFO << "RequestData caller" << requestData.caller;
-    qDebug() << Q_FUNC_INFO << "RequestData input" << requestData.input;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 

@@ -265,7 +265,7 @@ ChartsPlugin::chartResources()
             foreach(QVariant resource, m_chartResources){
                 tDebug() << "ChartsPlugin: InfoChart fetching possible types for "<< resource.toString();
 
-                QUrl url = QUrl( QString( CHART_URL "/source/%1" ).arg(resource.toString() ) );
+                QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
                 qDebug() << "Getting types from " << url;
 
                 QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
@@ -298,8 +298,10 @@ ChartsPlugin::chartTypes()
             return;
         }
 
-        foreach(QVariant chart, res.value( "charts" ).toMap() )
+        foreach(QVariant chart, res.value( "charts" ).toMap() ){
             m_chartTypes.append(chart);
+            qDebug() << "Chart types" << chart;
+        }
 
     }
 
