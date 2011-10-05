@@ -827,7 +827,9 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             InfoSystem::InfoCriteriaHash inputInfo;
             inputInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
             artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
-            Q_ASSERT( !artist.isNull() );
+
+            if ( artist.isNull() )
+                return;
 
             foreach ( const QString& albumName, albums )
             {
