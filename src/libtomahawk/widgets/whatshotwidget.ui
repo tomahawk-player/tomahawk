@@ -30,6 +30,30 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="page3">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <widget class="QListView" name="albumViewLeft">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>9</y>
+         <width>839</width>
+         <height>471</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>320</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
      <widget class="QWidget" name="page1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -57,7 +81,7 @@
   <customwidget>
    <class>ArtistView</class>
    <extends>QTreeView</extends>
-   <header location="global">artistview.h</header>
+   <header>artistview.h</header>
   </customwidget>
   <customwidget>
    <class>HeaderBreadCrumb</class>

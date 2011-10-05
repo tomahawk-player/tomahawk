@@ -84,6 +84,7 @@ private slots:
 private:
     void setLeftViewArtists();
     void setLeftViewTracks();
+
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
 
@@ -91,6 +92,7 @@ private:
     TreeModel* m_artistsModel;
     TreeProxyModel* m_artistsProxy;
     QStandardItemModel* m_crumbModelLeft;
+    TreeModel* m_albumsModel;
 
     QTimer* m_timer;
 };

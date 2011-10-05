@@ -25,6 +25,7 @@
 #include "infosystemcache.h"
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
+#include "infoplugins/generic/chartsplugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "utils/tomahawkutils.h"
@@ -85,9 +86,17 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr mbptr( new MusicBrainzPlugin() );
     m_plugins.append( mbptr );
     registerInfoTypes( mbptr, mbptr.data()->supportedGetTypes(), mbptr.data()->supportedPushTypes() );
+
+
+
+    InfoPluginPtr chartsptr( new ChartsPlugin() );
+    m_plugins.append( chartsptr );
+    registerInfoTypes( chartsptr, chartsptr.data()->supportedGetTypes(), chartsptr.data()->supportedPushTypes() );
+
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
