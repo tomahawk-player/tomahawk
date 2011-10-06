@@ -58,6 +58,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout_2->layout() );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout2->layout() );
+
 
 
     //set crumb widgets
@@ -79,9 +81,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->breadCrumbRight->setUseAnimation(true);*/
 
 
-    m_tracksModel = new TreeModel( ui->tracksViewLeft );
-    ui->tracksViewLeft->setTreeModel( m_tracksModel );
-
+    m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
+    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
 
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
@@ -109,6 +110,12 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
+
+    ui->albumsViewLeft->setFrameShape( QFrame::NoFrame );
+    ui->albumsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    m_albumsModel = new AlbumModel( ui->albumsViewLeft );
+    ui->albumsViewLeft->setAlbumModel( m_albumsModel );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
@@ -210,21 +217,23 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "albums" )
             {
-                setLeftViewArtists();
-                m_artistsModel->clear();
-
+                setLeftViewAlbums();
+                m_albumsModel->clear();
+                QList<album_ptr> al;
                 const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
 
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
-                    //query_ptr query = Query::get( album.artist, QString(), album.album, uuid() );
-                    artist_ptr artistPtr = Artist::get( album.artist );
-                    //album_ptr albumPtr = Album::get( 0, album.album, artistPtr );
+                    qDebug() << "Getting album" << album.album << "By" << album.artist;
+                    album_ptr albumPtr = Album::get( 0, album.album, Artist::get( album.artist ) );
+                    al << albumPtr;
 
-                    m_artistsModel->addArtists( artistPtr );
-                    //m_albumsModel->append( query );
                 }
+                qDebug() << "Adding albums to model";
+                m_albumsModel->addAlbums( al );
+                qDebug() << "Added albums";
+
             }
             else if( type == "tracks" )
             {
@@ -351,6 +360,13 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
         sourceItem->appendRow(childItem);
     }
     return sourceItem;
+}
+
+
+void
+WhatsHotWidget::setLeftViewAlbums()
+{
+    ui->stackLeft->setCurrentIndex(2);
 }
 
 
