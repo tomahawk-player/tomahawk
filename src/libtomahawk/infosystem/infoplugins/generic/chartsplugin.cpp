@@ -52,9 +52,20 @@ ChartsPlugin::ChartsPlugin()
 
     tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
 
-    QUrl url = QUrl(CHART_URL);
-    QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
-    connect( reply, SIGNAL( finished() ), SLOT( chartResources() ) );
+    /// Add resources here
+    m_chartResources << "billboard"
+                     << "itunes";
+
+    /// Then get each chart from resource
+    if(!m_chartResources.isEmpty()){
+
+        foreach(QVariant resource, m_chartResources)
+        {
+            QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
+            QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
+            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
+        }
+    }
 
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
@@ -112,29 +123,29 @@ ChartsPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
 }
 
 
-
-
 void
 ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
+
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
+
     InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    if ( !hash.contains( "chart_id" ) )
+
+    /// Each request needs to contain both a id and source
+    if ( !hash.contains( "chart_id" ) && !hash.contains( "chart_source" ) )
     {
         dataError( requestId, requestData );
         return;
-    } else {
-        criteria["chart_id"] = hash["chart_id"];
+
     }
-    if ( hash.contains( "chart_source" ) )
-    {
-        criteria["chart_source"] = hash["chart_source"];
-    }
+    /// Set the criterias for current chart
+    criteria["chart_id"] = hash["chart_id"];
+    criteria["chart_source"] = hash["chart_source"];
 
     emit getCachedInfo( requestId, criteria, 0, requestData );
 }
@@ -147,7 +158,8 @@ ChartsPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::Info
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+
+    //InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
 
     emit getCachedInfo( requestId, criteria, 0, requestData );
@@ -168,9 +180,11 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         case InfoChart:
         {
 
+            /// Fetch the chart, we need source and id
             QUrl url = QUrl( QString( CHART_URL "/source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
+            /// @todo: Should add ChartPlugin nam here
             QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -193,12 +207,15 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
                 if( !m_chartTypes.isEmpty() )
                     foreach( QVariant type, m_chartTypes )
                     {
-                        // Itunes supplys charts based on geo, for now, only take US charts
+                        /// Itunes supplys charts based on geo, for now, only take US charts
+                        /// @todo: Add new breadcrumb option for country?
                         if( type.toMap().value( "source" ).toString() == chartResource.toString()
                             && type.toMap().value( "geo" ).isValid()
                             && type.toMap().value( "geo" ).toString() != "us" )
                                 continue;
 
+                        /// Append each type to its parent source
+                        /// @todo Add chartType enum
                         if( type.toMap().value( "source" ).toString() == chartResource.toString() )
                         {
                             if( type.toMap().value( "type" ).toString() == "Album" )
@@ -213,8 +230,13 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
                             }
                         }
                     }
+                /// @note For displaying purposes, upper the first letter
+                /// @note Remeber to lower it when fetching this!
+                QString chartName = chartResource.toString();
+                chartName[0] = chartName[0].toUpper();
 
-                result.insert( chartResource.toString() , QVariant::fromValue<QVariantMap>( charts ) );
+                /// Add the possible charts and its types to breadcrumb
+                result.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
             }
             emit info(
                 requestId,
@@ -223,8 +245,6 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             );
             return;
         }
-
-
 
         default:
         {
@@ -235,55 +255,12 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
     }
 }
 
-
-void
-ChartsPlugin::chartResources()
-{
-
-    tDebug() << "ChartsPlugin: InfoChart resources returned!";
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-
-
-    if ( reply->error() == QNetworkReply::NoError )
-    {
-        QJson::Parser p;
-        bool ok;
-        QVariantMap res = p.parse( reply, &ok ).toMap();
-
-        if ( !ok )
-        {
-            tLog() << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
-
-            return;
-        }
-
-        m_chartResources = res.value( "chart_sources" ).toList();
-        qDebug() << "Resources" << m_chartResources;
-
-        if(!m_chartResources.isEmpty()){
-
-            foreach(QVariant resource, m_chartResources){
-                tDebug() << "ChartsPlugin: InfoChart fetching possible types for "<< resource.toString();
-
-                QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
-                qDebug() << "Getting types from " << url;
-
-                QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
-
-                connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-            }
-        }
-    }
-
-}
-
 void
 ChartsPlugin::chartTypes()
 {
-
+    /// Get possible chart type for specific chart source
     tDebug() << "ChartsPlugin: InfoChart types returned!";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -297,11 +274,9 @@ ChartsPlugin::chartTypes()
 
             return;
         }
-
-        foreach(QVariant chart, res.value( "charts" ).toMap() ){
+        /// Got types, append!
+        foreach(QVariant chart, res.value( "charts" ).toMap() )
             m_chartTypes.append(chart);
-            qDebug() << "Chart types" << chart;
-        }
 
     }
 
@@ -311,8 +286,8 @@ void
 ChartsPlugin::chartReturned()
 {
 
+    /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-
     QVariantMap returnedData;
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -324,15 +299,16 @@ ChartsPlugin::chartReturned()
         if ( !ok )
         {
             tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
-
             return;
-        }else qDebug() << res;
+        }
 
-
+        /// SO we have a result, parse it!
         QVariantList chartResponse = res.value( "list" ).toList();
         QList<ArtistTrackPair> top_tracks;
         QList<ArtistAlbumPair> top_albums;
 
+        /// Deside what type, we need to handle it differently
+        /// @todo: We allready know the type, append it to breadcrumb hash
 
         if( res.value( "type" ).toString() == "Album" )
             setChartType( Album );
@@ -347,57 +323,77 @@ ChartsPlugin::chartReturned()
             QString title, artist, album;
             QVariantMap chartMap = chartR.toMap();
 
-            if ( chartMap.contains( "track" ) )
+            if( !chartMap.isEmpty() )
             {
 
                 title = chartMap.value( "track" ).toString();
+                album = chartMap.value( "album" ).toString();
                 artist = chartMap.value( "artist" ).toString();
+                /// Maybe we can use rank later on, to display something nice
+                /// rank = chartMap.value( "rank" ).toString();
 
-                if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+                if( chartType() == Album )
                 {
-                    tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
+                     /** HACK, billboard chart returns wrong typename **/
+                    if( res.value( "source" ).toString() == "billboard" )
+                        album = chartMap.value( "track" ).toString();
 
-                }
-                else{
+                    if ( album.isEmpty() && artist.isEmpty() ) // don't have enough...
+                    {
+                        tLog() << "Didn't get an artist and album name from chart, not enough to build a query on. Aborting" << title << album << artist;
 
-                    if( chartType() == Album ){
-
+                    }else
+                    {
+                        qDebug() << Q_FUNC_INFO << album << artist;
                         ArtistAlbumPair pair;
                         pair.artist = artist;
-                        pair.album = title;
+                        pair.album = album;
                         top_albums << pair;
 
-                    }else if( chartType() == Track ){
+                    }
+                }
+
+                else if( chartType() == Track )
+                {
+
+                    if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+                    {
+                        tLog() << "Didn't get an artist and track name from charts, not enough to build a query on. Aborting" << title << artist << album;
+
+                    }else{
 
                         ArtistTrackPair pair;
                         pair.artist = artist;
                         pair.track = title;
                         top_tracks << pair;
-                    }
 
+                    }
                 }
             }
         }
-            if( chartType() == Track ){
-                tDebug() << "ChartsPlugin:" << "\tgot " << top_tracks.size() << " tracks";
-                returnedData["tracks"] = QVariant::fromValue( top_tracks );
-                returnedData["type"] = "tracks";
-            }
 
-            if( chartType() == Album ){
-                tDebug() << "ChartsPlugin:" << "\tgot " << top_albums.size() << " albums";
-                returnedData["albums"] = QVariant::fromValue( top_albums );
-                returnedData["type"] = "albums";
-            }
+        if( chartType() == Track )
+        {
+            tDebug() << "ChartsPlugin:" << "\tgot " << top_tracks.size() << " tracks";
+            returnedData["tracks"] = QVariant::fromValue( top_tracks );
+            returnedData["type"] = "tracks";
+        }
 
-        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+        if( chartType() == Album )
+        {
+            tDebug() << "ChartsPlugin:" << "\tgot " << top_albums.size() << " albums";
+            returnedData["albums"] = QVariant::fromValue( top_albums );
+            returnedData["type"] = "albums";
+        }
 
-        emit info(
-            reply->property( "requestId" ).toUInt(),
-            requestData,
-            returnedData
-        );
-        // TODO update cache
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+
+    emit info(
+        reply->property( "requestId" ).toUInt(),
+        requestData,
+        returnedData
+    );
+    // TODO update cache
 
     }else qDebug() << "Network error";
 

@@ -10,7 +10,7 @@
     <height>513</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="HeaderBreadCrumb" name="breadCrumbLeft" native="true"/>
    </item>
@@ -45,21 +45,17 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page2">
-      <layout class="QVBoxLayout" name="verticalLayout2">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2"/>
- 
-        <widget class="AlbumView" name="albumsViewLeft">
-         <property name="minimumSize">
-          <size>
-           <width>320</width>
-           <height>0</height>
-          </size>
+        <widget class="AlbumView" name="additionsView">
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
          </property>
         </widget>
-    
        </item>
-       
       </layout>
      </widget>
     </widget>

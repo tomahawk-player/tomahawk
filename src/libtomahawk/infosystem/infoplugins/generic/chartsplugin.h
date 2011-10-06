@@ -52,7 +52,6 @@ public:
 
 public slots:
     void chartReturned();
-    void chartResources();
     void chartTypes();
     void namChangedSlot( QNetworkAccessManager *nam );
 
