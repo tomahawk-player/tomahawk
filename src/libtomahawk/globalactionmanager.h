@@ -45,8 +45,6 @@ public:
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
-    void shortenLink( const QUrl& url );
-
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
 
@@ -58,6 +56,8 @@ public:
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
 public slots:
+    void shortenLink( const QUrl& url );
+
     bool parseTomahawkLink( const QString& link );
     void waitingForResolved( bool );
 
