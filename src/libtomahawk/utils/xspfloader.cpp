@@ -26,12 +26,14 @@
 
 #include "sourcelist.h"
 #include "playlist.h"
+#include <XspfUpdater.h>
 
 using namespace Tomahawk;
 
-XSPFLoader::XSPFLoader( bool autoCreate, QObject *parent )
+XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
+    , m_autoUpdate( autoUpdate )
     , m_NS("http://xspf.org/ns/0/")
 {
     qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
@@ -60,10 +62,11 @@ void
 XSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
+    m_url = url;
+
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     QNetworkReply* reply = TomahawkUtils::nam()->get( request );
 
-    // isn't there a race condition here? something could happen before we connect()
     connect( reply, SIGNAL( finished() ),
                       SLOT( networkLoadFinished() ) );
 
@@ -219,6 +222,12 @@ XSPFLoader::gotBody()
                                        false,
                                        m_entries );
 
+        if ( m_autoUpdate )
+        {
+            Tomahawk::XspfUpdater* updater = new Tomahawk::XspfUpdater( m_playlist, m_url.toString() );
+            updater->setInterval( 60000 );
+            updater->setAutoUpdate( true );
+        }
         deleteLater();
     }
 

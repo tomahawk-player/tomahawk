@@ -36,9 +36,10 @@ class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
-
 namespace Tomahawk
 {
+
+class PlaylistUpdaterInterface;
 
 class DLLEXPORT PlaylistEntry : public QObject
 {
@@ -196,7 +197,10 @@ public:
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries );
+    QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
+    void setUpdater( PlaylistUpdaterInterface* interface ) const { m_updater = interface; }
+    PlaylistUpdaterInterface* updater() const { return m_updater; }
+
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
@@ -292,6 +296,8 @@ private:
     QList< plentry_ptr > m_entries;
 
     QQueue<RevisionQueueItem> m_revisionQueue;
+
+    PlaylistUpdaterInterface* m_updater;
 
     bool m_locallyChanged;
     bool m_deleted;

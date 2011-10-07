@@ -102,6 +102,8 @@ private slots:
     void onSearch( const QString& search );
     void onFilterEdited();
 
+    void loadXspfFinished( int );
+
     void showQueue();
     void hideQueue();
 

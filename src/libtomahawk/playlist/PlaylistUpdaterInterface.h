@@ -22,6 +22,7 @@
 #include "dllmacro.h"
 #include "typedefs.h"
 #include "playlist.h"
+#include <QTimer>
 
 namespace Tomahawk
 {
@@ -35,21 +36,40 @@ class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
-    PlaylistUpdaterInterface( const playlist_ptr& pl, QObject* parent )
-        : QObject( parent )
+    PlaylistUpdaterInterface( const playlist_ptr& pl )
+        : QObject( pl.data() )
+        , m_timer( new QTimer( this ) )
         , m_autoUpdate( true )
         , m_playlist( pl )
-    {}
+    {
+        Q_ASSERT( !m_playlist.isNull() );
+
+        m_playlist->setUpdater( this );
+        connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
+    }
 
     virtual ~PlaylistUpdaterInterface() {}
 
-    void setAutoUpdate( bool autoUpdate ) { m_autoUpdate = autoUpdate; }
+    void setAutoUpdate( bool autoUpdate ) {
+        m_autoUpdate = autoUpdate;
+        if ( m_autoUpdate )
+            m_timer->start();
+        else
+            m_timer->stop();
+    }
+
     bool autoUpdate() const { return m_autoUpdate; }
 
+    void setInterval( int intervalMsecs ) { m_timer->setInterval( intervalMsecs ); }
+    int intervalMsecs() const { return m_timer->interval(); }
+
     playlist_ptr playlist() const { return m_playlist; }
-signals:
+
+public slots:
+    virtual void updateNow() {}
 
 private:
+    QTimer* m_timer;
     bool m_autoUpdate;
     playlist_ptr m_playlist;
 };
