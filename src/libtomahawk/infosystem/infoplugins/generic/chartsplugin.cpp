@@ -32,8 +32,8 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-//#define CHART_URL "http://charts.tomahawk-player.org:10080/"
-#define CHART_URL "http://localhost:8080/"
+#define CHART_URL "http://charts.tomahawk-player.org:10080/"
+//#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
@@ -234,11 +234,11 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
                         {
                             /// Itunes supplys charts based on geo, for now, only take US charts
                             /// @todo: Add new breadcrumb option for country?
-                            /*if( type.toMap().value( "source" ).toString() == chartResource.toString()
+                            if( type.toMap().value( "source" ).toString() == chartResource.toString()
                                 && type.toMap().value( "geo" ).isValid()
                                 && type.toMap().value( "geo" ).toString() != "us" )
                                     continue;
-                            */
+
                             /// Append each type to its parent source
                             /// @todo Add chartType enum
                             if( type.toMap().value( "source" ).toString() == chartResource.toString() )
@@ -364,8 +364,8 @@ ChartsPlugin::chartReturned()
                 if( chartType() == Album )
                 {
                      /** HACK, billboard chart returns wrong typename **/
-                    //if( res.value( "source" ).toString() == "billboard" )
-                    //    album = chartMap.value( "track" ).toString();
+                    if( res.value( "source" ).toString() == "billboard" )
+                        album = chartMap.value( "track" ).toString();
 
                     if ( album.isEmpty() && artist.isEmpty() ) // don't have enough...
                     {
