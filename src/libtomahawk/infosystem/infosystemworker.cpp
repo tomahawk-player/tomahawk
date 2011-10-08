@@ -87,11 +87,9 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     m_plugins.append( mbptr );
     registerInfoTypes( mbptr, mbptr.data()->supportedGetTypes(), mbptr.data()->supportedPushTypes() );
 
-
-
-    InfoPluginPtr chartsptr( new ChartsPlugin() );
-    m_plugins.append( chartsptr );
-    registerInfoTypes( chartsptr, chartsptr.data()->supportedGetTypes(), chartsptr.data()->supportedPushTypes() );
+    InfoPluginPtr sptr( new ChartsPlugin() );
+    m_plugins.append( sptr );
+    registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
 
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );

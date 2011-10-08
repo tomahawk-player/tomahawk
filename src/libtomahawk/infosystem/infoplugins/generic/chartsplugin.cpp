@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
+#include <QNetworkReply>
 #include <QDomElement>
 
 #include "album.h"
@@ -31,10 +32,10 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-#include <lastfm/ws.h>
-
-#define CHART_URL "http://charts.tomahawk-player.org:10080/"
+//#define CHART_URL "http://charts.tomahawk-player.org:10080/"
+#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 using namespace Tomahawk::InfoSystem;
 
@@ -50,23 +51,9 @@ ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
 {
 
-    tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
 
     /// Add resources here
-    m_chartResources << "billboard"
-                     << "itunes";
-
-    /// Then get each chart from resource
-    if(!m_chartResources.isEmpty()){
-
-        foreach(QVariant resource, m_chartResources)
-        {
-            QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
-            QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
-            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-        }
-    }
-
+    m_chartResources << "last.fm" << "billboard" << "itunes";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -81,9 +68,25 @@ ChartsPlugin::~ChartsPlugin()
 void
 ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
+    tDebug() << "ChartsPlugin: namChangedSLot";
+
     qDebug() << Q_FUNC_INFO;
     if( !nam )
         return;
+
+    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
+
+    /// Then get each chart from resource
+    if( !m_chartResources.isEmpty() && m_nam && m_chartTypes.isEmpty() ){
+        tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
+
+        foreach(QVariant resource, m_chartResources)
+        {
+            QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
+            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
+        }
+    }
 }
 
 
@@ -98,6 +101,9 @@ ChartsPlugin::dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData r
 void
 ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
+    qDebug() << Q_FUNC_INFO << requestData.caller;
+    qDebug() << Q_FUNC_INFO << requestData.customData;
+
     switch ( requestData.type )
     {
 
@@ -168,12 +174,13 @@ ChartsPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::Info
 void
 ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !lastfm::nam() )
+    if ( !m_nam.data() )
     {
         tLog() << "Have a null QNAM, uh oh";
         emit info( requestId, requestData, QVariant() );
         return;
     }
+
 
     switch ( requestData.type )
     {
@@ -184,8 +191,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             QUrl url = QUrl( QString( CHART_URL "/source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            /// @todo: Should add ChartPlugin nam here
-            QNetworkReply* reply = lastfm::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
@@ -197,36 +203,56 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         {
 
             QVariantMap result;
+
             foreach( QVariant chartResource, m_chartResources )
             {
 
                 QList<Chart> album_charts;
                 QList<Chart> track_charts;
+                QList<Chart> artist_charts;
                 QVariantMap charts;
 
-                if( !m_chartTypes.isEmpty() )
-                    foreach( QVariant type, m_chartTypes )
-                    {
-                        /// Itunes supplys charts based on geo, for now, only take US charts
-                        /// @todo: Add new breadcrumb option for country?
-                        if( type.toMap().value( "source" ).toString() == chartResource.toString()
-                            && type.toMap().value( "geo" ).isValid()
-                            && type.toMap().value( "geo" ).toString() != "us" )
-                                continue;
+                if( chartResource.toString() == "last.fm")
+                {
 
-                        /// Append each type to its parent source
-                        /// @todo Add chartType enum
-                        if( type.toMap().value( "source" ).toString() == chartResource.toString() )
+                    track_charts.append( Chart( "chart.getTopTracks", "Top Tracks", "tracks" ) );
+                    track_charts.append( Chart( "chart.getLovedTracks", "Loved Tracks", "tracks" ) );
+                    track_charts.append( Chart( "chart.getHypedTracks", "Hyped Tracks", "tracks" ) );
+
+                    artist_charts.append( Chart( "chart.getTopArtists", "Top Artists", "artists" ) );
+                    artist_charts.append( Chart( "chart.getHypedArtists", "Hyped Artists", "artists" ) );
+
+                    charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
+                    charts.insert( "Artists", QVariant::fromValue<QList<Chart> >( artist_charts ) );
+
+
+                }
+                else
+                {
+
+                        foreach( QVariant type, m_chartTypes )
                         {
-                            if( type.toMap().value( "type" ).toString() == "Album" )
+                            /// Itunes supplys charts based on geo, for now, only take US charts
+                            /// @todo: Add new breadcrumb option for country?
+                            /*if( type.toMap().value( "source" ).toString() == chartResource.toString()
+                                && type.toMap().value( "geo" ).isValid()
+                                && type.toMap().value( "geo" ).toString() != "us" )
+                                    continue;
+                            */
+                            /// Append each type to its parent source
+                            /// @todo Add chartType enum
+                            if( type.toMap().value( "source" ).toString() == chartResource.toString() )
                             {
-                                album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
-                                charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
-                            }
-                            if( type.toMap().value( "type" ).toString() == "Track" )
-                            {
-                                track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
-                                charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
+                                if( type.toMap().value( "type" ).toString() == "Album" )
+                                {
+                                    album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
+                                    charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
+                                }
+                                if( type.toMap().value( "type" ).toString() == "Track" )
+                                {
+                                    track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
+                                    charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
+                                }
                             }
                         }
                     }
@@ -255,6 +281,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
     }
 }
 
+
 void
 ChartsPlugin::chartTypes()
 {
@@ -274,10 +301,12 @@ ChartsPlugin::chartTypes()
 
             return;
         }
-        /// Got types, append!
-        foreach(QVariant chart, res.value( "charts" ).toMap() )
-            m_chartTypes.append(chart);
 
+        /// Got types, append!
+        foreach(QVariant chart, res.value( "charts" ).toMap() ){
+             m_chartTypes.append(chart);
+
+        }
     }
 
 }
@@ -335,8 +364,8 @@ ChartsPlugin::chartReturned()
                 if( chartType() == Album )
                 {
                      /** HACK, billboard chart returns wrong typename **/
-                    if( res.value( "source" ).toString() == "billboard" )
-                        album = chartMap.value( "track" ).toString();
+                    //if( res.value( "source" ).toString() == "billboard" )
+                    //    album = chartMap.value( "track" ).toString();
 
                     if ( album.isEmpty() && artist.isEmpty() ) // don't have enough...
                     {

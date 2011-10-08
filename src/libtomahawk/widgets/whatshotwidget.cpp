@@ -208,12 +208,13 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "albums" )
             {
+
+                /// @todo: Fill the empty albums with resolved ones.
                 setLeftViewAlbums();
                 m_albumsModel->clear();
                 QList<album_ptr> al;
                 const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
-
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
                     qDebug() << "Getting album" << album.album << "By" << album.artist;

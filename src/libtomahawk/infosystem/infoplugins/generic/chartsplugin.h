@@ -21,7 +21,7 @@
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
-
+#include <QNetworkReply>
 #include <QObject>
 
 class QNetworkReply;
@@ -71,6 +71,9 @@ private:
     QList<Chart> m_charts;
     ChartType m_chartType;
 
+    QVariantMap m_chartResult;
+    bool chartHasReturned;
+    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }
