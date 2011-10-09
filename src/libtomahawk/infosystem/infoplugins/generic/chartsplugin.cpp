@@ -211,8 +211,8 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             foreach( QVariant type, m_chartTypes )
             {
 
-                if( type.toMap().value( "geo" ).isValid() ) {
-
+                if( type.toMap().value( "geo" ).isValid() )
+                {
                     geos.append( type.toMap().value( "geo" ).toString() );
                 }
             }
@@ -252,10 +252,10 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
                         QList<Chart> geoTrack_charts;
 
                        foreach( QVariant type, m_chartTypes )
-                        {
+                       {
 
-                            /// Itunes supplys charts based on geo, for now, only take US charts
-                            /// @todo: Add new breadcrumb option for country?
+                            /// Itunes supplys charts based on geo, create breadcrumb for each of them
+
                             if( type.toMap().value( "source" ).toString() == chartResource.toString()
                             && type.toMap().value( "geo" ).isValid() )
                             {
@@ -280,17 +280,14 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
                                     }
                                 }
-
                             }
                         }
                     }
 
                 }else{
-
+                     /// Billboard, and maybe others
                      foreach( QVariant type, m_chartTypes )
                      {
-                                   // && type.toMap().value( "geo" ).toString() != "us" )
-                                   // continue;
 
                             /// Append each type to its parent source
                             /// @todo Add chartType enum
@@ -301,6 +298,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
                                     album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
                                     charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
                                 }
+
                                 if( type.toMap().value( "type" ).toString() == "Track" )
                                 {
                                     track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
