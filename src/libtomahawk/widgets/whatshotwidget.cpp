@@ -53,12 +53,15 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->additionsView->setFrameShape( QFrame::NoFrame );
+    ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout_2->layout() );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
-
+    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
     //set crumb widgets
     SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
@@ -68,19 +71,15 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->breadCrumbLeft->setButtonFactory(crumbFactory);
     ui->breadCrumbLeft->setModel(m_crumbModelLeft);
     ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    //ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
     ui->breadCrumbLeft->setUseAnimation(true);
 
     connect(ui->breadCrumbLeft, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(leftCrumbIndexChanged(QModelIndex)));
 
-    /*ui->breadCrumbRight->setButtonFactory(crumbFactory);
-    ui->breadCrumbRight->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    ui->breadCrumbRight->setModel(m_crumbModelLeft);
-    ui->breadCrumbRight->setUseAnimation(true);*/
-
+    m_albumsModel = new AlbumModel( ui->additionsView );
+    ui->additionsView->setAlbumModel( m_albumsModel );
 
     m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
-    m_tracksModel->setStyle( TrackModel::Short );
+    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -108,6 +107,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
 
+
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
@@ -118,8 +118,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-
-    QTimer::singleShot( 0, this, SLOT( fetchData() ) );
+    /// Itunes response is big, so maybe wait for it here?
+    QTimer::singleShot( 1000, this, SLOT( fetchData() ) );
 }
 
 
@@ -184,7 +184,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
             //HACK ALERT - we want the second crumb to expand right away, so we
             //force it here. We should find a more elegant want to do this
-            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0));
+            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0).child(0,0));
             break;
         }
         case InfoSystem::InfoChart:
@@ -205,6 +205,27 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 m_artistsModel->clear();
                 foreach ( const QString& artist, artists )
                     m_artistsModel->addArtists( Artist::get( artist ) );
+            }
+            else if( type == "albums" )
+            {
+                setLeftViewAlbums();
+                m_albumsModel->clear();
+                QList<album_ptr> al;
+                const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
+                tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
+
+                foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
+                {
+                    qDebug() << "Getting album" << album.album << "By" << album.artist;
+                    album_ptr albumPtr = Album::get(Artist::get( album.artist, true ), album.album );
+
+                    if(!albumPtr.isNull())
+                        al << albumPtr;
+
+                }
+                qDebug() << "Adding albums to model";
+                m_albumsModel->addAlbums( al );
+
             }
             else if( type == "tracks" )
             {
@@ -249,10 +270,20 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
         return;
 
 
+    QList<QModelIndex> indexes;
+    while (index.parent().isValid())
+    {
+        indexes.prepend(index);
+        index = index.parent();
+    }
+
+
     const QString chartId = item->data().toString();
 
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria.insert("chart_id", chartId);
+    /// Remember to lower the source!
+    criteria.insert("chart_source",  index.data().toString().toLower());
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     QVariantMap customData;
@@ -322,6 +353,13 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
         sourceItem->appendRow(childItem);
     }
     return sourceItem;
+}
+
+
+void
+WhatsHotWidget::setLeftViewAlbums()
+{
+    ui->stackLeft->setCurrentIndex(2);
 }
 
 

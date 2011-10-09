@@ -37,6 +37,7 @@ class TreeModel;
 class PlaylistModel;
 class OverlayWidget;
 class TreeProxyModel;
+class AlbumModel;
 
 namespace Ui
 {
@@ -83,7 +84,10 @@ private slots:
 
 private:
     void setLeftViewArtists();
+    void setLeftViewAlbums();
     void setLeftViewTracks();
+
+
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
 
@@ -91,6 +95,7 @@ private:
     TreeModel* m_artistsModel;
     TreeProxyModel* m_artistsProxy;
     QStandardItemModel* m_crumbModelLeft;
+    AlbumModel* m_albumsModel;
 
     QTimer* m_timer;
 };

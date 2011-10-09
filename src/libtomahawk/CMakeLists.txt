@@ -110,6 +110,7 @@ set( libSources
     infosystem/infosystemworker.cpp
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
+    infosystem/infoplugins/generic/chartsplugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
 
@@ -335,6 +336,7 @@ set( libHeaders
     infosystem/infosystemcache.h
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
+    infosystem/infoplugins/generic/chartsplugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
     infosystem/infoplugins/generic/musicbrainzPlugin.h
 
