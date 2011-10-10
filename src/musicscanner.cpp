@@ -261,7 +261,9 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
         m_filesToDelete << m_filemtimes[ key ].keys().first();
     }
     commitBatch( m_scannedfiles, m_filesToDelete );
-
+    m_scannedfiles.clear();
+    m_filesToDelete.clear();
+    
     // remove obsolete / stale files
     foreach ( const QString& path, m_dirmtimes.keys() )
     {

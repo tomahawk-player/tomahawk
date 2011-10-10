@@ -168,7 +168,8 @@ ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_
 {
     Q_UNUSED( files );
     Q_UNUSED( collection );
-    runDirScan( TomahawkSettings::instance()->scannerPaths(), true );
+    if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
+        runDirScan( TomahawkSettings::instance()->scannerPaths(), true );
 }
 
 
