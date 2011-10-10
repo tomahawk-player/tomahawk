@@ -106,10 +106,12 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             idstring.chop( 2 ); //remove the trailing ", "
             
             dirquery.bindValue( 0, idstring );
+            tDebug() << Q_FUNC_INFO << " binding id string: " << idstring;
             dirquery.exec();
             while ( dirquery.next() )
                 m_files << dirquery.value( 1 ).toString();
 
+            tDebug() << Q_FUNC_INFO << " executed query was: " << dirquery.executedQuery() << ", bound value is: " << dirquery.boundValue( 0 ).toString();
             tDebug() << Q_FUNC_INFO << " files selected for delete: " << m_files;
         }
         else if ( m_deleteAll )
@@ -178,7 +180,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 << delquery.boundValues();
         }
 
-        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery();
+        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery() << ", bound value is: " << delquery.boundValue( 0 ).toString();
     }
 
     emit done( m_files, source()->collection() );
