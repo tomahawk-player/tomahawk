@@ -77,6 +77,9 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     m_albumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_albumsModel );
+    /// Disable sorting, its a ranked list!
+    ui->additionsView->proxyModel()->sort( -1 );
+
 
     m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
