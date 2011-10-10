@@ -169,6 +169,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         idstring.chop( 3 ); //remove the trailing "\", "
 
         delquery.bindValue( 0, idstring );
+        tDebug() << Q_FUNC_INFO << " bound idstring: " << idstring;
         if( !delquery.exec() )
         {
             qDebug() << "Failed to delete file:"
@@ -177,7 +178,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 << delquery.boundValues();
         }
 
-        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.lastQuery();
+        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery();
     }
 
     emit done( m_files, source()->collection() );
