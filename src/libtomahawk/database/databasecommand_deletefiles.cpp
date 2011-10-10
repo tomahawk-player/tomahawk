@@ -67,9 +67,10 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
     if ( source()->isLocal() )
     {
+        tDebug() << Q_FUNC_INFO << " source is local";
         if ( m_dir.path() != QString( "." ) )
         {
-            qDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
+            tDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
             TomahawkSqlQuery dirquery = dbi->newquery();
 
             dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE ?" ) );
@@ -82,7 +83,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 if ( fi.canonicalPath() != m_dir.canonicalPath() )
                 {
                     if ( lastPath != fi.canonicalPath() )
-                        qDebug() << "Skipping subdir:" << fi.canonicalPath();
+                        tDebug() << "Skipping subdir:" << fi.canonicalPath();
 
                     lastPath = fi.canonicalPath();
                     continue;
@@ -94,6 +95,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         }
         else if ( !m_ids.isEmpty() )
         {
+            tDebug() << Q_FUNC_INFO << " deleting given ids";
             TomahawkSqlQuery dirquery = dbi->newquery();
 
             dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( ? )" ) );
@@ -107,6 +109,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             dirquery.exec();
             while ( dirquery.next() )
                 m_files << dirquery.value( 1 ).toString();
+
+            tDebug() << Q_FUNC_INFO << " files selected for delete: " << m_files;
         }
         else if ( m_deleteAll )
         {
@@ -154,6 +158,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     }
     else if ( !m_ids.isEmpty() )
     {
+        tDebug() << Q_FUNC_INFO << " executing delete of ids " << m_ids;
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND %2 IN ( ? )" )
                              .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
                              .arg( source()->isLocal() ? "id" : "url"  ) );
@@ -171,6 +176,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 << delquery.lastError().driverText()
                 << delquery.boundValues();
         }
+
+        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.lastQuery();
     }
 
     emit done( m_files, source()->collection() );

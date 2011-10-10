@@ -28,6 +28,8 @@
 
 #include "dllmacro.h"
 
+#include "utils/logger.h"
+
 class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {
 Q_OBJECT
@@ -42,18 +44,21 @@ public:
     explicit DatabaseCommand_DeleteFiles( const Tomahawk::source_ptr& source, QObject* parent = 0 )
     : DatabaseCommandLoggable( parent ), m_deleteAll( true )
     {
+        tDebug() << Q_FUNC_INFO << " deleting single source";
         setSource( source );
     }
 
     explicit DatabaseCommand_DeleteFiles( const QDir& dir, const Tomahawk::source_ptr& source, QObject* parent = 0 )
     : DatabaseCommandLoggable( parent ), m_dir( dir ), m_deleteAll( false )
     {
+        tDebug() << Q_FUNC_INFO << " deleting dir " << dir;
         setSource( source );
     }
 
     explicit DatabaseCommand_DeleteFiles( const QVariantList& ids, const Tomahawk::source_ptr& source, QObject* parent = 0 )
     : DatabaseCommandLoggable( parent ), m_ids( ids ), m_deleteAll( false )
     {
+        tDebug() << Q_FUNC_INFO << " deleting ids " << ids << " with size " << ids.count();
         setSource( source );
     }
 
