@@ -97,10 +97,24 @@ lastfm::Track::Track( const QDomElement& e )
 
     if (e.isNull()) { d->null = true; return; }
     
-    d->artist = e.namedItem( "artist" ).toElement().text();
+    // XML response may have changed
+    QDomNode artistName = e.namedItem( "artist" ).namedItem( "name" );
+    if( artistName.isNull() ) {
+          d->artist = e.namedItem( "artist" ).toElement().text();
+    } else {
+        d->artist = artistName.toElement().text();
+
+    }
+    // XML response may have changed
+    QDomNode trackTitle = e.namedItem( "name" );
+    if( trackTitle.isNull() )
+        d->title = e.namedItem( "track" ).toElement().text();
+    else
+        d->title = trackTitle.toElement().text();
+
+
     d->albumArtist = e.namedItem( "albumArtist" ).toElement().text();
     d->album =  e.namedItem( "album" ).toElement().text();
-    d->title = e.namedItem( "track" ).toElement().text();
     d->correctedArtist = e.namedItem( "correctedArtist" ).toElement().text();
     d->correctedAlbumArtist = e.namedItem( "correctedAlbumArtist" ).toElement().text();
     d->correctedAlbum =  e.namedItem( "correctedAlbum" ).toElement().text();
