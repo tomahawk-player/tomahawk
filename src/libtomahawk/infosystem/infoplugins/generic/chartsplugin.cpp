@@ -319,7 +319,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
         default:
         {
-            tLog() << "Couldn't figure out what to do with this type of request after cache miss";
+            tLog() << Q_FUNC_INFO << "Couldn't figure out what to do with this type of request after cache miss";
             emit info( requestId, requestData, QVariant() );
             return;
         }

@@ -127,12 +127,6 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
                 SLOT( getCachedInfoSlot( uint, Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
             );
         connect(
-                cache.data(),
-                SIGNAL( notInCache( uint, Tomahawk::InfoSystem::InfoCriteriaHash, Tomahawk::InfoSystem::InfoRequestData ) ),
-                plugin.data(),
-                SLOT( notInCacheSlot( uint, Tomahawk::InfoSystem::InfoCriteriaHash, Tomahawk::InfoSystem::InfoRequestData ) )
-            );
-        connect(
                 plugin.data(),
                 SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
                 cache.data(),
