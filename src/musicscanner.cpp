@@ -63,7 +63,7 @@ DirLister::go()
         m_newdirmtimes = m_dirmtimes;
     }
 
-    tDebug( LOGEXTRA ) << "m_dirmtimes = " << m_dirmtimes;
+    tDebug( LOGVERBOSE ) << "m_dirmtimes = " << m_dirmtimes;
     foreach ( const QString& dir, m_dirs )
     {
         m_opcount++;

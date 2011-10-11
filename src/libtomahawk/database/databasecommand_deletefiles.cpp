@@ -105,15 +105,14 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( %1 )" ).arg( idstring ) );
             
             dirquery.exec();
-            tDebug() << Q_FUNC_INFO << " result size: " << dirquery.size();
             while ( dirquery.next() )
             {
-                tDebug() << Q_FUNC_INFO << " found dirquery value 0: " << dirquery.value( 0 ).toString() << " and value 1: " << dirquery.value( 1 ).toString();
+                //tDebug() << Q_FUNC_INFO << " found dirquery value 0: " << dirquery.value( 0 ).toString() << " and value 1: " << dirquery.value( 1 ).toString();
                 m_files << dirquery.value( 1 ).toString();
             }
 
-            tDebug() << Q_FUNC_INFO << " executed query was: " << dirquery.executedQuery();
-            tDebug() << Q_FUNC_INFO << " files selected for delete: " << m_files;
+            //tDebug() << Q_FUNC_INFO << " executed query was: " << dirquery.executedQuery();
+            //tDebug() << Q_FUNC_INFO << " files selected for delete: " << m_files;
         }
         else if ( m_deleteAll )
         {
@@ -161,7 +160,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     }
     else if ( !m_ids.isEmpty() )
     {
-        tDebug() << Q_FUNC_INFO << " executing delete of ids " << m_ids;
+        tDebug() << Q_FUNC_INFO << " executing delete";
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND %2 IN ( ? )" )
                              .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
                              .arg( source()->isLocal() ? "id" : "url"  ) );
@@ -184,7 +183,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 << delquery.boundValues();
         }
 
-        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery();
+        //tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery();
     }
 
     emit done( m_files, source()->collection() );
