@@ -167,8 +167,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
         QString idstring;
         foreach( const QVariant& id, m_ids )
-                idstring.append( '"' + id.toString() + "\", " );
-        idstring.chop( 3 ); //remove the trailing "\", "
+                idstring.append( id.toString() + ", " );
+        idstring.chop( 2 ); //remove the trailing ", "
 
         delquery.bindValue( 0, idstring );
         tDebug() << Q_FUNC_INFO << " bound idstring: " << idstring;
