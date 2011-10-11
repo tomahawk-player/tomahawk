@@ -158,7 +158,7 @@ EchonestCatalogSynchronizer::songCreateFinished()
         return;
     }
 
-    QString sql( "SELECT track.id, track.name, artist.name, album.name "
+    QString sql( "SELECT file.id, track.name, artist.name, album.name "
                  "FROM file, artist, track, file_join "
                  "LEFT OUTER JOIN album "
                  "ON file_join.album = album.id "
