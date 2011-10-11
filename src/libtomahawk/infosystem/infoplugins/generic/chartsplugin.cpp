@@ -39,13 +39,6 @@
 
 using namespace Tomahawk::InfoSystem;
 
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
-
 
 ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
