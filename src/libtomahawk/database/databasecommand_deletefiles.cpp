@@ -72,9 +72,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         {
             tDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
             TomahawkSqlQuery dirquery = dbi->newquery();
-
-            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE ?" ) );
-            dirquery.bindValue( 0, "file://" + m_dir.canonicalPath() + "/%" );
+            QString path( "file://" + m_dir.canonicalPath() + "/%" );
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE %1" ).arg( path ) );
             dirquery.exec();
 
             while ( dirquery.next() )
@@ -98,15 +97,13 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             tDebug() << Q_FUNC_INFO << " deleting given ids";
             TomahawkSqlQuery dirquery = dbi->newquery();
 
-            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( ? )" ) );
-
             QString idstring;
             foreach( const QVariant& id, m_ids )
                 idstring.append( id.toString() + ", " );
             idstring.chop( 2 ); //remove the trailing ", "
+
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( %1 )" ).arg( idstring ) );
             
-            dirquery.bindValue( 0, idstring );
-            tDebug() << Q_FUNC_INFO << " binding id string: " << idstring;
             dirquery.exec();
             tDebug() << Q_FUNC_INFO << " result size: " << dirquery.size();
             while ( dirquery.next() )
@@ -115,7 +112,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 m_files << dirquery.value( 1 ).toString();
             }
 
-            tDebug() << Q_FUNC_INFO << " executed query was: " << dirquery.executedQuery() << ", bound value is: " << dirquery.boundValue( 0 ).toString();
+            tDebug() << Q_FUNC_INFO << " executed query was: " << dirquery.executedQuery();
             tDebug() << Q_FUNC_INFO << " files selected for delete: " << m_files;
         }
         else if ( m_deleteAll )
@@ -174,8 +171,11 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 idstring.append( id.toString() + ", " );
         idstring.chop( 2 ); //remove the trailing ", "
 
-        delquery.bindValue( 0, idstring );
-        tDebug() << Q_FUNC_INFO << " bound idstring: " << idstring;
+        delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND %2 IN ( %3 )" )
+                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
+                             .arg( source()->isLocal() ? "id" : "url"  )
+                             .arg( idstring ) );
+        
         if( !delquery.exec() )
         {
             qDebug() << "Failed to delete file:"
@@ -184,7 +184,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                 << delquery.boundValues();
         }
 
-        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery() << ", bound value is: " << delquery.boundValue( 0 ).toString();
+        tDebug() << Q_FUNC_INFO << " executed query was: " << delquery.executedQuery();
     }
 
     emit done( m_files, source()->collection() );
