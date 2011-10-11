@@ -257,9 +257,8 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
 
     // any remaining stuff that wasnt emitted as a batch:
     foreach( const QString& key, m_filemtimes.keys() )
-    {
         m_filesToDelete << m_filemtimes[ key ].keys().first();
-    }
+
     commitBatch( m_scannedfiles, m_filesToDelete );
     m_scannedfiles.clear();
     m_filesToDelete.clear();
@@ -325,6 +324,7 @@ MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& delet
 void
 MusicScanner::scanFile( const QFileInfo& fi )
 {
+    tDebug() << Q_FUNC_INFO << " scanning file: " << fi.canonicalFilePath();
     if ( m_mode == TomahawkSettings::Files && m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
     {
         if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
@@ -334,6 +334,7 @@ MusicScanner::scanFile( const QFileInfo& fi )
         }
 
         m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
+        m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
     QVariant m = readFile( fi );

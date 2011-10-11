@@ -108,6 +108,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             dirquery.bindValue( 0, idstring );
             tDebug() << Q_FUNC_INFO << " binding id string: " << idstring;
             dirquery.exec();
+            tDebug() << Q_FUNC_INFO << " result size: " << dirquery.size();
             while ( dirquery.next() )
             {
                 tDebug() << Q_FUNC_INFO << " found dirquery value 0: " << dirquery.value( 0 ).toString() << " and value 1: " << dirquery.value( 1 ).toString();
