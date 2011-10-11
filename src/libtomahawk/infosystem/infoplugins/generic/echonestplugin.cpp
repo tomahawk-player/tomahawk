@@ -182,21 +182,22 @@ EchoNestPlugin::getArtistBiographySlot()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
     BiographyList biographies = artist.biographies();
-    InfoGenericMap biographyMap;
-    Q_FOREACH(const Biography& biography, biographies)
+    QVariantMap biographyMap;
+    Q_FOREACH( const Biography& biography, biographies )
     {
-        biographyMap[biography.site()]["site"] = biography.site();
-        biographyMap[biography.site()]["url"] = biography.url().toString();
-        biographyMap[biography.site()]["text"] = biography.text();
-        biographyMap[biography.site()]["attribution"] = biography.license().attribution;
-        biographyMap[biography.site()]["licensetype"] = biography.license().type;
-        biographyMap[biography.site()]["attribution"] = biography.license().url.toString();
-
+        QVariantHash siteData;
+        siteData[ "site" ] = biography.site();
+        siteData[ "url" ] = biography.url().toString();
+        siteData[ "text" ] = biography.text();
+        siteData[ "attribution" ] = biography.license().attribution;
+        siteData[ "licensetype" ] = biography.license().type;
+        siteData[ "attribution" ] = biography.license().url.toString();
+        biographyMap[ biography.site() ] = siteData;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( reply->property( "requestId" ).toUInt(),
                requestData,
-               QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( biographyMap ) );
+               biographyMap );
     reply->deleteLater();
 }
 
@@ -232,17 +233,17 @@ EchoNestPlugin::getArtistTermsSlot()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
     TermList terms = artist.terms();
-    InfoGenericMap termsMap;
+    QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
-        QMap< QString, QString > termMap;
-        termMap[ "weight" ] = QString::number(term.weight());
-        termMap[ "frequency" ] = QString::number(term.frequency());
-        termsMap[ term.name() ] = termMap;
+        QVariantHash termHash;
+        termHash[ "weight" ] = QString::number( term.weight() );
+        termHash[ "frequency" ] = QString::number( term.frequency() );
+        termsMap[ term.name() ] = termHash;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( reply->property( "requestId" ).toUInt(),
                requestData,
-               QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ) );
+               termsMap );
     reply->deleteLater();
 }
 
@@ -251,17 +252,17 @@ EchoNestPlugin::getMiscTopSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     TermList terms = Echonest::Artist::parseTopTerms( reply );
-    InfoGenericMap termsMap;
+    QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
-        QMap< QString, QString > termMap;
-        termMap[ "weight" ] = QString::number( term.weight() );
-        termMap[ "frequency" ] = QString::number( term.frequency() );
-        termsMap[ term.name().toLower() ] = termMap;
+        QVariantHash termHash;
+        termHash[ "weight" ] = QString::number( term.weight() );
+        termHash[ "frequency" ] = QString::number( term.frequency() );
+        termsMap[ term.name() ] = termHash;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( reply->property( "requestId" ).toUInt(),
                requestData,
-               QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ) );
+               termsMap );
     reply->deleteLater();
 }
 

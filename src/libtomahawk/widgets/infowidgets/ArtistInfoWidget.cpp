@@ -154,12 +154,12 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     {
         case InfoSystem::InfoArtistBiography:
         {
-            InfoSystem::InfoGenericMap bmap = output.value< Tomahawk::InfoSystem::InfoGenericMap >();
+            QVariantMap bmap = output.toMap();
 
             foreach ( const QString& source, bmap.keys() )
             {
                 if ( m_longDescription.isEmpty() || source == "last.fm" )
-                    m_longDescription = bmap[source]["text"];
+                    m_longDescription = bmap[ source ].toHash()[ "text" ].toString();
             }
             emit longDescriptionChanged( m_longDescription );
             break;

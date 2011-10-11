@@ -399,7 +399,6 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
 
-    qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );

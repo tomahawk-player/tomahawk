@@ -154,7 +154,6 @@ struct Chart {
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QString > InfoCriteriaHash;
 
 class DLLEXPORT InfoPlugin : public QObject
@@ -285,7 +284,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistTrackPair );
