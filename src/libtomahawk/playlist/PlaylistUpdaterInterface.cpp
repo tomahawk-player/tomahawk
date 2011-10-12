@@ -81,6 +81,18 @@ PlaylistUpdaterInterface::doSave()
 }
 
 void
+PlaylistUpdaterInterface::remove()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+    const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
+    removeFromSettings( key );
+    s->remove( QString( "%1/type" ).arg( key ) );
+    s->remove( QString( "%1/autoupdate" ).arg( key ) );
+    s->remove( QString( "%1/interval" ).arg( key ) );
+}
+
+
+void
 PlaylistUpdaterInterface::setAutoUpdate( bool autoUpdate )
 {
     m_autoUpdate = autoUpdate;

@@ -82,3 +82,9 @@ XspfUpdater::loadFromSettings( const QString& group )
 {
     m_url = TomahawkSettings::instance()->value( QString( "%1/xspfurl" ).arg( group ) ).toString();
 }
+
+void
+XspfUpdater::removeFromSettings( const QString& group ) const
+{
+    TomahawkSettings::instance()->remove( QString( "%1/xspfurl" ).arg( group ) );
+}

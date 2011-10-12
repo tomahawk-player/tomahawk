@@ -49,6 +49,8 @@ public:
     void setInterval( int intervalMsecs ) ;
     int intervalMsecs() const { return m_timer->interval(); }
 
+    void remove();
+
     playlist_ptr playlist() const { return m_playlist; }
 
     /// If you want to try to load a updater from the settings. Returns a valid
@@ -64,6 +66,7 @@ private slots:
 protected:
     virtual void loadFromSettings( const QString& group ) = 0;
     virtual void saveToSettings( const QString& group ) const = 0;
+    virtual void removeFromSettings( const QString& group ) const = 0;
 
 private:
     QTimer* m_timer;

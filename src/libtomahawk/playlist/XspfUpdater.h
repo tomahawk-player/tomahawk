@@ -42,6 +42,7 @@ public slots:
 protected:
     void loadFromSettings( const QString& group );
     void saveToSettings( const QString& group ) const;
+    virtual void removeFromSettings(const QString& group) const;
 
 private slots:
     void playlistLoaded();

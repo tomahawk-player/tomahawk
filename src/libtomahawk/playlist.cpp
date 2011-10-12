@@ -34,6 +34,7 @@
 #include "sourcelist.h"
 
 #include "utils/logger.h"
+#include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;
 
@@ -253,6 +254,9 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     Q_ASSERT( self.data() == this );
     m_deleted = true;
     m_source->collection()->deletePlaylist( self );
+
+    if ( m_updater )
+        m_updater->remove();
 
     emit deleted( self );
 }
