@@ -30,11 +30,18 @@ class XspfUpdater : public PlaylistUpdaterInterface
 {
     Q_OBJECT
 public:
-    explicit XspfUpdater( const playlist_ptr& pl, const QString& xspfUrl );
+    XspfUpdater( const playlist_ptr& pl, const QString& xspfUrl );
+    explicit XspfUpdater( const playlist_ptr& pl ); // used by factory
+
     virtual ~XspfUpdater();
 
+    virtual QString type() const { return "xspf"; }
 public slots:
     void updateNow();
+
+protected:
+    void loadFromSettings( const QString& group );
+    void saveToSettings( const QString& group ) const;
 
 private slots:
     void playlistLoaded();

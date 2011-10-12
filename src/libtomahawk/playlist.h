@@ -198,7 +198,7 @@ public:
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
-    void setUpdater( PlaylistUpdaterInterface* interface ) const { m_updater = interface; }
+    void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
     PlaylistUpdaterInterface* updater() const { return m_updater; }
 
 signals:

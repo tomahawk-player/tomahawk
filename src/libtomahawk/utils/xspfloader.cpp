@@ -222,12 +222,9 @@ XSPFLoader::gotBody()
                                        false,
                                        m_entries );
 
-        if ( m_autoUpdate )
-        {
-            Tomahawk::XspfUpdater* updater = new Tomahawk::XspfUpdater( m_playlist, m_url.toString() );
-            updater->setInterval( 60000 );
-            updater->setAutoUpdate( true );
-        }
+        Tomahawk::XspfUpdater* updater = new Tomahawk::XspfUpdater( m_playlist, m_url.toString() );
+        updater->setInterval( 60000 );
+        updater->setAutoUpdate( m_autoUpdate );
         deleteLater();
     }
 

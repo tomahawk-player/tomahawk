@@ -54,6 +54,10 @@ public:
 
     virtual bool isTemporaryPage() const { return false; }
 
+    virtual bool canAutoUpdate() const { return false; }
+    virtual void setAutoUpdate( bool ) {}
+    virtual bool autoUpdate() const { return false; }
+
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )
      * descriptionChanged( const QString& )
@@ -63,7 +67,6 @@ public:
      *
      * See DynamicWidget for an example
      */
-private:
 };
 
 }; // ns

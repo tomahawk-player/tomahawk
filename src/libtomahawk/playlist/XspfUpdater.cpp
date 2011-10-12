@@ -22,6 +22,7 @@
 #include "utils/xspfloader.h"
 
 #include <QTimer>
+#include <tomahawksettings.h>
 
 using namespace Tomahawk;
 
@@ -30,6 +31,13 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, const QString& xUrl )
     , m_url( xUrl )
 {
 }
+
+XspfUpdater::XspfUpdater( const playlist_ptr& pl )
+    : PlaylistUpdaterInterface( pl )
+{
+
+}
+
 
 XspfUpdater::~XspfUpdater()
 {}
@@ -61,4 +69,16 @@ XspfUpdater::playlistLoaded()
 //            if ( !playlist()->entries.contains() )
 //        }
 //    }
+}
+
+void
+XspfUpdater::saveToSettings( const QString& group ) const
+{
+    TomahawkSettings::instance()->setValue( QString( "%1/xspfurl" ).arg( group ), m_url );
+}
+
+void
+XspfUpdater::loadFromSettings( const QString& group )
+{
+    m_url = TomahawkSettings::instance()->value( QString( "%1/xspfurl" ).arg( group ) ).toString();
 }

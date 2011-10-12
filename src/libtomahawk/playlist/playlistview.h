@@ -42,6 +42,10 @@ public:
 
     virtual bool showFilter() const { return true; }
 
+    virtual bool canAutoUpdate() const;
+    virtual void setAutoUpdate( bool autoUpdate );
+    virtual bool autoUpdate() const;
+
     virtual QString title() const { return playlistModel()->title(); }
     virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }

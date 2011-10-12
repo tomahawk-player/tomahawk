@@ -109,6 +109,7 @@ ViewManager::ViewManager( QObject* parent )
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+    connect( m_infobar, SIGNAL( autoUpdateChanged( int ) ), SLOT( autoUpdateChanged( int ) ) );
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
     connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
@@ -507,6 +508,13 @@ ViewManager::applyFilter()
 
 
 void
+ViewManager::autoUpdateChanged( int state )
+{
+    currentPage()->setAutoUpdate( state == Qt::Checked );
+}
+
+
+void
 ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
@@ -655,6 +663,8 @@ ViewManager::updateView()
     emit statsAvailable( currentPage()->showStatsBar() );
     emit modesAvailable( currentPage()->showModes() );
     emit filterAvailable( currentPage()->showFilter() );
+
+    emit autoUpdateAvailable( currentPage()->canAutoUpdate() );
 
 /*    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
         m_topbar->setVisible( false );

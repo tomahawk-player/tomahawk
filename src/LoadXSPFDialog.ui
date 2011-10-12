@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>XSPF Url:</string>
+        <string>Playlist Url</string>
        </property>
       </widget>
      </item>

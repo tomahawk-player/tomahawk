@@ -36,37 +36,34 @@ class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
-    PlaylistUpdaterInterface( const playlist_ptr& pl )
-        : QObject( pl.data() )
-        , m_timer( new QTimer( this ) )
-        , m_autoUpdate( true )
-        , m_playlist( pl )
-    {
-        Q_ASSERT( !m_playlist.isNull() );
+    PlaylistUpdaterInterface( const playlist_ptr& pl );
 
-        m_playlist->setUpdater( this );
-        connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
-    }
+    virtual ~PlaylistUpdaterInterface(){}
 
-    virtual ~PlaylistUpdaterInterface() {}
-
-    void setAutoUpdate( bool autoUpdate ) {
-        m_autoUpdate = autoUpdate;
-        if ( m_autoUpdate )
-            m_timer->start();
-        else
-            m_timer->stop();
-    }
+    // What type you are. If you add a new updater, add the creation code as well.
+    virtual QString type() const = 0;
 
     bool autoUpdate() const { return m_autoUpdate; }
+    void setAutoUpdate( bool autoUpdate );
 
-    void setInterval( int intervalMsecs ) { m_timer->setInterval( intervalMsecs ); }
+    void setInterval( int intervalMsecs ) ;
     int intervalMsecs() const { return m_timer->interval(); }
 
     playlist_ptr playlist() const { return m_playlist; }
 
+    /// If you want to try to load a updater from the settings. Returns a valid
+    /// updater if one was saved
+    static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
+
 public slots:
     virtual void updateNow() {}
+
+private slots:
+    void doSave();
+
+protected:
+    virtual void loadFromSettings( const QString& group ) = 0;
+    virtual void saveToSettings( const QString& group ) const = 0;
 
 private:
     QTimer* m_timer;
