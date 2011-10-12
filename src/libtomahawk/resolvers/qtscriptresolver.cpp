@@ -184,7 +184,11 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-    Q_ASSERT( false );
+    /// I guess there is somereason for a assert in here, maybe fatal js errors, but
+    /// undefined is not so fatal
+    if(sourceID != "undefined")
+        Q_ASSERT( false );
+
 }
 
 
