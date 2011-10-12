@@ -223,7 +223,7 @@ XSPFLoader::gotBody()
                                        m_entries );
 
         Tomahawk::XspfUpdater* updater = new Tomahawk::XspfUpdater( m_playlist, m_url.toString() );
-        updater->setInterval( 60000 );
+        updater->setInterval(  1200000 ); // 20 minute default for now, no way to change it
         updater->setAutoUpdate( m_autoUpdate );
         deleteLater();
     }

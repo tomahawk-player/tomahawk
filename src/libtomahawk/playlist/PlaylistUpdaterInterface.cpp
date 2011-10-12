@@ -103,6 +103,10 @@ PlaylistUpdaterInterface::setAutoUpdate( bool autoUpdate )
 
     const QString key = QString( "playlistupdaters/%1/autoupdate" ).arg( m_playlist->guid() );
     TomahawkSettings::instance()->setValue( key, m_autoUpdate );
+
+    // Update immediately as well
+    if ( m_autoUpdate )
+        QTimer::singleShot( 0, this, SLOT( updateNow() ) );
 }
 
 void
