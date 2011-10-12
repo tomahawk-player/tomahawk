@@ -39,12 +39,12 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    bool autoCreate = true;
+    bool autoCreate = false;
     int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    autoCreate = true; // artistId overwrites autoCreate (reference)
+    autoCreate = false; // artistId overwrites autoCreate (reference)
     int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
