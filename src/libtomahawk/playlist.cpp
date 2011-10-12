@@ -116,6 +116,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
+    , m_updater( 0 )
 {
     init();
 }
@@ -138,6 +139,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
     , m_initEntries( entries )
+    , m_updater( 0 )
 {
     init();
 }
@@ -511,9 +513,12 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 
 
 QList<plentry_ptr>
-Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries )
+Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst )
 {
-    QList<plentry_ptr> el = entries();
+    QList<plentry_ptr> el;
+    if ( !clearFirst )
+        el = entries();
+
     foreach( const query_ptr& query, queries )
     {
         plentry_ptr e( new PlaylistEntry() );

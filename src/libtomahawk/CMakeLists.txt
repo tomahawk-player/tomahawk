@@ -140,6 +140,7 @@ set( libSources
     playlist/artistview.cpp
     playlist/customplaylistview.cpp
     playlist/ViewHeader.cpp
+    playlist/PlaylistUpdaterInterface.cpp
     playlist/XspfUpdater.cpp
 
     playlist/topbar/topbar.cpp

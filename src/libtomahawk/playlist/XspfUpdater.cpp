@@ -22,26 +22,31 @@
 #include "utils/xspfloader.h"
 
 #include <QTimer>
+#include <tomahawksettings.h>
 
 using namespace Tomahawk;
 
-XspfUpdater::XspfUpdater( const playlist_ptr& pl, const QString& xUrl, QObject *parent )
-    : PlaylistUpdaterInterface( pl, parent )
+XspfUpdater::XspfUpdater( const playlist_ptr& pl, const QString& xUrl )
+    : PlaylistUpdaterInterface( pl )
     , m_url( xUrl )
-    , m_timer( new QTimer( this ) )
 {
-    // for now refresh every 60min
-    m_timer->setInterval( 60 * 60 * 1000);
-    connect( m_timer, SIGNAL( timeout() ), this, SLOT( update() ) );
 }
+
+XspfUpdater::XspfUpdater( const playlist_ptr& pl )
+    : PlaylistUpdaterInterface( pl )
+{
+
+}
+
 
 XspfUpdater::~XspfUpdater()
 {}
 
 void
-XspfUpdater::update()
+XspfUpdater::updateNow()
 {
-    XSPFLoader* l = new XSPFLoader( false );
+    XSPFLoader* l = new XSPFLoader( false, false );
+    l->load( m_url );
     connect( l, SIGNAL( ok ( Tomahawk::playlist_ptr ) ), this, SLOT( playlistLoaded() ) );
 }
 
@@ -52,7 +57,7 @@ XspfUpdater::playlistLoaded()
     Q_ASSERT( loader );
 
     QList< query_ptr > queries = loader->entries();
-    QList<plentry_ptr> el = playlist()->entriesFromQueries( queries );
+    QList<plentry_ptr> el = playlist()->entriesFromQueries( queries, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );
 
 //    // if there are any different from the current playlist, clear and use the new one, update
@@ -64,4 +69,16 @@ XspfUpdater::playlistLoaded()
 //            if ( !playlist()->entries.contains() )
 //        }
 //    }
+}
+
+void
+XspfUpdater::saveToSettings( const QString& group ) const
+{
+    TomahawkSettings::instance()->setValue( QString( "%1/xspfurl" ).arg( group ), m_url );
+}
+
+void
+XspfUpdater::loadFromSettings( const QString& group )
+{
+    m_url = TomahawkSettings::instance()->value( QString( "%1/xspfurl" ).arg( group ) ).toString();
 }

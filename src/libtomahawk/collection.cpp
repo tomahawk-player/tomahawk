@@ -24,6 +24,7 @@
 #include "source.h"
 
 #include "utils/logger.h"
+#include <PlaylistUpdaterInterface.h>
 
 using namespace Tomahawk;
 
@@ -185,6 +186,8 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
     {
 //        qDebug() << "Batch inserting playlist:" << p->guid();
         m_playlists.insert( p->guid(), p );
+        if ( !m_source.isNull() && m_source->isLocal() )
+            PlaylistUpdaterInterface::loadForPlaylist( p );
     }
     emit playlistsAdded( plists );
 }

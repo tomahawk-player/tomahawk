@@ -25,6 +25,7 @@
 #include "widgets/overlaywidget.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
+#include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;
 
@@ -102,6 +103,34 @@ void
 PlaylistView::deleteItems()
 {
     proxyModel()->removeIndexes( selectedIndexes() );
+}
+
+bool
+PlaylistView::canAutoUpdate() const
+{
+    if ( !m_model->playlist().isNull() && m_model->playlist()->updater() )
+        return true;
+
+    return false;
+}
+
+bool
+PlaylistView::autoUpdate() const
+{
+    if ( canAutoUpdate() )
+        return m_model->playlist()->updater()->autoUpdate();
+
+    return false;
+}
+
+
+void
+PlaylistView::setAutoUpdate( bool autoUpdate )
+{
+    if ( !canAutoUpdate() )
+        return;
+
+    m_model->playlist()->updater()->setAutoUpdate( autoUpdate );
 }
 
 

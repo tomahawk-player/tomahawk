@@ -16,40 +16,28 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XSPFUPDATER_H
-#define XSPFUPDATER_H
+#ifndef LOADXSPFDIALOG_H
+#define LOADXSPFDIALOG_H
 
-#include "PlaylistUpdaterInterface.h"
+#include <QDialog>
 
-class QTimer;
+class Ui_LoadXSPF;
 
-namespace Tomahawk
-{
-
-class XspfUpdater : public PlaylistUpdaterInterface
+class LoadXSPFDialog : public QDialog
 {
     Q_OBJECT
 public:
-    XspfUpdater( const playlist_ptr& pl, const QString& xspfUrl );
-    explicit XspfUpdater( const playlist_ptr& pl ); // used by factory
+    explicit LoadXSPFDialog( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    virtual ~LoadXSPFDialog();
 
-    virtual ~XspfUpdater();
+    QString xspfUrl() const;
+    bool autoUpdate() const;
 
-    virtual QString type() const { return "xspf"; }
 public slots:
-    void updateNow();
-
-protected:
-    void loadFromSettings( const QString& group );
-    void saveToSettings( const QString& group ) const;
-
-private slots:
-    void playlistLoaded();
+    void getLocalFile();
 
 private:
-    QString m_url;
+    Ui_LoadXSPF* m_ui;
 };
 
-}
-
-#endif // XSPFUPDATER_H
+#endif // LOADXSPFDIALOG_H

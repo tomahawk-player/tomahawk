@@ -480,6 +480,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     }
     if( someCatalog )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );
+    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
