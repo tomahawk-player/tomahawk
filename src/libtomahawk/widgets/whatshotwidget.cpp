@@ -66,14 +66,14 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     //set crumb widgets
     SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
 
-    m_crumbModelLeft = new QStandardItemModel(this);
+    m_crumbModelLeft = new QStandardItemModel( this );
 
-    ui->breadCrumbLeft->setButtonFactory(crumbFactory);
-    ui->breadCrumbLeft->setModel(m_crumbModelLeft);
+    ui->breadCrumbLeft->setButtonFactory( crumbFactory );
+    ui->breadCrumbLeft->setModel( m_crumbModelLeft );
     ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    ui->breadCrumbLeft->setUseAnimation(true);
+    ui->breadCrumbLeft->setUseAnimation( true );
 
-    connect(ui->breadCrumbLeft, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(leftCrumbIndexChanged(QModelIndex)));
+    connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
     m_albumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_albumsModel );
@@ -121,7 +121,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    QTimer::singleShot( 2000, this, SLOT( fetchData() ) );
+    QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
 
@@ -142,7 +142,7 @@ WhatsHotWidget::fetchData()
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  2000, true );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
@@ -269,7 +269,7 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
-    QStandardItem* item = m_crumbModelLeft->itemFromIndex(index);
+    QStandardItem* item = m_crumbModelLeft->itemFromIndex( index );
     if( !item )
         return;
     if( !item->data().isValid() )
@@ -277,7 +277,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 
 
     QList<QModelIndex> indexes;
-    while (index.parent().isValid())
+    while ( index.parent().isValid() )
     {
         indexes.prepend(index);
         index = index.parent();
@@ -287,19 +287,19 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     const QString chartId = item->data().toString();
 
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    criteria.insert("chart_id", chartId);
+    criteria.insert( "chart_id", chartId );
     /// Remember to lower the source!
-    criteria.insert("chart_source",  index.data().toString().toLower());
+    criteria.insert( "chart_source",  index.data().toString().toLower() );
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     QVariantMap customData;
-    customData.insert("whatshot_side", "left");
+    customData.insert( "whatshot_side", "left" );
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = customData;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  2000, true );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
 }
 
 
@@ -326,28 +326,31 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem(label);
+
     if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
     {
         QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
         foreach( Tomahawk::InfoSystem::Chart chart, charts)
         {
-            QStandardItem *childItem= new QStandardItem(chart.label);
-            childItem->setData(chart.id);
-            sourceItem->appendRow(childItem);
+            QStandardItem *childItem= new QStandardItem( chart.label );
+            childItem->setData( chart.id );
+            sourceItem->appendRow( childItem );
         }
-    } else if( data.canConvert<QVariantMap>() )
+    }
+    else if( data.canConvert<QVariantMap>() )
     {
         QVariantMap dataMap = data.toMap();
-        foreach(const QString childLabel,dataMap.keys())
+        foreach( const QString childLabel,dataMap.keys() )
         {
             QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
-            sourceItem->appendRow(childItem);
+            sourceItem->appendRow( childItem );
         }
-    } else if ( data.canConvert<QVariantList>() )
+    }
+    else if ( data.canConvert<QVariantList>() )
     {
         QVariantList dataList = data.toList();
 
-        foreach(const QVariant value, dataList)
+        foreach( const QVariant value, dataList )
         {
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
@@ -356,7 +359,7 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
     else
     {
         QStandardItem *childItem= new QStandardItem(data.toString());
-        sourceItem->appendRow(childItem);
+        sourceItem->appendRow( childItem );
     }
     return sourceItem;
 }

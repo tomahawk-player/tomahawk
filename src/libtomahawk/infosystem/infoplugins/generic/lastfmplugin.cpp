@@ -398,7 +398,7 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         emit info( requestId, requestData, QVariant() );
         return;
     }
-    bool foundSource;
+
     InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     switch ( requestData.type )
     {
@@ -409,9 +409,11 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             {
                 dataError( requestId, requestData );
                 break;
-            }else
+            }
+            else
             {
-                if("last.fm" != hash["chart_source"]){
+                if( "last.fm" != hash["chart_source"] )
+                {
                     dataError( requestId, requestData );
                     break;
                 }

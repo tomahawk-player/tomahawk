@@ -110,13 +110,19 @@ ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
             {
                 dataError( requestId, requestData );
                 break;
-            }else
+            }
+            else
             {
-                foreach(QVariant resource, m_chartResources)
-                    if(resource.toString() == hash["chart_source"])
+                foreach( QVariant resource, m_chartResources )
+                {
+                    if( resource.toString() == hash["chart_source"] )
+                    {
                         foundSource = true;
+                    }
+                }
 
-                if(!foundSource){
+                if( !foundSource )
+                {
                     dataError( requestId, requestData );
                     break;
                 }
