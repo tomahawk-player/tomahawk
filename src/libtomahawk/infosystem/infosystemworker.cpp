@@ -86,14 +86,12 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr mbptr( new MusicBrainzPlugin() );
     m_plugins.append( mbptr );
     registerInfoTypes( mbptr, mbptr.data()->supportedGetTypes(), mbptr.data()->supportedPushTypes() );
-
-    InfoPluginPtr sptr( new ChartsPlugin() );
-    m_plugins.append( sptr );
-    registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
-
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+    InfoPluginPtr sptr( new ChartsPlugin() );
+    m_plugins.append( sptr );
+    registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
 
 
     #ifdef Q_WS_MAC

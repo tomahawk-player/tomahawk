@@ -121,8 +121,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    /// Itunes response is big, so maybe wait for it here?
-    QTimer::singleShot( 1000, this, SLOT( fetchData() ) );
+    QTimer::singleShot( 2000, this, SLOT( fetchData() ) );
 }
 
 
@@ -143,7 +142,7 @@ WhatsHotWidget::fetchData()
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  2000, true );
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
@@ -167,6 +166,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
     tDebug( LOGVERBOSE ) << "WhatsHot: got something...";
     QVariantMap returnedData = output.toMap();
+    qDebug() << "WhatsHot::" << returnedData;
     switch ( requestData.type )
     {
         case InfoSystem::InfoChartCapabilities:
@@ -182,12 +182,15 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 tDebug( LOGVERBOSE ) << "WhatsHot:: appending" << childItem->text();
                 rootItem->appendRow(childItem);
             }
+
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
+
             //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
             //HACK ALERT - we want the second crumb to expand right away, so we
             //force it here. We should find a more elegant want to do this
-            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0).child(0,0));
+            /// @note: this expands the billboard chart, as its fast loading and intersting album view ;) i think
+            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(1,0).child(0,0).child(0,0));
             break;
         }
         case InfoSystem::InfoChart:
@@ -296,7 +299,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  2000, true );
 }
 
 

@@ -46,7 +46,7 @@ ChartsPlugin::ChartsPlugin()
 
 
     /// Add resources here
-    m_chartResources << "last.fm" << "billboard" << "itunes";
+    m_chartResources << "billboard" << "itunes";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -98,10 +98,30 @@ ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
 
+    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    bool foundSource;
+
     switch ( requestData.type )
     {
 
         case InfoChart:
+            /// We need something to check if the request is actually ment to go to this plugin
+            if ( !hash.contains( "chart_source" ) )
+            {
+                dataError( requestId, requestData );
+                break;
+            }else
+            {
+                foreach(QVariant resource, m_chartResources)
+                    if(resource.toString() == hash["chart_source"])
+                        foundSource = true;
+
+                if(!foundSource){
+                    dataError( requestId, requestData );
+                    break;
+                }
+
+            }
             fetchChart( requestId, requestData );
             break;
 
@@ -159,9 +179,7 @@ ChartsPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::Info
         return;
     }
 
-    //InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-
     emit getCachedInfo( requestId, criteria, 0, requestData );
 }
 
@@ -182,7 +200,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         {
 
             /// Fetch the chart, we need source and id
-            QUrl url = QUrl( QString( CHART_URL "/source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
+            QUrl url = QUrl( QString( CHART_URL "source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
@@ -191,6 +209,7 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
+
         }
 
         case InfoChartCapabilities:
@@ -217,25 +236,9 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
                 QList<Chart> album_charts;
                 QList<Chart> track_charts;
-                QList<Chart> artist_charts;
                 QVariantMap charts;
 
-                if( chartResource.toString() == "last.fm")
-                {
-
-                    track_charts.append( Chart( "chart.getTopTracks", "Top Tracks", "tracks" ) );
-                    track_charts.append( Chart( "chart.getLovedTracks", "Loved Tracks", "tracks" ) );
-                    track_charts.append( Chart( "chart.getHypedTracks", "Hyped Tracks", "tracks" ) );
-
-                    artist_charts.append( Chart( "chart.getTopArtists", "Top Artists", "artists" ) );
-                    artist_charts.append( Chart( "chart.getHypedArtists", "Hyped Artists", "artists" ) );
-
-                    charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
-                    charts.insert( "Artists", QVariant::fromValue<QList<Chart> >( artist_charts ) );
-
-
-                }
-                else if( chartResource.toString() == "itunes")
+                if( chartResource.toString() == "itunes")
                 {
                     QVariantMap geoCharts;
 
@@ -472,4 +475,3 @@ ChartsPlugin::chartReturned()
     }else qDebug() << "Network error";
 
 }
-
