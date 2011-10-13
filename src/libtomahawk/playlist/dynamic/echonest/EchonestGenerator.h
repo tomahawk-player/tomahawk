@@ -46,6 +46,7 @@ signals:
    void catalogsUpdated();
 
 private slots:
+    void init();
     void doCatalogUpdate();
     void collectionAttributes( const PairList& );
 

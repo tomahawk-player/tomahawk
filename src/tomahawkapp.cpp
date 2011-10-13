@@ -181,7 +181,7 @@ TomahawkApp::init()
     new Pipeline( this );
 
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
-    connect( m_servent.data(), SIGNAL( ready() ), SLOT( serventReady() ) );
+    connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
 
     tDebug() << "Init Database.";
     initDatabase();
@@ -218,6 +218,8 @@ TomahawkApp::init()
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+
+    EchonestGenerator::setupCatalogs();
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -497,14 +499,6 @@ TomahawkApp::initServent()
         tLog() << "Failed to start listening with servent";
         exit( 1 );
     }
-}
-
-void
-TomahawkApp::serventReady()
-{
-    EchonestGenerator::setupCatalogs();
-
-    initSIP();
 }
 
 void

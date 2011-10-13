@@ -73,6 +73,12 @@ EchonestFactory::typeSelectors() const
 CatalogManager::CatalogManager( QObject* parent )
     : QObject( parent )
 {
+    connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( init() ) );
+}
+
+void
+CatalogManager::init()
+{
     connect( EchonestCatalogSynchronizer::instance(), SIGNAL( knownCatalogsChanged() ), this, SLOT( doCatalogUpdate() ) );
     connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( doCatalogUpdate() ) );
 
