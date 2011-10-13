@@ -29,6 +29,7 @@
 #include "databaseimpl.h"
 #include "network/servent.h"
 #include "utils/logger.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
@@ -73,7 +74,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             tDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
             TomahawkSqlQuery dirquery = dbi->newquery();
             QString path( "file://" + m_dir.canonicalPath() + "/%" );
-            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE \"%1\"" ).arg( path ) );
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE \"%1\"" ).arg( TomahawkUtils::sqlEscape( path ) ) );
             dirquery.exec();
 
             while ( dirquery.next() )
