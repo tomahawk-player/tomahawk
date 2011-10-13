@@ -33,9 +33,7 @@ LatchManager::LatchManager( QObject* parent )
     : QObject( parent )
     , m_state( NotLatched )
 {
-
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( playlistChanged() ) );
 }
 
 LatchManager::~LatchManager()
