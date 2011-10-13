@@ -135,8 +135,6 @@ EchonestGenerator::~EchonestGenerator()
 void
 EchonestGenerator::setupCatalogs()
 {
-    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
-    // not dealing with that right now.
     if ( s_catalogs == 0 )
         s_catalogs = new CatalogManager( 0 );
 //    qDebug() << "ECHONEST:" << m_logo.size();

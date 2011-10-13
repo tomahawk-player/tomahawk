@@ -63,7 +63,7 @@ public:
     virtual QStringList typeSelectors() const;
 };
 
-class EchonestGenerator : public GeneratorInterface
+class DLLEXPORT EchonestGenerator : public GeneratorInterface
 {
     Q_OBJECT
 public:
