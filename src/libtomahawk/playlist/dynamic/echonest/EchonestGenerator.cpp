@@ -123,13 +123,7 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 
     loadStylesAndMoods();
 
-    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
-    // not dealing with that right now.
-    if ( s_catalogs == 0 )
-        s_catalogs = new CatalogManager( this );
-
     connect( s_catalogs, SIGNAL( catalogsUpdated() ), this, SLOT( knownCatalogsChanged() ) );
-//    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
 
@@ -138,6 +132,15 @@ EchonestGenerator::~EchonestGenerator()
     delete m_dynPlaylist;
 }
 
+void
+EchonestGenerator::setupCatalogs()
+{
+    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
+    // not dealing with that right now.
+    if ( s_catalogs == 0 )
+        s_catalogs = new CatalogManager( 0 );
+//    qDebug() << "ECHONEST:" << m_logo.size();
+}
 
 dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )

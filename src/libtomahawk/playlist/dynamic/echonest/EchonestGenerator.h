@@ -84,6 +84,7 @@ public:
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
 
+    static void setupCatalogs();
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
 

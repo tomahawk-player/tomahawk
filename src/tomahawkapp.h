@@ -95,10 +95,12 @@ public slots:
 
 private slots:
     void initServent();
-    void initSIP();
+    void serventReady();
 
     void spotifyApiCheckFinished();
+
 private:
+    void initSIP();
     void registerMetaTypes();
 
     void printHelp();

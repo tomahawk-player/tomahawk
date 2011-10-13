@@ -181,7 +181,7 @@ TomahawkApp::init()
     new Pipeline( this );
 
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
-    connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
+    connect( m_servent.data(), SIGNAL( ready() ), SLOT( serventReady() ) );
 
     tDebug() << "Init Database.";
     initDatabase();
@@ -500,6 +500,13 @@ TomahawkApp::initServent()
     }
 }
 
+void
+TomahawkApp::serventReady()
+{
+    EchonestGenerator::setupCatalogs();
+
+    initSIP();
+}
 
 void
 TomahawkApp::initSIP()
