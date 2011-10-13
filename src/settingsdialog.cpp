@@ -139,35 +139,16 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->enableEchonestCatalog->setChecked( s->enableEchonestCatalogs() );
 
     connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
-    connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
-    connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
-
-    if ( s->scannerMode() == TomahawkSettings::Files )
-    {
-        ui->scannerFileModeButton->setChecked( true );
-    }
-    else
-    {
-        ui->scannerDirModeButton->setChecked( true );
-    }
 
     if ( ui->checkBoxWatchForChanges->isChecked() )
     {
         ui->scanTimeLabel->show();
         ui->scannerTimeSpinBox->show();
-        ui->scannerDirModeButton->show();
-        ui->scannerFileModeButton->show();
-        ui->scanInformationLabelFiles->show();
-        ui->scanInformationLabelDirs->show();
     }
     else
     {
         ui->scanTimeLabel->hide();
         ui->scannerTimeSpinBox->hide();
-        ui->scannerDirModeButton->hide();
-        ui->scannerFileModeButton->hide();
-        ui->scanInformationLabelFiles->hide();
-        ui->scanInformationLabelDirs->hide();
     }
 
     foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
@@ -241,10 +222,9 @@ SettingsDialog::~SettingsDialog()
         s->setScannerPaths( ui->dirTree->getCheckedPaths() );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
-        s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
         s->setEnableEchonestCatalogs( ui->enableEchonestCatalog->isChecked() );
 
-	s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
+        s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
@@ -410,23 +390,11 @@ SettingsDialog::updateScanOptionsView()
     {
         ui->scanTimeLabel->show();
         ui->scannerTimeSpinBox->show();
-        ui->scannerDirModeButton->show();
-        ui->scannerFileModeButton->show();
-        ui->scanInformationLabelFiles->show();
-        ui->scanInformationLabelDirs->show();
-        if ( sender() == ui->scannerFileModeButton || ( sender() == ui->checkBoxWatchForChanges && TomahawkSettings::instance()->scannerMode() == TomahawkSettings::Files ) )
-            ui->scannerFileModeButton->setChecked( true );
-        else
-            ui->scannerDirModeButton->setChecked( true );
     }
     else
     {
         ui->scanTimeLabel->hide();
         ui->scannerTimeSpinBox->hide();
-        ui->scannerDirModeButton->hide();
-        ui->scannerFileModeButton->hide();
-        ui->scanInformationLabelFiles->hide();
-        ui->scanInformationLabelDirs->hide();
     }
 }
 

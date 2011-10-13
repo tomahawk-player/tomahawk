@@ -138,23 +138,10 @@ ScanManager::runScan( bool manualFull )
 
     if ( !manualFull )
     {
-        runDirScan( TomahawkSettings::instance()->scannerPaths(), false );
+        runDirScan( TomahawkSettings::instance()->scannerPaths() );
         return;
     }
 
-    DatabaseCommand_DirMtimes *cmd = new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() );
-    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
-                          SLOT( mtimesDeleted( QMap< QString, unsigned int > ) ) );
-
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );   
-}
-
-
-void
-ScanManager::mtimesDeleted( QMap< QString, unsigned int > returnedMap )
-{
-    Q_UNUSED( returnedMap );
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
     connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
                           SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
@@ -169,12 +156,12 @@ ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_
     Q_UNUSED( files );
     Q_UNUSED( collection );
     if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
-        runDirScan( TomahawkSettings::instance()->scannerPaths(), true );
+        runDirScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 
 void
-ScanManager::runDirScan( const QStringList& paths, bool manualFull )
+ScanManager::runDirScan( const QStringList& paths )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -184,7 +171,6 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
     if ( paths.isEmpty() )
     {
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() ) ) );
         return;
     }
 
@@ -192,7 +178,7 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
     {
         m_scanTimer->stop();
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, manualFull ? TomahawkSettings::Dirs : TomahawkSettings::instance()->scannerMode() ) );
+        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
