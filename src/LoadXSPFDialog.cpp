@@ -51,7 +51,8 @@ LoadXSPFDialog::getLocalFile()
     m_ui->lineEdit->setText( url );
 }
 
-QString LoadXSPFDialog::xspfUrl() const
+QString
+LoadXSPFDialog::xspfUrl() const
 {
     return m_ui->lineEdit->text();
 }
