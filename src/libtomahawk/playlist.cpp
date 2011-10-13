@@ -93,6 +93,7 @@ PlaylistEntry::setLastSource( source_ptr s )
 Playlist::Playlist( const source_ptr& author )
     : m_source( author )
     , m_lastmodified( 0 )
+    , m_updater( 0 )
 {
 }
 
@@ -252,11 +253,11 @@ void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
-    m_deleted = true;
-    m_source->collection()->deletePlaylist( self );
-
     if ( m_updater )
         m_updater->remove();
+
+    m_deleted = true;
+    m_source->collection()->deletePlaylist( self );
 
     emit deleted( self );
 }

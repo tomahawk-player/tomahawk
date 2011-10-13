@@ -83,6 +83,9 @@ PlaylistUpdaterInterface::doSave()
 void
 PlaylistUpdaterInterface::remove()
 {
+    if ( m_playlist.isNull() )
+        return;
+
     TomahawkSettings* s = TomahawkSettings::instance();
     const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
     removeFromSettings( key );
