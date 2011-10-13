@@ -34,6 +34,7 @@
 #include "sourcelist.h"
 
 #include "utils/logger.h"
+#include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;
 
@@ -116,6 +117,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
+    , m_updater( 0 )
 {
     init();
 }
@@ -138,6 +140,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
     , m_initEntries( entries )
+    , m_updater( 0 )
 {
     init();
 }
@@ -251,6 +254,9 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     Q_ASSERT( self.data() == this );
     m_deleted = true;
     m_source->collection()->deletePlaylist( self );
+
+    if ( m_updater )
+        m_updater->remove();
 
     emit deleted( self );
 }
@@ -503,7 +509,7 @@ Playlist::addEntry( const query_ptr& query, const QString& oldrev )
 void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
-    QList<plentry_ptr> el = addEntriesInternal( queries );
+    QList<plentry_ptr> el = entriesFromQueries( queries );
 
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
@@ -511,9 +517,12 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 
 
 QList<plentry_ptr>
-Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
+Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst )
 {
-    QList<plentry_ptr> el = entries();
+    QList<plentry_ptr> el;
+    if ( !clearFirst )
+        el = entries();
+
     foreach( const query_ptr& query, queries )
     {
         plentry_ptr e( new PlaylistEntry() );

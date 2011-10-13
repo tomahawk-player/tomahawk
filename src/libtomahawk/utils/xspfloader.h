@@ -40,7 +40,7 @@ Q_OBJECT
 
 public:
     enum XSPFErrorCode { ParseError, InvalidTrackError, FetchError };
-    explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 );
+    explicit XSPFLoader( bool autoCreate = true, bool autoUpdate = false, QObject* parent = 0 );
 
     virtual ~XSPFLoader();
     QList< Tomahawk::query_ptr > entries() const;
@@ -63,11 +63,12 @@ private:
     void reportError();
     void gotBody();
 
-    bool m_autoCreate;
+    bool m_autoCreate, m_autoUpdate;
     QString m_NS,m_overrideTitle;
     QList< Tomahawk::query_ptr > m_entries;
     QString m_title, m_info, m_creator;
 
+    QUrl m_url;
     QByteArray m_body;
     Tomahawk::playlist_ptr m_playlist;
 };

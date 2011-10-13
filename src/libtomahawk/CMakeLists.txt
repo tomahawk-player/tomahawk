@@ -141,6 +141,8 @@ set( libSources
     playlist/artistview.cpp
     playlist/customplaylistview.cpp
     playlist/ViewHeader.cpp
+    playlist/PlaylistUpdaterInterface.cpp
+    playlist/XspfUpdater.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -377,6 +379,8 @@ set( libHeaders
     playlist/artistview.h
     playlist/customplaylistview.h
     playlist/ViewHeader.h
+    playlist/PlaylistUpdaterInterface.h
+    playlist/XspfUpdater.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h

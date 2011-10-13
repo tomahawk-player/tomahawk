@@ -26,6 +26,7 @@
 #include "thirdparty/Qocoa/qsearchfield.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <QCheckBox>
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64
@@ -70,6 +71,14 @@ InfoBar::InfoBar( QWidget* parent )
     ui->longDescriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
 
+    m_autoUpdate = new QCheckBox( this );
+    m_autoUpdate->setText( tr( "Automatically update" ) );
+    m_autoUpdate->setLayoutDirection( Qt::RightToLeft );
+    m_autoUpdate->setPalette( whitePal );
+    connect( m_autoUpdate, SIGNAL( stateChanged( int ) ), this, SIGNAL( autoUpdateChanged( int ) ) );
+
+    ui->horizontalLayout->addWidget( m_autoUpdate );
+
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
     m_searchWidget->setMinimumWidth( 180 );
@@ -87,6 +96,7 @@ InfoBar::InfoBar( QWidget* parent )
     setAutoFillBackground( true );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
+    connect( ViewManager::instance(), SIGNAL( autoUpdateAvailable( bool ) ), SLOT( setAutoUpdateAvailable( bool ) ) );
 }
 
 
@@ -147,13 +157,21 @@ InfoBar::setFilterAvailable( bool b )
     m_searchWidget->setVisible( b );
 }
 
+void
+InfoBar::setAutoUpdateAvailable( bool b )
+{
+    if ( b )
+        m_autoUpdate->setChecked( ViewManager::instance()->currentPage()->autoUpdate() );
+
+    m_autoUpdate->setVisible( b );
+}
+
 
 void
 InfoBar::onFilterEdited()
 {
     emit filterTextChanged( m_searchWidget->text() );
 }
-
 
 void
 InfoBar::changeEvent( QEvent* e )

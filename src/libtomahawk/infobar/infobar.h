@@ -23,6 +23,7 @@
 
 #include "dllmacro.h"
 
+class QCheckBox;
 class QTimeLine;
 class QSearchField;
 class ContextWidget;
@@ -49,8 +50,10 @@ public slots:
     void setFilter( const QString& filter );
     void setFilterAvailable( bool b );
 
+    void setAutoUpdateAvailable( bool b );
 signals:
     void filterTextChanged( const QString& filter );
+    void autoUpdateChanged( int state );
 
 protected:
     void changeEvent( QEvent* e );
@@ -62,6 +65,7 @@ private:
     Ui::InfoBar* ui;
 
     QSearchField* m_searchWidget;
+    QCheckBox* m_autoUpdate;
 };
 
 #endif // INFOBAR_H
