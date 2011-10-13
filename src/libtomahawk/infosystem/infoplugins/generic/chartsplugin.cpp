@@ -70,9 +70,11 @@ ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 
     /// Then get each chart from resource
-    if( !m_chartResources.isEmpty() && m_nam && m_chartTypes.isEmpty() ){
-        tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
+    /// We need to fetch them before they are asked for
 
+    if( !m_chartResources.isEmpty() && m_nam && m_chartTypes.isEmpty() ){
+
+        tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
         foreach(QVariant resource, m_chartResources)
         {
             QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
@@ -220,108 +222,18 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
         case InfoChartCapabilities:
         {
+            if( m_result.isEmpty() ){
 
-            QVariantMap result;
+                qDebug() << Q_FUNC_INFO << "InfoChartCapabilities is empty!";
 
-            /// Itunes have alot of country specified charts,
-            /// Get those for later use
-            QList<QString> geos;
-            foreach( QVariant type, m_chartTypes )
-            {
-
-                if( type.toMap().value( "geo" ).isValid() )
-                {
-                    geos.append( type.toMap().value( "geo" ).toString() );
-                }
+                dataError( requestId, requestData );
+                return;
             }
-            /// We only need a unique list
-            geos = QSet<QString>::fromList(geos).toList();
 
-            foreach( QVariant chartResource, m_chartResources )
-            {
-
-                QList<Chart> album_charts;
-                QList<Chart> track_charts;
-                QVariantMap charts;
-
-                if( chartResource.toString() == "itunes")
-                {
-                    QVariantMap geoCharts;
-
-                    foreach(QVariant country, geos)
-                    {
-                        QList<Chart> geoAlbum_charts;
-                        QList<Chart> geoTrack_charts;
-
-                       foreach( QVariant type, m_chartTypes )
-                       {
-
-                            /// Itunes supplys charts based on geo, create breadcrumb for each of them
-
-                            if( type.toMap().value( "source" ).toString() == chartResource.toString()
-                            && type.toMap().value( "geo" ).isValid() )
-                            {
-
-                                if( type.toMap().value( "geo" ).toString() == country.toString() )
-                                {
-                                    QString countryString = "Geo: " + type.toMap().value( "geo" ).toString().toUpper();
-
-                                    if( type.toMap().value( "type" ).toString() == "Album" )
-                                    {
-                                        geoAlbum_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString() , "album" ) );
-                                        geoCharts.insert( "Albums", QVariant::fromValue<QList<Chart> >( geoAlbum_charts ) );
-                                        charts.insert( countryString, QVariant::fromValue<QVariantMap >( geoCharts ) );
-                                    }
-
-                                    if( type.toMap().value( "type" ).toString() == "Track" )
-                                    {
-
-                                        geoTrack_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
-                                        geoCharts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( geoTrack_charts ) );
-                                        charts.insert( countryString, QVariant::fromValue<QVariantMap >( geoCharts ) );
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }else{
-                     /// Billboard, and maybe others
-                     foreach( QVariant type, m_chartTypes )
-                     {
-
-                            /// Append each type to its parent source
-                            /// @todo Add chartType enum
-                            if( type.toMap().value( "source" ).toString() == chartResource.toString() )
-                            {
-                                if( type.toMap().value( "type" ).toString() == "Album" )
-                                {
-                                    album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
-                                    charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
-                                }
-
-                                if( type.toMap().value( "type" ).toString() == "Track" )
-                                {
-                                    track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
-                                    charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
-                                }
-                            }
-                     }
-                }
-
-                /// @note For displaying purposes, upper the first letter
-                /// @note Remeber to lower it when fetching this!
-                QString chartName = chartResource.toString();
-                chartName[0] = chartName[0].toUpper();
-
-                /// Add the possible charts and its types to breadcrumb
-                result.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
-            }
             emit info(
                 requestId,
                 requestData,
-                result
+                m_result
             );
             return;
         }
@@ -360,6 +272,102 @@ ChartsPlugin::chartTypes()
         foreach(QVariant chart, res.value( "charts" ).toMap() ){
              m_chartTypes.append(chart);
 
+        }
+
+        /// Itunes have alot of country specified charts,
+        /// Get those for later use
+        QList<QString> geos;
+        foreach( QVariant type, m_chartTypes )
+        {
+
+            if( type.toMap().value( "geo" ).isValid() )
+            {
+                geos.append( type.toMap().value( "geo" ).toString() );
+            }
+        }
+        /// We only need a unique list
+        geos = QSet<QString>::fromList(geos).toList();
+
+        foreach( QVariant chartResource, m_chartResources )
+        {
+
+            QList<Chart> album_charts;
+            QList<Chart> track_charts;
+            QVariantMap charts;
+
+            if( chartResource.toString() == "itunes")
+            {
+                QVariantMap geoCharts;
+
+                foreach(QVariant country, geos)
+                {
+                    QList<Chart> geoAlbum_charts;
+                    QList<Chart> geoTrack_charts;
+
+                   foreach( QVariant type, m_chartTypes )
+                   {
+
+                        /// Itunes supplys charts based on geo, create breadcrumb for each of them
+
+                        if( type.toMap().value( "source" ).toString() == chartResource.toString()
+                        && type.toMap().value( "geo" ).isValid() )
+                        {
+
+                            if( type.toMap().value( "geo" ).toString() == country.toString() )
+                            {
+                                QString countryString = "Geo: " + type.toMap().value( "geo" ).toString().toUpper();
+
+                                if( type.toMap().value( "type" ).toString() == "Album" )
+                                {
+                                    geoAlbum_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString() , "album" ) );
+                                    geoCharts.insert( "Albums", QVariant::fromValue<QList<Chart> >( geoAlbum_charts ) );
+                                    charts.insert( countryString, QVariant::fromValue<QVariantMap >( geoCharts ) );
+                                }
+
+                                if( type.toMap().value( "type" ).toString() == "Track" )
+                                {
+
+                                    geoTrack_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
+                                    geoCharts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( geoTrack_charts ) );
+                                    charts.insert( countryString, QVariant::fromValue<QVariantMap >( geoCharts ) );
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }else{
+                 /// Billboard, and maybe others
+                 foreach( QVariant type, m_chartTypes )
+                 {
+
+                        /// Append each type to its parent source
+                        /// @todo Add chartType enum
+                        if( type.toMap().value( "source" ).toString() == chartResource.toString() )
+                        {
+                            if( type.toMap().value( "type" ).toString() == "Album" )
+                            {
+                                album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
+                                charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
+                            }
+
+                            if( type.toMap().value( "type" ).toString() == "Track" )
+                            {
+                                track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
+                                charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
+                            }
+                        }
+                 }
+            }
+
+            /// @note For displaying purposes, upper the first letter
+            /// @note Remeber to lower it when fetching this!
+            QString chartName = chartResource.toString();
+            chartName[0] = chartName[0].toUpper();
+
+            /// Add the possible charts and its types to breadcrumb
+            m_result.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
         }
     }
 
