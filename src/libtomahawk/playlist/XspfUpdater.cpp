@@ -23,6 +23,7 @@
 
 #include <QTimer>
 #include <tomahawksettings.h>
+#include <pipeline.h>
 
 using namespace Tomahawk;
 
@@ -31,6 +32,14 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, const QString& xUrl )
     , m_url( xUrl )
 {
 }
+
+XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate, const QString& xspfUrl )
+    : PlaylistUpdaterInterface( pl, interval, autoUpdate )
+    , m_url( xspfUrl )
+{
+
+}
+
 
 XspfUpdater::XspfUpdater( const playlist_ptr& pl )
     : PlaylistUpdaterInterface( pl )
@@ -46,6 +55,7 @@ void
 XspfUpdater::updateNow()
 {
     XSPFLoader* l = new XSPFLoader( false, false );
+    l->setAutoResolveTracks( false );
     l->load( m_url );
     connect( l, SIGNAL( ok ( Tomahawk::playlist_ptr ) ), this, SLOT( playlistLoaded() ) );
 }
@@ -56,8 +66,35 @@ XspfUpdater::playlistLoaded()
     XSPFLoader* loader = qobject_cast<XSPFLoader*>( sender() );
     Q_ASSERT( loader );
 
-    QList< query_ptr > queries = loader->entries();
-    QList<plentry_ptr> el = playlist()->entriesFromQueries( queries, true );
+    QList< query_ptr> oldqueries;
+    foreach ( const plentry_ptr& ple, playlist()->entries() )
+        oldqueries << ple->query();
+
+    QList< query_ptr > newqueries = loader->entries();
+    int sameCount = 0;
+    QList< query_ptr > tosave = newqueries;
+    foreach ( const query_ptr& newquery, newqueries )
+    {
+        foreach ( const query_ptr& oldq, oldqueries )
+        {
+            if ( newquery->track() == oldq->track() &&
+                 newquery->artist() == oldq->artist() &&
+                 newquery->album() == oldq->album() )
+            {
+                sameCount++;
+                if ( tosave.contains( newquery ) )
+                    tosave.replace( tosave.indexOf( newquery ), oldq );
+
+                break;
+            }
+        }
+    }
+
+    // No work to be done if all are the same
+    if ( oldqueries.size() == newqueries.size() && sameCount == oldqueries.size() )
+        return;
+
+    QList<plentry_ptr> el = playlist()->entriesFromQueries( tosave, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );
 
 //    // if there are any different from the current playlist, clear and use the new one, update

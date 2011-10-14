@@ -34,6 +34,7 @@ XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
     , m_autoUpdate( autoUpdate )
+    , m_autoResolve( false )
     , m_NS("http://xspf.org/ns/0/")
 {
     qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
@@ -102,6 +103,9 @@ void
 XSPFLoader::networkLoadFinished()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if ( reply->error() != QNetworkReply::NoError )
+        return;
+
     m_body = reply->readAll();
     gotBody();
 }
@@ -196,7 +200,7 @@ XSPFLoader::gotBody()
             continue;
         }
 
-        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), m_autoResolve );
         q->setDuration( duration.toInt() / 1000 );
         if ( !url.isEmpty() )
             q->setResultHint( url );
@@ -222,9 +226,8 @@ XSPFLoader::gotBody()
                                        false,
                                        m_entries );
 
-        Tomahawk::XspfUpdater* updater = new Tomahawk::XspfUpdater( m_playlist, m_url.toString() );
-        updater->setInterval(  1200000 ); // 20 minute default for now, no way to change it
-        updater->setAutoUpdate( m_autoUpdate );
+        // 10 minute default---for now, no way to change it
+        new Tomahawk::XspfUpdater( m_playlist, 6000000, m_autoUpdate, m_url.toString() );
         deleteLater();
     }
 

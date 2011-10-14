@@ -46,6 +46,7 @@ public:
     QList< Tomahawk::query_ptr > entries() const;
 
     void setOverrideTitle( const QString& newTitle );
+    void setAutoResolveTracks( bool autoResolve ) { m_autoResolve = autoResolve; }
 
 signals:
     void error( XSPFLoader::XSPFErrorCode error );
@@ -63,7 +64,7 @@ private:
     void reportError();
     void gotBody();
 
-    bool m_autoCreate, m_autoUpdate;
+    bool m_autoCreate, m_autoUpdate, m_autoResolve;
     QString m_NS,m_overrideTitle;
     QList< Tomahawk::query_ptr > m_entries;
     QString m_title, m_info, m_creator;

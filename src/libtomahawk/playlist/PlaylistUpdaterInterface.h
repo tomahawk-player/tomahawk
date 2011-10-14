@@ -37,6 +37,7 @@ class DLLEXPORT PlaylistUpdaterInterface : public QObject
     Q_OBJECT
 public:
     PlaylistUpdaterInterface( const playlist_ptr& pl );
+    PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate );
 
     virtual ~PlaylistUpdaterInterface(){}
 

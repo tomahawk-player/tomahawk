@@ -31,6 +31,7 @@ class XspfUpdater : public PlaylistUpdaterInterface
     Q_OBJECT
 public:
     XspfUpdater( const playlist_ptr& pl, const QString& xspfUrl );
+    XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate, const QString& xspfUrl );
     explicit XspfUpdater( const playlist_ptr& pl ); // used by factory
 
     virtual ~XspfUpdater();

@@ -66,6 +66,22 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
     QTimer::singleShot( 0, this, SLOT( doSave() ) );
 }
 
+PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate )
+    : QObject( 0 )
+    , m_timer( new QTimer( this ) )
+    , m_autoUpdate( autoUpdate )
+    , m_playlist( pl )
+{
+    Q_ASSERT( !m_playlist.isNull() );
+
+    m_playlist->setUpdater( this );
+    m_timer->setInterval( interval );
+    connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
+
+    QTimer::singleShot( 0, this, SLOT( doSave() ) );
+}
+
+
 void
 PlaylistUpdaterInterface::doSave()
 {
@@ -92,6 +108,8 @@ PlaylistUpdaterInterface::remove()
     s->remove( QString( "%1/type" ).arg( key ) );
     s->remove( QString( "%1/autoupdate" ).arg( key ) );
     s->remove( QString( "%1/interval" ).arg( key ) );
+
+    deleteLater();
 }
 
 
