@@ -71,9 +71,10 @@ private:
     QList<Chart> m_charts;
     ChartType m_chartType;
 
-    QVariantMap m_result;
-    QVariantMap m_chartResult;
-    bool chartHasReturned;
+    QVariantMap m_allChartsMap;
+
+    QList< QPair< uint, InfoRequestData > > m_cachedRequests;
+
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 

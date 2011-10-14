@@ -40,7 +40,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
     , m_cacheVersion( 2 )
 {
     TomahawkSettings *s = TomahawkSettings::instance();
-    if( s->infoSystemCacheVersion() != m_cacheVersion )
+    if ( s->infoSystemCacheVersion() != m_cacheVersion )
     {
         tLog() << "Cache version outdated, old:" << s->infoSystemCacheVersion()
                << "new:" << m_cacheVersion

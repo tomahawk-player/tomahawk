@@ -222,18 +222,20 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
         case InfoChartCapabilities:
         {
-            if( m_result.isEmpty() ){
+            if ( m_allChartsMap.isEmpty() )
+            {
 
-                qDebug() << Q_FUNC_INFO << "InfoChartCapabilities is empty!";
+                qDebug() << Q_FUNC_INFO << "InfoChartCapabilities is empty, probably still fetching!";
+                m_cachedRequests.append( QPair< uint, InfoRequestData >( requestId, requestData ) );;
 
-                dataError( requestId, requestData );
+//                 dataError( requestId, requestData );
                 return;
             }
 
             emit info(
                 requestId,
                 requestData,
-                m_result
+                m_allChartsMap
             );
             return;
         }
@@ -269,11 +271,12 @@ ChartsPlugin::chartTypes()
         }
 
         /// Got types, append!
-        foreach(QVariant chart, res.value( "charts" ).toMap() ){
-             m_chartTypes.append(chart);
-
+        foreach ( QVariant chart, res.value( "charts" ).toMap() )
+        {
+             m_chartTypes.append( chart );
         }
 
+        tDebug() << "Chart types we got:" << m_chartType;
         /// Itunes have alot of country specified charts,
         /// Get those for later use
         QList<QString> geos;
@@ -337,22 +340,24 @@ ChartsPlugin::chartTypes()
                     }
                 }
 
-            }else{
+            }
+            else
+            {
                  /// Billboard, and maybe others
-                 foreach( QVariant type, m_chartTypes )
+                 foreach ( QVariant type, m_chartTypes )
                  {
 
                         /// Append each type to its parent source
                         /// @todo Add chartType enum
-                        if( type.toMap().value( "source" ).toString() == chartResource.toString() )
+                        if ( type.toMap().value( "source" ).toString() == chartResource.toString() )
                         {
-                            if( type.toMap().value( "type" ).toString() == "Album" )
+                            if ( type.toMap().value( "type" ).toString() == "Album" )
                             {
                                 album_charts.append( Chart(  type.toMap().value("id").toString(), type.toMap().value("name").toString(), "album" ) );
                                 charts.insert( "Albums", QVariant::fromValue<QList<Chart> >( album_charts ) );
                             }
 
-                            if( type.toMap().value( "type" ).toString() == "Track" )
+                            if ( type.toMap().value( "type" ).toString() == "Track" )
                             {
                                 track_charts.append( Chart( type.toMap().value("id").toString(), type.toMap().value("name").toString(), "tracks" ) );
                                 charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
@@ -367,8 +372,22 @@ ChartsPlugin::chartTypes()
             chartName[0] = chartName[0].toUpper();
 
             /// Add the possible charts and its types to breadcrumb
-            m_result.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
+            m_allChartsMap.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
         }
+    }
+    else
+    {
+        tLog() << "Error fetching charts:" << reply->errorString();
+    }
+
+    if ( !m_cachedRequests.isEmpty() )
+    {
+        QPair< uint, InfoRequestData > request;
+        foreach ( request, m_cachedRequests )
+        {
+            emit info( request.first, request.second, m_allChartsMap );
+        }
+        m_cachedRequests.clear();
     }
 
 }
