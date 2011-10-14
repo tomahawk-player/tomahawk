@@ -85,6 +85,7 @@ private slots:
     void onSipError();
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
+    void onXSPFOk( const Tomahawk::playlist_ptr& );
 
     void addPeerManually();
 

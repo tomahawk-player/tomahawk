@@ -504,6 +504,7 @@ TomahawkWindow::loadSpiff()
 
         XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
         connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
         loader->load( url );
     }
 #endif
@@ -521,11 +522,17 @@ TomahawkWindow::loadXspfFinished( int ret )
 
         XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
         connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
         loader->load( url );
     }
     d->deleteLater();
 }
 
+void
+TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
+{
+    ViewManager::instance()->show( pl );
+}
 
 
 void

@@ -34,7 +34,7 @@ XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
     , m_autoUpdate( autoUpdate )
-    , m_autoResolve( false )
+    , m_autoResolve( true )
     , m_NS("http://xspf.org/ns/0/")
 {
     qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
