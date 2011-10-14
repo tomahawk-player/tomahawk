@@ -450,6 +450,7 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             QVariantMap result;
             result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
 
+            tDebug() << "LASTFM RETURNING CHART LIST!";
             emit info(
                 requestId,
                 requestData,

@@ -223,9 +223,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
                     qDebug() << "Getting album" << album.album << "By" << album.artist;
-                    album_ptr albumPtr = Album::get(Artist::get( album.artist, true ), album.album );
+                    album_ptr albumPtr = Album::get( Artist::get( album.artist, true ), album.album );
 
-                    if(!albumPtr.isNull())
+                    if( !albumPtr.isNull() )
                         al << albumPtr;
 
                 }
@@ -299,6 +299,8 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
+
+    qDebug() << "Making infosystem request for chart of type:" <<chartId;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
 }
 
@@ -352,6 +354,7 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
 
         foreach( const QVariant value, dataList )
         {
+            qDebug() << "CREATED:" << value.toString();
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
         }
