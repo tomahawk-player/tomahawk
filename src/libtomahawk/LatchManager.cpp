@@ -97,6 +97,17 @@ LatchManager::playlistChanged( PlaylistInterface* )
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
+    if ( !m_waitingForLatch.isNull() &&
+          m_waitingForLatch != m_latchedOnTo )
+    {
+        // We are asked to latch on immediately to another source
+        m_latchedOnTo.clear();
+        m_latchedInterface.clear();
+
+        // call ourselves to hit the "create latch" condition
+        playlistChanged( 0 );
+        return;
+    }
     m_latchedOnTo.clear();
     m_waitingForLatch.clear();
     m_latchedInterface.clear();
