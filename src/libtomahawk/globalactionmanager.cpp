@@ -660,6 +660,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         else
             pl->createNewRevision( uuid(), pl->currentrevision(), type, controls, pl->entries() );
 
+        ViewManager::instance()->show( pl );
         return pl;
     }
 
