@@ -326,7 +326,7 @@ QStandardItem*
 WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
 {
     Q_UNUSED( parentItem );
-    tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
+//     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem(label);
 
