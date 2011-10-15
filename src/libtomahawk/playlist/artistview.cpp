@@ -196,6 +196,9 @@ ArtistView::resizeEvent( QResizeEvent* event )
     QTreeView::resizeEvent( event );
     m_header->checkState();
 
+    if ( !model() )
+        return;
+
     if ( model()->columnCount( QModelIndex() ) == 1 )
     {
         m_header->resizeSection( 0, event->size().width() );

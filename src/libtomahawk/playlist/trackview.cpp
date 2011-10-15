@@ -233,6 +233,9 @@ TrackView::resizeEvent( QResizeEvent* event )
         sortByColumn( sortSection, sortOrder );
     }
 
+    if ( !model() )
+        return;
+
     if ( model()->columnCount() == 1 )
     {
         m_header->resizeSection( 0, event->size().width() );
