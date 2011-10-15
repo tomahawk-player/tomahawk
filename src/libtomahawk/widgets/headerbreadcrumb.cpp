@@ -40,7 +40,6 @@ HeaderBreadCrumb::~HeaderBreadCrumb()
 
 void HeaderBreadCrumb::paintEvent(QPaintEvent *event)
 {
-
     QStylePainter p(this);
-    StyleHelper::horizontalHeader(&p, event->rect());
+    StyleHelper::horizontalHeader(&p, rect());
 }

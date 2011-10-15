@@ -40,15 +40,12 @@ SiblingCrumbButton::SiblingCrumbButton(
 
     setIndex(index);
     connect(m_combo, SIGNAL(activated(int)), SLOT(comboboxActivated(int)));
-
-//    QTimer::singleShot(0, this, SLOT(activateSelf()));
 }
 
 void SiblingCrumbButton::setIndex( QModelIndex index )
 {
     m_index = index;
     setText( index.data().toString() );
-    qDebug() << "i am " << text();
     fillCombo();
 }
 

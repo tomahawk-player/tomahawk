@@ -322,27 +322,27 @@ WhatsHotWidget::changeEvent( QEvent* e )
 
 
 QStandardItem*
-WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data)
+WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
 {
     Q_UNUSED( parentItem );
     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem(label);
 
-    if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
+    if ( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
     {
         QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
-        foreach( Tomahawk::InfoSystem::Chart chart, charts)
+        foreach ( Tomahawk::InfoSystem::Chart chart, charts)
         {
             QStandardItem *childItem= new QStandardItem( chart.label );
             childItem->setData( chart.id );
             sourceItem->appendRow( childItem );
         }
     }
-    else if( data.canConvert<QVariantMap>() )
+    else if ( data.canConvert<QVariantMap>() )
     {
         QVariantMap dataMap = data.toMap();
-        foreach( const QString childLabel,dataMap.keys() )
+        foreach ( const QString childLabel,dataMap.keys() )
         {
             QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
             sourceItem->appendRow( childItem );
@@ -352,7 +352,7 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
     {
         QVariantList dataList = data.toList();
 
-        foreach( const QVariant value, dataList )
+        foreach ( const QVariant value, dataList )
         {
             qDebug() << "CREATED:" << value.toString();
             QStandardItem *childItem= new QStandardItem(value.toString());
@@ -361,7 +361,7 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
     }
     else
     {
-        QStandardItem *childItem= new QStandardItem(data.toString());
+        QStandardItem *childItem= new QStandardItem( data.toString() );
         sourceItem->appendRow( childItem );
     }
     return sourceItem;
