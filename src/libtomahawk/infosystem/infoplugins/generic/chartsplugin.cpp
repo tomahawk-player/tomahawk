@@ -211,7 +211,6 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
     {
         case InfoChart:
         {
-
             /// Fetch the chart, we need source and id
             QUrl url = QUrl( QString( CHART_URL "source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
@@ -395,7 +394,7 @@ ChartsPlugin::chartReturned()
             setChartType( None );
 
 
-        qDebug() << "Got chart returned!" << res;
+//         qDebug() << "Got chart returned!" << res;
         foreach ( QVariant chartR, chartResponse )
         {
             QString title, artist, album;
