@@ -77,26 +77,25 @@ public slots:
 
 private slots:
     void fetchData();
-    void checkQueries();
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
     void leftCrumbIndexChanged( QModelIndex );
 
 private:
-    void setLeftViewArtists();
-    void setLeftViewAlbums();
-    void setLeftViewTracks();
+    void setLeftViewArtists( TreeModel* artistModel );
+    void setLeftViewAlbums( AlbumModel* albumModel );
+    void setLeftViewTracks( PlaylistModel* trackModel );
 
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
 
-    PlaylistModel* m_tracksModel;
-    TreeModel* m_artistsModel;
-    TreeProxyModel* m_artistsProxy;
     QStandardItemModel* m_crumbModelLeft;
-    AlbumModel* m_albumsModel;
 
+    // Cache our model data
+    QHash< QString, AlbumModel* > m_albumModels;
+    QHash< QString, TreeModel* > m_artistModels;
+    QHash< QString, PlaylistModel* > m_trackModels;
     QTimer* m_timer;
 };
 

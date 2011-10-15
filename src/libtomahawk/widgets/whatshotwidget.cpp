@@ -75,45 +75,27 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
-    m_albumsModel = new AlbumModel( ui->additionsView );
-    ui->additionsView->setAlbumModel( m_albumsModel );
     /// Disable sorting, its a ranked list!
     ui->additionsView->proxyModel()->sort( -1 );
-
-
-    m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
-    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->tracksViewLeft->overlay()->setEnabled( false );
-    ui->tracksViewLeft->setTrackModel( m_tracksModel );
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
-    m_artistsModel = new TreeModel( this );
-    m_artistsModel->setColumnStyle( TreeModel::TrackOnly );
+    TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
+    artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    artistsProxy->setDynamicSortFilter( true );
 
-
-    m_artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
-    m_artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
-    m_artistsProxy->setDynamicSortFilter( true );
-
-    ui->artistsViewLeft->setProxyModel( m_artistsProxy );
-    ui->artistsViewLeft->setTreeModel( m_artistsModel );
+    ui->artistsViewLeft->setProxyModel( artistsProxy );
     ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
     ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-
-    m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    artistsProxy->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
-
-
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
-
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -146,15 +128,6 @@ WhatsHotWidget::fetchData()
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
-
-
-void
-WhatsHotWidget::checkQueries()
-{
-    m_timer->stop();
-    m_tracksModel->ensureResolved();
-}
-
 
 void
 WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
@@ -205,21 +178,25 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" )
             {
-                setLeftViewArtists();
                 const QStringList artists = returnedData["artists"].toStringList();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got artists! " << artists.size();
-                m_artistsModel->clear();
+
+                TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
+                artistsModel->setColumnStyle( TreeModel::TrackOnly );
                 foreach ( const QString& artist, artists )
-                    m_artistsModel->addArtists( Artist::get( artist ) );
+                    artistsModel->addArtists( Artist::get( artist ) );
+                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
+                m_artistModels[ chartId ] = artistsModel;
+
+                setLeftViewArtists( artistsModel );
             }
             else if( type == "albums" )
             {
-                setLeftViewAlbums();
-                m_albumsModel->clear();
                 QList<album_ptr> al;
                 const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
 
+                AlbumModel* albumModel = new AlbumModel( ui->additionsView );
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
                     qDebug() << "Getting album" << album.album << "By" << album.artist;
@@ -230,20 +207,28 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 }
                 qDebug() << "Adding albums to model";
-                m_albumsModel->addAlbums( al );
+                albumModel->addAlbums( al );
 
+                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
+                m_albumModels[ chartId ] = albumModel;
+                setLeftViewAlbums( albumModel );
             }
             else if( type == "tracks" )
             {
-                setLeftViewTracks();
                 const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
-                m_tracksModel->clear();
+
+                PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
+                trackModel->setStyle( TrackModel::Short );
                 foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
                 {
                     query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
-                    m_tracksModel->append( query );
+                    trackModel->append( query );
                 }
+
+                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
+                m_trackModels[ chartId ] = trackModel;
+                setLeftViewTracks( trackModel );
             }
             else
             {
@@ -285,6 +270,22 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 
 
     const QString chartId = item->data().toString();
+
+    if ( m_artistModels.contains( chartId ) )
+    {
+        setLeftViewArtists( m_artistModels[ chartId ] );
+        return;
+    }
+    else if ( m_albumModels.contains( chartId ) )
+    {
+        setLeftViewAlbums( m_albumModels[ chartId ] );
+        return;
+    }
+    else if ( m_trackModels.contains( chartId ) )
+    {
+        setLeftViewTracks( m_trackModels[ chartId ] );
+        return;
+    }
 
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria.insert( "chart_id", chartId );
@@ -369,21 +370,24 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
 
 void
-WhatsHotWidget::setLeftViewAlbums()
+WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
 {
-    ui->stackLeft->setCurrentIndex(2);
+    ui->additionsView->setAlbumModel( model );
+    ui->stackLeft->setCurrentIndex( 2 );
 }
 
 
 void
-WhatsHotWidget::setLeftViewArtists()
+WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 {
-    ui->stackLeft->setCurrentIndex(1);
+    ui->artistsViewLeft->setTreeModel( model );
+    ui->stackLeft->setCurrentIndex( 1 );
 }
 
 
 void
-WhatsHotWidget::setLeftViewTracks()
+WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
 {
-    ui->stackLeft->setCurrentIndex(0);
+    ui->tracksViewLeft->setPlaylistModel( model );
+    ui->stackLeft->setCurrentIndex( 0 );
 }
