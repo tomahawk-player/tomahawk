@@ -37,7 +37,7 @@ SiblingCrumbButton::SiblingCrumbButton(
     : BreadcrumbButtonBase(parent),
       m_index(index), m_combo( new ComboBox(this) )
 {
-
+    m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
     setIndex(index);
     connect(m_combo, SIGNAL(activated(int)), SLOT(comboboxActivated(int)));
 }
@@ -131,6 +131,7 @@ void SiblingCrumbButton::fillCombo()
     m_combo->clear();
     m_combo->addItems(list);
     m_combo->setCurrentIndex( m_combo->findText(text()));
+    m_combo->adjustSize();
 }
 
 void SiblingCrumbButton::comboboxActivated(int i)
