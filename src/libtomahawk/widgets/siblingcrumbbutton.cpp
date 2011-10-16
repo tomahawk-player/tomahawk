@@ -44,6 +44,8 @@ SiblingCrumbButton::SiblingCrumbButton(
 
 void SiblingCrumbButton::setIndex( QModelIndex index )
 {
+    if ( m_index == index && text() == index.data().toString() )
+        return;
     m_index = index;
     setText( index.data().toString() );
     fillCombo();
