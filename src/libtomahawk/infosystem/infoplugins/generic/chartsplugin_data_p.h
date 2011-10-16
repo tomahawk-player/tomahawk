@@ -16,6 +16,9 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef CHARTSPLUGIN_DATA_P_H
+#define CHARTSPLUGIN_DATA_P_H
+
 #include <QtCore/qchar.h>
 #include <QLocale>
 
@@ -798,3 +801,5 @@ static QString fullCountryFromCode(const QString& countryCode)
 
 }
 }
+
+#endif
