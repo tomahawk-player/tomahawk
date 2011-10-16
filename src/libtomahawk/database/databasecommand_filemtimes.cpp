@@ -40,7 +40,8 @@ DatabaseCommand_FileMtimes::execSelect( DatabaseImpl* dbi )
     TomahawkSqlQuery query = dbi->newquery();
     if( m_prefix.isEmpty() && m_prefixes.isEmpty() )
     {
-        query.exec( "SELECT url, id, mtime FROM file WHERE source IS NULL" );
+        QString limit( m_checkonly ? QString( " LIMIT 1" ) : QString() );
+        query.exec( QString( "SELECT url, id, mtime FROM file WHERE source IS NULL%1" ).arg( limit ) );
         while( query.next() )
         {
             QMap< unsigned int, unsigned int > map;

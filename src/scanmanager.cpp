@@ -20,7 +20,6 @@
 
 #include <QThread>
 #include <QCoreApplication>
-#include <QFileSystemWatcher>
 #include <QTimer>
 
 #include "musicscanner.h"
@@ -29,7 +28,7 @@
 #include "libtomahawk/sourcelist.h"
 
 #include "database/database.h"
-#include "database/databasecommand_dirmtimes.h"
+#include "database/databasecommand_filemtimes.h"
 #include "database/databasecommand_deletefiles.h"
 
 #include "utils/logger.h"
@@ -136,17 +135,39 @@ ScanManager::runScan( bool manualFull )
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( !manualFull )
+    if ( manualFull )
     {
-        runDirScan( TomahawkSettings::instance()->scannerPaths() );
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
 
-    DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-    connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                          SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
-    
+    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
+    connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
+                SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
+
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+}
+
+
+void
+ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes )
+{
+    if ( !mtimes.isEmpty() && TomahawkSettings::instance()->scannerPaths().isEmpty() )
+    {
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        return;
+    }
+    
+    runDirScan();
 }
 
 
@@ -156,24 +177,20 @@ ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_
     Q_UNUSED( files );
     Q_UNUSED( collection );
     if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
-        runDirScan( TomahawkSettings::instance()->scannerPaths() );
+        runDirScan();
 }
 
 
 void
-ScanManager::runDirScan( const QStringList& paths )
+ScanManager::runDirScan()
 {
     qDebug() << Q_FUNC_INFO;
 
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( paths.isEmpty() )
-    {
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
-        return;
-    }
-
+    QStringList paths = TomahawkSettings::instance()->scannerPaths();
+    
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_scanTimer->stop();

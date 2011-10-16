@@ -36,13 +36,18 @@ Q_OBJECT
 
 public:
     explicit DatabaseCommand_FileMtimes( const QString& prefix = QString(), QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_prefix( prefix )
+        : DatabaseCommand( parent ), m_prefix( prefix ), m_checkonly( false )
     {}
 
     explicit DatabaseCommand_FileMtimes( const QStringList& prefixes, QObject* parent = 0 )
-    : DatabaseCommand( parent ), m_prefixes( prefixes )
+    : DatabaseCommand( parent ), m_prefixes( prefixes ), m_checkonly( false )
     {}
 
+    //NOTE: when this is called we actually ignore the boolean flag; it's just used to give us the right constructor
+    explicit DatabaseCommand_FileMtimes( bool /*checkonly*/, QObject* parent = 0 )
+    : DatabaseCommand( parent ), m_checkonly( true )
+    {}
+    
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "filemtimes"; }
@@ -57,6 +62,7 @@ private:
     void execSelect( DatabaseImpl* dbi );
     QString m_prefix;
     QStringList m_prefixes;
+    bool m_checkonly;
 };
 
 #endif // DATABASECOMMAND_FILEMTIMES_H

@@ -48,7 +48,7 @@ signals:
 
 public slots:
     void runScan( bool manualFull = false );
-    void runDirScan( const QStringList& paths );
+    void runDirScan();
 
 private slots:
     void scannerFinished();
@@ -58,6 +58,7 @@ private slots:
 
     void onSettingsChanged();
 
+    void fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes );
     void filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection );
 
 private:
