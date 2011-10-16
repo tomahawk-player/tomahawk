@@ -119,11 +119,14 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         {
             TomahawkSqlQuery dirquery = dbi->newquery();
             
-            dirquery.prepare( QString( "SELECT url FROM file WHERE source IS NULL" ) );
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL" ) );
             
             dirquery.exec();
             while ( dirquery.next() )
-                m_files << dirquery.value( 0 ).toString();
+            {
+                m_ids << dirquery.value( 0 ).toString();
+                m_files << dirquery.value( 1 ).toString();
+            }
         }
     }
     else
@@ -145,19 +148,19 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
     if ( m_deleteAll )
     {
-        delquery.prepare( QString( "DELETE FROM file WHERE source %1" )
-        .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
-
-        if( !delquery.exec() )
+        if ( !m_ids.isEmpty() )
         {
-            qDebug() << "Failed to delete file:"
-            << delquery.lastError().databaseText()
-            << delquery.lastError().driverText()
-            << delquery.boundValues();
-        }
+            delquery.prepare( QString( "DELETE FROM file WHERE source %1" )
+            .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
 
-        emit done( m_files, source()->collection() );
-        return;
+            if( !delquery.exec() )
+            {
+                qDebug() << "Failed to delete file:"
+                << delquery.lastError().databaseText()
+                << delquery.lastError().driverText()
+                << delquery.boundValues();
+            }
+        }
     }
     else if ( !m_ids.isEmpty() )
     {
