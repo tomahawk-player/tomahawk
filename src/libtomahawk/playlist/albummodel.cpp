@@ -330,7 +330,8 @@ AlbumModel::getCover( const QModelIndex& index )
         return false;
 
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo["artist"] = item->album()->artist()->name();
+    if ( !item->album()->artist().isNull() )
+        trackInfo["artist"] = item->album()->artist()->name();
     trackInfo["album"] = item->album()->name();
     trackInfo["pptr"] = QString::number( (qlonglong)item );
     m_coverHash.insert( (qlonglong)item, index );

@@ -184,7 +184,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setColumnStyle( TreeModel::TrackOnly );
                 foreach ( const QString& artist, artists )
-                    artistsModel->addArtists( Artist::get( artist ) );
+                {
+                    artist_ptr artistPtr = Artist::get( artist );
+                    if ( artistPtr.isNull() )
+                        artistPtr = Artist::get( 0, artist );
+                    artistsModel->addArtists( artistPtr );
+                }
                 const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
                 m_artistModels[ chartId ] = artistsModel;
 
@@ -200,7 +205,10 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
                     qDebug() << "Getting album" << album.album << "By" << album.artist;
-                    album_ptr albumPtr = Album::get( Artist::get( album.artist, true ), album.album );
+                    artist_ptr artistPtr = Artist::get( album.artist );
+                    if ( artistPtr.isNull() )
+                        artistPtr = Artist::get( 0, album.artist );
+                    album_ptr albumPtr = Album::get( 0, album.album, artistPtr );
 
                     if( !albumPtr.isNull() )
                         al << albumPtr;
