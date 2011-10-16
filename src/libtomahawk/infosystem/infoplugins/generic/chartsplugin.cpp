@@ -27,6 +27,7 @@
 #include <QDomElement>
 
 #include "album.h"
+#include "chartsplugin_data_p.h"
 #include "typedefs.h"
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
@@ -288,9 +289,30 @@ ChartsPlugin::chartTypes()
             {
                 const QVariantMap chart = chartObj.toMap();
                 const QString id = chart.value( "id" ).toString();
-                const QString country = tr( "Country: %1" ).arg( chart.value( "geo" ).toString() );
+                const QString geo = chart.value( "geo" ).toString();
                 QString name = chart.value( "name" ).toString();
                 const QString type = chart.value( "type" ).toString();
+
+                QString country;
+                if ( !m_cachedCountries.contains( geo ) )
+                {
+                    QLocale l( QString( "en_%1" ).arg( geo ) );
+                    country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+
+                    for ( int i = 1; i < country.size(); i++ )
+                    {
+                        if ( country.at( i ).isUpper() )
+                        {
+                            country.insert( i, " " );
+                            i++;
+                        }
+                    }
+                    m_cachedCountries[ geo ] = country;
+                }
+                else
+                {
+                    country = m_cachedCountries[ geo ];
+                }
 
                 if ( name.startsWith( "iTunes Store:" ) ) // truncate
                     name = name.mid( 13 );

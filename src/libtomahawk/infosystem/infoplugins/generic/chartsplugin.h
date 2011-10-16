@@ -75,6 +75,8 @@ private:
     uint m_chartsFetchJobs;
     QList< QPair< uint, InfoRequestData > > m_cachedRequests;
 
+    QHash< QString, QString > m_cachedCountries;
+
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
