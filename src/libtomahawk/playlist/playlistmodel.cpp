@@ -186,6 +186,12 @@ PlaylistModel::clear()
     }
 }
 
+void
+PlaylistModel::append( const QList< query_ptr >& queries )
+{
+    onTracksAdded( queries );
+}
+
 
 void
 PlaylistModel::append( const Tomahawk::query_ptr& query )

@@ -37,6 +37,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <dynamic/GeneratorInterface.h>
+#include <pipeline.h>
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
@@ -224,11 +225,14 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );
+                QList<query_ptr> tracklist;
                 foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
                 {
-                    query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
-                    trackModel->append( query );
+                    query_ptr query = Query::get( track.artist, track.track, QString(), uuid(), false );
+                    tracklist << query;
                 }
+                Pipeline::instance()->resolve( tracklist );
+                trackModel->append( tracklist );
 
                 const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
                 m_trackModels[ chartId ] = trackModel;
