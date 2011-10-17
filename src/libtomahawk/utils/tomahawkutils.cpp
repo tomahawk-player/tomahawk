@@ -62,6 +62,9 @@
 namespace TomahawkUtils
 {
 
+
+static int s_headerHeight = 0;
+
 #ifdef Q_WS_MAC
 QString
 appSupportFolderPath()
@@ -445,8 +448,8 @@ unmarginLayout( QLayout* layout )
 }
 
 
-QWeakPointer< QNetworkAccessManager > s_nam;
-NetworkProxyFactory* s_proxyFactory = 0;
+static QWeakPointer< QNetworkAccessManager > s_nam;
+static NetworkProxyFactory* s_proxyFactory = 0;
 
 
 QList< QNetworkProxy >
@@ -649,5 +652,18 @@ crash()
     volatile int* a = (int*)(NULL);
     *a = 1;
 }
+
+int
+headerHeight()
+{
+    return s_headerHeight;
+}
+
+void
+setHeaderHeight( int height )
+{
+    s_headerHeight = height;
+}
+
 
 } // ns

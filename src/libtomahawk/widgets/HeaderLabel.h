@@ -39,6 +39,8 @@ public:
     QSize minimumSizeHint() const { return sizeHint(); }
     QSize sizeHint() const;
 
+    static int defaultFontSize();
+
 signals:
     void clicked();
 

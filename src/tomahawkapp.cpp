@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -57,6 +58,7 @@
 #include "utils/spotifyparser.h"
 #include "dropjob.h"
 #include "EchonestCatalogSynchronizer.h"
+#include "widgets/HeaderLabel.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -147,6 +149,11 @@ TomahawkApp::init()
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
 #endif
+
+    QFont f = APP->font();
+    f.setPixelSize( HeaderLabel::defaultFontSize() );
+    QFontMetrics fm( f );
+    TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 
     registerMetaTypes();
 

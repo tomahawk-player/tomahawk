@@ -20,6 +20,7 @@
 
 #include "combobox.h"
 #include "utils/stylehelper.h"
+#include "utils/tomahawkutils.h"
 
 #include <QTimer>
 #include <QDebug>
@@ -37,6 +38,7 @@ SiblingCrumbButton::SiblingCrumbButton(
     : BreadcrumbButtonBase(parent),
       m_index(index), m_combo( new ComboBox(this) )
 {
+    setFixedHeight( TomahawkUtils::headerHeight() );
     m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
     setIndex(index);
     connect(m_combo, SIGNAL(activated(int)), SLOT(comboboxActivated(int)));
