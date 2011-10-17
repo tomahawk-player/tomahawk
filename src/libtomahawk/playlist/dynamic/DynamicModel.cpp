@@ -88,7 +88,6 @@ DynamicModel::startOnDemand()
 
     m_playlist->generator()->startOnDemand();
 
-    m_deduper.clear();
     m_onDemandRunning = true;
 }
 
@@ -98,17 +97,22 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
         bool isDuplicate = false;
+        qDebug() << "Deduping:" << query->track() << query->artist();
         for ( int i = 0; i < m_deduper.size(); i++ )
         {
+            qDebug() << "Checking against:" << m_deduper[ i ].first << m_deduper[ i ].second;
             if ( m_deduper[ i ].first == query->track() && m_deduper[ i ].second == query->artist() )
                 isDuplicate = true;
         }
+        qDebug() << "is dup?" << isDuplicate;
         if ( isDuplicate )
         {
             m_playlist->generator()->fetchNext();
 
             return;
-        } else {
+        }
+        else
+        {
             m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
         }
 
