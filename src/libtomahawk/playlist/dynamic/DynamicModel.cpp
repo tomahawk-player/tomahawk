@@ -97,7 +97,13 @@ void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
-        if ( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) )
+        bool isDuplicate = false;
+        for ( int i = 0; i < m_deduper.size(); i++ )
+        {
+            if ( m_deduper[ i ].first == query->track() && m_deduper[ i ].second == query->artist() )
+                isDuplicate = true;
+        }
+        if ( isDuplicate )
         {
             m_playlist->generator()->fetchNext();
 
