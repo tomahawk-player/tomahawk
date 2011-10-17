@@ -59,6 +59,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
     }
     m_playlist = playlist;
 
+    m_deduper.clear();
     if( m_playlist->mode() == OnDemand )
         setFilterUnresolvable( true );
 
@@ -87,6 +88,7 @@ DynamicModel::startOnDemand()
 
     m_playlist->generator()->startOnDemand();
 
+    m_deduper.clear();
     m_onDemandRunning = true;
 }
 
@@ -95,13 +97,12 @@ void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
-        if( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) ) {
+        if ( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) )
+        {
             m_playlist->generator()->fetchNext();
 
             return;
         } else {
-            if( m_deduper.size() > 30 )
-                m_deduper.pop_front();
             m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
         }
 
