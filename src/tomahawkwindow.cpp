@@ -70,7 +70,6 @@
 #include "utils/logger.h"
 #include "jobview/JobStatusModel.h"
 #include "LoadXSPFDialog.h"
-#include <widgets/HeaderLabel.h>
 
 using namespace Tomahawk;
 
