@@ -76,9 +76,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
-    /// Disable sorting, its a ranked list!
-    ui->additionsView->proxyModel()->sort( -1 );
-
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->tracksViewLeft->overlay()->setEnabled( false );
@@ -92,8 +89,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setProxyModel( artistsProxy );
     ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
     ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    artistsProxy->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
@@ -381,6 +376,7 @@ void
 WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
 {
     ui->additionsView->setAlbumModel( model );
+    ui->additionsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
 }
 
@@ -389,6 +385,7 @@ void
 WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 {
     ui->artistsViewLeft->setTreeModel( model );
+    ui->artistsViewLeft->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 1 );
 }
 
@@ -397,5 +394,6 @@ void
 WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
 {
     ui->tracksViewLeft->setPlaylistModel( model );
+    ui->tracksViewLeft->proxyModel()->sort( -1 );
     ui->stackLeft->setCurrentIndex( 0 );
 }
