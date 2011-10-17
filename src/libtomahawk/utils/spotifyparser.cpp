@@ -26,12 +26,13 @@
 #include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "dropjobnotifier.h"
+#include "viewmanager.h"
 
 #include <qjson/parser.h>
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
-#include "dropjobnotifier.h"
 
 using namespace Tomahawk;
 
@@ -298,6 +299,7 @@ SpotifyParser::checkBrowseFinished()
             m_browseJob->setFinished();
 
         if( m_createNewPlaylist && !m_tracks.isEmpty() )
+        {
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
@@ -305,6 +307,8 @@ SpotifyParser::checkBrowseFinished()
                                        m_creator,
                                        false,
                                        m_tracks );
+            ViewManager::instance()->show( m_playlist );
+        }
 
         else if ( m_single && !m_tracks.isEmpty() )
             emit track( m_tracks.first() );
