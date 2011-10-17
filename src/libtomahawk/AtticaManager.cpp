@@ -156,7 +156,7 @@ AtticaManager::providerAdded( const Provider& provider )
     {
         m_resolverProvider = provider;
 
-        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads );
+        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads, 0, 30 );
         connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
         job->start();
     }
