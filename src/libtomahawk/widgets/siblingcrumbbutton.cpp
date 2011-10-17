@@ -44,10 +44,11 @@ SiblingCrumbButton::SiblingCrumbButton(
 
 void SiblingCrumbButton::setIndex( QModelIndex index )
 {
-    if ( m_index == index && text() == index.data().toString() )
-        return;
-    m_index = index;
-    setText( index.data().toString() );
+    if ( !(m_index == index && text() == index.data().toString()) )
+    {
+        m_index = index;
+        setText( index.data().toString() );
+    }
     fillCombo();
 }
 
@@ -59,6 +60,8 @@ QModelIndex SiblingCrumbButton::index() const
 void SiblingCrumbButton::setActive( bool active )
 {
     Q_UNUSED( active );
+    if ( active )
+        QTimer::singleShot( 0, this, SLOT( activateSelf() ) );
 }
 
 bool SiblingCrumbButton::isActive() const
@@ -152,7 +155,7 @@ void SiblingCrumbButton::comboboxActivated(int i)
     QModelIndex activated = m_index.sibling(i,0);
     int count = breadcrumbBar()->model()->rowCount(activated);
     if( count > 0 ) {
-        qDebug() << "activated" << activated.child(0,0).data().toString();
+//         qDebug() << "activated crumb with children:" << activated.child(0,0).data().toString();
         breadcrumbBar()->currentChangedTriggered(activated.child(0,0));
     } else {
         // if it has no children, then emit itself

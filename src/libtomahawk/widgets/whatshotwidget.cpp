@@ -160,10 +160,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
 
             //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
-            //HACK ALERT - we want the second crumb to expand right away, so we
-            //force it here. We should find a more elegant want to do this
-            /// @note: this expands the billboard chart, as its fast loading and intersting album view ;) i think
-            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(1,0).child(0,0).child(0,0));
             break;
         }
         case InfoSystem::InfoChart:
