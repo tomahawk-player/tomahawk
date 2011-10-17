@@ -163,8 +163,8 @@ SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
 ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 
 # we need pthreads too
-macro_optional_find_package(Threads)
-macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
+#macro_optional_find_package(Threads)
+#macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
 macro_optional_find_package(KDE4)
 macro_optional_find_package(KDE4Installed)
