@@ -130,6 +130,17 @@ void SiblingCrumbButton::fillCombo()
             list << sibling.data().toString();
     }
 
+    if ( m_combo->count() && list.count() )
+    {
+        // Check if it's the same, Don't change if it is, as it'll cause flickering
+        QStringList old;
+        for ( int i = 0; i < m_combo->count(); i++ )
+            old << m_combo->itemText( i );
+
+        if ( list == old )
+            return;
+    }
+
     m_combo->clear();
     m_combo->addItems(list);
     m_combo->setCurrentIndex( m_combo->findText(text()));
