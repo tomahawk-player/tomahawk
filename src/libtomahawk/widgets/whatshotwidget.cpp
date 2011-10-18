@@ -166,7 +166,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             if( !returnedData.contains(type) )
                 break;
             const QString side = requestData.customData["whatshot_side"].toString();
+            const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
 
+            m_queuedFetches.remove( chartId );
             tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" )
             {
@@ -182,7 +184,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         artistPtr = Artist::get( 0, artist );
                     artistsModel->addArtists( artistPtr );
                 }
-                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
+
                 m_artistModels[ chartId ] = artistsModel;
 
                 setLeftViewArtists( artistsModel );
@@ -209,7 +211,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 qDebug() << "Adding albums to model";
                 albumModel->addAlbums( al );
 
-                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
                 m_albumModels[ chartId ] = albumModel;
                 setLeftViewAlbums( albumModel );
             }
@@ -229,7 +230,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 Pipeline::instance()->resolve( tracklist );
                 trackModel->append( tracklist );
 
-                const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
                 m_trackModels[ chartId ] = trackModel;
                 setLeftViewTracks( trackModel );
             }
@@ -290,6 +290,11 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
         return;
     }
 
+    if ( m_queuedFetches.contains( chartId ) )
+    {
+        return;
+    }
+
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria.insert( "chart_id", chartId );
     /// Remember to lower the source!
@@ -306,6 +311,8 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 
     qDebug() << "Making infosystem request for chart of type:" <<chartId;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+
+    m_queuedFetches.insert( chartId );
 }
 
 

@@ -96,6 +96,7 @@ private:
     QHash< QString, AlbumModel* > m_albumModels;
     QHash< QString, TreeModel* > m_artistModels;
     QHash< QString, PlaylistModel* > m_trackModels;
+    QSet< QString > m_queuedFetches;
     QTimer* m_timer;
 };
 
