@@ -66,6 +66,7 @@ private slots:
     void spotifyTrackLookupFinished();
     void spotifyBrowseFinished();
 
+    void playlistCreated();
 private:
     QPixmap pixmap() const;
 

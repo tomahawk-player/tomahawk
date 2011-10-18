@@ -43,8 +43,8 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_browseJob( 0 )
     , m_limit ( 40 )
+    , m_browseJob( 0 )
 
 {
     foreach ( const QString& url, Urls )
@@ -56,8 +56,8 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_browseJob( 0 )
     , m_limit ( 40 )
+    , m_browseJob( 0 )
 {
     lookupUrl( Url );
 }
@@ -307,7 +307,8 @@ SpotifyParser::checkBrowseFinished()
                                        m_creator,
                                        false,
                                        m_tracks );
-            ViewManager::instance()->show( m_playlist );
+            connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+            return;
         }
 
         else if ( m_single && !m_tracks.isEmpty() )
@@ -337,6 +338,16 @@ SpotifyParser::checkTrackFinished()
     }
 
 }
+
+void
+SpotifyParser::playlistCreated()
+{
+
+    ViewManager::instance()->show( m_playlist );
+
+    deleteLater();
+}
+
 
 QPixmap
 SpotifyParser::pixmap() const
