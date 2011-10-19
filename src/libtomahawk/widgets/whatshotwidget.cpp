@@ -179,9 +179,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 artistsModel->setColumnStyle( TreeModel::TrackOnly );
                 foreach ( const QString& artist, artists )
                 {
-                    artist_ptr artistPtr = Artist::get( artist );
-                    if ( artistPtr.isNull() )
-                        artistPtr = Artist::get( 0, artist );
+                    artist_ptr artistPtr = Artist::get( artist, false );
                     artistsModel->addArtists( artistPtr );
                 }
 
@@ -199,13 +197,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
                 {
                     qDebug() << "Getting album" << album.album << "By" << album.artist;
-                    artist_ptr artistPtr = Artist::get( album.artist );
-                    if ( artistPtr.isNull() )
-                        artistPtr = Artist::get( 0, album.artist );
-                    album_ptr albumPtr = Album::get( 0, album.album, artistPtr );
-
-                    if( !albumPtr.isNull() )
-                        al << albumPtr;
+                    artist_ptr artistPtr = Artist::get( album.artist, false );
+                    album_ptr albumPtr = Album::get( artistPtr, album.album, false );
+                    al << albumPtr;
 
                 }
                 qDebug() << "Adding albums to model";
