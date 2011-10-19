@@ -143,7 +143,7 @@ GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int 
         // For now only allow rating if a resolver is installed!
         if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
             return false;
-        if ( AtticaManager::userHasRated( resolver ) )
+        if ( AtticaManager::instance()->userHasRated( resolver ) )
             return false;
         m_contentList[ index.row() ].setRating( value.toInt() * 20 );
         AtticaManager::instance()->uploadRating( m_contentList[ index.row() ] );

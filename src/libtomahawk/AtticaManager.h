@@ -75,6 +75,7 @@ public:
     virtual ~AtticaManager() {}
 #endif
 
+    static bool removeDirectory( const QString& dir );
 #ifdef LIBATTICA_FOUND
 
     bool resolversLoaded() const;
@@ -92,7 +93,6 @@ public:
     void uploadRating( const Attica::Content& c );
     bool userHasRated( const Attica::Content& c ) const;
 
-    static bool removeDirectory( const QString& dir );
 
 signals:
     void resolversReloaded( const Attica::Content::List& resolvers );
