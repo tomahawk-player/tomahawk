@@ -20,6 +20,7 @@
 
 #include "GetNewStuffModel.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include <QtGui/QPainter>
 #include <QApplication>
@@ -27,6 +28,7 @@
 #include "AtticaManager.h"
 
 #define PADDING 4
+#define PADDING_BETWEEN_STARS 2
 
 #ifdef Q_WS_MAC
 #define SIZEHINT_HEIGHT 70
@@ -175,17 +177,19 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     painter->setPen( saved );
     // rating stars
     int rating = index.data( GetNewStuffModel::RatingRole ).toInt();
-    const int paddingBetweenStars = 2;
-    const int ratingWidth = 5 * ( m_ratingStarPositive.width() + paddingBetweenStars );
+    const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
     int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
     for ( int i = 1; i < 6; i++ )
     {
         QRect r( runningEdge, btnRect.top() - m_ratingStarPositive.height() - PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
+        if ( i == 1 )
+            m_cachedStarRects[ QPair<int, int>(index.row(), index.column()) ] = r;
+
         if ( i <= rating ) // positive star
             painter->drawPixmap( r, m_ratingStarPositive );
         else
             painter->drawPixmap( r, m_ratingStarNegative );
-        runningEdge += m_ratingStarPositive.width() + paddingBetweenStars;
+        runningEdge += m_ratingStarPositive.width() + PADDING_BETWEEN_STARS;
     }
 
     // downloaded num times, underneath button
@@ -238,7 +242,10 @@ bool
 GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( option );
-    if ( event->type() == QEvent::MouseButtonRelease && m_cachedButtonRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
+    if ( event->type() != QEvent::MouseButtonRelease )
+        return false;
+
+    if ( m_cachedButtonRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
     {
         QRect rect = m_cachedButtonRects[ QPair<int, int>( index.row(), index.column() ) ];
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
@@ -246,6 +253,28 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
         if ( rect.contains( me->pos() ) )
         {
             model->setData( index, true );
+
+            return true;
+        }
+    }
+
+    if ( m_cachedStarRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
+    {
+        QRect fullStars = m_cachedStarRects[ QPair<int, int>( index.row(), index.column() ) ];
+        const int starsWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
+        fullStars.setWidth( starsWidth );
+
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+
+        if ( fullStars.contains( me->pos() ) )
+        {
+            tDebug() << "A star was pressed...which one?";
+
+            const int eachStar = starsWidth / 5;
+            const int clickOffset = me->pos().x() - fullStars.x();
+            const int whichStar = (clickOffset / eachStar) + 1;
+            tDebug() << "Clicked on:" << whichStar;
+            model->setData( index, whichStar, GetNewStuffModel::RatingRole );
 
             return true;
         }

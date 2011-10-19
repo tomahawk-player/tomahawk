@@ -148,6 +148,19 @@ AtticaManager::pathFromId( const QString& resolverId ) const
     return m_resolverStates.value( resolverId ).scriptPath;
 }
 
+void
+AtticaManager::uploadRating( const Content& c )
+{
+    m_resolverStates[ c.id() ].rating = c.rating();
+
+    PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
+    connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
+
+    job->start();
+
+    emit resolverStateChanged( c.id() );
+}
+
 
 void
 AtticaManager::providerAdded( const Provider& provider )
@@ -186,7 +199,7 @@ AtticaManager::resolversList( BaseJob* j )
         }
     }
 
-    checkForUpdates();
+    syncServerData();
 }
 
 
@@ -211,23 +224,28 @@ AtticaManager::resolverIconFetched()
 }
 
 void
-AtticaManager::checkForUpdates()
+AtticaManager::syncServerData()
 {
     // look for any newer. m_resolvers has list from server, and m_resolverStates will contain any locally installed ones
+    // also update ratings
     foreach ( const QString& id, m_resolverStates.keys() )
     {
         Resolver r = m_resolverStates[ id ];
-        if ( r.state == Installed || r.state == NeedsUpgrade )
+        foreach ( const Content& upstream, m_resolvers )
         {
-            foreach ( const Content& upstream, m_resolvers )
+            // same resolver
+            if ( id != upstream.id() )
+                continue;
+
+            // Update our rating with the server's idea of rating
+            m_resolverStates[ id ].rating = upstream.rating();
+            // DO we need to upgrade?
+            if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
+                 !upstream.version().isEmpty() )
             {
-                if ( id == upstream.id() && // the right one
-                     !upstream.version().isEmpty() ) // valid version
+                if ( newerVersion( r.version, upstream.version() ) )
                 {
-                    if ( newerVersion( r.version, upstream.version() ) )
-                    {
-                        m_resolverStates[ id ].state = NeedsUpgrade;
-                    }
+                    m_resolverStates[ id ].state = NeedsUpgrade;
                 }
             }
         }
@@ -513,7 +531,7 @@ AtticaManager::doResolverRemove( const QString& id ) const
 
 // taken from util/fileutils.cpp in kdevplatform
 bool
-AtticaManager::removeDirectory( const QString& dir ) const
+AtticaManager::removeDirectory( const QString& dir )
 {
     const QDir aDir(dir);
 

@@ -41,6 +41,7 @@ private:
 
     int m_widestTextWidth;
     mutable QHash< QPair<int, int>, QRect > m_cachedButtonRects;
+    mutable QHash< QPair<int, int>, QRect > m_cachedStarRects;
 };
 
 #endif // GETNEWSTUFFDELEGATE_H

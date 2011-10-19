@@ -48,11 +48,12 @@ public:
 
     struct Resolver {
         QString version, scriptPath;
+        int rating; // 0-100
         ResolverState state;
         QPixmap* pixmap;
 
-        Resolver( const QString& v, const QString& path, ResolverState s )
-            : version( v ), scriptPath( path ), state( s ), pixmap( 0 ) {}
+        Resolver( const QString& v, const QString& path, int r, ResolverState s )
+            : version( v ), scriptPath( path ), rating( r ), state( s ), pixmap( 0 ) {}
         Resolver() : state( Uninstalled ), pixmap( 0 ) {}
     };
 
@@ -88,6 +89,10 @@ public:
     void uninstallResolver( const QString& pathToResolver );
     QString pathFromId( const QString& resolverId ) const;
 
+    void uploadRating( const Attica::Content& c );
+
+    static bool removeDirectory( const QString& dir );
+
 signals:
     void resolversReloaded( const Attica::Content::List& resolvers );
 
@@ -105,13 +110,12 @@ private slots:
     void savePixmapsToCache();
     void resolverIconFetched();
 
-    void checkForUpdates();
+    void syncServerData();
     bool newerVersion( const QString& older, const QString& newer ) const;
 
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
-    bool removeDirectory( const QString& dir ) const;
 
     Attica::ProviderManager m_manager;
 

@@ -29,8 +29,9 @@
 #include "playlistinterface.h"
 
 #include "utils/logger.h"
+#include "utils/tomahawkutils.h"
 
-#define VERSION 3
+#define VERSION 4
 
 using namespace Tomahawk;
 
@@ -39,11 +40,12 @@ TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
 {
+    out <<  VERSION;
     out << (quint32)states.count();
     foreach( const QString& key, states.keys() )
     {
         AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state;
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << (quint32)resolver.rating;
     }
     return out;
 }
@@ -51,21 +53,22 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
 
 inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
 {
-    quint32 count = 0;
+    quint32 count = 0, version = 0;
+    in >> version;
     in >> count;
     for ( uint i = 0; i < count; i++ )
     {
         QString key, version, scriptPath;
-        qint32 state;
+        qint32 state, rating;
         in >> key;
         in >> version;
         in >> scriptPath;
         in >> state;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, (AtticaManager::ResolverState)state );
+        in >> rating;
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, rating, (AtticaManager::ResolverState)state );
     }
     return in;
 }
-
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -178,6 +181,45 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         }
         // create a zeroconf plugin too
         addSipPlugin( "sipzeroconf_legacy" );
+    } else if ( oldVersion == 3 )
+    {
+        if ( contains( "script/atticaResolverStates" ) )
+        {
+            // Do messy binary upgrade. remove attica resolvers :(
+            setValue( "script/atticaresolverstates", QVariant() );
+
+            QDir resolverDir = TomahawkUtils::appDataDir();
+            if ( !resolverDir.cd( QString( "atticaresolvers" ) ) )
+                return;
+
+            QStringList toremove;
+            QStringList resolvers = resolverDir.entryList( QDir::Dirs | QDir::NoDotAndDotDot );
+            QStringList listedResolvers = allScriptResolvers();
+            QStringList enabledResolvers = enabledScriptResolvers();
+            foreach ( const QString& resolver, resolvers )
+            {
+                foreach ( const QString& r, listedResolvers )
+                {
+                    if ( r.contains( resolver ) )
+                    {
+                        tDebug() << "Deleting listed resolver:" << r;
+                        listedResolvers.removeAll( r );
+                    }
+                }
+                foreach ( const QString& r, enabledResolvers )
+                {
+                    if ( r.contains( resolver ) )
+                    {
+                        tDebug() << "Deleting enabled resolver:" << r;
+                        enabledResolvers.removeAll( r );
+                    }
+                }
+            }
+            setAllScriptResolvers( listedResolvers );
+            setEnabledScriptResolvers( enabledResolvers );
+            tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
+            AtticaManager::removeDirectory( resolverDir.absolutePath() );
+        }
     }
 }
 
