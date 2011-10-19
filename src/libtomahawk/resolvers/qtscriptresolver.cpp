@@ -364,9 +364,9 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         QVariantMap m = rv.toMap();
 
         Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
+        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
         rp->setArtist( ap );
-        rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
+        rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
         rp->setTrack( m.value( "track" ).toString() );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
