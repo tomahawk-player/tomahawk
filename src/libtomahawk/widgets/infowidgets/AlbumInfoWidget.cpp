@@ -64,7 +64,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->tracksView );
-    m_button->setText( tr( "Click to show All Tracks" ) );
+    m_button->setText( tr( "Click to show Super Collection Tracks" ) );
     m_button->setCheckable( true );
     m_button->setChecked( true );
 
@@ -96,7 +96,7 @@ AlbumInfoWidget::onModeToggle()
     m_tracksModel->addTracks( m_album, QModelIndex() );
 
     if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show All Tracks" ) );
+        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
     else
         m_button->setText( tr( "Click to show Official Tracks" ) );
 }

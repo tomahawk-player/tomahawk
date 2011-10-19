@@ -34,7 +34,7 @@ OverlayButton::OverlayButton( QWidget* parent )
     , m_opacity( 0.0 )
     , m_parent( parent )
 {
-    resize( 160, 26 );
+    resize( 0, 26 );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
@@ -77,6 +77,9 @@ void
 OverlayButton::setText( const QString& text )
 {
     m_text = text;
+
+    QFontMetrics fm( font() );
+    resize( fm.width( text ) + 16, height() );
 }
 
 
