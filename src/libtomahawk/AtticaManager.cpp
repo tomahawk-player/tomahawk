@@ -151,7 +151,20 @@ AtticaManager::pathFromId( const QString& resolverId ) const
 void
 AtticaManager::uploadRating( const Content& c )
 {
-    m_resolverStates[ c.id() ].rating = c.rating();
+    m_resolverStates[ c.id() ].userRating = c.rating();
+
+    for ( int i = 0; i < m_resolvers.count(); i++ )
+    {
+        if ( m_resolvers[ i ].id() == c.id() )
+        {
+            Attica::Content atticaContent = m_resolvers[ i ];
+            atticaContent.setRating( c.rating() );
+            m_resolvers[ i ] = atticaContent;
+            break;
+        }
+    }
+
+    TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
 
     PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
@@ -159,6 +172,12 @@ AtticaManager::uploadRating( const Content& c )
     job->start();
 
     emit resolverStateChanged( c.id() );
+}
+
+bool
+AtticaManager::userHasRated( const Content& c ) const
+{
+    return m_resolverStates[ c.id() ].userRating != -1;
 }
 
 
@@ -231,14 +250,20 @@ AtticaManager::syncServerData()
     foreach ( const QString& id, m_resolverStates.keys() )
     {
         Resolver r = m_resolverStates[ id ];
-        foreach ( const Content& upstream, m_resolvers )
+        for ( int i = 0; i < m_resolvers.size(); i++ )
         {
+            Attica::Content upstream = m_resolvers[ i ];
             // same resolver
             if ( id != upstream.id() )
                 continue;
 
-            // Update our rating with the server's idea of rating
-            m_resolverStates[ id ].rating = upstream.rating();
+            // Update our rating with the server's idea of rating if we haven't rated it
+            if ( m_resolverStates[ id ].userRating != -1 )
+            {
+                upstream.setRating( m_resolverStates[ id ].userRating );
+                m_resolvers[ i ] = upstream;
+            }
+
             // DO we need to upgrade?
             if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
                  !upstream.version().isEmpty() )

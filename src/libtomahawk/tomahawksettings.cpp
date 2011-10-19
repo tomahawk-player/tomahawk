@@ -45,7 +45,7 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
     foreach( const QString& key, states.keys() )
     {
         AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << (quint32)resolver.rating;
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
     }
     return out;
 }
@@ -59,13 +59,13 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     for ( uint i = 0; i < count; i++ )
     {
         QString key, version, scriptPath;
-        qint32 state, rating;
+        qint32 state, userRating;
         in >> key;
         in >> version;
         in >> scriptPath;
         in >> state;
-        in >> rating;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, rating, (AtticaManager::ResolverState)state );
+        in >> userRating;
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
     }
     return in;
 }
@@ -183,7 +183,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         addSipPlugin( "sipzeroconf_legacy" );
     } else if ( oldVersion == 3 )
     {
-        if ( contains( "script/atticaResolverStates" ) )
+        if ( contains( "script/atticaresolverstates" ) )
         {
             // Do messy binary upgrade. remove attica resolvers :(
             setValue( "script/atticaresolverstates", QVariant() );

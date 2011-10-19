@@ -48,13 +48,13 @@ public:
 
     struct Resolver {
         QString version, scriptPath;
-        int rating; // 0-100
+        int userRating; // 0-100
         ResolverState state;
         QPixmap* pixmap;
 
-        Resolver( const QString& v, const QString& path, int r, ResolverState s )
-            : version( v ), scriptPath( path ), rating( r ), state( s ), pixmap( 0 ) {}
-        Resolver() : state( Uninstalled ), pixmap( 0 ) {}
+        Resolver( const QString& v, const QString& path, int userR, ResolverState s )
+            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ) {}
+        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ) {}
     };
 
     typedef QHash< QString, AtticaManager::Resolver > StateHash;
@@ -90,6 +90,7 @@ public:
     QString pathFromId( const QString& resolverId ) const;
 
     void uploadRating( const Attica::Content& c );
+    bool userHasRated( const Attica::Content& c ) const;
 
     static bool removeDirectory( const QString& dir );
 

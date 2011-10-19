@@ -113,11 +113,10 @@ GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int 
         return false;
 
 
+    Attica::Content resolver = m_contentList[ index.row() ];
+    AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
     if ( role == Qt::EditRole )
     {
-        Attica::Content resolver = m_contentList[ index.row() ];
-        AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
-
         switch( state )
         {
             case AtticaManager::Uninstalled:
@@ -141,6 +140,11 @@ GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int 
         };
     } else if ( role == RatingRole )
     {
+        // For now only allow rating if a resolver is installed!
+        if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+            return false;
+        if ( AtticaManager::userHasRated( resolver ) )
+            return false;
         m_contentList[ index.row() ].setRating( value.toInt() * 20 );
         AtticaManager::instance()->uploadRating( m_contentList[ index.row() ] );
     }
