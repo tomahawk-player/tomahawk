@@ -56,12 +56,12 @@ ContextWidget::ContextWidget( QWidget* parent )
     TopTracksContext* ttc = new TopTracksContext();
     RelatedArtistsContext* rac = new RelatedArtistsContext();
     WebContext* wiki = new WikipediaContext();
-    WebContext* lastfm = new LastfmContext();
+    /*WebContext* lastfm = new LastfmContext();*/
 
     m_views << ttc;
     m_views << rac;
     m_views << wiki;
-    m_views << lastfm;
+/*    m_views << lastfm;*/
 
     foreach ( ContextPage* view, m_views )
     {
