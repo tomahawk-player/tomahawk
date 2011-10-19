@@ -55,6 +55,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
     m_recentCollectionModel->setStyle( TrackModel::Short );
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
+    ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
     m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
 
     m_historyModel = new PlaylistModel( ui->historyView );
@@ -66,6 +67,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
+    ui->recentAlbumView->proxyModel()->sort( -1 );
     m_recentAlbumModel->addFilteredCollection( source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 
     m_title = tr( "New Additions" );
