@@ -835,8 +835,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
             foreach ( const QString& albumName, albums )
             {
-                int albumId = 0;
-                Tomahawk::album_ptr album = Tomahawk::Album::get( albumId, albumName, artist );
+                Tomahawk::album_ptr album = Tomahawk::Album::get( artist, albumName, false );
                 al << album;
             }
             onAlbumsAdded( al, requestData.customData[ "row" ] );

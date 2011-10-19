@@ -337,7 +337,7 @@ DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        tDebug() << "Failed to insert track:" << name_orig ;
+        tDebug() << "Failed to insert track:" << name_orig;
         return 0;
     }
 
@@ -388,7 +388,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        tDebug() << "Failed to insert album: " << name_orig ;
+        tDebug() << "Failed to insert album:" << name_orig;
         return 0;
     }
 

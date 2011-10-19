@@ -43,7 +43,7 @@ artist_ptr
 Artist::get( const QString& name, bool autoCreate )
 {
     int artid = Database::instance()->impl()->artistId( name, autoCreate );
-    if ( artid < 1 )
+    if ( artid < 1 && autoCreate )
         return artist_ptr();
 
     return Artist::get( artid, name );
