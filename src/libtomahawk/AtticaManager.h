@@ -75,7 +75,6 @@ public:
     virtual ~AtticaManager() {}
 #endif
 
-    static bool removeDirectory( const QString& dir );
 #ifdef LIBATTICA_FOUND
 
     bool resolversLoaded() const;

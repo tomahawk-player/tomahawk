@@ -550,30 +550,5 @@ AtticaManager::doResolverRemove( const QString& id ) const
         !resolverDir.absolutePath().contains( id ) )
         return;
 
-    removeDirectory( resolverDir.absolutePath() );
-}
-
-
-// taken from util/fileutils.cpp in kdevplatform
-bool
-AtticaManager::removeDirectory( const QString& dir )
-{
-    const QDir aDir(dir);
-
-    tLog() << "Deleting DIR:" << dir;
-    bool has_err = false;
-    if (aDir.exists()) {
-        foreach(const QFileInfo& entry, aDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks)) {
-            QString path = entry.absoluteFilePath();
-            if (entry.isDir()) {
-                has_err = !removeDirectory(path) || has_err;
-            } else if (!QFile::remove(path)) {
-                has_err = true;
-            }
-        }
-        if (!aDir.rmdir(aDir.absolutePath())) {
-            has_err = true;
-        }
-    }
-    return !has_err;
+    TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
 }

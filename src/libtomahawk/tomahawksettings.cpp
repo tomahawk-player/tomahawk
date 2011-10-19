@@ -218,7 +218,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             setAllScriptResolvers( listedResolvers );
             setEnabledScriptResolvers( enabledResolvers );
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
-            AtticaManager::removeDirectory( resolverDir.absolutePath() );
+            TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
     }
 }
