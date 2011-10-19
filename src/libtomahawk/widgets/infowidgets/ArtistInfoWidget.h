@@ -40,6 +40,7 @@
 
 class PlaylistModel;
 class TreeModel;
+class OverlayButton;
 
 namespace Ui
 {
@@ -90,6 +91,8 @@ private slots:
     void infoSystemFinished( QString target );
 
     void onModeToggle();
+    void onLoadingStarted();
+    void onLoadingFinished();
 
 private:
     Ui::ArtistInfoWidget *ui;
@@ -99,6 +102,8 @@ private:
     TreeModel* m_relatedModel;
     TreeModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
+
+    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;

@@ -30,6 +30,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+#include "widgets/OverlayButton.h"
 #include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
@@ -68,12 +69,16 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
 
-    ui->albumHeader->setContentsMargins( 0, 0, 4, 0 );
-    ui->button->setChecked( true );
-
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
-    connect( ui->button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    m_button = new OverlayButton( ui->albums );
+    m_button->setText( tr( "Click to show All Releases" ) );
+    m_button->setCheckable( true );
+    m_button->setChecked( true );
+
+    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
+    connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -94,9 +99,30 @@ ArtistInfoWidget::~ArtistInfoWidget()
 void
 ArtistInfoWidget::onModeToggle()
 {
-    m_albumsModel->setMode( ui->button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
+    m_albumsModel->setMode( m_button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
     m_albumsModel->clear();
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
+
+    if ( m_button->isChecked() )
+        m_button->setText( tr( "Click to show All Releases" ) );
+    else
+        m_button->setText( tr( "Click to show Official Releases" ) );
+}
+
+
+void
+ArtistInfoWidget::onLoadingStarted()
+{
+    m_button->setEnabled( false );
+    m_button->hide();
+}
+
+
+void
+ArtistInfoWidget::onLoadingFinished()
+{
+    m_button->setEnabled( true );
+    m_button->show();
 }
 
 

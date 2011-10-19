@@ -64,6 +64,7 @@ TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
             connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
         connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onRowsInserted( QModelIndex, int, int ) ) );
+        connect( m_model, SIGNAL( modelReset() ), SLOT( onModelReset() ) );
     }
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
@@ -90,6 +91,15 @@ TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int 
                     SLOT( onFilterAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+TreeProxyModel::onModelReset()
+{
+    m_cache.clear();
+    m_artistsFilter.clear();
+    m_albumsFilter.clear();
 }
 
 

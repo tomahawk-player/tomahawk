@@ -212,6 +212,7 @@ set( libSources
     widgets/whatshotwidget.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
+    widgets/OverlayButton.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
@@ -436,6 +437,7 @@ set( libHeaders
     widgets/whatshotwidget.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
+    widgets/OverlayButton.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
     widgets/HeaderWidget.h

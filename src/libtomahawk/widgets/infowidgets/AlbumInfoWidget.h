@@ -38,6 +38,7 @@
 
 class AlbumModel;
 class TreeModel;
+class OverlayButton;
 
 namespace Ui
 {
@@ -89,6 +90,10 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+    void onModeToggle();
+    void onLoadingStarted();
+    void onLoadingFinished();
+
 private:
     Ui::AlbumInfoWidget *ui;
 
@@ -96,6 +101,8 @@ private:
 
     AlbumModel* m_albumsModel;
     TreeModel* m_tracksModel;
+
+    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;
