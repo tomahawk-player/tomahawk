@@ -84,7 +84,7 @@ PortFwdThread::work()
                 QString pubip = QString( m_portfwd->external_ip().c_str() );
                 m_externalAddress = QHostAddress( pubip );
                 m_externalPort = tryport;
-                qDebug() << "External servent address detected as" << pubip << ":" << m_externalPort;
+                tDebug() << "External servent address detected as" << pubip << ":" << m_externalPort;
                 qDebug() << "Max upstream  " << m_portfwd->max_upstream_bps() << "bps";
                 qDebug() << "Max downstream" << m_portfwd->max_downstream_bps() << "bps";
                 break;
@@ -93,10 +93,10 @@ PortFwdThread::work()
         }
     }
     else
-        qDebug() << "No UPNP Gateway device found?";
+        tDebug() << "No UPNP Gateway device found?";
 
     if ( !m_externalPort )
-        qDebug() << "Could not setup fwd for port:" << m_port;
+        tDebug() << "Could not setup fwd for port:" << m_port;
 
     emit externalAddressDetected( m_externalAddress, m_externalPort );
 }
