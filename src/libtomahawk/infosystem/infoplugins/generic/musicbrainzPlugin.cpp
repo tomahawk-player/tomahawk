@@ -54,12 +54,12 @@ MusicBrainzPlugin::namChangedSlot( QNetworkAccessManager *nam )
 void
 MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         emit info( requestId, requestData, QVariant() );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
         emit info( requestId, requestData, QVariant() );
@@ -202,7 +202,7 @@ MusicBrainzPlugin::tracksSearchSlot()
     }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
     QDomElement element;
     for ( int i = 0; i < domNodeList.count(); i++ )
@@ -258,8 +258,8 @@ MusicBrainzPlugin::albumFoundSlot()
     returnedData["albums"] = albums;
     emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     emit updateCache( criteria, 0, requestData.type, returnedData );
 }
@@ -299,8 +299,8 @@ MusicBrainzPlugin::tracksFoundSlot()
     returnedData["tracks"] = tracks;
     emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     criteria["album"] = origData["album"];
     emit updateCache( criteria, 0, requestData.type, returnedData );

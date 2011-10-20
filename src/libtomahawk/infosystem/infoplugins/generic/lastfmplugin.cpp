@@ -192,7 +192,7 @@ LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
 void
 LastFmPlugin::nowPlaying( const QVariant &input )
 {
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() || !m_scrobbler )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
     {
         tLog() << "LastFmPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
         if ( !m_scrobbler )
@@ -200,7 +200,7 @@ LastFmPlugin::nowPlaying( const QVariant &input )
         return;
     }
 
-    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
         return;
 
@@ -235,13 +235,13 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         tLog() << "LastFmPlugin::nowPlaying cannot convert input!";
         return;
     }
 
-    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
@@ -269,19 +269,19 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 void
 LastFmPlugin::fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
     emit getCachedInfo( requestId, criteria, 2419200000, requestData );
@@ -291,19 +291,19 @@ LastFmPlugin::fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoReq
 void
 LastFmPlugin::fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
     emit getCachedInfo( requestId, criteria, 2419200000, requestData );
@@ -312,13 +312,13 @@ LastFmPlugin::fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestD
 void
 LastFmPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     if ( !hash.contains( "chart_id" ) )
     {
         dataError( requestId, requestData );
@@ -333,13 +333,13 @@ LastFmPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData 
 void
 LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
 
     emit getCachedInfo( requestId, criteria, 0, requestData );
 }
@@ -347,19 +347,19 @@ LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::Info
 void
 LastFmPlugin::fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) || !hash.contains( "album" ) )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
@@ -370,19 +370,19 @@ LastFmPlugin::fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestDa
 void
 LastFmPlugin::fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
     emit getCachedInfo( requestId, criteria, 2419200000, requestData );
@@ -399,7 +399,7 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         return;
     }
 
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     switch ( requestData.type )
     {
         case InfoChart:
@@ -544,8 +544,8 @@ LastFmPlugin::similarArtistsReturned()
         returnedData
     );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     emit updateCache( criteria, 2419200000, requestData.type, returnedData );
 }
@@ -565,9 +565,9 @@ LastFmPlugin::chartReturned()
     if ( url.contains( tracks_rx ) )
     {
         QList<lastfm::Track> tracks = parseTrackList( reply );
-        QList<InfoCriteriaHash> top_tracks;
+        QList<InfoStringHash> top_tracks;
         foreach( const lastfm::Track &t, tracks ) {
-            InfoCriteriaHash pair;
+            InfoStringHash pair;
             pair[ "artist" ] = t.artist().toString();
             pair[ "track" ] = t.title();
             top_tracks << pair;
@@ -620,8 +620,8 @@ LastFmPlugin::topTracksReturned()
         returnedData
     );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     emit updateCache( criteria, 0, requestData.type, returnedData );
 }
@@ -659,8 +659,8 @@ LastFmPlugin::coverArtReturned()
             returnedData
         );
 
-        Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-        Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+        Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["album"] = origData["album"];
         emit updateCache( criteria, 2419200000, requestData.type, returnedData );
@@ -712,8 +712,8 @@ LastFmPlugin::artistImagesReturned()
 
         emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
 
-        Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-        Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+        Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         emit updateCache( criteria, 2419200000, requestData.type, returnedData );
     }

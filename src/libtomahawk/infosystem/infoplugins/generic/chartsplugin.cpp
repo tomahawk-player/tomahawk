@@ -106,7 +106,7 @@ ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
 
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     bool foundSource;
 
     switch ( requestData.type )
@@ -161,14 +161,14 @@ void
 ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
 
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
 
     /// Each request needs to contain both a id and source
     if ( !hash.contains( "chart_id" ) && !hash.contains( "chart_source" ) )
@@ -187,13 +187,13 @@ ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData 
 void
 ChartsPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestId, requestData );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     emit getCachedInfo( requestId, criteria, 0, requestData );
 }
 
@@ -402,8 +402,8 @@ ChartsPlugin::chartReturned()
 
         /// SO we have a result, parse it!
         QVariantList chartResponse = res.value( "list" ).toList();
-        QList<InfoCriteriaHash> top_tracks;
-        QList<InfoCriteriaHash> top_albums;
+        QList<InfoStringHash> top_tracks;
+        QList<InfoStringHash> top_albums;
 
         /// Deside what type, we need to handle it differently
         /// @todo: We allready know the type, append it to breadcrumb hash
@@ -445,7 +445,7 @@ ChartsPlugin::chartReturned()
                     else
                     {
                         qDebug() << Q_FUNC_INFO << album << artist;
-                        InfoCriteriaHash pair;
+                        InfoStringHash pair;
                         pair["artist"] = artist;
                         pair["album"] = album;
                         top_albums << pair;
@@ -464,7 +464,7 @@ ChartsPlugin::chartReturned()
                     else
                     {
 
-                        InfoCriteriaHash pair;
+                        InfoStringHash pair;
                         pair["artist"] = artist;
                         pair["track"] = title;
                         top_tracks << pair;

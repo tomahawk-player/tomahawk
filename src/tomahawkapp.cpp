@@ -408,12 +408,12 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
 
-    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
+    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoCriteriaHash> >("QList<Tomahawk::InfoSystem::InfoCriteriaHash>");
+    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoStringHash> >("QList<Tomahawk::InfoSystem::InfoStringHash>");
     qRegisterMetaType< Tomahawk::InfoSystem::Chart>("Tomahawk::InfoSystem::Chart");
     qRegisterMetaType< QList<Tomahawk::InfoSystem::Chart> >("QList<Tomahawk::InfoSystem::Chart>");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );

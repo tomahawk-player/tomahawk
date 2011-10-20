@@ -136,14 +136,14 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = album->artist()->name();
     trackInfo["album"] = album->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_aiInfoIdentifier;
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -169,8 +169,8 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
         return;
     }
 
-    InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+    InfoSystem::InfoStringHash trackInfo;
+    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
 
     if ( output.canConvert< QVariantMap >() )
     {

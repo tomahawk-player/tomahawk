@@ -121,7 +121,7 @@ InfoSystemCache::pruneTimerFired()
 
 
 void
-InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData )
+InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     QObject* sendingObj = sender();
     const QString criteriaHashVal = criteriaMd5( criteria );
@@ -214,14 +214,14 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
 
 
 void
-InfoSystemCache::notInCache( QObject *receiver, uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+InfoSystemCache::notInCache( QObject *receiver, uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    QMetaObject::invokeMethod( receiver, "notInCacheSlot", Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoCriteriaHash, criteria ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+    QMetaObject::invokeMethod( receiver, "notInCacheSlot", Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoStringHash, criteria ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
 }
 
 
 void
-InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
+InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, type );
@@ -273,7 +273,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteri
 
 
 const QString
-InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria, Tomahawk::InfoSystem::InfoType type ) const
+InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type ) const
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
     QStringList keys = criteria.keys();

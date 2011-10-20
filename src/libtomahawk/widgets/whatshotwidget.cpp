@@ -112,12 +112,12 @@ WhatsHotWidget::~WhatsHotWidget()
 void
 WhatsHotWidget::fetchData()
 {
-    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    Tomahawk::InfoSystem::InfoStringHash artistInfo;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = QVariantMap();
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
@@ -166,7 +166,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             if( !returnedData.contains(type) )
                 break;
             const QString side = requestData.customData["whatshot_side"].toString();
-            const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >().value( "chart_id" );
+            const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
             m_queuedFetches.remove( chartId );
             tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
@@ -190,11 +190,11 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             else if( type == "albums" )
             {
                 QList<album_ptr> al;
-                const QList<Tomahawk::InfoSystem::InfoCriteriaHash> albums = returnedData[ "albums" ].value<QList<Tomahawk::InfoSystem::InfoCriteriaHash> >();
+                const QList<Tomahawk::InfoSystem::InfoStringHash> albums = returnedData[ "albums" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
 
                 AlbumModel* albumModel = new AlbumModel( ui->additionsView );
-                foreach ( const Tomahawk::InfoSystem::InfoCriteriaHash& album, albums )
+                foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, albums )
                 {
                     qDebug() << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
                     artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
@@ -210,13 +210,13 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "tracks" )
             {
-                const QList<Tomahawk::InfoSystem::InfoCriteriaHash> tracks = returnedData[ "tracks" ].value<QList<Tomahawk::InfoSystem::InfoCriteriaHash> >();
+                const QList<Tomahawk::InfoSystem::InfoStringHash> tracks = returnedData[ "tracks" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );
                 QList<query_ptr> tracklist;
-                foreach ( const Tomahawk::InfoSystem::InfoCriteriaHash& track, tracks )
+                foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, tracks )
                 {
                     query_ptr query = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
                     tracklist << query;
@@ -289,7 +289,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria.insert( "chart_id", chartId );
     /// Remember to lower the source!
     criteria.insert( "chart_source",  index.data().toString().toLower() );
@@ -299,7 +299,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     customData.insert( "whatshot_side", "left" );
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = customData;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
 

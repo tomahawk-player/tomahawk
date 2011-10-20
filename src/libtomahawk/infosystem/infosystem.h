@@ -144,7 +144,7 @@ struct Chart {
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QHash< QString, QString > InfoCriteriaHash;
+typedef QHash< QString, QString > InfoStringHash;
 
 class DLLEXPORT InfoPlugin : public QObject
 {
@@ -159,15 +159,15 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
     void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-    void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
     virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
+    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
 
@@ -252,7 +252,7 @@ private:
 
 
 
-inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
+inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
     QStringList keys = hash.keys();
@@ -274,10 +274,10 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::Chart );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoCriteriaHash> );
+Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoStringHash> );
 Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::Chart> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

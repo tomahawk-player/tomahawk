@@ -52,7 +52,7 @@ protected slots:
 public slots:
     void namChangedSlot( QNetworkAccessManager* nam );
 
-    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestId );
         Q_UNUSED( criteria );
@@ -72,7 +72,7 @@ private:
     void audioPaused();
     void audioResumed( const QVariant &input );
 
-    QUrl openLinkFromHash( const InfoCriteriaHash& hash ) const;
+    QUrl openLinkFromHash( const InfoStringHash& hash ) const;
 
     bool m_active;
     QString m_beforeStatus;

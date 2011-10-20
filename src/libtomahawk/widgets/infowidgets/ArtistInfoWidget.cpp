@@ -133,7 +133,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     m_title = artist->name();
     m_albumsModel->addAlbums( artist, QModelIndex() );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
@@ -144,7 +144,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -163,8 +163,8 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     if ( requestData.caller != m_infoId )
         return;
 
-    InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+    InfoSystem::InfoStringHash trackInfo;
+    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
 
     if ( output.canConvert< QVariantMap >() )
     {

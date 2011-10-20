@@ -88,7 +88,7 @@ TreeModel::getCover( const QModelIndex& index )
     if ( !item->cover.isNull() )
         return;
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     Tomahawk::InfoSystem::InfoRequestData requestData;
 
     if ( !item->artist().isNull() )
@@ -109,7 +109,7 @@ TreeModel::getCover( const QModelIndex& index )
     m_coverHash.insert( (qlonglong)item, index );
 
     requestData.caller = m_infoId;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
@@ -588,13 +588,13 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
     }
     else if ( m_mode == InfoSystem )
     {
-        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+        Tomahawk::InfoSystem::InfoStringHash artistInfo;
         artistInfo["artist"] = artist->name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
         requestData.customData["row"] = parent.row();
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
@@ -625,14 +625,14 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
     }
     else if ( m_mode == InfoSystem )
     {
-        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+        Tomahawk::InfoSystem::InfoStringHash artistInfo;
         artistInfo["artist"] = album->artist()->name();
         artistInfo["album"] = album->name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
         requestData.customData["rows"] = QVariant( rows );
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
@@ -798,7 +798,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
         case Tomahawk::InfoSystem::InfoAlbumCoverArt:
         case Tomahawk::InfoSystem::InfoArtistImages:
         {
-            Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+            Tomahawk::InfoSystem::InfoStringHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
             QVariantMap returnedData = output.value< QVariantMap >();
             const QByteArray ba = returnedData["imgbytes"].toByteArray();
             if ( ba.length() )
@@ -826,8 +826,8 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             QStringList albums = returnedData[ "albums" ].toStringList();
             QList<album_ptr> al;
 
-            InfoSystem::InfoCriteriaHash inputInfo;
-            inputInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+            InfoSystem::InfoStringHash inputInfo;
+            inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
             artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
 
             if ( artist.isNull() )
@@ -849,8 +849,8 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             QStringList tracks = returnedData[ "tracks" ].toStringList();
             QList<query_ptr> ql;
 
-            InfoSystem::InfoCriteriaHash inputInfo;
-            inputInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+            InfoSystem::InfoStringHash inputInfo;
+            inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
 
             foreach ( const QString& trackName, tracks )
             {

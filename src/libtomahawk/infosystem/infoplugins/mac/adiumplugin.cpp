@@ -172,10 +172,10 @@ AdiumPlugin::audioStarted( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 
-    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
@@ -188,7 +188,7 @@ AdiumPlugin::audioStarted( const QVariant &input )
 }
 
 QUrl
-AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& hash ) const
+AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoStringHash& hash ) const
 {
     QString title, artist, album;
 

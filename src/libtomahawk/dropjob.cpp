@@ -574,9 +574,9 @@ DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVar
 {
     if ( requestData.caller == "changeme" )
     {
-        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+        Tomahawk::InfoSystem::InfoStringHash artistInfo;
 
-        artistInfo = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+        artistInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
         QString artist = artistInfo["artist"];
 
@@ -643,14 +643,14 @@ DropJob::getTopTen( const QString &artist )
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = "changeme";
     requestData.customData = QVariantMap();
 
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );

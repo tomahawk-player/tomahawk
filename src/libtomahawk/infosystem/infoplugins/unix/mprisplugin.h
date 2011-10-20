@@ -119,7 +119,7 @@ public:
 public slots:
     void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused
 
-    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestId );
         Q_UNUSED( criteria );
