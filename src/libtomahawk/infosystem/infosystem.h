@@ -236,7 +236,7 @@ public:
 
     void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0, bool allSources = false );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
-    void getInfo( const QString &caller, const InfoTypeMap &inputMap, const QVariantMap &customData, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
+    void getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoTypeMap &input );
 

@@ -128,7 +128,7 @@ InfoSystem::getInfo( const InfoRequestData &requestData, uint timeoutMillis, boo
 
 
 void
-InfoSystem::getInfo( const QString &caller, const InfoTypeMap &inputMap, const QVariantMap &customData, const InfoTimeoutMap &timeoutMap, bool allSources )
+InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap, bool allSources )
 {
     InfoRequestData requestData;
     requestData.caller = caller;
