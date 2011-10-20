@@ -402,8 +402,8 @@ ChartsPlugin::chartReturned()
 
         /// SO we have a result, parse it!
         QVariantList chartResponse = res.value( "list" ).toList();
-        QList<ArtistTrackPair> top_tracks;
-        QList<ArtistAlbumPair> top_albums;
+        QList<InfoCriteriaHash> top_tracks;
+        QList<InfoCriteriaHash> top_albums;
 
         /// Deside what type, we need to handle it differently
         /// @todo: We allready know the type, append it to breadcrumb hash
@@ -445,9 +445,9 @@ ChartsPlugin::chartReturned()
                     else
                     {
                         qDebug() << Q_FUNC_INFO << album << artist;
-                        ArtistAlbumPair pair;
-                        pair.artist = artist;
-                        pair.album = album;
+                        InfoCriteriaHash pair;
+                        pair["artist"] = artist;
+                        pair["album"] = album;
                         top_albums << pair;
 
                     }
@@ -464,9 +464,9 @@ ChartsPlugin::chartReturned()
                     else
                     {
 
-                        ArtistTrackPair pair;
-                        pair.artist = artist;
-                        pair.track = title;
+                        InfoCriteriaHash pair;
+                        pair["artist"] = artist;
+                        pair["track"] = title;
                         top_tracks << pair;
 
                     }

@@ -190,15 +190,15 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             else if( type == "albums" )
             {
                 QList<album_ptr> al;
-                const QList<Tomahawk::InfoSystem::ArtistAlbumPair> albums = returnedData["albums"].value<QList<Tomahawk::InfoSystem::ArtistAlbumPair> >();
+                const QList<Tomahawk::InfoSystem::InfoCriteriaHash> albums = returnedData[ "albums" ].value<QList<Tomahawk::InfoSystem::InfoCriteriaHash> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
 
                 AlbumModel* albumModel = new AlbumModel( ui->additionsView );
-                foreach ( const Tomahawk::InfoSystem::ArtistAlbumPair& album, albums )
+                foreach ( const Tomahawk::InfoSystem::InfoCriteriaHash& album, albums )
                 {
-                    qDebug() << "Getting album" << album.album << "By" << album.artist;
-                    artist_ptr artistPtr = Artist::get( album.artist, false );
-                    album_ptr albumPtr = Album::get( artistPtr, album.album, false );
+                    qDebug() << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
+                    artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
+                    album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
                     al << albumPtr;
 
                 }
@@ -210,15 +210,15 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "tracks" )
             {
-                const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
+                const QList<Tomahawk::InfoSystem::InfoCriteriaHash> tracks = returnedData[ "tracks" ].value<QList<Tomahawk::InfoSystem::InfoCriteriaHash> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );
                 QList<query_ptr> tracklist;
-                foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
+                foreach ( const Tomahawk::InfoSystem::InfoCriteriaHash& track, tracks )
                 {
-                    query_ptr query = Query::get( track.artist, track.track, QString(), uuid(), false );
+                    query_ptr query = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
                     tracklist << query;
                 }
                 Pipeline::instance()->resolve( tracklist );

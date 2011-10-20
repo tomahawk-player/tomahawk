@@ -565,11 +565,11 @@ LastFmPlugin::chartReturned()
     if ( url.contains( tracks_rx ) )
     {
         QList<lastfm::Track> tracks = parseTrackList( reply );
-        QList<ArtistTrackPair> top_tracks;
+        QList<InfoCriteriaHash> top_tracks;
         foreach( const lastfm::Track &t, tracks ) {
-            ArtistTrackPair pair;
-            pair.artist = t.artist().toString();
-            pair.track = t.title();
+            InfoCriteriaHash pair;
+            pair[ "artist" ] = t.artist().toString();
+            pair[ "track" ] = t.title();
             top_tracks << pair;
         }
         tDebug() << "LastFmPlugin:" << "\tgot " << top_tracks.size() << " tracks";

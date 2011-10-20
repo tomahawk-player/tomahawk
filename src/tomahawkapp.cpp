@@ -413,10 +413,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
-    qRegisterMetaType< Tomahawk::InfoSystem::ArtistTrackPair >("Tomahawk::InfoSystem::ArtistTrackPair");
-    qRegisterMetaType< Tomahawk::InfoSystem::ArtistAlbumPair >("Tomahawk::InfoSystem::ArtistAlbumPair");
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::ArtistTrackPair> >("QList<Tomahawk::InfoSystem::ArtistTrackPair>");
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::ArtistAlbumPair> >("QList<Tomahawk::InfoSystem::ArtistAlbumPair>");
+    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoCriteriaHash> >("QList<Tomahawk::InfoSystem::InfoCriteriaHash>");
     qRegisterMetaType< Tomahawk::InfoSystem::Chart>("Tomahawk::InfoSystem::Chart");
     qRegisterMetaType< QList<Tomahawk::InfoSystem::Chart> >("QList<Tomahawk::InfoSystem::Chart>");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );

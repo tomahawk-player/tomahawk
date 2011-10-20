@@ -130,16 +130,6 @@ struct InfoRequestData {
     QVariantMap customData;
 };
 
-struct ArtistTrackPair {
-    QString artist;
-    QString track;
-};
-
-struct ArtistAlbumPair {
-    QString artist;
-    QString album;
-};
-
 struct Chart {
     Chart(){}
     Chart(const QString _id, const QString _label, const QString _type) {
@@ -286,11 +276,8 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistTrackPair );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistAlbumPair );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::Chart );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::ArtistTrackPair> );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::ArtistAlbumPair> );
+Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoCriteriaHash> );
 Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::Chart> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H
