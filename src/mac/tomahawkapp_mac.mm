@@ -232,6 +232,12 @@ void Tomahawk::checkForUpdates() {
 #endif
 }
 
+#ifdef LION
+#define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
+#else
+#define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
+#endif
+
 void Tomahawk::enableFullscreen()
 {
     // We don't support anything below leopard, so if it's not [snow] leopard it must be lion
@@ -249,7 +255,7 @@ void Tomahawk::enableFullscreen()
             {
                 NSView *nsview = (NSView *)w->winId();
                 NSWindow *nswindow = [nsview window];
-                [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+                [nswindow setCollectionBehavior:SET_LION_FULLSCREEN];
             }
         }
     }
