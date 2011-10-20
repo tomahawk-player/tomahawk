@@ -101,7 +101,7 @@ private slots:
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
 
-    void controlsChanged();
+    void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     void showPreview();
 

@@ -95,7 +95,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     layoutFloatingWidgets();
 
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
-    connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
+    connect( m_controls, SIGNAL( controlsChanged( bool ) ), this, SLOT( controlsChanged( bool ) ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
@@ -361,7 +361,7 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 
 
 void
-DynamicWidget::controlsChanged()
+DynamicWidget::controlsChanged( bool added )
 {
     // controlsChanged() is emitted when a control is added or removed
     // in the case of addition, it's blank by default... so to avoid an error
@@ -372,6 +372,9 @@ DynamicWidget::controlsChanged()
         return;
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
+
+    if ( !added )
+        showPreview();
 
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
@@ -395,7 +398,11 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 void
 DynamicWidget::showPreview()
 {
-    if( m_playlist->mode() == OnDemand && !m_runningOnDemand && m_model->rowCount( QModelIndex() ) == 0 ) { // if this is a not running station, preview matching tracks
+    if ( m_playlist->mode() == OnDemand &&
+        !m_runningOnDemand )
+    {
+        // if this is a not running station, preview matching tracks
+        m_model->clear();
         generate( 20 ); // ask for more, we'll filter how many we actually want
     }
 }

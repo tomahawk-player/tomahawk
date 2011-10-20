@@ -156,7 +156,7 @@ DynamicControlList::addNewControl()
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
 
     m_layout->addItem( m_collapseLayout, m_layout->rowCount(), 0, 1, 4, Qt::AlignCenter );
-    emit controlsChanged();
+    emit controlsChanged( true );
 }
 
 
@@ -170,7 +170,7 @@ DynamicControlList::removeControl()
     m_generator->removeControl( w->control() );
     delete w;
 
-    emit controlsChanged();
+    emit controlsChanged( false );
 }
 
 
