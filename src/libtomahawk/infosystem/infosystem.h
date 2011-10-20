@@ -130,18 +130,6 @@ struct InfoRequestData {
     QVariantMap customData;
 };
 
-struct Chart {
-    Chart(){}
-    Chart(const QString _id, const QString _label, const QString _type) {
-        id = _id;
-        label = _label;
-        type = _type;
-    }
-    QString id;
-    QString label;
-    QString type;
-};
-
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QHash< QString, QString > InfoStringHash;
@@ -276,8 +264,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::Chart );
 Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoStringHash> );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::Chart> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

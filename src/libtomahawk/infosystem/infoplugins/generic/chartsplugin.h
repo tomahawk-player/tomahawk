@@ -67,7 +67,7 @@ private:
     void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QVariantList m_chartResources;
-    QList<Chart> m_charts;
+    QList<InfoStringHash> m_charts;
     ChartType m_chartType;
 
     QVariantMap m_allChartsMap;

@@ -414,8 +414,6 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
     qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoStringHash> >("QList<Tomahawk::InfoSystem::InfoStringHash>");
-    qRegisterMetaType< Tomahawk::InfoSystem::Chart>("Tomahawk::InfoSystem::Chart");
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::Chart> >("QList<Tomahawk::InfoSystem::Chart>");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 

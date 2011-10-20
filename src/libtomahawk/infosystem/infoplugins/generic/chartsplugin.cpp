@@ -317,11 +317,14 @@ ChartsPlugin::chartTypes()
                 if ( name.startsWith( "iTunes Store:" ) ) // truncate
                     name = name.mid( 13 );
 
-                const Chart c( id, name, "album" );
-                QList<Chart> countryTypeData = countries[ country ][ type ].value<QList<Chart> >();
+                InfoStringHash c;
+                c[ "id" ] = id;
+                c[ "label" ] = name;
+                c[ "type" ] = "album";
+                QList<InfoStringHash> countryTypeData = countries[ country ][ type ].value< QList< InfoStringHash > >();
                 countryTypeData.append( c );
 
-                countries[ country ].insert( type, QVariant::fromValue<QList<Chart> >( countryTypeData ) );
+                countries[ country ].insert( type, QVariant::fromValue< QList< InfoStringHash > >( countryTypeData ) );
             }
 
             foreach( const QString& c, countries.keys() )
@@ -335,21 +338,28 @@ ChartsPlugin::chartTypes()
             // We'll just build:
             // [Source] - Album - Chart Type
             // [Source] - Track - Chart Type
-            QList< Chart > albumCharts;
-            QList< Chart > trackCharts;
+            QList< InfoStringHash > albumCharts;
+            QList< InfoStringHash > trackCharts;
             foreach( const QVariant& chartObj, chartObjs.values() )
             {
                 const QVariantMap chart = chartObj.toMap();
                 const QString type = chart.value( "type" ).toString();
-                const QString id = chart.value( "id" ).toString();
-                const QString name = chart.value( "name" ).toString();
+                InfoStringHash c;
+                c[ "id" ] = chart.value( "id" ).toString();
+                c[ "label" ] = chart.value( "name" ).toString();
                 if ( type == "Album" )
-                    albumCharts.append( Chart(  id, name, "album" ) );
+                {
+                    c[ "type" ] = "album";
+                    albumCharts.append( c );
+                }
                 else if ( type == "Track" )
-                    trackCharts.append( Chart( id, name, "tracks" ) );
+                {
+                    c[ "type" ] = "tracks";
+                    trackCharts.append( c );
+                }
             }
-            charts.insert( tr( "Albums" ), QVariant::fromValue< QList<Chart> >( albumCharts ) );
-            charts.insert( tr( "Tracks" ), QVariant::fromValue< QList<Chart> >( trackCharts ) );
+            charts.insert( tr( "Albums" ), QVariant::fromValue< QList< InfoStringHash > >( albumCharts ) );
+            charts.insert( tr( "Tracks" ), QVariant::fromValue< QList< InfoStringHash > >( trackCharts ) );
 
             /// @note For displaying purposes, upper the first letter
             /// @note Remeber to lower it when fetching this!
@@ -359,7 +369,7 @@ ChartsPlugin::chartTypes()
 
         /// Add the possible charts and its types to breadcrumb
 //         qDebug() << "ADDING CHART TYPE TO CHARTS:" << chartName;
-        m_allChartsMap.insert( chartName , QVariant::fromValue<QVariantMap>( charts ) );
+        m_allChartsMap.insert( chartName , QVariant::fromValue< QVariantMap >( charts ) );
 
     }
     else
@@ -402,8 +412,8 @@ ChartsPlugin::chartReturned()
 
         /// SO we have a result, parse it!
         QVariantList chartResponse = res.value( "list" ).toList();
-        QList<InfoStringHash> top_tracks;
-        QList<InfoStringHash> top_albums;
+        QList< InfoStringHash > top_tracks;
+        QList< InfoStringHash > top_albums;
 
         /// Deside what type, we need to handle it differently
         /// @todo: We allready know the type, append it to breadcrumb hash

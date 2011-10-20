@@ -334,13 +334,13 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
     QStandardItem *sourceItem = new QStandardItem(label);
 
-    if ( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
+    if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
-        QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
-        foreach ( Tomahawk::InfoSystem::Chart chart, charts)
+        QList< Tomahawk::InfoSystem::InfoStringHash > charts = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+        foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
-            QStandardItem *childItem= new QStandardItem( chart.label );
-            childItem->setData( chart.id );
+            QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
+            childItem->setData( chart[ "id" ] );
             sourceItem->appendRow( childItem );
         }
     }

@@ -434,18 +434,33 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
         case InfoChartCapabilities:
         {
-            QList<Chart> track_charts;
-            track_charts.append( Chart( "chart.getTopTracks", "Top Tracks", "tracks" ) );
-            track_charts.append( Chart( "chart.getLovedTracks", "Loved Tracks", "tracks" ) );
-            track_charts.append( Chart( "chart.getHypedTracks", "Hyped Tracks", "tracks" ) );
+            QList< InfoStringHash > track_charts;
+            InfoStringHash c;
+            c[ "type" ] = "tracks";
+            c[ "id" ] = "chart.getTopTracks";
+            c[ "label" ] = "Top Tracks";
+            track_charts.append( c );
+            c[ "id" ] = "chart.getLovedTracks";
+            c[ "label" ] = "Loved Tracks";
+            track_charts.append( c );
+            c[ "id" ] = "chart.getHypedTracks";
+            c[ "label" ] = "Hyped Tracks";
+            track_charts.append( c );
 
-            QList<Chart> artist_charts;
-            artist_charts.append( Chart( "chart.getTopArtists", "Top Artists", "artists" ) );
-            artist_charts.append( Chart( "chart.getHypedArtists", "Hyped Artists", "artists" ) );
+            QList< InfoStringHash > artist_charts;
+            c[ "type" ] = "artists";
+            c[ "id" ] = "chart.getTopArtists";
+            c[ "label" ] = "Top Artists";
+            artist_charts.append( c );
+            c[ "id" ] = "chart.getHypedArtists";
+            c[ "label" ] = "Hyped Artists";
+            artist_charts.append( c );
+            
 
+            
             QVariantMap charts;
-            charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
-            charts.insert( "Artists", QVariant::fromValue<QList<Chart> >( artist_charts ) );
+            charts.insert( "Tracks", QVariant::fromValue< QList< InfoStringHash > >( track_charts ) );
+            charts.insert( "Artists", QVariant::fromValue< QList< InfoStringHash > >( artist_charts ) );
 
             QVariantMap result;
             result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
