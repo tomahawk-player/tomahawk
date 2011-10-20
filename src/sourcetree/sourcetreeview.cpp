@@ -525,12 +525,15 @@ SourceTreeView::dropEvent( QDropEvent* event )
     }
     else
     {
-        // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
-        qDebug() << Q_FUNC_INFO << "Current Event";
-        DropJob *dropThis = new DropJob;
-        dropThis->setDropTypes( DropJob::Playlist );
-        dropThis->setDropAction( DropJob::Create );
-        dropThis->parseMimeData( event->mimeData() );
+        if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
+        {
+            // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
+            qDebug() << Q_FUNC_INFO << "Current Event";
+            DropJob *dropThis = new DropJob;
+            dropThis->setDropTypes( DropJob::Playlist );
+            dropThis->setDropAction( DropJob::Create );
+            dropThis->parseMimeData( event->mimeData() );
+        }
 
         QTreeView::dropEvent( event );
     }

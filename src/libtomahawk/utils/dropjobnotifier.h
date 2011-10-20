@@ -37,8 +37,10 @@ class DLLEXPORT DropJobNotifier : public JobStatusItem
 {
     Q_OBJECT
 public:
-
     DropJobNotifier( QPixmap pixmap, QString service, DropJob::DropType type, QNetworkReply* job );
+
+    // No QNetworkReply, needs manual finished call
+    DropJobNotifier( QPixmap pixmap, DropJob::DropType type );
     virtual ~DropJobNotifier();
 
     virtual QString rightColumnText() const;
@@ -51,6 +53,8 @@ public slots:
     void setFinished();
 
 private:
+    void init( DropJob::DropType type );
+
     QString m_type;
     QNetworkReply* m_job;
     QPixmap m_pixmap;

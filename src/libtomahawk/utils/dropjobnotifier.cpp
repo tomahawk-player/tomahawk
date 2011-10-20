@@ -41,7 +41,29 @@ DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJo
     , m_pixmap ( servicePixmap )
     , m_service ( service )
 {
+    init( type );
 
+    if( m_service.isEmpty() )
+        m_service = "DropJob";
+
+    connect( job, SIGNAL( finished() ), this, SLOT( setFinished() ) );
+}
+
+DropJobNotifier::DropJobNotifier( QPixmap pixmap, DropJob::DropType type )
+    : JobStatusItem()
+    , m_pixmap( pixmap )
+    , m_job( 0 )
+{
+    init( type );
+}
+
+
+DropJobNotifier::~DropJobNotifier()
+{}
+
+void
+DropJobNotifier::init( DropJob::DropType type )
+{
     if( type == DropJob::Playlist )
         m_type = "playlist";
 
@@ -54,15 +76,8 @@ DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJo
     if( type == DropJob::Album )
         m_type = "album";
 
-    if( m_service.isEmpty() )
-        m_service = "DropJob";
-
-    connect( job, SIGNAL( finished() ), this, SLOT( setFinished() ) );
 }
 
-
-DropJobNotifier::~DropJobNotifier()
-{}
 
 QString
 DropJobNotifier::rightColumnText() const
@@ -80,8 +95,15 @@ DropJobNotifier::icon() const
 QString
 DropJobNotifier::mainText() const
 {
-    return tr( "Parsing %1 %2" ).arg( m_service )
-                                .arg( m_type );
+    if ( m_service.isEmpty() )
+    {
+        return tr( "Fetching %1 from database" ).arg( m_type );
+    }
+    else
+    {
+        return tr( "Parsing %1 %2" ).arg( m_service )
+                                    .arg( m_type );
+    }
 }
 
 void

@@ -40,10 +40,10 @@ QPixmap* SpotifyParser::s_pixmap = 0;
 
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
+    , m_limit ( 40 )
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_limit ( 40 )
     , m_browseJob( 0 )
 
 {
@@ -53,10 +53,10 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
 
 SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
+    , m_limit ( 40 )
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_limit ( 40 )
     , m_browseJob( 0 )
 {
     lookupUrl( Url );
