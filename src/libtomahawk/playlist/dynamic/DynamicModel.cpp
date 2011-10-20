@@ -214,6 +214,8 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
     }
+    if ( m_playlist->mode() == OnDemand && entries.isEmpty() )
+        emit trackGenerationFailure( tr( "Failed to generate preview with the desired filters" ) );
 }
 
 
