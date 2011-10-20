@@ -211,6 +211,8 @@ MusicScanner::listerFinished()
         delete m_dirListerThreadController;
         m_dirListerThreadController = 0;
     }
+
+    emit finished();
 }
 
 
