@@ -180,8 +180,6 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::refreshResults()
 {
-    tDebug() << "Re-resolving query:" << toString() << s_queries.contains( id() );
-
     if ( m_resolveFinished )
     {
         m_resolveFinished = false;
