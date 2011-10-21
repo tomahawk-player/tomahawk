@@ -156,7 +156,7 @@ void SiblingCrumbButton::comboboxActivated(int i)
 {
     QModelIndex activated = m_index.sibling(i,0);
     int count = breadcrumbBar()->model()->rowCount(activated);
-    if( count >= 0 ) {
+    if( count > 0 ) {
 //         qDebug() << "activated crumb with children:" << activated.child(0,0).data().toString();
         breadcrumbBar()->currentChangedTriggered(activated.child(0,0));
     } else {
