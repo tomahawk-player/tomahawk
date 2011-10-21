@@ -92,6 +92,9 @@
         <file>data/images/artist-icon.png</file>
         <file>data/images/album-icon.png</file>
         <file>data/images/search-icon.png</file>
+        <file>data/images/star-hover.png</file>
+        <file>data/images/starred.png</file>
+        <file>data/images/star-unstarred.png</file>
         <file>data/images/track-icon-22x22.png</file>
         <file>data/images/track-icon-32x32.png</file>
         <file>data/images/track-icon-16x16.png</file>

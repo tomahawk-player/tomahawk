@@ -17,7 +17,9 @@
  */
 
 #include "temporarypageitem.h"
-#include <viewmanager.h>
+#include "viewmanager.h"
+#include "widgets/infowidgets/AlbumInfoWidget.h"
+#include "widgets/infowidgets/ArtistInfoWidget.h"
 
 using namespace Tomahawk;
 
@@ -27,6 +29,11 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
     , m_icon( QIcon( RESPATH "images/playlist-icon.png" ) )
     , m_sortValue( sortValue )
 {
+    if ( dynamic_cast< ArtistInfoWidget* >( page ) )
+        m_icon = QIcon( RESPATH "images/artist-icon.png" );
+    else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
+        m_icon = QIcon( RESPATH "images/album-icon.png" );
+
     model()->linkSourceItemToPage( this, page );
 }
 
