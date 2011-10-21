@@ -20,6 +20,7 @@
 #define TEMPORARYPAGEITEM_H
 
 #include "items/sourcetreeitem.h"
+#include "viewpage.h"
 
 class TemporaryPageItem : public SourceTreeItem
 {
@@ -32,9 +33,16 @@ public:
 
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
+    virtual int IDValue() const;
 
-    void removeFromList();
     Tomahawk::ViewPage* page() const { return m_page; }
+    virtual bool isBeingPlayed() const { return m_page->isBeingPlayed(); }
+
+public slots:
+    void removeFromList();
+
+signals:
+    bool removed();
 
 private:
     Tomahawk::ViewPage* m_page;

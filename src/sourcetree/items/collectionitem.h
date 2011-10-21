@@ -65,6 +65,7 @@ private slots:
     void requestExpanding();
 
     void tempPageActivated( Tomahawk::ViewPage* );
+    void temporaryPageDestroyed();
 
     Tomahawk::ViewPage* sourceInfoClicked();
     Tomahawk::ViewPage* getSourceInfoPage() const;

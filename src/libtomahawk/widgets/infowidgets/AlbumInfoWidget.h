@@ -75,6 +75,7 @@ public:
     virtual bool showStatsBar() const { return false; }
 
     virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool isBeingPlayed() const;
 
 signals:
     void longDescriptionChanged( const QString& description );

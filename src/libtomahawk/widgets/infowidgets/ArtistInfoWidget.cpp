@@ -19,6 +19,7 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 
+#include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
@@ -125,6 +126,36 @@ ArtistInfoWidget::onLoadingFinished()
     m_button->show();
 }
 
+bool
+ArtistInfoWidget::isBeingPlayed() const
+{
+    if ( ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( ui->relatedArtists->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    return false;
+}
+
+bool
+ArtistInfoWidget::jumpToCurrentTrack()
+{
+    if ( ui->albums->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->relatedArtists->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->topHits->jumpToCurrentTrack() )
+        return true;
+
+    return false;
+}
+
 
 void
 ArtistInfoWidget::load( const artist_ptr& artist )
@@ -168,7 +199,8 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 
     if ( output.canConvert< QVariantMap >() )
     {
-        if ( trackInfo["artist"] != m_artist->name() )
+        const QString artist = requestData.input.toString();
+        if ( trackInfo["artist"] != m_artist->name() && artist != m_artist->name() )
         {
             qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
             return;

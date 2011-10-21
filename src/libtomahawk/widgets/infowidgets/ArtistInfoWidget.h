@@ -76,7 +76,8 @@ public:
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showStatsBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
+    virtual bool isBeingPlayed() const;
 
 signals:
     void longDescriptionChanged( const QString& description );

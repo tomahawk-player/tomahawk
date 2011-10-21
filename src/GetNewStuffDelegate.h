@@ -35,11 +35,10 @@ protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 private:
-    QPixmap m_defaultCover;
-    QPixmap m_ratingStarPositive;
-    QPixmap m_ratingStarNegative;
+    QPixmap m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative;
 
     int m_widestTextWidth;
+    int m_hoveringOver;
     mutable QHash< QPair<int, int>, QRect > m_cachedButtonRects;
     mutable QHash< QPair<int, int>, QRect > m_cachedStarRects;
 };

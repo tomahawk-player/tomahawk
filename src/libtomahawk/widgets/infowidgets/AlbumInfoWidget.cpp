@@ -19,6 +19,7 @@
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
 
+#include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "database/database.h"
 #include "playlist/treemodel.h"
@@ -115,6 +116,18 @@ AlbumInfoWidget::onLoadingFinished()
 {
     m_button->setEnabled( true );
     m_button->show();
+}
+
+bool
+AlbumInfoWidget::isBeingPlayed() const
+{
+    if ( ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( ui->tracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    return false;
 }
 
 

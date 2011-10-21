@@ -33,6 +33,8 @@ GetNewStuffDialog::GetNewStuffDialog( QWidget *parent, Qt::WindowFlags f )
     ui->listView->setItemDelegate( new GetNewStuffDelegate( ui->listView ) );
     ui->listView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
+    ui->listView->setMouseTracking( true );
+
 #ifdef Q_WS_MAC
     setMinimumSize( 510, 350 );
     setMaximumSize( 510, 350 );

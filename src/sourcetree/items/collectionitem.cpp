@@ -409,7 +409,8 @@ CollectionItem::requestExpanding()
 void
 CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
 {
-    int idx = children().count();
+    const int idx = children().count();
+    const int latest = children().last()->IDValue();
 
     foreach ( TemporaryPageItem* page, m_tempItems )
     {
@@ -420,11 +421,26 @@ CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
         }
     }
 
+    // Only keep 5 temporary pages at once
+    while ( m_tempItems.size() > 4 )
+    {
+        TemporaryPageItem* item = m_tempItems.takeFirst();
+        QTimer::singleShot( 0, item, SLOT( removeFromList() ) );
+    }
     emit beginRowsAdded( idx, idx );
-    TemporaryPageItem* tempPage = new TemporaryPageItem( model(), this, v, idx );
+    TemporaryPageItem* tempPage = new TemporaryPageItem( model(), this, v, latest + 1 );
+    connect( tempPage, SIGNAL( removed() ), this, SLOT( temporaryPageDestroyed() ) );
     m_tempItems << tempPage;
     endRowsAdded();
     emit selectRequest( tempPage );
+}
+
+void
+CollectionItem::temporaryPageDestroyed()
+{
+    TemporaryPageItem* tempPage = qobject_cast< TemporaryPageItem* >( sender() );
+    Q_ASSERT( tempPage );
+    m_tempItems.removeAll( tempPage );
 }
 
 

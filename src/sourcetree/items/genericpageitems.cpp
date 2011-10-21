@@ -85,9 +85,8 @@ GenericPageItem::setText( const QString &text )
 bool
 GenericPageItem::isBeingPlayed() const
 {
-    if ( dynamic_cast< PlaylistInterface* >( m_get() ) )
-    {
-        return AudioEngine::instance()->currentTrackPlaylist() == dynamic_cast< PlaylistInterface* >( m_get() );
-    }
+    if ( m_get() )
+        return m_get()->isBeingPlayed();
+
     return false;
 }
