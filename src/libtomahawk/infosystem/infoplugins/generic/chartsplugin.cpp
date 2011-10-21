@@ -443,9 +443,6 @@ ChartsPlugin::chartReturned()
 
                 if ( chartType() == Album )
                 {
-                     /** HACK, billboard chart returns wrong typename **/
-                    if ( res.value( "source" ).toString() == "billboard" )
-                        album = chartMap.value( "track" ).toString();
 
                     if ( album.isEmpty() && artist.isEmpty() ) // don't have enough...
                     {
