@@ -569,7 +569,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     }
 
     m_stack->setCurrentWidget( page->widget() );
-    page->widget()->setFocus();
 
     updateView();
 }
