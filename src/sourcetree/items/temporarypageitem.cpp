@@ -55,6 +55,13 @@ TemporaryPageItem::peerSortValue() const
     return m_sortValue;
 }
 
+int
+TemporaryPageItem::IDValue() const
+{
+    return m_sortValue;
+}
+
+
 void
 TemporaryPageItem::removeFromList()
 {
@@ -66,6 +73,8 @@ TemporaryPageItem::removeFromList()
     parent()->beginRowsRemoved( idx, idx );
     parent()->removeChild( this );
     parent()->endRowsRemoved();
+
+    emit removed();
 
     deleteLater();
 }
