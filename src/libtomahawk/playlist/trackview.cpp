@@ -473,7 +473,7 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
+    if ( !m_model || m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
         return;
 
     if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
