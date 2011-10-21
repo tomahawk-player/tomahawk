@@ -65,7 +65,8 @@ public:
     virtual bool showStatsBar() const { return false; }
     virtual bool showInfoBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
+    virtual bool isBeingPlayed() const;
 
 protected:
     void changeEvent( QEvent* e );
@@ -80,7 +81,6 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
     void leftCrumbIndexChanged( QModelIndex );
-
 private:
     void setLeftViewArtists( TreeModel* artistModel );
     void setLeftViewAlbums( AlbumModel* albumModel );

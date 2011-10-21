@@ -53,6 +53,7 @@ public:
     virtual bool jumpToCurrentTrack() = 0;
 
     virtual bool isTemporaryPage() const { return false; }
+    virtual bool isBeingPlayed() const { return false; }
 
     virtual bool canAutoUpdate() const { return false; }
     virtual void setAutoUpdate( bool ) {}

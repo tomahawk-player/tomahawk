@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"
+#include "dynamic/GeneratorInterface.h"
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
@@ -36,7 +38,6 @@
 #include "widgets/kbreadcrumbselectionmodel.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <dynamic/GeneratorInterface.h>
 #include <pipeline.h>
 
 #define HISTORY_TRACK_ITEMS 25
@@ -99,6 +100,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
     QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
@@ -106,6 +108,31 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 WhatsHotWidget::~WhatsHotWidget()
 {
     delete ui;
+}
+
+
+bool
+WhatsHotWidget::isBeingPlayed() const
+{
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->playlistInterface() )
+        return true;
+
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
+        return true;
+
+    return false;
+}
+
+bool
+WhatsHotWidget::jumpToCurrentTrack()
+{
+    if ( ui->artistsViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->tracksViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    return false;
 }
 
 

@@ -140,6 +140,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     const bool playable = ( type == SourcesModel::StaticPlaylist ||
                             type == SourcesModel::AutomaticPlaylist ||
                             type == SourcesModel::Station ||
+                            type == SourcesModel::TemporaryPage ||
                             type == SourcesModel::GenericPage );
 
     if ( playable && item->isBeingPlayed() )
