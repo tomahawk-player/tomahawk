@@ -525,7 +525,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( m_model->style() != TrackModel::Detailed )
+    if ( !m_model || m_model->style() != TrackModel::Detailed )
         return;
 
     QModelIndex idx = indexAt( event->pos() );
