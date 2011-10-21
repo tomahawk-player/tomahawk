@@ -422,7 +422,7 @@ CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
     }
 
     // Only keep 5 temporary pages at once
-    while ( m_tempItems.size() > 5 )
+    while ( m_tempItems.size() > 4 )
     {
         TemporaryPageItem* item = m_tempItems.takeFirst();
         QTimer::singleShot( 0, item, SLOT( removeFromList() ) );
