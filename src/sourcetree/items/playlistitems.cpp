@@ -30,6 +30,7 @@
 #include "utils/logger.h"
 #include "dropjob.h"
 #include "source.h"
+#include "audio/audioengine.h"
 
 using namespace Tomahawk;
 
@@ -94,6 +95,14 @@ int
 PlaylistItem::IDValue() const
 {
     return m_playlist->createdOn();
+}
+
+bool
+PlaylistItem::isBeingPlayed() const
+{
+    if ( ViewManager::instance()->pageForPlaylist( m_playlist ) )
+        return AudioEngine::instance()->currentTrackPlaylist() == ViewManager::instance()->pageForPlaylist( m_playlist )->playlistInterface();
+    return false;
 }
 
 
@@ -417,5 +426,13 @@ DynamicPlaylistItem::activateCurrent()
     }
 
     return 0;
+}
+
+bool
+DynamicPlaylistItem::isBeingPlayed() const
+{
+    if ( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) )
+        return AudioEngine::instance()->currentTrackPlaylist() == ViewManager::instance()->pageForDynPlaylist( m_dynplaylist )->playlistInterface();
+    return false;
 }
 

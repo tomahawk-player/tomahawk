@@ -33,6 +33,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
+#include <audio/audioengine.h>
 
 #define TREEVIEW_INDENT_ADD -7
 
@@ -63,6 +64,8 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
 
     m_headphonesOff.load( RESPATH "images/headphones-off.png" );
     m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
+    m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
+    m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
 }
 
 
@@ -132,6 +135,21 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         o3.rect.setX( 0 );
 
     QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
+
+    // Paint the speaker icon next to the currently-playing playlist
+    const bool playable = ( type == SourcesModel::StaticPlaylist ||
+                            type == SourcesModel::AutomaticPlaylist ||
+                            type == SourcesModel::Station ||
+                            type == SourcesModel::GenericPage );
+
+    if ( playable && item->isBeingPlayed() )
+    {
+        const int iconW = o3.rect.height() - 4;
+        QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );
+        QPixmap speaker = o3.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
+        speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
+        painter->drawPixmap( iconRect, speaker );
+    }
 
     if ( type == SourcesModel::Collection )
     {

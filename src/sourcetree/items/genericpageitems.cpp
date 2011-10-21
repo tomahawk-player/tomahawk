@@ -21,6 +21,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "viewmanager.h"
+#include "audio/audioengine.h"
 
 using namespace Tomahawk;
 
@@ -81,3 +82,12 @@ GenericPageItem::setText( const QString &text )
     emit updated();
 }
 
+bool
+GenericPageItem::isBeingPlayed() const
+{
+    if ( dynamic_cast< PlaylistInterface* >( m_get() ) )
+    {
+        return AudioEngine::instance()->currentTrackPlaylist() == dynamic_cast< PlaylistInterface* >( m_get() );
+    }
+    return false;
+}
