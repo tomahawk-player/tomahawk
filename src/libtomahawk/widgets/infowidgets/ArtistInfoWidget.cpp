@@ -199,7 +199,8 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 
     if ( output.canConvert< QVariantMap >() )
     {
-        if ( trackInfo["artist"] != m_artist->name() )
+        const QString artist = requestData.input.toString();
+        if ( trackInfo["artist"] != m_artist->name() && artist != m_artist->name() )
         {
             qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
             return;
