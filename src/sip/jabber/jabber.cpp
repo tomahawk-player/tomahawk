@@ -80,13 +80,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
-    
+
     m_ui->jabberUsername->setText( m_currentUsername );
     m_ui->jabberPassword->setText( m_currentPassword );
     m_ui->jabberServer->setText( m_currentServer );
     m_ui->jabberPort->setValue( m_currentPort );
     m_ui->jidExistsLabel->hide();
-    
+
 
     connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
     // setup JID object
@@ -482,15 +482,15 @@ void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
-    
+
     QString username, password, server;
     int port;
-    
+
     username = accountName();
     password = readPassword();
     server = readServer();
     port = readPort();
-    
+
     if ( m_currentUsername != username )
     {
         m_currentUsername = username;
@@ -659,6 +659,8 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     else if( !caps )
     {
 //        qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
+        if ( presenceMeansOnline( m_peers[ jid ] ) )
+            handlePeerStatus( jid, Jreen::Presence::Unavailable );
     }
 }
 

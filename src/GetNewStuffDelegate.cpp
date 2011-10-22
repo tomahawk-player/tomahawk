@@ -20,6 +20,7 @@
 
 #include "GetNewStuffModel.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include <QtGui/QPainter>
 #include <QApplication>
@@ -27,6 +28,8 @@
 #include "AtticaManager.h"
 
 #define PADDING 4
+#define PADDING_BETWEEN_STARS 2
+#define STAR_SIZE 12
 
 #ifdef Q_WS_MAC
 #define SIZEHINT_HEIGHT 70
@@ -39,11 +42,14 @@ GetNewStuffDelegate::GetNewStuffDelegate( QObject* parent )
     , m_widestTextWidth( 0 )
 {
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
-    m_ratingStarPositive.load( RESPATH "images/loved.png" );
-    m_ratingStarNegative.load( RESPATH "images/not-loved.png" );
+    m_ratingStarPositive.load( RESPATH "images/starred.png" );
+    m_ratingStarNegative.load( RESPATH "images/star-unstarred.png" );
+    m_onHoverStar.load( RESPATH "images/star-hover.png" );
 
-    m_ratingStarPositive = m_ratingStarPositive.scaled( 8, 8, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
-    m_ratingStarNegative = m_ratingStarNegative.scaled( 8, 8, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
+    m_ratingStarPositive = m_ratingStarPositive.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
+    m_ratingStarNegative = m_ratingStarNegative.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
+    m_onHoverStar = m_onHoverStar.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
+
     const int w = SIZEHINT_HEIGHT - 2*PADDING;
     m_defaultCover = m_defaultCover.scaled( w, w, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
@@ -173,19 +179,33 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     painter->drawText( btnRect, Qt::AlignCenter, actionText );
 
     painter->setPen( saved );
+
     // rating stars
     int rating = index.data( GetNewStuffModel::RatingRole ).toInt();
-    const int paddingBetweenStars = 2;
-    const int ratingWidth = 5 * ( m_ratingStarPositive.width() + paddingBetweenStars );
+    const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
     int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
     for ( int i = 1; i < 6; i++ )
     {
         QRect r( runningEdge, btnRect.top() - m_ratingStarPositive.height() - PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
-        if ( i <= rating ) // positive star
-            painter->drawPixmap( r, m_ratingStarPositive );
+        if ( i == 1 )
+            m_cachedStarRects[ QPair<int, int>(index.row(), index.column()) ] = r;
+
+        QPixmap pm;
+        if ( m_hoveringOver > -1 )
+        {
+            if ( i <= m_hoveringOver ) // positive star
+                painter->drawPixmap( r, m_onHoverStar );
+            else
+                painter->drawPixmap( r, m_ratingStarNegative );
+        }
         else
-            painter->drawPixmap( r, m_ratingStarNegative );
-        runningEdge += m_ratingStarPositive.width() + paddingBetweenStars;
+        {
+            if ( i <= rating ) // positive star
+                painter->drawPixmap( r, m_ratingStarPositive );
+            else
+                painter->drawPixmap( r, m_ratingStarNegative );
+        }
+        runningEdge += m_ratingStarPositive.width() + PADDING_BETWEEN_STARS;
     }
 
     // downloaded num times, underneath button
@@ -238,6 +258,12 @@ bool
 GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( option );
+    m_hoveringOver = -1;
+
+    if ( event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseMove )
+        return false;
+
     if ( event->type() == QEvent::MouseButtonRelease && m_cachedButtonRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
     {
         QRect rect = m_cachedButtonRects[ QPair<int, int>( index.row(), index.column() ) ];
@@ -246,6 +272,37 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
         if ( rect.contains( me->pos() ) )
         {
             model->setData( index, true );
+
+            return true;
+        }
+    }
+
+    if ( m_cachedStarRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
+    {
+        QRect fullStars = m_cachedStarRects[ QPair<int, int>( index.row(), index.column() ) ];
+        const int starsWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
+        fullStars.setWidth( starsWidth );
+
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+
+        if ( fullStars.contains( me->pos() ) )
+        {
+            tDebug() << "A star was pressed...which one?";
+
+            const int eachStar = starsWidth / 5;
+            const int clickOffset = me->pos().x() - fullStars.x();
+            const int whichStar = (clickOffset / eachStar) + 1;
+
+            if ( event->type() == QEvent::MouseButtonRelease )
+            {
+                tDebug() << "Clicked on:" << whichStar;
+                model->setData( index, whichStar, GetNewStuffModel::RatingRole );
+            }
+            else if ( event->type() == QEvent::MouseMove )
+            {
+                // 0-indexed
+                m_hoveringOver = whichStar;
+            }
 
             return true;
         }

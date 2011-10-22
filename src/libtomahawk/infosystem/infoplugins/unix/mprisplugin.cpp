@@ -263,14 +263,14 @@ MprisPlugin::metadata() const
         {
             // Need to fetch the album cover
 
-            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            Tomahawk::InfoSystem::InfoStringHash trackInfo;
             trackInfo["artist"] = track->artist()->name();
             trackInfo["album"] = track->album()->name();
 
             Tomahawk::InfoSystem::InfoRequestData requestData;
             requestData.caller = s_mpInfoIdentifier;
             requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
             requestData.customData = QVariantMap();
 
             Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -489,10 +489,10 @@ MprisPlugin::audioStarted( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 
-    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
@@ -605,13 +605,13 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         image.loadFromData( ba );
 
         // Pull out request data for album+artist
-        if( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+        if( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         {
             qDebug() << "Cannot convert metadata input to album cover retrieval";
             return;
         }
 
-        Tomahawk::InfoSystem::InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
+        Tomahawk::InfoSystem::InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
 
         // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
         if( m_coverTempFile )

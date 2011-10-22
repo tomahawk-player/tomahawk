@@ -232,21 +232,31 @@ void Tomahawk::checkForUpdates() {
 #endif
 }
 
+#ifdef LION
+#define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
+#else
+#define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
+#endif
+
 void Tomahawk::enableFullscreen()
 {
-#ifdef LION
-    qDebug() << "Enabling Lion Full-screeen";
-    // Can't include tomahawkapp.h in a .mm file, pulls in infosystem.h which uses
-    // the objc keyword 'id'
-    foreach( QWidget* w, QApplication::topLevelWidgets() )
+    // We don't support anything below leopard, so if it's not [snow] leopard it must be lion
+    // Can't check for lion as Qt 4.7 doesn't have the enum val, not checking for Unknown as it will be lion
+    // on 4.8
+    if ( QSysInfo::MacintoshVersion != QSysInfo::MV_SNOWLEOPARD &&
+         QSysInfo::MacintoshVersion != QSysInfo::MV_LEOPARD   )
     {
-        if ( qobject_cast< TomahawkWindow* >( w ) )
+        qDebug() << "Enabling Lion Full-screeen";
+        // Can't include tomahawkapp.h in a .mm file, pulls in infosystem.h which uses
+        // the objc keyword 'id'
+        foreach( QWidget* w, QApplication::topLevelWidgets() )
         {
-            NSView *nsview = (NSView *)w->winId();
-            NSWindow *nswindow = [nsview window];
-            [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+            if ( qobject_cast< TomahawkWindow* >( w ) )
+            {
+                NSView *nsview = (NSView *)w->winId();
+                NSWindow *nswindow = [nsview window];
+                [nswindow setCollectionBehavior:SET_LION_FULLSCREEN];
+            }
         }
     }
-
-#endif
 }

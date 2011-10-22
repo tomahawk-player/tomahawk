@@ -66,6 +66,8 @@ public:
     void append( const Tomahawk::album_ptr& album );
     void append( const Tomahawk::artist_ptr& artist );
 
+    void append( const QList< Tomahawk::query_ptr >& queries );
+
     void insert( unsigned int row, const Tomahawk::query_ptr& query );
 
     void remove( unsigned int row, bool moreToCome = false );

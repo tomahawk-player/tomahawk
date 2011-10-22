@@ -112,6 +112,7 @@ set( libSources
     infosystem/infosystemworker.cpp
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
+    infosystem/infoplugins/generic/chartsplugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
 
@@ -142,6 +143,8 @@ set( libSources
     playlist/artistview.cpp
     playlist/customplaylistview.cpp
     playlist/ViewHeader.cpp
+    playlist/PlaylistUpdaterInterface.cpp
+    playlist/XspfUpdater.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -211,6 +214,7 @@ set( libSources
     widgets/whatshotwidget.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
+    widgets/OverlayButton.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
@@ -340,6 +344,7 @@ set( libHeaders
     infosystem/infosystemcache.h
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
+    infosystem/infoplugins/generic/chartsplugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
     infosystem/infoplugins/generic/musicbrainzPlugin.h
 
@@ -380,6 +385,8 @@ set( libHeaders
     playlist/artistview.h
     playlist/customplaylistview.h
     playlist/ViewHeader.h
+    playlist/PlaylistUpdaterInterface.h
+    playlist/XspfUpdater.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
@@ -435,6 +442,7 @@ set( libHeaders
     widgets/whatshotwidget.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
+    widgets/OverlayButton.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
     widgets/HeaderWidget.h

@@ -19,6 +19,7 @@
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
 
+#include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "database/database.h"
 #include "playlist/treemodel.h"
@@ -30,6 +31,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+#include "widgets/OverlayButton.h"
 #include "widgets/overlaywidget.h"
 
 static QString s_aiInfoIdentifier = QString( "AlbumInfoWidget" );
@@ -56,10 +58,20 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->albumsView->setAlbumModel( m_albumsModel );
 
     m_tracksModel = new TreeModel( ui->tracksView );
+    m_tracksModel->setMode( TreeModel::InfoSystem );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+
+    m_button = new OverlayButton( ui->tracksView );
+    m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+    m_button->setCheckable( true );
+    m_button->setChecked( true );
+
+    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
+    connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -74,6 +86,48 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 AlbumInfoWidget::~AlbumInfoWidget()
 {
     delete ui;
+}
+
+
+void
+AlbumInfoWidget::onModeToggle()
+{
+    m_tracksModel->setMode( m_button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
+    m_tracksModel->clear();
+    m_tracksModel->addTracks( m_album, QModelIndex() );
+
+    if ( m_button->isChecked() )
+        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+    else
+        m_button->setText( tr( "Click to show Official Tracks" ) );
+}
+
+
+void
+AlbumInfoWidget::onLoadingStarted()
+{
+    m_button->setEnabled( false );
+    m_button->hide();
+}
+
+
+void
+AlbumInfoWidget::onLoadingFinished()
+{
+    m_button->setEnabled( true );
+    m_button->show();
+}
+
+bool
+AlbumInfoWidget::isBeingPlayed() const
+{
+    if ( ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( ui->tracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    return false;
 }
 
 
@@ -95,14 +149,14 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = album->artist()->name();
     trackInfo["album"] = album->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_aiInfoIdentifier;
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -128,8 +182,8 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
         return;
     }
 
-    InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+    InfoSystem::InfoStringHash trackInfo;
+    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
 
     if ( output.canConvert< QVariantMap >() )
     {

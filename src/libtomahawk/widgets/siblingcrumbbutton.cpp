@@ -20,6 +20,7 @@
 
 #include "combobox.h"
 #include "utils/stylehelper.h"
+#include "utils/tomahawkutils.h"
 
 #include <QTimer>
 #include <QDebug>
@@ -37,18 +38,19 @@ SiblingCrumbButton::SiblingCrumbButton(
     : BreadcrumbButtonBase(parent),
       m_index(index), m_combo( new ComboBox(this) )
 {
-
+    setFixedHeight( TomahawkUtils::headerHeight() );
+    m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
     setIndex(index);
     connect(m_combo, SIGNAL(activated(int)), SLOT(comboboxActivated(int)));
-
-//    QTimer::singleShot(0, this, SLOT(activateSelf()));
 }
 
 void SiblingCrumbButton::setIndex( QModelIndex index )
 {
-    m_index = index;
-    setText( index.data().toString() );
-    qDebug() << "i am " << text();
+    if ( !(m_index == index && text() == index.data().toString()) )
+    {
+        m_index = index;
+        setText( index.data().toString() );
+    }
     fillCombo();
 }
 
@@ -60,6 +62,8 @@ QModelIndex SiblingCrumbButton::index() const
 void SiblingCrumbButton::setActive( bool active )
 {
     Q_UNUSED( active );
+    if ( active )
+        QTimer::singleShot( 0, this, SLOT( activateSelf() ) );
 }
 
 bool SiblingCrumbButton::isActive() const
@@ -131,9 +135,21 @@ void SiblingCrumbButton::fillCombo()
             list << sibling.data().toString();
     }
 
+    if ( m_combo->count() && list.count() )
+    {
+        // Check if it's the same, Don't change if it is, as it'll cause flickering
+        QStringList old;
+        for ( int i = 0; i < m_combo->count(); i++ )
+            old << m_combo->itemText( i );
+
+        if ( list == old )
+            return;
+    }
+
     m_combo->clear();
     m_combo->addItems(list);
     m_combo->setCurrentIndex( m_combo->findText(text()));
+    m_combo->adjustSize();
 }
 
 void SiblingCrumbButton::comboboxActivated(int i)
@@ -141,7 +157,7 @@ void SiblingCrumbButton::comboboxActivated(int i)
     QModelIndex activated = m_index.sibling(i,0);
     int count = breadcrumbBar()->model()->rowCount(activated);
     if( count > 0 ) {
-        qDebug() << "activated" << activated.child(0,0).data().toString();
+//         qDebug() << "activated crumb with children:" << activated.child(0,0).data().toString();
         breadcrumbBar()->currentChangedTriggered(activated.child(0,0));
     } else {
         // if it has no children, then emit itself

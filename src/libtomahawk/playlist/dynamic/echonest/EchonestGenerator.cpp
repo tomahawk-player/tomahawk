@@ -73,6 +73,12 @@ EchonestFactory::typeSelectors() const
 CatalogManager::CatalogManager( QObject* parent )
     : QObject( parent )
 {
+    connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( init() ) );
+}
+
+void
+CatalogManager::init()
+{
     connect( EchonestCatalogSynchronizer::instance(), SIGNAL( knownCatalogsChanged() ), this, SLOT( doCatalogUpdate() ) );
     connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( doCatalogUpdate() ) );
 
@@ -123,13 +129,7 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 
     loadStylesAndMoods();
 
-    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
-    // not dealing with that right now.
-    if ( s_catalogs == 0 )
-        s_catalogs = new CatalogManager( this );
-
     connect( s_catalogs, SIGNAL( catalogsUpdated() ), this, SLOT( knownCatalogsChanged() ) );
-//    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
 
@@ -138,6 +138,13 @@ EchonestGenerator::~EchonestGenerator()
     delete m_dynPlaylist;
 }
 
+void
+EchonestGenerator::setupCatalogs()
+{
+    if ( s_catalogs == 0 )
+        s_catalogs = new CatalogManager( 0 );
+//    qDebug() << "ECHONEST:" << m_logo.size();
+}
 
 dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
@@ -480,6 +487,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     }
     if( someCatalog )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );
+    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )

@@ -46,7 +46,10 @@ public:
     virtual QPixmap pixmap() const;
     virtual QString description() const;
     virtual QString longDescription() const;
+
     virtual bool isTemporaryPage() const { return false; }
+    virtual bool isBeingPlayed() const;
+    virtual bool jumpToCurrentTrack();
 
 private slots:
     void tracksGenerated( QList<Tomahawk::query_ptr> tracks );

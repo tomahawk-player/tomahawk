@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -58,6 +59,7 @@
 #include "utils/spotifyparser.h"
 #include "dropjob.h"
 #include "EchonestCatalogSynchronizer.h"
+#include "widgets/HeaderLabel.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -149,6 +151,11 @@ TomahawkApp::init()
     setQuitOnLastWindowClosed( false );
 #endif
 
+    QFont f = APP->font();
+    f.setPixelSize( HeaderLabel::defaultFontSize() );
+    QFontMetrics fm( f );
+    TomahawkUtils::setHeaderHeight( fm.height() + 8 );
+
     registerMetaTypes();
 
     new TomahawkSettings( this );
@@ -223,6 +230,8 @@ TomahawkApp::init()
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+
+    EchonestGenerator::setupCatalogs();
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -404,17 +413,12 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
 
-    qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
-    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
+    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
-    qRegisterMetaType< DirLister::Mode >("DirLister::Mode");
-    qRegisterMetaType< Tomahawk::InfoSystem::ArtistTrackPair >("Tomahawk::InfoSystem::ArtistTrackPair");
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::ArtistTrackPair> >("QList<Tomahawk::InfoSystem::ArtistTrackPair>");
-    qRegisterMetaType< Tomahawk::InfoSystem::Chart>("Tomahawk::InfoSystem::Chart");
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::Chart> >("QList<Tomahawk::InfoSystem::Chart>");
+    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoStringHash> >("QList<Tomahawk::InfoSystem::InfoStringHash>");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 
@@ -503,7 +507,6 @@ TomahawkApp::initServent()
         exit( 1 );
     }
 }
-
 
 void
 TomahawkApp::initSIP()

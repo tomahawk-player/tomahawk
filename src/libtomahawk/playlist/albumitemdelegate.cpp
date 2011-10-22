@@ -112,7 +112,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
 
-    bool oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
+    bool oneLiner = false;
+    if ( item->album()->artist().isNull() )
+        oneLiner = true;
+    else
+        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
                       textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
 
     if ( oneLiner )

@@ -236,9 +236,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             qDebug() << "Found result:" << m;
 
             Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-            Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
+            Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
             rp->setArtist( ap );
-            rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
+            rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
             rp->setTrack( m.value( "track" ).toString() );
             rp->setDuration( m.value( "duration" ).toUInt() );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );

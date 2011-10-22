@@ -123,6 +123,12 @@ AlbumProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( !p2 )
         return false;
 
+    if ( p1->album().isNull() || p1->album()->artist().isNull() )
+        return true;
+
+    if ( p2->album().isNull() || p2->album()->artist().isNull() )
+        return false;
+
     if ( p1->album()->artist()->name() == p2->album()->artist()->name() )
     {
         return QString::localeAwareCompare( p1->album()->name(), p2->album()->name() ) < 0;

@@ -44,14 +44,8 @@ Q_OBJECT
 
 public:
 
-    enum Mode {
-        NonRecursive,
-        Recursive,
-        MTimeOnly
-    };
-
-    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool recursive )
-        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_recursive( recursive ), m_opcount( 0 ), m_deleting( false )
+    DirLister( const QStringList& dirs )
+        : QObject(), m_dirs( dirs ), m_opcount( 0 ), m_deleting( false )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -66,19 +60,14 @@ public:
 
 signals:
     void fileToScan( QFileInfo );
-    void finished( const QMap<QString, unsigned int>& );
+    void finished();
 
 private slots:
     void go();
-    void scanDir( QDir dir, int depth, DirLister::Mode mode );
+    void scanDir( QDir dir, int depth );
 
 private:
     QStringList m_dirs;
-    QMap<QString, unsigned int> m_dirmtimes;
-    TomahawkSettings::ScannerMode m_mode;
-    bool m_recursive;
-
-    QMap<QString, unsigned int> m_newdirmtimes;
 
     uint m_opcount;
     QMutex m_deletingMutex;
@@ -91,7 +80,7 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive = true, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -103,30 +92,25 @@ private:
     QVariant readFile( const QFileInfo& fi );
 
 private slots:
-    void listerFinished( const QMap<QString, unsigned int>& newmtimes );
+    void listerFinished();
     void scanFile( const QFileInfo& fi );
+    void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
     void startScan();
     void scan();
-    void setDirMtimes( const QMap< QString, unsigned int >& m );
-    void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
     void commitBatch( const QVariantList& tracks, const QVariantList& deletethese );
 
 private:
     QStringList m_dirs;
-    TomahawkSettings::ScannerMode m_mode;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
 
     QList<QString> m_skippedFiles;
 
-    QMap<QString, unsigned int> m_dirmtimes;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
-    QMap<QString, unsigned int> m_newdirmtimes;
 
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;
-    bool m_recursive;
     quint32 m_batchsize;
 
     QWeakPointer< DirLister > m_dirLister;

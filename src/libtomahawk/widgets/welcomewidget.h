@@ -93,6 +93,7 @@ public:
     virtual bool showInfoBar() const { return false; }
 
     virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool isBeingPlayed() const;
 
 protected:
     void changeEvent( QEvent* e );

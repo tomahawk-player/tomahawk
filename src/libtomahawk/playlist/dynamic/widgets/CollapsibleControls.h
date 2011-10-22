@@ -49,7 +49,7 @@ public:
 
     virtual QSize sizeHint() const;
 signals:
-    void controlsChanged();
+    void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
 
 private slots:

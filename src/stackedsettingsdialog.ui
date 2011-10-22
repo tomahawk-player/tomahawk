@@ -258,57 +258,6 @@
                 </item>
                </layout>
               </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QRadioButton" name="scannerFileModeButton">
-                  <property name="text">
-                   <string>Files Mode (Recommended)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="scannerDirModeButton">
-                  <property name="text">
-                   <string>Directory Mode</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <widget class="QLabel" name="scanInformationLabelFiles">
-                  <property name="text">
-                   <string>⚫ More accurate
-⚫ Uses more computer resources</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="margin">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="scanInformationLabelDirs">
-                  <property name="text">
-                   <string>⚫ Less accurate
-⚫ Uses less computer resources
-⚫ Can be better for network files</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="margin">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
              </layout>
             </item>
            </layout>

@@ -75,6 +75,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      settingslistdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
+     LoadXSPFDialog.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -124,6 +125,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+     LoadXSPFDialog.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -135,6 +137,7 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
 
      GetNewStuffDialog.ui
+     LoadXSPFDialog.ui
 )
 
 INCLUDE_DIRECTORIES(

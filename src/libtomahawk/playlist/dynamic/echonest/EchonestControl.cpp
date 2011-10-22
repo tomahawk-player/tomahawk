@@ -159,8 +159,8 @@ Tomahawk::EchonestControl::updateWidgets()
         QComboBox* match = new QComboBox();
         QLineEdit* input =  new QLineEdit();
 
-        match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
+        match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         m_matchString = match->currentText();
         m_matchData = match->itemData( match->currentIndex() ).toString();
 

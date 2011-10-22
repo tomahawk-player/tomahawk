@@ -189,7 +189,10 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Age:
-                return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
+                if ( query->results().first()->modificationTime() == 0 )
+                    return QString();
+                else
+                    return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
                 break;
 
             case Year:

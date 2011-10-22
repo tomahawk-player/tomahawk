@@ -25,6 +25,7 @@
 #include "infosystemcache.h"
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
+#include "infoplugins/generic/chartsplugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "utils/tomahawkutils.h"
@@ -88,6 +89,10 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+    InfoPluginPtr sptr( new ChartsPlugin() );
+    m_plugins.append( sptr );
+    registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
+
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
@@ -115,21 +120,15 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
 
         connect(
                 plugin.data(),
-                SIGNAL( getCachedInfo( uint, Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+                SIGNAL( getCachedInfo( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
                 cache.data(),
-                SLOT( getCachedInfoSlot( uint, Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
-            );
-        connect(
-                cache.data(),
-                SIGNAL( notInCache( uint, Tomahawk::InfoSystem::InfoCriteriaHash, Tomahawk::InfoSystem::InfoRequestData ) ),
-                plugin.data(),
-                SLOT( notInCacheSlot( uint, Tomahawk::InfoSystem::InfoCriteriaHash, Tomahawk::InfoSystem::InfoRequestData ) )
+                SLOT( getCachedInfoSlot( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
             );
         connect(
                 plugin.data(),
-                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
                 cache.data(),
-                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
         connect(
                 this,

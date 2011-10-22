@@ -65,13 +65,13 @@ TopTracksContext::setQuery( const Tomahawk::query_ptr& query )
 
     m_query = query;
 
-    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = query->artist();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = m_infoId;
     requestData.customData = QVariantMap();
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -84,8 +84,8 @@ TopTracksContext::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     if ( requestData.caller != m_infoId )
         return;
 
-    InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+    InfoSystem::InfoStringHash trackInfo;
+    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
 
     if ( output.canConvert< QVariantMap >() )
     {

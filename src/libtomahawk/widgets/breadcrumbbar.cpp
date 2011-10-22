@@ -132,26 +132,27 @@ void BreadcrumbBar::deleteAnimationFinished()
 
 void BreadcrumbBar::deleteButton(BreadcrumbButtonBase *widget)
 {
-    if( !m_useAnimation ) {
-        widget->hide();
-        widget->deleteLater();
-        return; // all done here
-    }
+    widget->hide();
+    widget->deleteLater();
+    return; // all done here
 
-    int index = m_layout->indexOf(widget);
-    if( index != 0 && m_navButtons.size() > 0 ) {
-        QWidget* neighbor = m_layout->itemAt(index-1)->widget();
-        QPropertyAnimation *animation = new QPropertyAnimation(widget,"pos");
-        m_layout->removeWidget(widget);
-        connect(animation, SIGNAL(finished()), SLOT(deleteAnimationFinished()));
-        animation->setDuration(300);
-        animation->setStartValue(widget->pos());
-        animation->setEndValue(neighbor->pos());
-        animation->start();
-    } else {
-        widget->hide();
-        widget->deleteLater();
-    }
+    // Don't animate on delete. We expand a child recursively until it has no more children---this makes
+    // the deleting and creating animations overlap.
+
+//     int index = m_layout->indexOf(widget);
+//     if( index != 0 && m_navButtons.size() > 0 ) {
+//         QWidget* neighbor = m_layout->itemAt(index-1)->widget();
+//         QPropertyAnimation *animation = new QPropertyAnimation(widget,"pos");
+//         m_layout->removeWidget(widget);
+//         connect(animation, SIGNAL(finished()), SLOT(deleteAnimationFinished()));
+//         animation->setDuration(300);
+//         animation->setStartValue(widget->pos());
+//         animation->setEndValue(neighbor->pos());
+//         animation->start();
+//     } else {
+//         widget->hide();
+//         widget->deleteLater();
+//     }
 }
 
 

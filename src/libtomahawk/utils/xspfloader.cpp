@@ -26,12 +26,15 @@
 
 #include "sourcelist.h"
 #include "playlist.h"
+#include <XspfUpdater.h>
 
 using namespace Tomahawk;
 
-XSPFLoader::XSPFLoader( bool autoCreate, QObject *parent )
+XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
+    , m_autoUpdate( autoUpdate )
+    , m_autoResolve( true )
     , m_NS("http://xspf.org/ns/0/")
 {
     qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
@@ -60,10 +63,11 @@ void
 XSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
+    m_url = url;
+
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     QNetworkReply* reply = TomahawkUtils::nam()->get( request );
 
-    // isn't there a race condition here? something could happen before we connect()
     connect( reply, SIGNAL( finished() ),
                       SLOT( networkLoadFinished() ) );
 
@@ -99,6 +103,9 @@ void
 XSPFLoader::networkLoadFinished()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if ( reply->error() != QNetworkReply::NoError )
+        return;
+
     m_body = reply->readAll();
     gotBody();
 }
@@ -193,7 +200,7 @@ XSPFLoader::gotBody()
             continue;
         }
 
-        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), m_autoResolve );
         q->setDuration( duration.toInt() / 1000 );
         if ( !url.isEmpty() )
             q->setResultHint( url );
@@ -219,6 +226,8 @@ XSPFLoader::gotBody()
                                        false,
                                        m_entries );
 
+        // 10 minute default---for now, no way to change it
+        new Tomahawk::XspfUpdater( m_playlist, 6000000, m_autoUpdate, m_url.toString() );
         deleteLater();
     }
 

@@ -130,27 +130,9 @@ struct InfoRequestData {
     QVariantMap customData;
 };
 
-struct ArtistTrackPair {
-    QString artist;
-    QString track;
-};
-
-struct Chart {
-    Chart(){}
-    Chart(const QString _id, const QString _label, const QString _type) {
-        id = _id;
-        label = _label;
-        type = _type;
-    }
-    QString id;
-    QString label;
-    QString type;
-};
-
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
-typedef QHash< QString, QString > InfoCriteriaHash;
+typedef QHash< QString, QString > InfoStringHash;
 
 class DLLEXPORT InfoPlugin : public QObject
 {
@@ -165,15 +147,15 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
     void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-    void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
     virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
+    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
 
@@ -232,7 +214,7 @@ public:
 
     void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0, bool allSources = false );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
-    void getInfo( const QString &caller, const InfoTypeMap &inputMap, const QVariantMap &customData, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
+    void getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoTypeMap &input );
 
@@ -258,7 +240,7 @@ private:
 
 
 
-inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
+inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
     QStringList keys = hash.keys();
@@ -280,12 +262,8 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistTrackPair );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::Chart );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::ArtistTrackPair> );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::Chart> );
+Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoStringHash> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

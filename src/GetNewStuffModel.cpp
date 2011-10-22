@@ -109,36 +109,45 @@ bool
 GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
     Q_UNUSED( value );
-    Q_UNUSED( role );
     if ( !hasIndex( index.row(), index.column(), index.parent() ) )
         return false;
 
-    // the install/uninstall button was clicked
-    const Attica::Content resolver = m_contentList[ index.row() ];
 
+    Attica::Content resolver = m_contentList[ index.row() ];
     AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
-
-    switch( state )
+    if ( role == Qt::EditRole )
     {
-        case AtticaManager::Uninstalled:
-            // install
-            AtticaManager::instance()->installResolver( resolver );
-            break;
-        case AtticaManager::Installing:
-        case AtticaManager::Upgrading:
-            // Do nothing, busy
-            break;
-        case AtticaManager::Installed:
-            // Uninstall
-            AtticaManager::instance()->uninstallResolver( resolver );
-            break;
-        case AtticaManager::NeedsUpgrade:
-            AtticaManager::instance()->upgradeResolver( resolver );
-            break;
-        default:
-            //FIXME -- this handles e.g. Failed
-            break;
-    };
+        switch( state )
+        {
+            case AtticaManager::Uninstalled:
+                // install
+                AtticaManager::instance()->installResolver( resolver );
+                break;
+            case AtticaManager::Installing:
+            case AtticaManager::Upgrading:
+                // Do nothing, busy
+                break;
+            case AtticaManager::Installed:
+                // Uninstall
+                AtticaManager::instance()->uninstallResolver( resolver );
+                break;
+            case AtticaManager::NeedsUpgrade:
+                AtticaManager::instance()->upgradeResolver( resolver );
+                break;
+            default:
+                //FIXME -- this handles e.g. Failed
+                break;
+        };
+    } else if ( role == RatingRole )
+    {
+        // For now only allow rating if a resolver is installed!
+        if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+            return false;
+        if ( AtticaManager::instance()->userHasRated( resolver ) )
+            return false;
+        m_contentList[ index.row() ].setRating( value.toInt() * 20 );
+        AtticaManager::instance()->uploadRating( m_contentList[ index.row() ] );
+    }
     emit dataChanged( index, index );
 
     return true;

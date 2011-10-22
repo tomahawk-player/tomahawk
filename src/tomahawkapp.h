@@ -103,6 +103,7 @@ private slots:
     void initSIP();
 
     void spotifyApiCheckFinished();
+
 private:
     void registerMetaTypes();
 

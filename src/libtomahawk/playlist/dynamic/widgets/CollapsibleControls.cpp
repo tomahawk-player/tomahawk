@@ -120,7 +120,7 @@ CollapsibleControls::init()
         m_layout->setCurrentWidget( m_summary );
 
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ) );
-    connect( m_controls, SIGNAL( controlsChanged() ), SIGNAL( controlsChanged() ) );
+    connect( m_controls, SIGNAL( controlsChanged( bool ) ), SIGNAL( controlsChanged( bool ) ) );
 
     setLayout( m_layout );
 

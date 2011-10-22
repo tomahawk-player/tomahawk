@@ -59,6 +59,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
     }
     m_playlist = playlist;
 
+    m_deduper.clear();
     if( m_playlist->mode() == OnDemand )
         setFilterUnresolvable( true );
 
@@ -95,13 +96,20 @@ void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
-        if( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) ) {
+        bool isDuplicate = false;
+        for ( int i = 0; i < m_deduper.size(); i++ )
+        {
+            if ( m_deduper[ i ].first == query->track() && m_deduper[ i ].second == query->artist() )
+                isDuplicate = true;
+        }
+        if ( isDuplicate )
+        {
             m_playlist->generator()->fetchNext();
 
             return;
-        } else {
-            if( m_deduper.size() > 30 )
-                m_deduper.pop_front();
+        }
+        else
+        {
             m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
         }
 
@@ -206,6 +214,8 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
     }
+    if ( m_playlist->mode() == OnDemand && entries.isEmpty() )
+        emit trackGenerationFailure( tr( "Failed to generate preview with the desired filters" ) );
 }
 
 
@@ -277,6 +287,9 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
 {
     if( clearFirst )
         clear();
+
+    foreach ( const query_ptr& q, entries )
+        m_deduper.append( QPair< QString, QString >( q->track(), q->artist() ) );
 
     if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
         m_playlist->addEntries( entries, m_playlist->currentrevision() );

@@ -207,14 +207,14 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     ui->seekSlider->setVisible( true );
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_acInfoIdentifier;
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -567,7 +567,7 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 void
 AudioControls::onLoveButtonClicked( bool checked )
 {
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["title"] = m_currentTrack->track();
     trackInfo["artist"] = m_currentTrack->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
@@ -576,7 +576,7 @@ AudioControls::onLoveButtonClicked( bool checked )
     {
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "true") );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -586,7 +586,7 @@ AudioControls::onLoveButtonClicked( bool checked )
     {
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             s_acInfoIdentifier, Tomahawk::InfoSystem::InfoUnLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

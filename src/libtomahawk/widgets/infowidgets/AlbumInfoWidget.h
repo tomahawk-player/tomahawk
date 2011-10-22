@@ -38,6 +38,7 @@
 
 class AlbumModel;
 class TreeModel;
+class OverlayButton;
 
 namespace Ui
 {
@@ -74,6 +75,7 @@ public:
     virtual bool showStatsBar() const { return false; }
 
     virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool isBeingPlayed() const;
 
 signals:
     void longDescriptionChanged( const QString& description );
@@ -89,6 +91,10 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+    void onModeToggle();
+    void onLoadingStarted();
+    void onLoadingFinished();
+
 private:
     Ui::AlbumInfoWidget *ui;
 
@@ -96,6 +102,8 @@ private:
 
     AlbumModel* m_albumsModel;
     TreeModel* m_tracksModel;
+
+    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;

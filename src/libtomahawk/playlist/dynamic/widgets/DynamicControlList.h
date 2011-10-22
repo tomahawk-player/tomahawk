@@ -53,7 +53,7 @@ public:
     QList< DynamicControlWrapper* > controls() const { return m_controls; }
 
 signals:
-    void controlsChanged();
+    void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     void toggleCollapse();
 

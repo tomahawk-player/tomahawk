@@ -101,6 +101,11 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
 
     DLLEXPORT void crash();
+
+    DLLEXPORT int headerHeight();
+    DLLEXPORT void setHeaderHeight( int height );
+
+    DLLEXPORT bool removeDirectory( const QString& dir );
 }
 
 #endif // TOMAHAWKUTILS_H

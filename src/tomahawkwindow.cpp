@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -68,6 +69,7 @@
 
 #include "utils/logger.h"
 #include "jobview/JobStatusModel.h"
+#include "LoadXSPFDialog.h"
 
 using namespace Tomahawk;
 
@@ -488,14 +490,49 @@ TomahawkWindow::showOfflineSources()
 void
 TomahawkWindow::loadSpiff()
 {
-    bool ok;
-    QString urlstr = QInputDialog::getText( this, tr( "Load XSPF" ), tr( "Path:" ), QLineEdit::Normal, "http://ws.audioscrobbler.com/1.0/tag/metal/toptracks.xspf", &ok );
-    if ( !ok || urlstr.isEmpty() )
-        return;
+    LoadXSPFDialog* diag = new LoadXSPFDialog( this, Qt::Sheet );
+#ifdef Q_WS_MAC
+    connect( diag, SIGNAL( finished( int ) ), this, SLOT( loadXspfFinished( int ) ) );
+    diag->show();
+#else
+    QWeakPointer< LoadXSPFDialog > safe( diag );
 
-    XSPFLoader* loader = new XSPFLoader;
-    connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
-    loader->load( QUrl::fromUserInput( urlstr ) );
+    int ret = diag->exec();
+    if ( !safe.isNull() && ret == QDialog::Accepted )
+    {
+        QUrl url = QUrl::fromUserInput( safe.data()->xspfUrl() );
+        bool autoUpdate = safe.data()->autoUpdate();
+
+        XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
+        connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
+        loader->load( url );
+    }
+#endif
+}
+
+void
+TomahawkWindow::loadXspfFinished( int ret )
+{
+    LoadXSPFDialog* d = qobject_cast< LoadXSPFDialog* >( sender() );
+    Q_ASSERT( d );
+    if ( ret == QDialog::Accepted )
+    {
+        QUrl url = QUrl::fromUserInput( d->xspfUrl() );
+        bool autoUpdate = d->autoUpdate();
+
+        XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
+        connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
+        loader->load( url );
+    }
+    d->deleteLater();
+}
+
+void
+TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
+{
+    ViewManager::instance()->show( pl );
 }
 
 

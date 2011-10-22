@@ -148,6 +148,38 @@ AtticaManager::pathFromId( const QString& resolverId ) const
     return m_resolverStates.value( resolverId ).scriptPath;
 }
 
+void
+AtticaManager::uploadRating( const Content& c )
+{
+    m_resolverStates[ c.id() ].userRating = c.rating();
+
+    for ( int i = 0; i < m_resolvers.count(); i++ )
+    {
+        if ( m_resolvers[ i ].id() == c.id() )
+        {
+            Attica::Content atticaContent = m_resolvers[ i ];
+            atticaContent.setRating( c.rating() );
+            m_resolvers[ i ] = atticaContent;
+            break;
+        }
+    }
+
+    TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
+
+    PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
+    connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
+
+    job->start();
+
+    emit resolverStateChanged( c.id() );
+}
+
+bool
+AtticaManager::userHasRated( const Content& c ) const
+{
+    return m_resolverStates[ c.id() ].userRating != -1;
+}
+
 
 void
 AtticaManager::providerAdded( const Provider& provider )
@@ -156,7 +188,7 @@ AtticaManager::providerAdded( const Provider& provider )
     {
         m_resolverProvider = provider;
 
-        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads );
+        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads, 0, 30 );
         connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
         job->start();
     }
@@ -186,7 +218,7 @@ AtticaManager::resolversList( BaseJob* j )
         }
     }
 
-    checkForUpdates();
+    syncServerData();
 }
 
 
@@ -211,23 +243,34 @@ AtticaManager::resolverIconFetched()
 }
 
 void
-AtticaManager::checkForUpdates()
+AtticaManager::syncServerData()
 {
     // look for any newer. m_resolvers has list from server, and m_resolverStates will contain any locally installed ones
+    // also update ratings
     foreach ( const QString& id, m_resolverStates.keys() )
     {
         Resolver r = m_resolverStates[ id ];
-        if ( r.state == Installed || r.state == NeedsUpgrade )
+        for ( int i = 0; i < m_resolvers.size(); i++ )
         {
-            foreach ( const Content& upstream, m_resolvers )
+            Attica::Content upstream = m_resolvers[ i ];
+            // same resolver
+            if ( id != upstream.id() )
+                continue;
+
+            // Update our rating with the server's idea of rating if we haven't rated it
+            if ( m_resolverStates[ id ].userRating != -1 )
             {
-                if ( id == upstream.id() && // the right one
-                     !upstream.version().isEmpty() ) // valid version
+                upstream.setRating( m_resolverStates[ id ].userRating );
+                m_resolvers[ i ] = upstream;
+            }
+
+            // DO we need to upgrade?
+            if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
+                 !upstream.version().isEmpty() )
+            {
+                if ( newerVersion( r.version, upstream.version() ) )
                 {
-                    if ( newerVersion( r.version, upstream.version() ) )
-                    {
-                        m_resolverStates[ id ].state = NeedsUpgrade;
-                    }
+                    m_resolverStates[ id ].state = NeedsUpgrade;
                 }
             }
         }
@@ -507,30 +550,5 @@ AtticaManager::doResolverRemove( const QString& id ) const
         !resolverDir.absolutePath().contains( id ) )
         return;
 
-    removeDirectory( resolverDir.absolutePath() );
-}
-
-
-// taken from util/fileutils.cpp in kdevplatform
-bool
-AtticaManager::removeDirectory( const QString& dir ) const
-{
-    const QDir aDir(dir);
-
-    tLog() << "Deleting DIR:" << dir;
-    bool has_err = false;
-    if (aDir.exists()) {
-        foreach(const QFileInfo& entry, aDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks)) {
-            QString path = entry.absoluteFilePath();
-            if (entry.isDir()) {
-                has_err = !removeDirectory(path) || has_err;
-            } else if (!QFile::remove(path)) {
-                has_err = true;
-            }
-        }
-        if (!aDir.rmdir(aDir.absolutePath())) {
-            has_err = true;
-        }
-    }
-    return !has_err;
+    TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
 }

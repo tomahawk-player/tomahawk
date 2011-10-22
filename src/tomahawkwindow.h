@@ -85,6 +85,7 @@ private slots:
     void onSipError();
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
+    void onXSPFOk( const Tomahawk::playlist_ptr& );
 
     void addPeerManually();
 
@@ -101,6 +102,8 @@ private slots:
 
     void onSearch( const QString& search );
     void onFilterEdited();
+
+    void loadXspfFinished( int );
 
     void showQueue();
     void hideQueue();

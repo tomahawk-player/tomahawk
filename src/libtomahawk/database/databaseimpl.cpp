@@ -259,9 +259,8 @@ DatabaseImpl::file( int fid )
 
 
 int
-DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
+DatabaseImpl::artistId( const QString& name_orig, bool autoCreate )
 {
-    bool isnew = false;
     if ( m_lastart == name_orig )
         return m_lastartid;
 
@@ -296,20 +295,17 @@ DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
         }
 
         id = query.lastInsertId().toInt();
-        isnew = true;
         m_lastart = name_orig;
         m_lastartid = id;
     }
 
-    autoCreate = isnew;
     return id;
 }
 
 
 int
-DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
+DatabaseImpl::trackId( int artistid, const QString& name_orig, bool autoCreate )
 {
-    isnew = false;
     int id = 0;
     QString sortname = DatabaseImpl::sortname( name_orig );
     //if( ( id = m_artistcache[sortname] ) ) return id;
@@ -320,45 +316,46 @@ DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     query.exec();
 
-    if( query.next() )
+    if ( query.next() )
     {
         id = query.value( 0 ).toInt();
     }
-    if( id )
+    if ( id )
     {
         //m_trackcache[sortname]=id;
         return id;
     }
 
-    // not found, insert it.
-    query.prepare( "INSERT INTO track(id,artist,name,sortname) VALUES(NULL,?,?,?)" );
-    query.addBindValue( artistid );
-    query.addBindValue( name_orig );
-    query.addBindValue( sortname );
-    if( !query.exec() )
+    if ( autoCreate )
     {
-        tDebug() << "Failed to insert track:" << name_orig ;
-        return 0;
+        // not found, insert it.
+        query.prepare( "INSERT INTO track(id,artist,name,sortname) VALUES(NULL,?,?,?)" );
+        query.addBindValue( artistid );
+        query.addBindValue( name_orig );
+        query.addBindValue( sortname );
+        if ( !query.exec() )
+        {
+            tDebug() << "Failed to insert track:" << name_orig;
+            return 0;
+        }
+
+        id = query.lastInsertId().toInt();
     }
 
-    id = query.lastInsertId().toInt();
-    //m_trackcache[sortname]=id;
-    isnew = true;
     return id;
 }
 
 
 int
-DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
+DatabaseImpl::albumId( int artistid, const QString& name_orig, bool autoCreate )
 {
-    isnew = false;
-    if( name_orig.isEmpty() )
+    if ( name_orig.isEmpty() )
     {
         //qDebug() << Q_FUNC_INFO << "empty album name";
         return 0;
     }
 
-    if( m_lastartid == artistid && m_lastalb == name_orig )
+    if ( m_lastartid == artistid && m_lastalb == name_orig )
         return m_lastalbid;
 
     int id = 0;
@@ -370,33 +367,35 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( artistid );
     query.addBindValue( sortname );
     query.exec();
-    if( query.next() )
+    if ( query.next() )
     {
         id = query.value( 0 ).toInt();
     }
-    if( id )
+    if ( id )
     {
         m_lastalb = name_orig;
         m_lastalbid = id;
         return id;
     }
 
-    // not found, insert it.
-    query.prepare( "INSERT INTO album(id,artist,name,sortname) VALUES(NULL,?,?,?)" );
-    query.addBindValue( artistid );
-    query.addBindValue( name_orig );
-    query.addBindValue( sortname );
-    if( !query.exec() )
+    if ( autoCreate )
     {
-        tDebug() << "Failed to insert album: " << name_orig ;
-        return 0;
+        // not found, insert it.
+        query.prepare( "INSERT INTO album(id,artist,name,sortname) VALUES(NULL,?,?,?)" );
+        query.addBindValue( artistid );
+        query.addBindValue( name_orig );
+        query.addBindValue( sortname );
+        if( !query.exec() )
+        {
+            tDebug() << "Failed to insert album:" << name_orig;
+            return 0;
+        }
+
+        id = query.lastInsertId().toInt();
+        m_lastalb = name_orig;
+        m_lastalbid = id;
     }
 
-    id = query.lastInsertId().toInt();
-    //m_albumcache[sortname]=id;
-    isnew = true;
-    m_lastalb = name_orig;
-    m_lastalbid = id;
     return id;
 }
 

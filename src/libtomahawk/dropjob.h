@@ -27,6 +27,10 @@
 #include <QStringList>
 #include <QMimeData>
 
+namespace Tomahawk {
+class DropJobNotifier;
+}
+
 
 class DLLEXPORT DropJob : public QObject
 {
@@ -69,6 +73,14 @@ public:
      * \param action What action is requested from the content, if not all data types support all actions
      */
     static bool acceptsMimeData( const QMimeData* data, DropJob::DropTypes type = All, DropAction action = Append );
+
+    /**
+     * Return if the drop is primarily of the given type. Does not auto-convert (e.g. if the drop is of type playlist,
+     *  even thougha playlist can be converted into tracks, this will return true only for the Playlist drop type).
+     *
+     * TODO Only implemented for Playlist atm. Extend when you need it.
+     */
+    static bool isDropType( DropJob::DropType desired, const QMimeData* data );
 
     static QStringList mimeTypes();
 
@@ -130,6 +142,8 @@ private:
     bool m_top10;
     DropTypes m_dropTypes;
     DropAction m_dropAction;
+
+    Tomahawk::DropJobNotifier* m_dropJob;
 
     QList< Tomahawk::query_ptr > m_resultList;
 

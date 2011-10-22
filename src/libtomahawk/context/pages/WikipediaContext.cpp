@@ -28,7 +28,7 @@ WikipediaContext::setQuery( const Tomahawk::query_ptr& query )
         return;
 
     m_query = query;
-    webView()->load( QString( "http://en.wikipedia.org/w/index.php?printable=yes&title=%1" ).arg( query->artist() ) );
+    webView()->load( QString( "http://en.wikipedia.org/w/index.php?useformat=mobile&title=%1" ).arg( query->artist() ) );
 }
 
 

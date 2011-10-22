@@ -62,6 +62,9 @@
 namespace TomahawkUtils
 {
 
+
+static int s_headerHeight = 0;
+
 #ifdef Q_WS_MAC
 QString
 appSupportFolderPath()
@@ -445,8 +448,8 @@ unmarginLayout( QLayout* layout )
 }
 
 
-QWeakPointer< QNetworkAccessManager > s_nam;
-NetworkProxyFactory* s_proxyFactory = 0;
+static QWeakPointer< QNetworkAccessManager > s_nam;
+static NetworkProxyFactory* s_proxyFactory = 0;
 
 
 QList< QNetworkProxy >
@@ -649,5 +652,42 @@ crash()
     volatile int* a = (int*)(NULL);
     *a = 1;
 }
+
+int
+headerHeight()
+{
+    return s_headerHeight;
+}
+
+void
+setHeaderHeight( int height )
+{
+    s_headerHeight = height;
+}
+
+// taken from util/fileutils.cpp in kdevplatform
+bool
+removeDirectory( const QString& dir )
+{
+    const QDir aDir(dir);
+
+    tLog() << "Deleting DIR:" << dir;
+    bool has_err = false;
+    if (aDir.exists()) {
+        foreach(const QFileInfo& entry, aDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks)) {
+            QString path = entry.absoluteFilePath();
+            if (entry.isDir()) {
+                has_err = !removeDirectory(path) || has_err;
+            } else if (!QFile::remove(path)) {
+                has_err = true;
+            }
+        }
+        if (!aDir.rmdir(aDir.absolutePath())) {
+            has_err = true;
+        }
+    }
+    return !has_err;
+}
+
 
 } // ns

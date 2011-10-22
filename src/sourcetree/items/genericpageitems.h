@@ -38,6 +38,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual QIcon icon() const;
     virtual int peerSortValue() const { return m_sortValue; } // How to sort relative to peers in the tree.
+    virtual bool isBeingPlayed() const;
 
     void setText( const QString& text );
     void setSortValue( int value ) { m_sortValue = value; }

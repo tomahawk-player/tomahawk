@@ -42,12 +42,9 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
-    enum ScannerMode { Dirs, Files };
     QStringList scannerPaths(); /// QDesktopServices::MusicLocation by default
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
-    ScannerMode scannerMode() const;
-    void setScannerMode( ScannerMode mode );
     uint scannerTime() const;
     void setScannerTime( uint time );
     uint infoSystemCacheVersion() const;

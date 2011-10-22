@@ -130,14 +130,14 @@ AudioEngine::play()
     {
         m_mediaObject->play();
         emit resumed();
-        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
         trackInfo["title"] = m_currentTrack->track();
         trackInfo["artist"] = m_currentTrack->artist()->name();
         trackInfo["album"] = m_currentTrack->album()->name();
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
     }
     else
         next();
@@ -336,14 +336,14 @@ AudioEngine::sendNowPlayingNotification()
         m_infoSystemConnected = true;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = m_currentTrack->album()->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_aeInfoIdentifier;
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -471,7 +471,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            Tomahawk::InfoSystem::InfoStringHash trackInfo;
             trackInfo["title"] = m_currentTrack->track();
             trackInfo["artist"] = m_currentTrack->artist()->name();
             trackInfo["album"] = m_currentTrack->album()->name();
@@ -482,7 +482,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                 s_aeInfoIdentifier,
                 Tomahawk::InfoSystem::InfoNowPlaying,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
         }
     }
 

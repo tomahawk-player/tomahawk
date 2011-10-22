@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"
+#include "dynamic/GeneratorInterface.h"
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
@@ -36,7 +38,7 @@
 #include "widgets/kbreadcrumbselectionmodel.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <dynamic/GeneratorInterface.h>
+#include <pipeline.h>
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
@@ -53,64 +55,44 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->additionsView->setFrameShape( QFrame::NoFrame );
+    ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout_2->layout() );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
-
+    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
     //set crumb widgets
     SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
 
-    m_crumbModelLeft = new QStandardItemModel(this);
+    m_crumbModelLeft = new QStandardItemModel( this );
 
-    ui->breadCrumbLeft->setButtonFactory(crumbFactory);
-    ui->breadCrumbLeft->setModel(m_crumbModelLeft);
+    ui->breadCrumbLeft->setButtonFactory( crumbFactory );
+    ui->breadCrumbLeft->setModel( m_crumbModelLeft );
     ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    //ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
-    ui->breadCrumbLeft->setUseAnimation(true);
+    ui->breadCrumbLeft->setUseAnimation( true );
 
-    connect(ui->breadCrumbLeft, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(leftCrumbIndexChanged(QModelIndex)));
-
-    /*ui->breadCrumbRight->setButtonFactory(crumbFactory);
-    ui->breadCrumbRight->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    ui->breadCrumbRight->setModel(m_crumbModelLeft);
-    ui->breadCrumbRight->setUseAnimation(true);*/
-
-
-    m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
-    m_tracksModel->setStyle( TrackModel::Short );
+    connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->tracksViewLeft->overlay()->setEnabled( false );
-    ui->tracksViewLeft->setTrackModel( m_tracksModel );
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
-    m_artistsModel = new TreeModel( this );
-    m_artistsModel->setColumnStyle( TreeModel::TrackOnly );
+    TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
+    artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    artistsProxy->setDynamicSortFilter( true );
 
-
-    m_artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
-    m_artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
-    m_artistsProxy->setDynamicSortFilter( true );
-
-    ui->artistsViewLeft->setProxyModel( m_artistsProxy );
-    ui->artistsViewLeft->setTreeModel( m_artistsModel );
+    ui->artistsViewLeft->setProxyModel( artistsProxy );
     ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
     ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-
-    m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
-
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
-
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
-
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -118,7 +100,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
     QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
@@ -129,30 +111,46 @@ WhatsHotWidget::~WhatsHotWidget()
 }
 
 
+bool
+WhatsHotWidget::isBeingPlayed() const
+{
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->playlistInterface() )
+        return true;
+
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
+        return true;
+
+    return false;
+}
+
+bool
+WhatsHotWidget::jumpToCurrentTrack()
+{
+    if ( ui->artistsViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->tracksViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    return false;
+}
+
+
 void
 WhatsHotWidget::fetchData()
 {
-    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    Tomahawk::InfoSystem::InfoStringHash artistInfo;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = QVariantMap();
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
-
-
-void
-WhatsHotWidget::checkQueries()
-{
-    m_timer->stop();
-    m_tracksModel->ensureResolved();
-}
-
 
 void
 WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
@@ -164,6 +162,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
     tDebug( LOGVERBOSE ) << "WhatsHot: got something...";
     QVariantMap returnedData = output.toMap();
+    qDebug() << "WhatsHot::" << returnedData;
     switch ( requestData.type )
     {
         case InfoSystem::InfoChartCapabilities:
@@ -179,12 +178,11 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 tDebug( LOGVERBOSE ) << "WhatsHot:: appending" << childItem->text();
                 rootItem->appendRow(childItem);
             }
+
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
+
             //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
-            //HACK ALERT - we want the second crumb to expand right away, so we
-            //force it here. We should find a more elegant want to do this
-            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0));
             break;
         }
         case InfoSystem::InfoChart:
@@ -195,28 +193,66 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             if( !returnedData.contains(type) )
                 break;
             const QString side = requestData.customData["whatshot_side"].toString();
+            const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
+            m_queuedFetches.remove( chartId );
             tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" )
             {
-                setLeftViewArtists();
                 const QStringList artists = returnedData["artists"].toStringList();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got artists! " << artists.size();
-                m_artistsModel->clear();
+
+                TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
+                artistsModel->setColumnStyle( TreeModel::TrackOnly );
                 foreach ( const QString& artist, artists )
-                    m_artistsModel->addArtists( Artist::get( artist ) );
+                {
+                    artist_ptr artistPtr = Artist::get( artist, false );
+                    artistsModel->addArtists( artistPtr );
+                }
+
+                m_artistModels[ chartId ] = artistsModel;
+
+                setLeftViewArtists( artistsModel );
+            }
+            else if( type == "albums" )
+            {
+                QList<album_ptr> al;
+                const QList<Tomahawk::InfoSystem::InfoStringHash> albums = returnedData[ "albums" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
+                tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
+
+                AlbumModel* albumModel = new AlbumModel( ui->additionsView );
+                foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, albums )
+                {
+                    qDebug() << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
+                    artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
+                    album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
+                    al << albumPtr;
+
+                }
+                qDebug() << "Adding albums to model";
+                albumModel->addAlbums( al );
+
+                m_albumModels[ chartId ] = albumModel;
+                setLeftViewAlbums( albumModel );
             }
             else if( type == "tracks" )
             {
-                setLeftViewTracks();
-                const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
+                const QList<Tomahawk::InfoSystem::InfoStringHash> tracks = returnedData[ "tracks" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
                 tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
-                m_tracksModel->clear();
-                foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
+
+                PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
+                trackModel->setStyle( TrackModel::Short );
+                QList<query_ptr> tracklist;
+                foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, tracks )
                 {
-                    query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
-                    m_tracksModel->append( query );
+                    query_ptr query = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
+                    tracklist << query;
                 }
+                Pipeline::instance()->resolve( tracklist );
+                trackModel->append( tracklist );
+
+                m_trackModels[ chartId ] = trackModel;
+                setLeftViewTracks( trackModel );
             }
             else
             {
@@ -242,27 +278,62 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
-    QStandardItem* item = m_crumbModelLeft->itemFromIndex(index);
+    QStandardItem* item = m_crumbModelLeft->itemFromIndex( index );
     if( !item )
         return;
     if( !item->data().isValid() )
         return;
 
 
+    QList<QModelIndex> indexes;
+    while ( index.parent().isValid() )
+    {
+        indexes.prepend(index);
+        index = index.parent();
+    }
+
+
     const QString chartId = item->data().toString();
 
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    criteria.insert("chart_id", chartId);
+    if ( m_artistModels.contains( chartId ) )
+    {
+        setLeftViewArtists( m_artistModels[ chartId ] );
+        return;
+    }
+    else if ( m_albumModels.contains( chartId ) )
+    {
+        setLeftViewAlbums( m_albumModels[ chartId ] );
+        return;
+    }
+    else if ( m_trackModels.contains( chartId ) )
+    {
+        setLeftViewTracks( m_trackModels[ chartId ] );
+        return;
+    }
+
+    if ( m_queuedFetches.contains( chartId ) )
+    {
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria.insert( "chart_id", chartId );
+    /// Remember to lower the source!
+    criteria.insert( "chart_source",  index.data().toString().toLower() );
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     QVariantMap customData;
-    customData.insert("whatshot_side", "left");
+    customData.insert( "whatshot_side", "left" );
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = customData;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
 
     requestData.type = Tomahawk::InfoSystem::InfoChart;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    qDebug() << "Making infosystem request for chart of type:" <<chartId;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+
+    m_queuedFetches.insert( chartId );
 }
 
 
@@ -283,57 +354,74 @@ WhatsHotWidget::changeEvent( QEvent* e )
 
 
 QStandardItem*
-WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data)
+WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
 {
     Q_UNUSED( parentItem );
-    tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
+//     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem(label);
-    if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
+
+    if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
-        QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
-        foreach( Tomahawk::InfoSystem::Chart chart, charts)
+        QList< Tomahawk::InfoSystem::InfoStringHash > charts = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+        foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
-            QStandardItem *childItem= new QStandardItem(chart.label);
-            childItem->setData(chart.id);
-            sourceItem->appendRow(childItem);
+            QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
+            childItem->setData( chart[ "id" ] );
+            sourceItem->appendRow( childItem );
         }
-    } else if( data.canConvert<QVariantMap>() )
+    }
+    else if ( data.canConvert<QVariantMap>() )
     {
         QVariantMap dataMap = data.toMap();
-        foreach(const QString childLabel,dataMap.keys())
+        foreach ( const QString childLabel,dataMap.keys() )
         {
             QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
-            sourceItem->appendRow(childItem);
+            sourceItem->appendRow( childItem );
         }
-    } else if ( data.canConvert<QVariantList>() )
+    }
+    else if ( data.canConvert<QVariantList>() )
     {
         QVariantList dataList = data.toList();
 
-        foreach(const QVariant value, dataList)
+        foreach ( const QVariant value, dataList )
         {
+            qDebug() << "CREATED:" << value.toString();
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
         }
     }
     else
     {
-        QStandardItem *childItem= new QStandardItem(data.toString());
-        sourceItem->appendRow(childItem);
+        QStandardItem *childItem= new QStandardItem( data.toString() );
+        sourceItem->appendRow( childItem );
     }
     return sourceItem;
 }
 
 
 void
-WhatsHotWidget::setLeftViewArtists()
+WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
 {
-    ui->stackLeft->setCurrentIndex(1);
+    ui->additionsView->setAlbumModel( model );
+    ui->additionsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    ui->stackLeft->setCurrentIndex( 2 );
 }
 
 
 void
-WhatsHotWidget::setLeftViewTracks()
+WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 {
-    ui->stackLeft->setCurrentIndex(0);
+    ui->artistsViewLeft->setTreeModel( model );
+    ui->artistsViewLeft->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    ui->stackLeft->setCurrentIndex( 1 );
+}
+
+
+void
+WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
+{
+    ui->tracksViewLeft->setPlaylistModel( model );
+    ui->tracksViewLeft->proxyModel()->sort( -1 );
+    ui->stackLeft->setCurrentIndex( 0 );
 }

@@ -20,7 +20,6 @@
 
 #include <QThread>
 #include <QCoreApplication>
-#include <QFileSystemWatcher>
 #include <QTimer>
 
 #include "musicscanner.h"
@@ -29,7 +28,7 @@
 #include "libtomahawk/sourcelist.h"
 
 #include "database/database.h"
-#include "database/databasecommand_dirmtimes.h"
+#include "database/databasecommand_filemtimes.h"
 #include "database/databasecommand_deletefiles.h"
 
 #include "utils/logger.h"
@@ -136,30 +135,39 @@ ScanManager::runScan( bool manualFull )
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( !manualFull )
+    if ( manualFull )
     {
-        runDirScan( TomahawkSettings::instance()->scannerPaths(), false );
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
 
-    DatabaseCommand_DirMtimes *cmd = new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() );
-    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
-                          SLOT( mtimesDeleted( QMap< QString, unsigned int > ) ) );
+    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
+    connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
+                SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
 
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );   
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
 }
 
 
 void
-ScanManager::mtimesDeleted( QMap< QString, unsigned int > returnedMap )
+ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes )
 {
-    Q_UNUSED( returnedMap );
-    qDebug() << Q_FUNC_INFO;
-    DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-    connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                          SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+    if ( !mtimes.isEmpty() && TomahawkSettings::instance()->scannerPaths().isEmpty() )
+    {
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        return;
+    }
     
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    runDirScan();
 }
 
 
@@ -168,30 +176,26 @@ ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_
 {
     Q_UNUSED( files );
     Q_UNUSED( collection );
-    runDirScan( TomahawkSettings::instance()->scannerPaths(), true );
+    if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
+        runDirScan();
 }
 
 
 void
-ScanManager::runDirScan( const QStringList& paths, bool manualFull )
+ScanManager::runDirScan()
 {
     qDebug() << Q_FUNC_INFO;
 
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( paths.isEmpty() )
-    {
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() ) ) );
-        return;
-    }
-
+    QStringList paths = TomahawkSettings::instance()->scannerPaths();
+    
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_scanTimer->stop();
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, manualFull ? TomahawkSettings::Dirs : TomahawkSettings::instance()->scannerMode() ) );
+        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );

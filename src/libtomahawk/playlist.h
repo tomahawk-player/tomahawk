@@ -28,6 +28,7 @@
 #include "typedefs.h"
 #include "result.h"
 #include "playlistinterface.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "query.h"
 
 #include "dllmacro.h"
@@ -36,9 +37,10 @@ class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
-
 namespace Tomahawk
 {
+
+class PlaylistUpdaterInterface;
 
 class DLLEXPORT PlaylistEntry : public QObject
 {
@@ -196,6 +198,10 @@ public:
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
+    QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
+    void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
+    PlaylistUpdaterInterface* updater() const { return m_updater; }
+
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
@@ -222,7 +228,6 @@ signals:
     void sourceTrackCountChanged( unsigned int tracks );
 
     void nextTrackReady();
-
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
@@ -267,7 +272,6 @@ protected:
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
 
-    QList<plentry_ptr> addEntriesInternal( const QList<Tomahawk::query_ptr>& queries );
 
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
@@ -293,6 +297,8 @@ private:
     QList< plentry_ptr > m_entries;
 
     QQueue<RevisionQueueItem> m_revisionQueue;
+
+    PlaylistUpdaterInterface* m_updater;
 
     bool m_locallyChanged;
     bool m_deleted;

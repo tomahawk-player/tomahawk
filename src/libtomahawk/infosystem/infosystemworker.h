@@ -70,13 +70,12 @@ private slots:
 private:
 
     void checkFinished( const QString &target );
+    QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
     QMultiMap< qint64, uint > m_timeRequestMapper;
     QHash< uint, bool > m_requestSatisfiedMap;
     QHash< uint, InfoRequestData* > m_savedRequestMap;
-    
-    QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     // For now, statically instantiate plugins; this is just somewhere to keep them
     QList< InfoPluginPtr > m_plugins;

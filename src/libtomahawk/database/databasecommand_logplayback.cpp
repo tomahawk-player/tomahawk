@@ -88,7 +88,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
     qDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid;
     query.bindValue( 0, srcid );
 
-    bool autoCreate = true;
+    // If there's no artist, becuase it's a resolver result with bad metadata for example, don't save it
+    bool autoCreate = m_artist.isEmpty();
     int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;

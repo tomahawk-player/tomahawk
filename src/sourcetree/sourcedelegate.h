@@ -63,7 +63,7 @@ private:
     QMimeData *m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
     QMap< QModelIndex, AnimationHelper* > m_expandedMap;
-    QPixmap m_headphonesOn, m_headphonesOff;
+    QPixmap m_headphonesOn, m_headphonesOff, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark;
 
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;

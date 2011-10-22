@@ -40,6 +40,7 @@
 
 class PlaylistModel;
 class TreeModel;
+class OverlayButton;
 
 namespace Ui
 {
@@ -75,7 +76,8 @@ public:
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showStatsBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
+    virtual bool isBeingPlayed() const;
 
 signals:
     void longDescriptionChanged( const QString& description );
@@ -90,6 +92,8 @@ private slots:
     void infoSystemFinished( QString target );
 
     void onModeToggle();
+    void onLoadingStarted();
+    void onLoadingFinished();
 
 private:
     Ui::ArtistInfoWidget *ui;
@@ -99,6 +103,8 @@ private:
     TreeModel* m_relatedModel;
     TreeModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
+
+    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;

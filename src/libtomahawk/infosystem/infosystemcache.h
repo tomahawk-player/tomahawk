@@ -43,19 +43,19 @@ public:
     virtual ~InfoSystemCache();
 
 signals:
-    void notInCache( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 public slots:
-    void getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 private slots:
     void pruneTimerFired();
 
 private:
+    void notInCache( QObject *receiver, uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     void doUpgrade( uint oldVersion, uint newVersion );
-    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
+    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
     
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;

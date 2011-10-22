@@ -329,8 +329,9 @@ AlbumModel::getCover( const QModelIndex& index )
     if ( !item || !item->cover.isNull() )
         return false;
 
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo["artist"] = item->album()->artist()->name();
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
+    if ( !item->album()->artist().isNull() )
+        trackInfo["artist"] = item->album()->artist()->name();
     trackInfo["album"] = item->album()->name();
     trackInfo["pptr"] = QString::number( (qlonglong)item );
     m_coverHash.insert( (qlonglong)item, index );
@@ -338,7 +339,7 @@ AlbumModel::getCover( const QModelIndex& index )
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = s_tmInfoIdentifier;
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -364,7 +365,7 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    Tomahawk::InfoSystem::InfoStringHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )

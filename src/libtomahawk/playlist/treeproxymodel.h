@@ -92,6 +92,8 @@ private slots:
     void onFilterArtists( const QList<Tomahawk::artist_ptr>& artists );
     void onFilterAlbums( const QList<Tomahawk::album_ptr>& albums );
 
+    void onModelReset();
+
 private:
     void filterFinished();
     QString textForItem( TreeModelItem* item ) const;

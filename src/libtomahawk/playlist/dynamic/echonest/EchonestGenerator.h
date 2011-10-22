@@ -46,6 +46,7 @@ signals:
    void catalogsUpdated();
 
 private slots:
+    void init();
     void doCatalogUpdate();
     void collectionAttributes( const PairList& );
 
@@ -63,7 +64,7 @@ public:
     virtual QStringList typeSelectors() const;
 };
 
-class EchonestGenerator : public GeneratorInterface
+class DLLEXPORT EchonestGenerator : public GeneratorInterface
 {
     Q_OBJECT
 public:
@@ -84,6 +85,7 @@ public:
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
 
+    static void setupCatalogs();
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
 

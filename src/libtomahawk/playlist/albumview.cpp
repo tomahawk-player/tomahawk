@@ -105,6 +105,7 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( false );
+    onViewChanged(); // Fetch covers if albums were added to model before model was attached to view
 }
 
 

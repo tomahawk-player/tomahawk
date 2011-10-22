@@ -23,9 +23,10 @@
 
 #include "utils/logger.h"
 #include "utils/stylehelper.h"
+#include "utils/tomahawkutils.h"
 
-#define FONT_SIZE 16
 
+static const int s_defaultFontSize = 12;
 
 HeaderLabel::HeaderLabel( QWidget* parent )
     : QLabel( parent )
@@ -33,10 +34,10 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( 12 );
+    f.setPixelSize( s_defaultFontSize );
 
     setFont( f );
-    setFixedHeight( sizeHint().height() + 8 );
+    setFixedHeight( TomahawkUtils::headerHeight() );
 }
 
 
@@ -49,6 +50,12 @@ QSize
 HeaderLabel::sizeHint() const
 {
     return QLabel::sizeHint();
+}
+
+int
+HeaderLabel::defaultFontSize()
+{
+    return s_defaultFontSize;
 }
 
 

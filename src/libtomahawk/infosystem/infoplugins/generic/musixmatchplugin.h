@@ -54,7 +54,7 @@ protected slots:
         Q_UNUSED( data );
     }
 
-virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestId );
         Q_UNUSED( criteria );

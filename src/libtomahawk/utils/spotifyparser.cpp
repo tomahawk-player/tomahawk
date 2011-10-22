@@ -26,12 +26,13 @@
 #include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "dropjobnotifier.h"
+#include "viewmanager.h"
 
 #include <qjson/parser.h>
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
-#include "dropjobnotifier.h"
 
 using namespace Tomahawk;
 
@@ -39,11 +40,11 @@ QPixmap* SpotifyParser::s_pixmap = 0;
 
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
+    , m_limit ( 40 )
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
-    , m_limit ( 40 )
 
 {
     foreach ( const QString& url, Urls )
@@ -52,11 +53,11 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
 
 SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
+    , m_limit ( 40 )
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
-    , m_limit ( 40 )
 {
     lookupUrl( Url );
 }
@@ -298,6 +299,7 @@ SpotifyParser::checkBrowseFinished()
             m_browseJob->setFinished();
 
         if( m_createNewPlaylist && !m_tracks.isEmpty() )
+        {
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
@@ -305,6 +307,9 @@ SpotifyParser::checkBrowseFinished()
                                        m_creator,
                                        false,
                                        m_tracks );
+            connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+            return;
+        }
 
         else if ( m_single && !m_tracks.isEmpty() )
             emit track( m_tracks.first() );
@@ -333,6 +338,16 @@ SpotifyParser::checkTrackFinished()
     }
 
 }
+
+void
+SpotifyParser::playlistCreated()
+{
+
+    ViewManager::instance()->show( m_playlist );
+
+    deleteLater();
+}
+
 
 QPixmap
 SpotifyParser::pixmap() const

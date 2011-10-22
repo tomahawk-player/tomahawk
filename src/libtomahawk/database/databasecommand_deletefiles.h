@@ -28,6 +28,8 @@
 
 #include "dllmacro.h"
 
+#include "utils/logger.h"
+
 class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {
 Q_OBJECT
