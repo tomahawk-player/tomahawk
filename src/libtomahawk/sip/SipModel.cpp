@@ -70,11 +70,11 @@ SipModel::data( const QModelIndex& index, int role ) const
         {
             case Qt::DisplayRole:
             case SipModel::PluginName:
-                return p->accountName();
+                return p->account()->accountServiceName();
             case SipModel::ConnectionStateRole:
                 return p->connectionState();
             case SipModel::HasConfig:
-                return ( p->configWidget() != 0 );
+                return ( p->account()->configurationWidget() != 0 );
             case SipModel::FactoryRole:
                 return false;
             case Qt::DecorationRole:
@@ -82,12 +82,14 @@ SipModel::data( const QModelIndex& index, int role ) const
             case SipModel::SipPluginData:
                 return QVariant::fromValue< QObject* >( p );
             case Qt::CheckStateRole:
-                return SipHandler::instance()->enabledPlugins().contains( p ) ? Qt::Checked : Qt::Unchecked;
+                return p->account()->enabled() ? Qt::Checked : Qt::Unchecked;
             default:
                 return QVariant();
         }
     }
 
+    /*
+     * m_factories never actually populated yet, so just disable
     if( index.parent().isValid() ) { // this is a factory type
         SipPluginFactory* p = m_factories.at( index.row() );
         switch( role )
@@ -104,7 +106,7 @@ SipModel::data( const QModelIndex& index, int role ) const
             return QVariant();
         }
     }
-
+    */
     return QVariant();
 }
 
@@ -119,10 +121,10 @@ SipModel::setData( const QModelIndex& index, const QVariant& value, int role )
         QList< SipPlugin* > plugins = SipHandler::instance()->allPlugins();
         SipPlugin* p = plugins[ index.row() ];
 
-        if( state == Qt::Checked && !SipHandler::instance()->enabledPlugins().contains( p ) ) {
-            SipHandler::instance()->enablePlugin( p );
+        if( state == Qt::Checked && !p->account()->enabled() ) {
+            p->account()->setEnabled( true );
         } else if( state == Qt::Unchecked ) {
-            SipHandler::instance()->disablePlugin( p );
+            p->account()->setEnabled( false );
         }
         dataChanged( index, index );
 
@@ -169,7 +171,7 @@ SipModel::rowCount( const QModelIndex& parent ) const
         return SipHandler::instance()->allPlugins().size() /* TODO inline factories disabled + 1*/;
     if( parent.isValid() && !parent.parent().isValid() ) { // top level item
         if( parent.row() == SipHandler::instance()->allPlugins().count() ) {// last row, this is the factory
-            return m_factories.count();
+            //return m_factories.count();
         }
     }
 

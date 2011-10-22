@@ -174,7 +174,7 @@ void
 SipHandler::loadFromAccountManager()
 {
     QList< Tomahawk::Accounts::Account* > accountList = Tomahawk::Accounts::AccountManager::instance()->getAccounts( Tomahawk::Accounts::SipType );
-    foreach( const Tomahawk::Accounts::Account* account, accountList )
+    foreach( Tomahawk::Accounts::Account* account, accountList )
     {
         SipPlugin* p = account->sipPlugin();
         addSipPlugin( p );
@@ -240,7 +240,7 @@ SipHandler::disconnectPlugin( const QString &pluginName )
 {
     foreach( SipPlugin* sip, m_connectedPlugins )
     {
-        if ( sip->name() == pluginName )
+        if ( sip->account()->accountId() == pluginName )
             sip->disconnectPlugin();
     }
 }
@@ -387,7 +387,7 @@ SipHandler::onError( int code, const QString& msg )
     SipPlugin* sip = qobject_cast< SipPlugin* >( sender() );
     Q_ASSERT( sip );
 
-    qWarning() << "Failed to connect to SIP:" << sip->accountName() << code << msg;
+    qWarning() << "Failed to connect to SIP:" << sip->account()->accountFriendlyName() << code << msg;
 
     if ( code == SipPlugin::AuthError )
     {

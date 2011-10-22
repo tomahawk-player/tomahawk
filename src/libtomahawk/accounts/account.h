@@ -22,6 +22,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
 #include <QtGui/QWidget>
+#include <QtGui/QIcon>
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 

@@ -25,7 +25,6 @@
 #include <QModelIndex>
 #include <QStringList>
 
-class SipPluginFactory;
 class SipPlugin;
 
 class DLLEXPORT SipModel : public QAbstractItemModel
@@ -59,9 +58,6 @@ private slots:
     void pluginAdded( SipPlugin* p );
     void pluginRemoved( SipPlugin* p );
     void pluginStateChanged( SipPlugin* p );
-
-private:
-    QList< SipPluginFactory* > m_factories;
 };
 
 #endif // SIPMODEL_H

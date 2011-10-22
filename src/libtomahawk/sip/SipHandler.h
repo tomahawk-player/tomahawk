@@ -37,16 +37,14 @@ public:
     SipHandler( QObject* parent );
     ~SipHandler();
 
-    QList< SipPluginFactory* > pluginFactories() const;
     QList< SipPlugin* > allPlugins() const;
     QList< SipPlugin* > connectedPlugins() const;
     void loadFromAccountManager();
 
-    void addSipPlugin( SipPlugin* p, bool enable = true );
+    void addSipPlugin( SipPlugin* p );
     void removeSipPlugin( SipPlugin* p );
 
     bool hasPluginType( const QString& factoryId ) const;
-    SipPluginFactory* factoryFromPlugin( SipPlugin* p ) const;
 
     const QPixmap avatar( const QString& name ) const;
     //TODO: implement a proper SipInfo class and maybe attach it to the source
@@ -56,9 +54,6 @@ public:
 public slots:
     void checkSettings();
 
-    void enablePlugin( SipPlugin* p );
-    void disablePlugin( SipPlugin* p );
-
     void connectPlugin( const QString &pluginId = QString() );
     void disconnectPlugin( const QString &pluginId = QString() );
     void connectAll();
@@ -67,13 +62,6 @@ public slots:
     void toggleConnect();
 
     void refreshProxy();
-
-    // create a new plugin of the given name. the name is the value returned in SipPluginFactory::pluginName
-    // be default sip plugins are NOt connected when created
-    SipPlugin* createPlugin( const QString& factoryName );
-    // load a plugin with the given id
-    SipPlugin* loadPlugin( const QString& pluginId );
-    void removePlugin( SipPlugin* p );
 
 signals:
     void connected( SipPlugin* );
@@ -113,7 +101,6 @@ private:
     void loadPluginFactory( const QString& path );
     QString factoryFromId( const QString& pluginId ) const;
 
-    QHash< QString, SipPluginFactory* > m_pluginFactories;
     QList< SipPlugin* > m_allPlugins;
     QList< SipPlugin* > m_enabledPlugins;
     QList< SipPlugin* > m_connectedPlugins;
