@@ -35,9 +35,7 @@
 #include "../sipdllmacro.h"
 #include "sip/SipPlugin.h"
 #include "accounts/account.h"
-#include "tomahawkoauthtwitter.h"
-
-#define MYNAME "SIPTWITTER"
+#include "accounts/twitter/tomahawkoauthtwitter.h"
 
 class SIPDLLEXPORT TwitterSipPlugin : public SipPlugin
 {
@@ -124,11 +122,6 @@ private:
     QHash< QString, QPixmap > m_cachedAvatars;
     QSet<QString> m_keyCache;
     ConnectionState m_state;
-
-    QWeakPointer<TwitterConfigWidget > m_configWidget;
-
-    // for settings access
-    friend class TwitterConfigWidget;
 };
 
 #endif

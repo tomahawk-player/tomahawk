@@ -102,8 +102,10 @@ private slots:
     void onPeerOnline( const QString &peerId );
     void onPeerOffline( const QString &peerId );
 
-private:
+protected:
     Tomahawk::Accounts::Account *m_account;
+    
+private:
     QString m_cachedError;
     QStringList m_peersOnline;
 };

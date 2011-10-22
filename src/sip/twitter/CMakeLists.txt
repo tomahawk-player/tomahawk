@@ -8,18 +8,10 @@ add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( twitterSources
     twittersip.cpp
-    twitterconfigwidget.cpp
-    tomahawkoauthtwitter.cpp
 )
 
 set( twitterHeaders
     twittersip.h
-    twitterconfigwidget.h
-    tomahawkoauthtwitter.h
-)
-
-set( twitterUI
-    twitterconfigwidget.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
@@ -29,8 +21,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 
 qt4_add_resources( RC_SRCS "resources.qrc" )
 qt4_wrap_cpp( twitterMoc ${twitterHeaders} )
-qt4_wrap_ui( twitterUI_H ${twitterUI} )
-add_library( tomahawk_siptwitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} ${RC_SRCS} )
+add_library( tomahawk_siptwitter SHARED ${twitterSources} ${twitterMoc} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

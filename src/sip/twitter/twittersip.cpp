@@ -18,8 +18,6 @@
 
 #include "twittersip.h"
 
-#include "twitterconfigwidget.h"
-
 #include <QtPlugin>
 #include <QDateTime>
 #include <QRegExp>
