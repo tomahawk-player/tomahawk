@@ -32,6 +32,8 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_siptwitter
+    tomahawk_oauth_twitter
+    tomahawk_account_twitter
     ${TOMAHAWK_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QT_LIBRARIES}

@@ -128,7 +128,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
-    setupSipButtons();
+    //setupSipButtons();
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
@@ -309,7 +309,7 @@ SettingsDialog::createIcons()
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
 
-
+/*
 void
 SettingsDialog::setupSipButtons()
 {
@@ -329,7 +329,7 @@ SettingsDialog::setupSipButtons()
 
     connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
 }
-
+*/
 
 void
 SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
@@ -599,7 +599,7 @@ SettingsDialog::resolverConfigClosed( int value )
     }
 }
 
-
+/*
 void
 SettingsDialog::sipItemClicked( const QModelIndex& item )
 {
@@ -814,7 +814,7 @@ SettingsDialog::sipPluginDeleted( bool )
         }
     }
 }
-
+*/
 
 ProxyDialog::ProxyDialog( QWidget *parent )
 : QDialog( parent )

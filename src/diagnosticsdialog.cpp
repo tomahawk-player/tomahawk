@@ -115,9 +115,9 @@ void DiagnosticsDialog::updateLogView()
         }
         log.append(
             QString("  %2 (%1): %3 (%4)\n")
-                .arg(sip->name())
+                .arg(sip->account()->accountServiceName())
                 .arg(sip->friendlyName())
-                .arg(sip->accountName())
+                .arg(sip->account()->accountFriendlyName())
                 .arg(stateString)
         );
 

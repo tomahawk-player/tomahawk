@@ -9,17 +9,23 @@ add_definitions( -DDLLEXPORT_PRO )
 set( twitterAccountSources
     twitteraccount.cpp
     twitterconfigwidget.cpp
-    tomahawkoauthtwitter.cpp
 )
 
 set( twitterAccountHeaders
     twitteraccount.h
     twitterconfigwidget.h
-    tomahawkoauthtwitter.h
 )
 
 set( twitterAccountUI
     twitterconfigwidget.ui
+)
+
+set( tomahawkOAuthTwitterSources
+    tomahawkoauthtwitter.cpp
+)
+
+set( tomahawkOAuthTwitterHeaders
+    tomahawkoauthtwitter.h
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
@@ -27,9 +33,11 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QTWEETLIB_INCLUDE_DIR}
 )
 
-qt4_add_resources( RC_SRCS "resources.qrc" )
+qt4_wrap_cpp( tomahawkOAuthTwitterMoc ${tomahawkOAuthTwitterSources} )
+add_library( tomahawk_oauth_twitter SHARED ${tomahawkOAuthTwitterSources} ${tomahawkOAuthTwitterMoc} )
 qt4_wrap_cpp( twitterAccountMoc ${twitterAccountHeaders} )
 qt4_wrap_ui( twitterAccountUI_H ${twitterAccountUI} )
+qt4_add_resources( RC_SRCS "resources.qrc" )
 add_library( tomahawk_account_twitter SHARED ${twitterAccountUI_H} ${twitterAccountSources} ${twitterAccountMoc} ${RC_SRCS} )
 
 IF( WIN32 )
@@ -40,7 +48,15 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( WIN32 )
 
+target_link_libraries( tomahawk_oauth_twitter
+    ${TOMAHAWK_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
+    ${QT_LIBRARIES}
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+)
+
 target_link_libraries( tomahawk_account_twitter
+    tomahawk_oauth_twitter
     ${TOMAHAWK_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QT_LIBRARIES}
@@ -51,4 +67,5 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
+install( TARGETS tomahawk_oauth_twitter DESTINATION lib${LIB_SUFFIX} )
 install( TARGETS tomahawk_account_twitter DESTINATION lib${LIB_SUFFIX} )

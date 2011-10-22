@@ -37,6 +37,7 @@
 #include <network/servent.h>
 
 #include "utils/logger.h"
+#include "accounts/twitter/tomahawkoauthtwitter.h"
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
@@ -92,13 +93,19 @@ TwitterSipPlugin::connectionState() const
 }
 
 
+void TwitterSipPlugin::checkSettings()
+{
+  //TODO/FIXME: check status and enable/disable?
+}
+
+
 bool
 TwitterSipPlugin::connectPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 
     if ( !m_account->enabled() )
-        return;
+        return false;
     
     m_cachedPeers = m_configuration[ "cachedPeers" ].toHash();
     QStringList peerList = m_cachedPeers.keys();
@@ -134,7 +141,7 @@ TwitterSipPlugin::refreshTwitterAuth()
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
-    m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+    m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if( m_twitterAuth.isNull() )
       return false;
@@ -191,7 +198,7 @@ TwitterSipPlugin::connectAuthVerifyReply( const QTweetUser &user )
         m_isAuthed = true;
         if ( !m_twitterAuth.isNull() )
         {
-            m_configuration[ "screenName" ] = user.screenName;
+            m_configuration[ "screenName" ] = user.screenName();
             syncConfig();
             m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_twitterAuth.data(), this ) );
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );

@@ -89,6 +89,7 @@ private slots:
 #endif
 
     void openResolverConfig( const QString& );
+    /*
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );
     void factoryActionTriggered ( bool );
@@ -96,21 +97,22 @@ private slots:
     void sipContextMenuRequest( const QPoint& );
     void sipPluginDeleted( bool );
     void sipPluginRowDeleted( bool );
-
-    void updateScanOptionsView();
-
+    */
     // dialog slots
     void resolverConfigClosed( int value );
+    /*
     void sipConfigClosed( int value );
     void sipCreateConfigClosed( int value );
-
+    */
+    void updateScanOptionsView();
+    
     void changePage( QListWidgetItem*, QListWidgetItem* );
     void serventReady();
 
 private:
     void createIcons();
-    void setupSipButtons();
-    void handleSipPluginAdded( SipPlugin* p, bool added );
+    //void setupSipButtons();
+    //void handleSipPluginAdded( SipPlugin* p, bool added );
 
     Ui_StackedSettingsDialog* ui;
 

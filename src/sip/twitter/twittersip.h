@@ -72,6 +72,8 @@ public slots:
         Q_UNUSED( msg );
     }
 
+    void checkSettings();
+    
 private slots:
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
@@ -90,16 +92,11 @@ private slots:
     void fetchAvatar( const QString &screenName );
     void avatarUserDataSlot( const QTweetUser &user );
     void profilePicReply();
-
+    
 private:
     inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->syncConfig(); }
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
-    // handle per-plugin config
-    QString twitterOAuthToken() const;
-    void setTwitterOAuthToken( const QString& oauthtoken );
-    QString twitterOAuthTokenSecret() const;
-    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
