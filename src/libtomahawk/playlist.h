@@ -28,6 +28,7 @@
 #include "typedefs.h"
 #include "result.h"
 #include "playlistinterface.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "query.h"
 
 #include "dllmacro.h"
