@@ -40,6 +40,7 @@
 #endif
 
 #include "lastfm/NetworkAccessManager"
+#include "infoplugins/generic/RoviPlugin.h"
 
 namespace Tomahawk
 {
@@ -92,7 +93,9 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr sptr( new ChartsPlugin() );
     m_plugins.append( sptr );
     registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
-
+    InfoPluginPtr roviptr( new RoviPlugin() );
+    m_plugins.append( roviptr );
+    registerInfoTypes( roviptr, roviptr.data()->supportedGetTypes(), roviptr.data()->supportedPushTypes() );
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
@@ -105,7 +108,7 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     registerInfoTypes( fdonotifyptr, fdonotifyptr.data()->supportedGetTypes(), fdonotifyptr.data()->supportedPushTypes() );
     InfoPluginPtr mprisptr( new MprisPlugin() );
     m_plugins.append( mprisptr );
-    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );    
+    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );
     #endif
 
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )

@@ -171,6 +171,7 @@ private:
 
     Tomahawk::collection_ptr m_collection;
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
+    QSet<Tomahawk::InfoSystem::InfoStringHash> m_receivedInfoData;
 };
 
 #endif // ALBUMMODEL_H

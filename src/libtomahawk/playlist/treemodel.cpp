@@ -629,12 +629,13 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
         artistInfo["artist"] = album->artist()->name();
         artistInfo["album"] = album->name();
 
+        m_receivedInfoData.remove( artistInfo );
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
         requestData.customData["rows"] = QVariant( rows );
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData, 0, true );
     }
     else
         Q_ASSERT( false );
@@ -845,6 +846,10 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
         case Tomahawk::InfoSystem::InfoAlbumSongs:
         {
+            if ( m_receivedInfoData.contains( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() ) )
+                break;
+            m_receivedInfoData.insert( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
+
             QVariantMap returnedData = output.value< QVariantMap >();
             QStringList tracks = returnedData[ "tracks" ].toStringList();
             QList<query_ptr> ql;

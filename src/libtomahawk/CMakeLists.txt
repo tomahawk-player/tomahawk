@@ -113,6 +113,7 @@ set( libSources
     infosystem/infoplugins/generic/chartsplugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
+    infosystem/infoplugins/generic/RoviPlugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -342,6 +343,7 @@ set( libHeaders
     infosystem/infoplugins/generic/chartsplugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
     infosystem/infoplugins/generic/musicbrainzPlugin.h
+    infosystem/infoplugins/generic/RoviPlugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
