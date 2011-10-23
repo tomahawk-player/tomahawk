@@ -138,11 +138,9 @@ RoviPlugin::albumLookupFinished()
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     int requestId = reply->property( "requestId" ).toUInt();
 
-    QByteArray data = reply->readAll();
-    qDebug() << "data:" << data;
     QJson::Parser p;
     bool ok;
-    QVariantMap result = p.parse( data, &ok ).toMap();
+    QVariantMap result = p.parse( reply, &ok ).toMap();
 
     if ( !ok || result.isEmpty() || !result.contains( "tracks" ) )
     {
@@ -150,7 +148,6 @@ RoviPlugin::albumLookupFinished()
         emit info( requestId, requestData, QVariant() );
     }
 
-    tDebug() << "Got Rovi results:" << result[ "tracks" ];
     QVariantList tracks = result[ "tracks" ].toList();
     QStringList trackNameList;
     foreach ( const QVariant& track, tracks )
@@ -159,7 +156,6 @@ RoviPlugin::albumLookupFinished()
         if ( trackData.contains( "title" ) )
             trackNameList << trackData[ "title" ].toString();
     }
-    tDebug() << "FOUND TRACK LIST FROM ROVI:" << trackNameList;
 
     QVariantMap returnedData;
     returnedData["tracks"] = trackNameList;
@@ -179,7 +175,7 @@ RoviPlugin::makeRequest( QUrl url )
     url.addQueryItem( "apikey", m_apiKey );
     url.addEncodedQueryItem( "sig", generateSig() );
 
-    qDebug() << "url:" << url.toString();
+//     qDebug() << "url:" << url.toString();
     return m_nam->get( QNetworkRequest( url ) );
 }
 
