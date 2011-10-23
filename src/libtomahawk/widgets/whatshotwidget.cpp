@@ -171,7 +171,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
             tDebug( LOGVERBOSE ) << "WhatsHot:: " << returnedData.keys();
 
-            foreach( const QString label, returnedData.keys() )
+            QVariantMap defaults;
+            if ( returnedData.contains( "defaults" ) )
+                defaults = returnedData.take( "defaults" ).toMap();
+            QString defaultSource = returnedData.take( "defaultSource" ).toString();
+
+            foreach ( const QString label, returnedData.keys() )
             {
                 tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
@@ -179,9 +184,40 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 rootItem->appendRow(childItem);
             }
 
+            // Set the default source
+            // Set the default chart for each source
+            for ( int i = 0; i < rootItem->rowCount(); i++ )
+            {
+                QStandardItem* source = rootItem->child( i, 0 );
+                if ( defaultSource.toLower() == source->text().toLower() )
+                {
+                    source->setData( true, DefaultRole );
+                }
+
+                if ( defaults.contains( source->text().toLower() ) )
+                {
+                    QStringList defaultIndices = defaults[ source->text().toLower() ].toStringList();
+                    QStandardItem* cur = source;
+
+                    foreach( const QString& index, defaultIndices )
+                    {
+                        // Go through the children of the current item, marking the default one as default
+                        for ( int k = 0; k < cur->rowCount(); k++ )
+                        {
+                            if ( cur->child( k, 0 )->text() == index )
+                            {
+//                                 tDebug() << "Found DEFAULT ITEM:" << index;
+                                cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
+                                cur->setData( true, DefaultRole );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
-
             //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
             break;
         }
@@ -368,6 +404,8 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
         {
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ] );
+            if ( chart.value( "default", "" ) == "true")
+                sourceItem->setData( WhatsHotWidget::DefaultRole, true );
             sourceItem->appendRow( childItem );
         }
     }
@@ -386,7 +424,6 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
         foreach ( const QVariant value, dataList )
         {
-            qDebug() << "CREATED:" << value.toString();
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
         }

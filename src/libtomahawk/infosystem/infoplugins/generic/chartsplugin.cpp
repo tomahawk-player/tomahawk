@@ -279,6 +279,7 @@ ChartsPlugin::chartTypes()
         // We'll populate charts with the data from the server
         QVariantMap charts;
         QString chartName;
+        QStringList defaultChain;
         if ( source == "itunes" )
         {
             // Itunes has geographic-area based charts. So we build a breadcrumb of
@@ -292,6 +293,7 @@ ChartsPlugin::chartTypes()
                 const QString geo = chart.value( "geo" ).toString();
                 QString name = chart.value( "name" ).toString();
                 const QString type = chart.value( "type" ).toString();
+                const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
                 QString country;
                 if ( !m_cachedCountries.contains( geo ) )
@@ -321,10 +323,20 @@ ChartsPlugin::chartTypes()
                 c[ "id" ] = id;
                 c[ "label" ] = name;
                 c[ "type" ] = "album";
+                if ( isDefault )
+                    c[ "default" ] = "true";
+
                 QList<InfoStringHash> countryTypeData = countries[ country ][ type ].value< QList< InfoStringHash > >();
                 countryTypeData.append( c );
 
                 countries[ country ].insert( type, QVariant::fromValue< QList< InfoStringHash > >( countryTypeData ) );
+                if ( isDefault )
+                {
+                    defaultChain.clear();
+                    defaultChain.append( country );
+                    defaultChain.append( type );
+                    defaultChain.append( name );
+                }
             }
 
             foreach( const QString& c, countries.keys() )
@@ -344,9 +356,14 @@ ChartsPlugin::chartTypes()
             {
                 const QVariantMap chart = chartObj.toMap();
                 const QString type = chart.value( "type" ).toString();
+                const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
+
                 InfoStringHash c;
                 c[ "id" ] = chart.value( "id" ).toString();
                 c[ "label" ] = chart.value( "name" ).toString();
+                if ( isDefault )
+                    c[ "default" ] = "true";
+
                 if ( type == "Album" )
                 {
                     c[ "type" ] = "album";
@@ -356,6 +373,13 @@ ChartsPlugin::chartTypes()
                 {
                     c[ "type" ] = "tracks";
                     trackCharts.append( c );
+                }
+
+                if ( isDefault )
+                {
+                    defaultChain.clear();
+                    defaultChain.append( type + "s" ); //UGLY but it's plural to the user, see below
+                    defaultChain.append( c[ "label" ] );
                 }
             }
             charts.insert( tr( "Albums" ), QVariant::fromValue< QList< InfoStringHash > >( albumCharts ) );
@@ -369,6 +393,10 @@ ChartsPlugin::chartTypes()
 
         /// Add the possible charts and its types to breadcrumb
 //         qDebug() << "ADDING CHART TYPE TO CHARTS:" << chartName;
+        QVariantMap defaultMap = m_allChartsMap.value( "defaults" ).value< QVariantMap >();
+        defaultMap[ source ] = defaultChain;
+        m_allChartsMap[ "defaults" ] = defaultMap;
+        m_allChartsMap[ "defaultSource" ] = "itunes";
         m_allChartsMap.insert( chartName , QVariant::fromValue< QVariantMap >( charts ) );
 
     }

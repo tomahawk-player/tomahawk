@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOption>
+#include "whatshotwidget.h"
 
 BreadcrumbButtonBase* SiblingCrumbButtonFactory::newButton(QModelIndex index, BreadcrumbBar *parent)
 {
@@ -129,10 +130,16 @@ void SiblingCrumbButton::fillCombo()
 {
     QStringList list;
     int count = breadcrumbBar()->model()->rowCount(m_index.parent());
-    for(int i = 0; i < count; ++i) {
+    int defaultIndex = -1;
+    for ( int i = 0; i < count; ++i )
+    {
         QModelIndex sibling = m_index.sibling(i,0);
-        if( sibling.isValid() )
+        if ( sibling.isValid() )
+        {
             list << sibling.data().toString();
+            if ( sibling.data( WhatsHotWidget::DefaultRole ).toBool() )
+                defaultIndex = i;
+        }
     }
 
     if ( m_combo->count() && list.count() )
@@ -148,7 +155,13 @@ void SiblingCrumbButton::fillCombo()
 
     m_combo->clear();
     m_combo->addItems(list);
-    m_combo->setCurrentIndex( m_combo->findText(text()));
+    if ( defaultIndex == -1 )
+        m_combo->setCurrentIndex( m_combo->findText(text()));
+    else
+    {
+        m_combo->setCurrentIndex( defaultIndex );
+        comboboxActivated( defaultIndex );
+    }
     m_combo->adjustSize();
 }
 
