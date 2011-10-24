@@ -111,6 +111,7 @@ set( libSources
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
+    infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
     infosystem/infoplugins/generic/RoviPlugin.cpp
@@ -341,6 +342,7 @@ set( libHeaders
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
     infosystem/infoplugins/generic/chartsplugin.h
+    infosystem/infoplugins/generic/spotifyPlugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
     infosystem/infoplugins/generic/musicbrainzPlugin.h
     infosystem/infoplugins/generic/RoviPlugin.h

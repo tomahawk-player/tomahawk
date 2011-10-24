@@ -26,6 +26,7 @@
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/chartsplugin.h"
+#include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "utils/tomahawkutils.h"
@@ -96,6 +97,9 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr roviptr( new RoviPlugin() );
     m_plugins.append( roviptr );
     registerInfoTypes( roviptr, roviptr.data()->supportedGetTypes(), roviptr.data()->supportedPushTypes() );
+    InfoPluginPtr spotptr( new SpotifyPlugin() );
+    m_plugins.append( spotptr );
+    registerInfoTypes( spotptr, spotptr.data()->supportedGetTypes(), spotptr.data()->supportedPushTypes() );
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
