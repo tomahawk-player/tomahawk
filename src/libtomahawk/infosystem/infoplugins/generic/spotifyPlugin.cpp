@@ -172,7 +172,7 @@ SpotifyPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria,
         case InfoChart:
         {
             /// Fetch the chart, we need source and id
-            QUrl url = QUrl( QString( CHART_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
+            QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
