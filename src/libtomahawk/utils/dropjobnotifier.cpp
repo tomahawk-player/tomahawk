@@ -51,8 +51,8 @@ DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJo
 
 DropJobNotifier::DropJobNotifier( QPixmap pixmap, DropJob::DropType type )
     : JobStatusItem()
-    , m_pixmap( pixmap )
     , m_job( 0 )
+    , m_pixmap( pixmap )
 {
     init( type );
 }

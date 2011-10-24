@@ -74,8 +74,8 @@ InfoSystem::InfoSystem( QObject *parent )
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
 
-    connect( m_cache.data(), SIGNAL( info( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             m_worker.data(), SLOT( infoSlot( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+    connect( m_cache.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             m_worker.data(), SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
 
     connect( m_worker.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              this,       SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );

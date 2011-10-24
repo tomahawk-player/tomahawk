@@ -93,15 +93,15 @@ ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
 
 void
-ChartsPlugin::dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    emit info( requestId, requestData, QVariant() );
+    emit info( requestData, QVariant() );
     return;
 }
 
 
 void
-ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
@@ -116,7 +116,7 @@ ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
             /// We need something to check if the request is actually ment to go to this plugin
             if ( !hash.contains( "chart_source" ) )
             {
-                dataError( requestId, requestData );
+                dataError( requestData );
                 break;
             }
             else
@@ -131,19 +131,19 @@ ChartsPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
 
                 if( !foundSource )
                 {
-                    dataError( requestId, requestData );
+                    dataError( requestData );
                     break;
                 }
 
             }
-            fetchChart( requestId, requestData );
+            fetchChart( requestData );
             break;
 
         case InfoChartCapabilities:
-            fetchChartCapabilities( requestId, requestData );
+            fetchChartCapabilities( requestData );
             break;
         default:
-            dataError( requestId, requestData );
+            dataError( requestData );
     }
 }
 
@@ -158,12 +158,12 @@ ChartsPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
 
 
 void
-ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
 
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
@@ -173,7 +173,7 @@ ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData 
     /// Each request needs to contain both a id and source
     if ( !hash.contains( "chart_id" ) && !hash.contains( "chart_source" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
 
     }
@@ -181,29 +181,29 @@ ChartsPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData 
     criteria["chart_id"] = hash["chart_id"];
     criteria["chart_source"] = hash["chart_source"];
 
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
-ChartsPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
-ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !m_nam.data() )
     {
         tLog() << "Have a null QNAM, uh oh";
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
 
@@ -217,7 +217,6 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
@@ -230,22 +229,18 @@ ChartsPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             if ( m_chartsFetchJobs > 0 )
             {
                 qDebug() << Q_FUNC_INFO << "InfoChartCapabilities still fetching!";
-                m_cachedRequests.append( QPair< uint, InfoRequestData >( requestId, requestData ) );
+                m_cachedRequests.append( requestData );
                 return;
             }
 
-            emit info(
-                requestId,
-                requestData,
-                m_allChartsMap
-            );
+            emit info( requestData, m_allChartsMap );
             return;
         }
 
         default:
         {
             tLog() << Q_FUNC_INFO << "Couldn't figure out what to do with this type of request after cache miss";
-            emit info( requestId, requestData, QVariant() );
+            emit info( requestData, QVariant() );
             return;
         }
     }
@@ -408,10 +403,9 @@ ChartsPlugin::chartTypes()
     m_chartsFetchJobs--;
     if ( !m_cachedRequests.isEmpty() && m_chartsFetchJobs == 0 )
     {
-        QPair< uint, InfoRequestData > request;
-        foreach ( request, m_cachedRequests )
+        foreach ( InfoRequestData request, m_cachedRequests )
         {
-            emit info( request.first, request.second, m_allChartsMap );
+            emit info( request, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }
@@ -526,11 +520,7 @@ ChartsPlugin::chartReturned()
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
 
-        emit info(
-            reply->property( "requestId" ).toUInt(),
-            requestData,
-            returnedData
-        );
+        emit info( requestData, returnedData );
         // TODO update cache
     }
     else

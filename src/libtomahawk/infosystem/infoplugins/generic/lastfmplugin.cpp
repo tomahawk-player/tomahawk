@@ -123,43 +123,43 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
 
 void
-LastFmPlugin::dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    emit info( requestId, requestData, QVariant() );
+    emit info( requestData, QVariant() );
     return;
 }
 
 
 void
-LastFmPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
         case InfoArtistImages:
-            fetchArtistImages( requestId, requestData );
+            fetchArtistImages( requestData );
             break;
 
         case InfoAlbumCoverArt:
-            fetchCoverArt( requestId, requestData );
+            fetchCoverArt( requestData );
             break;
 
         case InfoArtistSimilars:
-            fetchSimilarArtists( requestId, requestData );
+            fetchSimilarArtists( requestData );
             break;
 
         case InfoArtistSongs:
-            fetchTopTracks( requestId, requestData );
+            fetchTopTracks( requestData );
             break;
 
         case InfoChart:
-            fetchChart( requestId, requestData );
+            fetchChart( requestData );
             break;
 
         case InfoChartCapabilities:
-            fetchChartCapabilities( requestId, requestData );
+            fetchChartCapabilities( requestData );
             break;
         default:
-            dataError( requestId, requestData );
+            dataError( requestData );
     }
 }
 
@@ -267,95 +267,95 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 
 
 void
-LastFmPlugin::fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
 
 void
-LastFmPlugin::fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
 void
-LastFmPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
     if ( !hash.contains( "chart_id" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     } else {
         criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
-LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
-LastFmPlugin::fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) || !hash.contains( "album" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
@@ -363,39 +363,39 @@ LastFmPlugin::fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestDa
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
 
 void
-LastFmPlugin::fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchArtistImages( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
 
 void
-LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !lastfm::nam() )
     {
         tLog() << "Have a null QNAM, uh oh";
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
 
@@ -407,14 +407,14 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
              /// We need something to check if the request is actually ment to go to this plugin
             if ( !hash.contains( "chart_source" ) )
             {
-                dataError( requestId, requestData );
+                dataError( requestData );
                 break;
             }
             else
             {
                 if( "last.fm" != hash["chart_source"] )
                 {
-                    dataError( requestId, requestData );
+                    dataError( requestData );
                     break;
                 }
 
@@ -425,7 +425,6 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             args["method"] = criteria["chart_id"];
             args["limit"] = "100";
             QNetworkReply* reply = lastfm::ws::get(args);
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
@@ -466,11 +465,7 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
 
             tDebug() << "LASTFM RETURNING CHART LIST!";
-            emit info(
-                requestId,
-                requestData,
-                result
-            );
+            emit info( requestData, result );
             return;
         }
 
@@ -478,7 +473,6 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         {
             lastfm::Artist a( criteria["artist"] );
             QNetworkReply* reply = a.getSimilar();
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( similarArtistsReturned() ) );
@@ -489,7 +483,6 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         {
             lastfm::Artist a( criteria["artist"] );
             QNetworkReply* reply = a.getTopTracks();
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( topTracksReturned() ) );
@@ -504,7 +497,6 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
             QNetworkReply* reply = lastfm::nam()->get( req );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
@@ -518,7 +510,6 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ) );
             QNetworkReply* reply = lastfm::nam()->get( req );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
@@ -528,7 +519,7 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         default:
         {
             tLog() << "Couldn't figure out what to do with this type of request after cache miss";
-            emit info( requestId, requestData, QVariant() );
+            emit info( requestData, QVariant() );
             return;
         }
     }
@@ -553,11 +544,7 @@ LastFmPlugin::similarArtistsReturned()
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-    emit info(
-        reply->property( "requestId" ).toUInt(),
-        requestData,
-        returnedData
-    );
+    emit info( requestData, returnedData );
 
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -609,11 +596,7 @@ LastFmPlugin::chartReturned()
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-    emit info(
-        reply->property( "requestId" ).toUInt(),
-        requestData,
-        returnedData
-    );
+    emit info( requestData, returnedData );
     // TODO update cache
 }
 
@@ -629,11 +612,7 @@ LastFmPlugin::topTracksReturned()
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-    emit info(
-        reply->property( "requestId" ).toUInt(),
-        requestData,
-        returnedData
-    );
+    emit info( requestData, returnedData );
 
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -653,7 +632,7 @@ LastFmPlugin::coverArtReturned()
         if ( ba.isNull() || !ba.length() )
         {
             tLog() << Q_FUNC_INFO << "Uh oh, null byte array";
-            emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
             return;
         }
         foreach ( const QUrl& url, m_badUrls )
@@ -668,11 +647,7 @@ LastFmPlugin::coverArtReturned()
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-        emit info(
-            reply->property( "requestId" ).toUInt(),
-            requestData,
-            returnedData
-        );
+        emit info( requestData, returnedData );
 
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -685,13 +660,12 @@ LastFmPlugin::coverArtReturned()
         if ( !lastfm::nam() )
         {
             tLog() << Q_FUNC_INFO << "Uh oh, nam is null";
-            emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
             return;
         }
         // Follow HTTP redirect
         QNetworkRequest req( redir );
         QNetworkReply* newReply = lastfm::nam()->get( req );
-        newReply->setProperty( "requestId", reply->property( "requestId" ) );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
     }
@@ -711,7 +685,7 @@ LastFmPlugin::artistImagesReturned()
         if ( ba.isNull() || !ba.length() )
         {
             tLog() << Q_FUNC_INFO << "Uh oh, null byte array";
-            emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
             return;
         }
         foreach ( const QUrl& url, m_badUrls )
@@ -725,7 +699,7 @@ LastFmPlugin::artistImagesReturned()
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-        emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
+        emit info( requestData, returnedData );
 
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -737,13 +711,12 @@ LastFmPlugin::artistImagesReturned()
         if ( !lastfm::nam() )
         {
             tLog() << Q_FUNC_INFO << "Uh oh, nam is null";
-            emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
             return;
         }
         // Follow HTTP redirect
         QNetworkRequest req( redir );
         QNetworkReply* newReply = lastfm::nam()->get( req );
-        newReply->setProperty( "requestId", reply->property( "requestId" ) );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
     }

@@ -77,15 +77,15 @@ SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
 
 void
-SpotifyPlugin::dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+SpotifyPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    emit info( requestId, requestData, QVariant() );
+    emit info( requestData, QVariant() );
     return;
 }
 
 
 void
-SpotifyPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
@@ -98,18 +98,18 @@ SpotifyPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData re
         case InfoChart:
             if ( !hash.contains( "chart_source" ) || hash["chart_source"] != "spotify" )
             {
-                dataError( requestId, requestData );
+                dataError( requestData );
                 break;
             }
             qDebug() << Q_FUNC_INFO << "InfoCHart req for" << hash["chart_source"];
-            fetchChart( requestId, requestData );
+            fetchChart( requestData );
             break;
 
         case InfoChartCapabilities:
-            fetchChartCapabilities( requestId, requestData );
+            fetchChartCapabilities( requestData );
             break;
         default:
-            dataError( requestId, requestData );
+            dataError( requestData );
     }
 }
 
@@ -123,45 +123,45 @@ SpotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoT
 }
 
 void
-SpotifyPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
     if ( !hash.contains( "chart_id" ) )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     } else {
         criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 void
-SpotifyPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        dataError( requestId, requestData );
+        dataError( requestData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    emit getCachedInfo( requestId, criteria, 0, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
-SpotifyPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !m_nam.data() )
     {
         tLog() << Q_FUNC_INFO << "Have a null QNAM, uh oh";
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
 
@@ -176,7 +176,6 @@ SpotifyPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria,
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
@@ -186,18 +185,14 @@ SpotifyPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria,
         case InfoChartCapabilities:
         {
         qDebug() << Q_FUNC_INFO << "EMITTING CHART" << m_allChartsMap;
-            emit info(
-                requestId,
-                requestData,
-                m_allChartsMap
-            );
+            emit info( requestData, m_allChartsMap );
             return;
         }
 
         default:
         {
             tLog() << Q_FUNC_INFO << "Couldn't figure out what to do with this type of request after cache miss";
-            emit info( requestId, requestData, QVariant() );
+            emit info( requestData, QVariant() );
             return;
         }
     }
@@ -381,11 +376,7 @@ SpotifyPlugin::chartReturned()
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
 
-        emit info(
-            reply->property( "requestId" ).toUInt(),
-            requestData,
-            returnedData
-        );
+        emit info( requestData, returnedData );
 
     }
     else

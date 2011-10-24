@@ -106,6 +106,8 @@ namespace TomahawkUtils
     DLLEXPORT void setHeaderHeight( int height );
 
     DLLEXPORT bool removeDirectory( const QString& dir );
+
+    DLLEXPORT quint64 infosystemRequestId();
 }
 
 #endif // TOMAHAWKUTILS_H

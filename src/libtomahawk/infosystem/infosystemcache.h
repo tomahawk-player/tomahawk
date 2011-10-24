@@ -43,17 +43,17 @@ public:
     virtual ~InfoSystemCache();
 
 signals:
-    void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 public slots:
-    void getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
     void updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 private slots:
     void pruneTimerFired();
 
 private:
-    void notInCache( QObject *receiver, uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     void doUpgrade( uint oldVersion, uint newVersion );
     const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
     

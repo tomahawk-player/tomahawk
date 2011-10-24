@@ -60,7 +60,7 @@ public slots:
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
-    void infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     
     void newNam();
 
@@ -73,7 +73,7 @@ private:
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
-    QMultiMap< qint64, uint > m_timeRequestMapper;
+    QMultiMap< qint64, quint64 > m_timeRequestMapper;
     QHash< uint, bool > m_requestSatisfiedMap;
     QHash< uint, InfoRequestData* > m_savedRequestMap;
     
@@ -84,8 +84,6 @@ private:
     QMap< InfoType, QList< InfoPluginPtr > > m_infoPushMap;
 
     QWeakPointer< QNetworkAccessManager> m_nam;
-
-    uint m_nextRequest;
 
     QTimer m_checkTimeoutsTimer;
 };

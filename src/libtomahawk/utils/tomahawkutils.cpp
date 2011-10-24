@@ -24,6 +24,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
+#include <QtCore/QMutex>
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
@@ -64,6 +65,8 @@ namespace TomahawkUtils
 
 
 static int s_headerHeight = 0;
+static quint64 s_infosystemRequestId = 0;
+static QMutex s_infosystemRequestIdMutex;
 
 #ifdef Q_WS_MAC
 QString
@@ -687,6 +690,15 @@ removeDirectory( const QString& dir )
         }
     }
     return !has_err;
+}
+
+
+quint64 infosystemRequestId()
+{
+    QMutexLocker locker( &s_infosystemRequestIdMutex );
+    quint64 result = s_infosystemRequestId;
+    s_infosystemRequestId++;
+    return result;
 }
 
 

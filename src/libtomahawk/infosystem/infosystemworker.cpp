@@ -51,7 +51,6 @@ namespace InfoSystem
 
 InfoSystemWorker::InfoSystemWorker()
     : QObject()
-    , m_nextRequest( 0 )
 {
 //    qDebug() << Q_FUNC_INFO;
 
@@ -119,17 +118,17 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     {
         connect(
                 plugin.data(),
-                SIGNAL( info( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this,
-                SLOT( infoSlot( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 Qt::UniqueConnection
             );
 
         connect(
                 plugin.data(),
-                SIGNAL( getCachedInfo( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
                 cache.data(),
-                SLOT( getCachedInfoSlot( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
             );
         connect(
                 plugin.data(),
@@ -194,7 +193,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
             continue;
 
         foundOne = true;
-        uint requestId = ++m_nextRequest;
+        quint64 requestId = requestData.requestId;
         m_requestSatisfiedMap[ requestId ] = false;
         if ( timeoutMillis != 0 )
         {
@@ -212,7 +211,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
         data->customData = requestData.customData;
         m_savedRequestMap[ requestId ] = data;
 
-        QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+        QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
     }
 
     if ( !foundOne )
@@ -237,9 +236,11 @@ InfoSystemWorker::pushInfo( QString caller, InfoType type, QVariant input )
 
 
 void
-InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
 //    qDebug() << Q_FUNC_INFO << "with requestId" << requestId;
+
+    quint64 requestId = requestData.requestId;
 
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
     {
@@ -285,7 +286,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
     qint64 currTime = QDateTime::currentMSecsSinceEpoch();
     Q_FOREACH( qint64 time, m_timeRequestMapper.keys() )
     {
-        Q_FOREACH( uint requestId, m_timeRequestMapper.values( time ) )
+        Q_FOREACH( quint64 requestId, m_timeRequestMapper.values( time ) )
         {
             if ( time < currTime )
             {

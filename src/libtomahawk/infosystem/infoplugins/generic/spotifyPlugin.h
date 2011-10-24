@@ -56,14 +56,14 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data );
 
 private:
-    void fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
 
     ChartType m_chartType;
