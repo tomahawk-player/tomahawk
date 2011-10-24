@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
- *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,7 +33,7 @@
 #include "utils/logger.h"
 #include "chartsplugin_data_p.h"
 
-#define CHART_URL "http://localhost:5112/"
+#define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org:10380/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
@@ -69,7 +68,7 @@ SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
     /// We need to fetch possible types before they are asked for
     tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
 
-    QUrl url = QUrl( QString( CHART_URL "toplist/charts" )  );
+    QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
     QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
     tDebug() << Q_FUNC_INFO << "fetching:" << url;
     connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
