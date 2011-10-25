@@ -67,7 +67,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -78,11 +78,15 @@
    </widget>
    <widget class="QMenu" name="menuApp">
     <property name="title">
-     <string>&amp;Music Player</string>
+     <string>&amp;Tomahawk</string>
     </property>
     <addaction name="actionPlay"/>
     <addaction name="actionPrevious"/>
     <addaction name="actionNext"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreatePlaylist"/>
+    <addaction name="actionCreate_New_Station"/>
+    <addaction name="actionLoadXSPF"/>
     <addaction name="separator"/>
     <addaction name="actionUpdateCollection"/>
     <addaction name="actionRescanCollection"/>
@@ -112,17 +116,7 @@
     <addaction name="actionDiagnostics"/>
     <addaction name="actionAboutTomahawk"/>
    </widget>
-   <widget class="QMenu" name="menuPlaylist">
-    <property name="title">
-     <string>&amp;Playlist</string>
-    </property>
-    <addaction name="actionCreatePlaylist"/>
-    <addaction name="actionCreate_New_Station"/>
-    <addaction name="separator"/>
-    <addaction name="actionLoadXSPF"/>
-   </widget>
    <addaction name="menuApp"/>
-   <addaction name="menuPlaylist"/>
    <addaction name="menuNetwork"/>
    <addaction name="menuSettings"/>
    <addaction name="menuWindow"/>
