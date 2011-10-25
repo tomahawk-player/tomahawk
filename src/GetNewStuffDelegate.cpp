@@ -39,6 +39,7 @@
 
 GetNewStuffDelegate::GetNewStuffDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
+    , m_hoveringOver( -1 )
     , m_widestTextWidth( 0 )
     , m_hoveringOver( -1 )
 {

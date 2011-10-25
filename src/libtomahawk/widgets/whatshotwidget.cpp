@@ -65,17 +65,11 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
-    //set crumb widgets
-    SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
-
     m_crumbModelLeft = new QStandardItemModel( this );
 
-    ui->breadCrumbLeft->setButtonFactory( crumbFactory );
-    ui->breadCrumbLeft->setModel( m_crumbModelLeft );
-    ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    ui->breadCrumbLeft->setUseAnimation( true );
+    ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
 
-    connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
+    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -216,9 +210,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 }
             }
 
-            KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
-            ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
-            //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
+            ui->breadCrumbLeft->setModel( m_crumbModelLeft );
             break;
         }
         case InfoSystem::InfoChart:
@@ -321,12 +313,12 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
         return;
 
 
-    QList<QModelIndex> indexes;
-    while ( index.parent().isValid() )
-    {
-        indexes.prepend(index);
-        index = index.parent();
-    }
+   QList<QModelIndex> indexes;
+   while ( index.parent().isValid() )
+   {
+       indexes.prepend(index);
+       index = index.parent();
+   }
 
 
     const QString chartId = item->data().toString();

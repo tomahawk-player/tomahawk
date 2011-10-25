@@ -229,6 +229,8 @@ set( libSources
     widgets/breadcrumbbuttonbase.cpp
     widgets/headerbreadcrumb.cpp
     widgets/siblingcrumbbutton.cpp
+    widgets/Breadcrumb.cpp
+    widgets/BreadcrumbButton.cpp
 
     jobview/JobStatusView.cpp
     jobview/JobStatusModel.cpp
@@ -457,6 +459,8 @@ set( libHeaders
     widgets/breadcrumbbuttonbase.h
     widgets/headerbreadcrumb.h
     widgets/siblingcrumbbutton.h
+    widgets/Breadcrumb.h
+    widgets/BreadcrumbButton.h
 
     jobview/JobStatusView.h
     jobview/JobStatusModel.h

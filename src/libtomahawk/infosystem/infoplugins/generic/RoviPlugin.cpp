@@ -172,7 +172,7 @@ RoviPlugin::makeRequest( QUrl url )
     url.addQueryItem( "apikey", m_apiKey );
     url.addEncodedQueryItem( "sig", generateSig() );
 
-//     qDebug() << "url:" << url.toString();
+    qDebug() << "Rovi request url:" << url.toString();
     return m_nam->get( QNetworkRequest( url ) );
 }
 
