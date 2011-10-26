@@ -173,7 +173,7 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 void
 InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources )
 {
-//    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO << "type is " << requestData.type << " and allSources = " << (allSources ? "true" : "false" );
 
     QList< InfoPluginPtr > providers = determineOrderedMatches( requestData.type );
     if ( providers.isEmpty() )
@@ -193,7 +193,13 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
             continue;
 
         foundOne = true;
-        quint64 requestId = requestData.requestId;
+
+        if ( allSources )
+            requestData.internalId = TomahawkUtils::infosystemRequestId();
+        else
+            requestData.internalId = requestData.requestId;
+        
+        quint64 requestId = requestData.internalId;
         m_requestSatisfiedMap[ requestId ] = false;
         if ( timeoutMillis != 0 )
         {
@@ -240,7 +246,7 @@ InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, Q
 {
 //    qDebug() << Q_FUNC_INFO << "with requestId" << requestId;
 
-    quint64 requestId = requestData.requestId;
+    quint64 requestId = requestData.internalId;
 
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
     {

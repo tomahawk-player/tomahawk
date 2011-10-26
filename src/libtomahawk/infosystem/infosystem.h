@@ -127,6 +127,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 
 struct InfoRequestData {
     quint64 requestId;
+    quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
     QString caller;
     Tomahawk::InfoSystem::InfoType type;
     QVariant input;
@@ -134,6 +135,7 @@ struct InfoRequestData {
 
     InfoRequestData()
         : requestId( TomahawkUtils::infosystemRequestId() )
+        , internalId( TomahawkUtils::infosystemRequestId() )
         , caller( QString() )
         , type( Tomahawk::InfoSystem::InfoNoInfo )
         , input( QVariant() )
@@ -142,6 +144,7 @@ struct InfoRequestData {
     
     InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
         : requestId( rId )
+        , internalId( TomahawkUtils::infosystemRequestId() )
         , caller( callr )
         , type( typ )
         , input( inputvar )
