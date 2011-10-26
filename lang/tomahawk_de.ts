@@ -636,7 +636,7 @@
     <message>
         <location filename="src/sourcetree/sourcetreeitemwidget.cpp" line="151"/>
         <source>Synced</source>
-        <translation">Synchronisiert</translation>
+        <translation>Synchronisiert</translation>
     </message>
     <message>
         <location filename="src/sourcetree/sourcetreeitemwidget.cpp" line="154"/>
@@ -877,7 +877,7 @@ Bitte ändere den Filter oder versuche es erneut.</translation>
     <message>
         <location filename="src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="296"/>
         <source>Artist Familiarity</source>
-    <translatorcomment>nicht sicher ob das passt</translatorcomment
+    <translatorcomment>nicht sicher ob das passt</translatorcomment>
         <translation>Ähnlichkeit</translation>
     </message>
     <message>
