@@ -384,7 +384,7 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     // so check if the drag originated in this playlist to determine whether or not to copy
 #ifdef Q_WS_MAC
     if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
-        data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() )
+         ( !m_playlist.isNull() && data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() ) )
         dj->setDropAction( DropJob::Append );
 #else
     if ( action & Qt::CopyAction )
