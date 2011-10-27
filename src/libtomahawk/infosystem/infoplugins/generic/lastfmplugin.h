@@ -56,25 +56,25 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data );
 
 private:
-    void fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchArtistImages( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
     void scrobble();
     void sendLoveSong( const InfoType type, QVariant input );
 
-    void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QList<lastfm::Track> parseTrackList( QNetworkReply * reply );
 

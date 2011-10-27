@@ -64,28 +64,28 @@ RoviPlugin::namChangedSlot( QNetworkAccessManager* nam )
 
 
 void
-RoviPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+RoviPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) || !hash.contains( "album" ) )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
 void
-RoviPlugin::notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+RoviPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
@@ -96,7 +96,6 @@ RoviPlugin::notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash
 
             QNetworkReply* reply = makeRequest( baseUrl );
 
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), this, SLOT( albumLookupFinished() ) );
             connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( albumLookupError( QNetworkReply::NetworkError ) ) );
@@ -120,9 +119,8 @@ RoviPlugin::albumLookupError( QNetworkReply::NetworkError error )
     Q_ASSERT( reply );
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    int requestId = reply->property( "requestId" ).toUInt();
 
-    emit info( requestId, requestData, QVariant() );
+    emit info( requestData, QVariant() );
 
 }
 
@@ -136,7 +134,6 @@ RoviPlugin::albumLookupFinished()
         return;
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    int requestId = reply->property( "requestId" ).toUInt();
 
     QJson::Parser p;
     bool ok;
@@ -145,7 +142,7 @@ RoviPlugin::albumLookupFinished()
     if ( !ok || result.isEmpty() || !result.contains( "tracks" ) )
     {
         tLog() << "Error parsing JSON from Rovi!" << p.errorString() << result;
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
     }
 
     QVariantList tracks = result[ "tracks" ].toList();
@@ -160,7 +157,7 @@ RoviPlugin::albumLookupFinished()
     QVariantMap returnedData;
     returnedData["tracks"] = trackNameList;
 
-    emit info( requestId, requestData, returnedData );
+    emit info( requestData, returnedData );
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["artist"];

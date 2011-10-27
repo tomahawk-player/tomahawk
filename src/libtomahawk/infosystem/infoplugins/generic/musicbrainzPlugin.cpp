@@ -52,17 +52,17 @@ MusicBrainzPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
 
 void
-MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "artist" ) )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return;
     }
 
@@ -74,7 +74,6 @@ MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
             QUrl url( requestString );
             url.addQueryItem( "query", hash["artist"] );
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( artistSearchSlot() ) );
@@ -87,7 +86,6 @@ MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
             QUrl url( requestString );
             url.addQueryItem( "query", hash["artist"] );
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( albumSearchSlot() ) );
@@ -104,24 +102,24 @@ MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
 
 
 bool
-MusicBrainzPlugin::isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+MusicBrainzPlugin::isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QVariantMap >() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         qDebug() << Q_FUNC_INFO << "Data null, invalid, or can't convert";
         return false;
     }
     QVariantMap hash = requestData.input.value< QVariantMap >();
     if ( hash[ "trackName" ].toString().isEmpty() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         qDebug() << Q_FUNC_INFO << "Track name is empty";
         return false;
     }
     if ( hash[ "artistName" ].toString().isEmpty() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         qDebug() << Q_FUNC_INFO << "No artist name found";
         return false;
     }
@@ -141,7 +139,7 @@ MusicBrainzPlugin::artistSearchSlot()
     QDomNodeList domNodeList = doc.elementsByTagName( "artist" );
     if ( domNodeList.isEmpty() )
     {
-        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -151,7 +149,6 @@ MusicBrainzPlugin::artistSearchSlot()
     url.addQueryItem( "artist", artist_id );
 
     QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
-    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
     connect( newReply, SIGNAL( finished() ), SLOT( albumFoundSlot() ) );
 }
@@ -169,7 +166,7 @@ MusicBrainzPlugin::albumSearchSlot()
     QDomNodeList domNodeList = doc.elementsByTagName( "artist" );
     if ( domNodeList.isEmpty() )
     {
-        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -179,7 +176,6 @@ MusicBrainzPlugin::albumSearchSlot()
     url.addQueryItem( "artist", artist_id );
 
     QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
-    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
     connect( newReply, SIGNAL( finished() ), SLOT( tracksSearchSlot() ) );
 }
@@ -197,7 +193,7 @@ MusicBrainzPlugin::tracksSearchSlot()
     QDomNodeList domNodeList = doc.elementsByTagName( "release" );
     if ( domNodeList.isEmpty() )
     {
-        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -214,7 +210,7 @@ MusicBrainzPlugin::tracksSearchSlot()
 
     if ( element.isNull() )
     {
-        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -223,7 +219,6 @@ MusicBrainzPlugin::tracksSearchSlot()
     QUrl url( requestString );
 
     QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
-    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
     connect( newReply, SIGNAL( finished() ), SLOT( tracksFoundSlot() ) );
 }
@@ -241,7 +236,7 @@ MusicBrainzPlugin::albumFoundSlot()
     QDomNodeList domNodeList = doc.elementsByTagName( "title" );
     if ( domNodeList.isEmpty() )
     {
-        emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -256,7 +251,7 @@ MusicBrainzPlugin::albumFoundSlot()
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     QVariantMap returnedData;
     returnedData["albums"] = albums;
-    emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
+    emit info( requestData, returnedData );
 
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -277,7 +272,7 @@ MusicBrainzPlugin::tracksFoundSlot()
     QDomNodeList domNodeList = doc.elementsByTagName( "recording" );
     if ( domNodeList.isEmpty() )
     {
-        emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
@@ -297,7 +292,7 @@ MusicBrainzPlugin::tracksFoundSlot()
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     QVariantMap returnedData;
     returnedData["tracks"] = tracks;
-    emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
+    emit info( requestData, returnedData );
 
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;

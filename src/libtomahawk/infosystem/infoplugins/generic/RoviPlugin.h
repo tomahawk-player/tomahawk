@@ -40,12 +40,12 @@ public:
 
 protected:
     virtual void namChangedSlot( QNetworkAccessManager* nam );
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant )
     {}
 
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
 private slots:
     void albumLookupFinished();

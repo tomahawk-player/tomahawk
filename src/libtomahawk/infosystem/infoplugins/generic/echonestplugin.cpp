@@ -68,37 +68,37 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
 }
 
 void
-EchoNestPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+EchoNestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
         case Tomahawk::InfoSystem::InfoArtistBiography:
-            return getArtistBiography( requestId, requestData );
+            return getArtistBiography( requestData );
         case Tomahawk::InfoSystem::InfoArtistFamiliarity:
-            return getArtistFamiliarity( requestId, requestData );
+            return getArtistFamiliarity( requestData );
         case Tomahawk::InfoSystem::InfoArtistHotttness:
-            return getArtistHotttnesss( requestId, requestData );
+            return getArtistHotttnesss( requestData );
         case Tomahawk::InfoSystem::InfoArtistTerms:
-            return getArtistTerms( requestId, requestData );
+            return getArtistTerms( requestData );
         case Tomahawk::InfoSystem::InfoTrackEnergy:
-            return getSongProfile( requestId, requestData, "energy" );
+            return getSongProfile( requestData, "energy" );
         case Tomahawk::InfoSystem::InfoMiscTopTerms:
-            return getMiscTopTerms( requestId, requestData );
+            return getMiscTopTerms( requestData );
         default:
         {
-            emit info( requestId, requestData, QVariant() );
+            emit info( requestData, QVariant() );
             return;
         }
     }
 }
 
 void
-EchoNestPlugin::getSongProfile( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
+EchoNestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
 
-    if( !isValidTrackData( requestId, requestData ) )
+    if( !isValidTrackData( requestData ) )
         return;
 
 //     Track track( input.toString() );
@@ -110,67 +110,62 @@ EchoNestPlugin::getSongProfile( uint requestId, const Tomahawk::InfoSystem::Info
 }
 
 void
-EchoNestPlugin::getArtistBiography( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    if( !isValidArtistData( requestId, requestData ) )
+    if( !isValidArtistData( requestData ) )
         return;
 
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply *reply = artist.fetchBiographies();
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
-    reply->setProperty( "requestId", requestId );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistBiographySlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistFamiliarity( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    if( !isValidArtistData( requestId, requestData ) )
+    if( !isValidArtistData( requestData ) )
         return;
 
     qDebug() << "Fetching artist familiarity!" << requestData.input;
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply* reply = artist.fetchFamiliarity();
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
-    reply->setProperty( "requestId", requestId );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistFamiliaritySlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistHotttnesss( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    if( !isValidArtistData( requestId, requestData ) )
+    if( !isValidArtistData( requestData ) )
         return;
 
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply* reply = artist.fetchHotttnesss();
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
-    reply->setProperty( "requestId", requestId );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistHotttnesssSlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistTerms( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    if( !isValidArtistData( requestId, requestData ) )
+    if( !isValidArtistData( requestData ) )
         return;
 
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply* reply = artist.fetchTerms( Echonest::Artist::Weight );
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
-    reply->setProperty( "requestId", requestId );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistTermsSlot() ) );
 }
 
 void
-EchoNestPlugin::getMiscTopTerms( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
-    reply->setProperty( "requestId", requestId );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getMiscTopSlot() ) );
 }
@@ -195,9 +190,7 @@ EchoNestPlugin::getArtistBiographySlot()
         biographyMap[ biography.site() ] = siteData;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    emit info( reply->property( "requestId" ).toUInt(),
-               requestData,
-               biographyMap );
+    emit info( requestData, biographyMap );
     reply->deleteLater();
 }
 
@@ -208,9 +201,7 @@ EchoNestPlugin::getArtistFamiliaritySlot()
     Echonest::Artist artist = artistFromReply( reply );
     qreal familiarity = artist.familiarity();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    emit info( reply->property( "requestId" ).toUInt(),
-               requestData,
-               familiarity );
+    emit info( requestData, familiarity );
     reply->deleteLater();
 }
 
@@ -221,9 +212,7 @@ EchoNestPlugin::getArtistHotttnesssSlot()
     Echonest::Artist artist = artistFromReply( reply );
     qreal hotttnesss = artist.hotttnesss();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    emit info( reply->property( "requestId" ).toUInt(),
-               requestData,
-               hotttnesss );
+    emit info( requestData, hotttnesss );
     reply->deleteLater();
 }
 
@@ -241,9 +230,7 @@ EchoNestPlugin::getArtistTermsSlot()
         termsMap[ term.name() ] = termHash;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    emit info( reply->property( "requestId" ).toUInt(),
-               requestData,
-               termsMap );
+    emit info( requestData, termsMap );
     reply->deleteLater();
 }
 
@@ -260,46 +247,44 @@ EchoNestPlugin::getMiscTopSlot()
         termsMap[ term.name() ] = termHash;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    emit info( reply->property( "requestId" ).toUInt(),
-               requestData,
-               termsMap );
+    emit info( requestData, termsMap );
     reply->deleteLater();
 }
 
 bool
-EchoNestPlugin::isValidArtistData( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return false;
     }
     QString artistName = requestData.input.toString();
     if ( artistName.isEmpty() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return false;
     }
     return true;
 }
 
 bool
-EchoNestPlugin::isValidTrackData( uint requestId, const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchoNestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return false;
     }
     QString trackName = requestData.input.toString();
     if ( trackName.isEmpty() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return false;
     }
     if ( !requestData.customData.contains( "artistName" ) || requestData.customData[ "artistName" ].toString().isEmpty() )
     {
-        emit info( requestId, requestData, QVariant() );
+        emit info( requestData, QVariant() );
         return false;
     }
     return true;
