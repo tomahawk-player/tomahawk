@@ -40,6 +40,7 @@
 GetNewStuffDelegate::GetNewStuffDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
     , m_widestTextWidth( 0 )
+    , m_hoveringOver( -1 )
 {
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
     m_ratingStarPositive.load( RESPATH "images/starred.png" );
