@@ -267,6 +267,9 @@ SpotifyPlugin::chartTypes()
 
         }
 
+        QVariantMap defaultMap;
+        defaultMap[ "Spotify" ] = QStringList() << "United States" << "Top Albums";
+        m_allChartsMap[ "defaults" ] = defaultMap;
         m_allChartsMap.insert( "Spotify", QVariant::fromValue<QVariantMap>( charts ) );
 
     }

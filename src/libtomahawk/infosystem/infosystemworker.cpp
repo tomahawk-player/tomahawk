@@ -198,7 +198,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
             requestData.internalId = TomahawkUtils::infosystemRequestId();
         else
             requestData.internalId = requestData.requestId;
-        
+
         quint64 requestId = requestData.internalId;
         m_requestSatisfiedMap[ requestId ] = false;
         if ( timeoutMillis != 0 )

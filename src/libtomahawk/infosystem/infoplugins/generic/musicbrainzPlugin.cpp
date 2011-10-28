@@ -50,7 +50,6 @@ MusicBrainzPlugin::namChangedSlot( QNetworkAccessManager *nam )
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
-
 void
 MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -70,9 +69,44 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         case InfoArtistReleases:
         {
+
+            Tomahawk::InfoSystem::InfoStringHash criteria;
+            criteria["artist"] = hash["artist"];
+
+            emit getCachedInfo( criteria, 2419200000, requestData );
+            break;
+        }
+
+        case InfoAlbumSongs:
+        {
+
+            Tomahawk::InfoSystem::InfoStringHash criteria;
+            criteria["artist"] = hash["artist"];
+            criteria["album"] = hash["album"];
+
+            emit getCachedInfo( criteria, 2419200000, requestData );
+
+            break;
+        }
+
+        default:
+        {
+            Q_ASSERT( false );
+            break;
+        }
+    }
+}
+
+void
+MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData )
+{
+    switch ( requestData.type )
+    {
+        case InfoArtistReleases:
+        {
             QString requestString( "http://musicbrainz.org/ws/2/artist" );
             QUrl url( requestString );
-            url.addQueryItem( "query", hash["artist"] );
+            url.addQueryItem( "query", criteria["artist"] );
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
@@ -84,7 +118,7 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         {
             QString requestString( "http://musicbrainz.org/ws/2/artist" );
             QUrl url( requestString );
-            url.addQueryItem( "query", hash["artist"] );
+            url.addQueryItem( "query", criteria["artist"] );
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 

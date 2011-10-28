@@ -43,6 +43,7 @@ public slots:
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
 
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data )
     {
@@ -51,11 +52,6 @@ protected slots:
         Q_UNUSED( data );
     }
 
-virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
-    {
-        Q_UNUSED( criteria );
-        Q_UNUSED( requestData );
-    }
 
 private slots:
     void artistSearchSlot();
