@@ -325,7 +325,7 @@ hypemPlugin::chartTypes()
     }
 
 
-    m_allChartsMap.insert( "Hypem", QVariant::fromValue<QVariantMap>( charts ) );
+    m_allChartsMap.insert( "Hype Machine", QVariant::fromValue<QVariantMap>( charts ) );
     qDebug() << "hypemPlugin:Chartstype: " << m_allChartsMap;
 
 
