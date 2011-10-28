@@ -64,7 +64,7 @@ public:
     void load( const Tomahawk::album_ptr& album );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }

@@ -17,12 +17,14 @@
  */
 
 #include "ArtistInfoWidget.h"
+#include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
+#include "playlist/treeproxymodel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
@@ -44,6 +46,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     , m_infoId( uuid() )
 {
     ui->setupUi( this );
+
+    m_plInterface = new MetaPlaylistInterface( this );
 
     ui->albums->setFrameShape( QFrame::NoFrame );
     ui->albums->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -93,7 +97,14 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
+    delete m_plInterface;
     delete ui;
+}
+
+PlaylistInterface*
+ArtistInfoWidget::playlistInterface() const
+{
+    return m_plInterface;
 }
 
 

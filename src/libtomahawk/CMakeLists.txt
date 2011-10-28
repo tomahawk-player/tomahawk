@@ -447,6 +447,7 @@ set( libHeaders
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
+    widgets/infowidgets/ArtistInfoWidget_p.h
     widgets/infowidgets/AlbumInfoWidget.h
     widgets/Breadcrumb.h
     widgets/BreadcrumbButton.h

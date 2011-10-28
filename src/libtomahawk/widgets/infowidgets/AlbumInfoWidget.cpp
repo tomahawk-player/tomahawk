@@ -88,6 +88,12 @@ AlbumInfoWidget::~AlbumInfoWidget()
     delete ui;
 }
 
+PlaylistInterface*
+AlbumInfoWidget::playlistInterface() const
+{
+    return ui->tracksView->playlistInterface();
+}
+
 
 void
 AlbumInfoWidget::onModeToggle()

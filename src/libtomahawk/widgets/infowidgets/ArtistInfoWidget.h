@@ -47,6 +47,8 @@ namespace Ui
     class ArtistInfoWidget;
 }
 
+class MetaPlaylistInterface;
+
 class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
@@ -66,7 +68,7 @@ public:
     void load( const Tomahawk::artist_ptr& artist );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
@@ -103,6 +105,7 @@ private:
     TreeModel* m_relatedModel;
     TreeModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
+    MetaPlaylistInterface* m_plInterface;
 
     OverlayButton* m_button;
 
@@ -111,6 +114,8 @@ private:
     QString m_longDescription;
     QString m_infoId;
     QPixmap m_pixmap;
+
+    friend class MetaPlaylistInterface;
 };
 
 #endif // ARTISTINFOWIDGET_H
