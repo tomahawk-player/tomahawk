@@ -153,6 +153,7 @@ RoviPlugin::albumLookupFinished()
     if ( resultList.size() == 0 )
     {
         emit info( requestData, QVariant() );
+        return;
     }
 
     QVariantMap results = resultList.first().toMap();
