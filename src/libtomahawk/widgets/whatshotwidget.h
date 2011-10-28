@@ -53,10 +53,6 @@ class DLLEXPORT WhatsHotWidget : public QWidget, public Tomahawk::ViewPage
 Q_OBJECT
 
 public:
-    enum ExtraRoles {
-        DefaultRole = Qt::UserRole + 10
-    };
-
     WhatsHotWidget( QWidget* parent = 0 );
     ~WhatsHotWidget();
 

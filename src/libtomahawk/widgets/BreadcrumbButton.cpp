@@ -38,6 +38,8 @@ BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* mode
     setFixedHeight( TomahawkUtils::headerHeight() );
     m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 
+    setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+
     connect( m_combo, SIGNAL( activated( int ) ), SLOT( comboboxActivated( int ) ) );
 }
 
@@ -47,7 +49,7 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
     QPainter p( this );
     QStyleOption opt;
     opt.initFrom( this );
-    QRect r = opt.rect;
+    QRect r = rect();
 
     StyleHelper::horizontalHeader( &p, r ); // draw the background
 
@@ -59,12 +61,11 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
     int rightSpacing = 10;
     int left = !reverse ? r.right()-rightSpacing - menuButtonWidth : r.left();
     int right = !reverse ? r.right()-rightSpacing : r.left() + menuButtonWidth;
-    int height = sizeHint().height();
+    int height = r.height();
     QRect arrowRect( ( left + right ) / 2 + ( reverse ? 6 : -6 ), 0, height, height );
 
     QStyleOption arrowOpt = opt;
     arrowOpt.rect = arrowRect;
-
 
     QLine l1( left, 0, right, height/2 );
     QLine l2( left, height, right, height/2 );
@@ -119,6 +120,17 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
     }
 
 
+    if ( m_combo->count() && list.count() )
+    {
+        // Check if it's the same, Don't change if it is, as it'll cause flickering
+        QStringList old;
+        for ( int i = 0; i < m_combo->count(); i++ )
+            old << m_combo->itemText( i );
+
+        if ( list == old )
+            return;
+    }
+
     m_combo->clear();
     m_combo->addItems( list );
 
@@ -129,18 +141,6 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
 
     m_curIndex = m_model->index( m_combo->currentIndex(), 0, m_parentIndex );
     m_combo->adjustSize();
-/*
-    if ( m_combo->count() && list.count() )
-    {
-        // Check if it's the same, Don't change if it is, as it'll cause flickering
-        QStringList old;
-        for ( int i = 0; i < m_combo->count(); i++ )
-            old << m_combo->itemText( i );
-
-        if ( list == old )
-            return;
-    }*/
-
 }
 
 void

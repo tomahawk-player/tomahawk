@@ -34,8 +34,6 @@
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
-#include "widgets/siblingcrumbbutton.h"
-#include "widgets/kbreadcrumbselectionmodel.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <pipeline.h>
@@ -185,7 +183,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 QStandardItem* source = rootItem->child( i, 0 );
                 if ( defaultSource.toLower() == source->text().toLower() )
                 {
-                    source->setData( true, DefaultRole );
+                    qDebug() << "Setting DEFAULT SOURCE:" << source->text();
+                    source->setData( true, Breadcrumb::DefaultRole );
                 }
 
                 if ( defaults.contains( source->text().toLower() ) )
@@ -200,9 +199,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         {
                             if ( cur->child( k, 0 )->text() == index )
                             {
-//                                 tDebug() << "Found DEFAULT ITEM:" << index;
+                                tDebug() << "Found DEFAULT ITEM:" << index;
                                 cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
-                                cur->setData( true, DefaultRole );
+                                cur->setData( true, Breadcrumb::DefaultRole );
                                 break;
                             }
                         }
@@ -397,7 +396,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ] );
             if ( chart.value( "default", "" ) == "true")
-                sourceItem->setData( WhatsHotWidget::DefaultRole, true );
+                sourceItem->setData( Breadcrumb::DefaultRole, true );
             sourceItem->appendRow( childItem );
         }
     }

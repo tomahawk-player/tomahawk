@@ -20,7 +20,6 @@
 
 #include "BreadcrumbButton.h"
 #include "utils/stylehelper.h"
-#include "kbreadcrumbselectionmodel.h"
 #include "utils/logger.h"
 
 #include <QStylePainter>
@@ -34,7 +33,7 @@ using namespace Tomahawk;
 Breadcrumb::Breadcrumb( QWidget* parent, Qt::WindowFlags f )
     : QWidget( parent, f )
     , m_model( 0 )
-    , m_selModel( 0 )
+
     , m_buttonlayout( new QHBoxLayout( this ) )
 {
     m_buttonlayout->setSpacing( 0 );
@@ -58,12 +57,6 @@ void
 Breadcrumb::setModel( QAbstractItemModel* model )
 {
     m_model = model;
-
-    if ( m_selModel )
-        delete m_selModel;
-
-    m_selModel = new KBreadcrumbSelectionModel( new QItemSelectionModel( m_model ) );
-//     connect( m_selMode, SIGNAL( currentChanged( QModelIndex, QModelIndex) ), this, SLOT( updateButtons( QModelIndex, QModelIndex ) ) );
     updateButtons( QModelIndex() );
 }
 
@@ -95,14 +88,19 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
 {
     qDebug() << "Updating buttons:" << updateFrom.data();
     int cur = 0;
-    QModelIndex idx;
-    for ( cur = 0; cur < m_buttons.count(); cur++ )
+    QModelIndex idx = updateFrom;
+    for ( int i = 0; i < m_buttons.count(); i++ )
     {
-        qDebug() << "Checking if this breadcrumb item changed:" << sel[ cur ].data() << updateFrom.data() << ( sel[ cur ] != updateFrom);
-        if ( m_buttons[ cur ].currentIndex() == updateFrom )
+        qDebug() << "Checking if this breadcrumb item changed:" << m_buttons[ i ]->currentIndex().data() << updateFrom.data() << ( m_buttons[ i ]->currentIndex() != updateFrom);
+        if ( m_buttons[ i ]->currentIndex() == updateFrom )
+        {
+            cur = i;
             break;
-        idx = m_buttons[ cur ].currentIndex();
+        }
     }
+
+    // We set the parent index, so go up one
+    idx = idx.parent();
 
     // Ok, changed all indices that are at cur or past it. lets update them
     // When we get to the "end" of the tree, the leaf node is the chart itself
@@ -118,14 +116,14 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
             connect( btn, SIGNAL( currentIndexChanged( QModelIndex ) ), this, SLOT( breadcrumbComboChanged( QModelIndex ) ) );
 
             m_buttonlayout->addWidget( btn );
+            btn->show();
 
             // Animate all buttons except the first
             if ( m_buttons.count() > 0 )
             {
-                QWidget* neighbor = m_buttonlayout->itemAt( m_buttonlayout->count() - 2 )->widget();
                 QPropertyAnimation* animation = new QPropertyAnimation( btn, "pos" );
                 animation->setDuration( 300 );
-                animation->setStartValue( neighbor->pos() );
+                animation->setStartValue( m_buttons.last()->pos() );
                 animation->setEndValue( btn->pos() );
                 animation->start( QAbstractAnimation::DeleteWhenStopped );
             }
@@ -148,6 +146,26 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
         cur++;
     }
 
+    // extra buttons to delete! (cur is 0-indexed)
+    while ( m_buttons.size() > cur )
+    {
+        BreadcrumbButton* b = m_buttons.takeLast();
+
+        m_buttonlayout->removeWidget( b );
+        b->show();
+
+        if ( m_buttons.size() )
+        {
+            QPropertyAnimation* animation = new QPropertyAnimation( b, "pos" );
+            animation->setDuration( 300 );
+            animation->setStartValue( b->pos() );
+            animation->setEndValue( m_buttons.last()->pos() );
+            animation->start( QAbstractAnimation::DeleteWhenStopped );
+        }
+
+        b->deleteLater();
+    }
+
     // Now we're at the leaf, lets activate the chart
     emit activateIndex( idx );
 }
@@ -157,7 +175,6 @@ Breadcrumb::breadcrumbComboChanged( const QModelIndex& childSelected )
 {
     // Some breadcrumb buttons' combobox changed. lets update the child breadcrumbs
     tDebug() << "Combo changed:" << childSelected.data();
-    m_selModel->select( childSelected, QItemSelectionModel::SelectCurrent );
     updateButtons( childSelected );
 }
 

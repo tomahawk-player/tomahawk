@@ -24,7 +24,6 @@
 
 class QHBoxLayout;
 class QAbstractItemModel;
-class KBreadcrumbSelectionModel;
 
 namespace Tomahawk {
 
@@ -71,7 +70,6 @@ private:
     void updateButtons( const QModelIndex& fromIndex );
 
     QAbstractItemModel* m_model;
-    KBreadcrumbSelectionModel* m_selModel;
     QPixmap m_rootIcon;
 
     QHBoxLayout* m_buttonlayout;
