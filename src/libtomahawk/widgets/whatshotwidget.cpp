@@ -92,7 +92,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
     QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
