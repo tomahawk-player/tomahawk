@@ -286,7 +286,7 @@ ChartsPlugin::chartTypes()
                 const QVariantMap chart = chartObj.toMap();
                 const QString id = chart.value( "id" ).toString();
                 const QString geo = chart.value( "geo" ).toString();
-                QString name = chart.value( "name" ).toString();
+                QString name = chart.value( "genre" ).toString();
                 const QString type = chart.value( "type" ).toString();
                 const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
@@ -311,8 +311,8 @@ ChartsPlugin::chartTypes()
                     country = m_cachedCountries[ geo ];
                 }
 
-                if ( name.startsWith( "iTunes Store:" ) ) // truncate
-                    name = name.mid( 13 );
+                if ( name.isEmpty() ) // not a specific chart, an all chart
+                    name = tr( "Top Overall" );
 
                 InfoStringHash c;
                 c[ "id" ] = id;
