@@ -92,7 +92,7 @@ QSize
 BreadcrumbButton::sizeHint() const
 {
     // our width = width of combo + 20px for right-arrow and spacing
-    const int padding = hasChildren() ? 20 : 5;
+    const int padding = hasChildren() ? 20 : 8;
     return m_combo->sizeHint() + QSize( padding, 0 );
 }
 

@@ -308,19 +308,19 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( index );
     if( !item )
         return;
-    if( !item->data().isValid() )
+    if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
         return;
 
 
-   QList<QModelIndex> indexes;
-   while ( index.parent().isValid() )
-   {
-       indexes.prepend(index);
-       index = index.parent();
-   }
+    QList<QModelIndex> indexes;
+    while ( index.parent().isValid() )
+    {
+        indexes.prepend(index);
+        index = index.parent();
+    }
 
 
-    const QString chartId = item->data().toString();
+    const QString chartId = item->data( Breadcrumb::ChartIdRole ).toString();
 
     if ( m_artistModels.contains( chartId ) )
     {
@@ -394,9 +394,11 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
         foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
-            childItem->setData( chart[ "id" ] );
+            childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
             if ( chart.value( "default", "" ) == "true")
-                sourceItem->setData( Breadcrumb::DefaultRole, true );
+            {
+                childItem->setData( true, Breadcrumb::DefaultRole );
+            }
             sourceItem->appendRow( childItem );
         }
     }

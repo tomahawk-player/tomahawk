@@ -45,7 +45,8 @@ class Breadcrumb : public QWidget
 public:
     enum ExtraRoles {
         DefaultRole = Qt::UserRole + 1,
-        UserSelectedRole = Qt::UserRole + 2
+        UserSelectedRole = Qt::UserRole + 2,
+        ChartIdRole = Qt::UserRole + 3
     };
 
     explicit Breadcrumb( QWidget* parent = 0, Qt::WindowFlags f = 0 );
