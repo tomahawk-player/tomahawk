@@ -79,9 +79,10 @@ RoviPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, 0, requestData );
 }
 
 void
@@ -91,8 +92,10 @@ RoviPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomah
     {
         case InfoAlbumSongs:
         {
-            QUrl baseUrl = QUrl( "http://api.rovicorp.com/data/v1/album/tracks" );
-            baseUrl.addQueryItem( "album", criteria[ "album" ] );
+            QUrl baseUrl = QUrl( "http://api.rovicorp.com/search/v2/music/search" );
+            baseUrl.addQueryItem( "query", QString( "%1 %2" ).arg( criteria[ "artist" ] ).arg( criteria[ "album" ] ) );
+            baseUrl.addQueryItem( "entitytype", "album" );
+            baseUrl.addQueryItem( "include", "album:tracks" );
 
             QNetworkReply* reply = makeRequest( baseUrl );
 
@@ -137,15 +140,25 @@ RoviPlugin::albumLookupFinished()
 
     QJson::Parser p;
     bool ok;
-    QVariantMap result = p.parse( reply, &ok ).toMap();
+    QVariantMap response = p.parse( reply, &ok ).toMap();
 
-    if ( !ok || result.isEmpty() || !result.contains( "tracks" ) )
+    if ( !ok || response.isEmpty() || !response.contains( "searchResponse" ) )
     {
-        tLog() << "Error parsing JSON from Rovi!" << p.errorString() << result;
+        tLog() << "Error parsing JSON from Rovi!" << p.errorString() << response;
+        emit info( requestData, QVariant() );
+        return;
+    }
+
+    QVariantMap results = response[ "searchResponse" ].toMap().value( "results" ).toList().first().toMap();
+    QVariantList tracks = results[ "album" ].toMap()[ "tracks" ].toList();
+
+    if ( tracks.isEmpty() )
+    {
+        tLog() << "Error parsing JSON from Rovi!" << p.errorString() << response;
         emit info( requestData, QVariant() );
     }
 
-    QVariantList tracks = result[ "tracks" ].toList();
+
     QStringList trackNameList;
     foreach ( const QVariant& track, tracks )
     {
@@ -161,6 +174,7 @@ RoviPlugin::albumLookupFinished()
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["artist"];
+    criteria["album"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["album"];
 
     emit updateCache( criteria, 0, requestData.type, returnedData );
 }
