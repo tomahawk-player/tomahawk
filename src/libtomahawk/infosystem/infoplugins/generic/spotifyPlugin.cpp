@@ -140,7 +140,7 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
         criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( criteria, 0, requestData );
+    emit getCachedInfo( criteria, 604800000 /* Expire chart cache in 1 week */, requestData );
 }
 void
 SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -268,7 +268,7 @@ SpotifyPlugin::chartTypes()
         }
 
         QVariantMap defaultMap;
-        defaultMap[ "Spotify" ] = QStringList() << "United States" << "Top Albums";
+        defaultMap[ "spotify" ] = QStringList() << "United States" << "Top Albums";
         m_allChartsMap[ "defaults" ] = defaultMap;
         m_allChartsMap.insert( "Spotify", QVariant::fromValue<QVariantMap>( charts ) );
 
