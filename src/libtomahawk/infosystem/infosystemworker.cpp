@@ -199,8 +199,12 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
 
         foundOne = true;
 
-        if ( allSources )
+        if ( allSources || m_savedRequestMap.contains( requestData.requestId ) )
+        {
+            if ( m_savedRequestMap.contains( requestData.requestId ) )
+                tDebug() << Q_FUNC_INFO << "Warning: reassigning requestId because it already exists";
             requestData.internalId = TomahawkUtils::infosystemRequestId();
+        }
         else
             requestData.internalId = requestData.requestId;
 
