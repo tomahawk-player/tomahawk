@@ -63,6 +63,7 @@ protected:
     virtual void startDrag( Qt::DropActions supportedActions );
 
     void paintEvent( QPaintEvent* event );
+    void resizeEvent( QResizeEvent* event );
 
 private slots:
     void onFilterChanged( const QString& filter );

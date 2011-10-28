@@ -117,7 +117,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         oneLiner = true;
     else
         oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
-                      textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
+                     textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
 
     if ( oneLiner )
     {

@@ -22,6 +22,7 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <qmath.h>
 
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
@@ -47,7 +48,8 @@ AlbumView::AlbumView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 20 );
+    setSpacing( 16 );
+    setContentsMargins( 0, 0, 0, 0 );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
@@ -176,6 +178,26 @@ void
 AlbumView::paintEvent( QPaintEvent* event )
 {
     QListView::paintEvent( event );
+}
+
+
+void
+AlbumView::resizeEvent( QResizeEvent* event )
+{
+    QListView::resizeEvent( event );
+
+    int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+    int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
+    QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+
+    int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
+    int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
+    int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+
+    if ( itemsPerRow < 1 )
+        setSpacing( 16 );
+    else
+        setSpacing( newSpacing );
 }
 
 
