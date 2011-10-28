@@ -189,12 +189,15 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
