@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "spotifyPlugin.h"
+#include "hypemPlugin.h"
 
 #include <QDir>
 #include <QSettings>
@@ -31,55 +32,93 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "chartsplugin_data_p.h"
 
-#define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org:10380/"
+#define HYPEM_URL "http://hypem.com/playlist/"
+#define HYPEM_END_URL "json/1/data.js"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
 using namespace Tomahawk::InfoSystem;
 
 
-SpotifyPlugin::SpotifyPlugin()
+hypemPlugin::hypemPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
 
     m_supportedGetTypes << InfoChart << InfoChartCapabilities;
+    m_types << "Artists" << "Tracks" << "Recent by Tag";
+
+    m_trackTypes    << "Last 3 Days"
+                    << "Last Week"
+                    << "No Remixes"
+                    << "On Twitter";
+
+    m_byTagTypes    << "Dance"
+                    << "Experimental"
+                    << "Electronic"
+                    << "Funk"
+                    << "Hip-hop"
+                    << "Indie"
+                    << "Instrumental"
+                    << "Post-punk"
+                    << "Rock"
+                    << "Singer-songwriter"
+                    << "Alternative"
+                    << "Pop"
+                    << "Female"
+                    << "Vocalist"
+                    << "Folk"
+                    << "Electro"
+                    << "Lo-fi"
+                    << "Psychedelic"
+                    << "Rap"
+                    << "British"
+                    << "Ambient"
+                    << "Dubstep"
+                    << "House"
+                    << "Chillwave"
+                    << "Dreampop"
+                    << "Shoegaze"
+                    << "Chillout"
+                    << "Soul"
+                    << "French"
+                    << "Acoustic"
+                    << "Canadian"
+                    << "60s"
+                    << "80s"
+                    << "Techno"
+                    << "Punk"
+                    << "New wave";
+    chartTypes();
 
 }
 
 
-SpotifyPlugin::~SpotifyPlugin()
+
+
+hypemPlugin::~hypemPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
+hypemPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
-    tDebug() << "SpotifyPlugin: namChangedSLot";
+    tDebug() << "hypemPlugin: namChangedSLot";
     qDebug() << Q_FUNC_INFO;
     if( !nam )
         return;
 
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 
-    /// We need to fetch possible types before they are asked for
-    tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
-
-    QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
-    QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-    tDebug() << Q_FUNC_INFO << "fetching:" << url;
-    connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-    m_chartsFetchJobs++;
 
 }
 
 
 void
-SpotifyPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
+hypemPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     emit info( requestData, QVariant() );
     return;
@@ -87,7 +126,7 @@ SpotifyPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+hypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
@@ -97,8 +136,9 @@ SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
     switch ( requestData.type )
     {
+
         case InfoChart:
-            if ( !hash.contains( "chart_source" ) || hash["chart_source"] != "spotify" )
+            if ( !hash.contains( "chart_source" ) || hash["chart_source"] != "hypem" )
             {
                 dataError( requestData );
                 break;
@@ -117,35 +157,43 @@ SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-SpotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
+hypemPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
 {
     Q_UNUSED( caller )
     Q_UNUSED( type)
     Q_UNUSED( input )
 }
 
+
 void
-SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
+hypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
+
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestData );
         return;
     }
+
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    if ( !hash.contains( "chart_id" ) )
+
+    /// Each request needs to contain both a id and source
+    if ( !hash.contains( "chart_id" ) && !hash.contains( "chart_source" ) )
     {
         dataError( requestData );
         return;
-    } else {
-        criteria["chart_id"] = hash["chart_id"];
-    }
 
-    emit getCachedInfo( criteria, 604800000 /* Expire chart cache in 1 week */, requestData );
+    }
+    /// Set the criterias for current chart
+    criteria["chart_id"] = hash["chart_id"];
+    criteria["chart_source"] = hash["chart_source"];
+
+    emit getCachedInfo( criteria, 0, requestData );
 }
+
 void
-SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
+hypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -158,11 +206,11 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
 }
 
 void
-SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !m_nam.data() )
     {
-        tLog() << Q_FUNC_INFO << "Have a null QNAM, uh oh";
+        tLog() << "Have a null QNAM, uh oh";
         emit info( requestData, QVariant() );
         return;
     }
@@ -170,11 +218,11 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
 
     switch ( requestData.type )
     {
-
         case InfoChart:
         {
             /// Fetch the chart, we need source and id
-            QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
+
+            QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg(HYPEM_END_URL) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
@@ -184,6 +232,7 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
 
 
         }
+
         case InfoChartCapabilities:
         {
             if ( m_chartsFetchJobs > 0 )
@@ -208,98 +257,83 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
 
 
 void
-SpotifyPlugin::chartTypes()
+hypemPlugin::chartTypes()
 {
-    /// Get possible chart type for specificSpotifyPlugin: InfoChart types returned chart source
-    tDebug() << Q_FUNC_INFO << "Got spotifychart type result";
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    /// Get possible chart type for specifichypemPlugin: InfoChart types returned chart source
+    tDebug() << Q_FUNC_INFO << "Got hypem types";
 
-    if ( reply->error() == QNetworkReply::NoError )
+    QVariantMap charts;
+
+    foreach(QVariant types, m_types )
     {
-        QJson::Parser p;
-        bool ok;
-        const QVariantMap res = p.parse( reply, &ok ).toMap();
-        const QVariantMap chartObj = res;
+        QList< InfoStringHash > chart_types;
+        QList< InfoStringHash > pop_charts;
+        InfoStringHash c;
 
-        if ( !ok )
-        {
-            tLog() << Q_FUNC_INFO << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
-
-            return;
-        }
-
-        QVariantMap charts;
-        foreach(QVariant geos, chartObj.value("Charts").toList().takeLast().toMap().value("geo").toList() )
+        if(types.toString() != "Artists")
         {
 
-           const QString geo = geos.toMap().value( "name" ).toString();
-           const QString geoId = geos.toMap().value( "id" ).toString();
-           QString country;
+            if(types.toString() == "Tracks")
+            {
 
-           if( geo == "For me" )
-              continue; /// country = geo; Lets use this later, when we can get the spotify username from tomahawk
-           else if( geo == "Everywhere" )
-               country = geo;
-           else
-           {
+                foreach(QVariant trackType, m_trackTypes)
+                {
+                    QString typeId;
+                    if(trackType.toString() == "Last 3 Days")
+                        typeId = "popular/3day";
 
-               QLocale l( QString( "en_%1" ).arg( geo ) );
-               country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+                    if(trackType.toString() == "Last Week")
+                        typeId = "popular/lastweek";
 
-               for ( int i = 1; i < country.size(); i++ )
-               {
-                   if ( country.at( i ).isUpper() )
-                   {
-                       country.insert( i, " " );
-                       i++;
-                   }
-               }
-           }
+                    if(trackType.toString() == "No Remixes")
+                        typeId = "popular/noremix";
 
-           QList< InfoStringHash > chart_types;
-           foreach(QVariant types, chartObj.value("Charts").toList().takeFirst().toMap().value("types").toList() )
-           {
-               QString type = types.toMap().value( "id" ).toString();
-               QString label = types.toMap().value( "name" ).toString();
+                    if(trackType.toString() == "On Twitter")
+                        typeId = "popular/twitter";
 
-               InfoStringHash c;
-               c[ "id" ] = type + "/" + geoId;
-               c[ "label" ] = label;
-               c[ "type" ] = type;
+                    c[ "id" ] = typeId;
+                    c[ "label" ] = trackType.toString();
+                    c[ "type" ] = "tracks";
+                    pop_charts.append( c );
+                }
 
-               chart_types.append( c );
+                chart_types.append( pop_charts );
 
-           }
+            }
+            else if(types.toString() == "Recent by Tag")
+            {
+                foreach(QVariant tagTypes, m_byTagTypes)
+                {
 
-           charts.insert( country.toUtf8(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
+                    c[ "id" ] = "tags/" + tagTypes.toString().toLower();
+                    c[ "label" ] = tagTypes.toString();
+                    c[ "type" ] = tagTypes.toString();
+                    chart_types.append( c );
+                }
 
-        }
+            }
 
-        QVariantMap defaultMap;
-        defaultMap[ "spotify" ] = QStringList() << "United States" << "Top Albums";
-        m_allChartsMap[ "defaults" ] = defaultMap;
-        m_allChartsMap.insert( "Spotify", QVariant::fromValue<QVariantMap>( charts ) );
-
-    }
-    else
-    {
-        tLog() << Q_FUNC_INFO << "Error fetching charts:" << reply->errorString();
-    }
-
-    m_chartsFetchJobs--;
-    if ( !m_cachedRequests.isEmpty() && m_chartsFetchJobs == 0 )
-    {
-        foreach ( InfoRequestData request, m_cachedRequests )
+        }else
         {
-            emit info( request, m_allChartsMap );
+            InfoStringHash c;
+            c[ "id" ] = "popular/artists";
+            c[ "label" ] = "Most Recent";
+            c[ "type" ] = "artists";
+            chart_types.append( c );
         }
-        m_cachedRequests.clear();
+
+        charts.insert( types.toString(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
     }
+
+
+    m_allChartsMap.insert( "Hypem", QVariant::fromValue<QVariantMap>( charts ) );
+    qDebug() << "hypemPlugin:Chartstype: " << m_allChartsMap;
+
 
 }
 
 void
-SpotifyPlugin::chartReturned()
+hypemPlugin::chartReturned()
 {
 
     /// Chart request returned something! Woho
@@ -320,19 +354,14 @@ SpotifyPlugin::chartReturned()
 
         /// SO we have a result, parse it!
         QList< InfoStringHash > top_tracks;
-        QList< InfoStringHash > top_albums;
         QStringList top_artists;
 
-        if( url.contains( "albums" ) )
-            setChartType( Album );
-        else if( url.contains( "tracks" ) )
-            setChartType( Track );
-        else if( url.contains( "artists" ) )
+        if( url.contains( "artists" ) )
             setChartType( Artist );
         else
-            setChartType( None );
+            setChartType( Track );
 
-        foreach(QVariant result, res.value("toplist").toMap().value("result").toList() )
+        foreach(QVariant result, res )
         {
             QString title, artist;
             QVariantMap chartMap = result.toMap();
@@ -350,24 +379,15 @@ SpotifyPlugin::chartReturned()
                     pair["track"] = title;
                     top_tracks << pair;
 
-                    qDebug() << "SpotifyChart type is track";
+                    qDebug() << "HypemChart type is track";
                 }
 
-                if( chartType() == Album )
-                {
-
-                    InfoStringHash pair;
-                    pair["artist"] = artist;
-                    pair["album"] = title;
-                    top_albums << pair;
-                    qDebug() << "SpotifyChart type is album";
-                }
 
                 if( chartType() == Artist )
                 {
 
-                    top_artists << chartMap.value( "name" ).toString();
-                    qDebug() << "SpotifyChart type is artist";
+                    top_artists << artist;
+                    qDebug() << "HypemChart type is artist";
 
                 }
             }
@@ -375,21 +395,16 @@ SpotifyPlugin::chartReturned()
 
         if( chartType() == Track )
         {
-            tDebug() << "ChartsPlugin:" << "\tgot " << top_tracks.size() << " tracks";
+            tDebug() << "HypemPlugin:" << "\tgot " << top_tracks.size() << " tracks";
             returnedData["tracks"] = QVariant::fromValue( top_tracks );
             returnedData["type"] = "tracks";
         }
 
-        if( chartType() == Album )
-        {
-            tDebug() << "ChartsPlugin:" << "\tgot " << top_albums.size() << " albums";
-            returnedData["albums"] = QVariant::fromValue( top_albums );
-            returnedData["type"] = "albums";
-        }
+
 
         if( chartType() == Artist )
         {
-            tDebug() << "ChartsPlugin:" << "\tgot " << top_artists.size() << " artists";
+            tDebug() << "HypemPlugin:" << "\tgot " << top_artists.size() << " artists";
             returnedData["artists"] = top_artists;
             returnedData["type"] = "artists";
         }
@@ -398,7 +413,7 @@ SpotifyPlugin::chartReturned()
 
 
         emit info( requestData, returnedData );
-
+        // TODO update cache
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();

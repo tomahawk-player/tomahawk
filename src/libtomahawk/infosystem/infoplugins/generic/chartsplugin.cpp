@@ -107,7 +107,7 @@ ChartsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     qDebug() << Q_FUNC_INFO << requestData.customData;
 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-    bool foundSource;
+    bool foundSource = false;
 
     switch ( requestData.type )
     {

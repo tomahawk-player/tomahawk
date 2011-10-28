@@ -29,6 +29,7 @@
 #include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
+#include "infoplugins/generic/hypemPlugin.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -99,6 +100,10 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr spotptr( new SpotifyPlugin() );
     m_plugins.append( spotptr );
     registerInfoTypes( spotptr, spotptr.data()->supportedGetTypes(), spotptr.data()->supportedPushTypes() );
+    InfoPluginPtr hypeptr( new hypemPlugin() );
+    m_plugins.append( hypeptr );
+    registerInfoTypes( hypeptr, hypeptr.data()->supportedGetTypes(), hypeptr.data()->supportedPushTypes() );
+
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );

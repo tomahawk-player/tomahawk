@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SpotifyPlugin_H
-#define SpotifyPlugin_H
+#ifndef hypemPlugin_H
+#define hypemPlugin_H
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
@@ -32,13 +32,13 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class SpotifyPlugin : public InfoPlugin
+class hypemPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    SpotifyPlugin();
-    virtual ~SpotifyPlugin();
+    hypemPlugin();
+    virtual ~hypemPlugin();
 
     enum ChartType {
         None =      0x00,
@@ -58,6 +58,7 @@ public slots:
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data );
 
 private:
@@ -65,11 +66,23 @@ private:
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
+    QVariantList m_chartResources;
+    QList<InfoStringHash> m_charts;
+
 
     ChartType m_chartType;
     QVariantMap m_allChartsMap;
+    QVariantList m_types;
+    QVariantList m_popularTypes;
+    QVariantList m_trackTypes;
+    QVariantList m_byTagTypes;
+
+
     uint m_chartsFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
+
+    QHash< QString, QString > m_cachedCountries;
+
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
@@ -77,4 +90,4 @@ private:
 
 }
 
-#endif // SpotifyPlugin_H
+#endif // hypemPlugin_H
