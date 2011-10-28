@@ -149,7 +149,13 @@ RoviPlugin::albumLookupFinished()
         return;
     }
 
-    QVariantMap results = response[ "searchResponse" ].toMap().value( "results" ).toList().first().toMap();
+    QVariantList resultList = response[ "searchResponse" ].toMap().value( "results" ).toList();
+    if ( resultList.size() == 0 )
+    {
+        emit info( requestData, QVariant() );
+    }
+
+    QVariantMap results = resultList.first().toMap();
     QVariantList tracks = results[ "album" ].toMap()[ "tracks" ].toList();
 
     if ( tracks.isEmpty() )
