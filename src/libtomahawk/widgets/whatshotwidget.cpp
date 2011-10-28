@@ -238,7 +238,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 m_artistModels[ chartId ] = artistsModel;
 
-                setLeftViewArtists( artistsModel );
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewArtists( artistsModel );
             }
             else if( type == "albums" )
             {
@@ -259,7 +260,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 albumModel->addAlbums( al );
 
                 m_albumModels[ chartId ] = albumModel;
-                setLeftViewAlbums( albumModel );
+
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewAlbums( albumModel );
             }
             else if( type == "tracks" )
             {
@@ -278,7 +281,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 trackModel->append( tracklist );
 
                 m_trackModels[ chartId ] = trackModel;
-                setLeftViewTracks( trackModel );
+
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewTracks( trackModel );
             }
             else
             {
@@ -360,6 +365,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
 
     m_queuedFetches.insert( chartId );
+    m_queueItemToShow = chartId;
 }
 
 
