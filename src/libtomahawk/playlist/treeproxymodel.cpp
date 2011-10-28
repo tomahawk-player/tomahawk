@@ -333,10 +333,30 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
 
     QModelIndex idx = currentIndex();
 
+    if ( m_shuffled )
+        idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
+    else if ( m_repeatMode == PlaylistInterface::RepeatOne )
+        idx = index( idx.row(), 0, idx.parent() );
+    else
+        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+
+    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
+    {
+        if ( itemsAway > 0 )
+        {
+            // reset to first item
+            idx = index( 0, 0, currentIndex().parent() );
+        }
+        else
+        {
+            // reset to last item
+            idx = index( rowCount( currentIndex().parent() ) - 1, 0, currentIndex().parent() );
+        }
+    }
+
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
     {
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
         if ( !idx.isValid() )
             break;
 
