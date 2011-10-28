@@ -186,7 +186,11 @@ AlbumView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
 
+#ifdef Q_WS_X11
     int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+#else
+    int scrollbar = verticalScrollBar()->rect().width();
+#endif
     int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
     QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
