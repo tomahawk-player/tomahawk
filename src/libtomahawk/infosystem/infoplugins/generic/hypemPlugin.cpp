@@ -137,7 +137,7 @@ hypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
 
         case InfoChart:
-            if ( !hash.contains( "chart_source" ) || hash["chart_source"] != "hypem" )
+            if ( !hash.contains( "chart_source" ) || hash["chart_source"].toLower() != "hype machine" )
             {
                 dataError( requestData );
                 break;
