@@ -26,6 +26,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QHBoxLayout>
 
 using namespace Tomahawk;
 
@@ -35,6 +36,11 @@ BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* mode
     , m_model( model )
     , m_combo( new ComboBox( this ) )
 {
+    setLayout( new QHBoxLayout );
+    layout()->setContentsMargins( 0, 0, 0, 0 );
+    layout()->setSpacing( 0 );
+    layout()->addWidget( m_combo );
+
     setFixedHeight( TomahawkUtils::headerHeight() );
     m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 
@@ -131,6 +137,7 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
             return;
     }
 
+    m_combo->hide();
     m_combo->clear();
     m_combo->addItems( list );
 
@@ -140,6 +147,8 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
         m_combo->setCurrentIndex( defaultIndex );
 
     m_curIndex = m_model->index( m_combo->currentIndex(), 0, m_parentIndex );
+
+    m_combo->show();
     m_combo->adjustSize();
 }
 
