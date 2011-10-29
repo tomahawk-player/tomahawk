@@ -191,6 +191,8 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     tDebug() << "Init Database Factory.";
@@ -221,7 +223,6 @@ TomahawkApp::init()
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
-    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
     EchonestGenerator::setupCatalogs();
 
