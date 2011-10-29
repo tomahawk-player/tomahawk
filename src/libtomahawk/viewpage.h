@@ -23,6 +23,8 @@
 
 #include "typedefs.h"
 #include "playlistinterface.h"
+#include "artist.h"
+#include "album.h"
 #include "utils/tomahawkutils.h"
 
 #include "dllmacro.h"
@@ -33,6 +35,12 @@ namespace Tomahawk
 class DLLEXPORT ViewPage
 {
 public:
+    enum DescriptionType {
+        TextType = 0,
+        ArtistType = 1,
+        AlbumType = 2
+    };
+
     ViewPage() {}
     virtual ~ViewPage() {}
 
@@ -40,7 +48,12 @@ public:
     virtual Tomahawk::PlaylistInterface* playlistInterface() const = 0;
 
     virtual QString title() const = 0;
+
+    virtual DescriptionType descriptionType() { return TextType; }
     virtual QString description() const = 0;
+    virtual Tomahawk::artist_ptr descriptionArtist() const { return Tomahawk::artist_ptr(); }
+    virtual Tomahawk::album_ptr descriptionAlbum() const { return Tomahawk::album_ptr(); }
+
     virtual QString longDescription() const { return QString(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
 
@@ -62,6 +75,8 @@ public:
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )
      * descriptionChanged( const QString& )
+     * descriptionChanged( const Tomahawk::artist_ptr& artist )
+     * descriptionChanged( const Tomahawk::album_ptr& album )
      * longDescriptionChanged( const QString& )
      * pixmapChanged( const QPixmap& )
      * destroyed( QWidget* widget );

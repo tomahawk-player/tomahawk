@@ -136,6 +136,23 @@ AlbumInfoWidget::isBeingPlayed() const
     return false;
 }
 
+artist_ptr AlbumInfoWidget::descriptionArtist() const
+{
+    if ( !m_album.isNull() && !m_album->artist().isNull() )
+        return m_album->artist();
+
+    return artist_ptr();
+}
+
+ViewPage::DescriptionType
+AlbumInfoWidget::descriptionType()
+{
+    if ( !m_album.isNull() && !m_album->artist().isNull() )
+        return ViewPage::ArtistType;
+
+    return ViewPage::TextType;
+}
+
 
 void
 AlbumInfoWidget::load( const album_ptr& album )
@@ -143,6 +160,7 @@ AlbumInfoWidget::load( const album_ptr& album )
     m_album = album;
     m_title = album->name();
     m_description = album->artist()->name();
+
     ui->albumsLabel->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
 
     m_tracksModel->addTracks( album, QModelIndex() );

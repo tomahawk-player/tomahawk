@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include <QFrame>
 #include <QTime>
+#include <QPen>
 
 #include "result.h"
 #include "query.h"
@@ -67,6 +68,14 @@ public:
     Qt::TextElideMode elideMode() const;
     void setElideMode( Qt::TextElideMode mode );
 
+    void setTextPen( const QPen& );
+    QPen textPen() const;
+
+    void setFont( const QFont& );
+    QFont font() const;
+
+    void setExtraContentsMargins( int left, int top, int right, int bottom );
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -98,18 +107,22 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
     virtual void startDrag();
-    
+
 private:
     QString smartAppend( QString& text, const QString& appendage ) const;
-    QTime time;
+    QTime m_time;
 
     DisplayType m_type;
     QString m_text;
     Tomahawk::result_ptr m_result;
     Tomahawk::query_ptr m_query;
 
-    Qt::Alignment align;
-    Qt::TextElideMode mode;
+    Qt::Alignment m_align;
+    Qt::TextElideMode m_mode;
+
+    bool m_useCustomPen, m_useCustomFont;
+    QPen m_textPen;
+    QFont m_font;
 
     DisplayType m_hoverType;
     QRect m_hoverArea;

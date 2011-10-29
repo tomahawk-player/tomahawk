@@ -555,6 +555,12 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
 
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::artist_ptr)" ) > -1 )
+            connect( obj, SIGNAL( descriptionChanged( Tomahawk::artist_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::artist_ptr ) ), Qt::UniqueConnection );
+
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::album_ptr)" ) > -1 )
+            connect( obj, SIGNAL( descriptionChanged( Tomahawk::album_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::album_ptr ) ), Qt::UniqueConnection );
+
         if( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( longDescriptionChanged( QString ) ), m_infobar, SLOT( setLongDescription( QString ) ), Qt::UniqueConnection );
 
@@ -672,7 +678,19 @@ ViewManager::updateView()
 
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
-    m_infobar->setDescription( currentPage()->description() );
+    switch( currentPage()->descriptionType() )
+    {
+        case ViewPage::TextType:
+            m_infobar->setDescription( currentPage()->description() );
+            break;
+        case ViewPage::ArtistType:
+            m_infobar->setDescription( currentPage()->descriptionArtist() );
+            break;
+        case ViewPage::AlbumType:
+            m_infobar->setDescription( currentPage()->descriptionAlbum() );
+            break;
+
+    }
     m_infobar->setLongDescription( currentPage()->longDescription() );
     m_infobar->setPixmap( currentPage()->pixmap() );
 

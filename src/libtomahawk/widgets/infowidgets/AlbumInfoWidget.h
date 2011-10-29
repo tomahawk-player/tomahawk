@@ -53,6 +53,24 @@ public:
     AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
     ~AlbumInfoWidget();
 
+    virtual QWidget* widget() { return this; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
+
+    virtual QString title() const { return m_title; }
+    virtual DescriptionType descriptionType();
+    virtual QString description() const { return m_description; }
+    virtual Tomahawk::artist_ptr descriptionArtist() const;
+    virtual QString longDescription() const { return m_longDescription; }
+    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+
+    virtual bool isTemporaryPage() const { return true; }
+    virtual bool showStatsBar() const { return false; }
+
+    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool isBeingPlayed() const;
+
+public slots:
+
     /** \brief Loads information for a given album.
      *  \param album The album that you want to load information for.
      *
@@ -63,23 +81,9 @@ public:
      */
     void load( const Tomahawk::album_ptr& album );
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
-
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
-    virtual QString longDescription() const { return m_longDescription; }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
-
-    virtual bool isTemporaryPage() const { return true; }
-    virtual bool showStatsBar() const { return false; }
-
-    virtual bool jumpToCurrentTrack() { return false; }
-    virtual bool isBeingPlayed() const;
-
 signals:
     void longDescriptionChanged( const QString& description );
-    void descriptionChanged( const QString& description );
+    void descriptionChanged( const Tomahawk::artist_ptr& artist );
     void pixmapChanged( const QPixmap& pixmap );
 
 protected:

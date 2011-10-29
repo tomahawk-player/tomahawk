@@ -59,6 +59,7 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
 
     StyleHelper::horizontalHeader( &p, r ); // draw the background
 
+    qDebug() << "BREADCRUMBBUTTON PAINTING IN:" << r << mapToParent( r.topLeft() ) << m_curIndex.data();
     if( !hasChildren() )
         return;
 

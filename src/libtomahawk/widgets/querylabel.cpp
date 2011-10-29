@@ -80,8 +80,10 @@ QueryLabel::init()
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
 
-    align = Qt::AlignLeft;
-    mode = Qt::ElideMiddle;
+    m_useCustomPen = false;
+    m_useCustomFont = false;
+    m_align = Qt::AlignLeft;
+    m_mode = Qt::ElideMiddle;
 }
 
 
@@ -234,36 +236,61 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
 Qt::Alignment
 QueryLabel::alignment() const
 {
-    return align;
+    return m_align;
 }
 
 
 void
 QueryLabel::setAlignment( Qt::Alignment alignment )
 {
-    if ( this->align != alignment )
+    if ( m_align != alignment )
     {
-        this->align = alignment;
+        m_align = alignment;
         update(); // no geometry change, repaint is sufficient
     }
 }
 
+void
+QueryLabel::setTextPen( const QPen & pen )
+{
+    m_useCustomPen = true;
+    m_textPen = pen;
+}
+
+QPen
+QueryLabel::textPen() const
+{
+    return m_textPen;
+}
 
 Qt::TextElideMode
 QueryLabel::elideMode() const
 {
-    return mode;
+    return m_mode;
 }
 
 
 void
 QueryLabel::setElideMode( Qt::TextElideMode mode )
 {
-    if ( this->mode != mode )
+    if ( m_mode != mode )
     {
-        this->mode = mode;
+        m_mode = mode;
         updateLabel();
     }
+}
+
+QFont
+QueryLabel::font() const
+{
+    return m_font;
+}
+
+void
+QueryLabel::setFont( const QFont& font )
+{
+    m_useCustomFont = true;
+    m_font = font;
 }
 
 
@@ -275,6 +302,17 @@ QueryLabel::updateLabel()
 
     updateGeometry();
     update();
+}
+
+void
+QueryLabel::setExtraContentsMargins( int left, int top, int right, int bottom )
+{
+    QMargins margins = contentsMargins();
+    margins.setLeft( margins.left() + left );
+    margins.setTop( margins.top() + top );
+    margins.setRight( margins.right() + right );
+    margins.setBottom( margins.bottom() + bottom );
+    setContentsMargins( margins );
 }
 
 
@@ -290,7 +328,7 @@ QueryLabel::sizeHint() const
 QSize
 QueryLabel::minimumSizeHint() const
 {
-    switch ( mode )
+    switch ( m_mode )
     {
         case Qt::ElideNone:
             return sizeHint();
@@ -312,10 +350,13 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QPainter p( this );
     QRect r = contentsRect();
     QString s = text();
-    const QString elidedText = fontMetrics().elidedText( s, mode, r.width() );
+    const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
 
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
+
+    if ( m_useCustomFont )
+        p.setFont( m_font );
 
     if ( m_hoverArea.width() )
     {
@@ -343,7 +384,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.setBrush( palette().window() );
             p.setPen( palette().color( foregroundRole() ) );
         }
-        p.drawText( r, align, elidedText );
+        p.drawText( r, m_align, elidedText );
     }
     else
     {
@@ -353,10 +394,14 @@ QueryLabel::paintEvent( QPaintEvent* event )
         int albumX = m_type & Album ? fm.width( album() ) : 0;
         int trackX = m_type & Track ? fm.width( track() ) : 0;
 
+        if ( m_useCustomPen )
+            p.setPen( m_textPen );
+
         if ( m_type & Artist )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
+            if ( !m_useCustomPen )
+                p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_hoverType == Artist )
             {
@@ -364,17 +409,18 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, align, artist() );
+            p.drawText( r, m_align, artist() );
             r.adjust( artistX, 0, 0, 0 );
         }
         if ( m_type & Album )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
+            if ( !m_useCustomPen )
+                p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist )
             {
-                p.drawText( r, align, DASH );
+                p.drawText( r, m_align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverType == Album )
@@ -383,17 +429,18 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, align, album() );
+            p.drawText( r, m_align, album() );
             r.adjust( albumX, 0, 0, 0 );
         }
         if ( m_type & Track )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
+            if ( !m_useCustomPen )
+                p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist || m_type & Album )
             {
-                p.drawText( r, align, DASH );
+                p.drawText( r, m_align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverType == Track )
@@ -402,7 +449,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, align, track() );
+            p.drawText( r, m_align, track() );
             r.adjust( trackX, 0, 0, 0 );
         }
     }
@@ -432,7 +479,8 @@ void
 QueryLabel::mousePressEvent( QMouseEvent* event )
 {
     QFrame::mousePressEvent( event );
-    time.start();
+    m_time.restart();
+    m_dragPos = event->pos();
 }
 
 
@@ -442,7 +490,8 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
     QFrame::mouseReleaseEvent( event );
 
     m_dragPos = QPoint();
-    if ( time.elapsed() < qApp->doubleClickInterval() )
+    qDebug() << "ELAPSED TIME" << m_time.elapsed() << "limit:" << qApp->doubleClickInterval();
+    if ( m_time.elapsed() < qApp->doubleClickInterval() )
     {
         switch( m_hoverType )
         {
@@ -484,7 +533,10 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         return;
     }
 
-    const QFontMetrics& fm = fontMetrics();
+    QFontMetrics fm = fontMetrics();
+    if ( m_useCustomFont )
+        fm = QFontMetrics( m_font );
+
     int dashX = fm.width( DASH );
     int artistX = m_type & Artist ? fm.width( artist() ) : 0;
     int albumX = m_type & Album ? fm.width( album() ) : 0;

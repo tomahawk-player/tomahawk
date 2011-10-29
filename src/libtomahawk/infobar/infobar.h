@@ -22,7 +22,9 @@
 #include <QWidget>
 
 #include "dllmacro.h"
+#include "artist.h"
 
+class QueryLabel;
 class QCheckBox;
 class QTimeLine;
 class QSearchField;
@@ -43,7 +45,12 @@ public:
 
 public slots:
     void setCaption( const QString& s );
+
     void setDescription( const QString& s );
+    // If you want a querylabel instead of an ElidedLabel
+    void setDescription( const Tomahawk::artist_ptr& artist );
+    void setDescription( const Tomahawk::album_ptr& album_ptr );
+
     void setLongDescription( const QString& s );
     void setPixmap( const QPixmap& p );
 
@@ -60,12 +67,14 @@ protected:
 
 private slots:
     void onFilterEdited();
+    void artistClicked();
 
 private:
     Ui::InfoBar* ui;
 
     QSearchField* m_searchWidget;
     QCheckBox* m_autoUpdate;
+    QueryLabel* m_queryLabel;
 };
 
 #endif // INFOBAR_H

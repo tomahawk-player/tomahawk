@@ -121,10 +121,10 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
             // Animate all buttons except the first
             if ( m_buttons.count() > 0 )
             {
-                QPropertyAnimation* animation = new QPropertyAnimation( btn, "pos" );
+                QPropertyAnimation* animation = new QPropertyAnimation( btn, "x" );
                 animation->setDuration( 300 );
-                animation->setStartValue( m_buttons.last()->pos() );
-                animation->setEndValue( btn->pos() );
+                animation->setStartValue( m_buttons.last()->pos().x() );
+                animation->setEndValue( btn->pos().x() );
                 animation->start( QAbstractAnimation::DeleteWhenStopped );
             }
 
@@ -150,19 +150,7 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
     while ( m_buttons.size() > cur )
     {
         BreadcrumbButton* b = m_buttons.takeLast();
-
         m_buttonlayout->removeWidget( b );
-        b->show();
-
-        if ( m_buttons.size() )
-        {
-            QPropertyAnimation* animation = new QPropertyAnimation( b, "pos" );
-            animation->setDuration( 300 );
-            animation->setStartValue( b->pos() );
-            animation->setEndValue( m_buttons.last()->pos() );
-            animation->start( QAbstractAnimation::DeleteWhenStopped );
-        }
-
         b->deleteLater();
     }
 
