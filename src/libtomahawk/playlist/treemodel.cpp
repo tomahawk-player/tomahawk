@@ -827,7 +827,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             QStringList albums = returnedData[ "albums" ].toStringList();
             QList<album_ptr> al;
 
-            InfoSystem::InfoStringHash inputInfo;
+            Tomahawk::InfoSystem::InfoStringHash inputInfo;
             inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
             artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
 
@@ -848,14 +848,19 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
         {
             if ( m_receivedInfoData.contains( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() ) )
                 break;
+            
+            QVariantMap returnedData = output.value< QVariantMap >();
+            if ( returnedData.isEmpty() )
+                break;
+            
             m_receivedInfoData.insert( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
 
-            QVariantMap returnedData = output.value< QVariantMap >();
+            
             QStringList tracks = returnedData[ "tracks" ].toStringList();
             QList<query_ptr> ql;
 
-            InfoSystem::InfoStringHash inputInfo;
-            inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
+            Tomahawk::InfoSystem::InfoStringHash inputInfo;
+            inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
             foreach ( const QString& trackName, tracks )
             {
