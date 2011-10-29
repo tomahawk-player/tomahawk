@@ -181,8 +181,6 @@ TomahawkApp::init()
 
     TomahawkUtils::setProxyFactory( proxyFactory );
 
-    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
-
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
     new Pipeline( this );
@@ -225,7 +223,6 @@ TomahawkApp::init()
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
-
     EchonestGenerator::setupCatalogs();
 
 #ifndef TOMAHAWK_HEADLESS
@@ -305,10 +302,11 @@ TomahawkApp::~TomahawkApp()
 
     delete SipHandler::instance();
 
+    Pipeline::instance()->stop();
+
     if ( !m_database.isNull() )
         delete m_database.data();
 
-    Pipeline::instance()->stop();
     delete Pipeline::instance();
 
 #ifndef TOMAHAWK_HEADLESS
