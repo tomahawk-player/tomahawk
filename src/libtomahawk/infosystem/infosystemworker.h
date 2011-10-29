@@ -52,12 +52,13 @@ public:
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
+    void finished( QString target, Tomahawk::InfoSystem::InfoType type );
     
     void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
@@ -69,7 +70,7 @@ private slots:
     
 private:
 
-    void checkFinished( const QString &target );
+    void checkFinished( const Tomahawk::InfoSystem::InfoRequestData &target );
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     QHash< QString, QHash< InfoType, int > > m_dataTracker;

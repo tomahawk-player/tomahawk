@@ -79,7 +79,11 @@ InfoSystem::InfoSystem( QObject *parent )
 
     connect( m_worker.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              this,       SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
     connect( m_worker.data(), SIGNAL( finished( QString ) ), this, SIGNAL( finished( QString ) ), Qt::UniqueConnection );
+
+    connect( m_worker.data(), SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
+             this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
 }
 
 InfoSystem::~InfoSystem()
@@ -120,10 +124,10 @@ InfoSystem::newNam() const
 
 
 void
-InfoSystem::getInfo( const InfoRequestData &requestData, uint timeoutMillis, bool allSources )
+InfoSystem::getInfo( const InfoRequestData &requestData )
 {
     qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ), Q_ARG( uint, timeoutMillis ), Q_ARG( bool, allSources ) );
+    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
 }
 
 
@@ -133,11 +137,13 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
     InfoRequestData requestData;
     requestData.caller = caller;
     requestData.customData = customData;
+    requestData.allSources = allSources;
     Q_FOREACH( InfoType type, inputMap.keys() )
     {
         requestData.type = type;
         requestData.input = inputMap[ type ];
-        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ), Q_ARG( uint, ( timeoutMap.contains( type ) ? timeoutMap[ type ] : 0 ) ), Q_ARG( bool, allSources ) );
+        requestData.timeoutMillis = timeoutMap.contains( type ) ? timeoutMap[ type ] : 10000;
+        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
     }
 }
 

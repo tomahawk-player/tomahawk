@@ -136,9 +136,10 @@ WhatsHotWidget::fetchData()
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = QVariantMap();
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+    requestData.timeoutMillis = 20000;
+    requestData.allSources = true;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
@@ -358,11 +359,12 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = customData;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
-
     requestData.type = Tomahawk::InfoSystem::InfoChart;
+    requestData.timeoutMillis = 20000;
+    requestData.allSources = true;
 
     qDebug() << "Making infosystem request for chart of type:" <<chartId;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     m_queuedFetches.insert( chartId );
     m_queueItemToShow = chartId;

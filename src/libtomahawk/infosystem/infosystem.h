@@ -132,7 +132,9 @@ struct InfoRequestData {
     Tomahawk::InfoSystem::InfoType type;
     QVariant input;
     QVariantMap customData;
-
+    uint timeoutMillis;
+    bool allSources;
+    
     InfoRequestData()
         : requestId( TomahawkUtils::infosystemRequestId() )
         , internalId( TomahawkUtils::infosystemRequestId() )
@@ -140,6 +142,8 @@ struct InfoRequestData {
         , type( Tomahawk::InfoSystem::InfoNoInfo )
         , input( QVariant() )
         , customData( QVariantMap() )
+        , timeoutMillis( 10000 )
+        , allSources( false )
         {}
     
     InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
@@ -149,6 +153,8 @@ struct InfoRequestData {
         , type( typ )
         , input( inputvar )
         , customData( custom )
+        , timeoutMillis( 10000 )
+        , allSources( false )
         {}
 };
 
@@ -234,7 +240,7 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0, bool allSources = false );
+    void getInfo( const InfoRequestData &requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
     void getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
@@ -243,6 +249,7 @@ public:
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
+    void finished( QString target, Tomahawk::InfoSystem::InfoType type );
 
 public slots:
     void newNam() const;

@@ -635,7 +635,9 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
         requestData.customData["rows"] = QVariant( rows );
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData, 0, true );
+        requestData.timeoutMillis = 0;
+        requestData.allSources = true;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
     else
         Q_ASSERT( false );
