@@ -38,7 +38,6 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_view( parent )
     , m_model( proxy )
 {
-    m_shadowPixmap = QPixmap( RESPATH "images/cover-shadow.png" );
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
 }
 
@@ -63,9 +62,30 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     painter->save();
+    painter->setRenderHint( QPainter::Antialiasing );
 
-//    painter->setRenderHint( QPainter::Antialiasing );
-//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
+    if ( !( option.state & QStyle::State_Selected ) )
+    {
+        QRect shadowRect = option.rect.adjusted( 5, 4, -5, -40 );
+        painter->setPen( QColor( 90, 90, 90 ) );
+        painter->drawRoundedRect( shadowRect, 0.5, 0.5 );
+
+        QPen shadowPen( QColor( 30, 30, 30 ) );
+        shadowPen.setWidth( 0.4 );
+        painter->drawLine( shadowRect.bottomLeft() + QPoint( -1, 2 ), shadowRect.bottomRight() + QPoint( 1, 2 ) );
+
+        shadowPen.setColor( QColor( 160, 160, 160 ) );
+        painter->setPen( shadowPen );
+        painter->drawLine( shadowRect.topLeft() + QPoint( -1, 2 ), shadowRect.bottomLeft() + QPoint( -1, 2 ) );
+        painter->drawLine( shadowRect.topRight() + QPoint( 2, 2 ), shadowRect.bottomRight() + QPoint( 2, 2 ) );
+        painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 3 ), shadowRect.bottomRight() + QPoint( 0, 3 ) );
+
+        shadowPen.setColor( QColor( 180, 180, 180 ) );
+        painter->setPen( shadowPen );
+        painter->drawLine( shadowRect.topLeft() + QPoint( -2, 3 ), shadowRect.bottomLeft() + QPoint( -2, 1 ) );
+        painter->drawLine( shadowRect.topRight() + QPoint( 3, 3 ), shadowRect.bottomRight() + QPoint( 3, 1 ) );
+        painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
+    }
 
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
     QRect r = option.rect.adjusted( 6, 5, -6, -41 );
@@ -127,11 +147,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
     else
     {
+        painter->setFont( boldFont );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
         text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
-        painter->setFont( boldFont );
+        painter->setPen( opt.palette.color( QPalette::Dark ) );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
