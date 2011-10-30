@@ -50,6 +50,7 @@
 #include "utils/spotifyparser.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/rdioparser.h"
+#include "widgets/searchwidget.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -500,20 +501,26 @@ bool
 GlobalActionManager::handleSearchCommand( const QUrl& url )
 {
     // open the super collection and set this as the search filter
-    QStringList query;
-    if( url.hasQueryItem( "artist" ) )
-        query << url.queryItemValue( "artist" );
-    if( url.hasQueryItem( "album" ) )
-        query << url.queryItemValue( "album" );
-    if( url.hasQueryItem( "title" ) )
-        query << url.queryItemValue( "title" );
-    QString queryStr = query.join( " " );
+    QString queryStr;
+    if ( url.hasQueryItem( "query" ) )
+        queryStr = url.queryItemValue( "query" );
+    else
+    {
+        QStringList query;
+        if( url.hasQueryItem( "artist" ) )
+            query << url.queryItemValue( "artist" );
+        if( url.hasQueryItem( "album" ) )
+            query << url.queryItemValue( "album" );
+        if( url.hasQueryItem( "title" ) )
+            query << url.queryItemValue( "title" );
+        queryStr = query.join( " " );
+    }
 
-    if( queryStr.isEmpty() )
+    if( queryStr.trimmed().isEmpty() )
         return false;
 
-    ViewManager::instance()->showSuperCollection();
-//    ViewManager::instance()->topbar()->setFilter( queryStr );
+    ViewManager::instance()->show( new SearchWidget( queryStr.trimmed() ) );
+
     return true;
 }
 
