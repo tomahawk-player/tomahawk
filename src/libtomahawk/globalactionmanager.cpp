@@ -357,7 +357,7 @@ GlobalActionManager::handleOpenTrack ( const query_ptr& q )
     ViewManager::instance()->queue()->model()->append( q );
     ViewManager::instance()->showQueue();
 
-    if( !AudioEngine::instance()->isPlaying() ) {
+    if( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() ) {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
         m_waitingToPlay = q;
     }
