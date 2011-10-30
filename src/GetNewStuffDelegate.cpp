@@ -192,7 +192,7 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
             m_cachedStarRects[ QPair<int, int>(index.row(), index.column()) ] = r;
 
         QPixmap pm;
-        if ( m_hoveringOver > -1 )
+        if ( m_hoveringOver > -1 && ( m_hoveringItem.first == index.row() && m_hoveringItem.second == index.column() ) )
         {
             if ( i <= m_hoveringOver ) // positive star
                 painter->drawPixmap( r, m_onHoverStar );
@@ -303,6 +303,8 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
             {
                 // 0-indexed
                 m_hoveringOver = whichStar;
+                m_hoveringItem.first = index.row();
+                m_hoveringItem.second = index.column();
             }
 
             return true;
