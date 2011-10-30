@@ -152,6 +152,13 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
+
+        // we don't know about these.. gotta say yes for now
+        if ( url.contains( "bit.ly" ) ||
+             url.contains( "j.mp" ) ||
+             url.contains( "t.co" ) ||
+             url.contains( "rd.io" ) )
+            return true;
     }
 
     return false;

@@ -539,6 +539,9 @@ SourceTreeView::dropEvent( QDropEvent* event )
             dropThis->setDropTypes( DropJob::Playlist );
             dropThis->setDropAction( DropJob::Create );
             dropThis->parseMimeData( event->mimeData() );
+
+            // Don't add it to the playlist under drop, it's a new playlist now
+            return;
         }
 
         QTreeView::dropEvent( event );
