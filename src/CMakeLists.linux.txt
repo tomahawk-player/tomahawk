@@ -5,6 +5,6 @@ FOREACH( _file ${_icons} )
  INSTALL( FILES ${_file} RENAME tomahawk.png DESTINATION share/icons/hicolor/${_res}/apps )
 ENDFOREACH( _file )
 
-INSTALL( FILES ${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon.svg RENAME tomahawk.svg  DESTINATION share/icons/hicolor/scalable )
+INSTALL( FILES ${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon.svg RENAME tomahawk.svg  DESTINATION share/icons/hicolor/scalable/apps )
 
 INSTALL( FILES ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.desktop DESTINATION share/applications )
