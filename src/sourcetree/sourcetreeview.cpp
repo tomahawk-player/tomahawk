@@ -115,8 +115,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
 }
 
+
 SourceTreeView::~SourceTreeView()
-{}
+{
+}
+
 
 void
 SourceTreeView::setupMenus()
@@ -151,7 +154,7 @@ SourceTreeView::setupMenus()
                 m_latchOnAction->setText( tr( "&Catch Up" ) );
                 m_latchMenu.addSeparator();
                 m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
-                connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
+                connect( m_latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
             }
         }
     }
@@ -231,6 +234,7 @@ SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
     }
 }
 
+
 void
 SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
 {
@@ -244,6 +248,7 @@ SourceTreeView::loadPlaylist()
 {
     onItemActivated( m_contextMenuIndex );
 }
+
 
 void
 SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
@@ -352,6 +357,7 @@ SourceTreeView::latchOnOrCatchUp()
     else
         emit latchRequest( source );
 }
+
 
 void
 SourceTreeView::latchOff()
