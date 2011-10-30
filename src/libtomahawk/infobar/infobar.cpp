@@ -43,7 +43,6 @@ InfoBar::InfoBar( QWidget* parent )
     ui->setupUi( this );
     TomahawkUtils::unmarginLayout( layout() );
     layout()->setContentsMargins( 8, 4, 8, 4 );
-    ui->verticalLayout->setContentsMargins( 0, 0, 0, 15 );
 
     QFont boldFont = ui->captionLabel->font();
     boldFont.setPixelSize( 18 );
@@ -133,6 +132,7 @@ InfoBar::setDescription( const QString& s )
         m_queryLabel->hide();
 
         ui->verticalLayout->addWidget( ui->descriptionLabel );
+        ui->verticalLayout->setContentsMargins( 0, 0, 0, 0 );
         ui->descriptionLabel->show();
     }
     ui->descriptionLabel->setText( s );
@@ -151,12 +151,13 @@ InfoBar::setDescription( const artist_ptr& artist )
 
         m_queryLabel->show();
         ui->verticalLayout->addWidget( m_queryLabel );
+        ui->verticalLayout->setContentsMargins( 0, 0, 0, 15 );
     }
 
 }
 
 void
-InfoBar::setDescription( const album_ptr& album_ptr )
+InfoBar::setDescription( const album_ptr&  )
 {
     // TODO
 }
