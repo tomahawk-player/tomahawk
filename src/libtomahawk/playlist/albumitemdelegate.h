@@ -23,6 +23,7 @@
 
 #include "dllmacro.h"
 
+class QEvent;
 class AlbumProxyModel;
 
 class DLLEXPORT AlbumItemDelegate : public QStyledItemDelegate
@@ -36,13 +37,20 @@ protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+    bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 //    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+signals:
+    void updateIndex( const QModelIndex& idx );
 
 private:
     QAbstractItemView* m_view;
     AlbumProxyModel* m_model;
 
     mutable QHash< qint64, QPixmap > m_cache;
+    mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
+    QPersistentModelIndex m_hoveringOver;
+
     QPixmap m_shadowPixmap;
     QPixmap m_defaultCover;
 };

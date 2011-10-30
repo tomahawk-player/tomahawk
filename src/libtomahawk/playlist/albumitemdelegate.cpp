@@ -31,6 +31,8 @@
 
 #include "playlist/albumitem.h"
 #include "playlist/albumproxymodel.h"
+#include <QMouseEvent>
+#include <viewmanager.h>
 
 
 AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )
@@ -152,11 +154,75 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
+        // If the user is hovering over an artist rect, draw a background so she knows it's clickable
+        QRect r = textRect;
+        r.setTop( r.bottom() - painter->fontMetrics().height() );
+        if ( m_hoveringOver == index )
+            TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
+
         painter->setPen( opt.palette.color( QPalette::Dark ) );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
+        // Calculate rect of artist on-hover button click area
+
+        m_artistNameRects[ index ] = r;
     }
 
     painter->restore();
+}
+
+bool
+AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+    Q_UNUSED( option );
+
+    if ( event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseMove &&
+         event->type() != QEvent::MouseButtonPress )
+        return false;
+
+    if ( m_artistNameRects.contains( index ) )
+    {
+        QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        QRect artistNameRect = m_artistNameRects[ index ];
+        if ( artistNameRect.contains( ev->pos() ) )
+        {
+            if ( event->type() == QEvent::MouseMove )
+            {
+                if ( m_hoveringOver != index )
+                {
+                    QModelIndex old = m_hoveringOver;
+                    m_hoveringOver = index;
+                    emit updateIndex( old );
+                    emit updateIndex( index );
+                }
+
+                return true;
+            }
+            else if ( event->type() == QEvent::MouseButtonRelease )
+            {
+                AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+                if ( !item || item->album().isNull() || item->album()->artist().isNull() )
+                    return false;
+
+                ViewManager::instance()->show( item->album()->artist() );
+
+                return true;
+            } else if ( event->type() == QEvent::MouseButtonPress )
+            {
+                // Stop the whole album from having a down click action as we just want the artist name to be clicked
+                return true;
+            }
+        }
+    }
+
+    if ( m_hoveringOver.isValid() )
+    {
+        QModelIndex old = m_hoveringOver;
+        m_hoveringOver = QPersistentModelIndex();
+        emit updateIndex( old );
+    }
+
+    return false;
 }

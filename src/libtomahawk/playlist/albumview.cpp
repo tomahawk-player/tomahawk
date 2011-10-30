@@ -50,6 +50,7 @@ AlbumView::AlbumView( QWidget* parent )
     setUniformItemSizes( true );
     setSpacing( 16 );
     setContentsMargins( 0, 0, 0, 0 );
+    setMouseTracking( true );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
@@ -77,7 +78,9 @@ void
 AlbumView::setProxyModel( AlbumProxyModel* model )
 {
     m_proxyModel = model;
-    setItemDelegate( new AlbumItemDelegate( this, m_proxyModel ) );
+    AlbumItemDelegate* del = new AlbumItemDelegate( this, m_proxyModel );
+    connect( del, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
+    setItemDelegate( del );
 
     QListView::setModel( m_proxyModel );
 }

@@ -367,9 +367,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             m_hoverType = Track;
         }
 
-        p.setPen( palette().mid().color() );
-        p.setBrush( palette().highlight() );
-        p.drawRoundedRect( m_hoverArea, 4.0, 4.0 );
+        TomahawkUtils::drawQueryBackground( &p, palette(), m_hoverArea );
     }
 
     if ( elidedText != s || ( m_result.isNull() && m_query.isNull() ) )
