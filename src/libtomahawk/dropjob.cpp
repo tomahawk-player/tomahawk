@@ -112,7 +112,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "spotify" ) && url.contains( "track" ) )
             return true;
 
-        if ( url.contains( "rdio.com" ) && url.contains( "track" ) )
+        if ( url.contains( "rdio.com" ) && ( url.contains( "track" ) || /*url.contains( "artist" ) ||*/ url.contains( "album" ) || url.contains( "playlists" ) )  )
             return true;
     }
 
@@ -151,6 +151,9 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
 
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
+            return true;
+
+        if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
             return true;
 
         // we don't know about these.. gotta say yes for now
@@ -451,6 +454,30 @@ DropJob::handleSpotifyUrls( const QString& urlsRaw )
 }
 
 void
+DropJob::handleRdioUrls( const QString& urlsRaw )
+{
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    qDebug() << "Got Rdio urls!!" << urls;
+
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
+    RdioParser* rdio = new RdioParser( this );
+    rdio->setCreatePlaylist( dropAction() == Create  );
+    rdio->parse( urls );
+
+    /// This currently supports draging and dropping a spotify playlist and artist
+    if ( dropAction() == Append )
+    {
+        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
+        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+    }
+
+    m_queryCount++;
+}
+
+
+void
 DropJob::handleAllUrls( const QString& urls )
 {
     if ( urls.contains( "xspf" ) )
@@ -459,6 +486,8 @@ DropJob::handleAllUrls( const QString& urls )
               && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
               && s_canParseSpotifyPlaylists )
         handleSpotifyUrls( urls );
+    else if ( urls.contains( "rdio.com" ) )
+        handleRdioUrls( urls );
     else
         handleTrackUrls ( urls );
 }
