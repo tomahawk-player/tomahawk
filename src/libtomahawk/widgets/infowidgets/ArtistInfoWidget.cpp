@@ -74,7 +74,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->albums );
     m_button->setText( tr( "Click to show All Releases" ) );

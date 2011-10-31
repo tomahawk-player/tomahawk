@@ -40,7 +40,7 @@ TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( RESPATH "images/now-playing-speaker.png" );
-    m_defaultAlbumCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+    m_defaultAlbumCover = QPixmap( RESPATH "images/no-album-no-case.png" );
     m_defaultArtistImage = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
 }
 
