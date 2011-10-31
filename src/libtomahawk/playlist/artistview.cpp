@@ -158,7 +158,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
         if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->album().isNull() )
-            ViewManager::instance()->show( item->album() );
+            ViewManager::instance()->show( item->album(), m_model->mode() );
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );

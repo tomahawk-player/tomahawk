@@ -35,6 +35,7 @@
 #include "infosystem/infosystem.h"
 
 #include "dllmacro.h"
+#include "typedefs.h"
 
 class AlbumModel;
 class TreeModel;
@@ -50,7 +51,7 @@ class DLLEXPORT AlbumInfoWidget : public QWidget, public Tomahawk::ViewPage
 Q_OBJECT
 
 public:
-    AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
+    AlbumInfoWidget( const Tomahawk::album_ptr& album, Tomahawk::ModelMode startingMode = Tomahawk::InfoSystemMode, QWidget* parent = 0 );
     ~AlbumInfoWidget();
 
     virtual QWidget* widget() { return this; }
@@ -62,6 +63,8 @@ public:
     virtual Tomahawk::artist_ptr descriptionArtist() const;
     virtual QString longDescription() const { return m_longDescription; }
     virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+
+    void setMode( Tomahawk::ModelMode mode );
 
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showStatsBar() const { return false; }

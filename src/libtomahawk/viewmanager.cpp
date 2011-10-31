@@ -217,12 +217,12 @@ ViewManager::show( const Tomahawk::artist_ptr& artist )
 
 
 Tomahawk::ViewPage*
-ViewManager::show( const Tomahawk::album_ptr& album )
+ViewManager::show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode initialMode )
 {
     AlbumInfoWidget* swidget;
     if ( !m_albumViews.contains( album ) || m_albumViews.value( album ).isNull() )
     {
-        swidget = new AlbumInfoWidget( album );
+        swidget = new AlbumInfoWidget( album, initialMode );
         m_albumViews.insert( album, swidget );
     }
     else

@@ -39,7 +39,7 @@ static QString s_aiInfoIdentifier = QString( "AlbumInfoWidget" );
 using namespace Tomahawk;
 
 
-AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
+AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode startingMode, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
 {
@@ -58,16 +58,19 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->albumsView->setAlbumModel( m_albumsModel );
 
     m_tracksModel = new TreeModel( ui->tracksView );
-    m_tracksModel->setMode( TreeModel::InfoSystem );
+    m_tracksModel->setMode( startingMode );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->tracksView );
-    m_button->setText( tr( "Click to show Super Collection Tracks" ) );
     m_button->setCheckable( true );
-    m_button->setChecked( true );
+    m_button->setChecked( m_tracksModel->mode() == InfoSystemMode );
+    if ( m_button->isChecked() )
+        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+    else
+        m_button->setText( tr( "Click to show Official Tracks" ) );
 
     connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
     connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
@@ -94,11 +97,18 @@ AlbumInfoWidget::playlistInterface() const
     return ui->tracksView->playlistInterface();
 }
 
+void
+AlbumInfoWidget::setMode( ModelMode mode )
+{
+    if ( m_tracksModel->mode() != mode )
+        onModeToggle();
+}
+
 
 void
 AlbumInfoWidget::onModeToggle()
 {
-    m_tracksModel->setMode( m_button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
+    m_tracksModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
     m_tracksModel->clear();
     m_tracksModel->addTracks( m_album, QModelIndex() );
 

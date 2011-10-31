@@ -195,7 +195,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( pi );
 
-    if ( m_model->mode() == TreeModel::Database && !pi->result().isNull() )
+    if ( m_model->mode() == Tomahawk::DatabaseMode && !pi->result().isNull() )
     {
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& result, rl )
