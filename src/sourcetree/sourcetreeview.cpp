@@ -485,8 +485,9 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = QRect();
         }
 
-        if ( accept )
+        if ( accept || DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
         {
+            // Playlists are accepted always since they can be dropped anywhere
             //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
             event->accept();
