@@ -682,7 +682,10 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
     }
 
     if ( !playlist )
+    {
+        m_playlist.clear();
         return;
+    }
 
     m_playlist = playlist->getSharedPointer();
 
