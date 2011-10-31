@@ -352,7 +352,6 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QString s = text();
     const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
 
-    qDebug() << "ELIDED TEXT:" << elidedText << "orig:" << s;
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
 
