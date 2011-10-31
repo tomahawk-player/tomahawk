@@ -352,18 +352,23 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QString s = text();
     const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
 
+    qDebug() << "ELIDED TEXT:" << elidedText << "orig:" << s;
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
 
+    QFontMetrics fm = fontMetrics();
     if ( m_useCustomFont )
+    {
         p.setFont( m_font );
+        fm = QFontMetrics( m_font );
+    }
 
     if ( m_hoverArea.width() )
     {
         if ( elidedText != s )
         {
             m_hoverArea.setLeft( 0 );
-            m_hoverArea.setRight( fontMetrics().width( elidedText ) + contentsMargins().left() * 2 );
+            m_hoverArea.setRight( fm.width( elidedText ) + contentsMargins().left() * 2 );
             m_hoverType = Track;
         }
 
@@ -386,7 +391,6 @@ QueryLabel::paintEvent( QPaintEvent* event )
     }
     else
     {
-        const QFontMetrics& fm = fontMetrics();
         int dashX = fm.width( DASH );
         int artistX = m_type & Artist ? fm.width( artist() ) : 0;
         int albumX = m_type & Album ? fm.width( album() ) : 0;
