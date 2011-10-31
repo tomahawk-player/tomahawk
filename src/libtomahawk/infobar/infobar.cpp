@@ -105,6 +105,8 @@ InfoBar::InfoBar( QWidget* parent )
     setPalette( p );
     setAutoFillBackground( true );
 
+    setMinimumHeight( geometry().height() );
+    setMaximumHeight( geometry().height() );
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( autoUpdateAvailable( bool ) ), SLOT( setAutoUpdateAvailable( bool ) ) );
 }
