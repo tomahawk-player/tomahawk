@@ -160,7 +160,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         if ( m_hoveringOver == index )
             TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
 
+#ifdef Q_WS_MAC
+        painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
+#else
         painter->setPen( opt.palette.color( QPalette::Dark ) );
+#endif
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
