@@ -50,6 +50,7 @@ static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
+    , m_sortedProxy( 0 )
 {
     ui->setupUi( this );
 
@@ -64,6 +65,9 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
     m_crumbModelLeft = new QStandardItemModel( this );
+    m_sortedProxy = new QSortFilterProxyModel( this );
+    m_sortedProxy->setDynamicSortFilter( true );
+    m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
     ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
 
@@ -209,7 +213,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 }
             }
 
-            ui->breadCrumbLeft->setModel( m_crumbModelLeft );
+            m_sortedProxy->setSourceModel( m_crumbModelLeft );
+            m_sortedProxy->sort( 0, Qt::AscendingOrder );
+            ui->breadCrumbLeft->setModel( m_sortedProxy );
             break;
         }
         case InfoSystem::InfoChart:
@@ -310,7 +316,7 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
-    QStandardItem* item = m_crumbModelLeft->itemFromIndex( index );
+    QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if( !item )
         return;
     if( !item->data( Breadcrumb::ChartIdRole ).isValid() )

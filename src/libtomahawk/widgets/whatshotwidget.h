@@ -31,6 +31,7 @@
 
 #include "dllmacro.h"
 
+class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
 class TreeModel;
@@ -91,6 +92,7 @@ private:
     Ui::WhatsHotWidget *ui;
 
     QStandardItemModel* m_crumbModelLeft;
+    QSortFilterProxyModel* m_sortedProxy;
 
     // Cache our model data
     QHash< QString, AlbumModel* > m_albumModels;

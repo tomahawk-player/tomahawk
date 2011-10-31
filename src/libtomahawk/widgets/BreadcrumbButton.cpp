@@ -102,10 +102,6 @@ BreadcrumbButton::sizeHint() const
     return m_combo->sizeHint() + QSize( padding, 0 );
 }
 
-bool caseInsensitiveLessThan( const QString &s1, const QString &s2 )
-{
-    return s1.toLower() < s2.toLower();
-}
 
 void
 BreadcrumbButton::setParentIndex( const QModelIndex& idx )
@@ -116,19 +112,12 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
     QStringList list;
     int count = m_model->rowCount( m_parentIndex );
     int defaultIndex = -1, userSelected = -1;
-
-    // Two-pass so we can sort the list first
-    for ( int i = 0; i < count; ++i )
-    {
-        list << m_model->index( i, 0, m_parentIndex ).data().toString();
-    }
-    qSort( list.begin(), list.end(), caseInsensitiveLessThan );
-
     for ( int i = 0; i < count; ++i )
     {
         QModelIndex idx = m_model->index( i, 0, m_parentIndex );
         if ( idx.isValid() )
         {
+            list << idx.data().toString();
             if ( idx.data( Breadcrumb::DefaultRole ).toBool() )
                 defaultIndex = i;
             if ( idx.data( Breadcrumb::UserSelectedRole ).toBool() )
