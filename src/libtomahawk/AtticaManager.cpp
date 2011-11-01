@@ -45,7 +45,6 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
     m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org:10480/resolvers/providers.xml" ) );
-    QTimer::singleShot( 0, this, SLOT( loadPixmapsFromCache() ) );
 }
 
 
@@ -62,6 +61,8 @@ AtticaManager::loadPixmapsFromCache()
     if ( !cacheDir.cd( "atticacache" ) ) // doesn't exist, no cache
         return;
 
+    qDebug() << "Loading resolvers from cache dir:" << cacheDir.absolutePath();
+    qDebug() << "Currently we know about these resolvers:" << m_resolverStates.keys();
     foreach ( const QString& file, cacheDir.entryList( QStringList() << "*.png", QDir::Files | QDir::NoSymLinks ) )
     {
         // load all the pixmaps
@@ -204,6 +205,8 @@ AtticaManager::resolversList( BaseJob* j )
     m_resolverStates = TomahawkSettings::instance()->atticaResolverStates();
 
     // load icon cache from disk, and fetch any we are missing
+    loadPixmapsFromCache();
+
     foreach ( Content resolver, m_resolvers )
     {
         if ( !m_resolverStates.contains( resolver.id() ) )
