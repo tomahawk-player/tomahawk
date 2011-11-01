@@ -121,10 +121,10 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
             // Animate all buttons except the first
             if ( m_buttons.count() > 0 )
             {
-                QPropertyAnimation* animation = new QPropertyAnimation( btn, "x" );
+                QPropertyAnimation* animation = new QPropertyAnimation( btn, "pos" );
                 animation->setDuration( 300 );
-                animation->setStartValue( m_buttons.last()->pos().x() );
-                animation->setEndValue( btn->pos().x() );
+                animation->setStartValue( m_buttons.last()->pos());
+                animation->setEndValue( btn->pos() );
                 animation->start( QAbstractAnimation::DeleteWhenStopped );
             }
 
@@ -165,11 +165,3 @@ Breadcrumb::breadcrumbComboChanged( const QModelIndex& childSelected )
     tDebug() << "Combo changed:" << childSelected.data();
     updateButtons( childSelected );
 }
-
-
-// void
-// Breadcrumb::currentIndexChanged( const QModelIndex& current, const QModelIndex& previous )
-// {
-//
-// }
-//
