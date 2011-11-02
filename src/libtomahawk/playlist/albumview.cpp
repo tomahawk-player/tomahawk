@@ -32,6 +32,7 @@
 #include "albummodel.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 
 #define SCROLL_TIMEOUT 280
 
@@ -42,7 +43,7 @@ AlbumView::AlbumView( QWidget* parent )
     : QListView( parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
-//    , m_delegate( 0 )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
 {
     setDragEnabled( true );
     setDropIndicatorShown( false );
@@ -108,6 +109,9 @@ AlbumView::setAlbumModel( AlbumModel* model )
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
+
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     setAcceptDrops( false );
     onViewChanged(); // Fetch covers if albums were added to model before model was attached to view

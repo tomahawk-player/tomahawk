@@ -28,6 +28,7 @@
 #include "albumproxymodel.h"
 
 class AlbumModel;
+class LoadingSpinner;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
 {
@@ -74,7 +75,7 @@ private slots:
 private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
-//    PlaylistItemDelegate* m_delegate;
+    LoadingSpinner* m_loadingSpinner;
 
     QTimer m_timer;
 };
