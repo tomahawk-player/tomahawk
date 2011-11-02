@@ -34,6 +34,7 @@
 #include <QDateTime>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 #include <QUrl>
 #include <QStringList>
 
