@@ -33,6 +33,8 @@ Q_OBJECT
 public:
     AlbumItemDelegate( QAbstractItemView* parent = 0, AlbumProxyModel* proxy = 0 );
 
+    void whitespaceMouseEvent();
+
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;

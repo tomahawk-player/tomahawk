@@ -157,6 +157,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         // If the user is hovering over an artist rect, draw a background so she knows it's clickable
         QRect r = textRect;
         r.setTop( r.bottom() - painter->fontMetrics().height() );
+        r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
             TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
 
@@ -183,7 +184,8 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
     if ( event->type() != QEvent::MouseButtonRelease &&
          event->type() != QEvent::MouseMove &&
-         event->type() != QEvent::MouseButtonPress )
+         event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::Leave )
         return false;
 
     if ( m_artistNameRects.contains( index ) )
@@ -202,6 +204,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
                     emit updateIndex( index );
                 }
 
+                event->accept();
                 return true;
             }
             else if ( event->type() == QEvent::MouseButtonRelease )
@@ -212,21 +215,29 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
                 ViewManager::instance()->show( item->album()->artist() );
 
+                event->accept();
                 return true;
             } else if ( event->type() == QEvent::MouseButtonPress )
             {
                 // Stop the whole album from having a down click action as we just want the artist name to be clicked
+                event->accept();
                 return true;
             }
         }
     }
 
+    whitespaceMouseEvent();
+
+    return false;
+}
+
+void
+AlbumItemDelegate::whitespaceMouseEvent()
+{
     if ( m_hoveringOver.isValid() )
     {
         QModelIndex old = m_hoveringOver;
         m_hoveringOver = QPersistentModelIndex();
         emit updateIndex( old );
     }
-
-    return false;
 }

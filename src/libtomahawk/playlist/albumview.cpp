@@ -43,6 +43,7 @@ AlbumView::AlbumView( QWidget* parent )
     : QListView( parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
+    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
 {
     setDragEnabled( true );
@@ -79,9 +80,9 @@ void
 AlbumView::setProxyModel( AlbumProxyModel* model )
 {
     m_proxyModel = model;
-    AlbumItemDelegate* del = new AlbumItemDelegate( this, m_proxyModel );
-    connect( del, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
-    setItemDelegate( del );
+    m_delegate = new AlbumItemDelegate( this, m_proxyModel );
+    connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
+    setItemDelegate( m_delegate );
 
     QListView::setModel( m_proxyModel );
 }
