@@ -49,7 +49,7 @@ ChartsPlugin::ChartsPlugin()
 
 
     /// Add resources here
-    m_chartResources << "billboard" << "itunes";
+    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -275,115 +275,143 @@ ChartsPlugin::chartTypes()
         QVariantMap charts;
         QString chartName;
         QStringList defaultChain;
-        if ( source == "itunes" )
+        if ( source == "wearehunted" || source == "itunes" )
         {
+            // Some charts can have an extra param, itunes has geo, WAH has emerging/mainstream
             // Itunes has geographic-area based charts. So we build a breadcrumb of
             // ITunes - Country - Albums - Top Chart Type
             //                  - Tracks - Top Chart Type
-            QHash< QString, QVariantMap > countries;
+            // WeAreHunted has Mainstream/Emerging
+            // WeAreHunted - Type - Artists - Chart Type
+            //                    - Tracks  - Chart Type
+            QHash< QString, QVariantMap > extraType;
             foreach( const QVariant& chartObj, chartObjs.values() )
             {
-                const QVariantMap chart = chartObj.toMap();
-                const QString id = chart.value( "id" ).toString();
-                const QString geo = chart.value( "geo" ).toString();
-                QString name = chart.value( "genre" ).toString();
-                const QString type = chart.value( "type" ).toString();
-                const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
+                if( !chartObj.toMap().isEmpty() ){
+                    const QVariantMap chart = chartObj.toMap();
+                    const QString id = chart.value( "id" ).toString();
+                    const QString geo = chart.value( "geo" ).toString();
+                    QString name = chart.value( "genre" ).toString();
+                    const QString type = chart.value( "type" ).toString();
+                    const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
-                QString country;
-                if ( !m_cachedCountries.contains( geo ) )
-                {
-                    QLocale l( QString( "en_%1" ).arg( geo ) );
-                    country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+                    QString extra;
+                    if( !geo.isEmpty() ){
 
-                    for ( int i = 1; i < country.size(); i++ )
-                    {
-                        if ( country.at( i ).isUpper() )
+                        if ( !m_cachedCountries.contains( geo ) )
                         {
-                            country.insert( i, " " );
-                            i++;
+                            QLocale l( QString( "en_%1" ).arg( geo ) );
+                            extra = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+
+                            for ( int i = 1; i < extra.size(); i++ )
+                            {
+                                if ( extra.at( i ).isUpper() )
+                                {
+                                    extra.insert( i, " " );
+                                    i++;
+                                }
+                            }
+                            m_cachedCountries[ geo ] = extra;
                         }
+                        else
+                        {
+                            extra = m_cachedCountries[ geo ];
+                        }
+                    }else extra = chart.value( "extra" ).toString();
+
+                    if ( name.isEmpty() ) // not a specific chart, an all chart
+                        name = tr( "Top Overall" );
+
+                    InfoStringHash c;
+                    c[ "id" ] = id;
+                    c[ "label" ] = name;
+                    c[ "type" ] = "album";
+                    if ( isDefault )
+                        c[ "default" ] = "true";
+
+                    QList<InfoStringHash> extraTypeData = extraType[ extra ][ type ].value< QList< InfoStringHash > >();
+                    extraTypeData.append( c );
+
+                    extraType[ extra ].insert( type, QVariant::fromValue< QList< InfoStringHash > >( extraTypeData ) );
+                    if ( isDefault )
+                    {
+                        defaultChain.clear();
+                        defaultChain.append( extra );
+                        defaultChain.append( type );
+                        defaultChain.append( name );
                     }
-                    m_cachedCountries[ geo ] = country;
                 }
-                else
+                foreach( const QString& c, extraType.keys() )
                 {
-                    country = m_cachedCountries[ geo ];
+                    charts[ c ] = extraType[ c ];
+                    qDebug() << "extraType has types:" << c;
                 }
-
-                if ( name.isEmpty() ) // not a specific chart, an all chart
-                    name = tr( "Top Overall" );
-
-                InfoStringHash c;
-                c[ "id" ] = id;
-                c[ "label" ] = name;
-                c[ "type" ] = "album";
-                if ( isDefault )
-                    c[ "default" ] = "true";
-
-                QList<InfoStringHash> countryTypeData = countries[ country ][ type ].value< QList< InfoStringHash > >();
-                countryTypeData.append( c );
-
-                countries[ country ].insert( type, QVariant::fromValue< QList< InfoStringHash > >( countryTypeData ) );
-                if ( isDefault )
-                {
-                    defaultChain.clear();
-                    defaultChain.append( country );
-                    defaultChain.append( type );
-                    defaultChain.append( name );
+                if( source == "itunes" ){
+                    chartName = "iTunes";
+                }
+                if( source == "wearehunted" ){
+                    chartName = "WeAreHunted";
                 }
             }
 
-            foreach( const QString& c, countries.keys() )
-            {
-                charts[ c ] = countries[ c ];
-//                 qDebug() << "Country has types:" << countries[ c ];
-            }
-            chartName = "iTunes";
-        } else
+        }else
         {
             // We'll just build:
             // [Source] - Album - Chart Type
             // [Source] - Track - Chart Type
             QList< InfoStringHash > albumCharts;
             QList< InfoStringHash > trackCharts;
+            QList< InfoStringHash > artistCharts;
+
             foreach( const QVariant& chartObj, chartObjs.values() )
             {
-                const QVariantMap chart = chartObj.toMap();
-                const QString type = chart.value( "type" ).toString();
-                const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
+                if( !chartObj.toMap().isEmpty() ){
+                    const QVariantMap chart = chartObj.toMap();
+                    const QString type = chart.value( "type" ).toString();
+                    const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
-                InfoStringHash c;
-                c[ "id" ] = chart.value( "id" ).toString();
-                c[ "label" ] = chart.value( "name" ).toString();
-                if ( isDefault )
-                    c[ "default" ] = "true";
+                    InfoStringHash c;
+                    c[ "id" ] = chart.value( "id" ).toString();
+                    c[ "label" ] = chart.value( "name" ).toString();
+                    if ( isDefault )
+                        c[ "default" ] = "true";
 
-                if ( type == "Album" )
-                {
-                    c[ "type" ] = "album";
-                    albumCharts.append( c );
-                }
-                else if ( type == "Track" )
-                {
-                    c[ "type" ] = "tracks";
-                    trackCharts.append( c );
-                }
+                    if ( type == "Album" )
+                    {
+                        c[ "type" ] = "album";
+                        albumCharts.append( c );
+                    }
+                    else if ( type == "Track" )
+                    {
+                        c[ "type" ] = "tracks";
+                        trackCharts.append( c );
 
-                if ( isDefault )
-                {
-                    defaultChain.clear();
-                    defaultChain.append( type + "s" ); //UGLY but it's plural to the user, see below
-                    defaultChain.append( c[ "label" ] );
+                    }else if ( type == "Artist" )
+                    {
+                        c[ "type" ] = "artists";
+                        artistCharts.append( c );
+
+                    }
+
+                    if ( isDefault )
+                    {
+                        defaultChain.clear();
+                        defaultChain.append( type + "s" ); //UGLY but it's plural to the user, see below
+                        defaultChain.append( c[ "label" ] );
+                    }
                 }
+                if( !artistCharts.isEmpty() )
+                    charts.insert( tr( "Artists" ), QVariant::fromValue< QList< InfoStringHash > >( artistCharts ) );
+                if( !albumCharts.isEmpty() )
+                    charts.insert( tr( "Albums" ), QVariant::fromValue< QList< InfoStringHash > >( albumCharts ) );
+                if( !trackCharts.isEmpty() )
+                    charts.insert( tr( "Tracks" ), QVariant::fromValue< QList< InfoStringHash > >( trackCharts ) );
+
+                /// @note For displaying purposes, upper the first letter
+                /// @note Remeber to lower it when fetching this!
+                chartName = source;
+                chartName[0] = chartName[0].toUpper();
             }
-            charts.insert( tr( "Albums" ), QVariant::fromValue< QList< InfoStringHash > >( albumCharts ) );
-            charts.insert( tr( "Tracks" ), QVariant::fromValue< QList< InfoStringHash > >( trackCharts ) );
-
-            /// @note For displaying purposes, upper the first letter
-            /// @note Remeber to lower it when fetching this!
-            chartName = source;
-            chartName[0] = chartName[0].toUpper();
         }
 
         /// Add the possible charts and its types to breadcrumb
@@ -436,6 +464,7 @@ ChartsPlugin::chartReturned()
         QVariantList chartResponse = res.value( "list" ).toList();
         QList< InfoStringHash > top_tracks;
         QList< InfoStringHash > top_albums;
+        QStringList top_artists;
 
         /// Deside what type, we need to handle it differently
         /// @todo: We allready know the type, append it to breadcrumb hash
@@ -444,6 +473,8 @@ ChartsPlugin::chartReturned()
             setChartType( Album );
         else if( res.value( "type" ).toString() == "Track" )
             setChartType( Track );
+        else if( res.value( "type" ).toString() == "Artist" )
+            setChartType( Artist );
         else
             setChartType( None );
 
@@ -499,8 +530,27 @@ ChartsPlugin::chartReturned()
                         top_tracks << pair;
 
                     }
+                }else if( chartType() == Artist )
+                {
+                    if ( artist.isEmpty() ) // don't have enough...
+                    {
+                        tLog() << "Didn't get an artist from charts, not enough to build a query on. Aborting" << artist;
+
+                    }
+                    else
+                    {
+                        top_artists << artist;
+                    }
+
                 }
             }
+        }
+
+        if( chartType() == Artist )
+        {
+            tDebug() << "ChartsPlugin:" << "\tgot " << top_artists.size() << " artists";
+            returnedData["artists"] = QVariant::fromValue( top_artists );
+            returnedData["type"] = "artists";
         }
 
         if( chartType() == Track )
