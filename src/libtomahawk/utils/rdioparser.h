@@ -19,6 +19,7 @@
 
 #ifndef RDIOPARSER_H
 #define RDIOPARSER_H
+
 #include "jobview/JobStatusItem.h"
 #include "query.h"
 #include "config.h"
@@ -30,9 +31,10 @@
 #include <QStringList>
 #include <QSet>
 
+#include <QNetworkRequest>
+
 #ifdef QCA2_FOUND
 #include <QtCrypto>
-#include <QNetworkRequest>
 #endif
 
 class QNetworkReply;
