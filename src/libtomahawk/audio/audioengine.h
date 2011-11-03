@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QNetworkReply>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
@@ -134,6 +135,7 @@ private slots:
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
+    void ioStreamError( QNetworkReply::NetworkError );
 private:
     void setState( AudioState state );
 
