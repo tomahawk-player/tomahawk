@@ -112,7 +112,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "spotify" ) && url.contains( "track" ) )
             return true;
 
-        if ( url.contains( "rdio.com" ) && ( url.contains( "track" ) || /*url.contains( "artist" ) ||*/ url.contains( "album" ) || url.contains( "playlists" ) )  )
+        if ( url.contains( "rdio.com" ) && ( ( ( url.contains( "track" ) && url.contains( "artist" ) && url.contains( "album" ) )
+                                               || url.contains( "playlists" )  ) ) )
             return true;
     }
 
@@ -122,6 +123,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             return true;
         if ( url.contains( "spotify" ) && url.contains( "album" ) )
             return true;
+        if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && url.contains( "album" ) && !url.contains( "track" ) )  )
+            return true;
     }
 
     if ( acceptedType.testFlag( Artist ) )
@@ -129,6 +132,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "itunes" ) && url.contains( "artist" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
         if ( url.contains( "spotify" ) && url.contains( "artist" ) )
+            return true;
+        if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && !url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
     }
 
@@ -463,15 +468,10 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
         setDropAction( Create );
 
     RdioParser* rdio = new RdioParser( this );
+    connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+
     rdio->setCreatePlaylist( dropAction() == Create  );
     rdio->parse( urls );
-
-    /// This currently supports draging and dropping a spotify playlist and artist
-    if ( dropAction() == Append )
-    {
-        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
-        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-    }
 
     m_queryCount++;
 }

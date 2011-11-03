@@ -236,7 +236,7 @@ RdioParser::parseTrack( const QString& origUrl )
 
     query_ptr q = Query::get( artist, trk, album, uuid(), !m_createPlaylist );
     m_count++;
-    m_queries << q;
+    m_tracks << q;
 
     checkFinished();
 }
@@ -334,6 +334,7 @@ RdioParser::checkFinished()
                                            m_tracks );
 
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+
             return;
         }
         else
@@ -342,6 +343,8 @@ RdioParser::checkFinished()
                 emit track( m_tracks.first() );
             else if ( m_multi && m_count == m_total )
                 emit tracks( m_tracks );
+
+            m_tracks.clear();
         }
 
         deleteLater();

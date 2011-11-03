@@ -82,7 +82,6 @@ private:
 
     bool m_multi;
     int m_count, m_total;
-    QList< query_ptr > m_queries;
     QSet< QNetworkReply* > m_reqQueries;
     DropJobNotifier* m_browseJob;
 
