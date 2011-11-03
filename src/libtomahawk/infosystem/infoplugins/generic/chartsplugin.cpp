@@ -345,7 +345,7 @@ ChartsPlugin::chartTypes()
                 foreach( const QString& c, extraType.keys() )
                 {
                     charts[ c ] = extraType[ c ];
-                    qDebug() << "extraType has types:" << c;
+//                     qDebug() << "extraType has types:" << c;
                 }
                 if( source == "itunes" ){
                     chartName = "iTunes";
