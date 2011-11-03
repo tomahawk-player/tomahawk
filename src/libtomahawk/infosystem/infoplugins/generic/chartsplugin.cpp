@@ -73,7 +73,7 @@ ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 
     /// Then get each chart from resource
-    /// We need to fetch them before they are asked for
+    /// We want to prepopulate the breadcrumb to fetch them before they are asked for
 
     if( !m_chartResources.isEmpty() && m_nam ){
 
@@ -194,6 +194,7 @@ ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requ
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
+
     emit getCachedInfo( criteria, 0, requestData );
 }
 

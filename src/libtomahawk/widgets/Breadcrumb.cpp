@@ -56,6 +56,10 @@ Breadcrumb::~Breadcrumb()
 void
 Breadcrumb::setModel( QAbstractItemModel* model )
 {
+    foreach ( BreadcrumbButton* b, m_buttons )
+        b->deleteLater();;
+    m_buttons.clear();
+
     m_model = model;
     updateButtons( QModelIndex() );
 }
