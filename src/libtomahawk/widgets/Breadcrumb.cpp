@@ -123,7 +123,7 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
             btn->show();
 
             // Animate all buttons except the first
-            if ( m_buttons.count() > 0 )
+            if ( m_buttons.count() > 0 && isVisible() )
             {
                 QPropertyAnimation* animation = new QPropertyAnimation( btn, "pos" );
                 animation->setDuration( 300 );
