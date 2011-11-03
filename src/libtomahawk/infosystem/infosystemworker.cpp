@@ -372,14 +372,19 @@ InfoSystemWorker::newNam()
         return;
     }
 
-    if (
-        oldNam &&
-        !m_nam.isNull() &&
-        oldNam->configuration() == m_nam.data()->configuration() &&
-        oldNam->networkAccessible() == m_nam.data()->networkAccessible() &&
-        oldNam->proxyFactory() == m_nam.data()->proxyFactory()
-    )
-        return;
+    if
+        (
+            oldNam &&
+            !m_nam.isNull() &&
+            oldNam->configuration() == m_nam.data()->configuration() &&
+            oldNam->networkAccessible() == m_nam.data()->networkAccessible()
+        )
+    {
+        TomahawkUtils::NetworkProxyFactory fac1 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( oldNam->proxyFactory() ) );
+        TomahawkUtils::NetworkProxyFactory fac2 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( m_nam.data()->proxyFactory() ) );
+        if ( fac1 == fac2 )
+            return;
+    }
 
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
