@@ -361,18 +361,26 @@ InfoSystemWorker::nam() const
 void
 InfoSystemWorker::newNam()
 {
-//    qDebug() << Q_FUNC_INFO << " begin";
-
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
     if ( oldNam && oldNam->thread() == thread() )
     {
-//        qDebug() << Q_FUNC_INFO << "Using old nam as it's the same thread (GUI) as me";
-        m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
-        emit namChanged( m_nam.data() );
+        if ( m_nam.data() != oldNam )
+        {
+            m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
+            emit namChanged( m_nam.data() );
+        }
         return;
     }
 
-//    qDebug() << Q_FUNC_INFO << "No nam exists, or it's a different thread, creating a new one";
+    if (
+        oldNam &&
+        !m_nam.isNull() &&
+        oldNam->configuration() == m_nam.data()->configuration() &&
+        oldNam->networkAccessible() == m_nam.data()->networkAccessible() &&
+        oldNam->proxyFactory() == m_nam.data()->proxyFactory()
+    )
+        return;
+
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = new lastfm::NetworkAccessManager( this );

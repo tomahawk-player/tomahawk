@@ -513,6 +513,15 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 }
 
 
+bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other )
+{
+    if ( m_noProxyHosts != other.m_noProxyHosts or m_proxy != other.m_proxy )
+        return false;
+
+    return true;
+}
+
+
 NetworkProxyFactory*
 proxyFactory()
 {

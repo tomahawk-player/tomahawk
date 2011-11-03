@@ -65,6 +65,8 @@ namespace TomahawkUtils
         void setProxy( const QNetworkProxy &proxy );
         QNetworkProxy proxy() { return m_proxy; }
 
+        bool operator==( const NetworkProxyFactory &other );
+
     private:
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
