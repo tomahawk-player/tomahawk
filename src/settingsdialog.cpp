@@ -233,6 +233,7 @@ SettingsDialog::~SettingsDialog()
         m_resolversModel->saveScriptResolvers();
 
         s->applyChanges();
+        s->sync();
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
