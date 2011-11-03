@@ -259,7 +259,6 @@ bool
 GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( option );
-    m_hoveringOver = -1;
 
     if ( event->type() != QEvent::MouseButtonRelease &&
          event->type() != QEvent::MouseMove )
@@ -288,15 +287,12 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
 
         if ( fullStars.contains( me->pos() ) )
         {
-            tDebug() << "A star was pressed...which one?";
-
             const int eachStar = starsWidth / 5;
             const int clickOffset = me->pos().x() - fullStars.x();
             const int whichStar = (clickOffset / eachStar) + 1;
 
             if ( event->type() == QEvent::MouseButtonRelease )
             {
-                tDebug() << "Clicked on:" << whichStar;
                 model->setData( index, whichStar, GetNewStuffModel::RatingRole );
             }
             else if ( event->type() == QEvent::MouseMove )
@@ -309,6 +305,14 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
 
             return true;
         }
+    }
+
+    if ( m_hoveringOver > -1 )
+    {
+        QModelIndex idx = model->index( m_hoveringItem.first, m_hoveringItem.second );
+        emit update( idx );
+        m_hoveringOver = -1;
+        m_hoveringItem = QPair<int, int>();
     }
     return false;
 }
