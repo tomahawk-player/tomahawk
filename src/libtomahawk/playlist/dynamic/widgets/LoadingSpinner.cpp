@@ -74,9 +74,6 @@ LoadingSpinner::fadeIn()
 void
 LoadingSpinner::fadeOut()
 {
-    if ( !isVisible() )
-        return;
-
     m_showHide->setDirection( QTimeLine::Backward );
 
     if ( m_showHide->state() != QTimeLine::Running )

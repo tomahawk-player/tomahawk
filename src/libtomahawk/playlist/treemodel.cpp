@@ -851,6 +851,8 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             if ( m_receivedInfoData.contains( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() ) )
                 break;
 
+            emit loadingFinished();
+
             QVariantMap returnedData = output.value< QVariantMap >();
             if ( returnedData.isEmpty() )
                 break;
