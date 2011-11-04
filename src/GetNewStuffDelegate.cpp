@@ -191,8 +191,10 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
         if ( i == 1 )
             m_cachedStarRects[ QPair<int, int>(index.row(), index.column()) ] = r;
 
-        QPixmap pm;
-        if ( m_hoveringOver > -1 && ( m_hoveringItem.first == index.row() && m_hoveringItem.second == index.column() ) )
+        const bool userHasRated = index.data( GetNewStuffModel::UserHasRatedRole ).toBool();
+        if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
+             m_hoveringOver > -1 &&
+             m_hoveringItem == index )
         {
             if ( i <= m_hoveringOver ) // positive star
                 painter->drawPixmap( r, m_onHoverStar );
@@ -201,8 +203,13 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
         }
         else
         {
-            if ( i <= rating ) // positive star
-                painter->drawPixmap( r, m_ratingStarPositive );
+            if ( i <= rating ) // positive or rated star
+            {
+                if ( userHasRated )
+                    painter->drawPixmap( r, m_onHoverStar );
+                else
+                    painter->drawPixmap( r, m_ratingStarPositive );
+            }
             else
                 painter->drawPixmap( r, m_ratingStarNegative );
         }
@@ -299,8 +306,7 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
             {
                 // 0-indexed
                 m_hoveringOver = whichStar;
-                m_hoveringItem.first = index.row();
-                m_hoveringItem.second = index.column();
+                m_hoveringItem = index;
             }
 
             return true;
@@ -309,10 +315,9 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
 
     if ( m_hoveringOver > -1 )
     {
-        QModelIndex idx = model->index( m_hoveringItem.first, m_hoveringItem.second );
-        emit update( idx );
+        emit update( m_hoveringItem );
         m_hoveringOver = -1;
-        m_hoveringItem = QPair<int, int>();
+        m_hoveringItem = QPersistentModelIndex();
     }
     return false;
 }

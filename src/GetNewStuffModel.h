@@ -38,7 +38,8 @@ public:
         DescriptionRole = Qt::UserRole + 5,
         TypeRole = Qt::UserRole + 6, // Category in attica-speak. What sort of item this is (resolver, etc).
         AuthorRole = Qt::UserRole + 7,
-        StateRole = Qt::UserRole + 8
+        StateRole = Qt::UserRole + 8,
+        UserHasRatedRole = Qt::UserRole + 9
     };
 
     enum Types {

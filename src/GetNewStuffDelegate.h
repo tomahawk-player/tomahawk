@@ -42,7 +42,7 @@ private:
 
     int m_widestTextWidth;
     int m_hoveringOver;
-    QPair<int, int> m_hoveringItem;
+    QPersistentModelIndex m_hoveringItem;
     mutable QHash< QPair<int, int>, QRect > m_cachedButtonRects;
     mutable QHash< QPair<int, int>, QRect > m_cachedStarRects;
 };
