@@ -329,9 +329,9 @@ TreeProxyModel::siblingItem( int itemsAway )
 Tomahawk::result_ptr
 TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
 {
-    qDebug() << Q_FUNC_INFO;
-
     QModelIndex idx = currentIndex();
+    if ( !idx.isValid() )
+        return Tomahawk::result_ptr();
 
     if ( m_shuffled )
         idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
