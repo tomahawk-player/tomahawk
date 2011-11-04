@@ -75,7 +75,8 @@ ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
     /// Then get each chart from resource
     /// We want to prepopulate the breadcrumb to fetch them before they are asked for
 
-    if( !m_chartResources.isEmpty() && m_nam ){
+    if ( !m_chartResources.isEmpty() && m_nam && m_allChartsMap.isEmpty() )
+    {
 
         tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
         foreach ( QVariant resource, m_chartResources )

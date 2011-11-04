@@ -66,6 +66,10 @@ SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 
+    // we never need to re-fetch
+    if ( !m_allChartsMap.isEmpty() )
+        return;
+
     /// We need to fetch possible types before they are asked for
     tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
 
