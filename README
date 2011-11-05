@@ -40,7 +40,7 @@ Dependencies
 
   Attica 0.2.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
   jreen (Git) - https://github.com/euroelessar/jreen
-  QTweetLib (Git) - https://github.com/minimoog/QTweetLib
+  QTweetLib 0.3.0 - https://github.com/minimoog/QTweetLib
 
  Third party libraries that we ship with our source:
 
