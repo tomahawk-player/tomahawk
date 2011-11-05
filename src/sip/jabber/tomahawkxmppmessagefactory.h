@@ -19,17 +19,17 @@
 #ifndef ENTITYTIMEFACTORY_P_H
 #define ENTITYTIMEFACTORY_P_H
 
-#include "tomahawksipmessage.h"
+#include "tomahawkxmppmessage.h"
 
 #include <jreen/stanzaextension.h>
 
 #include "../sipdllmacro.h"
 
-class SIPDLLEXPORT TomahawkSipMessageFactory : public Jreen::PayloadFactory<TomahawkSipMessage>
+class SIPDLLEXPORT TomahawkXMPPMessageFactory : public Jreen::PayloadFactory<TomahawkXMPPMessage>
 {
 public:
-    TomahawkSipMessageFactory();
-    virtual ~TomahawkSipMessageFactory();
+    TomahawkXMPPMessageFactory();
+    virtual ~TomahawkXMPPMessageFactory();
     QStringList features() const;
     bool canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
     void handleStartElement(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);

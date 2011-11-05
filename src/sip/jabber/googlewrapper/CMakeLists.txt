@@ -9,8 +9,8 @@ set( googleHeaders
 
 set( googleSources
      ../jabber.cpp
-     ../tomahawksipmessage.cpp
-     ../tomahawksipmessagefactory.cpp
+     ../tomahawkxmppmessage.cpp
+     ../tomahawkxmppmessagefactory.cpp
      ../avatarmanager.cpp
      ../xmlconsole.cpp
      googlewrapper.cpp )

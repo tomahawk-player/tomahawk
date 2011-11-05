@@ -25,8 +25,8 @@
 #include "config.h"
 
 #include "tomahawksettings.h"
-#include "tomahawksipmessage.h"
-#include "tomahawksipmessagefactory.h"
+#include "tomahawkxmppmessage.h"
+#include "tomahawkxmppmessagefactory.h"
 
 #include <jreen/jid.h>
 #include <jreen/capabilities.h>
@@ -96,7 +96,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client = new Jreen::Client( jid, m_currentPassword );
     setupClientHelper();
 
-    m_client->registerPayload(new TomahawkSipMessageFactory);
+    m_client->registerPayload(new TomahawkXMPPMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
@@ -402,10 +402,10 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     QVariantMap m = v.toMap();
     /*******************************************************/
 
-    TomahawkSipMessage *sipMessage;
+    TomahawkXMPPMessage *sipMessage;
     if(m["visible"].toBool())
     {
-        sipMessage = new TomahawkSipMessage(m["ip"].toString(),
+        sipMessage = new TomahawkXMPPMessage(m["ip"].toString(),
                                             m["port"].toInt(),
                                             m["uniqname"].toString(),
                                             m["key"].toString()
@@ -413,7 +413,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     }
     else
     {
-        sipMessage = new TomahawkSipMessage();
+        sipMessage = new TomahawkXMPPMessage();
     }
 
     qDebug() << "Send sip messsage to " << to;
@@ -802,7 +802,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq)
     }*/
     else
     {
-        TomahawkSipMessage::Ptr sipMessage = iq.payload<TomahawkSipMessage>();
+        TomahawkXMPPMessage::Ptr sipMessage = iq.payload<TomahawkXMPPMessage>();
         if(sipMessage)
         {
             iq.accept();

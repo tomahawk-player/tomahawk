@@ -16,12 +16,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawksipmessage.h"
+#include "tomahawkxmppmessage.h"
 
 #include "utils/logger.h"
 
 
-class TomahawkSipMessagePrivate
+class TomahawkXMPPMessagePrivate
 {
 public:
     QString ip;
@@ -31,9 +31,9 @@ public:
     bool visible;
 };
 
-TomahawkSipMessage::TomahawkSipMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkSipMessagePrivate)
+TomahawkXMPPMessage::TomahawkXMPPMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkXMPPMessagePrivate)
 {
-    Q_D(TomahawkSipMessage);
+    Q_D(TomahawkXMPPMessage);
     d->ip = ip;
     d->port = port;
     d->uniqname = uniqname;
@@ -41,39 +41,39 @@ TomahawkSipMessage::TomahawkSipMessage(const QString &ip, unsigned int port, con
     d->visible = true;
 }
 
-TomahawkSipMessage::TomahawkSipMessage() : d_ptr(new TomahawkSipMessagePrivate)
+TomahawkXMPPMessage::TomahawkXMPPMessage() : d_ptr(new TomahawkXMPPMessagePrivate)
 {
-    Q_D(TomahawkSipMessage);
+    Q_D(TomahawkXMPPMessage);
     d->visible = false;
     d->port = -1;
 }
 
 
-TomahawkSipMessage::~TomahawkSipMessage()
+TomahawkXMPPMessage::~TomahawkXMPPMessage()
 {
 }
 
-const QString TomahawkSipMessage::ip() const
+const QString TomahawkXMPPMessage::ip() const
 {
     return d_func()->ip;
 }
 
-unsigned int TomahawkSipMessage::port() const
+unsigned int TomahawkXMPPMessage::port() const
 {
     return d_func()->port;
 }
 
-const QString TomahawkSipMessage::uniqname() const
+const QString TomahawkXMPPMessage::uniqname() const
 {
     return d_func()->uniqname;
 }
 
-const QString TomahawkSipMessage::key() const
+const QString TomahawkXMPPMessage::key() const
 {
     return d_func()->key;
 }
 
-bool TomahawkSipMessage::visible() const
+bool TomahawkXMPPMessage::visible() const
 {
     return d_func()->visible;
 }

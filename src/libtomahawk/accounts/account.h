@@ -140,7 +140,6 @@ public:
         m_acl = s->value( "acl", QVariantMap() ).toMap();
         m_types = s->value( "types", QStringList() ).toStringList();
         s->endGroup();
-        s->sync();
     }
 
     virtual void syncConfig()

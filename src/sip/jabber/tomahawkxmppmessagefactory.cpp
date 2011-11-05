@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawksipmessagefactory.h"
+#include "tomahawkxmppmessagefactory.h"
 
 #include <QStringList>
 #include <QXmlStreamWriter>
@@ -26,29 +26,29 @@
 
 using namespace Jreen;
 
-TomahawkSipMessageFactory::TomahawkSipMessageFactory()
+TomahawkXMPPMessageFactory::TomahawkXMPPMessageFactory()
 {
     m_depth = 0;
     m_state = AtNowhere;
 }
 
-TomahawkSipMessageFactory::~TomahawkSipMessageFactory()
+TomahawkXMPPMessageFactory::~TomahawkXMPPMessageFactory()
 {
 }
 
-QStringList TomahawkSipMessageFactory::features() const
+QStringList TomahawkXMPPMessageFactory::features() const
 {
     return QStringList(TOMAHAWK_SIP_MESSAGE_NS);
 }
 
-bool TomahawkSipMessageFactory::canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes)
+bool TomahawkXMPPMessageFactory::canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes)
 {
     Q_UNUSED(uri);
     Q_UNUSED(attributes);
     return name == QLatin1String("tomahawk") && uri == TOMAHAWK_SIP_MESSAGE_NS;
 }
 
-void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const QStringRef &uri,
+void TomahawkXMPPMessageFactory::handleStartElement(const QStringRef &name, const QStringRef &uri,
                                             const QXmlStreamAttributes &attributes)
 {
     m_depth++;
@@ -83,7 +83,7 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
     Q_UNUSED(attributes);
 }
 
-void TomahawkSipMessageFactory::handleEndElement(const QStringRef &name, const QStringRef &uri)
+void TomahawkXMPPMessageFactory::handleEndElement(const QStringRef &name, const QStringRef &uri)
 {
     if (m_depth == 3)
         m_state = AtNowhere;
@@ -92,7 +92,7 @@ void TomahawkSipMessageFactory::handleEndElement(const QStringRef &name, const Q
     m_depth--;
 }
 
-void TomahawkSipMessageFactory::handleCharacterData(const QStringRef &text)
+void TomahawkXMPPMessageFactory::handleCharacterData(const QStringRef &text)
 {
     /*if (m_state == AtUtc) {
         //m_utc = Util::fromStamp(text.toString());
@@ -105,9 +105,9 @@ void TomahawkSipMessageFactory::handleCharacterData(const QStringRef &text)
     Q_UNUSED(text);
 }
 
-void TomahawkSipMessageFactory::serialize(Payload *extension, QXmlStreamWriter *writer)
+void TomahawkXMPPMessageFactory::serialize(Payload *extension, QXmlStreamWriter *writer)
 {
-    TomahawkSipMessage *sipMessage = se_cast<TomahawkSipMessage*>(extension);
+    TomahawkXMPPMessage *sipMessage = se_cast<TomahawkXMPPMessage*>(extension);
 
         writer->writeStartElement(QLatin1String("tomahawk"));
         writer->writeDefaultNamespace(TOMAHAWK_SIP_MESSAGE_NS);
@@ -137,10 +137,10 @@ void TomahawkSipMessageFactory::serialize(Payload *extension, QXmlStreamWriter *
         writer->writeEndElement();
 }
 
-Payload::Ptr TomahawkSipMessageFactory::createPayload()
+Payload::Ptr TomahawkXMPPMessageFactory::createPayload()
 {
     if(m_visible)
-        return Payload::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key));
+        return Payload::Ptr(new TomahawkXMPPMessage(m_ip, m_port, m_uniqname, m_key));
     else
-        return Payload::Ptr(new TomahawkSipMessage());
+        return Payload::Ptr(new TomahawkXMPPMessage());
 }

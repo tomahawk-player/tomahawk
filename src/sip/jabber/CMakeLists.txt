@@ -8,8 +8,8 @@ add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( jabberSources
     jabber.cpp
-    tomahawksipmessage.cpp
-    tomahawksipmessagefactory.cpp
+    tomahawkxmppmessage.cpp
+    tomahawkxmppmessagefactory.cpp
     avatarmanager.cpp
     xmlconsole.cpp
 )
