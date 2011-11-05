@@ -129,9 +129,14 @@ public:
         syncConfig();
     }
 
+    virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
+
+signals:
+    void configurationChanged();
+    
+protected:
     virtual void loadFromConfig( const QString &accountId )
     {
-        QMutexLocker locker( &m_mutex );
         m_accountId = accountId;
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
@@ -147,7 +152,6 @@ public:
 
     virtual void syncConfig()
     {
-        QMutexLocker locker( &m_mutex );
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
         s->setValue( "accountfriendlyname", m_accountFriendlyName );
@@ -171,10 +175,6 @@ public:
     QVariantMap m_acl;
     QStringList m_types;
     mutable QMutex m_mutex;
-
-signals:
-    void configurationChanged();
-
 };
 
 class DLLEXPORT AccountFactory : public QObject

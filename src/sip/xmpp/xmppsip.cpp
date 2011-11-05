@@ -467,7 +467,7 @@ XmppSipPlugin::configurationChanged()
         QVariantHash credentials = m_account->credentials();
         credentials[ "username" ] = m_currentUsername;
         m_account->setCredentials( credentials );
-        m_account->syncConfig();
+        m_account->sync();
     }
 
     if ( reconnect )

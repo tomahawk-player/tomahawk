@@ -94,7 +94,7 @@ private slots:
     void profilePicReply();
     
 private:
-    inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->syncConfig(); }
+    inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->sync(); }
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
