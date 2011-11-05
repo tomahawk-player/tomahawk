@@ -63,18 +63,18 @@ public:
         , m_accountId( accountId ) {}
     virtual ~Account() {}
 
-    virtual QString accountServiceName() const { return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
-    virtual QString accountFriendlyName() const { return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
-    virtual bool enabled() const { return m_enabled; }
-    virtual bool autoConnect() const { return m_autoConnect; }
-    virtual QString accountId() const { return m_accountId; }
+    virtual QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
+    virtual QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
+    virtual bool enabled() const { QMutexLocker locker( &m_mutex ); return m_enabled; }
+    virtual bool autoConnect() const { QMutexLocker locker( &m_mutex ); return m_autoConnect; }
+    virtual QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
 
-    virtual QVariantHash configuration() const { return m_configuration; }
+    virtual QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_configuration; }
     virtual QWidget* configurationWidget() = 0;
 
-    virtual QVariantHash credentials() { return m_credentials; }
+    virtual QVariantHash credentials() { QMutexLocker locker( &m_mutex ); return m_credentials; }
 
-    virtual QVariantMap acl() const { return m_acl; }
+    virtual QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
     virtual QWidget* aclWidget() = 0;
 
     virtual QIcon icon() const = 0;
@@ -87,6 +87,7 @@ public:
 
     virtual QSet< AccountType > types() const
     {
+        QMutexLocker locker( &m_mutex );
         QSet< AccountType > set;
         foreach ( QString type, m_types )
         {
@@ -98,19 +99,20 @@ public:
         return set;
     }
 
-    virtual void setAccountServiceName( const QString &serviceName ) { m_accountServiceName = serviceName; }
-    virtual void setAccountFriendlyName( const QString &friendlyName )  { m_accountFriendlyName = friendlyName; }
-    virtual void setEnabled( bool enabled ) { m_enabled = enabled; }
-    virtual void setAutoConnect( bool autoConnect ) { m_autoConnect = autoConnect; }
-    virtual void setAccountId( const QString &accountId )  { m_accountId = accountId; }
-    virtual void setCredentials( const QVariantHash &credentialHash ) { m_credentials = credentialHash; }
+    virtual void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
+    virtual void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
+    virtual void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_enabled = enabled; }
+    virtual void setAutoConnect( bool autoConnect ) { QMutexLocker locker( &m_mutex ); m_autoConnect = autoConnect; }
+    virtual void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
+    virtual void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
 
-    virtual void setConfiguration( const QVariantHash &configuration ) { m_configuration = configuration; }
+    virtual void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
 
-    virtual void setAcl( const QVariantMap &acl ) { m_acl = acl; }
+    virtual void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
 
     virtual void setTypes( const QSet< AccountType > types )
     {
+        QMutexLocker locker( &m_mutex );
         m_types = QStringList();
         foreach ( AccountType type, types )
         {
@@ -129,6 +131,7 @@ public:
 
     virtual void loadFromConfig( const QString &accountId )
     {
+        QMutexLocker locker( &m_mutex );
         m_accountId = accountId;
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
@@ -144,6 +147,7 @@ public:
 
     virtual void syncConfig()
     {
+        QMutexLocker locker( &m_mutex );
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
         s->setValue( "accountfriendlyname", m_accountFriendlyName );
@@ -166,6 +170,7 @@ public:
     QVariantHash m_configuration;
     QVariantMap m_acl;
     QStringList m_types;
+    mutable QMutex m_mutex;
 
 signals:
     void configurationChanged();

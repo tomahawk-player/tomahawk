@@ -28,8 +28,6 @@
 
 #include <QWidget>
 
-class TwitterAccount;
-
 namespace Ui
 {
     class TwitterConfigWidget;
@@ -72,7 +70,7 @@ private:
     void authenticateTwitter();
     void deauthenticateTwitter();
 
-    Ui::TwitterConfigWidget *ui;
+    Ui::TwitterConfigWidget *m_ui;
     TwitterAccount *m_account;
     QString m_postGTtype;
 };

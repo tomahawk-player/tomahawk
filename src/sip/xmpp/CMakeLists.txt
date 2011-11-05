@@ -6,22 +6,21 @@ add_definitions( -DQT_PLUGIN )
 add_definitions( -DQT_SHARED )
 add_definitions( -DSIPDLLEXPORT_PRO )
 
-set( jabberSources
-    jabber.cpp
+set( xmppSipSources
+    xmppsip.cpp
     tomahawkxmppmessage.cpp
     tomahawkxmppmessagefactory.cpp
     avatarmanager.cpp
     xmlconsole.cpp
 )
 
-set( jabberHeaders
-    jabber.h
+set( xmppSipHeaders
+    xmppsip.h
     avatarmanager.h
     xmlconsole.h
 )
 
-set( jabberUI
-    configwidget.ui
+set( xmppSipUI
     xmlconsole.ui
 )
 
@@ -30,10 +29,9 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${LIBJREEN_INCLUDE_DIR}
 )
 
-qt4_add_resources( RC_SRCS "resources.qrc" )
-qt4_wrap_ui( jabberUI_H ${jabberUI} )
-qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
-add_library( tomahawk_sipjabber SHARED ${jabberSources} ${jabberMoc} ${jabberUI_H} ${RC_SRCS} )
+qt4_wrap_ui( xmppSipUI_H ${xmppSipUI} )
+qt4_wrap_cpp( xmppSipMoc ${xmppSipHeaders} )
+add_library( tomahawk_sipxmpp SHARED ${xmppSipSources} ${xmppSipMoc} ${xmppSipUI_H} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -44,7 +42,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( WIN32 )
 
-target_link_libraries( tomahawk_sipjabber
+target_link_libraries( tomahawk_sipxmpp
     ${QT_LIBRARIES}
     ${LIBJREEN_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
@@ -55,7 +53,7 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_sipxmpp DESTINATION lib${LIB_SUFFIX} )
 
 
-add_subdirectory(googlewrapper)
+#add_subdirectory(googlewrapper)

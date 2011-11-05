@@ -41,20 +41,20 @@ namespace Accounts
 
 TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *parent ) :
     QWidget( parent ),
-    ui( new Ui::TwitterConfigWidget ),
+    m_ui( new Ui::TwitterConfigWidget ),
     m_account( account )
 {
-    ui->setupUi( this );
+    m_ui->setupUi( this );
 
-    connect( ui->twitterAuthenticateButton, SIGNAL( pressed() ),
+    connect( m_ui->twitterAuthenticateButton, SIGNAL( pressed() ),
             this, SLOT( authDeauthTwitter() ) );
-    connect( ui->twitterTweetGotTomahawkButton, SIGNAL( pressed() ),
+    connect( m_ui->twitterTweetGotTomahawkButton, SIGNAL( pressed() ),
             this, SLOT( startPostGotTomahawkStatus() ) );
-    connect( ui->twitterTweetComboBox, SIGNAL( currentIndexChanged( int ) ),
+    connect( m_ui->twitterTweetComboBox, SIGNAL( currentIndexChanged( int ) ),
             this, SLOT( tweetComboBoxIndexChanged( int ) ) );
 
-    ui->twitterTweetComboBox->setCurrentIndex( 0 );
-    ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
+    m_ui->twitterTweetComboBox->setCurrentIndex( 0 );
+    m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
     QVariantHash credentials = m_account->credentials();
     
@@ -62,18 +62,18 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
          credentials[ "oauthtokensecret" ].toString().isEmpty() ||
          credentials[ "username" ].toString().isEmpty() )
     {
-        ui->twitterStatusLabel->setText( tr( "Status: No saved credentials" ) );
-        ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
-        ui->twitterSyncGroupBox->setVisible( false );
+        m_ui->twitterStatusLabel->setText( tr( "Status: No saved credentials" ) );
+        m_ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
+        m_ui->twitterSyncGroupBox->setVisible( false );
 
         emit twitterAuthed( false );
     }
     else
     {
-        ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( m_account->credentials()[ "username" ].toString() ) );
-        ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-        ui->twitterSyncGroupBox->setVisible( true );
-        ui->twitterUserTweetLineEdit->setVisible( false );
+        m_ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( m_account->credentials()[ "username" ].toString() ) );
+        m_ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
+        m_ui->twitterSyncGroupBox->setVisible( true );
+        m_ui->twitterUserTweetLineEdit->setVisible( false );
 
         emit twitterAuthed( true );
     }
@@ -82,13 +82,13 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
 
 TwitterConfigWidget::~TwitterConfigWidget()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void
 TwitterConfigWidget::authDeauthTwitter()
 {
-    if ( ui->twitterAuthenticateButton->text() == tr( "Authenticate" ) ) //FIXME: don't rely on UI strings here!
+    if ( m_ui->twitterAuthenticateButton->text() == tr( "Authenticate" ) ) //FIXME: don't rely on UI strings here!
         authenticateTwitter();
     else
         deauthenticateTwitter();
@@ -132,12 +132,12 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     configuration[ "sipcachedmentionssinceid" ] = 0;
     m_account->setConfiguration( configuration );
     
-    ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( user.screenName() ) );
-    ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-    ui->twitterSyncGroupBox->setVisible( true );
-    ui->twitterTweetComboBox->setCurrentIndex( 0 );
-    ui->twitterUserTweetLineEdit->setVisible( false );
-    ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
+    m_ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( user.screenName() ) );
+    m_ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
+    m_ui->twitterSyncGroupBox->setVisible( true );
+    m_ui->twitterTweetComboBox->setCurrentIndex( 0 );
+    m_ui->twitterUserTweetLineEdit->setVisible( false );
+    m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
     emit twitterAuthed( true );
     emit sizeHintChanged();
@@ -148,7 +148,7 @@ TwitterConfigWidget::authenticateVerifyError( QTweetNetBase::ErrorCode code, con
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Error validating credentials, error code is " << code << ", error message is " << errorMsg;
-    ui->twitterStatusLabel->setText(tr("Status: Error validating credentials"));
+    m_ui->twitterStatusLabel->setText(tr("Status: Error validating credentials"));
     emit twitterAuthed( false );
     return;
 }
@@ -163,9 +163,9 @@ TwitterConfigWidget::deauthenticateTwitter()
     credentials[ "username" ] = QString();
     m_account->setCredentials( credentials );
 
-    ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
-    ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
-    ui->twitterSyncGroupBox->setVisible( false );
+    m_ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
+    m_ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
+    m_ui->twitterSyncGroupBox->setVisible( false );
 
     emit twitterAuthed( false );
     emit sizeHintChanged();
@@ -175,26 +175,26 @@ void
 TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
 {
     Q_UNUSED( index );
-    if ( ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
-        ui->twitterUserTweetLineEdit->setVisible( false );
+    if ( m_ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
+        m_ui->twitterUserTweetLineEdit->setVisible( false );
     else
-        ui->twitterUserTweetLineEdit->setVisible( true );
+        m_ui->twitterUserTweetLineEdit->setVisible( true );
 
-    if ( ui->twitterTweetComboBox->currentText() == tr( "Direct Message" ) ) //FIXME: use data!
-        ui->twitterTweetGotTomahawkButton->setText( tr( "Send Message!" ) );
-    else if ( ui->twitterTweetComboBox->currentText() == tr( "@Mention" ) )
-        ui->twitterTweetGotTomahawkButton->setText( tr( "Send Mention!" ) );
+    if ( m_ui->twitterTweetComboBox->currentText() == tr( "Direct Message" ) ) //FIXME: use data!
+        m_ui->twitterTweetGotTomahawkButton->setText( tr( "Send Message!" ) );
+    else if ( m_ui->twitterTweetComboBox->currentText() == tr( "@Mention" ) )
+        m_ui->twitterTweetGotTomahawkButton->setText( tr( "Send Mention!" ) );
     else
-        ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
+        m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 }
 
 void
 TwitterConfigWidget::startPostGotTomahawkStatus()
 {
     qDebug() << Q_FUNC_INFO;
-    m_postGTtype = ui->twitterTweetComboBox->currentText();
+    m_postGTtype = m_ui->twitterTweetComboBox->currentText();
 
-    if ( m_postGTtype != "Global Tweet" && ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" ) )
+    if ( m_postGTtype != "Global Tweet" && ( m_ui->twitterUserTweetLineEdit->text().isEmpty() || m_ui->twitterUserTweetLineEdit->text() == "@" ) )
     {
         QMessageBox::critical( this, tr("Tweetin' Error"), tr("You must enter a user name for this type of tweet.") );
         return;
@@ -242,7 +242,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
         if ( m_postGTtype == "@Mention" )
         {
-            QString user = ui->twitterUserTweetLineEdit->text();
+            QString user = m_ui->twitterUserTweetLineEdit->text();
             if ( user.startsWith( "@" ) )
                 user.remove( 0, 1 );
             message = QString( "@" ) + user + QString( " " ) + message;
@@ -256,7 +256,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
         QString uuid = QUuid::createUuid();
         QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
-        QString user = ui->twitterUserTweetLineEdit->text();
+        QString user = m_ui->twitterUserTweetLineEdit->text();
         if ( user.startsWith( "@" ) )
             user.remove( 0, 1 );
         statUpdate->post( user, message );

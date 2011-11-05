@@ -95,7 +95,7 @@ TwitterSipPlugin::connectionState() const
 
 void TwitterSipPlugin::checkSettings()
 {
-  //TODO/FIXME: check status and enable/disable?
+    configurationChanged();
 }
 
 

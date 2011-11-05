@@ -25,18 +25,18 @@
 
 #include "../sipdllmacro.h"
 
-class TomahawkXMPPMessagePrivate;
-class SIPDLLEXPORT TomahawkXMPPMessage : public Jreen::Payload
+class TomahawkXmppMessagePrivate;
+class SIPDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
 {
-    J_PAYLOAD(TomahawkXMPPMessage)
-    Q_DECLARE_PRIVATE(TomahawkXMPPMessage)
+    J_PAYLOAD(TomahawkXmppMessage)
+    Q_DECLARE_PRIVATE(TomahawkXmppMessage)
     public:
         // sets visible to true
-        TomahawkXMPPMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key);
+        TomahawkXmppMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key);
 
         // sets visible to false as we dont have any extra information
-        TomahawkXMPPMessage();
-        ~TomahawkXMPPMessage();
+        TomahawkXmppMessage();
+        ~TomahawkXmppMessage();
 
         const QString ip() const;
         unsigned int port() const;
@@ -44,7 +44,7 @@ class SIPDLLEXPORT TomahawkXMPPMessage : public Jreen::Payload
         const QString key() const;
         bool visible() const;
     private:
-        QScopedPointer<TomahawkXMPPMessagePrivate> d_ptr;
+        QScopedPointer<TomahawkXmppMessagePrivate> d_ptr;
 };
 
 #endif // ENTITYTIME_H

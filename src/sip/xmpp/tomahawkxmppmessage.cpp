@@ -21,7 +21,7 @@
 #include "utils/logger.h"
 
 
-class TomahawkXMPPMessagePrivate
+class TomahawkXmppMessagePrivate
 {
 public:
     QString ip;
@@ -31,9 +31,9 @@ public:
     bool visible;
 };
 
-TomahawkXMPPMessage::TomahawkXMPPMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkXMPPMessagePrivate)
+TomahawkXmppMessage::TomahawkXmppMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkXmppMessagePrivate)
 {
-    Q_D(TomahawkXMPPMessage);
+    Q_D(TomahawkXmppMessage);
     d->ip = ip;
     d->port = port;
     d->uniqname = uniqname;
@@ -41,39 +41,39 @@ TomahawkXMPPMessage::TomahawkXMPPMessage(const QString &ip, unsigned int port, c
     d->visible = true;
 }
 
-TomahawkXMPPMessage::TomahawkXMPPMessage() : d_ptr(new TomahawkXMPPMessagePrivate)
+TomahawkXmppMessage::TomahawkXmppMessage() : d_ptr(new TomahawkXmppMessagePrivate)
 {
-    Q_D(TomahawkXMPPMessage);
+    Q_D(TomahawkXmppMessage);
     d->visible = false;
     d->port = -1;
 }
 
 
-TomahawkXMPPMessage::~TomahawkXMPPMessage()
+TomahawkXmppMessage::~TomahawkXmppMessage()
 {
 }
 
-const QString TomahawkXMPPMessage::ip() const
+const QString TomahawkXmppMessage::ip() const
 {
     return d_func()->ip;
 }
 
-unsigned int TomahawkXMPPMessage::port() const
+unsigned int TomahawkXmppMessage::port() const
 {
     return d_func()->port;
 }
 
-const QString TomahawkXMPPMessage::uniqname() const
+const QString TomahawkXmppMessage::uniqname() const
 {
     return d_func()->uniqname;
 }
 
-const QString TomahawkXMPPMessage::key() const
+const QString TomahawkXmppMessage::key() const
 {
     return d_func()->key;
 }
 
-bool TomahawkXMPPMessage::visible() const
+bool TomahawkXmppMessage::visible() const
 {
     return d_func()->visible;
 }

@@ -130,9 +130,3 @@ SipPlugin::onPeerOffline( const QString& peerId )
 {
     m_peersOnline.removeAll( peerId );
 }
-
-
-void
-SipPlugin::deletePlugin()
-{
-}

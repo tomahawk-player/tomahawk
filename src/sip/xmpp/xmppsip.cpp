@@ -17,14 +17,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "jabber.h"
-#include "ui_configwidget.h"
+#include "xmppsip.h"
 
 #include "xmlconsole.h"
 
 #include "config.h"
 
-#include "tomahawksettings.h"
 #include "tomahawkxmppmessage.h"
 #include "tomahawkxmppmessagefactory.h"
 
@@ -49,54 +47,30 @@
 #include <QTimer>
 
 #include <utils/tomahawkutils.h>
-#include "utils/logger.h"
+#include <utils/logger.h>
+#include <accounts/accountmanager.h>
 
-SipPlugin*
-JabberFactory::createPlugin( const QString& pluginId )
-{
-    return new JabberPlugin( pluginId.isEmpty() ? generateId() : pluginId );
-}
-
-QIcon
-JabberFactory::icon() const
-{
-    return QIcon( ":/jabber-icon.png" );
-}
-
-JabberPlugin::JabberPlugin( const QString& pluginId )
-    : SipPlugin( pluginId )
+XmppSipPlugin::XmppSipPlugin( Tomahawk::Accounts::Account *account )
+    : SipPlugin( account )
     , m_menu( 0 )
     , m_xmlConsole( 0 )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_configWidget = QWeakPointer< QWidget >( new QWidget );
-    m_ui = new Ui_JabberConfig;
-    m_ui->setupUi( m_configWidget.data() );
-    m_configWidget.data()->setVisible( false );
-
-    m_currentUsername = accountName();
+    m_currentUsername = readUsername();
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
 
-    m_ui->jabberUsername->setText( m_currentUsername );
-    m_ui->jabberPassword->setText( m_currentPassword );
-    m_ui->jabberServer->setText( m_currentServer );
-    m_ui->jabberPort->setValue( m_currentPort );
-    m_ui->jidExistsLabel->hide();
-
-
-    connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
     // setup JID object
-    Jreen::JID jid = Jreen::JID( accountName() );
+    Jreen::JID jid = Jreen::JID( readUsername() );
 
     // general client setup
     m_client = new Jreen::Client( jid, m_currentPassword );
     setupClientHelper();
 
-    m_client->registerPayload(new TomahawkXMPPMessageFactory);
+    m_client->registerPayload( new TomahawkXmppMessageFactory );
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
@@ -145,55 +119,22 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 }
 
-JabberPlugin::~JabberPlugin()
+XmppSipPlugin::~XmppSipPlugin()
 {
     delete m_avatarManager;
     delete m_roster;
     delete m_xmlConsole;
     delete m_client;
-    delete m_ui;
-}
-
-
-const QString
-JabberPlugin::name() const
-{
-    return QString( MYNAME );
-}
-
-const QString
-JabberPlugin::friendlyName() const
-{
-    return QString( "Jabber" );
-}
-
-const QString
-JabberPlugin::accountName() const
-{
-    return TomahawkSettings::instance()->value( pluginId() + "/username" ).toString();
 }
 
 QMenu*
-JabberPlugin::menu()
+XmppSipPlugin::menu()
 {
     return m_menu;
 }
 
-QWidget*
-JabberPlugin::configWidget()
-{
-    return m_configWidget.data();
-}
-
-QIcon
-JabberPlugin::icon() const
-{
-    return QIcon( ":/jabber-icon.png" );
-}
-
-
 bool
-JabberPlugin::connectPlugin()
+XmppSipPlugin::connectPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -203,7 +144,7 @@ JabberPlugin::connectPlugin()
         return true; //FIXME: should i return false here?!
     }
 
-    qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
+    qDebug() << "Connecting to the Xmpp server..." << m_client->jid().full();
 
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
@@ -217,7 +158,7 @@ JabberPlugin::connectPlugin()
 }
 
 void
-JabberPlugin::disconnectPlugin()
+XmppSipPlugin::disconnectPlugin()
 {
     if (!m_client->isConnected())
     {
@@ -242,7 +183,7 @@ JabberPlugin::disconnectPlugin()
 }
 
 void
-JabberPlugin::onConnect()
+XmppSipPlugin::onConnect()
 {
 //    qDebug() << Q_FUNC_INFO;
 
@@ -254,7 +195,7 @@ JabberPlugin::onConnect()
         emit jidChanged( m_client->jid().full() );
     }
 
-    qDebug() << "Connected to jabber as:" << m_client->jid().full();
+    qDebug() << "Connected to xmpp as:" << m_client->jid().full();
 
     // set presence to least valid value
     m_client->setPresence(Jreen::Presence::XA, "Got Tomahawk? http://gettomahawk.com", -127);
@@ -284,7 +225,7 @@ JabberPlugin::onConnect()
 }
 
 void
-JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
+XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -325,13 +266,13 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 }
 
 void
-JabberPlugin::onError( const Jreen::Connection::SocketError& e )
+XmppSipPlugin::onError( const Jreen::Connection::SocketError& e )
 {
     tLog() << "JABBER error:" << e;
 }
 
 QString
-JabberPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
+XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 {
     switch( reason )
     {
@@ -380,7 +321,7 @@ JabberPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 }
 
 void
-JabberPlugin::sendMsg(const QString& to, const QString& msg)
+XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
 {
     qDebug() << Q_FUNC_INFO << to << msg;
 
@@ -396,16 +337,16 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     QVariant v = parser.parse( msg.toAscii(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
-        qDebug() << "Invalid JSON in XMPP msg";
+        qDebug() << "Invalid JSON in Xmpp msg";
         return;
     }
     QVariantMap m = v.toMap();
     /*******************************************************/
 
-    TomahawkXMPPMessage *sipMessage;
+    TomahawkXmppMessage *sipMessage;
     if(m["visible"].toBool())
     {
-        sipMessage = new TomahawkXMPPMessage(m["ip"].toString(),
+        sipMessage = new TomahawkXmppMessage(m["ip"].toString(),
                                             m["port"].toInt(),
                                             m["uniqname"].toString(),
                                             m["key"].toString()
@@ -413,7 +354,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     }
     else
     {
-        sipMessage = new TomahawkXMPPMessage();
+        sipMessage = new TomahawkXmppMessage();
     }
 
     qDebug() << "Send sip messsage to " << to;
@@ -425,7 +366,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
 }
 
 void
-JabberPlugin::broadcastMsg(const QString& msg)
+XmppSipPlugin::broadcastMsg(const QString& msg)
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -439,7 +380,7 @@ JabberPlugin::broadcastMsg(const QString& msg)
 }
 
 void
-JabberPlugin::addContact(const QString& jid, const QString& msg)
+XmppSipPlugin::addContact(const QString& jid, const QString& msg)
 {
     // Add contact to the Tomahawk group on the roster
 
@@ -453,40 +394,48 @@ JabberPlugin::addContact(const QString& jid, const QString& msg)
 }
 
 void
-JabberPlugin::showAddFriendDialog()
+XmppSipPlugin::showAddFriendDialog()
 {
     bool ok;
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
-                                        tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok );
+                                        tr( "Enter Xmpp ID:" ), QLineEdit::Normal, "", &ok );
     if ( !ok )
         return;
 
-    qDebug() << "Attempting to add jabber contact to roster:" << id;
+    qDebug() << "Attempting to add xmpp contact to roster:" << id;
     addContact( id );
 }
 
 QString
-JabberPlugin::defaultSuffix() const
+XmppSipPlugin::defaultSuffix() const
 {
-    return "@jabber.org";
+    return "@xmpp.org";
 }
 
 
 void
-JabberPlugin::showXmlConsole()
+XmppSipPlugin::showXmlConsole()
 {
    m_xmlConsole->show();
 }
 
+
 void
-JabberPlugin::checkSettings()
+XmppSipPlugin::checkSettings()
+{
+    configurationChanged();
+}
+
+
+void
+XmppSipPlugin::configurationChanged()
 {
     bool reconnect = false;
 
     QString username, password, server;
     int port;
 
-    username = accountName();
+    username = readUsername();
     password = readPassword();
     server = readServer();
     port = readPort();
@@ -515,7 +464,10 @@ JabberPlugin::checkSettings()
     if ( !m_currentUsername.contains( '@' ) )
     {
         m_currentUsername += defaultSuffix();
-        TomahawkSettings::instance()->setValue( pluginId() + "/username", m_currentUsername );
+        QVariantHash credentials = m_account->credentials();
+        credentials[ "username" ] = m_currentUsername;
+        m_account->setCredentials( credentials );
+        m_account->syncConfig();
     }
 
     if ( reconnect )
@@ -530,7 +482,7 @@ JabberPlugin::checkSettings()
     }
 }
 
-void JabberPlugin::setupClientHelper()
+void XmppSipPlugin::setupClientHelper()
 {
     Jreen::JID jid = Jreen::JID( m_currentUsername );
     m_client->setJID( jid );
@@ -550,11 +502,11 @@ void JabberPlugin::setupClientHelper()
     }
 }
 
-void JabberPlugin::addMenuHelper()
+void XmppSipPlugin::addMenuHelper()
 {
     if( !m_menu )
     {
-        m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( accountName() ).append(")" ) );
+        m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( readUsername() ).append(")" ) );
 
         QAction* addFriendAction = m_menu->addAction( tr( "Add Friend..." ) );
         connect( addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );
@@ -569,7 +521,7 @@ void JabberPlugin::addMenuHelper()
     }
 }
 
-void JabberPlugin::removeMenuHelper()
+void XmppSipPlugin::removeMenuHelper()
 {
     if( m_menu )
     {
@@ -580,7 +532,7 @@ void JabberPlugin::removeMenuHelper()
     }
 }
 
-void JabberPlugin::onNewMessage(const Jreen::Message& message)
+void XmppSipPlugin::onNewMessage(const Jreen::Message& message)
 {
     if ( m_state != Connected )
         return;
@@ -621,7 +573,7 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 }
 
 
-void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
+void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
     Q_UNUSED(item);
     if ( m_state != Connected )
@@ -664,7 +616,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     }
 }
 
-void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
+void XmppSipPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
 {
     if ( m_state != Connected )
         return;
@@ -716,7 +668,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
 }
 
 void
-JabberPlugin::onSubscriptionRequestConfirmed( int result )
+XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
 {
     qDebug() << Q_FUNC_INFO << result;
 
@@ -750,7 +702,7 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
     m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
 }
 
-void JabberPlugin::onNewIq(const Jreen::IQ& iq)
+void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
 {
     if ( m_state != Connected )
         return;
@@ -802,7 +754,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq)
     }*/
     else
     {
-        TomahawkXMPPMessage::Ptr sipMessage = iq.payload<TomahawkXMPPMessage>();
+        TomahawkXmppMessage::Ptr sipMessage = iq.payload<TomahawkXmppMessage>();
         if(sipMessage)
         {
             iq.accept();
@@ -831,7 +783,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq)
     }
 }
 
-bool JabberPlugin::presenceMeansOnline(Jreen::Presence::Type p)
+bool XmppSipPlugin::presenceMeansOnline(Jreen::Presence::Type p)
 {
     switch(p)
     {
@@ -845,7 +797,7 @@ bool JabberPlugin::presenceMeansOnline(Jreen::Presence::Type p)
     }
 }
 
-void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type presenceType)
+void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type presenceType)
 {
     QString fulljid = jid.full();
 
@@ -892,7 +844,7 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
     m_peers[ jid ] = presenceType;
 }
 
-void JabberPlugin::onNewAvatar(const QString& jid)
+void XmppSipPlugin::onNewAvatar(const QString& jid)
 {
 //    qDebug() << Q_FUNC_INFO << jid;
     if ( m_state != Connected )
@@ -918,82 +870,49 @@ void JabberPlugin::onNewAvatar(const QString& jid)
         emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
 }
 
+
 bool
-JabberPlugin::readXmlConsoleEnabled()
+XmppSipPlugin::readXmlConsoleEnabled()
 {
-    return TomahawkSettings::instance()->value( pluginId() + "/xmlconsole", QVariant( false ) ).toBool();
+    QVariantHash configuration = m_account->configuration();
+    return configuration.contains( "xmlconsole" ) && configuration[ "xmlconsole" ].toBool();
 }
 
 
 QString
-JabberPlugin::readPassword()
+XmppSipPlugin::readUsername()
 {
-    return TomahawkSettings::instance()->value( pluginId() + "/password" ).toString();
+    QVariantHash credentials = m_account->credentials();
+    return credentials.contains( "username" ) ? credentials[ "username" ].toString() : QString();
 }
+
+
+QString
+XmppSipPlugin::readPassword()
+{
+    QVariantHash credentials = m_account->credentials();
+    return credentials.contains( "password" ) ? credentials[ "password" ].toString() : QString();
+}
+
 
 int
-JabberPlugin::readPort()
+XmppSipPlugin::readPort()
 {
-    return TomahawkSettings::instance()->value( pluginId() + "/port", 5222 ).toInt();
+    QVariantHash configuration = m_account->configuration();
+    return configuration.contains( "port" ) ? configuration[ "port" ].toInt() : 5222;
 }
+
 
 QString
-JabberPlugin::readServer()
+XmppSipPlugin::readServer()
 {
-    return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
-}
-
-
-void
-JabberPlugin::onCheckJidExists( QString jid )
-{
-    for ( int i=0; i<TomahawkSettings::instance()->sipPlugins().count(); i++ )
-    {
-        QString savedUsername = TomahawkSettings::instance()->value(
-                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString();
-        QStringList splitUserName = TomahawkSettings::instance()->value(
-                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString().split("@");
-        QString server = TomahawkSettings::instance()->value(
-                TomahawkSettings::instance()->sipPlugins().at( i ) + "/server" ).toString();
-
-        if ( ( savedUsername == jid || splitUserName.contains( jid ) ) &&
-               server == m_ui->jabberServer->text() && !jid.trimmed().isEmpty() )
-        {
-            m_ui->jidExistsLabel->show();
-            // the already jid exists
-            emit dataError( true );
-            return;
-        }
-    }
-    m_ui->jidExistsLabel->hide();
-    emit dataError( false );
-}
-
-
-void
-JabberPlugin::saveConfig()
-{
-    TomahawkSettings::instance()->setValue( pluginId() + "/username", m_ui->jabberUsername->text() );
-    TomahawkSettings::instance()->setValue( pluginId() + "/password", m_ui->jabberPassword->text() );
-    TomahawkSettings::instance()->setValue( pluginId() + "/port", m_ui->jabberPort->value() );
-    TomahawkSettings::instance()->setValue( pluginId() + "/server", m_ui->jabberServer->text() );
-
-    checkSettings();
-}
-
-void
-JabberPlugin::deletePlugin()
-{
-    TomahawkSettings::instance()->remove( pluginId() );
+    QVariantHash configuration = m_account->configuration();
+    return configuration.contains( "server" ) ? configuration[ "server" ].toString() : QString();
 }
 
 
 SipPlugin::ConnectionState
-JabberPlugin::connectionState() const
+XmppSipPlugin::connectionState() const
 {
     return m_state;
 }
-
-#ifndef GOOGLE_WRAPPER
-Q_EXPORT_PLUGIN2( sipfactory, JabberFactory )
-#endif

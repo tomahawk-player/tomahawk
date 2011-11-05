@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>JabberConfig</class>
- <widget class="QWidget" name="JabberConfig">
+ <class>XmppConfigWidget</class>
+ <widget class="QWidget" name="XmppConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Jabber Configuration</string>
+   <string>Xmpp Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -35,7 +35,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/jabber-icon.png</pixmap>
+        <pixmap resource="resources.qrc">:/xmpp-icon.png</pixmap>
        </property>
       </widget>
      </item>
@@ -49,7 +49,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Configure this Jabber account</string>
+        <string>Configure this Xmpp account</string>
        </property>
       </widget>
      </item>
@@ -84,9 +84,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="jabberBlurb">
+      <widget class="QLabel" name="xmppBlurb">
        <property name="text">
-        <string>Enter your Jabber login to connect with your friends using Tomahawk!</string>
+        <string>Enter your Xmpp login to connect with your friends using Tomahawk!</string>
        </property>
       </widget>
      </item>
@@ -128,15 +128,15 @@
            </size>
           </property>
           <property name="text">
-           <string>Jabber ID:</string>
+           <string>Xmpp ID:</string>
           </property>
           <property name="buddy">
-           <cstring>jabberUsername</cstring>
+           <cstring>xmppUsername</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="jabberUsername">
+         <widget class="QLineEdit" name="xmppUsername">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -160,12 +160,12 @@
            <string>Password:</string>
           </property>
           <property name="buddy">
-           <cstring>jabberPassword</cstring>
+           <cstring>xmppPassword</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="jabberPassword">
+         <widget class="QLineEdit" name="xmppPassword">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -196,7 +196,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBoxJabberAdvanced">
+    <widget class="QGroupBox" name="groupBoxXmppAdvanced">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -207,13 +207,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Advanced Jabber Settings</string>
+      <string>Advanced Xmpp Settings</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="labelJabberServer">
+         <widget class="QLabel" name="labelXmppServer">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -233,12 +233,12 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="buddy">
-           <cstring>jabberServer</cstring>
+           <cstring>xmppServer</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="jabberServer">
+         <widget class="QLineEdit" name="xmppServer">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -248,7 +248,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="labelJabberPort">
+         <widget class="QLabel" name="labelXmppPort">
           <property name="text">
            <string>Port:</string>
           </property>
@@ -258,7 +258,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="jabberPort">
+         <widget class="QSpinBox" name="xmppPort">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>

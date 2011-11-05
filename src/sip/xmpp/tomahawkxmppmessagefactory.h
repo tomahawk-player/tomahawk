@@ -25,11 +25,11 @@
 
 #include "../sipdllmacro.h"
 
-class SIPDLLEXPORT TomahawkXMPPMessageFactory : public Jreen::PayloadFactory<TomahawkXMPPMessage>
+class SIPDLLEXPORT TomahawkXmppMessageFactory : public Jreen::PayloadFactory<TomahawkXmppMessage>
 {
 public:
-    TomahawkXMPPMessageFactory();
-    virtual ~TomahawkXMPPMessageFactory();
+    TomahawkXmppMessageFactory();
+    virtual ~TomahawkXmppMessageFactory();
     QStringList features() const;
     bool canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
     void handleStartElement(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);

@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JABBER_H
-#define JABBER_H
+#ifndef XMPPSIP_H
+#define XMPPSIP_H
 
 #include "sip/SipPlugin.h"
 
@@ -40,57 +40,32 @@
 
 #include <QMessageBox>
 
-#define MYNAME "SIPJREEN"
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
 #include "../sipdllmacro.h"
 
-class Ui_JabberConfig;
-
-class SIPDLLEXPORT JabberFactory : public SipPluginFactory
-{
-    Q_OBJECT
-    Q_INTERFACES( SipPluginFactory )
-
-public:
-    JabberFactory() {}
-    virtual ~JabberFactory() {}
-
-    virtual QString prettyName() const { return "Jabber"; }
-    virtual QString factoryId() const { return "sipjabber"; }
-    virtual QIcon icon() const;
-    virtual SipPlugin* createPlugin( const QString& pluginId );
-};
-
-class SIPDLLEXPORT JabberPlugin : public SipPlugin
+class SIPDLLEXPORT XmppSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
 public:
-    JabberPlugin( const QString& pluginId );
-    virtual ~JabberPlugin();
+    XmppSipPlugin( Tomahawk::Accounts::Account* account );
+    virtual ~XmppSipPlugin();
 
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
-    virtual const QString name() const;
-    virtual const QString friendlyName() const;
-    virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
     virtual QMenu* menu();
-    virtual QIcon icon() const;
-    virtual QWidget* configWidget();
-    virtual void saveConfig();
-    virtual void deletePlugin();
 
 signals:
-    void dataError( bool exists );
     void jidChanged( const QString& );
 
 public slots:
     virtual bool connectPlugin();
     void disconnectPlugin();
     void checkSettings();
+    void configurationChanged();
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
@@ -98,8 +73,6 @@ public slots:
 
 protected:
     virtual QString defaultSuffix() const;
-
-    Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
 
 private slots:
     void showXmlConsole();
@@ -114,10 +87,10 @@ private slots:
     void onError( const Jreen::Connection::SocketError& e );
     void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
-    void onCheckJidExists( QString jid );
 
 private:
     bool readXmlConsoleEnabled();
+    QString readUsername();
     QString readPassword();
     QString readServer();
     int readPort();
@@ -139,8 +112,6 @@ private:
     QString m_currentServer;
     int m_currentPort;
     ConnectionState m_state;
-
-    QWeakPointer< QWidget > m_configWidget;
 
     QString m_currentResource;
 
