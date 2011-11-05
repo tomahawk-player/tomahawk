@@ -4,7 +4,6 @@
         <file>data/images/avatar-dude.png</file>
         <file>data/images/back-pressed.png</file>
         <file>data/images/back-rest.png</file>
-        <file>data/images/cover-shadow.png</file>
         <file>data/images/filter.png</file>
         <file>data/images/loved.png</file>
         <file>data/images/not-loved.png</file>
@@ -112,7 +111,7 @@
         <file>data/sql/dbmigrate-23_to_24.sql</file>
         <file>data/sql/dbmigrate-24_to_25.sql</file>
         <file>data/sql/dbmigrate-25_to_26.sql</file>
-	<file>data/sql/dbmigrate-26_to_27.sql</file>
+        <file>data/sql/dbmigrate-26_to_27.sql</file>
         <file>data/js/tomahawk.js</file>
         <file>data/images/avatar_frame.png</file>
         <file>data/images/drop-all-songs.png</file>
@@ -120,7 +119,7 @@
         <file>data/images/drop-top-songs.png</file>
         <file>data/images/drop-song.png</file>
         <file>data/images/drop-album.png</file>
-	<file>data/images/spotify-logo.png</file>
+        <file>data/images/spotify-logo.png</file>
         <file>data/images/itunes.png</file>
         <file>data/images/uploading.png</file>
         <file>data/images/downloading.png</file>
@@ -128,5 +127,7 @@
         <file>data/images/headphones-off.png</file>
         <file>data/images/headphones-sidebar.png</file>
         <file>data/images/headphones-bigger.png</file>
+        <file>data/images/no-album-no-case.png</file>
+        <file>data/images/rdio.png</file>
     </qresource>
 </RCC>

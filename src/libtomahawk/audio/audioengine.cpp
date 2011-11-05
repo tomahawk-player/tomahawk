@@ -424,6 +424,9 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             tLog() << "Starting new song:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
+            if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
+                connect( qnr_io, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( ioStreamError( QNetworkReply::NetworkError ) ) );
+
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
                 if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
@@ -573,6 +576,16 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
     }
 }
 
+void
+AudioEngine::ioStreamError( QNetworkReply::NetworkError error )
+{
+    if ( error != QNetworkReply::NoError )
+    {
+        if ( canGoNext() )
+            loadNextTrack();
+    }
+}
+
 
 void
 AudioEngine::playlistNextTrackReady()
@@ -682,7 +695,10 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
     }
 
     if ( !playlist )
+    {
+        m_playlist.clear();
         return;
+    }
 
     m_playlist = playlist->getSharedPointer();
 

@@ -34,8 +34,6 @@
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
-#include "widgets/siblingcrumbbutton.h"
-#include "widgets/kbreadcrumbselectionmodel.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <pipeline.h>
@@ -52,6 +50,7 @@ static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
+    , m_sortedProxy( 0 )
 {
     ui->setupUi( this );
 
@@ -65,17 +64,14 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
-    //set crumb widgets
-    SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
-
     m_crumbModelLeft = new QStandardItemModel( this );
+    m_sortedProxy = new QSortFilterProxyModel( this );
+    m_sortedProxy->setDynamicSortFilter( true );
+    m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-    ui->breadCrumbLeft->setButtonFactory( crumbFactory );
-    ui->breadCrumbLeft->setModel( m_crumbModelLeft );
-    ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
-    ui->breadCrumbLeft->setUseAnimation( true );
+    ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
 
-    connect( ui->breadCrumbLeft, SIGNAL( currentIndexChanged( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
+    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
     ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
     ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -100,7 +96,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
     QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
@@ -145,9 +140,10 @@ WhatsHotWidget::fetchData()
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = QVariantMap();
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+    requestData.timeoutMillis = 20000;
+    requestData.allSources = true;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
@@ -171,7 +167,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
             tDebug( LOGVERBOSE ) << "WhatsHot:: " << returnedData.keys();
 
-            foreach( const QString label, returnedData.keys() )
+            QVariantMap defaults;
+            if ( returnedData.contains( "defaults" ) )
+                defaults = returnedData.take( "defaults" ).toMap();
+            QString defaultSource = returnedData.take( "defaultSource" ).toString();
+
+            foreach ( const QString label, returnedData.keys() )
             {
                 tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
@@ -179,10 +180,42 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 rootItem->appendRow(childItem);
             }
 
-            KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
-            ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
+            // Set the default source
+            // Set the default chart for each source
+            for ( int i = 0; i < rootItem->rowCount(); i++ )
+            {
+                QStandardItem* source = rootItem->child( i, 0 );
+                if ( defaultSource.toLower() == source->text().toLower() )
+                {
+                    qDebug() << "Setting DEFAULT SOURCE:" << source->text();
+                    source->setData( true, Breadcrumb::DefaultRole );
+                }
 
-            //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
+                if ( defaults.contains( source->text().toLower() ) )
+                {
+                    QStringList defaultIndices = defaults[ source->text().toLower() ].toStringList();
+                    QStandardItem* cur = source;
+
+                    foreach( const QString& index, defaultIndices )
+                    {
+                        // Go through the children of the current item, marking the default one as default
+                        for ( int k = 0; k < cur->rowCount(); k++ )
+                        {
+                            if ( cur->child( k, 0 )->text() == index )
+                            {
+                                tDebug() << "Found DEFAULT ITEM:" << index;
+                                cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
+                                cur->setData( true, Breadcrumb::DefaultRole );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            m_sortedProxy->setSourceModel( m_crumbModelLeft );
+            m_sortedProxy->sort( 0, Qt::AscendingOrder );
+            ui->breadCrumbLeft->setModel( m_sortedProxy );
             break;
         }
         case InfoSystem::InfoChart:
@@ -212,7 +245,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 m_artistModels[ chartId ] = artistsModel;
 
-                setLeftViewArtists( artistsModel );
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewArtists( artistsModel );
             }
             else if( type == "albums" )
             {
@@ -233,7 +267,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 albumModel->addAlbums( al );
 
                 m_albumModels[ chartId ] = albumModel;
-                setLeftViewAlbums( albumModel );
+
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewAlbums( albumModel );
             }
             else if( type == "tracks" )
             {
@@ -252,7 +288,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 trackModel->append( tracklist );
 
                 m_trackModels[ chartId ] = trackModel;
-                setLeftViewTracks( trackModel );
+
+                if ( m_queueItemToShow == chartId )
+                    setLeftViewTracks( trackModel );
             }
             else
             {
@@ -278,10 +316,10 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
-    QStandardItem* item = m_crumbModelLeft->itemFromIndex( index );
+    QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if( !item )
         return;
-    if( !item->data().isValid() )
+    if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
         return;
 
 
@@ -293,7 +331,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     }
 
 
-    const QString chartId = item->data().toString();
+    const QString chartId = item->data( Breadcrumb::ChartIdRole ).toString();
 
     if ( m_artistModels.contains( chartId ) )
     {
@@ -327,13 +365,15 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.caller = s_whatsHotIdentifier;
     requestData.customData = customData;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
-
     requestData.type = Tomahawk::InfoSystem::InfoChart;
+    requestData.timeoutMillis = 20000;
+    requestData.allSources = true;
 
     qDebug() << "Making infosystem request for chart of type:" <<chartId;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData,  20000, true );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     m_queuedFetches.insert( chartId );
+    m_queueItemToShow = chartId;
 }
 
 
@@ -367,7 +407,11 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
         foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
-            childItem->setData( chart[ "id" ] );
+            childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
+            if ( chart.value( "default", "" ) == "true")
+            {
+                childItem->setData( true, Breadcrumb::DefaultRole );
+            }
             sourceItem->appendRow( childItem );
         }
     }
@@ -386,7 +430,6 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
         foreach ( const QVariant value, dataList )
         {
-            qDebug() << "CREATED:" << value.toString();
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
         }

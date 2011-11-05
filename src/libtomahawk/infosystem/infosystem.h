@@ -32,6 +32,7 @@
 #include <QtCore/QStringList>
 
 #include "dllmacro.h"
+#include "utils/tomahawkutils.h"
 
 class QNetworkAccessManager;
 
@@ -43,28 +44,29 @@ class InfoSystemCache;
 class InfoSystemWorker;
 
 enum InfoType { // as items are saved in cache, mark them here to not change them
-    InfoTrackID = 0,
-    InfoTrackArtist = 1,
-    InfoTrackAlbum = 2,
-    InfoTrackGenre = 3,
-    InfoTrackComposer = 4,
-    InfoTrackDate = 5,
-    InfoTrackNumber = 6,
-    InfoTrackDiscNumber = 7,
-    InfoTrackBitRate = 8,
-    InfoTrackLength = 9,
-    InfoTrackSampleRate = 10,
-    InfoTrackFileSize = 11,
-    InfoTrackBPM = 12,
-    InfoTrackReplayGain = 13,
-    InfoTrackReplayPeakGain = 14,
-    InfoTrackLyrics = 15,
-    InfoTrackLocation = 16,
-    InfoTrackProfile = 17,
-    InfoTrackEnergy = 18,
-    InfoTrackDanceability = 19,
-    InfoTrackTempo = 20,
-    InfoTrackLoudness = 21,
+    InfoNoInfo = 0, //WARNING: *ALWAYS* keep this first!
+    InfoTrackID = 1,
+    InfoTrackArtist = 2,
+    InfoTrackAlbum = 3,
+    InfoTrackGenre = 4,
+    InfoTrackComposer = 5,
+    InfoTrackDate = 6,
+    InfoTrackNumber = 7,
+    InfoTrackDiscNumber = 8,
+    InfoTrackBitRate = 9,
+    InfoTrackLength = 10,
+    InfoTrackSampleRate = 11,
+    InfoTrackFileSize = 12,
+    InfoTrackBPM = 13,
+    InfoTrackReplayGain = 14,
+    InfoTrackReplayPeakGain = 15,
+    InfoTrackLyrics = 16,
+    InfoTrackLocation = 17,
+    InfoTrackProfile = 18,
+    InfoTrackEnergy = 19,
+    InfoTrackDanceability = 20,
+    InfoTrackTempo = 21,
+    InfoTrackLoudness = 22,
 
     InfoArtistID = 25,
     InfoArtistName = 26,
@@ -120,14 +122,40 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 
     InfoNotifyUser = 100,
 
-    InfoNoInfo = 101 //WARNING: *ALWAYS* keep this last!
+    InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
 };
 
 struct InfoRequestData {
+    quint64 requestId;
+    quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
     QString caller;
     Tomahawk::InfoSystem::InfoType type;
     QVariant input;
     QVariantMap customData;
+    uint timeoutMillis;
+    bool allSources;
+    
+    InfoRequestData()
+        : requestId( TomahawkUtils::infosystemRequestId() )
+        , internalId( TomahawkUtils::infosystemRequestId() )
+        , caller( QString() )
+        , type( Tomahawk::InfoSystem::InfoNoInfo )
+        , input( QVariant() )
+        , customData( QVariantMap() )
+        , timeoutMillis( 10000 )
+        , allSources( false )
+        {}
+    
+    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
+        : requestId( rId )
+        , internalId( TomahawkUtils::infosystemRequestId() )
+        , caller( callr )
+        , type( typ )
+        , input( inputvar )
+        , customData( custom )
+        , timeoutMillis( 10000 )
+        , allSources( false )
+        {}
 };
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
@@ -147,15 +175,15 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void getCachedInfo( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
-    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
 
@@ -212,7 +240,7 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0, bool allSources = false );
+    void getInfo( const InfoRequestData &requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
     void getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
@@ -221,6 +249,7 @@ public:
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
+    void finished( QString target, Tomahawk::InfoSystem::InfoType type );
 
 public slots:
     void newNam() const;

@@ -38,7 +38,7 @@ TreeModel::TreeModel( QObject* parent )
     , m_rootItem( new TreeModelItem( 0, this ) )
     , m_infoId( uuid() )
     , m_columnStyle( AllColumns )
-    , m_mode( Database )
+    , m_mode( DatabaseMode )
 {
     setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
@@ -576,7 +576,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 {
     emit loadingStarted();
 
-    if ( m_mode == Database )
+    if ( m_mode == DatabaseMode )
     {
         DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( m_collection, artist );
         cmd->setData( parent.row() );
@@ -586,7 +586,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
-    else if ( m_mode == InfoSystem )
+    else if ( m_mode == InfoSystemMode )
     {
         Tomahawk::InfoSystem::InfoStringHash artistInfo;
         artistInfo["artist"] = artist->name();
@@ -612,7 +612,7 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
     rows << parent.row();
     rows << parent.parent().row();
 
-    if ( m_mode == Database )
+    if ( m_mode == DatabaseMode )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
         cmd->setAlbum( album.data() );
@@ -623,17 +623,20 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
-    else if ( m_mode == InfoSystem )
+    else if ( m_mode == InfoSystemMode )
     {
         Tomahawk::InfoSystem::InfoStringHash artistInfo;
         artistInfo["artist"] = album->artist()->name();
         artistInfo["album"] = album->name();
 
+        m_receivedInfoData.remove( artistInfo );
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
         requestData.customData["rows"] = QVariant( rows );
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
+        requestData.timeoutMillis = 0;
+        requestData.allSources = true;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
     else
@@ -826,7 +829,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             QStringList albums = returnedData[ "albums" ].toStringList();
             QList<album_ptr> al;
 
-            InfoSystem::InfoStringHash inputInfo;
+            Tomahawk::InfoSystem::InfoStringHash inputInfo;
             inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
             artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
 
@@ -845,12 +848,23 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
         case Tomahawk::InfoSystem::InfoAlbumSongs:
         {
+            if ( m_receivedInfoData.contains( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() ) )
+                break;
+
+            emit loadingFinished();
+
             QVariantMap returnedData = output.value< QVariantMap >();
+            if ( returnedData.isEmpty() )
+                break;
+
+            m_receivedInfoData.insert( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
+
+
             QStringList tracks = returnedData[ "tracks" ].toStringList();
             QList<query_ptr> ql;
 
-            InfoSystem::InfoStringHash inputInfo;
-            inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
+            Tomahawk::InfoSystem::InfoStringHash inputInfo;
+            inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
             foreach ( const QString& trackName, tracks )
             {

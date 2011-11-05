@@ -112,7 +112,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "spotify" ) && url.contains( "track" ) )
             return true;
 
-        if ( url.contains( "rdio.com" ) && url.contains( "track" ) )
+        if ( url.contains( "rdio.com" ) && ( ( ( url.contains( "track" ) && url.contains( "artist" ) && url.contains( "album" ) )
+                                               || url.contains( "playlists" )  ) ) )
             return true;
     }
 
@@ -122,6 +123,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             return true;
         if ( url.contains( "spotify" ) && url.contains( "album" ) )
             return true;
+        if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && url.contains( "album" ) && !url.contains( "track" ) )  )
+            return true;
     }
 
     if ( acceptedType.testFlag( Artist ) )
@@ -129,6 +132,8 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "itunes" ) && url.contains( "artist" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
         if ( url.contains( "spotify" ) && url.contains( "artist" ) )
+            return true;
+        if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && !url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
     }
 
@@ -151,6 +156,16 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
 
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
+            return true;
+
+        if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
+            return true;
+
+        // we don't know about these.. gotta say yes for now
+        if ( url.contains( "bit.ly" ) ||
+             url.contains( "j.mp" ) ||
+             url.contains( "t.co" ) ||
+             url.contains( "rd.io" ) )
             return true;
     }
 
@@ -444,6 +459,25 @@ DropJob::handleSpotifyUrls( const QString& urlsRaw )
 }
 
 void
+DropJob::handleRdioUrls( const QString& urlsRaw )
+{
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    qDebug() << "Got Rdio urls!!" << urls;
+
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
+    RdioParser* rdio = new RdioParser( this );
+    connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+
+    rdio->setCreatePlaylist( dropAction() == Create  );
+    rdio->parse( urls );
+
+    m_queryCount++;
+}
+
+
+void
 DropJob::handleAllUrls( const QString& urls )
 {
     if ( urls.contains( "xspf" ) )
@@ -452,6 +486,8 @@ DropJob::handleAllUrls( const QString& urls )
               && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
               && s_canParseSpotifyPlaylists )
         handleSpotifyUrls( urls );
+    else if ( urls.contains( "rdio.com" ) )
+        handleRdioUrls( urls );
     else
         handleTrackUrls ( urls );
 }

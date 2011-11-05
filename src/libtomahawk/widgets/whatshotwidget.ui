@@ -12,7 +12,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="HeaderBreadCrumb" name="breadCrumbLeft" native="true"/>
+    <widget class="Tomahawk::Breadcrumb" name="breadCrumbLeft" native="true"/>
    </item>
    <item>
     <widget class="QStackedWidget" name="stackLeft">
@@ -79,9 +79,10 @@
    <header>playlist/playlistview.h</header>
   </customwidget>
   <customwidget>
-   <class>HeaderBreadCrumb</class>
+   <class>Tomahawk::Breadcrumb</class>
    <extends>QWidget</extends>
-   <header location="global">widgets/headerbreadcrumb.h</header>
+   <header>widgets/Breadcrumb.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

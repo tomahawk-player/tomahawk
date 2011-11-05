@@ -180,6 +180,8 @@ TomahawkWindow::applyPlatformTweaks()
     setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
+    /// Mac users allready have Tomahawk appmenu, change the name
+    ui->menuApp->setTitle( "&Music Player" );
 #else
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
@@ -708,7 +710,7 @@ TomahawkWindow::showAboutTomahawk()
 {
     QMessageBox::about( this, tr( "About Tomahawk" ),
                         tr( "<h2><b>Tomahawk %1<br/>(%2)</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-                            "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Michael Zanetti, Harald Sitter and Steve Robertson" )
+                            "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson" )
                         .arg( TomahawkUtils::appFriendlyVersion() )
                         .arg( qApp->applicationVersion() ) );
 }

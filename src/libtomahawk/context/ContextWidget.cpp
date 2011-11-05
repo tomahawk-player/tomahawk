@@ -276,10 +276,14 @@ ContextWidget::onAnimationFinished()
         m_scene->setSceneRect( ui->contextView->viewport()->rect() );
         layoutViews( false );
         setQuery( m_query, true );
+
+        ui->toggleButton->setText( tr( "Hide Footnotes" ) );
     }
     else
     {
         setFixedHeight( m_minHeight );
+
+        ui->toggleButton->setText( tr( "Show Footnotes" ) );
     }
 }
 

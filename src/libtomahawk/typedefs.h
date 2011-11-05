@@ -63,6 +63,12 @@ namespace Tomahawk
         Static
     };
 
+    enum ModelMode
+    {
+        DatabaseMode = 0,
+        InfoSystemMode
+    };
+
 }; // ns
 
 typedef int AudioErrorCode;

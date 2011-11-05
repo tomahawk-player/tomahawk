@@ -50,6 +50,7 @@
 #include "utils/spotifyparser.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/rdioparser.h"
+#include "widgets/searchwidget.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -269,6 +270,8 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
             return handlePlayCommand( u );
         } else if( cmdType == "open" ) {
             return handleOpenCommand( u );
+        } else if( cmdType == "view" ) {
+            return handleViewCommand( u );
         } else {
             tLog() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
             return false;
@@ -357,7 +360,7 @@ GlobalActionManager::handleOpenTrack ( const query_ptr& q )
     ViewManager::instance()->queue()->model()->append( q );
     ViewManager::instance()->showQueue();
 
-    if( !AudioEngine::instance()->isPlaying() ) {
+    if( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() ) {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
         m_waitingToPlay = q;
     }
@@ -498,21 +501,69 @@ bool
 GlobalActionManager::handleSearchCommand( const QUrl& url )
 {
     // open the super collection and set this as the search filter
-    QStringList query;
-    if( url.hasQueryItem( "artist" ) )
-        query << url.queryItemValue( "artist" );
-    if( url.hasQueryItem( "album" ) )
-        query << url.queryItemValue( "album" );
-    if( url.hasQueryItem( "title" ) )
-        query << url.queryItemValue( "title" );
-    QString queryStr = query.join( " " );
+    QString queryStr;
+    if ( url.hasQueryItem( "query" ) )
+        queryStr = url.queryItemValue( "query" );
+    else
+    {
+        QStringList query;
+        if( url.hasQueryItem( "artist" ) )
+            query << url.queryItemValue( "artist" );
+        if( url.hasQueryItem( "album" ) )
+            query << url.queryItemValue( "album" );
+        if( url.hasQueryItem( "title" ) )
+            query << url.queryItemValue( "title" );
+        queryStr = query.join( " " );
+    }
 
-    if( queryStr.isEmpty() )
+    if( queryStr.trimmed().isEmpty() )
         return false;
 
-    ViewManager::instance()->showSuperCollection();
-//    ViewManager::instance()->topbar()->setFilter( queryStr );
+    ViewManager::instance()->show( new SearchWidget( queryStr.trimmed() ) );
+
     return true;
+}
+
+bool
+GlobalActionManager::handleViewCommand( const QUrl& url )
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
+    if( parts.isEmpty() ) {
+        tLog() << "No specific view command:" << url.toString();
+        return false;
+    }
+
+    if ( parts[ 0 ] == "artist" )
+    {
+        const QString artist = url.queryItemValue( "name" );
+        if ( artist.isEmpty() )
+        {
+            tLog() << "Not artist supplied for view/artist command.";
+            return false;
+        }
+        artist_ptr artistPtr = Artist::get( artist );
+        if ( !artistPtr.isNull() )
+            ViewManager::instance()->show( artistPtr );
+
+        return true;
+    }
+    else if ( parts[ 0 ] == "album" )
+    {
+        const QString artist = url.queryItemValue( "artist" );
+        const QString album = url.queryItemValue( "name" );
+        if ( artist.isEmpty() || album.isEmpty() )
+        {
+            tLog() << "Not artist or album supplied for view/artist command:" << url;
+            return false;
+        }
+        album_ptr albumPtr = Album::get( Artist::get( artist, false ), album, false );
+        if ( !albumPtr.isNull() )
+            ViewManager::instance()->show( albumPtr );
+
+        return true;
+    }
+
+    return false;
 }
 
 

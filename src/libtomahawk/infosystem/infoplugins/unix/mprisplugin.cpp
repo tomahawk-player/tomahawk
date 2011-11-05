@@ -432,9 +432,8 @@ MprisPlugin::Stop()
 // InfoPlugin Methods
 
 void
-MprisPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+MprisPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-  Q_UNUSED( requestId );
   Q_UNUSED( requestData );
   qDebug() << Q_FUNC_INFO;
 

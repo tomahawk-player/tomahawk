@@ -115,8 +115,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
 }
 
+
 SourceTreeView::~SourceTreeView()
-{}
+{
+}
+
 
 void
 SourceTreeView::setupMenus()
@@ -151,7 +154,7 @@ SourceTreeView::setupMenus()
                 m_latchOnAction->setText( tr( "&Catch Up" ) );
                 m_latchMenu.addSeparator();
                 m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
-                connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
+                connect( m_latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
             }
         }
     }
@@ -231,6 +234,7 @@ SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
     }
 }
 
+
 void
 SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
 {
@@ -244,6 +248,7 @@ SourceTreeView::loadPlaylist()
 {
     onItemActivated( m_contextMenuIndex );
 }
+
 
 void
 SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
@@ -352,6 +357,7 @@ SourceTreeView::latchOnOrCatchUp()
     else
         emit latchRequest( source );
 }
+
 
 void
 SourceTreeView::latchOff()
@@ -479,8 +485,9 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = QRect();
         }
 
-        if ( accept )
+        if ( accept || DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
         {
+            // Playlists are accepted always since they can be dropped anywhere
             //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
             event->accept();
@@ -533,6 +540,9 @@ SourceTreeView::dropEvent( QDropEvent* event )
             dropThis->setDropTypes( DropJob::Playlist );
             dropThis->setDropAction( DropJob::Create );
             dropThis->parseMimeData( event->mimeData() );
+
+            // Don't add it to the playlist under drop, it's a new playlist now
+            return;
         }
 
         QTreeView::dropEvent( event );

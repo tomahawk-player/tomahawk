@@ -33,6 +33,7 @@
 #include "infosystem/infosystem.h"
 
 #include "dllmacro.h"
+#include "typedefs.h"
 
 class QMetaData;
 
@@ -55,9 +56,6 @@ public:
     enum ColumnStyle
     { AllColumns = 0, TrackOnly };
 
-    enum ModelMode
-    { Database = 0, InfoSystem };
-
     explicit TreeModel( QObject* parent = 0 );
     virtual ~TreeModel();
 
@@ -73,8 +71,8 @@ public:
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
-    virtual ModelMode mode() const { return m_mode; }
-    virtual void setMode( ModelMode mode ) { m_mode = mode; }
+    virtual Tomahawk::ModelMode mode() const { return m_mode; }
+    virtual void setMode( Tomahawk::ModelMode mode ) { m_mode = mode; }
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
@@ -165,12 +163,13 @@ private:
     QString m_description;
     QPixmap m_icon;
     ColumnStyle m_columnStyle;
-    ModelMode m_mode;
+    Tomahawk::ModelMode m_mode;
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;
 
     Tomahawk::collection_ptr m_collection;
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
+    QSet<Tomahawk::InfoSystem::InfoStringHash> m_receivedInfoData;
 };
 
 #endif // ALBUMMODEL_H

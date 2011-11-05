@@ -94,6 +94,8 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
+    void loadingStarted();
+    void loadingFinished();
 private slots:
     void onDataChanged();
 

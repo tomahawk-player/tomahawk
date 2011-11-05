@@ -26,8 +26,10 @@
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/chartsplugin.h"
+#include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
+#include "infoplugins/generic/hypemPlugin.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -40,6 +42,7 @@
 #endif
 
 #include "lastfm/NetworkAccessManager"
+#include "infoplugins/generic/RoviPlugin.h"
 
 namespace Tomahawk
 {
@@ -49,7 +52,6 @@ namespace InfoSystem
 
 InfoSystemWorker::InfoSystemWorker()
     : QObject()
-    , m_nextRequest( 0 )
 {
 //    qDebug() << Q_FUNC_INFO;
 
@@ -92,6 +94,15 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr sptr( new ChartsPlugin() );
     m_plugins.append( sptr );
     registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
+    InfoPluginPtr roviptr( new RoviPlugin() );
+    m_plugins.append( roviptr );
+    registerInfoTypes( roviptr, roviptr.data()->supportedGetTypes(), roviptr.data()->supportedPushTypes() );
+    InfoPluginPtr spotptr( new SpotifyPlugin() );
+    m_plugins.append( spotptr );
+    registerInfoTypes( spotptr, spotptr.data()->supportedGetTypes(), spotptr.data()->supportedPushTypes() );
+    InfoPluginPtr hypeptr( new hypemPlugin() );
+    m_plugins.append( hypeptr );
+    registerInfoTypes( hypeptr, hypeptr.data()->supportedGetTypes(), hypeptr.data()->supportedPushTypes() );
 
 
     #ifdef Q_WS_MAC
@@ -105,24 +116,24 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     registerInfoTypes( fdonotifyptr, fdonotifyptr.data()->supportedGetTypes(), fdonotifyptr.data()->supportedPushTypes() );
     InfoPluginPtr mprisptr( new MprisPlugin() );
     m_plugins.append( mprisptr );
-    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );    
+    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );
     #endif
 
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         connect(
                 plugin.data(),
-                SIGNAL( info( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this,
-                SLOT( infoSlot( uint, Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 Qt::UniqueConnection
             );
 
         connect(
                 plugin.data(),
-                SIGNAL( getCachedInfo( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
                 cache.data(),
-                SLOT( getCachedInfoSlot( uint, Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
             );
         connect(
                 plugin.data(),
@@ -165,19 +176,19 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 
 
 void
-InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources )
+InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-//    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO << "type is " << requestData.type << " and allSources = " << (allSources ? "true" : "false" );
 
     QList< InfoPluginPtr > providers = determineOrderedMatches( requestData.type );
     if ( providers.isEmpty() )
     {
         emit info( requestData, QVariant() );
-        checkFinished( requestData.caller );
+        checkFinished( requestData );
         return;
     }
 
-    if ( !allSources )
+    if ( !requestData.allSources )
         providers = QList< InfoPluginPtr >( providers.mid( 0, 1 ) );
 
     bool foundOne = false;
@@ -187,12 +198,22 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
             continue;
 
         foundOne = true;
-        uint requestId = ++m_nextRequest;
+
+        if ( requestData.allSources || m_savedRequestMap.contains( requestData.requestId ) )
+        {
+            if ( m_savedRequestMap.contains( requestData.requestId ) )
+                tDebug() << Q_FUNC_INFO << "Warning: reassigning requestId because it already exists";
+            requestData.internalId = TomahawkUtils::infosystemRequestId();
+        }
+        else
+            requestData.internalId = requestData.requestId;
+
+        quint64 requestId = requestData.internalId;
         m_requestSatisfiedMap[ requestId ] = false;
-        if ( timeoutMillis != 0 )
+        if ( requestData.timeoutMillis != 0 )
         {
             qint64 currMs = QDateTime::currentMSecsSinceEpoch();
-            m_timeRequestMapper.insert( currMs + timeoutMillis, requestId );
+            m_timeRequestMapper.insert( currMs + requestData.timeoutMillis, requestId );
         }
     //    qDebug() << "Assigning request with requestId" << requestId << "and type" << requestData.type;
         m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] + 1;
@@ -205,19 +226,19 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
         data->customData = requestData.customData;
         m_savedRequestMap[ requestId ] = data;
 
-        QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+        QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
     }
 
     if ( !foundOne )
     {
         emit info( requestData, QVariant() );
-        checkFinished( requestData.caller );
+        checkFinished( requestData );
     }
 }
 
 
 void
-InfoSystemWorker::pushInfo( QString caller, InfoType type, QVariant input )
+InfoSystemWorker::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
 {
 //    qDebug() << Q_FUNC_INFO;
 
@@ -230,9 +251,11 @@ InfoSystemWorker::pushInfo( QString caller, InfoType type, QVariant input )
 
 
 void
-InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
 //    qDebug() << Q_FUNC_INFO << "with requestId" << requestId;
+
+    quint64 requestId = requestData.internalId;
 
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
     {
@@ -252,23 +275,23 @@ InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
 //    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
     delete m_savedRequestMap[ requestId ];
     m_savedRequestMap.remove( requestId );
-    checkFinished( requestData.caller );
+    checkFinished( requestData );
 }
 
 
 void
-InfoSystemWorker::checkFinished( const QString &target )
+InfoSystemWorker::checkFinished( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    Q_FOREACH( InfoType testtype, m_dataTracker[ target ].keys() )
+    if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
+        emit finished( requestData.caller, requestData.type );
+    
+    Q_FOREACH( InfoType testtype, m_dataTracker[ requestData.caller ].keys() )
     {
-        if ( m_dataTracker[ target ][ testtype ] != 0)
-        {
-//            qDebug() << "Found outstanding request of type" << testtype;
+        if ( m_dataTracker[ requestData.caller ][ testtype ] != 0 )
             return;
-        }
     }
 //    qDebug() << "Emitting finished with target" << target;
-    emit finished( target );
+    emit finished( requestData.caller );
 }
 
 
@@ -278,7 +301,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
     qint64 currTime = QDateTime::currentMSecsSinceEpoch();
     Q_FOREACH( qint64 time, m_timeRequestMapper.keys() )
     {
-        Q_FOREACH( uint requestId, m_timeRequestMapper.values( time ) )
+        Q_FOREACH( quint64 requestId, m_timeRequestMapper.values( time ) )
         {
             if ( time < currTime )
             {
@@ -313,7 +336,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
                 if ( !m_timeRequestMapper.count( time ) )
                     m_timeRequestMapper.remove( time );
 
-                checkFinished( returnData.caller );
+                checkFinished( returnData );
             }
             else
             {
@@ -338,18 +361,31 @@ InfoSystemWorker::nam() const
 void
 InfoSystemWorker::newNam()
 {
-//    qDebug() << Q_FUNC_INFO << " begin";
-
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
     if ( oldNam && oldNam->thread() == thread() )
     {
-//        qDebug() << Q_FUNC_INFO << "Using old nam as it's the same thread (GUI) as me";
-        m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
-        emit namChanged( m_nam.data() );
+        if ( m_nam.data() != oldNam )
+        {
+            m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
+            emit namChanged( m_nam.data() );
+        }
         return;
     }
 
-//    qDebug() << Q_FUNC_INFO << "No nam exists, or it's a different thread, creating a new one";
+    if
+        (
+            oldNam &&
+            !m_nam.isNull() &&
+            oldNam->configuration() == m_nam.data()->configuration() &&
+            oldNam->networkAccessible() == m_nam.data()->networkAccessible()
+        )
+    {
+        TomahawkUtils::NetworkProxyFactory fac1 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( oldNam->proxyFactory() ) );
+        TomahawkUtils::NetworkProxyFactory fac2 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( m_nam.data()->proxyFactory() ) );
+        if ( fac1 == fac2 )
+            return;
+    }
+
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = new lastfm::NetworkAccessManager( this );

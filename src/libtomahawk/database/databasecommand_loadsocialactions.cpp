@@ -50,7 +50,7 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
         return;
 
     QString whereToken;
-    whereToken = QString( "WHERE id IS %1"  ).arg( trkid );
+    whereToken = QString( "WHERE id IS %1" ).arg( trkid );
 
     QString sql = QString(
             "SELECT k, v, timestamp, source "
@@ -66,7 +66,7 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
         Tomahawk::SocialAction action;
         action.action    = query.value( 0 );  // action
         action.value     = query.value( 1 );  // comment
-        action.timestamp = query.value( 2 );    // timestamp
+        action.timestamp = query.value( 2 );  // timestamp
         action.source    = query.value( 3 );  // source
 
         allSocialActions.append( action );

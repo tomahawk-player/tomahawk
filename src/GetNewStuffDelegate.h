@@ -31,6 +31,9 @@ public:
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+signals:
+    void update( const QModelIndex& idx );
+
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
@@ -39,6 +42,7 @@ private:
 
     int m_widestTextWidth;
     int m_hoveringOver;
+    QPersistentModelIndex m_hoveringItem;
     mutable QHash< QPair<int, int>, QRect > m_cachedButtonRects;
     mutable QHash< QPair<int, int>, QRect > m_cachedStarRects;
 };

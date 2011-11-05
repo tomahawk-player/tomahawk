@@ -26,6 +26,7 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
 #include <QtCore/QRect>
+#include <QPalette>
 
 #define RESPATH ":/data/"
 
@@ -64,6 +65,8 @@ namespace TomahawkUtils
         void setProxy( const QNetworkProxy &proxy );
         QNetworkProxy proxy() { return m_proxy; }
 
+        bool operator==( const NetworkProxyFactory &other );
+
     private:
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
@@ -85,6 +88,7 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
+    DLLEXPORT void drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor = 1 );
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
@@ -106,6 +110,8 @@ namespace TomahawkUtils
     DLLEXPORT void setHeaderHeight( int height );
 
     DLLEXPORT bool removeDirectory( const QString& dir );
+
+    DLLEXPORT quint64 infosystemRequestId();
 }
 
 #endif // TOMAHAWKUTILS_H

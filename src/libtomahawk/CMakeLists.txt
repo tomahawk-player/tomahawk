@@ -113,8 +113,11 @@ set( libSources
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
+    infosystem/infoplugins/generic/spotifyPlugin.cpp
+    infosystem/infoplugins/generic/hypemPlugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
+    infosystem/infoplugins/generic/RoviPlugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -224,11 +227,8 @@ set( libSources
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
-    widgets/kbreadcrumbselectionmodel.cpp
-    widgets/breadcrumbbar.cpp
-    widgets/breadcrumbbuttonbase.cpp
-    widgets/headerbreadcrumb.cpp
-    widgets/siblingcrumbbutton.cpp
+    widgets/Breadcrumb.cpp
+    widgets/BreadcrumbButton.cpp
 
     jobview/JobStatusView.cpp
     jobview/JobStatusModel.cpp
@@ -345,8 +345,11 @@ set( libHeaders
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
     infosystem/infoplugins/generic/chartsplugin.h
+    infosystem/infoplugins/generic/spotifyPlugin.h
+    infosystem/infoplugins/generic/hypemPlugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
     infosystem/infoplugins/generic/musicbrainzPlugin.h
+    infosystem/infoplugins/generic/RoviPlugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
@@ -451,13 +454,10 @@ set( libHeaders
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
+    widgets/infowidgets/ArtistInfoWidget_p.h
     widgets/infowidgets/AlbumInfoWidget.h
-    widgets/kbreadcrumbselectionmodel.h
-    widgets/kbreadcrumbselectionmodel_p.h
-    widgets/breadcrumbbar.h
-    widgets/breadcrumbbuttonbase.h
-    widgets/headerbreadcrumb.h
-    widgets/siblingcrumbbutton.h
+    widgets/Breadcrumb.h
+    widgets/BreadcrumbButton.h
 
     jobview/JobStatusView.h
     jobview/JobStatusModel.h
@@ -507,7 +507,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
     ${CLUCENE_INCLUDE_DIR}
-    ${CLUCENE_LIBRARY_DIR}
     ${PHONON_INCLUDES}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 

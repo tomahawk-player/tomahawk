@@ -81,7 +81,7 @@ PortFwdThread::work()
             qDebug() << "Trying to setup portfwd on" << tryport;
             if ( m_portfwd->add( tryport, m_port ) )
             {
-                QString pubip = QString( m_portfwd->external_ip().c_str() );
+                QString pubip = QString( m_portfwd->external_ip().c_str() ).trimmed();
                 m_externalAddress = QHostAddress( pubip );
                 m_externalPort = tryport;
                 tDebug() << "External servent address detected as" << pubip << ":" << m_externalPort;

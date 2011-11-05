@@ -556,7 +556,8 @@ TrackView::mousePressEvent( QMouseEvent* event )
                 }
                 else
                 {
-                    //TODO
+                    artist_ptr artist = Artist::get( item->query()->artist() );
+                    ViewManager::instance()->show( Album::get( artist, item->query()->album() ) );
                 }
                 break;
             }

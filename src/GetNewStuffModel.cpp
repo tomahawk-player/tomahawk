@@ -94,6 +94,8 @@ GetNewStuffModel::data( const QModelIndex& index, int role ) const
             return resolver.author();
         case StateRole:
             return (int)AtticaManager::instance()->resolverState( resolver );
+        case UserHasRatedRole:
+            return AtticaManager::instance()->userHasRated( resolver );
     }
     return QVariant();
 }

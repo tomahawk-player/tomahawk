@@ -28,6 +28,8 @@
 #include "albumproxymodel.h"
 
 class AlbumModel;
+class LoadingSpinner;
+class AlbumItemDelegate;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
 {
@@ -63,6 +65,7 @@ protected:
     virtual void startDrag( Qt::DropActions supportedActions );
 
     void paintEvent( QPaintEvent* event );
+    void resizeEvent( QResizeEvent* event );
 
 private slots:
     void onFilterChanged( const QString& filter );
@@ -73,7 +76,8 @@ private slots:
 private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
-//    PlaylistItemDelegate* m_delegate;
+    AlbumItemDelegate* m_delegate;
+    LoadingSpinner* m_loadingSpinner;
 
     QTimer m_timer;
 };

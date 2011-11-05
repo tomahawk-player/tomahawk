@@ -52,15 +52,16 @@ public:
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
+    void finished( QString target, Tomahawk::InfoSystem::InfoType type );
     
     void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
-    void infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     
     void newNam();
 
@@ -69,11 +70,11 @@ private slots:
     
 private:
 
-    void checkFinished( const QString &target );
+    void checkFinished( const Tomahawk::InfoSystem::InfoRequestData &target );
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
-    QMultiMap< qint64, uint > m_timeRequestMapper;
+    QMultiMap< qint64, quint64 > m_timeRequestMapper;
     QHash< uint, bool > m_requestSatisfiedMap;
     QHash< uint, InfoRequestData* > m_savedRequestMap;
     
@@ -84,8 +85,6 @@ private:
     QMap< InfoType, QList< InfoPluginPtr > > m_infoPushMap;
 
     QWeakPointer< QNetworkAccessManager> m_nam;
-
-    uint m_nextRequest;
 
     QTimer m_checkTimeoutsTimer;
 };

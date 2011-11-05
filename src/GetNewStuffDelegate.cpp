@@ -40,6 +40,7 @@
 GetNewStuffDelegate::GetNewStuffDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
     , m_widestTextWidth( 0 )
+    , m_hoveringOver( -1 )
 {
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
     m_ratingStarPositive.load( RESPATH "images/starred.png" );
@@ -190,8 +191,10 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
         if ( i == 1 )
             m_cachedStarRects[ QPair<int, int>(index.row(), index.column()) ] = r;
 
-        QPixmap pm;
-        if ( m_hoveringOver > -1 )
+        const bool userHasRated = index.data( GetNewStuffModel::UserHasRatedRole ).toBool();
+        if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
+             m_hoveringOver > -1 &&
+             m_hoveringItem == index )
         {
             if ( i <= m_hoveringOver ) // positive star
                 painter->drawPixmap( r, m_onHoverStar );
@@ -200,8 +203,13 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
         }
         else
         {
-            if ( i <= rating ) // positive star
-                painter->drawPixmap( r, m_ratingStarPositive );
+            if ( i <= rating ) // positive or rated star
+            {
+                if ( userHasRated )
+                    painter->drawPixmap( r, m_onHoverStar );
+                else
+                    painter->drawPixmap( r, m_ratingStarPositive );
+            }
             else
                 painter->drawPixmap( r, m_ratingStarNegative );
         }
@@ -258,7 +266,6 @@ bool
 GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( option );
-    m_hoveringOver = -1;
 
     if ( event->type() != QEvent::MouseButtonRelease &&
          event->type() != QEvent::MouseMove )
@@ -287,25 +294,30 @@ GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, cons
 
         if ( fullStars.contains( me->pos() ) )
         {
-            tDebug() << "A star was pressed...which one?";
-
             const int eachStar = starsWidth / 5;
             const int clickOffset = me->pos().x() - fullStars.x();
             const int whichStar = (clickOffset / eachStar) + 1;
 
             if ( event->type() == QEvent::MouseButtonRelease )
             {
-                tDebug() << "Clicked on:" << whichStar;
                 model->setData( index, whichStar, GetNewStuffModel::RatingRole );
             }
             else if ( event->type() == QEvent::MouseMove )
             {
                 // 0-indexed
                 m_hoveringOver = whichStar;
+                m_hoveringItem = index;
             }
 
             return true;
         }
+    }
+
+    if ( m_hoveringOver > -1 )
+    {
+        emit update( m_hoveringItem );
+        m_hoveringOver = -1;
+        m_hoveringItem = QPersistentModelIndex();
     }
     return false;
 }

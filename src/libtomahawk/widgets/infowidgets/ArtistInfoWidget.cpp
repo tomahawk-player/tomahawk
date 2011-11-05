@@ -17,12 +17,13 @@
  */
 
 #include "ArtistInfoWidget.h"
+#include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/audioengine.h"
-#include "viewmanager.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
+#include "playlist/treeproxymodel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
@@ -45,6 +46,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 {
     ui->setupUi( this );
 
+    m_plInterface = new MetaPlaylistInterface( this );
+
     ui->albums->setFrameShape( QFrame::NoFrame );
     ui->albums->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->relatedArtists->setFrameShape( QFrame::NoFrame );
@@ -59,7 +62,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
     m_albumsModel = new TreeModel( ui->albums );
-    m_albumsModel->setMode( TreeModel::InfoSystem );
+    m_albumsModel->setMode( InfoSystemMode );
     ui->albums->setTreeModel( m_albumsModel );
 
     m_relatedModel = new TreeModel( ui->relatedArtists );
@@ -70,7 +73,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->albums );
     m_button->setText( tr( "Click to show All Releases" ) );
@@ -93,14 +96,21 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
+    delete m_plInterface;
     delete ui;
+}
+
+PlaylistInterface*
+ArtistInfoWidget::playlistInterface() const
+{
+    return m_plInterface;
 }
 
 
 void
 ArtistInfoWidget::onModeToggle()
 {
-    m_albumsModel->setMode( m_button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
+    m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
     m_albumsModel->clear();
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
 
@@ -178,12 +188,15 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 

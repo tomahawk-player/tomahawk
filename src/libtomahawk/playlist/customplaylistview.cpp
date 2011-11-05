@@ -52,14 +52,18 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     }
 }
 
+
 CustomPlaylistView::~CustomPlaylistView()
-{}
+{
+}
+
 
 bool
 CustomPlaylistView::isBeingPlayed() const
 {
     return AudioEngine::instance()->currentTrackPlaylist() == playlistInterface();
 }
+
 
 bool
 CustomPlaylistView::jumpToCurrentTrack()
@@ -80,7 +84,7 @@ CustomPlaylistView::generateTracks()
                            "FROM social_attributes, track, artist "
                            "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
                            "GROUP BY track.id "
-                           "ORDER BY counter DESC, social_attributes.timestamp DESC " ).arg( m_source->isLocal() ? "IS NULL" : QString( "=%1" ).arg( m_source->id() ) );
+                           "ORDER BY counter DESC, social_attributes.timestamp DESC " ).arg( m_source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_source->id() ) );
             break;
         case AllLovedTracks:
             sql = QString( "SELECT track.name, artist.name, source, COUNT(*) as counter "
@@ -96,12 +100,14 @@ CustomPlaylistView::generateTracks()
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
+
 void
 CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
 {
     foreach ( const query_ptr& q, tracks )
         m_model->append( q );
 }
+
 
 QString
 CustomPlaylistView::title() const
@@ -132,17 +138,20 @@ CustomPlaylistView::description() const
     }
 }
 
+
 QString
 CustomPlaylistView::longDescription() const
 {
     return QString();
 }
 
+
 QPixmap
 CustomPlaylistView::pixmap() const
 {
     return QPixmap( RESPATH "images/loved_playlist.png" );
 }
+
 
 void
 CustomPlaylistView::reload()
@@ -153,7 +162,7 @@ CustomPlaylistView::reload()
 
 
 void
-CustomPlaylistView::sourceAdded( const source_ptr& s)
+CustomPlaylistView::sourceAdded( const source_ptr& s )
 {
     connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
 }

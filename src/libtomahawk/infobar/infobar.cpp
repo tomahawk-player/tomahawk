@@ -27,6 +27,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <QCheckBox>
+#include <widgets/querylabel.h>
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64
@@ -37,6 +38,7 @@ using namespace Tomahawk;
 InfoBar::InfoBar( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::InfoBar )
+    , m_queryLabel( 0 )
 {
     ui->setupUi( this );
     TomahawkUtils::unmarginLayout( layout() );
@@ -71,6 +73,14 @@ InfoBar::InfoBar( QWidget* parent )
     ui->longDescriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
 
+    m_queryLabel = new QueryLabel( this );
+    m_queryLabel->setType( QueryLabel::Artist );
+    m_queryLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_queryLabel->setTextPen( palette().brightText().color() );
+    m_queryLabel->setFont( boldFont );
+    m_queryLabel->hide();
+    connect( m_queryLabel, SIGNAL( clickedArtist() ), this, SLOT( artistClicked() ) );
+
     m_autoUpdate = new QCheckBox( this );
     m_autoUpdate->setText( tr( "Automatically update" ) );
     m_autoUpdate->setLayoutDirection( Qt::RightToLeft );
@@ -95,6 +105,8 @@ InfoBar::InfoBar( QWidget* parent )
     setPalette( p );
     setAutoFillBackground( true );
 
+    setMinimumHeight( geometry().height() );
+    setMaximumHeight( geometry().height() );
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( autoUpdateAvailable( bool ) ), SLOT( setAutoUpdateAvailable( bool ) ) );
 }
@@ -116,7 +128,47 @@ InfoBar::setCaption( const QString& s )
 void
 InfoBar::setDescription( const QString& s )
 {
+    if ( m_queryLabel->isVisible() )
+    {
+        ui->verticalLayout->removeWidget( m_queryLabel );
+        m_queryLabel->hide();
+
+        ui->verticalLayout->addWidget( ui->descriptionLabel );
+        ui->verticalLayout->setContentsMargins( 0, 0, 0, 0 );
+        ui->descriptionLabel->show();
+    }
     ui->descriptionLabel->setText( s );
+}
+
+void
+InfoBar::setDescription( const artist_ptr& artist )
+{
+    m_queryLabel->setQuery( Query::get( artist->name(), QString(), QString() ) );
+    m_queryLabel->setExtraContentsMargins( 4, 0, 0, 0 );
+
+    if ( !m_queryLabel->isVisible() )
+    {
+        ui->verticalLayout->removeWidget( ui->descriptionLabel );
+        ui->descriptionLabel->hide();
+
+        m_queryLabel->show();
+        ui->verticalLayout->addWidget( m_queryLabel );
+        ui->verticalLayout->setContentsMargins( 0, 0, 0, 15 );
+    }
+
+}
+
+void
+InfoBar::setDescription( const album_ptr&  )
+{
+    // TODO
+}
+
+void
+InfoBar::artistClicked()
+{
+    if ( m_queryLabel && !m_queryLabel->query().isNull() )
+        ViewManager::instance()->show( Artist::get( m_queryLabel->artist() ) );
 }
 
 

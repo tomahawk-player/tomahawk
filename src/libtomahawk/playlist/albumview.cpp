@@ -22,6 +22,7 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <qmath.h>
 
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
@@ -31,6 +32,7 @@
 #include "albummodel.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 
 #define SCROLL_TIMEOUT 280
 
@@ -41,13 +43,16 @@ AlbumView::AlbumView( QWidget* parent )
     : QListView( parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
-//    , m_delegate( 0 )
+    , m_delegate( 0 )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
 {
     setDragEnabled( true );
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 20 );
+    setSpacing( 16 );
+    setContentsMargins( 0, 0, 0, 0 );
+    setMouseTracking( true );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
@@ -75,7 +80,9 @@ void
 AlbumView::setProxyModel( AlbumProxyModel* model )
 {
     m_proxyModel = model;
-    setItemDelegate( new AlbumItemDelegate( this, m_proxyModel ) );
+    m_delegate = new AlbumItemDelegate( this, m_proxyModel );
+    connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
+    setItemDelegate( m_delegate );
 
     QListView::setModel( m_proxyModel );
 }
@@ -103,6 +110,9 @@ AlbumView::setAlbumModel( AlbumModel* model )
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
+
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     setAcceptDrops( false );
     onViewChanged(); // Fetch covers if albums were added to model before model was attached to view
@@ -176,6 +186,30 @@ void
 AlbumView::paintEvent( QPaintEvent* event )
 {
     QListView::paintEvent( event );
+}
+
+
+void
+AlbumView::resizeEvent( QResizeEvent* event )
+{
+    QListView::resizeEvent( event );
+
+#ifdef Q_WS_X11
+    int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+#else
+    int scrollbar = verticalScrollBar()->rect().width();
+#endif
+    int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
+    QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+
+    int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
+    int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
+    int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+
+    if ( itemsPerRow < 1 )
+        setSpacing( 16 );
+    else
+        setSpacing( newSpacing );
 }
 
 

@@ -41,9 +41,8 @@ public:
     virtual ~AdiumPlugin();
 
 protected slots:
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
-        Q_UNUSED( requestId );
         Q_UNUSED( requestData );
     }
     
@@ -52,9 +51,8 @@ protected slots:
 public slots:
     void namChangedSlot( QNetworkAccessManager* nam );
 
-    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
-        Q_UNUSED( requestId );
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }

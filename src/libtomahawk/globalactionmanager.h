@@ -95,6 +95,7 @@ private:
     bool handlePlayCommand(const QUrl& url );
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
+    bool handleViewCommand(const QUrl& url );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     bool playSpotify( const QUrl& url );

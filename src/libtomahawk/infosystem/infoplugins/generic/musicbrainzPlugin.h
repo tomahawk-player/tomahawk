@@ -42,7 +42,8 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
-    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
 
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data )
     {
@@ -51,12 +52,6 @@ protected slots:
         Q_UNUSED( data );
     }
 
-virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
-    {
-        Q_UNUSED( requestId );
-        Q_UNUSED( criteria );
-        Q_UNUSED( requestData );
-    }
 
 private slots:
     void artistSearchSlot();
@@ -67,7 +62,7 @@ private slots:
     void tracksFoundSlot();
 
 private:
-    bool isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QWeakPointer< QNetworkAccessManager > m_nam;
 };

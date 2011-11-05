@@ -195,7 +195,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( pi );
 
-    if ( m_model->mode() == TreeModel::Database && !pi->result().isNull() )
+    if ( m_model->mode() == Tomahawk::DatabaseMode && !pi->result().isNull() )
     {
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& result, rl )
@@ -329,14 +329,34 @@ TreeProxyModel::siblingItem( int itemsAway )
 Tomahawk::result_ptr
 TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
 {
-    qDebug() << Q_FUNC_INFO;
-
     QModelIndex idx = currentIndex();
+    if ( !idx.isValid() )
+        return Tomahawk::result_ptr();
+
+    if ( m_shuffled )
+        idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
+    else if ( m_repeatMode == PlaylistInterface::RepeatOne )
+        idx = index( idx.row(), 0, idx.parent() );
+    else
+        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+
+    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
+    {
+        if ( itemsAway > 0 )
+        {
+            // reset to first item
+            idx = index( 0, 0, currentIndex().parent() );
+        }
+        else
+        {
+            // reset to last item
+            idx = index( rowCount( currentIndex().parent() ) - 1, 0, currentIndex().parent() );
+        }
+    }
 
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
     {
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
         if ( !idx.isValid() )
             break;
 

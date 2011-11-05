@@ -254,6 +254,8 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+
+    emit loadingStarted();
 }
 
 
@@ -280,6 +282,8 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
         m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
     else
         m_title = tr( "All albums" );
+
+    emit loadingStarted();
 }
 
 
@@ -291,6 +295,8 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     if ( m_overwriteOnAdd )
         clear();
+
+    emit loadingFinished();
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;

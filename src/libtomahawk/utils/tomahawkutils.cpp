@@ -24,6 +24,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
+#include <QtCore/QMutex>
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
@@ -64,6 +65,8 @@ namespace TomahawkUtils
 
 
 static int s_headerHeight = 0;
+static quint64 s_infosystemRequestId = 0;
+static QMutex s_infosystemRequestIdMutex;
 
 #ifdef Q_WS_MAC
 QString
@@ -431,6 +434,14 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
 }
 
+void
+drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor )
+{
+    p->setPen( palette.mid().color().lighter( lightnessFactor * 100 ) );
+    p->setBrush( palette.highlight().color().lighter( lightnessFactor * 100 ) );
+    p->drawRoundedRect( r, 4.0, 4.0 );
+}
+
 
 void
 unmarginLayout( QLayout* layout )
@@ -499,6 +510,15 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
         m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
     qDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
     qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+}
+
+
+bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other )
+{
+    if ( m_noProxyHosts != other.m_noProxyHosts or m_proxy != other.m_proxy )
+        return false;
+
+    return true;
 }
 
 
@@ -687,6 +707,15 @@ removeDirectory( const QString& dir )
         }
     }
     return !has_err;
+}
+
+
+quint64 infosystemRequestId()
+{
+    QMutexLocker locker( &s_infosystemRequestIdMutex );
+    quint64 result = s_infosystemRequestId;
+    s_infosystemRequestId++;
+    return result;
 }
 
 

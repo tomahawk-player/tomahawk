@@ -31,6 +31,7 @@
 
 #include "dllmacro.h"
 
+class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
 class TreeModel;
@@ -91,11 +92,13 @@ private:
     Ui::WhatsHotWidget *ui;
 
     QStandardItemModel* m_crumbModelLeft;
+    QSortFilterProxyModel* m_sortedProxy;
 
     // Cache our model data
     QHash< QString, AlbumModel* > m_albumModels;
     QHash< QString, TreeModel* > m_artistModels;
     QHash< QString, PlaylistModel* > m_trackModels;
+    QString m_queueItemToShow;
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
 };

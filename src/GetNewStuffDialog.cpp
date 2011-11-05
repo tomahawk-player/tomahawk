@@ -30,7 +30,9 @@ GetNewStuffDialog::GetNewStuffDialog( QWidget *parent, Qt::WindowFlags f )
     ui->setupUi( this );
 
     ui->listView->setModel( m_model );
-    ui->listView->setItemDelegate( new GetNewStuffDelegate( ui->listView ) );
+    GetNewStuffDelegate* del = new GetNewStuffDelegate( ui->listView );
+    connect( del, SIGNAL( update( QModelIndex ) ), ui->listView, SLOT( update( QModelIndex ) ) );
+    ui->listView->setItemDelegate( del );
     ui->listView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
     ui->listView->setMouseTracking( true );
