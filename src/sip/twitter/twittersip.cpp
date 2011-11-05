@@ -58,10 +58,10 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( Database::instance()->dbid() != m_configuration[ "savedDbid" ].toString() )
+    if ( Database::instance()->dbid() != m_configuration[ "saveddbid" ].toString() )
     {
-        m_configuration[ "cachedPeers" ] = QVariantHash();
-        m_configuration[ "savedDbid" ] = Database::instance()->dbid();
+        m_configuration[ "cachedpeers" ] = QVariantHash();
+        m_configuration[ "saveddbid" ] = Database::instance()->dbid();
         syncConfig();
     }
 
@@ -102,18 +102,22 @@ void TwitterSipPlugin::checkSettings()
 bool
 TwitterSipPlugin::connectPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
-
+    tDebug() << Q_FUNC_INFO;
     if ( !m_account->enabled() )
+    {
+        tDebug() << Q_FUNC_INFO << "account isn't enabled";
         return false;
+    }
     
-    m_cachedPeers = m_configuration[ "cachedPeers" ].toHash();
+    m_cachedPeers = m_configuration[ "cachedpeers" ].toHash();
     QStringList peerList = m_cachedPeers.keys();
     qStableSort( peerList.begin(), peerList.end() );
 
     registerOffers( peerList );
+
+    tDebug() << Q_FUNC_INFO << "credentials: " << m_credentials.keys();
     
-    if ( m_credentials[ "oauthToken" ].toString().isEmpty() || m_credentials[ "oauthTokenSecret" ].toString().isEmpty() )
+    if ( m_credentials[ "oauthtoken" ].toString().isEmpty() || m_credentials[ "oauthtokensecret" ].toString().isEmpty() )
     {
         qDebug() << "TwitterSipPlugin has empty Twitter credentials; not connecting";
         return m_cachedPeers.isEmpty();
@@ -146,8 +150,8 @@ TwitterSipPlugin::refreshTwitterAuth()
     if( m_twitterAuth.isNull() )
       return false;
 
-    m_twitterAuth.data()->setOAuthToken( m_credentials[ "oauthToken" ].toString().toLatin1() );
-    m_twitterAuth.data()->setOAuthTokenSecret( m_credentials[ "oauthTokenSecret" ].toString().toLatin1() );
+    m_twitterAuth.data()->setOAuthToken( m_credentials[ "oauthtoken" ].toString().toLatin1() );
+    m_twitterAuth.data()->setOAuthTokenSecret( m_credentials[ "oauthtokensecret" ].toString().toLatin1() );
 
     return true;
 }
@@ -155,7 +159,7 @@ TwitterSipPlugin::refreshTwitterAuth()
 void
 TwitterSipPlugin::disconnectPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     m_checkTimer.stop();
     m_connectTimer.stop();
     m_dmPollTimer.stop();
@@ -172,7 +176,7 @@ TwitterSipPlugin::disconnectPlugin()
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
 
-    m_configuration[ "cachedPeers" ] = m_cachedPeers;
+    m_configuration[ "cachedpeers" ] = m_cachedPeers;
     syncConfig();
     m_cachedPeers.empty();
     m_state = Disconnected;
@@ -198,7 +202,7 @@ TwitterSipPlugin::connectAuthVerifyReply( const QTweetUser &user )
         m_isAuthed = true;
         if ( !m_twitterAuth.isNull() )
         {
-            m_configuration[ "screenName" ] = user.screenName();
+            m_configuration[ "screenname" ] = user.screenName();
             syncConfig();
             m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_twitterAuth.data(), this ) );
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );
@@ -249,7 +253,7 @@ TwitterSipPlugin::checkTimerFired()
         return;
 
     if ( m_cachedFriendsSinceId == 0 )
-        m_cachedFriendsSinceId = m_configuration[ "cachedFriendsSinceId" ].toLongLong();
+        m_cachedFriendsSinceId = m_configuration[ "cachedfriendssinceid" ].toLongLong();
 
     qDebug() << "TwitterSipPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
 
@@ -257,7 +261,7 @@ TwitterSipPlugin::checkTimerFired()
         m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
 
     if ( m_cachedMentionsSinceId == 0 )
-        m_cachedMentionsSinceId = m_configuration[ "cachedMentionsSinceId" ].toLongLong();
+        m_cachedMentionsSinceId = m_configuration[ "cachedmentionssinceid" ].toLongLong();
 
     qDebug() << "TwitterSipPlugin looking at mentions timeline since id " << m_cachedMentionsSinceId;
 
@@ -276,7 +280,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
         if ( peerData.contains( "onod" ) && peerData["onod"] != Database::instance()->dbid() )
         {
             m_cachedPeers.remove( screenName );
-            m_configuration[ "cachedPeers" ] = m_cachedPeers;
+            m_configuration[ "cachedpeers" ] = m_cachedPeers;
             syncConfig();
         }
         
@@ -284,7 +288,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
             m_cachedPeers[screenName] = peerData;
-            m_configuration[ "cachedPeers" ] = m_cachedPeers;
+            m_configuration[ "cachedpeers" ] = m_cachedPeers;
             syncConfig();
             qDebug() << Q_FUNC_INFO << " already connected";
             continue;
@@ -293,7 +297,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
         {
             qDebug() << Q_FUNC_INFO << " aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
-            m_configuration[ "cachedPeers" ] = m_cachedPeers;
+            m_configuration[ "cachedpeers" ] = m_cachedPeers;
             syncConfig();
             m_cachedAvatars.remove( screenName );
             continue;
@@ -313,20 +317,20 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
 void
 TwitterSipPlugin::connectTimerFired()
 {
-    qDebug() << Q_FUNC_INFO << " beginning";
+    tDebug() << Q_FUNC_INFO << " beginning";
     if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
     {
         if ( !isValid() )
-            qDebug() << Q_FUNC_INFO << " is not valid";
+            tDebug() << Q_FUNC_INFO << " is not valid";
         if ( m_cachedPeers.isEmpty() )
-            qDebug() << Q_FUNC_INFO << " has empty cached peers";
+            tDebug() << Q_FUNC_INFO << " has empty cached peers";
         if ( m_twitterAuth.isNull() )
-            qDebug() << Q_FUNC_INFO << " has null twitterAuth";
+            tDebug() << Q_FUNC_INFO << " has null twitterAuth";
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << " continuing";
-    QString myScreenName = m_configuration[ "screenName" ].toString();
+    tDebug() << Q_FUNC_INFO << " continuing";
+    QString myScreenName = m_configuration[ "screenname" ].toString();
     QStringList peerList = m_cachedPeers.keys();
     qStableSort( peerList.begin(), peerList.end() );
     registerOffers( peerList );
@@ -335,7 +339,7 @@ TwitterSipPlugin::connectTimerFired()
 void
 TwitterSipPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text )
 {
-    QString myScreenName = m_configuration[ "screenName" ].toString();
+    QString myScreenName = m_configuration[ "screenname" ].toString();
     qDebug() << "TwitterSipPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName << ", now parsing";
     regex.exactMatch( text );
     if ( text.startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
@@ -411,7 +415,7 @@ TwitterSipPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
 
-    m_configuration[ "cachedFriendsSinceId" ] = m_cachedFriendsSinceId;
+    m_configuration[ "cachedfriendssinceid" ] = m_cachedFriendsSinceId;
     syncConfig();
 }
 
@@ -445,7 +449,7 @@ TwitterSipPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
 
-    m_configuration[ "cachedMentionsSinceId" ] = m_cachedMentionsSinceId;
+    m_configuration[ "cachedmentionssinceid" ] = m_cachedMentionsSinceId;
     syncConfig();
 }
 
@@ -456,7 +460,7 @@ TwitterSipPlugin::pollDirectMessages()
         return;
 
     if ( m_cachedDirectMessagesSinceId == 0 )
-            m_cachedDirectMessagesSinceId = m_configuration[ "cachedDirectMentionsSinceId" ].toLongLong();
+            m_cachedDirectMessagesSinceId = m_configuration[ "cacheddirectmentionssinceid" ].toLongLong();
 
     qDebug() << "TwitterSipPlugin looking for direct messages since id " << m_cachedDirectMessagesSinceId;
 
@@ -470,7 +474,7 @@ TwitterSipPlugin::directMessages( const QList< QTweetDMStatus > &messages )
     qDebug() << Q_FUNC_INFO;
 
     QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = m_configuration[ "screenName" ].toString();
+    QString myScreenName = m_configuration[ "screenname" ].toString();
 
     QHash< QString, QTweetDMStatus > latestHash;
     foreach ( QTweetDMStatus status, messages )
@@ -547,7 +551,7 @@ TwitterSipPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         }
     }
 
-    m_configuration[ "cachedDirectMessagesSinceId" ] = m_cachedDirectMessagesSinceId;
+    m_configuration[ "cacheddirectmessagessinceid" ] = m_cachedDirectMessagesSinceId;
     syncConfig();
 }
 
@@ -627,7 +631,7 @@ TwitterSipPlugin::registerOffer( const QString &screenName, const QVariantHash &
     {
         _peerData["lastseen"] = QString::number( QDateTime::currentMSecsSinceEpoch() );
         m_cachedPeers[screenName] = QVariant::fromValue< QVariantHash >( _peerData );
-        m_configuration[ "cachedPeers" ] = m_cachedPeers;
+        m_configuration[ "cachedpeers" ] = m_cachedPeers;
         syncConfig();
     }
 
@@ -715,7 +719,7 @@ TwitterSipPlugin::fetchAvatar( const QString& screenName )
 void
 TwitterSipPlugin::avatarUserDataSlot( const QTweetUser &user )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     if ( user.profileImageUrl().isEmpty() || m_twitterAuth.isNull() )
         return;
 
@@ -735,11 +739,11 @@ TwitterSipPlugin::refreshProxy()
 void
 TwitterSipPlugin::profilePicReply()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     QNetworkReply *reply = qobject_cast< QNetworkReply* >( sender() );
     if ( !reply || reply->error() != QNetworkReply::NoError || !reply->property( "screenname" ).isValid() )
     {
-        qDebug() << Q_FUNC_INFO << " reply not valid or came back with error";
+        tDebug() << Q_FUNC_INFO << " reply not valid or came back with error";
         return;
     }
     QString screenName = reply->property( "screenname" ).toString();
@@ -755,6 +759,7 @@ TwitterSipPlugin::profilePicReply()
 void
 TwitterSipPlugin::configurationChanged()
 {
+    tDebug() << Q_FUNC_INFO;
     if ( m_state != Disconnected )
         disconnectPlugin();
     connectPlugin();

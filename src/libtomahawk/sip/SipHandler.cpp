@@ -173,9 +173,11 @@ SipHandler::removeSipPlugin( SipPlugin* p )
 void
 SipHandler::loadFromAccountManager()
 {
+    tDebug() << Q_FUNC_INFO;
     QList< Tomahawk::Accounts::Account* > accountList = Tomahawk::Accounts::AccountManager::instance()->getAccounts( Tomahawk::Accounts::SipType );
     foreach( Tomahawk::Accounts::Account* account, accountList )
     {
+        tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();
         SipPlugin* p = account->sipPlugin();
         addSipPlugin( p );
     }

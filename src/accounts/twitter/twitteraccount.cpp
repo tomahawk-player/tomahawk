@@ -62,6 +62,7 @@ TwitterAccount::~TwitterAccount()
 void
 TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 {
+    tDebug() << Q_FUNC_INFO;
     m_isAuthenticated = authed;
     if ( !credentials()[ "username" ].toString().isEmpty() )
         setAccountFriendlyName( QString( "@%1" ).arg( credentials()[ "username" ].toString() ) );

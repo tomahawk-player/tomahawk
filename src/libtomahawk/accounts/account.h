@@ -132,9 +132,9 @@ public:
         m_accountId = accountId;
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
-        m_accountFriendlyName = s->value( "accountFriendlyName", QString() ).toString();
+        m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
         m_enabled = s->value( "enabled", false ).toBool();
-        m_autoConnect = s->value( "autoConnect", false ).toBool();
+        m_autoConnect = s->value( "autoconnect", false ).toBool();
         m_credentials = s->value( "credentials", QVariantHash() ).toHash();
         m_configuration = s->value( "configuration", QVariantHash() ).toHash();
         m_acl = s->value( "acl", QVariantMap() ).toMap();
@@ -147,17 +147,15 @@ public:
     {
         TomahawkSettings* s = TomahawkSettings::instance();
         s->beginGroup( "accounts/" + m_accountId );
-        s->setValue( "accountFriendlyName", m_accountFriendlyName );
+        s->setValue( "accountfriendlyname", m_accountFriendlyName );
         s->setValue( "enabled", m_enabled );
-        s->setValue( "autoConnect", m_autoConnect );
+        s->setValue( "autoconnect", m_autoConnect );
         s->setValue( "credentials", m_credentials );
         s->setValue( "configuration", m_configuration );
         s->setValue( "acl", m_acl );
         s->setValue( "types", m_types );
         s->endGroup();
         s->sync();
-
-        emit configurationChanged();
     }
 
     QString m_accountServiceName;

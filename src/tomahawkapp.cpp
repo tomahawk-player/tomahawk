@@ -514,8 +514,10 @@ TomahawkApp::initSIP()
     foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->getAccounts() )
     {
         tDebug() << Q_FUNC_INFO << "testing account with name " << account->accountServiceName();
-        if ( account->configurationWidget() )
+        if ( account->configurationWidget() && account->configuration().isEmpty() )
             account->configurationWidget()->show();
+        if ( !account->enabled() )
+            account->setEnabled( true );
     }
     
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
