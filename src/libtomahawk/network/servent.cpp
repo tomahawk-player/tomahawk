@@ -80,6 +80,12 @@ Servent::Servent( QObject* parent )
         boost::bind( &Servent::remoteIODeviceFactory, this, _1 );
     this->registerIODeviceFactory( "servent", fac );
     }
+
+    {
+    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
+        boost::bind( &Servent::httpIODeviceFactory, this, _1 );
+    this->registerIODeviceFactory( "http", fac );
+    }
 }
 
 
@@ -873,4 +879,13 @@ Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
         io->open( QIODevice::ReadOnly );
 
     return QSharedPointer<QIODevice>( io );
+}
+
+
+QSharedPointer<QIODevice>
+Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
+{
+    QNetworkRequest req( result->url() );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
 }
