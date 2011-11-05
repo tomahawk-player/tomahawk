@@ -45,7 +45,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
 
     setAccountServiceName( "Twitter" );
     QSet< AccountType > types;
-    types << InfoType;
+    types << InfoType << SipType;
     setTypes( types );
     
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );

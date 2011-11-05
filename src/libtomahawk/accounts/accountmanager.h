@@ -49,8 +49,8 @@ public:
     void loadFromConfig();
     void loadPluginFactory( const QString &path );
     void addAccountPlugin( Account* account );
-    Account* loadPlugin( const QString &pluginId );
-    QString factoryFromId( const QString& pluginId ) const;
+    Account* loadPlugin( const QString &accountId );
+    QString factoryFromId( const QString& accountId ) const;
     
     QList< Account* > getAccounts() { return m_accounts; };
     QList< Account* > getAccounts( Tomahawk::Accounts::AccountType type ) { return m_accountsByAccountType[ type ]; }

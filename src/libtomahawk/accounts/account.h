@@ -80,7 +80,7 @@ public:
     virtual QIcon icon() const = 0;
 
     virtual bool authenticate() = 0; //if none needed, just return true
-    virtual bool isAuthenticated() = 0;
+    virtual bool isAuthenticated() const = 0;
 
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
@@ -190,7 +190,7 @@ public:
     virtual QIcon icon() const { return QIcon(); }
     virtual bool isUnique() const { return false; }
 
-    virtual Account* createAccount( const QString& pluginId = QString() ) = 0;
+    virtual Account* createAccount( const QString& accountId = QString() ) = 0;
 };
 
 };

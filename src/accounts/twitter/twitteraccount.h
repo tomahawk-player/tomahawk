@@ -62,7 +62,7 @@ public:
 
     bool canSelfAuthenticate() { return false; }
     bool authenticate() { return false; }
-    bool isAuthenticated() { return m_isAuthenticated; }
+    bool isAuthenticated() const { return m_isAuthenticated; }
 
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     SipPlugin* sipPlugin();

@@ -38,6 +38,7 @@ set( libSources
     EchonestCatalogSynchronizer.cpp
 
     accounts/accountmanager.cpp
+    accounts/account.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp

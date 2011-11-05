@@ -33,7 +33,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QTWEETLIB_INCLUDE_DIR}
 )
 
-qt4_wrap_cpp( tomahawkOAuthTwitterMoc ${tomahawkOAuthTwitterSources} )
+qt4_wrap_cpp( tomahawkOAuthTwitterMoc ${tomahawkOAuthTwitterHeaders} )
 add_library( tomahawk_oauth_twitter SHARED ${tomahawkOAuthTwitterSources} ${tomahawkOAuthTwitterMoc} )
 qt4_wrap_cpp( twitterAccountMoc ${twitterAccountHeaders} )
 qt4_wrap_ui( twitterAccountUI_H ${twitterAccountUI} )
@@ -57,6 +57,7 @@ target_link_libraries( tomahawk_oauth_twitter
 
 target_link_libraries( tomahawk_account_twitter
     tomahawk_oauth_twitter
+    tomahawk_siptwitter
     ${TOMAHAWK_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QT_LIBRARIES}

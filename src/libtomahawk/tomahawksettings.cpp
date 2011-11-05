@@ -693,34 +693,34 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
 
 
 QStringList
-TomahawkSettings::accountPlugins() const
+TomahawkSettings::accounts() const
 {
-    return value( "accounts/allplugins", QStringList() ).toStringList();
+    return value( "accounts/allaccounts", QStringList() ).toStringList();
 }
 
 
 void
-TomahawkSettings::setAccountPlugins( const QStringList& plugins )
+TomahawkSettings::setAccounts( const QStringList& accountIds )
 {
-    setValue( "accounts/allplugins", plugins );
+    setValue( "accounts/allaccounts", accountIds );
 }
 
 
 void
-TomahawkSettings::addAccountPlugin( const QString& pluginId )
+TomahawkSettings::addAccount( const QString& accountId )
 {
-    QStringList list = accountPlugins();
-    list << pluginId;
-    setAccountPlugins( list );
+    QStringList list = accounts();
+    list << accountId;
+    setAccounts( list );
 }
 
 
 void
-TomahawkSettings::removeAccountPlugin( const QString& pluginId )
+TomahawkSettings::removeAccount( const QString& accountId )
 {
-    QStringList list = accountPlugins();
-    list.removeAll( pluginId );
-    setAccountPlugins( list );
+    QStringList list = accounts();
+    list.removeAll( accountId );
+    setAccounts( list );
 }
 
 

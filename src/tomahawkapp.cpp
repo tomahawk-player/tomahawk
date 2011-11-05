@@ -510,6 +510,7 @@ TomahawkApp::initServent()
 void
 TomahawkApp::initSIP()
 {
+    tDebug() << Q_FUNC_INFO;
     foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->getAccounts() )
     {
         tDebug() << Q_FUNC_INFO << "testing account with name " << account->accountServiceName();

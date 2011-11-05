@@ -106,10 +106,10 @@ public:
     void addSipPlugin( const QString& pluginId, bool enable = true );
     void removeSipPlugin( const QString& pluginId );
 
-    void setAccountPlugins( const QStringList& plugins );
-    QStringList accountPlugins() const;
-    void addAccountPlugin( const QString& pluginId );
-    void removeAccountPlugin( const QString& pluginId );
+    void setAccounts( const QStringList& accountIds );
+    QStringList accounts() const;
+    void addAccount( const QString& accountId );
+    void removeAccount( const QString& accountId );
 
     
     void setBookmarkPlaylist( const QString& guid );

@@ -112,9 +112,9 @@ AccountManager::loadPluginFactories( const QStringList& paths )
 
 
 QString
-AccountManager::factoryFromId( const QString& pluginId ) const
+AccountManager::factoryFromId( const QString& accountId ) const
 {
-    return pluginId.split( "_" ).first();
+    return accountId.split( "_" ).first();
 }
 
 
@@ -143,21 +143,22 @@ AccountManager::loadPluginFactory( const QString& path )
 void
 AccountManager::loadFromConfig()
 {
-    QStringList pluginIds = TomahawkSettings::instance()->accountPlugins();
+    QStringList accountIds = TomahawkSettings::instance()->accounts();
 
     //FIXME: this is just for debugging
-    if ( pluginIds.isEmpty() )
+    if ( accountIds.isEmpty() )
     {
         Account* account = m_accountFactories[ "twitteraccount" ]->createAccount();
         addAccountPlugin( account );
+        TomahawkSettings::instance()->addAccount( account->accountId() );
     }
-    
-    foreach( const QString& pluginId, pluginIds )
+
+    foreach( const QString& accountId, accountIds )
     {
-        QString pluginFactory = factoryFromId( pluginId );
+        QString pluginFactory = factoryFromId( accountId );
         if( m_accountFactories.contains( pluginFactory ) )
         {
-            Account* account = loadPlugin( pluginId );
+            Account* account = loadPlugin( accountId );
             addAccountPlugin( account );
         }
     }
@@ -166,13 +167,13 @@ AccountManager::loadFromConfig()
 
 
 Account*
-AccountManager::loadPlugin( const QString& pluginId )
+AccountManager::loadPlugin( const QString& accountId )
 {
-    QString factoryName = factoryFromId( pluginId );
+    QString factoryName = factoryFromId( accountId );
 
     Q_ASSERT( m_accountFactories.contains( factoryName ) );
 
-    Account* account = m_accountFactories[ factoryName ]->createAccount( pluginId );
+    Account* account = m_accountFactories[ factoryName ]->createAccount( accountId );
 
     // caller responsible for calling pluginAdded() and hookupPlugin
     return account;
@@ -186,7 +187,7 @@ AccountManager::addAccountPlugin( Account* account )
 
     foreach( AccountType type, account->types() )
         m_accountsByAccountType[ type ].append( account );
-    //TODO:
+    //TODO:?
     //emit pluginAdded( account );
 }
 
