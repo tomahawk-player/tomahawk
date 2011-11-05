@@ -23,6 +23,7 @@
 #include <QNetworkReply>
 
 #include "source.h"
+#include "sourcelist.h"
 #include "audio/audioengine.h"
 #include "database/databasecommand_allalbums.h"
 #include "database/databasecommand_alltracks.h"
@@ -553,6 +554,14 @@ TreeModel::addAllCollections()
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+
+    QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
+    foreach ( const source_ptr& source, sources )
+    {
+        connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+    }
+
     m_title = tr( "All Artists" );
 }
 
@@ -659,6 +668,8 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
+    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+
     if ( !collection->source()->avatar().isNull() )
         setIcon( collection->source()->avatar() );
 
@@ -691,6 +702,25 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
         setTitle( tr( "My Collection" ) );
     else
         setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
+}
+
+
+void
+TreeModel::onSourceAdded( const Tomahawk::source_ptr& source )
+{
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+}
+
+
+void
+TreeModel::onCollectionChanged()
+{
+    clear();
+
+    if ( m_collection )
+        addCollection( m_collection );
+    else
+        addAllCollections();
 }
 
 

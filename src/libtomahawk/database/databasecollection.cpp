@@ -72,7 +72,7 @@ DatabaseCollection::loadStations()
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );}
 
 
-void
+/*void
 DatabaseCollection::loadTracks()
 {
     qDebug() << Q_FUNC_INFO << source()->userName();
@@ -84,7 +84,7 @@ DatabaseCollection::loadTracks()
                     SLOT( setTracks( QList<Tomahawk::query_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
+}*/
 
 
 void
@@ -143,7 +143,7 @@ DatabaseCollection::stations()
 }
 
 
-QList< Tomahawk::query_ptr >
+/*QList< Tomahawk::query_ptr >
 DatabaseCollection::tracks()
 {
     if ( !isLoaded() )
@@ -152,7 +152,7 @@ DatabaseCollection::tracks()
     }
 
     return Collection::tracks();
-}
+}*/
 
 
 void DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )

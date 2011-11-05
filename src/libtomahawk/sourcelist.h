@@ -69,6 +69,7 @@ private slots:
 
     void latchedOn( const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr& );
+
 private:
     void add( const Tomahawk::source_ptr& source );
 

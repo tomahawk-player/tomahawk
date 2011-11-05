@@ -55,9 +55,8 @@ public:
     virtual QString name() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadTracks() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO ; }
-    virtual void loadStations() { qDebug() << Q_FUNC_INFO ; }
+    virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }
+    virtual void loadStations() { qDebug() << Q_FUNC_INFO; }
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual Tomahawk::dynplaylist_ptr autoPlaylist( const QString& guid );
@@ -75,7 +74,6 @@ public:
     virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists.values(); }
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
     virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
-    virtual QList< Tomahawk::query_ptr > tracks();
 
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
@@ -93,6 +91,8 @@ signals:
     void stationsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
     void stationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
 
+    void changed();
+
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems ) = 0;
     virtual void removeTracks( const QDir& dir ) = 0;
@@ -103,7 +103,6 @@ public slots:
 
     void setTracks( const QList<Tomahawk::query_ptr>& tracks );
     void delTracks( const QStringList& files );
-    void resetTrackCache() { m_tracks.clear(); m_isLoaded = false; }
 
 protected:
     QString m_name;
@@ -113,7 +112,6 @@ private:
     bool m_isLoaded;
 
     source_ptr m_source;
-    QList< Tomahawk::query_ptr > m_tracks;
     QHash< QString, Tomahawk::playlist_ptr > m_playlists;
     QHash< QString, Tomahawk::dynplaylist_ptr > m_autoplaylists;
     QHash< QString, Tomahawk::dynplaylist_ptr > m_stations;

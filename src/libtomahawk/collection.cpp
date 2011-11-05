@@ -171,12 +171,6 @@ Collection::station( const QString& guid )
     return m_stations.value( guid, dynplaylist_ptr() );
 }
 
-QList< query_ptr >
-Collection::tracks()
-{
-    return m_tracks;
-}
-
 
 void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
@@ -226,8 +220,8 @@ Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
 {
 //    qDebug() << Q_FUNC_INFO << tracks.count() << name();
 
-    m_tracks << tracks;
     emit tracksAdded( tracks );
+    emit changed();
 }
 
 
@@ -235,8 +229,9 @@ void
 Collection::delTracks( const QStringList& files )
 {
     qDebug() << Q_FUNC_INFO << files.count() << name();
+    emit changed();
 
-    QList<Tomahawk::query_ptr> tracks;
+/*    QList<Tomahawk::query_ptr> tracks;
     int i = 0;
     foreach ( const query_ptr& query, m_tracks )
     {
@@ -263,7 +258,7 @@ Collection::delTracks( const QStringList& files )
     }
 
     tDebug() << "Emitting tracks removed:" << tracks.size();
-    emit tracksRemoved( tracks );
+    emit tracksRemoved( tracks );*/
 }
 
 
