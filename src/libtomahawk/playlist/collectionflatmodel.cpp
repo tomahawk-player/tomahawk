@@ -72,15 +72,13 @@ CollectionFlatModel::addCollection( const collection_ptr& collection, bool sendN
     if( sendNotifications )
         emit loadingStarted();
 
-    if ( collection->isLoaded() )
-    {
-        onTracksAdded( collection->tracks() );
-    }
-    else
-    {
-        collection->tracks(); // data will arrive via signals
-        m_loadingCollections << collection.data();
-    }
+    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( collection );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+
+    m_loadingCollections << collection.data();
 
     if ( collection->source()->isLocal() )
         setTitle( tr( "My Collection" ) );

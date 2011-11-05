@@ -154,6 +154,9 @@ private slots:
 
     void onDataChanged();
 
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+    void onCollectionChanged();
+
 private:
     QPersistentModelIndex m_currentIndex;
     TreeModelItem* m_rootItem;

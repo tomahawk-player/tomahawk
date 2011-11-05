@@ -38,13 +38,11 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual void loadTracks();
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
     virtual void loadStations();
 
     virtual QList< Tomahawk::playlist_ptr > playlists();
-    virtual QList< Tomahawk::query_ptr > tracks();
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists();
     virtual QList< Tomahawk::dynplaylist_ptr > stations();
 
