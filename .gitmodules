@@ -1,6 +1,3 @@
 [submodule "thirdparty/jreen"]
 	path = thirdparty/jreen
 	url = git://github.com/euroelessar/jreen.git
-[submodule "thirdparty/qtweetlib/QTweetLib"]
-	path = thirdparty/qtweetlib/QTweetLib
-	url = git://github.com/minimoog/QTweetLib.git
