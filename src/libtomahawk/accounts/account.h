@@ -79,6 +79,7 @@ public:
 
     virtual QIcon icon() const = 0;
 
+    virtual bool canSelfAuthenticate() const = 0;
     virtual bool authenticate() = 0; //if none needed, just return true
     virtual bool isAuthenticated() const = 0;
 

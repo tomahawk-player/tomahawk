@@ -60,7 +60,7 @@ public:
     
     QIcon icon() const { return QIcon( ":/twitter-icon.png" ); }
 
-    bool canSelfAuthenticate() { return false; }
+    bool canSelfAuthenticate() const { return false; }
     bool authenticate() { return false; }
     bool isAuthenticated() const { return m_isAuthenticated; }
 

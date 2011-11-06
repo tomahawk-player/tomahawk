@@ -46,6 +46,13 @@ Account::icon() const
 
 
 bool
+Account::canSelfAuthenticate() const
+{
+    return false;
+}
+
+
+bool
 Account::authenticate()
 {
     return false;
