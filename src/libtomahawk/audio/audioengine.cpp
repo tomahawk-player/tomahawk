@@ -471,21 +471,24 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             m_mediaObject->play();
             emit started( m_currentTrack );
 
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-            Tomahawk::InfoSystem::InfoStringHash trackInfo;
-            trackInfo["title"] = m_currentTrack->track();
-            trackInfo["artist"] = m_currentTrack->artist()->name();
-            trackInfo["album"] = m_currentTrack->album()->name();
-
             if ( TomahawkSettings::instance()->verboseNotifications() )
-                sendNowPlayingNotification();
+                    sendNowPlayingNotification();
+            
+            if ( TomahawkUtils::privateListeningMode() != TomahawkUtils::FullyPrivate )
+            {
+                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
+                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-                s_aeInfoIdentifier,
-                Tomahawk::InfoSystem::InfoNowPlaying,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+                Tomahawk::InfoSystem::InfoStringHash trackInfo;
+                trackInfo["title"] = m_currentTrack->track();
+                trackInfo["artist"] = m_currentTrack->artist()->name();
+                trackInfo["album"] = m_currentTrack->album()->name();
+
+                Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                    s_aeInfoIdentifier,
+                    Tomahawk::InfoSystem::InfoNowPlaying,
+                    QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+            }
         }
     }
 
@@ -715,8 +718,11 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     m_lastTrack = m_currentTrack;
     if ( !m_lastTrack.isNull() )
     {
-        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        if ( TomahawkUtils::privateListeningMode() == TomahawkUtils::PublicListening )
+        {
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        }
 
         emit finished( m_lastTrack );
     }
