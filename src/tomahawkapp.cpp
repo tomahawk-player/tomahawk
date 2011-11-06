@@ -502,6 +502,7 @@ TomahawkApp::initServent()
     }
 }
 
+
 void
 TomahawkApp::initSIP()
 {
@@ -517,6 +518,7 @@ TomahawkApp::initSIP()
         SipHandler::instance()->loadFromConfig( true );
     }
 }
+
 
 void
 TomahawkApp::spotifyApiCheckFinished()
@@ -543,7 +545,6 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-    activate();
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else if ( url.contains( "open.spotify.com" ) || url.contains( "spotify:track" ) )
@@ -561,7 +562,8 @@ TomahawkApp::loadUrl( const QString& url )
             l->load( QUrl::fromUserInput( url ) );
 
             return true;
-        } else if ( info.suffix() == "jspf" )
+        }
+        else if ( info.suffix() == "jspf" )
         {
             JSPFLoader* l = new JSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading j-spiff:" << url;
@@ -580,10 +582,9 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
 
+    activate();
     if ( instance.arguments.size() < 2 )
-    {
         return;
-    }
 
     QString arg1 = instance.arguments[ 1 ];
     loadUrl( arg1 );

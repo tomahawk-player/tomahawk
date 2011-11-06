@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -55,11 +55,11 @@ public:
 
 signals:
     void done( const QList<QVariant>&, const Tomahawk::collection_ptr& );
-    void notify( const QList<Tomahawk::query_ptr>& );
+    void notify( const QList<unsigned int>& ids );
 
 private:
     QVariantList m_files;
-    QList<Tomahawk::query_ptr> m_queries;
+    QList<unsigned int> m_ids;
 };
 
 #endif // DATABASECOMMAND_ADDFILES_H
