@@ -62,7 +62,7 @@ signals:
     void jidChanged( const QString& );
 
 public slots:
-    virtual bool connectPlugin();
+    virtual void connectPlugin();
     void disconnectPlugin();
     void checkSettings();
     void configurationChanged();

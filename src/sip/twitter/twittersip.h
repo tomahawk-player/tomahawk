@@ -50,7 +50,7 @@ public:
     virtual ConnectionState connectionState() const;
 
 public slots:
-    virtual bool connectPlugin();
+    virtual void connectPlugin();
     void disconnectPlugin();
     void refreshProxy();
     void configurationChanged();
@@ -75,7 +75,7 @@ public slots:
     void checkSettings();
     
 private slots:
-    void connectAuthVerifyReply( const QTweetUser &user );
+    void accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user );
     void checkTimerFired();
     void connectTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
@@ -98,7 +98,8 @@ private:
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
-    QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
+    QWeakPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
+    
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
     QWeakPointer< QTweetMentions > m_mentions;
     QWeakPointer< QTweetDirectMessages > m_directMessages;
@@ -108,7 +109,6 @@ private:
     QVariantHash m_configuration;
     QVariantHash m_credentials;
     
-    bool m_isAuthed;
     QTimer m_checkTimer;
     QTimer m_connectTimer;
     QTimer m_dmPollTimer;

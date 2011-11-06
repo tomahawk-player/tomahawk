@@ -80,7 +80,8 @@ public:
     virtual QIcon icon() const = 0;
 
     virtual bool canSelfAuthenticate() const = 0;
-    virtual bool authenticate() = 0; //if none needed, just return true
+    virtual void authenticate() = 0;
+    virtual void deauthenticate() = 0;
     virtual bool isAuthenticated() const = 0;
 
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
@@ -106,11 +107,8 @@ public:
     virtual void setAutoConnect( bool autoConnect ) { QMutexLocker locker( &m_mutex ); m_autoConnect = autoConnect; }
     virtual void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
     virtual void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
-
     virtual void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
-
     virtual void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
-
     virtual void setTypes( const QSet< AccountType > types )
     {
         QMutexLocker locker( &m_mutex );
@@ -130,10 +128,13 @@ public:
         syncConfig();
     }
 
+    virtual void refreshProxy() = 0;
+    
     virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
 
 signals:
     void configurationChanged();
+    void authenticated( bool );
     
 protected:
     virtual void loadFromConfig( const QString &accountId )

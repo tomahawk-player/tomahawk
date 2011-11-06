@@ -61,7 +61,8 @@ public:
     QIcon icon() const { return QIcon( ":/xmpp-icon.png" ); }
 
     bool canSelfAuthenticate() const { return false; }
-    bool authenticate() { return false; }
+    void authenticate();
+    void deauthenticate();
     bool isAuthenticated() const { return m_isAuthenticated; }
 
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
@@ -70,6 +71,8 @@ public:
     QWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
 
+    void refreshProxy() {};
+    
 private:
     Ui_XmppConfigWidget* m_ui; // so the google wrapper can change the config dialog a bit
     bool m_isAuthenticated;

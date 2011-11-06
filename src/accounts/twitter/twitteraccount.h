@@ -60,8 +60,9 @@ public:
     
     QIcon icon() const { return QIcon( ":/twitter-icon.png" ); }
 
-    bool canSelfAuthenticate() const { return false; }
-    bool authenticate() { return false; }
+    bool canSelfAuthenticate() const { return true; }
+    void authenticate();
+    void deauthenticate();
     bool isAuthenticated() const { return m_isAuthenticated; }
 
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
@@ -70,11 +71,22 @@ public:
     QWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
 
+    bool refreshTwitterAuth();
+    TomahawkOAuthTwitter* twitterAuth() const { return m_twitterAuth.data(); }
+
+    void refreshProxy();
+
+signals:
+    void nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter >&, const QTweetUser &user );
+    void nowDeauthenticated();
+    
 private slots:
     void configDialogAuthedSignalSlot( bool authed );
+    void connectAuthVerifyReply( const QTweetUser &user );
     
 private:
     bool m_isAuthenticated;
+    QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< TwitterConfigWidget > m_configWidget;
     QWeakPointer< TwitterSipPlugin > m_twitterSipPlugin;
 

@@ -133,15 +133,15 @@ XmppSipPlugin::menu()
     return m_menu;
 }
 
-bool
+void
 XmppSipPlugin::connectPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if(m_client->isConnected())
+    if( m_client->isConnected() )
     {
         qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
-        return true; //FIXME: should i return false here?!
+        return; //FIXME: should i return false here?!
     }
 
     qDebug() << "Connecting to the Xmpp server..." << m_client->jid().full();
@@ -154,7 +154,7 @@ XmppSipPlugin::connectPlugin()
 
     m_state = Connecting;
     emit stateChanged( m_state );
-    return true;
+    return;
 }
 
 void

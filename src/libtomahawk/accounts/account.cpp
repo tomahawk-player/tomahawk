@@ -52,10 +52,17 @@ Account::canSelfAuthenticate() const
 }
 
 
-bool
+void
 Account::authenticate()
 {
-    return false;
+    return;
+}
+
+
+void
+Account::deauthenticate()
+{
+    return;
 }
 
 
@@ -63,6 +70,13 @@ bool
 Account::isAuthenticated() const
 {
     return false;
+}
+
+
+void
+Account::refreshProxy()
+{
+
 }
 
 

@@ -56,6 +56,20 @@ XmppAccount::~XmppAccount()
 }
 
 
+void
+XmppAccount::authenticate()
+{
+    return;
+}
+
+
+void
+XmppAccount::deauthenticate()
+{
+    return;
+}
+
+
 SipPlugin*
 XmppAccount::sipPlugin()
 {

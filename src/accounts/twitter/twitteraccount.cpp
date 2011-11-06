@@ -17,10 +17,15 @@
  */
 
 #include "twitteraccount.h"
-
 #include "twitterconfigwidget.h"
+#include "accounts/twitter/tomahawkoauthtwitter.h"
 
 #include "sip/SipPlugin.h"
+
+#include <QTweetLib/qtweetaccountverifycredentials.h>
+#include <QTweetLib/qtweetuser.h>
+#include <QTweetLib/qtweetstatus.h>
+#include <QTweetLib/qtweetusershow.h>
 
 #include <QtCore/QtPlugin>
 
@@ -50,6 +55,8 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
+
+    m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 }
 
 
@@ -80,6 +87,86 @@ TwitterAccount::sipPlugin()
         return m_twitterSipPlugin.data();
     }
     return m_twitterSipPlugin.data();
+}
+
+
+void
+TwitterAccount::authenticate()
+{
+    tDebug() << Q_FUNC_INFO << "credentials: " << m_credentials.keys();
+
+    if ( m_credentials[ "oauthtoken" ].toString().isEmpty() || m_credentials[ "oauthtokensecret" ].toString().isEmpty() )
+    {
+        qDebug() << "TwitterSipPlugin has empty Twitter credentials; not connecting";
+        return;
+    }
+
+    if ( refreshTwitterAuth() )
+    {
+        QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+        connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( connectAuthVerifyReply( const QTweetUser & ) ) );
+        credVerifier->verify();
+    }
+}
+
+
+void
+TwitterAccount::deauthenticate()
+{
+    if ( sipPlugin() )
+        sipPlugin()->disconnectPlugin();
+
+    m_isAuthenticated = false;
+    emit nowDeauthenticated();
+}
+
+
+
+bool
+TwitterAccount::refreshTwitterAuth()
+{
+    qDebug() << Q_FUNC_INFO << " begin";
+    if( !m_twitterAuth.isNull() )
+        delete m_twitterAuth.data();
+
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
+    qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
+    m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+
+    if( m_twitterAuth.isNull() )
+      return false;
+
+    m_twitterAuth.data()->setOAuthToken( m_credentials[ "oauthtoken" ].toString().toLatin1() );
+    m_twitterAuth.data()->setOAuthTokenSecret( m_credentials[ "oauthtokensecret" ].toString().toLatin1() );
+
+    return true;
+}
+
+
+void
+TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
+{
+    if ( user.id() == 0 )
+    {
+        qDebug() << "TwitterAccount could not authenticate to Twitter";
+        deauthenticate();
+    }
+    else
+    {
+        tDebug() << "TwitterAccount successfully authenticated to Twitter as user " << user.screenName();
+        m_configuration[ "screenname" ] = user.screenName();
+        sync();
+        emit nowAuthenticated( m_twitterAuth, user );
+    }
+}
+
+
+void
+TwitterAccount::refreshProxy()
+{
+    //FIXME: Could this cause a race condition if a client is threaded?
+    if ( !m_twitterAuth.isNull() )
+        m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
 }
 
 
