@@ -211,7 +211,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
         m_queries << query;*/
 
-        m_ids << trackid;
+        m_ids << fileid;
         added++;
     }
     qDebug() << "Inserted" << added << "tracks to database";
