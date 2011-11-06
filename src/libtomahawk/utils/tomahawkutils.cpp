@@ -719,4 +719,20 @@ quint64 infosystemRequestId()
 }
 
 
+static PrivateListeningMode s_privateListeningMode = PublicListening;
+
+PrivateListeningMode
+privateListeningMode()
+{
+    return s_privateListeningMode;
+}
+
+
+void
+setPrivateListeningMode( PrivateListeningMode mode )
+{
+    s_privateListeningMode = mode;
+}
+
+
 } // ns
