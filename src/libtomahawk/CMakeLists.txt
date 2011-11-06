@@ -18,6 +18,7 @@ set( libSources
     pipeline.cpp
 
     aclsystem.cpp
+    actioncollection.cpp
     artist.cpp
     album.cpp
     collection.cpp

@@ -32,6 +32,7 @@
 #include <QFileInfo>
 #include <QNetworkProxy>
 
+#include "actioncollection.h"
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
@@ -160,6 +161,8 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    new ActionCollection();
+    
     tDebug( LOGINFO ) << "Setting NAM.";
 #ifdef LIBLASTFM_FOUND
     TomahawkUtils::setNam( lastfm::nam() );
@@ -317,6 +320,8 @@ TomahawkApp::~TomahawkApp()
     delete AtticaManager::instance();
 #endif
 
+    delete ActionCollection::instance();
+    
     tLog() << "Finished shutdown.";
 }
 
