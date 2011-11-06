@@ -31,7 +31,7 @@
 #include "utils/tomahawkutils.h"
 
 #define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
-#define LOGFILE_SIZE 1024 * 512
+#define LOGFILE_SIZE 1024 * 256
 
 #define RELEASE_LEVEL_THRESHOLD 0
 #define DEBUG_LEVEL_THRESHOLD LOGEXTRA
