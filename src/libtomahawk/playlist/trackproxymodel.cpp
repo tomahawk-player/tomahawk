@@ -331,7 +331,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         albumpos1 = r->albumpos();
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
-        id1 = r->dbid();
+        id1 = r->trackId();
         size1 = r->size();
     }
     if ( q2->numResults() )
@@ -343,7 +343,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         albumpos2 = r->albumpos();
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
-        id2 = r->dbid();
+        id2 = r->trackId();
         size2 = r->size();
     }
 
