@@ -975,3 +975,16 @@ TomahawkSettings::setNowPlayingEnabled( bool enable )
 {
     setValue( "adium/enablenowplaying", enable );
 }
+
+TomahawkSettings::PrivateListeningMode
+TomahawkSettings::privateListeningMode() const
+{
+    return ( TomahawkSettings::PrivateListeningMode ) value( "privatelisteningmode", TomahawkSettings::PublicListening ).toInt();
+}
+
+
+void
+TomahawkSettings::setPrivateListeningMode( TomahawkSettings::PrivateListeningMode mode )
+{
+    setValue( "privatelisteningmode", mode );
+}

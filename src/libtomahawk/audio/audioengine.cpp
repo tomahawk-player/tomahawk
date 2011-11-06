@@ -474,7 +474,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             if ( TomahawkSettings::instance()->verboseNotifications() )
                     sendNowPlayingNotification();
             
-            if ( TomahawkUtils::privateListeningMode() != TomahawkUtils::FullyPrivate )
+            if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
                 Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -718,7 +718,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     m_lastTrack = m_currentTrack;
     if ( !m_lastTrack.isNull() )
     {
-        if ( TomahawkUtils::privateListeningMode() == TomahawkUtils::PublicListening )
+        if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

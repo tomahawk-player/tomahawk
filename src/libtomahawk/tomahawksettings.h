@@ -201,6 +201,15 @@ public:
     bool nowPlayingEnabled() const; // false by default
     void setNowPlayingEnabled( bool enable );
 
+    enum PrivateListeningMode
+    {
+        PublicListening,
+        NoLogPlayback,
+        FullyPrivate
+    };
+    PrivateListeningMode privateListeningMode() const;
+    void setPrivateListeningMode( PrivateListeningMode mode );
+    
 signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );

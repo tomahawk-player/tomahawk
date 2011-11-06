@@ -48,13 +48,6 @@ namespace TomahawkUtils
         MediaTypeTrack
     };
 
-    enum PrivateListeningMode
-    {
-        PublicListening,
-        NoLogPlayback,
-        FullyPrivate
-    };
-
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
     public:
@@ -119,9 +112,6 @@ namespace TomahawkUtils
     DLLEXPORT bool removeDirectory( const QString& dir );
 
     DLLEXPORT quint64 infosystemRequestId();
-
-    DLLEXPORT PrivateListeningMode privateListeningMode();
-    DLLEXPORT void setPrivateListeningMode( PrivateListeningMode mode );
 }
 
 #endif // TOMAHAWKUTILS_H
