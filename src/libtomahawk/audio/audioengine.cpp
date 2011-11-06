@@ -700,6 +700,7 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
     if ( !playlist )
     {
         m_playlist.clear();
+        emit playlistChanged( playlist );
         return;
     }
 

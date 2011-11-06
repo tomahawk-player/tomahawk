@@ -28,6 +28,7 @@
 #include <QSize>
 #include <QFileDialog>
 
+#include "actioncollection.h"
 #include "playlist.h"
 #include "viewmanager.h"
 #include "sourcesproxymodel.h"
@@ -80,8 +81,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
-    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( latchOff( Tomahawk::source_ptr ) ) );
 
     setItemDelegate( m_delegate );
 
@@ -141,7 +142,8 @@ SourceTreeView::setupMenus()
         }
     }
 
-    m_latchOnAction = m_latchMenu.addAction( tr( "&Listen Along" ) );
+    QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+    m_latchMenu.addAction( latchOnAction );
 
     if ( type == SourcesModel::Collection )
     {
@@ -151,10 +153,10 @@ SourceTreeView::setupMenus()
         {
             if ( m_latchManager->isLatched( source ) )
             {
-                m_latchOnAction->setText( tr( "&Catch Up" ) );
                 m_latchMenu.addSeparator();
-                m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
-                connect( m_latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
+                QAction *latchOffAction = ActionCollection::instance()->getAction( "latchOff" );
+                m_latchMenu.addAction( latchOffAction );
+                connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
             }
         }
     }
@@ -189,7 +191,7 @@ SourceTreeView::setupMenus()
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( m_latchOnAction,        SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ) );
+    connect( latchOnAction,          SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ) );
 }
 
 
@@ -342,6 +344,7 @@ SourceTreeView::addToLocal()
 void
 SourceTreeView::latchOnOrCatchUp()
 {
+    disconnect( this, SLOT( latchOnOrCatchUp() ) );
     if ( !m_contextMenuIndex.isValid() )
         return;
 
@@ -352,16 +355,14 @@ SourceTreeView::latchOnOrCatchUp()
     CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     source_ptr source = item->source();
 
-    if ( m_latchManager->isLatched( source ) )
-        emit catchUpRequest();
-    else
-        emit latchRequest( source );
+    latchOnOrCatchUp( source );
 }
 
 
 void
 SourceTreeView::latchOff()
 {
+    disconnect( this, SLOT( latchOff() ) );
     qDebug() << Q_FUNC_INFO;
     if ( !m_contextMenuIndex.isValid() )
         return;
@@ -372,9 +373,27 @@ SourceTreeView::latchOff()
 
     const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
+    
+    latchOff( source );
+}
 
+
+void
+SourceTreeView::latchOnOrCatchUp( const Tomahawk::source_ptr& source )
+{
+    if ( m_latchManager->isLatched( source ) )
+        emit catchUpRequest();
+    else
+        emit latchRequest( source );
+}
+
+
+void
+SourceTreeView::latchOff( const Tomahawk::source_ptr& source )
+{
     emit unlatchRequest( source );
 }
+
 
 
 void

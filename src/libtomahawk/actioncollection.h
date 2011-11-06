@@ -24,13 +24,14 @@
 #include <QAction>
 
 
-class DLLEXPORT ActionCollection
+class DLLEXPORT ActionCollection : public QObject
 {
-
+    Q_OBJECT
+    
 public:
     static ActionCollection* instance();
 
-    ActionCollection();
+    ActionCollection( QObject *parent);
     ~ActionCollection();
 
     void initActions();

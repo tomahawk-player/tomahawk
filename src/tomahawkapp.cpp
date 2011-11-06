@@ -161,7 +161,7 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    new ActionCollection();
+    new ActionCollection( this );
     
     tDebug( LOGINFO ) << "Setting NAM.";
 #ifdef LIBLASTFM_FOUND
@@ -319,8 +319,6 @@ TomahawkApp::~TomahawkApp()
 #ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
 #endif
-
-    delete ActionCollection::instance();
     
     tLog() << "Finished shutdown.";
 }

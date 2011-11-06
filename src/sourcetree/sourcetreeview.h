@@ -72,7 +72,9 @@ private slots:
 
     void latchOnOrCatchUp();
     void latchOff();
-
+    void latchOnOrCatchUp( const Tomahawk::source_ptr& source );
+    void latchOff( const Tomahawk::source_ptr& source );
+    
     void onCustomContextMenu( const QPoint& pos );
 
 protected:

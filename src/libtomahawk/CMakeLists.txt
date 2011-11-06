@@ -249,6 +249,7 @@ set( libHeaders
     functimeout.h
 
     aclsystem.h
+    actioncollection.h
     collection.h
     query.h
     resolver.h

@@ -25,7 +25,8 @@ ActionCollection* ActionCollection::instance()
 }
 
 
-ActionCollection::ActionCollection()
+ActionCollection::ActionCollection( QObject *parent )
+    : QObject( parent )
 {
     s_instance = this;
     initActions();
@@ -35,7 +36,8 @@ ActionCollection::ActionCollection()
 void
 ActionCollection::initActions()
 {
-
+    m_actionCollection[ "latchOn" ] = new QAction( tr( "&Listen Along" ), this );
+    m_actionCollection[ "latchOff" ] = new QAction( tr( "&Stop Listening Along" ), this );
 }
 
 
