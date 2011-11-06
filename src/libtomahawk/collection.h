@@ -78,8 +78,8 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
-    void tracksAdded( const QList<unsigned int>& ids );
-    void tracksRemoved( const QList<unsigned int>& ids );
+    void tracksAdded( const QList<unsigned int>& fileids );
+    void tracksRemoved( const QList<unsigned int>& fileids );
 
     void playlistsAdded( const QList<Tomahawk::playlist_ptr>& );
     void playlistsDeleted( const QList<Tomahawk::playlist_ptr>& );
@@ -100,8 +100,8 @@ public slots:
     void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
     void setStations( const QList< Tomahawk::dynplaylist_ptr >& stations );
 
-    void setTracks( const QList<unsigned int>& ids );
-    void delTracks( const QList<unsigned int>& ids );
+    void setTracks( const QList<unsigned int>& fileids );
+    void delTracks( const QList<unsigned int>& fileids );
 
 protected:
     QString m_name;

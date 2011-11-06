@@ -25,7 +25,7 @@
 #include "bufferiodevice.h"
 #include "network/controlconnection.h"
 #include "network/servent.h"
-#include "database/databasecommand_loadfile.h"
+#include "database/databasecommand_loadfiles.h"
 #include "database/database.h"
 #include "sourcelist.h"
 #include "utils/logger.h"
@@ -158,7 +158,7 @@ StreamConnection::setup()
 
     qDebug() << "in TX mode, fid:" << m_fid;
 
-    DatabaseCommand_LoadFile* cmd = new DatabaseCommand_LoadFile( m_fid );
+    DatabaseCommand_LoadFiles* cmd = new DatabaseCommand_LoadFiles( m_fid.toUInt() );
     connect( cmd, SIGNAL( result( Tomahawk::result_ptr ) ), SLOT( startSending( Tomahawk::result_ptr ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

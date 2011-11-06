@@ -24,7 +24,6 @@
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"
-#include "database/databasecommand_loadfile.h"
 #include "database/databasecommand_loadsocialactions.h"
 
 #include "utils/logger.h"
