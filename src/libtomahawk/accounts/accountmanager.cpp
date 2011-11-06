@@ -187,8 +187,8 @@ AccountManager::addAccountPlugin( Account* account )
 
     foreach( AccountType type, account->types() )
         m_accountsByAccountType[ type ].append( account );
-    //TODO:?
-    //emit pluginAdded( account );
+
+    emit accountAdded( account );
 }
 
 

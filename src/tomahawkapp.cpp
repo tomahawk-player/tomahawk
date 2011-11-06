@@ -505,7 +505,7 @@ void
 TomahawkApp::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->getAccounts() )
+    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->accounts() )
     {
         tDebug() << Q_FUNC_INFO << "testing account with name " << account->accountServiceName();
         if ( account->configurationWidget() && account->configuration().isEmpty() )

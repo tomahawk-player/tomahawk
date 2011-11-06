@@ -61,10 +61,10 @@ set( libSources
 
     accounts/accountmanager.cpp
     accounts/account.cpp
+    accounts/accountmodel.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
-    sip/SipModel.cpp
     sip/sipinfo.cpp
 
     audio/audioengine.cpp
@@ -286,12 +286,12 @@ set( libHeaders
 
     accounts/account.h
     accounts/accountmanager.h
+    accounts/accountmodel.h
 
     EchonestCatalogSynchronizer.h
 
     sip/SipPlugin.h
     sip/SipHandler.h
-    sip/SipModel.h
     sip/sipinfo.h
 
     audio/audioengine.h
