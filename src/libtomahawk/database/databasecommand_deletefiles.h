@@ -74,7 +74,7 @@ public:
 
 signals:
     void done( const QStringList&, const Tomahawk::collection_ptr& );
-    void notify( const QStringList& );
+    void notify( const QList<unsigned int>& ids );
 
 private:
     QStringList m_files;

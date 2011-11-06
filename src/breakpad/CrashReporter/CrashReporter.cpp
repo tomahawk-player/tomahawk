@@ -25,6 +25,9 @@
 #include <QDateTime>
 #include <QHttp>
 
+#include "utils/tomahawkutils.h"
+
+#define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define RESPATH ":/data/"
 
 
@@ -40,7 +43,6 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressLabel->setPalette( Qt::gray );
 
   #ifdef Q_WS_MAC
-    // macify++
     QFont f = ui.bottomLabel->font();
     f.setPointSize( 10 );
     ui.bottomLabel->setFont( f );
@@ -55,12 +57,14 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.bottomLabel->setIndent( 1 );
 
     // adjust the spacer since we adjusted the spacing above
-    for (int x = 0; x < ui.vboxLayout->count(); ++x)
-        if (QSpacerItem* spacer = ui.vboxLayout->itemAt( x )->spacerItem())
+    for ( int x = 0; x < ui.vboxLayout->count(); ++x )
+    {
+        if ( QSpacerItem* spacer = ui.vboxLayout->itemAt( x )->spacerItem() )
         {
             spacer->changeSize( 6, 2, QSizePolicy::Minimum, QSizePolicy::Fixed );
             break;
         }
+    }
   #endif //Q_WS_MAC
 
     m_http = new QHttp( "oops.tomahawk-player.org", 80, this );
@@ -72,9 +76,9 @@ CrashReporter::CrashReporter( const QStringList& args )
     m_minidump = m_dir + '/' + args.value( 2 ) + ".dmp";
     m_product_name = args.value( 3 );
 
-    QTimer::singleShot( 0, this, SLOT(send()) );
-
     setFixedSize( sizeHint() );
+
+    QTimer::singleShot( 0, this, SLOT( send() ) );
 }
 
 
@@ -94,7 +98,7 @@ CrashReporter::send()
 
     // socorro expects a 10 digit build id
     QRegExp rx( "(\\d+\\.\\d+\\.\\d+).(\\d+)" );
-    rx.exactMatch( "0.2.99" );
+    rx.exactMatch( TomahawkUtils::appFriendlyVersion() );
     QString const version = rx.cap( 1 );
     QString const buildId = rx.cap( 2 ).leftJustified( 10, '0' );
 
@@ -103,7 +107,7 @@ CrashReporter::send()
     QList<Pair> pairs;
     pairs << Pair( "BuildID", buildId.toUtf8() )
           << Pair( "ProductName", m_product_name.toUtf8() )
-          << Pair( "Version", version.toUtf8() )
+          << Pair( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() )
           << Pair( "Vendor", "Tomahawk" )
           << Pair( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
 
@@ -126,14 +130,13 @@ CrashReporter::send()
 
     // add logfile
     body += "--thkboundary\r\n";
-    body += "Content-Disposition: form-data; name=\"upload_file_containerlog\"; filename=\"container.log\"\r\n";
+    body += "Content-Disposition: form-data; name=\"upload_file_tomahawklog\"; filename=\"Tomahawk.log\"\r\n";
     body += "Content-Type: application/x-gzip\r\n";
     body += "\r\n";
-//    body += qCompress( contents( "Tomahawk.log" ) );
+    body += qCompress( contents( LOGFILE ) );
     body += "\r\n";
     body += "--thkboundary--\r\n";
 
-//////
     QHttpRequestHeader header( "POST", "/addreport.php" );
     header.setContentType( "multipart/form-data; boundary=thkboundary" );
     header.setValue( "HOST", "oops.tomahawk-player.org" );
@@ -179,5 +182,5 @@ CrashReporter::onFail( int error, const QString& errorString )
 {
     ui.button->setText( tr( "Close" ) );
     ui.progressLabel->setText( tr( "Failed to send crash info." ) );
-    qDebug() << "Error: " << error << errorString;
+    qDebug() << "Error:" << error << errorString;
 }

@@ -1,58 +1,53 @@
 Version 0.3.0:
-    * Fixed bug where we would download http:// tracks twice.
     * Make artist names in the album view clickable.
     * Don't start playing if a tomahawk:// link was clicked while Tomahawk
       is paused.
     * Make artist name clickable in header of Album pages.
-    * Fixed adding social actions such as loved tracks from other sources.
-    * Added a drop shadow to cover images, and put CD placeholder in jewel
-      case.
+    * Added a drop shadow to cover images, and put placeholder in jewel case.
     * Added shuffle and repeat support to tree view.
     * Draw a speaker next to the currently playing playlist.
     * Refresh station previews whenever a filter is changed.
     * Support and show official releases on album and track pages.
     * Filter out duplicates from station previews and upcoming tracks.
-    * Resolve lists top-down.
     * Added YouTube resolver.
     * Fixed bug where going offline then online would not re-connect to many
       peers.
-    * Added support for auto-updating live xspf playlists. 
-    * Don't show an age of 41 for tracks that have no age information.
-    * Show config UI for resolvers that have them as so on as you add the resolver.
+    * Added support for auto-updating live XSPF playlists. 
+    * Don't show an age of 41 years for tracks that have no age information.
+    * Show config UI for resolvers that have them as soon as you add them.
     * Add support for Echo Nest Personal Catalogs and User Radio. Synchronize
       your catalog with The Echo Nest and enable personal recommendations
       from you and your friends.
     * Added support for Grooveshark resolver (requires Grooveshark Anywhere).
-    * Fixed re-resolving when resolvers or sources go offline.
+    * Fixed re-resolving when resolvers or sources go off- / online.
     * Correctly sort recently played tracks on the Dashboard.
     * Show a Lion full-screen toggle button if running on Lion.
-    * Display list of who is currently listening along to you.
+    * Show a list of users who are currently listening along to you.
     * Show headphone icon in source item to allow users to listen along; paint
-      headphones red on a source if the user is listening along to it.
+      headphones red on a source if you are currently listening along to it.
     * Added new job status view in the bottom of the source list that displays
       current jobs such as resolving, parsing playlists, and loading from
       database.
     * Parse and convert a Spotify playlist url when dropped anywhere on the
-      sidebar
+      sidebar.
     * Convert resolvers to use asynchronous calls to avoid blocking Tomahawk's
       UI, greatly increasing responsiveness of Tomahawk while resolving.
     * Fixed no playlists overlay not disappearing when playlists were added.
     * Add support for parsing itunes track, artist and album links.
     * Fixed crash when syncing playlists with peers.
-    * Add support for browsing, downloading and rating resolvers
-      from inside Tomahawk directly.
+    * Add support for browsing, downloading and rating resolvers from within
+      Tomahawk directly.
     * Support multi-folder selection and scanning.
-    * Actually remove deleted files from the collection.
     * Fixed handling of special characters in tomahawk:// links
     * Improve sidebar performance by caching pixmaps and shrinking them.
     * Send updated playlists to peers when tracks are moved/copied.
-    * Remove splitter handles in sidebar
-    * Fixed Tomahawk preventing system shutdown / logut.
+    * Remove splitter handles in sidebar.
+    * Fixed Tomahawk preventing system shutdown / logout.
     * Ignore leading 'The' when sorting artists.
     * Added Charts page, which shows various sources' top hits & artists.
     * The Collection tree-views can now be filtered.
     * Fixed crash when pressing enter in an empty playlist.
-    * Moved the song queue below to the left, below the sidebar.
+    * Moved the song queue to the bottom of the sidebar.
     * Added Footnotes, a contextual view that you can slide it.
     * Show recently added playlists in dashboard rather than recently opened
       playlists.
