@@ -155,8 +155,6 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 
-    registerMetaTypes();
-
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
@@ -359,11 +357,12 @@ void
 TomahawkApp::registerMetaTypes()
 {
     qRegisterMetaType< QSharedPointer<DatabaseCommand> >("QSharedPointer<DatabaseCommand>");
-    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< DBSyncConnection::State >("DBSyncConnection::State");
     qRegisterMetaType< msg_ptr >("msg_ptr");
     qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
+    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< QList<QString> >("QList<QString>");
+    qRegisterMetaType< QList<uint> >("QList<uint>");
     qRegisterMetaType< Connection* >("Connection*");
     qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
