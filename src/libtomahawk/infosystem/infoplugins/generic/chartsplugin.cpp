@@ -34,8 +34,8 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-#define CHART_URL "http://charts.tomahawk-player.org:10080/"
-//#define CHART_URL "http://localhost:8080/"
+//#define CHART_URL "http://charts.tomahawk-player.org:10080/"
+#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
@@ -49,7 +49,7 @@ ChartsPlugin::ChartsPlugin()
 
 
     /// Add resources here
-    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted";
+    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 
@@ -327,6 +327,7 @@ ChartsPlugin::chartTypes()
                 if( source == "itunes" ){
                     chartName = "iTunes";
                 }
+
                 if( source == "wearehunted" ){
                     chartName = "WeAreHunted";
                 }
@@ -350,7 +351,10 @@ ChartsPlugin::chartTypes()
 
                     InfoStringHash c;
                     c[ "id" ] = chart.value( "id" ).toString();
-                    c[ "label" ] = chart.value( "name" ).toString();
+                    if( chart.value( "genre").isValid() )
+                        c[ "label" ] = chart.value( "genre" ).toString();
+                    else
+                        c[ "label" ] = chart.value( "name" ).toString();
                     if ( isDefault )
                         c[ "default" ] = "true";
 
