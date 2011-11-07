@@ -489,11 +489,13 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+
 bool
 TomahawkSettings::showOfflineSources() const
 {
     return value( "collection/sources/showoffline", false ).toBool();
 }
+
 
 void
 TomahawkSettings::setShowOfflineSources( bool show )
@@ -501,19 +503,20 @@ TomahawkSettings::setShowOfflineSources( bool show )
     setValue( "collection/sources/showoffline", show );
 }
 
+
 bool
 TomahawkSettings::enableEchonestCatalogs() const
 {
     return value( "collection/enable_catalogs", false ).toBool();
 }
 
+
 void
 TomahawkSettings::setEnableEchonestCatalogs( bool enable )
 {
     setValue( "collection/enable_catalogs", enable );
-
-    emit changed();
 }
+
 
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
