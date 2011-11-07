@@ -103,20 +103,6 @@ hypemPlugin::~hypemPlugin()
 
 
 void
-hypemPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    tDebug() << "hypemPlugin: namChangedSLot";
-    qDebug() << Q_FUNC_INFO;
-    if( !nam )
-        return;
-
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
-
-
-}
-
-
-void
 hypemPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     emit info( requestData, QVariant() );
@@ -207,14 +193,6 @@ hypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData reque
 void
 hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !m_nam.data() )
-    {
-        tLog() << "Have a null QNAM, uh oh";
-        emit info( requestData, QVariant() );
-        return;
-    }
-
-
     switch ( requestData.type )
     {
         case InfoChart:
@@ -224,7 +202,7 @@ hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
             QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg(HYPEM_END_URL) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;

@@ -160,11 +160,6 @@ AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
     m_pauseTimer->stop();
 }
 
-void
-AdiumPlugin::namChangedSlot( QNetworkAccessManager* nam )
-{
-    Q_UNUSED( nam )
-}
 
 /** Audio state slots */
 void

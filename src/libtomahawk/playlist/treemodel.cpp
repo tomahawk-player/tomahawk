@@ -559,7 +559,7 @@ TreeModel::addAllCollections()
     QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
     foreach ( const source_ptr& source, sources )
     {
-        connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+        connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
     }
 
     m_title = tr( "All Artists" );
@@ -668,7 +668,7 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
     if ( !collection->source()->avatar().isNull() )
         setIcon( collection->source()->avatar() );
@@ -708,7 +708,7 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
 void
 TreeModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
-    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 }
 
 

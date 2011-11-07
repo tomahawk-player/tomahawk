@@ -38,9 +38,6 @@ public:
     MusicBrainzPlugin();
     virtual ~MusicBrainzPlugin();
 
-public slots:
-    void namChangedSlot( QNetworkAccessManager *nam );
-
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
@@ -63,8 +60,6 @@ private slots:
 
 private:
     bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
-
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

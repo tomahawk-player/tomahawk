@@ -54,8 +54,6 @@ signals:
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
     
-    void namChanged( QNetworkAccessManager* );
-
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -63,8 +61,6 @@ public slots:
 
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     
-    void newNam();
-
 private slots:
     void checkTimeoutsTimerFired();
     
@@ -83,8 +79,6 @@ private:
 
     QMap< InfoType, QList< InfoPluginPtr > > m_infoGetMap;
     QMap< InfoType, QList< InfoPluginPtr > > m_infoPushMap;
-
-    QWeakPointer< QNetworkAccessManager> m_nam;
 
     QTimer m_checkTimeoutsTimer;
 };

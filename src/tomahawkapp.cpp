@@ -156,18 +156,18 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 
-    registerMetaTypes();
-
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
     new ActionCollection( this );
     
     tDebug( LOGINFO ) << "Setting NAM.";
-#ifdef LIBLASTFM_FOUND
-    TomahawkUtils::setNam( lastfm::nam() );
-#else
+#ifndef LIBLASTFM_FOUND
     TomahawkUtils::setNam( new QNetworkAccessManager() );
+#else
+    TomahawkUtils::setNam( lastfm::nam() );
+    //Ensure that liblastfm2 won't delete the nam out from under us, even though they created it
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 #endif
 
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -183,6 +183,7 @@ TomahawkApp::init()
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
 
     TomahawkUtils::setProxyFactory( proxyFactory );
+    
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
@@ -362,11 +363,12 @@ void
 TomahawkApp::registerMetaTypes()
 {
     qRegisterMetaType< QSharedPointer<DatabaseCommand> >("QSharedPointer<DatabaseCommand>");
-    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< DBSyncConnection::State >("DBSyncConnection::State");
     qRegisterMetaType< msg_ptr >("msg_ptr");
     qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
+    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< QList<QString> >("QList<QString>");
+    qRegisterMetaType< QList<uint> >("QList<uint>");
     qRegisterMetaType< Connection* >("Connection*");
     qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
@@ -505,6 +507,7 @@ TomahawkApp::initServent()
     }
 }
 
+
 void
 TomahawkApp::initSIP()
 {
@@ -520,6 +523,7 @@ TomahawkApp::initSIP()
         SipHandler::instance()->loadFromConfig( true );
     }
 }
+
 
 void
 TomahawkApp::spotifyApiCheckFinished()
@@ -546,7 +550,6 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-    activate();
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else if ( url.contains( "open.spotify.com" ) || url.contains( "spotify:track" ) )
@@ -564,7 +567,8 @@ TomahawkApp::loadUrl( const QString& url )
             l->load( QUrl::fromUserInput( url ) );
 
             return true;
-        } else if ( info.suffix() == "jspf" )
+        }
+        else if ( info.suffix() == "jspf" )
         {
             JSPFLoader* l = new JSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading j-spiff:" << url;
@@ -583,10 +587,9 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
 
+    activate();
     if ( instance.arguments.size() < 2 )
-    {
         return;
-    }
 
     QString arg1 = instance.arguments[ 1 ];
     loadUrl( arg1 );

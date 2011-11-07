@@ -61,9 +61,6 @@ protected slots:
         Q_UNUSED( requestData );
     }
 
-public slots:
-    void namChangedSlot( QNetworkAccessManager *nam );
-
 private:
     void getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item = QString() );
     void getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData );

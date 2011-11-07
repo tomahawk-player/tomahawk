@@ -24,7 +24,6 @@
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"
-#include "database/databasecommand_loadfile.h"
 #include "database/databasecommand_loadsocialactions.h"
 
 #include "utils/logger.h"
@@ -61,7 +60,8 @@ Result::Result( const QString& url )
     , m_modtime( 0 )
     , m_year( 0 )
     , m_score( 0 )
-    , m_id( 0 )
+    , m_trackId( 0 )
+    , m_fileId( 0 )
 {
 }
 

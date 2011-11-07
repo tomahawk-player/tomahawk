@@ -95,34 +95,6 @@ LastFmPlugin::~LastFmPlugin()
 
 
 void
-LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    if ( !nam )
-        return;
-
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
-    if ( !oldProxyFactory )
-    {
-        tLog() << Q_FUNC_INFO << "Could not get old proxyFactory!";
-        return;
-    }
-
-    //WARNING: there's a chance liblastfm2 will clobber the application proxy factory it if it constructs a nam due to the below call
-    //but it is unsafe to re-set it here
-    QNetworkAccessManager* currNam = lastfm::nam();
-
-    currNam->setConfiguration( nam->configuration() );
-    currNam->setNetworkAccessible( nam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    QNetworkProxy newProxy( oldProxyFactory->proxy() );
-    newProxyFactory->setProxy( newProxy );
-    currNam->setProxyFactory( newProxyFactory );
-    settingsChanged(); // to get the scrobbler set up
-}
-
-
-void
 LastFmPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     emit info( requestData, QVariant() );

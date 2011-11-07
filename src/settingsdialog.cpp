@@ -415,21 +415,9 @@ SettingsDialog::testLastFmLogin()
     query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
     query[ "authToken" ] = authToken;
 
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
-    QNetworkAccessManager* nam = TomahawkUtils::nam();
-
-    //WARNING: there's a chance liblastfm2 will clobber the application proxy factory it if it constructs a nam due to the below call
-    //but it is unsafe to re-set it here
-    QNetworkAccessManager* currNam = lastfm::nam();
-
-    currNam->setConfiguration( nam->configuration() );
-    currNam->setNetworkAccessible( nam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    QNetworkProxy newProxy( oldProxyFactory->proxy() );
-    newProxyFactory->setProxy( newProxy );
-    currNam->setProxyFactory( newProxyFactory );
-
+    // ensure they have up-to-date settings
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
+    
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );

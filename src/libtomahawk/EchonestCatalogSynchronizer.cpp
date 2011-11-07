@@ -22,6 +22,7 @@
 #include "database/database.h"
 #include "database/databasecommand_genericselect.h"
 #include "database/databasecommand_setcollectionattributes.h"
+#include "database/databasecommand_loadfiles.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "query.h"
@@ -41,8 +42,8 @@ EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject *parent )
     qRegisterMetaType<QList<QStringList> >("QList<QStringList>");
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), this, SLOT( checkSettingsChanged() ) );
-    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
-    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksRemoved( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksAdded( QList<unsigned int> ) ), this, SLOT( tracksAdded( QList<unsigned int> ) ), Qt::QueuedConnection );
+    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksRemoved( QList<unsigned int> ) ), this, SLOT( tracksRemoved( QList<unsigned int> ) ), Qt::QueuedConnection );
 
     const QByteArray artist = TomahawkSettings::instance()->value( "collection/artistCatalog" ).toByteArray();
     const QByteArray song = TomahawkSettings::instance()->value( "collection/songCatalog" ).toByteArray();
@@ -81,7 +82,7 @@ EchonestCatalogSynchronizer::checkSettingsChanged()
     } else if ( !TomahawkSettings::instance()->enableEchonestCatalogs() && m_syncing )
     {
 
-        tDebug() << "FOund echonest change, doing catalog deletes!";
+        tDebug() << "Found echonest change, doing catalog deletes!";
         // delete all track nums and catalog ids from our peers
         {
             DatabaseCommand_SetTrackAttributes* cmd = new DatabaseCommand_SetTrackAttributes( DatabaseCommand_SetTrackAttributes::EchonestCatalogId );
@@ -123,7 +124,9 @@ EchonestCatalogSynchronizer::catalogDeleted()
         // If we didn't throw, no errors, so clear our config
         TomahawkSettings::instance()->setValue( toDel, QString() );
     } catch ( const Echonest::ParseError& e )
-    {}
+    {
+        tLog() << "Error in libechonest parsing catalog delete:" << e.what();
+    }
 }
 
 
@@ -293,60 +296,60 @@ EchonestCatalogSynchronizer::checkTicket()
 }
 
 void
-EchonestCatalogSynchronizer::tracksAdded( const QList< query_ptr >& tracks )
+EchonestCatalogSynchronizer::tracksAdded( const QList< unsigned int >& tracks )
 {
     if ( !m_syncing || m_songCatalog.id().isEmpty() || tracks.isEmpty() )
         return;
 
+    qDebug() << Q_FUNC_INFO << "Got tracks added from db, fetching metadata" << tracks;
+    // Get the result_ptrs from the tracks
+    DatabaseCommand_LoadFiles* cmd = new DatabaseCommand_LoadFiles( tracks );
+    connect( cmd, SIGNAL( results( QList<Tomahawk::result_ptr> ) ), this, SLOT( loadedResults( QList<Tomahawk::result_ptr> ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
+
+
+void
+EchonestCatalogSynchronizer::loadedResults( const QList<result_ptr>& results )
+{
     QList< QStringList > rawTracks;
-    foreach( const query_ptr& track, tracks )
+    qDebug() << Q_FUNC_INFO << "Got track metadata..." << results.size();
+
+    foreach( const result_ptr& result, results )
     {
-        // DatabaseCommand_AddFiles sets the track id on the result
-        int id = -1;
-        if ( track->results().size() == 1 )
-            id = track->results().first()->dbid();
-        else
-        {
-            tLog() << Q_FUNC_INFO << "No dbid for track we got in tracksAdded()!";
+        if ( result.isNull() )
             continue;
-        }
-        rawTracks << ( QStringList() << QString::number( id ) << track->track() << track->artist() << track->album() );
+
+        qDebug() << "Metadata for item:" << result->fileId();
+
+        const QString artist = result->artist().isNull() ? QString() : result->artist()->name();
+        const QString album = result->album().isNull() ? QString() : result->album()->name();
+        rawTracks << ( QStringList() << QString::number( result->fileId() ) << result->track() << artist << album );
     }
     rawTracksAdd( rawTracks );
 }
 
 void
-EchonestCatalogSynchronizer::tracksRemoved( const QList< query_ptr >& tracks )
+EchonestCatalogSynchronizer::tracksRemoved( const QList< unsigned int >& trackIds )
 {
 
-    if ( !m_syncing || m_songCatalog.id().isEmpty() || tracks.isEmpty() )
+    if ( !m_syncing || m_songCatalog.id().isEmpty() || trackIds.isEmpty() )
         return;
 
 
     Echonest::CatalogUpdateEntries entries;
-    entries.reserve( tracks.size() );
+    entries.reserve( trackIds.size() );
 
-    foreach ( const query_ptr& q, tracks )
+    foreach ( unsigned int id, trackIds )
     {
-        QByteArray itemId;
-        if ( q->results().size() > 0 )
-        {
-            // Should always be the case, should have the local result from the db that we are deleting!
-            itemId = QString::number( q->results().first()->dbid() ).toLatin1();
-        }
-        else
-        {
-            tLog() << "Got deleted query_ptr with no local result! Wtf!" << q->track() << q->artist() << q->results();
-            continue;
-        }
-
-        tDebug() << "Deleting item with id:" << itemId;
+        tDebug() << "Deleting item with id:" << id;
         Echonest::CatalogUpdateEntry e( Echonest::CatalogTypes::Delete );
-        e.setItemId( itemId );
+        e.setItemId( QString::number( id ).toLatin1() );
         entries.append( e );
     }
 
-    m_songCatalog.update( entries );
+    QNetworkReply* reply = m_songCatalog.update( entries );
+    connect( reply, SIGNAL( finished() ), this, SLOT( songUpdateFinished() ) );
 }
 
 QByteArray

@@ -56,7 +56,6 @@ DatabaseCommand_AddFiles::files() const
 void
 DatabaseCommand_AddFiles::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( source().isNull() || source()->collection().isNull() )
     {
         qDebug() << "Source has gone offline, not emitting to GUI.";
@@ -67,13 +66,13 @@ DatabaseCommand_AddFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr> ) ),
-             coll, SLOT( setTracks( QList<Tomahawk::query_ptr> ) ),
+    connect( this, SIGNAL( notify( QList<unsigned int> ) ),
+             coll, SLOT( setTracks( QList<unsigned int> ) ),
              Qt::QueuedConnection );
 
-    emit notify( m_queries );
+    emit notify( m_ids );
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
     {
         Servent::instance()->triggerDBSync();
 
@@ -185,7 +184,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         query_trackattr.bindValue( 2, year );
         query_trackattr.exec();
 
-        QVariantMap attr;
+/*        QVariantMap attr;
         Tomahawk::query_ptr query = Tomahawk::Query::get( artist, track, album );
         attr["releaseyear"] = m.value( "year" );
 
@@ -210,12 +209,13 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         results << result;
         query->addResults( results );
 
-        m_queries << query;
+        m_queries << query;*/
+
+        m_ids << fileid;
         added++;
     }
     qDebug() << "Inserted" << added << "tracks to database";
 
-    // TODO building the index could be a separate job, outside this transaction
     if ( added )
         source()->updateIndexWhenSynced();
 

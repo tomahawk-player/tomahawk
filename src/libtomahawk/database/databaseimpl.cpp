@@ -249,9 +249,10 @@ DatabaseImpl::file( int fid )
         r->setArtist( artist );
         r->setAlbum( album );
         r->setTrack( query.value( 12 ).toString() );
-        r->setId( query.value( 9 ).toUInt() );
+        r->setTrackId( query.value( 9 ).toUInt() );
         r->setCollection( s->collection() );
         r->setScore( 1.0 );
+        r->setFileId( fid );
     }
 
     return r;
@@ -608,7 +609,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setTrack( query.value( 12 ).toString() );
         res->setAlbumPos( query.value( 14 ).toUInt() );
         res->setRID( uuid() );
-        res->setId( query.value( 9 ).toUInt() );
+        res->setTrackId( query.value( 9 ).toUInt() );
         res->setCollection( s->collection() );
         res->setYear( query.value( 17 ).toUInt() );
     }

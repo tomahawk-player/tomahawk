@@ -68,7 +68,6 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 
     QList<playlist_ptr> toadd;
     toadd << p;
-//    qDebug() << "Inserted playlist with guid:" << p->guid();
     m_playlists.insert( p->guid(), p );
 
 /*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
@@ -83,7 +82,6 @@ Collection::addAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 {
     QList<dynplaylist_ptr> toadd;
     toadd << p;
-//    qDebug() << "Inserted dynamic playlist with guid:" << p->guid();
     m_autoplaylists.insert( p->guid(), p );
 
 /*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
@@ -98,7 +96,6 @@ Collection::addStation( const dynplaylist_ptr& s )
 {
     QList<dynplaylist_ptr> toadd;
     toadd << s;
-//    qDebug() << "Inserted station with guid:" << s->guid();
     m_stations.insert( s->guid(), s );
 
 /*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
@@ -167,7 +164,6 @@ Collection::autoPlaylist( const QString& guid )
 dynplaylist_ptr
 Collection::station( const QString& guid )
 {
-
     return m_stations.value( guid, dynplaylist_ptr() );
 }
 
@@ -175,7 +171,6 @@ Collection::station( const QString& guid )
 void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
-//    qDebug() << Q_FUNC_INFO << plists.count();
     foreach ( const playlist_ptr& p, plists )
     {
 //        qDebug() << "Batch inserting playlist:" << p->guid();
@@ -190,8 +185,6 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 void
 Collection::setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
-//    qDebug() << Q_FUNC_INFO << plists.count();
-
     foreach ( const dynplaylist_ptr& p, plists )
     {
 //        qDebug() << "Batch inserting dynamic playlist:" << p->guid();
@@ -204,8 +197,6 @@ Collection::setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 void
 Collection::setStations( const QList< dynplaylist_ptr >& stations )
 {
-//    qDebug() << Q_FUNC_INFO << stations.count();
-
     foreach ( const dynplaylist_ptr& s, stations )
     {
 //        qDebug() << "Batch inserting station:" << s->guid();
@@ -216,56 +207,29 @@ Collection::setStations( const QList< dynplaylist_ptr >& stations )
 
 
 void
-Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
+Collection::setTracks( const QList<unsigned int>& ids )
 {
-//    qDebug() << Q_FUNC_INFO << tracks.count() << name();
+    qDebug() << Q_FUNC_INFO << ids.count() << name();
 
-    emit tracksAdded( tracks );
+    emit tracksAdded( ids );
     emit changed();
 }
 
 
 void
-Collection::delTracks( const QStringList& files )
+Collection::delTracks( const QList<unsigned int>& ids )
 {
-    qDebug() << Q_FUNC_INFO << files.count() << name();
+    qDebug() << Q_FUNC_INFO << ids.count() << name();
+
+    emit tracksRemoved( ids );
     emit changed();
-
-/*    QList<Tomahawk::query_ptr> tracks;
-    int i = 0;
-    foreach ( const query_ptr& query, m_tracks )
-    {
-        foreach ( const QString& file, files )
-        {
-            bool found = false;
-            foreach ( const result_ptr& result, query->results() )
-            {
-                if ( file == result->url() )
-                {
-//                    qDebug() << Q_FUNC_INFO << "Found deleted result:" << file;
-                    tracks << query;
-                    m_tracks.removeAt( i );
-                    i--;
-                    found = true;
-                    break;
-                }
-            }
-            if ( found )
-                break;
-        }
-
-        i++;
-    }
-
-    tDebug() << "Emitting tracks removed:" << tracks.size();
-    emit tracksRemoved( tracks );*/
 }
 
 
 void
 Collection::moveAutoToStation( const QString& guid )
 {
-    if( m_autoplaylists.contains( guid ) )
+    if ( m_autoplaylists.contains( guid ) )
         m_stations.insert( guid, m_autoplaylists.take( guid ) );
 }
 
@@ -273,6 +237,6 @@ Collection::moveAutoToStation( const QString& guid )
 void
 Collection::moveStationToAuto( const QString& guid )
 {
-    if( m_stations.contains( guid ) )
+    if ( m_stations.contains( guid ) )
         m_autoplaylists.insert( guid, m_stations.take( guid ) );
 }

@@ -47,26 +47,7 @@ SpotifyPlugin::SpotifyPlugin()
 
     m_supportedGetTypes << InfoChart << InfoChartCapabilities;
 
-}
-
-
-SpotifyPlugin::~SpotifyPlugin()
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
-
-void
-SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    tDebug() << "SpotifyPlugin: namChangedSLot";
-    qDebug() << Q_FUNC_INFO;
-    if( !nam )
-        return;
-
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
-
-    // we never need to re-fetch
+        // we never need to re-fetch
     if ( !m_allChartsMap.isEmpty() )
         return;
 
@@ -74,11 +55,17 @@ SpotifyPlugin::namChangedSlot( QNetworkAccessManager *nam )
     tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
 
     QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
-    QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     tDebug() << Q_FUNC_INFO << "fetching:" << url;
     connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
     m_chartsFetchJobs++;
 
+}
+
+
+SpotifyPlugin::~SpotifyPlugin()
+{
+    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -164,14 +151,6 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
 void
 SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !m_nam.data() )
-    {
-        tLog() << Q_FUNC_INFO << "Have a null QNAM, uh oh";
-        emit info( requestData, QVariant() );
-        return;
-    }
-
-
     switch ( requestData.type )
     {
 
@@ -181,7 +160,7 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
             QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;

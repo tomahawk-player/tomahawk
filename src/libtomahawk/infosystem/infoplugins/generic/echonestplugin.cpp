@@ -37,35 +37,12 @@ EchoNestPlugin::EchoNestPlugin()
     m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
 }
 
+
 EchoNestPlugin::~EchoNestPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
-void
-EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    qDebug() << Q_FUNC_INFO;
-    if( !nam )
-        return;
-
-    QNetworkAccessManager* currNam = Echonest::Config::instance()->nam();
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
-
-    if ( !oldProxyFactory )
-    {
-        qDebug() << "Could not get old proxyFactory!";
-        return;
-    }
-
-    currNam->setConfiguration( nam->configuration() );
-    currNam->setNetworkAccessible( nam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    QNetworkProxy newProxy( oldProxyFactory->proxy() );
-    newProxyFactory->setProxy( newProxy );
-    currNam->setProxyFactory( newProxyFactory );
-}
 
 void
 EchoNestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -92,6 +69,7 @@ EchoNestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     }
 }
 
+
 void
 EchoNestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
 {
@@ -109,6 +87,7 @@ EchoNestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &req
 //     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
 }
 
+
 void
 EchoNestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
@@ -121,6 +100,7 @@ EchoNestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData 
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistBiographySlot() ) );
 }
+
 
 void
 EchoNestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData )
@@ -136,6 +116,7 @@ EchoNestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestDat
     connect( reply, SIGNAL( finished() ), SLOT( getArtistFamiliaritySlot() ) );
 }
 
+
 void
 EchoNestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
@@ -149,6 +130,7 @@ EchoNestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData
     connect( reply, SIGNAL( finished() ), SLOT( getArtistHotttnesssSlot() ) );
 }
 
+
 void
 EchoNestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
@@ -161,6 +143,7 @@ EchoNestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &req
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistTermsSlot() ) );
 }
+
 
 void
 EchoNestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
@@ -194,6 +177,7 @@ EchoNestPlugin::getArtistBiographySlot()
     reply->deleteLater();
 }
 
+
 void
 EchoNestPlugin::getArtistFamiliaritySlot()
 {
@@ -205,6 +189,7 @@ EchoNestPlugin::getArtistFamiliaritySlot()
     reply->deleteLater();
 }
 
+
 void
 EchoNestPlugin::getArtistHotttnesssSlot()
 {
@@ -215,6 +200,7 @@ EchoNestPlugin::getArtistHotttnesssSlot()
     emit info( requestData, hotttnesss );
     reply->deleteLater();
 }
+
 
 void
 EchoNestPlugin::getArtistTermsSlot()
@@ -234,6 +220,7 @@ EchoNestPlugin::getArtistTermsSlot()
     reply->deleteLater();
 }
 
+
 void
 EchoNestPlugin::getMiscTopSlot()
 {
@@ -251,6 +238,7 @@ EchoNestPlugin::getMiscTopSlot()
     reply->deleteLater();
 }
 
+
 bool
 EchoNestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
@@ -267,6 +255,7 @@ EchoNestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &
     }
     return true;
 }
+
 
 bool
 EchoNestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
@@ -289,6 +278,7 @@ EchoNestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &r
     }
     return true;
 }
+
 
 Artist
 EchoNestPlugin::artistFromReply( QNetworkReply* reply )

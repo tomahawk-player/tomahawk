@@ -83,7 +83,8 @@ public:
     QList< Tomahawk::SocialAction > allSocialActions();
 
     void setScore( float score ) { m_score = score; }
-    void setId( unsigned int id ) { m_id = id; }
+    void setTrackId( unsigned int id ) { m_trackId = id; }
+    void setFileId( unsigned int id ) { m_fileId = id; }
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
@@ -104,7 +105,8 @@ public:
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
-    unsigned int dbid() const { return m_id; }
+    unsigned int trackId() const { return m_trackId; }
+    unsigned int fileId() const { return m_fileId; }
 
 public slots:
     void onSocialActionsLoaded();
@@ -148,7 +150,7 @@ private:
 
     QVariantMap m_attributes;
 
-    unsigned int m_id;
+    unsigned int m_trackId, m_fileId;
 
     QHash< QString, QVariant > m_currentSocialActions;
     QList< SocialAction > m_allSocialActions;
