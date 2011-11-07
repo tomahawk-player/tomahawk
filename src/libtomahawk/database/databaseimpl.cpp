@@ -252,7 +252,6 @@ DatabaseImpl::file( int fid )
         r->setTrackId( query.value( 9 ).toUInt() );
         r->setCollection( s->collection() );
         r->setScore( 1.0 );
-        r->setRID( query.value( 14 ).toString() );
         r->setFileId( fid );
     }
 
