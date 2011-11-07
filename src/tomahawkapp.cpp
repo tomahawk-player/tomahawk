@@ -159,10 +159,12 @@ TomahawkApp::init()
     TomahawkSettings* s = TomahawkSettings::instance();
 
     tDebug( LOGINFO ) << "Setting NAM.";
-#ifdef LIBLASTFM_FOUND
-    TomahawkUtils::setNam( lastfm::nam() );
-#else
+#ifndef LIBLASTFM_FOUND
     TomahawkUtils::setNam( new QNetworkAccessManager() );
+#else
+    TomahawkUtils::setNam( lastfm::nam() );
+    //Ensure that liblastfm2 won't delete the nam out from under us, even though they created it
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 #endif
 
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -178,6 +180,7 @@ TomahawkApp::init()
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
 
     TomahawkUtils::setProxyFactory( proxyFactory );
+    
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );

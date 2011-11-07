@@ -39,7 +39,6 @@ public:
     virtual ~RoviPlugin();
 
 protected:
-    virtual void namChangedSlot( QNetworkAccessManager* nam );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant )
@@ -53,8 +52,6 @@ private slots:
 private:
     QNetworkReply* makeRequest( QUrl url );
     QByteArray generateSig() const;
-
-    QNetworkAccessManager* m_nam;
 
     QByteArray m_apiKey;
     QByteArray m_secret;

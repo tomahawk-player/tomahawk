@@ -42,8 +42,6 @@ public slots:
     void trackSearchSlot();
     void trackLyricsSlot();
 
-    void namChangedSlot( QNetworkAccessManager *nam );
-    
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
@@ -64,8 +62,6 @@ private:
     bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
     
     QString m_apiKey;
-
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

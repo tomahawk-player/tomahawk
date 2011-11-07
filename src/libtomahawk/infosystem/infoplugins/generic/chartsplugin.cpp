@@ -52,44 +52,28 @@ ChartsPlugin::ChartsPlugin()
     m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
+
+    /// Then get each chart from resource
+    /// We want to prepopulate the breadcrumb to fetch them before they are asked for
+    if ( !m_chartResources.isEmpty() && m_allChartsMap.isEmpty() )
+    {
+        tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
+        foreach ( QVariant resource, m_chartResources )
+        {
+            QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+            tDebug() << "fetching:" << url;
+            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
+            
+            m_chartsFetchJobs++;
+        }
+    }
 }
 
 
 ChartsPlugin::~ChartsPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-}
-
-
-void
-ChartsPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    tDebug() << "ChartsPlugin: namChangedSLot";
-
-    qDebug() << Q_FUNC_INFO;
-    if( !nam )
-        return;
-
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
-
-    /// Then get each chart from resource
-    /// We want to prepopulate the breadcrumb to fetch them before they are asked for
-
-    if ( !m_chartResources.isEmpty() && m_nam && m_allChartsMap.isEmpty() )
-    {
-
-        tDebug() << "ChartsPlugin: InfoChart fetching possible resources";
-        foreach ( QVariant resource, m_chartResources )
-        {
-            QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg(resource.toString() ) );
-            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-            tDebug() << "fetching:" << url;
-            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-
-            m_chartsFetchJobs++;
-        }
-
-    }
 }
 
 
@@ -202,14 +186,6 @@ ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requ
 void
 ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !m_nam.data() )
-    {
-        tLog() << "Have a null QNAM, uh oh";
-        emit info( requestData, QVariant() );
-        return;
-    }
-
-
     switch ( requestData.type )
     {
         case InfoChart:
@@ -218,7 +194,7 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             QUrl url = QUrl( QString( CHART_URL "source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );

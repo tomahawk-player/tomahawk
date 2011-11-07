@@ -72,8 +72,6 @@ InfoSystem::InfoSystem( QObject *parent )
 
     QMetaObject::invokeMethod( m_worker.data(), "init", Qt::QueuedConnection, Q_ARG( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >, m_cache ) );
 
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
-
     connect( m_cache.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              m_worker.data(), SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
 
@@ -112,14 +110,6 @@ InfoSystem::~InfoSystem()
     }
 
     qDebug() << Q_FUNC_INFO << " done deleting cache";
-}
-
-
-void
-InfoSystem::newNam() const
-{
-    qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "newNam", Qt::QueuedConnection );
 }
 
 

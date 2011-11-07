@@ -160,7 +160,12 @@ lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
         oldNam = threadNamHash[thread];
 
     if ( oldNam == nam )
+    {
+        // If we're being passed back our own NAM, assume they want to
+        // ensure that we don't delete it out from under them 
+        ourNamSet.remove( thread );
         return;
+    }
 
     threadNamHash[thread] = nam;
     ourNamSet.remove( thread );

@@ -117,8 +117,6 @@ public:
     void setVolume( double value );
 
 public slots:
-    void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused
-
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );

@@ -35,8 +35,6 @@ public:
     FdoNotifyPlugin();
     virtual ~FdoNotifyPlugin();
 
-    virtual void namChangedSlot( QNetworkAccessManager* ) {}
-
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {

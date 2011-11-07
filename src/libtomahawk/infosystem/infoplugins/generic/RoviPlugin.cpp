@@ -52,17 +52,6 @@ RoviPlugin::~RoviPlugin()
 }
 
 
-
-void
-RoviPlugin::namChangedSlot( QNetworkAccessManager* nam )
-{
-    if ( !nam )
-        return;
-
-    m_nam = nam;
-}
-
-
 void
 RoviPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -194,7 +183,7 @@ RoviPlugin::makeRequest( QUrl url )
     url.addEncodedQueryItem( "sig", generateSig() );
 
     qDebug() << "Rovi request url:" << url.toString();
-    return m_nam->get( QNetworkRequest( url ) );
+    return TomahawkUtils::nam()->get( QNetworkRequest( url ) );
 }
 
 

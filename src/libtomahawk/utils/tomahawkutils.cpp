@@ -539,7 +539,7 @@ setProxyFactory( NetworkProxyFactory* factory )
     s_proxyFactory = factory;
     NetworkProxyFactory::setApplicationProxyFactory( s_proxyFactory );
     //nam takes ownership so set a copy, not the global one
-    if ( s_nam )
+    if ( !s_nam.isNull() )
     {
         TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
         newProxyFactory->setNoProxyHosts( factory->noProxyHosts() );

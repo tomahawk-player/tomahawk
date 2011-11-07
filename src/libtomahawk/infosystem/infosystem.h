@@ -185,8 +185,6 @@ protected slots:
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
-    virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
-
 protected:
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;
@@ -250,9 +248,6 @@ signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
-
-public slots:
-    void newNam() const;
 
 private:
     QWeakPointer< InfoSystemCache > m_cache;

@@ -43,20 +43,10 @@ MusixMatchPlugin::~MusixMatchPlugin()
 }
 
 void
-MusixMatchPlugin::namChangedSlot( QNetworkAccessManager *nam )
-{
-    qDebug() << Q_FUNC_INFO;
-    if( !nam )
-        return;
-
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
-}
-
-void
 MusixMatchPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData( requestData ) || !requestData.input.canConvert< QVariantMap >() || m_nam.isNull() || requestData.type != Tomahawk::InfoSystem::InfoTrackLyrics )
+    if( !isValidTrackData( requestData ) || !requestData.input.canConvert< QVariantMap >() || requestData.type != Tomahawk::InfoSystem::InfoTrackLyrics )
         return;
     QVariantMap hash = requestData.input.value< QVariantMap >();
     QString artist = hash["artistName"].toString();
@@ -72,7 +62,7 @@ MusixMatchPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     url.addQueryItem( "apikey", m_apiKey );
     url.addQueryItem( "q_artist", artist );
     url.addQueryItem( "q_track", track );
-    QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
     connect( reply, SIGNAL( finished() ), SLOT( trackSearchSlot() ) );
@@ -126,7 +116,7 @@ MusixMatchPlugin::trackSearchSlot()
     QUrl url( requestString );
     url.addQueryItem( "apikey", m_apiKey );
     url.addQueryItem( "track_id", track_id );
-    QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
+    QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
     connect( newReply, SIGNAL( finished() ), SLOT( trackLyricsSlot() ) );
 }

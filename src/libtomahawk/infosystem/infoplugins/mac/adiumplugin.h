@@ -49,8 +49,6 @@ protected slots:
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
 public slots:
-    void namChangedSlot( QNetworkAccessManager* nam );
-
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );

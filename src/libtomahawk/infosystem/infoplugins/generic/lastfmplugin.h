@@ -53,8 +53,6 @@ public slots:
     void topTracksReturned();
     void chartReturned();
 
-    void namChangedSlot( QNetworkAccessManager *nam );
-
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );

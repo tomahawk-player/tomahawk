@@ -141,15 +141,7 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
                 cache.data(),
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
-        connect(
-                this,
-                SIGNAL( namChanged( QNetworkAccessManager* ) ),
-                plugin.data(),
-                SLOT( namChangedSlot( QNetworkAccessManager* ) )
-            );
     }
-
-    QMetaObject::invokeMethod( this, "newNam" );
 }
 
 
@@ -347,73 +339,6 @@ InfoSystemWorker::checkTimeoutsTimerFired()
     }
 }
 
-
-QNetworkAccessManager*
-InfoSystemWorker::nam() const
-{
-    if ( m_nam.isNull() )
-        return 0;
-
-    return m_nam.data();
-}
-
-
-void
-InfoSystemWorker::newNam()
-{
-    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
-    if ( oldNam && oldNam->thread() == thread() )
-    {
-        if ( m_nam.data() != oldNam )
-        {
-            m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
-            emit namChanged( m_nam.data() );
-        }
-        return;
-    }
-
-    if
-        (
-            oldNam &&
-            !m_nam.isNull() &&
-            oldNam->configuration() == m_nam.data()->configuration() &&
-            oldNam->networkAccessible() == m_nam.data()->networkAccessible()
-        )
-    {
-        TomahawkUtils::NetworkProxyFactory fac1 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( oldNam->proxyFactory() ) );
-        TomahawkUtils::NetworkProxyFactory fac2 = *( dynamic_cast< TomahawkUtils::NetworkProxyFactory * >( m_nam.data()->proxyFactory() ) );
-        if ( fac1 == fac2 )
-            return;
-    }
-
-    QNetworkAccessManager* newNam;
-#ifdef LIBLASTFM_FOUND
-    newNam = new lastfm::NetworkAccessManager( this );
-#else
-    newNam = new QNetworkAccessManager( this );
-#endif
-    if ( !m_nam.isNull() )
-        delete m_nam.data();
-
-    if ( !oldNam )
-        oldNam = new QNetworkAccessManager();
-
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
-    if ( !oldProxyFactory )
-        oldProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-
-    newNam->setConfiguration( oldNam->configuration() );
-    newNam->setNetworkAccessible( oldNam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( oldProxyFactory->proxy() );
-    newNam->setProxyFactory( newProxyFactory );
-    m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
-
-    emit namChanged( m_nam.data() );
-
-    //FIXME: Currently leaking nam/proxyfactory above -- how to change in a thread-safe way?
-}
 
 } //namespace InfoSystem
 
