@@ -81,8 +81,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
-    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
-    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( latchOff( Tomahawk::source_ptr ) ) );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( latchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
 
     setItemDelegate( m_delegate );
 
@@ -156,7 +156,7 @@ SourceTreeView::setupMenus()
                 m_latchMenu.addSeparator();
                 QAction *latchOffAction = ActionCollection::instance()->getAction( "latchOff" );
                 m_latchMenu.addAction( latchOffAction );
-                connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
+                connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ), Qt::QueuedConnection );
             }
         }
     }
@@ -191,7 +191,7 @@ SourceTreeView::setupMenus()
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( latchOnAction,          SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ) );
+    connect( latchOnAction,          SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ), Qt::QueuedConnection );
 }
 
 
