@@ -169,6 +169,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
     connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), SLOT( testLastFmLogin() ) );
 
+#ifdef Q_WS_MAC // FIXME
+    ui->pushButtonTestLastfmLogin->setVisible( false );
+#endif
+
     // SCRIPT RESOLVER
     ui->removeScript->setEnabled( false );
     ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
@@ -413,7 +417,7 @@ SettingsDialog::testLastFmLogin()
 
     // ensure they have up-to-date settings
     lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
-
+    
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
