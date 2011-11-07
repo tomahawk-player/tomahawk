@@ -24,15 +24,17 @@
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-
+#include "actioncollection.h"
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
 #include "utils/qnr_iodevicestream.h"
+#include "headlesscheck.h"
 
 #include "album.h"
 
 #include "utils/logger.h"
+
 
 using namespace Tomahawk;
 
@@ -75,6 +77,11 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
+#ifndef TOMAHAWK_HEADLESS
+    tDebug() << Q_FUNC_INFO << "Connecting privacy toggle";
+    connect( ActionCollection::instance()->getAction( "togglePrivacy" ), SIGNAL( triggered( bool ) ), this, SLOT( togglePrivateListeningMode() ) );
+#endif
+    
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -392,6 +399,25 @@ AudioEngine::infoSystemFinished( QString caller )
 {
     Q_UNUSED( caller );
 }
+
+
+void
+AudioEngine::togglePrivateListeningMode()
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
+    else
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
+
+#ifndef TOMAHAWK_HEADLESS
+    ActionCollection::instance()->getAction( "togglePrivacy" )->setText(
+        tr( QString( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening ?
+            "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() )
+        );
+#endif
+}
+
 
 
 bool

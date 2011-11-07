@@ -131,6 +131,7 @@ LatchManager::catchUpRequest()
 void
 LatchManager::unlatchRequest( const source_ptr& source )
 {
+    Q_UNUSED( source );
     AudioEngine::instance()->stop();
     AudioEngine::instance()->setPlaylist( 0 );
 

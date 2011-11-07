@@ -17,6 +17,7 @@
  */
 
 #include "actioncollection.h"
+#include "tomahawksettings.h"
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
@@ -38,6 +39,8 @@ ActionCollection::initActions()
 {
     m_actionCollection[ "latchOn" ] = new QAction( tr( "&Listen Along" ), this );
     m_actionCollection[ "latchOff" ] = new QAction( tr( "&Stop Listening Along" ), this );
+    m_actionCollection[ "togglePrivacy" ] = new QAction( tr( QString( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening ?
+                "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ), this );
 }
 
 
