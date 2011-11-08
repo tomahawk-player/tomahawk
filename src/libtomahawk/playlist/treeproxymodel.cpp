@@ -283,9 +283,6 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     const QString& lefts = textForItem( p1 );
     const QString& rights = textForItem( p2 );
 
-    tDebug() << lefts << albumpos1;
-    tDebug() << rights << albumpos2;
-
     if ( albumpos1 != albumpos2 )
         return albumpos1 < albumpos2;
 
