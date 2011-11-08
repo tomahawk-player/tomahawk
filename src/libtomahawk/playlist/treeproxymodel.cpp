@@ -264,22 +264,33 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     if ( !p2 )
         return false;
 
-    if ( !p1->result().isNull() && p2->result().isNull() )
+/*    if ( !p1->result().isNull() && p2->result().isNull() )
         return true;
     if ( p1->result().isNull() && !p2->result().isNull() )
-        return false;
+        return false;*/
+
+    unsigned int albumpos1 = 0;
+    unsigned int albumpos2 = 0;
+    if ( !p1->query().isNull() )
+        albumpos1 = p1->query()->albumpos();
+    if ( !p2->query().isNull() )
+        albumpos2 = p2->query()->albumpos();
+    if ( albumpos1 == 0 && !p1->result().isNull() )
+        albumpos1 = p1->result()->albumpos();
+    if ( albumpos2 == 0 && !p2->result().isNull() )
+        albumpos2 = p2->result()->albumpos();
 
     const QString& lefts = textForItem( p1 );
     const QString& rights = textForItem( p2 );
 
-    if ( !p1->result().isNull() )
-    {
-        if ( p1->result()->albumpos() != p2->result()->albumpos() )
-            return p1->result()->albumpos() < p2->result()->albumpos();
+    tDebug() << lefts << albumpos1;
+    tDebug() << rights << albumpos2;
 
-        if ( lefts == rights )
-            return (qint64)&p1 < (qint64)&p2;
-    }
+    if ( albumpos1 != albumpos2 )
+        return albumpos1 < albumpos2;
+
+    if ( lefts == rights )
+        return (qint64)&p1 < (qint64)&p2;
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
 }
