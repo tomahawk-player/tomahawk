@@ -316,13 +316,19 @@ TreeModel::data( const QModelIndex& index, int role ) const
                 return TomahawkUtils::timeToString( result->duration() );
 
             case Bitrate:
-                return result->bitrate();
+                if ( result->bitrate() == 0 )
+                    return QString();
+                else
+                    return result->bitrate();
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
 
             case Year:
-                return result->year();
+                if ( result->year() == 0 )
+                    return QString();
+                else
+                    return result->year();
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( result->size() );

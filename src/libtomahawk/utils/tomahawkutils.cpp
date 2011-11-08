@@ -214,6 +214,9 @@ timeToString( int seconds )
 QString
 ageToString( const QDateTime& time )
 {
+    if ( time.toTime_t() == 0 )
+        return QString();
+
     QDateTime now = QDateTime::currentDateTime();
 
     int mins = time.secsTo( now ) / 60;
@@ -276,6 +279,9 @@ ageToString( const QDateTime& time )
 QString
 filesizeToString( unsigned int size )
 {
+    if ( size == 0 )
+        return QString();
+
     int kb = size / 1024;
     int mb = kb / 1024;
 
@@ -556,7 +562,7 @@ proxyFactory( bool noMutexLocker )
     // Don't lock if being called from nam()
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
-    
+
     if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
         return s_threadProxyFactoryHash[ QThread::currentThread() ];
 
@@ -606,7 +612,7 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
 
 
 QNetworkAccessManager*
-nam()   
+nam()
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
@@ -627,7 +633,7 @@ nam()
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
     newNam->setNetworkAccessible( mainNam->networkAccessible() );
     newNam->setProxyFactory( proxyFactory( true ) );
-    
+
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
     return newNam;
