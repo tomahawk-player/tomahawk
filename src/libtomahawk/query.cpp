@@ -122,6 +122,7 @@ Query::init()
     m_solved = false;
     m_playable = false;
     m_duration = -1;
+    m_albumpos = 0;
 
     updateSortNames();
 }

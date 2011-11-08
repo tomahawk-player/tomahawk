@@ -192,18 +192,18 @@ TreeProxyModel::filterFinished()
 bool
 TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
-    Q_ASSERT( pi );
+    TreeModelItem* item = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    Q_ASSERT( item );
 
-    if ( m_model->mode() == Tomahawk::DatabaseMode && !pi->result().isNull() )
+    if ( m_model->mode() == Tomahawk::DatabaseMode && !item->result().isNull() )
     {
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
-        foreach ( const Tomahawk::result_ptr& result, rl )
+        foreach ( const Tomahawk::result_ptr& cachedResult, rl )
         {
-            if ( result->track() == pi->result()->track() &&
-               ( result->albumpos() == pi->result()->albumpos() || result->albumpos() == 0 ) )
+            if ( cachedResult->track() == item->result()->track() &&
+               ( cachedResult->albumpos() == item->result()->albumpos() || cachedResult->albumpos() == 0 ) )
             {
-                return ( result.data() == pi->result().data() );
+                return ( cachedResult.data() == item->result().data() );
             }
         }
 
@@ -214,13 +214,13 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
             TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
-            if ( ti->name() == pi->name() &&
-               ( ti->result()->albumpos() == pi->result()->albumpos() || ti->result()->albumpos() == 0 ) )
+            if ( ti->name() == item->name() &&
+               ( ti->result()->albumpos() == item->result()->albumpos() || ti->result()->albumpos() == 0 || item->result()->albumpos() == 0 ) )
             {
-                if ( !pi->result()->isOnline() && ti->result()->isOnline() )
+                if ( !item->result()->isOnline() && ti->result()->isOnline() )
                     return false;
 
-                if ( !pi->result()->collection()->source()->isLocal() && ti->result()->collection()->source()->isLocal() )
+                if ( !item->result()->collection()->source()->isLocal() && ti->result()->collection()->source()->isLocal() )
                     return false;
             }
         }
@@ -229,26 +229,26 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     bool accepted = false;
     if ( m_filter.isEmpty() )
         accepted = true;
-    else if ( !pi->artist().isNull() )
-        accepted = m_artistsFilter.contains( pi->artist() );
-    else if ( !pi->album().isNull() )
-        accepted = m_albumsFilter.contains( pi->album()->id() );
+    else if ( !item->artist().isNull() )
+        accepted = m_artistsFilter.contains( item->artist() );
+    else if ( !item->album().isNull() )
+        accepted = m_albumsFilter.contains( item->album()->id() );
 
     if ( !accepted )
     {
         QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
         foreach( const QString& s, sl )
         {
-            if ( !pi->name().contains( s, Qt::CaseInsensitive ) &&
-                 !pi->albumName().contains( s, Qt::CaseInsensitive ) &&
-                 !pi->artistName().contains( s, Qt::CaseInsensitive ) )
+            if ( !item->name().contains( s, Qt::CaseInsensitive ) &&
+                 !item->albumName().contains( s, Qt::CaseInsensitive ) &&
+                 !item->artistName().contains( s, Qt::CaseInsensitive ) )
             {
                 return false;
             }
         }
     }
 
-    m_cache.insertMulti( sourceParent, pi->result() );
+    m_cache.insertMulti( sourceParent, item->result() );
     return true;
 }
 
@@ -264,22 +264,30 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     if ( !p2 )
         return false;
 
-    if ( !p1->result().isNull() && p2->result().isNull() )
+/*    if ( !p1->result().isNull() && p2->result().isNull() )
         return true;
     if ( p1->result().isNull() && !p2->result().isNull() )
-        return false;
+        return false;*/
+
+    unsigned int albumpos1 = 0;
+    unsigned int albumpos2 = 0;
+    if ( !p1->query().isNull() )
+        albumpos1 = p1->query()->albumpos();
+    if ( !p2->query().isNull() )
+        albumpos2 = p2->query()->albumpos();
+    if ( albumpos1 == 0 && !p1->result().isNull() )
+        albumpos1 = p1->result()->albumpos();
+    if ( albumpos2 == 0 && !p2->result().isNull() )
+        albumpos2 = p2->result()->albumpos();
 
     const QString& lefts = textForItem( p1 );
     const QString& rights = textForItem( p2 );
 
-    if ( !p1->result().isNull() )
-    {
-        if ( p1->result()->albumpos() != p2->result()->albumpos() )
-            return p1->result()->albumpos() < p2->result()->albumpos();
+    if ( albumpos1 != albumpos2 )
+        return albumpos1 < albumpos2;
 
-        if ( lefts == rights )
-            return (qint64)&p1 < (qint64)&p2;
-    }
+    if ( lefts == rights )
+        return (qint64)&p1 < (qint64)&p2;
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
 }
@@ -334,11 +342,14 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
         return Tomahawk::result_ptr();
 
     if ( m_shuffled )
+    {
         idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
-    else if ( m_repeatMode == PlaylistInterface::RepeatOne )
-        idx = index( idx.row(), 0, idx.parent() );
+    }
     else
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+    {
+        if ( m_repeatMode != PlaylistInterface::RepeatOne )
+            idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+    }
 
     if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
     {
@@ -355,11 +366,8 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
     }
 
     // Try to find the next available PlaylistItem (with results)
-    if ( idx.isValid() ) do
+    while ( idx.isValid() )
     {
-        if ( !idx.isValid() )
-            break;
-
         TreeModelItem* item = itemFromIndex( mapToSource( idx ) );
         if ( item && !item->result().isNull() && item->result()->isOnline() )
         {
@@ -368,8 +376,9 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
                 setCurrentIndex( idx );
             return item->result();
         }
+
+        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
     }
-    while ( idx.isValid() );
 
     if ( !readOnly )
         setCurrentIndex( QModelIndex() );
