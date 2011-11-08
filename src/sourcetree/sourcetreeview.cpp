@@ -128,6 +128,7 @@ SourceTreeView::setupMenus()
     m_playlistMenu.clear();
     m_roPlaylistMenu.clear();
     m_latchMenu.clear();
+    m_privacyMenu.clear();
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -145,6 +146,8 @@ SourceTreeView::setupMenus()
     QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
     m_latchMenu.addAction( latchOnAction );
 
+    m_privacyMenu.addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
+    
     if ( type == SourcesModel::Collection )
     {
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
@@ -432,6 +435,8 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
         if ( !item->source().isNull() && !item->source()->isLocal() )
             m_latchMenu.exec( mapToGlobal( pos ) );
+        else if ( !item->source().isNull() )
+            m_privacyMenu.exec( mapToGlobal( pos ) );
     }
 }
 

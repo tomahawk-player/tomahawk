@@ -103,6 +103,7 @@ private:
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
     QMenu m_latchMenu;
+    QMenu m_privacyMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
