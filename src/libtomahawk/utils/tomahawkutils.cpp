@@ -575,10 +575,12 @@ proxyFactory( bool noMutexLocker )
 
 
 void
-setProxyFactory( NetworkProxyFactory* factory )
+setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
 {
     Q_ASSERT( factory );
-    QMutexLocker locker( &s_namAccessMutex );
+    // Don't lock if being called from setNam()
+    QMutex otherMutex;
+    QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
 
     if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
         return;
@@ -662,6 +664,9 @@ setNam( QNetworkAccessManager* nam )
     }
 
     s_threadNamHash[ QThread::currentThread() ] = nam;
+
+    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+        setProxyFactory( dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() ), true );
 }
 
 

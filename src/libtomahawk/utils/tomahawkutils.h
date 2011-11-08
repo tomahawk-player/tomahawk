@@ -97,7 +97,7 @@ namespace TomahawkUtils
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
     DLLEXPORT QNetworkAccessManager* nam();
 
-    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
+    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
 
     DLLEXPORT QWidget* tomahawkWindow();
