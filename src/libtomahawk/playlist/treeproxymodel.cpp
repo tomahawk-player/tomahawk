@@ -334,11 +334,14 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
         return Tomahawk::result_ptr();
 
     if ( m_shuffled )
+    {
         idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
-    else if ( m_repeatMode == PlaylistInterface::RepeatOne )
-        idx = index( idx.row(), 0, idx.parent() );
+    }
     else
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+    {
+        if ( m_repeatMode != PlaylistInterface::RepeatOne )
+            idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+    }
 
     if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
     {
@@ -355,11 +358,8 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
     }
 
     // Try to find the next available PlaylistItem (with results)
-    if ( idx.isValid() ) do
+    while ( idx.isValid() )
     {
-        if ( !idx.isValid() )
-            break;
-
         TreeModelItem* item = itemFromIndex( mapToSource( idx ) );
         if ( item && !item->result().isNull() && item->result()->isOnline() )
         {
@@ -368,8 +368,9 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
                 setCurrentIndex( idx );
             return item->result();
         }
+
+        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
     }
-    while ( idx.isValid() );
 
     if ( !readOnly )
         setCurrentIndex( QModelIndex() );
