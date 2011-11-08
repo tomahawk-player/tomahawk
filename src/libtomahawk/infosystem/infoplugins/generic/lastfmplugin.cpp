@@ -83,6 +83,8 @@ LastFmPlugin::LastFmPlugin()
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
+
+    QTimer::singleShot( 0, this, SLOT( settingsChanged() ) );
 }
 
 
