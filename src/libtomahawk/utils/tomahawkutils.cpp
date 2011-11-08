@@ -591,7 +591,6 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
     if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
         return;
 
-    TomahawkUtils::NetworkProxyFactory *oldProxyFactory = s_threadProxyFactoryHash[ QThread::currentThread() ];
     if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
         // If setting new values on the main thread, clear the other entries

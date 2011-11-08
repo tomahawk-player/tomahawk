@@ -46,12 +46,9 @@ ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
-
-
     /// Add resources here
     m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
-
 
     /// Then get each chart from resource
     /// We want to prepopulate the breadcrumb to fetch them before they are asked for
