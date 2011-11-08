@@ -123,6 +123,7 @@ void DiagnosticsDialog::updateLogView()
 
         Q_FOREACH( const QString &peerId, sip->peersOnline() )
         {
+            /* enable this again, when we check the source has this peerId
             bool connected = false;
             Q_FOREACH( const Tomahawk::source_ptr &source, sources )
             {
@@ -131,33 +132,35 @@ void DiagnosticsDialog::updateLogView()
                     connected = true;
                     break;
                 }
-            }
+            }*/
 
             QString versionString = SipHandler::instance()->versionString( peerId );
             SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
             if( !sipInfo.isValid() )
                log.append(
-                    QString("       %1: %2 (%3) %4\n")
+                    QString("       %1: %2 %3" /*"(%4)"*/ "\n")
                         .arg( peerId )
                         .arg( "sipinfo invalid" )
-                        .arg( connected ? "connected" : "not connected")
                         .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
                 );
             else if( sipInfo.isVisible() )
                 log.append(
-                    QString("       %1: %2:%3 (%4) %5\n")
+                    QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
                         .arg( peerId )
                         .arg( sipInfo.host().hostName() )
                         .arg( sipInfo.port() )
-                        .arg( connected ? "connected" : "not connected")
                         .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
+
                 );
             else
                 log.append(
-                    QString("       %1: visible: false (%2) %3\n")
+                    QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
                         .arg( peerId )
-                        .arg( connected ? "connected" : "not connected")
                         .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
+
                 );
         }
         log.append("\n");
