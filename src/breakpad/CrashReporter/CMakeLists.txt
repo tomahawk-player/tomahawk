@@ -16,5 +16,5 @@ INCLUDE( ${QT_USE_FILE} )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src ../../libtomahawk )
 ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
-ADD_EXECUTABLE( CrashReporter ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
+ADD_EXECUTABLE( CrashReporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
 TARGET_LINK_LIBRARIES( CrashReporter ${QT_LIBRARIES} tomahawklib )
