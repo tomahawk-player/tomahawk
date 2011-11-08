@@ -392,17 +392,17 @@ TomahawkSettings::setProxyPassword( const QString& password )
 }
 
 
-int
+QNetworkProxy::ProxyType
 TomahawkSettings::proxyType() const
 {
-    return value( "network/proxy/type", QNetworkProxy::NoProxy ).toInt();
+    return static_cast< QNetworkProxy::ProxyType>( value( "network/proxy/type", QNetworkProxy::NoProxy ).toInt() );
 }
 
 
 void
-TomahawkSettings::setProxyType( const int type )
+TomahawkSettings::setProxyType( const QNetworkProxy::ProxyType type )
 {
-    setValue( "network/proxy/type", type );
+    setValue( "network/proxy/type", static_cast< uint >( type ) );
 }
 
 

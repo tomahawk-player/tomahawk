@@ -61,12 +61,13 @@ namespace TomahawkUtils
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
         static QList< QNetworkProxy > proxyForQuery( const QNetworkProxyQuery & query );
 
-        void setNoProxyHosts( const QStringList &hosts );
-        QStringList noProxyHosts() const { return m_noProxyHosts; }
-        void setProxy( const QNetworkProxy &proxy );
-        QNetworkProxy proxy() { return m_proxy; }
+        virtual void setNoProxyHosts( const QStringList &hosts );
+        virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
+        virtual void setProxy( const QNetworkProxy &proxy );
+        virtual QNetworkProxy proxy() { return m_proxy; }
 
-        bool operator==( const NetworkProxyFactory &other );
+        virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );
+        virtual bool operator==( const NetworkProxyFactory &other ) const;
 
     private:
         QStringList m_noProxyHosts;

@@ -26,6 +26,8 @@
 #include "AtticaManager.h"
 #include "playlist.h"
 
+#include <QtNetwork/QNetworkProxy>
+
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -142,8 +144,8 @@ public:
     QString proxyPassword() const;
     void setProxyPassword( const QString &password );
 
-    int proxyType() const;
-    void setProxyType( const int type );
+    QNetworkProxy::ProxyType proxyType() const;
+    void setProxyType( const QNetworkProxy::ProxyType type );
 
     bool proxyDns() const;
     void setProxyDns( bool lookupViaProxy );

@@ -477,7 +477,7 @@ NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 {
     Q_UNUSED( query );
     QList< QNetworkProxy > proxies;
-    proxies << QNetworkProxy( QNetworkProxy::NoProxy );
+    proxies << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
     return proxies;
 }
 
@@ -500,14 +500,14 @@ void
 NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 {
     QStringList newList;
-    qDebug() << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
+    tDebug() << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
     foreach( QString host, hosts )
     {
         QString munge = host.simplified();
         newList << munge;
         //TODO: wildcard support
     }
-    qDebug() << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
+    tDebug() << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
     m_noProxyHosts = newList;
 }
 
@@ -518,13 +518,28 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
     m_proxy = proxy;
     if ( !TomahawkSettings::instance()->proxyDns() )
         m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
-    qDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
-    qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    tDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
+    tDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
 
 
-bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other )
+NetworkProxyFactory&
+NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
 {
+    tDebug() << Q_FUNC_INFO;
+    if ( this != &rhs )
+    {
+        m_proxy = QNetworkProxy( rhs.m_proxy );
+        m_noProxyHosts = QStringList( rhs.m_noProxyHosts );
+    }
+
+    return *this;
+}
+
+
+bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other ) const
+{
+    tDebug() << Q_FUNC_INFO;
     if ( m_noProxyHosts != other.m_noProxyHosts || m_proxy != other.m_proxy )
         return false;
 
@@ -539,7 +554,8 @@ NetworkProxyFactory*
 proxyFactory( bool noMutexLocker )
 {
     // Don't lock if being called from nam()
-    QMutexLocker locker( noMutexLocker ? new QMutex() : &s_namAccessMutex );
+    QMutex otherMutex;
+    QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
     
     if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
         return s_threadProxyFactoryHash[ QThread::currentThread() ];
@@ -550,14 +566,10 @@ proxyFactory( bool noMutexLocker )
     // create a new proxy factory for this thread
     TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( mainProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( QNetworkProxy ( mainProxyFactory->proxy() ) );
+    *newProxyFactory = *mainProxyFactory;
 
     s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
 
-    if ( s_threadNamHash.contains( QThread::currentThread() ) )
-        s_threadNamHash[ QThread::currentThread() ]->setProxyFactory( newProxyFactory );
-    
     return newProxyFactory;
 }
 
@@ -570,40 +582,33 @@ setProxyFactory( NetworkProxyFactory* factory )
 
     if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
         return;
-    
+
+    TomahawkUtils::NetworkProxyFactory *oldProxyFactory = s_threadProxyFactoryHash[ QThread::currentThread() ];
     if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
         // If setting new values on the main thread, clear the other entries
         // so that on next access new ones will be created with new proper values
         NetworkProxyFactory::setApplicationProxyFactory( factory );
-        s_threadProxyFactoryHash.clear();
+        foreach( QThread* thread, s_threadProxyFactoryHash.keys() )
+        {
+            if ( thread != QThread::currentThread() )
+            {
+                TomahawkUtils::NetworkProxyFactory *currFactory = s_threadProxyFactoryHash[ thread ];
+                *currFactory = *factory;
+            }
+        }
     }
 
-    // Yes, we really do need to create a new one, or we will crash when we set the factory
-    // in the QNAM, because it deletes the old one -- and guess what happens when the old one is
-    // the same as the new one?
-    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = factory;
-    TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( mainProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( QNetworkProxy ( mainProxyFactory->proxy() ) );
-
-    s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
-
-    if ( s_threadNamHash.contains( QThread::currentThread() ) )
-        s_threadNamHash[ QThread::currentThread() ]->setProxyFactory( newProxyFactory );
+    *s_threadProxyFactoryHash[ QThread::currentThread() ] = *factory;
 }
 
 
 QNetworkAccessManager*
-nam()
+nam()   
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
-    {
-        // Ensure the proxy values are up to date
-        Q_UNUSED( proxyFactory( true ) );
         return s_threadNamHash[ QThread::currentThread() ];
-    }
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
         return 0;
@@ -619,10 +624,9 @@ nam()
 
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
     newNam->setNetworkAccessible( mainNam->networkAccessible() );
+    newNam->setProxyFactory( proxyFactory( true ) );
     
     s_threadNamHash[ QThread::currentThread() ] = newNam;
-    //get the proxy info, must be done *after* setting the new thread in the hash
-    Q_UNUSED( proxyFactory( true ) );
 
     return newNam;
 }
@@ -657,13 +661,6 @@ setNam( QNetworkAccessManager* nam )
         return;
     }
 
-    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
-    {
-        // If setting new values on the main thread, clear the other entries
-        // so that on next access new ones will be created with new proper values
-        s_threadNamHash.clear();
-        s_threadProxyFactoryHash.clear();
-    }
     s_threadNamHash[ QThread::currentThread() ] = nam;
 }
 
