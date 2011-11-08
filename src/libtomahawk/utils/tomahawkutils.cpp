@@ -16,6 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "tomahawkutils.h"
 
 #include "headlesscheck.h"
@@ -28,6 +29,7 @@
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
+#include <QtNetwork/QNetworkConfiguration>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
 
@@ -59,6 +61,10 @@
 #include <tomahawksettings.h>
 #include "utils/logger.h"
 #include "config.h"
+
+#ifdef LIBLASTFM_FOUND
+#include <lastfm/ws.h>
+#endif
 
 namespace TomahawkUtils
 {
@@ -459,8 +465,11 @@ unmarginLayout( QLayout* layout )
 }
 
 
-static QWeakPointer< QNetworkAccessManager > s_nam;
-static NetworkProxyFactory* s_proxyFactory = 0;
+NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
+{
+    m_noProxyHosts = QStringList( other.m_noProxyHosts );
+    m_proxy = QNetworkProxy( other.m_proxy );
+}
 
 
 QList< QNetworkProxy >
@@ -491,13 +500,14 @@ void
 NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 {
     QStringList newList;
+    qDebug() << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
     foreach( QString host, hosts )
     {
         QString munge = host.simplified();
         newList << munge;
         //TODO: wildcard support
     }
-    qDebug() << Q_FUNC_INFO << "No-proxy hosts:" << newList;
+    qDebug() << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
     m_noProxyHosts = newList;
 }
 
@@ -515,20 +525,40 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 
 bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other )
 {
-    if ( m_noProxyHosts != other.m_noProxyHosts or m_proxy != other.m_proxy )
+    if ( m_noProxyHosts != other.m_noProxyHosts || m_proxy != other.m_proxy )
         return false;
 
     return true;
 }
 
+static QMap< QThread*, QNetworkAccessManager* > s_threadNamHash;
+static QMap< QThread*, NetworkProxyFactory* > s_threadProxyFactoryHash;
+static QMutex s_namAccessMutex;
 
 NetworkProxyFactory*
-proxyFactory()
+proxyFactory( bool noMutexLocker )
 {
-    if ( !s_proxyFactory )
-        s_proxyFactory = new NetworkProxyFactory();
+    // Don't lock if being called from nam()
+    QMutexLocker locker( noMutexLocker ? new QMutex() : &s_namAccessMutex );
+    
+    if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
+        return s_threadProxyFactoryHash[ QThread::currentThread() ];
 
-    return s_proxyFactory;
+    if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+        return 0;
+
+    // create a new proxy factory for this thread
+    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+    TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( mainProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( QNetworkProxy ( mainProxyFactory->proxy() ) );
+
+    s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
+
+    if ( s_threadNamHash.contains( QThread::currentThread() ) )
+        s_threadNamHash[ QThread::currentThread() ]->setProxyFactory( newProxyFactory );
+    
+    return newProxyFactory;
 }
 
 
@@ -536,27 +566,65 @@ void
 setProxyFactory( NetworkProxyFactory* factory )
 {
     Q_ASSERT( factory );
-    s_proxyFactory = factory;
-    NetworkProxyFactory::setApplicationProxyFactory( s_proxyFactory );
-    //nam takes ownership so set a copy, not the global one
-    if ( !s_nam.isNull() )
+    QMutexLocker locker( &s_namAccessMutex );
+
+    if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+        return;
+    
+    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
-        TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-        newProxyFactory->setNoProxyHosts( factory->noProxyHosts() );
-        QNetworkProxy newProxy( factory->proxy() );
-        newProxyFactory->setProxy( newProxy );
-        s_nam.data()->setProxyFactory( newProxyFactory );
+        // If setting new values on the main thread, clear the other entries
+        // so that on next access new ones will be created with new proper values
+        NetworkProxyFactory::setApplicationProxyFactory( factory );
+        s_threadProxyFactoryHash.clear();
     }
+
+    // Yes, we really do need to create a new one, or we will crash when we set the factory
+    // in the QNAM, because it deletes the old one -- and guess what happens when the old one is
+    // the same as the new one?
+    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = factory;
+    TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( mainProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( QNetworkProxy ( mainProxyFactory->proxy() ) );
+
+    s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
+
+    if ( s_threadNamHash.contains( QThread::currentThread() ) )
+        s_threadNamHash[ QThread::currentThread() ]->setProxyFactory( newProxyFactory );
 }
 
 
 QNetworkAccessManager*
 nam()
 {
-    if ( s_nam.isNull() )
+    QMutexLocker locker( &s_namAccessMutex );
+    if ( s_threadNamHash.contains(  QThread::currentThread() ) )
+    {
+        // Ensure the proxy values are up to date
+        Q_UNUSED( proxyFactory( true ) );
+        return s_threadNamHash[ QThread::currentThread() ];
+    }
+
+    if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
         return 0;
 
-    return s_nam.data();
+    // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
+    QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+    QNetworkAccessManager* newNam;
+#ifdef LIBLASTFM_FOUND
+    newNam = lastfm::nam();
+#else
+    newNam = new QNetworkAccessManager();
+#endif
+
+    newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
+    newNam->setNetworkAccessible( mainNam->networkAccessible() );
+    
+    s_threadNamHash[ QThread::currentThread() ] = newNam;
+    //get the proxy info, must be done *after* setting the new thread in the hash
+    Q_UNUSED( proxyFactory( true ) );
+
+    return newNam;
 }
 
 
@@ -564,7 +632,39 @@ void
 setNam( QNetworkAccessManager* nam )
 {
     Q_ASSERT( nam );
-    s_nam = QWeakPointer< QNetworkAccessManager >( nam );
+    QMutexLocker locker( &s_namAccessMutex );
+    if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
+            QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+    {
+        // Should only get here on first initialization of the nam
+        TomahawkSettings *s = TomahawkSettings::instance();
+        TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
+        if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
+        {
+            tDebug( LOGEXTRA ) << "Setting proxy to saved values";
+            QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+            proxyFactory->setProxy( proxy );
+            //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
+            //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
+        }
+        if ( !s->proxyNoProxyHosts().isEmpty() )
+            proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
+
+        nam->setProxyFactory( proxyFactory );
+        s_threadNamHash[ QThread::currentThread() ] = nam;
+        s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
+        NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
+        return;
+    }
+
+    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+    {
+        // If setting new values on the main thread, clear the other entries
+        // so that on next access new ones will be created with new proper values
+        s_threadNamHash.clear();
+        s_threadProxyFactoryHash.clear();
+    }
+    s_threadNamHash[ QThread::currentThread() ] = nam;
 }
 
 

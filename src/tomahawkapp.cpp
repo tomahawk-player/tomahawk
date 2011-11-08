@@ -19,8 +19,6 @@
 
 #include "tomahawkapp.h"
 
-#include "config.h"
-
 #include <iostream>
 
 #include <QPluginLoader>
@@ -169,21 +167,6 @@ TomahawkApp::init()
     //Ensure that liblastfm2 won't delete the nam out from under us, even though they created it
     lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 #endif
-
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
-    {
-        tDebug( LOGEXTRA ) << "Setting proxy to saved values";
-        QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-        proxyFactory->setProxy( proxy );
-        //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
-        //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
-    }
-    if ( !s->proxyNoProxyHosts().isEmpty() )
-        proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
-
-    TomahawkUtils::setProxyFactory( proxyFactory );
-    
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );

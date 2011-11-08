@@ -892,9 +892,14 @@ ProxyDialog::saveSettings()
         return;
 
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    tDebug() << Q_FUNC_INFO << "Got proxyFactory: " << proxyFactory;
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
     proxyFactory->setProxy( proxy );
     if ( !ui->noHostLineEdit->text().isEmpty() )
-        proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ',', QString::SkipEmptyParts ) );
+    {
+        tDebug() << Q_FUNC_INFO << "hosts line edit is " << ui->noHostLineEdit->text();
+        tDebug() << Q_FUNC_INFO << "split hosts line edit is " << ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts );
+        proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts ) );
+    }
     TomahawkUtils::setProxyFactory( proxyFactory );
 }
