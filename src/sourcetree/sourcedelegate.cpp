@@ -29,11 +29,13 @@
 #include "utils/tomahawkutils.h"
 #include "animationhelper.h"
 #include "source.h"
+#include "tomahawksettings.h"
 
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
 #include <audio/audioengine.h>
+#include <actioncollection.h>
 
 #define TREEVIEW_INDENT_ADD -7
 
@@ -66,6 +68,9 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
     m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
     m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
+
+    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
+    connect( privacyToggle, SIGNAL( triggered( bool ) ), qobject_cast< QWidget* >( this ), SLOT( repaint() ) );
 }
 
 
@@ -205,6 +210,15 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
         painter->setFont( normal );
+        bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
+        if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
+        {
+            QRect pmRect = textRect;
+            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
+            pmRect.setRight( pmRect.left() + pmRect.height() );
+            ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+        }
         if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
         {
             // Show a listen icon
