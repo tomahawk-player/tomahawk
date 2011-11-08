@@ -68,9 +68,6 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
     m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
     m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
-
-    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
-    connect( privacyToggle, SIGNAL( triggered( bool ) ), qobject_cast< QWidget* >( this ), SLOT( repaint() ) );
 }
 
 

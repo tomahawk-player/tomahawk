@@ -114,6 +114,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( latchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
+
+    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
+    connect( privacyToggle, SIGNAL( triggered( bool ) ), SLOT( repaint() ) );
 }
 
 
