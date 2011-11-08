@@ -55,6 +55,7 @@ namespace TomahawkUtils
             : m_proxy( QNetworkProxy::NoProxy )
             {}
 
+        NetworkProxyFactory( const NetworkProxyFactory &other );
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
@@ -92,7 +93,7 @@ namespace TomahawkUtils
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
-    DLLEXPORT NetworkProxyFactory* proxyFactory();
+    DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
     DLLEXPORT QNetworkAccessManager* nam();
 
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
