@@ -35,6 +35,7 @@ EchoNestPlugin::EchoNestPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
+    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 }
 
 
