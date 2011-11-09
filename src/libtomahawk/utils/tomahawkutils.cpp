@@ -583,9 +583,6 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
 
     if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
-        // If setting new values on the main thread, clear the other entries
-        // so that on next access new ones will be created with new proper values
-        NetworkProxyFactory::setApplicationProxyFactory( factory );
         foreach( QThread* thread, s_threadProxyFactoryHash.keys() )
         {
             if ( thread != QThread::currentThread() )
@@ -608,17 +605,19 @@ nam()
         return s_threadNamHash[ QThread::currentThread() ];
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-        return 0;
+    {
+        if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+        {
+            setNam( new QNetworkAccessManager(), true );
+            return s_threadNamHash[ QThread::currentThread() ];
+        }
+        else
+            return 0;
+    }
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
-    QNetworkAccessManager* newNam;
-#ifdef LIBLASTFM_FOUND
-    newNam = lastfm::nam();
-    lastfm::setNetworkAccessManager( newNam );
-#else
-    newNam = new QNetworkAccessManager();
-#endif
+    QNetworkAccessManager* newNam = new QNetworkAccessManager();
 
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
     newNam->setNetworkAccessible( mainNam->networkAccessible() );
@@ -631,10 +630,12 @@ nam()
 
 
 void
-setNam( QNetworkAccessManager* nam )
+setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 {
     Q_ASSERT( nam );
-    QMutexLocker locker( &s_namAccessMutex );
+    // Don't lock if being called from nam()()
+    QMutex otherMutex;
+    QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
             QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
@@ -644,10 +645,8 @@ setNam( QNetworkAccessManager* nam )
         if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
         {
             tDebug( LOGEXTRA ) << "Setting proxy to saved values";
-            QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+            QNetworkProxy proxy( s->proxyType(), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
             proxyFactory->setProxy( proxy );
-            //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
-            //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
         }
         if ( !s->proxyNoProxyHosts().isEmpty() )
             proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
@@ -655,7 +654,6 @@ setNam( QNetworkAccessManager* nam )
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
         s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
-        NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
         return;
     }
 

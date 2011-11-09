@@ -160,13 +160,8 @@ TomahawkApp::init()
     new ActionCollection( this );
     
     tDebug( LOGINFO ) << "Setting NAM.";
-#ifndef LIBLASTFM_FOUND
-    TomahawkUtils::setNam( new QNetworkAccessManager() );
-#else
-    TomahawkUtils::setNam( lastfm::nam() );
-    //Ensure that liblastfm2 won't delete the nam out from under us, even though they created it
-    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
-#endif
+    // Cause the creation of the nam, but don't need to address it directly, so prevent warning
+    Q_UNUSED( TomahawkUtils::nam() );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );

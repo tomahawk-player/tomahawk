@@ -64,6 +64,7 @@ LastFmPlugin::LastFmPlugin()
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
     lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 
     m_pw = TomahawkSettings::instance()->lastFmPassword();
 
