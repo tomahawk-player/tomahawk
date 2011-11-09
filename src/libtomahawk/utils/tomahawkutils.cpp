@@ -605,15 +605,7 @@ nam()
         return s_threadNamHash[ QThread::currentThread() ];
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-    {
-        if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
-        {
-            setNam( new QNetworkAccessManager(), true );
-            return s_threadNamHash[ QThread::currentThread() ];
-        }
-        else
-            return 0;
-    }
+        return 0;
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
@@ -630,12 +622,11 @@ nam()
 
 
 void
-setNam( QNetworkAccessManager* nam, bool noMutexLocker )
+setNam( QNetworkAccessManager* nam )
 {
     Q_ASSERT( nam );
     // Don't lock if being called from nam()()
-    QMutex otherMutex;
-    QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
+    QMutexLocker locker( &s_namAccessMutex );
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
             QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {

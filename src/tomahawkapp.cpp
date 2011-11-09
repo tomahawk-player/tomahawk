@@ -161,7 +161,7 @@ TomahawkApp::init()
     
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
-    Q_UNUSED( TomahawkUtils::nam() );
+    TomahawkUtils::setNam( new QNetworkAccessManager() );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
