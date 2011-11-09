@@ -481,9 +481,9 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 {
-    Q_UNUSED( query );
-    QList< QNetworkProxy > proxies;
-    proxies << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
+    tDebug() << Q_FUNC_INFO << " in thread " << QThread::currentThread() << " for query " << query.url();
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
+    QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
     return proxies;
 }
 
@@ -491,6 +491,7 @@ NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
+    tDebug() << Q_FUNC_INFO << " in thread " << QThread::currentThread() << " for query " << query.url();
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     if ( hostname.isEmpty() || m_noProxyHosts.contains( hostname ) )
