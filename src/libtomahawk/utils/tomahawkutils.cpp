@@ -550,6 +550,7 @@ NetworkProxyFactory*
 proxyFactory( bool noMutexLocker )
 {
     // Don't lock if being called from nam()
+    tDebug() << Q_FUNC_INFO;
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
 
@@ -573,6 +574,7 @@ proxyFactory( bool noMutexLocker )
 void
 setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
 {
+    tDebug() << Q_FUNC_INFO;
     Q_ASSERT( factory );
     // Don't lock if being called from setNam()
     QMutex otherMutex;
@@ -602,10 +604,16 @@ nam()
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
+    {
+        tDebug( LOGEXTRA ) << "returning existing nam for thread " << QThread::currentThread();
         return s_threadNamHash[ QThread::currentThread() ];
+    }
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    {
+        tDebug( LOGEXTRA ) << "no gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam available to copy, returning 0";
         return 0;
+    }
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
@@ -617,6 +625,8 @@ nam()
 
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
+    tDebug( LOGEXTRA ) << "created new nam for thread " << QThread::currentThread();
+    
     return newNam;
 }
 
@@ -626,10 +636,12 @@ setNam( QNetworkAccessManager* nam )
 {
     Q_ASSERT( nam );
     // Don't lock if being called from nam()()
+    tDebug( LOGEXTRA ) << "setting nam for thread " << QThread::currentThread();
     QMutexLocker locker( &s_namAccessMutex );
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
             QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
+        tDebug( LOGEXTRA ) << "creating initial gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam";
         // Should only get here on first initialization of the nam
         TomahawkSettings *s = TomahawkSettings::instance();
         TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
