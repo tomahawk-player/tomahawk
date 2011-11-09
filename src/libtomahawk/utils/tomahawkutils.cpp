@@ -615,6 +615,7 @@ nam()
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = lastfm::nam();
+    lastfm::setNetworkAccessManager( newNam );
 #else
     newNam = new QNetworkAccessManager();
 #endif
