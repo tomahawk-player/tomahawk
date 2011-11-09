@@ -481,7 +481,6 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << " in thread " << QThread::currentThread() << " for query " << query.url();
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
     return proxies;
@@ -491,7 +490,6 @@ NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << " in thread " << QThread::currentThread() << " for query " << query.url();
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     if ( hostname.isEmpty() || m_noProxyHosts.contains( hostname ) )
@@ -615,15 +613,17 @@ nam()
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
-    {
-        tDebug( LOGEXTRA ) << "returning existing nam for thread " << QThread::currentThread();
         return s_threadNamHash[ QThread::currentThread() ];
-    }
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
     {
-        tDebug( LOGEXTRA ) << "no gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam available to copy, returning 0";
-        return 0;
+        if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+        {
+            setNam( new QNetworkAccessManager(), true );
+            return s_threadNamHash[ QThread::currentThread() ];
+        }
+        else
+            return 0;
     }
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
@@ -643,12 +643,12 @@ nam()
 
 
 void
-setNam( QNetworkAccessManager* nam )
+setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 {
     Q_ASSERT( nam );
     // Don't lock if being called from nam()()
-    tDebug( LOGEXTRA ) << "setting nam for thread " << QThread::currentThread();
-    QMutexLocker locker( &s_namAccessMutex );
+    QMutex otherMutex;
+    QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
             QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
