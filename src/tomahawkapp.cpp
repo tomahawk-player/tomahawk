@@ -86,6 +86,7 @@
 #include <sys/sysctl.h>
 #endif
 
+const char* enApiSecret = "BNvTzfthHr/d1eNhHLvL1Jo=";
 
 void
 increaseMaxFileDescriptors()
@@ -158,7 +159,7 @@ TomahawkApp::init()
     TomahawkSettings* s = TomahawkSettings::instance();
 
     new ActionCollection( this );
-    
+
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );
@@ -173,7 +174,11 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
-    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+    QByteArray magic = QByteArray::fromBase64( enApiSecret );
+    QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
+    int length = magic.length(), n2 = wand.length();
+    for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    Echonest::Config::instance()->setAPIKey( magic );
 
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
@@ -298,7 +303,7 @@ TomahawkApp::~TomahawkApp()
 #ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
 #endif
-    
+
     tLog() << "Finished shutdown.";
 }
 
