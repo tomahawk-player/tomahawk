@@ -59,7 +59,6 @@ namespace TomahawkUtils
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
-        static QList< QNetworkProxy > proxyForQuery( const QNetworkProxyQuery & query );
 
         virtual void setNoProxyHosts( const QStringList &hosts );
         virtual QStringList noProxyHosts() const { return m_noProxyHosts; }

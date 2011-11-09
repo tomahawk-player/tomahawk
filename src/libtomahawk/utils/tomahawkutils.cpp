@@ -479,16 +479,6 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 
 
 QList< QNetworkProxy >
-NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
-{
-    Q_UNUSED( query );
-    QList< QNetworkProxy > proxies;
-    proxies << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
-    return proxies;
-}
-
-
-QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
     QList< QNetworkProxy > proxies;
