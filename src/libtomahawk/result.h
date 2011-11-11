@@ -69,6 +69,7 @@ public:
     collection_ptr collection() const;
     Tomahawk::artist_ptr artist() const;
     Tomahawk::album_ptr album() const;
+    Tomahawk::artist_ptr composer() const;
     QString track() const { return m_track; }
     QString url() const { return m_url; }
     QString mimetype() const { return m_mimetype; }
@@ -80,6 +81,7 @@ public:
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int modificationTime() const { return m_modtime; }
     int year() const { return m_year; }
+    unsigned int discnumber() const { return m_discnumber; }
 
     void setScore( float score ) { m_score = score; }
     void setTrackId( unsigned int id ) { m_trackId = id; }
@@ -89,6 +91,7 @@ public:
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
+    void setComposer( const Tomahawk::artist_ptr& composer );
     void setTrack( const QString& track ) { m_track = track; }
     void setMimetype( const QString& mimetype ) { m_mimetype = mimetype; }
     void setDuration( unsigned int duration ) { m_duration = duration; }
@@ -97,6 +100,7 @@ public:
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
     void setYear( unsigned int year ) { m_year = year; }
+    void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
 
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
@@ -125,6 +129,7 @@ private:
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
+    Tomahawk::artist_ptr m_composer;
     QString m_track;
     QString m_url;
     QString m_mimetype;
@@ -135,6 +140,7 @@ private:
     unsigned int m_size;
     unsigned int m_albumpos;
     unsigned int m_modtime;
+    unsigned int m_discnumber;
     int m_year;
     float m_score;
 

@@ -97,10 +97,28 @@ set( libGuiSources
     playlist/topbar/searchbutton.cpp
 
     ExternalResolverGui.cpp
+    network/bufferiodevice.cpp
+    network/msgprocessor.cpp
+    network/streamconnection.cpp
+    network/dbsyncconnection.cpp
+    network/remotecollection.cpp
+    network/portfwdthread.cpp
+    network/servent.cpp
+    network/connection.cpp
+    network/controlconnection.cpp
+    
     resolvers/scriptresolver.cpp
     resolvers/qtscriptresolver.cpp
 
     sip/SipModel.cpp
+
+    taghandlers/tag.cpp
+    taghandlers/apetag.cpp
+    taghandlers/asftag.cpp
+    taghandlers/id3v1tag.cpp
+    taghandlers/id3v2tag.cpp
+    taghandlers/mp4tag.cpp
+    taghandlers/oggtag.cpp
 
     utils/widgetdragfilter.cpp
     utils/xspfgenerator.cpp
@@ -537,6 +555,14 @@ set( libHeaders
 
 set( libHeaders_NoMOC
     infosystem/infoplugins/unix/imageconverter.h
+    
+    taghandlers/tag.h
+    taghandlers/apetag.h
+    taghandlers/asftag.h
+    taghandlers/id3v1tag.h
+    taghandlers/id3v2tag.h
+    taghandlers/mp4tag.h
+    taghandlers/oggtag.h
 
     utils/tomahawkutils.h
 )

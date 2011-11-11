@@ -127,12 +127,14 @@ Query::updateSortNames()
     if ( isFullTextQuery() )
     {
         m_artistSortname = DatabaseImpl::sortname( m_fullTextQuery, true );
+        m_composerSortName = DatabaseImpl::sortname( m_composer, true );
         m_albumSortname = DatabaseImpl::sortname( m_fullTextQuery );
         m_trackSortname = m_albumSortname;
     }
     else
     {
         m_artistSortname = DatabaseImpl::sortname( m_artist, true );
+        m_composerSortName = DatabaseImpl::sortname( m_composer, true );
         m_albumSortname = DatabaseImpl::sortname( m_album );
         m_trackSortname = DatabaseImpl::sortname( m_track );
     }

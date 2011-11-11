@@ -79,11 +79,13 @@ public:
     QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
     void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
+    void setComposer( const QString& composer ) { m_composer = composer; updateSortNames(); }
     void setAlbum( const QString& album ) { m_album = album; updateSortNames(); }
     void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
+    void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
 
     QVariant toVariant() const;
     QString toString() const;
@@ -93,11 +95,13 @@ public:
     QString albumSortname() const { return m_albumSortname; }
     QString trackSortname() const { return m_trackSortname; }
     QString artist() const { return m_artist; }
+    QString composer() const { return m_composer; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
 
     int duration() const { return m_duration; }
     unsigned int albumpos() const { return m_albumpos; }
+    unsigned int discnumber() const { return m_discnumber; }
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
@@ -171,16 +175,19 @@ private:
     mutable QID m_qid;
 
     QString m_artistSortname;
+    QString m_composerSortName;
     QString m_albumSortname;
     QString m_trackSortname;
 
     QString m_artist;
+    QString m_composer;
     QString m_album;
     QString m_track;
     QString m_fullTextQuery;
 
     int m_duration;
     unsigned int m_albumpos;
+    unsigned int m_discnumber;
     QString m_resultHint;
 
     QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;

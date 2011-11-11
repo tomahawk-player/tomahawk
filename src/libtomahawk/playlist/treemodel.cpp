@@ -894,6 +894,11 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
                 QStringList tracks = returnedData[ "tracks" ].toStringList();
                 QList<query_ptr> ql;
+
+                //TODO: Figure out how to do this with a multi-disk album without breaking the
+                //      current behaviour. I just know too little about InfoSystem to deal with
+                //      it right now, I've only taken the liberty of adding Query::setDiscNumber
+                //      which should make this easier. --Teo 11/2011
                 unsigned int trackNo = 1;
 
                 foreach ( const QString& trackName, tracks )

@@ -58,6 +58,7 @@ Result::Result( const QString& url )
     , m_size( 0 )
     , m_albumpos( 0 )
     , m_modtime( 0 )
+    , m_discnumber( 0 )
     , m_year( 0 )
     , m_score( 0 )
     , m_trackId( 0 )
@@ -80,6 +81,12 @@ artist_ptr
 Result::artist() const
 {
     return m_artist;
+}
+
+artist_ptr
+Result::composer() const
+{
+    return m_composer;
 }
 
 
@@ -151,6 +158,8 @@ Result::toVariant() const
     m.insert( "duration", duration() );
     m.insert( "score", score() );
     m.insert( "sid", id() );
+    m.insert( "discnumber", discnumber() );
+    m.insert( "composer", composer()->name() );
 
     return m;
 }
@@ -208,6 +217,13 @@ void
 Result::setArtist( const Tomahawk::artist_ptr& artist )
 {
     m_artist = artist;
+}
+
+
+void
+Result::setComposer( const Tomahawk::artist_ptr &composer )
+{
+    m_composer = composer;
 }
 
 

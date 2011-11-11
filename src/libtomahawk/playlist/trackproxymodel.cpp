@@ -177,6 +177,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     QString track1 = q1->track();
     QString track2 = q2->track();
     unsigned int albumpos1 = 0, albumpos2 = 0;
+    unsigned int discnumber1 = 0, discnumber2 = 0;
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
@@ -189,6 +190,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         album1 = r->album()->name();
         track1 = r->track();
         albumpos1 = r->albumpos();
+        discnumber1 = r->discnumber();
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
         id1 = r->trackId();
@@ -201,6 +203,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         album2 = r->album()->name();
         track2 = r->track();
         albumpos2 = r->albumpos();
+        discnumber2 = r->discnumber();
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
         id2 = r->trackId();
@@ -220,10 +223,15 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         {
             if ( album1 == album2 )
             {
-                if ( albumpos1 == albumpos2 )
-                    return id1 < id2;
+                if( discnumber1 == discnumber2 )
+                {
+                    if ( albumpos1 == albumpos2 )
+                        return id1 < id2;
 
-                return albumpos1 < albumpos2;
+                    return albumpos1 < albumpos2;
+                }
+
+                return discnumber1 < discnumber2;
             }
 
             return QString::localeAwareCompare( album1, album2 ) < 0;
@@ -235,10 +243,15 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     {
         if ( album1 == album2 )
         {
-            if ( albumpos1 == albumpos2 )
-                return id1 < id2;
+            if( discnumber1 == discnumber2 )
+            {
+                if ( albumpos1 == albumpos2 )
+                    return id1 < id2;
 
-            return albumpos1 < albumpos2;
+                return albumpos1 < albumpos2;
+            }
+
+            return discnumber1 < discnumber2;
         }
 
         return QString::localeAwareCompare( album1, album2 ) < 0;
