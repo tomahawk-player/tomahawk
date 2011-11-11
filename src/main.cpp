@@ -43,6 +43,8 @@ main( int argc, char *argv[] )
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 #endif
 
+    setenv("QT_X11_NO_NATIVE_MENUBAR", "1", true);
+
     TomahawkApp a( argc, argv );
     new BreakPad( QDir::tempPath() );
 
