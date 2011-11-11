@@ -414,7 +414,7 @@ bool
 SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
 
-    if ( event->type() == QEvent::MouseButtonRelease )
+    if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonPress )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
         if ( type == SourcesModel::TemporaryPage )
@@ -429,7 +429,12 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
             QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
 
             if ( r.contains( ev->pos() ) )
-                gpi->removeFromList();
+            {
+                if ( event->type() == QEvent::MouseButtonRelease )
+                    gpi->removeFromList();
+
+                return true;
+            }
         }
         else if ( type == SourcesModel::Collection )
         {
