@@ -18,14 +18,18 @@
 
 #include "resolver.h"
 
-#include <QWidget>
-#include <QtUiTools/QUiLoader>
+
 #include <QMetaProperty>
 #include <QBuffer>
 #include <QDir>
-#include <QIcon>
 
 #include "utils/logger.h"
+
+#ifndef ENABLE_HEADLESS
+    #include <QIcon>
+    #include <QWidget>
+#endif
+#include <QUiLoader>
 
 Tomahawk::ExternalResolver::ErrorState
 Tomahawk::ExternalResolver::error() const
@@ -33,6 +37,7 @@ Tomahawk::ExternalResolver::error() const
     return NoError;
 }
 
+#ifndef ENABLE_HEADLESS
 QVariant
 Tomahawk::ExternalResolver::configMsgFromWidget( QWidget* w )
 {
@@ -45,7 +50,7 @@ Tomahawk::ExternalResolver::configMsgFromWidget( QWidget* w )
 //     qDebug() << "Generated widget variant:" << widgetMap;
     return widgetMap;
 }
-
+#endif
 
 void
 Tomahawk::ExternalResolver::addChildProperties( QObject* widget, QVariantMap& m )

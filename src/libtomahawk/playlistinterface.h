@@ -20,7 +20,6 @@
 #define PLAYLISTINTERFACE_H
 
 #include <QModelIndex>
-#include <QWidget>
 
 #include "typedefs.h"
 #include "dllmacro.h"

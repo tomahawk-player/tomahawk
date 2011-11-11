@@ -26,7 +26,10 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
 #include <QtCore/QRect>
-#include <QPalette>
+
+#ifndef ENABLE_HEADLESS
+    #include <QPalette>
+#endif
 
 #define RESPATH ":/data/"
 

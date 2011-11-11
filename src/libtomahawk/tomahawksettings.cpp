@@ -18,7 +18,7 @@
 
 #include "tomahawksettings.h"
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     #include <QDesktopServices>
     #include "settingsdialog.h"
 #endif
@@ -37,7 +37,7 @@ using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
-
+#ifndef ENABLE_HEADLESS
 inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
 {
     out <<  VERSION;
@@ -69,6 +69,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     }
     return in;
 }
+#endif
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -104,8 +105,11 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         setValue( "configversion", VERSION );
     }
 
+#ifndef ENABLE_HEADLESS
     qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
     qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
+#endif
+
 }
 
 
@@ -257,7 +261,7 @@ TomahawkSettings::scannerPaths()
 {
     QString musicLocation;
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
 #endif
 
@@ -905,6 +909,7 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
     setValue( "script/loadedresolvers", resolvers );
 }
 
+#ifndef ENABLE_HEADLESS
 void
 TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
 {
@@ -937,6 +942,7 @@ TomahawkSettings::removeAtticaResolverState ( const QString& resolver )
     resolvers.remove( resolver );
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
 }
+#endif
 
 QString
 TomahawkSettings::scriptDefaultPath() const

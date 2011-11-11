@@ -12,6 +12,29 @@ add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 
+set( libGuiHeaders
+    viewpage.h
+    viewmanager.h
+
+    playlist/topbar/topbar.h
+    playlist/topbar/clearbutton.h
+    playlist/topbar/searchlineedit.h
+    playlist/topbar/lineedit.h
+    playlist/topbar/lineedit_p.h
+    playlist/topbar/searchbutton.h
+)
+
+set( libGuiSources
+    viewpage.cpp
+    viewmanager.cpp
+
+    playlist/topbar/topbar.cpp
+    playlist/topbar/clearbutton.cpp
+    playlist/topbar/searchlineedit.cpp
+    playlist/topbar/lineedit.cpp
+    playlist/topbar/searchbutton.cpp
+)
+
 set( libSources
     tomahawksettings.cpp
     sourcelist.cpp
@@ -28,8 +51,6 @@ set( libSources
     result.cpp
     source.cpp
     sourceplaylistinterface.cpp
-    viewpage.cpp
-    viewmanager.cpp
     globalactionmanager.cpp
     contextmenu.cpp
     dropjob.cpp
@@ -148,11 +169,6 @@ set( libSources
     playlist/PlaylistUpdaterInterface.cpp
     playlist/XspfUpdater.cpp
 
-    playlist/topbar/topbar.cpp
-    playlist/topbar/clearbutton.cpp
-    playlist/topbar/searchlineedit.cpp
-    playlist/topbar/lineedit.cpp
-    playlist/topbar/searchbutton.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicControl.cpp
@@ -256,11 +272,9 @@ set( libHeaders
     result.h
     source.h
     sourceplaylistinterface.h
-    viewmanager.h
     globalactionmanager.h
     contextmenu.h
     dropjob.h
-    AtticaManager.h
     LatchManager.h
 
     artist.h
@@ -388,13 +402,6 @@ set( libHeaders
     playlist/PlaylistUpdaterInterface.h
     playlist/XspfUpdater.h
 
-    playlist/topbar/topbar.h
-    playlist/topbar/clearbutton.h
-    playlist/topbar/searchlineedit.h
-    playlist/topbar/lineedit.h
-    playlist/topbar/lineedit_p.h
-    playlist/topbar/searchbutton.h
-
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
     playlist/dynamic/GeneratorInterface.h
@@ -469,8 +476,6 @@ set( libHeaders
 )
 
 set( libHeaders_NoMOC
-    viewpage.h
-
     infosystem/infoplugins/unix/imageconverter.h
 
     playlist/dynamic/GeneratorInterface.h
@@ -517,8 +522,8 @@ IF(QCA2_FOUND)
 ENDIF(QCA2_FOUND)
 
 IF(LIBATTICA_FOUND)
-    SET( libSources ${libSources} AtticaManager.cpp )
-    SET( libHeaders ${libHeaders} AtticaManager.h )
+    SET( libGuiSources ${libGuiSources} AtticaManager.cpp )
+    SET( libGuiHeaders ${libGuiHeaders} AtticaManager.h )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
 ENDIF(LIBATTICA_FOUND)
 
@@ -591,12 +596,17 @@ IF(LIBLASTFM_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
 ENDIF(LIBLASTFM_FOUND)
 
+IF(BUILD_GUI)
+    LIST(APPEND libSources ${libGuiSources} )
+    LIST(APPEND libHeaders ${libGuiHeaders} )
+ENDIF()
+
 qt4_wrap_ui( libUI_H ${libUI} )
-qt4_wrap_cpp( libMoc ${libHeaders} )
+qt4_wrap_cpp( libMoc ${libHeaders} ${libGuiHeaders} )
 
 SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libSources} ${libMoc} )
+ADD_LIBRARY( tomahawklib SHARED ${libGuiSources} ${libSources} ${libMoc} )
 
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )

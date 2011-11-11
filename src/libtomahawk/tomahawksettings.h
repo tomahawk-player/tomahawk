@@ -19,15 +19,16 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
-#include <QSettings>
+#ifndef ENABLE_HEADLESS
+    #include "AtticaManager.h"
+#endif
 
-#include "dllmacro.h"
-
-#include "AtticaManager.h"
 #include "playlist.h"
 
+#include <QSettings>
 #include <QtNetwork/QNetworkProxy>
 
+#include "dllmacro.h"
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -187,11 +188,13 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
+#ifndef ENABLE_HEADLESS
     AtticaManager::StateHash atticaResolverStates() const;
     void setAtticaResolverStates( const AtticaManager::StateHash states );
 
     void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
     void removeAtticaResolverState( const QString& resolver );
+#endif
 
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
@@ -211,7 +214,7 @@ public:
     };
     PrivateListeningMode privateListeningMode() const;
     void setPrivateListeningMode( PrivateListeningMode mode );
-    
+
 signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );
@@ -223,6 +226,8 @@ private:
     static TomahawkSettings* s_instance;
 };
 
+#ifndef ENABLE_HEADLESS
 Q_DECLARE_METATYPE(AtticaManager::StateHash);
+#endif
 
 #endif

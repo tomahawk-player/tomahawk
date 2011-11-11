@@ -24,8 +24,11 @@
 
 #include <QObject>
 #include <QString>
-#include <QMenu>
 #include <QNetworkProxy>
+
+#ifndef ENABLE_HEADLESS
+    #include <QMenu>
+#endif
 
 #include "dllmacro.h"
 
@@ -42,8 +45,12 @@ public:
     virtual QString prettyName() const = 0;
     // internal name
     virtual QString factoryId() const = 0;
+
+#ifndef ENABLE_HEADLESS
     // if the user can create multiple
     virtual QIcon icon() const { return QIcon(); }
+#endif
+
     virtual bool isUnique() const { return false; }
 
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
@@ -73,8 +80,10 @@ public:
     virtual const QString accountName() const = 0;
     virtual ConnectionState connectionState() const = 0;
     virtual QString errorMessage() const;
+#ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
     virtual QWidget* configWidget();
+#endif
     virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
 
@@ -110,9 +119,10 @@ signals:
     // new data for other sources;
     void avatarReceived ( const QString& from,  const QPixmap& avatar);
 
-
+#ifndef ENABLE_HEADLESS
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
+#endif
 
     void dataError( bool );
 
