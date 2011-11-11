@@ -135,22 +135,29 @@ ScanManager::runScan( bool manualFull )
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( manualFull )
+    if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
-        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+        if ( manualFull )
+        {
+            DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+            connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                                SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+
+            Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+            return;
+        }
+
+        DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
+        connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
+                    SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
 
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    }
+    else
+    {
+        qDebug() << "Could not run dir scan, old scan still running";
         return;
     }
-
-    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
-    connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
-                SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
-
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
 }
 
 
@@ -166,7 +173,7 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
-    
+
     runDirScan();
 }
 
@@ -190,7 +197,7 @@ ScanManager::runDirScan()
         return;
 
     QStringList paths = TomahawkSettings::instance()->scannerPaths();
-    
+
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_scanTimer->stop();
