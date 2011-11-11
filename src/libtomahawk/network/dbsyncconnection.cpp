@@ -121,7 +121,7 @@ DBSyncConnection::trigger()
 void
 DBSyncConnection::check()
 {
-    qDebug() << Q_FUNC_INFO << m_source->id();
+    qDebug() << Q_FUNC_INFO << this << m_source->id();
     if ( m_state != UNKNOWN && m_state != SYNCED )
     {
         qDebug() << "Syncing in progress already.";
