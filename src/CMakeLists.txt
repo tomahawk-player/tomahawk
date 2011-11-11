@@ -40,6 +40,7 @@ SET( tomahawkSources ${tomahawkSources}
      musicscanner.cpp
      shortcuthandler.cpp
      scanmanager.cpp
+     ubuntuunityhack.cpp
      tomahawkapp.cpp
      main.cpp
 )
@@ -85,6 +86,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 
      musicscanner.h
      scanmanager.h
+     ubuntuunityhack.h
      shortcuthandler.h
 )
 
