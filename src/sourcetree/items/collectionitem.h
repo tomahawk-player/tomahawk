@@ -42,7 +42,7 @@ public:
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 
-    virtual bool localLatchedOn() const { return m_latchedOn; }
+    virtual bool localLatchedOn() const;
 
     Tomahawk::source_ptr source() const;
 
@@ -85,7 +85,9 @@ private:
     QPixmap m_superCol, m_defaultAvatar;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
+
     bool m_latchedOn;
+    Tomahawk::source_ptr m_latchedOnTo;
 
     QList< TemporaryPageItem* > m_tempItems;
     GenericPageItem* m_sourceInfoItem;
