@@ -271,31 +271,6 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->drawPixmap( pixmapRect, icon );
 
-    QString descText;
-    if ( type == RecentlyPlayedPlaylistsModel::Station )
-    {
-        descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
-    } else
-    {
-        descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
-    }
-    QColor c = painter->pen().color();
-    painter->setPen( QColor( Qt::gray ).darker() );
-    QFont font2 = font;
-    font2.setPointSize( font2.pointSize() - 1 );
-    painter->setFont( font2 );
-
-    QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
-#ifdef Q_WS_MAC
-    rectText.adjust( 0, 1, 0, 0 );
-#elif defined Q_WS_WIN
-    rectText.adjust( 0, 2, 0, 0 );
-#endif
-
-    painter->drawText( rectText, descText );
-    painter->setPen( c );
-    painter->setFont( font );
-
     if ( type != RecentlyPlayedPlaylistsModel::Station )
     {
         painter->save();
@@ -323,6 +298,40 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         avatar = m_defaultAvatar;
     QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );
     painter->drawPixmap( r, avatar );
+
+    QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
+    if ( author.contains( "@" ) )
+        author = author.mid( 0, author.indexOf( '@' ) );
+
+    const int w = painter->fontMetrics().width( author );
+    QRect avatarNameRect( opt.rect.width() - 10 - w, r.bottom(), w, opt.rect.bottom() - r.bottom() );
+    painter->drawText( avatarNameRect, author, QTextOption( Qt::AlignCenter ) );
+
+    const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );
+    QString descText;
+    if ( type == RecentlyPlayedPlaylistsModel::Station )
+    {
+        descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
+    } else
+    {
+        descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
+    }
+    QColor c = painter->pen().color();
+    painter->setPen( QColor( Qt::gray ).darker() );
+    QFont font2 = font;
+    font2.setPointSize( font2.pointSize() - 1 );
+    painter->setFont( font2 );
+
+    QRect rectText = option.rect.adjusted( 66, 20, -leftEdge - 10, -8 );
+#ifdef Q_WS_MAC
+    rectText.adjust( 0, 1, 0, 0 );
+#elif defined Q_WS_WIN
+    rectText.adjust( 0, 2, 0, 0 );
+#endif
+
+    painter->drawText( rectText, descText );
+    painter->setPen( c );
+    painter->setFont( font );
 
     painter->setFont( boldFont );
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );
