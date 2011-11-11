@@ -359,5 +359,11 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 void
 Source::updateIndexWhenSynced()
 {
-    m_updateIndexWhenSynced = true;
+    if ( isLocal() )
+    {
+        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+    else
+        m_updateIndexWhenSynced = true;
 }
