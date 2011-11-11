@@ -200,12 +200,28 @@ CollectionItem::icon() const
     }
 }
 
+bool
+CollectionItem::localLatchedOn() const
+{
+    // Don't show a listen icon if this is the local collection and we are latched on to someone who went offline
+    // we are technically still latched on (if they come back online we'll be still listening along) but it's not visible
+    // in the UI and confusing to the user why the red headphones are still there
+
+    if ( !m_source.isNull() && m_source->isLocal() &&
+         !m_latchedOnTo.isNull() && !m_latchedOnTo->isOnline() )
+        return false;
+
+    return m_latchedOn;
+}
+
+
 void
 CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
 {
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = false;
+        m_latchedOnTo.clear();
         emit updated();
     }
 }
@@ -216,6 +232,7 @@ CollectionItem::latchedOn( const source_ptr& from, const source_ptr& to )
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = true;
+        m_latchedOnTo = to;
         emit updated();
     }
 }
