@@ -22,6 +22,7 @@
 #include <QTranslator>
 
 #include "breakpad/BreakPad.h"
+#include "ubuntuunityhack.h"
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -59,6 +60,14 @@ main( int argc, char *argv[] )
     QTranslator translator;
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );
+
+    // Unity hack taken from Clementine's main.cpp
+#ifdef Q_OS_LINUX
+    // In 11.04 Ubuntu decided that the system tray should be reserved for certain
+    // whitelisted applications.  Tomahawk will override this setting and insert
+    // itself into the list of whitelisted apps.
+    UbuntuUnityHack hack;
+#endif
 
     if ( argc > 1 )
     {
