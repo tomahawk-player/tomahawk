@@ -220,7 +220,10 @@ TomahawkApp::init()
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->setObjectName( "TH_Main_Window" );
-        m_mainwindow->show();
+        if ( !arguments().contains( "--hide" ) )
+        {
+            m_mainwindow->show();
+        }
     }
 #endif
 
@@ -325,6 +328,7 @@ TomahawkApp::printHelp()
     echo( "  --help         Show this help\n" );
     echo( "  --http         Initialize HTTP server\n" );
     echo( "  --filescan     Scan for files on startup\n" );
+    echo( "  --hide         Hide main window on startup\n" );
     echo( "  --testdb       Use a test database instead of real collection\n" );
     echo( "  --noupnp       Disable UPNP\n" );
     echo( "  --nosip        Disable SIP\n" );
