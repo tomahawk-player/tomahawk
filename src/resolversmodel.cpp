@@ -197,12 +197,13 @@ ResolversModel::addInstalledResolvers()
 
     QDir appDir( qApp->applicationDirPath() );
     QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+    QDir libexecDir( CMAKE_INSTALL_LIBEXECDIR );
 
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
 
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    pluginDirs << appDir << libDir << lib64Dir << libexecDir << QDir( qApp->applicationDirPath() );
     foreach ( const QDir& pluginDir, pluginDirs )
     {
         qDebug() << "Checking directory for resolvers:" << pluginDir;
