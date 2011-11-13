@@ -219,6 +219,9 @@ signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );
 
+private slots:
+    void updateIndex();
+
 private:
     void doInitialSetup();
     void doUpgrade( int oldVersion, int newVersion );
