@@ -527,7 +527,7 @@ QtScriptResolver::loadDataFromWidgets()
         QString widgetName = data["widget"].toString();
         QWidget* widget= findWidget( m_configWidget.data(), widgetName );
 
-        QString value = widgetData( widget, data["property"].toString() ).toString();
+        QVariant value = widgetData( widget, data["property"].toString() );
 
         saveData[ data["name"].toString() ] = value;
     }
