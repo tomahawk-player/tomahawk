@@ -31,7 +31,10 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 
-#define VERSION 4
+#include "database/databasecommand_updatesearchindex.h"
+#include "database/database.h"
+
+#define VERSION 5
 
 using namespace Tomahawk;
 
@@ -220,6 +223,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
+    } else if ( oldVersion == 4 )
+    {
+        // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
     }
 }
 
@@ -990,4 +997,12 @@ void
 TomahawkSettings::setPrivateListeningMode( TomahawkSettings::PrivateListeningMode mode )
 {
     setValue( "privatelisteningmode", mode );
+}
+
+
+void
+TomahawkSettings::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

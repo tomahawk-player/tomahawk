@@ -26,6 +26,7 @@
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
 {
+    tLog() << Q_FUNC_INFO << "Updating index.";
 }
 
 
