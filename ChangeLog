@@ -1,5 +1,8 @@
 Version 0.3.1:
-    * Support more widget types in javascript resolver configs
+    * Fixed not resolving to local files.
+    * Fixed shutdown crash on Windows.
+    * Support more widget types in Javascript resolver configs.
+
 Version 0.3.0:
     * Make artist names in the album view clickable.
     * Don't start playing if a tomahawk:// link was clicked while Tomahawk
