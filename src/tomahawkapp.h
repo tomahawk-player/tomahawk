@@ -111,8 +111,6 @@ private:
 
     void initHTTP();
 
-    QList<Tomahawk::collection_ptr> m_collections;
-
     QWeakPointer<Database> m_database;
     QWeakPointer<ScanManager> m_scanManager;
     QWeakPointer<AudioEngine> m_audioEngine;
