@@ -132,7 +132,7 @@ TomahawkApp::init()
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
     {
         printHelp();
-        ::exit(0);
+        ::exit( 0 );
     }
 
     qDebug() << "TomahawkApp thread:" << thread();
@@ -283,8 +283,9 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
-    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();
+
+/*    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data(); */ // FIXME: this causes a shutdown crash on Windows
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
