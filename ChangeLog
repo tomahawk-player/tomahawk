@@ -1,3 +1,5 @@
+Version 0.3.1:
+    * Support more widget types in javascript resolver configs
 Version 0.3.0:
     * Make artist names in the album view clickable.
     * Don't start playing if a tomahawk:// link was clicked while Tomahawk
@@ -12,7 +14,7 @@ Version 0.3.0:
     * Added YouTube resolver.
     * Fixed bug where going offline then online would not re-connect to many
       peers.
-    * Added support for auto-updating live XSPF playlists. 
+    * Added support for auto-updating live XSPF playlists.
     * Don't show an age of 41 years for tracks that have no age information.
     * Show config UI for resolvers that have them as soon as you add them.
     * Add support for Echo Nest Personal Catalogs and User Radio. Synchronize
