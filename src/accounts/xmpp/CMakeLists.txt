@@ -39,7 +39,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_account_xmpp
-    tomahawk_sipxmpp
+    tomahawk_sip_xmpp
     ${TOMAHAWK_LIBRARIES}
     ${JREEN_LIBRARY}
     ${QT_LIBRARIES}

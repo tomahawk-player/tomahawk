@@ -57,7 +57,7 @@ target_link_libraries( tomahawk_oauth_twitter
 
 target_link_libraries( tomahawk_account_twitter
     tomahawk_oauth_twitter
-    tomahawk_siptwitter
+    tomahawk_sip_twitter
     ${TOMAHAWK_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QT_LIBRARIES}
