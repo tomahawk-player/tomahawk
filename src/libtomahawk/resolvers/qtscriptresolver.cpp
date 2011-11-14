@@ -173,6 +173,10 @@ QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& resul
                                                                         .arg( QString( QUrl( result->url() ).toEncoded() ) );
 
     QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
+
+    if ( urlStr.isEmpty() )
+        return QSharedPointer< QIODevice >();
+
     QUrl url = QUrl::fromEncoded( urlStr.toUtf8() );
     QNetworkRequest req( url );
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
