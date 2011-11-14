@@ -21,12 +21,12 @@
 
 #include <jreen/client.h>
 
-#include <QObject>
-#include <QDir>
+#include <QtCore/QObject>
+#include <QtCore/QDir>
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 
-class SIPDLLEXPORT AvatarManager : public QObject
+class ACCOUNTDLLEXPORT AvatarManager : public QObject
 {
 Q_OBJECT
 

@@ -1,13 +1,13 @@
 #ifndef TOMAHAWKOAUTHTWITTERACCOUNT
 #define TOMAHAWKOAUTHTWITTERACCOUNT
 
-#include "dllmacro.h"
+#include "accounts/accountdllmacro.h"
 #include <utils/tomahawkutils.h>
 
 #include <QTweetLib/qtweetlib_global.h>
 #include <QTweetLib/oauthtwitter.h>
 
-class DLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
+class ACCOUNTDLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
 {
     Q_OBJECT
 

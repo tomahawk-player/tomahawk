@@ -1,6 +1,6 @@
 #include "tomahawkoauthtwitter.h"
 
-#include <QInputDialog>
+#include <QtGui/QInputDialog>
 
 #include "utils/logger.h"
 

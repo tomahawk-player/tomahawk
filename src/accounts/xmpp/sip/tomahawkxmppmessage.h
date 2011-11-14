@@ -23,10 +23,10 @@
 
 #define TOMAHAWK_SIP_MESSAGE_NS QLatin1String("http://www.tomhawk-player.org/sip/transports")
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 
 class TomahawkXmppMessagePrivate;
-class SIPDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
+class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
 {
     J_PAYLOAD(TomahawkXmppMessage)
     Q_DECLARE_PRIVATE(TomahawkXmppMessage)

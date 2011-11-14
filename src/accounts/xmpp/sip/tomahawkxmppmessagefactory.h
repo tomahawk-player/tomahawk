@@ -23,9 +23,9 @@
 
 #include <jreen/stanzaextension.h>
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 
-class SIPDLLEXPORT TomahawkXmppMessageFactory : public Jreen::PayloadFactory<TomahawkXmppMessage>
+class ACCOUNTDLLEXPORT TomahawkXmppMessageFactory : public Jreen::PayloadFactory<TomahawkXmppMessage>
 {
 public:
     TomahawkXmppMessageFactory();

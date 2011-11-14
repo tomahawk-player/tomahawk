@@ -4,20 +4,29 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_PLUGIN )
 add_definitions( -DQT_SHARED )
-add_definitions( -DDLLEXPORT_PRO )
+add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( xmppAccountSources
     xmppaccount.cpp
     xmppconfigwidget.cpp
+    sip/xmppsip.cpp
+    sip/tomahawkxmppmessage.cpp
+    sip/tomahawkxmppmessagefactory.cpp
+    sip/avatarmanager.cpp
+    sip/xmlconsole.cpp
 )
 
 set( xmppAccountHeaders
     xmppaccount.h
     xmppconfigwidget.h
+    sip/xmppsip.h
+    sip/avatarmanager.h
+    sip/xmlconsole.h
 )
 
 set( xmppAccountUI
     xmppconfigwidget.ui
+    sip/xmlconsole.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
@@ -39,9 +48,8 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_account_xmpp
-    tomahawk_sip_xmpp
     ${TOMAHAWK_LIBRARIES}
-    ${JREEN_LIBRARY}
+    ${LIBJREEN_LIBRARY}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
 )
@@ -51,3 +59,6 @@ IF( APPLE )
 ENDIF( APPLE )
 
 install( TARGETS tomahawk_account_xmpp DESTINATION lib${LIB_SUFFIX} )
+
+#add_subdirectory(googlewrapper)
+

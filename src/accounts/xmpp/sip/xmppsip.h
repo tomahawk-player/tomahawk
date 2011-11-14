@@ -43,9 +43,9 @@
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 
-class SIPDLLEXPORT XmppSipPlugin : public SipPlugin
+class ACCOUNTDLLEXPORT XmppSipPlugin : public SipPlugin
 {
     Q_OBJECT
 

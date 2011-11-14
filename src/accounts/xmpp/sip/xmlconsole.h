@@ -23,18 +23,18 @@
 #include <jreen/client.h>
 #include <jreen/jid.h>
 
-#include <QWidget>
-#include <QXmlStreamReader>
-#include <QDateTime>
-#include <QTextBlock>
+#include <QtGui/QWidget>
+#include <QtXml/QXmlStreamReader>
+#include <QtCore/QDateTime>
+#include <QtGui/QTextBlock>
 
 namespace Ui {
 class XmlConsole;
 }
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 
-class SIPDLLEXPORT XmlConsole : public QWidget, public Jreen::XmlStreamHandler
+class ACCOUNTDLLEXPORT XmlConsole : public QWidget, public Jreen::XmlStreamHandler
 {
     Q_OBJECT
 

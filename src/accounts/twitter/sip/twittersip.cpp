@@ -155,6 +155,8 @@ TwitterSipPlugin::disconnectPlugin()
 void
 TwitterSipPlugin::accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user )
 {
+    Q_UNUSED( user );
+    
     if ( !isValid() )
         return;
 

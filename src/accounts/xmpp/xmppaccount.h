@@ -20,9 +20,8 @@
 #ifndef XMPPACCOUNT_H
 #define XMPPACCOUNT_H
 
-#include "dllmacro.h"
-
-#include "sip/xmpp/xmppsip.h"
+#include "sip/xmppsip.h"
+#include "accounts/accountdllmacro.h"
 #include "accounts/account.h"
 
 #define MYNAME "ACCOUNTJABBER"
@@ -35,7 +34,7 @@ namespace Tomahawk
 namespace Accounts
 {
     
-class DLLEXPORT XmppAccountFactory : public AccountFactory
+class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )

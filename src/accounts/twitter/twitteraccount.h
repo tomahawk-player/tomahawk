@@ -19,12 +19,11 @@
 #ifndef TWITTERACCOUNT_H
 #define TWITTERACCOUNT_H
 
-#include "dllmacro.h"
-
 #include "twitterconfigwidget.h"
 #include "tomahawkoauthtwitter.h"
 
-#include "sip/twitter/twittersip.h"
+#include "sip/twittersip.h"
+#include "accounts/accountdllmacro.h"
 #include "accounts/account.h"
 
 #define MYNAME "ACCOUNTTWITTER"
@@ -35,7 +34,7 @@ namespace Tomahawk
 namespace Accounts
 {
 
-class DLLEXPORT TwitterAccountFactory : public AccountFactory
+class ACCOUNTDLLEXPORT TwitterAccountFactory : public AccountFactory
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )

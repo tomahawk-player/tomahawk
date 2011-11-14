@@ -32,12 +32,12 @@
 #include <QTweetLib/qtweetmentions.h>
 #include <QTweetLib/qtweetdmstatus.h>
 
-#include "../sipdllmacro.h"
+#include "accounts/accountdllmacro.h"
 #include "sip/SipPlugin.h"
 #include "accounts/account.h"
 #include "accounts/twitter/tomahawkoauthtwitter.h"
 
-class SIPDLLEXPORT TwitterSipPlugin : public SipPlugin
+class ACCOUNTDLLEXPORT TwitterSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
