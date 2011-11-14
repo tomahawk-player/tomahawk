@@ -53,7 +53,7 @@ namespace InfoSystem
 InfoSystemWorker::InfoSystemWorker()
     : QObject()
 {
-//    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     m_checkTimeoutsTimer.setInterval( 1000 );
     m_checkTimeoutsTimer.setSingleShot( false );
@@ -64,20 +64,20 @@ InfoSystemWorker::InfoSystemWorker()
 
 InfoSystemWorker::~InfoSystemWorker()
 {
-//    qDebug() << Q_FUNC_INFO << " beginning";
+    tDebug() << Q_FUNC_INFO << " beginning";
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         if( plugin )
             delete plugin.data();
     }
-//    qDebug() << Q_FUNC_INFO << " finished";
+    tDebug() << Q_FUNC_INFO << " finished";
 }
 
 
 void
-InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cache )
+InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 {
-//    qDebug() << Q_FUNC_INFO << "and cache is" << cache.data();
+    tDebug() << Q_FUNC_INFO;
 
     InfoPluginPtr enptr( new EchoNestPlugin() );
     m_plugins.append( enptr );
@@ -132,13 +132,13 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
         connect(
                 plugin.data(),
                 SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
-                cache.data(),
+                cache,
                 SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
             );
         connect(
                 plugin.data(),
                 SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-                cache.data(),
+                cache,
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
     }

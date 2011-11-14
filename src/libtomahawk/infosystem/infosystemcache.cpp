@@ -39,6 +39,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
     , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
     , m_cacheVersion( 2 )
 {
+    tDebug() << Q_FUNC_INFO;
     TomahawkSettings *s = TomahawkSettings::instance();
     if ( s->infoSystemCacheVersion() != m_cacheVersion )
     {
@@ -64,6 +65,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
 
 InfoSystemCache::~InfoSystemCache()
 {
+    tDebug() << Q_FUNC_INFO;
 }
 
 void
