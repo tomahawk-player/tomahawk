@@ -26,7 +26,10 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
 #include <QtCore/QRect>
-#include <QPalette>
+
+#ifndef ENABLE_HEADLESS
+    #include <QPalette>
+#endif
 
 #define RESPATH ":/data/"
 
@@ -55,17 +58,19 @@ namespace TomahawkUtils
             : m_proxy( QNetworkProxy::NoProxy )
             {}
 
+        NetworkProxyFactory( const NetworkProxyFactory &other );
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
         static QList< QNetworkProxy > proxyForQuery( const QNetworkProxyQuery & query );
 
-        void setNoProxyHosts( const QStringList &hosts );
-        QStringList noProxyHosts() const { return m_noProxyHosts; }
-        void setProxy( const QNetworkProxy &proxy );
-        QNetworkProxy proxy() { return m_proxy; }
+        virtual void setNoProxyHosts( const QStringList &hosts );
+        virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
+        virtual void setProxy( const QNetworkProxy &proxy );
+        virtual QNetworkProxy proxy() { return m_proxy; }
 
-        bool operator==( const NetworkProxyFactory &other );
+        virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );
+        virtual bool operator==( const NetworkProxyFactory &other ) const;
 
     private:
         QStringList m_noProxyHosts;
@@ -92,11 +97,11 @@ namespace TomahawkUtils
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
-    DLLEXPORT NetworkProxyFactory* proxyFactory();
+    DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
     DLLEXPORT QNetworkAccessManager* nam();
 
-    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
-    DLLEXPORT void setNam( QNetworkAccessManager* nam );
+    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
+    DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
 
     DLLEXPORT QWidget* tomahawkWindow();
     /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us

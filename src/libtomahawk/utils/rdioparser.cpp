@@ -374,7 +374,6 @@ RdioParser::pixmap() const
     if ( !s_pixmap )
         s_pixmap = new QPixmap( RESPATH "images/rdio.png" );
 
-
     return *s_pixmap;
 }
 

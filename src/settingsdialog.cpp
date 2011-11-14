@@ -415,21 +415,9 @@ SettingsDialog::testLastFmLogin()
     query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
     query[ "authToken" ] = authToken;
 
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
-    QNetworkAccessManager* nam = TomahawkUtils::nam();
-
-    //WARNING: there's a chance liblastfm2 will clobber the application proxy factory it if it constructs a nam due to the below call
-    //but it is unsafe to re-set it here
-    QNetworkAccessManager* currNam = lastfm::nam();
-
-    currNam->setConfiguration( nam->configuration() );
-    currNam->setNetworkAccessible( nam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    QNetworkProxy newProxy( oldProxyFactory->proxy() );
-    newProxyFactory->setProxy( newProxy );
-    currNam->setProxyFactory( newProxyFactory );
-
+    // ensure they have up-to-date settings
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
+    
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
@@ -888,6 +876,8 @@ ProxyDialog::saveSettings()
 {
     qDebug() << Q_FUNC_INFO;
 
+    QNetworkProxy::ProxyType type = static_cast< QNetworkProxy::ProxyType>( m_backwardMap[ ui->typeBox->currentIndex() ] );
+    
     //First set settings
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setProxyHost( ui->hostLineEdit->text() );
@@ -897,16 +887,26 @@ ProxyDialog::saveSettings()
     s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
     s->setProxyUsername( ui->userLineEdit->text() );
     s->setProxyPassword( ui->passwordLineEdit->text() );
-    s->setProxyType( m_backwardMap[ ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() ] );
+    s->setProxyType( type );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
-
-    if( s->proxyHost().isEmpty() )
-        return;
-
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-    proxyFactory->setProxy( proxy );
-    if ( !ui->noHostLineEdit->text().isEmpty() )
-        proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ',', QString::SkipEmptyParts ) );
-    TomahawkUtils::setProxyFactory( proxyFactory );
+    s->sync();
+    
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
+    tDebug() << Q_FUNC_INFO << "Got proxyFactory: " << proxyFactory;
+    if ( type == QNetworkProxy::NoProxy )
+    {
+        tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
+        proxyFactory->setProxy( QNetworkProxy::NoProxy );
+    }
+    else
+    {
+        tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
+        proxyFactory->setProxy( QNetworkProxy( type, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
+        if ( !ui->noHostLineEdit->text().isEmpty() )
+        {
+            tDebug() << Q_FUNC_INFO << "hosts line edit is " << ui->noHostLineEdit->text();
+            tDebug() << Q_FUNC_INFO << "split hosts line edit is " << ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts );
+            proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts ) );
+        }
+    }
 }

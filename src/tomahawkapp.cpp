@@ -19,8 +19,6 @@
 
 #include "tomahawkapp.h"
 
-#include "config.h"
-
 #include <iostream>
 
 #include <QPluginLoader>
@@ -32,6 +30,7 @@
 #include <QFileInfo>
 #include <QNetworkProxy>
 
+#include "actioncollection.h"
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
@@ -88,6 +87,7 @@
 #include <sys/sysctl.h>
 #endif
 
+const char* enApiSecret = "BNvTzfthHr/d1eNhHLvL1Jo=";
 
 void
 increaseMaxFileDescriptors()
@@ -133,7 +133,7 @@ TomahawkApp::init()
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
     {
         printHelp();
-        ::exit(0);
+        ::exit( 0 );
     }
 
     qDebug() << "TomahawkApp thread:" << thread();
@@ -156,31 +156,14 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 
-    registerMetaTypes();
-
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    new ActionCollection( this );
+
     tDebug( LOGINFO ) << "Setting NAM.";
-#ifdef LIBLASTFM_FOUND
-    TomahawkUtils::setNam( lastfm::nam() );
-#else
-    TomahawkUtils::setNam( new QNetworkAccessManager() );
-#endif
-
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
-    {
-        tDebug( LOGEXTRA ) << "Setting proxy to saved values";
-        QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-        proxyFactory->setProxy( proxy );
-        //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
-        //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
-    }
-    if ( !s->proxyNoProxyHosts().isEmpty() )
-        proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
-
-    TomahawkUtils::setProxyFactory( proxyFactory );
+    // Cause the creation of the nam, but don't need to address it directly, so prevent warning
+    Q_UNUSED( TomahawkUtils::nam() );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
@@ -192,7 +175,11 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
-    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+    QByteArray magic = QByteArray::fromBase64( enApiSecret );
+    QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
+    int length = magic.length(), n2 = wand.length();
+    for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    Echonest::Config::instance()->setAPIKey( magic );
 
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
@@ -238,7 +225,10 @@ TomahawkApp::init()
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->setObjectName( "TH_Main_Window" );
-        m_mainwindow->show();
+        if ( !arguments().contains( "--hide" ) )
+        {
+            m_mainwindow->show();
+        }
     }
 #endif
 
@@ -301,6 +291,7 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
+
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
 
@@ -343,6 +334,7 @@ TomahawkApp::printHelp()
     echo( "  --help         Show this help\n" );
     echo( "  --http         Initialize HTTP server\n" );
     echo( "  --filescan     Scan for files on startup\n" );
+    echo( "  --hide         Hide main window on startup\n" );
     echo( "  --testdb       Use a test database instead of real collection\n" );
     echo( "  --noupnp       Disable UPNP\n" );
     echo( "  --nosip        Disable SIP\n" );
@@ -364,11 +356,12 @@ void
 TomahawkApp::registerMetaTypes()
 {
     qRegisterMetaType< QSharedPointer<DatabaseCommand> >("QSharedPointer<DatabaseCommand>");
-    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< DBSyncConnection::State >("DBSyncConnection::State");
     qRegisterMetaType< msg_ptr >("msg_ptr");
     qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
+    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
     qRegisterMetaType< QList<QString> >("QList<QString>");
+    qRegisterMetaType< QList<uint> >("QList<uint>");
     qRegisterMetaType< Connection* >("Connection*");
     qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
@@ -415,9 +408,9 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
-    qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
 
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoStringHash> >("QList<Tomahawk::InfoSystem::InfoStringHash>");
+    qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 

@@ -310,6 +310,7 @@ Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
     m_currentTrack = query;
+    m_currentTrackTimer.stop();
     if ( m_playlistInterface.isNull() )
         getPlaylistInterface();
     emit playbackStarted( query );
@@ -358,5 +359,11 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 void
 Source::updateIndexWhenSynced()
 {
-    m_updateIndexWhenSynced = true;
+    if ( isLocal() )
+    {
+        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+    else
+        m_updateIndexWhenSynced = true;
 }

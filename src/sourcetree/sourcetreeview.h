@@ -72,7 +72,9 @@ private slots:
 
     void latchOnOrCatchUp();
     void latchOff();
-
+    void latchOnOrCatchUp( const Tomahawk::source_ptr& source );
+    void latchOff( const Tomahawk::source_ptr& source );
+    
     void onCustomContextMenu( const QPoint& pos );
 
 protected:
@@ -101,6 +103,7 @@ private:
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
     QMenu m_latchMenu;
+    QMenu m_privacyMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;

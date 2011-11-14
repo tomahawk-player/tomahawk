@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QNetworkReply>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
@@ -103,6 +102,8 @@ public slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString caller );
 
+    void togglePrivateListeningMode();
+
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -135,7 +136,6 @@ private slots:
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
-    void ioStreamError( QNetworkReply::NetworkError );
 private:
     void setState( AudioState state );
 

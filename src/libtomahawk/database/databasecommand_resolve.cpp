@@ -156,14 +156,14 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         result->setTrack( files_query.value( 12 ).toString() );
         result->setRID( uuid() );
         result->setAlbumPos( files_query.value( 14 ).toUInt() );
-        result->setId( files_query.value( 9 ).toUInt() );
+        result->setTrackId( files_query.value( 9 ).toUInt() );
         result->setYear( files_query.value( 17 ).toUInt() );
 
         TomahawkSqlQuery attrQuery = lib->newquery();
         QVariantMap attr;
 
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, result->dbid() );
+        attrQuery.bindValue( 0, result->trackId() );
         attrQuery.exec();
         while ( attrQuery.next() )
         {
@@ -268,12 +268,12 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setTrack( files_query.value( 12 ).toString() );
         result->setRID( uuid() );
         result->setAlbumPos( files_query.value( 14 ).toUInt() );
-        result->setId( files_query.value( 9 ).toUInt() );
+        result->setTrackId( files_query.value( 9 ).toUInt() );
         result->setYear( files_query.value( 17 ).toUInt() );
 
         for ( int k = 0; k < tracks.count(); k++ )
         {
-            if ( tracks.at( k ).first == (int)result->dbid() )
+            if ( tracks.at( k ).first == (int)result->trackId() )
             {
                 result->setScore( tracks.at( k ).second );
                 break;
@@ -284,7 +284,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         QVariantMap attr;
 
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, result->dbid() );
+        attrQuery.bindValue( 0, result->trackId() );
         attrQuery.exec();
         while ( attrQuery.next() )
         {

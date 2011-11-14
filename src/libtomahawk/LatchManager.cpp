@@ -18,6 +18,7 @@
 
 #include "LatchManager.h"
 
+#include "actioncollection.h"
 #include "audio/audioengine.h"
 #include "database/database.h"
 
@@ -81,6 +82,8 @@ LatchManager::playlistChanged( PlaylistInterface* )
         cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
+        ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Catch Up" ) );
+        
         // If not, then keep waiting
         return;
     }
@@ -113,6 +116,8 @@ LatchManager::playlistChanged( PlaylistInterface* )
     m_latchedInterface.clear();
 
     m_state = NotLatched;
+
+    ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
 }
 
 
@@ -126,9 +131,9 @@ LatchManager::catchUpRequest()
 void
 LatchManager::unlatchRequest( const source_ptr& source )
 {
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
-
-
+    Q_UNUSED( source );
     AudioEngine::instance()->stop();
     AudioEngine::instance()->setPlaylist( 0 );
+
+    ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
 }

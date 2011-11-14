@@ -70,6 +70,7 @@
 #include "utils/logger.h"
 #include "jobview/JobStatusModel.h"
 #include "LoadXSPFDialog.h"
+#include <actioncollection.h>
 
 using namespace Tomahawk;
 
@@ -105,6 +106,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         ui->menu_Help->addSeparator();
         ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
     }
+    
+    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
+    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
 
     // set initial state
     onSipDisconnected();

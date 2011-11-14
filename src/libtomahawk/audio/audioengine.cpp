@@ -24,15 +24,17 @@
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-
+#include "actioncollection.h"
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
 #include "utils/qnr_iodevicestream.h"
+#include "headlesscheck.h"
 
 #include "album.h"
 
 #include "utils/logger.h"
+
 
 using namespace Tomahawk;
 
@@ -75,6 +77,11 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
+#ifndef TOMAHAWK_HEADLESS
+    tDebug() << Q_FUNC_INFO << "Connecting privacy toggle";
+    connect( ActionCollection::instance()->getAction( "togglePrivacy" ), SIGNAL( triggered( bool ) ), this, SLOT( togglePrivateListeningMode() ) );
+#endif
+    
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -394,6 +401,25 @@ AudioEngine::infoSystemFinished( QString caller )
 }
 
 
+void
+AudioEngine::togglePrivateListeningMode()
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
+    else
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
+
+#ifndef TOMAHAWK_HEADLESS
+    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
+    bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
+    privacyToggle->setText( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ) );
+    privacyToggle->setIconVisibleInMenu( isPublic );
+#endif
+}
+
+
+
 bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
@@ -423,9 +449,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             tLog() << "Starting new song:" << m_currentTrack->url();
             emit loading( m_currentTrack );
-
-            if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
-                connect( qnr_io, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( ioStreamError( QNetworkReply::NetworkError ) ) );
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
@@ -471,21 +494,24 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             m_mediaObject->play();
             emit started( m_currentTrack );
 
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-            Tomahawk::InfoSystem::InfoStringHash trackInfo;
-            trackInfo["title"] = m_currentTrack->track();
-            trackInfo["artist"] = m_currentTrack->artist()->name();
-            trackInfo["album"] = m_currentTrack->album()->name();
-
             if ( TomahawkSettings::instance()->verboseNotifications() )
-                sendNowPlayingNotification();
+                    sendNowPlayingNotification();
+            
+            if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
+            {
+                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
+                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-                s_aeInfoIdentifier,
-                Tomahawk::InfoSystem::InfoNowPlaying,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+                Tomahawk::InfoSystem::InfoStringHash trackInfo;
+                trackInfo["title"] = m_currentTrack->track();
+                trackInfo["artist"] = m_currentTrack->artist()->name();
+                trackInfo["album"] = m_currentTrack->album()->name();
+
+                Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                    s_aeInfoIdentifier,
+                    Tomahawk::InfoSystem::InfoNowPlaying,
+                    QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+            }
         }
     }
 
@@ -573,16 +599,6 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
             sendWaitingNotification();
         else
             stop();
-    }
-}
-
-void
-AudioEngine::ioStreamError( QNetworkReply::NetworkError error )
-{
-    if ( error != QNetworkReply::NoError )
-    {
-        if ( canGoNext() )
-            loadNextTrack();
     }
 }
 
@@ -697,6 +713,7 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
     if ( !playlist )
     {
         m_playlist.clear();
+        emit playlistChanged( playlist );
         return;
     }
 
@@ -715,8 +732,11 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     m_lastTrack = m_currentTrack;
     if ( !m_lastTrack.isNull() )
     {
-        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        {
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        }
 
         emit finished( m_lastTrack );
     }

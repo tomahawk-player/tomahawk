@@ -1,3 +1,17 @@
+Version 0.3.1:
+    * Fixed not resolving to local files.
+    * Fixed shutdown crash on Windows.
+    * Support more widget types in Javascript resolver configs.
+    * Fixed bug where red headphone would be visible on My Collection
+      when listened along to source went offline.
+    * Draw author name as well as avatar in recently played playlists.
+    * Fixed Tomahawk integration in Unity.
+    * Fixed incorrect item selected in source tree when deleting temporary
+      pages.
+    * Fixed currently played label disappearing after 10 minutes regardless
+      of length of track.
+    * Fixed crash on Sparkle upgrade on OS X.
+
 Version 0.3.0:
     * Make artist names in the album view clickable.
     * Don't start playing if a tomahawk:// link was clicked while Tomahawk

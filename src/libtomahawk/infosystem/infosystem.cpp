@@ -51,6 +51,7 @@ InfoSystem::instance()
 
 InfoSystem::InfoSystem( QObject *parent )
     : QObject( parent )
+    , m_inited( false )
     , m_infoSystemCacheThreadController( 0 )
     , m_infoSystemWorkerThreadController( 0 )
 {
@@ -59,81 +60,94 @@ InfoSystem::InfoSystem( QObject *parent )
     qDebug() << Q_FUNC_INFO;
 
     m_infoSystemCacheThreadController = new InfoSystemCacheThread( this );
-    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
-    m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
-    m_infoSystemCacheThreadController->setCache( m_cache );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
 
     m_infoSystemWorkerThreadController = new InfoSystemWorkerThread( this );
-    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
-    m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
-    m_infoSystemWorkerThreadController->setWorker( m_worker );
     m_infoSystemWorkerThreadController->start();
 
-    QMetaObject::invokeMethod( m_worker.data(), "init", Qt::QueuedConnection, Q_ARG( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >, m_cache ) );
-
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
-
-    connect( m_cache.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             m_worker.data(), SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-
-    connect( m_worker.data(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             this,       SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-
-    connect( m_worker.data(), SIGNAL( finished( QString ) ), this, SIGNAL( finished( QString ) ), Qt::UniqueConnection );
-
-    connect( m_worker.data(), SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
-             this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
+    QTimer::singleShot( 0, this, SLOT( init() ) );
 }
+
 
 InfoSystem::~InfoSystem()
 {
-    qDebug() << Q_FUNC_INFO << " beginning";
+    tDebug() << Q_FUNC_INFO << " beginning";
 
-    if ( !m_worker.isNull() )
+    if ( m_infoSystemWorkerThreadController->worker() )
     {
         m_infoSystemWorkerThreadController->quit();
         m_infoSystemWorkerThreadController->wait( 60000 );
 
-        //delete m_worker.data();
         delete m_infoSystemWorkerThreadController;
         m_infoSystemWorkerThreadController = 0;
     }
-    qDebug() << Q_FUNC_INFO << " done deleting worker";
+    tDebug() << Q_FUNC_INFO << " done deleting worker";
 
-    if( m_infoSystemCacheThreadController )
+    if( m_infoSystemCacheThreadController->cache() )
     {
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
 
-        //delete m_cache.data();
         delete m_infoSystemCacheThreadController;
         m_infoSystemCacheThreadController = 0;
     }
 
-    qDebug() << Q_FUNC_INFO << " done deleting cache";
+    tDebug() << Q_FUNC_INFO << " done deleting cache";
 }
 
 
 void
-InfoSystem::newNam() const
+InfoSystem::init()
 {
-    qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "newNam", Qt::QueuedConnection );
+    tDebug() << Q_FUNC_INFO;
+    if ( !m_infoSystemCacheThreadController->cache() || !m_infoSystemWorkerThreadController->worker() )
+    {
+        QTimer::singleShot( 0, this, SLOT( init() ) );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoSystemCache* cache = m_infoSystemCacheThreadController->cache();
+    Tomahawk::InfoSystem::InfoSystemWorker* worker = m_infoSystemWorkerThreadController->worker();
+
+    connect( cache, SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             worker, SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+    
+    connect( worker, SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             this,       SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+    
+    connect( worker, SIGNAL( finished( QString ) ), this, SIGNAL( finished( QString ) ), Qt::UniqueConnection );
+    
+    connect( worker, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
+             this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
+
+    QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
+    
+    m_inited = true;
 }
 
 
-void
+bool
 InfoSystem::getInfo( const InfoRequestData &requestData )
 {
     qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        init();
+        return false;
+    }
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+    return true;
 }
 
 
-void
+bool
 InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap, bool allSources )
 {
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        init();
+        return false;
+    }
     InfoRequestData requestData;
     requestData.caller = caller;
     requestData.customData = customData;
@@ -143,82 +157,102 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
         requestData.type = type;
         requestData.input = inputMap[ type ];
         requestData.timeoutMillis = timeoutMap.contains( type ) ? timeoutMap[ type ] : 10000;
-        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
     }
+    return false;
 }
 
 
-void
+bool
 InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant& input )
 {
-    qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+    tDebug() << Q_FUNC_INFO;
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        init();
+        return false;
+    }
+
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+
+    return true;
 }
 
 
-void
+bool
 InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
 {
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        init();
+        return false;
+    }
+
     Q_FOREACH( InfoType type, input.keys() )
-        QMetaObject::invokeMethod( m_worker.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ) );
+        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ) );
+
+    return true;
 }
 
 
 InfoSystemCacheThread::InfoSystemCacheThread( QObject *parent )
     : QThread( parent )
 {
+    tDebug() << Q_FUNC_INFO;
 }
+
 
 InfoSystemCacheThread::~InfoSystemCacheThread()
 {
-    delete m_cache.data();
+    tDebug() << Q_FUNC_INFO;
 }
+
 
 void
 InfoSystemCacheThread::InfoSystemCacheThread::run()
 {
+    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
     exec();
+    if ( !m_cache.isNull() )
+        delete m_cache.data();
 }
 
-QWeakPointer< InfoSystemCache >
+
+InfoSystemCache*
 InfoSystemCacheThread::cache() const
 {
-    return m_cache;
+    if ( m_cache.isNull() )
+        return 0;
+    return m_cache.data();
 }
 
-void
-InfoSystemCacheThread::setCache( QWeakPointer< InfoSystemCache >  cache )
-{
-    m_cache = cache;
-}
 
 InfoSystemWorkerThread::InfoSystemWorkerThread( QObject *parent )
     : QThread( parent )
 {
+    tDebug() << Q_FUNC_INFO;
 }
 
 InfoSystemWorkerThread::~InfoSystemWorkerThread()
 {
+    tDebug() << Q_FUNC_INFO;
 }
 
 void
 InfoSystemWorkerThread::InfoSystemWorkerThread::run()
 {
+    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
     exec();
-    if( m_worker )
+    if( !m_worker.isNull() )
         delete m_worker.data();
 }
 
-QWeakPointer< InfoSystemWorker >
+InfoSystemWorker*
 InfoSystemWorkerThread::worker() const
 {
-    return m_worker;
-}
-
-void
-InfoSystemWorkerThread::setWorker( QWeakPointer< InfoSystemWorker >  worker )
-{
-    m_worker = worker;
+    if ( m_worker.isNull() )
+        return 0;
+    return m_worker.data();
 }
 
 

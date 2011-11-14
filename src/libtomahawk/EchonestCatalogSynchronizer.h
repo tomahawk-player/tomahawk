@@ -54,8 +54,10 @@ signals:
 
 private slots:
     void checkSettingsChanged();
-    void tracksAdded( const QList<Tomahawk::query_ptr>& );
-    void tracksRemoved( const QList<Tomahawk::query_ptr>& );
+    void tracksAdded( const QList<unsigned int>& );
+    void tracksRemoved( const QList<unsigned int>& );
+
+    void loadedResults( const QList<Tomahawk::result_ptr>& results );
 
     // Echonest slots
     void songCreateFinished();

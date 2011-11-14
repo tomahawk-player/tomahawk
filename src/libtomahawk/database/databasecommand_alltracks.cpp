@@ -120,7 +120,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 12 ).toUInt(), artist );
         Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 13 ).toUInt(), album, artistptr );
 
-        result->setId( query.value( 14 ).toUInt() );
+        result->setTrackId( query.value( 14 ).toUInt() );
         result->setArtist( artistptr );
         result->setAlbum( albumptr );
         result->setTrack( query.value( 3 ).toString() );
@@ -137,7 +137,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         QVariantMap attr;
 
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, result->dbid() );
+        attrQuery.bindValue( 0, result->trackId() );
         attrQuery.exec();
         while ( attrQuery.next() )
         {

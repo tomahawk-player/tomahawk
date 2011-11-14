@@ -18,7 +18,7 @@
 
 #include "tomahawksettings.h"
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     #include <QDesktopServices>
     #include "settingsdialog.h"
 #endif
@@ -31,13 +31,16 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 
-#define VERSION 4
+#include "database/databasecommand_updatesearchindex.h"
+#include "database/database.h"
+
+#define VERSION 5
 
 using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
-
+#ifndef ENABLE_HEADLESS
 inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
 {
     out <<  VERSION;
@@ -69,6 +72,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     }
     return in;
 }
+#endif
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -104,8 +108,11 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         setValue( "configversion", VERSION );
     }
 
+#ifndef ENABLE_HEADLESS
     qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
     qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
+#endif
+
 }
 
 
@@ -220,6 +227,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
+    } else if ( oldVersion == 4 )
+    {
+        // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
     }
 }
 
@@ -257,7 +268,7 @@ TomahawkSettings::scannerPaths()
 {
     QString musicLocation;
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
 #endif
 
@@ -392,17 +403,17 @@ TomahawkSettings::setProxyPassword( const QString& password )
 }
 
 
-int
+QNetworkProxy::ProxyType
 TomahawkSettings::proxyType() const
 {
-    return value( "network/proxy/type", QNetworkProxy::NoProxy ).toInt();
+    return static_cast< QNetworkProxy::ProxyType>( value( "network/proxy/type", QNetworkProxy::NoProxy ).toInt() );
 }
 
 
 void
-TomahawkSettings::setProxyType( const int type )
+TomahawkSettings::setProxyType( const QNetworkProxy::ProxyType type )
 {
-    setValue( "network/proxy/type", type );
+    setValue( "network/proxy/type", static_cast< uint >( type ) );
 }
 
 
@@ -489,11 +500,13 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+
 bool
 TomahawkSettings::showOfflineSources() const
 {
     return value( "collection/sources/showoffline", false ).toBool();
 }
+
 
 void
 TomahawkSettings::setShowOfflineSources( bool show )
@@ -501,19 +514,20 @@ TomahawkSettings::setShowOfflineSources( bool show )
     setValue( "collection/sources/showoffline", show );
 }
 
+
 bool
 TomahawkSettings::enableEchonestCatalogs() const
 {
     return value( "collection/enable_catalogs", false ).toBool();
 }
 
+
 void
 TomahawkSettings::setEnableEchonestCatalogs( bool enable )
 {
     setValue( "collection/enable_catalogs", enable );
-
-    emit changed();
 }
+
 
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
@@ -934,6 +948,7 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
     setValue( "script/loadedresolvers", resolvers );
 }
 
+#ifndef ENABLE_HEADLESS
 void
 TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
 {
@@ -966,6 +981,7 @@ TomahawkSettings::removeAtticaResolverState ( const QString& resolver )
     resolvers.remove( resolver );
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
 }
+#endif
 
 QString
 TomahawkSettings::scriptDefaultPath() const
@@ -1006,4 +1022,25 @@ void
 TomahawkSettings::setNowPlayingEnabled( bool enable )
 {
     setValue( "adium/enablenowplaying", enable );
+}
+
+TomahawkSettings::PrivateListeningMode
+TomahawkSettings::privateListeningMode() const
+{
+    return ( TomahawkSettings::PrivateListeningMode ) value( "privatelisteningmode", TomahawkSettings::PublicListening ).toInt();
+}
+
+
+void
+TomahawkSettings::setPrivateListeningMode( TomahawkSettings::PrivateListeningMode mode )
+{
+    setValue( "privatelisteningmode", mode );
+}
+
+
+void
+TomahawkSettings::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

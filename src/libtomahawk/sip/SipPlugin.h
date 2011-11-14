@@ -24,10 +24,12 @@
 
 #include <QObject>
 #include <QString>
-#include <QMenu>
 #include <QNetworkProxy>
 
 #include "accounts/account.h"
+#ifndef ENABLE_HEADLESS
+    #include <QMenu>
+#endif
 
 #include "dllmacro.h"
 
@@ -53,7 +55,10 @@ public:
     virtual const QString serviceName() const;
     virtual ConnectionState connectionState() const = 0;
     virtual QString errorMessage() const;
+#ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
+#endif
+    virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
     virtual Tomahawk::Accounts::Account* account() const;
     // peer infos
@@ -86,9 +91,10 @@ signals:
     // new data for other sources;
     void avatarReceived ( const QString& from,  const QPixmap& avatar);
 
-
+#ifndef ENABLE_HEADLESS
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
+#endif
 
     void dataError( bool );
 

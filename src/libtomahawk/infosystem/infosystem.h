@@ -185,8 +185,6 @@ protected slots:
     virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
-    virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
-
 protected:
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;
@@ -207,8 +205,7 @@ public:
     virtual ~InfoSystemCacheThread();
 
     void run();
-    QWeakPointer< InfoSystemCache > cache() const;
-    void setCache( QWeakPointer< InfoSystemCache >  cache );
+    InfoSystemCache* cache() const;
 
 private:
     QWeakPointer< InfoSystemCache > m_cache;
@@ -223,8 +220,7 @@ public:
     virtual ~InfoSystemWorkerThread();
 
     void run();
-    QWeakPointer< InfoSystemWorker > worker() const;
-    void setWorker( QWeakPointer< InfoSystemWorker >  worker );
+    InfoSystemWorker* worker() const;
 
 private:
     QWeakPointer< InfoSystemWorker > m_worker;
@@ -240,23 +236,22 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const InfoRequestData &requestData );
+    bool getInfo( const InfoRequestData &requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
-    void getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
-    void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
-    void pushInfo( const QString &caller, const InfoTypeMap &input );
+    bool getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
+    bool pushInfo( const QString &caller, const InfoType type, const QVariant &input );
+    bool pushInfo( const QString &caller, const InfoTypeMap &input );
 
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
 
-public slots:
-    void newNam() const;
-
+private slots:
+    void init();
+    
 private:
-    QWeakPointer< InfoSystemCache > m_cache;
-    QWeakPointer< InfoSystemWorker > m_worker;
+    bool m_inited;
     InfoSystemCacheThread* m_infoSystemCacheThreadController;
     InfoSystemWorkerThread* m_infoSystemWorkerThreadController;
 
@@ -292,7 +287,7 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
-Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
-Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::InfoStringHash> );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
+Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

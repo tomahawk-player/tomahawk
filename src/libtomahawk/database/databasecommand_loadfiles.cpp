@@ -16,34 +16,43 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "databasecommand_loadfile.h"
+#include "databasecommand_loadfiles.h"
 
 #include "databaseimpl.h"
 #include "collection.h"
 #include "utils/logger.h"
 
 
-DatabaseCommand_LoadFile::DatabaseCommand_LoadFile( const QString& id, QObject* parent )
+DatabaseCommand_LoadFiles::DatabaseCommand_LoadFiles( unsigned int id, QObject* parent )
     : DatabaseCommand( parent )
-    , m_id( id )
+    , m_single( true )
+{
+    m_ids << id;
+}
+
+DatabaseCommand_LoadFiles::DatabaseCommand_LoadFiles( const QList<unsigned int>& ids, QObject* parent )
+    : DatabaseCommand( parent )
+    , m_single( false )
+    , m_ids( ids )
 {
 }
 
 
 void
-DatabaseCommand_LoadFile::exec( DatabaseImpl* dbi )
+DatabaseCommand_LoadFiles::exec( DatabaseImpl* dbi )
 {
-    Tomahawk::result_ptr r;
+    QList<Tomahawk::result_ptr> resultList;
     // file ids internally are really ints, at least for now:
-    bool ok;
-    do
+    foreach ( unsigned int id, m_ids )
     {
-        unsigned int fid = m_id.toInt( &ok );
-        if( !ok )
-            break;
+        qDebug() << "Loading file from db with id:" << id;
+        resultList << dbi->file( id );
+    }
 
-        r = dbi->file( fid );
-    } while( false );
+    Q_ASSERT( !m_single || resultList.size() <= 1 );
 
-    emit result( r );
+    if ( m_single && !resultList.isEmpty() )
+        emit result( resultList.first() );
+    else
+        emit results( resultList );
 }

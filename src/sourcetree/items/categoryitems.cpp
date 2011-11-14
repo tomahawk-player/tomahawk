@@ -201,8 +201,9 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
         }
 
         QString name = firstArtist.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( firstArtist );
-        newpl->rename( name );
         newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+        newpl->setProperty( "newname", name );
+        connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
 
         ViewManager::instance()->show( newpl );
         return true;
@@ -279,6 +280,22 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 }
 
 void
+CategoryAddItem::playlistToRenameLoaded()
+{
+    Playlist* pl = qobject_cast< Playlist* >( sender() );
+    Q_ASSERT( pl );
+
+    QString name = sender()->property( "newname" ).toString();
+    if ( !name.isEmpty() )
+        pl->rename( name );
+    else
+        QTimer::singleShot( 400, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+
+    disconnect( pl, SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
+}
+
+
+void
 CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
     if( m_categoryType == SourcesModel::PlaylistsCategory ) {
@@ -322,8 +339,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
 
         ViewManager::instance()->show( newpl );
-        // Give a shot to try to rename it. The playlist has to be created first. ugly.
-        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+        connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
     }
 }
 

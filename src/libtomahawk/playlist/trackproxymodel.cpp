@@ -110,7 +110,7 @@ TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
     qDebug() << Q_FUNC_INFO;
 
     QModelIndex idx = index( 0, 0 );
-    if( rowCount() )
+    if ( rowCount() )
     {
         if ( m_shuffled )
         {
@@ -123,12 +123,7 @@ TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
             idx = currentIndex();
 
             // random mode is disabled
-            if ( m_repeatMode == PlaylistInterface::RepeatOne )
-            {
-                // repeat one track
-                idx = index( idx.row(), 0 );
-            }
-            else
+            if ( m_repeatMode != PlaylistInterface::RepeatOne )
             {
                 // keep progressing through the playlist normally
                 idx = index( idx.row() + itemsAway, 0 );
@@ -152,7 +147,7 @@ TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
     }
 
     // Try to find the next available PlaylistItem (with results)
-    if ( idx.isValid() ) do
+    while ( idx.isValid() )
     {
         TrackModelItem* item = itemFromIndex( mapToSource( idx ) );
         if ( item && item->query()->playable() )
@@ -165,7 +160,6 @@ TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
 
         idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0 );
     }
-    while ( idx.isValid() );
 
     if ( !readOnly )
         setCurrentIndex( QModelIndex() );
@@ -331,7 +325,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         albumpos1 = r->albumpos();
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
-        id1 = r->dbid();
+        id1 = r->trackId();
         size1 = r->size();
     }
     if ( q2->numResults() )
@@ -343,7 +337,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         albumpos2 = r->albumpos();
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
-        id2 = r->dbid();
+        id2 = r->trackId();
         size2 = r->size();
     }
 

@@ -22,6 +22,7 @@
 #include "macshortcuthandler.h"
 #include "config.h"
 #include "tomahawkwindow.h"
+#include "audio/audioengine.h"
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
@@ -54,6 +55,12 @@
 
 - (Tomahawk::PlatformInterface*) application_handler;
 - (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler;
+
+#ifdef HAVE_SPARKLE
+// SUUpdaterDelegate
+- (void)updater:(SUUpdater *)updater willInstallUpdate:(SUAppcastItem *)update;
+#endif
+
 @end
 
 
@@ -204,6 +211,15 @@
 
     [super sendEvent: event];
 }
+
+#ifdef HAVE_SPARKLE
+- (void)updater:(SUUpdater *)updater willInstallUpdate:(SUAppcastItem *)update
+{
+    tLog() << "NSApp in willInstallUpdate, deleting Phonon objects";
+    AudioEngine::instance()->stop();
+    delete AudioEngine::instance();
+}
+#endif
 
 @end
 

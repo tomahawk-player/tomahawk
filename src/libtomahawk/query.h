@@ -86,6 +86,7 @@ public:
     void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
+    void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
 
     QVariant toVariant() const;
     QString toString() const;
@@ -97,7 +98,9 @@ public:
     QString artist() const { return m_artist; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
+
     int duration() const { return m_duration; }
+    unsigned int albumpos() const { return m_albumpos; }
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
@@ -154,6 +157,7 @@ private:
     QString m_fullTextQuery;
 
     int m_duration;
+    unsigned int m_albumpos;
     QString m_resultHint;
 
     QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;

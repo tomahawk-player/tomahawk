@@ -16,42 +16,32 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FDONOTIFYPLUGIN_H
-#define FDONOTIFYPLUGIN_H
+#ifndef TOMAHAWKACTIONCOLLECTION_H
+#define TOMAHAWKACTIONCOLLECTION_H
 
-#include "infosystem/infosystem.h"
+#include "dllmacro.h"
 
-namespace Tomahawk
-{
+#include <QtGui/QAction>
 
-namespace InfoSystem
-{
 
-class FdoNotifyPlugin : public InfoPlugin
+class DLLEXPORT ActionCollection : public QObject
 {
     Q_OBJECT
-
+    
 public:
-    FdoNotifyPlugin();
-    virtual ~FdoNotifyPlugin();
+    static ActionCollection* instance();
 
-protected slots:
-    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
-    {
-        Q_UNUSED( requestData );
-    }
+    ActionCollection( QObject *parent);
+    ~ActionCollection();
 
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant pushData );
+    void initActions();
+    
+    QAction* getAction( const QString &name );
+    
+private:
+    static ActionCollection* s_instance;
 
-    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
-    {
-        Q_UNUSED( criteria );
-        Q_UNUSED( requestData );
-    }
+    QHash< QString, QAction* > m_actionCollection;
 };
 
-}
-
-}
-
-#endif // FDONOTIFYPLUGIN_H
+#endif

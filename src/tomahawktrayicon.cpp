@@ -27,6 +27,7 @@
 #include "tomahawkwindow.h"
 
 #include "utils/logger.h"
+#include <actioncollection.h>
 
 
 TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
@@ -48,6 +49,8 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addSeparator();
     m_prevAction = m_contextMenu->addAction( tr( "Previous Track" ) );
     m_nextAction = m_contextMenu->addAction( tr( "Next Track" ) );
+    m_contextMenu->addSeparator();
+    m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
 #ifdef Q_WS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again

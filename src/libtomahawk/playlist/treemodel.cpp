@@ -300,23 +300,35 @@ TreeModel::data( const QModelIndex& index, int role ) const
     else if ( !entry->result().isNull() )
     {
         const result_ptr& result = entry->result();
+        unsigned int albumpos = 0;
+        if ( !entry->query().isNull() )
+            albumpos = entry->query()->albumpos();
+        if ( albumpos == 0 )
+            albumpos = result->albumpos();
+
         switch( index.column() )
         {
             case Name:
-                return QString( "%1%2" ).arg( result->albumpos() > 0 ? QString( "%1. ").arg( result->albumpos() ) : QString() )
+                return QString( "%1%2" ).arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
                                         .arg( result->track() );
 
             case Duration:
                 return TomahawkUtils::timeToString( result->duration() );
 
             case Bitrate:
-                return result->bitrate();
+                if ( result->bitrate() == 0 )
+                    return QString();
+                else
+                    return result->bitrate();
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
 
             case Year:
-                return result->year();
+                if ( result->year() == 0 )
+                    return QString();
+                else
+                    return result->year();
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( result->size() );
@@ -331,9 +343,21 @@ TreeModel::data( const QModelIndex& index, int role ) const
                 return QVariant();
         }
     }
-    else if ( !entry->query().isNull() && index.column() == Name )
+    else if ( !entry->query().isNull() )
     {
-        return entry->query()->track();
+        const query_ptr& query = entry->query();
+        switch( index.column() )
+        {
+            case Name:
+                return QString( "%1%2" ).arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
+                                        .arg( query->track() );
+
+            case AlbumPosition:
+                return entry->query()->albumpos();
+
+            default:
+                return QVariant();
+        }
     }
 
     return QVariant();
@@ -889,16 +913,17 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
             m_receivedInfoData.insert( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
 
-
             QStringList tracks = returnedData[ "tracks" ].toStringList();
             QList<query_ptr> ql;
 
             Tomahawk::InfoSystem::InfoStringHash inputInfo;
             inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
+            unsigned int trackNo = 1;
             foreach ( const QString& trackName, tracks )
             {
                 query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
+                query->setAlbumPos( trackNo++ );
                 ql << query;
             }
             onTracksAdded( ql, requestData.customData[ "rows" ] );

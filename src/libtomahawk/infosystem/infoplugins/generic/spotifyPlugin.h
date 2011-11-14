@@ -53,7 +53,6 @@ public:
 public slots:
     void chartReturned();
     void chartTypes();
-    void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -70,7 +69,6 @@ private:
     QVariantMap m_allChartsMap;
     uint m_chartsFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

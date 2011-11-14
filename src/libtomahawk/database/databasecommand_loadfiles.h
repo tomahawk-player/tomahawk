@@ -16,32 +16,42 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATABASECOMMAND_LOADFILE_H
-#define DATABASECOMMAND_LOADFILE_H
+#ifndef DATABASECOMMAND_LOADFILES_H
+#define DATABASECOMMAND_LOADFILES_H
 
 #include <QObject>
 #include <QVariantMap>
+#include <QStringList>
 #include <QMap>
 
 #include "databasecommand.h"
 #include "result.h"
 #include "dllmacro.h"
 
-class DLLEXPORT DatabaseCommand_LoadFile : public DatabaseCommand
+/**
+  Loads a result_ptr from the database from a track dbid.
+
+  If use use the QStringList constructor, isten to results() instead of result()
+  */
+class DLLEXPORT DatabaseCommand_LoadFiles : public DatabaseCommand
 {
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_LoadFile( const QString& id, QObject* parent = 0 );
+    explicit DatabaseCommand_LoadFiles( unsigned int id, QObject* parent = 0 );
+    explicit DatabaseCommand_LoadFiles( const QList<unsigned int>& ids, QObject* parent = 0 );
+
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadfile"; }
+    virtual QString commandname() const { return "loadfiles"; }
 
 signals:
     void result( const Tomahawk::result_ptr& result );
+    void results( const QList<Tomahawk::result_ptr>& results );
 
 private:
-    QString m_id;
+    bool m_single;
+    QList<unsigned int> m_ids;
 };
 
 #endif // DATABASECOMMAND_LOADFILE_H

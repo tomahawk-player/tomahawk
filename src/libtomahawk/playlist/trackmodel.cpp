@@ -185,18 +185,21 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Bitrate:
-                return query->results().first()->bitrate();
+                if ( query->results().first()->bitrate() == 0 )
+                    return QString();
+                else
+                    return query->results().first()->bitrate();
                 break;
 
             case Age:
-                if ( query->results().first()->modificationTime() == 0 )
-                    return QString();
-                else
-                    return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
+                return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
                 break;
 
             case Year:
-                return query->results().first()->year();
+                if ( query->results().first()->year() == 0 )
+                    return QString();
+                else
+                    return query->results().first()->year();
                 break;
 
             case Filesize:

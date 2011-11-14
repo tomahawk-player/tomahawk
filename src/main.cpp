@@ -22,6 +22,7 @@
 #include <QTranslator>
 
 #include "breakpad/BreakPad.h"
+#include "ubuntuunityhack.h"
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -34,13 +35,22 @@ int
 main( int argc, char *argv[] )
 {
 #ifdef Q_WS_MAC
-      // Do Mac specific startup to get media keys working.
-      // This must go before QApplication initialisation.
-      Tomahawk::macMain();
+    // Do Mac specific startup to get media keys working.
+    // This must go before QApplication initialisation.
+    Tomahawk::macMain();
 
-      // used for url handler
-      AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
-      AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
+    // used for url handler
+    AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
+    AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
+#endif
+
+    // Unity hack taken from Clementine's main.cpp
+#ifdef Q_OS_LINUX
+    // In 11.04 Ubuntu decided that the system tray should be reserved for certain
+    // whitelisted applications.  Tomahawk will override this setting and insert
+    // itself into the list of whitelisted apps.
+    setenv( "QT_X11_NO_NATIVE_MENUBAR", "1", true );
+    UbuntuUnityHack hack;
 #endif
 
     TomahawkApp a( argc, argv );

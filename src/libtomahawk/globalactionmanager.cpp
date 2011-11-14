@@ -18,8 +18,10 @@
 
 #include "globalactionmanager.h"
 
-#include <QApplication>
-#include <QClipboard>
+#ifndef ENABLE_HEADLESS
+    #include <QClipboard>
+#endif
+
 #include <QMimeData>
 #include <QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -31,13 +33,10 @@
 #include "album.h"
 #include "sourcelist.h"
 #include "pipeline.h"
-#include "viewmanager.h"
 #include "tomahawksettings.h"
 #include "audio/audioengine.h"
 #include "database/localcollection.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/topbar/topbar.h"
-#include "playlist/playlistview.h"
 
 #include "echonest/Playlist.h"
 
@@ -50,7 +49,15 @@
 #include "utils/spotifyparser.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/rdioparser.h"
-#include "widgets/searchwidget.h"
+
+#ifndef ENABLE_HEADLESS
+    #include <QApplication>
+    #include "widgets/searchwidget.h"
+    #include "viewmanager.h"
+    #include "playlist/topbar/topbar.h"
+    #include "playlist/playlistview.h"
+
+#endif
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 

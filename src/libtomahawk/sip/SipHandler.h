@@ -24,8 +24,12 @@
 
 #include <QObject>
 #include <QHash>
-#include <QPixmap>
 #include <QString>
+
+#ifndef ENABLE_HEADLESS
+    #include <QPixmap>
+#endif
+
 
 class DLLEXPORT SipHandler : public QObject
 {

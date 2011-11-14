@@ -94,18 +94,8 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     }
     else
     {
-        // No controls, lets load the info we need directly from the playlist table
-        TomahawkSqlQuery info = dbi->newquery();
-        info.prepare( QString( "SELECT dynamic_playlist.pltype, dynamic_playlist.plmode FROM playlist, dynamic_playlist WHERE playlist.guid = \"%1\" AND playlist.guid = dynamic_playlist.guid" ).arg( playlist_guid ) );
-        if( !info.exec()  ) {
-            qWarning() << "Failed to load dynplaylist info..";
-            return;
-        } else if( !info.first() ) {
-            qWarning() << "Noo results for queryL:" << info.lastQuery();
-            return;
-        }
-        type = info.value( 0 ).toString();
-        mode = static_cast<GeneratorMode>( info.value( 1 ).toInt() );
+        // No controls or plguid is null, but that's okay. We'll get a setdynrevision command with a proper revision some point later
+        return;
     }
 
     if( mode == OnDemand )
