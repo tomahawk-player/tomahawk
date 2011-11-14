@@ -55,7 +55,7 @@ signals:
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
     
 public slots:
-    void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
+    void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 

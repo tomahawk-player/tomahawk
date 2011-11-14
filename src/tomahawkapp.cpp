@@ -287,8 +287,8 @@ TomahawkApp::~TomahawkApp()
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-/*    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data(); */ // FIXME: this causes a shutdown crash on Windows
+    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
@@ -403,9 +403,9 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
-    qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
 
-    qRegisterMetaType< QList<Tomahawk::InfoSystem::InfoStringHash> >("QList<Tomahawk::InfoSystem::InfoStringHash>");
+    qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 
