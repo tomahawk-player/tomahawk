@@ -661,6 +661,8 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
             tDebug( LOGEXTRA ) << "Setting proxy to saved values";
             QNetworkProxy proxy( s->proxyType(), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
             proxyFactory->setProxy( proxy );
+            //FIXME: Jreen is broke without this
+            QNetworkProxy::setApplicationProxy( proxy );
         }
         if ( !s->proxyNoProxyHosts().isEmpty() )
             proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
