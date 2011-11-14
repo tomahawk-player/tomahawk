@@ -454,11 +454,15 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
 //                 tDebug() << "CHECKING CLICK RECT:" << headphonesRect;
                 if ( headphonesRect.contains( ev->pos() ) )
                 {
-                    if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
-                        // unlatch
-                        emit latchOff( colItem->source() );
-                    else
-                        emit latchOn( colItem->source() );
+                    if ( event->type() == QEvent::MouseButtonRelease )
+                    {
+                        if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+                            // unlatch
+                            emit latchOff( colItem->source() );
+                        else
+                            emit latchOn( colItem->source() );
+                    }
+                    return true;
                 }
             }
         }
