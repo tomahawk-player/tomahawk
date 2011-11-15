@@ -398,7 +398,6 @@ set( libHeaders
     result.h
     source.h
     sourceplaylistinterface.h
-    globalactionmanager.h
     LatchManager.h
 
     artist.h
@@ -607,7 +606,7 @@ IF(BUILD_GUI)
 ENDIF()
 
 qt4_wrap_ui( libUI_H ${libUI} )
-qt4_wrap_cpp( libMoc ${libHeaders} ${libGuiHeaders} )
+qt4_wrap_cpp( libMoc ${libHeaders} )
 
 SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
