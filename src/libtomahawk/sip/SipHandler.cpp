@@ -22,7 +22,10 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QPluginLoader>
-#include <QMessageBox>
+
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
+#endif
 
 #include "functimeout.h"
 
@@ -68,6 +71,7 @@ SipHandler::~SipHandler()
 }
 
 
+#ifndef ENABLE_HEADLESS
 const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
@@ -84,7 +88,7 @@ SipHandler::avatar( const QString& name ) const
         return QPixmap();
     }
 }
-
+#endif
 
 const SipInfo
 SipHandler::sipInfo(const QString& peerId) const
@@ -373,7 +377,7 @@ SipHandler::enablePlugin( SipPlugin* p )
 void
 SipHandler::connectPlugin( bool startup, const QString &pluginId )
 {
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
     {
         int result = QMessageBox::question(
@@ -599,7 +603,7 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
     emit stateChanged( sip, state );
 }
 
-
+#ifndef ENABLE_HEADLESS
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
@@ -644,6 +648,7 @@ SipHandler::onAvatarReceived( const QPixmap& avatar )
 //    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
     SourceList::instance()->getLocal()->setAvatar( avatar );
 }
+#endif
 
 
 QString

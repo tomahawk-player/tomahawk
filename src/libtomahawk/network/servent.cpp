@@ -26,8 +26,11 @@
 #include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QPushButton>
-#include <QMessageBox>
+
+#ifndef ENABLE_HEADLESS
+    #include <QPushButton>
+    #include <QMessageBox>
+#endif
 
 #include "result.h"
 #include "source.h"
@@ -684,7 +687,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
     if( peerStatus == ACLSystem::Deny )
         return false;
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     //FIXME: Actually enable it when it makes sense
     return true;
     if( peerStatus == ACLSystem::NotFound )

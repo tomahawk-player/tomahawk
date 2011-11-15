@@ -31,7 +31,10 @@
 #include <network/servent.h>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QMessageBox>
+
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
+#endif
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
@@ -191,8 +194,10 @@ ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, 
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
     /// I guess there is somereason for a assert in here, maybe fatal js errors, but
     /// undefined is not so fatal
+#ifndef ENABLE_HEADLESS
 #ifdef QT_DEBUG
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
+#endif
 #endif
 }
 

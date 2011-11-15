@@ -43,7 +43,7 @@
     #include <sys/sysctl.h>
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     #include <QtGui/QApplication>
     #include <QtGui/QWidget>
 
@@ -446,6 +446,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
 }
 
+#ifndef ENABLE_HEADLESS
 void
 drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor )
 {
@@ -469,6 +470,7 @@ unmarginLayout( QLayout* layout )
             unmarginLayout( childLayout );
     }
 }
+#endif
 
 
 NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
@@ -637,7 +639,7 @@ nam()
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
     tDebug( LOGEXTRA ) << "created new nam for thread " << QThread::currentThread();
-    
+
     return newNam;
 }
 
@@ -680,8 +682,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 }
 
 
-#ifndef TOMAHAWK_HEADLESS
-
+#ifndef ENABLE_HEADLESS
 QWidget*
 tomahawkWindow()
 {

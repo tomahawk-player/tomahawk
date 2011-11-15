@@ -18,7 +18,8 @@
 
 #include "portfwdthread.h"
 
-#include <QApplication>
+#include "headlesscheck.h"
+
 #include <QNetworkInterface>
 #include <QStringList>
 #include <QTime>

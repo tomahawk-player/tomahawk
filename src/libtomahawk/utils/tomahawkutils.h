@@ -93,8 +93,14 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
+#ifndef ENABLE_HEADLESS
     DLLEXPORT void drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor = 1 );
+    DLLEXPORT QWidget* tomahawkWindow();
+    /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
+    DLLEXPORT void bringToFront();
 
+    DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
+#endif
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
@@ -102,12 +108,6 @@ namespace TomahawkUtils
 
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
     DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
-
-    DLLEXPORT QWidget* tomahawkWindow();
-    /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
-    DLLEXPORT void bringToFront();
-
-    DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
 
     DLLEXPORT void crash();
 

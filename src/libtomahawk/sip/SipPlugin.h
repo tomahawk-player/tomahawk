@@ -83,9 +83,9 @@ public:
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
     virtual QWidget* configWidget();
+    virtual QIcon icon() const;
 #endif
     virtual void saveConfig() {} // called when the widget has been edited
-    virtual QIcon icon() const;
 
     // peer infos
     virtual const QStringList peersOnline() const;
@@ -113,13 +113,13 @@ signals:
     void sipInfoReceived( const QString& peerId, const SipInfo& info );
     void softwareVersionReceived( const QString& peerId, const QString& versionString );
 
+#ifndef ENABLE_HEADLESS
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );
 
     // new data for other sources;
     void avatarReceived ( const QString& from,  const QPixmap& avatar);
 
-#ifndef ENABLE_HEADLESS
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
 #endif

@@ -22,7 +22,7 @@
 #ifdef ENABLE_HEADLESS
 
 #define TOMAHAWK_APPLICATION QCoreApplication
-#include <QApplication>
+#include <QCoreApplication>
 
 #else
 

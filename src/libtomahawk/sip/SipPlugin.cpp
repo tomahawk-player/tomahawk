@@ -52,6 +52,7 @@ SipPlugin::pluginId() const
 }
 
 
+#ifndef ENABLE_HEADLESS
 QMenu*
 SipPlugin::menu()
 {
@@ -66,17 +67,18 @@ SipPlugin::configWidget()
 }
 
 
-QString
-SipPlugin::errorMessage() const
-{
-    return m_cachedError;
-}
-
-
 QIcon
 SipPlugin::icon() const
 {
     return QIcon();
+}
+#endif
+
+
+QString
+SipPlugin::errorMessage() const
+{
+    return m_cachedError;
 }
 
 

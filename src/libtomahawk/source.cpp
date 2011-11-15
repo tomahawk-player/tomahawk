@@ -115,7 +115,7 @@ Source::friendlyName() const
     return m_friendlyname;
 }
 
-
+#ifndef ENABLE_HEADLESS
 void
 Source::setAvatar( const QPixmap& avatar )
 {
@@ -137,7 +137,7 @@ Source::avatar( AvatarStyle style ) const
     else
         return QPixmap();
 }
-
+#endif
 
 void
 Source::setFriendlyName( const QString& fname )

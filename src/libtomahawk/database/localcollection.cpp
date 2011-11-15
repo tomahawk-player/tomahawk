@@ -21,9 +21,12 @@
 #include "localcollection.h"
 
 #include "sourcelist.h"
-#include "viewmanager.h"
 #include <tomahawksettings.h>
 #include "utils/logger.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "viewmanager.h"
+#endif
 
 
 LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* parent )
@@ -49,10 +52,12 @@ LocalCollection::createBookmarksPlaylist()
     if( bookmarksPlaylist().isNull() ) {
         QString guid = uuid();
         Tomahawk::playlist_ptr p = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), guid, tr( "Bookmarks" ), tr( "Saved tracks" ), QString(), false );
+
+#ifndef ENABLE_HEADLESS
         ViewManager::instance()->createPageForPlaylist( p );
 //         connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( loaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
         connect( p.data(), SIGNAL( created() ), this, SLOT( created() ) );
-
+#endif
         TomahawkSettings::instance()->setBookmarkPlaylist( guid );
 //         p->createNewRevision( uuid(), p->currentrevision(), QList< Tomahawk::plentry_ptr >() );
     }

@@ -130,11 +130,13 @@ ControlConnection::registerSource()
     Q_UNUSED( source )
     Q_ASSERT( source == m_source.data() );
 
+#ifndef ENABLE_HEADLESS
 //    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
     if( !SipHandler::instance()->avatar( name() ).isNull() )
     {
         source->setAvatar( SipHandler::instance()->avatar( name() ) );
     }
+#endif
 
     m_registered = true;
     m_servent->registerControlConnection( this );

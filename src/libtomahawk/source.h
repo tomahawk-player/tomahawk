@@ -61,8 +61,10 @@ public:
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
 
+#ifndef ENABLE_HEADLESS
     void setAvatar( const QPixmap& avatar );
     QPixmap avatar( AvatarStyle style = Original ) const;
+#endif
 
     collection_ptr collection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
