@@ -86,7 +86,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
 
+#ifdef Q_WS_MAC
+    ui->ownerLabel->setForegroundRole( QPalette::Text );
+#else
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
+#endif
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setEnabled( true );
