@@ -23,7 +23,6 @@
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
-#include <QDomElement>
 
 #include "album.h"
 #include "typedefs.h"
@@ -46,19 +45,6 @@ SpotifyPlugin::SpotifyPlugin()
 {
 
     m_supportedGetTypes << InfoChart << InfoChartCapabilities;
-
-        // we never need to re-fetch
-    if ( !m_allChartsMap.isEmpty() )
-        return;
-
-    /// We need to fetch possible types before they are asked for
-    tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
-
-    QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-    tDebug() << Q_FUNC_INFO << "fetching:" << url;
-    connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-    m_chartsFetchJobs++;
 
 }
 
@@ -108,14 +94,6 @@ SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-SpotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
-{
-    Q_UNUSED( caller )
-    Q_UNUSED( type)
-    Q_UNUSED( input )
-}
-
-void
 SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
@@ -123,17 +101,22 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
         dataError( requestData );
         return;
     }
+
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    if ( !hash.contains( "chart_id" ) )
+    /// Each request needs to contain both a id and source
+    if ( !hash.contains( "chart_id" ) && !hash.contains( "chart_source" ) )
     {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required params!";
         dataError( requestData );
         return;
-    } else {
-        criteria["chart_id"] = hash["chart_id"];
-    }
 
-    emit getCachedInfo( criteria, 604800000 /* Expire chart cache in 1 week */, requestData );
+    }
+    /// Set the criterias for current chart
+    criteria["chart_id"] = hash["chart_id"];
+    criteria["chart_source"] = hash["chart_source"];
+
+    emit getCachedInfo( criteria, 86400000 /* Expire chart cache in 1 day */, requestData );
 }
 void
 SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -145,7 +128,8 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    emit getCachedInfo( criteria, 0, requestData );
+    criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
+    emit getCachedInfo( criteria, 604800000, requestData );
 }
 
 void
@@ -157,6 +141,7 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
         case InfoChart:
         {
             /// Fetch the chart, we need source and id
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart not in cache! Fetching...";
             QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
@@ -169,6 +154,21 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
         }
         case InfoChartCapabilities:
         {
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
+
+            // we never need to re-fetch
+            if ( !m_allChartsMap.isEmpty() )
+                return;
+
+            /// We need to fetch possible types before they are asked for
+            tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
+
+            QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+            tDebug() << Q_FUNC_INFO << "fetching:" << url;
+            connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
+            m_chartsFetchJobs++;
+
             if ( m_chartsFetchJobs > 0 )
             {
                 qDebug() << Q_FUNC_INFO << "InfoChartCapabilities still fetching!";
@@ -275,6 +275,9 @@ SpotifyPlugin::chartTypes()
         foreach ( InfoRequestData request, m_cachedRequests )
         {
             emit info( request, m_allChartsMap );
+            Tomahawk::InfoSystem::InfoStringHash criteria;
+            criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
+            emit updateCache( criteria,604800000, request.type, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }
@@ -379,9 +382,14 @@ SpotifyPlugin::chartReturned()
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-
         emit info( requestData, returnedData );
 
+        // update cache
+        Tomahawk::InfoSystem::InfoStringHash criteria;
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+        criteria[ "chart_id" ] = origData[ "chart_id" ];
+        criteria[ "chart_source" ] = origData[ "chart_source" ];
+        emit updateCache( criteria, 86400000, requestData.type, returnedData );
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
