@@ -406,6 +406,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
 
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
+    qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 
@@ -582,4 +583,3 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     QString arg1 = instance.arguments[ 1 ];
     loadUrl( arg1 );
 }
-
