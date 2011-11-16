@@ -85,7 +85,7 @@ namespace TomahawkUtils
 
     DLLEXPORT QString sqlEscape( QString sql );
     DLLEXPORT QString timeToString( int seconds );
-    DLLEXPORT QString ageToString( const QDateTime& time );
+    DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
 
