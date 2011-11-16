@@ -182,12 +182,12 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     else
     {
         upperText = QString( "%1 - %2" ).arg( artist ).arg( track );
-        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ) );
+        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
-            lowerText = QString( "played %1 ago by you" ).arg( playtime );
+            lowerText = QString( "played %1 by you" ).arg( playtime );
         else
-            lowerText = QString( "played %1 ago by %2" ).arg( playtime ).arg( source->friendlyName() );
+            lowerText = QString( "played %1 by %2" ).arg( playtime ).arg( source->friendlyName() );
 
         if ( useAvatars )
             pixmap = source->avatar( Source::FancyStyle );
