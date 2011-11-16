@@ -157,7 +157,6 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         result->setRID( uuid() );
         result->setAlbumPos( files_query.value( 14 ).toUInt() );
         result->setTrackId( files_query.value( 9 ).toUInt() );
-        result->setYear( files_query.value( 17 ).toUInt() );
 
         TomahawkSqlQuery attrQuery = lib->newquery();
         QVariantMap attr;

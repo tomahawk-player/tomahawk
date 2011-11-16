@@ -263,6 +263,7 @@ Servent::unregisterControlConnection( ControlConnection* conn )
         if( c!=conn )
             n.append( c );
 
+    m_connectedNodes.removeAll( conn->id() );
     m_controlconnections = n;
 }
 
@@ -330,7 +331,6 @@ Servent::readyRead()
 
     ControlConnection* cc = 0;
     bool ok;
-//    int pport; //FIXME?
     QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
     if( !ok )
@@ -338,9 +338,9 @@ Servent::readyRead()
         tDebug() << "Invalid JSON on new connection, aborting";
         goto closeconnection;
     }
+
     conntype  = m.value( "conntype" ).toString();
     key       = m.value( "key" ).toString();
-//    pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 
@@ -348,13 +348,24 @@ Servent::readyRead()
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
+        bool dupe = false;
+        if ( m_connectedNodes.contains( nodeid ) )
+            dupe = true;
+
         foreach( ControlConnection* con, m_controlconnections )
         {
+            tDebug() << "known connection:" << con->id() << con->source()->friendlyName();
             if( con->id() == nodeid )
             {
-                tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
-                goto closeconnection;
+                dupe = true;
+                break;
             }
+        }
+
+        if ( dupe )
+        {
+            tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
+            goto closeconnection;
         }
     }
 
@@ -374,11 +385,12 @@ Servent::readyRead()
         Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
-            tLog() << "claimOffer FAILED, key:" << key;
+            tLog() << "claimOffer FAILED, key:" << key << nodeid;
             goto closeconnection;
         }
-        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key;
+        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;
 
+        m_connectedNodes << nodeid;
         if( !nodeid.isEmpty() )
             conn->setId( nodeid );
 

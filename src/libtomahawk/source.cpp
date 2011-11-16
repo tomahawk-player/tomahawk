@@ -46,6 +46,7 @@ Source::Source( int id, const QString& username )
     , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
+    , m_commandCount( 0 )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
 {
@@ -224,8 +225,19 @@ void
 Source::scanningFinished( unsigned int files )
 {
     Q_UNUSED( files );
+
     m_textStatus = QString();
+
+    if ( m_updateIndexWhenSynced )
+    {
+        m_updateIndexWhenSynced = false;
+
+        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+
     emit stateChanged();
+    emit synced();
 }
 
 
@@ -251,27 +263,14 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
             msg = tr( "Parsing" );
             break;
         }
-        case DBSyncConnection::SAVING:
+        case DBSyncConnection::SCANNING:
         {
-            msg = tr( "Saving" );
+            msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
         }
         case DBSyncConnection::SYNCED:
         {
-            if ( m_updateIndexWhenSynced )
-            {
-                m_updateIndexWhenSynced = false;
-
-                DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-            }
-
             msg = QString();
-            break;
-        }
-        case DBSyncConnection::SCANNING:
-        {
-            msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
         }
 
@@ -337,6 +336,51 @@ Source::trackTimerFired()
 
 
 void
+Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
+{
+    m_cmds << command;
+    if ( !command->singletonCmd() )
+        m_lastCmdGuid = command->guid();
+
+    m_commandCount = m_cmds.count();
+}
+
+
+void
+Source::executeCommands()
+{
+    if ( !m_cmds.isEmpty() )
+    {
+        QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+
+        connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
+        Database::instance()->enqueue( cmd );
+
+        int percentage = ( float( m_commandCount - m_cmds.count() ) / (float)m_commandCount ) * 100.0;
+        m_textStatus = tr( "Saving (%1%)" ).arg( percentage );
+        emit stateChanged();
+    }
+    else
+    {
+        if ( m_updateIndexWhenSynced )
+        {
+            m_updateIndexWhenSynced = false;
+
+            DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        }
+
+        m_textStatus = QString();
+        m_state = DBSyncConnection::SYNCED;
+
+        emit commandsFinished();
+        emit stateChanged();
+        emit synced();
+    }
+}
+
+
+void
 Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 {
     emit socialAttributesChanged();
@@ -359,11 +403,5 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 void
 Source::updateIndexWhenSynced()
 {
-    if ( isLocal() )
-    {
-        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-    }
-    else
-        m_updateIndexWhenSynced = true;
+    m_updateIndexWhenSynced = true;
 }
