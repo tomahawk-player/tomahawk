@@ -20,8 +20,6 @@
 #include "jabber.h"
 #include "ui_configwidget.h"
 
-#include "xmlconsole.h"
-
 #include "config.h"
 
 #include "tomahawksettings.h"
@@ -42,11 +40,15 @@
 
 #include <QtPlugin>
 #include <QStringList>
-#include <QInputDialog>
-#include <QLineEdit>
-#include <QMessageBox>
 #include <QDateTime>
 #include <QTimer>
+
+#ifndef ENABLE_HEADLESS
+    #include <QInputDialog>
+    #include <QLineEdit>
+    #include <QMessageBox>
+#endif
+
 
 #include <utils/tomahawkutils.h>
 #include "utils/logger.h"
@@ -65,8 +67,10 @@ JabberFactory::icon() const
 
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
+#ifndef ENABLE_HEADLESS
     , m_menu( 0 )
     , m_xmlConsole( 0 )
+#endif
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
@@ -100,21 +104,24 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
+#ifndef ENABLE_HEADLESS
     // instantiate XmlConsole
     if( readXmlConsoleEnabled() )
     {
         m_xmlConsole = new XmlConsole( m_client );
         m_xmlConsole->show();
     }
-
+#endif
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
 
     // initaliaze the roster
     m_roster = new Jreen::SimpleRoster( m_client );
 
+#ifndef ENABLE_HEADLESS
     // initialize the AvatarManager
     m_avatarManager = new AvatarManager( m_client );
+#endif
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
@@ -149,7 +156,9 @@ JabberPlugin::~JabberPlugin()
 {
     delete m_avatarManager;
     delete m_roster;
+#ifndef ENABLE_HEADLESS
     delete m_xmlConsole;
+#endif
     delete m_client;
     delete m_ui;
 }
@@ -173,6 +182,7 @@ JabberPlugin::accountName() const
     return TomahawkSettings::instance()->value( pluginId() + "/username" ).toString();
 }
 
+#ifndef ENABLE_HEADLESS
 QMenu*
 JabberPlugin::menu()
 {
@@ -190,7 +200,7 @@ JabberPlugin::icon() const
 {
     return QIcon( ":/jabber-icon.png" );
 }
-
+#endif
 
 bool
 JabberPlugin::connectPlugin( bool startup )
@@ -456,6 +466,7 @@ JabberPlugin::addContact(const QString& jid, const QString& msg)
 void
 JabberPlugin::showAddFriendDialog()
 {
+#ifndef ENABLE_HEADLESS
     bool ok;
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
                                         tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok );
@@ -464,6 +475,7 @@ JabberPlugin::showAddFriendDialog()
 
     qDebug() << "Attempting to add jabber contact to roster:" << id;
     addContact( id );
+#endif
 }
 
 QString
@@ -476,7 +488,9 @@ JabberPlugin::defaultSuffix() const
 void
 JabberPlugin::showXmlConsole()
 {
+#ifndef ENABLE_HEADLESS
    m_xmlConsole->show();
+#endif
 }
 
 void
@@ -553,6 +567,7 @@ void JabberPlugin::setupClientHelper()
 
 void JabberPlugin::addMenuHelper()
 {
+#ifndef ENABLE_HEADLESS
     if( !m_menu )
     {
         m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( accountName() ).append(")" ) );
@@ -568,10 +583,12 @@ void JabberPlugin::addMenuHelper()
 
         emit addMenu( m_menu );
     }
+#endif
 }
 
 void JabberPlugin::removeMenuHelper()
 {
+#ifndef ENABLE_HEADLESS
     if( m_menu )
     {
         emit removeMenu( m_menu );
@@ -579,6 +596,7 @@ void JabberPlugin::removeMenuHelper()
         delete m_menu;
         m_menu = 0;
     }
+#endif
 }
 
 void JabberPlugin::onNewMessage(const Jreen::Message& message)
@@ -699,7 +717,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
 
         return;
     }
-
+#ifndef ENABLE_HEADLESS
     // preparing the confirm box for the user
     QMessageBox *confirmBox = new QMessageBox(
                                 QMessageBox::Question,
@@ -714,11 +732,13 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
 
     // display the box and wait for the answer
     confirmBox->open( this, SLOT( onSubscriptionRequestConfirmed( int ) ) );
+#endif
 }
 
 void
 JabberPlugin::onSubscriptionRequestConfirmed( int result )
 {
+#ifndef ENABLE_HEADLESS
     qDebug() << Q_FUNC_INFO << result;
 
     QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
@@ -749,6 +769,7 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
     }
 
     m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
+#endif
 }
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq)
@@ -876,8 +897,10 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 
         emit peerOnline( fulljid );
 
+#ifndef ENABLE_HEADLESS
         if(!m_avatarManager->avatar(jid.bare()).isNull())
             onNewAvatar( jid.bare() );
+#endif
 
         // request software version
         Jreen::IQ versionIq( Jreen::IQ::Get, jid );
@@ -895,6 +918,7 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 
 void JabberPlugin::onNewAvatar(const QString& jid)
 {
+#ifndef ENABLE_HEADLESS
 //    qDebug() << Q_FUNC_INFO << jid;
     if ( m_state != Connected )
         return;
@@ -917,6 +941,7 @@ void JabberPlugin::onNewAvatar(const QString& jid)
     else
         // someone else's avatar
         emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
+#endif
 }
 
 bool

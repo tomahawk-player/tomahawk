@@ -52,12 +52,9 @@
 #include "globalactionmanager.h"
 #include "database/localcollection.h"
 #include "musicscanner.h"
-#include "AtticaManager.h"
 #include "pipeline.h"
-#include "utils/spotifyparser.h"
 #include "dropjob.h"
 #include "EchonestCatalogSynchronizer.h"
-#include "widgets/HeaderLabel.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -68,10 +65,14 @@
 #include <lastfm/ws.h>
 #include "config.h"
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
+    #include "utils/spotifyparser.h"
+    #include "AtticaManager.h"
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
     #include <QMessageBox>
+    #include "widgets/HeaderLabel.h"
+
 #endif
 
 // should go to a plugin actually
@@ -141,19 +142,19 @@ TomahawkApp::init()
 
     tLog() << "Starting Tomahawk...";
 
-#ifdef TOMAHAWK_HEADLESS
+#ifdef ENABLE_HEADLESS
     m_headless = true;
 #else
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
-#endif
 
     QFont f = APP->font();
     f.setPixelSize( HeaderLabel::defaultFontSize() );
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
+#endif
 
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -180,8 +181,10 @@ TomahawkApp::init()
     for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
     Echonest::Config::instance()->setAPIKey( magic );
 
+#ifndef ENABLE_HEADLESS
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
+#endif
     tDebug() << "Init Database Factory.";
     GeneratorFactory::registerFactory( "database", new DatabaseFactory );
 
@@ -211,9 +214,10 @@ TomahawkApp::init()
     m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+#ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
 
-#ifndef TOMAHAWK_HEADLESS
+
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";
@@ -233,8 +237,10 @@ TomahawkApp::init()
     initPipeline();
 
 #ifdef LIBATTICA_FOUND
+#ifndef ENABLE_HEADLESS
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
+#endif
 #endif
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
@@ -242,7 +248,7 @@ TomahawkApp::init()
         initHTTP();
     }
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     if ( !s->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
@@ -259,14 +265,17 @@ TomahawkApp::init()
         m_scanManager.data()->runScan( true );
     }
 
+    // Set up echonest catalog synchronizer
+    Tomahawk::EchonestCatalogSynchronizer::instance();
+
+#ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
 
-    // Set up echonest catalog synchronizer
-    Tomahawk::EchonestCatalogSynchronizer::instance();
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
     QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/playlist/test" ) ) );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
+#endif
 
 #ifdef Q_WS_MAC
     // Make sure to do this after main window is inited
@@ -301,12 +310,13 @@ TomahawkApp::~TomahawkApp()
 
     delete Pipeline::instance();
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     delete m_mainwindow;
-#endif
-#ifdef LIBATTICA_FOUND
+    #ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
+    #endif
 #endif
+
 
     tLog() << "Finished shutdown.";
 }
@@ -338,7 +348,7 @@ TomahawkApp::printHelp()
 }
 
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
 AudioControls*
 TomahawkApp::audioControls()
 {
@@ -517,6 +527,7 @@ TomahawkApp::initSIP()
 void
 TomahawkApp::spotifyApiCheckFinished()
 {
+#ifndef ENABLE_HEADLESS
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
@@ -524,13 +535,14 @@ TomahawkApp::spotifyApiCheckFinished()
         DropJob::setCanParseSpotifyPlaylists( true );
     else
         DropJob::setCanParseSpotifyPlaylists( false );
+#endif
 }
 
 
 void
 TomahawkApp::activate()
 {
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     TomahawkUtils::bringToFront();
 #endif
 }
@@ -539,6 +551,7 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
+#ifndef ENABLE_HEADLESS
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else if ( url.contains( "open.spotify.com" ) || url.contains( "spotify:track" ) )
@@ -566,7 +579,7 @@ TomahawkApp::loadUrl( const QString& url )
             return true;
         }
     }
-
+#endif
     return false;
 }
 

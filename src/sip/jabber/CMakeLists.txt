@@ -10,12 +10,16 @@ set( jabberSources
     jabber.cpp
     tomahawksipmessage.cpp
     tomahawksipmessagefactory.cpp
+)
+set( jabberSourcesGui
     avatarmanager.cpp
     xmlconsole.cpp
 )
 
 set( jabberHeaders
     jabber.h
+)
+set( jabberHeadersGui
     avatarmanager.h
     xmlconsole.h
 )
@@ -24,6 +28,11 @@ set( jabberUI
     configwidget.ui
     xmlconsole.ui
 )
+
+if(BUILD_GUI)
+    list(APPEND jabberSources ${jabberSourcesGui})
+    list(APPEND jabberHeaders ${jabberHeadersGui})
+endif()
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
@@ -57,5 +66,6 @@ ENDIF( APPLE )
 
 install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
 
-
-add_subdirectory(googlewrapper)
+if(BUILD_GUI)
+    add_subdirectory(googlewrapper)
+endif()

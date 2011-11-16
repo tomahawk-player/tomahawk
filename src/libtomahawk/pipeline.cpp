@@ -118,6 +118,7 @@ Tomahawk::ExternalResolver*
 Pipeline::addScriptResolver( const QString& path, bool start )
 {
     ExternalResolver* res = 0;
+#ifndef ENABLE_HEADLESS
     const QFileInfo fi( path );
 
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
@@ -128,6 +129,7 @@ Pipeline::addScriptResolver( const QString& path, bool start )
     m_scriptResolvers << res;
     if ( start )
         res->start();
+#endif
 
     return res;
 }

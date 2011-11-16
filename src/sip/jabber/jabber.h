@@ -23,7 +23,10 @@
 #include "sip/SipPlugin.h"
 
 #include "avatarmanager.h"
-#include "xmlconsole.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "xmlconsole.h"
+#endif
 
 #include <jreen/client.h>
 #include <jreen/disco.h>
@@ -38,7 +41,9 @@
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
 
-#include <QMessageBox>
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
+#endif
 
 #define MYNAME "SIPJREEN"
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
@@ -77,9 +82,12 @@ public:
     virtual const QString friendlyName() const;
     virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
+
+#ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
     virtual QIcon icon() const;
     virtual QWidget* configWidget();
+#endif
     virtual void saveConfig();
     virtual void deletePlugin();
 
@@ -132,8 +140,6 @@ private:
 
     using SipPlugin::errorMessage;
 
-    QMenu* m_menu;
-    XmlConsole* m_xmlConsole;
     QString m_currentUsername;
     QString m_currentPassword;
     QString m_currentServer;
@@ -150,7 +156,11 @@ private:
     Jreen::MUCRoom *m_room;
     Jreen::SimpleRoster *m_roster;
     QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+#ifndef ENABLE_HEADLESS
     QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
+    QMenu* m_menu;
+    XmlConsole* m_xmlConsole;
+#endif
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager *m_avatarManager;
 };

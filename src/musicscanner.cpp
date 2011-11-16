@@ -194,7 +194,7 @@ MusicScanner::listerFinished()
     commitBatch( m_scannedfiles, m_filesToDelete );
     m_scannedfiles.clear();
     m_filesToDelete.clear();
-    
+
     tDebug( LOGINFO ) << "Scanning complete, saving to database. "
                          "( scanned" << m_scanned << "skipped" << m_skipped << ")";
 

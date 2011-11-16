@@ -35,9 +35,6 @@ set( libGuiSources
 
     infobar/infobar.cpp
 
-    infosystem/infosystemcache.cpp
-    infosystem/infosystem.cpp
-    infosystem/infosystemworker.cpp
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
@@ -74,16 +71,10 @@ set( libGuiSources
     playlist/artistview.cpp
     playlist/customplaylistview.cpp
     playlist/ViewHeader.cpp
-    playlist/PlaylistUpdaterInterface.cpp
-    playlist/XspfUpdater.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
-    playlist/dynamic/DynamicControl.cpp
-    playlist/dynamic/GeneratorFactory.cpp
-    playlist/dynamic/GeneratorInterface.cpp
     playlist/dynamic/DynamicView.cpp
     playlist/dynamic/DynamicModel.cpp
-    playlist/dynamic/DynamicPlaylistRevision.cpp
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/echonest/EchonestSteerer.cpp
@@ -95,8 +86,6 @@ set( libGuiSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
     playlist/dynamic/widgets/LoadingSpinner.cpp
-    playlist/dynamic/database/DatabaseControl.cpp
-    playlist/dynamic/database/DatabaseGenerator.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -104,10 +93,12 @@ set( libGuiSources
     playlist/topbar/lineedit.cpp
     playlist/topbar/searchbutton.cpp
 
+    resolvers/scriptresolver.cpp
+    resolvers/qtscriptresolver.cpp
+
     sip/SipModel.cpp
 
     utils/widgetdragfilter.cpp
-    utils/xspfloader.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
     utils/spotifyparser.cpp
@@ -161,9 +152,6 @@ set( libGuiHeaders
 
     infobar/infobar.h
 
-    infosystem/infosystem.h
-    infosystem/infosystemworker.h
-    infosystem/infosystemcache.h
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
     infosystem/infoplugins/generic/chartsplugin.h
@@ -180,7 +168,7 @@ set( libGuiHeaders
     playlist/topbar/lineedit_p.h
     playlist/topbar/searchbutton.h
 
- playlist/treemodel.h
+    playlist/treemodel.h
     playlist/treeproxymodel.h
     playlist/treeheader.h
     playlist/treeitemdelegate.h
@@ -207,11 +195,8 @@ set( libGuiHeaders
     playlist/artistview.h
     playlist/customplaylistview.h
     playlist/ViewHeader.h
-    playlist/PlaylistUpdaterInterface.h
-    playlist/XspfUpdater.h
 
     playlist/dynamic/DynamicPlaylist.h
-    playlist/dynamic/DynamicControl.h
     playlist/dynamic/GeneratorInterface.h
     playlist/dynamic/DynamicView.h
     playlist/dynamic/DynamicModel.h
@@ -226,19 +211,19 @@ set( libGuiHeaders
     playlist/dynamic/widgets/CollapsibleControls.h
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
-    playlist/dynamic/database/DatabaseControl.h
-    playlist/dynamic/database/DatabaseGenerator.h
+
+    resolvers/scriptresolver.h
+    resolvers/qtscriptresolver.h
+
     sip/SipModel.h
 
     utils/widgetdragfilter.h
-    utils/xspfloader.h
     utils/xspfgenerator.h
     utils/jspfloader.h
     utils/spotifyparser.h
     utils/itunesparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
-    utils/qnr_iodevicestream.h
     utils/dropjobnotifier.h
 
     widgets/checkdirtree.h
@@ -361,8 +346,9 @@ set( libSources
     database/databasecommand_settrackattributes.cpp
     database/database.cpp
 
-    resolvers/scriptresolver.cpp
-    resolvers/qtscriptresolver.cpp
+    infosystem/infosystem.cpp
+    infosystem/infosystemcache.cpp
+    infosystem/infosystemworker.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -374,9 +360,20 @@ set( libSources
     network/connection.cpp
     network/controlconnection.cpp
 
+    playlist/PlaylistUpdaterInterface.cpp
+    playlist/dynamic/DynamicPlaylist.cpp
+    playlist/dynamic/GeneratorFactory.cpp
+    playlist/dynamic/GeneratorInterface.cpp
+    playlist/dynamic/DynamicPlaylistRevision.cpp
+    playlist/XspfUpdater.cpp
+    playlist/dynamic/database/DatabaseGenerator.cpp
+    playlist/dynamic/database/DatabaseControl.cpp
+    playlist/dynamic/DynamicControl.cpp
+
     utils/tomahawkutils.cpp
     utils/logger.cpp
     utils/qnr_iodevicestream.cpp
+    utils/xspfloader.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -463,6 +460,11 @@ set( libHeaders
     database/databasecommand_trackattributes.h
     database/databasecommand_settrackattributes.h
 
+    infosystem/infosystem.h
+    infosystem/infosystem.h
+    infosystem/infosystemworker.h
+    infosystem/infosystemcache.h
+
     network/bufferiodevice.h
     network/msgprocessor.h
     network/remotecollection.h
@@ -473,17 +475,23 @@ set( libHeaders
     network/controlconnection.h
     network/portfwdthread.h
 
-    resolvers/scriptresolver.h
-    resolvers/qtscriptresolver.h
+    playlist/PlaylistUpdaterInterface.h
+    playlist/dynamic/DynamicPlaylist.h
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/GeneratorFactory.h
+    playlist/XspfUpdater.h
+    playlist/dynamic/database/DatabaseGenerator.h
+    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/DynamicControl.h
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
+
+    utils/xspfloader.h
+    utils/qnr_iodevicestream.h
 )
 
 set( libHeaders_NoMOC
     infosystem/infoplugins/unix/imageconverter.h
-
-    playlist/dynamic/GeneratorInterface.h
-    playlist/dynamic/GeneratorFactory.h
 
     utils/tomahawkutils.h
 )

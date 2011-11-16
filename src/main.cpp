@@ -16,12 +16,13 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "tomahawkapp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include <QTranslator>
 
-#include "breakpad/BreakPad.h"
+
 #include "ubuntuunityhack.h"
 
 #ifdef Q_WS_MAC
@@ -30,6 +31,9 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
+#ifndef ENABLE_HEADLESS
+    #include "breakpad/BreakPad.h"
+#endif
 
 int
 main( int argc, char *argv[] )
@@ -54,7 +58,10 @@ main( int argc, char *argv[] )
 #endif
 
     TomahawkApp a( argc, argv );
+
+#ifndef ENABLE_HEADLESS
     new BreakPad( QDir::tempPath() );
+#endif
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );

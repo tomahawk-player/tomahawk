@@ -39,7 +39,9 @@ public:
     virtual QString factoryId() const { return "sipzeroconf"; }
     virtual QString prettyName() const { return "Local Network"; }
     virtual bool isUnique() const { return true; }
+#ifndef ENABLE_HEADLESS
     virtual QIcon icon() const;
+#endif
 
 
     virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
@@ -60,7 +62,9 @@ public:
     virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
     virtual bool isValid() const { return true; }
+#ifndef ENABLE_HEADLESS
     virtual QIcon icon() const;
+#endif
     virtual void checkSettings() {}
 
 public slots:

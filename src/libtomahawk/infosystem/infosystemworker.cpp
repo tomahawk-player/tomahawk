@@ -78,7 +78,7 @@ void
 InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 {
     tDebug() << Q_FUNC_INFO;
-
+#ifndef ENABLE_HEADLESS
     InfoPluginPtr enptr( new EchoNestPlugin() );
     m_plugins.append( enptr );
     registerInfoTypes( enptr, enptr.data()->supportedGetTypes(), enptr.data()->supportedPushTypes() );
@@ -103,13 +103,14 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     InfoPluginPtr hypeptr( new hypemPlugin() );
     m_plugins.append( hypeptr );
     registerInfoTypes( hypeptr, hypeptr.data()->supportedGetTypes(), hypeptr.data()->supportedPushTypes() );
-
+#endif
 
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
     m_plugins.append( admptr );
     registerInfoTypes( admptr, admptr.data()->supportedGetTypes(), admptr.data()->supportedPushTypes() );
     #endif
+#ifndef ENABLE_HEADLESS
     #ifdef Q_WS_X11
     InfoPluginPtr fdonotifyptr( new FdoNotifyPlugin() );
     m_plugins.append( fdonotifyptr );
@@ -118,7 +119,7 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_plugins.append( mprisptr );
     registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );
     #endif
-
+#endif
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         connect(
@@ -276,7 +277,7 @@ InfoSystemWorker::checkFinished( const Tomahawk::InfoSystem::InfoRequestData &re
 {
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
         emit finished( requestData.caller, requestData.type );
-    
+
     Q_FOREACH( InfoType testtype, m_dataTracker[ requestData.caller ].keys() )
     {
         if ( m_dataTracker[ requestData.caller ][ testtype ] != 0 )

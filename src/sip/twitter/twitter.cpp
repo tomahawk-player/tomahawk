@@ -168,7 +168,7 @@ TwitterPlugin::connectPlugin( bool startup )
     qStableSort( peerList.begin(), peerList.end() );
 
     registerOffers( peerList );
-    
+
     if ( twitterOAuthToken().isEmpty() || twitterOAuthTokenSecret().isEmpty() )
     {
         qDebug() << "TwitterPlugin has empty Twitter credentials; not connecting";
@@ -337,7 +337,7 @@ TwitterPlugin::registerOffers( const QStringList &peerList )
             m_cachedPeers.remove( screenName );
             syncConfig();
         }
-        
+
         if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
@@ -354,13 +354,13 @@ TwitterPlugin::registerOffers( const QStringList &peerList )
             m_cachedAvatars.remove( screenName );
             continue;
         }
-        
+
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
             qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
             continue;
         }
-        
+
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, peerData ) );
     }
 }

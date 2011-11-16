@@ -72,12 +72,13 @@ ZeroconfPlugin::connectionState() const
     return m_state;
 }
 
+#ifndef ENABLE_HEADLESS
 QIcon
 ZeroconfFactory::icon() const
 {
     return QIcon( ":/zeroconf-icon.png" );
 }
-
+#endif
 
 bool
 ZeroconfPlugin::connectPlugin( bool /*startup*/ )
@@ -98,7 +99,7 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
     m_cachedNodes.clear();
 
     m_advertisementTimer.start();
-    
+
     return true;
 }
 
@@ -112,11 +113,14 @@ ZeroconfPlugin::disconnectPlugin()
     m_zeroconf = 0;
 }
 
+
+#ifndef ENABLE_HEADLESS
 QIcon
 ZeroconfPlugin::icon() const
 {
     return QIcon( ":/zeroconf-icon.png" );
 }
+#endif
 
 
 void

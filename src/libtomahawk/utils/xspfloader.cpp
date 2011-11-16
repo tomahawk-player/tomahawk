@@ -18,7 +18,8 @@
 
 #include "xspfloader.h"
 
-#include <QApplication>
+#include "headlesscheck.h"
+
 #include <QDomDocument>
 
 #include "utils/tomahawkutils.h"

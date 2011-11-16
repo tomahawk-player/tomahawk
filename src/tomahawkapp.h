@@ -81,7 +81,7 @@ public:
 
     XMPPBot* xmppBot() { return m_xmppBot.data(); }
 
-#ifndef TOMAHAWK_HEADLESS
+#ifndef ENABLE_HEADLESS
     AudioControls* audioControls();
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
