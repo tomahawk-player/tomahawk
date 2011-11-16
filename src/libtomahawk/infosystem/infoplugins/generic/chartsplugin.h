@@ -21,8 +21,8 @@
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
-#include <QNetworkReply>
-#include <QObject>
+#include <QtNetwork/QNetworkReply>
+#include <QtCore/QObject>
 
 class QNetworkReply;
 
@@ -47,8 +47,9 @@ public:
         Artist =    0x04
 
     };
- void setChartType( ChartType type ) { m_chartType = type; }
- ChartType chartType() const { return m_chartType; }
+
+    void setChartType( ChartType type ) { m_chartType = type; }
+    ChartType chartType() const { return m_chartType; }
 
 public slots:
     void chartReturned();
@@ -58,15 +59,20 @@ protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data );
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data )
+    {
+        Q_UNUSED( caller )
+        Q_UNUSED( type )
+        Q_UNUSED( data )
+    }
 
 private:
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    QVariantList m_chartResources;
-    QList<InfoStringHash> m_charts;
+    QStringList m_chartResources;
+    QList< InfoStringHash > m_charts;
     ChartType m_chartType;
 
     QVariantMap m_allChartsMap;
