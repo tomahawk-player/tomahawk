@@ -23,11 +23,9 @@
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
-#include <QDomElement>
 
 #include "album.h"
 #include "typedefs.h"
-#include "audio/audioengine.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -140,16 +138,6 @@ hypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     }
 }
 
-
-void
-hypemPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
-{
-    Q_UNUSED( caller )
-    Q_UNUSED( type)
-    Q_UNUSED( input )
-}
-
-
 void
 hypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -173,8 +161,9 @@ hypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     /// Set the criterias for current chart
     criteria["chart_id"] = hash["chart_id"];
     criteria["chart_source"] = hash["chart_source"];
-
-    emit getCachedInfo( criteria, 0, requestData );
+    /// @todo
+    /// set cache time based on wether requested type is 3day, lastweek or recent.
+    emit getCachedInfo( criteria, 86400000, requestData );
 }
 
 void
@@ -198,7 +187,7 @@ hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
         case InfoChart:
         {
             /// Fetch the chart, we need source and id
-
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart not in cache! Fetching...";
             QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg(HYPEM_END_URL) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
@@ -212,6 +201,7 @@ hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
 
         case InfoChartCapabilities:
         {
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
             if ( m_chartsFetchJobs > 0 )
             {
                 qDebug() << Q_FUNC_INFO << "InfoChartCapabilities still fetching!";
@@ -390,7 +380,14 @@ hypemPlugin::chartReturned()
 
 
         emit info( requestData, returnedData );
-        // TODO update cache
+        // update cache
+        Tomahawk::InfoSystem::InfoStringHash criteria;
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+        criteria[ "chart_id" ] = origData[ "chart_id" ];
+        criteria[ "chart_source" ] = origData[ "chart_source" ];
+        /// @todo
+        /// set cache time based on wether requested type is 3day, lastweek or recent.
+        emit updateCache( criteria, 86400000, requestData.type, returnedData );
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();

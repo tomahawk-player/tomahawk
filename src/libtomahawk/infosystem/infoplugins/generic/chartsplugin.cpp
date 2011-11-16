@@ -152,8 +152,8 @@ ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requ
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    criteria[ "InfoChartCapabilities" ] = "all";
-    emit getCachedInfo( criteria, 86400000, requestData );
+    criteria[ "InfoChartCapabilities" ] = "chartsplugin";
+    emit getCachedInfo( criteria, 604800000, requestData );
 }
 
 void
@@ -181,6 +181,9 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
         {
 
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
+            // we never need to re-fetch
+            if ( !m_allChartsMap.isEmpty() )
+                return;
 
             /// Then get each chart from resource
 
@@ -418,8 +421,8 @@ ChartsPlugin::chartTypes()
             emit info( request, m_allChartsMap );
             // update cache
             Tomahawk::InfoSystem::InfoStringHash criteria;
-            criteria[ "InfoChartCapabilities" ] = "all";
-            emit updateCache( criteria, 86400000, request.type, m_allChartsMap );
+            criteria[ "InfoChartCapabilities" ] = "chartsplugin";
+            emit updateCache( criteria, 604800000, request.type, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }
