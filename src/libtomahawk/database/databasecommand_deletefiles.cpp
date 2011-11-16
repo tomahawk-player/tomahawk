@@ -25,7 +25,6 @@
 #include "collection.h"
 #include "source.h"
 #include "database/database.h"
-#include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
 #include "network/servent.h"
 #include "utils/logger.h"
@@ -54,7 +53,7 @@ DatabaseCommand_DeleteFiles::postCommitHook()
         ids << id.toUInt();
     emit notify( ids );
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
 

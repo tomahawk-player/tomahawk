@@ -24,6 +24,7 @@
 
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
+#include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_sourceoffline.h"
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
@@ -230,9 +231,7 @@ Source::scanningFinished( unsigned int files )
     if ( m_updateIndexWhenSynced )
     {
         m_updateIndexWhenSynced = false;
-
-        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        updateTracks();
     }
 
     emit stateChanged();
@@ -351,10 +350,28 @@ Source::executeCommands()
 {
     if ( !m_cmds.isEmpty() )
     {
+        QList< QSharedPointer<DatabaseCommand> > cmdGroup;
         QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+        while ( cmd->groupable() )
+        {
+            cmdGroup << cmd;
+            if ( !m_cmds.isEmpty() && m_cmds.first()->groupable() && m_cmds.first()->commandname() == cmd->commandname() )
+                cmd = m_cmds.takeFirst();
+            else
+                break;
+        }
 
+        // return here when the last command finished
         connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
-        Database::instance()->enqueue( cmd );
+
+        if ( cmdGroup.count() )
+        {
+            Database::instance()->enqueue( cmdGroup );
+        }
+        else
+        {
+            Database::instance()->enqueue( cmd );
+        }
 
         int percentage = ( float( m_commandCount - m_cmds.count() ) / (float)m_commandCount ) * 100.0;
         m_textStatus = tr( "Saving (%1%)" ).arg( percentage );
@@ -365,9 +382,7 @@ Source::executeCommands()
         if ( m_updateIndexWhenSynced )
         {
             m_updateIndexWhenSynced = false;
-
-            DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            updateTracks();
         }
 
         m_textStatus = QString();
@@ -396,6 +411,26 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
         const source_ptr from = SourceList::instance()->get( action->comment() );
         if ( !from.isNull() )
             emit latchedOff( from );
+    }
+}
+
+
+void
+Source::updateTracks()
+{
+    {
+        DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+
+    {
+        // Re-calculate local db stats
+        DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->get( id() ) );
+        connect( cmd, SIGNAL( done( QVariantMap ) ),
+                 SourceList::instance()->getLocal().data(), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+
+        connect( cmd, SIGNAL( finished() ), SIGNAL( stateChanged() ) );
     }
 }
 

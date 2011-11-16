@@ -73,7 +73,15 @@ Database::loadIndex()
 
 
 void
-Database::enqueue( QSharedPointer<DatabaseCommand> lc )
+Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
+{
+    qDebug() << "Enqueueing" << lc.count() << "commands to rw thread";
+    m_workerRW->enqueue( lc );
+}
+
+
+void
+Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 {
     if ( lc->doesMutates() )
     {

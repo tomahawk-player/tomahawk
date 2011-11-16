@@ -70,6 +70,7 @@ public:
     const Tomahawk::source_ptr& source() const;
 
     virtual bool loggable() const { return false; }
+    virtual bool groupable() const { return false; }
     virtual bool singletonCmd() const { return false; }
     virtual bool localOnly() const { return false; }
 
