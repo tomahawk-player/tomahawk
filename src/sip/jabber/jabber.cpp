@@ -75,24 +75,26 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_configWidget = QWeakPointer< QWidget >( new QWidget );
-    m_ui = new Ui_JabberConfig;
-    m_ui->setupUi( m_configWidget.data() );
-    m_configWidget.data()->setVisible( false );
-
     m_currentUsername = accountName();
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
+
+#ifndef ENABLE_HEADLESS
+    m_configWidget = QWeakPointer< QWidget >( new QWidget );
+    m_ui = new Ui_JabberConfig;
+    m_ui->setupUi( m_configWidget.data() );
+    m_configWidget.data()->setVisible( false );
 
     m_ui->jabberUsername->setText( m_currentUsername );
     m_ui->jabberPassword->setText( m_currentPassword );
     m_ui->jabberServer->setText( m_currentServer );
     m_ui->jabberPort->setValue( m_currentPort );
     m_ui->jidExistsLabel->hide();
-
-
     connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
+#endif
+
+
     // setup JID object
     Jreen::JID jid = Jreen::JID( accountName() );
 
@@ -149,7 +151,9 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     connect(m_roster, SIGNAL(subscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
                       SLOT(onSubscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
 
+#ifndef ENABLE_HEADLESS
     connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
+#endif
 }
 
 JabberPlugin::~JabberPlugin()
