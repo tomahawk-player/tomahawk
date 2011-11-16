@@ -64,6 +64,7 @@ public:
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return true; }
     virtual bool localOnly() const { return false; }
+    virtual bool groupable() const { return true; }
     virtual void postCommitHook();
 
     QVariantList ids() const { return m_ids; }

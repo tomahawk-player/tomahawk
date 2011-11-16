@@ -24,7 +24,6 @@
 #include "album.h"
 #include "collection.h"
 #include "database/database.h"
-#include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
 #include "network/dbsyncconnection.h"
 #include "network/servent.h"
@@ -73,15 +72,7 @@ DatabaseCommand_AddFiles::postCommitHook()
     emit notify( m_ids );
 
     if ( source()->isLocal() )
-    {
         Servent::instance()->triggerDBSync();
-
-        // Re-calculate local db stats
-        DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
-        connect( cmd, SIGNAL( done( QVariantMap ) ),
-                 SourceList::instance()->getLocal().data(), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-    }
 }
 
 

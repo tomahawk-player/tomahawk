@@ -73,15 +73,20 @@ DatabaseWorker::run()
 
 
 void
+DatabaseWorker::enqueue( const QList< QSharedPointer<DatabaseCommand> >& cmds )
+{
+    QMutexLocker lock( &m_mut );
+    m_outstanding += cmds.count();
+    m_commands << cmds;
+
+    if ( m_outstanding == cmds.count() )
+        QTimer::singleShot( 0, this, SLOT( doWork() ) );
+}
+
+
+void
 DatabaseWorker::enqueue( const QSharedPointer<DatabaseCommand>& cmd )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-//        qDebug() << Q_FUNC_INFO << "Reinvoking in correct thread.";
-        QMetaObject::invokeMethod( this, "enqueue", Qt::QueuedConnection, Q_ARG( QSharedPointer<DatabaseCommand>, cmd ) );
-        return;
-    }
-
     QMutexLocker lock( &m_mut );
     m_outstanding++;
     m_commands << cmd;
@@ -107,6 +112,7 @@ DatabaseWorker::doWork()
     timer.start();
 #endif
 
+    QList< QSharedPointer<DatabaseCommand> > cmdGroup;
     QSharedPointer<DatabaseCommand> cmd;
     {
         QMutexLocker lock( &m_mut );
@@ -119,45 +125,66 @@ DatabaseWorker::doWork()
         Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
+
+    unsigned int completed = 0;
     try
     {
+        bool finished = false;
         {
-            cmd->_exec( m_dbimpl ); // runs actual SQL stuff
-
-            if ( cmd->loggable() )
+            while ( !finished )
             {
-                // We only save our own ops to the oplog, since incoming ops from peers
-                // are applied immediately.
-                //
-                // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
-                // would be safe to sync ops for friend A from friend B's cache, if he saved them,
-                // which would mean you could get updates even if a peer was offline.
-                if ( cmd->source()->isLocal() && !cmd->localOnly() )
+                completed++;
+                cmd->_exec( m_dbimpl ); // runs actual SQL stuff
+
+                if ( cmd->loggable() )
                 {
-                    // save to op-log
-                    DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
-                    logOp( command );
-                }
-                else
-                {
-                    // Make a note of the last guid we applied for this source
-                    // so we can always request just the newer ops in future.
+                    // We only save our own ops to the oplog, since incoming ops from peers
+                    // are applied immediately.
                     //
-                    if ( !cmd->singletonCmd() )
+                    // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
+                    // would be safe to sync ops for friend A from friend B's cache, if he saved them,
+                    // which would mean you could get updates even if a peer was offline.
+                    if ( cmd->source()->isLocal() && !cmd->localOnly() )
                     {
-//                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
-
-                        TomahawkSqlQuery query = m_dbimpl->newquery();
-                        query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
-                        query.addBindValue( cmd->guid() );
-                        query.addBindValue( cmd->source()->id() );
-
-                        if ( !query.exec() )
+                        // save to op-log
+                        DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
+                        logOp( command );
+                    }
+                    else
+                    {
+                        // Make a note of the last guid we applied for this source
+                        // so we can always request just the newer ops in future.
+                        //
+                        if ( !cmd->singletonCmd() )
                         {
-                            throw "Failed to set lastop";
+                            TomahawkSqlQuery query = m_dbimpl->newquery();
+                            query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
+                            query.addBindValue( cmd->guid() );
+                            query.addBindValue( cmd->source()->id() );
+
+                            if ( !query.exec() )
+                            {
+                                throw "Failed to set lastop";
+                            }
                         }
                     }
                 }
+
+                cmdGroup << cmd;
+                if ( cmd->groupable() && !m_commands.isEmpty() )
+                {
+                    QMutexLocker lock( &m_mut );
+                    if ( m_commands.first()->groupable() )
+                    {
+                        cmd = m_commands.takeFirst();
+                    }
+                    else
+                    {
+                        finished = true;
+                    }
+                }
+                else
+                    finished = true;
             }
 
             if ( cmd->doesMutates() )
@@ -175,7 +202,8 @@ DatabaseWorker::doWork()
             tDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
 #endif
 
-            cmd->postCommit();
+            foreach ( QSharedPointer<DatabaseCommand> c, cmdGroup )
+                c->postCommit();
 
 #ifdef DEBUG_TIMING
             tDebug() << "Post commit finished in" << timer.elapsed() - duration << "ms for" << cmd->commandname();
@@ -192,7 +220,7 @@ DatabaseWorker::doWork()
                  << m_dbimpl->database().lastError().driverText()
                  << endl;
 
-        if( cmd->doesMutates() )
+        if ( cmd->doesMutates() )
             m_dbimpl->database().rollback();
 
         Q_ASSERT( false );
@@ -200,17 +228,19 @@ DatabaseWorker::doWork()
     catch(...)
     {
         qDebug() << "Uncaught exception processing dbcmd";
-        if( cmd->doesMutates() )
+        if ( cmd->doesMutates() )
             m_dbimpl->database().rollback();
 
         Q_ASSERT( false );
         throw;
     }
 
-    cmd->emitFinished();
+    foreach ( QSharedPointer<DatabaseCommand> c, cmdGroup )
+        c->emitFinished();
 
     QMutexLocker lock( &m_mut );
-    if ( --m_outstanding > 0 )
+    m_outstanding -= completed;
+    if ( m_outstanding > 0 )
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
 }
 

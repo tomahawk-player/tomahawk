@@ -130,7 +130,7 @@ private slots:
 
 private:
     void addCommand( const QSharedPointer<DatabaseCommand>& command );
-
+    void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 
     QList< QSharedPointer<Collection> > m_collections;

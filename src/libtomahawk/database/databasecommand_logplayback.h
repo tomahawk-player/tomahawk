@@ -68,6 +68,7 @@ public:
     virtual bool doesMutates() const { return true; }
     virtual bool singletonCmd() const { return ( m_action == Started ); }
     virtual bool localOnly() const;
+    virtual bool groupable() const { return true; }
 
     QString artist() const { return m_artist; }
     void setArtist( const QString& s ) { m_artist = s; }

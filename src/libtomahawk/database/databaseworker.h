@@ -47,6 +47,7 @@ public:
 
 public slots:
     void enqueue( const QSharedPointer<DatabaseCommand>& );
+    void enqueue( const QList< QSharedPointer<DatabaseCommand> >& );
 
 protected:
     void run();
