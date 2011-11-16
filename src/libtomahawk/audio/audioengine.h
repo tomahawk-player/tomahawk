@@ -55,23 +55,23 @@ public:
     ~AudioEngine();
 
     QStringList supportedMimeTypes() const;
-    unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
+    unsigned int volume() const {  return m_volume; } // in percent
 
-    AudioState state() const { return m_state; }
-    bool isPlaying() const { return m_state == Playing; }
-    bool isPaused() const { return m_state == Paused; }
-    bool isStopped() const { return m_state == Stopped; }
+    AudioState state() const { QMutexLocker locker( &m_stateMutex ); return m_state; }
+    bool isPlaying() const { QMutexLocker locker( &m_stateMutex ); return m_state == Playing; }
+    bool isPaused() const { QMutexLocker locker( &m_stateMutex ); return m_state == Paused; }
+    bool isStopped() const { QMutexLocker locker( &m_stateMutex ); return m_state == Stopped; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist.data(); }
+    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { QMutexLocker locker( &m_currentTrackPlaylistMutex ); return m_currentTrackPlaylist.data(); }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    Tomahawk::PlaylistInterface* playlist() const { return m_playlist.data(); }
+    Tomahawk::PlaylistInterface* playlist() const { QMutexLocker locker( &m_playlistMutex ); return m_playlist.data(); }
 
-    Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
+    Tomahawk::result_ptr currentTrack() const { QMutexLocker locker( &m_currentTrackMutex ); return m_currentTrack; }
 
-    qint64 currentTime() const { return m_mediaObject->currentTime(); }
-    qint64 currentTrackTotalTime() const { return m_mediaObject->totalTime(); }
+    qint64 currentTime() const { QMutexLocker locker( &m_currentTrackMutex ); return m_currentTime; }
+    qint64 currentTrackTotalTime() const { QMutexLocker locker( &m_currentTrackMutex ); return m_currentTrackTotalTime; }
 
 public slots:
     void playPause();
@@ -89,14 +89,14 @@ public slots:
     void seek( qint64 ms );
     void seek( int ms ); // for compatibility with seekbar in audiocontrols
     void setVolume( int percentage );
-    void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
-    void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
-    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
+    void lowerVolume();
+    void raiseVolume();
+    void onVolumeChanged( qreal volume ) { QMutexLocker locker( &m_volumeMutex ); m_volume = volume * 100; emit volumeChanged( volume * 100 ); }
     void mute();
 
     void playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( Tomahawk::PlaylistInterface* playlist );
-    void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
+    void setQueue( Tomahawk::PlaylistInterface* queue );
 
     void playlistNextTrackReady();
 
@@ -167,6 +167,18 @@ private:
     AudioState m_state;
 
     static AudioEngine* s_instance;
+
+    mutable QMutex m_stateMutex;
+    mutable QMutex m_mimeTypeMutex;
+    mutable QMutex m_currentTrackMutex;
+    mutable QMutex m_currentTrackPlaylistMutex;
+    mutable QMutex m_playlistMutex;
+    mutable QMutex m_queueMutex;
+    mutable QMutex m_volumeMutex;
+
+    qint64 m_currentTime;
+    qint64 m_currentTrackTotalTime;
+    unsigned int m_volume;
 };
 
 #endif // AUDIOENGINE_H

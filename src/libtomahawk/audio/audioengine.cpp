@@ -107,6 +107,7 @@ AudioEngine::~AudioEngine()
 QStringList
 AudioEngine::supportedMimeTypes() const
 {
+    QMutexLocker locker( &m_mimeTypeMutex );
     if ( m_supportedMimeTypes.isEmpty() )
     {
         m_supportedMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
@@ -122,7 +123,13 @@ AudioEngine::supportedMimeTypes() const
 void
 AudioEngine::playPause()
 {
-    if ( isPlaying() )
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "playPause" );
+        return;
+    }
+    
+    if ( m_mediaObject->state() == Phonon::PlayingState )
         pause();
     else
         play();
@@ -132,14 +139,21 @@ AudioEngine::playPause()
 void
 AudioEngine::play()
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "play" );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    if ( isPaused() )
+    if ( m_mediaObject->state() == Phonon::PausedState )
     {
         m_mediaObject->play();
         emit resumed();
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
+        QMutexLocker locker( &m_currentTrackMutex );
         trackInfo["title"] = m_currentTrack->track();
         trackInfo["artist"] = m_currentTrack->artist()->name();
         trackInfo["album"] = m_currentTrack->album()->name();
@@ -155,6 +169,12 @@ AudioEngine::play()
 void
 AudioEngine::pause()
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "pause" );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_mediaObject->pause();
@@ -167,8 +187,15 @@ AudioEngine::pause()
 void
 AudioEngine::stop()
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "stop" );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( isStopped() )
+    QMutexLocker locker( &m_playlistMutex );
+    if ( m_mediaObject->state() == Phonon::StoppedState )
         return;
 
     setState( Stopped );
@@ -176,8 +203,11 @@ AudioEngine::stop()
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
+
+    m_currentTrackMutex.lock();
     if ( !m_currentTrack.isNull() )
         emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+    m_currentTrackMutex.unlock();
 
     emit stopped();
     setCurrentTrack( Tomahawk::result_ptr() );
@@ -203,6 +233,12 @@ AudioEngine::stop()
 void
 AudioEngine::previous()
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "previous" );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( canGoPrevious() )
@@ -213,6 +249,12 @@ AudioEngine::previous()
 void
 AudioEngine::next()
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "next" );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( canGoNext() )
@@ -224,6 +266,9 @@ bool
 AudioEngine::canGoNext()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    QMutexLocker plocker( &m_playlistMutex );
+    QMutexLocker qlocker( &m_queueMutex );
+    QMutexLocker ctlocker( &m_currentTrackMutex );
 
     if ( m_queue && m_queue->trackCount() )
         return true;
@@ -251,6 +296,7 @@ AudioEngine::canGoNext()
 bool
 AudioEngine::canGoPrevious()
 {
+    QMutexLocker locker( &m_playlistMutex );
     if ( m_playlist.isNull() )
         return false;
 
@@ -265,6 +311,7 @@ AudioEngine::canGoPrevious()
 bool
 AudioEngine::canSeek()
 {
+    QMutexLocker locker( &m_playlistMutex );
     bool phononCanSeek = true;
     /* TODO: When phonon properly reports this, re-enable it
     if ( m_mediaObject && m_mediaObject->isValid() )
@@ -277,13 +324,19 @@ AudioEngine::canSeek()
 void
 AudioEngine::seek( qint64 ms )
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "seek", Q_ARG( qint64, ms ) );
+        return;
+    }
+    
     if ( !canSeek() )
     {
         tDebug( LOGEXTRA ) << "Could not seek!";
         return;
     }
 
-    if ( isPlaying() || isPaused() )
+    if ( m_mediaObject->state() == Phonon::PlayingState  || m_mediaObject->state() == Phonon::PausedState )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );
@@ -302,6 +355,12 @@ AudioEngine::seek( int ms )
 void
 AudioEngine::setVolume( int percentage )
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "setVolume", Q_ARG( int, percentage ) );
+        return;
+    }
+    
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << percentage;
 
     percentage = qBound( 0, percentage, 100 );
@@ -309,6 +368,27 @@ AudioEngine::setVolume( int percentage )
     emit volumeChanged( percentage );
 }
 
+void
+AudioEngine::lowerVolume()
+{
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "lowerVolume" );
+        return;
+    }
+    setVolume( volume() - AUDIO_VOLUME_STEP );
+}
+
+void
+AudioEngine::raiseVolume()
+{
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "raiseVolume" );
+        return;
+    }
+    setVolume( volume() + AUDIO_VOLUME_STEP );
+}
 
 void
 AudioEngine::mute()
@@ -344,6 +424,7 @@ AudioEngine::sendNowPlayingNotification()
         m_infoSystemConnected = true;
     }
 
+    QMutexLocker locker( &m_currentTrackMutex );
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = m_currentTrack->album()->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
@@ -361,6 +442,7 @@ AudioEngine::sendNowPlayingNotification()
 void
 AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
+    QMutexLocker locker( &m_currentTrackMutex );
     if ( requestData.caller != s_aeInfoIdentifier ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
@@ -434,6 +516,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             setCurrentTrack( result );
 
+            QMutexLocker locker( &m_currentTrackMutex );
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
                 io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
@@ -448,6 +531,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
         if ( !err )
         {
+            QMutexLocker locker( &m_currentTrackMutex );
             tLog() << "Starting new song:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
@@ -531,7 +615,8 @@ void
 AudioEngine::loadPreviousTrack()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-
+    QMutexLocker locker( &m_playlistMutex );
+    
     if ( m_playlist.isNull() )
     {
         stop();
@@ -550,6 +635,8 @@ void
 AudioEngine::loadNextTrack()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    QMutexLocker plocker( &m_playlistMutex );
+    QMutexLocker qlocker( &m_queueMutex );
 
     Tomahawk::result_ptr result;
 
@@ -562,7 +649,9 @@ AudioEngine::loadNextTrack()
     {
         tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Loading playlist's next item";
         result = m_playlist.data()->nextItem();
+        m_currentTrackPlaylistMutex.lock();
         m_currentTrackPlaylist = m_playlist;
+        m_currentTrackPlaylistMutex.unlock();
     }
 
     if ( !result.isNull() )
@@ -583,20 +672,29 @@ AudioEngine::loadNextTrack()
 void
 AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "playItem", Q_ARG( Tomahawk::PlaylistInterface*, playlist ), Q_ARG( const Tomahawk::result_ptr&, result ) );
+        return;
+    }
+    
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+    QMutexLocker locker( &m_playlistMutex );
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
 
     setPlaylist( playlist );
+    m_currentTrackPlaylistMutex.lock();
     m_currentTrackPlaylist = playlist->getSharedPointer();
+    m_currentTrackPlaylistMutex.unlock();
 
     if ( !result.isNull() )
         loadTrack( result );
     else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
-        if ( isStopped() )
+        if ( m_mediaObject->state() == Phonon::StoppedState )
             sendWaitingNotification();
         else
             stop();
@@ -627,14 +725,21 @@ void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop;
-
+    QMutexLocker plocker( &m_playlistMutex );
+    QMutexLocker vlocker( &m_volumeMutex );
+    m_volume = m_audioOutput->volume() * 100.0;
+    
     if ( newState == Phonon::ErrorState )
     {
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
         return;
     }
     if ( newState == Phonon::PlayingState )
+    {
+        QMutexLocker locker( &m_currentTrackMutex );
+        m_currentTrackTotalTime = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
         setState( Playing );
+    }
 
     if ( oldState == Phonon::PlayingState )
     {
@@ -643,6 +748,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             case Phonon::PausedState:
             {
+                QMutexLocker locker( &m_currentTrackMutex );
                 qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
                 stopped = ( duration - 1000 < m_mediaObject->currentTime() );
                 if ( !stopped )
@@ -679,6 +785,8 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 void
 AudioEngine::timerTriggered( qint64 time )
 {
+    QMutexLocker locker( &m_currentTrackMutex );
+    m_currentTime = time;
     emit timerMilliSeconds( time );
 
     if ( m_timeElapsed != time / 1000 )
@@ -704,6 +812,14 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "setPlaylist", Q_ARG( Tomahawk::PlaylistInterface*, playlist ) );
+        return;
+    }
+
+    QMutexLocker locker( &m_playlistMutex );
+    
     if ( !m_playlist.isNull() )
     {
         if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
@@ -728,8 +844,24 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
 
 
 void
+AudioEngine::setQueue( Tomahawk::PlaylistInterface* queue )
+{
+    if ( QThread::currentThread() != AudioEngine::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( AudioEngine::instance(), "setQueue", Q_ARG( Tomahawk::PlaylistInterface*, queue ) );
+        return;
+    }
+
+    QMutexLocker locker( &m_queueMutex );
+
+    m_queue = queue;
+}
+
+
+void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
+    QMutexLocker locker( &m_currentTrackMutex );
     m_lastTrack = m_currentTrack;
     if ( !m_lastTrack.isNull() )
     {
@@ -763,6 +895,7 @@ AudioEngine::isLocalResult( const QString& url ) const
 void
 AudioEngine::setState( AudioState state )
 {
+    QMutexLocker locker( &m_stateMutex );
     AudioState oldState = m_state;
     m_state = state;
 
