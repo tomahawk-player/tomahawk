@@ -150,7 +150,7 @@ SourceTreeView::setupMenus()
     m_latchMenu.addAction( latchOnAction );
 
     m_privacyMenu.addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
-    
+
     if ( type == SourcesModel::Collection )
     {
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
@@ -379,7 +379,7 @@ SourceTreeView::latchOff()
 
     const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
-    
+
     latchOff( source );
 }
 
@@ -481,6 +481,14 @@ void
 SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
     bool accept = false;
+
+    // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
+    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
+    {
+        event->accept();
+        return;
+    }
+
     QTreeView::dragMoveEvent( event );
 
     if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Track, DropJob::Append ) )
@@ -550,6 +558,19 @@ SourceTreeView::dropEvent( QDropEvent* event )
         qDebug() << Q_FUNC_INFO << "dropType is " << m_delegate->hoveredDropType();
     }
 
+    // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
+    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
+    {
+        qDebug() << Q_FUNC_INFO << "Current Event";
+        DropJob *dropThis = new DropJob;
+        dropThis->setDropTypes( DropJob::Playlist );
+        dropThis->setDropAction( DropJob::Create );
+        dropThis->parseMimeData( event->mimeData() );
+
+        // Don't add it to the playlist under drop, it's a new playlist now
+        return;
+    }
+
     // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
     if ( pos.x() < 100 )
     {
@@ -559,19 +580,6 @@ SourceTreeView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
-        {
-            // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
-            qDebug() << Q_FUNC_INFO << "Current Event";
-            DropJob *dropThis = new DropJob;
-            dropThis->setDropTypes( DropJob::Playlist );
-            dropThis->setDropAction( DropJob::Create );
-            dropThis->parseMimeData( event->mimeData() );
-
-            // Don't add it to the playlist under drop, it's a new playlist now
-            return;
-        }
-
         QTreeView::dropEvent( event );
     }
 
