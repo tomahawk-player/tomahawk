@@ -69,22 +69,8 @@ DatabaseCollection::loadStations()
     connect( cmd, SIGNAL( stationLoaded( Tomahawk::source_ptr, QVariantList ) ),
              SLOT( stationCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );}
-
-
-/*void
-DatabaseCollection::loadTracks()
-{
-    qDebug() << Q_FUNC_INFO << source()->userName();
-
-    setLoaded();
-    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
-
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( setTracks( QList<Tomahawk::query_ptr> ) ) );
-
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}*/
+}
 
 
 void
@@ -143,19 +129,8 @@ DatabaseCollection::stations()
 }
 
 
-/*QList< Tomahawk::query_ptr >
-DatabaseCollection::tracks()
-{
-    if ( !isLoaded() )
-    {
-        loadTracks();
-    }
-
-    return Collection::tracks();
-}*/
-
-
-void DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
+void
+DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {
     dynplaylist_ptr p( new DynamicPlaylist( source,                  //src
                                             data[0].toString(),  //current rev
@@ -172,7 +147,8 @@ void DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QV
 }
 
 
-void DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList& data )
+void
+DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList& data )
 {
     dynplaylist_ptr p( new DynamicPlaylist( source,                  //src
                                             data[0].toString(),  //current rev

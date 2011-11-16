@@ -85,6 +85,8 @@ public:
 
 signals:
     void syncedWithDatabase();
+    void synced();
+
     void online();
     void offline();
 
@@ -98,6 +100,7 @@ signals:
     void playbackFinished( const Tomahawk::query_ptr& query );
 
     void stateChanged();
+    void commandsFinished();
 
     void socialAttributesChanged();
 
@@ -110,19 +113,22 @@ public slots:
 private slots:
     void dbLoaded( unsigned int id, const QString& fname );
     QString lastCmdGuid() const { return m_lastCmdGuid; }
-    void setLastCmdGuid( const QString& guid ) { m_lastCmdGuid = guid; }
     void updateIndexWhenSynced();
 
     void setOffline();
     void setOnline();
 
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
-    void onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration );
 
+    void onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
     void trackTimerFired();
 
+    void executeCommands();
+
 private:
+    void addCommand( const QSharedPointer<DatabaseCommand>& command );
+
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 
     QList< QSharedPointer<Collection> > m_collections;
@@ -143,6 +149,8 @@ private:
     QTimer m_currentTrackTimer;
 
     ControlConnection* m_cc;
+    QList< QSharedPointer<DatabaseCommand> > m_cmds;
+    int m_commandCount;
 
     QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;

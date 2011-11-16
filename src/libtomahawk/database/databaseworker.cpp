@@ -122,7 +122,6 @@ DatabaseWorker::doWork()
     try
     {
         {
-//            tDebug() << "Executing cmd:" << cmd->guid();
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
             if ( cmd->loggable() )
@@ -155,7 +154,6 @@ DatabaseWorker::doWork()
 
                         if ( !query.exec() )
                         {
-                            qDebug() << "Failed to set lastop";
                             throw "Failed to set lastop";
                         }
                     }
@@ -167,8 +165,7 @@ DatabaseWorker::doWork()
                 qDebug() << "Committing" << cmd->commandname() << cmd->guid();
                 if ( !m_dbimpl->database().commit() )
                 {
-
-                    qDebug() << "*FAILED TO COMMIT TRANSACTION*";
+                    tDebug() << "FAILED TO COMMIT TRANSACTION*";
                     throw "commit failed";
                 }
             }

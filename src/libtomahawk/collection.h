@@ -49,8 +49,6 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
-    virtual void setLoaded() { m_isLoaded = true; }
-    virtual bool isLoaded() const { return m_isLoaded; }
     virtual QString name() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
@@ -107,8 +105,11 @@ protected:
     QString m_name;
     unsigned int m_lastmodified; // unix time of last change to collection
 
+private slots:
+    void onSynced();
+
 private:
-    bool m_isLoaded;
+    bool m_changed;
 
     source_ptr m_source;
     QHash< QString, Tomahawk::playlist_ptr > m_playlists;
