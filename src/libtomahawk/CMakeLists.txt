@@ -292,7 +292,7 @@ set( libSources
     sip/sipinfo.cpp
 
     audio/audioengine.cpp
-
+    audio/audioenginethread.cpp
 
     database/database.cpp
     database/fuzzyindex.cpp
@@ -408,6 +408,7 @@ set( libHeaders
     sip/sipinfo.h
 
     audio/audioengine.h
+    audio/audioenginethread.h
 
     database/database.h
     database/fuzzyindex.h

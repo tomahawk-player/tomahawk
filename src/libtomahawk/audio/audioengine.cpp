@@ -100,6 +100,7 @@ AudioEngine::~AudioEngine()
 
     delete m_audioOutput;
     delete m_mediaObject;
+    s_instance = 0;
 }
 
 

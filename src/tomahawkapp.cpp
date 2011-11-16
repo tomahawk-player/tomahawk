@@ -21,14 +21,15 @@
 
 #include <iostream>
 
-#include <QPluginLoader>
-#include <QDir>
-#include <QMetaType>
-#include <QTime>
-#include <QNetworkReply>
-#include <QFile>
-#include <QFileInfo>
-#include <QNetworkProxy>
+#include <QtCore/QPluginLoader>
+#include <QtCore/QDir>
+#include <QtCore/QMetaType>
+#include <QtCore/QTime>
+#include <QtNetwork/QNetworkReply>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtNetwork/QNetworkProxy>
+#include <QtCore/QThread>
 
 #include "actioncollection.h"
 #include "artist.h"
@@ -57,6 +58,7 @@
 #include "EchonestCatalogSynchronizer.h"
 
 #include "audio/audioengine.h"
+#include "audio/audioenginethread.h"
 #include "utils/xspfloader.h"
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
@@ -70,7 +72,7 @@
     #include "AtticaManager.h"
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
-    #include <QMessageBox>
+    #include <QtGui/QMessageBox>
     #include "widgets/HeaderLabel.h"
 
 #endif
@@ -165,11 +167,13 @@ TomahawkApp::init()
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );
 
-    m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
-    m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
+    m_audioEngineThread = QWeakPointer< AudioEngineThread >( new AudioEngineThread( this ) );
+    m_audioEngineThread.data()->start( QThread::HighPriority );
+    
+    m_scanManager = QWeakPointer< ScanManager >( new ScanManager( this ) );
     new Pipeline( this );
 
-    m_servent = QWeakPointer<Servent>( new Servent( this ) );
+    m_servent = QWeakPointer< Servent >( new Servent( this ) );
     connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
 
     tDebug() << "Init Database.";
@@ -198,16 +202,17 @@ TomahawkApp::init()
 #endif
 
     // Connect up shortcuts
-    if ( !m_shortcutHandler.isNull() )
+    if ( !m_shortcutHandler.isNull() && AudioEngine::instance() )
     {
-        connect( m_shortcutHandler.data(), SIGNAL( playPause() ), m_audioEngine.data(), SLOT( playPause() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( pause() ), m_audioEngine.data(), SLOT( pause() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( stop() ), m_audioEngine.data(), SLOT( stop() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( previous() ), m_audioEngine.data(), SLOT( previous() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( next() ), m_audioEngine.data(), SLOT( next() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( volumeUp() ), m_audioEngine.data(), SLOT( raiseVolume() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( volumeDown() ), m_audioEngine.data(), SLOT( lowerVolume() ) );
-        connect( m_shortcutHandler.data(), SIGNAL( mute() ), m_audioEngine.data(), SLOT( mute() ) );
+        AudioEngine* audioEngine = AudioEngine::instance();
+        connect( m_shortcutHandler.data(), SIGNAL( playPause() ), audioEngine, SLOT( playPause() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( pause() ), audioEngine, SLOT( pause() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( stop() ), audioEngine, SLOT( stop() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( previous() ), audioEngine, SLOT( previous() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( next() ), audioEngine, SLOT( next() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( volumeUp() ), audioEngine, SLOT( raiseVolume() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( volumeDown() ), audioEngine, SLOT( lowerVolume() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( mute() ), audioEngine, SLOT( mute() ) );
     }
 
     tDebug() << "Init InfoSystem.";
@@ -293,8 +298,14 @@ TomahawkApp::~TomahawkApp()
     if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
 
-    if ( !m_audioEngine.isNull() )
-        delete m_audioEngine.data();
+    if ( AudioEngine::instance() )
+    {
+        m_audioEngineThread.data()->quit();
+        m_audioEngineThread.data()->wait( 60000 );
+        
+        delete m_audioEngineThread.data();
+        m_audioEngineThread.clear();
+    }
 
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();

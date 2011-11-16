@@ -24,11 +24,11 @@
 #include "headlesscheck.h"
 #include "config.h"
 
-#include <QRegExp>
-#include <QFile>
-#include <QSettings>
-#include <QDir>
-#include <QPersistentModelIndex>
+#include <QtCore/QRegExp>
+#include <QtCore/QFile>
+#include <QtCore/QSettings>
+#include <QtCore/QDir>
+#include <QtCore/QPersistentModelIndex>
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
@@ -38,6 +38,7 @@
 #include "utils/tomahawkutils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
+class AudioEngineThread;
 class AudioEngine;
 class Database;
 class ScanManager;
@@ -113,7 +114,7 @@ private:
 
     QWeakPointer<Database> m_database;
     QWeakPointer<ScanManager> m_scanManager;
-    QWeakPointer<AudioEngine> m_audioEngine;
+    QWeakPointer<AudioEngineThread> m_audioEngineThread;
     QWeakPointer<Servent> m_servent;
     QWeakPointer<Tomahawk::InfoSystem::InfoSystem> m_infoSystem;
     QWeakPointer<XMPPBot> m_xmppBot;

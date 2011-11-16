@@ -19,8 +19,9 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include <QObject>
-#include <QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QMutex>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
