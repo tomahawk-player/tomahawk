@@ -58,6 +58,7 @@ public:
 
     virtual bool doesMutates() const { return true; }
     virtual bool localOnly() const { return m_localOnly; }
+    virtual bool groupable() const { return true; }
 
     void setAddedentriesV( const QVariantList& vlist )
     {
