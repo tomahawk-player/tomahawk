@@ -59,7 +59,7 @@ DatabaseCommand_addSource::exec( DatabaseImpl* dbi )
     query.exec();
 
     unsigned int id = query.lastInsertId().toUInt();
-    qDebug() << "Inserted new source to DB, id:" << id << " friendlyname" << m_username;
+    tDebug() << "Inserted new source to DB, id:" << id << "friendlyname" << m_username;
 
     emit done( id, m_fname );
 }

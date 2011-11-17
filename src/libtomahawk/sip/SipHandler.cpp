@@ -467,7 +467,7 @@ void
 SipHandler::onPeerOnline( const QString& jid )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP online:" << jid;
+    tDebug() << "SIP online:" << jid;
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
@@ -485,6 +485,7 @@ SipHandler::onPeerOnline( const QString& jid )
         else
             conn->setName( jid.left( jid.indexOf( "/" ) ) );
 
+        tDebug() << "Set name on connection:" << conn->name();
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
@@ -520,7 +521,7 @@ SipHandler::onPeerOffline( const QString& jid )
 void
 SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
+    tDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
 
     /*
       If only one party is externally visible, connection is obvious
