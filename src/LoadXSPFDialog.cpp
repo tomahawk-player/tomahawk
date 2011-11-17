@@ -34,9 +34,6 @@ LoadXSPFDialog::LoadXSPFDialog( QWidget* parent, Qt::WindowFlags f )
     m_ui->verticalLayout->setSpacing( 0 );
 #endif
 
-    connect( m_ui->buttonBox, SIGNAL( accepted() ), SLOT( accept() ) );
-    connect( m_ui->buttonBox, SIGNAL( rejected() ), SLOT( reject() ) );
-
     connect( m_ui->navigateButton, SIGNAL( clicked( bool ) ), this, SLOT( getLocalFile() ) );
 }
 
