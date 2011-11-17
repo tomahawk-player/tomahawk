@@ -44,6 +44,7 @@ public:
     virtual void paintEvent(QPaintEvent* );
 
 public slots:
+    void applySteering();
     void resetSteering( bool automatic = false );
 
     void fadeIn();
@@ -77,6 +78,7 @@ private:
     QLabel* m_steerBottom;
 
     // icons on the right
+    QToolButton* m_apply;
     QToolButton* m_reset;
 
     // animations
