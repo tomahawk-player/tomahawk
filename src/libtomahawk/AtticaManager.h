@@ -128,6 +128,8 @@ private:
     static AtticaManager* s_instance;
 };
 
+#ifdef LIBATTICA_FOUND
 Q_DECLARE_METATYPE( Attica::Content );
+#endif
 
 #endif // ATTICAMANAGER_H
