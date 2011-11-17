@@ -83,8 +83,6 @@ public:
     ResolverState resolverState( const Attica::Content& resolver ) const;
     QPixmap iconForResolver( const Attica::Content& id ); // Looks up in icon cache
 
-    void installResolver( const Attica::Content& resolver );
-    void upgradeResolver( const Attica::Content& resolver );
     void uninstallResolver( const Attica::Content& resolver );
     void uninstallResolver( const QString& pathToResolver );
     QString pathFromId( const QString& resolverId ) const;
@@ -92,6 +90,9 @@ public:
     void uploadRating( const Attica::Content& c );
     bool userHasRated( const Attica::Content& c ) const;
 
+public slots:
+    void installResolver( const Attica::Content& resolver );
+    void upgradeResolver( const Attica::Content& resolver );
 
 signals:
     void resolversReloaded( const Attica::Content::List& resolvers );
@@ -126,5 +127,7 @@ private:
 
     static AtticaManager* s_instance;
 };
+
+Q_DECLARE_METATYPE( Attica::Content );
 
 #endif // ATTICAMANAGER_H
