@@ -19,8 +19,8 @@
 #ifndef CONTEXTMENU_H
 #define CONTEXTMENU_H
 
-#include <QSignalMapper>
-#include <QMenu>
+#include <QtCore/QSignalMapper>
+#include <QtGui/QMenu>
 
 #include "typedefs.h"
 #include "dllmacro.h"

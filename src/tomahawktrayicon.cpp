@@ -18,7 +18,7 @@
 
 #include "tomahawktrayicon.h"
 
-#include <QWheelEvent>
+#include <QtGui/QWheelEvent>
 
 #include "artist.h"
 
@@ -43,12 +43,12 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
 
-    m_playPauseAction = m_contextMenu->addAction( tr( "Play" ) );
-    //m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
-    m_stopAction = m_contextMenu->addAction( tr( "Stop" ) );
+    ActionCollection *ac = ActionCollection::instance();
+    m_contextMenu->addAction( ac->getAction( "playPause" ) );
+    m_contextMenu->addAction( ac->getAction( "stop" ) );
     m_contextMenu->addSeparator();
-    m_prevAction = m_contextMenu->addAction( tr( "Previous Track" ) );
-    m_nextAction = m_contextMenu->addAction( tr( "Next Track" ) );
+    m_contextMenu->addAction( ac->getAction( "previousTrack" ) );
+    m_contextMenu->addAction( ac->getAction( "nextTrack" ) );
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
@@ -61,19 +61,13 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 #endif
 
     m_contextMenu->addSeparator();
-    m_quitAction = m_contextMenu->addAction( tr( "Quit" ) );
+    m_contextMenu->addAction( ac->getAction( "quit" ) );
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( enablePause() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( enablePause() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( enablePlay() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( enablePlay() ) );
-
-    connect( m_playPauseAction, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
-    connect( m_stopAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( stop() ) );
-    connect( m_prevAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
-    connect( m_nextAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
-    connect( m_quitAction,      SIGNAL( triggered() ), (QObject*)APP,           SLOT( quit() ) );
 
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
@@ -203,14 +197,14 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 void
 TomahawkTrayIcon::enablePlay()
 {
-    m_playPauseAction->setText( tr( "Play" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Play" ) );
 }
 
 
 void
 TomahawkTrayIcon::enablePause()
 {
-    m_playPauseAction->setText( tr( "Pause" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
 }
 
 

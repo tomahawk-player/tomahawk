@@ -31,9 +31,9 @@
 #include "source.h"
 #include "tomahawksettings.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
+#include <QtGui/QApplication>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 #include <audio/audioengine.h>
 #include <actioncollection.h>
 

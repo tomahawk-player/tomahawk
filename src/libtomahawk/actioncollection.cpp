@@ -54,6 +54,11 @@ ActionCollection::initActions()
     m_actionCollection[ "loadPlaylist"] = new QAction( tr( "&Load Playlist" ), this );
     m_actionCollection[ "renamePlaylist"] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist"] = new QAction( tr( "&Copy Playlist Link" ), this );
+    m_actionCollection[ "playPause"] = new QAction( tr( "&Play" ), this );
+    m_actionCollection[ "stop"] = new QAction( tr( "&Stop" ), this );
+    m_actionCollection[ "previousTrack"] = new QAction( tr( "&Previous Track" ), this );
+    m_actionCollection[ "nextTrack"] = new QAction( tr( "&Next Track" ), this );
+    m_actionCollection[ "quit"] = new QAction( tr( "&Quit" ), this );
 }
 
 

@@ -21,16 +21,15 @@
 
 #include <iostream>
 
-#include <QPluginLoader>
-#include <QDir>
-#include <QMetaType>
-#include <QTime>
-#include <QNetworkReply>
-#include <QFile>
-#include <QFileInfo>
-#include <QNetworkProxy>
+#include <QtCore/QPluginLoader>
+#include <QtCore/QDir>
+#include <QtCore/QMetaType>
+#include <QtCore/QTime>
+#include <QtNetwork/QNetworkReply>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtNetwork/QNetworkProxy>
 
-#include "actioncollection.h"
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
@@ -70,9 +69,9 @@
     #include "AtticaManager.h"
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
-    #include <QMessageBox>
+    #include "actioncollection.h"
+    #include <QtGui/QMessageBox>
     #include "widgets/HeaderLabel.h"
-
 #endif
 
 // should go to a plugin actually
@@ -159,8 +158,11 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+#ifndef ENABLE_HEADLESS
     new ActionCollection( this );
-
+    connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
+#endif
+    
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );

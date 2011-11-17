@@ -125,6 +125,8 @@ signals:
 
     void error( AudioErrorCode errorCode );
 
+    void privacyModeChanged();
+    
 private slots:
     bool loadTrack( const Tomahawk::result_ptr& result );
     void loadPreviousTrack();

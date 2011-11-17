@@ -21,7 +21,7 @@
 
 #include "typedefs.h"
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class QPaintEvent;
 class QHBoxLayout;

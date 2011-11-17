@@ -79,7 +79,12 @@ AudioEngine::AudioEngine()
 
 #ifndef TOMAHAWK_HEADLESS
     tDebug() << Q_FUNC_INFO << "Connecting privacy toggle";
-    connect( ActionCollection::instance()->getAction( "togglePrivacy" ), SIGNAL( triggered( bool ) ), this, SLOT( togglePrivateListeningMode() ) );
+    ActionCollection *ac = ActionCollection::instance();
+    connect( ac->getAction( "togglePrivacy" ), SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
+    connect( ac->getAction( "playPause" ),     SIGNAL( triggered() ), SLOT( playPause() ),                  Qt::UniqueConnection );
+    connect( ac->getAction( "stop" ),          SIGNAL( triggered() ), SLOT( stop() ),                       Qt::UniqueConnection );
+    connect( ac->getAction( "previousTrack" ), SIGNAL( triggered() ), SLOT( previous() ),                   Qt::UniqueConnection );
+    connect( ac->getAction( "nextTrack" ),     SIGNAL( triggered() ), SLOT( next() ),                       Qt::UniqueConnection );
 #endif
     
     onVolumeChanged( m_audioOutput->volume() );
@@ -416,6 +421,7 @@ AudioEngine::togglePrivateListeningMode()
     privacyToggle->setText( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
 #endif
+    emit privacyModeChanged();
 }
 
 
