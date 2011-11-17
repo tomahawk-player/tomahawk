@@ -122,7 +122,7 @@ private slots:
 
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
 
-    void onPlaybackStarted( const Tomahawk::query_ptr& query );
+    void onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
     void trackTimerFired();
 
