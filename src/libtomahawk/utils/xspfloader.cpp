@@ -28,6 +28,7 @@
 #include "sourcelist.h"
 #include "playlist.h"
 #include <XspfUpdater.h>
+#include <pipeline.h>
 
 using namespace Tomahawk;
 
@@ -201,12 +202,18 @@ XSPFLoader::gotBody()
             continue;
         }
 
-        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), m_autoResolve );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), false );
         q->setDuration( duration.toInt() / 1000 );
         if ( !url.isEmpty() )
             q->setResultHint( url );
 
         m_entries << q;
+    }
+
+    if ( m_autoResolve )
+    {
+        for ( int i = m_entries.size() - 1; i >= 0; i-- )
+            Pipeline::instance()->resolve( m_entries[ i ] );
     }
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
