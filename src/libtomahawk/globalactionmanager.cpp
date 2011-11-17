@@ -297,12 +297,12 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             tDebug() << "No xspf to load...";
             return false;
         }
-        QUrl xspf = QUrl( url.queryItemValue( "xspf" ) );
+        QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
         QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
         XSPFLoader* l= new XSPFLoader( true, this );
         l->setOverrideTitle( title );
         l->load( xspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
 
     } else if( parts [ 0 ] == "new" ) {
         if( !url.hasQueryItem( "title" ) ) {
@@ -321,6 +321,22 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
     }
 
     return false;
+}
+
+void
+GlobalActionManager::playlistCreatedToShow( const playlist_ptr& pl )
+{
+    connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistReadyToShow() ) );
+    pl->setProperty( "sharedptr", QVariant::fromValue<Tomahawk::playlist_ptr>( pl ) );
+}
+
+void GlobalActionManager::playlistReadyToShow()
+{
+    playlist_ptr pl = sender()->property( "sharedptr" ).value<Tomahawk::playlist_ptr>();
+    if ( !pl.isNull() )
+        ViewManager::instance()->show( pl );
+
+    disconnect( sender(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistReadyToShow() ) );
 }
 
 
@@ -431,7 +447,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
             foreach( pair, queryItems ) {
                 if( pair.first != "url" )
                     continue;
-                QUrl track = QUrl::fromUserInput( pair.second  );
+                QUrl track = QUrl::fromUserInput( pair.second );
                 //FIXME: isLocalFile is Qt 4.8
                 if( track.toString().startsWith( "file://" ) ) { // it's local, so we see if it's in the DB and load it if so
                     // TODO
