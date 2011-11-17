@@ -114,7 +114,7 @@ JobStatusModel::itemFinished()
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
-    tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
+//     tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
     if ( !m_items.contains( item ) && !m_collapseCount.contains( item->type() ) )
         return;
 
@@ -140,7 +140,7 @@ JobStatusModel::itemFinished()
 //             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
         }
         m_collapseCount[ item->type() ].removeAll( item );
-        tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
+//         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
         if ( m_collapseCount[ item->type() ].isEmpty() )
             m_collapseCount.remove( item->type() );
         else

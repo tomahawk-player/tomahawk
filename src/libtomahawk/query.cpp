@@ -102,8 +102,6 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    tDebug() << Q_FUNC_INFO << toString();
-
     if ( !id().isEmpty() )
     {
         QMutexLocker lock( &s_mutex );

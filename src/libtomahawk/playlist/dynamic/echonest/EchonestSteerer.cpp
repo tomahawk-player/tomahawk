@@ -97,6 +97,12 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
 
     connect( m_description, SIGNAL( textChanged( QString ) ), this, SLOT( changed() ) );
 
+    m_apply = initButton( this );
+    m_apply->setIcon( QIcon( RESPATH "images/apply-check.png" ) );
+    m_apply->setToolTip( tr( "Apply steering command" ) );
+    m_layout->addWidget( m_apply );
+    connect( m_apply, SIGNAL( clicked( bool ) ), this, SLOT( applySteering() ) );
+
     m_reset = initButton( this );
     m_reset->setIcon( QIcon( RESPATH "images/view-refresh.png" ) );
     m_reset->setToolTip( tr( "Reset all steering commands" ) );
@@ -165,19 +171,7 @@ EchonestSteerer::fadeOut()
 void
 EchonestSteerer::changed()
 {
-    bool keep = false;
-    if( m_amplifier->itemData( m_amplifier->currentIndex() ).toString().isEmpty() ) { // Keep Current
-        keep = true;
-
-        emit reset();
-    }
-
     if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
-        if( !keep ) {
-            QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
-            emit steerField( steer );
-        }
-
         // if description was shown, animate to shrink
         if( m_layout->indexOf( m_description ) > 0 ) {
             m_expanding = false;
@@ -190,15 +184,8 @@ EchonestSteerer::changed()
 
             m_resizeAnim.setFrameRange( start, end );
             m_resizeAnim.start();
-
-            qDebug() << "COLLAPSING FROM" << start << "TO" << end;
         }
     } else { // description, so put in the description field
-        if( !m_description->text().isEmpty() && !keep ) {
-            QString steer = m_description->text() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
-            emit steerDescription( steer );
-        }
-
         if( m_layout->indexOf( m_description ) == -1 ) {
             // animate to expand
             m_layout->insertWidget( m_layout->count() - 1, m_description, 1 );
@@ -210,10 +197,28 @@ EchonestSteerer::changed()
             int end = start + m_layout->spacing() + m_description->sizeHint().width();
             m_resizeAnim.setFrameRange( start, end );
             m_resizeAnim.start();
-
-            qDebug() << "EXPANDING FROM" << start << "TO" << end;
         }
     }
+}
+
+void
+EchonestSteerer::applySteering()
+{
+    if ( m_field->itemData( m_field->currentIndex() ).toString() != "desc" )
+    {
+        QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
+        emit steerField( steer );
+    }
+    else
+    {
+        if ( !m_description->text().isEmpty() )
+        {
+            QString steer = m_description->text() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
+            emit steerDescription( steer );
+        }
+    }
+
+    resetSteering( true );
 }
 
 
