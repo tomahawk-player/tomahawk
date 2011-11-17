@@ -18,15 +18,15 @@
 
 #include "sourcetreeview.h"
 
-#include <QAction>
-#include <QApplication>
-#include <QContextMenuEvent>
-#include <QDragEnterEvent>
-#include <QHeaderView>
-#include <QPainter>
-#include <QStyledItemDelegate>
-#include <QSize>
-#include <QFileDialog>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QContextMenuEvent>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QHeaderView>
+#include <QtGui/QPainter>
+#include <QtGui/QStyledItemDelegate>
+#include <QtCore/QSize>
+#include <QtGui/QFileDialog>
 
 #include "actioncollection.h"
 #include "playlist.h"
@@ -167,12 +167,14 @@ SourceTreeView::setupMenus()
         }
     }
 
-    m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
-    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
+    QAction *loadPlaylistAction = ActionCollection::instance()->getAction( "loadPlaylist" );
+    m_playlistMenu.addAction( loadPlaylistAction );
+    QAction *renamePlaylistAction = ActionCollection::instance()->getAction( "renamePlaylist" );
+    m_playlistMenu.addAction( renamePlaylistAction );
     m_playlistMenu.addSeparator();
 
-    m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
-    m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
+    QAction *copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
+    QAction *deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
     QString addToText = QString( "Add to my %1" );
     if ( type == SourcesModel::StaticPlaylist )
@@ -182,21 +184,21 @@ SourceTreeView::setupMenus()
     else if ( type == SourcesModel::Station )
         addToText = addToText.arg( "Stations" );
 
-    m_addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
+    QAction *addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
 
-    m_roPlaylistMenu.addAction( m_copyPlaylistAction );
-    m_deletePlaylistAction->setEnabled( !readonly );
-    m_renamePlaylistAction->setEnabled( !readonly );
-    m_addToLocalAction->setEnabled( readonly );
+    m_roPlaylistMenu.addAction( copyPlaylistAction );
+    deletePlaylistAction->setEnabled( !readonly );
+    renamePlaylistAction->setEnabled( !readonly );
+    addToLocalAction->setEnabled( readonly );
 
     if ( type == SourcesModel::StaticPlaylist )
-        m_copyPlaylistAction->setText( tr( "&Export Playlist" ) );
+        copyPlaylistAction->setText( tr( "&Export Playlist" ) );
 
-    connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
-    connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
-    connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
-    connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
-    connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
+    connect( loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
+    connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
+    connect( deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
+    connect( copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
+    connect( addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
     connect( latchOnAction,          SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ), Qt::QueuedConnection );
 }
 

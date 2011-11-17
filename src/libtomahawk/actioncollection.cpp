@@ -38,14 +38,22 @@ ActionCollection::ActionCollection( QObject *parent )
 void
 ActionCollection::initActions()
 {
-    m_actionCollection[ "latchOn" ] = new QAction( tr( "&Listen Along" ), this );
-    m_actionCollection[ "latchOff" ] = new QAction( tr( "&Stop Listening Along" ), this );
+    QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
+    latchOn->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
+    m_actionCollection[ "latchOn" ] = latchOn;
+    QAction *latchOff = new QAction( tr( "&Stop Listening Along" ), this );
+    latchOff->setIcon( QIcon( RESPATH "images/headphones-off.png" ) );
+    m_actionCollection[ "latchOff" ] = latchOff;
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
     QAction *privacyToggle = new QAction( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ), this );
     privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
+
+    m_actionCollection[ "loadPlaylist"] = new QAction( tr( "&Load Playlist" ), this );
+    m_actionCollection[ "renamePlaylist"] = new QAction( tr( "&Rename Playlist" ), this );
+    m_actionCollection[ "copyPlaylist"] = new QAction( tr( "&Copy Playlist Link" ), this );
 }
 
 

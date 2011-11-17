@@ -22,8 +22,8 @@
 #include "typedefs.h"
 #include "sourceplaylistinterface.h"
 
-#include <QTreeView>
-#include <QMenu>
+#include <QtGui/QTreeView>
+#include <QtGui/QMenu>
 
 class CollectionModel;
 class PlaylistModel;
@@ -104,13 +104,6 @@ private:
     QMenu m_roPlaylistMenu;
     QMenu m_latchMenu;
     QMenu m_privacyMenu;
-    QAction* m_loadPlaylistAction;
-    QAction* m_renamePlaylistAction;
-    QAction* m_deletePlaylistAction;
-    QAction* m_copyPlaylistAction;
-    QAction* m_addToLocalAction;
-    QAction* m_latchOnAction;
-    QAction* m_latchOffAction;
 
     bool m_dragging;
     QRect m_dropRect;
