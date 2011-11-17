@@ -470,10 +470,10 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
     RdioParser* rdio = new RdioParser( this );
     connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
 
+    m_queryCount++;
     rdio->setCreatePlaylist( dropAction() == Create  );
     rdio->parse( urls );
 
-    m_queryCount++;
 }
 
 
