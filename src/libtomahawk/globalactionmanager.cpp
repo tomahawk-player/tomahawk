@@ -424,6 +424,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 
         QString title, artist, album, urlStr;
         foreach( pair, queryItems ) {
+            pair.second = pair.second.replace( "+", " " ); // QUrl::queryItems doesn't decode + to a space :(
             if( pair.first == "title" )
                 title = pair.second;
             else if( pair.first == "artist" )
