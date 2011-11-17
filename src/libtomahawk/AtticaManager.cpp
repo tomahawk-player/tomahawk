@@ -45,6 +45,8 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
     m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org:10480/resolvers/providers.xml" ) );
+
+    qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }
 
 
@@ -274,6 +276,7 @@ AtticaManager::syncServerData()
                 if ( newerVersion( r.version, upstream.version() ) )
                 {
                     m_resolverStates[ id ].state = NeedsUpgrade;
+                    QMetaObject::invokeMethod( this, "upgradeResolver", Qt::QueuedConnection, Q_ARG( Attica::Content, upstream ) );
                 }
             }
         }
