@@ -266,6 +266,7 @@ CREATE TABLE IF NOT EXISTS playback_log (
     playtime INTEGER NOT NULL,              -- when playback finished (timestamp)
     secs_played INTEGER NOT NULL
 );
+
 CREATE INDEX playback_log_source ON playback_log(source);
 CREATE INDEX playback_log_track ON playback_log(track);
 

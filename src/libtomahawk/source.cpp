@@ -57,7 +57,6 @@ Source::Source( int id, const QString& username )
         m_online = true;
     }
 
-    m_currentTrackTimer.setInterval( 600000 ); // 10 minutes
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
 }
@@ -306,11 +305,12 @@ Source::getPlaylistInterface()
 
 
 void
-Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
+Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
     m_currentTrack = query;
-    m_currentTrackTimer.stop();
+    m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
+
     if ( m_playlistInterface.isNull() )
         getPlaylistInterface();
     emit playbackStarted( query );

@@ -645,7 +645,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     if( caps )
     {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
+//         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
