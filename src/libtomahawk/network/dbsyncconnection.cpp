@@ -63,7 +63,7 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
 
 DBSyncConnection::~DBSyncConnection()
 {
-    tDebug() << "DTOR" << Q_FUNC_INFO << m_source->friendlyName();
+    tDebug() << "DTOR" << Q_FUNC_INFO << m_source->id() << m_source->friendlyName();
     m_state = SHUTDOWN;
 }
 
@@ -117,8 +117,6 @@ DBSyncConnection::check()
     }
 
     m_uscache.clear();
-    m_us.clear();
-
     changeState( CHECKING );
 
     // load last-modified etc data for our collection and theirs from our DB:
@@ -144,7 +142,6 @@ DBSyncConnection::check()
 void
 DBSyncConnection::gotUs( const QVariantMap& m )
 {
-    m_us = m;
     if ( !m_uscache.empty() )
         sendOps();
 }
@@ -227,8 +224,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     if ( m.value( "method" ).toString() == "fetchops" )
     {
         m_uscache = m;
-        if ( !m_us.empty() )
-            sendOps();
+        sendOps();
         return;
     }
 
@@ -278,6 +274,7 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
     m_lastSentOp = lastguid;
     if ( ops.length() == 0 )
     {
+        tDebug() << "Sending ok" << m_source->id() << m_source->friendlyName();
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );
         return;
     }

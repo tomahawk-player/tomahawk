@@ -97,6 +97,7 @@ Source::setStats( const QVariantMap& m )
 {
     m_stats = m;
     emit stats( m_stats );
+    emit stateChanged();
 }
 
 
@@ -429,8 +430,6 @@ Source::updateTracks()
         connect( cmd, SIGNAL( done( QVariantMap ) ),
                  this,  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-
-        connect( cmd, SIGNAL( finished() ), SIGNAL( stateChanged() ) );
     }
 }
 

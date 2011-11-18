@@ -79,7 +79,7 @@ private:
     void changeState( State newstate );
 
     Tomahawk::source_ptr m_source;
-    QVariantMap m_us, m_uscache;
+    QVariantMap m_uscache;
 
     QString m_lastSentOp;
 
