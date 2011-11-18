@@ -44,14 +44,14 @@ Q_OBJECT
 public:
     enum Columns {
         Name = 0,
+        Composer,
         Duration,
         Bitrate,
         Age,
         Year,
         Filesize,
         Origin,
-        AlbumPosition,
-        Composer
+        AlbumPosition
     };
 
     enum ColumnStyle

@@ -349,7 +349,7 @@ QVariant
 TreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     QStringList headers;
-    headers << tr( "Name" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
+    headers << tr( "Name" ) << tr( "Composer" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
