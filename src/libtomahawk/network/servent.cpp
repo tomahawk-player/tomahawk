@@ -67,7 +67,9 @@ Servent::Servent( QObject* parent )
 
     new ACLSystem( this );
 
-    setProxy( QNetworkProxy::NoProxy );
+    // Don't use system default proxy, so if SOCKS 5 specified, use that, otherwise set no proxy
+    if ( TomahawkSettings::instance()->proxyHost().isEmpty() )
+        setProxy( QNetworkProxy::NoProxy );
 
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =

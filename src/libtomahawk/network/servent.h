@@ -22,15 +22,15 @@
 // time before new connection terminates if no auth received
 #define AUTH_TIMEOUT 180000
 
-#include <QObject>
-#include <QTcpServer>
-#include <QHostInfo>
-#include <QMap>
-#include <QMutex>
-#include <QSharedPointer>
-#include <QTcpSocket>
-#include <QTimer>
-#include <QPointer>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QMutex>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTimer>
+#include <QtCore/QPointer>
+#include <QtNetwork/QTcpServer>
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QHostInfo>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
