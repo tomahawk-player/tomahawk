@@ -106,7 +106,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         ui->menu_Help->addSeparator();
         ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
     }
-    
+
     ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
     ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
 
@@ -150,6 +150,11 @@ TomahawkWindow::loadSettings()
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
+    else
+    {
+        ui->splitter->setStretchFactor( 0, 0 );
+        ui->splitter->setStretchFactor( 1, 1 );
+    }
 
 #ifdef QT_MAC_USE_COCOA
      if ( workaround )
@@ -245,9 +250,6 @@ TomahawkWindow::setupSideBar()
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
-
-    ui->splitter->setStretchFactor( 0, 1 );
-    ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
