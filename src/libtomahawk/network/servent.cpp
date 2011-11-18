@@ -18,18 +18,18 @@
 
 #include "servent.h"
 
-#include <QCoreApplication>
-#include <QMutexLocker>
-#include <QNetworkInterface>
-#include <QFile>
-#include <QThread>
-#include <QNetworkProxy>
-#include <QNetworkRequest>
-#include <QNetworkReply>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QMutexLocker>
+#include <QtNetwork/QNetworkInterface>
+#include <QtCore/QFile>
+#include <QtCore/QThread>
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #ifndef ENABLE_HEADLESS
-    #include <QPushButton>
-    #include <QMessageBox>
+    #include <QtGui/QPushButton>
+    #include <QtGui/QMessageBox>
 #endif
 
 #include "result.h"
@@ -70,7 +70,9 @@ Servent::Servent( QObject* parent )
 
     new ACLSystem( this );
 
-    setProxy( QNetworkProxy::NoProxy );
+    // Don't use system default proxy, so if SOCKS 5 specified, use that, otherwise set no proxy
+    if ( TomahawkSettings::instance()->proxyHost().isEmpty() )
+        setProxy( QNetworkProxy::NoProxy );
 
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
