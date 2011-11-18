@@ -82,7 +82,6 @@ Connection::handleIncomingQueueEmpty()
     //         << "m_peer_disconnected" << m_peer_disconnected
     //         << "bytes rx" << bytesReceived();
 
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     if( !m_sock.isNull() && m_sock->bytesAvailable() == 0 && m_peer_disconnected )
     {
         qDebug() << "No more data to read, peer disconnected. shutting down connection."
@@ -153,7 +152,6 @@ Connection::actualShutdown()
 
     if ( !m_sock.isNull() && m_sock->isOpen() )
     {
-        tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
         m_sock->disconnectFromHost();
     }
 
@@ -179,8 +177,7 @@ Connection::start( QTcpSocket* sock )
     Q_ASSERT( sock->isValid() );
 
     m_sock = sock;
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
-    
+
     if( m_name.isEmpty() )
     {
         m_name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
@@ -229,8 +226,7 @@ Connection::doSetup()
     m_statstimer_mark.start();
 
     m_sock->moveToThread( thread() );
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
-    
+
     connect( m_sock.data(), SIGNAL( bytesWritten( qint64 ) ),
                               SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
 
@@ -270,7 +266,6 @@ Connection::socketDisconnected()
              << "bytesavail:" << m_sock->bytesAvailable()
              << "bytesRecvd" << bytesReceived();
 
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     m_peer_disconnected = true;
     emit socketClosed();
 
@@ -431,7 +426,6 @@ Connection::sendMsg_now( msg_ptr msg )
     Q_ASSERT( QThread::currentThread() == thread() );
 //    Q_ASSERT( this->isRunning() );
 
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     if ( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
     {
         qDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
