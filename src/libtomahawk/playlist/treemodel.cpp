@@ -271,6 +271,12 @@ TreeModel::data( const QModelIndex& index, int role ) const
     else if ( !entry->result().isNull() )
     {
         const result_ptr& result = entry->result();
+        unsigned int discnumber = 0;
+        if( !entry->query().isNull() )
+            discnumber = entry->query()->discnumber();
+        if( discnumber == 0 )
+            discnumber = result->discnumber();
+
         unsigned int albumpos = 0;
         if ( !entry->query().isNull() )
             albumpos = entry->query()->albumpos();
@@ -280,8 +286,9 @@ TreeModel::data( const QModelIndex& index, int role ) const
         switch( index.column() )
         {
             case Name:
-                return QString( "%1%2" ).arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
-                                        .arg( result->track() );
+                return QString( "%1%2%3" ).arg( discnumber > 0 ? QString( "%1." ).arg( discnumber ) : QString() )
+                                          .arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
+                                          .arg( result->track() );
 
             case Duration:
                 return TomahawkUtils::timeToString( result->duration() );
@@ -309,6 +316,9 @@ TreeModel::data( const QModelIndex& index, int role ) const
 
             case AlbumPosition:
                 return result->albumpos();
+
+            case Composer:
+                return result->composer()->name();
 
             default:
                 return QVariant();

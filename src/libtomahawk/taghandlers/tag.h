@@ -57,7 +57,7 @@ public:
     //TODO: add support for writing those 3 items with TagLib's addField/setField
 
 protected:
-    Tag( TagLib::Tag *tag ) : m_tag( tag ) {}
+    Tag( TagLib::Tag *tag ) : m_tag( tag ), m_discNumber( 0 ) {}
 
     unsigned int processDiscNumber( const QString & ) const;
 

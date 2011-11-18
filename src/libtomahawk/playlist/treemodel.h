@@ -50,7 +50,8 @@ public:
         Year,
         Filesize,
         Origin,
-        AlbumPosition
+        AlbumPosition,
+        Composer
     };
 
     enum ColumnStyle

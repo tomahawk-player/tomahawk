@@ -116,6 +116,7 @@ Query::init()
     m_playable = false;
     m_duration = -1;
     m_albumpos = 0;
+    m_discnumber = 0;
 
     updateSortNames();
 }
