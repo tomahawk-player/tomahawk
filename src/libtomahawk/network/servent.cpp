@@ -70,9 +70,7 @@ Servent::Servent( QObject* parent )
 
     new ACLSystem( this );
 
-    // Don't use system default proxy, so if SOCKS 5 specified, use that, otherwise set no proxy
-    if ( TomahawkSettings::instance()->proxyHost().isEmpty() )
-        setProxy( QNetworkProxy::NoProxy );
+    setProxy( QNetworkProxy::NoProxy );
 
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
@@ -384,6 +382,7 @@ Servent::readyRead()
     if( conntype == "accept-offer" || "push-offer" )
     {
         sock->_msg.clear();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock->peerAddress() << "socket peer name = " << sock->peerName();
         Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
@@ -417,11 +416,11 @@ closeconnection:
 void
 Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key )
 {
-    tDebug( LOGVERBOSE ) << "Servent::createParallelConnection, key:" << key << thread() << orig_conn;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ", key:" << key << thread() << orig_conn;
     // if we can connect to them directly:
     if( orig_conn && orig_conn->outbound() )
     {
-        connectToPeer( orig_conn->socket()->peerAddress().toString(),
+        connectToPeer( orig_conn->socket()->peerAddress().isNull() ? orig_conn->socket()->peerName() : orig_conn->socket()->peerAddress().toString(),
                        orig_conn->peerPort(),
                        key,
                        new_conn );
@@ -450,7 +449,7 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    tDebug( LOGVERBOSE ) << "Servent::SocketConnected" << thread() << "socket:" << sock;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket: " << sock << ", hostaddr: " << sock->peerAddress() << ", hostname: " << sock->peerName();
 
     Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
@@ -599,6 +598,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << " peer is " << peer.toString();
     bool noauth = qApp->arguments().contains( "--noauth" );
 
     // magic key for stream connections:
