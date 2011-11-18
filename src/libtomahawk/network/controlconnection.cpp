@@ -82,7 +82,6 @@ ControlConnection::clone()
 void
 ControlConnection::setup()
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     qDebug() << Q_FUNC_INFO << id() << name();
 
     if ( !m_source.isNull() )
@@ -126,7 +125,6 @@ ControlConnection::setup()
 void
 ControlConnection::registerSource()
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     qDebug() << Q_FUNC_INFO << m_source->id();
     Source* source = (Source*) sender();
     Q_UNUSED( source )
@@ -147,7 +145,6 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << m_dbconnkey << m_dbsyncconn << m_registered;
 
     if ( m_dbsyncconn || !m_registered )
@@ -190,7 +187,6 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
 void
 ControlConnection::dbSyncConnFinished( QObject* c )
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     qDebug() << Q_FUNC_INFO << "DBSync connection closed (for now)";
     if( (DBSyncConnection*)c == m_dbsyncconn )
     {
@@ -205,7 +201,6 @@ ControlConnection::dbSyncConnFinished( QObject* c )
 DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     qDebug() << Q_FUNC_INFO << m_source->id();
     if ( !m_dbsyncconn )
     {
@@ -220,7 +215,6 @@ ControlConnection::dbSyncConnection()
 void
 ControlConnection::handleMsg( msg_ptr msg )
 {
-    tDebug() << Q_FUNC_INFO << "m_sock peer address: " << m_sock->peerAddress().toIPv4Address();
     if ( msg->is( Msg::PING ) )
     {
         // qDebug() << "Received Connection PING, nice." << m_pingtimer_mark.elapsed();
