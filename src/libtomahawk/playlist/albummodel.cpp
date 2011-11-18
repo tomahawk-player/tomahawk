@@ -290,13 +290,13 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 void
 AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
+    emit loadingFinished();
+
     if ( !albums.count() )
         return;
 
     if ( m_overwriteOnAdd )
         clear();
-
-    emit loadingFinished();
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
