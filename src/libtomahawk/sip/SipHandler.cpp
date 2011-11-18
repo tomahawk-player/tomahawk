@@ -471,7 +471,7 @@ SipHandler::onPeerOnline( const QString& jid )
     if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
-        ControlConnection* conn = new ControlConnection( Servent::instance() );
+        ControlConnection* conn = new ControlConnection( Servent::instance(), QString() );
 
         const QString& nodeid = Database::instance()->dbid();
 

@@ -39,7 +39,8 @@ class DLLEXPORT ControlConnection : public Connection
 Q_OBJECT
 
 public:
-    explicit ControlConnection( Servent* parent = 0 );
+    explicit ControlConnection( Servent* parent = 0, const QHostAddress &ha = QHostAddress() );
+    explicit ControlConnection( Servent* parent = 0, const QString &ha = QString() );
     ~ControlConnection();
     Connection* clone();
 

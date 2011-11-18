@@ -33,7 +33,7 @@
 using namespace Tomahawk;
 
 
-ControlConnection::ControlConnection( Servent* parent )
+ControlConnection::ControlConnection( Servent* parent, const QHostAddress &ha )
     : Connection( parent )
     , m_dbsyncconn( 0 )
     , m_registered( false )
@@ -41,12 +41,44 @@ ControlConnection::ControlConnection( Servent* parent )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
-
+    
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ) );
 
     this->setMsgProcessorModeIn( MsgProcessor::UNCOMPRESS_ALL | MsgProcessor::PARSE_JSON );
     this->setMsgProcessorModeOut( MsgProcessor::COMPRESS_IF_LARGE );
+
+    m_peerIpAddress = ha;
+}
+
+
+ControlConnection::ControlConnection( Servent* parent, const QString &ha )
+    : Connection( parent )
+    , m_dbsyncconn( 0 )
+    , m_registered( false )
+    , m_pingtimer( 0 )
+{
+    qDebug() << "CTOR controlconnection";
+    setId("ControlConnection()");
+    
+    // auto delete when connection closes:
+    connect( this, SIGNAL( finished() ), SLOT( deleteLater() ) );
+    
+    this->setMsgProcessorModeIn( MsgProcessor::UNCOMPRESS_ALL | MsgProcessor::PARSE_JSON );
+    this->setMsgProcessorModeOut( MsgProcessor::COMPRESS_IF_LARGE );
+    
+    if ( !ha.isEmpty() )
+    {
+        QHostAddress qha( ha );
+        if ( !qha.isNull() )
+            m_peerIpAddress = qha;
+        else
+        {
+            QHostInfo qhi = QHostInfo::fromName( ha );
+            if ( !qhi.addresses().isEmpty() )
+                m_peerIpAddress = qhi.addresses().first();
+        }
+    }
 }
 
 
@@ -72,7 +104,7 @@ ControlConnection::source() const
 Connection*
 ControlConnection::clone()
 {
-    ControlConnection* clone = new ControlConnection( servent() );
+    ControlConnection* clone = new ControlConnection( servent(), m_peerIpAddress.toString() );
     clone->setOnceOnly( onceOnly() );
     clone->setName( name() );
     return clone;

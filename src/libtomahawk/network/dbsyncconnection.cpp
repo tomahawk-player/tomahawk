@@ -142,6 +142,7 @@ DBSyncConnection::check()
 void
 DBSyncConnection::gotUs( const QVariantMap& m )
 {
+    Q_UNUSED( m )
     if ( !m_uscache.empty() )
         sendOps();
 }
