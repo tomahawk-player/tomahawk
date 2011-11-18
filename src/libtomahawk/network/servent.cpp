@@ -164,7 +164,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString _key = ( key.isEmpty() ? uuid() : key );
-    ControlConnection* cc = new ControlConnection( this );
+    ControlConnection* cc = new ControlConnection( this, name );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     if ( !nodeid.isEmpty() )
         cc->setId( nodeid );
@@ -420,7 +420,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     // if we can connect to them directly:
     if( orig_conn && orig_conn->outbound() )
     {
-        connectToPeer( orig_conn->socket()->peerAddress().isNull() ? orig_conn->socket()->peerName() : orig_conn->socket()->peerAddress().toString(),
+        connectToPeer( orig_conn->socket()->peerAddress().toString(),
                        orig_conn->peerPort(),
                        key,
                        new_conn );
@@ -513,7 +513,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
-    ControlConnection* conn = new ControlConnection( this );
+    ControlConnection* conn = new ControlConnection( this, ha );
     QVariantMap m;
     m["conntype"]  = "accept-offer";
     m["key"]       = key;
@@ -565,7 +565,10 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
                      SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
-    sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
+    if ( !conn->peerIpAddress().isNull() )
+        sock->connectToHost( conn->peerIpAddress(), port, QTcpSocket::ReadWrite );
+    else
+        sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
     sock->moveToThread( thread() );
 }
 
@@ -598,7 +601,6 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << " peer is " << peer.toString();
     bool noauth = qApp->arguments().contains( "--noauth" );
 
     // magic key for stream connections:
@@ -633,7 +635,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if( isIPWhitelisted( peer ) )
         {
             tDebug() << "Connection is from whitelisted IP range (LAN)";
-            Connection* conn = new ControlConnection( this );
+            Connection* conn = new ControlConnection( this, peer.toString() );
             conn->setName( peer.toString() );
             return conn;
         }
@@ -679,7 +681,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     else if ( noauth )
     {
         Connection* conn;
-        conn = new ControlConnection( this );
+        conn = new ControlConnection( this, peer );
         conn->setName( key );
         return conn;
     }
