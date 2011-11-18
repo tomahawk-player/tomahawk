@@ -20,6 +20,7 @@
 
 #include "artist.h"
 #include "album.h"
+#include "config.h"
 #include "pipeline.h"
 #include "sourcelist.h"
 #include "utils/tomahawkutils.h"
@@ -189,9 +190,7 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-    /// I guess there is somereason for a assert in here, maybe fatal js errors, but
-    /// undefined is not so fatal
-#ifdef QT_DEBUG
+#ifdef DEBUG_BUILD
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
 #endif
 }
