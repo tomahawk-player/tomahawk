@@ -217,9 +217,18 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case AlbumPos:
+                QString tPos;
                 if ( query->results().first()->albumpos() == 0 )
                     return QString();
-                return QString::number( query->results().first()->albumpos() );
+                else
+                {
+                    tPos = QString::number( query->results().first()->albumpos() );
+                    if( query->results().first()->discnumber() == 0 )
+                        return tPos;
+                    else
+                        return QString( "%1.%2" ).arg( QString::number( query->results().first()->discnumber() ) )
+                                                 .arg( tPos );
+                }
                 break;
         }
     }
