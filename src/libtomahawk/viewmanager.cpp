@@ -818,6 +818,8 @@ ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
         ViewPage* page = m_pageHistory.at( i );
         if ( page->playlistInterface() == interface )
             return page;
+        if ( page->playlistInterface() && page->playlistInterface()->hasChildInterface( interface ) )
+            return page;
     }
 
     return 0;

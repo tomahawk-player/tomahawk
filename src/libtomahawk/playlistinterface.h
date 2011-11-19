@@ -67,6 +67,10 @@ public:
 
     virtual void reset() {}
 
+    // Some playlist interfaces can wrap other interfaces. When checking for top-level
+    // equality (say, to compare the currently playing interface) this might be needed
+    virtual bool hasChildInterface( PlaylistInterface* ) { return false; }
+
     QObject* object() const { return m_object; }
 
     static void dontDelete( Tomahawk::PlaylistInterface* obj )

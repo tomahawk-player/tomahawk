@@ -43,6 +43,15 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     setSourceTreeModel( 0 );
 }
 
+QPersistentModelIndex
+TreeProxyModel::currentIndex() const
+{
+    if ( !m_model )
+        return QPersistentModelIndex();
+
+    return mapFromSource( m_model->currentItem() );
+}
+
 
 void
 TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )

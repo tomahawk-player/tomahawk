@@ -16,46 +16,43 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ARTISTINFOWIDGET_P_H
-#define ARTISTINFOWIDGET_P_H
+#ifndef WHATSHOTWIDGET_P_H
+#define WHATSHOTWIDGET_P_H
 
-#include "ArtistInfoWidget.h"
-#include "ui_ArtistInfoWidget.h"
+#include "whatshotwidget.h"
 #include "playlistinterface.h"
+#include "ui_whatshotwidget.h"
 #include "treeproxymodel.h"
+#include "playlistview.h"
 #include "result.h"
 
 #include <QObject>
 
-class MetaPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+class ChartsPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
 {
     Q_OBJECT
 public:
-    explicit MetaPlaylistInterface( ArtistInfoWidget* w )
+    explicit ChartsPlaylistInterface( WhatsHotWidget* w )
         : PlaylistInterface( this )
         , m_w( w )
     {
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                 SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
-                 SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
-    virtual ~MetaPlaylistInterface() {}
+    virtual ~ChartsPlaylistInterface() {}
 
 
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->repeatMode(); }
+    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->repeatMode(); }
 
-    virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->shuffled(); }
+    virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->shuffled(); }
 
     // Do nothing
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
@@ -66,23 +63,21 @@ public:
 
     virtual bool hasChildInterface( PlaylistInterface* other )
     {
-        return ( m_w->ui->albums->playlistInterface() == other ) ||
-               ( m_w->ui->relatedArtists->playlistInterface() == other ) ||
-               ( m_w->ui->topHits->playlistInterface() == other );
+        return m_w->ui->tracksViewLeft->playlistInterface() == other ||
+               m_w->ui->artistsViewLeft->playlistInterface() == other;
+
     }
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {
-        m_w->ui->albums->proxyModel()->setRepeatMode( mode );
-        m_w->ui->relatedArtists->proxyModel()->setRepeatMode( mode );
-        m_w->ui->topHits->proxyModel()->setRepeatMode( mode );
+        m_w->ui->tracksViewLeft->proxyModel()->setRepeatMode( mode );
+        m_w->ui->artistsViewLeft->proxyModel()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->albums->proxyModel()->setShuffled( enabled );
-        m_w->ui->relatedArtists->proxyModel()->setShuffled( enabled );
-        m_w->ui->topHits->proxyModel()->setShuffled( enabled );
+        m_w->ui->tracksViewLeft->proxyModel()->setShuffled( enabled );
+        m_w->ui->artistsViewLeft->proxyModel()->setShuffled( enabled );
     }
 
 signals:
@@ -105,7 +100,7 @@ private slots:
     }
 
 private:
-    ArtistInfoWidget* m_w;
+    WhatsHotWidget* m_w;
 
 };
 
