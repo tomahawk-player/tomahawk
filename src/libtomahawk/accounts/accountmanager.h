@@ -52,12 +52,8 @@ public:
     Account* loadPlugin( const QString &accountId );
     QString factoryFromId( const QString& accountId ) const;
     
-    QList< Account* > accounts() const { return m_accounts; };
-    QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
-
-signals:
-    void accountAdded( Tomahawk::Accounts::Account* );
-    void accountRemoved( Tomahawk::Accounts::Account* );
+    QList< Account* > getAccounts() { return m_accounts; };
+    QList< Account* > getAccounts( Tomahawk::Accounts::AccountType type ) { return m_accountsByAccountType[ type ]; }
 
 private:
     QList< Account* > m_accounts;

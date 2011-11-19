@@ -56,9 +56,10 @@ class DLLEXPORT TwitterAccount : public Account
 public:
     TwitterAccount( const QString &accountId );
     virtual ~TwitterAccount();
-
+    
     QIcon icon() const { return QIcon( ":/twitter-icon.png" ); }
 
+    bool canSelfAuthenticate() const { return true; }
     void authenticate();
     void deauthenticate();
     bool isAuthenticated() const { return m_isAuthenticated; }
@@ -81,7 +82,7 @@ signals:
 private slots:
     void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );
-
+    
 private:
     bool m_isAuthenticated;
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;

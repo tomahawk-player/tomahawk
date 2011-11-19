@@ -21,35 +21,26 @@
 
 #include "configdelegatebase.h"
 
-namespace Tomahawk
-{
-namespace Accounts
-{
-
-class Account;
-
-class AccountDelegate : public ConfigDelegateBase
+class SipPlugin;
+class SipPluginFactory;
+class SipConfigDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
 public:
-    AccountDelegate( QObject* parent = 0);
+    SipConfigDelegate( QObject* parent = 0);
 
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
-
-    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::BasicCapabilityRole; }
 private slots:
     void askedForEdit( const QModelIndex& idx );
 
 signals:
-    void openConfig( Account* );
+    void sipFactoryClicked( SipPluginFactory* );
+    void openConfig( SipPlugin* );
 };
-
-}
-}
 
 #endif // SIPCONFIGDELEGATE_H

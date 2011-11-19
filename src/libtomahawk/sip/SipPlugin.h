@@ -40,6 +40,9 @@ class DLLEXPORT SipPlugin : public QObject
     Q_OBJECT
 
 public:
+    enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
+    enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
+
     SipPlugin();
     explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
     virtual ~SipPlugin();
@@ -104,7 +107,7 @@ private slots:
 
 protected:
     Tomahawk::Accounts::Account *m_account;
-
+    
 private:
     QString m_cachedError;
     QStringList m_peersOnline;

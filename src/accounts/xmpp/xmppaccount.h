@@ -59,6 +59,7 @@ public:
 
     QIcon icon() const { return QIcon( ":/xmpp-icon.png" ); }
 
+    bool canSelfAuthenticate() const { return false; }
     void authenticate();
     void deauthenticate();
     bool isAuthenticated() const { return m_isAuthenticated; }
@@ -76,7 +77,7 @@ private:
     bool m_isAuthenticated;
     QWeakPointer< QWidget > m_configWidget;
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
-
+    
 
     // for settings access
     friend class XmppConfigWidget;
