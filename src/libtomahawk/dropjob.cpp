@@ -68,7 +68,8 @@ DropJob::mimeTypes()
               << "application/tomahawk.metadata.artist"
               << "application/tomahawk.metadata.album"
               << "application/tomahawk.mixed"
-              << "text/plain";
+              << "text/plain"
+              << "text/uri-list";
 
     return mimeTypes;
 }
@@ -77,6 +78,7 @@ bool
 DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType, DropJob::DropAction acceptedAction )
 {
     Q_UNUSED( acceptedAction );
+
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
         || data->hasFormat( "application/tomahawk.result.list" )
@@ -89,14 +91,14 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     }
 
     // check plain text url types
-    if ( !data->hasFormat( "text/plain" ) )
+    if ( !data->hasFormat( "text/plain" ) || !data->hasFormat( "text/uri-list" ) )
         return false;
 
     const QString url = data->data( "text/plain" );
 
     if ( acceptedType.testFlag( Playlist ) )
     {
-        if( url.contains( "xspf" ) )
+        if( url.contains( "xspf" ) || data->data( "text/uri-list" ).contains( "xspf" ) )
             return true;
 
         // Not the most elegant
@@ -151,7 +153,7 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
     const QString url = data->data( "text/plain" );
     if ( desired == Playlist )
     {
-        if( url.contains( "xspf" ) )
+        if( url.contains( "xspf" ) || data->data( "text/uri-list").contains( "xspf" ) )
             return true;
 
         // Not the most elegant
@@ -222,9 +224,14 @@ DropJob::parseMimeData( const QMimeData *data )
         results = tracksFromArtistMetaData( data );
     else if ( data->hasFormat( "application/tomahawk.mixed" ) )
         tracksFromMixedData( data );
-    else if ( data->hasFormat( "text/plain" ) )
+    else if ( data->hasFormat( "text/plain" ) && !data->data( "text/plain" ).isEmpty() )
     {
         const QString plainData = QString::fromUtf8( data->data( "text/plain" ) );
+        handleAllUrls( plainData );
+
+    }else if ( data->hasFormat( "text/uri-list" ) )
+    {
+        const QString plainData = QString::fromUtf8( data->data( "text/uri-list" ).trimmed() );
         handleAllUrls( plainData );
     }
 
@@ -419,16 +426,23 @@ DropJob::handleXspfs( const QString& fileUrls )
 
     foreach ( const QString& url, urls )
     {
-        QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
 
+        QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
         if ( xspfFile.exists() )
         {
             XSPFLoader* l = new XSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
             l->load( xspfFile );
         }
+        else if( QUrl( url ).isValid() )
+        {
+
+            XSPFLoader* l = new XSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading remote xspf " << url;
+            l->load( QUrl( url ) );
+        }
         else
-            tLog( LOGINFO ) << "Error Loading local xspf " << xspfFile.fileName();
+            tLog() << "Failed to load or parse dropped XSPF";
     }
 
 }
