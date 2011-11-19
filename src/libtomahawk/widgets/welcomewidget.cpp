@@ -99,6 +99,19 @@ WelcomeWidget::~WelcomeWidget()
     delete ui;
 }
 
+PlaylistInterface*
+WelcomeWidget::playlistInterface() const
+{
+    return ui->tracksView->playlistInterface();
+}
+
+
+bool
+WelcomeWidget::jumpToCurrentTrack()
+{
+    return ui->tracksView->jumpToCurrentTrack();
+}
+
 bool
 WelcomeWidget::isBeingPlayed() const
 {

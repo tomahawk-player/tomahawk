@@ -18,6 +18,7 @@
  */
 
 #include "whatshotwidget.h"
+#include "whatshotwidget_p.h"
 #include "ui_whatshotwidget.h"
 
 #include <QPainter>
@@ -50,6 +51,7 @@ static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
+    , m_playlistInterface( 0 )
     , m_sortedProxy( 0 )
 {
     ui->setupUi( this );
@@ -90,6 +92,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
 
+    m_playlistInterface = new ChartsPlaylistInterface( this );
+
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
@@ -102,7 +106,14 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 WhatsHotWidget::~WhatsHotWidget()
 {
+    delete m_playlistInterface;
     delete ui;
+}
+
+PlaylistInterface*
+WhatsHotWidget::playlistInterface() const
+{
+    return m_playlistInterface;
 }
 
 

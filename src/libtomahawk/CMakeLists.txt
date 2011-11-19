@@ -440,6 +440,7 @@ set( libHeaders
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
     widgets/whatshotwidget.h
+    widgets/whatshotwidget_p.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
     widgets/OverlayButton.h
