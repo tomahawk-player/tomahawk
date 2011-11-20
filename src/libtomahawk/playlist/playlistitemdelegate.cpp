@@ -33,7 +33,7 @@
 #include "trackview.h"
 #include "trackheader.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )

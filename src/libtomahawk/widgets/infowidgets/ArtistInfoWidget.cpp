@@ -29,7 +29,7 @@
 #include "database/databasecommand_allalbums.h"
 
 #include "utils/stylehelper.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
 #include "widgets/OverlayButton.h"

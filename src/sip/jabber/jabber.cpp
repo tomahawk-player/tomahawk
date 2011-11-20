@@ -50,7 +50,7 @@
 #endif
 
 
-#include <utils/tomahawkutils.h>
+#include <utils/tomahawkutilsgui.h>
 #include "utils/logger.h"
 
 SipPlugin*

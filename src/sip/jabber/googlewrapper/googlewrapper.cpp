@@ -20,7 +20,7 @@
 #include "googlewrapper.h"
 #include "ui_configwidget.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include <QtPlugin>
 #include <QInputDialog>

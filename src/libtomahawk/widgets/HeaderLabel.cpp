@@ -23,7 +23,7 @@
 
 #include "utils/logger.h"
 #include "utils/stylehelper.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 
 static const int s_defaultFontSize = 12;

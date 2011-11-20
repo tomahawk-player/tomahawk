@@ -29,7 +29,7 @@
 #include "source.h"
 #include "viewpage.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include "dllmacro.h"
 

@@ -32,7 +32,7 @@
 #include <QCoreApplication>
 
 #include "utils/logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "database/databasecommand_socialaction.h"
 
 using namespace Tomahawk;

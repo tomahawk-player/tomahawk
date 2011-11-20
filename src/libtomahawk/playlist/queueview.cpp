@@ -26,6 +26,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
 #include "playlistview.h"
+#include "utils/tomahawkutilsgui.h"
 
 using namespace Tomahawk;
 

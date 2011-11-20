@@ -26,7 +26,7 @@
 #include "items/categoryitems.h"
 #include "items/temporarypageitem.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "animationhelper.h"
 #include "source.h"
 #include "tomahawksettings.h"

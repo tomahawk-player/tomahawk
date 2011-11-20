@@ -108,6 +108,7 @@ set( libGuiSources
     utils/stylehelper.cpp
     utils/dropjobnotifier.cpp
     utils/proxystyle.cpp
+    utils/tomahawkutilsgui.cpp
 
     widgets/checkdirtree.cpp
     widgets/querylabel.cpp
@@ -225,6 +226,7 @@ set( libGuiHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
     utils/dropjobnotifier.h
+    utils/tomahawkutilsgui.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h

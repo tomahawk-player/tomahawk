@@ -23,7 +23,7 @@
 #include "viewmanager.h"
 #include "playlist.h"
 #include "genericpageitems.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/customplaylistview.h"

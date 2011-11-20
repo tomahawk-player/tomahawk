@@ -20,6 +20,8 @@
 #include "settingsdialog.h"
 #include "config.h"
 
+#include "utils/tomahawkutilsgui.h"
+
 #include <QCryptographicHash>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -417,7 +419,7 @@ SettingsDialog::testLastFmLogin()
 
     // ensure they have up-to-date settings
     lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
-    
+
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
@@ -877,7 +879,7 @@ ProxyDialog::saveSettings()
     qDebug() << Q_FUNC_INFO;
 
     QNetworkProxy::ProxyType type = static_cast< QNetworkProxy::ProxyType>( m_backwardMap[ ui->typeBox->currentIndex() ] );
-    
+
     //First set settings
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setProxyHost( ui->hostLineEdit->text() );
@@ -890,7 +892,7 @@ ProxyDialog::saveSettings()
     s->setProxyType( type );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
     s->sync();
-    
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     tDebug() << Q_FUNC_INFO << "Got proxyFactory: " << proxyFactory;
     if ( type == QNetworkProxy::NoProxy )

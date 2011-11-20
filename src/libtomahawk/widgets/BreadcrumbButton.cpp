@@ -22,7 +22,7 @@
 #include "Breadcrumb.h"
 #include "combobox.h"
 #include "utils/stylehelper.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include <QPaintEvent>
 #include <QPainter>

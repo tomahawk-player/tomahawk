@@ -59,7 +59,7 @@
 #include "utils/xspfloader.h"
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include <lastfm/ws.h>
 #include "config.h"
@@ -162,7 +162,7 @@ TomahawkApp::init()
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
 #endif
-    
+
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );
