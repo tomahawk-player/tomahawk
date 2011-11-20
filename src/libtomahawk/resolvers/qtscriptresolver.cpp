@@ -23,19 +23,20 @@
 #include "config.h"
 #include "pipeline.h"
 #include "sourcelist.h"
+
+#include "network/servent.h"
+
 #include "utils/tomahawkutils.h"
-
-#include <QMetaProperty>
-#include <QCryptographicHash>
-
 #include "utils/logger.h"
-#include <network/servent.h>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 
-#ifndef ENABLE_HEADLESS
-    #include <QMessageBox>
-#endif
+
+#include <QtGui/QMessageBox>
+
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+
+#include <QtCore/QMetaProperty>
+#include <QtCore/QCryptographicHash>
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
