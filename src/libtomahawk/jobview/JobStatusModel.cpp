@@ -81,6 +81,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
     {
     case Qt::DecorationRole:
         return item->icon();
+    case Qt::ToolTipRole:
     case Qt::DisplayRole:
     {
         if ( m_collapseCount.contains( item->type() ) )

@@ -51,6 +51,8 @@ public:
 signals:
     void error( XSPFLoader::XSPFErrorCode error );
     void ok( const Tomahawk::playlist_ptr& );
+    void track( const Tomahawk::query_ptr& track );
+    void tracks( const QList< Tomahawk::query_ptr > tracks );
 
 public slots:
     void load( const QUrl& url );

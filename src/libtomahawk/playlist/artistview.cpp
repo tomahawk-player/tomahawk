@@ -369,6 +369,9 @@ ArtistView::onMenuTriggered( int action )
 bool
 ArtistView::jumpToCurrentTrack()
 {
+    if ( !m_proxyModel )
+        return false;
+
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }

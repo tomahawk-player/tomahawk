@@ -144,8 +144,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                             type == SourcesModel::Station ||
                             type == SourcesModel::TemporaryPage ||
                             type == SourcesModel::GenericPage );
-
-    if ( playable && item->isBeingPlayed() )
+    const bool playing = ( AudioEngine::instance()->isPlaying() || AudioEngine::instance()->isPaused() );
+    if ( playable && playing && item->isBeingPlayed() )
     {
         const int iconW = o3.rect.height() - 4;
         QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );

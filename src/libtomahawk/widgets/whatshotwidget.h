@@ -31,6 +31,7 @@
 
 #include "dllmacro.h"
 
+class ChartsPlaylistInterface;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
@@ -58,7 +59,7 @@ public:
     ~WhatsHotWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
 
     virtual QString title() const { return tr( "Charts" ); }
     virtual QString description() const { return QString(); }
@@ -90,6 +91,7 @@ private:
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
+    ChartsPlaylistInterface* m_playlistInterface;
 
     QStandardItemModel* m_crumbModelLeft;
     QSortFilterProxyModel* m_sortedProxy;
@@ -101,6 +103,8 @@ private:
     QString m_queueItemToShow;
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
+
+    friend class ChartsPlaylistInterface;
 };
 
 #endif // WHATSHOTWIDGET_H
