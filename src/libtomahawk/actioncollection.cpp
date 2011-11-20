@@ -42,7 +42,7 @@ ActionCollection::initActions()
     m_actionCollection[ "latchOff" ] = new QAction( tr( "&Stop Listening Along" ), this );
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    QAction *privacyToggle = new QAction( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ), this );
+    QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
     privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
