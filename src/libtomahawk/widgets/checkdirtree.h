@@ -21,15 +21,16 @@
 
 #include "dllmacro.h"
 
-#include <QDirModel>
+#include <QFileSystemModel>
 #include <QTreeView>
 
-class DLLEXPORT CheckDirModel : public QDirModel
+class DLLEXPORT CheckDirModel : public QFileSystemModel
 {
     Q_OBJECT
 
 public:
     CheckDirModel( QWidget* parent = 0 );
+    virtual ~CheckDirModel();
 
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -41,8 +42,13 @@ public:
 signals:
     void dataChangedByUser( const QModelIndex & index );
 
+private slots:
+    void getFileInfoResult();
+
 private:
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkTable;
+
+    bool m_shownVolumes;
 };
 
 
