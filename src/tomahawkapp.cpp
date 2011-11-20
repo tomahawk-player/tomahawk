@@ -158,11 +158,6 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
-#ifndef ENABLE_HEADLESS
-    new ActionCollection( this );
-    connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
-#endif
-
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );
@@ -170,6 +165,11 @@ TomahawkApp::init()
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
     new Pipeline( this );
+
+    #ifndef ENABLE_HEADLESS
+        new ActionCollection( this );
+        connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
+    #endif
 
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
     connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );

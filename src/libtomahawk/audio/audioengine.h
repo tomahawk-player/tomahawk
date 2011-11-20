@@ -102,8 +102,6 @@ public slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString caller );
 
-    void togglePrivateListeningMode();
-
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -125,8 +123,6 @@ signals:
 
     void error( AudioErrorCode errorCode );
 
-    void privacyModeChanged();
-    
 private slots:
     bool loadTrack( const Tomahawk::result_ptr& result );
     void loadPreviousTrack();

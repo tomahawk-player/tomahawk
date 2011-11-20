@@ -19,6 +19,7 @@
 #include "actioncollection.h"
 #include <tomahawksettings.h>
 #include <utils/tomahawkutils.h>
+#include "audio/audioengine.h"
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
@@ -50,6 +51,8 @@ ActionCollection::initActions()
     privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
+    connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
+
 
     m_actionCollection[ "loadPlaylist"] = new QAction( tr( "&Load Playlist" ), this );
     m_actionCollection[ "renamePlaylist"] = new QAction( tr( "&Rename Playlist" ), this );
@@ -59,6 +62,13 @@ ActionCollection::initActions()
     m_actionCollection[ "previousTrack"] = new QAction( tr( "&Previous Track" ), this );
     m_actionCollection[ "nextTrack"] = new QAction( tr( "&Next Track" ), this );
     m_actionCollection[ "quit"] = new QAction( tr( "&Quit" ), this );
+
+    // connect actions to AudioEngine
+    AudioEngine *ae = AudioEngine::instance();
+    connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ),                  Qt::UniqueConnection );
+    connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),                       Qt::UniqueConnection );
+    connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),                   Qt::UniqueConnection );
+    connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),                       Qt::UniqueConnection );
 }
 
 
@@ -74,4 +84,21 @@ QAction*
 ActionCollection::getAction( const QString& name )
 {
     return m_actionCollection.contains( name ) ? m_actionCollection[ name ] : 0;
+}
+
+void
+ActionCollection::togglePrivateListeningMode()
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
+    else
+        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
+
+    QAction *privacyToggle = m_actionCollection[ "togglePrivacy" ];
+    bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
+    privacyToggle->setText( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ) );
+    privacyToggle->setIconVisibleInMenu( isPublic );
+
+    emit privacyModeChanged();
 }

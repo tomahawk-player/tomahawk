@@ -24,7 +24,6 @@
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-#include "actioncollection.h"
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
@@ -77,16 +76,6 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
-#ifndef TOMAHAWK_HEADLESS
-    tDebug() << Q_FUNC_INFO << "Connecting privacy toggle";
-    ActionCollection *ac = ActionCollection::instance();
-    connect( ac->getAction( "togglePrivacy" ), SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
-    connect( ac->getAction( "playPause" ),     SIGNAL( triggered() ), SLOT( playPause() ),                  Qt::UniqueConnection );
-    connect( ac->getAction( "stop" ),          SIGNAL( triggered() ), SLOT( stop() ),                       Qt::UniqueConnection );
-    connect( ac->getAction( "previousTrack" ), SIGNAL( triggered() ), SLOT( previous() ),                   Qt::UniqueConnection );
-    connect( ac->getAction( "nextTrack" ),     SIGNAL( triggered() ), SLOT( next() ),                       Qt::UniqueConnection );
-#endif
-    
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -406,26 +395,6 @@ AudioEngine::infoSystemFinished( QString caller )
 }
 
 
-void
-AudioEngine::togglePrivateListeningMode()
-{
-    tDebug() << Q_FUNC_INFO;
-    if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
-        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
-    else
-        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
-
-#ifndef TOMAHAWK_HEADLESS
-    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
-    bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    privacyToggle->setText( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ) );
-    privacyToggle->setIconVisibleInMenu( isPublic );
-#endif
-    emit privacyModeChanged();
-}
-
-
-
 bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
@@ -502,7 +471,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             if ( TomahawkSettings::instance()->verboseNotifications() )
                     sendNowPlayingNotification();
-            
+
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );

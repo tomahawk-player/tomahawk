@@ -115,7 +115,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
 
-    connect( AudioEngine::instance(), SIGNAL( privacyModeChanged() ), SLOT( repaint() ) );
+    connect( ActionCollection::instance(), SIGNAL( privacyModeChanged() ), SLOT( repaint() ) );
 }
 
 
