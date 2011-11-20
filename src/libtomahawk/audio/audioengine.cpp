@@ -418,7 +418,7 @@ AudioEngine::togglePrivateListeningMode()
 #ifndef TOMAHAWK_HEADLESS
     QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    privacyToggle->setText( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ) );
+    privacyToggle->setText( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
 #endif
     emit privacyModeChanged();
