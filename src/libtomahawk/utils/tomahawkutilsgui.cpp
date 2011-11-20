@@ -291,4 +291,16 @@ setHeaderHeight( int height )
 }
 
 
+QColor
+alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
+{
+    opacity = qMax( (float)0.3, opacity );
+    int r = colorFrom.red(), g = colorFrom.green(), b = colorFrom.blue();
+    r = opacity * r + ( 1 - opacity ) * colorTo.red();
+    g = opacity * g + ( 1 - opacity ) * colorTo.green();
+    b = opacity * b + ( 1 - opacity ) * colorTo.blue();
+
+    return QColor( r, g, b );
+}
+
 } // ns
