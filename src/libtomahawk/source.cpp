@@ -180,6 +180,9 @@ Source::setOffline()
     m_online = false;
     emit offline();
 
+    m_currentTrack.clear();
+    emit stateChanged();
+
     m_cc = 0;
     DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -309,6 +312,7 @@ void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
+
     m_currentTrack = query;
     m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
