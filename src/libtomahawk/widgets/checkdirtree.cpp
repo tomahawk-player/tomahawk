@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011,      Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,30 +21,81 @@
 
 #include "utils/logger.h"
 
+#include <QProcess>
+
+static QString s_macVolumePath = "/Volumes";
 
 CheckDirModel::CheckDirModel( QWidget* parent )
-    : QDirModel( parent )
+    : QFileSystemModel( parent )
+    , m_shownVolumes( false )
 {
+#ifdef Q_WS_MAC
+    QProcess* checkVolumeVisible = new QProcess( this );
+    connect( checkVolumeVisible, SIGNAL( readyReadStandardOutput() ), this, SLOT( getFileInfoResult() ) );
+    checkVolumeVisible->start( "GetFileInfo", QStringList() <<  "-aV" << s_macVolumePath );
+#endif
 }
 
+CheckDirModel::~CheckDirModel()
+{
+#ifdef Q_WS_MAC
+    // reset to previous state
+    if ( m_shownVolumes )
+        QProcess::startDetached( QString( "SetFile -a V %1" ).arg( s_macVolumePath ) );
+#endif
+}
+
+void
+CheckDirModel::getFileInfoResult()
+{
+#ifdef Q_WS_MAC
+    QProcess* p = qobject_cast< QProcess* >( sender() );
+    Q_ASSERT( p );
+
+    QByteArray res = p->readAll().trimmed();
+    // 1 means /Volumes is hidden, so we show it while the dialog is visible
+    if ( res == "1" )
+    {
+        // Remove the hidden flag for the /Volumnes folder so all mount points are visible in the default (Q)FileSystemModel
+        QProcess::startDetached( QString( "SetFile -a v %1" ).arg( s_macVolumePath ) );
+        m_shownVolumes = true;
+    }
+
+    p->deleteLater();
+#endif
+}
 
 Qt::ItemFlags
 CheckDirModel::flags( const QModelIndex& index ) const
 {
-    return QDirModel::flags( index ) | Qt::ItemIsUserCheckable;
+    return QFileSystemModel::flags( index ) | Qt::ItemIsUserCheckable;
 }
 
 
 QVariant
 CheckDirModel::data( const QModelIndex& index, int role ) const
 {
+#ifdef Q_WS_MAC
+    // return the 'My Computer' icon for the /Volumes folder
+    if ( index.column() == 0 && filePath( index ) == s_macVolumePath )
+    {
+        switch ( role )
+        {
+            case Qt::DecorationRole:
+                return myComputer( role );
+            default:
+                break;
+        }
+    }
+#endif
+
     if ( role == Qt::CheckStateRole )
     {
         return m_checkTable.contains( index ) ? m_checkTable.value( index ) : Qt::Unchecked;
     }
     else
     {
-        return QDirModel::data( index, role );
+        return QFileSystemModel::data( index, role );
     }
 }
 
@@ -51,7 +103,7 @@ CheckDirModel::data( const QModelIndex& index, int role ) const
 bool
 CheckDirModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    bool b = QDirModel::setData( index, value, role );
+    bool b = QFileSystemModel::setData( index, value, role );
 
     if ( role == Qt::CheckStateRole )
     {
@@ -67,7 +119,7 @@ CheckDirModel::setData( const QModelIndex& index, const QVariant& value, int rol
 void
 CheckDirModel::setCheck( const QModelIndex& index, const QVariant& value )
 {
-    QDirModel::setData( index, value, Qt::CheckStateRole );
+    QFileSystemModel::setData( index, value, Qt::CheckStateRole );
     m_checkTable.insert( index, (Qt::CheckState)value.toInt() );
     emit dataChanged( index, index );
 }
@@ -84,6 +136,10 @@ CheckDirTree::CheckDirTree( QWidget* parent )
     : QTreeView( parent )
 {
     m_dirModel.setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks );
+    m_dirModel.setRootPath( "/" );
+
+    m_dirModel.setNameFilters( QStringList() << "[^\\.]*" );
+
     setModel( &m_dirModel );
     setColumnHidden( 1, true );
     setColumnHidden( 2, true );
