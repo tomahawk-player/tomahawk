@@ -18,17 +18,6 @@
 
 #include "globalactionmanager.h"
 
-#ifndef ENABLE_HEADLESS
-    #include <QClipboard>
-#endif
-
-#include <QMimeData>
-#include <QUrl>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkProxy>
-
 #include "artist.h"
 #include "album.h"
 #include "sourcelist.h"
@@ -50,14 +39,23 @@
 #include "utils/shortenedlinkparser.h"
 #include "utils/rdioparser.h"
 
-#ifndef ENABLE_HEADLESS
-    #include <QApplication>
-    #include "widgets/searchwidget.h"
-    #include "viewmanager.h"
-    #include "playlist/topbar/topbar.h"
-    #include "playlist/playlistview.h"
+#include "widgets/searchwidget.h"
+#include "viewmanager.h"
+#include "playlist/topbar/topbar.h"
+#include "playlist/playlistview.h"
 
-#endif
+
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
+
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkConfiguration>
+#include <QtNetwork/QNetworkProxy>
+
+#include <QtCore/QMimeData>
+#include <QtCore/QUrl>
+
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
