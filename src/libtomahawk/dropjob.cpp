@@ -91,7 +91,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     }
 
     // check plain text url types
-    if ( !data->hasFormat( "text/plain" ) || !data->hasFormat( "text/uri-list" ) )
+    if ( !data->hasFormat( "text/plain" ) )
         return false;
 
     const QString url = data->data( "text/plain" );
