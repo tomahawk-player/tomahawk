@@ -383,7 +383,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         int result = QMessageBox::question(
             //TomahawkApp::instance()->mainWindow(),
             0, tr( "Legal Warning" ),
-            tr( "By pressing OK below, you agree that your use of Tomahawk will be in accordance with any applicable laws, including copyright and intellectual property laws, in effect in your country of residence, and indemnify the Tomahawk developers and project from liability should you choose to break those laws.\n\nFor more information, please see http://gettomahawk.com/legal" ),
+            tr( "By pressing I Agree below, you agree that your use of Tomahawk will be in accordance with any applicable laws, including copyright and intellectual property laws, in effect in your country of residence, and indemnify the Tomahawk developers and project from liability should you choose to break those laws.\n\nFor more information, please see http://gettomahawk.com/legal" ),
             tr( "I Do Not Agree" ), tr( "I Agree" )
         );
         if ( result != 1 )
