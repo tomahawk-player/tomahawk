@@ -92,13 +92,18 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
     // check plain text url types
     if ( !data->hasFormat( "text/plain" ) )
-        return false;
+        if ( !data->hasFormat( "text/uri-list" ) )
+            return false;
+
 
     const QString url = data->data( "text/plain" );
 
     if ( acceptedType.testFlag( Playlist ) )
     {
-        if( url.contains( "xspf" ) || data->data( "text/uri-list" ).contains( "xspf" ) )
+        if( url.contains( "xspf" ) )
+            return true;
+
+        if( data->data( "text/uri-list" ).contains( "xspf" ) )
             return true;
 
         // Not the most elegant
@@ -418,7 +423,7 @@ void
 DropJob::handleXspfs( const QString& fileUrls )
 {
     tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrls;
-
+    bool error = false;
     QStringList urls = fileUrls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
     if ( dropAction() == Default )
@@ -426,23 +431,37 @@ DropJob::handleXspfs( const QString& fileUrls )
 
     foreach ( const QString& url, urls )
     {
+        XSPFLoader* l;
 
         QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
+
         if ( xspfFile.exists() )
         {
-            XSPFLoader* l = new XSPFLoader( true, this );
+            l = new XSPFLoader(  dropAction() == Create, this );
             tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
             l->load( xspfFile );
         }
         else if( QUrl( url ).isValid() )
         {
 
-            XSPFLoader* l = new XSPFLoader( true, this );
+            l = new XSPFLoader(  dropAction() == Create, this );
             tDebug( LOGINFO ) << "Loading remote xspf " << url;
             l->load( QUrl( url ) );
         }
         else
+        {
+            error = true;
             tLog() << "Failed to load or parse dropped XSPF";
+
+        }
+
+        if ( dropAction() == Append && !error )
+        {
+            qDebug() << Q_FUNC_INFO << "Trying to append xspf";
+            connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        }
+
+
     }
 
 }
