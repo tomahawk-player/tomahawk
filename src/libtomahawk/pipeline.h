@@ -36,6 +36,7 @@ namespace Tomahawk
 {
 class Resolver;
 class ExternalResolver;
+typedef boost::function<boostcrap> ResolverFactoryFunc;
 
 class DLLEXPORT Pipeline : public QObject
 {
@@ -52,7 +53,7 @@ public:
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
-    void addExternalResolverFactory( boost::function<Tomahawk::ExternalResolver*(QString)> resolverFactory );
+    void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
@@ -104,7 +105,7 @@ private:
 
     QList< Resolver* > m_resolvers;
     QList< Tomahawk::ExternalResolver* > m_scriptResolvers;
-    QList< boost::function<Tomahawk::ExternalResolver*(QString)> > m_resolverFactories;
+    QList< ResolverFactoryFunc > m_resolverFactories;
     QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;

@@ -115,7 +115,7 @@ Pipeline::addResolver( Resolver* r )
 
 
 void
-Pipeline::addExternalResolverFactory(boost::function< ExternalResolver*(QString) > resolverFactory)
+Pipeline::addExternalResolverFactory(ResolverFactoryFunc resolverFactory)
 {
     m_resolverFactories << resolverFactory;
 }
@@ -126,7 +126,7 @@ Pipeline::addScriptResolver( const QString& path, bool start )
 {
     ExternalResolver* res = 0;
 
-    Q_FOREACH(boost::function<Tomahawk::ExternalResolver*(QString)> factory, m_resolverFactories)
+    foreach( ResolverFactoryFunc factory, m_resolverFactories)
     {
         res = factory( path );
 
