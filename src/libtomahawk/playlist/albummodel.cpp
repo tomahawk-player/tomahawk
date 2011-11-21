@@ -25,6 +25,7 @@
 #include "artist.h"
 #include "albumitem.h"
 #include "source.h"
+#include "sourcelist.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -247,6 +248,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     m_overwriteOnAdd = overwrite;
+    m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -254,6 +256,21 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+
+    if ( collection.isNull() )
+    {
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+
+        QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
+        foreach ( const source_ptr& source, sources )
+        {
+            connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+        }
+    }
+    else
+    {
+        connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+    }
 
     emit loadingStarted();
 }
@@ -315,6 +332,23 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     }
 
     emit endInsertRows();
+}
+
+
+void
+AlbumModel::onSourceAdded( const Tomahawk::source_ptr& source )
+{
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+}
+
+
+void
+AlbumModel::onCollectionChanged()
+{
+    if ( m_collection )
+        addCollection( m_collection, true );
+    else
+        addCollection( m_collection, true );
 }
 
 

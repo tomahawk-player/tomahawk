@@ -60,12 +60,17 @@ protected:
 private slots:
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
 
+    void loadTracks();
+    void onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& queries );
+
 private:
     Ui::SourceInfoWidget *ui;
 
     CollectionFlatModel* m_recentCollectionModel;
     PlaylistModel* m_historyModel;
     AlbumModel* m_recentAlbumModel;
+
+    Tomahawk::source_ptr m_source;
 
     QString m_title;
     QString m_description;

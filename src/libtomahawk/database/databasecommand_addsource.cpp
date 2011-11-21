@@ -35,20 +35,21 @@ DatabaseCommand_addSource::DatabaseCommand_addSource( const QString& username, c
 void
 DatabaseCommand_addSource::exec( DatabaseImpl* dbi )
 {
+    Q_ASSERT( !m_fname.isEmpty() );
+
     TomahawkSqlQuery query = dbi->newquery();
-    query.prepare( "SELECT id, friendlyname FROM source WHERE name = ?" );
+    query.prepare( "SELECT id FROM source WHERE name = ?" );
     query.addBindValue( m_username );
     query.exec();
 
     if ( query.next() )
     {
         unsigned int id = query.value( 0 ).toInt();
-        QString fname = query.value( 1 ).toString();
         query.prepare( "UPDATE source SET isonline = 'true', friendlyname = ? WHERE id = ?" );
         query.addBindValue( m_fname );
         query.addBindValue( id );
         query.exec();
-        emit done( id, fname );
+        emit done( id, m_fname );
         return;
     }
 
