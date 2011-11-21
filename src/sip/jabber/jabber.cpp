@@ -86,9 +86,8 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->jabberServer->setText( m_currentServer );
     m_ui->jabberPort->setValue( m_currentPort );
     m_ui->jidExistsLabel->hide();
-
-
     connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
+
     // setup JID object
     Jreen::JID jid = Jreen::JID( accountName() );
 
