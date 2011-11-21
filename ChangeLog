@@ -1,3 +1,22 @@
+Version 0.3.2:
+    * Fixed not showing delete icon on temporary pages when deleting
+       one above.
+    * Fixed inability to select externally mounted drives on OS X.
+    * Fixed bug where speaker would be shown next to a playlist even
+       after playlist had finished.
+    * Fixed bug where first startup would show a loading spinner in
+       the welcome screen album view forever.
+    * Automatically upgrade resolvers when an upgrade is found.
+    * Fixed last played track of a friend never expiring.
+    * Fixed parsing of rdio tracks.
+    * Changed steering mechanism in stations to make it clearer.
+    * Fixed loading biographies of artists with '+' in the name.
+    * Fixed behaviour of dropping spotify other playlists on the sidebar.
+    * Fixed impossible to read source in audiocontrols on Mac.
+    * Fixed crashes when playing Grooveshark tracks.
+    * Fixed bug where clicking the latch button would flicker and unlatch.
+    * Fixed jabber accounts not connecting properly when proxy is in use.
+
 Version 0.3.1:
     * Fixed not resolving to local files.
     * Fixed shutdown crash on Windows.
