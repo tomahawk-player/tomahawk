@@ -102,6 +102,10 @@ public:
      *  If this generator doesn't support this (and returns false for
      * \c onDemandSteerable) this will be null. The generator is responsible
      *  for reacting to changes in the widget.
+     *
+     * Steering widgets may emit a \c steeringChanged() signal, which will cause the model to toss any
+     *  upcoming tracks and re-fetch them.
+     *
      */
     virtual QWidget* steeringWidget() { return 0; }
 

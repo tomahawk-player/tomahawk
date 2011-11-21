@@ -57,6 +57,9 @@ signals:
     void reset();
 
     void resized();
+
+    // interface to DynamicWidget
+    void steeringChanged();
 private slots:
     void changed();
 
