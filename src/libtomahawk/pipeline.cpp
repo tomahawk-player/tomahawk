@@ -136,6 +136,8 @@ Pipeline::addScriptResolver( const QString& path, bool start )
         m_scriptResolvers << res;
         if ( start )
             res->start();
+
+        break;
     }
 
     return res;
