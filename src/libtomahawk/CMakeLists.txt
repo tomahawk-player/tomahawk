@@ -13,11 +13,15 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 
 set( libGuiSources
+    actioncollection.cpp
+
     contextmenu.cpp
     dropjob.cpp
     globalactionmanager.cpp
     viewpage.cpp
     viewmanager.cpp
+    LatchManager.cpp
+    TomahawkSettingsGui.cpp
 
     context/ContextPage.cpp
     context/ContextWidget.cpp
@@ -34,15 +38,6 @@ set( libGuiSources
     jobview/LatchedStatusItem.cpp
 
     infobar/infobar.cpp
-
-    infosystem/infoplugins/generic/echonestplugin.cpp
-    infosystem/infoplugins/generic/lastfmplugin.cpp
-    infosystem/infoplugins/generic/chartsplugin.cpp
-    infosystem/infoplugins/generic/spotifyPlugin.cpp
-    infosystem/infoplugins/generic/hypemPlugin.cpp
-    infosystem/infoplugins/generic/musixmatchplugin.cpp
-    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
-    infosystem/infoplugins/generic/RoviPlugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -138,11 +133,15 @@ set( libGuiSources
 )
 
 set( libGuiHeaders
+    actioncollection.h
+
     contextmenu.h
     dropjob.h
     viewpage.h
     viewmanager.h
     globalactionmanager.h
+    LatchManager.h
+    TomahawkSettingsGui.h
 
     context/ContextPage.h
     context/ContextWidget.h
@@ -152,15 +151,6 @@ set( libGuiHeaders
     context/pages/WebContext.h
 
     infobar/infobar.h
-
-    infosystem/infoplugins/generic/echonestplugin.h
-    infosystem/infoplugins/generic/lastfmplugin.h
-    infosystem/infoplugins/generic/chartsplugin.h
-    infosystem/infoplugins/generic/spotifyPlugin.h
-    infosystem/infoplugins/generic/hypemPlugin.h
-    infosystem/infoplugins/generic/musixmatchplugin.h
-    infosystem/infoplugins/generic/musicbrainzPlugin.h
-    infosystem/infoplugins/generic/RoviPlugin.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
@@ -275,7 +265,6 @@ set( libSources
     pipeline.cpp
 
     aclsystem.cpp
-    actioncollection.cpp
     artist.cpp
     album.cpp
     collection.cpp
@@ -286,7 +275,6 @@ set( libSources
     source.cpp
     sourceplaylistinterface.cpp
     playlistinterface.cpp
-    LatchManager.cpp
 
     EchonestCatalogSynchronizer.cpp
 
@@ -353,6 +341,15 @@ set( libSources
     infosystem/infosystemcache.cpp
     infosystem/infosystemworker.cpp
 
+    infosystem/infoplugins/generic/echonestplugin.cpp
+    infosystem/infoplugins/generic/lastfmplugin.cpp
+    infosystem/infoplugins/generic/chartsplugin.cpp
+    infosystem/infoplugins/generic/spotifyPlugin.cpp
+    infosystem/infoplugins/generic/hypemPlugin.cpp
+    infosystem/infoplugins/generic/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
+    infosystem/infoplugins/generic/RoviPlugin.cpp
+
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
     network/streamconnection.cpp
@@ -391,14 +388,12 @@ set( libHeaders
     functimeout.h
 
     aclsystem.h
-    actioncollection.h
     collection.h
     query.h
     resolver.h
     result.h
     source.h
     sourceplaylistinterface.h
-    LatchManager.h
 
     artist.h
     album.h
@@ -467,6 +462,15 @@ set( libHeaders
     infosystem/infosystem.h
     infosystem/infosystemworker.h
     infosystem/infosystemcache.h
+
+    infosystem/infoplugins/generic/echonestplugin.h
+    infosystem/infoplugins/generic/lastfmplugin.h
+    infosystem/infoplugins/generic/chartsplugin.h
+    infosystem/infoplugins/generic/spotifyPlugin.h
+    infosystem/infoplugins/generic/hypemPlugin.h
+    infosystem/infoplugins/generic/musixmatchplugin.h
+    infosystem/infoplugins/generic/musicbrainzPlugin.h
+    infosystem/infoplugins/generic/RoviPlugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
@@ -543,14 +547,14 @@ IF(LIBATTICA_FOUND)
 ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
-    SET( libGuiSources ${libGuiSources}
+    LIST(APPEND libGuiSources
       infosystem/infoplugins/unix/mprispluginrootadaptor.cpp
       infosystem/infoplugins/unix/mprispluginplayeradaptor.cpp
       infosystem/infoplugins/unix/mprisplugin.cpp
       infosystem/infoplugins/unix/fdonotifyplugin.cpp
       infosystem/infoplugins/unix/imageconverter.cpp )
 
-    SET( libGuiHeaders ${libGuiHeaders}
+    LIST(APPEND libGuiHeaders
       infosystem/infoplugins/unix/mprispluginrootadaptor.h
       infosystem/infoplugins/unix/mprispluginplayeradaptor.h
       infosystem/infoplugins/unix/mprisplugin.h

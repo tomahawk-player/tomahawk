@@ -19,7 +19,7 @@
 #include "AtticaManager.h"
 
 #include "utils/tomahawkutils.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettingsGui.h"
 #include "pipeline.h"
 
 #include <attica/downloaditem.h>
@@ -167,7 +167,7 @@ AtticaManager::uploadRating( const Content& c )
         }
     }
 
-    TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
+    TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
 
     PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
@@ -204,7 +204,7 @@ AtticaManager::resolversList( BaseJob* j )
     ListJob< Content >* job = static_cast< ListJob< Content >* >( j );
 
     m_resolvers = job->itemList();
-    m_resolverStates = TomahawkSettings::instance()->atticaResolverStates();
+    m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
 
     // load icon cache from disk, and fetch any we are missing
     loadPixmapsFromCache();
@@ -418,7 +418,7 @@ AtticaManager::payloadFetched()
             // Do the install / add to tomahawk
             Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
             m_resolverStates[ resolverId ].state = Installed;
-            TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
+            TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
             emit resolverStateChanged( resolverId );
         }
@@ -514,7 +514,7 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
             if ( resolver.id() == atticaId ) // this is the one
             {
                 m_resolverStates[ atticaId ].state = Uninstalled;
-                TomahawkSettings::instance()->setAtticaResolverState( atticaId, Uninstalled );
+                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( atticaId, Uninstalled );
 
                 doResolverRemove( atticaId );
             }
@@ -532,7 +532,7 @@ AtticaManager::uninstallResolver( const Content& resolver )
         emit resolverStateChanged( resolver.id() );
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
-        TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
+        TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
     }
 
     Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );

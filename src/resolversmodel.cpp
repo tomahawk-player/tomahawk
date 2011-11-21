@@ -25,7 +25,7 @@
 #include "resolver.h"
 #include "pipeline.h"
 #include "config.h"
-
+#include "AtticaManager.h"
 #include "utils/logger.h"
 
 ResolversModel::ResolversModel( QObject* parent )

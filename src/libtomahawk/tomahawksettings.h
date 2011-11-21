@@ -19,10 +19,6 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
-#ifndef ENABLE_HEADLESS
-    #include "AtticaManager.h"
-#endif
-
 #include "playlist.h"
 
 #include <QSettings>
@@ -45,7 +41,7 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
-    QStringList scannerPaths(); /// QDesktopServices::MusicLocation by default
+    virtual QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
     uint scannerTime() const;
@@ -188,13 +184,6 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
-#ifndef ENABLE_HEADLESS
-    AtticaManager::StateHash atticaResolverStates() const;
-    void setAtticaResolverStates( const AtticaManager::StateHash states );
-
-    void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
-    void removeAtticaResolverState( const QString& resolver );
-#endif
 
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
@@ -229,8 +218,5 @@ private:
     static TomahawkSettings* s_instance;
 };
 
-#ifndef ENABLE_HEADLESS
-Q_DECLARE_METATYPE(AtticaManager::StateHash);
-#endif
 
 #endif
