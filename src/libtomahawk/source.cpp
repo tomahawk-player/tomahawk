@@ -146,6 +146,9 @@ Source::avatar( AvatarStyle style ) const
 void
 Source::setFriendlyName( const QString& fname )
 {
+    if ( fname.isEmpty() )
+        return;
+
     m_friendlyname = fname;
     if ( m_scrubFriendlyName )
         m_friendlyname = m_friendlyname.split( "@" ).first();
