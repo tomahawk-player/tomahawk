@@ -65,6 +65,8 @@
 #include "config.h"
 
 #ifndef ENABLE_HEADLESS
+    #include "resolvers/qtscriptresolver.h"
+    #include "resolvers/scriptresolver.h"
     #include "utils/spotifyparser.h"
     #include "AtticaManager.h"
     #include "tomahawkwindow.h"
@@ -164,9 +166,15 @@ TomahawkApp::init()
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
+
+    // init pipeline and resolver factories
     new Pipeline( this );
 
     #ifndef ENABLE_HEADLESS
+        Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
+        Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1 ) );
+
+
         new ActionCollection( this );
         connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
     #endif

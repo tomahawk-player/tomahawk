@@ -114,22 +114,29 @@ Pipeline::addResolver( Resolver* r )
 }
 
 
+void
+Pipeline::addExternalResolverFactory(boost::function< ExternalResolver*(QString) > resolverFactory)
+{
+    m_resolverFactories << resolverFactory;
+}
+
+
 Tomahawk::ExternalResolver*
 Pipeline::addScriptResolver( const QString& path, bool start )
 {
     ExternalResolver* res = 0;
-#ifndef ENABLE_HEADLESS
-    const QFileInfo fi( path );
 
-    if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        res = new QtScriptResolver( path );
-    else
-        res = new ScriptResolver( path );
+    Q_FOREACH(boost::function<Tomahawk::ExternalResolver*(QString)> factory, m_resolverFactories)
+    {
+        res = factory( path );
 
-    m_scriptResolvers << res;
-    if ( start )
-        res->start();
-#endif
+        if( !res )
+            continue;
+
+        m_scriptResolvers << res;
+        if ( start )
+            res->start();
+    }
 
     return res;
 }

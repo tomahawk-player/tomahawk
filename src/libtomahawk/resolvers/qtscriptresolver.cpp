@@ -194,10 +194,8 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-#ifndef ENABLE_HEADLESS
 #ifdef DEBUG_BUILD
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
-#endif
 #endif
 }
 
@@ -231,6 +229,22 @@ QtScriptResolver::~QtScriptResolver()
     Tomahawk::Pipeline::instance()->removeResolver( this );
     delete m_engine;
 }
+
+
+Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath )
+{
+    ExternalResolver* res = 0;
+
+    const QFileInfo fi( scriptPath );
+    if ( fi.suffix() == "js" || fi.suffix() == "script" )
+    {
+        res = new QtScriptResolver( scriptPath );
+        tLog() << Q_FUNC_INFO << scriptPath << "Loaded.";
+    }
+
+    return res;
+}
+
 
 bool
 QtScriptResolver::running() const

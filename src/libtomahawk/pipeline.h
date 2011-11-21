@@ -19,14 +19,16 @@
 #ifndef PIPELINE_H
 #define PIPELINE_H
 
+#include "typedefs.h"
+#include "query.h"
+
 #include <QObject>
 #include <QList>
 #include <QMap>
 #include <QMutex>
 #include <QTimer>
 
-#include "typedefs.h"
-#include "query.h"
+#include <boost/function.hpp>
 
 #include "dllmacro.h"
 
@@ -50,6 +52,7 @@ public:
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
+    void addExternalResolverFactory( boost::function<Tomahawk::ExternalResolver*(QString)> resolverFactory );
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
@@ -101,7 +104,7 @@ private:
 
     QList< Resolver* > m_resolvers;
     QList< Tomahawk::ExternalResolver* > m_scriptResolvers;
-
+    QList< boost::function<Tomahawk::ExternalResolver*(QString)> > m_resolverFactories;
     QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;

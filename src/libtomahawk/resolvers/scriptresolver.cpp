@@ -79,6 +79,22 @@ ScriptResolver::~ScriptResolver()
         delete m_configWidget.data();
 }
 
+Tomahawk::ExternalResolver*
+ScriptResolver::factory(const QString& exe)
+{
+    ExternalResolver* res = 0;
+
+    const QFileInfo fi( exe );
+    if ( fi.suffix() != "js" && fi.suffix() != "script" )
+    {
+        res = new ScriptResolver( exe );
+        tLog() << Q_FUNC_INFO << exe << "Loaded.";
+    }
+
+    return res;
+}
+
+
 void
 ScriptResolver::start()
 {

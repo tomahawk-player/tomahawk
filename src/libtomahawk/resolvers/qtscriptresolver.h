@@ -123,6 +123,7 @@ friend class ::QtScriptResolverHelper;
 public:
     explicit QtScriptResolver( const QString& scriptPath );
     virtual ~QtScriptResolver();
+    static ExternalResolver* factory( const QString& scriptPath );
 
     virtual QString name() const         { return m_name; }
     virtual unsigned int weight() const  { return m_weight; }
