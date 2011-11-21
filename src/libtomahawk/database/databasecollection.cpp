@@ -132,7 +132,6 @@ DatabaseCollection::stations()
 void
 DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {
-#ifndef ENABLE_HEADLESS
     dynplaylist_ptr p( new DynamicPlaylist( source,                  //src
                                             data[0].toString(),  //current rev
                                             data[1].toString(),  //title
@@ -145,14 +144,12 @@ DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVarian
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ) );  //GUID
     addAutoPlaylist( p );
-#endif
 }
 
 
 void
 DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList& data )
 {
-#ifndef ENABLE_HEADLESS
     dynplaylist_ptr p( new DynamicPlaylist( source,                  //src
                                             data[0].toString(),  //current rev
                                             data[1].toString(),  //title
@@ -165,7 +162,6 @@ DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ) );  //GUID
     addStation( p );
-#endif
 }
 
 

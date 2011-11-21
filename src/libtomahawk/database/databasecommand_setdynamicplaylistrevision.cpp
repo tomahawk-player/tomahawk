@@ -87,7 +87,6 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
-#ifndef ENABLE_HEADLESS
     if ( source().isNull() || source()->collection().isNull() )
     {
         tDebug() << "Source has gone offline, not emitting to GUI.";
@@ -173,7 +172,6 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
-#endif
 }
 
 
