@@ -44,7 +44,7 @@ LoadXSPFDialog::~LoadXSPFDialog()
 void
 LoadXSPFDialog::getLocalFile()
 {
-    QString url = QFileDialog::getOpenFileName( this, tr( "Load XSPF File" ), QDir::homePath(), ".xspf" );
+    QString url = QFileDialog::getOpenFileName( this, tr( "Load XSPF File" ), QDir::homePath(), tr( "XSPF Files (*.xspf)" ) );
     m_ui->lineEdit->setText( url );
 }
 
