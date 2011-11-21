@@ -104,6 +104,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
     else
     {
+        tDebug() << "Playlist:" << m_playlistguid << m_currentRevision << source()->friendlyName() << source()->id();
         throw "No such playlist, WTF?";
         return;
     }

@@ -20,10 +20,10 @@
 #include "tomahawkapp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "ubuntuunityhack.h"
+
 #include <QTranslator>
 
-
-#include "ubuntuunityhack.h"
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -70,7 +70,6 @@ main( int argc, char *argv[] )
         a.init();
 
     QString locale = QLocale::system().name();
-
     QTranslator translator;
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );

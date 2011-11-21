@@ -294,6 +294,7 @@ void
 Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries )
 {
     tDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
+    Q_ASSERT( m_source->isLocal() || newrev == oldrev );
 
     if ( busy() )
     {
