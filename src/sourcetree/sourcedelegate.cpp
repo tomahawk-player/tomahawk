@@ -431,7 +431,13 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
             if ( r.contains( ev->pos() ) )
             {
                 if ( event->type() == QEvent::MouseButtonRelease )
+                {
                     gpi->removeFromList();
+
+                    // Send a new mouse event to the view, since if the mouse is now over another item's delete area we want it to show up
+                    QMouseEvent* ev = new QMouseEvent( QEvent::MouseMove, m_parent->viewport()->mapFromGlobal( QCursor::pos() ), Qt::NoButton, Qt::NoButton, Qt::NoModifier );
+                    QApplication::postEvent( m_parent->viewport(), ev );
+                }
 
                 return true;
             }
