@@ -180,7 +180,7 @@ WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
         TrackModelItem* youngestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( 0, 0, QModelIndex() ) );
         if ( youngestItem->query()->playedBy().second <= playtime )
-            m_tracksModel->insert( 0, query );
+            m_tracksModel->insert( query, 0 );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -190,14 +190,14 @@ WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
                 if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
                 {
-                    m_tracksModel->insert( i + 1, query );
+                    m_tracksModel->insert( query, i + 1 );
                     break;
                 }
             }
         }
     }
     else
-        m_tracksModel->insert( 0, query );
+        m_tracksModel->insert( query, 0 );
 
     if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
         m_tracksModel->remove( HISTORY_TRACK_ITEMS );
