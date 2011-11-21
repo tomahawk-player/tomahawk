@@ -249,8 +249,8 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
 
             controlsQuery.exec();
         }
-
     }
+
     if ( m_applied )
     {
         tLog() << "updating dynamic playlist, optimistic locking okay";
