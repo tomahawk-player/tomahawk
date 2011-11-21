@@ -200,7 +200,7 @@ Source::setOnline()
     emit online();
 
     // ensure username is in the database
-    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
+    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
     connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

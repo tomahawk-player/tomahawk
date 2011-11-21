@@ -41,7 +41,7 @@ ControlConnection::ControlConnection( Servent* parent, const QHostAddress &ha )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
-    
+
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ) );
 
@@ -60,13 +60,13 @@ ControlConnection::ControlConnection( Servent* parent, const QString &ha )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
-    
+
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ) );
-    
+
     this->setMsgProcessorModeIn( MsgProcessor::UNCOMPRESS_ALL | MsgProcessor::PARSE_JSON );
     this->setMsgProcessorModeOut( MsgProcessor::COMPRESS_IF_LARGE );
-    
+
     if ( !ha.isEmpty() )
     {
         QHostAddress qha( ha );
@@ -133,6 +133,8 @@ ControlConnection::setup()
     }
     else
         friendlyName = name();
+
+    tDebug() << "Detected name:" << name() << friendlyName << m_sock->peerAddress();
 
     // setup source and remote collection for this peer
     m_source = SourceList::instance()->get( id(), friendlyName );

@@ -818,11 +818,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
     static QList<range> whitelist;
     if( whitelist.isEmpty() )
     {
-        whitelist   << range( QHostAddress( "10.0.0.0" ), 8 )
-                    << range( QHostAddress( "172.16.0.0" ), 12 )
-                    << range( QHostAddress( "192.168.0.0" ), 16 )
-                    << range( QHostAddress( "169.254.0.0" ), 16 )
-                    << range( QHostAddress( "127.0.0.0" ), 24 );
+        whitelist << range( QHostAddress( "10.0.0.0" ), 8 )
+                  << range( QHostAddress( "172.16.0.0" ), 12 )
+                  << range( QHostAddress( "192.168.0.0" ), 16 )
+                  << range( QHostAddress( "169.254.0.0" ), 16 )
+                  << range( QHostAddress( "127.0.0.0" ), 24 );
 
 //        tDebug( LOGVERBOSE ) << "Loaded whitelist IP range:" << whitelist;
     }
