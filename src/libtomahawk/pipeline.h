@@ -36,7 +36,7 @@ namespace Tomahawk
 {
 class Resolver;
 class ExternalResolver;
-typedef boost::function<boostcrap> ResolverFactoryFunc;
+typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
 
 class DLLEXPORT Pipeline : public QObject
 {
