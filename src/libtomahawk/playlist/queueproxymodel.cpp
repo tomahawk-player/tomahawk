@@ -44,7 +44,7 @@ void
 QueueProxyModel::onIndexActivated( const QModelIndex& index )
 {
     setCurrentIndex( QModelIndex() );
-    removeIndex( index );
+    remove( index );
 }
 
 
@@ -54,7 +54,7 @@ QueueProxyModel::siblingItem( int itemsAway )
     setCurrentIndex( QModelIndex() );
     Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
 
-    removeIndex( currentIndex() );
+    remove( currentIndex() );
 
     return res;
 }

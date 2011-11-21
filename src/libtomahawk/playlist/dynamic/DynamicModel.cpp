@@ -313,9 +313,9 @@ DynamicModel::removeIndex(const QModelIndex& idx, bool moreToCome)
         if( !moreToCome && idx == index( rowCount( QModelIndex() ) - 1, 0, QModelIndex() ) ) { // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
         }
-        TrackModel::removeIndex( idx );
+        TrackModel::remove( idx );
     } else
-        PlaylistModel::removeIndex( idx, moreToCome );
+        PlaylistModel::remove( idx, moreToCome );
     // don't call onPlaylistChanged.
 
     if( !moreToCome )

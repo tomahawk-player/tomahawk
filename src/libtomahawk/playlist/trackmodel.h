@@ -23,6 +23,7 @@
 
 #include "playlistinterface.h"
 #include "trackmodelitem.h"
+#include "typedefs.h"
 
 #include "dllmacro.h"
 
@@ -84,15 +85,12 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
+    virtual Tomahawk::QID currentItemUuid() { return m_currentUuid; }
 
     virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return Tomahawk::PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
     virtual void ensureResolved();
-
-    virtual void append( const Tomahawk::query_ptr& query ) = 0;
-    virtual void append( const Tomahawk::artist_ptr& artist ) = 0;
-    virtual void append( const Tomahawk::album_ptr& album ) = 0;
 
     TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
     TrackModelItem* m_rootItem;
@@ -109,8 +107,20 @@ signals:
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
-    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
-    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+    virtual void clear();
+
+    virtual void append( const QList< Tomahawk::query_ptr >& queries );
+    virtual void append( const Tomahawk::query_ptr& query );
+    virtual void append( const Tomahawk::artist_ptr& artist ) { Q_UNUSED( artist ); }
+    virtual void append( const Tomahawk::album_ptr& album ) { Q_UNUSED( album ); }
+
+    virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
+
+    virtual void remove( int row, bool moreToCome = false );
+    virtual void remove( const QModelIndex& index, bool moreToCome = false );
+    virtual void remove( const QList<QModelIndex>& indexes );
+    virtual void remove( const QList<QPersistentModelIndex>& indexes );
 
     virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
@@ -121,6 +131,8 @@ private slots:
 
 private:
     QPersistentModelIndex m_currentIndex;
+    Tomahawk::QID m_currentUuid;
+
     bool m_readOnly;
 
     QString m_title;

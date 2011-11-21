@@ -411,7 +411,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
     if ( action == Qt::MoveAction )
     {
-        m_proxyModel->removeIndexes( pindexes );
+        m_proxyModel->remove( pindexes );
     }
 }
 

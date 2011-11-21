@@ -108,6 +108,7 @@ public:
 
     static bool canParseSpotifyPlaylists() { return s_canParseSpotifyPlaylists; }
     static void setCanParseSpotifyPlaylists( bool parseable ) { s_canParseSpotifyPlaylists = parseable; }
+
 signals:
     /// QMimeData parsing results
     void tracks( const QList< Tomahawk::query_ptr >& tracks );

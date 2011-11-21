@@ -227,66 +227,48 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
 
 
 void
-TrackProxyModel::removeIndex( const QModelIndex& index )
+TrackProxyModel::remove( const QModelIndex& index )
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( !sourceModel() )
         return;
     if ( !index.isValid() )
         return;
 
-    sourceModel()->removeIndex( mapToSource( index ) );
+    sourceModel()->remove( mapToSource( index ) );
 }
 
 
 void
-TrackProxyModel::removeIndexes( const QModelIndexList& indexes )
+TrackProxyModel::remove( const QModelIndexList& indexes )
 {
     if ( !sourceModel() )
         return;
 
     QList<QPersistentModelIndex> pil;
-    foreach( const QModelIndex& idx, indexes )
+    foreach ( const QModelIndex& idx, indexes )
     {
-        if ( idx.isValid() && idx.column() == 0 )
+        if ( idx.isValid() )
             pil << mapToSource( idx );
     }
 
-    bool b = true;
-    foreach( const QPersistentModelIndex& idx, pil )
-    {
-        if ( idx == pil.last() )
-            b = false;
-
-        qDebug() << "b is:" << b;
-        sourceModel()->removeIndex( idx, b );
-    }
+    sourceModel()->remove( pil );
 }
 
 
 void
-TrackProxyModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
+TrackProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 {
     if ( !sourceModel() )
         return;
 
     QList<QPersistentModelIndex> pil;
-    foreach( const QModelIndex& idx, indexes )
+    foreach ( const QPersistentModelIndex& idx, indexes )
     {
-        if ( idx.isValid() && idx.column() == 0 )
+        if ( idx.isValid() )
             pil << mapToSource( idx );
     }
 
-    bool b = true;
-    foreach( const QPersistentModelIndex& idx, pil )
-    {
-        if ( idx == pil.last() )
-            b = false;
-
-        qDebug() << "b is:" << b;
-        sourceModel()->removeIndex( idx, b );
-    }
+    sourceModel()->remove( pil );
 }
 
 

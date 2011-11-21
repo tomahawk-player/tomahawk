@@ -47,11 +47,6 @@ public:
     explicit PlaylistModel( QObject* parent = 0 );
     ~PlaylistModel();
 
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-
-    QVariant data( const QModelIndex& index, int role ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-
     virtual QMimeData* mimeData ( const QModelIndexList& indexes ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
@@ -60,44 +55,47 @@ public:
     virtual void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
     void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 50 );
 
-    void clear();
-
-    void append( const Tomahawk::query_ptr& query );
-    void append( const Tomahawk::album_ptr& album );
-    void append( const Tomahawk::artist_ptr& artist );
-
-    void append( const QList< Tomahawk::query_ptr >& queries );
-
-    void insert( unsigned int row, const Tomahawk::query_ptr& query );
-
-    void remove( unsigned int row, bool moreToCome = false );
-    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     bool isTemporary() const;
+
+public slots:
+    virtual void clear();
+
+    virtual void append( const Tomahawk::query_ptr& query );
+    virtual void append( const Tomahawk::album_ptr& album );
+    virtual void append( const Tomahawk::artist_ptr& artist );
+    virtual void append( const QList< Tomahawk::query_ptr >& queries );
+    virtual void append( const QList< Tomahawk::plentry_ptr >& entries );
+
+    virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
+    virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insert( const QList< Tomahawk::plentry_ptr >& entries, int row = 0 );
+
+    virtual void remove( int row, bool moreToCome = false );
+    virtual void remove( const QModelIndex& index, bool moreToCome = false );
+    virtual void remove( const QList<QModelIndex>& indexes );
+    virtual void remove( const QList<QPersistentModelIndex>& indexes );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
-    void itemSizeChanged( const QModelIndex& index );
     void playlistDeleted();
     void playlistChanged();
 
 private slots:
     void onDataChanged();
-
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
-    void onPlaylistChanged();
-
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
-    void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
     void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
-
     void trackResolved( bool );
 
 private:
+    void beginPlaylistChanges();
+    void endPlaylistChanges();
+
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
     bool m_isTemporary;
+    bool m_changesOngoing;
     QList< Tomahawk::Query* > m_waitingForResolved;
     QStringList m_waitForRevision;
 
