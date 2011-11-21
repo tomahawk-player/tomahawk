@@ -21,9 +21,9 @@
 #include "whatshotwidget_p.h"
 #include "ui_whatshotwidget.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QStandardItem>
+#include <QPainter>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 #include "viewmanager.h"
 #include "sourcelist.h"
@@ -37,7 +37,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <pipeline.h>
+#include "pipeline.h"
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
@@ -110,6 +110,7 @@ WhatsHotWidget::~WhatsHotWidget()
     delete ui;
 }
 
+
 PlaylistInterface*
 WhatsHotWidget::playlistInterface() const
 {
@@ -128,6 +129,7 @@ WhatsHotWidget::isBeingPlayed() const
 
     return false;
 }
+
 
 bool
 WhatsHotWidget::jumpToCurrentTrack()
@@ -159,15 +161,13 @@ WhatsHotWidget::fetchData()
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
 
+
 void
 WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     if ( requestData.caller != s_whatsHotIdentifier )
-    {
         return;
-    }
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got something...";
     if ( !output.canConvert< QVariantMap >() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output";
@@ -175,15 +175,11 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     }
 
     QVariantMap returnedData = output.toMap();
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot::" << returnedData;
     switch ( requestData.type )
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            tDebug( LOGVERBOSE ) << "WhatsHot:: info chart capabilities";
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
-            tDebug( LOGVERBOSE ) << "WhatsHot:: " << returnedData.keys();
-
             QVariantMap defaults;
             if ( returnedData.contains( "defaults" ) )
                 defaults = returnedData.take( "defaults" ).toMap();
@@ -191,9 +187,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
             foreach ( const QString label, returnedData.keys() )
             {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot:: parsing " << label;
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot:: appending" << childItem->text();
                 rootItem->appendRow(childItem);
             }
 
@@ -204,7 +198,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 QStandardItem* source = rootItem->child( i, 0 );
                 if ( defaultSource.toLower() == source->text().toLower() )
                 {
-                    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Setting DEFAULT SOURCE:" << source->text();
                     source->setData( true, Breadcrumb::DefaultRole );
                 }
 
@@ -220,7 +213,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         {
                             if ( cur->child( k, 0 )->text() == index )
                             {
-                                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found DEFAULT ITEM:" << index;
                                 cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
                                 cur->setData( true, Breadcrumb::DefaultRole );
                                 break;
@@ -235,6 +227,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             ui->breadCrumbLeft->setModel( m_sortedProxy );
             break;
         }
+
         case InfoSystem::InfoChart:
         {
             if( !returnedData.contains("type") )
@@ -246,11 +239,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
             m_queuedFetches.remove( chartId );
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" )
             {
                 const QStringList artists = returnedData["artists"].toStringList();
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got artists! " << artists.size();
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setColumnStyle( TreeModel::TrackOnly );
@@ -269,7 +260,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             {
                 QList<album_ptr> al;
                 const QList< Tomahawk::InfoSystem::InfoStringHash > albums = returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got albums! " << albums.size();
 
                 AlbumModel* albumModel = new AlbumModel( ui->additionsView );
                 foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, albums )
@@ -280,7 +270,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                     al << albumPtr;
 
                 }
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding albums to model";
                 albumModel->addAlbums( al );
 
                 m_albumModels[ chartId ] = albumModel;
@@ -291,7 +280,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             else if( type == "tracks" )
             {
                 const QList< Tomahawk::InfoSystem::InfoStringHash > tracks = returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
-                tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );

@@ -96,8 +96,12 @@ signals:
 
     void loadingStarted();
     void loadingFinished();
+
 private slots:
     void onDataChanged();
+
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+    void onCollectionChanged();
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
@@ -109,6 +113,8 @@ private:
     QString m_title;
     QString m_description;
     bool m_overwriteOnAdd;
+
+    Tomahawk::collection_ptr m_collection;
 
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
 };

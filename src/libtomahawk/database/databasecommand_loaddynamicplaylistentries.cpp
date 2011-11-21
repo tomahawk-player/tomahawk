@@ -100,7 +100,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
 
     if( mode == OnDemand )
     {
-        Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
+//        Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
 
         emit done( revisionGuid(), m_islatest, type, controls, true );
     }

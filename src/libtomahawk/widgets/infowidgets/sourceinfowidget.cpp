@@ -26,6 +26,7 @@
 #include "playlist/collectionflatmodel.h"
 #include "playlist/playlistmodel.h"
 
+#include "database/database.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
 
@@ -38,6 +39,7 @@
 SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::SourceInfoWidget )
+    , m_source( source )
 {
     ui->setupUi( this );
 
@@ -56,7 +58,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     m_recentCollectionModel->setStyle( TrackModel::Short );
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
-    m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
+    loadTracks();
 
     m_historyModel = new PlaylistModel( ui->historyView );
     m_historyModel->setStyle( TrackModel::Short );
@@ -87,6 +89,29 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 SourceInfoWidget::~SourceInfoWidget()
 {
     delete ui;
+}
+
+
+void
+SourceInfoWidget::loadTracks()
+{
+    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_source->collection() );
+    cmd->setLimit( 250 );
+    cmd->setSortOrder( DatabaseCommand_AllTracks::ModificationTime );
+    cmd->setSortDescending( true );
+
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                    SLOT( onLoadedTrackHistory( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+SourceInfoWidget::onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& queries )
+{
+    m_recentCollectionModel->clear();
+    m_recentCollectionModel->append( queries );
 }
 
 
