@@ -103,6 +103,7 @@ private slots:
 
     void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
+    void steeringChanged();
     void showPreview();
 
     void layoutFloatingWidgets();

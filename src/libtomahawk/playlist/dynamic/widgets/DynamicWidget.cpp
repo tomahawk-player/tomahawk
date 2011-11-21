@@ -324,6 +324,8 @@ DynamicWidget::startStation()
         m_steering = m_playlist->generator()->steeringWidget();
         Q_ASSERT( m_steering );
 
+        connect( m_steering, SIGNAL( steeringChanged() ), this, SLOT( steeringChanged() ) );
+
         int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
         int y = height() - m_steering->size().height() - 40; // padding
 
@@ -392,6 +394,25 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
     showPreview();
 
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
+}
+
+void
+DynamicWidget::steeringChanged()
+{
+    // When steering changes, toss all the tracks that are upcoming, and re-fetch.
+    QModelIndex cur = m_view->currentIndex();
+    const int upcoming = m_view->proxyModel()->rowCount( QModelIndex() ) - 1 - cur.row();
+    tDebug() << "Removing tracks after current in station, found" << upcoming;
+
+    QModelIndexList toRemove;
+    for ( int i = cur.row() + 1; i < m_view->proxyModel()->rowCount( QModelIndex() ); i++ )
+    {
+        toRemove << m_view->proxyModel()->index( i, 0, QModelIndex() );
+    }
+
+    m_view->proxyModel()->removeIndexes( toRemove );
+
+    m_playlist->generator()->fetchNext();
 }
 
 

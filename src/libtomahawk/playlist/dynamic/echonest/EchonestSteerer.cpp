@@ -218,6 +218,8 @@ EchonestSteerer::applySteering()
         }
     }
 
+    emit steeringChanged();
+
     resetSteering( true );
 }
 
