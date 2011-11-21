@@ -60,7 +60,7 @@ public:
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
     virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
+    virtual bool groupable() const { return false; }
 
     void setControlsV( const QVariantList& vlist )
     {
