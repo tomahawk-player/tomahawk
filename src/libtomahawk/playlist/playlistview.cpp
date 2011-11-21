@@ -94,7 +94,7 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
     if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !model()->isReadOnly() )
     {
         qDebug() << "Removing selected items";
-        proxyModel()->removeIndexes( selectedIndexes() );
+        proxyModel()->remove( selectedIndexes() );
     }
 }
 
@@ -102,8 +102,9 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
 void
 PlaylistView::deleteItems()
 {
-    proxyModel()->removeIndexes( selectedIndexes() );
+    proxyModel()->remove( selectedIndexes() );
 }
+
 
 bool
 PlaylistView::canAutoUpdate() const
@@ -113,6 +114,7 @@ PlaylistView::canAutoUpdate() const
 
     return false;
 }
+
 
 bool
 PlaylistView::autoUpdate() const

@@ -230,6 +230,7 @@ QVariant
 TrackModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     Q_UNUSED( orientation );
+
     QStringList headers;
     headers << tr( "Artist" ) << tr( "Title" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
     if ( role == Qt::DisplayRole && section >= 0 )
@@ -244,7 +245,6 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 void
 TrackModel::setCurrentItem( const QModelIndex& index )
 {
-    qDebug() << Q_FUNC_INFO;
     TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
@@ -255,11 +255,13 @@ TrackModel::setCurrentItem( const QModelIndex& index )
     if ( entry )
     {
         m_currentIndex = index;
+        m_currentUuid = entry->query()->id();
         entry->setIsPlaying( true );
     }
     else
     {
         m_currentIndex = QModelIndex();
+        m_currentUuid = QString();
     }
 }
 
@@ -322,16 +324,96 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
 
 
 void
-TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
+TrackModel::clear()
+{
+    if ( rowCount( QModelIndex() ) )
+    {
+        emit loadingFinished();
+
+        emit beginResetModel();
+        delete m_rootItem;
+        m_rootItem = 0;
+        m_rootItem = new TrackModelItem( 0, this );
+        emit endResetModel();
+    }
+}
+
+
+void
+TrackModel::append( const Tomahawk::query_ptr& query )
+{
+    insert( query, rowCount( QModelIndex() ) );
+}
+
+
+void
+TrackModel::append( const QList< Tomahawk::query_ptr >& queries )
+{
+    insert( queries, rowCount( QModelIndex() ) );
+}
+
+
+void
+TrackModel::insert( const Tomahawk::query_ptr& query, int row )
+{
+    if ( query.isNull() )
+        return;
+
+    QList< Tomahawk::query_ptr > ql;
+    ql << query;
+
+    insert( ql, row );
+}
+
+
+void
+TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
+{
+    if ( !queries.count() )
+        return;
+
+    int c = row;
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + queries.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    int i = 0;
+    TrackModelItem* plitem;
+    foreach( const query_ptr& query, queries )
+    {
+        plitem = new TrackModelItem( query, m_rootItem, row + i );
+        plitem->index = createIndex( row + i, 0, plitem );
+        i++;
+
+        if ( query->id() == currentItemUuid() )
+            setCurrentItem( plitem->index );
+
+        connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    emit endInsertRows();
+    emit trackCountChanged( rowCount( QModelIndex() ) );
+}
+
+
+void
+TrackModel::remove( int row, bool moreToCome )
+{
+    remove( index( row, 0, QModelIndex() ), moreToCome );
+}
+
+
+void
+TrackModel::remove( const QModelIndex& index, bool moreToCome )
 {
     if ( QThread::currentThread() != thread() )
     {
-//        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "removeIndex",
+        QMetaObject::invokeMethod( this, "remove",
                                    Qt::QueuedConnection,
                                    Q_ARG(const QModelIndex, index),
-                                   Q_ARG(bool, moreToCome)
-                                 );
+                                   Q_ARG(bool, moreToCome) );
         return;
     }
 
@@ -346,24 +428,49 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
         emit endRemoveRows();
     }
 
-    emit trackCountChanged( rowCount( QModelIndex() ) );
+    if ( !moreToCome )
+        emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
 void
-TrackModel::removeIndexes( const QList<QModelIndex>& indexes )
+TrackModel::remove( const QList<QModelIndex>& indexes )
 {
-    foreach( const QModelIndex& idx, indexes )
+    QList<QPersistentModelIndex> pil;
+    foreach ( const QModelIndex& idx, indexes )
     {
-        removeIndex( idx );
+        pil << idx;
+    }
+
+    remove( pil );
+}
+
+
+void
+TrackModel::remove( const QList<QPersistentModelIndex>& indexes )
+{
+    QList<QPersistentModelIndex> finalIndexes;
+    foreach ( const QPersistentModelIndex index, indexes )
+    {
+        if ( index.column() > 0 )
+            continue;
+        finalIndexes << index;
+    }
+
+    for ( int i = 0; i < finalIndexes.count(); i++ )
+    {
+        remove( finalIndexes.at( i ), i + 1 != finalIndexes.count() );
     }
 }
+
 
 TrackModelItem*
 TrackModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
+    {
         return static_cast<TrackModelItem*>( index.internalPointer() );
+    }
     else
     {
         return m_rootItem;

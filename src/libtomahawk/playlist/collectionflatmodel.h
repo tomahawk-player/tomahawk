@@ -46,15 +46,8 @@ public:
     virtual int trackCount() const { return rowCount( QModelIndex() ) + m_tracksToAdd.count(); }
 
     void addCollections( const QList< Tomahawk::collection_ptr >& collections );
-
     void addCollection( const Tomahawk::collection_ptr& collection, bool sendNotifications = true );
-    void removeCollection( const Tomahawk::collection_ptr& collection );
-
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
-
-    virtual void append( const Tomahawk::query_ptr& /*query*/ ) {}
-    virtual void append( const Tomahawk::artist_ptr& /*artist*/ ) {}
-    virtual void append( const Tomahawk::album_ptr& /*album*/ ) {}
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
@@ -69,10 +62,6 @@ private slots:
 
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks );
-
-    void onSourceOffline( const Tomahawk::source_ptr& src );
-
-    void processTracksToAdd();
 
 private:
     QMap< Tomahawk::collection_ptr, QPair< int, int > > m_collectionRows;

@@ -39,9 +39,8 @@ using namespace Tomahawk;
 PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
     , m_isTemporary( false )
+    , m_changesOngoing( false )
 {
-    qDebug() << Q_FUNC_INFO;
-
     m_dropStorage.parent = QPersistentModelIndex();
     m_dropStorage.row = -10;
 
@@ -54,34 +53,9 @@ PlaylistModel::~PlaylistModel()
 }
 
 
-int
-PlaylistModel::columnCount( const QModelIndex& parent ) const
-{
-    return TrackModel::columnCount( parent );
-}
-
-
-QVariant
-PlaylistModel::data( const QModelIndex& index, int role ) const
-{
-    return TrackModel::data( index, role );
-}
-
-
-QVariant
-PlaylistModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    return TrackModel::headerData( section, orientation, role );
-}
-
-
 void
 PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
-    QString currentuuid;
-    if ( currentItem().isValid() )
-        currentuuid = itemFromIndex( currentItem() )->query()->id();
-
     if ( !m_playlist.isNull() )
     {
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
@@ -89,10 +63,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         disconnect( m_playlist.data(), SIGNAL( changed() ), this, SIGNAL( playlistChanged() ) );
     }
 
-    if ( rowCount( QModelIndex() ) && loadEntries )
-    {
+    if ( loadEntries )
         clear();
-    }
 
     m_playlist = playlist;
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
@@ -109,45 +81,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     if ( !loadEntries )
         return;
 
-    TrackModelItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
-    if ( entries.count() )
-    {
-        int c = rowCount( QModelIndex() );
-
-        qDebug() << "Starting loading" << playlist->title();
-        emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
-
-        m_waitingForResolved.clear();
-        foreach( const plentry_ptr& entry, entries )
-        {
-//            qDebug() << entry->query()->toString();
-            plitem = new TrackModelItem( entry, m_rootItem );
-            plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
-
-            connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-
-            if ( entry->query()->id() == currentuuid )
-                setCurrentItem( plitem->index );
-
-            if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
-            {
-                m_waitingForResolved.append( entry->query().data() );
-                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
-            }
-        }
-
-        emit endInsertRows();
-    }
-    else
-        qDebug() << "Playlist seems empty:" << playlist->title();
-
-    if ( !m_waitingForResolved.isEmpty() )
-    {
-        emit loadingStarted();
-    }
-
-    emit trackCountChanged( rowCount( QModelIndex() ) );
+    append( entries );
 }
 
 
@@ -165,7 +100,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
     cmd->setLimit( amount );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
-                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+                    SLOT( append( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -174,22 +109,23 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
 void
 PlaylistModel::clear()
 {
-    if ( rowCount( QModelIndex() ) )
-    {
-        emit loadingFinished();
+    TrackModel::clear();
 
-        emit beginResetModel();
-        delete m_rootItem;
-        m_rootItem = 0;
-        m_rootItem = new TrackModelItem( 0, this );
-        emit endResetModel();
-    }
+    m_waitingForResolved.clear();
 }
+
+
+void
+PlaylistModel::append( const QList< plentry_ptr >& entries )
+{
+    insert( entries, rowCount( QModelIndex() ) );
+}
+
 
 void
 PlaylistModel::append( const QList< query_ptr >& queries )
 {
-    onTracksAdded( queries );
+    insert( queries, rowCount( QModelIndex() ) );
 }
 
 
@@ -199,13 +135,10 @@ PlaylistModel::append( const Tomahawk::query_ptr& query )
     if ( query.isNull() )
         return;
 
-    QList< Tomahawk::query_ptr > ql;
-    ql << query;
-
     if ( !query->resolvingFinished() )
         Pipeline::instance()->resolve( query );
 
-    onTracksAdded( ql );
+    TrackModel::append( query );
 }
 
 
@@ -225,7 +158,7 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
         m_isTemporary = true;
     }
 
-    onTracksAdded( album->tracks() );
+    append( album->tracks() );
 }
 
 
@@ -245,20 +178,83 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
         m_isTemporary = true;
     }
 
-    onTracksAdded( artist->tracks() );
+    append( artist->tracks() );
 }
 
 
 void
-PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
+PlaylistModel::insert( const Tomahawk::query_ptr& query, int row )
 {
-    if ( query.isNull() )
+    TrackModel::insert( query, row );
+}
+
+
+void
+PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
+{
+    if ( !queries.count() )
         return;
 
-    QList< Tomahawk::query_ptr > ql;
-    ql << query;
+    QList< Tomahawk::plentry_ptr > entries;
+    foreach( const query_ptr& query, queries )
+    {
+        plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
-    onTracksInserted( row, ql );
+        if ( query->results().count() )
+            entry->setDuration( query->results().at( 0 )->duration() );
+        else
+            entry->setDuration( 0 );
+
+        entry->setLastmodified( 0 );
+        entry->setAnnotation( "" ); // FIXME
+        entry->setQuery( query );
+        entry->setGuid( uuid() );
+
+        entries << entry;
+    }
+
+    insert( entries, row );
+}
+
+
+void
+PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
+{
+    if ( !entries.count() )
+        return;
+
+    int c = row;
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + entries.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    int i = 0;
+    TrackModelItem* plitem;
+    foreach( const plentry_ptr& entry, entries )
+    {
+        plitem = new TrackModelItem( entry, m_rootItem, row + i );
+        plitem->index = createIndex( row + i, 0, plitem );
+        i++;
+
+        if ( entry->query()->id() == currentItemUuid() )
+            setCurrentItem( plitem->index );
+
+        if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
+        {
+            m_waitingForResolved.append( entry->query().data() );
+            connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
+        }
+
+        connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    if ( !m_waitingForResolved.isEmpty() )
+        emit loadingStarted();
+
+    emit endInsertRows();
+    emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -283,52 +279,8 @@ PlaylistModel::trackResolved( bool )
 
 
 void
-PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
-{
-    onTracksInserted( rowCount( QModelIndex() ), tracks );
-}
-
-
-void
-PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks )
-{
-    if ( !tracks.count() )
-    {
-        emit trackCountChanged( rowCount( QModelIndex() ) );
-        return;
-    }
-
-    int c = row;
-    QPair< int, int > crows;
-    crows.first = c;
-    crows.second = c + tracks.count() - 1;
-
-    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
-
-    int i = 0;
-    TrackModelItem* plitem;
-    foreach( const query_ptr& query, tracks )
-    {
-        plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
-        entry->setQuery( query );
-
-        plitem = new TrackModelItem( entry, m_rootItem, row + i );
-        plitem->index = createIndex( row + i, 0, plitem );
-
-        i++;
-
-        connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-    }
-
-    emit endInsertRows();
-    emit trackCountChanged( rowCount( QModelIndex() ) );
-}
-
-
-void
 PlaylistModel::onDataChanged()
 {
-    qDebug() << Q_FUNC_INFO;
     TrackModelItem* p = (TrackModelItem*)sender();
     if ( p && p->index.isValid() )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
@@ -384,14 +336,16 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     // so check if the drag originated in this playlist to determine whether or not to copy
 #ifdef Q_WS_MAC
     if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
-         ( !m_playlist.isNull() && data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() ) )
+       ( !m_playlist.isNull() && data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() ) )
+    {
         dj->setDropAction( DropJob::Append );
+    }
 #else
     if ( action & Qt::CopyAction )
         dj->setDropAction( DropJob::Append );
 #endif
 
-    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     dj->tracksFromMimeData( data );
 
     return true;
@@ -412,44 +366,13 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
     else
         beginRow = rowCount( QModelIndex() );
 
-//    qDebug() << data->formats();
-    QString currentuuid;
-    if ( currentItem().isValid() )
-        currentuuid = itemFromIndex( currentItem() )->query()->id();
-
     if ( tracks.count() )
     {
-        emit beginInsertRows( QModelIndex(), beginRow, beginRow + tracks.count() - 1 );
-        foreach( const Tomahawk::query_ptr& query, tracks )
-        {
-            plentry_ptr e( new PlaylistEntry() );
-            e->setGuid( uuid() );
+        bool update = ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction );
+        if ( update )
+            beginPlaylistChanges();
 
-            if ( query->results().count() )
-                e->setDuration( query->results().at( 0 )->duration() );
-            else
-                e->setDuration( 0 );
-
-            e->setLastmodified( 0 );
-            e->setAnnotation( "" ); // FIXME
-            e->setQuery( query );
-
-            TrackModelItem* plitem = new TrackModelItem( e, m_rootItem, beginRow );
-            plitem->index = createIndex( beginRow++, 0, plitem );
-
-            if ( query->id() == currentuuid )
-                setCurrentItem( plitem->index );
-
-            connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-        }
-        emit endInsertRows();
-
-        if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
-        {
-            onPlaylistChanged();
-            emit trackCountChanged( rowCount( QModelIndex() ) );
-        }
-
+        insert( tracks, beginRow );
     }
 
     m_dropStorage.parent = QPersistentModelIndex();
@@ -458,8 +381,26 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 
 
 void
-PlaylistModel::onPlaylistChanged()
+PlaylistModel::beginPlaylistChanges()
 {
+    Q_ASSERT( !m_changesOngoing );
+    m_changesOngoing = true;
+}
+
+
+void
+PlaylistModel::endPlaylistChanges()
+{
+    if ( m_changesOngoing )
+    {
+        m_changesOngoing = false;
+    }
+    else
+    {
+        tDebug() << "Called" << Q_FUNC_INFO << "unexpectedly!";
+        Q_ASSERT( false );
+    }
+
     if ( m_playlist.isNull() )
         return;
 
@@ -505,16 +446,17 @@ PlaylistModel::playlistEntries() const
 
 
 void
-PlaylistModel::remove( unsigned int row, bool moreToCome )
+PlaylistModel::remove( int row, bool moreToCome )
 {
-    removeIndex( index( row, 0, QModelIndex() ), moreToCome );
+    TrackModel::remove( row, moreToCome );
 }
 
 
 void
-PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
+PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 {
     TrackModelItem* item = itemFromIndex( index );
+
     if ( item && m_waitingForResolved.contains( item->query().data() ) )
     {
         m_waitingForResolved.removeAll( item->query().data() );
@@ -522,12 +464,27 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
             emit loadingFinished();
     }
 
-    TrackModel::removeIndex( index );
+    if ( !m_changesOngoing )
+        beginPlaylistChanges();
 
-    if ( !moreToCome && !m_playlist.isNull() )
-    {
-        onPlaylistChanged();
-    }
+    TrackModel::remove( index, moreToCome );
+
+    if ( !moreToCome )
+        endPlaylistChanges();
+}
+
+
+void
+PlaylistModel::remove( const QList<QModelIndex>& indexes )
+{
+    TrackModel::remove( indexes );
+}
+
+
+void
+PlaylistModel::remove( const QList<QPersistentModelIndex>& indexes )
+{
+    TrackModel::remove( indexes );
 }
 
 
