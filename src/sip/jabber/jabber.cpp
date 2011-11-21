@@ -472,7 +472,7 @@ JabberPlugin::showAddFriendDialog()
 #ifndef ENABLE_HEADLESS
     bool ok;
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
-                                        tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok );
+                                        tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok ).trimmed();
     if ( !ok )
         return;
 

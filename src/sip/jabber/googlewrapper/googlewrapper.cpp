@@ -72,7 +72,7 @@ GoogleWrapper::showAddFriendDialog()
 {
     bool ok;
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
-                                        tr( "Enter Google Address:" ), QLineEdit::Normal, "", &ok );
+                                        tr( "Enter Google Address:" ), QLineEdit::Normal, "", &ok ).trimmed();
     if ( !ok )
         return;
 
