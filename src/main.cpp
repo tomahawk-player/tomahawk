@@ -64,7 +64,7 @@ main( int argc, char *argv[] )
     if ( guard.isPrimaryInstance() )
         a.init();
 
-    QString locale = QLocale::c().name();
+    QString locale = QLocale::system().name();
     if ( locale == "C" )
         locale = "en";
     QTranslator translator;
