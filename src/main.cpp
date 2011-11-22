@@ -64,10 +64,13 @@ main( int argc, char *argv[] )
     if ( guard.isPrimaryInstance() )
         a.init();
 
-    QString locale = QLocale::system().name();
+    QString locale = QLocale::c().name();
+    if ( locale == "C" )
+        locale = "en";
     QTranslator translator;
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );
+    tDebug() << "Using locale:" << locale;
 
     if ( argc > 1 )
     {
