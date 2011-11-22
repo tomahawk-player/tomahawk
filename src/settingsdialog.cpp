@@ -471,6 +471,7 @@ SettingsDialog::onLastFmFinished()
 #endif
 }
 
+
 void
 SettingsDialog::addScriptResolver()
 {
@@ -499,13 +500,13 @@ SettingsDialog::removeScriptResolver()
     }
 }
 
+
 void
 SettingsDialog::getMoreResolvers()
 {
 #if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
     GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
-    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished(int)));
-
+    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished( int ) ) );
     diag->show();
 #elif defined(LIBATTICA_FOUND)
     GetNewStuffDialog diag( this );
@@ -515,6 +516,7 @@ SettingsDialog::getMoreResolvers()
 
 }
 
+
 #ifdef LIBATTICA_FOUND
 void
 SettingsDialog::atticaResolverInstalled( const QString& resolverId )
@@ -522,12 +524,14 @@ SettingsDialog::atticaResolverInstalled( const QString& resolverId )
     m_resolversModel->atticaResolverInstalled( resolverId );
 }
 
+
 void
 SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
 {
     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
 }
 #endif
+
 
 void
 SettingsDialog::scriptSelectionChanged()
@@ -541,6 +545,7 @@ SettingsDialog::scriptSelectionChanged()
         ui->removeScript->setEnabled( false );
     }
 }
+
 
 void
 SettingsDialog::getMoreResolversFinished( int ret )
@@ -572,7 +577,6 @@ SettingsDialog::openResolverConfig( const QString& resolver )
 
         dialog->show();
 #endif
-
     }
 }
 
@@ -693,7 +697,8 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
 
         handleSipPluginAdded( p, added );
 #endif
-    } else
+    }
+    else
     {
         // no config, so just add it
         added = true;
