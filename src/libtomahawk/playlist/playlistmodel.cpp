@@ -401,7 +401,7 @@ PlaylistModel::endPlaylistChanges()
         Q_ASSERT( false );
     }
 
-    if ( m_playlist.isNull() )
+    if ( m_playlist.isNull() || !m_playlist->author()->isLocal() )
         return;
 
     QList<plentry_ptr> l = playlistEntries();
