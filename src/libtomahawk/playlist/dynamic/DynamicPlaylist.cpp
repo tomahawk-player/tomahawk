@@ -172,7 +172,7 @@ DynamicPlaylist::createNewRevision( const QString& newUuid )
     }
     else if( mode() == OnDemand )
     {
-        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls());
+        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls() );
     }
 }
 

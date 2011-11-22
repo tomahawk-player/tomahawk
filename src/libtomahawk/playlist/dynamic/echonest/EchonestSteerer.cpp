@@ -60,10 +60,10 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     f.setBold( true );
     m_steerTop->setFont( f );
     m_textL->addWidget( m_steerTop );
-    m_steerBottom = new QLabel( tr( "Takes effect on track change" ), this );
-    f.setPointSize( f.pointSize() - 3 );
-    m_steerBottom->setFont( f );
-    m_textL->addWidget( m_steerBottom );
+//    m_steerBottom = new QLabel( tr( "Takes effect on track change" ), this );
+//    f.setPointSize( f.pointSize() - 3 );
+//    m_steerBottom->setFont( f );
+//    m_textL->addWidget( m_steerBottom );
 
     m_layout->addLayout( m_textL, 1 );
 
