@@ -286,46 +286,50 @@ AtticaManager::syncServerData()
 bool
 AtticaManager::newerVersion( const QString& older, const QString& newer ) const
 {
-    // Dumb version comparison. Expects two strings, X.Y and Z.V. Returns true if Z > v || Z == V && V > Y
-    // DOES NOT support X.Y.Z version strings
+    // Version comparison: turns X.Y.Z into XYZ (adding 0 to X.Y. and 00 to X respectively)
     if ( older.isEmpty() || newer.isEmpty() )
         return false;
 
-    QPair<int, int> oldVer, newVer;
-    QStringList parts = older.split( "." );
+    QString oldDigits = older;
+    oldDigits = oldDigits.replace( ".", "" );
+    int oldDigitsInt;
 
-    if ( parts.size() == 1 )
+    if ( oldDigits.size() == 1 )
     {
-        oldVer.first = parts[ 0 ].toInt();
-        oldVer.second = 0;
+        oldDigitsInt = oldDigits.append("00").toInt();
     }
-    else if ( parts.size() == 2 )
+    else if ( oldDigits.size() == 2 )
     {
-        oldVer.first = parts[ 0 ].toInt();
-        oldVer.second = parts[ 1 ].toInt();;
+        oldDigitsInt = oldDigits.append("0").toInt();
+    }
+    else if ( oldDigits.size() == 3 )
+    {
+        oldDigitsInt = oldDigits.toInt();
     }
     else
         return false;
+    
+    QString newDigits = newer;
+    newDigits = newDigits.replace( ".", "");
+    int newDigitsInt;
 
-    parts = newer.split( "." );
-    if ( parts.size() == 1 )
+    if ( newDigits.size() == 1 )
     {
-        newVer.first = parts[ 0 ].toInt();
-        newVer.second = 0;
+        newDigitsInt = newDigits.append("00").toInt();
     }
-    else if ( parts.size() == 2 )
+    else if ( newDigits.size() == 2 )
     {
-        newVer.first = parts[ 0 ].toInt();
-        newVer.second = parts[ 1 ].toInt();;
+        newDigitsInt = newDigits.append("0").toInt();
+    }
+    else if ( newDigits.size() == 3 )
+    {
+        newDigitsInt = newDigits.toInt();    
     }
     else
         return false;
 
     // Do the comparison
-    if ( newVer.first > oldVer.first )
-        return true;
-    if ( newVer.first == oldVer.first &&
-         newVer.second > oldVer.second )
+    if ( newDigitsInt > oldDigitsInt )
         return true;
 
     return false;
