@@ -19,9 +19,9 @@
 #include "audiocontrols.h"
 #include "ui_audiocontrols.h"
 
-#include <QNetworkReply>
-#include <QDropEvent>
-#include <QMouseEvent>
+#include <QtNetwork/QNetworkReply>
+#include <QtGui/QDropEvent>
+#include <QtGui/QMouseEvent>
 
 #include "audio/audioengine.h"
 #include "playlist/playlistview.h"
@@ -208,9 +208,11 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seekMsecs = -1;
-
+    
     ui->seekSlider->setVisible( true );
 
+    m_noTimeChange = false;
+    
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -377,9 +379,22 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
 
-    if ( m_sliderTimeLine.currentTime() > msElapsed || m_seekMsecs != -1 )
+    if ( m_noTimeChange )
+    {
+        if ( m_sliderTimeLine.currentTime() != msElapsed )
+        {
+            m_noTimeChange = false;
+            m_sliderTimeLine.resume();
+        }
+    }
+    else if ( m_sliderTimeLine.currentTime() >= msElapsed || m_seekMsecs != -1 )
     {
         m_sliderTimeLine.setPaused( true );
+
+        m_noTimeChange = false;
+        if ( m_sliderTimeLine.currentTime() == msElapsed )
+            m_noTimeChange = true;
+
         m_sliderTimeLine.setCurrentTime( msElapsed );
         m_seekMsecs = -1;
         if ( AudioEngine::instance()->state() != AudioEngine::Paused )

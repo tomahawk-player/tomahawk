@@ -19,8 +19,8 @@
 #ifndef AUDIOCONTROLS_H
 #define AUDIOCONTROLS_H
 
-#include <QWidget>
-#include <QTimeLine>
+#include <QtGui/QWidget>
+#include <QtCore/QTimeLine>
 
 #include "result.h"
 #include "playlistinterface.h"
@@ -95,6 +95,7 @@ private:
 
     QTimeLine m_sliderTimeLine;
     qint64 m_seekMsecs;
+    bool m_noTimeChange;
 };
 
 #endif // AUDIOCONTROLS_H
