@@ -208,8 +208,6 @@ Source::setOnline()
 void
 Source::dbLoaded( unsigned int id, const QString& fname )
 {
-    qDebug() << Q_FUNC_INFO << id << fname;
-
     m_id = id;
     setFriendlyName( fname );
 
@@ -247,6 +245,7 @@ void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
     Q_UNUSED( oldstate );
+
     QString msg;
     switch( newstate )
     {
