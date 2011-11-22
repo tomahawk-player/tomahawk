@@ -192,13 +192,19 @@ MusicScanner::listerFinished()
         m_filesToDelete << m_filemtimes[ key ].keys().first();
 
     commitBatch( m_scannedfiles, m_filesToDelete );
-    m_scannedfiles.clear();
-    m_filesToDelete.clear();
 
-    tDebug( LOGINFO ) << "Scanning complete, saving to database. ( scanned" << m_scanned << "skipped" << m_skipped << ")";
-    tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
-    foreach ( const QString& s, m_skippedFiles )
-        tDebug( LOGEXTRA ) << s;
+    if ( m_filesToDelete.length() || m_scannedfiles.length() )
+    {
+        m_scannedfiles.clear();
+        m_filesToDelete.clear();
+
+        tDebug( LOGINFO ) << "Scanning complete, saving to database. ( scanned" << m_scanned << "skipped" << m_skipped << ")";
+        tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
+        foreach ( const QString& s, m_skippedFiles )
+            tDebug( LOGEXTRA ) << s;
+    }
+    else
+        cleanup();
 }
 
 
