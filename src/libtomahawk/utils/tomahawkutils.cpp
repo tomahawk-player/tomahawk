@@ -218,8 +218,6 @@ ageToString( const QDateTime& time, bool appendAgoString )
         return QString();
 
     QDateTime now = QDateTime::currentDateTime();
-    QString agoToken = appendAgoString ? QString( " %1" ).arg( QObject::tr( "ago" ) ) : QString();
-
     int mins = time.secsTo( now ) / 60;
     int hours = mins / 60;
     int days = time.daysTo( now );
@@ -231,48 +229,50 @@ ageToString( const QDateTime& time, bool appendAgoString )
     {
         if ( years )
         {
-            if ( years > 1 )
-                return QObject::tr( "%1 years%2" ).arg( years ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%n year(s) ago", "", years );
             else
-                return QObject::tr( "%1 year%2" ).arg( years ).arg( agoToken );
+                return QObject::tr( "%n year(s)", "", years );
         }
 
         if ( months )
         {
-            if ( months > 1 )
-                return QObject::tr( "%1 months%2" ).arg( months ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%n month(s) ago", "", months );
             else
-                return QObject::tr( "%1 month%2" ).arg( months ).arg( agoToken );
+                return QObject::tr( "%n month(s)", "", months );
         }
 
         if ( weeks )
         {
-            if ( weeks > 1 )
-                return QObject::tr( "%1 weeks%2" ).arg( weeks ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%n week(s) ago", "", weeks );
             else
-                return QObject::tr( "%1 week%2" ).arg( weeks ).arg( agoToken );
+                return QObject::tr( "%n week(s)", "", weeks );
         }
 
         if ( days )
         {
-            if ( days > 1 )
-                return QObject::tr( "%1 days%2" ).arg( days ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%n day(s) ago", "", days );
             else if ( hours >= 24 )
-                return QObject::tr( "%1 day%2" ).arg( days ).arg( agoToken );
+                return QObject::tr( "%n day(s)", "", days );
         }
 
         if ( hours )
         {
-            if ( hours > 1 )
-                return QObject::tr( "%1 hours%2" ).arg( hours ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%n hour(s) ago", "", hours );
             else
-                return QObject::tr( "%1 hour%2" ).arg( hours ).arg( agoToken );
+                return QObject::tr( "%n hour(s)", "", hours );
         }
 
-        if ( mins )
+        if ( mins > 1 )
         {
-            if ( mins > 1 )
-                return QObject::tr( "%1 minutes%2" ).arg( mins ).arg( agoToken );
+            if ( appendAgoString )
+                return QObject::tr( "%1 minutes ago" ).arg( mins );
+            else
+                return QObject::tr( "%1 minutes" ).arg( mins );
         }
     }
 
