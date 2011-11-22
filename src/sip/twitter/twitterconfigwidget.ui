@@ -202,7 +202,7 @@
          <string>
 If you only want to post tweets, you're done.
 
-If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message.  You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
+If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</string>
         </property>
