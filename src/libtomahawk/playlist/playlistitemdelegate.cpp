@@ -185,9 +185,9 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
-            lowerText = QString( "played %1 by you" ).arg( playtime );
+            lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
         else
-            lowerText = QString( "played %1 by %2" ).arg( playtime ).arg( source->friendlyName() );
+            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
 
         if ( useAvatars )
             pixmap = source->avatar( Source::FancyStyle );
