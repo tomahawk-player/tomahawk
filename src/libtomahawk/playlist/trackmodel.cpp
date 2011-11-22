@@ -252,7 +252,7 @@ TrackModel::setCurrentItem( const QModelIndex& index )
     }
 
     TrackModelItem* entry = itemFromIndex( index );
-    if ( entry )
+    if ( index.isValid() && entry && !entry->query().isNull() )
     {
         m_currentIndex = index;
         m_currentUuid = entry->query()->id();
