@@ -806,6 +806,19 @@
     </message>
 </context>
 <context>
+    <name>PlaylistItemDelegate</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="188"/>
+        <source>played %1 by you</source>
+        <translation>odtworzone %1 przez ciebie</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="190"/>
+        <source>played %1 by %2</source>
+        <translation>odtworzone %1 przez %2</translation>
+    </message>
+</context>
+<context>
     <name>PlaylistModel</name>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="76"/>
