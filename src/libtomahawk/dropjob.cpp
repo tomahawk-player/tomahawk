@@ -424,7 +424,7 @@ DropJob::handleXspfs( const QString& fileUrls )
 {
     tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrls;
     bool error = false;
-    QStringList urls = fileUrls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    QStringList urls = fileUrls.split( QRegExp( "\n" ), QString::SkipEmptyParts );
 
     if ( dropAction() == Default )
         setDropAction( Create );
