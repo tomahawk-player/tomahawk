@@ -34,9 +34,11 @@
 #include "utils/xspfloader.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+
 using namespace Tomahawk;
 
 bool DropJob::s_canParseSpotifyPlaylists = false;
+
 
 DropJob::DropJob( QObject *parent )
     : QObject( parent )
@@ -50,10 +52,12 @@ DropJob::DropJob( QObject *parent )
 {
 }
 
+
 DropJob::~DropJob()
 {
     qDebug() << "destryong DropJob";
 }
+
 
 /// QMIMEDATA HANDLING
 
@@ -73,6 +77,7 @@ DropJob::mimeTypes()
 
     return mimeTypes;
 }
+
 
 bool
 DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType, DropJob::DropAction acceptedAction )
@@ -144,13 +149,14 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             return true;
     }
 
-    // We whitelist t.co and bit.ly (and j.mp) since they do some link checking. Often playable (e.g. spotify..) links hide behind them,
-    //  so we do an extra level of lookup
-    if ( url.contains( "bit.ly" ) || url.contains( "j.mp" ) || url.contains( "t.co" ) || url.contains( "rd.io" ) )
+    // We whitelist certain url-shorteners since they do some link checking. Often playable (e.g. spotify) links hide behind them,
+    // so we do an extra level of lookup
+    if ( ShortenedLinkParser::handlesUrl( url ) )
         return true;
 
     return false;
 }
+
 
 bool
 DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
@@ -168,11 +174,7 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
             return true;
 
-        // we don't know about these.. gotta say yes for now
-        if ( url.contains( "bit.ly" ) ||
-             url.contains( "j.mp" ) ||
-             url.contains( "t.co" ) ||
-             url.contains( "rd.io" ) )
+        if ( ShortenedLinkParser::handlesUrl( url ) )
             return true;
     }
 
@@ -185,6 +187,7 @@ DropJob::setGetWholeArtists( bool getWholeArtists )
 {
     m_getWholeArtists = getWholeArtists;
 }
+
 
 void
 DropJob::setGetWholeAlbums( bool getWholeAlbums )
@@ -215,6 +218,7 @@ DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool o
     }
 }
 
+
 void
 DropJob::parseMimeData( const QMimeData *data )
 {
@@ -242,6 +246,7 @@ DropJob::parseMimeData( const QMimeData *data )
 
     m_resultList.append( results );
 }
+
 
 QList< query_ptr >
 DropJob::tracksFromQueryList( const QMimeData* data )
@@ -281,6 +286,7 @@ DropJob::tracksFromQueryList( const QMimeData* data )
 
     return queries;
 }
+
 
 QList< query_ptr >
 DropJob::tracksFromResultList( const QMimeData* data )
@@ -323,6 +329,7 @@ DropJob::tracksFromResultList( const QMimeData* data )
     return queries;
 }
 
+
 QList< query_ptr >
 DropJob::tracksFromAlbumMetaData( const QMimeData *data )
 {
@@ -347,6 +354,7 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
     return queries;
 }
 
+
 QList< query_ptr >
 DropJob::tracksFromArtistMetaData( const QMimeData *data )
 {
@@ -370,6 +378,7 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
     }
     return queries;
 }
+
 
 QList< query_ptr >
 DropJob::tracksFromMixedData( const QMimeData *data )
@@ -419,6 +428,7 @@ DropJob::tracksFromMixedData( const QMimeData *data )
     return queries;
 }
 
+
 void
 DropJob::handleXspfs( const QString& fileUrls )
 {
@@ -431,8 +441,7 @@ DropJob::handleXspfs( const QString& fileUrls )
 
     foreach ( const QString& url, urls )
     {
-        XSPFLoader* l;
-
+        XSPFLoader* l = 0;
         QFile xspfFile( QUrl::fromUserInput( url ).toLocalFile() );
 
         if ( xspfFile.exists() )
@@ -441,9 +450,8 @@ DropJob::handleXspfs( const QString& fileUrls )
             tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
             l->load( xspfFile );
         }
-        else if( QUrl( url ).isValid() )
+        else if ( QUrl( url ).isValid() )
         {
-
             l = new XSPFLoader(  dropAction() == Create, this );
             tDebug( LOGINFO ) << "Loading remote xspf " << url;
             l->load( QUrl( url ) );
@@ -452,20 +460,17 @@ DropJob::handleXspfs( const QString& fileUrls )
         {
             error = true;
             tLog() << "Failed to load or parse dropped XSPF";
-
         }
 
-        if ( dropAction() == Append && !error )
+        if ( dropAction() == Append && !error && l )
         {
             qDebug() << Q_FUNC_INFO << "Trying to append xspf";
             connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
             m_queryCount++;
         }
-
-
     }
-
 }
+
 
 void
 DropJob::handleSpotifyUrls( const QString& urlsRaw )
@@ -491,6 +496,7 @@ DropJob::handleSpotifyUrls( const QString& urlsRaw )
 
     m_queryCount++;
 }
+
 
 void
 DropJob::handleRdioUrls( const QString& urlsRaw )
@@ -558,10 +564,8 @@ DropJob::handleTrackUrls( const QString& urls )
         m_queryCount++;
 
         rdio->parse( tracks );
-    } else if ( urls.contains( "bit.ly" ) ||
-        urls.contains( "j.mp" ) ||
-        urls.contains( "t.co" ) ||
-        urls.contains( "rd.io" ) )
+    }
+    else if ( ShortenedLinkParser::handlesUrl( urls ) )
     {
         QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
@@ -572,12 +576,14 @@ DropJob::handleTrackUrls( const QString& urls )
     }
 }
 
+
 void
 DropJob::expandedUrls( QStringList urls )
 {
     m_queryCount--;
     handleAllUrls( urls.join( "\n" ) );
 }
+
 
 void
 DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
@@ -603,6 +609,7 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
     }
 }
 
+
 void
 DropJob::removeDuplicates()
 {
@@ -621,6 +628,7 @@ DropJob::removeDuplicates()
     m_resultList = list;
 }
 
+
 void
 DropJob::removeRemoteSources()
 {
@@ -638,6 +646,7 @@ DropJob::removeRemoteSources()
     }
     m_resultList = list;
 }
+
 
 void
 DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
@@ -668,6 +677,7 @@ DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVar
     }
 }
 
+
 QList< query_ptr >
 DropJob::getArtist( const QString &artist )
 {
@@ -682,6 +692,7 @@ DropJob::getArtist( const QString &artist )
     else
         return artistPtr->tracks();
 }
+
 
 QList< query_ptr >
 DropJob::getAlbum(const QString &artist, const QString &album)
@@ -705,6 +716,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     else
         return albumPtr->tracks();
 }
+
 
 void
 DropJob::getTopTen( const QString &artist )
