@@ -103,6 +103,7 @@ MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
 {
     m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
     m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
+    m_ext2mime.insert( "oga", TomahawkUtils::extensionToMimetype( "oga" ) );
     m_ext2mime.insert( "mpc", TomahawkUtils::extensionToMimetype( "mpc" ) );
     m_ext2mime.insert( "wma", TomahawkUtils::extensionToMimetype( "wma" ) );
     m_ext2mime.insert( "aac", TomahawkUtils::extensionToMimetype( "aac" ) );
