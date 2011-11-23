@@ -43,7 +43,7 @@ TreeModel::TreeModel( QObject* parent )
 {
     setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
-    connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
@@ -948,11 +948,10 @@ TreeModel::infoSystemFinished( QString target )
 
 
 void
-TreeModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
+TreeModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
-    qDebug() << oldEntry->result().data() << result.data();
-    if ( oldEntry && !oldEntry->result().isNull() && oldEntry->result().data() == result.data() )
+    if ( oldEntry && ( oldEntry->result().isNull() || oldEntry->result().data() != result.data() ) )
     {
         oldEntry->setIsPlaying( false );
     }
