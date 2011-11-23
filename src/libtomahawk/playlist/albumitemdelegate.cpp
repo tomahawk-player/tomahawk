@@ -159,13 +159,19 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         r.setTop( r.bottom() - painter->fontMetrics().height() );
         r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
+        {
             TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
-
+            painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
+        }
+        else
+        {
 #ifdef Q_WS_MAC
-        painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
+            painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
 #else
-        painter->setPen( opt.palette.color( QPalette::Dark ) );
+            painter->setPen( opt.palette.color( QPalette::Dark ) );
 #endif
+        }
+
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
@@ -177,9 +183,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->restore();
 }
 
+
 bool
 AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    Q_UNUSED( model );
     Q_UNUSED( option );
 
     if ( event->type() != QEvent::MouseButtonRelease &&
@@ -217,7 +225,8 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
                 event->accept();
                 return true;
-            } else if ( event->type() == QEvent::MouseButtonPress )
+            }
+            else if ( event->type() == QEvent::MouseButtonPress )
             {
                 // Stop the whole album from having a down click action as we just want the artist name to be clicked
                 event->accept();
@@ -230,6 +239,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
     return false;
 }
+
 
 void
 AlbumItemDelegate::whitespaceMouseEvent()
