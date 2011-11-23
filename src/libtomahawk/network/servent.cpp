@@ -351,7 +351,7 @@ Servent::readyRead()
 
         foreach( ControlConnection* con, m_controlconnections )
         {
-            tDebug() << "known connection:" << con->id() << con->source()->friendlyName();
+            tLog( LOGVERBOSE ) << "known connection:" << con->id() << con->source()->friendlyName();
             if( con->id() == nodeid )
             {
                 dupe = true;
