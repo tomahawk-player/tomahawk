@@ -126,6 +126,7 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 private slots:
+    void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 
 private:

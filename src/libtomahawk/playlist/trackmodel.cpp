@@ -39,13 +39,13 @@ TrackModel::TrackModel( QObject* parent )
     , m_readOnly( true )
     , m_style( Detailed )
 {
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 }
 
 
 TrackModel::~TrackModel()
 {
-    delete m_rootItem;
 }
 
 
@@ -471,6 +471,17 @@ TrackModel::itemFromIndex( const QModelIndex& index ) const
     else
     {
         return m_rootItem;
+    }
+}
+
+
+void
+TrackModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
+{
+    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry && ( oldEntry->query().isNull() || !oldEntry->query()->numResults() || oldEntry->query()->results().first().data() != result.data() ) )
+    {
+        oldEntry->setIsPlaying( false );
     }
 }
 
