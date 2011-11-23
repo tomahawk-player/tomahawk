@@ -306,7 +306,7 @@ SettingsDialog::createIcons()
 
 #ifndef Q_WS_MAC
     // doesn't listen to sizehint...
-    ui->listWidget->setMaximumWidth( maxlen + 8 );
+    ui->listWidget->setFixedWidth( maxlen + 8 );
 #endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
