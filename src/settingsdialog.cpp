@@ -253,6 +253,8 @@ SettingsDialog::createIcons()
     /// so the icons arre lined up.
     // Resolvers is the longest string... in english. fml.
 
+    ensurePolished();
+
     int maxlen = 0;
     QFontMetrics fm( font() );
     QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
