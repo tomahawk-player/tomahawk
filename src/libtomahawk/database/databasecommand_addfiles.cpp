@@ -142,8 +142,6 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
         if( !composer.trimmed().isEmpty() )
             composerid = dbi->artistId( composer, true );
-        /*if( composerid < 1 )
-            continue;*/
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
@@ -151,7 +149,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         query_filejoin.bindValue( 2, albumid > 0 ? albumid : QVariant( QVariant::Int ) );
         query_filejoin.bindValue( 3, trackid );
         query_filejoin.bindValue( 4, albumpos );
-        query_filejoin.bindValue( 5, composerid );
+        query_filejoin.bindValue( 5, composerid > 0 ? composerid : QVariant( QVariant::Int ) );
         query_filejoin.bindValue( 6, discnumber );
         if ( !query_filejoin.exec() )
         {
