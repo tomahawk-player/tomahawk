@@ -211,4 +211,7 @@ ADD_SUBDIRECTORY( src/libtomahawk )
 SET( TOMAHAWK_LIBRARIES tomahawklib )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
-ADD_SUBDIRECTORY( src/breakpad/CrashReporter )
+
+IF( NOT DISABLE_CRASHREPORTER )
+    ADD_SUBDIRECTORY( src/breakpad/CrashReporter )
+ENDIF()

@@ -19,13 +19,14 @@
 #include "BreakPad.h"
 
 #include "config.h"
+#include "utils/logger.h"
 
 #include <QCoreApplication>
 #include <QString>
 #include <QFileInfo>
 #include <string.h>
 
-#define CRASH_REPORTER_BINARY "CrashReporter"
+#define CRASH_REPORTER_BINARY "tomahawk_crash_reporter"
 
 #ifndef WIN32
 #include <unistd.h>
@@ -77,12 +78,15 @@ BreakPad::BreakPad( const QString& path )
 {
     QString reporter;
     QString localReporter = QString( "%1/%2" ).arg( qApp->applicationDirPath() ).arg( CRASH_REPORTER_BINARY );
-    QString globalReporter = QString( "%1/%2" ).arg( CMAKE_INSTALL_LIBEXECDIR ).arg( CRASH_REPORTER_BINARY );
+    QString globalReporter = QString( "%1/%2" ).arg( CMAKE_INSTALL_PREFIX "/" CMAKE_INSTALL_LIBEXECDIR ).arg( CRASH_REPORTER_BINARY );
 
     if ( QFileInfo( localReporter ).exists() )
         reporter = localReporter;
     else if ( QFileInfo( globalReporter ).exists() )
         reporter = globalReporter;
+    else
+        tLog() << "Could not find \"" CRASH_REPORTER_BINARY "\" in \"" CMAKE_INSTALL_PREFIX "/" CMAKE_INSTALL_LIBEXECDIR "\" or application path";
+
 
     char* creporter;
     std::string sreporter = reporter.toStdString();
