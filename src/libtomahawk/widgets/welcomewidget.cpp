@@ -33,7 +33,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <dynamic/GeneratorInterface.h>
+#include "dynamic/GeneratorInterface.h"
 #include "RecentlyPlayedPlaylistsModel.h"
 
 #define HISTORY_TRACK_ITEMS 25
@@ -48,9 +48,8 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     , ui( new Ui::WelcomeWidget )
 {
     ui->setupUi( this );
-
-    ui->splitter_2->setStretchFactor( 0, 2 );
-    ui->splitter_2->setStretchFactor( 0, 1 );
+    ui->splitter_2->setStretchFactor( 0, 3 );
+    ui->splitter_2->setStretchFactor( 1, 1 );
 
     RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
@@ -73,8 +72,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     updatePlaylists();
 
-    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
-
     m_tracksModel = new PlaylistModel( ui->tracksView );
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
@@ -88,9 +85,10 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
-    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
+    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
+    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
 }
 
 
@@ -98,6 +96,7 @@ WelcomeWidget::~WelcomeWidget()
 {
     delete ui;
 }
+
 
 PlaylistInterface*
 WelcomeWidget::playlistInterface() const
@@ -112,6 +111,7 @@ WelcomeWidget::jumpToCurrentTrack()
     return ui->tracksView->jumpToCurrentTrack();
 }
 
+
 bool
 WelcomeWidget::isBeingPlayed() const
 {
@@ -120,11 +120,12 @@ WelcomeWidget::isBeingPlayed() const
 
 
 void
-WelcomeWidget::updateRecentTracks()
+WelcomeWidget::onSourcesReady()
 {
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 
-    connect( SourceList::instance()->getLocal().data(), SIGNAL( stats( QVariantMap ) ), this, SLOT( updateRecentAdditions() ) );
+    foreach ( const source_ptr& source, SourceList::instance()->sources() )
+        onSourceAdded( source );
 }
 
 
@@ -152,6 +153,7 @@ WelcomeWidget::updatePlaylists()
 void
 WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 {
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ) );
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
 }
 
