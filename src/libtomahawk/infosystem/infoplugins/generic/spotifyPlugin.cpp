@@ -32,7 +32,7 @@
 #include "utils/logger.h"
 #include "chartsplugin_data_p.h"
 
-#define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org:10380/"
+#define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 

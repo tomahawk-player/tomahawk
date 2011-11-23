@@ -29,7 +29,7 @@
 #include <QSet>
 #include <QtCore/QStringList>
 
-#define SPOTIFY_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org:10380"
+#define SPOTIFY_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org"
 
 /**
  * Small class to parse spotify links into query_ptrs
