@@ -273,7 +273,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-        File "${INSTALL_PATH}\bin\CrashReporter.exe"
+        File "${INSTALL_PATH}\bin\tomahawk_crash_reporter.exe"
         File "${INSTALL_PATH}\bin\libtomahawk_breakpad.dll"
 
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
