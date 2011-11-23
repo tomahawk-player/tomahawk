@@ -97,6 +97,7 @@ set( libGuiSources
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
     utils/spotifyparser.cpp
+    utils/m3uloader.cpp
     utils/itunesparser.cpp
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
@@ -212,6 +213,7 @@ set( libGuiHeaders
     utils/xspfgenerator.h
     utils/jspfloader.h
     utils/spotifyparser.h
+    utils/m3uloader.h
     utils/itunesparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h

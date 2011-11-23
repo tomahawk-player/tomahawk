@@ -26,6 +26,7 @@
 #include "utils/spotifyparser.h"
 #include "utils/itunesparser.h"
 #include "utils/rdioparser.h"
+#include "utils/m3uloader.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
@@ -108,7 +109,13 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if( url.contains( "xspf" ) )
             return true;
 
+        if( url.contains( "m3u" ) )
+            return true;
+
         if( data->data( "text/uri-list" ).contains( "xspf" ) )
+            return true;
+
+        if( data->data( "text/uri-list" ).contains( "m3u" ) )
             return true;
 
         // Not the most elegant
@@ -118,6 +125,14 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
     if ( acceptedType.testFlag( Track ) )
     {
+
+
+        if( url.contains( "m3u" ) )
+            return true;
+
+        if( data->data( "text/uri-list" ).contains( "m3u" ) )
+            return true;
+
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
 
@@ -165,6 +180,9 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
     if ( desired == Playlist )
     {
         if( url.contains( "xspf" ) || data->data( "text/uri-list").contains( "xspf" ) )
+            return true;
+
+        if( url.contains( "m3u" ) || data->data( "text/uri-list").contains( "m3u" ) )
             return true;
 
         // Not the most elegant
@@ -428,6 +446,29 @@ DropJob::tracksFromMixedData( const QMimeData *data )
     return queries;
 }
 
+void
+DropJob::handleM3u( const QString& fileUrls )
+{
+    tDebug() << Q_FUNC_INFO << "Got M3u playlist!!" << fileUrls;
+    QStringList urls = fileUrls.split( QRegExp( "\n" ), QString::SkipEmptyParts );
+
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
+
+    tDebug() << "Got a M3U playlist url to parse!" << urls;
+    M3uLoader* m = new M3uLoader( urls, dropAction() == Create, this );
+
+    if ( dropAction() == Append )
+    {
+        tDebug() << Q_FUNC_INFO << "Trying to append contents from" << urls;
+        connect( m, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+
+    }
+    m_queryCount++;
+
+
+}
 
 void
 DropJob::handleXspfs( const QString& fileUrls )
@@ -466,8 +507,9 @@ DropJob::handleXspfs( const QString& fileUrls )
         {
             qDebug() << Q_FUNC_INFO << "Trying to append xspf";
             connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-            m_queryCount++;
+
         }
+        m_queryCount++;
     }
 }
 
@@ -522,6 +564,8 @@ DropJob::handleAllUrls( const QString& urls )
 {
     if ( urls.contains( "xspf" ) )
         handleXspfs( urls );
+    else if ( urls.contains( "m3u" ) )
+        handleM3u( urls );
     else if ( urls.contains( "spotify" ) /// Handle all the spotify uris on internal server, if not avail. fallback to spotify
               && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
               && s_canParseSpotifyPlaylists )
@@ -588,6 +632,7 @@ DropJob::expandedUrls( QStringList urls )
 void
 DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
+    qDebug() << Q_FUNC_INFO;
     if ( m_dropJob )
     {
         m_dropJob->setFinished();
