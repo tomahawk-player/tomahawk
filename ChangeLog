@@ -1,4 +1,5 @@
 Version 0.3.2:
+    * Install CrashReporter
     * Fixed not showing delete icon on temporary pages when deleting
        one above.
     * Fixed inability to select externally mounted drives on OS X.
