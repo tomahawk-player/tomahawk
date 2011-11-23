@@ -85,6 +85,7 @@ namespace TomahawkUtils
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
+    DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );

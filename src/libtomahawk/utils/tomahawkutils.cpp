@@ -218,6 +218,8 @@ ageToString( const QDateTime& time, bool appendAgoString )
         return QString();
 
     QDateTime now = QDateTime::currentDateTime();
+    QString agoToken = appendAgoString ? QString( " %1" ).arg( QObject::tr( "ago" ) ) : QString();
+
     int mins = time.secsTo( now ) / 60;
     int hours = mins / 60;
     int days = time.daysTo( now );
@@ -229,50 +231,48 @@ ageToString( const QDateTime& time, bool appendAgoString )
     {
         if ( years )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%n year(s) ago", "", years );
+            if ( years > 1 )
+                return QObject::tr( "%1 years%2" ).arg( years ).arg( agoToken );
             else
-                return QObject::tr( "%n year(s)", "", years );
+                return QObject::tr( "%1 year%2" ).arg( years ).arg( agoToken );
         }
 
         if ( months )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%n month(s) ago", "", months );
+            if ( months > 1 )
+                return QObject::tr( "%1 months%2" ).arg( months ).arg( agoToken );
             else
-                return QObject::tr( "%n month(s)", "", months );
+                return QObject::tr( "%1 month%2" ).arg( months ).arg( agoToken );
         }
 
         if ( weeks )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%n week(s) ago", "", weeks );
+            if ( weeks > 1 )
+                return QObject::tr( "%1 weeks%2" ).arg( weeks ).arg( agoToken );
             else
-                return QObject::tr( "%n week(s)", "", weeks );
+                return QObject::tr( "%1 week%2" ).arg( weeks ).arg( agoToken );
         }
 
         if ( days )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%n day(s) ago", "", days );
+            if ( days > 1 )
+                return QObject::tr( "%1 days%2" ).arg( days ).arg( agoToken );
             else if ( hours >= 24 )
-                return QObject::tr( "%n day(s)", "", days );
+                return QObject::tr( "%1 day%2" ).arg( days ).arg( agoToken );
         }
 
         if ( hours )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%n hour(s) ago", "", hours );
+            if ( hours > 1 )
+                return QObject::tr( "%1 hours%2" ).arg( hours ).arg( agoToken );
             else
-                return QObject::tr( "%n hour(s)", "", hours );
+                return QObject::tr( "%1 hour%2" ).arg( hours ).arg( agoToken );
         }
 
-        if ( mins > 1 )
+        if ( mins )
         {
-            if ( appendAgoString )
-                return QObject::tr( "%1 minutes ago" ).arg( mins );
-            else
-                return QObject::tr( "%1 minutes" ).arg( mins );
+            if ( mins > 1 )
+                return QObject::tr( "%1 minutes%2" ).arg( mins ).arg( agoToken );
         }
     }
 
@@ -485,10 +485,8 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO;
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
-    tDebug() << Q_FUNC_INFO << " proxies size = " << proxies.size();
     return proxies;
 }
 
@@ -496,7 +494,6 @@ NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << "query.peerHostName() = " << query.peerHostName() << ", m_noProxyHosts = " << m_noProxyHosts;
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     if ( hostname.isEmpty() || m_noProxyHosts.contains( hostname ) )
@@ -504,7 +501,6 @@ NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
     else
         proxies << m_proxy << QNetworkProxy( QNetworkProxy::NoProxy ) << QNetworkProxy( QNetworkProxy::DefaultProxy );
 
-    tDebug() << Q_FUNC_INFO << " proxies size = " << proxies.size();
     return proxies;
 }
 
@@ -610,7 +606,6 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
                 *currFactory = *factory;
             }
         }
-        QNetworkProxyFactory::setApplicationProxyFactory( factory );
     }
 
     *s_threadProxyFactoryHash[ QThread::currentThread() ] = *factory;
@@ -804,6 +799,34 @@ void
 setHeaderHeight( int height )
 {
     s_headerHeight = height;
+}
+
+bool
+newerVersion( const QString& oldVersion, const QString& newVersion )
+{
+    if ( oldVersion.isEmpty() || newVersion.isEmpty() )
+        return false;
+
+    QStringList oldVList = oldVersion.split( ".", QString::SkipEmptyParts );
+    QStringList newVList = newVersion.split( ".", QString::SkipEmptyParts );
+
+    int i = 0;
+    foreach ( const QString& nvPart, newVList )
+    {
+        if ( i + 1 > oldVList.count() )
+            return true;
+
+        int nviPart = nvPart.toInt();
+        int oviPart = oldVList.at( i++ ).toInt();
+
+        if ( nviPart > oviPart )
+            return true;
+
+        if ( nviPart < oviPart )
+            return false;
+    }
+
+    return false;
 }
 
 // taken from util/fileutils.cpp in kdevplatform
