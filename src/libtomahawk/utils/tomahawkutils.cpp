@@ -500,7 +500,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
             if ( !s->proxyNoProxyHosts().isEmpty() )
                 proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
         }
-        
+
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
         s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
@@ -514,12 +514,42 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 }
 
 
+bool
+newerVersion( const QString& oldVersion, const QString& newVersion )
+{
+    if ( oldVersion.isEmpty() || newVersion.isEmpty() )
+        return false;
+
+    QStringList oldVList = oldVersion.split( ".", QString::SkipEmptyParts );
+    QStringList newVList = newVersion.split( ".", QString::SkipEmptyParts );
+
+    int i = 0;
+    foreach ( const QString& nvPart, newVList )
+    {
+        if ( i + 1 > oldVList.count() )
+            return true;
+
+        int nviPart = nvPart.toInt();
+        int oviPart = oldVList.at( i++ ).toInt();
+
+        if ( nviPart > oviPart )
+            return true;
+
+        if ( nviPart < oviPart )
+            return false;
+    }
+
+    return false;
+}
+
+
 void
 crash()
 {
     volatile int* a = (int*)(NULL);
     *a = 1;
 }
+
 
 // taken from util/fileutils.cpp in kdevplatform
 bool

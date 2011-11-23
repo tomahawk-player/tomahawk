@@ -151,6 +151,7 @@ AtticaManager::pathFromId( const QString& resolverId ) const
     return m_resolverStates.value( resolverId ).scriptPath;
 }
 
+
 void
 AtticaManager::uploadRating( const Content& c )
 {
@@ -176,6 +177,7 @@ AtticaManager::uploadRating( const Content& c )
 
     emit resolverStateChanged( c.id() );
 }
+
 
 bool
 AtticaManager::userHasRated( const Content& c ) const
@@ -247,6 +249,7 @@ AtticaManager::resolverIconFetched()
     m_resolverStates[ resolverId ].pixmap = icon;
 }
 
+
 void
 AtticaManager::syncServerData()
 {
@@ -273,7 +276,7 @@ AtticaManager::syncServerData()
             if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
                  !upstream.version().isEmpty() )
             {
-                if ( newerVersion( r.version, upstream.version() ) )
+                if ( TomahawkUtils::newerVersion( r.version, upstream.version() ) )
                 {
                     m_resolverStates[ id ].state = NeedsUpgrade;
                     QMetaObject::invokeMethod( this, "upgradeResolver", Qt::QueuedConnection, Q_ARG( Attica::Content, upstream ) );
@@ -283,57 +286,6 @@ AtticaManager::syncServerData()
     }
 }
 
-bool
-AtticaManager::newerVersion( const QString& older, const QString& newer ) const
-{
-    // Version comparison: turns X.Y.Z into XYZ (adding 0 to X.Y. and 00 to X respectively)
-    if ( older.isEmpty() || newer.isEmpty() )
-        return false;
-
-    QString oldDigits = older;
-    oldDigits = oldDigits.replace( ".", "" );
-    int oldDigitsInt;
-
-    if ( oldDigits.size() == 1 )
-    {
-        oldDigitsInt = oldDigits.append("00").toInt();
-    }
-    else if ( oldDigits.size() == 2 )
-    {
-        oldDigitsInt = oldDigits.append("0").toInt();
-    }
-    else if ( oldDigits.size() == 3 )
-    {
-        oldDigitsInt = oldDigits.toInt();
-    }
-    else
-        return false;
-    
-    QString newDigits = newer;
-    newDigits = newDigits.replace( ".", "");
-    int newDigitsInt;
-
-    if ( newDigits.size() == 1 )
-    {
-        newDigitsInt = newDigits.append("00").toInt();
-    }
-    else if ( newDigits.size() == 2 )
-    {
-        newDigitsInt = newDigits.append("0").toInt();
-    }
-    else if ( newDigits.size() == 3 )
-    {
-        newDigitsInt = newDigits.toInt();    
-    }
-    else
-        return false;
-
-    // Do the comparison
-    if ( newDigitsInt > oldDigitsInt )
-        return true;
-
-    return false;
-}
 
 void
 AtticaManager::installResolver( const Content& resolver )
@@ -353,6 +305,7 @@ AtticaManager::installResolver( const Content& resolver )
 
     job->start();
 }
+
 
 void
 AtticaManager::upgradeResolver( const Content& resolver )

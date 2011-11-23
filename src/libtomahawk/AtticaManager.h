@@ -112,7 +112,6 @@ private slots:
     void resolverIconFetched();
 
     void syncServerData();
-    bool newerVersion( const QString& older, const QString& newer ) const;
 
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
