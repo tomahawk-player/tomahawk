@@ -383,6 +383,9 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 void
 PlaylistModel::beginPlaylistChanges()
 {
+    if ( m_playlist.isNull() || !m_playlist->author()->isLocal() )
+        return;
+
     Q_ASSERT( !m_changesOngoing );
     m_changesOngoing = true;
 }
@@ -391,6 +394,9 @@ PlaylistModel::beginPlaylistChanges()
 void
 PlaylistModel::endPlaylistChanges()
 {
+    if ( m_playlist.isNull() || !m_playlist->author()->isLocal() )
+        return;
+
     if ( m_changesOngoing )
     {
         m_changesOngoing = false;
@@ -400,9 +406,6 @@ PlaylistModel::endPlaylistChanges()
         tDebug() << "Called" << Q_FUNC_INFO << "unexpectedly!";
         Q_ASSERT( false );
     }
-
-    if ( m_playlist.isNull() || !m_playlist->author()->isLocal() )
-        return;
 
     QList<plentry_ptr> l = playlistEntries();
     QString newrev = uuid();
