@@ -1,4 +1,8 @@
-Version 0.3.2:
+Version 0.3.2: 
+    * Supoort .oga (ogg mimetype) files
+    * Fixed stuck Now Playing indicator icon
+    * Fixed sidebar width of SettingsDialog on Windows
+    * Add translations for Swedish, Polish and Argentinian-Spanish
     * Install CrashReporter
     * Fixed not showing delete icon on temporary pages when deleting
        one above.
