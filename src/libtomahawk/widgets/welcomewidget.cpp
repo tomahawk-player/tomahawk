@@ -330,12 +330,17 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( type == RecentlyPlayedPlaylistsModel::Station )
     {
         descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
-    } else
+    }
+    else
     {
         descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
     }
+
     QColor c = painter->pen().color();
-    painter->setPen( QColor( Qt::gray ).darker() );
+    if ( !( option.state & QStyle::State_Selected && option.state & QStyle::State_Active ) )
+    {
+        painter->setPen( QColor( Qt::gray ).darker() );
+    }
 
     QRect rectText = option.rect.adjusted( 66, 20, -leftEdge - 10, -8 );
 #ifdef Q_WS_MAC
