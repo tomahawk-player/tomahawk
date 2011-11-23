@@ -102,11 +102,11 @@ signals:
     void destroyed( QWidget* widget );
 
 public slots:
-    void updateRecentTracks();
     void updatePlaylists();
     void updateRecentAdditions();
 
 private slots:
+    void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( const QModelIndex& );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
