@@ -58,19 +58,20 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     m_recentCollectionModel->setStyle( TrackModel::Short );
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
-    loadTracks();
 
     m_historyModel = new PlaylistModel( ui->historyView );
     m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
     m_historyModel->loadHistory( source, 25 );
 
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
-
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
     ui->recentAlbumView->proxyModel()->sort( -1 );
-    m_recentAlbumModel->addFilteredCollection( source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime );
+
+    onCollectionChanged();
+
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
+    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
 
     m_title = tr( "New Additions" );
     if ( source->isLocal() )
@@ -89,6 +90,21 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 SourceInfoWidget::~SourceInfoWidget()
 {
     delete ui;
+}
+
+
+void
+SourceInfoWidget::onCollectionChanged()
+{
+    loadTracks();
+    loadRecentAdditions();
+}
+
+
+void
+SourceInfoWidget::loadRecentAdditions()
+{
+    m_recentAlbumModel->addFilteredCollection( m_source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
 

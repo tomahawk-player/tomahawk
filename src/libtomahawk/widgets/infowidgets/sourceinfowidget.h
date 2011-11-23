@@ -58,9 +58,11 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void onPlaybackFinished( const Tomahawk::query_ptr& query );
-
     void loadTracks();
+    void loadRecentAdditions();
+
+    void onCollectionChanged();
+    void onPlaybackFinished( const Tomahawk::query_ptr& query );
     void onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& queries );
 
 private:
