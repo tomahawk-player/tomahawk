@@ -91,12 +91,14 @@ M3uLoader::parseM3u( const QString& fileLink )
     QFileInfo fileInfo( fileLink );
     QFile file( QUrl::fromUserInput( fileLink ).toLocalFile() );
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if ( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
         qDebug() << "Error" << file.errorString();
         return;
     }
 
-    while (!file.atEnd()) {
+    while ( !file.atEnd() )
+    {
 
          QByteArray line = file.readLine();
          /// If anyone wants to take on the regex for parsing EXT, go ahead
@@ -119,7 +121,8 @@ M3uLoader::parseM3u( const QString& fileLink )
     }
 
 
-    if( !m_tracks.isEmpty() ){
+    if( !m_tracks.isEmpty() )
+    {
         qDebug() << Q_FUNC_INFO << "Emitting tracks!";
         emit tracks( m_tracks );
     }
