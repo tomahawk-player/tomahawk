@@ -20,7 +20,6 @@
 
 #include <QDir>
 #include <QSettings>
-#include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QDomElement>
 
@@ -37,13 +36,6 @@
 #include <qjson/parser.h>
 
 using namespace Tomahawk::InfoSystem;
-
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
 
 
 LastFmPlugin::LastFmPlugin()
@@ -429,9 +421,9 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             c[ "id" ] = "chart.getHypedArtists";
             c[ "label" ] = "Hyped Artists";
             artist_charts.append( c );
-            
 
-            
+
+
             QVariantMap charts;
             charts.insert( "Tracks", QVariant::fromValue< QList< InfoStringHash > >( track_charts ) );
             charts.insert( "Artists", QVariant::fromValue< QList< InfoStringHash > >( artist_charts ) );
@@ -777,7 +769,7 @@ LastFmPlugin::createScrobbler()
     if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
         qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
-        QString authToken = md5( ( lastfm::ws::Username.toLower() + md5( m_pw.toUtf8() ) ).toUtf8() );
+        QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
 
         QMap<QString, QString> query;
         query[ "method" ] = "auth.getMobileSession";

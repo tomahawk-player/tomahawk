@@ -22,7 +22,6 @@
 
 #include "utils/tomahawkutilsgui.h"
 
-#include <QCryptographicHash>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -59,12 +58,6 @@
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
@@ -409,7 +402,7 @@ SettingsDialog::testLastFmLogin()
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken = md5( ( ui->lineEditLastfmUsername->text().toLower() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = TomahawkUtils::md5( ( ui->lineEditLastfmUsername->text().toLower() + TomahawkUtils::md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;

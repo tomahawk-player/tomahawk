@@ -81,16 +81,15 @@ namespace TomahawkUtils
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
-    DLLEXPORT QNetworkAccessManager* nam();
-
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
+    DLLEXPORT QNetworkAccessManager* nam();
     DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
+    DLLEXPORT quint64 infosystemRequestId();
 
-    DLLEXPORT void crash();
-
+    DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
 
-    DLLEXPORT quint64 infosystemRequestId();
+    DLLEXPORT void crash();
 }
 
 #endif // TOMAHAWKUTILS_H

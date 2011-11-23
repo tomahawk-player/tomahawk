@@ -27,14 +27,15 @@
     #include <lastfm/ws.h>
 #endif
 
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkProxy>
+#include <QNetworkConfiguration>
+#include <QNetworkAccessManager>
+#include <QNetworkProxy>
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDateTime>
-#include <QtCore/QDir>
-#include <QtCore/QMutex>
+#include <QCoreApplication>
+#include <QDateTime>
+#include <QDir>
+#include <QMutex>
+#include <QCryptographicHash>
 
 #ifdef Q_WS_WIN
     #include <windows.h>
@@ -543,14 +544,6 @@ newerVersion( const QString& oldVersion, const QString& newVersion )
 }
 
 
-void
-crash()
-{
-    volatile int* a = (int*)(NULL);
-    *a = 1;
-}
-
-
 // taken from util/fileutils.cpp in kdevplatform
 bool
 removeDirectory( const QString& dir )
@@ -582,6 +575,22 @@ quint64 infosystemRequestId()
     quint64 result = s_infosystemRequestId;
     s_infosystemRequestId++;
     return result;
+}
+
+
+QString
+md5( const QByteArray& data )
+{
+    QByteArray const digest = QCryptographicHash::hash( data, QCryptographicHash::Md5 );
+    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
+}
+
+
+void
+crash()
+{
+    volatile int* a = (int*)(NULL);
+    *a = 1;
 }
 
 } // ns

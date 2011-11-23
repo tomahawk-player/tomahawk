@@ -26,12 +26,6 @@
 
 using namespace Tomahawk::InfoSystem;
 
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
 
 RoviPlugin::RoviPlugin()
     : InfoPlugin()
@@ -191,6 +185,6 @@ QByteArray
 RoviPlugin::generateSig() const
 {
     QByteArray raw = m_apiKey + m_secret + QString::number( QDateTime::currentMSecsSinceEpoch() / 1000 ).toLatin1();
-    return md5( raw ).toLatin1();
+    return TomahawkUtils::md5( raw ).toLatin1();
 
 }
