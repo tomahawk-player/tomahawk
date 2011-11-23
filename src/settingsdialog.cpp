@@ -95,8 +95,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->listWidget->setFrameShadow( QFrame::Sunken );
     setContentsMargins( 4, 4, 4, 4 );
 #else
-    ui->listWidget->setFixedWidth( 83 );
     setContentsMargins( 0, 4, 4, 4 );
+#endif
+
+#ifdef Q_WS_MAC
+    ui->listWidget->setFixedWidth( 83 );
 #endif
 
 #ifdef Q_WS_MAC
