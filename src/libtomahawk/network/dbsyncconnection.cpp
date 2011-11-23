@@ -275,7 +275,7 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
     m_lastSentOp = lastguid;
     if ( ops.length() == 0 )
     {
-        tDebug() << "Sending ok" << m_source->id() << m_source->friendlyName();
+        tLog( LOGVERBOSE ) << "Sending ok" << m_source->id() << m_source->friendlyName();
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );
         return;
     }
