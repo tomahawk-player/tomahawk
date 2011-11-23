@@ -289,6 +289,7 @@ extensionToMimetype( const QString& extension )
     {
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
+        s_ext2mime.insert( "oga",  "application/ogg" );
         s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
