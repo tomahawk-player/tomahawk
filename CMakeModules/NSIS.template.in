@@ -287,7 +287,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${BUILD_PATH}\tomahawk.exe"
 
-        File "${BUILD_PATH}\CrashReporter.exe"
+        File "${BUILD_PATH}\tomahawk_crash_reporter.exe"
         File "${BUILD_PATH}\libtomahawk_breakpad.dll"
 
         File "${BUILD_PATH}\libtomahawklib.dll"
