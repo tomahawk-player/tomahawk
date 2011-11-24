@@ -431,7 +431,7 @@ DropJob::tracksFromMixedData( const QMimeData *data )
 void
 DropJob::handleXspfs( const QString& fileUrls )
 {
-    tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrls;
+    tDebug() << Q_FUNC_INFO << "Got XSPF playlist!" << fileUrls;
     bool error = false;
     QStringList urls = fileUrls.split( QRegExp( "\n" ), QString::SkipEmptyParts );
 
@@ -446,13 +446,13 @@ DropJob::handleXspfs( const QString& fileUrls )
         if ( xspfFile.exists() )
         {
             l = new XSPFLoader(  dropAction() == Create, this );
-            tDebug( LOGINFO ) << "Loading local xspf " << xspfFile.fileName();
+            tDebug( LOGINFO ) << "Loading local XSPF" << xspfFile.fileName();
             l->load( xspfFile );
         }
         else if ( QUrl( url ).isValid() )
         {
             l = new XSPFLoader(  dropAction() == Create, this );
-            tDebug( LOGINFO ) << "Loading remote xspf " << url;
+            tDebug( LOGINFO ) << "Loading remote XSPF" << url;
             l->load( QUrl( url ) );
         }
         else
@@ -463,7 +463,7 @@ DropJob::handleXspfs( const QString& fileUrls )
 
         if ( dropAction() == Append && !error && l )
         {
-            qDebug() << Q_FUNC_INFO << "Trying to append xspf";
+            qDebug() << Q_FUNC_INFO << "Trying to append XSPF";
             connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
             m_queryCount++;
         }

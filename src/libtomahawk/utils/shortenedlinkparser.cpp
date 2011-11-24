@@ -52,6 +52,10 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "bit.ly" ) ||
              url.contains( "j.mp" ) ||
              url.contains( "spoti.fi" ) ||
+             url.contains( "ow.ly" ) ||
+             url.contains( "fb.me" ) ||
+             url.contains( "itun.es" ) ||
+             url.contains( "tinyurl.com" ) ||
              url.contains( "rd.io" ) );
 }
 
