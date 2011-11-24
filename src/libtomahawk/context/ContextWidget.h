@@ -63,6 +63,7 @@ private slots:
 protected:
     void paintEvent( QPaintEvent* e );
     void resizeEvent( QResizeEvent* e );
+    void changeEvent( QEvent* e );
 
 private:
     void fadeOut( bool animate );

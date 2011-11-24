@@ -404,22 +404,22 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             InfoStringHash c;
             c[ "type" ] = "tracks";
             c[ "id" ] = "chart.getTopTracks";
-            c[ "label" ] = "Top Tracks";
+            c[ "label" ] = tr( "Top Tracks" );
             track_charts.append( c );
             c[ "id" ] = "chart.getLovedTracks";
-            c[ "label" ] = "Loved Tracks";
+            c[ "label" ] = tr( "Loved Tracks" );
             track_charts.append( c );
             c[ "id" ] = "chart.getHypedTracks";
-            c[ "label" ] = "Hyped Tracks";
+            c[ "label" ] = tr( "Hyped Tracks" );
             track_charts.append( c );
 
             QList< InfoStringHash > artist_charts;
             c[ "type" ] = "artists";
             c[ "id" ] = "chart.getTopArtists";
-            c[ "label" ] = "Top Artists";
+            c[ "label" ] = tr( "Top Artists" );
             artist_charts.append( c );
             c[ "id" ] = "chart.getHypedArtists";
-            c[ "label" ] = "Hyped Artists";
+            c[ "label" ] = tr( "Hyped Artists" );
             artist_charts.append( c );
 
 
