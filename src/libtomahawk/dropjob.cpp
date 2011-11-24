@@ -222,6 +222,7 @@ void
 DropJob::parseMimeData( const QMimeData *data )
 {
     QList< query_ptr > results;
+
     if ( data->hasFormat( "application/tomahawk.query.list" ) )
         results = tracksFromQueryList( data );
     else if ( data->hasFormat( "application/tomahawk.result.list" ) )
@@ -237,7 +238,8 @@ DropJob::parseMimeData( const QMimeData *data )
         const QString plainData = QString::fromUtf8( data->data( "text/plain" ) );
         handleAllUrls( plainData );
 
-    }else if ( data->hasFormat( "text/uri-list" ) )
+    }
+    else if ( data->hasFormat( "text/uri-list" ) )
     {
         const QString plainData = QString::fromUtf8( data->data( "text/uri-list" ).trimmed() );
         handleAllUrls( plainData );
@@ -350,6 +352,7 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         else
             queries << getAlbum( artist, album );
     }
+
     return queries;
 }
 
@@ -424,6 +427,7 @@ DropJob::tracksFromMixedData( const QMimeData *data )
         singleMimeData.setData( mimeType, singleData );
         parseMimeData( &singleMimeData );
     }
+
     return queries;
 }
 
@@ -475,7 +479,7 @@ void
 DropJob::handleSpotifyUrls( const QString& urlsRaw )
 {
     QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    qDebug() << "Got spotify browse uris!!" << urls;
+    qDebug() << "Got spotify browse uris!" << urls;
 
     /// Lets allow parsing all spotify uris here, if parse server is not available
     /// fallback to spotify metadata for tracks /hugo
@@ -501,7 +505,7 @@ void
 DropJob::handleRdioUrls( const QString& urlsRaw )
 {
     QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    qDebug() << "Got Rdio urls!!" << urls;
+    qDebug() << "Got Rdio urls!" << urls;
 
     if ( dropAction() == Default )
         setDropAction( Create );
@@ -624,6 +628,7 @@ DropJob::removeDuplicates()
         if ( !contains )
             list.append( item );
     }
+
     m_resultList = list;
 }
 
