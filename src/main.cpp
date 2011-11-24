@@ -68,9 +68,16 @@ main( int argc, char *argv[] )
     if ( locale == "C" )
         locale = "en";
     QTranslator translator;
-    translator.load( QString( ":/lang/tomahawk_" ) + locale );
+    if ( translator.load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug() << "Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Using default locale, system locale one not found:" << locale;
+        translator.load( QString( ":/lang/tomahawk_en" ) );
+    }
     a.installTranslator( &translator );
-    tDebug() << "Using locale:" << locale;
 
     if ( argc > 1 )
     {
