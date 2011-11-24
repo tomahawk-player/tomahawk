@@ -22,7 +22,6 @@
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include "ubuntuunityhack.h"
 #include "tomahawksettings.h"
-#include "TomahawkSettingsGui.h"
 
 #include <QTranslator>
 
@@ -33,6 +32,7 @@
 #endif
 
 #ifndef ENABLE_HEADLESS
+    #include "TomahawkSettingsGui.h"
     #include "breakpad/BreakPad.h"
 #endif
 
