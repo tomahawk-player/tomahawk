@@ -1,26 +1,28 @@
 Version 0.3.2: 
-    * Supoort .oga (ogg mimetype) files
-    * Fixed stuck Now Playing indicator icon
-    * Fixed sidebar width of SettingsDialog on Windows
-    * Add translations for Swedish, Polish and Argentinian-Spanish
-    * Install CrashReporter
-    * Fixed not showing delete icon on temporary pages when deleting
-       one above.
-    * Fixed inability to select externally mounted drives on OS X.
-    * Fixed bug where speaker would be shown next to a playlist even
-       after playlist had finished.
-    * Fixed bug where first startup would show a loading spinner in
-       the welcome screen album view forever.
-    * Automatically upgrade resolvers when an upgrade is found.
+    * Improved syncing process, it's faster and more reliable now.
+    * Fixed UPnP issues.
+    * Fixed not updating collections and views after a collection changes.
+    * Fixed not showing a source's proper name at all times.
+    * Improved music scanner reliability.
+    * Fixed various labels not being painted in the right color when selected.
+    * Support .oga (ogg mimetype) files.
+    * Fixed stuck Now Playing indicator icon.
+    * Fixed sidebar width of settings dialog on Windows.
+    * Fixed not always showing delete icon on hovered temporary pages.
+    * Fixed inability to select externally mounted drives.
+    * Fixed bug where speaker would be stuck next to a playlist.
+    * Fixed bug where first startup would show a loading spinner in the
+      Dashboard's "Recent Additions" forever.
+    * Automatically upgrade resolvers when an update is found.
     * Fixed last played track of a friend never expiring.
     * Fixed parsing of rdio tracks.
-    * Changed steering mechanism in stations to make it clearer.
+    * Changed steering mechanism in stations user-friendlier.
     * Fixed loading biographies of artists with '+' in the name.
-    * Fixed behaviour of dropping spotify other playlists on the sidebar.
-    * Fixed impossible to read source in audiocontrols on Mac.
+    * Fixed behaviour of dropping Spotify playlists on the sidebar.
+    * Fixed hard to read source-name in the audio control area on OS X.
     * Fixed crashes when playing Grooveshark tracks.
     * Fixed bug where clicking the latch button would flicker and unlatch.
-    * Fixed jabber accounts not connecting properly when proxy is in use.
+    * Fixed Jabber accounts not connecting properly when proxy is in use.
 
 Version 0.3.1:
     * Fixed not resolving to local files.
