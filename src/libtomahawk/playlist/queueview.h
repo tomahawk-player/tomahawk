@@ -54,6 +54,9 @@ public slots:
     virtual void show();
     virtual void hide();
 
+protected:
+    void changeEvent( QEvent* e );
+
 private:
     Ui::QueueView* ui;
     QTimer* m_dragTimer;

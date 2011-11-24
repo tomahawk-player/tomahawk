@@ -114,6 +114,22 @@ ContextWidget::~ContextWidget()
 
 
 void
+ContextWidget::changeEvent( QEvent* e )
+{
+    QWidget::changeEvent( e );
+    switch ( e->type() )
+    {
+        case QEvent::LanguageChange:
+            ui->retranslateUi( this );
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+void
 ContextWidget::layoutViews( bool animate )
 {
     int smallViewWidth = 120;

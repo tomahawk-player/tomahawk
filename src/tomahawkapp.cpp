@@ -460,7 +460,7 @@ TomahawkApp::initLocalCollection()
 {
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( initServent() ) );
 
-    source_ptr src( new Source( 0, "My Collection" ) );
+    source_ptr src( new Source( 0, tr( "My Collection" ) ) );
     collection_ptr coll( new LocalCollection( src ) );
 
     src->addCollection( coll );

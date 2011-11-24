@@ -736,29 +736,29 @@ Tomahawk::EchonestControl::calculateSummary()
     if( selectedType() == "Artist" ) {
         // magic char is used by EchonestGenerator to split the prefix from the artist name
         if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistType )
-            summary = QString( "only by ~%1" ).arg( m_data.second.toString() );
+            summary = tr( "only by ~%1" ).arg( m_data.second.toString() );
         else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistRadioType )
-            summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
+            summary = tr( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
-        summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
+        summary = tr( "with genre ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "User Radio" ) {
         QComboBox* b = qobject_cast< QComboBox* >( m_input.data() );
         if ( b )
         {
             if ( b->currentText().isEmpty() || b->itemData( b->currentIndex() ).isNull() )
-                summary = "from no one";
+                summary = tr( "from no one" );
             else
             {
                 QString subSum;
-                if ( b->currentText() == "My Collection" )
+                if ( b->currentText() == tr( "My Collection" ) )
                     subSum = "my";
                 else
                     subSum = b->currentText();
-                summary = QString( "from %1 radio" ).arg( subSum );
+                summary = tr( "from %1 radio" ).arg( subSum );
             }
         }
         else
-            summary = "from no one";
+            summary = tr( "from no one" );
     } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" ||
@@ -777,25 +777,25 @@ Tomahawk::EchonestControl::calculateSummary()
             modifier = "high";
         else if( 0.8 <= sliderVal && sliderVal <= 1 )
             modifier = "very high";
-        summary = QString( "with %1 %2" ).arg( modifier ).arg( selectedType().toLower() );
+        summary = tr( "with %1 %2" ).arg( modifier ).arg( selectedType().toLower() );
     } else if( selectedType() == "Tempo" ) {
-        summary = QString( "about %1 BPM" ).arg( m_data.second.toString() );
+        summary = tr( "about %1 BPM" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Duration" ) {
-        summary = QString( "about %1 minutes long" ).arg( m_data.second.toInt() / 60 );
+        summary = tr( "about %n minute(s) long", "", m_data.second.toInt() / 60 );
     } else if( selectedType() == "Loudness" ) {
-        summary = QString( "about %1 dB" ).arg( m_data.second.toString() );
+        summary = tr( "about %1 dB" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Latitude" || selectedType() == "Longitude"  ) {
-        summary = QString( "at around %1%2 %3" ).arg( m_data.second.toString() ).arg( QString( QChar( 0x00B0 ) ) ).arg( selectedType().toLower() );
+        summary = tr( "at around %1%2 %3" ).arg( m_data.second.toString() ).arg( QString( QChar( 0x00B0 ) ) ).arg( selectedType().toLower() );
     } else if( selectedType() == "Key" ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString keyName = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        summary = QString( "in %1" ).arg( keyName );
+        summary = tr( "in %1" ).arg( keyName );
     } else if( selectedType() == "Mode" ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString modeName = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        summary = QString( "in a %1 key" ).arg( modeName );
+        summary = tr( "in a %1 key" ).arg( modeName );
     } else if( selectedType() == "Sorting" ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
@@ -805,17 +805,17 @@ Tomahawk::EchonestControl::calculateSummary()
         Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
         QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
 
-        summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
+        summary = tr( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
     } else if( selectedType() == "Mood" ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        summary = QString( "with a %1 mood" ).arg( text );
+        summary = tr( "with a %1 mood" ).arg( text );
     } else if( selectedType() == "Style"  ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        summary = QString( "in a %1 style" ).arg( text );
+        summary = tr( "in a %1 style" ).arg( text );
     }
     m_summary = summary;
 }
