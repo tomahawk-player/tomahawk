@@ -329,6 +329,20 @@ TomahawkSettings::setHttpEnabled( bool enable )
 }
 
 
+bool
+TomahawkSettings::crashReporterEnabled() const
+{
+    return value( "ui/crashReporter", true ).toBool();
+}
+
+
+void
+TomahawkSettings::setCrashReporterEnabled( bool enable )
+{
+    setValue( "ui/crashReporter", enable );
+}
+
+
 QString
 TomahawkSettings::proxyHost() const
 {

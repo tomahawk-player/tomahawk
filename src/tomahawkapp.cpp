@@ -155,11 +155,9 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 
-    new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
-
     new ActionCollection( this );
-
+    
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( TomahawkUtils::nam() );

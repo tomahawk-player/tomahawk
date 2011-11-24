@@ -122,6 +122,9 @@ public:
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );
 
+    bool crashReporterEnabled() const; /// true by default
+    void setCrashReporterEnabled( bool enable );
+
     QString externalHostname() const;
     void setExternalHostname( const QString& externalHostname );
 

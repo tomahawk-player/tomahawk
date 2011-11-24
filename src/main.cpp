@@ -20,6 +20,7 @@
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include "ubuntuunityhack.h"
+#include "tomahawksettings.h"
 
 #include <QTranslator>
 
@@ -56,7 +57,9 @@ main( int argc, char *argv[] )
 #endif*/
 
     TomahawkApp a( argc, argv );
-    new BreakPad( QDir::tempPath() );
+
+    new TomahawkSettings( &a );
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
