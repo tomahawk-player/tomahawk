@@ -21,11 +21,12 @@
 #include "utils/tomahawkutils.h"
 #include "query.h"
 #include "sourcelist.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "viewmanager.h"
-#include <QtCore/QRegExp>
+
+//#include <QtCore/QRegExp>
 #include <QtCore/QFileInfo>
+#include "playlist.h"
+
+#include "dropjob.h"
 #include <QtCore/QFile>
 /* taglib */
 #include <taglib/fileref.h>
@@ -57,7 +58,7 @@ M3uLoader::~M3uLoader()
 {
 }
 
-Tomahawk::query_ptr
+void
 M3uLoader::getTags( const QFileInfo& info )
 {
 
@@ -74,13 +75,13 @@ M3uLoader::getTags( const QFileInfo& info )
     if ( artist.isEmpty() || track.isEmpty() )
     {
         qDebug() << "Error parsing" << info.fileName();
-        return Tomahawk::query_ptr();
+        return;
     }
     else
     {
         qDebug() << Q_FUNC_INFO << artist << track << album;
-        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), true );
-        return q;
+        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), !m_createNewPlaylist );
+        m_tracks << q;
     }
 
 }
@@ -97,6 +98,8 @@ M3uLoader::parseM3u( const QString& fileLink )
         return;
     }
 
+    m_title = fileInfo.baseName();
+
     while ( !file.atEnd() )
     {
 
@@ -110,23 +113,44 @@ M3uLoader::parseM3u( const QString& fileLink )
          QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
 
          if( tmpFile.exists() )
-             m_tracks << getTags( tmpFile );
+             getTags( tmpFile );
          else
          {
              QFileInfo tmpFile( QUrl::fromUserInput( QString( fileInfo.canonicalPath() + "/" + line.simplified() ) ).toLocalFile() );
              if( tmpFile.exists() )
-                 m_tracks << getTags( tmpFile );
+                getTags( tmpFile );
          }
 
     }
 
 
-    if( !m_tracks.isEmpty() )
+    if( m_tracks.isEmpty() )
     {
-        qDebug() << Q_FUNC_INFO << "Emitting tracks!";
-        emit tracks( m_tracks );
+
+        qDebug() << Q_FUNC_INFO << "Coulnt parse M3U!";
+        return;
     }
 
+
+    if ( m_createNewPlaylist )
+    {
+        m_playlist = Playlist::create( SourceList::instance()->getLocal(),
+                                       uuid(),
+                                       m_title,
+                                       m_info,
+                                       m_creator,
+                                       false,
+                                       m_tracks );
+
+        connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+
+    }
+    else
+        emit tracks( m_tracks );
+
+
+    m_tracks.clear();
     file.deleteLater();
+
 }
 
