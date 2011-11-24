@@ -23,6 +23,7 @@
 #include <QVariantMap>
 
 #include "artist.h"
+#include "collection.h"
 #include "typedefs.h"
 #include "databasecommand.h"
 
