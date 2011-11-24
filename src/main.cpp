@@ -46,14 +46,14 @@ main( int argc, char *argv[] )
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 #endif
 
-    // Unity hack taken from Clementine's main.cpp
+/*    // Unity hack taken from Clementine's main.cpp
 #ifdef Q_OS_LINUX
     // In 11.04 Ubuntu decided that the system tray should be reserved for certain
     // whitelisted applications.  Tomahawk will override this setting and insert
     // itself into the list of whitelisted apps.
     setenv( "QT_X11_NO_NATIVE_MENUBAR", "1", true );
     UbuntuUnityHack hack;
-#endif
+#endif*/
 
     TomahawkApp a( argc, argv );
     new BreakPad( QDir::tempPath() );
