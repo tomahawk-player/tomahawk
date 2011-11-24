@@ -16,7 +16,7 @@ Version 0.3.2:
     * Automatically upgrade resolvers when an update is found.
     * Fixed last played track of a friend never expiring.
     * Fixed parsing of rdio tracks.
-    * Changed steering mechanism in stations user-friendlier.
+    * Changed steering mechanism in stations to be user-friendlier.
     * Fixed loading biographies of artists with '+' in the name.
     * Fixed behaviour of dropping Spotify playlists on the sidebar.
     * Fixed hard to read source-name in the audio control area on OS X.
