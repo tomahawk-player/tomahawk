@@ -453,6 +453,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 #endif
+                    tLog() << "Passing to Phonon:" << furl << furl.toLatin1();
                     m_mediaObject->setCurrentSource( furl );
                 }
 
