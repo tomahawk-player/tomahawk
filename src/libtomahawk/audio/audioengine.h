@@ -143,7 +143,6 @@ private:
     void sendWaitingNotification() const;
     void sendNowPlayingNotification();
 
-    bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::result_ptr m_currentTrack;

@@ -51,7 +51,6 @@ AudioEngine::instance()
 
 AudioEngine::AudioEngine()
     : QObject()
-    , m_isPlayingHttp( false )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
@@ -432,7 +431,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 else
                     m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
-                m_isPlayingHttp = false;
             }
             else
             {
@@ -458,7 +456,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 }
 
                 m_mediaObject->currentSource().setAutoDelete( true );
-                m_isPlayingHttp = true;
             }
 
             if ( !m_input.isNull() )
