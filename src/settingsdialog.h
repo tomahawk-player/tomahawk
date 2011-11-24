@@ -107,6 +107,8 @@ private slots:
     void changePage( QListWidgetItem*, QListWidgetItem* );
     void serventReady();
 
+    void requiresRestart();
+
 private:
     void createIcons();
     void setupSipButtons();

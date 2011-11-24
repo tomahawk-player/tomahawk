@@ -21,9 +21,10 @@
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include "ubuntuunityhack.h"
+#include "tomahawksettings.h"
+#include "TomahawkSettingsGui.h"
 
 #include <QTranslator>
-
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -59,8 +60,14 @@ main( int argc, char *argv[] )
 
     TomahawkApp a( argc, argv );
 
+#ifdef ENABLE_HEADLESS
+    new TomahawkSettings( &a );
+#else
+    new TomahawkSettingsGui( &a );
+#endif
+
 #ifndef ENABLE_HEADLESS
-    new BreakPad( QDir::tempPath() );
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
 #endif
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );

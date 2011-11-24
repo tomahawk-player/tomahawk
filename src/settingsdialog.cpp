@@ -79,6 +79,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->addScript->setFixedWidth( 42 );
     ui->removeScript->setFixedWidth( ui->addScript->width() );
 
+    ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
     ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
@@ -195,6 +196,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
+    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->checkBoxUpnp, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->checkBoxReporter, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
     connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
 
     ui->listWidget->setCurrentRow( 0 );
@@ -210,6 +214,7 @@ SettingsDialog::~SettingsDialog()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
 
+        s->setCrashReporterEnabled( ui->checkBoxReporter->checkState() == Qt::Checked );
         s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
         s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
         s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
@@ -807,6 +812,13 @@ SettingsDialog::sipPluginDeleted( bool )
             SipHandler::instance()->removeSipPlugin( p );
         }
     }
+}
+
+
+void
+SettingsDialog::requiresRestart()
+{
+    QMessageBox::information( this, tr( "Information" ), tr( "Changing this setting requires a restart of Tomahawk!" ) );
 }
 
 

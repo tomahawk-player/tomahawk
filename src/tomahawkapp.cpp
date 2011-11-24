@@ -158,14 +158,7 @@ TomahawkApp::init()
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 #endif
 
-#ifdef ENABLE_HEADLESS
-    new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
-#else
-    new TomahawkSettingsGui( this );
-    TomahawkSettings* s = TomahawkSettings::instance();
-#endif
-
 
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
