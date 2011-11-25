@@ -20,6 +20,7 @@
 #include "checkdirtree.h"
 
 #include "utils/logger.h"
+#include "tomahawksettings.h"
 
 #include <QProcess>
 
@@ -57,12 +58,20 @@ CheckDirModel::getFileInfoResult()
     if ( res == "1" )
     {
         // Remove the hidden flag for the /Volumnes folder so all mount points are visible in the default (Q)FileSystemModel
-        QProcess::startDetached( QString( "SetFile -a v %1" ).arg( s_macVolumePath ) );
+        QProcess* p = new QProcess( this );
+        connect( p, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( volumeShowFinished() ) );
+        p->start( QString( "SetFile -a v %1" ).arg( s_macVolumePath ) );
         m_shownVolumes = true;
     }
 
     p->deleteLater();
 #endif
+}
+
+void
+CheckDirModel::volumeShowFinished()
+{
+    reset();
 }
 
 Qt::ItemFlags
@@ -150,6 +159,8 @@ CheckDirTree::CheckDirTree( QWidget* parent )
                             SLOT( updateNode( QModelIndex ) ) );
     connect( &m_dirModel, SIGNAL( dataChangedByUser( const QModelIndex& ) ),
                           SIGNAL( changed() ) );
+    connect( &m_dirModel, SIGNAL( modelReset() ),
+                            SLOT( modelReset() ) );
 
     connect( this, SIGNAL( collapsed( QModelIndex ) ),
                      SLOT( onCollapse( QModelIndex ) ) );
@@ -298,6 +309,16 @@ CheckDirTree::updateNode( const QModelIndex& idx )
     // Start by recursing down to the bottom and then work upwards
     fillDown( idx );
     updateParent( idx );
+}
+
+
+void
+CheckDirTree::modelReset()
+{
+    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
+    {
+        checkPath( dir, Qt::Checked );
+    }
 }
 
 
