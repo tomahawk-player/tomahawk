@@ -47,6 +47,7 @@ TrackModelItem::TrackModelItem( TrackModelItem* parent, QAbstractItemModel* mode
     this->model = model;
     childCount = 0;
     toberemoved = false;
+    m_isPlaying = false;
 
     if ( parent )
     {

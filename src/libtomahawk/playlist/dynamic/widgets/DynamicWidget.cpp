@@ -400,12 +400,26 @@ void
 DynamicWidget::steeringChanged()
 {
     // When steering changes, toss all the tracks that are upcoming, and re-fetch.
-    QModelIndex cur = m_view->currentIndex();
-    const int upcoming = m_view->proxyModel()->rowCount( QModelIndex() ) - 1 - cur.row();
+    // We have to find the currently playing item
+    QModelIndex playing;
+    for ( int i = 0; i < m_view->proxyModel()->rowCount( QModelIndex() ); ++i )
+    {
+        const QModelIndex  cur = m_view->proxyModel()->index( i, 0, QModelIndex() );
+        TrackModelItem* item = m_view->proxyModel()->itemFromIndex( m_view->proxyModel()->mapToSource( cur ) );
+        if ( item && item->isPlaying() )
+        {
+            playing = cur;
+            break;
+        }
+    }
+    if ( !playing.isValid() )
+        return;
+
+    const int upcoming = m_view->proxyModel()->rowCount( QModelIndex() ) - 1 - playing.row();
     tDebug() << "Removing tracks after current in station, found" << upcoming;
 
     QModelIndexList toRemove;
-    for ( int i = cur.row() + 1; i < m_view->proxyModel()->rowCount( QModelIndex() ); i++ )
+    for ( int i = playing.row() + 1; i < m_view->proxyModel()->rowCount( QModelIndex() ); i++ )
     {
         toRemove << m_view->proxyModel()->index( i, 0, QModelIndex() );
     }
