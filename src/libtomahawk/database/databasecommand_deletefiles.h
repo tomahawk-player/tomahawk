@@ -74,13 +74,13 @@ public:
     void setDeleteAll( const bool deleteAll ) { m_deleteAll = deleteAll; }
 
 signals:
-    void done( const QStringList&, const Tomahawk::collection_ptr& );
+    void done( const QList<unsigned int>&, const Tomahawk::collection_ptr& );
     void notify( const QList<unsigned int>& ids );
 
 private:
-    QStringList m_files;
     QDir m_dir;
     QVariantList m_ids;
+    QList<unsigned int> m_idList;
     bool m_deleteAll;
 };
 

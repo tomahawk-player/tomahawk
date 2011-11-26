@@ -342,7 +342,6 @@ EchonestCatalogSynchronizer::tracksRemoved( const QList< unsigned int >& trackId
 
     foreach ( unsigned int id, trackIds )
     {
-        tDebug() << "Deleting item with id:" << id;
         Echonest::CatalogUpdateEntry e( Echonest::CatalogTypes::Delete );
         e.setItemId( QString::number( id ).toLatin1() );
         entries.append( e );

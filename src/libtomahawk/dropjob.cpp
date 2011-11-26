@@ -509,7 +509,6 @@ DropJob::handleXspfs( const QString& fileUrls )
         {
             qDebug() << Q_FUNC_INFO << "Trying to append XSPF";
             connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-
         }
 
         m_queryCount++;

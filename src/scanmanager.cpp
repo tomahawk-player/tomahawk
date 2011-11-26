@@ -140,9 +140,7 @@ ScanManager::runScan( bool manualFull )
         if ( manualFull )
         {
             DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-            connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
-
+            connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
             Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
             return;
         }
@@ -167,9 +165,7 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
     if ( !mtimes.isEmpty() && TomahawkSettings::instance()->scannerPaths().isEmpty() )
     {
         DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                        SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
-
+        connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
@@ -179,12 +175,12 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
 
 
 void
-ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection )
+ScanManager::filesDeleted()
 {
-    Q_UNUSED( files );
-    Q_UNUSED( collection );
     if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
         runDirScan();
+    else
+        scannerFinished();
 }
 
 
@@ -192,9 +188,6 @@ void
 ScanManager::runDirScan()
 {
     qDebug() << Q_FUNC_INFO;
-
-    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-        return;
 
     QStringList paths = TomahawkSettings::instance()->scannerPaths();
 
@@ -219,6 +212,7 @@ ScanManager::runDirScan()
 void
 ScanManager::scannerFinished()
 {
+    tDebug() << "deleting scanner";
     if ( !m_scanner.isNull() )
     {
         m_musicScannerThreadController->quit();

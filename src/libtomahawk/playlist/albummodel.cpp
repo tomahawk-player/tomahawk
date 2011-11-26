@@ -309,11 +309,11 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     emit loadingFinished();
 
-    if ( !albums.count() )
-        return;
-
     if ( m_overwriteOnAdd )
         clear();
+
+    if ( !albums.count() )
+        return;
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
