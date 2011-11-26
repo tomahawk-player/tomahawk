@@ -113,7 +113,7 @@ private:
     QList<QString> m_skippedFiles;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
 
-    QList<DatabaseCommand*> m_cmdQueue;
+    unsigned int m_cmdQueue;
 
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;

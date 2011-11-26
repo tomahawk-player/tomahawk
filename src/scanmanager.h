@@ -59,7 +59,7 @@ private slots:
     void onSettingsChanged();
 
     void fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes );
-    void filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection );
+    void filesDeleted();
 
 private:
     static ScanManager* s_instance;

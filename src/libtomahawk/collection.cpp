@@ -211,7 +211,7 @@ Collection::setStations( const QList< dynplaylist_ptr >& stations )
 void
 Collection::setTracks( const QList<unsigned int>& ids )
 {
-    qDebug() << Q_FUNC_INFO << ids.count() << name();
+    tDebug() << Q_FUNC_INFO << ids.count() << name();
 
     m_changed = true;
     emit tracksAdded( ids );
@@ -221,7 +221,7 @@ Collection::setTracks( const QList<unsigned int>& ids )
 void
 Collection::delTracks( const QList<unsigned int>& ids )
 {
-    qDebug() << Q_FUNC_INFO << ids.count() << name();
+    tDebug() << Q_FUNC_INFO << ids.count() << name();
 
     m_changed = true;
     emit tracksRemoved( ids );
@@ -231,6 +231,7 @@ Collection::delTracks( const QList<unsigned int>& ids )
 void
 Collection::onSynced()
 {
+    tDebug() << Q_FUNC_INFO << m_changed;
     if ( m_changed )
     {
         m_changed = false;

@@ -429,8 +429,7 @@ Source::updateTracks()
     {
         // Re-calculate local db stats
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->get( id() ) );
-        connect( cmd, SIGNAL( done( QVariantMap ) ),
-                 this,  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
+        connect( cmd, SIGNAL( done( QVariantMap ) ), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
 }

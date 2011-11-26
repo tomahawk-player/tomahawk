@@ -34,6 +34,7 @@ class ControlConnection;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
+class DatabaseCommand_DeleteFiles;
 
 namespace Tomahawk
 {
@@ -47,6 +48,7 @@ friend class ::ControlConnection;
 friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_SocialAction;
 friend class ::DatabaseCommand_AddFiles;
+friend class ::DatabaseCommand_DeleteFiles;
 
 public:
     enum AvatarStyle { Original, FancyStyle };

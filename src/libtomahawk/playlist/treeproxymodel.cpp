@@ -151,6 +151,7 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 {
     bool finished = true;
     m_artistsFilter = artists;
+    m_artistsFilterCmd = 0;
 
     foreach ( const Tomahawk::artist_ptr& artist, artists )
     {
