@@ -81,7 +81,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
 }
 
 
-
 void
 PlaylistView::keyPressEvent( QKeyEvent* event )
 {

@@ -81,6 +81,7 @@ protected:
     void keyPressEvent( QKeyEvent* event );
 
 private slots:
+    void onItemCountChanged( unsigned int items );
     void onFilterChanged( const QString& filter );
     void onFilteringStarted();
     void onViewChanged();

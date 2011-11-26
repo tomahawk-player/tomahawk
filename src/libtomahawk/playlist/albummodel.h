@@ -61,6 +61,8 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
+    Tomahawk::collection_ptr collection() const { return m_collection; }
+
     void clear();
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
@@ -92,7 +94,7 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void trackCountChanged( unsigned int tracks );
+    void itemCountChanged( unsigned int items );
 
     void loadingStarted();
     void loadingFinished();

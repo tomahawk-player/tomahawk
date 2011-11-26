@@ -45,6 +45,7 @@ AlbumView::AlbumView( QWidget* parent )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_overlay( new OverlayWidget( this ) )
 {
     setDragEnabled( true );
     setDropIndicatorShown( false );
@@ -111,6 +112,7 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
+    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
@@ -140,6 +142,23 @@ AlbumView::onViewChanged()
         m_timer.stop();
 
     m_timer.start();
+}
+
+
+void
+AlbumView::onItemCountChanged( unsigned int items )
+{
+    if ( items == 0 )
+    {
+        if ( m_model->collection().isNull() || ( !m_model->collection().isNull() && m_model->collection()->source()->isLocal() ) )
+            m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
+        else
+            m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );
+
+        m_overlay->show();
+    }
+    else
+        m_overlay->hide();
 }
 
 
