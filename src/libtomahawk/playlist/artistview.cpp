@@ -130,6 +130,7 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( filteringStarted() ), SLOT( onFilteringStarted() ) );
     connect( m_proxyModel, SIGNAL( filteringFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
+    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
@@ -167,6 +168,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
     }
 }
 
+
 void
 ArtistView::keyPressEvent( QKeyEvent* event )
 {
@@ -203,6 +205,23 @@ ArtistView::resizeEvent( QResizeEvent* event )
     {
         m_header->resizeSection( 0, event->size().width() );
     }
+}
+
+
+void
+ArtistView::onItemCountChanged( unsigned int items )
+{
+    if ( items == 0 )
+    {
+        if ( m_model->collection().isNull() || ( !m_model->collection().isNull() && m_model->collection()->source()->isLocal() ) )
+            m_overlay->setText( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+        else
+            m_overlay->setText( tr( "This collection is currently empty." ) );
+
+        m_overlay->show();
+    }
+    else
+        m_overlay->hide();
 }
 
 

@@ -192,9 +192,6 @@ PlaylistModel::insert( const Tomahawk::query_ptr& query, int row )
 void
 PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
 {
-    if ( !queries.count() )
-        return;
-
     QList< Tomahawk::plentry_ptr > entries;
     foreach( const query_ptr& query, queries )
     {
@@ -221,7 +218,10 @@ void
 PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 {
     if ( !entries.count() )
+    {
+        emit trackCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = row;
     QPair< int, int > crows;

@@ -568,8 +568,6 @@ TreeModel::removeIndexes( const QList<QModelIndex>& indexes )
 void
 TreeModel::addAllCollections()
 {
-    qDebug() << Q_FUNC_INFO;
-
     emit loadingStarted();
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists();
 
@@ -578,7 +576,7 @@ TreeModel::addAllCollections()
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
 
     QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
     foreach ( const source_ptr& source, sources )
@@ -753,7 +751,10 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 {
     emit loadingFinished();
     if ( !artists.count() )
+    {
+        emit itemCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -771,6 +772,7 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     }
 
     emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 

@@ -367,7 +367,10 @@ void
 TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
 {
     if ( !queries.count() )
+    {
+        emit trackCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = row;
     QPair< int, int > crows;

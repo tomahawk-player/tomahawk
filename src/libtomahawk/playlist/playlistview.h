@@ -52,14 +52,12 @@ public:
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
 
-
 signals:
     void nameChanged( const QString& title );
     void destroyed( QWidget* widget );
 
 protected:
     void keyPressEvent( QKeyEvent* event );
-
 
 private slots:
     void onTrackCountChanged( unsigned int tracks );
@@ -73,7 +71,6 @@ private:
     PlaylistModel* m_model;
     QString m_customTitle;
     QString m_customDescripton;
-
 };
 
 #endif // PLAYLISTVIEW_H

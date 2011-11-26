@@ -226,6 +226,8 @@ AlbumModel::removeIndex( const QModelIndex& index )
         delete item;
         emit endRemoveRows();
     }
+
+    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -259,7 +261,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 
     if ( collection.isNull() )
     {
-        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
 
         QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
         foreach ( const source_ptr& source, sources )
@@ -289,6 +291,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
     m_overwriteOnAdd = overwrite;
+    m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -313,7 +316,10 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
         clear();
 
     if ( !albums.count() )
+    {
+        emit itemCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -332,6 +338,7 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     }
 
     emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -345,10 +352,7 @@ AlbumModel::onSourceAdded( const Tomahawk::source_ptr& source )
 void
 AlbumModel::onCollectionChanged()
 {
-    if ( m_collection )
-        addCollection( m_collection, true );
-    else
-        addCollection( m_collection, true );
+    addCollection( m_collection, true );
 }
 
 
@@ -395,7 +399,6 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
     if ( requestData.caller != s_tmInfoIdentifier ||
        ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
