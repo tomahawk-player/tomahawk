@@ -37,7 +37,7 @@ LoadingSpinner::LoadingSpinner( QWidget* parent )
     m_showHide->setDuration( 300 );
     m_showHide->setStartFrame( 0 );
     m_showHide->setEndFrame( 100 );
-    m_showHide->setUpdateInterval( 20  );
+    m_showHide->setUpdateInterval( 20 );
     connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
     connect( m_showHide, SIGNAL( finished() ), this, SLOT( hideFinished() ) );
 
@@ -45,6 +45,7 @@ LoadingSpinner::LoadingSpinner( QWidget* parent )
 
     connect( m_anim, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
 
+    resize( 31, 31 );
     setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     hide();
 }
@@ -100,33 +101,23 @@ LoadingSpinner::sizeHint() const
 
 
 void
-LoadingSpinner::resizeEvent( QResizeEvent* )
-{
-    reposition();
-}
-
-
-void
-LoadingSpinner::reposition()
-{
-    if( !parentWidget() )
-        return;
-
-    int x = ( parentWidget()->width() / 2 ) - ( width() / 2 );
-    int y = ( parentWidget()->height() / 2 ) - ( height() / 2 );
-    move( x, y );
-    resize( 31, 31 );
-}
-
-
-void
 LoadingSpinner::paintEvent( QPaintEvent* ev )
 {
     Q_UNUSED( ev );
+
+    if ( !parentWidget() )
+        return;
+
+    QPoint center( ( parentWidget()->width() / 2 ) - ( width() / 2 ), ( parentWidget()->height() / 2 ) - ( height() / 2 ) );
+    if ( center != pos() )
+    {
+        move( center );
+        return;
+    }
+
     QPainter p( this );
 
-//     qDebug() << "FADING" << ( m_showHide->state() == QTimeLine::Running ) << "at frame:" << m_showHide->currentValue();
-    if( m_showHide->state() == QTimeLine::Running )
+    if ( m_showHide->state() == QTimeLine::Running )
     { // showing or hiding
         p.setOpacity( (qreal)m_showHide->currentValue() );
     }
