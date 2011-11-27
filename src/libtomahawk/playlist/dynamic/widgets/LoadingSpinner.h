@@ -36,7 +36,6 @@ public:
 
     virtual QSize sizeHint() const;
     virtual void paintEvent( QPaintEvent* );
-    virtual void resizeEvent( QResizeEvent* );
 
 public slots:
     void fadeIn();
