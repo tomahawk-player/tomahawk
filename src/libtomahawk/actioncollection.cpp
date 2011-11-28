@@ -17,9 +17,9 @@
  */
 
 #include "actioncollection.h"
-#include <tomahawksettings.h>
-#include <utils/tomahawkutils.h>
+#include "tomahawksettings.h"
 #include "audio/audioengine.h"
+#include "utils/tomahawkutils.h"
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
@@ -53,22 +53,21 @@ ActionCollection::initActions()
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
-
-    m_actionCollection[ "loadPlaylist"] = new QAction( tr( "&Load Playlist" ), this );
-    m_actionCollection[ "renamePlaylist"] = new QAction( tr( "&Rename Playlist" ), this );
-    m_actionCollection[ "copyPlaylist"] = new QAction( tr( "&Copy Playlist Link" ), this );
-    m_actionCollection[ "playPause"] = new QAction( tr( "&Play" ), this );
-    m_actionCollection[ "stop"] = new QAction( tr( "&Stop" ), this );
-    m_actionCollection[ "previousTrack"] = new QAction( tr( "&Previous Track" ), this );
-    m_actionCollection[ "nextTrack"] = new QAction( tr( "&Next Track" ), this );
-    m_actionCollection[ "quit"] = new QAction( tr( "&Quit" ), this );
+    m_actionCollection[ "loadPlaylist" ] = new QAction( tr( "&Load Playlist" ), this );
+    m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
+    m_actionCollection[ "copyPlaylist" ] = new QAction( tr( "&Copy Playlist Link" ), this );
+    m_actionCollection[ "playPause" ] = new QAction( tr( "&Play" ), this );
+    m_actionCollection[ "stop" ] = new QAction( tr( "&Stop" ), this );
+    m_actionCollection[ "previousTrack" ] = new QAction( tr( "&Previous Track" ), this );
+    m_actionCollection[ "nextTrack" ] = new QAction( tr( "&Next Track" ), this );
+    m_actionCollection[ "quit" ] = new QAction( tr( "&Quit" ), this );
 
     // connect actions to AudioEngine
     AudioEngine *ae = AudioEngine::instance();
-    connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ),                  Qt::UniqueConnection );
-    connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),                       Qt::UniqueConnection );
-    connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),                   Qt::UniqueConnection );
-    connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),                       Qt::UniqueConnection );
+    connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ), Qt::UniqueConnection );
+    connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),      Qt::UniqueConnection );
+    connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),  Qt::UniqueConnection );
+    connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
 }
 
 
@@ -85,6 +84,7 @@ ActionCollection::getAction( const QString& name )
 {
     return m_actionCollection.contains( name ) ? m_actionCollection[ name ] : 0;
 }
+
 
 void
 ActionCollection::togglePrivateListeningMode()

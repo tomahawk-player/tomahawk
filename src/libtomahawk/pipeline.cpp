@@ -115,7 +115,7 @@ Pipeline::addResolver( Resolver* r )
 
 
 void
-Pipeline::addExternalResolverFactory(ResolverFactoryFunc resolverFactory)
+Pipeline::addExternalResolverFactory( ResolverFactoryFunc resolverFactory )
 {
     m_resolverFactories << resolverFactory;
 }
