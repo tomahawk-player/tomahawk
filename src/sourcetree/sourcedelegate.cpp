@@ -122,7 +122,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
-        o3.state = QStyle::State_Enabled;
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
