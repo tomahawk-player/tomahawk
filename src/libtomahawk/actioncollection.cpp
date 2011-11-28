@@ -42,7 +42,7 @@ ActionCollection::initActions()
     QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
     latchOn->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
     m_actionCollection[ "latchOn" ] = latchOn;
-    QAction *latchOff = new QAction( tr( "&Stop Listening Along" ), this );
+    QAction *latchOff = new QAction( tr( "Stop &Listening Along" ), this );
     latchOff->setIcon( QIcon( RESPATH "images/headphones-off.png" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
