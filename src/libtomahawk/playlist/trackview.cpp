@@ -90,8 +90,6 @@ TrackView::TrackView( QWidget* parent )
 TrackView::~TrackView()
 {
     tDebug() << Q_FUNC_INFO;
-
-    delete m_header;
 }
 
 

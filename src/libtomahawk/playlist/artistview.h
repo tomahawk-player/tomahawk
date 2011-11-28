@@ -70,6 +70,9 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
+    bool updatesContextView() const { return m_updateContextView; }
+    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
+
 public slots:
     void onItemActivated( const QModelIndex& index );
 
@@ -79,6 +82,9 @@ protected:
 
     void paintEvent( QPaintEvent* event );
     void keyPressEvent( QKeyEvent* event );
+
+protected slots:
+    virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 private slots:
     void onItemCountChanged( unsigned int items );
@@ -97,6 +103,8 @@ private:
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
     LoadingSpinner* m_loadingSpinner;
+
+    bool m_updateContextView;
 
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
