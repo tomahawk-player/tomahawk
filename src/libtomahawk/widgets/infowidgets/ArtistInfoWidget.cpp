@@ -76,7 +76,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show All Releases" ) );
+    m_button->setText( tr( "Click to show Super Collection Albums" ) );
     m_button->setCheckable( true );
     m_button->setChecked( true );
 
@@ -115,7 +115,7 @@ ArtistInfoWidget::onModeToggle()
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
 
     if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show All Releases" ) );
+        m_button->setText( tr( "Click to show Super Collection Albums" ) );
     else
         m_button->setText( tr( "Click to show Official Releases" ) );
 }
