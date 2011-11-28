@@ -465,7 +465,6 @@ DropJob::handleM3u( const QString& fileUrls )
     {
         tDebug() << Q_FUNC_INFO << "Trying to append contents from" << urls;
         connect( m, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-
     }
 
     m_queryCount++;
