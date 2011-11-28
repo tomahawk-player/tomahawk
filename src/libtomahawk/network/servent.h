@@ -152,6 +152,7 @@ private slots:
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
+    bool isValidExternalIP( const QHostAddress& addr ) const;
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
     bool checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const;
     void printCurrentTransfers();
@@ -165,6 +166,7 @@ private:
     QHostAddress m_externalAddress;
     QString m_externalHostname;
     bool m_ready;
+    bool m_lanHack;
 
     // currently active file transfers:
     QList< StreamConnection* > m_scsessions;

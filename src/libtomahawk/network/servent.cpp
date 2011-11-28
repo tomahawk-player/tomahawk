@@ -63,8 +63,8 @@ Servent::Servent( QObject* parent )
 {
     s_instance = this;
 
+    m_lanHack = qApp->arguments().contains( "--lanhack" );
     new ACLSystem( this );
-
     setProxy( QNetworkProxy::NoProxy );
 
     {
@@ -142,7 +142,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
         case TomahawkSettings::Upnp:
             // TODO check if we have a public/internet IP on this machine directly
-            tLog() << "External address mode set to upnp....";
+            tLog() << "External address mode set to upnp...";
             m_portfwd = new PortFwdThread( m_port );
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                   SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
@@ -171,6 +171,19 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
 }
 
 
+bool
+Servent::isValidExternalIP( const QHostAddress& addr ) const
+{
+    QString ip = addr.toString();
+    if ( !m_lanHack && ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) ) )
+    {
+        return false;
+    }
+
+    return !addr.isNull();
+}
+
+
 void
 Servent::setInternalAddress()
 {
@@ -181,7 +194,7 @@ Servent::setInternalAddress()
         if ( ha.toString().contains( ":" ) )
             continue; //ipv6
 
-        if ( qApp->arguments().contains( "--lanhack" ) )
+        if ( m_lanHack && isValidExternalIP( ha ) )
         {
             tLog() << "LANHACK: set external address to lan address" << ha.toString();
             setExternalAddress( ha, m_port );
@@ -199,26 +212,13 @@ Servent::setInternalAddress()
 void
 Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
-    QString ip = ha.toString();
-    if ( !qApp->arguments().contains( "--lanhack" ) )
-    {
-        if ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) )
-        {
-            tDebug() << Q_FUNC_INFO << "Tried to set an invalid ip as external address!";
-            setInternalAddress();
-            return;
-        }
-
-        m_externalAddress = ha;
-        m_externalPort = port;
-    }
-    else
+    if ( isValidExternalIP( ha ) )
     {
         m_externalAddress = ha;
         m_externalPort = port;
     }
 
-    if ( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
     {
         if ( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
              !TomahawkSettings::instance()->externalPort() == 0 )
@@ -228,7 +228,11 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
             tDebug() << "UPnP failed, have external address/port - falling back" << m_externalHostname << m_externalPort << m_externalAddress;
         }
         else
+        {
             tLog() << "No external access, LAN and outbound connections only!";
+            setInternalAddress();
+            return;
+        }
     }
 
     m_ready = true;
