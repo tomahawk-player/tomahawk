@@ -100,6 +100,7 @@ signals:
     void hideWidget();
 
     void sizeChanged( const QSize& size );
+    void sizeHintChanged( const QSize& size );
     void hiddenSizeChanged();
 
 private slots:

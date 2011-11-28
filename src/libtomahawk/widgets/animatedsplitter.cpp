@@ -61,7 +61,8 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 
     connect( widget, SIGNAL( showWidget() ), SLOT( onShowRequest() ) );
     connect( widget, SIGNAL( hideWidget() ), SLOT( onHideRequest() ) );
-    connect( widget, SIGNAL( sizeChanged( QSize) ), SLOT( onSizeChanged( QSize ) ) );
+    connect( widget, SIGNAL( sizeHintChanged( QSize ) ), SLOT( onShowRequest() ) );
+    connect( widget, SIGNAL( sizeChanged( QSize ) ), SLOT( onSizeChanged( QSize ) ) );
 
     connect( this, SIGNAL( shown( QWidget*, bool ) ), widget, SLOT( onShown( QWidget*, bool ) ) );
     connect( this, SIGNAL( hidden( QWidget*, bool ) ), widget, SLOT( onHidden( QWidget*, bool ) ) );
@@ -247,6 +248,7 @@ AnimatedWidget::onAnimationFinished()
         setFixedHeight( hiddenSize().height() );
     }
 }
+
 
 QSize
 AnimatedSplitterHandle::sizeHint() const
