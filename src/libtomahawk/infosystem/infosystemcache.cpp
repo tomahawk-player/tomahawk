@@ -40,11 +40,7 @@ namespace InfoSystem
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
-#ifndef ENABLE_HEADLESS
-    , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
-#else
-    , m_cacheBaseDir( QDir::tempPath() )
-#endif
+    , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/InfoSystemCache/" )
     , m_cacheVersion( 2 )
 {
     tDebug() << Q_FUNC_INFO;

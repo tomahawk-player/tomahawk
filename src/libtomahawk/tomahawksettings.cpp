@@ -219,6 +219,13 @@ TomahawkSettings::infoSystemCacheVersion() const
 }
 
 
+QString
+TomahawkSettings::storageCacheLocation() const
+{
+    return QDir::tempPath() + "/tomahawk/";
+}
+
+
 QStringList
 TomahawkSettings::scannerPaths() const
 {

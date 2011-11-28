@@ -41,6 +41,7 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
+    virtual QString storageCacheLocation() const;
     virtual QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;

@@ -39,6 +39,7 @@ public:
     explicit TomahawkSettingsGui( QObject* parent = 0 );
     virtual ~TomahawkSettingsGui();
 
+    virtual QString storageCacheLocation() const;
     virtual QStringList scannerPaths() const;
 
     AtticaManager::StateHash atticaResolverStates() const;
