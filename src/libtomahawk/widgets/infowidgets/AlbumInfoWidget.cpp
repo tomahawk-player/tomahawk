@@ -73,6 +73,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
         m_button->setText( tr( "Click to show Official Tracks" ) );
 
     connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    connect( m_tracksModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
@@ -91,17 +92,26 @@ AlbumInfoWidget::~AlbumInfoWidget()
     delete ui;
 }
 
+
 PlaylistInterface*
 AlbumInfoWidget::playlistInterface() const
 {
     return ui->tracksView->playlistInterface();
 }
 
+
 void
 AlbumInfoWidget::setMode( ModelMode mode )
 {
+    m_button->setChecked( mode == InfoSystemMode );
+
     if ( m_tracksModel->mode() != mode )
         onModeToggle();
+
+    if ( mode == InfoSystemMode )
+        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+    else
+        m_button->setText( tr( "Click to show Official Tracks" ) );
 }
 
 
@@ -109,13 +119,7 @@ void
 AlbumInfoWidget::onModeToggle()
 {
     m_tracksModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_tracksModel->clear();
     m_tracksModel->addTracks( m_album, QModelIndex() );
-
-    if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
-    else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
 }
 
 
@@ -134,6 +138,7 @@ AlbumInfoWidget::onLoadingFinished()
     m_button->show();
 }
 
+
 bool
 AlbumInfoWidget::isBeingPlayed() const
 {
@@ -146,6 +151,7 @@ AlbumInfoWidget::isBeingPlayed() const
     return false;
 }
 
+
 artist_ptr AlbumInfoWidget::descriptionArtist() const
 {
     if ( !m_album.isNull() && !m_album->artist().isNull() )
@@ -153,6 +159,7 @@ artist_ptr AlbumInfoWidget::descriptionArtist() const
 
     return artist_ptr();
 }
+
 
 ViewPage::DescriptionType
 AlbumInfoWidget::descriptionType()
@@ -173,7 +180,7 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     ui->albumsLabel->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
 
-    m_tracksModel->addTracks( album, QModelIndex() );
+    m_tracksModel->addTracks( album, QModelIndex(), true );
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums();
     cmd->setArtist( album->artist() );

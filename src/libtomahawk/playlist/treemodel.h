@@ -72,7 +72,7 @@ public:
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
     virtual Tomahawk::ModelMode mode() const { return m_mode; }
-    virtual void setMode( Tomahawk::ModelMode mode ) { m_mode = mode; }
+    virtual void setMode( Tomahawk::ModelMode mode );
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
@@ -95,7 +95,7 @@ public:
 
     void addArtists( const Tomahawk::artist_ptr& artist );
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
-    void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
+    void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
 
     void getCover( const QModelIndex& index );
 
@@ -132,6 +132,7 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
+    void modeChanged( Tomahawk::ModelMode mode );
     void itemCountChanged( unsigned int items );
 
     void loadingStarted();
@@ -143,8 +144,10 @@ protected:
 
 private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
-    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data );
+    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModelIndex& index );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& variant );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
@@ -172,7 +175,7 @@ private:
 
     Tomahawk::collection_ptr m_collection;
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
-    QSet<Tomahawk::InfoSystem::InfoStringHash> m_receivedInfoData;
+    QList<Tomahawk::InfoSystem::InfoStringHash> m_receivedInfoData;
 };
 
 #endif // ALBUMMODEL_H

@@ -100,6 +100,7 @@ ArtistInfoWidget::~ArtistInfoWidget()
     delete ui;
 }
 
+
 PlaylistInterface*
 ArtistInfoWidget::playlistInterface() const
 {
@@ -136,6 +137,7 @@ ArtistInfoWidget::onLoadingFinished()
     m_button->show();
 }
 
+
 bool
 ArtistInfoWidget::isBeingPlayed() const
 {
@@ -150,6 +152,7 @@ ArtistInfoWidget::isBeingPlayed() const
 
     return false;
 }
+
 
 bool
 ArtistInfoWidget::jumpToCurrentTrack()
