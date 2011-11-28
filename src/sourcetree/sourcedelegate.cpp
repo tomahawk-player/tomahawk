@@ -109,6 +109,7 @@ void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem o = option;
+    QStyleOptionViewItemV4 o3 = option;
 
 #ifdef Q_WS_MAC
     QFont savedFont = painter->font();
@@ -121,10 +122,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
+        o3.state = QStyle::State_Enabled;
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
+            o3.state |= QStyle::State_Selected;
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+            o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
 
@@ -132,7 +136,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     Q_ASSERT( item );
 
-    QStyleOptionViewItemV4 o3 = option;
     if ( type != SourcesModel::Collection && type != SourcesModel::Category )
         o3.rect.setX( 0 );
 
@@ -413,7 +416,6 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
 bool
 SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
-
     if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonPress )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
