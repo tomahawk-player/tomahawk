@@ -53,11 +53,6 @@ LastFmPlugin::LastFmPlugin()
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
-/*
-      Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
-      Your secret is ba80f1df6d27ae63e9cb1d33ccf2052f
-*/
-
     // Flush session key cache
     TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
 
@@ -394,9 +389,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
                 }
 
             }
-            tDebug() << "LastFmPlugin: InfoChart not in cache, fetching";
             QMap<QString, QString> args;
-            tDebug() << "LastFmPlugin: " << "args chart_id" << criteria["chart_id"];
             args["method"] = criteria["chart_id"];
             args["limit"] = "100";
             QNetworkReply* reply = lastfm::ws::get(args);
@@ -430,8 +423,6 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             c[ "label" ] = tr( "Hyped Artists" );
             artist_charts.append( c );
             
-
-            
             QVariantMap charts;
             charts.insert( "Tracks", QVariant::fromValue< QList< InfoStringHash > >( track_charts ) );
             charts.insert( "Artists", QVariant::fromValue< QList< InfoStringHash > >( artist_charts ) );
@@ -439,7 +430,6 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             QVariantMap result;
             result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
 
-            tDebug() << "LASTFM RETURNING CHART LIST!";
             emit info( requestData, result );
             return;
         }
@@ -531,7 +521,6 @@ LastFmPlugin::similarArtistsReturned()
 void
 LastFmPlugin::chartReturned()
 {
-    tDebug() << "LastfmPlugin: InfoChart data returned!";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     QVariantMap returnedData;
@@ -549,7 +538,6 @@ LastFmPlugin::chartReturned()
             pair[ "track" ] = t.title();
             top_tracks << pair;
         }
-        tDebug() << "LastFmPlugin:" << "\tgot " << top_tracks.size() << " tracks";
         returnedData["tracks"] = QVariant::fromValue( top_tracks );
         returnedData["type"] = "tracks";
 
@@ -558,7 +546,6 @@ LastFmPlugin::chartReturned()
     {
         QList<lastfm::Artist> list = lastfm::Artist::list( reply );
         QStringList al;
-        tDebug() << "LastFmPlugin:"<< "\tgot " << list.size() << " artists";
         foreach ( const lastfm::Artist& a, list )
             al << a.toString();
         returnedData["artists"] = al;
@@ -566,7 +553,7 @@ LastFmPlugin::chartReturned()
     }
     else
     {
-        tDebug() << "LastfmPlugin:: got non tracks and non artists";
+        tDebug() << Q_FUNC_INFO << "got non tracks and non artists";
     }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
