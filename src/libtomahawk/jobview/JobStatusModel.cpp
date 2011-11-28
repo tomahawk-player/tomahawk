@@ -58,7 +58,7 @@ JobStatusModel::addJob( JobStatusItem* item )
     }
     qDebug() << "Adding item:" << item;
 
-    beginInsertRows( QModelIndex(), m_items.count() - 1, m_items.count() );
+    beginInsertRows( QModelIndex(), m_items.count(), m_items.count() );
     m_items.append( item );
     endInsertRows();
 }
