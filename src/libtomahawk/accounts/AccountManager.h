@@ -25,7 +25,7 @@
 #include "dllmacro.h"
 #include "infosystem/infosystem.h"
 #include "sip/SipPlugin.h"
-#include "account.h"
+#include "Account.h"
 
 namespace Tomahawk
 {
@@ -36,10 +36,10 @@ namespace Accounts
 class DLLEXPORT AccountManager : public QObject
 {
     Q_OBJECT
-    
+
 public:
     static AccountManager* instance();
-        
+
     explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
 
@@ -51,12 +51,24 @@ public:
     void addAccountPlugin( Account* account );
     Account* loadPlugin( const QString &accountId );
     QString factoryFromId( const QString& accountId ) const;
-    
-    QList< Account* > getAccounts() { return m_accounts; };
-    QList< Account* > getAccounts( Tomahawk::Accounts::AccountType type ) { return m_accountsByAccountType[ type ]; }
+
+    QList< Account* > accounts() const { return m_accounts; };
+    QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
+
+public slots:
+    void connectAll();
+    void disconnectAll();
+
+signals:
+    void accountAdded( Tomahawk::Accounts::Account* );
+    void accountRemoved( Tomahawk::Accounts::Account* );
 
 private:
     QList< Account* > m_accounts;
+    QList< Account* > m_enabledAccounts;
+    QList< Account* > m_connectedAccounts;
+    bool m_connected;
+
     QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;
 

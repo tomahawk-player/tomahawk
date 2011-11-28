@@ -26,7 +26,7 @@
 #include <QString>
 #include <QNetworkProxy>
 
-#include "accounts/account.h"
+#include "accounts/Account.h"
 #ifndef ENABLE_HEADLESS
     #include <QMenu>
 #endif
@@ -40,9 +40,6 @@ class DLLEXPORT SipPlugin : public QObject
     Q_OBJECT
 
 public:
-    enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
-    enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
-
     SipPlugin();
     explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
     virtual ~SipPlugin();
@@ -53,8 +50,6 @@ public:
     virtual bool isValid() const = 0;
     virtual const QString friendlyName() const;
     virtual const QString serviceName() const;
-    virtual ConnectionState connectionState() const = 0;
-    virtual QString errorMessage() const;
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
 #endif
@@ -76,9 +71,6 @@ public slots:
     virtual void refreshProxy();
 
 signals:
-    void error( int, const QString& );
-    void stateChanged( SipPlugin::ConnectionState state );
-
     void peerOnline( const QString& );
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
@@ -99,17 +91,13 @@ signals:
     void dataError( bool );
 
 private slots:
-    void onError( int, const QString& );
-    void onStateChange( SipPlugin::ConnectionState state );
-
     void onPeerOnline( const QString &peerId );
     void onPeerOffline( const QString &peerId );
 
 protected:
     Tomahawk::Accounts::Account *m_account;
-    
+
 private:
-    QString m_cachedError;
     QStringList m_peersOnline;
 };
 

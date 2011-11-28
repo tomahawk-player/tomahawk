@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org?
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,7 +40,7 @@ namespace InfoSystem
 {
     class InfoPlugin;
 }
-    
+
 namespace Accounts
 {
 
@@ -54,13 +55,12 @@ inline QString generateId( const QString &factoryId )
 class DLLEXPORT Account : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    explicit Account( const QString &accountId )
-        : QObject()
-        , m_enabled( false )
-        , m_autoConnect( false )
-        , m_accountId( accountId ) {}
+    enum AuthErrorCode { AuthError, ConnectionError };
+    enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
+
+    explicit Account( const QString &accountId );
     virtual ~Account() {}
 
     virtual QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
@@ -79,10 +79,12 @@ public:
 
     virtual QIcon icon() const = 0;
 
-    virtual bool canSelfAuthenticate() const = 0;
     virtual void authenticate() = 0;
     virtual void deauthenticate() = 0;
+    virtual ConnectionState connectionState() = 0;
     virtual bool isAuthenticated() const = 0;
+
+    virtual QString errorMessage() const { QMutexLocker locker( &m_mutex ); return m_cachedError; }
 
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
@@ -129,13 +131,16 @@ public:
     }
 
     virtual void refreshProxy() = 0;
-    
+
     virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
 
 signals:
+    void error( int errorId, const QString& errorStr );
+    void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
+
     void configurationChanged();
     void authenticated( bool );
-    
+
 protected:
     virtual void loadFromConfig( const QString &accountId )
     {
@@ -167,8 +172,14 @@ protected:
         s->sync();
     }
 
+private slots:
+    void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );
+    void onError( int,QString );
+
+private:
     QString m_accountServiceName;
     QString m_accountFriendlyName;
+    QString m_cachedError;
     bool m_enabled;
     bool m_autoConnect;
     QString m_accountId;

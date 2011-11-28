@@ -25,6 +25,8 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+#define ROW_HEIGHT 50
+
 ConfigDelegateBase::ConfigDelegateBase ( QObject* parent )
     : QStyledItemDelegate ( parent )
 {
@@ -36,23 +38,7 @@ QSize
 ConfigDelegateBase::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     int width = QStyledItemDelegate::sizeHint( option, index ).width();
-
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
-
-
-    QFont name = opt.font;
-    name.setPointSize( name.pointSize() + 2 );
-    name.setBold( true );
-
-    QFont path = opt.font;
-    path.setItalic( true );
-    path.setPointSize( path.pointSize() - 1 );
-
-
-    QFontMetrics bfm( name );
-    QFontMetrics sfm( path );
-    return QSize( width, 2 * PADDING + bfm.height() + sfm.height() );
+    return QSize( width, ROW_HEIGHT );
 }
 
 void
@@ -94,17 +80,24 @@ ConfigDelegateBase::editorEvent ( QEvent* event, QAbstractItemModel* model, cons
         m_configPressed = QModelIndex();
 
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
-        if( me->button() != Qt::LeftButton || !checkRectForIndex( option, index ).contains( me->pos() ) )
-            return false;
+        QList<int> roles = QList<int>() << (int)Qt::CheckStateRole;
+        roles.append( extraCheckRoles() );
 
-        // eat the double click events inside the check rect
-        if( event->type() == QEvent::MouseButtonDblClick ) {
-            return true;
+        foreach ( int role, roles )
+        {
+            if( me->button() != Qt::LeftButton || !checkRectForIndex( option, index, role ).contains( me->pos() ) )
+                return false;
+
+            // eat the double click events inside the check rect
+            if( event->type() == QEvent::MouseButtonDblClick ) {
+                return true;
+            }
+
+            Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( role ).toInt() );
+            Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
+            return model->setData( index, newState, role );
         }
 
-        Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
-        Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
-        return model->setData( index, newState, Qt::CheckStateRole );
 
     } else if( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );

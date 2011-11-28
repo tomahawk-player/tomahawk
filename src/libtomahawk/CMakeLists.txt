@@ -59,12 +59,12 @@ set( libSources
 
     EchonestCatalogSynchronizer.cpp
 
-    accounts/accountmanager.cpp
-    accounts/account.cpp
+    accounts/AccountManager.cpp
+    accounts/Account.cpp
+    accounts/AccountModel.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
-    sip/SipModel.cpp
     sip/sipinfo.cpp
 
     audio/audioengine.cpp
@@ -284,14 +284,14 @@ set( libHeaders
     album.h
     playlist.h
 
-    accounts/account.h
-    accounts/accountmanager.h
+    accounts/Account.h
+    accounts/AccountManager.h
+    accounts/AccountModel.h
 
     EchonestCatalogSynchronizer.h
 
     sip/SipPlugin.h
     sip/SipHandler.h
-    sip/SipModel.h
     sip/sipinfo.h
 
     audio/audioengine.h
@@ -484,7 +484,7 @@ set( libHeaders
 set( libHeaders_NoMOC
     viewpage.h
 
-    accounts/account.h
+    accounts/Account.h
 
     infosystem/infoplugins/unix/imageconverter.h
 

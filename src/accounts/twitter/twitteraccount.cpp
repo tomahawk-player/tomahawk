@@ -52,7 +52,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     QSet< AccountType > types;
     types << InfoType << SipType;
     setTypes( types );
-    
+
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
 
@@ -93,9 +93,9 @@ TwitterAccount::sipPlugin()
 void
 TwitterAccount::authenticate()
 {
-    tDebug() << Q_FUNC_INFO << "credentials: " << m_credentials.keys();
+    tDebug() << Q_FUNC_INFO << "credentials: " << credentials().keys();
 
-    if ( m_credentials[ "oauthtoken" ].toString().isEmpty() || m_credentials[ "oauthtokensecret" ].toString().isEmpty() )
+    if ( credentials[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
     {
         qDebug() << "TwitterSipPlugin has empty Twitter credentials; not connecting";
         return;
@@ -154,7 +154,9 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
     else
     {
         tDebug() << "TwitterAccount successfully authenticated to Twitter as user " << user.screenName();
-        m_configuration[ "screenname" ] = user.screenName();
+        QVariantHash config = configuration();
+        config[ "screenname" ] = user.screenName();
+        setConfiguration( config );
         sync();
         emit nowAuthenticated( m_twitterAuth, user );
     }

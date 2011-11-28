@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -60,8 +61,6 @@ public slots:
 
     void connectPlugin( const QString &pluginId = QString() );
     void disconnectPlugin( const QString &pluginId = QString() );
-    void connectAll();
-    void disconnectAll();
 
     void toggleConnect();
 
@@ -104,11 +103,6 @@ private:
     void loadPluginFactories( const QStringList& paths );
     void loadPluginFactory( const QString& path );
     QString factoryFromId( const QString& pluginId ) const;
-
-    QList< SipPlugin* > m_allPlugins;
-    QList< SipPlugin* > m_enabledPlugins;
-    QList< SipPlugin* > m_connectedPlugins;
-    bool m_connected;
 
     //TODO: move this to source
     QHash<QString, SipInfo> m_peersSipInfos;

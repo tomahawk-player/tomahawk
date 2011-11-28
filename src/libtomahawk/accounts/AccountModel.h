@@ -1,5 +1,4 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
     Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
 
     This program is free software: you can redistribute it and/or modify
@@ -21,43 +20,57 @@
 #define SIPMODEL_H
 
 #include "dllmacro.h"
+#include "sip/SipPlugin.h"
 
 #include <QModelIndex>
 #include <QStringList>
 
-class SipPlugin;
+namespace Tomahawk
+{
+namespace Accounts
+{
 
-class DLLEXPORT SipModel : public QAbstractItemModel
+class Account;
+
+class DLLEXPORT AccountModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum Roles {
-        PluginName = Qt::UserRole + 15,
-        ConnectionStateRole = Qt::UserRole + 17,
-        HasConfig = Qt::UserRole + 18,
-        FactoryRole = Qt::UserRole + 19,
-        ErrorString = Qt::UserRole + 20,
-        FactoryItemRole = Qt::UserRole + 21,
-        FactoryItemIcon = Qt::UserRole + 22,
-        SipPluginData = Qt::UserRole + 23,
-        SipPluginFactoryData = Qt::UserRole + 24
+    enum BasicCapabilities
+    {
+        NoCapabilities = 0,
+        SipCapability = 0x1,
+        ResolverCapability = 0x2
     };
 
-    explicit SipModel( QObject* parent = 0 );
-    virtual ~SipModel();
+    enum Roles {
+        AccountName = Qt::UserRole + 15,
+        AccountIcon = Qt::UserRole + 16,
+        HeadlineText = Qt::UserRole + 17,
+        DescText = Qt::UserRole + 18,
+        BasicCapabilityRole = Qt::UserRole + 19,
+        ConnectionStateRole = Qt::UserRole + 20,
+        HasConfig = Qt::UserRole + 21,
+        ErrorString = Qt::UserRole + 22,
+        AccountData = Qt::UserRole + 23 // raw plugin
+    };
 
-    virtual QModelIndex index ( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-    virtual QModelIndex parent ( const QModelIndex& child ) const;
+    explicit AccountModel( QObject* parent = 0 );
+    virtual ~AccountModel();
+
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual int columnCount( const QModelIndex& parent ) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
 private slots:
-    void pluginAdded( SipPlugin* p );
-    void pluginRemoved( SipPlugin* p );
-    void pluginStateChanged( SipPlugin* p );
+    void accountAdded( Tomahawk::Accounts::Account* p );
+    void accountRemoved( Tomahawk::Accounts::Account* p );
+    void accountStateChanged( Tomahawk::Accounts::Account::ConnectionState );
 };
+
+}
+
+}
 
 #endif // SIPMODEL_H

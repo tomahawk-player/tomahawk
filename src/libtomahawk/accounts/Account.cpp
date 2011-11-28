@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org?
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,13 +17,23 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "account.h"
+#include "Account.h"
 
 namespace Tomahawk
 {
 
 namespace Accounts
 {
+
+Account::Account( const QString& accountId )
+    : QObject()
+    , m_enabled( false )
+    , m_autoConnect( false )
+    , m_accountId( accountId )
+{
+    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
+    connect( this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) , this, SLOT( onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+}
 
 QWidget*
 Account::configurationWidget()
@@ -77,9 +88,4 @@ void
 Account::refreshProxy()
 {
 
-}
-
-
-}
-    
 }

@@ -16,31 +16,40 @@
 */
 
 
-#ifndef SIPCONFIGDELEGATE_H
-#define SIPCONFIGDELEGATE_H
+#ifndef ACCOUNTDELEGATE_H
+#define ACCOUNTDELEGATE_H
 
 #include "configdelegatebase.h"
 
-class SipPlugin;
-class SipPluginFactory;
-class SipConfigDelegate : public ConfigDelegateBase
+namespace Tomahawk
+{
+namespace Accounts
+{
+
+class Account;
+
+class AccountDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
 public:
-    SipConfigDelegate( QObject* parent = 0);
+    AccountDelegate( QObject* parent = 0);
 
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
+
+    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::BasicCapabilityRole; }
 private slots:
     void askedForEdit( const QModelIndex& idx );
 
 signals:
-    void sipFactoryClicked( SipPluginFactory* );
-    void openConfig( SipPlugin* );
+    void openConfig( Account* );
 };
 
-#endif // SIPCONFIGDELEGATE_H
+}
+}
+
+#endif // ACCOUNTDELEGATE_H

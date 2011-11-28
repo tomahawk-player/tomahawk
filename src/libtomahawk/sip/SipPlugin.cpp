@@ -29,10 +29,6 @@ SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
     : QObject( parent )
     , m_account( account )
 {
-    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
-    connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
-    connect( this, SIGNAL( peerOnline( QString ) ), this, SLOT( onPeerOnline( QString ) ) );
-    connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
 }
 
 

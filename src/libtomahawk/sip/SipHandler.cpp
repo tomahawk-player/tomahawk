@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -32,7 +33,7 @@
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 #include "utils/logger.h"
-#include "accounts/accountmanager.h"
+#include "accounts/AccountManager.h"
 
 #include "config.h"
 
@@ -62,8 +63,6 @@ SipHandler::SipHandler( QObject* parent )
 SipHandler::~SipHandler()
 {
     qDebug() << Q_FUNC_INFO;
-    disconnectAll();
-    qDeleteAll( m_allPlugins );
 }
 
 
@@ -174,7 +173,7 @@ void
 SipHandler::loadFromAccountManager()
 {
     tDebug() << Q_FUNC_INFO;
-    QList< Tomahawk::Accounts::Account* > accountList = Tomahawk::Accounts::AccountManager::instance()->getAccounts( Tomahawk::Accounts::SipType );
+    QList< Tomahawk::Accounts::Account* > accountList = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
     foreach( Tomahawk::Accounts::Account* account, accountList )
     {
         tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();

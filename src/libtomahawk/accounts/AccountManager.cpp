@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "accountmanager.h"
+#include "AccountManager.h"
 #include "config.h"
 
 #include <QtCore/QLibrary>
@@ -48,13 +48,14 @@ AccountManager::AccountManager( QObject *parent )
     loadPluginFactories( findPluginFactories() );
 }
 
-    
+
 AccountManager::~AccountManager()
 {
-
+    disconnectAll();
+    qDeleteAll( m_accounts );
 }
 
-    
+
 QStringList
 AccountManager::findPluginFactories()
 {
@@ -187,8 +188,8 @@ AccountManager::addAccountPlugin( Account* account )
 
     foreach( AccountType type, account->types() )
         m_accountsByAccountType[ type ].append( account );
-    //TODO:?
-    //emit pluginAdded( account );
+
+    emit accountAdded( account );
 }
 
 

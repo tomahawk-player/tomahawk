@@ -211,7 +211,7 @@ TomahawkApp::init()
     tDebug() << "Init AccountManager.";
     m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
     Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
-    
+
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
@@ -505,7 +505,8 @@ void
 TomahawkApp::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->getAccounts() )
+    // TODO debugging hack only
+    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->accounts() )
     {
         tDebug() << Q_FUNC_INFO << "testing account with name " << account->accountServiceName();
         if ( account->configurationWidget() && account->configuration().isEmpty() )
@@ -513,7 +514,7 @@ TomahawkApp::initSIP()
         if ( !account->enabled() )
             account->setEnabled( true );
     }
-    
+
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
