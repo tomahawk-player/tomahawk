@@ -27,11 +27,6 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
-#ifndef ENABLE_HEADLESS
-    #include <QtGui/QPushButton>
-    #include <QtGui/QMessageBox>
-#endif
-
 #include "result.h"
 #include "source.h"
 #include "bufferiodevice.h"
@@ -703,8 +698,9 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
     if( peerStatus == ACLSystem::Deny )
         return false;
 
-#ifndef ENABLE_HEADLESS
     //FIXME: Actually enable it when it makes sense
+    //FIXME: needs refactoring because it depends on QtGui and the servent is part of libtomahawk-core
+    /*
     return true;
     if( peerStatus == ACLSystem::NotFound )
     {
@@ -744,7 +740,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
         Q_ASSERT( false );
         return false;
     }
-#endif
+    */
 
     return true;
 }
