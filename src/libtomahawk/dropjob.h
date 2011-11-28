@@ -62,7 +62,8 @@ public:
     enum DropAction {
         Default = 0,
         Append,
-        Create
+        Create,
+        Move
     };
 
     /**

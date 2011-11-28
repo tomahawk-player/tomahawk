@@ -331,18 +331,17 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
 
     dj->setDropTypes( DropJob::Track | DropJob::Playlist | DropJob::Artist | DropJob::Album );
     dj->setDropAction( DropJob::Append );
+/*    if ( action & Qt::MoveAction )
+        dj->setDropAction( DropJob::Move ); */
 
+#ifdef Q_WS_MAC
     // On mac, drags from outside the app are still Qt::MoveActions instead of Qt::CopyAction by default
     // so check if the drag originated in this playlist to determine whether or not to copy
-#ifdef Q_WS_MAC
     if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
        ( !m_playlist.isNull() && data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() ) )
     {
         dj->setDropAction( DropJob::Append );
     }
-#else
-    if ( action & Qt::CopyAction )
-        dj->setDropAction( DropJob::Append );
 #endif
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
@@ -373,6 +372,9 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
             beginPlaylistChanges();
 
         insert( tracks, beginRow );
+
+        if ( update && m_dropStorage.action & Qt::CopyAction )
+            endPlaylistChanges();
     }
 
     m_dropStorage.parent = QPersistentModelIndex();
