@@ -58,15 +58,17 @@ TopTracksContext::~TopTracksContext()
 
 
 void
-TopTracksContext::setQuery( const Tomahawk::query_ptr& query )
+TopTracksContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
-    if ( !m_query.isNull() && query->artist() == m_query->artist() )
+    if ( artist.isNull() )
+        return;
+    if ( !m_artist.isNull() && m_artist->name() == artist->name() )
         return;
 
-    m_query = query;
+    m_artist = artist;
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = query->artist();
+    artistInfo["artist"] = artist->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = m_infoId;
@@ -75,6 +77,26 @@ TopTracksContext::setQuery( const Tomahawk::query_ptr& query )
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+void
+TopTracksContext::setAlbum( const Tomahawk::album_ptr& album )
+{
+    if ( album.isNull() )
+        return;
+
+    setArtist( album->artist() );
+}
+
+
+void
+TopTracksContext::setQuery( const Tomahawk::query_ptr& query )
+{
+    if ( query.isNull() )
+        return;
+
+    setArtist( Artist::get( query->artist(), false ) );
 }
 
 
@@ -89,9 +111,9 @@ TopTracksContext::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 
     if ( output.canConvert< QVariantMap >() )
     {
-        if ( trackInfo["artist"] != m_query->artist() )
+        if ( trackInfo["artist"] != m_artist->name() )
         {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_query->artist();
+            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
             return;
         }
     }
@@ -107,7 +129,7 @@ TopTracksContext::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                query_ptr query = Query::get( m_query->artist(), track, QString(), uuid() );
+                query_ptr query = Query::get( m_artist->name(), track, QString(), uuid() );
                 m_topHitsModel->append( query );
 
                 if ( ++i == 15 )

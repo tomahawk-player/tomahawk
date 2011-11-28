@@ -24,6 +24,7 @@
 #include <QScrollBar>
 
 #include "audio/audioengine.h"
+#include "context/ContextWidget.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "widgets/overlaywidget.h"
 
@@ -47,6 +48,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
 {
@@ -146,6 +148,27 @@ ArtistView::setTreeModel( TreeModel* model )
     {
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
+}
+
+
+void
+ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& /* previous */ )
+{
+    if ( !m_updateContextView )
+        return;
+
+    TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    if ( item )
+    {
+        if ( !item->result().isNull() )
+            ViewManager::instance()->context()->setQuery( item->result()->toQuery() );
+        else if ( !item->artist().isNull() )
+            ViewManager::instance()->context()->setArtist( item->artist() );
+        else if ( !item->album().isNull() )
+            ViewManager::instance()->context()->setAlbum( item->album() );
+        else if ( !item->query().isNull() )
+            ViewManager::instance()->context()->setQuery( item->query() );
     }
 }
 

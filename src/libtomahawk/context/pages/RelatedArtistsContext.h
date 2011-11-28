@@ -23,6 +23,8 @@
 
 #include "dllmacro.h"
 
+#include "artist.h"
+#include "album.h"
 #include "query.h"
 #include "context/ContextPage.h"
 #include "infosystem/infosystem.h"
@@ -48,6 +50,8 @@ public:
     virtual bool jumpToCurrentTrack() { return false; }
 
 public slots:
+    virtual void setArtist( const Tomahawk::artist_ptr& artist );
+    virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
 private slots:
@@ -61,7 +65,7 @@ private:
     QGraphicsProxyWidget* m_proxy;
 
     QString m_infoId;
-    Tomahawk::query_ptr m_query;
+    Tomahawk::artist_ptr m_artist;
 };
 
 #endif // RELATEDARTISTSCONTEXT_H
