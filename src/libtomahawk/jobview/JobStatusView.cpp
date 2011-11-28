@@ -19,22 +19,21 @@
 
 #include "JobStatusView.h"
 
-
-#include "libtomahawk/pipeline.h"
-
+#include "pipeline.h"
 #include "JobStatusModel.h"
 #include "JobStatusDelegate.h"
 #include "PipelineStatusItem.h"
+#include "TransferStatusItem.h"
+#include "LatchedStatusItem.h"
 #include "utils/logger.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QListView>
 #include <QAbstractItemModel>
-#include "TransferStatusItem.h"
-#include "LatchedStatusItem.h"
 
 using namespace Tomahawk;
+
 
 JobStatusView* JobStatusView::s_instance = 0;
 
@@ -77,6 +76,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     new LatchedStatusManager( this );
 }
 
+
 void
 JobStatusView::setModel( JobStatusModel* m )
 {
@@ -87,6 +87,7 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
 }
+
 
 void
 JobStatusView::checkCount()

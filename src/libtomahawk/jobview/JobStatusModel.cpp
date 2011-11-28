@@ -21,17 +21,20 @@
 #include "JobStatusItem.h"
 #include "utils/logger.h"
 
+
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
 {
 
 }
 
+
 JobStatusModel::~JobStatusModel()
 {
     qDeleteAll( m_items );
     m_collapseCount.clear();
 }
+
 
 void
 JobStatusModel::addJob( JobStatusItem* item )
@@ -55,10 +58,11 @@ JobStatusModel::addJob( JobStatusItem* item )
     }
     qDebug() << "Adding item:" << item;
 
-    beginInsertRows( QModelIndex(), 0, 0 );
-    m_items.prepend( item );
+    beginInsertRows( QModelIndex(), m_items.count() - 1, m_items.count() );
+    m_items.append( item );
     endInsertRows();
 }
+
 
 Qt::ItemFlags
 JobStatusModel::flags( const QModelIndex& index ) const
@@ -100,6 +104,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
 
     return QVariant();
 }
+
 
 int
 JobStatusModel::rowCount( const QModelIndex& parent ) const
@@ -164,6 +169,7 @@ JobStatusModel::itemFinished()
 
     item->deleteLater();
 }
+
 
 void
 JobStatusModel::itemUpdated()
