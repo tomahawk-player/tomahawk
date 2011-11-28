@@ -51,6 +51,13 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_3 );
+
+    ui->splitter->setStretchFactor( 0, 0 );
+    ui->splitter->setStretchFactor( 1, 1 );
 
     ui->historyView->overlay()->setEnabled( false );
 
