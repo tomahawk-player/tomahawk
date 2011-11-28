@@ -75,6 +75,15 @@ TreeModel::clear()
 }
 
 
+void
+TreeModel::setMode( ModelMode mode )
+{
+    clear();
+    m_mode = mode;
+    emit modeChanged( mode );
+}
+
+
 Tomahawk::collection_ptr
 TreeModel::collection() const
 {
@@ -613,7 +622,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
         cmd->setData( parent.row() );
 
         connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                        SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, QVariant ) ) );
+                        SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
@@ -635,7 +644,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 
 
 void
-TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
+TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool autoRefetch )
 {
     emit loadingStarted();
 
@@ -650,7 +659,7 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
         cmd->setData( QVariant( rows ) );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, QVariant ) ) );
+                        SLOT( onTracksFound( QList<Tomahawk::query_ptr>, QVariant ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
@@ -660,10 +669,11 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
         artistInfo["artist"] = album->artist()->name();
         artistInfo["album"] = album->name();
 
-        m_receivedInfoData.remove( artistInfo );
+        m_receivedInfoData.removeAll( artistInfo );
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
         requestData.customData["rows"] = QVariant( rows );
+        requestData.customData["refetch"] = QVariant( autoRefetch );
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
         requestData.timeoutMillis = 0;
@@ -777,13 +787,12 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 
 
 void
-TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data )
+TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModelIndex& parent )
 {
     emit loadingFinished();
     if ( !albums.count() )
         return;
 
-    QModelIndex parent = index( data.toInt(), 0, QModelIndex() );
     TreeModelItem* parentItem = itemFromIndex( parent );
 
     QPair< int, int > crows;
@@ -808,16 +817,12 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
 
 
 void
-TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data )
+TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& parent )
 {
     emit loadingFinished();
     if ( !tracks.count() )
         return;
 
-    QList< QVariant > rows = data.toList();
-    tDebug() << "Adding to:" << rows;
-
-    QModelIndex parent = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
     TreeModelItem* parentItem = itemFromIndex( parent );
 
     QPair< int, int > crows;
@@ -841,6 +846,24 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     }
 
     emit endInsertRows();
+}
+
+
+void
+TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant )
+{
+    QList< QVariant > rows = variant.toList();
+    QModelIndex idx = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
+
+    onTracksAdded( tracks, idx );
+}
+
+
+void
+TreeModel::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& variant )
+{
+    QModelIndex idx = index( variant.toInt(), 0, QModelIndex() );
+    onAlbumsAdded( albums, idx );
 }
 
 
@@ -897,38 +920,59 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
                 Tomahawk::album_ptr album = Tomahawk::Album::get( artist, albumName, false );
                 al << album;
             }
-            onAlbumsAdded( al, requestData.customData[ "row" ] );
+
+            QModelIndex idx = index( requestData.customData[ "row" ].toInt(), 0, QModelIndex() );
+            onAlbumsAdded( al, idx );
 
             break;
         }
 
         case Tomahawk::InfoSystem::InfoAlbumSongs:
         {
-            if ( m_receivedInfoData.contains( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() ) )
-                break;
-
-            emit loadingFinished();
+            m_receivedInfoData.append( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
 
             QVariantMap returnedData = output.value< QVariantMap >();
-            if ( returnedData.isEmpty() )
-                break;
-
-            m_receivedInfoData.insert( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
-
-            QStringList tracks = returnedData[ "tracks" ].toStringList();
-            QList<query_ptr> ql;
-
-            Tomahawk::InfoSystem::InfoStringHash inputInfo;
-            inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-            unsigned int trackNo = 1;
-            foreach ( const QString& trackName, tracks )
+            if ( !returnedData.isEmpty() )
             {
-                query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
-                query->setAlbumPos( trackNo++ );
-                ql << query;
+                emit loadingFinished();
+
+                QList< QVariant > rows = requestData.customData[ "rows" ].toList();
+                QModelIndex idx = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
+                if ( rowCount( idx ) )
+                    return;
+
+                Tomahawk::InfoSystem::InfoStringHash inputInfo;
+                inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+
+                QStringList tracks = returnedData[ "tracks" ].toStringList();
+                QList<query_ptr> ql;
+                unsigned int trackNo = 1;
+
+                foreach ( const QString& trackName, tracks )
+                {
+                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
+                    query->setAlbumPos( trackNo++ );
+                    ql << query;
+                }
+
+                onTracksAdded( ql, idx );
             }
-            onTracksAdded( ql, requestData.customData[ "rows" ] );
+            else if ( m_receivedInfoData.count() == 2 /* FIXME */ )
+            {
+                if ( requestData.customData[ "refetch" ].toInt() > 0 )
+                {
+                    setMode( DatabaseMode );
+
+                    Tomahawk::InfoSystem::InfoStringHash inputInfo;
+                    inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
+                    artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
+                    album_ptr album = Album::get( artist, inputInfo[ "album" ], false );
+
+                    addTracks( album, QModelIndex() );
+                }
+                else
+                    emit loadingFinished();
+            }
 
             break;
         }
