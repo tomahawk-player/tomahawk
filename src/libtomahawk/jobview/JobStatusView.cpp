@@ -72,8 +72,6 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     setFont( f );
 #endif
 
-    hideWidget();
-
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
@@ -95,10 +93,8 @@ JobStatusView::checkCount()
 {
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
-    else if ( isHidden() && m_view->model()->rowCount() > 0 )
-        emit showWidget();
     else
-        emit sizeChanged( sizeHint() );
+        emit sizeHintChanged( sizeHint() );
 }
 
 
