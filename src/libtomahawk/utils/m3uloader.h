@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2011-2012, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -37,10 +38,14 @@ namespace Tomahawk
 class DLLEXPORT M3uLoader : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit M3uLoader( const QString& trackUrl, bool createNewPlaylist = false, QObject* parent = 0 );
-    explicit M3uLoader( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
+    explicit M3uLoader( const QString& url, bool createNewPlaylist = false, QObject* parent = 0 );
+    explicit M3uLoader( const QStringList& urls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~M3uLoader();
+
+public slots:
+    void parse();
 
 signals:
     void track( const Tomahawk::query_ptr& track );
@@ -55,7 +60,7 @@ private:
     bool m_trackMode;
     bool m_createNewPlaylist;
     playlist_ptr m_playlist;
-
+    QStringList m_urls;
 };
 
 }

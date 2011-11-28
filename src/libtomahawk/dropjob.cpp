@@ -103,19 +103,18 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
 
     const QString url = data->data( "text/plain" );
-
     if ( acceptedType.testFlag( Playlist ) )
     {
-        if( url.contains( "xspf" ) )
+        if ( url.contains( "xspf" ) )
             return true;
 
-        if( url.contains( "m3u" ) )
+        if ( url.contains( "m3u" ) )
             return true;
 
-        if( data->data( "text/uri-list" ).contains( "xspf" ) )
+        if ( data->data( "text/uri-list" ).contains( "xspf" ) )
             return true;
 
-        if( data->data( "text/uri-list" ).contains( "m3u" ) )
+        if ( data->data( "text/uri-list" ).contains( "m3u" ) )
             return true;
 
         // Not the most elegant
@@ -125,10 +124,10 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
     if ( acceptedType.testFlag( Track ) )
     {
-        if( url.contains( "m3u" ) )
+        if ( url.contains( "m3u" ) )
             return true;
 
-        if( data->data( "text/uri-list" ).contains( "m3u" ) )
+        if ( data->data( "text/uri-list" ).contains( "m3u" ) )
             return true;
 
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
@@ -466,6 +465,7 @@ DropJob::handleM3u( const QString& fileUrls )
         tDebug() << Q_FUNC_INFO << "Trying to append contents from" << urls;
         connect( m, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
     }
+    m->parse();
 
     m_queryCount++;
 }
@@ -556,7 +556,6 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
     m_queryCount++;
     rdio->setCreatePlaylist( dropAction() == Create  );
     rdio->parse( urls );
-
 }
 
 
@@ -785,5 +784,4 @@ DropJob::getTopTen( const QString &artist )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     m_queryCount++;
-
 }

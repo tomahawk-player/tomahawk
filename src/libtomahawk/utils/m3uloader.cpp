@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,46 +23,55 @@
 #include "query.h"
 #include "sourcelist.h"
 
-//#include <QtCore/QRegExp>
-#include <QtCore/QFileInfo>
 #include "playlist.h"
-
 #include "dropjob.h"
-#include <QtCore/QFile>
+
+#include <QFileInfo>
+#include <QFile>
+
 /* taglib */
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 
 using namespace Tomahawk;
 
-M3uLoader::M3uLoader( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
-    : QObject ( parent )
+
+M3uLoader::M3uLoader( const QStringList& urls, bool createNewPlaylist, QObject* parent )
+    : QObject( parent )
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-
+    , m_urls( urls )
 {
-    foreach ( const QString& url, Urls )
-        parseM3u( url );
 }
 
-M3uLoader::M3uLoader( const QString& Url, bool createNewPlaylist, QObject* parent )
-    : QObject ( parent )
+
+M3uLoader::M3uLoader( const QString& url, bool createNewPlaylist, QObject* parent )
+    : QObject( parent )
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
+    , m_urls( url )
 {
-    parseM3u( Url );
 }
+
 
 M3uLoader::~M3uLoader()
 {
 }
 
+
+void
+M3uLoader::parse()
+{
+    foreach ( const QString& url, m_urls )
+        parseM3u( url );
+}
+
+
 void
 M3uLoader::getTags( const QFileInfo& info )
 {
-
     QByteArray fileName = QFile::encodeName( info.canonicalFilePath() );
     const char *encodedName = fileName.constData();
 
@@ -83,8 +93,8 @@ M3uLoader::getTags( const QFileInfo& info )
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), !m_createNewPlaylist );
         m_tracks << q;
     }
-
 }
+
 
 void
 M3uLoader::parseM3u( const QString& fileLink )
@@ -94,22 +104,19 @@ M3uLoader::parseM3u( const QString& fileLink )
 
     if ( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        qDebug() << "Error" << file.errorString();
+        tDebug() << "Error opening m3u:" << file.errorString();
         return;
     }
 
     m_title = fileInfo.baseName();
-
     while ( !file.atEnd() )
     {
-
          QByteArray line = file.readLine();
          /// If anyone wants to take on the regex for parsing EXT, go ahead
          /// But the notion that users does not tag by a common rule. that seems hard
-         if( line.contains("EXT") )
+         if ( line.contains( "EXT" ) )
              continue;
 
-         qDebug() << line.simplified();
          QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
 
          if( tmpFile.exists() )
@@ -117,20 +124,16 @@ M3uLoader::parseM3u( const QString& fileLink )
          else
          {
              QFileInfo tmpFile( QUrl::fromUserInput( QString( fileInfo.canonicalPath() + "/" + line.simplified() ) ).toLocalFile() );
-             if( tmpFile.exists() )
+             if ( tmpFile.exists() )
                 getTags( tmpFile );
          }
-
     }
 
-
-    if( m_tracks.isEmpty() )
+    if ( m_tracks.isEmpty() )
     {
-
-        qDebug() << Q_FUNC_INFO << "Coulnt parse M3U!";
+        tDebug() << Q_FUNC_INFO << "Could not parse M3U!";
         return;
     }
-
 
     if ( m_createNewPlaylist )
     {
@@ -143,14 +146,10 @@ M3uLoader::parseM3u( const QString& fileLink )
                                        m_tracks );
 
         connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
-
     }
     else
         emit tracks( m_tracks );
 
-
     m_tracks.clear();
     file.deleteLater();
-
 }
-
