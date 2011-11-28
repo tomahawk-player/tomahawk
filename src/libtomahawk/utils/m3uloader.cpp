@@ -151,5 +151,4 @@ M3uLoader::parseM3u( const QString& fileLink )
         emit tracks( m_tracks );
 
     m_tracks.clear();
-    file.deleteLater();
 }
