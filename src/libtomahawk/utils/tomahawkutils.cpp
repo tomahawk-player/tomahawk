@@ -312,10 +312,8 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO;
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
-    tDebug() << Q_FUNC_INFO << " proxies size = " << proxies.size();
     return proxies;
 }
 
@@ -323,7 +321,6 @@ NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << "query.peerHostName() = " << query.peerHostName() << ", m_noProxyHosts = " << m_noProxyHosts;
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || m_noProxyHosts.contains( hostname ) || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
@@ -331,7 +328,6 @@ NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
     else
         proxies << m_proxy << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
 
-    tDebug() << Q_FUNC_INFO << " proxies size = " << proxies.size();
     return proxies;
 }
 
