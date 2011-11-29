@@ -9,4 +9,4 @@ Comment=Tomahawk - Social Music Player
 Icon=tomahawk
 Terminal=false
 Categories=Qt;AudioVideo;Audio;Player;
-MimeType=x-scheme-handler/tomahawk
+MimeType=x-scheme-handler/tomahawk;
