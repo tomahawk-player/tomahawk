@@ -1,21 +1,30 @@
 #!/bin/bash
-echo "Remove old vlc dir..."
-
 mkdir -p vlc/
+
+if [ "$1" = "-c" ] ; then
+echo "Continuing last download.."
+rm -rvf vlc/prefix/
+else
+echo "Remove old vlc dir..."
+rm -rvf vlc/*
+fi
+
 cd vlc/
 
-#rm -vf vlc-*.7z
-#rm -rf vlc/
-
-echo "Download specified binary..."
+echo "Download phonon archive..."
 #wget -c "http://downloads.sourceforge.net/project/vlc/1.1.9/win32/vlc-1.1.9-win32.7z?r=http%3A%2F%2Fwww.videolan.org%2Fvlc%2Fdownload-windows.html&ts=1306272584&use_mirror=leaseweb"
 #wget -c "http://download.tomahawk-player.org/tomahawk-vlc-0.1.zip"
-wget -c http://people.videolan.org/~jb/phonon/phonon-vlc-last.7z
+#wget -c http://people.videolan.org/~jb/phonon/phonon-vlc-last.7z
+wget -c http://people.videolan.org/~jb/phonon/phonon_phonon-vlc_20111128.7z
 
 echo "Extract binary..."
-7z x phonon-vlc-last.7z
+7z x phonon*.7z
 #mv -v vlc-*/ vlc/
 #unzip tomahawk-vlc-0.1.zip
+
+echo "Download phonon_vlc_no_video.dll..."
+wget -c http://people.videolan.org/~jb/phonon/phonon_vlc_no_video.dll
+cp -v phonon_vlc_no_video.dll prefix/bin/phonon_backend/phonon_vlc.dll
 
 echo "Strip unneeded plugins from vlc/plugins..."
 cd prefix/bin/plugins
