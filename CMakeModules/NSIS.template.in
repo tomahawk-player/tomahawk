@@ -329,12 +329,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libstdc++-6.dll"
 
    ;Phonon stuff
-
-   ;Fix the phonon build to not use Dbus
-   File "${QT_DLL_PATH}\QtDbus4.dll"
-   File "${MING_BIN}\libdbus-1-3.dll"
-   File "${MING_BIN}\dbus-daemon.exe"
-
    File "${VLC_BIN}\libphonon.dll"
    SetOutPath "$INSTDIR\phonon_backend"
    File "${VLC_BIN}\phonon_backend\phonon_vlc.dll"
@@ -347,12 +341,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\plugins"
    File /r "${VLC_PLUGIN_PATH}\*.dll"
    SetOutPath "$INSTDIR"
-   File "${MING_BIN}\libmad-0.dll" ; MP3
-   File "${MING_BIN}\libFLAC-8.dll" ; FLAC
-   File "${MING_BIN}\libogg-0.dll" ; OGG, FLAC
-   File "${MING_BIN}\libvorbis-0.dll" ; OGG
-   File "${MING_BIN}\libvorbisenc-2.dll" ; OGG
-
 
    ; Other
    File "${MING_BIN}\libqjson.dll"
