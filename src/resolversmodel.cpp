@@ -40,6 +40,7 @@ ResolversModel::~ResolversModel()
 
 }
 
+
 QVariant
 ResolversModel::data( const QModelIndex& index, int role ) const
 {
@@ -66,6 +67,7 @@ ResolversModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 }
+
 
 bool
 ResolversModel::setData( const QModelIndex& index, const QVariant& value, int role )
@@ -112,12 +114,14 @@ ResolversModel::rowCount( const QModelIndex& parent ) const
     return Tomahawk::Pipeline::instance()->scriptResolvers().count();
 }
 
+
 int
 ResolversModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED( parent );
     return 1;
 }
+
 
 Qt::ItemFlags
 ResolversModel::flags( const QModelIndex& index ) const
@@ -140,6 +144,7 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
     else
         m_waitingForLoad << resolver;
 }
+
 
 void
 ResolversModel::atticaResolverInstalled( const QString& resolverId )
@@ -170,6 +175,7 @@ ResolversModel::removeResolver( const QString& resolver )
     endRemoveRows();
 }
 
+
 void
 ResolversModel::resolverChanged()
 {
@@ -190,6 +196,7 @@ ResolversModel::resolverChanged()
     }
 }
 
+
 void
 ResolversModel::addInstalledResolvers()
 {
@@ -203,7 +210,7 @@ ResolversModel::addInstalledResolvers()
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
 
-    pluginDirs << appDir << libDir << lib64Dir << libexecDir << QDir( qApp->applicationDirPath() );
+    pluginDirs << appDir << libDir << lib64Dir << libexecDir;
     foreach ( const QDir& pluginDir, pluginDirs )
     {
         qDebug() << "Checking directory for resolvers:" << pluginDir;
@@ -223,6 +230,7 @@ ResolversModel::addInstalledResolvers()
         }
     }
 }
+
 
 void
 ResolversModel::saveScriptResolvers()

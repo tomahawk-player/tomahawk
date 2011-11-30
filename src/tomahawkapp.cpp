@@ -170,14 +170,13 @@ TomahawkApp::init()
     // init pipeline and resolver factories
     new Pipeline( this );
 
-    #ifndef ENABLE_HEADLESS
-        Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
-        Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1 ) );
+#ifndef ENABLE_HEADLESS
+    Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
+    Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1 ) );
 
-
-        new ActionCollection( this );
-        connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
-    #endif
+    new ActionCollection( this );
+    connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
+#endif
 
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
     connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );

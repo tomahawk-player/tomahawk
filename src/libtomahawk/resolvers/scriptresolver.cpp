@@ -79,8 +79,9 @@ ScriptResolver::~ScriptResolver()
         delete m_configWidget.data();
 }
 
+
 Tomahawk::ExternalResolver*
-ScriptResolver::factory(const QString& exe)
+ScriptResolver::factory( const QString& exe )
 {
     ExternalResolver* res = 0;
 
@@ -151,17 +152,20 @@ ScriptResolver::reload()
     }
 }
 
+
 bool
 ScriptResolver::running() const
 {
     return !m_stopped;
 }
 
+
 void
 ScriptResolver::readStderr()
 {
     tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
+
 
 ScriptResolver::ErrorState
 ScriptResolver::error() const
