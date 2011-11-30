@@ -267,7 +267,7 @@ ENDIF( APPLE )
 
 INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
 
-IF( UNIX AND NOT APPLE AND KDE4_INSTALLED ) #install protocol file
+IF( UNIX AND NOT APPLE AND KDE4_INSTALLED AND LEGACY_KDE_INTEGRATION ) #install protocol file
   FILE( READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol )
   STRING( REPLACE "/path/to/binary" # match this
               "${CMAKE_INSTALL_PREFIX}/bin/tomahawk" # this is linux (kde) so pretty safe I think

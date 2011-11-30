@@ -24,6 +24,7 @@ SET( TOMAHAWK_VERSION_PATCH 99 )
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
+option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 
 # generate version string
 
