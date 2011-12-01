@@ -160,6 +160,8 @@ void
 AudioEngine::stop()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    emit stopped();
     if ( isStopped() )
         return;
 
@@ -171,7 +173,6 @@ AudioEngine::stop()
     if ( !m_currentTrack.isNull() )
         emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
 
-    emit stopped();
     setCurrentTrack( Tomahawk::result_ptr() );
 
     Tomahawk::InfoSystem::InfoTypeMap map;
@@ -603,6 +604,9 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     if ( newState == Phonon::ErrorState )
     {
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        emit error( UnknownError );
+
+        stop();
         return;
     }
     if ( newState == Phonon::PlayingState )
