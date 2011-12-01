@@ -149,7 +149,7 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
         return;
 
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                             SLOT( append( QList<Tomahawk::query_ptr> ) ) );
 
     if ( rowCount( QModelIndex() ) == 0 )
     {
@@ -169,7 +169,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
         return;
 
     connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                              SLOT( append( QList<Tomahawk::query_ptr> ) ) );
 
     if ( rowCount( QModelIndex() ) == 0 )
     {

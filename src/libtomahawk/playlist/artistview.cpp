@@ -28,6 +28,7 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "widgets/overlaywidget.h"
 
+#include "contextmenu.h"
 #include "tomahawksettings.h"
 #include "treeheader.h"
 #include "treeitemdelegate.h"

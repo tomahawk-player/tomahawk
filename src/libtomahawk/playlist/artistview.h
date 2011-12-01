@@ -23,11 +23,15 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include "contextmenu.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"
 
 #include "dllmacro.h"
+
+namespace Tomahawk
+{
+    class ContextMenu;
+};
 
 class TreeHeader;
 class LoadingSpinner;
