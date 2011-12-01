@@ -39,8 +39,11 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink;
 }
 
+
 ContextMenu::~ContextMenu()
-{}
+{
+}
+
 
 void
 ContextMenu::clear()
@@ -50,8 +53,8 @@ ContextMenu::clear()
     m_queries.clear();
     m_albums.clear();
     m_artists.clear();
-
 }
+
 
 unsigned int
 ContextMenu::itemCount() const
@@ -59,13 +62,12 @@ ContextMenu::itemCount() const
    return  m_queries.count() + m_artists.count() + m_albums.count();
 }
 
+
 void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 {
-
     if ( queries.isEmpty() )
         return;
-
 
     QMenu::clear();
     m_queries.clear();
@@ -87,11 +89,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
 
-
-
     foreach ( QAction* action, actions() )
     {
-
         connect( action, SIGNAL( triggered() ), m_sigmap, SLOT( map() ) );
     }
 }
@@ -105,7 +104,6 @@ ContextMenu::setQuery( const Tomahawk::query_ptr& query )
     queries << query;
     setQueries( queries );
 }
-
 
 
 void
@@ -185,6 +183,7 @@ ContextMenu::setArtist( const Tomahawk::artist_ptr& artist )
     setArtists( artists );
 }
 
+
 void
 ContextMenu::onTriggered( int action )
 {
@@ -205,7 +204,8 @@ ContextMenu::onTriggered( int action )
 
 
 
-void ContextMenu::addToQueue()
+void
+ContextMenu::addToQueue()
 {
     foreach ( const query_ptr& query, m_queries )
     {

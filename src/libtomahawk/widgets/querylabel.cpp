@@ -27,11 +27,14 @@
 #include "artist.h"
 #include "album.h"
 #include "query.h"
-#include "utils/tomahawkutils.h"
+#include "contextmenu.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
 #define BOXMARGIN 2
 #define DASH "  -  "
+
+using namespace Tomahawk;
 
 
 QueryLabel::QueryLabel( QWidget* parent, Qt::WindowFlags flags )
@@ -76,6 +79,9 @@ QueryLabel::~QueryLabel()
 void
 QueryLabel::init()
 {
+    m_contextMenu = new ContextMenu( this );
+    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink );
+
     m_hoverType = None;
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
@@ -250,6 +256,7 @@ QueryLabel::setAlignment( Qt::Alignment alignment )
     }
 }
 
+
 void
 QueryLabel::setTextPen( const QPen & pen )
 {
@@ -257,11 +264,13 @@ QueryLabel::setTextPen( const QPen & pen )
     m_textPen = pen;
 }
 
+
 QPen
 QueryLabel::textPen() const
 {
     return m_textPen;
 }
+
 
 Qt::TextElideMode
 QueryLabel::elideMode() const
@@ -280,11 +289,13 @@ QueryLabel::setElideMode( Qt::TextElideMode mode )
     }
 }
 
+
 QFont
 QueryLabel::font() const
 {
     return m_font;
 }
+
 
 void
 QueryLabel::setFont( const QFont& font )
@@ -303,6 +314,7 @@ QueryLabel::updateLabel()
     updateGeometry();
     update();
 }
+
 
 void
 QueryLabel::setExtraContentsMargins( int left, int top, int right, int bottom )
@@ -473,6 +485,15 @@ QueryLabel::changeEvent( QEvent* event )
         default:
             break;
     }
+}
+
+
+void
+QueryLabel::contextMenuEvent( QContextMenuEvent* event )
+{
+    m_contextMenu->clear();
+    m_contextMenu->setQuery( m_query );
+    m_contextMenu->exec( event->globalPos() );
 }
 
 

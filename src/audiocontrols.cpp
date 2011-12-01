@@ -111,8 +111,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
-    connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
-    connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), SIGNAL( playPressed() ) );
+    connect( ui->pauseButton,      SIGNAL( clicked() ), SIGNAL( pausePressed() ) );
 
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
@@ -208,11 +208,11 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seekMsecs = -1;
-    
+
     ui->seekSlider->setVisible( true );
 
     m_noTimeChange = false;
-    
+
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -291,8 +291,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     result->loadSocialActions();
 
-    connect( result.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+    connect( result.data(), SIGNAL( socialActionsLoaded() ), SLOT( socialActionsLoaded() ) );
 }
+
 
 void
 AudioControls::socialActionsLoaded()
@@ -323,6 +324,7 @@ AudioControls::onPlaybackPaused()
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     m_sliderTimeLine.setPaused( true );
 }
+
 
 void
 AudioControls::onPlaybackResumed()

@@ -39,7 +39,6 @@ public:
        ActionQueue =        2,
        ActionDelete =       4,
        ActionCopyLink =     8
-
     };
 
     explicit ContextMenu( QWidget* parent = 0 );
