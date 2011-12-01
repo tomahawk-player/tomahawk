@@ -37,7 +37,6 @@
 #include "playlist.h"
 #include "query.h"
 #include "artist.h"
-#include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "sip/SipHandler.h"
 #include "sourcetree/sourcetreeview.h"
@@ -297,8 +296,8 @@ TomahawkWindow::setupSignals()
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
-    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
-                                        SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
+    connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
@@ -487,6 +486,7 @@ TomahawkWindow::pluginMenuRemoved( QMenu* menu )
     }
 }
 
+
 void
 TomahawkWindow::showOfflineSources()
 {
@@ -519,6 +519,7 @@ TomahawkWindow::loadSpiff()
 #endif
 }
 
+
 void
 TomahawkWindow::loadXspfFinished( int ret )
 {
@@ -536,6 +537,7 @@ TomahawkWindow::loadXspfFinished( int ret )
     }
     d->deleteLater();
 }
+
 
 void
 TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
@@ -560,6 +562,17 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
             //FIXME: This includes FetchError
             break;
     }
+}
+
+
+void
+TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
+{
+#ifdef Q_WS_X11
+    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device. Make sure you have a suitable Phonon backend and required plugins installed." ), QMessageBox::Ok );
+#else
+    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device." ), QMessageBox::Ok );
+#endif
 }
 
 
@@ -613,7 +626,9 @@ TomahawkWindow::createPlaylist()
     playlistSelectorDlg->show();
 }
 
-void TomahawkWindow::playlistCreateDialogFinished( int ret )
+
+void
+TomahawkWindow::playlistCreateDialogFinished( int ret )
 {
     PlaylistTypeSelectorDlg* playlistSelectorDlg = qobject_cast< PlaylistTypeSelectorDlg* >( sender() );
     Q_ASSERT( playlistSelectorDlg );
@@ -632,6 +647,7 @@ void TomahawkWindow::playlistCreateDialogFinished( int ret )
     }
     playlistSelectorDlg->deleteLater();
 }
+
 
 void
 TomahawkWindow::audioStarted()
@@ -655,6 +671,7 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
     setWindowTitle( m_windowTitle );
 }
 
+
 void
 TomahawkWindow::onSipConnected()
 {
@@ -672,8 +689,8 @@ TomahawkWindow::onSipDisconnected()
 void
 TomahawkWindow::onSipPluginAdded( SipPlugin* p )
 {
-    connect( p, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
-    connect( p, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
+    connect( p, SIGNAL( addMenu( QMenu* ) ), SLOT( pluginMenuAdded( QMenu* ) ) );
+    connect( p, SIGNAL( removeMenu( QMenu* ) ), SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
 
