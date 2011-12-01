@@ -88,6 +88,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
 
     ui->setupUi( this );
+
+    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
+    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
+
     applyPlatformTweaks();
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
@@ -105,9 +109,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         ui->menu_Help->addSeparator();
         ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
     }
-
-    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
-    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
 
     // set initial state
     onSipDisconnected();
