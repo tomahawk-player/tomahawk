@@ -185,7 +185,7 @@ AudioEngine::stop()
     else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
         QVariantMap stopInfo;
-        stopInfo["message"] = QString( "Tomahawk is stopped." );
+        stopInfo["message"] = tr( "Tomahawk is stopped." );
         map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
     }
 
@@ -452,7 +452,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 #endif
-                    tLog() << "Passing to Phonon:" << furl << furl.toLatin1();
+                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl << furl.toLatin1();
                     m_mediaObject->setCurrentSource( furl );
                 }
 

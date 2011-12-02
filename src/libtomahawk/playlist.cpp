@@ -157,7 +157,9 @@ Playlist::init()
 }
 
 
-Playlist::~Playlist() {}
+Playlist::~Playlist()
+{
+}
 
 
 playlist_ptr
@@ -363,7 +365,6 @@ Playlist::setRevision( const QString& rev,
     {
         connect( entry->query().data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                  SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ), Qt::UniqueConnection );
-
     }
 
     setBusy( false );

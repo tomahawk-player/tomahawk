@@ -19,10 +19,11 @@
 #include "databasecommand_genericselect.h"
 
 #include "databaseimpl.h"
+#include "sourcelist.h"
+#include "artist.h"
+#include "album.h"
+#include "pipeline.h"
 #include "utils/logger.h"
-#include <sourcelist.h>
-#include <artist.h>
-#include <album.h>
 
 using namespace Tomahawk;
 
@@ -63,7 +64,6 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
 
         while( query.next() )
         {
-
             QStringList rawRow;
             int count = 0;
             while ( query.value( count ).isValid() )
@@ -90,15 +90,16 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
             track = query.value( 0 ).toString();
             artist = query.value( 1 ).toString();
 
-
-            qry = Tomahawk::Query::get( artist, track, QString(), uuid(), true ); // Only auto-resolve non-local results
-        } else if ( m_queryType == Artist )
+            qry = Tomahawk::Query::get( artist, track, QString() );
+        }
+        else if ( m_queryType == Artist )
         {
             int artistId = query.value( 0 ).toInt();
             QString artistName = query.value( 1 ).toString();
 
             artist = Tomahawk::Artist::get( artistId, artistName );
-        } else if ( m_queryType == Album )
+        }
+        else if ( m_queryType == Album )
         {
             int albumId = query.value( 0 ).toInt();
             QString albumName = query.value( 1 ).toString();
@@ -122,12 +123,14 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
             if ( !extraData.isEmpty() )
                 qry->setProperty( "data", extraData );
             queries << qry;
-        } else if ( m_queryType == Artist )
+        }
+        else if ( m_queryType == Artist )
         {
             if ( !extraData.isEmpty() )
                 artist->setProperty( "data", extraData );
             arts << artist;
-        } else if ( m_queryType == Album )
+        }
+        else if ( m_queryType == Album )
         {
             if ( !extraData.isEmpty() )
                 album->setProperty( "data", extraData );

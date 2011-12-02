@@ -47,11 +47,13 @@ TemporaryPageItem::text() const
     return m_page->title();
 }
 
+
 void
 TemporaryPageItem::activate()
 {
     ViewManager::instance()->show( m_page );
 }
+
 
 QIcon
 TemporaryPageItem::icon() const
@@ -59,11 +61,13 @@ TemporaryPageItem::icon() const
     return m_icon;
 }
 
+
 int
 TemporaryPageItem::peerSortValue() const
 {
     return m_sortValue;
 }
+
 
 int
 TemporaryPageItem::IDValue() const

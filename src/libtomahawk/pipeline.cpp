@@ -126,11 +126,10 @@ Pipeline::addScriptResolver( const QString& path, bool start )
 {
     ExternalResolver* res = 0;
 
-    foreach( ResolverFactoryFunc factory, m_resolverFactories)
+    foreach ( ResolverFactoryFunc factory, m_resolverFactories )
     {
         res = factory( path );
-
-        if( !res )
+        if ( !res )
             continue;
 
         m_scriptResolvers << res;
