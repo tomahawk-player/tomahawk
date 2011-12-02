@@ -455,7 +455,8 @@ Section -post
    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoRepair" "1"
 
    ; Register tomahawk:// protocol handler
-   WriteRegStr HKCR "tomahawk" "" "URL: Tomahawk Protocol"
+   WriteRegStr HKCR "tomahawk" "" "URL:Tomahawk Protocol"
+   WriteRegStr HKCR "tomahawk" "URL Protocol" ""
    WriteRegStr HKCR "tomahawk\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
    WriteRegStr HKCR "tomahawk\shell" "" "open"
    WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
