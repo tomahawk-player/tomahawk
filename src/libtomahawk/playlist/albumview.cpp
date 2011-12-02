@@ -116,7 +116,6 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
-    setAcceptDrops( false );
     onViewChanged(); // Fetch covers if albums were added to model before model was attached to view
 }
 

@@ -496,8 +496,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->verboseNotifications() )
-                    sendNowPlayingNotification();
-            
+                sendNowPlayingNotification();
+
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );

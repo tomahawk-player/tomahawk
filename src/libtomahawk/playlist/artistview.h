@@ -84,8 +84,7 @@ protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void resizeEvent( QResizeEvent* event );
 
-    void paintEvent( QPaintEvent* event );
-    void keyPressEvent( QKeyEvent* event );
+    virtual void keyPressEvent( QKeyEvent* event );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
