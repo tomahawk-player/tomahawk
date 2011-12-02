@@ -156,8 +156,10 @@ TrackView::setTrackModel( TrackModel* model )
 
 
 void
-TrackView::currentChanged( const QModelIndex& current, const QModelIndex& /* previous */ )
+TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
+    QTreeView::currentChanged( current, previous );
+
     if ( !m_updateContextView )
         return;
 

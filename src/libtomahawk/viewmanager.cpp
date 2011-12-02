@@ -394,7 +394,8 @@ ViewManager::playlistInterfaceChanged( Tomahawk::PlaylistInterface* interface )
     if ( !pl.isNull() )
     {
         TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl );
-    } else
+    }
+    else
     {
         pl = dynamicPlaylistForInterface( interface );
         if ( !pl.isNull() )
@@ -408,6 +409,7 @@ ViewManager::showWelcomePage()
 {
     return show( m_welcomeWidget );
 }
+
 
 Tomahawk::ViewPage*
 ViewManager::showWhatsHotPage()

@@ -138,7 +138,6 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     guid(); // this will set the guid on the header
-    setAcceptDrops( false );
 
     if ( model->columnStyle() == TreeModel::TrackOnly )
     {
@@ -154,8 +153,10 @@ ArtistView::setTreeModel( TreeModel* model )
 
 
 void
-ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& /* previous */ )
+ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
+    QTreeView::currentChanged( current, previous );
+
     if ( !m_updateContextView )
         return;
 
@@ -196,7 +197,6 @@ ArtistView::onItemActivated( const QModelIndex& index )
 void
 ArtistView::keyPressEvent( QKeyEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     QTreeView::keyPressEvent( event );
 
     if ( !model() )
@@ -206,13 +206,6 @@ ArtistView::keyPressEvent( QKeyEvent* event )
     {
         onItemActivated( currentIndex() );
     }
-}
-
-
-void
-ArtistView::paintEvent( QPaintEvent* event )
-{
-    QTreeView::paintEvent( event );
 }
 
 

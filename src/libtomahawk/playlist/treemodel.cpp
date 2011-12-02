@@ -18,9 +18,7 @@
 
 #include "treemodel.h"
 
-#include <QListView>
 #include <QMimeData>
-#include <QNetworkReply>
 
 #include "source.h"
 #include "sourcelist.h"
