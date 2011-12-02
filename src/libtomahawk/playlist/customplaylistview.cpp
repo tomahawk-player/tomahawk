@@ -104,8 +104,7 @@ CustomPlaylistView::generateTracks()
 void
 CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
 {
-    foreach ( const query_ptr& q, tracks )
-        m_model->append( q );
+    m_model->append( tracks );
 }
 
 

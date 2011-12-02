@@ -95,6 +95,7 @@ private:
 
     QTimeLine m_sliderTimeLine;
     qint64 m_seekMsecs;
+    qint64 m_lastSliderCheck;
     bool m_noTimeChange;
 };
 

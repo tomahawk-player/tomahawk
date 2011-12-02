@@ -132,13 +132,7 @@ PlaylistModel::append( const QList< query_ptr >& queries )
 void
 PlaylistModel::append( const Tomahawk::query_ptr& query )
 {
-    if ( query.isNull() )
-        return;
-
-    if ( !query->resolvingFinished() )
-        Pipeline::instance()->resolve( query );
-
-    TrackModel::append( query );
+    insert( query, rowCount( QModelIndex() ) );
 }
 
 
@@ -230,6 +224,7 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
+    QList< Tomahawk::query_ptr > queries;
     int i = 0;
     TrackModelItem* plitem;
     foreach( const plentry_ptr& entry, entries )
@@ -243,6 +238,7 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 
         if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
         {
+            queries << entry->query();
             m_waitingForResolved.append( entry->query().data() );
             connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
         }
@@ -251,7 +247,10 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     }
 
     if ( !m_waitingForResolved.isEmpty() )
+    {
+        Pipeline::instance()->resolve( queries );
         emit loadingStarted();
+    }
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );

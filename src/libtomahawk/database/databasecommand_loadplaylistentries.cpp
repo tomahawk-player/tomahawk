@@ -31,7 +31,6 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
 {
-//    qDebug() << "Loading playlist entries for revision" << m_revguid;
     generateEntries( dbi );
 
     emit done( m_revguid, m_guids, m_oldentries, m_islatest, m_entrymap, true );
@@ -42,40 +41,38 @@ void
 DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query_entries = dbi->newquery();
-    query_entries.prepare("SELECT entries, playlist, author, timestamp, previous_revision "
-                          "FROM playlist_revision "
-                          "WHERE guid = :guid");
+    query_entries.prepare( "SELECT entries, playlist, author, timestamp, previous_revision "
+                           "FROM playlist_revision "
+                           "WHERE guid = :guid" );
     query_entries.bindValue( ":guid", m_revguid );
     query_entries.exec();
 
-//    qDebug() << "trying to load entries:" << m_revguid;
+    tLog( LOGVERBOSE ) << "trying to load playlist entries for guid:" << m_revguid;
     QString prevrev;
     QJson::Parser parser; bool ok;
 
-    if( query_entries.next() )
+    if ( query_entries.next() )
     {
         // entries should be a list of strings:
-        QVariant v = parser.parse( query_entries.value(0).toByteArray(), &ok );
+        QVariant v = parser.parse( query_entries.value( 0 ).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
         m_guids = v.toStringList();
-
-        QString inclause = QString("('%1')").arg(m_guids.join("', '"));
+        QString inclause = QString( "('%1')" ).arg( m_guids.join( "', '" ) );
 
         TomahawkSqlQuery query = dbi->newquery();
-        QString sql = QString("SELECT guid, trackname, artistname, albumname, annotation, "
-                              "duration, addedon, addedby, result_hint "
-                              "FROM playlist_item "
-                              "WHERE guid IN %1").arg( inclause );
-        //qDebug() << sql;
+        QString sql = QString( "SELECT guid, trackname, artistname, albumname, annotation, "
+                               "duration, addedon, addedby, result_hint "
+                               "FROM playlist_item "
+                               "WHERE guid IN %1" ).arg( inclause );
 
         query.exec( sql );
-        while( query.next() )
+        while ( query.next() )
         {
             plentry_ptr e( new PlaylistEntry );
             e->setGuid( query.value( 0 ).toString() );
             e->setAnnotation( query.value( 4 ).toString() );
             e->setDuration( query.value( 5 ).toUInt() );
-            e->setLastmodified( 0 ); // TODO e->lastmodified = query.value(6).toInt();
+            e->setLastmodified( 0 ); // TODO e->lastmodified = query.value( 6 ).toInt();
             e->setResultHint( query.value( 8 ).toString() );
 
             Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString() );
@@ -86,14 +83,13 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         }
 
         prevrev = query_entries.value( 4 ).toString();
-
     }
     else
     {
 //        qDebug() << "Playlist has no current revision data";
     }
 
-    if( prevrev.length() )
+    if ( prevrev.length() )
     {
         TomahawkSqlQuery query_entries_old = dbi->newquery();
         query_entries_old.prepare( "SELECT entries, "
@@ -105,7 +101,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         query_entries_old.addBindValue( prevrev );
 
         query_entries_old.exec();
-        if( !query_entries_old.next() )
+        if ( !query_entries_old.next() )
         {
             return;
             Q_ASSERT( false );

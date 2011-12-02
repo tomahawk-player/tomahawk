@@ -45,6 +45,7 @@ AudioControls::AudioControls( QWidget* parent )
     , ui( new Ui::AudioControls )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
+    , m_lastSliderCheck( 0 )
 {
     ui->setupUi( this );
     setAcceptDrops( true );
@@ -212,6 +213,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setVisible( true );
 
     m_noTimeChange = false;
+    m_lastSliderCheck = 0;
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
@@ -371,7 +373,11 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
-    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << " msElapsed = " << msElapsed << " and timer current time = " << m_sliderTimeLine.currentTime() << " and m_seekMsecs = " << m_seekMsecs;
+//    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
+    if ( msElapsed > 0 && msElapsed - 500 < m_lastSliderCheck )
+        return;
+    m_lastSliderCheck = msElapsed;
+
     if ( m_currentTrack.isNull() )
         return;
 
@@ -405,7 +411,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
     {
         ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
-        m_sliderTimeLine.resume();
+        m_sliderTimeLine.start();
     }
     else if ( m_sliderTimeLine.state() == QTimeLine::Paused && AudioEngine::instance()->state() != AudioEngine::Paused )
     {
