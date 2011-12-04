@@ -185,6 +185,12 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
     Q_UNUSED( rev );
     qDebug() << "DynamicWidget::onRevisionLoaded";
+    if ( m_model->ignoreRevision( rev.revisionguid ) )
+    {
+        m_model->removeRevisionFromIgnore( rev.revisionguid );
+        return;
+    }
+
     loadDynamicPlaylist( m_playlist );
     if( m_resolveOnNextLoad || !m_playlist->author()->isLocal() )
     {
@@ -351,12 +357,16 @@ void
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
     int limit = -1; // only limit the "preview" of a station
-    if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
+    if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
+    {
         m_resolveOnNextLoad = true;
-    } else if( m_playlist->mode() == OnDemand )
+    }
+    else if( m_playlist->mode() == OnDemand )
+    {
         limit = 5;
+    }
 
-    if( m_playlist->mode() != OnDemand )
+    if ( m_playlist->mode() != OnDemand )
         m_loading->fadeOut();
     m_model->tracksGenerated( queries, limit );
 }
