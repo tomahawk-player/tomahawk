@@ -81,6 +81,10 @@ signals:
     void playlistDeleted();
     void playlistChanged();
 
+protected:
+    bool waitForRevision( const QString& revisionguid ) const { return m_waitForRevision.contains( revisionguid ); }
+    void removeFromWaitList( const QString& revisionguid ) { m_waitForRevision.removeAll( revisionguid ); }
+
 private slots:
     void onDataChanged();
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );

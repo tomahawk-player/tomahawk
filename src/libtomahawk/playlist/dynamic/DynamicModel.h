@@ -57,6 +57,9 @@ public:
 
     using PlaylistModel::loadPlaylist;
 
+    bool ignoreRevision( const QString& revisionguid ) const { return waitForRevision( revisionguid ); }
+    void removeRevisionFromIgnore( const QString& revisionguid ) { removeFromWaitList( revisionguid ); }
+
 signals:
     void collapseFromTo( int startRow, int num );
     void checkForOverflow();
