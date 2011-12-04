@@ -122,10 +122,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
+        o3.state = QStyle::State_Enabled;
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             o3.state |= QStyle::State_Selected;
+            o.palette.setColor( QPalette::Base, QColor( 0, 0, 0, 0 ) );
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
             o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
@@ -357,6 +359,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
     {
         QStyledItemDelegate::paint( painter, o, index );
+
         if ( type == SourcesModel::TemporaryPage )
         {
             TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
