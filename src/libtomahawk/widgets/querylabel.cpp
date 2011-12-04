@@ -28,7 +28,7 @@
 #include "album.h"
 #include "query.h"
 #include "contextmenu.h"
-#include "utils/tomahawkutilsgui.h"
+#include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
 #define BOXMARGIN 2
