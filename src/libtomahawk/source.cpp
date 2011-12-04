@@ -221,7 +221,7 @@ Source::scanningProgress( unsigned int files )
     if ( files )
         m_textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
     else
-        m_textStatus = tr( "Scanning" ).arg( files );
+        m_textStatus = tr( "Scanning" );
 
     emit stateChanged();
 }
