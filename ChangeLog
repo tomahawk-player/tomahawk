@@ -1,3 +1,14 @@
+Version 0.3.3:
+    * Automatically load Super Collection tracks when no official release
+      information is available.
+    * Fixed stations not fetching new tracks under certain circumstances.
+    * Fixed Footnotes not always updating when selecting a new track.
+    * Added support for ow.ly, fb.me, itun.es and tinyurl.com URL shorteners.
+    * Fixed playback issues with non-latin filenames on Windows.
+    * Fixed tomahawk:// protocol not working properly on Windows.
+    * Fixed dupe menu entry appearing on OS X.
+    * Fixed invisible sidebar items on Linux.
+
 Version 0.3.2: 
     * Improved syncing process, it's faster and more reliable now.
     * Fixed UPnP issues.
@@ -68,7 +79,7 @@ Version 0.3.0:
     * Added new job status view in the bottom of the source list that displays
       current jobs such as resolving, parsing playlists, and loading from
       database.
-    * Parse and convert a Spotify playlist url when dropped anywhere on the
+    * Parse and convert a Spotify playlist URL when dropped anywhere on the
       sidebar.
     * Convert resolvers to use asynchronous calls to avoid blocking Tomahawk's
       UI, greatly increasing responsiveness of Tomahawk while resolving.
