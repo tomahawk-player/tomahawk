@@ -272,6 +272,7 @@ set( libSources
     collection.cpp
     playlist.cpp
     resolver.cpp
+    ExternalResolver.cpp
     query.cpp
     result.cpp
     source.cpp
@@ -393,6 +394,7 @@ set( libHeaders
     collection.h
     query.h
     resolver.h
+    ExternalResolver.h
     result.h
     source.h
     sourceplaylistinterface.h
@@ -647,8 +649,9 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
-    ${QT_LIBRARIES}
+    ${QT_QTGUI_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
