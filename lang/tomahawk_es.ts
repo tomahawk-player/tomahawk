@@ -81,7 +81,7 @@
     <message>
         <location filename="libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="174"/>
         <source>Other Albums by %1</source>
-        <translation>Otros álbums por %1</translation>
+        <translation>Otros álbumes por %1</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="libtomahawk/playlist/albummodel.cpp" line="284"/>
         <source>All albums</source>
-        <translation>Todos los ábumes</translation>
+        <translation>Todos los álbumes</translation>
     </message>
 </context>
 <context>
