@@ -81,7 +81,7 @@
     <message>
         <location filename="libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="174"/>
         <source>Other Albums by %1</source>
-        <translation>Otros álbumes de %1</translation>
+        <translation>Otros álbums por %1</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="libtomahawk/playlist/albummodel.cpp" line="284"/>
         <source>All albums</source>
-        <translation>Todos los álbumes</translation>
+        <translation>Todos los ábumes</translation>
     </message>
 </context>
 <context>
@@ -817,7 +817,7 @@
     <message>
         <location filename="libtomahawk/playlist/playlistmodel.cpp" line="105"/>
         <source>you</source>
-        <translation>tú</translation>
+        <translation>ti</translation>
     </message>
     <message>
         <location filename="libtomahawk/playlist/playlistmodel.cpp" line="224"/>
@@ -2393,7 +2393,7 @@ introduzca el número PIN aquí:</translation>
     <message>
         <location filename="tomahawkwindow.cpp" line="718"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;Copyright 2010, 2011&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</source>
-        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;Copyright 2010, 2011&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Gracias a : Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter y Steve Robertson</translation>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;Copyright 2010, 2011&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Gracias a: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter y Steve Robertson</translation>
     </message>
 </context>
 <context>
@@ -2823,7 +2823,7 @@ Si lo desea puede volver a autenticarse.</translation>
     <message>
         <location filename="libtomahawk/widgets/welcomewidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Nuevas estacios y listas de reproducción</translation>
+        <translation>Nuevas estaciones y listas de reproducción</translation>
     </message>
     <message>
         <location filename="libtomahawk/widgets/welcomewidget.ui" line="70"/>
