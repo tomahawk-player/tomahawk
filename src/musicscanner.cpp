@@ -139,6 +139,8 @@ MusicScanner::startScan()
     m_scanned = m_skipped = m_cmdQueue = 0;
     m_skippedFiles.clear();
 
+    SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+
     // trigger the scan once we've loaded old filemtimes
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
     //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
