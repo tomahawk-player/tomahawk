@@ -189,8 +189,6 @@ TomahawkWindow::applyPlatformTweaks()
     setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
-    /// Mac users allready have Tomahawk appmenu, change the name
-    ui->menuApp->setTitle( "&Music Player" );
 #else
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
