@@ -464,10 +464,9 @@ DropJob::handleM3u( const QString& fileUrls )
     {
         tDebug() << Q_FUNC_INFO << "Trying to append contents from" << urls;
         connect( m, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
     }
     m->parse();
-
-    m_queryCount++;
 }
 
 
@@ -508,9 +507,8 @@ DropJob::handleXspfs( const QString& fileUrls )
         {
             qDebug() << Q_FUNC_INFO << "Trying to append XSPF";
             connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+            m_queryCount++;
         }
-
-        m_queryCount++;
     }
 }
 
@@ -535,9 +533,8 @@ DropJob::handleSpotifyUrls( const QString& urlsRaw )
     {
         tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
     }
-
-    m_queryCount++;
 }
 
 
@@ -731,7 +728,7 @@ DropJob::getArtist( const QString &artist )
     if ( artistPtr->tracks().isEmpty() )
     {
         connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                 SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
         m_queryCount++;
         return QList< query_ptr >();
     }
@@ -753,7 +750,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     {
         m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
         connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                 SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
         JobStatusView::instance()->model()->addJob( m_dropJob );
 
         m_queryCount++;
