@@ -185,9 +185,9 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artistPairs = lib->searchTable( "artist", m_query->fullTextQuery(), 10 );
-    QList< QPair<int, float> > trackPairs = lib->searchTable( "track", m_query->fullTextQuery(), 10 );
-    QList< QPair<int, float> > albumPairs = lib->searchTable( "album", m_query->fullTextQuery(), 10 );
+    QList< QPair<int, float> > artistPairs = lib->searchTable( "artist", m_query->fullTextQuery(), 20 );
+    QList< QPair<int, float> > trackPairs = lib->searchTable( "track", m_query->fullTextQuery(), 20 );
+    QList< QPair<int, float> > albumPairs = lib->searchTable( "album", m_query->fullTextQuery(), 20 );
 
     foreach ( const scorepair_t& artistPair, artistPairs )
     {
