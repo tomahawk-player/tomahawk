@@ -459,7 +459,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     else
     {
         // don't penalize for missing album name
-        if ( m_albumSortname.isEmpty() || rAlbumname.isEmpty() )
+        if ( m_albumSortname.isEmpty() )
             dcalb = 1.0;
 
         // weighted, so album match is worth less than track title
