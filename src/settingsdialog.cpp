@@ -578,8 +578,8 @@ SettingsDialog::openResolverConfig( const QString& resolver )
         }
 #else
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( r->configUI(), "Resolver Configuration", this, Qt::Sheet );
-        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( r ) );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( res->configUI(), "Resolver Configuration", this, Qt::Sheet );
+        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( res ) );
         connect( dialog, SIGNAL( finished( int ) ), this, SLOT( resolverConfigClosed( int ) ) );
 
         dialog->show();
