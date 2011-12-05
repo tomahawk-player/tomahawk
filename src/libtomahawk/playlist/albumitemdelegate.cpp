@@ -149,6 +149,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     if ( oneLiner )
     {
+        painter->setFont( boldFont );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
