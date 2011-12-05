@@ -88,6 +88,7 @@ set( libGuiSources
     playlist/topbar/lineedit.cpp
     playlist/topbar/searchbutton.cpp
 
+    ExternalResolverGui.cpp
     resolvers/scriptresolver.cpp
     resolvers/qtscriptresolver.cpp
 
@@ -204,6 +205,7 @@ set( libGuiHeaders
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
 
+    ExternalResolverGui.h
     resolvers/scriptresolver.h
     resolvers/qtscriptresolver.h
 

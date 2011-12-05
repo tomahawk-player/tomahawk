@@ -43,6 +43,7 @@
 #include "musicscanner.h"
 #include "pipeline.h"
 #include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
 #include "scanmanager.h"
@@ -563,10 +564,11 @@ void
 SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( resolver );
-    if( r && r->configUI() )
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    if( res && res->configUI() )
     {
 #ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
+        DelegateConfigWrapper dialog( res->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted )

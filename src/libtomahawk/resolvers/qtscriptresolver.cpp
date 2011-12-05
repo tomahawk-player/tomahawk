@@ -201,7 +201,7 @@ ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, 
 
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
-    : Tomahawk::ExternalResolver( scriptPath )
+    : Tomahawk::ExternalResolverGui( scriptPath )
     , m_ready( false )
     , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )

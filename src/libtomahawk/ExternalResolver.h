@@ -53,7 +53,6 @@ public:
 
     virtual QString filePath() const { return m_filePath; }
 
-    virtual QWidget* configUI() const = 0;
     virtual void saveConfig() = 0;
 
     virtual void reload() {} // Reloads from file (especially useful to check if file now exists)
@@ -68,18 +67,12 @@ signals:
     void changed(); // if config widget was added/removed
 
 protected:
-    QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
-    QVariant configMsgFromWidget( QWidget* w );
-    QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
-
     void setFilePath( const QString& path ) { m_filePath = path; }
 
 private:
-    void addChildProperties( QObject* parent, QVariantMap& m );
-
     QString m_filePath;
 };
 
 }; //ns
 
-#endif // EXTERNALRESOLVER_H
+#endif // EXTERNALESOLVER_H

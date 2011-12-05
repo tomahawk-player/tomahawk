@@ -22,7 +22,7 @@
 
 #include "tomahawksettings.h"
 #include "tomahawkapp.h"
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "pipeline.h"
 #include "config.h"
 #include "AtticaManager.h"
@@ -47,7 +47,9 @@ ResolversModel::data( const QModelIndex& index, int role ) const
     if( !index.isValid() || !hasIndex( index.row(), index.column(), QModelIndex() ) )
         return QVariant();
 
-    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    Q_ASSERT(res); // this is part of the gui, so there should be no non-gui resolvers
     switch( role )
     {
     case Qt::DisplayRole:
@@ -135,7 +137,9 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
 {
     const int count = rowCount( QModelIndex() );
     beginInsertRows( QModelIndex(), count, count );
-    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    Q_ASSERT(res); // this is part of the gui, so there should be no non-gui resolvers
     connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     endInsertRows();
 
@@ -184,7 +188,7 @@ ResolversModel::resolverChanged()
 
     if ( Tomahawk::Pipeline::instance()->scriptResolvers().contains( res ) )
     {
-        qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << res->configUI();
+        qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << qobject_cast< Tomahawk::ExternalResolverGui* >(res)->configUI();
         const QModelIndex idx = index( Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( res ), 0, QModelIndex() );
         emit dataChanged( idx, idx );
 

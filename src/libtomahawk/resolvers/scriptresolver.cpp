@@ -32,7 +32,7 @@
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
-    : Tomahawk::ExternalResolver( exe )
+    : Tomahawk::ExternalResolverGui( exe )
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
     , m_ready( false )

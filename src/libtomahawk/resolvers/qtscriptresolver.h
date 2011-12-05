@@ -19,7 +19,7 @@
 #ifndef QTSCRIPTRESOLVER_H
 #define QTSCRIPTRESOLVER_H
 
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "query.h"
 #include "utils/tomahawkutils.h"
 #include "config.h"
@@ -114,7 +114,7 @@ private:
 };
 
 
-class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolver
+class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 

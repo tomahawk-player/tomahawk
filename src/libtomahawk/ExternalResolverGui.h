@@ -16,12 +16,40 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef EXTERNALRESOLVERGUI_H
+#define EXTERNALRESOLVERGUI_H
+
 #include "ExternalResolver.h"
+#include "dllmacro.h"
 
-#include "utils/logger.h"
+class QWidget;
 
-Tomahawk::ExternalResolver::ErrorState
-Tomahawk::ExternalResolver::error() const
+namespace Tomahawk
 {
-    return NoError;
-}
+
+/**
+ * Generic resolver object, used to manage a resolver that Tomahawk knows about
+ *
+ * You *must* start() a resolver after creating an ExternalResolver in order to use it,
+ * otherwise it will not do anything.
+ */
+class DLLEXPORT ExternalResolverGui : public ExternalResolver
+{
+Q_OBJECT
+
+public:
+    ExternalResolverGui( const QString& filePath );
+    virtual QWidget* configUI() const = 0;
+
+protected:
+    QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
+    QVariant configMsgFromWidget( QWidget* w );
+    QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
+
+private:
+    void addChildProperties( QObject* parent, QVariantMap& m );
+};
+
+}; //ns
+
+#endif // RESOLVER_H

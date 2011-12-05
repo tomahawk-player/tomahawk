@@ -26,13 +26,13 @@
 #include <qjson/qobjecthelper.h>
 
 #include "query.h"
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 
 #include "dllmacro.h"
 
 class QWidget;
 
-class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolver
+class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 
