@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -36,9 +36,11 @@ public:
     ~AlbumItem();
 
     explicit AlbumItem( AlbumItem* parent = 0, QAbstractItemModel* model = 0 );
+    explicit AlbumItem( const Tomahawk::artist_ptr& artist, AlbumItem* parent = 0, int row = -1 );
     explicit AlbumItem( const Tomahawk::album_ptr& album, AlbumItem* parent = 0, int row = -1 );
 
-    const Tomahawk::album_ptr& album() const { return m_album; };
+    const Tomahawk::artist_ptr& artist() const { return m_artist; }
+    const Tomahawk::album_ptr& album() const { return m_album; }
     void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
 
     AlbumItem* parent;
@@ -54,6 +56,7 @@ signals:
     void dataChanged();
 
 private:
+    Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
 };
 

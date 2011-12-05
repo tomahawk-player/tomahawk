@@ -177,6 +177,30 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
 
 void
+Query::addAlbums( const QList< Tomahawk::album_ptr >& newalbums )
+{
+    {
+        QMutexLocker lock( &m_mutex );
+        m_albums << newalbums;
+    }
+
+    emit albumsAdded( newalbums );
+}
+
+
+void
+Query::addArtists( const QList< Tomahawk::artist_ptr >& newartists )
+{
+    {
+        QMutexLocker lock( &m_mutex );
+        m_artists << newartists;
+    }
+
+    emit artistsAdded( newartists );
+}
+
+
+void
 Query::refreshResults()
 {
     if ( m_resolveFinished )

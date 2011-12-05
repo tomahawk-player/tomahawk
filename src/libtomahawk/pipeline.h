@@ -52,6 +52,8 @@ public:
     unsigned int activeQueryCount() const { return m_qidsState.count(); }
 
     void reportResults( QID qid, const QList< result_ptr >& results );
+    void reportAlbums( QID qid, const QList< album_ptr >& albums );
+    void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
     void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );

@@ -46,6 +46,7 @@ AlbumView::AlbumView( QWidget* parent )
     , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_overlay( new OverlayWidget( this ) )
+    , m_inited( false )
 {
     setDragEnabled( true );
     setDropIndicatorShown( false );
@@ -59,6 +60,7 @@ AlbumView::AlbumView( QWidget* parent )
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
+    setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
 
     m_timer.setInterval( SCROLL_TIMEOUT );
@@ -129,7 +131,10 @@ AlbumView::onItemActivated( const QModelIndex& index )
 //        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
 //        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
 
-        ViewManager::instance()->show( item->album() );
+        if ( !item->album().isNull() )
+            ViewManager::instance()->show( item->album() );
+        else if ( !item->artist().isNull() )
+            ViewManager::instance()->show( item->artist() );
     }
 }
 
@@ -203,7 +208,8 @@ AlbumView::onScrollTimeout()
 void
 AlbumView::paintEvent( QPaintEvent* event )
 {
-    QListView::paintEvent( event );
+    if ( m_inited )
+        QListView::paintEvent( event );
 }
 
 
@@ -211,6 +217,10 @@ void
 AlbumView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
+
+    m_inited = true;
+    if ( !autoFitItems() )
+        return;
 
 #ifdef Q_WS_X11
     int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;

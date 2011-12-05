@@ -287,6 +287,64 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
 
 void
+Pipeline::reportAlbums( QID qid, const QList< album_ptr >& albums )
+{
+    if ( !m_running )
+        return;
+
+    if ( !m_qids.contains( qid ) )
+    {
+        tDebug() << "Albums arrived too late for:" << qid;
+        return;
+    }
+    const query_ptr& q = m_qids.value( qid );
+    Q_ASSERT( q->isFullTextQuery() );
+
+    QList< album_ptr > cleanAlbums;
+    foreach( const album_ptr& r, albums )
+    {
+//        float score = q->howSimilar( r );
+
+        cleanAlbums << r;
+    }
+
+    if ( !cleanAlbums.isEmpty() )
+    {
+        q->addAlbums( cleanAlbums );
+    }
+}
+
+
+void
+Pipeline::reportArtists( QID qid, const QList< artist_ptr >& artists )
+{
+    if ( !m_running )
+        return;
+
+    if ( !m_qids.contains( qid ) )
+    {
+        tDebug() << "Artists arrived too late for:" << qid;
+        return;
+    }
+    const query_ptr& q = m_qids.value( qid );
+    Q_ASSERT( q->isFullTextQuery() );
+
+    QList< artist_ptr > cleanArtists;
+    foreach( const artist_ptr& r, artists )
+    {
+//        float score = q->howSimilar( r );
+
+        cleanArtists << r;
+    }
+
+    if ( !cleanArtists.isEmpty() )
+    {
+        q->addArtists( cleanArtists );
+    }
+}
+
+
+void
 Pipeline::shuntNext()
 {
     if ( !m_running )

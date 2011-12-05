@@ -29,6 +29,7 @@
 #include "dllmacro.h"
 
 class QPushButton;
+class AlbumModel;
 class PlaylistModel;
 
 namespace Ui
@@ -64,6 +65,9 @@ signals:
 
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums );
+    void onArtistsFound( const QList<Tomahawk::artist_ptr>& artists );
+
     void onQueryFinished();
 
 private:
@@ -71,6 +75,8 @@ private:
 
     QString m_search;
 
+    AlbumModel* m_artistsModel;
+    AlbumModel* m_albumsModel;
     PlaylistModel* m_resultsModel;
     QList< Tomahawk::query_ptr > m_queries;
 };

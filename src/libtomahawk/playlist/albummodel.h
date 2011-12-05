@@ -89,6 +89,7 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
+    void addArtists( const QList<Tomahawk::artist_ptr>& artists );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );

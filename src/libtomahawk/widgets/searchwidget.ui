@@ -14,11 +14,26 @@
    <enum>Qt::TabFocus</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
-    <widget class="PlaylistView" name="resultsView"/>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="handleWidth">
+      <number>1</number>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="handleWidth">
+       <number>1</number>
+      </property>
+      <widget class="AlbumView" name="artistView"/>
+      <widget class="AlbumView" name="albumView"/>
+     </widget>
+     <widget class="PlaylistView" name="resultsView"/>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -27,6 +42,11 @@
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
    <header>playlist/playlistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AlbumView</class>
+   <extends>QListView</extends>
+   <header>playlist/albumview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

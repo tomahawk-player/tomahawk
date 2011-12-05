@@ -46,6 +46,9 @@ public:
     AlbumProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
+    bool autoFitItems() const { return m_autoFitItems; }
+    void setAutoFitItems( bool b ) { m_autoFitItems = b; }
+
     void setAlbumModel( AlbumModel* model );
     void setModel( QAbstractItemModel* model );
 
@@ -82,6 +85,9 @@ private:
     AlbumItemDelegate* m_delegate;
     LoadingSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
+
+    bool m_inited;
+    bool m_autoFitItems;
 
     QTimer m_timer;
 };
