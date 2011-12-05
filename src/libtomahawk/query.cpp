@@ -385,6 +385,9 @@ Query::checkResults()
             {
                 solved = true;
             }
+
+            if ( playable )
+                break;
         }
     }
 
