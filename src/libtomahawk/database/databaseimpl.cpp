@@ -370,20 +370,27 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool autoCreate )
 QList< QPair<int, float> >
 DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
-    Q_UNUSED( limit );
-
     QList< QPair<int, float> > resultslist;
-    if( table != "artist" && table != "track" && table != "album" )
+    if ( table != "artist" && table != "track" && table != "album" )
         return resultslist;
 
     QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
-    foreach( int i, resultsmap.keys() )
+    foreach ( int i, resultsmap.keys() )
     {
         resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
     }
     qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
 
-    return resultslist;
+    if ( !limit )
+        return resultslist;
+
+    QList< QPair<int, float> > resultscapped;
+    for ( unsigned int i = 0; i < limit && i < resultsmap.count(); i++ )
+    {
+        resultscapped << resultslist.at( i );
+    }
+
+    return resultscapped;
 }
 
 
