@@ -68,7 +68,7 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QRect textRect = option.rect.adjusted( 6, iconRect.height() + 8, -6, 0 );
     QString text = painter->fontMetrics().elidedText( index.data( Qt::DisplayRole ).toString(), Qt::ElideRight, textRect.width() );
     QTextOption to( Qt::AlignHCenter );
-    painter->drawText( textRect, text, to);
+    painter->drawText( textRect, text, to );
 
     painter->restore();
 }
