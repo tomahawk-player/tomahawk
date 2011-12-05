@@ -310,23 +310,14 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 
 
 QList< QNetworkProxy >
-NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
-{
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
-    QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
-    return proxies;
-}
-
-
-QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || m_noProxyHosts.contains( hostname ) || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
-        proxies << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
+        proxies << systemProxyForQuery( query );
     else
-        proxies << m_proxy << QNetworkProxy( QNetworkProxy::DefaultProxy ) << QNetworkProxy( QNetworkProxy::NoProxy );
+        proxies << m_proxy << systemProxyForQuery( query );
 
     return proxies;
 }
