@@ -190,10 +190,15 @@ void
 TreeProxyModel::filterFinished()
 {
     m_artistsFilterCmd = 0;
+
+    if ( PlaylistInterface::filter() != m_filter )
+    {
+        emit filterChanged( m_filter );
+    }
+
     PlaylistInterface::setFilter( m_filter );
     setFilterRegExp( m_filter );
 
-    emit filterChanged( m_filter );
     emit trackCountChanged( trackCount() );
     emit filteringFinished();
 }
