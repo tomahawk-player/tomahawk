@@ -426,7 +426,10 @@ Query::toVariant() const
 QString
 Query::toString() const
 {
-    return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
+    if ( !isFullTextQuery() )
+        return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
+    else
+        return QString( "Query(%1, Fulltext: %2)" ).arg( id() ).arg( fullTextQuery() );
 }
 
 
