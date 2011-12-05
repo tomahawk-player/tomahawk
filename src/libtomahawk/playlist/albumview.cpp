@@ -208,7 +208,7 @@ AlbumView::onScrollTimeout()
 void
 AlbumView::paintEvent( QPaintEvent* event )
 {
-    if ( m_inited )
+    if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )
         QListView::paintEvent( event );
 }
 
@@ -216,28 +216,30 @@ AlbumView::paintEvent( QPaintEvent* event )
 void
 AlbumView::resizeEvent( QResizeEvent* event )
 {
-    QListView::resizeEvent( event );
-
-    m_inited = true;
-    if ( !autoFitItems() )
-        return;
-
+    if ( autoFitItems() )
+    {
 #ifdef Q_WS_X11
-    int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+        int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
 #else
-    int scrollbar = verticalScrollBar()->rect().width();
+        int scrollbar = verticalScrollBar()->rect().width();
 #endif
-    int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
-    QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+        int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
+        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-    int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
-    int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
-    int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+        int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
+        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
+        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
 
-    if ( itemsPerRow < 1 )
-        setSpacing( 16 );
-    else
-        setSpacing( newSpacing );
+        if ( itemsPerRow < 1 )
+            setSpacing( 16 );
+        else
+            setSpacing( newSpacing );
+
+        if ( !m_inited && m_proxyModel->rowCount() )
+            m_inited = true;
+    }
+
+    QListView::resizeEvent( event );
 }
 
 
