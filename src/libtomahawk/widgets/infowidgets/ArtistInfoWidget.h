@@ -90,6 +90,8 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
+    void setMode( Tomahawk::ModelMode mode );
+
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 

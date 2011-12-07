@@ -81,6 +81,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_button->setChecked( true );
 
     connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    connect( m_albumsModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
@@ -109,16 +110,25 @@ ArtistInfoWidget::playlistInterface() const
 
 
 void
+ArtistInfoWidget::setMode( ModelMode mode )
+{
+    m_button->setChecked( mode == InfoSystemMode );
+
+    if ( m_albumsModel->mode() != mode )
+        onModeToggle();
+
+    if ( mode == InfoSystemMode )
+        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+    else
+        m_button->setText( tr( "Click to show Official Tracks" ) );
+}
+
+
+void
 ArtistInfoWidget::onModeToggle()
 {
     m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->clear();
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
-
-    if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show Super Collection Albums" ) );
-    else
-        m_button->setText( tr( "Click to show Official Releases" ) );
 }
 
 
@@ -175,7 +185,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 {
     m_artist = artist;
     m_title = artist->name();
-    m_albumsModel->addAlbums( artist, QModelIndex() );
+    m_albumsModel->addAlbums( artist, QModelIndex(), true );
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();

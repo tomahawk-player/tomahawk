@@ -92,12 +92,15 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
+    void loadAlbums( bool autoRefetch = false );
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
     void onModeToggle();
+    void onAlbumsModeToggle();
+
     void onLoadingStarted();
     void onLoadingFinished();
 
@@ -110,11 +113,14 @@ private:
     TreeModel* m_tracksModel;
 
     OverlayButton* m_button;
+    OverlayButton* m_buttonAlbums;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
+
+    QString m_infoId;
 };
 
 #endif // ALBUMINFOWIDGET_H

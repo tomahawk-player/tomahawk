@@ -165,6 +165,7 @@ MusicBrainzPlugin::artistSearchSlot()
     if ( domNodeList.isEmpty() )
     {
         emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        tDebug() << Q_FUNC_INFO << doc.toString();
         return;
     }
 
