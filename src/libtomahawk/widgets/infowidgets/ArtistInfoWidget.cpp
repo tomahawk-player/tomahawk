@@ -118,9 +118,9 @@ ArtistInfoWidget::setMode( ModelMode mode )
         onModeToggle();
 
     if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+        m_button->setText( tr( "Click to show Super Collection Albums" ) );
     else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
+        m_button->setText( tr( "Click to show Official Albums" ) );
 }
 
 
