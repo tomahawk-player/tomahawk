@@ -1,5 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/lang">
 <file>tomahawk_en.qm</file>
+<file>tomahawk_es.qm</file>
+<file>tomahawk_de.qm</file>
+<file>tomahawk_pl.qm</file>
 </qresource>
 </RCC>
