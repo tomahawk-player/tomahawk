@@ -75,7 +75,7 @@ public:
 
     static void dontDelete( Tomahawk::PlaylistInterface* obj )
     {
-        qDebug() << Q_FUNC_INFO << obj;
+        tDebug() << Q_FUNC_INFO << obj;
     }
     virtual Tomahawk::playlistinterface_ptr getSharedPointer()
     {

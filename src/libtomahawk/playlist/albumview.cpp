@@ -235,8 +235,11 @@ AlbumView::resizeEvent( QResizeEvent* event )
         else
             setSpacing( newSpacing );
 
-        if ( !m_inited && m_proxyModel->rowCount() )
+        if ( !m_inited )
+        {
             m_inited = true;
+            repaint();
+        }
     }
 
     QListView::resizeEvent( event );

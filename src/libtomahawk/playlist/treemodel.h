@@ -94,7 +94,7 @@ public:
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
     void addArtists( const Tomahawk::artist_ptr& artist );
-    void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
+    void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent, bool autoRefetch = false );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
 
     void getCover( const QModelIndex& index );

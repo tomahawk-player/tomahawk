@@ -610,7 +610,7 @@ TreeModel::addArtists( const artist_ptr& artist )
 
 
 void
-TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
+TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent, bool autoRefetch )
 {
     emit loadingStarted();
 
@@ -633,6 +633,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
         requestData.caller = m_infoId;
         requestData.customData["row"] = parent.row();
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
+        requestData.customData["refetch"] = QVariant( autoRefetch );
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
@@ -920,7 +921,19 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             }
 
             QModelIndex idx = index( requestData.customData[ "row" ].toInt(), 0, QModelIndex() );
-            onAlbumsAdded( al, idx );
+
+            if ( requestData.customData[ "refetch" ].toInt() > 0 && !al.count() )
+            {
+                setMode( DatabaseMode );
+
+                Tomahawk::InfoSystem::InfoStringHash inputInfo;
+                inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
+                artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
+
+                addAlbums( artist, idx );
+            }
+            else
+                onAlbumsAdded( al, idx );
 
             break;
         }
