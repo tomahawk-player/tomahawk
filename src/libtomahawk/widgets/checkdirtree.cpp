@@ -144,7 +144,7 @@ CheckDirModel::getCheck( const QModelIndex& index )
 CheckDirTree::CheckDirTree( QWidget* parent )
     : QTreeView( parent )
 {
-    m_dirModel.setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks );
+    m_dirModel.setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
     m_dirModel.setRootPath( "/" );
 
     m_dirModel.setNameFilters( QStringList() << "[^\\.]*" );
