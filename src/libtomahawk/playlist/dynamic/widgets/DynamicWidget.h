@@ -62,7 +62,7 @@ public:
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
     dynplaylist_ptr playlist();
 
-    virtual PlaylistInterface* playlistInterface() const;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );

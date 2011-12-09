@@ -554,7 +554,7 @@ AudioEngine::loadNextTrack()
 
 
 void
-AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
@@ -678,7 +678,7 @@ AudioEngine::timerTriggered( qint64 time )
 
 
 void
-AudioEngine::setPlaylist( PlaylistInterface* playlist )
+AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
     if ( !m_playlist.isNull() )
     {
@@ -687,14 +687,14 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
         m_playlist.data()->reset();
     }
 
-    if ( !playlist )
+    if ( !playlist.isNull() )
     {
         m_playlist.clear();
         emit playlistChanged( playlist );
         return;
     }
 
-    m_playlist = playlist->getSharedPointer();
+    m_playlist = playlist.data()->getSharedPointer();
 
     if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
         connect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );

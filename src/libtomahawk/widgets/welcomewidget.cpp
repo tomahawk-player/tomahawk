@@ -20,7 +20,7 @@
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
 
-#include <QPainter>
+#include <QtGui/QPainter>
 
 #include "viewmanager.h"
 #include "sourcelist.h"
@@ -98,10 +98,10 @@ WelcomeWidget::~WelcomeWidget()
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 WelcomeWidget::playlistInterface() const
 {
-    return ui->tracksView->playlistInterface();
+    return ui->tracksView->playlistInterface()->getSharedPointer();
 }
 
 

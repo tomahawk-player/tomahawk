@@ -44,7 +44,7 @@ public:
     ~SourceInfoWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }

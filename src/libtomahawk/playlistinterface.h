@@ -69,19 +69,15 @@ public:
 
     // Some playlist interfaces can wrap other interfaces. When checking for top-level
     // equality (say, to compare the currently playing interface) this might be needed
-    virtual bool hasChildInterface( PlaylistInterface* ) { return false; }
+    virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr ) { return false; }
 
     QObject* object() const { return m_object; }
 
-    static void dontDelete( Tomahawk::PlaylistInterface* obj )
-    {
-        tDebug() << Q_FUNC_INFO << obj;
-    }
     virtual Tomahawk::playlistinterface_ptr getSharedPointer()
     {
         if ( m_sharedPtr.isNull() )
         {
-            m_sharedPtr = Tomahawk::playlistinterface_ptr( this, dontDelete );
+            m_sharedPtr = Tomahawk::playlistinterface_ptr( this );
         }
 
         return m_sharedPtr;

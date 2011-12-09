@@ -58,7 +58,7 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+    AudioEngine::instance()->playItem( source->getPlaylistInterface(), source->getPlaylistInterface()->nextItem() );
 }
 
 void
@@ -133,7 +133,7 @@ LatchManager::unlatchRequest( const source_ptr& source )
 {
     Q_UNUSED( source );
     AudioEngine::instance()->stop();
-    AudioEngine::instance()->setPlaylist( 0 );
+    AudioEngine::instance()->setPlaylist( Tomahawk::playlistinterface_ptr() );
 
     ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
 }

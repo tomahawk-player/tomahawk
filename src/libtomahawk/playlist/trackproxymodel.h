@@ -19,7 +19,7 @@
 #ifndef TRACKPROXYMODEL_H
 #define TRACKPROXYMODEL_H
 
-#include <QSortFilterProxyModel>
+#include <QtGui/QSortFilterProxyModel>
 
 #include "playlistinterface.h"
 #include "playlist/trackmodel.h"

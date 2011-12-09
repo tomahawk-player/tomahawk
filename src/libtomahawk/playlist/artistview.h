@@ -19,12 +19,14 @@
 #ifndef ARTISTVIEW_H
 #define ARTISTVIEW_H
 
-#include <QSortFilterProxyModel>
-#include <QTreeView>
-#include <QTimer>
+#include <QtGui/QSortFilterProxyModel>
+#include <QtGui/QTreeView>
+#include <QtCore/QTimer>
 
 #include "treeproxymodel.h"
 #include "viewpage.h"
+
+#include "playlistinterface.h"
 
 #include "dllmacro.h"
 
@@ -60,7 +62,7 @@ public:
     void setTreeModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getSharedPointer(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }

@@ -46,7 +46,7 @@ public:
     ~SearchWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
     virtual bool isTemporaryPage() const { return true; }
 
     virtual QString title() const { return QString( tr( "Search: %1" ) ).arg( m_search ); }

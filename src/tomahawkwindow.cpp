@@ -224,7 +224,7 @@ TomahawkWindow::setupSideBar()
     m_queueModel->setStyle( PlaylistModel::Short );
     m_queueView->queue()->setPlaylistModel( m_queueModel );
     m_queueView->queue()->playlistModel()->setReadOnly( false );
-    AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
+    AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->getSharedPointer() );
 
     m_sidebar->addWidget( m_searchWidget );
     m_sidebar->addWidget( m_sourcetree );

@@ -200,10 +200,10 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 DynamicWidget::playlistInterface() const
 {
-    return m_view->proxyModel();
+    return m_view->proxyModel()->getSharedPointer();
 }
 
 

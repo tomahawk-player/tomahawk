@@ -1012,7 +1012,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
         if ( sender() && sender()->property( "playNow" ).toBool() )
         {
-            if ( AudioEngine::instance()->playlist() )
+            if ( !AudioEngine::instance()->playlist().isNull() )
                 AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
             else
             {

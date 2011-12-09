@@ -388,7 +388,7 @@ ViewManager::showSuperCollection()
 
 
 void
-ViewManager::playlistInterfaceChanged( Tomahawk::PlaylistInterface* interface )
+ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface )
 {
     playlist_ptr pl = playlistForInterface( interface );
     if ( !pl.isNull() )
@@ -813,7 +813,7 @@ ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 
 
 ViewPage*
-ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
@@ -827,13 +827,13 @@ ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
     return 0;
 }
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 ViewManager::currentPlaylistInterface() const
 {
     if ( currentPage() )
         return currentPage()->playlistInterface();
     else
-        return 0;
+        return Tomahawk::playlistinterface_ptr();
 }
 
 
@@ -844,7 +844,7 @@ ViewManager::currentPage() const
 }
 
 Tomahawk::playlist_ptr
-ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<PlaylistView> view, m_playlistViews.values() )
     {
@@ -859,7 +859,7 @@ ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) cons
 
 
 Tomahawk::dynplaylist_ptr
-ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
     {
@@ -874,7 +874,7 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface
 
 
 Tomahawk::collection_ptr
-ViewManager::collectionForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<CollectionView> view, m_collectionViews.values() )
     {

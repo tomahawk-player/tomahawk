@@ -188,7 +188,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );
-            AudioEngine::instance()->playItem( m_proxyModel, item->result() );
+            AudioEngine::instance()->playItem( m_proxyModel->getSharedPointer(), item->result() );
         }
     }
 }

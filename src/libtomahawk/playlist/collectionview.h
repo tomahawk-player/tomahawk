@@ -39,7 +39,7 @@ public:
     virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getSharedPointer(); }
 
     virtual QString title() const { return model()->title(); }
     virtual QString description() const { return model()->description(); }

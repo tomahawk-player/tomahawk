@@ -84,7 +84,7 @@ public:
     ~WelcomeWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const { return tr( "Welcome to Tomahawk" ); }
     virtual QString description() const { return QString(); }

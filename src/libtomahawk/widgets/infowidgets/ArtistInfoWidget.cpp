@@ -102,10 +102,10 @@ ArtistInfoWidget::~ArtistInfoWidget()
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 ArtistInfoWidget::playlistInterface() const
 {
-    return m_plInterface;
+    return m_plInterface->getSharedPointer();
 }
 
 

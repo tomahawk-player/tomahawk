@@ -115,10 +115,10 @@ SocialPlaylistWidget::fetchFromDB()
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 SocialPlaylistWidget::playlistInterface() const
 {
-    return 0;
+    return Tomahawk::playlistinterface_ptr();
 }
 
 
