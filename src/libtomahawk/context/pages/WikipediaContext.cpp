@@ -31,7 +31,8 @@ WikipediaContext::setArtist( const Tomahawk::artist_ptr& artist )
 
     m_artist = artist;
 
-    webView()->load( QString( "http://en.wikipedia.org/w/index.php?useformat=mobile&title=%1" ).arg( m_artist->name() ) );
+    QString lang = QLocale::system().name().split("_").first();
+    webView()->load( QString( "http://%1.wikipedia.org/w/index.php?useformat=mobile&title=%2" ).arg( lang ).arg( m_artist->name() ) );
 }
 
 
