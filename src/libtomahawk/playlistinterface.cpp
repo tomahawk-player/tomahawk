@@ -30,6 +30,7 @@ PlaylistInterface::PlaylistInterface ( QObject *parent )
 
 PlaylistInterface::~PlaylistInterface()
 {
+    m_sharedPtr.clear();
 }
 
 result_ptr
