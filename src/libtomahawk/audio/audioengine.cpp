@@ -687,7 +687,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         m_playlist.data()->reset();
     }
 
-    if ( !playlist.isNull() )
+    if ( playlist.isNull() )
     {
         m_playlist.clear();
         emit playlistChanged( playlist );
