@@ -105,7 +105,7 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );

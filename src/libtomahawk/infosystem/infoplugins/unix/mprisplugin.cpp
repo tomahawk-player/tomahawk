@@ -62,8 +62,8 @@ MprisPlugin::MprisPlugin()
             SLOT( onVolumeChanged( int ) ) );
 
     // When the playlist changes, signals for several properties are sent
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ),
-            SLOT( onPlaylistChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ),
+            SLOT( onPlaylistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     // When a track is added or removed, CanGoNext updated signal is sent
     Tomahawk::playlistinterface_ptr playlist = AudioEngine::instance()->playlist();
@@ -539,15 +539,15 @@ MprisPlugin::onVolumeChanged( int volume )
 }
 
 void
-MprisPlugin::onPlaylistChanged( Tomahawk::PlaylistInterface* playlist )
+MprisPlugin::onPlaylistChanged( Tomahawk::playlistinterface_ptr playlist )
 {
     qDebug() << Q_FUNC_INFO;
     disconnect( this, SLOT( onTrackCountChanged( unsigned int ) ) );
     qDebug() << "disconnected";
-    if( playlist )
+    if( !playlist.isNull() )
         qDebug() << "playlist not null";
 
-    if( playlist )
+    if( !playlist.isNull() )
         connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
             SLOT( onTrackCountChanged( unsigned int ) ) );
 

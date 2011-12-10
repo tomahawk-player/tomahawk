@@ -36,7 +36,7 @@ public:
     WikipediaContext() : WebContext() {}
     ~WikipediaContext() {}
 
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
 
     virtual QString title() const { return tr( "Wikipedia" ); }
     virtual QString description() const { return QString(); }
@@ -61,7 +61,7 @@ public:
     LastfmContext() : WebContext() {}
     ~LastfmContext() {}
 
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
 
     virtual QString title() const { return tr( "Last.fm" ); }
     virtual QString description() const { return QString(); }

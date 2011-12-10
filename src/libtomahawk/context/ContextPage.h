@@ -43,7 +43,7 @@ public:
     virtual ~ContextPage() {}
 
     virtual QGraphicsWidget* widget() = 0;
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const = 0;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const = 0;
 
     virtual QString title() const = 0;
     virtual QString description() const = 0;

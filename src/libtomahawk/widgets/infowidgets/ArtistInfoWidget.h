@@ -107,7 +107,7 @@ private:
     TreeModel* m_relatedModel;
     TreeModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
-    MetaPlaylistInterface* m_plInterface;
+    Tomahawk::playlistinterface_ptr m_plInterface;
 
     OverlayButton* m_button;
 

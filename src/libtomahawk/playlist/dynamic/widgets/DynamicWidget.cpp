@@ -98,7 +98,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_controls, SIGNAL( controlsChanged( bool ) ), this, SLOT( controlsChanged( bool ) ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 }
 
 
@@ -241,9 +241,9 @@ DynamicWidget::layoutFloatingWidgets()
 
 
 void
-DynamicWidget::playlistChanged( PlaylistInterface* pl )
+DynamicWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 {
-    if( pl == static_cast< PlaylistInterface* >( m_view->proxyModel() ) ) { // same playlist
+    if( pl == m_view->proxyModel()->getSharedPointer() ) { // same playlist
         m_activePlaylist = true;
     } else {
         m_activePlaylist = false;

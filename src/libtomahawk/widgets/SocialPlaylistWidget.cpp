@@ -85,7 +85,7 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
+    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
 */
     fetchFromDB();
 }

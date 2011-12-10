@@ -37,7 +37,7 @@ RecentlyPlayedPlaylistsModel::RecentlyPlayedPlaylistsModel( QObject* parent )
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
     connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( Tomahawk::playlist_ptr ) ), this, SLOT( plAdded( Tomahawk::playlist_ptr ) ) );
-    connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ), Qt::QueuedConnection );
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
@@ -229,10 +229,13 @@ RecentlyPlayedPlaylistsModel::plAdded( const playlist_ptr& pl )
 
 
 void
-RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::PlaylistInterface* pli )
+RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr pli )
 {
     // ARG
-    if( Playlist* pl = dynamic_cast< Playlist* >( pli ) ) {
+    if ( pli.isNull() )
+        return;
+    
+    if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) ) {
         // look for it, qsharedpointer fail
         playlist_ptr ptr;
         foreach( const playlist_ptr& test, m_recplaylists ) {

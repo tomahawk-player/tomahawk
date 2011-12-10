@@ -88,7 +88,7 @@ public slots:
     void trackStarted();
     void stationFailed( const QString& );
 
-    void playlistChanged( Tomahawk::PlaylistInterface* );
+    void playlistChanged( Tomahawk::playlistinterface_ptr );
     void tracksAdded();
 
 signals:

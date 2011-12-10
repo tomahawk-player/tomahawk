@@ -45,8 +45,8 @@ public slots:
     void catchUpRequest();
 
 private slots:
-
-    void playlistChanged( Tomahawk::PlaylistInterface* );
+    void playlistChanged( Tomahawk::playlistinterface_ptr );
+    
 private:
     enum State {
         NotLatched =  0,
