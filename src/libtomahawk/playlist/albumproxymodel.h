@@ -32,6 +32,7 @@ Q_OBJECT
 
 public:
     explicit AlbumProxyModel( QObject* parent = 0 );
+    virtual ~AlbumProxyModel() {}
 
     virtual AlbumModel* sourceModel() const { return m_model; }
     virtual void setSourceAlbumModel( AlbumModel* sourceModel );

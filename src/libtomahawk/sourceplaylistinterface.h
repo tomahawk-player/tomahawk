@@ -36,7 +36,7 @@ Q_OBJECT
 
 public:
     SourcePlaylistInterface( Tomahawk::source_ptr& source );
-    ~SourcePlaylistInterface();
+    virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
 

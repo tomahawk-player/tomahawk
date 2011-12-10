@@ -34,6 +34,7 @@ Q_OBJECT
 
 public:
     explicit TreeProxyModel( QObject* parent = 0 );
+    virtual ~TreeProxyModel() {}
 
     virtual TreeModel* sourceModel() const { return m_model; }
     virtual void setSourceTreeModel( TreeModel* sourceModel );

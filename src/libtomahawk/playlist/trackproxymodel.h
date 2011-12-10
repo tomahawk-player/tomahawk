@@ -32,6 +32,7 @@ Q_OBJECT
 
 public:
     explicit TrackProxyModel ( QObject* parent = 0 );
+    virtual ~TrackProxyModel() {}
     
     virtual TrackModel* sourceModel() const { return m_model; }
     virtual void setSourceTrackModel( TrackModel* sourceModel );

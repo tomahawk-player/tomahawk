@@ -81,7 +81,7 @@ Q_OBJECT
 
 public:
     WelcomeWidget( QWidget* parent = 0 );
-    ~WelcomeWidget();
+    virtual ~WelcomeWidget();
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;

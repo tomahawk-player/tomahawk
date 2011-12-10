@@ -132,7 +132,7 @@ friend class ::DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;
 
 public:
-    ~Playlist();
+    virtual ~Playlist();
 
     static Tomahawk::playlist_ptr load( const QString& guid );
 

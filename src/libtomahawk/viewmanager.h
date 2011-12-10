@@ -70,7 +70,7 @@ public:
     static ViewManager* instance();
 
     explicit ViewManager( QObject* parent = 0 );
-    ~ViewManager();
+    virtual ~ViewManager();
 
     QWidget* widget() const { return m_widget; }
     InfoBar* infobar() const { return m_infobar; }

@@ -29,6 +29,7 @@ Q_OBJECT
 
 public:
     explicit PlaylistProxyModel( QObject* parent = 0 );
+    virtual ~PlaylistProxyModel() {}
 };
 
 #endif // PLAYLISTPROXYMODEL_H

@@ -38,7 +38,7 @@ public:
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
     Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
-    ~Album();
+    virtual ~Album();
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
