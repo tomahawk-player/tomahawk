@@ -17,7 +17,7 @@
  */
 
 #include "playlistinterface.h"
-
+#include "utils/logger.h"
 #include "result.h"
 
 using namespace Tomahawk;
@@ -30,6 +30,7 @@ PlaylistInterface::PlaylistInterface ( QObject *parent )
 
 PlaylistInterface::~PlaylistInterface()
 {
+    tDebug() << Q_FUNC_INFO << "DELETING POINTER " << m_sharedPtr.data();
     m_sharedPtr.clear();
 }
 
