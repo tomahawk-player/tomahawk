@@ -400,6 +400,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
     qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
+    qRegisterMetaType< Tomahawk::playlistinterface_ptr >("Tomahawk::playlistinterface_ptr");
     qRegisterMetaType< Tomahawk::dynplaylist_ptr >("Tomahawk::dynplaylist_ptr");
     qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
