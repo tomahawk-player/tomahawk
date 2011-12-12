@@ -31,8 +31,12 @@
     #include <QPixmap>
 #endif
 
+/**
+ * Manages SIP plugins for connecting to friends. External interface to SIP plugins is
+ * through AccountManager, this is an internal class.
+ */
 
-class DLLEXPORT SipHandler : public QObject
+class SipHandler : public QObject
 {
     Q_OBJECT
 
@@ -42,12 +46,7 @@ public:
     SipHandler( QObject* parent );
     ~SipHandler();
 
-    QList< SipPlugin* > allPlugins() const;
-    QList< SipPlugin* > connectedPlugins() const;
     void loadFromAccountManager();
-
-    void addSipPlugin( SipPlugin* p );
-    void removeSipPlugin( SipPlugin* p );
 
     bool hasPluginType( const QString& factoryId ) const;
 
@@ -56,25 +55,11 @@ public:
     const SipInfo sipInfo( const QString& peerId ) const;
     const QString versionString( const QString& peerId ) const;
 
+    void hookUpPlugin( SipPlugin* p );
+
 public slots:
-    void checkSettings();
-
-    void connectPlugin( const QString &pluginId = QString() );
-    void disconnectPlugin( const QString &pluginId = QString() );
-
-    void toggleConnect();
-
-    void refreshProxy();
-
-signals:
-    void connected( SipPlugin* );
-    void disconnected( SipPlugin* );
-    void authError( SipPlugin* );
-
-    void stateChanged( SipPlugin* p, SipPlugin::ConnectionState state );
-
-    void pluginAdded( SipPlugin* p );
-    void pluginRemoved( SipPlugin* p );
+//     TODO no longer called from anywhere... can we remove it?
+//     void refreshProxy();
 
 private slots:
     void onSipInfo( const QString& peerId, const SipInfo& info );
@@ -82,10 +67,6 @@ private slots:
     void onMessage( const QString&, const QString& );
     void onPeerOffline( const QString& );
     void onPeerOnline( const QString& );
-    void onError( int code, const QString& msg );
-    void onStateChanged( SipPlugin::ConnectionState );
-
-    void onSettingsChanged();
 
     // set data for local source
     void onAvatarReceived( const QPixmap& avatar );
@@ -95,14 +76,6 @@ private slots:
 
 private:
     static SipHandler *s_instance;
-
-    QStringList findPluginFactories();
-    bool pluginLoaded( const QString& pluginId ) const;
-    void hookUpPlugin( SipPlugin* p );
-
-    void loadPluginFactories( const QStringList& paths );
-    void loadPluginFactory( const QString& path );
-    QString factoryFromId( const QString& pluginId ) const;
 
     //TODO: move this to source
     QHash<QString, SipInfo> m_peersSipInfos;

@@ -55,14 +55,6 @@ Account::icon() const
     return QIcon();
 }
 
-
-bool
-Account::canSelfAuthenticate() const
-{
-    return false;
-}
-
-
 void
 Account::authenticate()
 {
@@ -87,5 +79,24 @@ Account::isAuthenticated() const
 void
 Account::refreshProxy()
 {
+
+}
+
+void
+Account::onError(int errorCode, const QString& error )
+{
+    QMutexLocker locker( &m_mutex );
+    m_cachedError = error;
+}
+
+
+void
+Account::onConnectionStateChanged( Account::ConnectionState )
+{
+    m_cachedError.clear();
+}
+
+
+}
 
 }

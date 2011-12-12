@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,6 +48,8 @@ public:
     void loadPluginFactories( const QStringList &paths );
 
     void loadFromConfig();
+    void initSIP();
+
     void loadPluginFactory( const QString &path );
     void addAccountPlugin( Account* account );
     Account* loadPlugin( const QString &accountId );
@@ -58,12 +61,26 @@ public:
 public slots:
     void connectAll();
     void disconnectAll();
+    void toggleAccountsConnected();
 
 signals:
-    void accountAdded( Tomahawk::Accounts::Account* );
-    void accountRemoved( Tomahawk::Accounts::Account* );
+    void added( Tomahawk::Accounts::Account* );
+    void removed( Tomahawk::Accounts::Account* );
 
+    void connected( Tomahawk::Accounts::Account* );
+    void disconnected( Tomahawk::Accounts::Account* );
+    void authError( Tomahawk::Accounts::Account* );
+
+    void stateChanged( Account* p, Accounts::Account::ConnectionState state );
+
+private slots:
+    void onStateChanged( Accounts::Account::ConnectionState state );
+    void onError( int code, const QString& msg );
+
+    void onSettingsChanged();
 private:
+    void hookupAccount( Account* ) const;
+
     QList< Account* > m_accounts;
     QList< Account* > m_enabledAccounts;
     QList< Account* > m_connectedAccounts;

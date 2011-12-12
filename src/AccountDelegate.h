@@ -20,6 +20,7 @@
 #define ACCOUNTDELEGATE_H
 
 #include "configdelegatebase.h"
+#include "accounts/AccountModel.h"
 
 namespace Tomahawk
 {

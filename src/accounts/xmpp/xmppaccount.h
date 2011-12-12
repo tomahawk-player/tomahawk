@@ -22,7 +22,7 @@
 
 #include "sip/xmppsip.h"
 #include "accounts/accountdllmacro.h"
-#include "accounts/account.h"
+#include "accounts/Account.h"
 
 #define MYNAME "ACCOUNTJABBER"
 
@@ -33,7 +33,7 @@ namespace Tomahawk
 
 namespace Accounts
 {
-    
+
 class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
 {
     Q_OBJECT
@@ -70,7 +70,7 @@ public:
     QWidget* aclWidget() { return 0; }
 
     void refreshProxy() {};
-    
+
 private:
     Ui_XmppConfigWidget* m_ui; // so the google wrapper can change the config dialog a bit
     bool m_isAuthenticated;

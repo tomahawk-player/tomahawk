@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
+ *             2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -67,13 +68,6 @@ SipPlugin::account() const
 }
 
 
-QString
-SipPlugin::errorMessage() const
-{
-    return m_cachedError;
-}
-
-
 QIcon
 SipPlugin::icon() const
 {
@@ -92,22 +86,6 @@ void
 SipPlugin::refreshProxy()
 {
     qDebug() << Q_FUNC_INFO << "Not implemented";
-}
-
-
-void
-SipPlugin::onError( int code, const QString& error )
-{
-    Q_UNUSED( code );
-    m_cachedError = error;
-}
-
-
-void
-SipPlugin::onStateChange( SipPlugin::ConnectionState state )
-{
-    Q_UNUSED( state );
-    m_cachedError.clear();
 }
 
 

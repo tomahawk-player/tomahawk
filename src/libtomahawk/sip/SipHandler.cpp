@@ -52,7 +52,6 @@ SipHandler::instance()
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
-    , m_connected( false )
 {
     s_instance = this;
 
@@ -98,13 +97,6 @@ SipHandler::versionString( const QString& peerId ) const
 
 
 void
-SipHandler::onSettingsChanged()
-{
-    checkSettings();
-}
-
-
-void
 SipHandler::hookUpPlugin( SipPlugin* sip )
 {
     QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
@@ -113,164 +105,13 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
     QObject::connect( sip, SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfo( QString, SipInfo ) ) );
     QObject::connect( sip, SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( onSoftwareVersion( QString, QString ) ) );
 
-    QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
-    QObject::connect( sip, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( SipPlugin::ConnectionState ) ) );
-
     QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
     QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
 
     QObject::connect( sip->account(), SIGNAL( configurationChanged() ), sip, SLOT( configurationChanged() ) );
 }
 
-
-bool
-SipHandler::pluginLoaded( const QString& pluginId ) const
-{
-    foreach( SipPlugin* plugin, m_allPlugins )
-    {
-        if ( plugin->pluginId() == pluginId )
-            return true;
-    }
-
-    return false;
-}
-
-
-void
-SipHandler::checkSettings()
-{
-    foreach( SipPlugin* sip, m_allPlugins )
-    {
-        sip->checkSettings();
-    }
-}
-
-
-void
-SipHandler::addSipPlugin( SipPlugin* p )
-{
-    m_allPlugins << p;
-
-    hookUpPlugin( p );
-    p->connectPlugin();
-
-    emit pluginAdded( p );
-}
-
-
-void
-SipHandler::removeSipPlugin( SipPlugin* p )
-{
-    p->disconnectPlugin();
-
-    emit pluginRemoved( p );
-
-    m_allPlugins.removeAll( p );
-}
-
-
-void
-SipHandler::loadFromAccountManager()
-{
-    tDebug() << Q_FUNC_INFO;
-    QList< Tomahawk::Accounts::Account* > accountList = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
-    foreach( Tomahawk::Accounts::Account* account, accountList )
-    {
-        tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();
-        SipPlugin* p = account->sipPlugin();
-        addSipPlugin( p );
-    }
-    m_connected = true;
-}
-
-
-void
-SipHandler::connectAll()
-{
-    foreach( SipPlugin* sip, m_allPlugins )
-    {
-        sip->connectPlugin();
-    }
-    m_connected = true;
-}
-
-
-void
-SipHandler::disconnectAll()
-{
-    foreach( SipPlugin* p, m_connectedPlugins )
-        p->disconnectPlugin();
-
-    SourceList::instance()->removeAllRemote();
-    m_connected = false;
-}
-
-
-void
-SipHandler::connectPlugin( const QString &pluginId )
-{
-#ifndef TOMAHAWK_HEADLESS
-    if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
-    {
-        int result = QMessageBox::question(
-            //TomahawkApp::instance()->mainWindow(),
-            0, tr( "Legal Warning" ),
-            tr( "By pressing OK below, you agree that your use of Tomahawk will be in accordance with any applicable laws, including copyright and intellectual property laws, in effect in your country of residence, and indemnify the Tomahawk developers and project from liability should you choose to break those laws.\n\nFor more information, please see http://gettomahawk.com/legal" ),
-            tr( "I Do Not Agree" ), tr( "I Agree" )
-        );
-        if ( result != 1 )
-            return;
-        else
-            TomahawkSettings::instance()->setAcceptedLegalWarning( true );
-    }
-#endif
-    foreach( SipPlugin* sip, m_allPlugins )
-    {
-        if ( sip->pluginId() == pluginId )
-        {
-            Q_ASSERT( m_allPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
-            //each sip should refreshProxy() or take care of that function in some other way during connection
-            sip->connectPlugin();
-        }
-    }
-}
-
-
-void
-SipHandler::disconnectPlugin( const QString &pluginName )
-{
-    foreach( SipPlugin* sip, m_connectedPlugins )
-    {
-        if ( sip->account()->accountId() == pluginName )
-            sip->disconnectPlugin();
-    }
-}
-
-
-QList< SipPlugin* >
-SipHandler::allPlugins() const
-{
-    return m_allPlugins;
-}
-
-
-QList< SipPlugin* >
-SipHandler::connectedPlugins() const
-{
-    return m_connectedPlugins;
-}
-
-
-void
-SipHandler::toggleConnect()
-{
-    if( m_connected )
-        disconnectAll();
-    else
-        connectAll();
-}
-
-
+/*
 void
 SipHandler::refreshProxy()
 {
@@ -278,7 +119,7 @@ SipHandler::refreshProxy()
 
     foreach( SipPlugin* sip, m_allPlugins )
         sip->refreshProxy();
-}
+}*/
 
 
 void
@@ -380,47 +221,6 @@ SipHandler::onMessage( const QString& from, const QString& msg )
 {
     qDebug() << Q_FUNC_INFO << from << msg;
 }
-
-
-void
-SipHandler::onError( int code, const QString& msg )
-{
-    SipPlugin* sip = qobject_cast< SipPlugin* >( sender() );
-    Q_ASSERT( sip );
-
-    qWarning() << "Failed to connect to SIP:" << sip->account()->accountFriendlyName() << code << msg;
-
-    if ( code == SipPlugin::AuthError )
-    {
-        emit authError( sip );
-    }
-    else
-    {
-        QTimer::singleShot( 10000, sip, SLOT( connectPlugin() ) );
-    }
-}
-
-
-void
-SipHandler::onStateChanged( SipPlugin::ConnectionState state )
-{
-    SipPlugin* sip = qobject_cast< SipPlugin* >( sender() );
-    Q_ASSERT( sip );
-
-    if ( sip->connectionState() == SipPlugin::Disconnected )
-    {
-        m_connectedPlugins.removeAll( sip );
-        emit disconnected( sip );
-    }
-    else if ( sip->connectionState() == SipPlugin::Connected )
-    {
-        m_connectedPlugins << sip;
-        emit connected( sip );
-    }
-
-    emit stateChanged( sip, state );
-}
-
 
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,9 +29,14 @@
 #include "result.h"
 #include "utils/xspfloader.h"
 
+namespace Tomahawk {
+namespace Accounts {
+    class Account;
+}
+}
+
 class JobStatusModel;
 class QSearchField;
-class SipPlugin;
 class SourceTreeView;
 class QAction;
 
@@ -80,9 +86,10 @@ public slots:
     void showOfflineSources();
 
 private slots:
-    void onSipConnected();
-    void onSipDisconnected();
-    void onSipError();
+    void onAccountAdded( Tomahawk::Accounts::Account* account );
+    void onAccountConnected();
+    void onAccountDisconnected();
+    void onAccountError();
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
     void onXSPFOk( const Tomahawk::playlist_ptr& );
@@ -96,9 +103,6 @@ private slots:
 
     void showAboutTomahawk();
     void checkForUpdates();
-
-    void onSipPluginAdded( SipPlugin* p );
-    void onSipPluginRemoved( SipPlugin* p );
 
     void onSearch( const QString& search );
     void onFilterEdited();

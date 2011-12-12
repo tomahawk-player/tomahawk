@@ -79,8 +79,6 @@ public:
 
     virtual QIcon icon() const = 0;
 
-    virtual void authenticate() = 0;
-    virtual void deauthenticate() = 0;
     virtual ConnectionState connectionState() = 0;
     virtual bool isAuthenticated() const = 0;
 
@@ -134,6 +132,10 @@ public:
 
     virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
 
+public slots:
+    virtual void authenticate() = 0;
+    virtual void deauthenticate() = 0;
+
 signals:
     void error( int errorId, const QString& errorStr );
     void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
@@ -174,7 +176,7 @@ protected:
 
 private slots:
     void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );
-    void onError( int,QString );
+    void onError( int, const QString& );
 
 private:
     QString m_accountServiceName;

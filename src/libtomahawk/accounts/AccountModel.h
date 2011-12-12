@@ -22,6 +22,7 @@
 #include "dllmacro.h"
 #include "sip/SipPlugin.h"
 
+#include <QAbstractListModel>
 #include <QModelIndex>
 #include <QStringList>
 

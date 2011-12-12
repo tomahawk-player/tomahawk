@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,11 +19,14 @@
 
 #include "AccountManager.h"
 #include "config.h"
+#include "sourcelist.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
+#include <QTimer>
+#include <sip/SipHandler.h>
 
 namespace Tomahawk
 {
@@ -63,7 +67,7 @@ AccountManager::findPluginFactories()
     QList< QDir > pluginDirs;
 
     QDir appDir( qApp->applicationDirPath() );
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     if ( appDir.dirName() == "MacOS" )
     {
         // Development convenience-hack
@@ -71,7 +75,7 @@ AccountManager::findPluginFactories()
         appDir.cdUp();
         appDir.cdUp();
     }
-    #endif
+#endif
 
     QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
 
@@ -141,18 +145,45 @@ AccountManager::loadPluginFactory( const QString& path )
 }
 
 
+
+void
+AccountManager::connectAll()
+{
+    foreach( Account* acc, m_accounts )
+    {
+        if ( acc->types().contains( Accounts::SipType ) && acc->sipPlugin() )
+            acc->sipPlugin()->connectPlugin();
+
+    }
+    m_connected = true;
+}
+
+
+void
+AccountManager::disconnectAll()
+{
+    foreach( Account* acc, m_connectedAccounts )
+        acc->sipPlugin()->disconnectPlugin();
+
+    SourceList::instance()->removeAllRemote();
+    m_connected = false;
+}
+
+
+void
+AccountManager::toggleAccountsConnected()
+{
+    if ( m_connected )
+        disconnectAll();
+    else
+        connectAll();
+}
+
+
 void
 AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
-
-    //FIXME: this is just for debugging
-    if ( accountIds.isEmpty() )
-    {
-        Account* account = m_accountFactories[ "twitteraccount" ]->createAccount();
-        addAccountPlugin( account );
-        TomahawkSettings::instance()->addAccount( account->accountId() );
-    }
 
     foreach( const QString& accountId, accountIds )
     {
@@ -162,6 +193,18 @@ AccountManager::loadFromConfig()
             Account* account = loadPlugin( accountId );
             addAccountPlugin( account );
         }
+    }
+}
+
+void
+AccountManager::initSIP()
+{
+    tDebug() << Q_FUNC_INFO;
+    foreach( Account* account, accounts( Tomahawk::Accounts::SipType ) )
+    {
+        tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();
+        SipPlugin* p = account->sipPlugin();
+        SipHandler::instance()->hookUpPlugin( p );
     }
 }
 
@@ -175,8 +218,8 @@ AccountManager::loadPlugin( const QString& accountId )
     Q_ASSERT( m_accountFactories.contains( factoryName ) );
 
     Account* account = m_accountFactories[ factoryName ]->createAccount( accountId );
+    hookupAccount( account );
 
-    // caller responsible for calling pluginAdded() and hookupPlugin
     return account;
 }
 
@@ -189,7 +232,66 @@ AccountManager::addAccountPlugin( Account* account )
     foreach( AccountType type, account->types() )
         m_accountsByAccountType[ type ].append( account );
 
-    emit accountAdded( account );
+    emit added( account );
+}
+
+void
+AccountManager::hookupAccount( Account* account ) const
+{
+    connect( account, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
+    connect( account, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( Accounts::Account::ConnectionState ) ) );
+}
+
+
+
+void
+AccountManager::onError( int code, const QString& msg )
+{
+    Account* account = qobject_cast< Account* >( sender() );
+    Q_ASSERT( account );
+
+
+    qWarning() << "Failed to connect to SIP:" << account->accountFriendlyName() << code << msg;
+
+    if ( code == Account::AuthError )
+    {
+        emit authError( account );
+    }
+    else
+    {
+        QTimer::singleShot( 10000, account, SLOT( authenticate() ) );
+    }
+}
+
+void
+AccountManager::onSettingsChanged()
+{
+    foreach( Account* account, m_accounts )
+    {
+        if ( account->types().contains( Accounts::SipType ) && account->sipPlugin() )
+            account->sipPlugin()->checkSettings();
+    }
+}
+
+
+void
+AccountManager::onStateChanged( Account::ConnectionState state )
+{
+    Account* account = qobject_cast< Account* >( sender() );
+    Q_ASSERT( account );
+
+    if ( account->connectionState() == Account::Disconnected )
+    {
+        m_connectedAccounts.removeAll( account );
+        emit disconnected( account );
+    }
+    else if ( account->connectionState() == Account::Connected )
+    {
+        m_connectedAccounts << account;
+        emit connected( account );
+    }
+
+    emit stateChanged( account, state );
 }
 
 

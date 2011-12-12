@@ -24,7 +24,7 @@
 
 #include "sip/twittersip.h"
 #include "accounts/accountdllmacro.h"
-#include "accounts/account.h"
+#include "accounts/Account.h"
 
 #define MYNAME "ACCOUNTTWITTER"
 
@@ -77,7 +77,7 @@ public:
 signals:
     void nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter >&, const QTweetUser &user );
     void nowDeauthenticated();
-    
+
 private slots:
     void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );

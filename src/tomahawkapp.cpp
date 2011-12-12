@@ -35,7 +35,7 @@
 #include "album.h"
 #include "collection.h"
 #include "infosystem/infosystem.h"
-#include "accounts/accountmanager.h"
+#include "accounts/AccountManager.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -505,16 +505,6 @@ void
 TomahawkApp::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    // TODO debugging hack only
-    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->accounts() )
-    {
-        tDebug() << Q_FUNC_INFO << "testing account with name " << account->accountServiceName();
-        if ( account->configurationWidget() && account->configuration().isEmpty() )
-            account->configurationWidget()->show();
-        if ( !account->enabled() )
-            account->setEnabled( true );
-    }
-
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
@@ -523,7 +513,7 @@ TomahawkApp::initSIP()
 #endif
 
         tDebug( LOGINFO ) << "Connecting SIP classes";
-        SipHandler::instance()->loadFromAccountManager();
+        Accounts::AccountManager::instance()->loadFromConfig();
     }
 }
 

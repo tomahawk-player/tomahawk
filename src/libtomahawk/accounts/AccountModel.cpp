@@ -30,8 +30,8 @@ using namespace Accounts;
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
-    connect( AccountManager::instance(), SIGNAL( accountAdded( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
-    connect( AccountManager::instance(), SIGNAL( accountRemoved( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
+    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
+    connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
 }
 
 
@@ -98,7 +98,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 }
 
 int
-AccountModel::rowCount( const QModelIndex& parent ) const
+AccountModel::rowCount( const QModelIndex& ) const
 {
     return AccountManager::instance()->accounts().size();
 }
@@ -113,8 +113,7 @@ AccountModel::flags( const QModelIndex& index ) const
 void
 AccountModel::accountAdded( Account* account )
 {
-    Q_UNUSED( p );
-    // we assume account plugins are added at the end of the list.
+    // TODO HACK we assume account plugins are added at the end of the list.
     Q_ASSERT( AccountManager::instance()->accounts().last() == account );
     if ( account->types().contains( SipType ) )
         connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
@@ -128,17 +127,17 @@ AccountModel::accountAdded( Account* account )
 void
 AccountModel::accountRemoved( Account* account )
 {
-    int idx = AccountManager::instance()->allPlugins().indexOf( account );
+    int idx = AccountManager::instance()->accounts().indexOf( account );
     beginRemoveRows( QModelIndex(), idx, idx );
     endRemoveRows();
 }
 
 
 void
-AccountModel::accountStateChanged( Tomahawk::Accounts::Account::ConnectionState state )
+AccountModel::accountStateChanged( Tomahawk::Accounts::Account::ConnectionState )
 {
     Account* account = qobject_cast< Account* >( sender() );
-    Q_ASSERT( a );
+    Q_ASSERT( account );
 
     for ( int i = 0; i < AccountManager::instance()->accounts().size(); i++ )
     {
