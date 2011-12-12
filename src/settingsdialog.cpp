@@ -46,16 +46,19 @@
 #include "resolversmodel.h"
 #include "scanmanager.h"
 #include "settingslistdelegate.h"
-#include "sipconfigdelegate.h"
+#include "AccountDelegate.h"
 #include "database/database.h"
 #include "network/servent.h"
 #include "playlist/dynamic/widgets/LoadingSpinner.h"
 #include "sip/SipHandler.h"
-#include "sip/AccountModel.h"
+#include "accounts/AccountModel.h"
 #include "utils/logger.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
+
+using namespace Tomahawk;
+using namespace Accounts;
 
 static QString
 md5( const QByteArray& src )
@@ -69,7 +72,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
-    , m_sipModel( 0 )
+    , m_accountModel( 0 )
     , m_resolversModel( 0 )
     , m_sipSpinner( 0 )
 {
@@ -107,7 +110,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 #endif
 
     // SIP PLUGINS
-    SipConfigDelegate* sipdel = new SipConfigDelegate( this );
+    AccountDelegate* sipdel = new AccountDelegate( this );
     ui->accountsView->setItemDelegate( sipdel );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
@@ -115,8 +118,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
     connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
-    m_sipModel = new SipModel( this );
-    ui->accountsView->setModel( m_sipModel );
+    m_accountModel = new AccountModel( this );
+    ui->accountsView->setModel( m_accountModel );
 
     if ( !Servent::instance()->isReady() )
     {

@@ -27,9 +27,7 @@
 class LoadingSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
-class SipPluginFactory;
 class SipPlugin;
-class SipModel;
 class ResolversModel;
 class QNetworkReply;
 
@@ -37,6 +35,14 @@ namespace Ui
 {
     class SettingsDialog;
     class ProxyDialog;
+}
+
+namespace Tomahawk
+{
+    namespace Accounts
+    {
+        class AccountModel;
+    }
 }
 
 class ProxyDialog : public QDialog
@@ -105,7 +111,7 @@ private slots:
     void sipCreateConfigClosed( int value );
     */
     void updateScanOptionsView();
-    
+
     void changePage( QListWidgetItem*, QListWidgetItem* );
     void serventReady();
 
@@ -118,9 +124,11 @@ private:
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
-    SipModel* m_sipModel;
+    Tomahawk::Accounts::AccountModel* m_accountModel;
     ResolversModel* m_resolversModel;
     LoadingSpinner* m_sipSpinner;
 };
 
 #endif // SETTINGSDIALOG_H
+
+struct A;
