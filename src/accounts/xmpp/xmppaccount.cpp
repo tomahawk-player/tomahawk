@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 #include "xmppaccount.h"
 #include "xmppconfigwidget.h"
 #include "sip/SipPlugin.h"
+#include "ui_xmppconfigwidget.h"
 
 #include <QtCore/QtPlugin>
 
@@ -37,7 +39,6 @@ XmppAccountFactory::createAccount( const QString& accountId )
 
 XmppAccount::XmppAccount( const QString &accountId )
     : Account( accountId )
-    , m_isAuthenticated( false )
 {
     loadFromConfig( accountId );
 
@@ -46,27 +47,52 @@ XmppAccount::XmppAccount( const QString &accountId )
     types << SipType;
     setTypes( types );
 
-    m_configWidget = QWeakPointer< XmppConfigWidget >( new XmppConfigWidget( this, 0 ) );
+    m_configWidget = QWeakPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
 }
 
 
 XmppAccount::~XmppAccount()
 {
-
+    delete m_configWidget.data();
+    delete m_xmppSipPlugin.data();
 }
 
 
 void
 XmppAccount::authenticate()
 {
-    return;
+    if ( connectionState() != Account::Connected )
+        sipPlugin()->connectPlugin();
 }
 
 
 void
 XmppAccount::deauthenticate()
 {
-    return;
+    if ( connectionState() != Account::Disconnected )
+        sipPlugin()->disconnectPlugin();
+}
+
+bool
+XmppAccount::isAuthenticated() const
+{
+    return m_xmppSipPlugin.data()->connectionState() == Account::Connected;
+}
+
+
+Account::ConnectionState
+XmppAccount::connectionState() const
+{
+    // Ensure we exist
+    const_cast<XmppAccount*>( this )->sipPlugin();
+    return m_xmppSipPlugin.data()->connectionState();
+}
+
+void
+XmppAccount::saveConfig()
+{
+    if ( !m_configWidget.isNull() )
+        static_cast< XmppConfigWidget* >( m_configWidget.data() )->saveConfig();
 }
 
 
@@ -76,6 +102,10 @@ XmppAccount::sipPlugin()
     if ( m_xmppSipPlugin.isNull() )
     {
         m_xmppSipPlugin = QWeakPointer< XmppSipPlugin >( new XmppSipPlugin( this ) );
+
+        connect( m_xmppSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+        connect( m_xmppSipPlugin.data(), SIGNAL( error( int, QString ) ), this, SIGNAL( error( int, QString ) ) );
+
         return m_xmppSipPlugin.data();
     }
     return m_xmppSipPlugin.data();

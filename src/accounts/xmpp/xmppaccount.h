@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -61,19 +62,19 @@ public:
 
     void authenticate();
     void deauthenticate();
-    bool isAuthenticated() const { return m_isAuthenticated; }
+    bool isAuthenticated() const;
 
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     SipPlugin* sipPlugin();
 
     QWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
+    void saveConfig();
 
-    void refreshProxy() {};
+    virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
 private:
     Ui_XmppConfigWidget* m_ui; // so the google wrapper can change the config dialog a bit
-    bool m_isAuthenticated;
     QWeakPointer< QWidget > m_configWidget;
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
 

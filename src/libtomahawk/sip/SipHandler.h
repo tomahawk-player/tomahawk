@@ -48,18 +48,12 @@ public:
 
     void loadFromAccountManager();
 
-    bool hasPluginType( const QString& factoryId ) const;
-
     const QPixmap avatar( const QString& name ) const;
     //TODO: implement a proper SipInfo class and maybe attach it to the source
     const SipInfo sipInfo( const QString& peerId ) const;
     const QString versionString( const QString& peerId ) const;
 
     void hookUpPlugin( SipPlugin* p );
-
-public slots:
-//     TODO no longer called from anywhere... can we remove it?
-//     void refreshProxy();
 
 private slots:
     void onSipInfo( const QString& peerId, const SipInfo& info );

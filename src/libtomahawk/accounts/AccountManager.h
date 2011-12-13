@@ -44,16 +44,16 @@ public:
     explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
 
-    QStringList findPluginFactories();
-    void loadPluginFactories( const QStringList &paths );
-
     void loadFromConfig();
     void initSIP();
 
-    void loadPluginFactory( const QString &path );
-    void addAccountPlugin( Account* account );
-    Account* loadPlugin( const QString &accountId );
-    QString factoryFromId( const QString& accountId ) const;
+    QList< AccountFactory* > factories() const { return m_accountFactories.values(); }
+    bool hasPluginWithFactory( const QString& factory ) const;
+    AccountFactory* factoryForAccount( Account* account ) const;
+
+    void addAccount( Account* account );
+    void hookupAndEnable( Account* account, bool startup = false ); /// Hook up signals and start the plugin
+    void removeAccount( Account* account );
 
     QList< Account* > accounts() const { return m_accounts; };
     QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
@@ -74,11 +74,17 @@ signals:
     void stateChanged( Account* p, Accounts::Account::ConnectionState state );
 
 private slots:
-    void onStateChanged( Accounts::Account::ConnectionState state );
+    void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
 
     void onSettingsChanged();
 private:
+    QStringList findPluginFactories();
+    void loadPluginFactories( const QStringList &paths );
+    void loadPluginFactory( const QString &path );
+    QString factoryFromId( const QString& accountId ) const;
+
+    Account* loadPlugin( const QString &accountId );
     void hookupAccount( Account* ) const;
 
     QList< Account* > m_accounts;

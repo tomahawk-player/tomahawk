@@ -54,14 +54,13 @@ SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
 {
     s_instance = this;
-
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 }
 
 
 SipHandler::~SipHandler()
 {
     qDebug() << Q_FUNC_INFO;
+    s_instance = 0;
 }
 
 
@@ -110,16 +109,6 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
 
     QObject::connect( sip->account(), SIGNAL( configurationChanged() ), sip, SLOT( configurationChanged() ) );
 }
-
-/*
-void
-SipHandler::refreshProxy()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    foreach( SipPlugin* sip, m_allPlugins )
-        sip->refreshProxy();
-}*/
 
 
 void

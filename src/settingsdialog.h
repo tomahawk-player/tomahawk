@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -42,7 +43,9 @@ namespace Tomahawk
     namespace Accounts
     {
         class AccountModel;
-    }
+        class Account;
+        class AccountFactory;
+}
 }
 
 class ProxyDialog : public QDialog
@@ -95,21 +98,20 @@ private slots:
 #endif
 
     void openResolverConfig( const QString& );
-    /*
-    void sipItemClicked ( const QModelIndex& );
-    void openSipConfig( SipPlugin* );
+
+    void openAccountConfig( Tomahawk::Accounts::Account* );
     void factoryActionTriggered ( bool );
-    void sipFactoryClicked( SipPluginFactory* );
-    void sipContextMenuRequest( const QPoint& );
-    void sipPluginDeleted( bool );
-    void sipPluginRowDeleted( bool );
-    */
+    void accountFactoryClicked( Tomahawk::Accounts::AccountFactory* );
+    void accountContextMenuRequest( const QPoint& );
+    void accountDeleted( bool );
+    void onAccountRowDeleted( bool );
+
     // dialog slots
     void resolverConfigClosed( int value );
-    /*
-    void sipConfigClosed( int value );
-    void sipCreateConfigClosed( int value );
-    */
+
+    void accountConfigClosed( int value );
+    void accountCreateConfigClosed( int value );
+
     void updateScanOptionsView();
 
     void changePage( QListWidgetItem*, QListWidgetItem* );
@@ -117,8 +119,8 @@ private slots:
 
 private:
     void createIcons();
-    //void setupSipButtons();
-    //void handleSipPluginAdded( SipPlugin* p, bool added );
+    void setupAccountButtons();
+    void handleAccountAdded( Tomahawk::Accounts::Account* p, bool added );
 
     Ui_StackedSettingsDialog* ui;
 

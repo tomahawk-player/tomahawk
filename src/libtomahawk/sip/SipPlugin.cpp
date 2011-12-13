@@ -83,13 +83,6 @@ SipPlugin::peersOnline() const
 
 
 void
-SipPlugin::refreshProxy()
-{
-    qDebug() << Q_FUNC_INFO << "Not implemented";
-}
-
-
-void
 SipPlugin::onPeerOnline( const QString& peerId )
 {
    if( !m_peersOnline.contains( peerId ) )

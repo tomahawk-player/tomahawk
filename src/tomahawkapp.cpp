@@ -40,7 +40,6 @@
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databaseresolver.h"
-#include "sip/SipHandler.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
@@ -297,7 +296,7 @@ TomahawkApp::~TomahawkApp()
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
-    delete SipHandler::instance();
+    delete Tomahawk::Accounts::AccountManager::instance();
 
     Pipeline::instance()->stop();
 
@@ -513,7 +512,7 @@ TomahawkApp::initSIP()
 #endif
 
         tDebug( LOGINFO ) << "Connecting SIP classes";
-        Accounts::AccountManager::instance()->loadFromConfig();
+        Accounts::AccountManager::instance()->initSIP();
     }
 }
 

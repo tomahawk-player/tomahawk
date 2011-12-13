@@ -49,12 +49,17 @@ AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
 {
     s_instance = this;
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+
     loadPluginFactories( findPluginFactories() );
 }
 
 
 AccountManager::~AccountManager()
 {
+    delete SipHandler::instance();
+
     disconnectAll();
     qDeleteAll( m_accounts );
 }
@@ -116,10 +121,29 @@ AccountManager::loadPluginFactories( const QStringList& paths )
 }
 
 
+bool
+AccountManager::hasPluginWithFactory( const QString& factory ) const
+{
+    foreach( Account* account, m_accounts ) {
+        if( factoryFromId( account->accountId() ) == factory )
+            return true;
+    }
+    return false;
+
+}
+
+
 QString
 AccountManager::factoryFromId( const QString& accountId ) const
 {
     return accountId.split( "_" ).first();
+}
+
+AccountFactory*
+AccountManager::factoryForAccount( Account* account ) const
+{
+    const QString factoryId = factoryFromId( account->accountId() );
+    return m_accountFactories.value( factoryId, 0 );
 }
 
 
@@ -191,7 +215,7 @@ AccountManager::loadFromConfig()
         if( m_accountFactories.contains( pluginFactory ) )
         {
             Account* account = loadPlugin( accountId );
-            addAccountPlugin( account );
+            addAccount( account );
         }
     }
 }
@@ -203,11 +227,9 @@ AccountManager::initSIP()
     foreach( Account* account, accounts( Tomahawk::Accounts::SipType ) )
     {
         tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();
-        SipPlugin* p = account->sipPlugin();
-        SipHandler::instance()->hookUpPlugin( p );
+        hookupAndEnable( account, true );
     }
 }
-
 
 
 Account*
@@ -223,8 +245,9 @@ AccountManager::loadPlugin( const QString& accountId )
     return account;
 }
 
+
 void
-AccountManager::addAccountPlugin( Account* account )
+AccountManager::addAccount( Account* account )
 {
     tDebug() << Q_FUNC_INFO << "adding account plugin";
     m_accounts.append( account );
@@ -235,13 +258,52 @@ AccountManager::addAccountPlugin( Account* account )
     emit added( account );
 }
 
+
+void
+AccountManager::removeAccount( Account* account )
+{
+    account->deauthenticate();
+
+    // emit before moving from list so accountmodel can get indexOf
+    emit removed( account );
+
+    m_accounts.removeAll( account );
+    m_enabledAccounts.removeAll( account );
+    m_connectedAccounts.removeAll( account );
+    foreach ( AccountType type, m_accountsByAccountType.keys() )
+    {
+        QList< Account* > accounts = m_accountsByAccountType.value( type );
+        accounts.removeAll( account );
+        m_accountsByAccountType[ type ] = accounts;
+    }
+
+    TomahawkSettings::instance()->removeAccount( account->accountId() );
+
+    account->removeFromConfig();
+    account->deleteLater();
+}
+
+
 void
 AccountManager::hookupAccount( Account* account ) const
 {
     connect( account, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
-    connect( account, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( Accounts::Account::ConnectionState ) ) );
+    connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( onStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
 }
 
+
+void
+AccountManager::hookupAndEnable( Account* account, bool startup )
+{
+    SipPlugin* p = account->sipPlugin();
+    SipHandler::instance()->hookUpPlugin( p );
+
+    if ( account->enabled() && ( !startup || account->autoConnect() ) )
+    {
+        account->authenticate();
+        m_enabledAccounts << account;
+    }
+}
 
 
 void

@@ -1,2 +1,2 @@
 add_subdirectory( xmpp )
-add_subdirectory( twitter )
+#add_subdirectory( twitter )

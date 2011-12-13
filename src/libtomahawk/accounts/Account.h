@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2011, Leo Franchi <lfranchi@kde.org?
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -63,23 +63,28 @@ public:
     explicit Account( const QString &accountId );
     virtual ~Account() {}
 
-    virtual QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
-    virtual QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
-    virtual bool enabled() const { QMutexLocker locker( &m_mutex ); return m_enabled; }
-    virtual bool autoConnect() const { QMutexLocker locker( &m_mutex ); return m_autoConnect; }
-    virtual QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
+    QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
+    QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
+    bool enabled() const { QMutexLocker locker( &m_mutex ); return m_enabled; }
+    bool autoConnect() const { QMutexLocker locker( &m_mutex ); return m_autoConnect; }
+    QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
 
-    virtual QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_configuration; }
+    QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_configuration; }
+
+    /**
+     * Configuration widgets can have a "dataError( bool )" signal to enable/disable the OK button in their wrapper dialogs.
+     */
     virtual QWidget* configurationWidget() = 0;
+    virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
-    virtual QVariantHash credentials() { QMutexLocker locker( &m_mutex ); return m_credentials; }
+    QVariantHash credentials() { QMutexLocker locker( &m_mutex ); return m_credentials; }
 
-    virtual QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
+    QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
     virtual QWidget* aclWidget() = 0;
 
     virtual QIcon icon() const = 0;
 
-    virtual ConnectionState connectionState() = 0;
+    virtual ConnectionState connectionState() const = 0;
     virtual bool isAuthenticated() const = 0;
 
     virtual QString errorMessage() const { QMutexLocker locker( &m_mutex ); return m_cachedError; }
@@ -87,50 +92,26 @@ public:
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
 
-    virtual QSet< AccountType > types() const
-    {
-        QMutexLocker locker( &m_mutex );
-        QSet< AccountType > set;
-        foreach ( QString type, m_types )
-        {
-            if ( type == "InfoType" )
-                set << InfoType;
-            else if ( type == "SipType" )
-                set << SipType;
-        }
-        return set;
-    }
+    QSet< AccountType > types() const;
 
-    virtual void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
-    virtual void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
-    virtual void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_enabled = enabled; }
-    virtual void setAutoConnect( bool autoConnect ) { QMutexLocker locker( &m_mutex ); m_autoConnect = autoConnect; }
-    virtual void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
-    virtual void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
-    virtual void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
-    virtual void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
-    virtual void setTypes( const QSet< AccountType > types )
-    {
-        QMutexLocker locker( &m_mutex );
-        m_types = QStringList();
-        foreach ( AccountType type, types )
-        {
-            switch( type )
-            {
-                case InfoType:
-                    m_types << "InfoType";
-                    break;
-                case SipType:
-                    m_types << "SipType";
-                    break;
-            }
-        }
-        syncConfig();
-    }
-
-    virtual void refreshProxy() = 0;
+    void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
+    void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
+    void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_enabled = enabled; }
+    void setAutoConnect( bool autoConnect ) { QMutexLocker locker( &m_mutex ); m_autoConnect = autoConnect; }
+    void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
+    void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
+    void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
+    void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
+    void setTypes( const QSet< AccountType > types );
 
     virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
+
+    /**
+     * Removes all the settings held in the config file for this account instance
+     *
+     * Re-implement if you have saved additional files or config settings outside the built-in ones
+     */
+    virtual void removeFromConfig();
 
 public slots:
     virtual void authenticate() = 0;
@@ -141,38 +122,10 @@ signals:
     void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
 
     void configurationChanged();
-    void authenticated( bool );
 
 protected:
-    virtual void loadFromConfig( const QString &accountId )
-    {
-        m_accountId = accountId;
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->beginGroup( "accounts/" + m_accountId );
-        m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
-        m_enabled = s->value( "enabled", false ).toBool();
-        m_autoConnect = s->value( "autoconnect", false ).toBool();
-        m_credentials = s->value( "credentials", QVariantHash() ).toHash();
-        m_configuration = s->value( "configuration", QVariantHash() ).toHash();
-        m_acl = s->value( "acl", QVariantMap() ).toMap();
-        m_types = s->value( "types", QStringList() ).toStringList();
-        s->endGroup();
-    }
-
-    virtual void syncConfig()
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->beginGroup( "accounts/" + m_accountId );
-        s->setValue( "accountfriendlyname", m_accountFriendlyName );
-        s->setValue( "enabled", m_enabled );
-        s->setValue( "autoconnect", m_autoConnect );
-        s->setValue( "credentials", m_credentials );
-        s->setValue( "configuration", m_configuration );
-        s->setValue( "acl", m_acl );
-        s->setValue( "types", m_types );
-        s->endGroup();
-        s->sync();
-    }
+    virtual void loadFromConfig( const QString &accountId );
+    virtual void syncConfig();
 
 private slots:
     void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );

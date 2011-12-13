@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -48,13 +49,16 @@
 
 #include <utils/tomahawkutils.h>
 #include <utils/logger.h>
-#include <accounts/accountmanager.h>
+#include <accounts/AccountManager.h>
 
-XmppSipPlugin::XmppSipPlugin( Tomahawk::Accounts::Account *account )
+using namespace Tomahawk;
+using namespace Accounts;
+
+XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
     , m_menu( 0 )
     , m_xmlConsole( 0 )
-    , m_state( Disconnected )
+    , m_state( Account::Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -152,7 +156,7 @@ XmppSipPlugin::connectPlugin()
     if ( m_client->connection() )
         connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
-    m_state = Connecting;
+    m_state = Account::Connecting;
     emit stateChanged( m_state );
     return;
 }
@@ -162,10 +166,10 @@ XmppSipPlugin::disconnectPlugin()
 {
     if (!m_client->isConnected())
     {
-        if ( m_state != Disconnected ) // might be Connecting
+        if ( m_state != Account::Disconnected ) // might be Connecting
         {
-           m_state = Disconnected;
-           emit stateChanged( m_state );
+            m_state = Account::Disconnected;
+            emit stateChanged( m_state );
         }
         return;
     }
@@ -178,7 +182,7 @@ XmppSipPlugin::disconnectPlugin()
     m_peers.clear();
 
     m_client->disconnectFromServer( true );
-    m_state = Disconnecting;
+    m_state = Account::Disconnecting;
     emit stateChanged( m_state );
 }
 
@@ -218,7 +222,7 @@ XmppSipPlugin::onConnect()
     //connect( m_room, SIGNAL( messageReceived( Jreen::Message, bool ) ), this, SLOT( onNewMessage( Jreen::Message ) ) );
     //connect( m_room, SIGNAL( presenceReceived( Jreen::Presence, const Jreen::MUCRoom::Participant* ) ), this, SLOT( onNewPresence( Jreen::Presence ) ) );
 
-    m_state = Connected;
+    m_state = Account::Connected;
     emit stateChanged( m_state );
 
     addMenuHelper();
@@ -235,7 +239,7 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             break;
 
         case Jreen::Client::AuthorizationError:
-            emit error( SipPlugin::AuthError, errorMessage( reason ) );
+            emit error( Account::AuthError, errorMessage( reason ) );
             break;
 
         case Jreen::Client::HostUnknown:
@@ -246,7 +250,7 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
         case Jreen::Client::SystemShutdown:
         case Jreen::Client::Conflict:
         case Jreen::Client::Unknown:
-            emit error( SipPlugin::ConnectionError, errorMessage( reason ) );
+            emit error( Account::ConnectionError, errorMessage( reason ) );
             break;
 
         default:
@@ -254,7 +258,7 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             Q_ASSERT(false);
             break;
     }
-    m_state = Disconnected;
+    m_state = Account::Disconnected;
     emit stateChanged( m_state );
 
     removeMenuHelper();
@@ -314,7 +318,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
             break;
     }
 
-    m_state = Disconnected;
+    m_state = Account::Disconnected;
     emit stateChanged( m_state );
 
     return QString();
@@ -534,7 +538,7 @@ void XmppSipPlugin::removeMenuHelper()
 
 void XmppSipPlugin::onNewMessage(const Jreen::Message& message)
 {
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
         return;
 
 //    qDebug() << Q_FUNC_INFO << "message type" << message.subtype();
@@ -576,7 +580,7 @@ void XmppSipPlugin::onNewMessage(const Jreen::Message& message)
 void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
     Q_UNUSED(item);
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
         return;
 
     Jreen::JID jid = presence.from();
@@ -618,7 +622,7 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
 
 void XmppSipPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
 {
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
         return;
 
 //    qDebug() << Q_FUNC_INFO << "presence type:" << presence.subtype();
@@ -704,7 +708,7 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
 
 void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
 {
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
         return;
 
     Jreen::IQReply *reply = qobject_cast<Jreen::IQReply*>(sender());
@@ -847,7 +851,7 @@ void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Typ
 void XmppSipPlugin::onNewAvatar(const QString& jid)
 {
 //    qDebug() << Q_FUNC_INFO << jid;
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
         return;
 
     Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
@@ -911,7 +915,7 @@ XmppSipPlugin::readServer()
 }
 
 
-SipPlugin::ConnectionState
+Account::ConnectionState
 XmppSipPlugin::connectionState() const
 {
     return m_state;

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -160,15 +161,6 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         sync();
         emit nowAuthenticated( m_twitterAuth, user );
     }
-}
-
-
-void
-TwitterAccount::refreshProxy()
-{
-    //FIXME: Could this cause a race condition if a client is threaded?
-    if ( !m_twitterAuth.isNull() )
-        m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
 }
 
 

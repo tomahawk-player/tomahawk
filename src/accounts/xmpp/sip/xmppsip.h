@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -55,20 +56,26 @@ public:
 
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
-    virtual ConnectionState connectionState() const;
     virtual QMenu* menu();
+
+    // used by XmppAccount to expose connection state and controls
+    Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
 signals:
     void jidChanged( const QString& );
 
+    // Used by XmppAccount
+    void stateChanged( Tomahawk::Accounts::Account::ConnectionState state );
+    void error( int errorId, const QString& errorStr );
+
 public slots:
     virtual void connectPlugin();
-    void disconnectPlugin();
-    void checkSettings();
-    void configurationChanged();
-    void sendMsg( const QString& to, const QString& msg );
+    virtual void disconnectPlugin();
+    virtual void checkSettings();
+    virtual void configurationChanged();
+    virtual void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
-    void addContact( const QString &jid, const QString& msg = QString() );
+    virtual void addContact( const QString &jid, const QString& msg = QString() );
     void showAddFriendDialog();
 
 protected:
@@ -103,15 +110,13 @@ private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
-    using SipPlugin::errorMessage;
-
     QMenu* m_menu;
     XmlConsole* m_xmlConsole;
     QString m_currentUsername;
     QString m_currentPassword;
     QString m_currentServer;
     int m_currentPort;
-    ConnectionState m_state;
+    Tomahawk::Accounts::Account::ConnectionState m_state;
 
     QString m_currentResource;
 

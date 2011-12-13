@@ -54,7 +54,6 @@ public:
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
 #endif
-    virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
     virtual Tomahawk::Accounts::Account* account() const;
     // peer infos
@@ -68,8 +67,6 @@ public slots:
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
-
-    virtual void refreshProxy();
 
 signals:
     void peerOnline( const QString& );

@@ -114,7 +114,7 @@ public:
     void addAccount( const QString& accountId );
     void removeAccount( const QString& accountId );
 
-    
+
     void setBookmarkPlaylist( const QString& guid );
     QString bookmarkPlaylist() const;
 

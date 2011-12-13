@@ -50,8 +50,9 @@
 #include "database/database.h"
 #include "network/servent.h"
 #include "playlist/dynamic/widgets/LoadingSpinner.h"
-#include "sip/SipHandler.h"
 #include "accounts/AccountModel.h"
+#include "accounts/Account.h"
+#include "accounts/AccountManager.h"
 #include "utils/logger.h"
 
 #include "ui_proxydialog.h"
@@ -115,9 +116,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-    connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
-    connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
-    connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
+    connect( sipdel, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
     m_accountModel = new AccountModel( this );
     ui->accountsView->setModel( m_accountModel );
 
@@ -131,7 +131,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
-    //setupSipButtons();
+    setupAccountButtons();
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
@@ -313,13 +313,13 @@ SettingsDialog::createIcons()
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
 
-/*
+
 void
-SettingsDialog::setupSipButtons()
+SettingsDialog::setupAccountButtons()
 {
-    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() )
+    foreach( AccountFactory* f, AccountManager::instance()->factories() )
     {
-        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) )
+        if( f->isUnique() && AccountManager::instance()->hasPluginWithFactory( f->factoryId() ) )
         {
             continue;
         }
@@ -331,9 +331,9 @@ SettingsDialog::setupSipButtons()
         connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
     }
 
-    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
+    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
 }
-*/
+
 
 void
 SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
@@ -591,39 +591,26 @@ SettingsDialog::resolverConfigClosed( int value )
     }
 }
 
-/*
-void
-SettingsDialog::sipItemClicked( const QModelIndex& item )
-{
-    if( item.data( SipModel::FactoryRole ).toBool() )
-        if( ui->accountsView->isExpanded( item ) )
-            ui->accountsView->collapse( item );
-        else
-            ui->accountsView->expand( item );
-    else if( item.data( SipModel::FactoryItemRole ).toBool() )
-        sipFactoryClicked( qobject_cast<SipPluginFactory* >( item.data( SipModel::SipPluginFactoryData ).value< QObject* >() ) );
-}
-
 
 void
-SettingsDialog::openSipConfig( SipPlugin* p )
+SettingsDialog::openAccountConfig( Account* account )
 {
-    if( p->configWidget() )
+    if( account->configurationWidget() )
     {
 #ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this );
+        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted )
         {
             // send changed config to resolver
-            p->saveConfig();
+            account->saveConfig();
         }
 #else
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipConfigClosed( int ) ) );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
+        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountConfigClosed( int ) ) );
 
         dialog->show();
 #endif
@@ -632,13 +619,13 @@ SettingsDialog::openSipConfig( SipPlugin* p )
 
 
 void
-SettingsDialog::sipConfigClosed( int value )
+SettingsDialog::accountConfigClosed( int value )
 {
     if( value == QDialog::Accepted )
     {
         DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
-        p->saveConfig();
+        Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+        account->saveConfig();
     }
 }
 
@@ -649,149 +636,154 @@ SettingsDialog::factoryActionTriggered( bool )
     Q_ASSERT( sender() && qobject_cast< QAction* >( sender() ) );
 
     QAction* a = qobject_cast< QAction* >( sender() );
-    Q_ASSERT( qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) );
+    Q_ASSERT( qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) );
 
-    SipPluginFactory* f = qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() );
-    sipFactoryClicked( f );
+    AccountFactory* f = qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() );
+    accountFactoryClicked( f );
 }
 
 
 void
-SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
+SettingsDialog::accountFactoryClicked( AccountFactory* factory )
 {
     //if exited with OK, create it, if not, delete it immediately!
-    SipPlugin* p = factory->createPlugin();
+    Account* account = factory->createAccount();
     bool added = false;
-    if( p->configWidget() )
+    if( account->configurationWidget() )
     {
 #ifdef Q_WS_MAC
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipCreateConfigClosed( int ) ) );
-        connect( p, SIGNAL( datatError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ) );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
+        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountCreateConfigClosed( int ) ) );
+
+        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
 
         dialog->show();
 #else
-        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
+
+        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
+
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            p->saveConfig();
-
-            // accepted, so add it to tomahawk
-            TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-            SipHandler::instance()->addSipPlugin( p );
-
+        if( !watcher.isNull() && ret == QDialog::Accepted ) // send changed config to account
             added = true;
-        }
-        else
-        {
-            // canceled, delete it
+        else // canceled, delete it
             added = false;
-        }
 
-        handleSipPluginAdded( p, added );
+        handleAccountAdded( account, added );
 #endif
     } else
     {
         // no config, so just add it
         added = true;
-        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-        SipHandler::instance()->addSipPlugin( p );
-
-        handleSipPluginAdded( p, added );
+        handleAccountAdded( account, added );
     }
 }
 
 
 void
-SettingsDialog::sipCreateConfigClosed( int finished )
+SettingsDialog::accountCreateConfigClosed( int finished )
 {
     DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-    SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
-    Q_ASSERT( p );
+    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+    Q_ASSERT( account );
 
-    bool added = false;
-    if( finished == QDialog::Accepted )
-    {
+    bool added = ( finished == QDialog::Accepted );
 
-        p->saveConfig();
-        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-        SipHandler::instance()->addSipPlugin( p );
-
-        added = true;
-    }
-
-    handleSipPluginAdded( p, added );
+    handleAccountAdded( account, added );
 }
 
 
 void
-SettingsDialog::handleSipPluginAdded( SipPlugin* p, bool added )
+SettingsDialog::handleAccountAdded( Account* account, bool added )
 {
-    SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
-    if( added && f && f->isUnique() )
+    AccountFactory* f = AccountManager::instance()->factoryForAccount( account );
+    if ( added )
     {
-        // remove from actions list
-        QAction* toremove = 0;
-        foreach( QAction* a, ui->addSipButton->actions() )
+        account->setEnabled( true );
+        account->setAutoConnect( true );
+        account->saveConfig();
+
+        TomahawkSettings::instance()->addAccount( account->accountId() );
+        AccountManager::instance()->addAccount( account );
+        AccountManager::instance()->hookupAndEnable( account );
+
+        if( f && f->isUnique() )
         {
-            if( f == qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) )
+            // remove from actions list
+            QAction* toremove = 0;
+            foreach( QAction* a, ui->addSipButton->actions() )
             {
-                toremove = a;
-                break;
+                if( f == qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) )
+                {
+                    toremove = a;
+                    break;
+                }
             }
+            if( toremove )
+                ui->addSipButton->removeAction( toremove );
         }
-        if( toremove )
-            ui->addSipButton->removeAction( toremove );
     }
-    else if( added == false )
+    else
     { // user pressed cancel
-        delete p;
+        delete account;
     }
 }
 
 
 void
-SettingsDialog::sipContextMenuRequest( const QPoint& p )
+SettingsDialog::accountContextMenuRequest( const QPoint& p )
 {
     QModelIndex idx = ui->accountsView->indexAt( p );
     // if it's an account, allow to delete
-    if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+    if( idx.isValid() )
     {
         QList< QAction* > acts;
         acts << new QAction( tr( "Delete Account" ), this );
-        acts.first()->setProperty( "sipplugin", idx.data( SipModel::SipPluginData ) );
-        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( sipPluginRowDeleted( bool ) ) );
+        acts.first()->setProperty( "accountplugin", idx.data( AccountModel::AccountData ) );
+        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( onAccountRowDeleted( bool ) ) );
         QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
     }
 }
 
 
 void
-SettingsDialog::sipPluginRowDeleted( bool )
+SettingsDialog::onAccountRowDeleted( bool )
 {
-    SipPlugin* p = qobject_cast< SipPlugin* >( qobject_cast< QAction* >( sender() )->property( "sipplugin" ).value< QObject* >() );
-    SipHandler::instance()->removeSipPlugin( p );
+    Account* account = qobject_cast< Account* >( qobject_cast< QAction* >( sender() )->property( "accountplugin" ).value< QObject* >() );
+
+    if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
+    {
+        if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
+        {
+            QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+            action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+            ui->addSipButton->addAction( action );
+
+            connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+        }
+    }
+
+    AccountManager::instance()->removeAccount( account );
 }
 
 
 void
-SettingsDialog::sipPluginDeleted( bool )
+SettingsDialog::accountDeleted( bool )
 {
     QModelIndexList indexes = ui->accountsView->selectionModel()->selectedIndexes();
     // if it's an account, allow to delete
     foreach( const QModelIndex& idx, indexes )
     {
-        if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+        if( idx.isValid() )
         {
-            SipPlugin* p = qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() );
+            Account* account = qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() );
 
-            if( SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p ) )
+            if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
             {
                 if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
                 {
@@ -802,11 +794,11 @@ SettingsDialog::sipPluginDeleted( bool )
                     connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
                 }
             }
-            SipHandler::instance()->removeSipPlugin( p );
+            AccountManager::instance()->removeAccount( account );
         }
     }
 }
-*/
+
 
 ProxyDialog::ProxyDialog( QWidget *parent )
 : QDialog( parent )

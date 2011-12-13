@@ -22,7 +22,7 @@
 
 #include <QMessageBox>
 
-#include <accounts/accountmanager.h>
+#include <accounts/AccountManager.h>
 #include <utils/logger.h>
 
 namespace Tomahawk
@@ -53,16 +53,31 @@ XmppConfigWidget::~XmppConfigWidget()
     delete m_ui;
 }
 
+void
+XmppConfigWidget::saveConfig()
+{
+    QVariantHash credentials = m_account->credentials();
+    credentials[ "username" ] = m_ui->xmppUsername->text();
+    credentials[ "password" ] = m_ui->xmppPassword->text();
+    credentials[ "server" ] = m_ui->xmppServer->text();
+    credentials[ "port" ] = m_ui->xmppPort->text();
+    m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
+    m_account->setCredentials( credentials );
+    m_account->sync();
+
+    static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
+}
+
 
 void
 XmppConfigWidget::onCheckJidExists( QString jid )
 {
-    QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->getAccounts( Tomahawk::Accounts::SipType );
+    QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
     foreach( Tomahawk::Accounts::Account* account, accounts )
     {
         if ( account->accountId() == m_account->accountId() )
             continue;
-        
+
         QString savedUsername = account->credentials()[ "username" ].toString();
         QStringList savedSplitUsername = account->credentials()[ "username" ].toString().split("@");
         QString savedServer = account->configuration()[ "server" ].toString();

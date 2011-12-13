@@ -65,7 +65,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     QFont desc = opt.font;
     desc.setItalic( true );
-    desc.setPointSize( error.pointSize() - 2 );
+    desc.setPointSize( desc.pointSize() - 2 );
 
     // draw the background
     const QWidget* w = opt.widget;
@@ -93,7 +93,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     // from the right edge--config status and online/offline
     QRect confRect = QRect( itemRect.width() - WRENCH_SIZE - 2 * PADDING, mid - WRENCH_SIZE / 2 + top, WRENCH_SIZE, WRENCH_SIZE );
-    if( index.data( SipModel::HasConfig ).toBool() ) {
+    if( index.data( AccountModel::HasConfig ).toBool() ) {
 
         QStyleOptionToolButton topt;
         topt.rect = confRect;
@@ -116,10 +116,10 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QPixmap p;
     QString statusText;
     Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
-    if( state == SipPlugin::Connected ) {
+    if( state == Account::Connected ) {
         p = QPixmap( RESPATH "images/sipplugin-online.png" );
         statusText = tr( "Online" );
-    } else if( state == SipPlugin::Connecting ) {
+    } else if( state == Account::Connecting ) {
         p = QPixmap( RESPATH "images/sipplugin-offline.png" );
         statusText = tr( "Connecting..." );
     } else {
@@ -128,7 +128,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     }
     p = p.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
     painter->drawPixmap( statusX, statusY - STATUS_ICON_SIZE / 2 + top, STATUS_ICON_SIZE, STATUS_ICON_SIZE, p );
-    const int width = statusFM.width( statusText );
+    int width = statusFM.width( statusText );
     int statusTextX = statusX - PADDING - width;
     painter->save();
     painter->setFont( statusF );
@@ -155,7 +155,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         // text to accompany checkbox
         const int capW = statusFM.width( capString );
         const int capTextX = statusX - PADDING  - capW;
-        painter->drawText( QRect( capTextX, capY - statusFM.height() / 2 + top, capW, statusFM.height() ) );
+        painter->drawText( QRect( capTextX, capY - statusFM.height() / 2 + top, capW, statusFM.height() ), capString );
 
         if ( capTextX < statusTextX )
             statusTextX = capTextX;
@@ -167,7 +167,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setFont( name );
     QFontMetrics namefm( name );
     // pos will the top-left point of the text rect
-    pos = mid - ( nameHeight / 2 ) + top;
+    pos = mid - ( namefm.height() / 2 ) + top;
     // TODO bound with config icon and offline/online status
     width = itemRect.width() - statusTextX;
     QRect nameRect( textLeftEdge, pos, width, namefm.height() );
@@ -208,15 +208,11 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QM
 QRect
 AccountDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    if( !idx.data( SipModel::FactoryItemRole ).toBool() && !idx.data( SipModel::FactoryRole ).toBool() )
-    {
-        QStyleOptionViewItemV4 opt = option;
-        initStyleOption( &opt, idx );
-        QRect itemRect = opt.rect;
-        QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
-        return confRect;
-    }
-    return QRect();
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, idx );
+    QRect itemRect = opt.rect;
+    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
+    return confRect;
 }
 
 
@@ -229,7 +225,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
 void
 AccountDelegate::askedForEdit( const QModelIndex& idx )
 {
-    emit openConfig( qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() ) );
+    emit openConfig( qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() ) );
 }
 
 

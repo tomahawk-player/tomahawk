@@ -45,12 +45,14 @@ public:
     explicit XmppConfigWidget( XmppAccount* account = 0, QWidget *parent = 0 );
     virtual ~XmppConfigWidget();
 
+    void saveConfig();
+
 signals:
     void dataError( bool exists );
-    
+
 private slots:
     void onCheckJidExists( QString jid );
-    
+
 private:
     Ui::XmppConfigWidget *m_ui;
     XmppAccount *m_account;

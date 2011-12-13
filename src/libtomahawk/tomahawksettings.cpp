@@ -126,7 +126,7 @@ void
 TomahawkSettings::doInitialSetup()
 {
     // by default we add a local network resolver
-    addSipPlugin( "sipzeroconf_autocreated" );
+    addAccount( "sipzeroconf_autocreated" );
 }
 
 

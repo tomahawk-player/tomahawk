@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,7 +35,7 @@
 
 #include "accounts/accountdllmacro.h"
 #include "sip/SipPlugin.h"
-#include "accounts/account.h"
+#include "accounts/Account.h"
 #include "accounts/twitter/tomahawkoauthtwitter.h"
 
 class ACCOUNTDLLEXPORT TwitterSipPlugin : public SipPlugin
@@ -52,7 +53,6 @@ public:
 public slots:
     virtual void connectPlugin();
     void disconnectPlugin();
-    void refreshProxy();
     void configurationChanged();
 
     void sendMsg( const QString& to, const QString& msg )
@@ -73,7 +73,7 @@ public slots:
     }
 
     void checkSettings();
-    
+
 private slots:
     void accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user );
     void checkTimerFired();
@@ -92,14 +92,14 @@ private slots:
     void fetchAvatar( const QString &screenName );
     void avatarUserDataSlot( const QTweetUser &user );
     void profilePicReply();
-    
+
 private:
     inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->sync(); }
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
     QWeakPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
-    
+
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
     QWeakPointer< QTweetMentions > m_mentions;
     QWeakPointer< QTweetDirectMessages > m_directMessages;
@@ -108,7 +108,7 @@ private:
 
     QVariantHash m_configuration;
     QVariantHash m_credentials;
-    
+
     QTimer m_checkTimer;
     QTimer m_connectTimer;
     QTimer m_dmPollTimer;

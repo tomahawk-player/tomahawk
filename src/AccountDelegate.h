@@ -47,7 +47,7 @@ private slots:
     void askedForEdit( const QModelIndex& idx );
 
 signals:
-    void openConfig( Account* );
+    void openConfig( Tomahawk::Accounts::Account* );
 };
 
 }

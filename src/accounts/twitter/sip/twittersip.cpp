@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -57,7 +58,7 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
     qDebug() << Q_FUNC_INFO;
 
     connect( account, SIGNAL( nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ), SLOT( accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ) );
-    
+
     if ( Database::instance()->dbid() != m_configuration[ "saveddbid" ].toString() )
     {
         m_configuration[ "cachedpeers" ] = QVariantHash();
@@ -113,7 +114,7 @@ TwitterSipPlugin::connectPlugin()
     m_cachedPeers = m_configuration[ "cachedpeers" ].toHash();
     QStringList peerList = m_cachedPeers.keys();
     qStableSort( peerList.begin(), peerList.end() );
-    
+
     if ( !m_account->isAuthenticated() )
     {
         tDebug() << Q_FUNC_INFO << "account isn't authenticated, attempting";
@@ -144,7 +145,7 @@ TwitterSipPlugin::disconnectPlugin()
         delete m_directMessageDestroy.data();
 
     m_cachedTwitterAuth.clear();
-    
+
     m_configuration[ "cachedpeers" ] = m_cachedPeers;
     syncConfig();
     m_cachedPeers.empty();
@@ -156,12 +157,12 @@ void
 TwitterSipPlugin::accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user )
 {
     Q_UNUSED( user );
-    
+
     if ( !isValid() )
         return;
 
     m_cachedTwitterAuth = twitterAuth;
-    
+
     m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_cachedTwitterAuth.data(), this ) );
     m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_cachedTwitterAuth.data(), this ) );
     m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_cachedTwitterAuth.data(), this ) );
@@ -216,7 +217,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
 {
     if ( !isValid() )
         return;
-    
+
     foreach( QString screenName, peerList )
     {
         QVariantHash peerData = m_cachedPeers[screenName].toHash();
@@ -227,7 +228,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
             m_configuration[ "cachedpeers" ] = m_cachedPeers;
             syncConfig();
         }
-        
+
         if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
@@ -246,13 +247,13 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
             m_cachedAvatars.remove( screenName );
             continue;
         }
-        
+
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
             qDebug() << "TwitterSipPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
             continue;
         }
-        
+
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, peerData ) );
     }
 }
@@ -653,7 +654,7 @@ TwitterSipPlugin::fetchAvatar( const QString& screenName )
     qDebug() << Q_FUNC_INFO;
     if ( !isValid() )
         return;
-    
+
     QTweetUserShow *userShowFetch = new QTweetUserShow( m_cachedTwitterAuth.data(), this );
     connect( userShowFetch, SIGNAL( parsedUserInfo( QTweetUser ) ), SLOT( avatarUserDataSlot( QTweetUser ) ) );
     userShowFetch->fetch( screenName );
@@ -672,11 +673,6 @@ TwitterSipPlugin::avatarUserDataSlot( const QTweetUser &user )
     connect( reply, SIGNAL( finished() ), this, SLOT( profilePicReply() ) );
 }
 
-void
-TwitterSipPlugin::refreshProxy()
-{
-    //handled by TwitterAccount::refreshProxy()
-}
 
 void
 TwitterSipPlugin::profilePicReply()
