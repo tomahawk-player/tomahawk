@@ -29,18 +29,20 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     , m_parent( parent )
     , m_model( model )
 {
-    connect( this, SIGNAL( beginChildRowsAdded( int,int ) ), m_model, SLOT( onItemRowsAddedBegin( int,int ) ) );
-    connect( this, SIGNAL( beginChildRowsRemoved( int,int ) ), m_model, SLOT( onItemRowsRemovedBegin( int,int ) ) );
+    connect( this, SIGNAL( beginChildRowsAdded( int, int ) ), m_model, SLOT( onItemRowsAddedBegin( int, int ) ) );
+    connect( this, SIGNAL( beginChildRowsRemoved( int, int ) ), m_model, SLOT( onItemRowsRemovedBegin( int, int ) ) );
     connect( this, SIGNAL( childRowsAdded() ), m_model, SLOT( onItemRowsAddedDone() ) );
     connect( this, SIGNAL( childRowsRemoved() ), m_model, SLOT( onItemRowsRemovedDone() ) );
     connect( this, SIGNAL( updated() ), m_model, SLOT( itemUpdated() ) );
     connect( this, SIGNAL( selectRequest( SourceTreeItem* ) ), m_model, SLOT( itemSelectRequest( SourceTreeItem* ) ) );
     connect( this, SIGNAL( expandRequest( SourceTreeItem* ) ), m_model, SLOT( itemExpandRequest( SourceTreeItem* ) ) );
-    if( !m_parent )
+    connect( this, SIGNAL( toggleExpandRequest( SourceTreeItem* ) ), m_model, SLOT( itemToggleExpandRequest( SourceTreeItem* ) ) );
+
+    if ( !m_parent )
         return;
 
     // caller must call begin/endInsertRows
-    if( index < 0 )
+    if ( index < 0 )
         m_parent->appendChild( this );
     else
         m_parent->insertChild( index, this );

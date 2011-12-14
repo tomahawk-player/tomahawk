@@ -56,6 +56,12 @@ private slots:
     void animationFinished( const QModelIndex& );
 
 private:
+    void paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+    void paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paintCategory( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
     QAbstractItemView* m_parent;
     mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;

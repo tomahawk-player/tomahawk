@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,7 +23,7 @@
 
 #include "sourcelist.h"
 #include "sourcesmodel.h"
-#include "sourcetree/items/collectionitem.h"
+#include "sourcetree/items/sourceitem.h"
 
 #include "utils/logger.h"
 
@@ -37,6 +38,11 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
     setSourceModel( model );
 
+    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onModelChanged() ) );
+    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onModelChanged() ) );
+
+    if ( model && model->metaObject()->indexOfSignal( "toggleExpandRequest(QPersistentModelIndex)" ) > -1 )
+        connect( model, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), this, SLOT( toggleExpandRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
     if ( model && model->metaObject()->indexOfSignal( "expandRequest(QPersistentModelIndex)" ) > -1 )
         connect( model, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
     if ( model && model->metaObject()->indexOfSignal( "selectRequest(QPersistentModelIndex)" ) > -1 )
@@ -55,10 +61,16 @@ SourcesProxyModel::showOfflineSources( bool offlineSourcesShown )
 bool
 SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
+    // always filter empty top-level groups
+    SourceTreeItem* item = m_model->data( sourceModel()->index( sourceRow, 0, sourceParent ), SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+
+    if ( item && item->type() != SourcesModel::Divider && item->parent()->parent() == 0 && !item->children().count() )
+        return false;
+
     if ( !m_filtered )
         return true;
 
-    CollectionItem* sti = qobject_cast< CollectionItem* >( m_model->data( sourceModel()->index( sourceRow, 0, sourceParent ), SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+    SourceItem* sti = qobject_cast< SourceItem* >( item );
     if ( sti )
     {
         if ( sti->source().isNull() || sti->source()->isOnline() )
@@ -68,6 +80,7 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
         else
             return false;
     }
+
     // accept rows that aren't sources
     return true;
 }
@@ -76,7 +89,6 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 void
 SourcesProxyModel::selectRequested( const QPersistentModelIndex& idx )
 {
-    qDebug() << "selectRequested for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx ) << mapFromSource( idx ).data(Qt::DisplayRole).toString();
     emit selectRequest( QPersistentModelIndex( mapFromSource( idx ) ) );
 }
 
@@ -84,8 +96,14 @@ SourcesProxyModel::selectRequested( const QPersistentModelIndex& idx )
 void
 SourcesProxyModel::expandRequested( const QPersistentModelIndex& idx )
 {
-    qDebug() << "emitting expand for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx ) << mapFromSource( idx ).data(Qt::DisplayRole).toString();
     emit expandRequest( QPersistentModelIndex( mapFromSource( idx ) ) );
+}
+
+
+void
+SourcesProxyModel::toggleExpandRequested( const QPersistentModelIndex& idx )
+{
+    emit toggleExpandRequest( QPersistentModelIndex( mapFromSource( idx ) ) );
 }
 
 
@@ -102,4 +120,11 @@ SourcesProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right )
         return ( m_model->data( left, SourcesModel::IDRole ).toInt() < m_model->data( right, SourcesModel::IDRole ).toInt() );
     else
         return QString::localeAwareCompare( lefts, rights ) < 0;
+}
+
+
+void
+SourcesProxyModel::onModelChanged()
+{
+    invalidateFilter();
 }

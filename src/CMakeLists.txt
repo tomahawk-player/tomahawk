@@ -58,11 +58,13 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcedelegate.cpp
      sourcetree/animationhelper.cpp
      sourcetree/items/sourcetreeitem.cpp
-     sourcetree/items/collectionitem.cpp
+     sourcetree/items/sourceitem.cpp
      sourcetree/items/playlistitems.cpp
      sourcetree/items/categoryitems.cpp
      sourcetree/items/genericpageitems.cpp
      sourcetree/items/temporarypageitem.cpp
+     sourcetree/items/groupitem.cpp
+     sourcetree/items/historyitem.cpp
 
      breakpad/BreakPad.cpp
 
@@ -110,11 +112,13 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcedelegate.h
      sourcetree/animationhelper.h
      sourcetree/items/sourcetreeitem.h
-     sourcetree/items/collectionitem.h
+     sourcetree/items/sourceitem.h
      sourcetree/items/playlistitems.h
      sourcetree/items/categoryitems.h
      sourcetree/items/genericpageitems.h
      sourcetree/items/temporarypageitem.h
+     sourcetree/items/groupitem.h
+     sourcetree/items/historyitem.h
 
      tomahawktrayicon.h
      audiocontrols.h
