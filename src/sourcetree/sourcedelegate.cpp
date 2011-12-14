@@ -478,7 +478,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else if ( type == SourcesModel::Category )
     {
-        paintCategory( painter, o3, index );
+        paintCategory( painter, o, index );
     }
     else if ( type == SourcesModel::Divider )
     {
