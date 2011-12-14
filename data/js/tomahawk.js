@@ -2,7 +2,7 @@
 // if run in phantomjs add fake Tomahawk environment
 if(window.Tomahawk === undefined)
 {
-    alert("PHANTOMJS ENVIRONMENT");
+//    alert("PHANTOMJS ENVIRONMENT");
     var Tomahawk = {
         fakeEnv: function()
         {
