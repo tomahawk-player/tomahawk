@@ -76,9 +76,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist(), 10 );
-    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track(), 10 );
-    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album(), 10 );
+    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist() );
+    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track() );
+    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album() );
 
     if ( artists.length() == 0 || tracks.length() == 0 )
     {

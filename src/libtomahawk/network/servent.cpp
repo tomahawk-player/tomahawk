@@ -378,7 +378,7 @@ Servent::readyRead()
     }
 
     // they connected to us and want something we are offering
-    if( conntype == "accept-offer" || "push-offer" )
+    if ( conntype == "accept-offer" || conntype == "push-offer" )
     {
         sock->_msg.clear();
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock->peerAddress() << "socket peer name = " << sock->peerName();

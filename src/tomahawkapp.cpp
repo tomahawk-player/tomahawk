@@ -226,7 +226,6 @@ TomahawkApp::init()
 #ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
 
-
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";

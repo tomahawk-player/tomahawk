@@ -53,6 +53,7 @@ public:
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName );
 
     QSharedPointer<QIODevice> customIODeviceFactory( const Tomahawk::result_ptr& result );
+
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -65,7 +66,6 @@ public slots:
     bool fakeEnv() { return false; }
 
     void addTrackResults( const QVariantMap& results );
-
 
 private:
     QString m_scriptPath, m_urlCallback;
