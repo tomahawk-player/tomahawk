@@ -53,7 +53,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
     {
     case Qt::DisplayRole:
     case AccountModel::AccountName:
-        return account->accountServiceName();
+        return account->accountFriendlyName();
     case AccountModel::ConnectionStateRole:
         return account->connectionState();
     case AccountModel::HasConfig:
