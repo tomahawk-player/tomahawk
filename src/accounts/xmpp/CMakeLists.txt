@@ -60,5 +60,5 @@ ENDIF( APPLE )
 
 install( TARGETS tomahawk_account_xmpp DESTINATION lib${LIB_SUFFIX} )
 
-#add_subdirectory(googlewrapper)
+add_subdirectory(googlewrapper)
 

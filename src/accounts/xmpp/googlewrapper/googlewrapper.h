@@ -19,12 +19,18 @@
 #ifndef GOOGLEWRAPPER_H
 #define GOOGLEWRAPPER_H
 
-#include "sip/jabber/jabber.h"
+#include "xmppaccount.h"
 
-class SIPDLLEXPORT GoogleWrapperFactory : public SipPluginFactory
+namespace Tomahawk
+{
+
+namespace Accounts
+{
+
+class ACCOUNTDLLEXPORT GoogleWrapperFactory : public XmppAccountFactory
 {
     Q_OBJECT
-    Q_INTERFACES( SipPluginFactory )
+    Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
 
 public:
     GoogleWrapperFactory() {}
@@ -33,25 +39,42 @@ public:
     virtual QString prettyName() const { return "Google"; }
     virtual QString factoryId() const { return "sipgoogle"; }
     virtual QIcon icon() const;
-    virtual SipPlugin* createPlugin( const QString& pluginId );
+    virtual Account* createAccount( const QString& pluginId );
 };
 
-class SIPDLLEXPORT GoogleWrapper : public JabberPlugin
+class ACCOUNTDLLEXPORT GoogleWrapperSip : public XmppSipPlugin
 {
     Q_OBJECT
 public:
-  GoogleWrapper( const QString& pluginID );
-  virtual ~GoogleWrapper() {}
-
-  virtual const QString name() const { return QString( "Google" ); }
-  virtual const QString friendlyName() const { return "Google"; }
-  virtual QIcon icon() const;
-
-protected:
-    QString defaultSuffix() const;
+    GoogleWrapperSip( Tomahawk::Accounts::Account* account );
+    virtual ~GoogleWrapperSip();
 
 public slots:
     void showAddFriendDialog();
+
+protected:
+    QString defaultSuffix() const;
 };
+
+class ACCOUNTDLLEXPORT GoogleWrapper : public XmppAccount
+{
+    Q_OBJECT
+public:
+    GoogleWrapper( const QString& pluginID );
+    virtual ~GoogleWrapper();
+
+    virtual const QString name() const { return QString( "Google" ); }
+    virtual const QString friendlyName() const { return "Google"; }
+    virtual QIcon icon() const;
+
+    virtual SipPlugin* sipPlugin();
+
+private:
+    QWeakPointer< GoogleWrapperSip > m_sipPlugin;
+};
+
+}
+
+}
 
 #endif // GOOGLEWRAPPER_H

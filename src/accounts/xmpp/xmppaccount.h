@@ -73,10 +73,11 @@ public:
 
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
-private:
-    Ui_XmppConfigWidget* m_ui; // so the google wrapper can change the config dialog a bit
-    QWeakPointer< QWidget > m_configWidget;
+protected:
+    QWeakPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
+
+private:
 
 
     // for settings access

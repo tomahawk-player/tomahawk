@@ -83,8 +83,6 @@ XmppAccount::isAuthenticated() const
 Account::ConnectionState
 XmppAccount::connectionState() const
 {
-    // Ensure we exist
-    const_cast<XmppAccount*>( this )->sipPlugin();
     return m_xmppSipPlugin.data()->connectionState();
 }
 
@@ -116,4 +114,6 @@ XmppAccount::sipPlugin()
 
 }
 
+#ifndef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::XmppAccountFactory )
+#endif

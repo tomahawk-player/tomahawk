@@ -18,18 +18,21 @@
 
 
 #include "googlewrapper.h"
-#include "ui_configwidget.h"
+#include "xmppconfigwidget.h"
+#include "ui_xmppconfigwidget.h"
 
 #include "utils/tomahawkutils.h"
 
 #include <QtPlugin>
 #include <QInputDialog>
 
+using namespace Tomahawk;
+using namespace Accounts;
 
-SipPlugin*
-GoogleWrapperFactory::createPlugin( const QString& pluginId )
+Account*
+GoogleWrapperFactory::createAccount( const QString& pluginId )
 {
-    return new GoogleWrapper( pluginId.isEmpty() ? generateId() : pluginId );
+    return new GoogleWrapper( pluginId.isEmpty() ? generateId( factoryId() ) : pluginId );
 }
 
 
@@ -39,36 +42,19 @@ GoogleWrapperFactory::icon() const
     return QIcon( ":/gmail-logo.png" );
 }
 
-
-GoogleWrapper::GoogleWrapper ( const QString& pluginID )
-    : JabberPlugin ( pluginID )
+GoogleWrapperSip::GoogleWrapperSip( Account* account )
+    : XmppSipPlugin( account )
 {
-    m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
-    m_ui->emailLabel->setText( tr( "Google Address" ) );
-    m_ui->jabberBlurb->setText( tr( "Enter your Google login to connect with your friends using Tomahawk!" ) );
-    m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
-    m_ui->jabberServer->setText( "talk.google.com" );
-    m_ui->jabberPort->setValue( 5222 );
-    m_ui->groupBoxJabberAdvanced->hide();
+
 }
 
-
-QIcon
-GoogleWrapper::icon() const
+GoogleWrapperSip::~GoogleWrapperSip()
 {
-    return QIcon( ":/gmail-logo.png" );
-}
-
-
-QString
-GoogleWrapper::defaultSuffix() const
-{
-    return "@gmail.com";
 }
 
 
 void
-GoogleWrapper::showAddFriendDialog()
+GoogleWrapperSip::showAddFriendDialog()
 {
     bool ok;
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
@@ -81,6 +67,55 @@ GoogleWrapper::showAddFriendDialog()
 }
 
 
+QString
+GoogleWrapperSip::defaultSuffix() const
+{
+    return "@gmail.com";
+}
+
+
+GoogleWrapper::GoogleWrapper ( const QString& pluginID )
+    : XmppAccount ( pluginID )
+{
+    XmppConfigWidget* config = static_cast< XmppConfigWidget* >( m_configWidget.data() );
+    config->m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
+    config->m_ui->emailLabel->setText( tr( "Google Address" ) );
+    config->m_ui->xmppBlurb->setText( tr( "Enter your Google login to connect with your friends using Tomahawk!" ) );
+    config->m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
+    config->m_ui->xmppServer->setText( "talk.google.com" );
+    config->m_ui->xmppPort->setValue( 5222 );
+    config->m_ui->groupBoxXmppAdvanced->hide();
+}
+
+GoogleWrapper::~GoogleWrapper()
+{
+    delete m_sipPlugin.data();
+}
+
+
+QIcon
+GoogleWrapper::icon() const
+{
+    return QIcon( ":/gmail-logo.png" );
+}
+
+
+SipPlugin*
+GoogleWrapper::sipPlugin()
+{
+    if ( m_xmppSipPlugin.isNull() )
+    {
+        m_xmppSipPlugin = QWeakPointer< XmppSipPlugin >( new GoogleWrapperSip( const_cast< GoogleWrapper* >( this ) ) );
+
+        connect( m_xmppSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+        connect( m_xmppSipPlugin.data(), SIGNAL( error( int, QString ) ), this, SIGNAL( error( int, QString ) ) );
+
+        return m_xmppSipPlugin.data();
+    }
+    return m_xmppSipPlugin.data();
+}
+
+
 #ifdef GOOGLE_WRAPPER
-Q_EXPORT_PLUGIN2( sipfactory, GoogleWrapperFactory )
+Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::GoogleWrapperFactory )
 #endif

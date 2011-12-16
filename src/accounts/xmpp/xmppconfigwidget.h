@@ -35,6 +35,7 @@ namespace Accounts
 {
 
 class XmppAccount;
+class GoogleWrapper;
 
 
 class DLLEXPORT XmppConfigWidget : public QWidget
@@ -56,6 +57,8 @@ private slots:
 private:
     Ui::XmppConfigWidget *m_ui;
     XmppAccount *m_account;
+
+    friend class GoogleWrapper; // So google wrapper can modify the labels and text
 };
 
 }
