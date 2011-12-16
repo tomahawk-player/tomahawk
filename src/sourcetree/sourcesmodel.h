@@ -1,19 +1,21 @@
-
-/*
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 
 #ifndef SOURCESMODEL_H
@@ -28,6 +30,7 @@
 class QMimeData;
 
 class SourceTreeItem;
+class GroupItem;
 
 namespace Tomahawk {
     class Source;
@@ -41,8 +44,10 @@ class SourcesModel : public QAbstractItemModel
 public:
     enum RowType {
         Invalid = -1,
+        Divider = 9,
 
         Collection = 0,
+        Group = 8,
 
         Category = 1,
         CategoryAdd = 2,
@@ -65,7 +70,7 @@ public:
         SourceTreeItemTypeRole  = Qt::UserRole + 11,
         SortRole                = Qt::UserRole + 12,
         IDRole                  = Qt::UserRole + 13,
-        LatchedOnRole                  = Qt::UserRole + 14
+        LatchedOnRole           = Qt::UserRole + 14
     };
 
     SourcesModel( QObject* parent = 0 );
@@ -86,6 +91,8 @@ public:
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual Qt::DropActions supportedDropActions() const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+
+    void appendGroups();
 
     void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
@@ -110,10 +117,12 @@ public slots:
 
     void itemSelectRequest( SourceTreeItem* item );
     void itemExpandRequest( SourceTreeItem* item );
+    void itemToggleExpandRequest( SourceTreeItem* item );
 
 signals:
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
+    void toggleExpandRequest( const QPersistentModelIndex& idx );
 
 private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
@@ -121,12 +130,14 @@ private slots:
     void onSourceRemoved( const Tomahawk::source_ptr& source );
 
     void onWidgetDestroyed( QWidget* w );
+
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
     SourceTreeItem* activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
 
     SourceTreeItem* m_rootItem;
+    GroupItem* m_collectionsGroup;
 
     QList< Tomahawk::source_ptr > m_sourcesWithViewPage;
     QHash< Tomahawk::source_ptr, SourceTreeItem* > m_sourcesWithViewPageItems;

@@ -43,6 +43,15 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     setSourceTreeModel( 0 );
 }
 
+QPersistentModelIndex
+TreeProxyModel::currentIndex() const
+{
+    if ( !m_model )
+        return QPersistentModelIndex();
+
+    return mapFromSource( m_model->currentItem() );
+}
+
 
 void
 TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
@@ -142,6 +151,7 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 {
     bool finished = true;
     m_artistsFilter = artists;
+    m_artistsFilterCmd = 0;
 
     foreach ( const Tomahawk::artist_ptr& artist, artists )
     {
@@ -180,10 +190,15 @@ void
 TreeProxyModel::filterFinished()
 {
     m_artistsFilterCmd = 0;
+
+    if ( PlaylistInterface::filter() != m_filter )
+    {
+        emit filterChanged( m_filter );
+    }
+
     PlaylistInterface::setFilter( m_filter );
     setFilterRegExp( m_filter );
 
-    emit filterChanged( m_filter );
     emit trackCountChanged( trackCount() );
     emit filteringFinished();
 }
@@ -200,6 +215,9 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& cachedResult, rl )
         {
+            if ( cachedResult.isNull() )
+                continue;
+
             if ( cachedResult->track() == item->result()->track() &&
                ( cachedResult->albumpos() == item->result()->albumpos() || cachedResult->albumpos() == 0 ) )
             {

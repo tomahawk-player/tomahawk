@@ -19,9 +19,9 @@
 #include "audiocontrols.h"
 #include "ui_audiocontrols.h"
 
-#include <QNetworkReply>
-#include <QDropEvent>
-#include <QMouseEvent>
+#include <QtNetwork/QNetworkReply>
+#include <QtGui/QDropEvent>
+#include <QtGui/QMouseEvent>
 
 #include "audio/audioengine.h"
 #include "playlist/playlistview.h"
@@ -45,6 +45,7 @@ AudioControls::AudioControls( QWidget* parent )
     , ui( new Ui::AudioControls )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
+    , m_lastSliderCheck( 0 )
 {
     ui->setupUi( this );
     setAcceptDrops( true );
@@ -86,7 +87,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
 
+#ifdef Q_WS_MAC
+    ui->ownerLabel->setForegroundRole( QPalette::Text );
+#else
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
+#endif
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setEnabled( true );
@@ -107,8 +112,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
-    connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
-    connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), SIGNAL( playPressed() ) );
+    connect( ui->pauseButton,      SIGNAL( clicked() ), SIGNAL( pausePressed() ) );
 
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
@@ -207,6 +212,9 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     ui->seekSlider->setVisible( true );
 
+    m_noTimeChange = false;
+    m_lastSliderCheck = 0;
+
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -285,8 +293,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     result->loadSocialActions();
 
-    connect( result.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+    connect( result.data(), SIGNAL( socialActionsLoaded() ), SLOT( socialActionsLoaded() ) );
 }
+
 
 void
 AudioControls::socialActionsLoaded()
@@ -317,6 +326,7 @@ AudioControls::onPlaybackPaused()
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     m_sliderTimeLine.setPaused( true );
 }
+
 
 void
 AudioControls::onPlaybackResumed()
@@ -363,7 +373,11 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
-    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << " msElapsed = " << msElapsed << " and timer current time = " << m_sliderTimeLine.currentTime() << " and m_seekMsecs = " << m_seekMsecs;
+//    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
+    if ( msElapsed > 0 && msElapsed - 500 < m_lastSliderCheck )
+        return;
+    m_lastSliderCheck = msElapsed;
+
     if ( m_currentTrack.isNull() )
         return;
 
@@ -373,9 +387,22 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
 
-    if ( m_sliderTimeLine.currentTime() > msElapsed || m_seekMsecs != -1 )
+    if ( m_noTimeChange )
+    {
+        if ( m_sliderTimeLine.currentTime() != msElapsed )
+        {
+            m_noTimeChange = false;
+            m_sliderTimeLine.resume();
+        }
+    }
+    else if ( m_sliderTimeLine.currentTime() >= msElapsed || m_seekMsecs != -1 )
     {
         m_sliderTimeLine.setPaused( true );
+
+        m_noTimeChange = false;
+        if ( m_sliderTimeLine.currentTime() == msElapsed )
+            m_noTimeChange = true;
+
         m_sliderTimeLine.setCurrentTime( msElapsed );
         m_seekMsecs = -1;
         if ( AudioEngine::instance()->state() != AudioEngine::Paused )
@@ -384,7 +411,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
     {
         ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
-        m_sliderTimeLine.resume();
+        m_sliderTimeLine.start();
     }
     else if ( m_sliderTimeLine.state() == QTimeLine::Paused && AudioEngine::instance()->state() != AudioEngine::Paused )
     {

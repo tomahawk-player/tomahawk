@@ -19,7 +19,7 @@
 #include "resolverconfigdelegate.h"
 
 #include "resolversmodel.h"
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 
 #include <QApplication>
 #include <QPainter>

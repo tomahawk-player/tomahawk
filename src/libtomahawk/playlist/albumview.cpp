@@ -45,6 +45,8 @@ AlbumView::AlbumView( QWidget* parent )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_overlay( new OverlayWidget( this ) )
+    , m_inited( false )
 {
     setDragEnabled( true );
     setDropIndicatorShown( false );
@@ -58,6 +60,7 @@ AlbumView::AlbumView( QWidget* parent )
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
+    setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
 
     m_timer.setInterval( SCROLL_TIMEOUT );
@@ -111,10 +114,10 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
+    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
-    setAcceptDrops( false );
     onViewChanged(); // Fetch covers if albums were added to model before model was attached to view
 }
 
@@ -128,7 +131,10 @@ AlbumView::onItemActivated( const QModelIndex& index )
 //        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
 //        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
 
-        ViewManager::instance()->show( item->album() );
+        if ( !item->album().isNull() )
+            ViewManager::instance()->show( item->album() );
+        else if ( !item->artist().isNull() )
+            ViewManager::instance()->show( item->artist() );
     }
 }
 
@@ -140,6 +146,23 @@ AlbumView::onViewChanged()
         m_timer.stop();
 
     m_timer.start();
+}
+
+
+void
+AlbumView::onItemCountChanged( unsigned int items )
+{
+    if ( items == 0 )
+    {
+        if ( m_model->collection().isNull() || ( !m_model->collection().isNull() && m_model->collection()->source()->isLocal() ) )
+            m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
+        else
+            m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );
+
+        m_overlay->show();
+    }
+    else
+        m_overlay->hide();
 }
 
 
@@ -185,31 +208,41 @@ AlbumView::onScrollTimeout()
 void
 AlbumView::paintEvent( QPaintEvent* event )
 {
-    QListView::paintEvent( event );
+    if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )
+        QListView::paintEvent( event );
 }
 
 
 void
 AlbumView::resizeEvent( QResizeEvent* event )
 {
-    QListView::resizeEvent( event );
-
+    if ( autoFitItems() )
+    {
 #ifdef Q_WS_X11
-    int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+        int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
 #else
-    int scrollbar = verticalScrollBar()->rect().width();
+        int scrollbar = verticalScrollBar()->rect().width();
 #endif
-    int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
-    QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+        int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
+        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-    int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
-    int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
-    int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+        int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
+        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
+        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
 
-    if ( itemsPerRow < 1 )
-        setSpacing( 16 );
-    else
-        setSpacing( newSpacing );
+        if ( itemsPerRow < 1 )
+            setSpacing( 16 );
+        else
+            setSpacing( newSpacing );
+
+        if ( !m_inited )
+        {
+            m_inited = true;
+            repaint();
+        }
+    }
+
+    QListView::resizeEvent( event );
 }
 
 

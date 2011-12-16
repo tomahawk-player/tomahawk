@@ -18,17 +18,6 @@
 
 #include "globalactionmanager.h"
 
-#ifndef ENABLE_HEADLESS
-    #include <QClipboard>
-#endif
-
-#include <QMimeData>
-#include <QUrl>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkProxy>
-
 #include "artist.h"
 #include "album.h"
 #include "sourcelist.h"
@@ -50,14 +39,23 @@
 #include "utils/shortenedlinkparser.h"
 #include "utils/rdioparser.h"
 
-#ifndef ENABLE_HEADLESS
-    #include <QApplication>
-    #include "widgets/searchwidget.h"
-    #include "viewmanager.h"
-    #include "playlist/topbar/topbar.h"
-    #include "playlist/playlistview.h"
+#include "widgets/searchwidget.h"
+#include "viewmanager.h"
+#include "playlist/topbar/topbar.h"
+#include "playlist/playlistview.h"
 
-#endif
+
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
+
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkConfiguration>
+#include <QtNetwork/QNetworkProxy>
+
+#include <QtCore/QMimeData>
+#include <QtCore/QUrl>
+
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -304,12 +302,12 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             tDebug() << "No xspf to load...";
             return false;
         }
-        QUrl xspf = QUrl( url.queryItemValue( "xspf" ) );
+        QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
         QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
         XSPFLoader* l= new XSPFLoader( true, this );
         l->setOverrideTitle( title );
         l->load( xspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
 
     } else if( parts [ 0 ] == "new" ) {
         if( !url.hasQueryItem( "title" ) ) {
@@ -328,6 +326,22 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
     }
 
     return false;
+}
+
+void
+GlobalActionManager::playlistCreatedToShow( const playlist_ptr& pl )
+{
+    connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistReadyToShow() ) );
+    pl->setProperty( "sharedptr", QVariant::fromValue<Tomahawk::playlist_ptr>( pl ) );
+}
+
+void GlobalActionManager::playlistReadyToShow()
+{
+    playlist_ptr pl = sender()->property( "sharedptr" ).value<Tomahawk::playlist_ptr>();
+    if ( !pl.isNull() )
+        ViewManager::instance()->show( pl );
+
+    disconnect( sender(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistReadyToShow() ) );
 }
 
 
@@ -415,6 +429,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 
         QString title, artist, album, urlStr;
         foreach( pair, queryItems ) {
+            pair.second = pair.second.replace( "+", " " ); // QUrl::queryItems doesn't decode + to a space :(
             if( pair.first == "title" )
                 title = pair.second;
             else if( pair.first == "artist" )
@@ -438,7 +453,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
             foreach( pair, queryItems ) {
                 if( pair.first != "url" )
                     continue;
-                QUrl track = QUrl::fromUserInput( pair.second  );
+                QUrl track = QUrl::fromUserInput( pair.second );
                 //FIXME: isLocalFile is Qt 4.8
                 if( track.toString().startsWith( "file://" ) ) { // it's local, so we see if it's in the DB and load it if so
                     // TODO

@@ -81,6 +81,8 @@ private slots:
     void playOrQueueNow( const Tomahawk::query_ptr& );
     void playNow( const Tomahawk::query_ptr& );
 
+    void playlistCreatedToShow( const Tomahawk::playlist_ptr& pl );
+    void playlistReadyToShow();
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );

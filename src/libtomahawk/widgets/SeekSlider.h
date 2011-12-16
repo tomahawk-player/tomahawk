@@ -19,7 +19,7 @@
 #ifndef SEEKSLIDER_H
 #define SEEKSLIDER_H
 
-#include <QSlider>
+#include <QtGui/QSlider>
 
 #include "dllmacro.h"
 

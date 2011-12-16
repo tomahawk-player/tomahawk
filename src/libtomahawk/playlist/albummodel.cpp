@@ -25,6 +25,7 @@
 #include "artist.h"
 #include "albumitem.h"
 #include "source.h"
+#include "sourcelist.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -39,8 +40,6 @@ AlbumModel::AlbumModel( QObject* parent )
     , m_rootItem( new AlbumItem( 0, this ) )
     , m_overwriteOnAdd( false )
 {
-    qDebug() << Q_FUNC_INFO;
-
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
@@ -132,11 +131,16 @@ AlbumModel::data( const QModelIndex& index, int role ) const
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    const album_ptr& album = entry->album();
+    QString name;
+    if ( !entry->album().isNull() )
+        name = entry->album()->name();
+    else if ( !entry->artist().isNull() )
+        name = entry->artist()->name();
+
     switch( index.column() )
     {
         case 0:
-            return album->name();
+            return name;
             break;
 
     }
@@ -225,6 +229,8 @@ AlbumModel::removeIndex( const QModelIndex& index )
         delete item;
         emit endRemoveRows();
     }
+
+    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -247,6 +253,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     m_overwriteOnAdd = overwrite;
+    m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -254,6 +261,21 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+
+    if ( collection.isNull() )
+    {
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
+
+        QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
+        foreach ( const source_ptr& source, sources )
+        {
+            connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+        }
+    }
+    else
+    {
+        connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+    }
 
     emit loadingStarted();
 }
@@ -272,6 +294,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
     m_overwriteOnAdd = overwrite;
+    m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -290,13 +313,16 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 void
 AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
-    if ( !albums.count() )
-        return;
+    emit loadingFinished();
 
     if ( m_overwriteOnAdd )
         clear();
 
-    emit loadingFinished();
+    if ( !albums.count() )
+    {
+        emit itemCountChanged( rowCount( QModelIndex() ) );
+        return;
+    }
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -315,6 +341,56 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     }
 
     emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
+}
+
+
+void
+AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
+{
+    emit loadingFinished();
+
+    if ( m_overwriteOnAdd )
+        clear();
+
+    if ( !artists.count() )
+    {
+        emit itemCountChanged( rowCount( QModelIndex() ) );
+        return;
+    }
+
+    int c = rowCount( QModelIndex() );
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + artists.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    AlbumItem* albumitem;
+    foreach( const artist_ptr& artist, artists )
+    {
+        albumitem = new AlbumItem( artist, m_rootItem );
+        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+
+        connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
+}
+
+
+void
+AlbumModel::onSourceAdded( const Tomahawk::source_ptr& source )
+{
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+}
+
+
+void
+AlbumModel::onCollectionChanged()
+{
+    addCollection( m_collection, true );
 }
 
 
@@ -336,15 +412,26 @@ AlbumModel::getCover( const QModelIndex& index )
         return false;
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    if ( !item->album()->artist().isNull() )
-        trackInfo["artist"] = item->album()->artist()->name();
-    trackInfo["album"] = item->album()->name();
-    trackInfo["pptr"] = QString::number( (qlonglong)item );
-    m_coverHash.insert( (qlonglong)item, index );
-
     Tomahawk::InfoSystem::InfoRequestData requestData;
+
+    if ( !item->artist().isNull() )
+    {
+        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+
+        trackInfo["artist"] = item->artist()->name();
+    }
+    else if ( !item->album().isNull() && !item->album()->artist().isNull() )
+    {
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+
+        trackInfo["artist"] = item->album()->artist()->name();
+        trackInfo["album"] = item->album()->name();
+    }
+
+    m_coverHash.insert( (qlonglong)item, index );
+    trackInfo["pptr"] = QString::number( (qlonglong)item );
+
     requestData.caller = s_tmInfoIdentifier;
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     requestData.customData = QVariantMap();
 
@@ -361,7 +448,6 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
     if ( requestData.caller != s_tmInfoIdentifier ||
        ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 

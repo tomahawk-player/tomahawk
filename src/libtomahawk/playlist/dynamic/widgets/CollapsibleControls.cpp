@@ -25,14 +25,13 @@
 #include "utils/tomahawkutils.h"
 #include "widgets/elidedlabel.h"
 
-#include <QLabel>
-#include <QStackedLayout>
-#include <QToolButton>
-#include <QAction>
-#include <QEasingCurve>
-#include <QTimeLine>
-#include <QPaintEvent>
-#include <QPainter>
+#include <QtGui/QLabel>
+#include <QtGui/QStackedLayout>
+#include <QtGui/QToolButton>
+#include <QtCore/QEasingCurve>
+#include <QtCore/QTimeLine>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPainter>
 
 #include "utils/logger.h"
 

@@ -41,6 +41,8 @@ public slots:
 
 private slots:
     void gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results );
+    void gotAlbums( const Tomahawk::QID qid, QList< Tomahawk::album_ptr> albums );
+    void gotArtists( const Tomahawk::QID qid, QList< Tomahawk::artist_ptr> artists );
 
 private:
     int m_weight;

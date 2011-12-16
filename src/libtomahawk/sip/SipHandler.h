@@ -48,7 +48,10 @@ public:
 
     void loadFromAccountManager();
 
+#ifndef ENABLE_HEADLESS
     const QPixmap avatar( const QString& name ) const;
+#endif
+
     //TODO: implement a proper SipInfo class and maybe attach it to the source
     const SipInfo sipInfo( const QString& peerId ) const;
     const QString versionString( const QString& peerId ) const;
@@ -62,19 +65,23 @@ private slots:
     void onPeerOffline( const QString& );
     void onPeerOnline( const QString& );
 
+#ifndef ENABLE_HEADLESS
     // set data for local source
     void onAvatarReceived( const QPixmap& avatar );
 
     // set data for other sources
     void onAvatarReceived( const QString& from, const QPixmap& avatar );
+#endif
 
 private:
     static SipHandler *s_instance;
 
     //TODO: move this to source
     QHash<QString, SipInfo> m_peersSipInfos;
-    QHash<QString, QPixmap> m_usernameAvatars;
     QHash<QString, QString> m_peersSoftwareVersions;
+#ifndef ENABLE_HEADLESS
+    QHash<QString, QPixmap> m_usernameAvatars;
+#endif
 };
 
 #endif

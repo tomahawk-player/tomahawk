@@ -20,18 +20,23 @@
 
 #include "artist.h"
 #include "album.h"
+#include "config.h"
 #include "pipeline.h"
 #include "sourcelist.h"
+
+#include "network/servent.h"
+
 #include "utils/tomahawkutils.h"
-
-#include <QMetaProperty>
-#include <QCryptographicHash>
-
 #include "utils/logger.h"
-#include <network/servent.h>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QMessageBox>
+
+
+#include <QtGui/QMessageBox>
+
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+
+#include <QtCore/QMetaProperty>
+#include <QtCore/QCryptographicHash>
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
@@ -189,16 +194,14 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-    /// I guess there is somereason for a assert in here, maybe fatal js errors, but
-    /// undefined is not so fatal
-#ifdef QT_DEBUG
+#ifdef DEBUG_BUILD
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
 #endif
 }
 
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
-    : Tomahawk::ExternalResolver( scriptPath )
+    : Tomahawk::ExternalResolverGui( scriptPath )
     , m_ready( false )
     , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )
@@ -226,6 +229,22 @@ QtScriptResolver::~QtScriptResolver()
     Tomahawk::Pipeline::instance()->removeResolver( this );
     delete m_engine;
 }
+
+
+Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath )
+{
+    ExternalResolver* res = 0;
+
+    const QFileInfo fi( scriptPath );
+    if ( fi.suffix() == "js" || fi.suffix() == "script" )
+    {
+        res = new QtScriptResolver( scriptPath );
+        tLog() << Q_FUNC_INFO << scriptPath << "Loaded.";
+    }
+
+    return res;
+}
+
 
 bool
 QtScriptResolver::running() const

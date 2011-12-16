@@ -45,7 +45,7 @@ class DLLEXPORT AudioEngine : public QObject
 Q_OBJECT
 
 public:
-    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError };
+    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError };
     enum AudioState { Stopped, Playing, Paused };
 
     static AudioEngine* instance();
@@ -102,8 +102,6 @@ public slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString caller );
 
-    void togglePrivateListeningMode();
-
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -123,7 +121,7 @@ signals:
 
     void playlistChanged( Tomahawk::PlaylistInterface* playlist );
 
-    void error( AudioErrorCode errorCode );
+    void error( AudioEngine::AudioErrorCode errorCode );
 
 private slots:
     bool loadTrack( const Tomahawk::result_ptr& result );
@@ -145,7 +143,6 @@ private:
     void sendWaitingNotification() const;
     void sendNowPlayingNotification();
 
-    bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::result_ptr m_currentTrack;

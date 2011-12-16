@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 
 using namespace Tomahawk;
 
+
 ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* parent )
     : QObject( parent )
 {
@@ -36,16 +38,32 @@ ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* par
         lengthenUrl( url );
 }
 
-ShortenedLinkParser::~ShortenedLinkParser() {}
+
+ShortenedLinkParser::~ShortenedLinkParser()
+{
+}
+
+
+bool
+ShortenedLinkParser::handlesUrl( const QString& url )
+{
+    // Whitelisted links
+    return ( url.contains( "t.co" ) ||
+             url.contains( "bit.ly" ) ||
+             url.contains( "j.mp" ) ||
+             url.contains( "spoti.fi" ) ||
+             url.contains( "ow.ly" ) ||
+             url.contains( "fb.me" ) ||
+             url.contains( "itun.es" ) ||
+             url.contains( "tinyurl.com" ) ||
+             url.contains( "rd.io" ) );
+}
+
 
 void
 ShortenedLinkParser::lengthenUrl( const QString& url )
 {
-    // Whitelisted links
-    if ( !( url.contains( "t.co" ) ||
-            url.contains( "bit.ly" ) ||
-            url.contains( "j.mp" ) ||
-            url.contains( "rd.io" ) ) )
+    if ( !handlesUrl( url ) )
         return;
 
     tDebug() << "Looking up..." << url;
@@ -55,6 +73,7 @@ ShortenedLinkParser::lengthenUrl( const QString& url )
 
     m_queries.insert( reply );
 }
+
 
 void
 ShortenedLinkParser::lookupFinished()
@@ -86,5 +105,4 @@ ShortenedLinkParser::checkFinished()
 
         deleteLater();
     }
-
 }

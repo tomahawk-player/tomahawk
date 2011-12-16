@@ -66,7 +66,8 @@ signals:
     void newJobRW( QSharedPointer<DatabaseCommand> );
 
 public slots:
-    void enqueue( QSharedPointer<DatabaseCommand> lc );
+    void enqueue( const QSharedPointer<DatabaseCommand>& lc );
+    void enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc );
 
 private slots:
     void setIsReadyTrue() { m_ready = true; }

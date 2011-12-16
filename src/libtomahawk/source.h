@@ -34,6 +34,7 @@ class ControlConnection;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
+class DatabaseCommand_DeleteFiles;
 
 namespace Tomahawk
 {
@@ -47,6 +48,7 @@ friend class ::ControlConnection;
 friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_SocialAction;
 friend class ::DatabaseCommand_AddFiles;
+friend class ::DatabaseCommand_DeleteFiles;
 
 public:
     enum AvatarStyle { Original, FancyStyle };
@@ -61,8 +63,10 @@ public:
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
 
+#ifndef ENABLE_HEADLESS
     void setAvatar( const QPixmap& avatar );
     QPixmap avatar( AvatarStyle style = Original ) const;
+#endif
 
     collection_ptr collection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
@@ -85,6 +89,8 @@ public:
 
 signals:
     void syncedWithDatabase();
+    void synced();
+
     void online();
     void offline();
 
@@ -98,6 +104,7 @@ signals:
     void playbackFinished( const Tomahawk::query_ptr& query );
 
     void stateChanged();
+    void commandsFinished();
 
     void socialAttributesChanged();
 
@@ -110,18 +117,22 @@ public slots:
 private slots:
     void dbLoaded( unsigned int id, const QString& fname );
     QString lastCmdGuid() const { return m_lastCmdGuid; }
-    void setLastCmdGuid( const QString& guid ) { m_lastCmdGuid = guid; }
     void updateIndexWhenSynced();
 
     void setOffline();
     void setOnline();
 
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
-    void onPlaybackStarted( const Tomahawk::query_ptr& query );
+
+    void onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
     void trackTimerFired();
 
+    void executeCommands();
+
 private:
+    void addCommand( const QSharedPointer<DatabaseCommand>& command );
+    void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 
     QList< QSharedPointer<Collection> > m_collections;
@@ -142,6 +153,8 @@ private:
     QTimer m_currentTrackTimer;
 
     ControlConnection* m_cc;
+    QList< QSharedPointer<DatabaseCommand> > m_cmds;
+    int m_commandCount;
 
     QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;

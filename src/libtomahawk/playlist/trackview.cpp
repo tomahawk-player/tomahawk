@@ -90,8 +90,6 @@ TrackView::TrackView( QWidget* parent )
 TrackView::~TrackView()
 {
     tDebug() << Q_FUNC_INFO;
-
-    delete m_header;
 }
 
 
@@ -158,8 +156,10 @@ TrackView::setTrackModel( TrackModel* model )
 
 
 void
-TrackView::currentChanged( const QModelIndex& current, const QModelIndex& /* previous */ )
+TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
+    QTreeView::currentChanged( current, previous );
+
     if ( !m_updateContextView )
         return;
 
@@ -411,7 +411,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
     if ( action == Qt::MoveAction )
     {
-        m_proxyModel->removeIndexes( pindexes );
+        m_proxyModel->remove( pindexes );
     }
 }
 

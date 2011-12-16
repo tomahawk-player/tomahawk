@@ -19,14 +19,14 @@
 #ifndef QTSCRIPTRESOLVER_H
 #define QTSCRIPTRESOLVER_H
 
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "query.h"
 #include "utils/tomahawkutils.h"
 #include "config.h"
 
-#include <QDir>
-#include <QFile>
-#include <QThread>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
@@ -53,6 +53,7 @@ public:
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName );
 
     QSharedPointer<QIODevice> customIODeviceFactory( const Tomahawk::result_ptr& result );
+
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -65,7 +66,6 @@ public slots:
     bool fakeEnv() { return false; }
 
     void addTrackResults( const QVariantMap& results );
-
 
 private:
     QString m_scriptPath, m_urlCallback;
@@ -114,7 +114,7 @@ private:
 };
 
 
-class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolver
+class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 
@@ -123,6 +123,7 @@ friend class ::QtScriptResolverHelper;
 public:
     explicit QtScriptResolver( const QString& scriptPath );
     virtual ~QtScriptResolver();
+    static ExternalResolver* factory( const QString& scriptPath );
 
     virtual QString name() const         { return m_name; }
     virtual unsigned int weight() const  { return m_weight; }

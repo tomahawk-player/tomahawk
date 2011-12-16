@@ -37,6 +37,7 @@ Q_PROPERTY( QString artist READ artist WRITE setArtist )
 Q_PROPERTY( QString track READ track WRITE setTrack )
 Q_PROPERTY( unsigned int playtime READ playtime WRITE setPlaytime )
 Q_PROPERTY( unsigned int secsPlayed READ secsPlayed WRITE setSecsPlayed )
+Q_PROPERTY( unsigned int trackDuration READ trackDuration WRITE setTrackDuration )
 Q_PROPERTY( int action READ action WRITE setAction )
 
 public:
@@ -47,13 +48,14 @@ public:
     };
 
     explicit DatabaseCommand_LogPlayback( QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent )
+        : DatabaseCommandLoggable( parent ), m_playtime( 0 ), m_secsPlayed( 0 ), m_trackDuration( 0 )
     {}
 
     explicit DatabaseCommand_LogPlayback( const Tomahawk::result_ptr& result, Action action, unsigned int secsPlayed = 0, QObject* parent = 0 )
         : DatabaseCommandLoggable( parent ), m_result( result ), m_secsPlayed( secsPlayed ), m_action( action )
     {
         m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
+        m_trackDuration = result->duration();
         setSource( SourceList::instance()->getLocal() );
 
         setArtist( result->artist()->name() );
@@ -68,6 +70,7 @@ public:
     virtual bool doesMutates() const { return true; }
     virtual bool singletonCmd() const { return ( m_action == Started ); }
     virtual bool localOnly() const;
+    virtual bool groupable() const { return true; }
 
     QString artist() const { return m_artist; }
     void setArtist( const QString& s ) { m_artist = s; }
@@ -81,11 +84,14 @@ public:
     unsigned int secsPlayed() const { return m_secsPlayed; }
     void setSecsPlayed( unsigned int i ) { m_secsPlayed = i; }
 
+    unsigned int trackDuration() const { return m_trackDuration; }
+    void setTrackDuration( unsigned int trackDuration ) { m_trackDuration = trackDuration; }
+
     int action() const { return m_action; }
     void setAction( int a ) { m_action = (Action)a; }
 
 signals:
-    void trackPlaying( const Tomahawk::query_ptr& query );
+    void trackPlaying( const Tomahawk::query_ptr& query, unsigned int duration );
     void trackPlayed( const Tomahawk::query_ptr& query );
 
 private:
@@ -95,6 +101,7 @@ private:
     QString m_track;
     unsigned int m_playtime;
     unsigned int m_secsPlayed;
+    unsigned int m_trackDuration;
     Action m_action;
 };
 

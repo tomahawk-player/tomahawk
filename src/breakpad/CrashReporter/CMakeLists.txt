@@ -1,7 +1,9 @@
 PROJECT( CrashReporter )
 
+
 FIND_PACKAGE( Qt4 REQUIRED )
 SET( QT_USE_QTNETWORK TRUE )
+
 
 SET( crashreporter_SOURCES main.cpp CrashReporter.cpp )
 SET( crashreporter_HEADERS CrashReporter.h )
@@ -16,5 +18,8 @@ INCLUDE( ${QT_USE_FILE} )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src ../../libtomahawk )
 ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
-ADD_EXECUTABLE( CrashReporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
-TARGET_LINK_LIBRARIES( CrashReporter ${QT_LIBRARIES} tomahawklib )
+ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
+TARGET_LINK_LIBRARIES( tomahawk_crash_reporter ${QT_LIBRARIES} tomahawklib )
+
+INCLUDE(GNUInstallDirs)
+install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})

@@ -16,13 +16,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "tomahawkapp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
-#include <QTranslator>
-
-#include "breakpad/BreakPad.h"
 #include "ubuntuunityhack.h"
+#include "tomahawksettings.h"
+
+#include <QTranslator>
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -30,6 +31,10 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
+#ifndef ENABLE_HEADLESS
+    #include "TomahawkSettingsGui.h"
+    #include "breakpad/BreakPad.h"
+#endif
 
 int
 main( int argc, char *argv[] )
@@ -44,17 +49,26 @@ main( int argc, char *argv[] )
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 #endif
 
-    // Unity hack taken from Clementine's main.cpp
+/*    // Unity hack taken from Clementine's main.cpp
 #ifdef Q_OS_LINUX
     // In 11.04 Ubuntu decided that the system tray should be reserved for certain
     // whitelisted applications.  Tomahawk will override this setting and insert
     // itself into the list of whitelisted apps.
     setenv( "QT_X11_NO_NATIVE_MENUBAR", "1", true );
     UbuntuUnityHack hack;
-#endif
+#endif*/
 
     TomahawkApp a( argc, argv );
-    new BreakPad( QDir::tempPath() );
+
+#ifdef ENABLE_HEADLESS
+    new TomahawkSettings( &a );
+#else
+    new TomahawkSettingsGui( &a );
+#endif
+
+#ifndef ENABLE_HEADLESS
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
+#endif
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
@@ -63,9 +77,18 @@ main( int argc, char *argv[] )
         a.init();
 
     QString locale = QLocale::system().name();
-
+    if ( locale == "C" )
+        locale = "en";
     QTranslator translator;
-    translator.load( QString( ":/lang/tomahawk_" ) + locale );
+    if ( translator.load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug() << "Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Using default locale, system locale one not found:" << locale;
+        translator.load( QString( ":/lang/tomahawk_en" ) );
+    }
     a.installTranslator( &translator );
 
     if ( argc > 1 )

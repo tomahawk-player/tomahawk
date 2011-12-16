@@ -35,7 +35,6 @@ CollectionView::CollectionView( QWidget* parent )
     setProxyModel( new CollectionProxyModel( this ) );
 
     setDragDropMode( QAbstractItemView::DragOnly );
-    setAcceptDrops( false );
 }
 
 

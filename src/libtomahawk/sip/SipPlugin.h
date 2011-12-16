@@ -54,8 +54,8 @@ public:
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
 #endif
-    virtual QIcon icon() const;
     virtual Tomahawk::Accounts::Account* account() const;
+
     // peer infos
     virtual const QStringList peersOnline() const;
 
@@ -75,13 +75,13 @@ signals:
     void sipInfoReceived( const QString& peerId, const SipInfo& info );
     void softwareVersionReceived( const QString& peerId, const QString& versionString );
 
+#ifndef ENABLE_HEADLESS
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );
 
     // new data for other sources;
     void avatarReceived ( const QString& from,  const QPixmap& avatar);
 
-#ifndef ENABLE_HEADLESS
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
 #endif

@@ -39,10 +39,6 @@
 #include "sourcelist.h"
 #include "utils/logger.h"
 
-// close the dbsync connection after this much inactivity.
-// it's automatically reestablished as needed.
-#define IDLE_TIMEOUT 300000
-
 using namespace Tomahawk;
 
 
@@ -52,11 +48,11 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
     , m_state( UNKNOWN )
 {
     qDebug() << Q_FUNC_INFO << src->id() << thread();
+
     connect( this,            SIGNAL( stateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
              m_source.data(),   SLOT( onStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ) );
-
-    m_timer.setInterval( IDLE_TIMEOUT );
-    connect( &m_timer, SIGNAL( timeout() ), SLOT( idleTimeout() ) );
+    connect( m_source.data(), SIGNAL( commandsFinished() ),
+             this,              SLOT( lastOpApplied() ) );
 
     this->setMsgProcessorModeIn( MsgProcessor::PARSE_JSON | MsgProcessor::UNCOMPRESS_ALL );
 
@@ -67,16 +63,8 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
 
 DBSyncConnection::~DBSyncConnection()
 {
-    qDebug() << "DTOR" << Q_FUNC_INFO;
+    tDebug() << "DTOR" << Q_FUNC_INFO << m_source->id() << m_source->friendlyName();
     m_state = SHUTDOWN;
-}
-
-
-void
-DBSyncConnection::idleTimeout()
-{
-    qDebug() << Q_FUNC_INFO;
-    shutdown( true );
 }
 
 
@@ -96,7 +84,6 @@ DBSyncConnection::changeState( State newstate )
 void
 DBSyncConnection::setup()
 {
-//    qDebug() << Q_FUNC_INFO;
     setId( QString( "DBSyncConnection/%1" ).arg( socket()->peerAddress().toString() ) );
     check();
 }
@@ -105,16 +92,12 @@ DBSyncConnection::setup()
 void
 DBSyncConnection::trigger()
 {
-//    qDebug() << Q_FUNC_INFO;
-
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
     if ( !isRunning() )
         return;
 
     QMetaObject::invokeMethod( this, "sendMsg", Qt::QueuedConnection,
-                               Q_ARG( msg_ptr,
-                                      Msg::factory( "{\"method\":\"trigger\"}", Msg::JSON ) )
-                             );
+                               Q_ARG( msg_ptr, Msg::factory( "{\"method\":\"trigger\"}", Msg::JSON ) ) );
 }
 
 
@@ -133,10 +116,7 @@ DBSyncConnection::check()
         return;
     }
 
-    Q_ASSERT( m_cmds.isEmpty() );
     m_uscache.clear();
-    m_us.clear();
-
     changeState( CHECKING );
 
     // load last-modified etc data for our collection and theirs from our DB:
@@ -154,9 +134,6 @@ DBSyncConnection::check()
     {
         fetchOpsData( m_source->lastCmdGuid() );
     }
-
-    // restarts idle countdown
-    m_timer.start();
 }
 
 
@@ -165,7 +142,7 @@ DBSyncConnection::check()
 void
 DBSyncConnection::gotUs( const QVariantMap& m )
 {
-    m_us = m;
+    Q_UNUSED( m )
     if ( !m_uscache.empty() )
         sendOps();
 }
@@ -231,19 +208,16 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     if ( msg->is( Msg::DBOP ) )
     {
         DatabaseCommand* cmd = DatabaseCommand::factory( m, m_source );
-        if ( !cmd )
+        if ( cmd )
         {
-            qDebug() << "UNKNOWN DBOP CMD";
-            return;
+            QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
+            m_source->addCommand( cmdsp );
         }
-
-        QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
-        m_cmds << cmdsp;
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
         {
             changeState( SAVING ); // just DB work left to complete
-            executeCommands();
+            m_source->executeCommands();
         }
         return;
     }
@@ -251,8 +225,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     if ( m.value( "method" ).toString() == "fetchops" )
     {
         m_uscache = m;
-        if ( !m_us.empty() )
-            sendOps();
+        sendOps();
         return;
     }
 
@@ -269,23 +242,11 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
 
 void
-DBSyncConnection::executeCommands()
+DBSyncConnection::lastOpApplied()
 {
-    if ( !m_cmds.isEmpty() )
-    {
-        QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
-        if ( !cmd->singletonCmd() )
-            m_source->setLastCmdGuid( cmd->guid() );
-
-        connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
-        Database::instance()->enqueue( cmd );
-    }
-    else
-    {
-        changeState( SYNCED );
-        // check again, until peer responds we have no new ops to process
-        check();
-    }
+    changeState( SYNCED );
+    // check again, until peer responds we have no new ops to process
+    check();
 }
 
 
@@ -298,8 +259,8 @@ DBSyncConnection::sendOps()
     source_ptr src = SourceList::instance()->getLocal();
 
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_uscache.value( "lastop" ).toString() );
-    connect( cmd,  SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
-                     SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
+    connect( cmd, SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
+                    SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -314,6 +275,7 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
     m_lastSentOp = lastguid;
     if ( ops.length() == 0 )
     {
+        tLog( LOGVERBOSE ) << "Sending ok" << m_source->id() << m_source->friendlyName();
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );
         return;
     }

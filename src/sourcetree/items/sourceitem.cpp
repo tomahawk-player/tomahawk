@@ -16,26 +16,25 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "collectionitem.h"
+#include "sourceitem.h"
 
 #include "categoryitems.h"
 #include "playlistitems.h"
 #include "viewmanager.h"
 #include "playlist.h"
 #include "genericpageitems.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/customplaylistview.h"
 #include "source.h"
-#include "temporarypageitem.h"
-#include <sourcelist.h>
+#include "sourcelist.h"
 
-/// CollectionItem
+/// SourceItem
 
 using namespace Tomahawk;
 
-CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source )
+SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source )
     : SourceTreeItem( mdl, parent, SourcesModel::Collection )
     , m_source( source )
     , m_playlists( 0 )
@@ -43,51 +42,31 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_latchedOn( false )
     , m_sourceInfoItem( 0   )
     , m_coolPlaylistsItem( 0 )
-    , m_lovedTracksItem()
+    , m_collectionPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
     , m_whatsHotPage( 0 )
 {
-    m_lovedTracksItem = new GenericPageItem( model(), this, ( m_source.isNull() ? tr( "Top Loved Tracks" ) : tr( "Loved Tracks" ) ), QIcon( RESPATH "images/loved_playlist.png" ),
-                                             boost::bind( &CollectionItem::lovedTracksClicked, this ),
-                                             boost::bind( &CollectionItem::getLovedTracksPage, this ) );
-    m_lovedTracksItem->setSortValue( -250 );
-
     if ( m_source.isNull() )
     {
-        // super collection
-        connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
-
-                // add misc children of root node
-        GenericPageItem* recent = new GenericPageItem( model(), this, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
-                             boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
-                             boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
-                                                    );
-        recent->setSortValue( -300 );
-
-        GenericPageItem* hot = new GenericPageItem( model(), this, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
-                             boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
-                             boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() )
-                                                    );
-        hot->setSortValue( -300 );
-
-
-        // TODO finish implementing and making pretty
-//         m_coolPlaylistsItem = new GenericPageItem( model(), this, tr( "Cool Stuff" ), QIcon( RESPATH "images/new-additions.png" ),
-//                                                    boost::bind( &CollectionItem::coolPlaylistsClicked, this ),
-//                                                    boost::bind( &CollectionItem::getCoolPlaylistsPage, this )
-//                                                  );
-//         m_coolPlaylistsItem->setSortValue( 200 );
-
         m_superCol = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/supercollection.png" ) );
-
         return;
     }
 
+    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
+                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
+                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
+    m_lovedTracksItem->setSortValue( -250 );
+
+    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/drop-song.png" ), //FIXME different icon
+                                            boost::bind( &SourceItem::collectionClicked, this ),
+                                            boost::bind( &SourceItem::getCollectionPage, this ) );
+    m_collectionItem->setSortValue( -350 );
+
     m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
-                                            boost::bind( &CollectionItem::sourceInfoClicked, this ),
-                                            boost::bind( &CollectionItem::getSourceInfoPage, this ) );
+                                            boost::bind( &SourceItem::sourceInfoClicked, this ),
+                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );
     m_sourceInfoItem->setSortValue( -300 );
 
     // create category items if there are playlists to show, or stations to show
@@ -114,14 +93,14 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
 
     // load auto playlists and stations!
 
-    connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( syncedWithDatabase() ), this, SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), this, SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( stateChanged() ), this, SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( offline() ), this, SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
-    connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
-    connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
+    connect( source.data(), SIGNAL( stats( QVariantMap ) ), SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( syncedWithDatabase() ), SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( stateChanged() ), SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( offline() ), SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( online() ), SIGNAL( updated() ) );
+    connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
 
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
              SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
@@ -131,30 +110,30 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
     if ( m_source->isLocal() )
-        QTimer::singleShot(0, this, SLOT(requestExpanding()));
+        QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );
 }
 
 
 Tomahawk::source_ptr
-CollectionItem::source() const
+SourceItem::source() const
 {
     return m_source;
 }
 
 
 QString
-CollectionItem::text() const
+SourceItem::text() const
 {
     return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
 }
 
 
 int
-CollectionItem::IDValue() const
+SourceItem::IDValue() const
 {
-    if( m_source.isNull() )
+    if ( m_source.isNull() )
         return -1;
-    if( m_source->isLocal() )
+    if ( m_source->isLocal() )
         return 0;
 
     return m_source->id();
@@ -162,46 +141,46 @@ CollectionItem::IDValue() const
 
 
 int
-CollectionItem::peerSortValue() const
+SourceItem::peerSortValue() const
 {
-    if( m_source.isNull() )
+    if ( m_source.isNull() || m_source->isLocal() )
         return -1;
-    if( m_source->isLocal() )
-        return 0;
 
     return 1;
 }
 
 
 void
-CollectionItem::activate()
+SourceItem::activate()
 {
     ViewPage* p = 0;
     if ( source().isNull() )
         p = ViewManager::instance()->showSuperCollection();
     else
-        p = ViewManager::instance()->show( source()->collection() );
+        emit toggleExpandRequest( this );
+//        p = ViewManager::instance()->show( source()->collection() );
 
     model()->linkSourceItemToPage( this, p );
 }
 
 
 QIcon
-CollectionItem::icon() const
+SourceItem::icon() const
 {
     if ( m_source.isNull() )
        return m_superCol;
     else
     {
-        if( m_source->avatar().isNull() )
+        if ( m_source->avatar().isNull() )
             return m_defaultAvatar;
         else
             return m_source->avatar( Source::FancyStyle );
     }
 }
 
+
 bool
-CollectionItem::localLatchedOn() const
+SourceItem::localLatchedOn() const
 {
     // Don't show a listen icon if this is the local collection and we are latched on to someone who went offline
     // we are technically still latched on (if they come back online we'll be still listening along) but it's not visible
@@ -216,7 +195,7 @@ CollectionItem::localLatchedOn() const
 
 
 void
-CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
+SourceItem::latchedOff( const source_ptr& from, const source_ptr& to )
 {
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
@@ -226,8 +205,9 @@ CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
     }
 }
 
+
 void
-CollectionItem::latchedOn( const source_ptr& from, const source_ptr& to )
+SourceItem::latchedOn( const source_ptr& from, const source_ptr& to )
 {
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
@@ -239,29 +219,32 @@ CollectionItem::latchedOn( const source_ptr& from, const source_ptr& to )
 
 
 void
-CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
+SourceItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
 {
     QList< SourceTreeItem* > items;
     int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
 
     int from = parent->children().count() - addOffset;
     parent->beginRowsAdded( from, from + playlists.count() - 1 );
-    foreach( const dynplaylist_ptr& p, playlists )
+    foreach ( const dynplaylist_ptr& p, playlists )
     {
         DynamicPlaylistItem* plItem = new DynamicPlaylistItem( model(), parent, p, parent->children().count() - addOffset );
 //        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
 
-        if( p->mode() == Static ) {
-            if( m_source->isLocal() )
+        if ( p->mode() == Static )
+        {
+            if ( m_source->isLocal() )
                 connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
                         SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
             else
                 connect( p.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ),
                         SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
-        } else {
-            if( m_source->isLocal() )
+        }
+        else
+        {
+            if ( m_source->isLocal() )
                 connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
                         SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
             else
@@ -275,7 +258,7 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
 
 template< typename T >
 void
-CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
+SourceItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
 {
     Q_ASSERT( parent ); // How can we delete playlists if we have none?
     int curCount = parent->children().count();
@@ -314,7 +297,7 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
 
 
 void
-CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
+SourceItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
 //    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
 
@@ -355,14 +338,14 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 
 
 void
-CollectionItem::onPlaylistDeleted( const  playlist_ptr& playlist )
+SourceItem::onPlaylistDeleted( const  playlist_ptr& playlist )
 {
     playlistDeletedInternal( m_playlists, playlist );
 }
 
 
 void
-CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
+SourceItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
 {
     if( playlists.isEmpty() )
         return;
@@ -381,7 +364,7 @@ CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists 
 
 
 void
-CollectionItem::onAutoPlaylistDeleted( const dynplaylist_ptr& playlist )
+SourceItem::onAutoPlaylistDeleted( const dynplaylist_ptr& playlist )
 {
     if( !m_playlists )
         qDebug() << "NO playlist category item for a deleting playlist..";
@@ -391,7 +374,7 @@ CollectionItem::onAutoPlaylistDeleted( const dynplaylist_ptr& playlist )
 
 
 void
-CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
+SourceItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
 {
     if( stations.isEmpty() )
         return;
@@ -410,59 +393,21 @@ CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
 
 
 void
-CollectionItem::onStationDeleted( const dynplaylist_ptr& station )
+SourceItem::onStationDeleted( const dynplaylist_ptr& station )
 {
     playlistDeletedInternal( m_stations, station );
 }
 
 
 void
-CollectionItem::requestExpanding()
+SourceItem::requestExpanding()
 {
-    emit expandRequest(this);
-}
-
-
-void
-CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
-{
-    const int idx = children().count();
-    const int latest = children().last()->IDValue();
-
-    foreach ( TemporaryPageItem* page, m_tempItems )
-    {
-        if ( page->page() == v )
-        {
-            emit selectRequest( page );
-            return;
-        }
-    }
-
-    // Only keep 5 temporary pages at once
-    while ( m_tempItems.size() > 4 )
-    {
-        TemporaryPageItem* item = m_tempItems.takeFirst();
-        QTimer::singleShot( 0, item, SLOT( removeFromList() ) );
-    }
-    emit beginRowsAdded( idx, idx );
-    TemporaryPageItem* tempPage = new TemporaryPageItem( model(), this, v, latest + 1 );
-    connect( tempPage, SIGNAL( removed() ), this, SLOT( temporaryPageDestroyed() ) );
-    m_tempItems << tempPage;
-    endRowsAdded();
-    emit selectRequest( tempPage );
-}
-
-void
-CollectionItem::temporaryPageDestroyed()
-{
-    TemporaryPageItem* tempPage = qobject_cast< TemporaryPageItem* >( sender() );
-    Q_ASSERT( tempPage );
-    m_tempItems.removeAll( tempPage );
+    emit expandRequest( this );
 }
 
 
 ViewPage*
-CollectionItem::sourceInfoClicked()
+SourceItem::sourceInfoClicked()
 {
     if( m_source.isNull() )
         return 0;
@@ -473,19 +418,37 @@ CollectionItem::sourceInfoClicked()
 
 
 ViewPage*
-CollectionItem::getSourceInfoPage() const
+SourceItem::getSourceInfoPage() const
 {
     return m_sourceInfoPage;
 }
 
 
 ViewPage*
-CollectionItem::coolPlaylistsClicked()
+SourceItem::collectionClicked()
 {
-    if( !m_source.isNull() )
+    if( m_source.isNull() )
         return 0;
 
-    if( !m_coolPlaylistsPage )
+    m_collectionPage = ViewManager::instance()->show( m_source->collection() );
+    return m_collectionPage;
+}
+
+
+ViewPage*
+SourceItem::getCollectionPage() const
+{
+    return m_collectionPage;;
+}
+
+
+ViewPage*
+SourceItem::coolPlaylistsClicked()
+{
+    if ( !m_source.isNull() )
+        return 0;
+
+    if ( !m_coolPlaylistsPage )
         m_coolPlaylistsPage = new SocialPlaylistWidget( ViewManager::instance()->widget() );
 
     ViewManager::instance()->show( m_coolPlaylistsPage );
@@ -494,16 +457,16 @@ CollectionItem::coolPlaylistsClicked()
 
 
 ViewPage*
-CollectionItem::getCoolPlaylistsPage() const
+SourceItem::getCoolPlaylistsPage() const
 {
     return m_coolPlaylistsPage;
 }
 
 
 ViewPage*
-CollectionItem::lovedTracksClicked()
+SourceItem::lovedTracksClicked()
 {
-    if( !m_lovedTracksPage )
+    if ( !m_lovedTracksPage )
         m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::AllLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
 
     ViewManager::instance()->show( m_lovedTracksPage );
@@ -512,7 +475,7 @@ CollectionItem::lovedTracksClicked()
 
 
 ViewPage*
-CollectionItem::getLovedTracksPage() const
+SourceItem::getLovedTracksPage() const
 {
     return m_lovedTracksPage;
 }

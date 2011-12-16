@@ -19,8 +19,8 @@
 #ifndef CONTEXTMENU_H
 #define CONTEXTMENU_H
 
-#include <QSignalMapper>
-#include <QMenu>
+#include <QtCore/QSignalMapper>
+#include <QtGui/QMenu>
 
 #include "typedefs.h"
 #include "dllmacro.h"
@@ -39,7 +39,6 @@ public:
        ActionQueue =        2,
        ActionDelete =       4,
        ActionCopyLink =     8
-
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

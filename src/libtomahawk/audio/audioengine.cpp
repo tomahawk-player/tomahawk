@@ -24,7 +24,6 @@
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-#include "actioncollection.h"
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
@@ -52,7 +51,6 @@ AudioEngine::instance()
 
 AudioEngine::AudioEngine()
     : QObject()
-    , m_isPlayingHttp( false )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
@@ -77,11 +75,6 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
-#ifndef TOMAHAWK_HEADLESS
-    tDebug() << Q_FUNC_INFO << "Connecting privacy toggle";
-    connect( ActionCollection::instance()->getAction( "togglePrivacy" ), SIGNAL( triggered( bool ) ), this, SLOT( togglePrivateListeningMode() ) );
-#endif
-    
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -167,6 +160,8 @@ void
 AudioEngine::stop()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    emit stopped();
     if ( isStopped() )
         return;
 
@@ -178,7 +173,6 @@ AudioEngine::stop()
     if ( !m_currentTrack.isNull() )
         emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
 
-    emit stopped();
     setCurrentTrack( Tomahawk::result_ptr() );
 
     Tomahawk::InfoSystem::InfoTypeMap map;
@@ -191,7 +185,7 @@ AudioEngine::stop()
     else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
         QVariantMap stopInfo;
-        stopInfo["message"] = QString( "Tomahawk is stopped." );
+        stopInfo["message"] = tr( "Tomahawk is stopped." );
         map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
     }
 
@@ -401,25 +395,6 @@ AudioEngine::infoSystemFinished( QString caller )
 }
 
 
-void
-AudioEngine::togglePrivateListeningMode()
-{
-    tDebug() << Q_FUNC_INFO;
-    if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
-        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
-    else
-        TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
-
-#ifndef TOMAHAWK_HEADLESS
-    QAction *privacyToggle = ActionCollection::instance()->getAction( "togglePrivacy" );
-    bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    privacyToggle->setText( tr( QString( isPublic ? "&Listen Privately" : "&Listen Publicly" ).toAscii().constData() ) );
-    privacyToggle->setIconVisibleInMenu( isPublic );
-#endif
-}
-
-
-
 bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
@@ -457,7 +432,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 else
                     m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
-                m_isPlayingHttp = false;
             }
             else
             {
@@ -478,11 +452,11 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 #endif
+                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl << furl.toLatin1();
                     m_mediaObject->setCurrentSource( furl );
                 }
 
                 m_mediaObject->currentSource().setAutoDelete( true );
-                m_isPlayingHttp = true;
             }
 
             if ( !m_input.isNull() )
@@ -495,8 +469,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->verboseNotifications() )
-                    sendNowPlayingNotification();
-            
+                sendNowPlayingNotification();
+
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
@@ -630,6 +604,9 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     if ( newState == Phonon::ErrorState )
     {
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        emit error( UnknownError );
+
+        stop();
         return;
     }
     if ( newState == Phonon::PlayingState )

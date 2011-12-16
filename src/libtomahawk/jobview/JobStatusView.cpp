@@ -19,22 +19,21 @@
 
 #include "JobStatusView.h"
 
-
-#include "libtomahawk/pipeline.h"
-
+#include "pipeline.h"
 #include "JobStatusModel.h"
 #include "JobStatusDelegate.h"
 #include "PipelineStatusItem.h"
+#include "TransferStatusItem.h"
+#include "LatchedStatusItem.h"
 #include "utils/logger.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QListView>
 #include <QAbstractItemModel>
-#include "TransferStatusItem.h"
-#include "LatchedStatusItem.h"
 
 using namespace Tomahawk;
+
 
 JobStatusView* JobStatusView::s_instance = 0;
 
@@ -72,12 +71,11 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     setFont( f );
 #endif
 
-    hideWidget();
-
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
 }
+
 
 void
 JobStatusView::setModel( JobStatusModel* m )
@@ -90,15 +88,14 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
 }
 
+
 void
 JobStatusView::checkCount()
 {
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
-    else if ( isHidden() && m_view->model()->rowCount() > 0 )
-        emit showWidget();
     else
-        emit sizeChanged( sizeHint() );
+        emit sizeHintChanged( sizeHint() );
 }
 
 

@@ -25,7 +25,7 @@
 #include "viewmanager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "categoryitems.h"
-#include "collectionitem.h"
+#include "sourceitem.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dropjob.h"
@@ -337,7 +337,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
         CategoryItem* from = cat;
         CategoryItem* to = 0;
         if( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand ) { // WRONG
-            CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
+            SourceItem* col = qobject_cast< SourceItem* >( cat->parent() );
             to = col->stationsCategory();
             if( !to ) { // you have got to be fucking kidding me
                 int fme = col->children().count();
@@ -348,7 +348,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
                 col->setStationsCategory( to );
             }
         } else if( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static ) { // WRONG
-            CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
+            SourceItem* col = qobject_cast< SourceItem* >( cat->parent() );
             to = col->playlistsCategory();
 //            qDebug() << "TRYING TO HACK TO:" << to;
             if( !to ) { // you have got to be fucking kidding me

@@ -21,17 +21,20 @@
 #include "JobStatusItem.h"
 #include "utils/logger.h"
 
+
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
 {
 
 }
 
+
 JobStatusModel::~JobStatusModel()
 {
     qDeleteAll( m_items );
     m_collapseCount.clear();
 }
+
 
 void
 JobStatusModel::addJob( JobStatusItem* item )
@@ -55,10 +58,11 @@ JobStatusModel::addJob( JobStatusItem* item )
     }
     qDebug() << "Adding item:" << item;
 
-    beginInsertRows( QModelIndex(), 0, 0 );
-    m_items.prepend( item );
+    beginInsertRows( QModelIndex(), m_items.count(), m_items.count() );
+    m_items.append( item );
     endInsertRows();
 }
+
 
 Qt::ItemFlags
 JobStatusModel::flags( const QModelIndex& index ) const
@@ -81,6 +85,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
     {
     case Qt::DecorationRole:
         return item->icon();
+    case Qt::ToolTipRole:
     case Qt::DisplayRole:
     {
         if ( m_collapseCount.contains( item->type() ) )
@@ -100,6 +105,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
+
 int
 JobStatusModel::rowCount( const QModelIndex& parent ) const
 {
@@ -114,7 +120,7 @@ JobStatusModel::itemFinished()
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
-    tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
+//     tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
     if ( !m_items.contains( item ) && !m_collapseCount.contains( item->type() ) )
         return;
 
@@ -140,7 +146,7 @@ JobStatusModel::itemFinished()
 //             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
         }
         m_collapseCount[ item->type() ].removeAll( item );
-        tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
+//         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
         if ( m_collapseCount[ item->type() ].isEmpty() )
             m_collapseCount.remove( item->type() );
         else
@@ -163,6 +169,7 @@ JobStatusModel::itemFinished()
 
     item->deleteLater();
 }
+
 
 void
 JobStatusModel::itemUpdated()

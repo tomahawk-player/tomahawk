@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,9 +25,10 @@
 
 #include <QObject>
 #include <QSet>
-#include <QtCore/QStringList>
+#include <QStringList>
 
 class QNetworkReply;
+
 namespace Tomahawk
 {
 
@@ -39,9 +41,12 @@ namespace Tomahawk
 class DLLEXPORT ShortenedLinkParser : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ShortenedLinkParser( const QStringList& urls, QObject* parent = 0 );
     virtual ~ShortenedLinkParser();
+
+    static bool handlesUrl( const QString& url );
 
 public slots:
     void lookupFinished();

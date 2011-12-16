@@ -22,10 +22,10 @@
 
 #include "tomahawksettings.h"
 #include "tomahawkapp.h"
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "pipeline.h"
 #include "config.h"
-
+#include "AtticaManager.h"
 #include "utils/logger.h"
 
 ResolversModel::ResolversModel( QObject* parent )
@@ -40,13 +40,16 @@ ResolversModel::~ResolversModel()
 
 }
 
+
 QVariant
 ResolversModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() || !hasIndex( index.row(), index.column(), QModelIndex() ) )
         return QVariant();
 
-    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    Q_ASSERT(res); // this is part of the gui, so there should be no non-gui resolvers
     switch( role )
     {
     case Qt::DisplayRole:
@@ -66,6 +69,7 @@ ResolversModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 }
+
 
 bool
 ResolversModel::setData( const QModelIndex& index, const QVariant& value, int role )
@@ -112,12 +116,14 @@ ResolversModel::rowCount( const QModelIndex& parent ) const
     return Tomahawk::Pipeline::instance()->scriptResolvers().count();
 }
 
+
 int
 ResolversModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED( parent );
     return 1;
 }
+
 
 Qt::ItemFlags
 ResolversModel::flags( const QModelIndex& index ) const
@@ -131,7 +137,9 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
 {
     const int count = rowCount( QModelIndex() );
     beginInsertRows( QModelIndex(), count, count );
-    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    Q_ASSERT(res); // this is part of the gui, so there should be no non-gui resolvers
     connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     endInsertRows();
 
@@ -140,6 +148,7 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
     else
         m_waitingForLoad << resolver;
 }
+
 
 void
 ResolversModel::atticaResolverInstalled( const QString& resolverId )
@@ -170,6 +179,7 @@ ResolversModel::removeResolver( const QString& resolver )
     endRemoveRows();
 }
 
+
 void
 ResolversModel::resolverChanged()
 {
@@ -178,7 +188,7 @@ ResolversModel::resolverChanged()
 
     if ( Tomahawk::Pipeline::instance()->scriptResolvers().contains( res ) )
     {
-        qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << res->configUI();
+        qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << qobject_cast< Tomahawk::ExternalResolverGui* >(res)->configUI();
         const QModelIndex idx = index( Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( res ), 0, QModelIndex() );
         emit dataChanged( idx, idx );
 
@@ -190,6 +200,7 @@ ResolversModel::resolverChanged()
     }
 }
 
+
 void
 ResolversModel::addInstalledResolvers()
 {
@@ -197,12 +208,13 @@ ResolversModel::addInstalledResolvers()
 
     QDir appDir( qApp->applicationDirPath() );
     QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+    QDir libexecDir( CMAKE_INSTALL_LIBEXECDIR );
 
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
 
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    pluginDirs << appDir << libDir << lib64Dir << libexecDir;
     foreach ( const QDir& pluginDir, pluginDirs )
     {
         qDebug() << "Checking directory for resolvers:" << pluginDir;
@@ -222,6 +234,7 @@ ResolversModel::addInstalledResolvers()
         }
     }
 }
+
 
 void
 ResolversModel::saveScriptResolvers()

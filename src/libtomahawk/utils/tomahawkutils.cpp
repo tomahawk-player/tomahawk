@@ -17,21 +17,25 @@
  */
 
 #include "config.h"
-#include "tomahawkutils.h"
-
 #include "headlesscheck.h"
-#include <QtCore/QCoreApplication>
+#include "tomahawksettings.h"
 
-#include <QtGui/QColor>
-#include <QtCore/QDateTime>
-#include <QtCore/QDir>
-#include <QtCore/QMutex>
-#include <QtGui/QLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkProxy>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+
+#ifdef LIBLASTFM_FOUND
+    #include <lastfm/ws.h>
+#endif
+
+#include <QNetworkConfiguration>
+#include <QNetworkAccessManager>
+#include <QNetworkProxy>
+
+#include <QCoreApplication>
+#include <QDateTime>
+#include <QDir>
+#include <QMutex>
+#include <QCryptographicHash>
 
 #ifdef Q_WS_WIN
     #include <windows.h>
@@ -43,36 +47,11 @@
     #include <sys/sysctl.h>
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
-    #include <QtGui/QApplication>
-    #include <QtGui/QWidget>
-
-    #ifdef Q_WS_X11
-        #include <QtGui/QX11Info>
-        #include <libqnetwm/netwm.h>
-    #endif
-
-    #ifdef Q_WS_WIN
-        #include <windows.h>
-        #include <windowsx.h>
-    #endif
-#endif
-
-#include <tomahawksettings.h>
-#include "utils/logger.h"
-#include "config.h"
-
-#ifdef LIBLASTFM_FOUND
-#include <lastfm/ws.h>
-#endif
-
 namespace TomahawkUtils
 {
-
-
-static int s_headerHeight = 0;
 static quint64 s_infosystemRequestId = 0;
 static QMutex s_infosystemRequestIdMutex;
+
 
 #ifdef Q_WS_MAC
 QString
@@ -212,13 +191,12 @@ timeToString( int seconds )
 
 
 QString
-ageToString( const QDateTime& time )
+ageToString( const QDateTime& time, bool appendAgoString )
 {
     if ( time.toTime_t() == 0 )
         return QString();
 
     QDateTime now = QDateTime::currentDateTime();
-
     int mins = time.secsTo( now ) / 60;
     int hours = mins / 60;
     int days = time.daysTo( now );
@@ -226,53 +204,58 @@ ageToString( const QDateTime& time )
     int months = days / 30.42;
     int years = months / 12;
 
-    if ( years )
+    if ( mins > 0 )
     {
-        if ( years > 1 )
-            return QObject::tr( "%1 years" ).arg( years );
-        else
-            return QObject::tr( "%1 year" ).arg( years );
-    }
+        if ( years )
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%n year(s) ago", "", years );
+            else
+                return QObject::tr( "%n year(s)", "", years );
+        }
 
-    if ( months )
-    {
-        if ( months > 1 )
-            return QObject::tr( "%1 months" ).arg( months );
-        else
-            return QObject::tr( "%1 month" ).arg( months );
-    }
+        if ( months )
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%n month(s) ago", "", months );
+            else
+                return QObject::tr( "%n month(s)", "", months );
+        }
 
-    if ( weeks )
-    {
-        if ( weeks > 1 )
-            return QObject::tr( "%1 weeks" ).arg( weeks );
-        else
-            return QObject::tr( "%1 week" ).arg( weeks );
-    }
+        if ( weeks )
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%n week(s) ago", "", weeks );
+            else
+                return QObject::tr( "%n week(s)", "", weeks );
+        }
 
-    if ( days )
-    {
-        if ( days > 1 )
-            return QObject::tr( "%1 days" ).arg( days );
-        else
-            return QObject::tr( "%1 day" ).arg( days );
-    }
+        if ( days )
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%n day(s) ago", "", days );
+            else if ( hours >= 24 )
+                return QObject::tr( "%n day(s)", "", days );
+        }
 
-    if ( hours )
-    {
-        if ( hours > 1 )
-            return QObject::tr( "%1 hours" ).arg( hours );
-        else
-            return QObject::tr( "%1 hour" ).arg( hours );
-    }
+        if ( hours )
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%n hour(s) ago", "", hours );
+            else
+                return QObject::tr( "%n hour(s)", "", hours );
+        }
 
-    if ( mins )
-    {
         if ( mins > 1 )
-            return QObject::tr( "%1 minutes" ).arg( mins );
+        {
+            if ( appendAgoString )
+                return QObject::tr( "%1 minutes ago" ).arg( mins );
+            else
+                return QObject::tr( "%1 minutes" ).arg( mins );
+        }
     }
 
-    return QObject::tr( "1 minute" );
+    return QObject::tr( "just now" );
 }
 
 
@@ -306,6 +289,7 @@ extensionToMimetype( const QString& extension )
     {
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
+        s_ext2mime.insert( "oga",  "application/ogg" );
         s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
@@ -318,159 +302,6 @@ extensionToMimetype( const QString& extension )
 }
 
 
-QColor
-alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
-{
-    opacity = qMax( (float)0.3, opacity );
-    int r = colorFrom.red(), g = colorFrom.green(), b = colorFrom.blue();
-    r = opacity * r + ( 1 - opacity ) * colorTo.red();
-    g = opacity * g + ( 1 - opacity ) * colorTo.green();
-    b = opacity * b + ( 1 - opacity ) * colorTo.blue();
-
-    return QColor( r, g, b );
-}
-
-
-QPixmap
-createDragPixmap( MediaType type, int itemCount )
-{
-    // If more than one item is dragged, align the items inside a
-    // rectangular grid. The maximum grid size is limited to 5 x 5 items.
-    int xCount = 3;
-    int size = 32;
-
-    if ( itemCount > 16 )
-    {
-        xCount = 5;
-        size = 16;
-    } else if( itemCount > 9 )
-    {
-        xCount = 4;
-        size = 22;
-    }
-
-    if( itemCount < xCount )
-    {
-        xCount = itemCount;
-    }
-
-    int yCount = itemCount / xCount;
-    if( itemCount % xCount != 0 )
-    {
-        ++yCount;
-    }
-    if( yCount > xCount )
-    {
-        yCount = xCount;
-    }
-    // Draw the selected items into the grid cells
-    QPixmap dragPixmap( xCount * size + xCount - 1, yCount * size + yCount - 1 );
-    dragPixmap.fill( Qt::transparent );
-
-    QPainter painter( &dragPixmap );
-    painter.setRenderHint( QPainter::Antialiasing );
-
-    QPixmap pixmap;
-    switch ( type )
-    {
-    case MediaTypeArtist:
-        pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
-        break;
-    case MediaTypeAlbum:
-        pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
-        break;
-    case MediaTypeTrack:
-        pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
-        break;
-    }
-
-    int x = 0;
-    int y = 0;
-    for( int i = 0; i < itemCount; ++i )
-    {
-
-        painter.drawPixmap( x, y, pixmap );
-
-        x += size + 1;
-        if ( x >= dragPixmap.width() )
-        {
-            x = 0;
-            y += size + 1;
-        }
-        if ( y >= dragPixmap.height() )
-        {
-            break;
-        }
-    }
-
-    return dragPixmap;
-}
-
-void
-drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& figRectIn )
-{
-    QRect figRect = figRectIn;
-    if ( text.length() == 1 )
-        figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
-
-    QPen origpen = painter->pen();
-    QPen pen = origpen;
-    pen.setWidth( 1.0 );
-    painter->setPen( pen );
-    painter->drawRect( figRect );
-
-    // circles look bad. make it an oval. (thanks, apple)
-    const int bulgeWidth = 8;
-    const int offset = 0; // number of pixels to begin, counting inwards from figRect.x() and figRect.width(). 0 means start at each end, negative means start inside the rect.
-
-    QPainterPath ppath;
-    ppath.moveTo( QPoint( figRect.x() + offset, figRect.y() + figRect.height() / 2 ) );
-    QRect leftArcRect( figRect.x() + offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
-    ppath.arcTo( leftArcRect, 90, 180 );
-    painter->drawPath( ppath );
-
-    ppath = QPainterPath();
-    ppath.moveTo( figRect.x() + figRect.width() - offset, figRect.y() + figRect.height() / 2 );
-    leftArcRect = QRect( figRect.x() + figRect.width() - offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
-    ppath.arcTo( leftArcRect, 270, 180 );
-    painter->drawPath( ppath );
-
-    painter->setPen( origpen );
-
-#ifdef Q_WS_MAC
-    figRect.adjust( -1, 0, 0, 0 );
-#endif
-
-    QTextOption to( Qt::AlignCenter );
-    painter->setPen( Qt::white );
-    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
-}
-
-void
-drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor )
-{
-    p->setPen( palette.mid().color().lighter( lightnessFactor * 100 ) );
-    p->setBrush( palette.highlight().color().lighter( lightnessFactor * 100 ) );
-    p->drawRoundedRect( r, 4.0, 4.0 );
-}
-
-
-void
-unmarginLayout( QLayout* layout )
-{
-    layout->setContentsMargins( 0, 0, 0, 0 );
-    layout->setMargin( 0 );
-    layout->setSpacing( 0 );
-
-    for ( int i = 0; i < layout->count(); i++ )
-    {
-        QLayout* childLayout = layout->itemAt( i )->layout();
-        if ( childLayout )
-            unmarginLayout( childLayout );
-    }
-}
-
-
 NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 {
     m_noProxyHosts = QStringList( other.m_noProxyHosts );
@@ -479,23 +310,14 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 
 
 QList< QNetworkProxy >
-NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
-{
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
-    QList< QNetworkProxy > proxies = proxyFactory->queryProxy( query );
-    return proxies;
-}
-
-
-QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
-    if ( hostname.isEmpty() || m_noProxyHosts.contains( hostname ) )
-        proxies << QNetworkProxy( QNetworkProxy::NoProxy );
+    if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || m_noProxyHosts.contains( hostname ) || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
+        proxies << systemProxyForQuery( query );
     else
-        proxies << m_proxy << QNetworkProxy( QNetworkProxy::NoProxy ) << QNetworkProxy( QNetworkProxy::DefaultProxy );
+        proxies << m_proxy << systemProxyForQuery( query );
 
     return proxies;
 }
@@ -602,6 +424,7 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
                 *currFactory = *factory;
             }
         }
+        QNetworkProxyFactory::setApplicationProxyFactory( factory );
     }
 
     *s_threadProxyFactoryHash[ QThread::currentThread() ] = *factory;
@@ -637,7 +460,7 @@ nam()
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
     tDebug( LOGEXTRA ) << "created new nam for thread " << QThread::currentThread();
-    
+
     return newNam;
 }
 
@@ -663,9 +486,9 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
             proxyFactory->setProxy( proxy );
             //FIXME: Jreen is broke without this
             QNetworkProxy::setApplicationProxy( proxy );
+            if ( !s->proxyNoProxyHosts().isEmpty() )
+                proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
         }
-        if ( !s->proxyNoProxyHosts().isEmpty() )
-            proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
 
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
@@ -680,122 +503,34 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 }
 
 
-#ifndef TOMAHAWK_HEADLESS
-
-QWidget*
-tomahawkWindow()
+bool
+newerVersion( const QString& oldVersion, const QString& newVersion )
 {
-    QWidgetList widgetList = qApp->topLevelWidgets();
+    if ( oldVersion.isEmpty() || newVersion.isEmpty() )
+        return false;
+
+    QStringList oldVList = oldVersion.split( ".", QString::SkipEmptyParts );
+    QStringList newVList = newVersion.split( ".", QString::SkipEmptyParts );
+
     int i = 0;
-    while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
-        i++;
-
-    if ( i == widgetList.count() )
+    foreach ( const QString& nvPart, newVList )
     {
-        qDebug() << Q_FUNC_INFO << "could not find main Tomahawk mainwindow";
-        Q_ASSERT( false );
-        return 0;
+        if ( i + 1 > oldVList.count() )
+            return true;
+
+        int nviPart = nvPart.toInt();
+        int oviPart = oldVList.at( i++ ).toInt();
+
+        if ( nviPart > oviPart )
+            return true;
+
+        if ( nviPart < oviPart )
+            return false;
     }
 
-    QWidget *widget = widgetList.at( i );
-    return widget;
+    return false;
 }
 
-
-#ifndef Q_WS_MAC
-void
-bringToFront()
-{
-#if defined(Q_WS_X11)
-    {
-        qDebug() << Q_FUNC_INFO;
-
-        QWidget* widget = tomahawkWindow();
-        if ( !widget )
-            return;
-
-        widget->show();
-        widget->activateWindow();
-        widget->raise();
-
-        WId wid = widget->winId();
-        NETWM::init();
-
-        XEvent e;
-        e.xclient.type = ClientMessage;
-        e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
-        e.xclient.display = QX11Info::display();
-        e.xclient.window = wid;
-        e.xclient.format = 32;
-        e.xclient.data.l[0] = 2;
-        e.xclient.data.l[1] = QX11Info::appTime();
-        e.xclient.data.l[2] = 0;
-        e.xclient.data.l[3] = 0l;
-        e.xclient.data.l[4] = 0l;
-
-        XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
-    }
-#elif defined(Q_WS_WIN)
-    {
-        qDebug() << Q_FUNC_INFO;
-
-        QWidget* widget = tomahawkWindow();
-        if ( !widget )
-            return;
-
-        widget->show();
-        widget->activateWindow();
-        widget->raise();
-
-        WId wid = widget->winId();
-
-        HWND hwndActiveWin = GetForegroundWindow();
-        int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
-        if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
-        {
-            SetForegroundWindow( wid );
-            SetFocus( wid );
-            AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
-        }
-    }
-#endif
-}
-#endif
-
-#endif
-
-
-QPixmap
-createAvatarFrame( const QPixmap &avatar )
-{
-    QPixmap frame( ":/data/images/avatar_frame.png" );
-    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
-    QPainter painter( &frame );
-    painter.drawPixmap( (frame.height() - scaledAvatar.height()) / 2, (frame.width() - scaledAvatar.width()) / 2, scaledAvatar );
-
-    return frame;
-}
-
-
-void
-crash()
-{
-    volatile int* a = (int*)(NULL);
-    *a = 1;
-}
-
-int
-headerHeight()
-{
-    return s_headerHeight;
-}
-
-void
-setHeaderHeight( int height )
-{
-    s_headerHeight = height;
-}
 
 // taken from util/fileutils.cpp in kdevplatform
 bool
@@ -828,6 +563,22 @@ quint64 infosystemRequestId()
     quint64 result = s_infosystemRequestId;
     s_infosystemRequestId++;
     return result;
+}
+
+
+QString
+md5( const QByteArray& data )
+{
+    QByteArray const digest = QCryptographicHash::hash( data, QCryptographicHash::Md5 );
+    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
+}
+
+
+void
+crash()
+{
+    volatile int* a = (int*)(NULL);
+    *a = 1;
 }
 
 } // ns

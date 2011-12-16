@@ -22,7 +22,7 @@
 #include "GetNewStuffDelegate.h"
 #include "GetNewStuffModel.h"
 
-GetNewStuffDialog::GetNewStuffDialog( QWidget *parent, Qt::WindowFlags f )
+GetNewStuffDialog::GetNewStuffDialog( QWidget* parent, Qt::WindowFlags f )
     : QDialog( parent, f )
     , ui( new Ui::GetNewStuffDialog )
     , m_model( new GetNewStuffModel( this ) )
@@ -37,15 +37,16 @@ GetNewStuffDialog::GetNewStuffDialog( QWidget *parent, Qt::WindowFlags f )
 
     ui->listView->setMouseTracking( true );
 
+    setMinimumSize( 560, 350 );
+
 #ifdef Q_WS_MAC
-    setMinimumSize( 510, 350 );
-    setMaximumSize( 510, 350 );
+    setMaximumSize( 560, 350 );
     setSizeGripEnabled( false );
 
     ui->listView->setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif
-
 }
+
 
 GetNewStuffDialog::~GetNewStuffDialog()
 {

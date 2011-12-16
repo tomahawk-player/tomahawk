@@ -78,7 +78,7 @@
    </widget>
    <widget class="QMenu" name="menuApp">
     <property name="title">
-     <string>&amp;Tomahawk</string>
+     <string>&amp;Controls</string>
     </property>
     <addaction name="actionPlay"/>
     <addaction name="actionPrevious"/>

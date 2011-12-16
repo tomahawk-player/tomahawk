@@ -19,15 +19,13 @@
 #ifndef VIEWPAGE_H
 #define VIEWPAGE_H
 
-#include <QObject>
-
 #include "typedefs.h"
 #include "playlistinterface.h"
 #include "artist.h"
 #include "album.h"
 #include "utils/tomahawkutils.h"
 
-#include "dllmacro.h"
+#include <QPixmap>
 
 namespace Tomahawk
 {

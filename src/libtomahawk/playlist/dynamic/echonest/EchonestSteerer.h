@@ -44,6 +44,7 @@ public:
     virtual void paintEvent(QPaintEvent* );
 
 public slots:
+    void applySteering();
     void resetSteering( bool automatic = false );
 
     void fadeIn();
@@ -56,6 +57,9 @@ signals:
     void reset();
 
     void resized();
+
+    // interface to DynamicWidget
+    void steeringChanged();
 private slots:
     void changed();
 
@@ -77,6 +81,7 @@ private:
     QLabel* m_steerBottom;
 
     // icons on the right
+    QToolButton* m_apply;
     QToolButton* m_reset;
 
     // animations

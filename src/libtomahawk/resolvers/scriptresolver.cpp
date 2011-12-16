@@ -32,7 +32,7 @@
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
-    : Tomahawk::ExternalResolver( exe )
+    : Tomahawk::ExternalResolverGui( exe )
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
     , m_ready( false )
@@ -78,6 +78,23 @@ ScriptResolver::~ScriptResolver()
     if ( !m_configWidget.isNull() )
         delete m_configWidget.data();
 }
+
+
+Tomahawk::ExternalResolver*
+ScriptResolver::factory( const QString& exe )
+{
+    ExternalResolver* res = 0;
+
+    const QFileInfo fi( exe );
+    if ( fi.suffix() != "js" && fi.suffix() != "script" )
+    {
+        res = new ScriptResolver( exe );
+        tLog() << Q_FUNC_INFO << exe << "Loaded.";
+    }
+
+    return res;
+}
+
 
 void
 ScriptResolver::start()
@@ -135,17 +152,20 @@ ScriptResolver::reload()
     }
 }
 
+
 bool
 ScriptResolver::running() const
 {
     return !m_stopped;
 }
 
+
 void
 ScriptResolver::readStderr()
 {
     tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
+
 
 ScriptResolver::ErrorState
 ScriptResolver::error() const

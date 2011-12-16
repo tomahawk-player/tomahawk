@@ -24,9 +24,11 @@
 #include <QScrollBar>
 
 #include "audio/audioengine.h"
+#include "context/ContextWidget.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "widgets/overlaywidget.h"
 
+#include "contextmenu.h"
 #include "tomahawksettings.h"
 #include "treeheader.h"
 #include "treeitemdelegate.h"
@@ -47,6 +49,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
 {
@@ -130,11 +133,11 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( filteringStarted() ), SLOT( onFilteringStarted() ) );
     connect( m_proxyModel, SIGNAL( filteringFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
+    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     guid(); // this will set the guid on the header
-    setAcceptDrops( false );
 
     if ( model->columnStyle() == TreeModel::TrackOnly )
     {
@@ -145,6 +148,29 @@ ArtistView::setTreeModel( TreeModel* model )
     {
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
+}
+
+
+void
+ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
+{
+    QTreeView::currentChanged( current, previous );
+
+    if ( !m_updateContextView )
+        return;
+
+    TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    if ( item )
+    {
+        if ( !item->result().isNull() )
+            ViewManager::instance()->context()->setQuery( item->result()->toQuery() );
+        else if ( !item->artist().isNull() )
+            ViewManager::instance()->context()->setArtist( item->artist() );
+        else if ( !item->album().isNull() )
+            ViewManager::instance()->context()->setAlbum( item->album() );
+        else if ( !item->query().isNull() )
+            ViewManager::instance()->context()->setQuery( item->query() );
     }
 }
 
@@ -167,10 +193,10 @@ ArtistView::onItemActivated( const QModelIndex& index )
     }
 }
 
+
 void
 ArtistView::keyPressEvent( QKeyEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     QTreeView::keyPressEvent( event );
 
     if ( !model() )
@@ -180,13 +206,6 @@ ArtistView::keyPressEvent( QKeyEvent* event )
     {
         onItemActivated( currentIndex() );
     }
-}
-
-
-void
-ArtistView::paintEvent( QPaintEvent* event )
-{
-    QTreeView::paintEvent( event );
 }
 
 
@@ -203,6 +222,23 @@ ArtistView::resizeEvent( QResizeEvent* event )
     {
         m_header->resizeSection( 0, event->size().width() );
     }
+}
+
+
+void
+ArtistView::onItemCountChanged( unsigned int items )
+{
+    if ( items == 0 )
+    {
+        if ( m_model->collection().isNull() || ( !m_model->collection().isNull() && m_model->collection()->source()->isLocal() ) )
+            m_overlay->setText( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+        else
+            m_overlay->setText( tr( "This collection is currently empty." ) );
+
+        m_overlay->show();
+    }
+    else
+        m_overlay->hide();
 }
 
 
@@ -369,6 +405,9 @@ ArtistView::onMenuTriggered( int action )
 bool
 ArtistView::jumpToCurrentTrack()
 {
+    if ( !m_proxyModel )
+        return false;
+
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }

@@ -61,6 +61,8 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
+    Tomahawk::collection_ptr collection() const { return m_collection; }
+
     void clear();
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
@@ -87,17 +89,22 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
+    void addArtists( const QList<Tomahawk::artist_ptr>& artists );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void trackCountChanged( unsigned int tracks );
+    void itemCountChanged( unsigned int items );
 
     void loadingStarted();
     void loadingFinished();
+
 private slots:
     void onDataChanged();
+
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+    void onCollectionChanged();
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
@@ -109,6 +116,8 @@ private:
     QString m_title;
     QString m_description;
     bool m_overwriteOnAdd;
+
+    Tomahawk::collection_ptr m_collection;
 
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
 };

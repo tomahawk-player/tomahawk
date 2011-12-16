@@ -21,13 +21,12 @@
 
 #include "dllmacro.h"
 
-#include <QtGui/QAction>
-
+#include <QAction>
 
 class DLLEXPORT ActionCollection : public QObject
 {
     Q_OBJECT
-    
+
 public:
     static ActionCollection* instance();
 
@@ -35,9 +34,15 @@ public:
     ~ActionCollection();
 
     void initActions();
-    
-    QAction* getAction( const QString &name );
-    
+
+    QAction* getAction( const QString& name );
+
+public slots:
+    void togglePrivateListeningMode();
+
+signals:
+    void privacyModeChanged();
+
 private:
     static ActionCollection* s_instance;
 

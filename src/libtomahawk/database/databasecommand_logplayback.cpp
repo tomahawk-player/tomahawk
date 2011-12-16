@@ -36,8 +36,8 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
-    connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
-             source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr, unsigned int ) ),
+             source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr, unsigned int ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
 
@@ -60,7 +60,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
     // if the play time is more than 10 minutes in the past, ignore
     else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < STARTED_THRESHOLD )
     {
-        emit trackPlaying( q );
+        emit trackPlaying( q, m_trackDuration );
     }
 
     if ( source()->isLocal() )

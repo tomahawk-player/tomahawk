@@ -1,19 +1,21 @@
-
-/*
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "sourcetree/sourcesmodel.h"
 
@@ -23,8 +25,10 @@
 #include <QSize>
 
 #include "sourcetree/items/sourcetreeitem.h"
-#include "sourcetree/items/collectionitem.h"
+#include "sourcetree/items/sourceitem.h"
+#include "sourcetree/items/groupitem.h"
 #include "sourcetree/items/genericpageitems.h"
+#include "sourcetree/items/historyitem.h"
 #include "sourcelist.h"
 #include "playlist.h"
 #include "collection.h"
@@ -48,6 +52,7 @@ SourcesModel::SourcesModel( QObject* parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
+    appendGroups();
     appendItem( source_ptr() );
 
     onSourcesAdded( SourceList::instance()->sources() );
@@ -69,6 +74,9 @@ SourcesModel::rowTypeToString( RowType type )
 {
     switch ( type )
     {
+        case Group:
+            return tr( "Group" );
+
         case Collection:
             return tr( "Collection" );
 
@@ -90,35 +98,35 @@ SourcesModel::rowTypeToString( RowType type )
 QVariant
 SourcesModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() )
+    if ( !index.isValid() )
         return QVariant();
 
-    switch( role )
+    switch ( role )
     {
-    case Qt::SizeHintRole:
-        return QSize( 0, 18 );
-    case SourceTreeItemRole:
-        return QVariant::fromValue< SourceTreeItem* >( itemFromIndex( index ) );
-    case SourceTreeItemTypeRole:
-        return itemFromIndex( index )->type();
-    case Qt::DisplayRole:
-    case Qt::EditRole:
-        return itemFromIndex( index )->text();
-    case Qt::DecorationRole:
-        return itemFromIndex( index )->icon();
-    case SourcesModel::SortRole:
-        return itemFromIndex( index )->peerSortValue();
-    case SourcesModel::IDRole:
-        return itemFromIndex( index )->IDValue();
-    case SourcesModel::LatchedOnRole:
-    {
-        if ( itemFromIndex( index )->type() == Collection )
+        case Qt::SizeHintRole:
+            return QSize( 0, 18 );
+        case SourceTreeItemRole:
+            return QVariant::fromValue< SourceTreeItem* >( itemFromIndex( index ) );
+        case SourceTreeItemTypeRole:
+            return itemFromIndex( index )->type();
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return itemFromIndex( index )->text();
+        case Qt::DecorationRole:
+            return itemFromIndex( index )->icon();
+        case SourcesModel::SortRole:
+            return itemFromIndex( index )->peerSortValue();
+        case SourcesModel::IDRole:
+            return itemFromIndex( index )->IDValue();
+        case SourcesModel::LatchedOnRole:
         {
-            CollectionItem* cItem = qobject_cast< CollectionItem* >( itemFromIndex( index ) );
-            return cItem->localLatchedOn();
+            if ( itemFromIndex( index )->type() == Collection )
+            {
+                SourceItem* cItem = qobject_cast< SourceItem* >( itemFromIndex( index ) );
+                return cItem->localLatchedOn();
+            }
+            return false;
         }
-        return false;
-    }
     }
     return QVariant();
 }
@@ -234,21 +242,63 @@ SourcesModel::supportedDropActions() const
 Qt::ItemFlags
 SourcesModel::flags( const QModelIndex& index ) const
 {
-    if ( index.isValid() ) {
+    if ( index.isValid() )
+    {
         return itemFromIndex( index )->flags();
-    } else {
-        return 0;
     }
+    else
+        return 0;
+}
+
+
+void
+SourcesModel::appendGroups()
+{
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 2 );
+
+    SourceTreeItem* divider = new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 0 );
+    HistoryItem* history = new HistoryItem( this, m_rootItem, tr( "History" ), 5 );
+    GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 10 );
+
+    // super collection
+    GenericPageItem* loved = new GenericPageItem( this, browse, tr( "Top Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
+                                                  boost::bind( &ViewManager::showTopLovedPage, ViewManager::instance() ),
+                                                  boost::bind( &ViewManager::topLovedWidget, ViewManager::instance() ) );
+    loved->setSortValue( -250 );
+
+    // add misc children of root node
+    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
+                                                   boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
+                                                   boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() ) );
+    recent->setSortValue( -300 );
+
+    GenericPageItem* hot = new GenericPageItem( this, browse, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
+                                                boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
+    hot->setSortValue( -300 );
+
+    m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 15 );
+
+    endInsertRows();
 }
 
 
 void
 SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-    // append to end
-    new CollectionItem( this, m_rootItem, source );
+    SourceTreeItem* parent;
+    if ( !source.isNull() && source->isLocal() )
+    {
+        parent = m_rootItem;
+    }
+    else
+    {
+        parent = m_collectionsGroup;
+    }
 
+    QModelIndex idx = indexFromItem( parent );
+    beginInsertRows( idx, rowCount( idx ), rowCount( idx ) );
+    new SourceItem( this, parent, source );
     endInsertRows();
 }
 
@@ -263,7 +313,7 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
     for ( int row = 0; row < rows; row++ )
     {
         QModelIndex idx = index( row, 0, QModelIndex() );
-        CollectionItem* item = static_cast< CollectionItem* >( idx.internalPointer() );
+        SourceItem* item = static_cast< SourceItem* >( idx.internalPointer() );
         if ( item && item->source() == source )
         {
 //            qDebug() << "Found removed source item:" << item->source()->userName();
@@ -346,11 +396,11 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
                 m_sourcesWithViewPageItems[ s ] = collectionOfPlaylist;
                 tDebug() << "Emitting dataChanged for offline source:" << idx << idx.isValid() << collectionOfPlaylist << collectionOfPlaylist->text();
                 emit dataChanged( idx, idx );
-
             }
         }
     }
 }
+
 
 SourceTreeItem*
 SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
@@ -423,7 +473,6 @@ SourcesModel::itemUpdated()
 void
 SourcesModel::onItemRowsAddedBegin( int first, int last )
 {
-
     Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
@@ -483,6 +532,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     }
     m_viewPageDelayedCacheItem = 0;
 }
+
 
 void
 SourcesModel::onWidgetDestroyed( QWidget* w )
@@ -574,9 +624,17 @@ SourcesModel::itemSelectRequest( SourceTreeItem* item )
     emit selectRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }
 
+
 void
 SourcesModel::itemExpandRequest( SourceTreeItem *item )
 {
     qDebug() << "expanding source" << indexFromItem( item ) << item;
     emit expandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
+}
+
+
+void
+SourcesModel::itemToggleExpandRequest( SourceTreeItem *item )
+{
+    emit toggleExpandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }

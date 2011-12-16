@@ -24,8 +24,9 @@
 #include <QTimer>
 
 #include "viewpage.h"
-#include "dllmacro.h"
 #include "albumproxymodel.h"
+#include "widgets/overlaywidget.h"
+#include "dllmacro.h"
 
 class AlbumModel;
 class LoadingSpinner;
@@ -44,6 +45,9 @@ public:
     AlbumModel* model() const { return m_model; }
     AlbumProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
+
+    bool autoFitItems() const { return m_autoFitItems; }
+    void setAutoFitItems( bool b ) { m_autoFitItems = b; }
 
     void setAlbumModel( AlbumModel* model );
     void setModel( QAbstractItemModel* model );
@@ -68,6 +72,8 @@ protected:
     void resizeEvent( QResizeEvent* event );
 
 private slots:
+    void onItemCountChanged( unsigned int items );
+
     void onFilterChanged( const QString& filter );
 
     void onViewChanged();
@@ -78,6 +84,10 @@ private:
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
     LoadingSpinner* m_loadingSpinner;
+    OverlayWidget* m_overlay;
+
+    bool m_inited;
+    bool m_autoFitItems;
 
     QTimer m_timer;
 };

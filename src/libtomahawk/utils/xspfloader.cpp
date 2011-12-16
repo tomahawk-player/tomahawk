@@ -18,7 +18,8 @@
 
 #include "xspfloader.h"
 
-#include <QApplication>
+#include "headlesscheck.h"
+
 #include <QDomDocument>
 
 #include "utils/tomahawkutils.h"
@@ -27,6 +28,7 @@
 #include "sourcelist.h"
 #include "playlist.h"
 #include <XspfUpdater.h>
+#include <pipeline.h>
 
 using namespace Tomahawk;
 
@@ -200,12 +202,18 @@ XSPFLoader::gotBody()
             continue;
         }
 
-        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), m_autoResolve );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), false );
         q->setDuration( duration.toInt() / 1000 );
         if ( !url.isEmpty() )
             q->setResultHint( url );
 
         m_entries << q;
+    }
+
+    if ( m_autoResolve )
+    {
+        for ( int i = m_entries.size() - 1; i >= 0; i-- )
+            Pipeline::instance()->resolve( m_entries[ i ] );
     }
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
@@ -227,9 +235,16 @@ XSPFLoader::gotBody()
                                        m_entries );
 
         // 10 minute default---for now, no way to change it
+        connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
         new Tomahawk::XspfUpdater( m_playlist, 6000000, m_autoUpdate, m_url.toString() );
-        deleteLater();
+        emit ok( m_playlist );
+    }
+    else{
+
+        if( !m_entries.isEmpty() )
+            emit tracks( m_entries );
     }
 
-    emit ok( m_playlist );
+    deleteLater();
+
 }

@@ -33,7 +33,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <dynamic/GeneratorInterface.h>
+#include "dynamic/GeneratorInterface.h"
 #include "RecentlyPlayedPlaylistsModel.h"
 
 #define HISTORY_TRACK_ITEMS 25
@@ -48,9 +48,8 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     , ui( new Ui::WelcomeWidget )
 {
     ui->setupUi( this );
-
-    ui->splitter_2->setStretchFactor( 0, 2 );
-    ui->splitter_2->setStretchFactor( 0, 1 );
+    ui->splitter_2->setStretchFactor( 0, 3 );
+    ui->splitter_2->setStretchFactor( 1, 1 );
 
     RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
@@ -73,8 +72,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     updatePlaylists();
 
-    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
-
     m_tracksModel = new PlaylistModel( ui->tracksView );
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
@@ -88,9 +85,10 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
-    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
+    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
+    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
 }
 
 
@@ -98,6 +96,21 @@ WelcomeWidget::~WelcomeWidget()
 {
     delete ui;
 }
+
+
+PlaylistInterface*
+WelcomeWidget::playlistInterface() const
+{
+    return ui->tracksView->playlistInterface();
+}
+
+
+bool
+WelcomeWidget::jumpToCurrentTrack()
+{
+    return ui->tracksView->jumpToCurrentTrack();
+}
+
 
 bool
 WelcomeWidget::isBeingPlayed() const
@@ -107,11 +120,12 @@ WelcomeWidget::isBeingPlayed() const
 
 
 void
-WelcomeWidget::updateRecentTracks()
+WelcomeWidget::onSourcesReady()
 {
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 
-    connect( SourceList::instance()->getLocal().data(), SIGNAL( stats( QVariantMap ) ), this, SLOT( updateRecentAdditions() ) );
+    foreach ( const source_ptr& source, SourceList::instance()->sources() )
+        onSourceAdded( source );
 }
 
 
@@ -139,7 +153,8 @@ WelcomeWidget::updatePlaylists()
 void
 WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 {
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ), Qt::UniqueConnection );
+    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::UniqueConnection );
 }
 
 
@@ -167,7 +182,7 @@ WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
         TrackModelItem* youngestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( 0, 0, QModelIndex() ) );
         if ( youngestItem->query()->playedBy().second <= playtime )
-            m_tracksModel->insert( 0, query );
+            m_tracksModel->insert( query, 0 );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -177,14 +192,14 @@ WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
                 if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
                 {
-                    m_tracksModel->insert( i + 1, query );
+                    m_tracksModel->insert( query, i + 1 );
                     break;
                 }
             }
         }
     }
     else
-        m_tracksModel->insert( 0, query );
+        m_tracksModel->insert( query, 0 );
 
     if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
         m_tracksModel->remove( HISTORY_TRACK_ITEMS );
@@ -315,12 +330,17 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( type == RecentlyPlayedPlaylistsModel::Station )
     {
         descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
-    } else
+    }
+    else
     {
         descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
     }
+
     QColor c = painter->pen().color();
-    painter->setPen( QColor( Qt::gray ).darker() );
+    if ( !( option.state & QStyle::State_Selected && option.state & QStyle::State_Active ) )
+    {
+        painter->setPen( QColor( Qt::gray ).darker() );
+    }
 
     QRect rectText = option.rect.adjusted( 66, 20, -leftEdge - 10, -8 );
 #ifdef Q_WS_MAC

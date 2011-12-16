@@ -19,7 +19,7 @@
 #include "AtticaManager.h"
 
 #include "utils/tomahawkutils.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettingsGui.h"
 #include "pipeline.h"
 
 #include <attica/downloaditem.h>
@@ -44,7 +44,9 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org:10480/resolvers/providers.xml" ) );
+    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+
+    qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }
 
 
@@ -149,6 +151,7 @@ AtticaManager::pathFromId( const QString& resolverId ) const
     return m_resolverStates.value( resolverId ).scriptPath;
 }
 
+
 void
 AtticaManager::uploadRating( const Content& c )
 {
@@ -165,7 +168,7 @@ AtticaManager::uploadRating( const Content& c )
         }
     }
 
-    TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
+    TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
 
     PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
@@ -174,6 +177,7 @@ AtticaManager::uploadRating( const Content& c )
 
     emit resolverStateChanged( c.id() );
 }
+
 
 bool
 AtticaManager::userHasRated( const Content& c ) const
@@ -202,7 +206,7 @@ AtticaManager::resolversList( BaseJob* j )
     ListJob< Content >* job = static_cast< ListJob< Content >* >( j );
 
     m_resolvers = job->itemList();
-    m_resolverStates = TomahawkSettings::instance()->atticaResolverStates();
+    m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
 
     // load icon cache from disk, and fetch any we are missing
     loadPixmapsFromCache();
@@ -245,6 +249,7 @@ AtticaManager::resolverIconFetched()
     m_resolverStates[ resolverId ].pixmap = icon;
 }
 
+
 void
 AtticaManager::syncServerData()
 {
@@ -271,62 +276,16 @@ AtticaManager::syncServerData()
             if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
                  !upstream.version().isEmpty() )
             {
-                if ( newerVersion( r.version, upstream.version() ) )
+                if ( TomahawkUtils::newerVersion( r.version, upstream.version() ) )
                 {
                     m_resolverStates[ id ].state = NeedsUpgrade;
+                    QMetaObject::invokeMethod( this, "upgradeResolver", Qt::QueuedConnection, Q_ARG( Attica::Content, upstream ) );
                 }
             }
         }
     }
 }
 
-bool
-AtticaManager::newerVersion( const QString& older, const QString& newer ) const
-{
-    // Dumb version comparison. Expects two strings, X.Y and Z.V. Returns true if Z > v || Z == V && V > Y
-    // DOES NOT support X.Y.Z version strings
-    if ( older.isEmpty() || newer.isEmpty() )
-        return false;
-
-    QPair<int, int> oldVer, newVer;
-    QStringList parts = older.split( "." );
-
-    if ( parts.size() == 1 )
-    {
-        oldVer.first = parts[ 0 ].toInt();
-        oldVer.second = 0;
-    }
-    else if ( parts.size() == 2 )
-    {
-        oldVer.first = parts[ 0 ].toInt();
-        oldVer.second = parts[ 1 ].toInt();;
-    }
-    else
-        return false;
-
-    parts = newer.split( "." );
-    if ( parts.size() == 1 )
-    {
-        newVer.first = parts[ 0 ].toInt();
-        newVer.second = 0;
-    }
-    else if ( parts.size() == 2 )
-    {
-        newVer.first = parts[ 0 ].toInt();
-        newVer.second = parts[ 1 ].toInt();;
-    }
-    else
-        return false;
-
-    // Do the comparison
-    if ( newVer.first > oldVer.first )
-        return true;
-    if ( newVer.first == oldVer.first &&
-         newVer.second > oldVer.second )
-        return true;
-
-    return false;
-}
 
 void
 AtticaManager::installResolver( const Content& resolver )
@@ -346,6 +305,7 @@ AtticaManager::installResolver( const Content& resolver )
 
     job->start();
 }
+
 
 void
 AtticaManager::upgradeResolver( const Content& resolver )
@@ -415,7 +375,7 @@ AtticaManager::payloadFetched()
             // Do the install / add to tomahawk
             Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
             m_resolverStates[ resolverId ].state = Installed;
-            TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
+            TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
             emit resolverStateChanged( resolverId );
         }
@@ -511,7 +471,7 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
             if ( resolver.id() == atticaId ) // this is the one
             {
                 m_resolverStates[ atticaId ].state = Uninstalled;
-                TomahawkSettings::instance()->setAtticaResolverState( atticaId, Uninstalled );
+                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( atticaId, Uninstalled );
 
                 doResolverRemove( atticaId );
             }
@@ -529,7 +489,7 @@ AtticaManager::uninstallResolver( const Content& resolver )
         emit resolverStateChanged( resolver.id() );
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
-        TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
+        TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
     }
 
     Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );

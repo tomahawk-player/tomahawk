@@ -24,7 +24,10 @@
 #include "sip/SipPlugin.h"
 
 #include "avatarmanager.h"
-#include "xmlconsole.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "xmlconsole.h"
+#endif
 
 #include <jreen/client.h>
 #include <jreen/disco.h>
@@ -39,7 +42,9 @@
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
 
-#include <QMessageBox>
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
+#endif
 
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
@@ -56,7 +61,10 @@ public:
 
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
+
+#ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
+#endif
 
     // used by XmppAccount to expose connection state and controls
     Tomahawk::Accounts::Account::ConnectionState connectionState() const;
@@ -110,8 +118,6 @@ private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
-    QMenu* m_menu;
-    XmlConsole* m_xmlConsole;
     QString m_currentUsername;
     QString m_currentPassword;
     QString m_currentServer;
@@ -126,7 +132,11 @@ private:
     Jreen::MUCRoom *m_room;
     Jreen::SimpleRoster *m_roster;
     QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+#ifndef ENABLE_HEADLESS
     QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
+    QMenu* m_menu;
+    XmlConsole* m_xmlConsole;
+#endif
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager *m_avatarManager;
 };

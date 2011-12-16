@@ -29,7 +29,7 @@
 #include "database/databasecommand_allalbums.h"
 
 #include "utils/stylehelper.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
 #include "widgets/OverlayButton.h"
@@ -76,11 +76,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show All Releases" ) );
+    m_button->setText( tr( "Click to show Super Collection Albums" ) );
     m_button->setCheckable( true );
     m_button->setChecked( true );
 
     connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
+    connect( m_albumsModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
@@ -100,6 +101,7 @@ ArtistInfoWidget::~ArtistInfoWidget()
     delete ui;
 }
 
+
 PlaylistInterface*
 ArtistInfoWidget::playlistInterface() const
 {
@@ -108,16 +110,25 @@ ArtistInfoWidget::playlistInterface() const
 
 
 void
+ArtistInfoWidget::setMode( ModelMode mode )
+{
+    m_button->setChecked( mode == InfoSystemMode );
+
+    if ( m_albumsModel->mode() != mode )
+        onModeToggle();
+
+    if ( mode == InfoSystemMode )
+        m_button->setText( tr( "Click to show Super Collection Albums" ) );
+    else
+        m_button->setText( tr( "Click to show Official Albums" ) );
+}
+
+
+void
 ArtistInfoWidget::onModeToggle()
 {
     m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->clear();
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
-
-    if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show All Releases" ) );
-    else
-        m_button->setText( tr( "Click to show Official Releases" ) );
 }
 
 
@@ -136,6 +147,7 @@ ArtistInfoWidget::onLoadingFinished()
     m_button->show();
 }
 
+
 bool
 ArtistInfoWidget::isBeingPlayed() const
 {
@@ -150,6 +162,7 @@ ArtistInfoWidget::isBeingPlayed() const
 
     return false;
 }
+
 
 bool
 ArtistInfoWidget::jumpToCurrentTrack()
@@ -172,7 +185,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 {
     m_artist = artist;
     m_title = artist->name();
-    m_albumsModel->addAlbums( artist, QModelIndex() );
+    m_albumsModel->addAlbums( artist, QModelIndex(), true );
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();

@@ -75,3 +75,27 @@ AlbumItem::AlbumItem( const Tomahawk::album_ptr& album, AlbumItem* parent, int r
 
     toberemoved = false;
 }
+
+
+AlbumItem::AlbumItem( const Tomahawk::artist_ptr& artist, AlbumItem* parent, int row )
+    : QObject( parent )
+    , m_artist( artist )
+{
+    this->parent = parent;
+    if ( parent )
+    {
+        if ( row < 0 )
+        {
+            parent->children.append( this );
+            row = parent->children.count() - 1;
+        }
+        else
+        {
+            parent->children.insert( row, this );
+        }
+
+        this->model = parent->model;
+    }
+
+    toberemoved = false;
+}

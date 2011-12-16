@@ -24,6 +24,7 @@
 
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
+#include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_sourceoffline.h"
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
@@ -31,7 +32,7 @@
 #include <QCoreApplication>
 
 #include "utils/logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "database/databasecommand_socialaction.h"
 
 using namespace Tomahawk;
@@ -46,6 +47,7 @@ Source::Source( int id, const QString& username )
     , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
+    , m_commandCount( 0 )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
 {
@@ -57,7 +59,6 @@ Source::Source( int id, const QString& username )
         m_online = true;
     }
 
-    m_currentTrackTimer.setInterval( 600000 ); // 10 minutes
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
 }
@@ -96,6 +97,7 @@ Source::setStats( const QVariantMap& m )
 {
     m_stats = m;
     emit stats( m_stats );
+    emit stateChanged();
 }
 
 
@@ -116,6 +118,7 @@ Source::friendlyName() const
 }
 
 
+#ifndef ENABLE_HEADLESS
 void
 Source::setAvatar( const QPixmap& avatar )
 {
@@ -137,11 +140,15 @@ Source::avatar( AvatarStyle style ) const
     else
         return QPixmap();
 }
+#endif
 
 
 void
 Source::setFriendlyName( const QString& fname )
 {
+    if ( fname.isEmpty() )
+        return;
+
     m_friendlyname = fname;
     if ( m_scrubFriendlyName )
         m_friendlyname = m_friendlyname.split( "@" ).first();
@@ -176,6 +183,9 @@ Source::setOffline()
     m_online = false;
     emit offline();
 
+    m_currentTrack.clear();
+    emit stateChanged();
+
     m_cc = 0;
     DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -193,7 +203,7 @@ Source::setOnline()
     emit online();
 
     // ensure username is in the database
-    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
+    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
     connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -203,8 +213,6 @@ Source::setOnline()
 void
 Source::dbLoaded( unsigned int id, const QString& fname )
 {
-    qDebug() << Q_FUNC_INFO << id << fname;
-
     m_id = id;
     setFriendlyName( fname );
 
@@ -215,7 +223,11 @@ Source::dbLoaded( unsigned int id, const QString& fname )
 void
 Source::scanningProgress( unsigned int files )
 {
-    m_textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
+    if ( files )
+        m_textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
+    else
+        m_textStatus = tr( "Scanning" );
+
     emit stateChanged();
 }
 
@@ -224,8 +236,17 @@ void
 Source::scanningFinished( unsigned int files )
 {
     Q_UNUSED( files );
+
     m_textStatus = QString();
+
+    if ( m_updateIndexWhenSynced )
+    {
+        m_updateIndexWhenSynced = false;
+        updateTracks();
+    }
+
     emit stateChanged();
+    emit synced();
 }
 
 
@@ -233,6 +254,7 @@ void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
     Q_UNUSED( oldstate );
+
     QString msg;
     switch( newstate )
     {
@@ -251,27 +273,14 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
             msg = tr( "Parsing" );
             break;
         }
-        case DBSyncConnection::SAVING:
+        case DBSyncConnection::SCANNING:
         {
-            msg = tr( "Saving" );
+            msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
         }
         case DBSyncConnection::SYNCED:
         {
-            if ( m_updateIndexWhenSynced )
-            {
-                m_updateIndexWhenSynced = false;
-
-                DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-            }
-
             msg = QString();
-            break;
-        }
-        case DBSyncConnection::SCANNING:
-        {
-            msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
         }
 
@@ -306,11 +315,13 @@ Source::getPlaylistInterface()
 
 
 void
-Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
+Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
+
     m_currentTrack = query;
-    m_currentTrackTimer.stop();
+    m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
+
     if ( m_playlistInterface.isNull() )
         getPlaylistInterface();
     emit playbackStarted( query );
@@ -337,6 +348,67 @@ Source::trackTimerFired()
 
 
 void
+Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
+{
+    m_cmds << command;
+    if ( !command->singletonCmd() )
+        m_lastCmdGuid = command->guid();
+
+    m_commandCount = m_cmds.count();
+}
+
+
+void
+Source::executeCommands()
+{
+    if ( !m_cmds.isEmpty() )
+    {
+        QList< QSharedPointer<DatabaseCommand> > cmdGroup;
+        QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+        while ( cmd->groupable() )
+        {
+            cmdGroup << cmd;
+            if ( !m_cmds.isEmpty() && m_cmds.first()->groupable() && m_cmds.first()->commandname() == cmd->commandname() )
+                cmd = m_cmds.takeFirst();
+            else
+                break;
+        }
+
+        // return here when the last command finished
+        connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
+
+        if ( cmdGroup.count() )
+        {
+            Database::instance()->enqueue( cmdGroup );
+        }
+        else
+        {
+            Database::instance()->enqueue( cmd );
+        }
+
+        int percentage = ( float( m_commandCount - m_cmds.count() ) / (float)m_commandCount ) * 100.0;
+        m_textStatus = tr( "Saving (%1%)" ).arg( percentage );
+        emit stateChanged();
+    }
+    else
+    {
+        if ( m_updateIndexWhenSynced )
+        {
+            m_updateIndexWhenSynced = false;
+            updateTracks();
+        }
+
+        m_textStatus = QString();
+        m_state = DBSyncConnection::SYNCED;
+
+        emit commandsFinished();
+        emit stateChanged();
+        emit synced();
+    }
+}
+
+
+void
 Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 {
     emit socialAttributesChanged();
@@ -357,13 +429,24 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 
 
 void
-Source::updateIndexWhenSynced()
+Source::updateTracks()
 {
-    if ( isLocal() )
     {
         DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
-    else
-        m_updateIndexWhenSynced = true;
+
+    {
+        // Re-calculate local db stats
+        DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->get( id() ) );
+        connect( cmd, SIGNAL( done( QVariantMap ) ), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+}
+
+
+void
+Source::updateIndexWhenSynced()
+{
+    m_updateIndexWhenSynced = true;
 }

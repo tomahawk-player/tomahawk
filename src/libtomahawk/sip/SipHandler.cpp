@@ -23,7 +23,10 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QPluginLoader>
-#include <QMessageBox>
+
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
+#endif
 
 #include "functimeout.h"
 
@@ -64,6 +67,7 @@ SipHandler::~SipHandler()
 }
 
 
+#ifndef ENABLE_HEADLESS
 const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
@@ -80,7 +84,7 @@ SipHandler::avatar( const QString& name ) const
         return QPixmap();
     }
 }
-
+#endif
 
 const SipInfo
 SipHandler::sipInfo( const QString& peerId ) const
@@ -115,7 +119,7 @@ void
 SipHandler::onPeerOnline( const QString& jid )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP online:" << jid;
+    tDebug() << "SIP online:" << jid;
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
@@ -123,16 +127,10 @@ SipHandler::onPeerOnline( const QString& jid )
     if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
-        ControlConnection* conn = new ControlConnection( Servent::instance() );
+        ControlConnection* conn = new ControlConnection( Servent::instance(), QString() );
 
         const QString& nodeid = Database::instance()->dbid();
-
-        //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
-        if ( jid.contains( "@conference.") )
-            conn->setName( jid );
-        else
-            conn->setName( jid.left( jid.indexOf( "/" ) ) );
-
+        conn->setName( jid.left( jid.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
@@ -168,7 +166,7 @@ SipHandler::onPeerOffline( const QString& jid )
 void
 SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
+    tDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
 
     /*
       If only one party is externally visible, connection is obvious
@@ -211,6 +209,7 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     qDebug() << Q_FUNC_INFO << from << msg;
 }
 
+#ifndef ENABLE_HEADLESS
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
@@ -255,3 +254,4 @@ SipHandler::onAvatarReceived( const QPixmap& avatar )
 //    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
     SourceList::instance()->getLocal()->setAvatar( avatar );
 }
+#endif

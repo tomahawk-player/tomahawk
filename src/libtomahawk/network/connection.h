@@ -19,17 +19,17 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <QSharedPointer>
-#include <QTcpSocket>
-#include <QHostAddress>
-#include <QVariant>
-#include <QVariantMap>
-#include <QString>
-#include <QDataStream>
-#include <QtEndian>
-#include <QTimer>
-#include <QTime>
-#include <QPointer>
+#include <QtCore/QSharedPointer>
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QHostAddress>
+#include <QtCore/QVariant>
+#include <QtCore/QVariantMap>
+#include <QtCore/QString>
+#include <QtCore/QDataStream>
+#include <QtCore/QtEndian>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
+#include <QtCore/QPointer>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -87,6 +87,8 @@ public:
     void setMsgProcessorModeOut( quint32 m ) { m_msgprocessor_out.setMode( m ); }
     void setMsgProcessorModeIn( quint32 m ) { m_msgprocessor_in.setMode( m ); }
 
+    const QHostAddress peerIpAddress() const { return m_peerIpAddress; }
+
 signals:
     void ready();
     void failed();
@@ -128,6 +130,7 @@ protected:
     bool m_outbound, m_ready, m_onceonly;
     msg_ptr m_firstmsg;
     QString m_name;
+    QHostAddress m_peerIpAddress;
 
 private:
     void handleReadMsg();

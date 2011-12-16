@@ -33,6 +33,7 @@
 #include "playlist/treemodel.h"
 
 #include "utils/stylehelper.h"
+#include "utils/tomahawkutilsgui.h"
 
 #define ANIMATION_TIME 450
 #define SLIDE_TIME 350
@@ -93,6 +94,7 @@ ContextWidget::ContextWidget( QWidget* parent )
     setAutoFillBackground( true );
     setFixedHeight( m_minHeight );
 
+    ensurePolished();
     QPalette pal = palette();
     pal.setBrush( QPalette::Window, StyleHelper::headerLowerColor() );
     setPalette( pal );
@@ -110,6 +112,22 @@ ContextWidget::ContextWidget( QWidget* parent )
 
 ContextWidget::~ContextWidget()
 {
+}
+
+
+void
+ContextWidget::changeEvent( QEvent* e )
+{
+    QWidget::changeEvent( e );
+    switch ( e->type() )
+    {
+        case QEvent::LanguageChange:
+            ui->retranslateUi( this );
+            break;
+
+        default:
+            break;
+    }
 }
 
 
@@ -213,6 +231,44 @@ ContextWidget::fadeOut( bool animate )
 
 
 void
+ContextWidget::setArtist( const Tomahawk::artist_ptr& artist )
+{
+    if ( artist.isNull() )
+        return;
+
+    m_artist = artist;
+    if ( height() > m_minHeight )
+    {
+        foreach ( ContextProxyPage* proxy, m_pages )
+        {
+            proxy->page()->setArtist( artist );
+        }
+
+        layoutViews( true );
+    }
+}
+
+
+void
+ContextWidget::setAlbum( const Tomahawk::album_ptr& album )
+{
+    if ( album.isNull() )
+        return;
+
+    m_album = album;
+    if ( height() > m_minHeight )
+    {
+        foreach ( ContextProxyPage* proxy, m_pages )
+        {
+            proxy->page()->setAlbum( album );
+        }
+
+        layoutViews( true );
+    }
+}
+
+
+void
 ContextWidget::setQuery( const Tomahawk::query_ptr& query, bool force )
 {
     if ( query.isNull() )
@@ -275,6 +331,8 @@ ContextWidget::onAnimationFinished()
         fadeOut( false );
         m_scene->setSceneRect( ui->contextView->viewport()->rect() );
         layoutViews( false );
+        setArtist( m_artist );
+        setAlbum( m_album );
         setQuery( m_query, true );
 
         ui->toggleButton->setText( tr( "Hide Footnotes" ) );

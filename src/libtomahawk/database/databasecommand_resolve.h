@@ -41,8 +41,8 @@ public:
 
 signals:
     void results( Tomahawk::QID qid, QList<Tomahawk::result_ptr> results );
-
-public slots:
+    void albums( Tomahawk::QID qid, QList<Tomahawk::album_ptr> albums );
+    void artists( Tomahawk::QID qid, QList<Tomahawk::artist_ptr> artists );
 
 private:
     DatabaseCommand_Resolve();

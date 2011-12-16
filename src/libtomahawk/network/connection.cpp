@@ -18,8 +18,8 @@
 
 #include "connection.h"
 
-#include <QTime>
-#include <QThread>
+#include <QtCore/QTime>
+#include <QtCore/QThread>
 
 #include "network/servent.h"
 #include "utils/logger.h"
@@ -63,7 +63,7 @@ Connection::Connection( Servent* parent )
 
 Connection::~Connection()
 {
-    qDebug() << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
+    tDebug() << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
     if( !m_sock.isNull() )
     {
 //        qDebug() << "deleteLatering sock" << m_sock;
@@ -82,7 +82,7 @@ Connection::handleIncomingQueueEmpty()
     //         << "m_peer_disconnected" << m_peer_disconnected
     //         << "bytes rx" << bytesReceived();
 
-    if( m_sock->bytesAvailable() == 0 && m_peer_disconnected )
+    if( !m_sock.isNull() && m_sock->bytesAvailable() == 0 && m_peer_disconnected )
     {
         qDebug() << "No more data to read, peer disconnected. shutting down connection."
                  << "bytesavail" << m_sock->bytesAvailable()
@@ -144,13 +144,13 @@ void
 Connection::actualShutdown()
 {
     qDebug() << Q_FUNC_INFO << m_actually_shutting_down << id();
-    if( m_actually_shutting_down )
+    if ( m_actually_shutting_down )
     {
         return;
     }
     m_actually_shutting_down = true;
 
-    if( !m_sock.isNull() && m_sock->isOpen() )
+    if ( !m_sock.isNull() && m_sock->isOpen() )
     {
         m_sock->disconnectFromHost();
     }
@@ -261,7 +261,7 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
-    qDebug() << "SOCKET DISCONNECTED" << this->name() << id()
+    tDebug() << "SOCKET DISCONNECTED" << this->name() << id()
              << "shutdown will happen after incoming queue empties."
              << "bytesavail:" << m_sock->bytesAvailable()
              << "bytesRecvd" << bytesReceived();
@@ -276,13 +276,14 @@ Connection::socketDisconnected()
     }
 }
 
+
 void
-Connection::socketDisconnectedError(QAbstractSocket::SocketError e)
+Connection::socketDisconnectedError( QAbstractSocket::SocketError e )
 {
+    qDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
+
     if ( e == QAbstractSocket::RemoteHostClosedError )
         return;
-
-    qDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
 
     m_peer_disconnected = true;
 
@@ -423,16 +424,16 @@ Connection::sendMsg_now( msg_ptr msg )
 {
     //qDebug() << Q_FUNC_INFO << thread() << QThread::currentThread();
     Q_ASSERT( QThread::currentThread() == thread() );
-    Q_ASSERT( this->isRunning() );
+//    Q_ASSERT( this->isRunning() );
 
-    if( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
+    if ( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
     {
         qDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
         shutdown( false );
         return;
     }
 
-    if( ! msg->write( m_sock.data() ) )
+    if ( !msg->write( m_sock.data() ) )
     {
         //qDebug() << "Error writing to socket in sendMsg() *************";
         shutdown( false );

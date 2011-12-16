@@ -18,6 +18,7 @@
  */
 
 #include "whatshotwidget.h"
+#include "whatshotwidget_p.h"
 #include "ui_whatshotwidget.h"
 
 #include <QPainter>
@@ -36,7 +37,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <pipeline.h>
+#include "pipeline.h"
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
@@ -50,6 +51,7 @@ static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
+    , m_playlistInterface( 0 )
     , m_sortedProxy( 0 )
 {
     ui->setupUi( this );
@@ -90,6 +92,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
 
+    m_playlistInterface = new ChartsPlaylistInterface( this );
+
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
@@ -102,7 +106,15 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 WhatsHotWidget::~WhatsHotWidget()
 {
+    delete m_playlistInterface;
     delete ui;
+}
+
+
+PlaylistInterface*
+WhatsHotWidget::playlistInterface() const
+{
+    return m_playlistInterface;
 }
 
 
@@ -117,6 +129,7 @@ WhatsHotWidget::isBeingPlayed() const
 
     return false;
 }
+
 
 bool
 WhatsHotWidget::jumpToCurrentTrack()
@@ -148,25 +161,25 @@ WhatsHotWidget::fetchData()
     tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
 
+
 void
 WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     if ( requestData.caller != s_whatsHotIdentifier )
+        return;
+
+    if ( !output.canConvert< QVariantMap >() )
     {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output";
         return;
     }
 
-    tDebug( LOGVERBOSE ) << "WhatsHot: got something...";
     QVariantMap returnedData = output.toMap();
-    qDebug() << "WhatsHot::" << returnedData;
     switch ( requestData.type )
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            tDebug( LOGVERBOSE ) << "WhatsHot:: info chart capabilities";
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
-            tDebug( LOGVERBOSE ) << "WhatsHot:: " << returnedData.keys();
-
             QVariantMap defaults;
             if ( returnedData.contains( "defaults" ) )
                 defaults = returnedData.take( "defaults" ).toMap();
@@ -174,9 +187,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
             foreach ( const QString label, returnedData.keys() )
             {
-                tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
-                tDebug( LOGVERBOSE ) << "WhatsHot:: appending" << childItem->text();
                 rootItem->appendRow(childItem);
             }
 
@@ -187,7 +198,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 QStandardItem* source = rootItem->child( i, 0 );
                 if ( defaultSource.toLower() == source->text().toLower() )
                 {
-                    qDebug() << "Setting DEFAULT SOURCE:" << source->text();
                     source->setData( true, Breadcrumb::DefaultRole );
                 }
 
@@ -203,7 +213,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         {
                             if ( cur->child( k, 0 )->text() == index )
                             {
-                                tDebug() << "Found DEFAULT ITEM:" << index;
                                 cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
                                 cur->setData( true, Breadcrumb::DefaultRole );
                                 break;
@@ -218,6 +227,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             ui->breadCrumbLeft->setModel( m_sortedProxy );
             break;
         }
+
         case InfoSystem::InfoChart:
         {
             if( !returnedData.contains("type") )
@@ -229,11 +239,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
             m_queuedFetches.remove( chartId );
-            tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" )
             {
                 const QStringList artists = returnedData["artists"].toStringList();
-                tDebug( LOGVERBOSE ) << "WhatsHot: got artists! " << artists.size();
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setColumnStyle( TreeModel::TrackOnly );
@@ -251,19 +259,17 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             else if( type == "albums" )
             {
                 QList<album_ptr> al;
-                const QList<Tomahawk::InfoSystem::InfoStringHash> albums = returnedData[ "albums" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
-                tDebug( LOGVERBOSE ) << "WhatsHot: got albums! " << albums.size();
+                const QList< Tomahawk::InfoSystem::InfoStringHash > albums = returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
 
                 AlbumModel* albumModel = new AlbumModel( ui->additionsView );
                 foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, albums )
                 {
-                    qDebug() << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
+                    tDebug( LOGVERBOSE) << Q_FUNC_INFO << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
                     artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
                     album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
                     al << albumPtr;
 
                 }
-                qDebug() << "Adding albums to model";
                 albumModel->addAlbums( al );
 
                 m_albumModels[ chartId ] = albumModel;
@@ -273,8 +279,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if( type == "tracks" )
             {
-                const QList<Tomahawk::InfoSystem::InfoStringHash> tracks = returnedData[ "tracks" ].value<QList<Tomahawk::InfoSystem::InfoStringHash> >();
-                tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
+                const QList< Tomahawk::InfoSystem::InfoStringHash > tracks = returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );
@@ -294,7 +299,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else
             {
-                tDebug( LOGVERBOSE ) << "WhatsHot: got unknown chart type" << type;
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got unknown chart type" << type;
             }
             break;
         }

@@ -26,19 +26,20 @@
 #include <qjson/qobjecthelper.h>
 
 #include "query.h"
-#include "resolver.h"
+#include "ExternalResolverGui.h"
 
 #include "dllmacro.h"
 
 class QWidget;
 
-class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolver
+class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 
 public:
     explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
+    static ExternalResolver* factory( const QString& exe );
 
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }

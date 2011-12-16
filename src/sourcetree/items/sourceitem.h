@@ -16,8 +16,8 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef COLLECTION_ITEM_H
-#define COLLECTION_ITEM_H
+#ifndef SOURCE_ITEM_H
+#define SOURCE_ITEM_H
 
 #include "sourcetreeitem.h"
 
@@ -30,11 +30,11 @@ namespace Tomahawk
     class ViewPage;
 }
 
-class CollectionItem : public SourceTreeItem
+class SourceItem : public SourceTreeItem
 {
     Q_OBJECT
 public:
-    CollectionItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
+    SourceItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
 
     virtual QString text() const;
     virtual void activate();
@@ -64,11 +64,11 @@ private slots:
 
     void requestExpanding();
 
-    void tempPageActivated( Tomahawk::ViewPage* );
-    void temporaryPageDestroyed();
-
     Tomahawk::ViewPage* sourceInfoClicked();
     Tomahawk::ViewPage* getSourceInfoPage() const;
+
+    Tomahawk::ViewPage* collectionClicked();
+    Tomahawk::ViewPage* getCollectionPage() const;
 
     Tomahawk::ViewPage* coolPlaylistsClicked();
     Tomahawk::ViewPage* getCoolPlaylistsPage() const;
@@ -89,11 +89,12 @@ private:
     bool m_latchedOn;
     Tomahawk::source_ptr m_latchedOnTo;
 
-    QList< TemporaryPageItem* > m_tempItems;
+    GenericPageItem* m_collectionItem;
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_lovedTracksItem;
 
+    Tomahawk::ViewPage* m_collectionPage;
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_lovedTracksPage;

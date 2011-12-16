@@ -21,25 +21,15 @@
 
 #include "dllmacro.h"
 
-#include <QtCore/QObject>
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
-#include <QtCore/QRect>
 
-#ifndef ENABLE_HEADLESS
-    #include <QPalette>
-#endif
 
 #define RESPATH ":/data/"
 
-class QPainter;
-class QColor;
+
 class QDir;
-class QDateTime;
-class QString;
-class QPixmap;
-class QLayout;
 class QNetworkAccessManager;
 
 namespace TomahawkUtils
@@ -62,7 +52,6 @@ namespace TomahawkUtils
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
-        static QList< QNetworkProxy > proxyForQuery( const QNetworkProxyQuery & query );
 
         virtual void setNoProxyHosts( const QStringList &hosts );
         virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
@@ -85,38 +74,21 @@ namespace TomahawkUtils
 
     DLLEXPORT QString sqlEscape( QString sql );
     DLLEXPORT QString timeToString( int seconds );
-    DLLEXPORT QString ageToString( const QDateTime& time );
+    DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
-
-    DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
-    DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
-
-    DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
-    DLLEXPORT void drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor = 1 );
-
-    DLLEXPORT void unmarginLayout( QLayout* layout );
+    DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
-    DLLEXPORT QNetworkAccessManager* nam();
-
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
+    DLLEXPORT QNetworkAccessManager* nam();
     DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
+    DLLEXPORT quint64 infosystemRequestId();
 
-    DLLEXPORT QWidget* tomahawkWindow();
-    /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
-    DLLEXPORT void bringToFront();
-
-    DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
-
-    DLLEXPORT void crash();
-
-    DLLEXPORT int headerHeight();
-    DLLEXPORT void setHeaderHeight( int height );
-
+    DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
 
-    DLLEXPORT quint64 infosystemRequestId();
+    DLLEXPORT void crash();
 }
 
 #endif // TOMAHAWKUTILS_H

@@ -123,8 +123,13 @@ void
 OverlayWidget::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
+
     QPoint center( ( m_parent->width() - width() ) / 2, ( m_parent->height() - height() ) / 2 );
-    move( center );
+    if ( center != pos() )
+    {
+        move( center );
+        return;
+    }
 
     QPainter p( this );
     QRect r = contentsRect();

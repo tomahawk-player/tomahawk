@@ -134,8 +134,14 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
 
+    QString name;
+    if ( !item->album().isNull() )
+        name = item->album()->name();
+    else if ( !item->artist().isNull() )
+        name = item->artist()->name();
+
     bool oneLiner = false;
-    if ( item->album()->artist().isNull() )
+    if ( item->album().isNull() || item->album()->artist().isNull() )
         oneLiner = true;
     else
         oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
@@ -143,8 +149,9 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     if ( oneLiner )
     {
+        painter->setFont( boldFont );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
     }
     else
@@ -159,13 +166,19 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         r.setTop( r.bottom() - painter->fontMetrics().height() );
         r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
+        {
             TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
-
+            painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
+        }
+        else
+        {
 #ifdef Q_WS_MAC
-        painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
+            painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
 #else
-        painter->setPen( opt.palette.color( QPalette::Dark ) );
+            painter->setPen( opt.palette.color( QPalette::Dark ) );
 #endif
+        }
+
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
@@ -177,9 +190,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->restore();
 }
 
+
 bool
 AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    Q_UNUSED( model );
     Q_UNUSED( option );
 
     if ( event->type() != QEvent::MouseButtonRelease &&
@@ -217,7 +232,8 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
                 event->accept();
                 return true;
-            } else if ( event->type() == QEvent::MouseButtonPress )
+            }
+            else if ( event->type() == QEvent::MouseButtonPress )
             {
                 // Stop the whole album from having a down click action as we just want the artist name to be clicked
                 event->accept();
@@ -230,6 +246,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
     return false;
 }
+
 
 void
 AlbumItemDelegate::whitespaceMouseEvent()

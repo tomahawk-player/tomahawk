@@ -21,23 +21,23 @@
 #include "sourcedelegate.h"
 
 #include "items/sourcetreeitem.h"
-#include "items/collectionitem.h"
+#include "items/sourceitem.h"
 #include "items/playlistitems.h"
 #include "items/categoryitems.h"
 #include "items/temporarypageitem.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "animationhelper.h"
 #include "source.h"
 #include "tomahawksettings.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
+#include <QtGui/QApplication>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 #include <audio/audioengine.h>
 #include <actioncollection.h>
 
-#define TREEVIEW_INDENT_ADD -7
+#define TREEVIEW_INDENT_ADD 12
 
 
 SourceDelegate::SourceDelegate( QAbstractItemView* parent )
@@ -81,17 +81,21 @@ QSize
 SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     SourceTreeItem *item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
-    if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::Collection )
+    if ( type == SourcesModel::Collection )
     {
-        return QSize( option.rect.width(), 44 );
+        return QSize( option.rect.width(), 40 );
+    }
+    else if ( type == SourcesModel::Divider )
+    {
+        return QSize( option.rect.width(), 6 );
     }
     else if ( m_expandedMap.contains( index ) )
     {
         if ( !m_expandedMap.value( index )->initialized() )
         {
             int dropTypes = dropTypeCount( item );
-            qDebug() << "droptypecount is " << dropTypes;
             QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
             QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 56 );
             m_expandedMap.value( index )->initialize( originalSize, targetSize, 300 );
@@ -106,162 +110,285 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
 
 void
+SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+    SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+
+    // Paint the speaker icon next to the currently-playing playlist
+    const bool playable = ( type == SourcesModel::StaticPlaylist ||
+        type == SourcesModel::AutomaticPlaylist ||
+        type == SourcesModel::Station ||
+        type == SourcesModel::TemporaryPage ||
+        type == SourcesModel::GenericPage );
+    const bool playing = ( AudioEngine::instance()->isPlaying() || AudioEngine::instance()->isPaused() );
+
+    if ( playable && playing && item->isBeingPlayed() )
+    {
+        const int iconW = option.rect.height() - 4;
+        QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );
+        QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
+        speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
+        painter->drawPixmap( iconRect, speaker );
+    }
+}
+
+
+void
+SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QFont normal = painter->font();
+    QFont bold = painter->font();
+    bold.setBold( true );
+
+    SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+    SourceItem* colItem = qobject_cast< SourceItem* >( item );
+    Q_ASSERT( colItem );
+    bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
+
+    QString tracks;
+    QString name = index.data().toString();
+    int figWidth = 0;
+
+    if ( status && colItem && !colItem->source().isNull() )
+    {
+        tracks = QString::number( colItem->source()->trackCount() );
+        figWidth = painter->fontMetrics().width( tracks );
+        name = colItem->source()->friendlyName();
+    }
+
+    QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
+
+    QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
+    painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+
+    if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+    {
+        painter->setPen( option.palette.color( QPalette::HighlightedText ) );
+    }
+
+    QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
+    if ( status || colItem->source().isNull() )
+        painter->setFont( bold );
+    QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
+    painter->drawText( textRect, text );
+
+    bool isPlaying = false;
+    QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
+    if ( colItem->source().isNull() )
+        desc = tr( "All available tracks" );
+    if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
+    {
+        desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
+        isPlaying = true;
+    }
+    if ( desc.isEmpty() )
+        desc = tr( "Online" );
+
+    textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 9, -figWidth - 24, -6 );
+    painter->setFont( normal );
+    bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
+    if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
+    {
+        QRect pmRect = textRect;
+        pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
+        pmRect.setRight( pmRect.left() + pmRect.height() );
+        ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
+        textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+    }
+    if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
+    {
+        // Show a listen icon
+        QPixmap pm;
+        if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+        {
+            // Currently listening along
+            pm = m_headphonesOn;
+        }
+        else if ( !colItem->source()->isLocal() )
+        {
+            pm = m_headphonesOff;
+        }
+
+        if ( !pm.isNull() )
+        {
+            QRect pmRect = textRect;
+            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
+            pmRect.setRight( pmRect.left() + pmRect.height() );
+            painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+        }
+    }
+
+    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
+    QTextOption to( Qt::AlignBottom );
+    painter->drawText( textRect, text, to );
+
+    if ( status )
+    {
+        painter->setRenderHint( QPainter::Antialiasing );
+
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 8, 0, -13, -option.rect.height() + 16 );
+        int hd = ( option.rect.height() - figRect.height() ) / 2;
+        figRect.adjust( 0, hd, 0, hd );
+#ifdef Q_WS_WIN
+        figRect.adjust( -3, 0, 3, 0 );
+#endif
+        painter->setFont( bold );
+
+        QColor figColor( 167, 183, 211 );
+        painter->setPen( figColor );
+        painter->setBrush( figColor );
+
+        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+    }
+}
+
+
+void
+SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QTextOption to( Qt::AlignVCenter );
+
+    painter->setPen( option.palette.color( QPalette::Base ) );
+    painter->setBrush( option.palette.color( QPalette::Base ) );
+    painter->drawRect( option.rect );
+    painter->setRenderHint( QPainter::Antialiasing );
+
+    painter->setPen( Qt::white );
+    painter->drawText( option.rect.translated( 4, 1 ), index.data().toString().toUpper(), to );
+    painter->setPen( QColor( 99, 113, 128 ) );
+    painter->drawText( option.rect.translated( 4, 0 ), index.data().toString().toUpper(), to );
+
+    if ( option.state & QStyle::State_MouseOver )
+    {
+        QString text = tr( "Show" );
+        if ( option.state & QStyle::State_Open )
+            text = tr( "Hide" );
+
+        QFont font = painter->font();
+        font.setPixelSize( 11 );
+        font.setBold( true );
+        painter->setFont( font );
+        QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
+
+        // draw close icon
+        painter->setPen( Qt::white );
+        painter->drawText( option.rect.translated( -4, 1 ), text, to );
+        painter->setPen( QColor( 99, 113, 128 ) );
+        painter->drawText( option.rect.translated( -4, 0 ), text, to );
+    }
+}
+
+
+void
+SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QFont font = painter->font();
+    font.setPixelSize( 12 );
+    font.setBold( true );
+    painter->setFont( font );
+
+    QTextOption to( Qt::AlignVCenter );
+
+    painter->setPen( option.palette.color( QPalette::Base ) );
+    painter->setBrush( option.palette.color( QPalette::Base ) );
+    painter->drawRect( option.rect );
+    painter->setRenderHint( QPainter::Antialiasing );
+
+    painter->setPen( Qt::white );
+    painter->drawText( option.rect.translated( 4, 1 ), index.data().toString().toUpper(), to );
+    painter->setPen( QColor( 99, 113, 128 ) );
+    painter->drawText( option.rect.translated( 4, 0 ), index.data().toString().toUpper(), to );
+
+    if ( option.state & QStyle::State_MouseOver )
+    {
+        QString text = tr( "Show" );
+        if ( option.state & QStyle::State_Open )
+            text = tr( "Hide" );
+
+        font.setPixelSize( font.pixelSize() - 1 );
+        painter->setFont( font );
+        QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
+
+        // draw close icon
+        painter->setPen( Qt::white );
+        painter->drawText( option.rect.translated( -4, 1 ), text, to );
+        painter->setPen( QColor( 99, 113, 128 ) );
+        painter->drawText( option.rect.translated( -4, 0 ), text, to );
+    }
+}
+
+
+void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem o = option;
+    QStyleOptionViewItemV4 o3 = option;
 
-#ifdef Q_WS_MAC
-    QFont savedFont = painter->font();
-    QFont smaller = savedFont;
-    smaller.setPointSize( smaller.pointSize() - 2 );
-    painter->setFont( smaller );
-    o.font = smaller;
-#endif
+    painter->save();
 
-    if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
-    {
-        o.state = QStyle::State_Enabled;
-
-        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-        {
-            o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
-        }
-    }
+    QFont font = painter->font();
+    font.setPixelSize( 11 );
+    painter->setFont( font );
+    o.font = font;
+    o3.font = font;
 
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     Q_ASSERT( item );
 
-    QStyleOptionViewItemV4 o3 = option;
-    if ( type != SourcesModel::Collection && type != SourcesModel::Category )
-        o3.rect.setX( 0 );
-
-    QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
-
-    // Paint the speaker icon next to the currently-playing playlist
-    const bool playable = ( type == SourcesModel::StaticPlaylist ||
-                            type == SourcesModel::AutomaticPlaylist ||
-                            type == SourcesModel::Station ||
-                            type == SourcesModel::TemporaryPage ||
-                            type == SourcesModel::GenericPage );
-
-    if ( playable && item->isBeingPlayed() )
+    if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
-        const int iconW = o3.rect.height() - 4;
-        QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );
-        QPixmap speaker = o3.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
-        speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
-        painter->drawPixmap( iconRect, speaker );
-    }
+        o.state = QStyle::State_Enabled;
 
-    if ( type == SourcesModel::Collection )
-    {
-        painter->save();
-
-        QFont normal = painter->font();
-        QFont bold = painter->font();
-        bold.setBold( true );
-
-        CollectionItem* colItem = qobject_cast< CollectionItem* >( item );
-        Q_ASSERT( colItem );
-        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
-
-        QString tracks;
-        QString name = index.data().toString();
-        int figWidth = 0;
-
-        if ( status && colItem && !colItem->source().isNull() )
+        if ( ( option.state & QStyle::State_MouseOver ) == QStyle::State_MouseOver )
         {
-            tracks = QString::number( colItem->source()->trackCount() );
-            figWidth = painter->fontMetrics().width( tracks );
-            name = colItem->source()->friendlyName();
+            o.state |= QStyle::State_MouseOver;
+            o3.state |= QStyle::State_MouseOver;
         }
 
-        QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-
-        QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
-        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+        if ( ( option.state & QStyle::State_Open ) == QStyle::State_Open )
+        {
+            o.state |= QStyle::State_Open;
+        }
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
-            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
+            if ( type != SourcesModel::Collection )
+                o3.state |= QStyle::State_Selected;
+            else
+                o3.state &= ~QStyle::State_Selected;
+
+            o.palette.setColor( QPalette::Base, QColor( 0, 0, 0, 0 ) );
+            o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+            o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
+    }
 
-        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
-        if ( status || colItem->source().isNull() )
-            painter->setFont( bold );
-        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
-        painter->drawText( textRect, text );
-
-        bool isPlaying = false;
-        QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
-        if ( colItem->source().isNull() )
-            desc = tr( "All available tracks" );
-        if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
+    // shrink the indentations
+    {
+        int indentMult = 0;
+        QModelIndex counter = index;
+        while ( counter.parent().isValid() )
         {
-            desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
-            isPlaying = true;
-        }
-        if ( desc.isEmpty() )
-            desc = tr( "Online" );
-
-        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
-        painter->setFont( normal );
-        bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
-        if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
-        {
-            QRect pmRect = textRect;
-            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
-            pmRect.setRight( pmRect.left() + pmRect.height() );
-            ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
-            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
-        }
-        if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
-        {
-            // Show a listen icon
-            QPixmap pm;
-            if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
-            {
-                // Currently listening along
-                pm = m_headphonesOn;
-            } else if ( !colItem->source()->isLocal() ) {
-                pm = m_headphonesOff;
-            }
-
-            if ( !pm.isNull() )
-            {
-                QRect pmRect = textRect;
-                pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
-                pmRect.setRight( pmRect.left() + pmRect.height() );
-    //             tDebug() << "DOING HEADPHONES RECT:" << pmRect;
-                painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-                textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
-            }
-        }
-        text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-        QTextOption to( Qt::AlignBottom );
-        painter->drawText( textRect, text, to );
-
-        if ( status )
-        {
-            painter->setRenderHint( QPainter::Antialiasing );
-
-            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 8, 0, -13, -o.rect.height() + 16 );
-            int hd = ( option.rect.height() - figRect.height() ) / 2;
-            figRect.adjust( 0, hd, 0, hd );
-#ifdef Q_WS_WIN
-            figRect.adjust( -3, 0, 3, 0 );
-#endif
-            painter->setFont( bold );
-
-            QColor figColor( 167, 183, 211 );
-            painter->setPen( figColor );
-            painter->setBrush( figColor );
-
-            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+            indentMult++;
+            counter = counter.parent();
         }
 
-        painter->restore();
+        int indentDelta = o.rect.x() - m_parent->viewport()->x();
+        o.rect.setX( o.rect.x() - indentDelta + indentMult * TREEVIEW_INDENT_ADD );
+        o3.rect.setX( 0 );
+    }
+
+    if ( type != SourcesModel::Group && type != SourcesModel::Category && type != SourcesModel::Divider )
+        QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
+
+    paintDecorations( painter, o3, index );
+
+    if ( type == SourcesModel::Collection )
+    {
+        paintCollection( painter, o, index );
     }
     else if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
               m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
@@ -271,8 +398,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         o.showDecorationSelected = false;
         o.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() );
         QStyledItemDelegate::paint( painter, o, index );
-
-        painter->save();
 
         // Get whole rect for the menu
         QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
@@ -284,9 +409,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         {
             m_gradient = QLinearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
             m_gradient.setColorAt( 0.0, Qt::white );
-            //        m_gradient.setColorAt( 0.8, QColor( 0xd6, 0xd6, 0xd6 ) ); // light grey
-            //        m_gradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) ); // dark red
-            //        m_gradient.setColorAt( 1.0, QColor( 0xb1, 0xb1, 0xb1 ) ); // not so light but still not dark grey
             m_gradient.setColorAt( 0.9, QColor( 0x88, 0x88, 0x88 ) );
             m_gradient.setColorAt( 1.0, QColor( 0x99, 0x99, 0x99 ) ); // dark grey
         }
@@ -349,12 +471,32 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
             count++;
         }
+    }
+    else if ( type == SourcesModel::Group )
+    {
+        paintGroup( painter, o3, index );
+    }
+    else if ( type == SourcesModel::Category )
+    {
+        paintCategory( painter, o, index );
+    }
+    else if ( type == SourcesModel::Divider )
+    {
+        QRect middle = o.rect.adjusted( 0, 2, 0, -2 );
+        painter->setRenderHint( QPainter::Antialiasing, false );
 
-        painter->restore();
+        QColor bgcolor = o3.palette.color( QPalette::Base );
+
+        painter->setPen( bgcolor.darker( 120 ) );
+        painter->drawLine( middle.topLeft(), middle.topRight() );
+        painter->setPen( bgcolor.lighter( 120 ) );
+        painter->drawLine( middle.bottomLeft(), middle.bottomRight() );
     }
     else
     {
+        o.state &= ~QStyle::State_MouseOver;
         QStyledItemDelegate::paint( painter, o, index );
+
         if ( type == SourcesModel::TemporaryPage )
         {
             TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
@@ -372,29 +514,9 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->drawPixmap( r, p );
             }
         }
-
-        /*QStyleOptionViewItemV4 opt = o;
-        initStyleOption( &opt, index );
-
-        // shrink the indentations. count how indented this item is and remove it
-        int indentMult = 0;
-        QModelIndex counter = index;
-        while ( counter.parent().isValid() )
-        {
-            indentMult++;
-            counter = counter.parent();
-        }
-        int realX = opt.rect.x() + indentMult * TREEVIEW_INDENT_ADD;
-
-        opt.rect.setX( realX );
-        const QWidget *widget = opt.widget;
-        QStyle *style = widget ? widget->style() : QApplication::style();
-        style->drawControl( QStyle::CE_ItemViewItem, &opt, painter, widget ); */
     }
 
-#ifdef Q_WS_MAC
-    painter->setFont( savedFont );
-#endif
+    painter->restore();
 }
 
 
@@ -411,9 +533,8 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
 
 
 bool
-SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
-
     if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonPress )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
@@ -431,14 +552,20 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
             if ( r.contains( ev->pos() ) )
             {
                 if ( event->type() == QEvent::MouseButtonRelease )
+                {
                     gpi->removeFromList();
+
+                    // Send a new mouse event to the view, since if the mouse is now over another item's delete area we want it to show up
+                    QMouseEvent* ev = new QMouseEvent( QEvent::MouseMove, m_parent->viewport()->mapFromGlobal( QCursor::pos() ), Qt::NoButton, Qt::NoButton, Qt::NoModifier );
+                    QApplication::postEvent( m_parent->viewport(), ev );
+                }
 
                 return true;
             }
         }
         else if ( type == SourcesModel::Collection )
         {
-            CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            SourceItem* colItem = qobject_cast< SourceItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
 
             if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
@@ -451,14 +578,17 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
                 const int height = fm.height() + 3;
 
                 QRect headphonesRect( option.rect.height() + 10, o.rect.bottom() - height, height, height );
-//                 tDebug() << "CHECKING CLICK RECT:" << headphonesRect;
                 if ( headphonesRect.contains( ev->pos() ) )
                 {
-                    if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
-                        // unlatch
-                        emit latchOff( colItem->source() );
-                    else
-                        emit latchOn( colItem->source() );
+                    if ( event->type() == QEvent::MouseButtonRelease )
+                    {
+                        if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+                            // unlatch
+                            emit latchOff( colItem->source() );
+                        else
+                            emit latchOn( colItem->source() );
+                    }
+                    return true;
                 }
             }
         }

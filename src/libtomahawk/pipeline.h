@@ -19,14 +19,16 @@
 #ifndef PIPELINE_H
 #define PIPELINE_H
 
+#include "typedefs.h"
+#include "query.h"
+
 #include <QObject>
 #include <QList>
 #include <QMap>
 #include <QMutex>
 #include <QTimer>
 
-#include "typedefs.h"
-#include "query.h"
+#include <boost/function.hpp>
 
 #include "dllmacro.h"
 
@@ -34,6 +36,7 @@ namespace Tomahawk
 {
 class Resolver;
 class ExternalResolver;
+typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
 
 class DLLEXPORT Pipeline : public QObject
 {
@@ -49,7 +52,10 @@ public:
     unsigned int activeQueryCount() const { return m_qidsState.count(); }
 
     void reportResults( QID qid, const QList< result_ptr >& results );
+    void reportAlbums( QID qid, const QList< album_ptr >& albums );
+    void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
+    void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
@@ -101,7 +107,7 @@ private:
 
     QList< Resolver* > m_resolvers;
     QList< Tomahawk::ExternalResolver* > m_scriptResolvers;
-
+    QList< ResolverFactoryFunc > m_resolverFactories;
     QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;

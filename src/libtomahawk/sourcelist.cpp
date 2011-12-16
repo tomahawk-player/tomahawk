@@ -96,6 +96,7 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
 
         tLog() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
     }
+
     emit ready();
 }
 
@@ -200,7 +201,10 @@ SourceList::get( const QString& username, const QString& friendlyName )
         add( source );
     }
     else
+    {
         source = m_sources.value( username );
+        source->setFriendlyName( friendlyName );
+    }
 
     return source;
 }

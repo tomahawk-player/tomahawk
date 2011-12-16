@@ -185,6 +185,12 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
     Q_UNUSED( rev );
     qDebug() << "DynamicWidget::onRevisionLoaded";
+    if ( m_model->ignoreRevision( rev.revisionguid ) )
+    {
+        m_model->removeRevisionFromIgnore( rev.revisionguid );
+        return;
+    }
+
     loadDynamicPlaylist( m_playlist );
     if( m_resolveOnNextLoad || !m_playlist->author()->isLocal() )
     {
@@ -324,6 +330,8 @@ DynamicWidget::startStation()
         m_steering = m_playlist->generator()->steeringWidget();
         Q_ASSERT( m_steering );
 
+        connect( m_steering, SIGNAL( steeringChanged() ), this, SLOT( steeringChanged() ) );
+
         int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
         int y = height() - m_steering->size().height() - 40; // padding
 
@@ -349,12 +357,16 @@ void
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
     int limit = -1; // only limit the "preview" of a station
-    if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
+    if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
+    {
         m_resolveOnNextLoad = true;
-    } else if( m_playlist->mode() == OnDemand )
+    }
+    else if( m_playlist->mode() == OnDemand )
+    {
         limit = 5;
+    }
 
-    if( m_playlist->mode() != OnDemand )
+    if ( m_playlist->mode() != OnDemand )
         m_loading->fadeOut();
     m_model->tracksGenerated( queries, limit );
 }
@@ -392,6 +404,39 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
     showPreview();
 
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
+}
+
+void
+DynamicWidget::steeringChanged()
+{
+    // When steering changes, toss all the tracks that are upcoming, and re-fetch.
+    // We have to find the currently playing item
+    QModelIndex playing;
+    for ( int i = 0; i < m_view->proxyModel()->rowCount( QModelIndex() ); ++i )
+    {
+        const QModelIndex  cur = m_view->proxyModel()->index( i, 0, QModelIndex() );
+        TrackModelItem* item = m_view->proxyModel()->itemFromIndex( m_view->proxyModel()->mapToSource( cur ) );
+        if ( item && item->isPlaying() )
+        {
+            playing = cur;
+            break;
+        }
+    }
+    if ( !playing.isValid() )
+        return;
+
+    const int upcoming = m_view->proxyModel()->rowCount( QModelIndex() ) - 1 - playing.row();
+    tDebug() << "Removing tracks after current in station, found" << upcoming;
+
+    QModelIndexList toRemove;
+    for ( int i = playing.row() + 1; i < m_view->proxyModel()->rowCount( QModelIndex() ); i++ )
+    {
+        toRemove << m_view->proxyModel()->index( i, 0, QModelIndex() );
+    }
+
+    m_view->proxyModel()->remove( toRemove );
+
+    m_playlist->generator()->fetchNext();
 }
 
 

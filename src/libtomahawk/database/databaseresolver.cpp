@@ -40,6 +40,10 @@ DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
 
     connect( cmd, SIGNAL( results( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ),
                     SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ), Qt::QueuedConnection );
+    connect( cmd, SIGNAL( albums( Tomahawk::QID, QList< Tomahawk::album_ptr > ) ),
+                    SLOT( gotAlbums( Tomahawk::QID, QList< Tomahawk::album_ptr > ) ), Qt::QueuedConnection );
+    connect( cmd, SIGNAL( artists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ),
+                    SLOT( gotArtists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
@@ -52,6 +56,20 @@ DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_p
     qDebug() << Q_FUNC_INFO << qid << results.length();
 
     Tomahawk::Pipeline::instance()->reportResults( qid, results );
+}
+
+
+void
+DatabaseResolver::gotAlbums( const Tomahawk::QID qid, QList< Tomahawk::album_ptr> albums )
+{
+    Tomahawk::Pipeline::instance()->reportAlbums( qid, albums );
+}
+
+
+void
+DatabaseResolver::gotArtists( const Tomahawk::QID qid, QList< Tomahawk::artist_ptr> artists )
+{
+    Tomahawk::Pipeline::instance()->reportArtists( qid, artists );
 }
 
 

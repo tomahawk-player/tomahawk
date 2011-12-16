@@ -250,7 +250,7 @@ frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
-plugins_dir = os.path.join(bundle_dir, 'Contents', 'PlugIns')
+plugins_dir = os.path.join(bundle_dir, 'Contents', 'plugins')
 binary = os.path.join(bundle_dir, 'Contents', 'MacOS', bundle_name)
 
 fixed_libraries = []
@@ -502,9 +502,9 @@ except:
   print 'Failed to find spotify resolver'
   
 try:
-  FixPlugin('CrashReporter', '../MacOS')
+  FixPlugin('tomahawk_crash_reporter', '../MacOS')
 except:
-  print 'Failed to find CrashReporter'
+  print 'Failed to find tomahawk_crash_reporter'
 
 for plugin in QT_PLUGINS:
   FixPlugin(FindQtPlugin(plugin), os.path.dirname(plugin))

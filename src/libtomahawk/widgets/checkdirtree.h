@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright      2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,15 +22,16 @@
 
 #include "dllmacro.h"
 
-#include <QDirModel>
+#include <QFileSystemModel>
 #include <QTreeView>
 
-class DLLEXPORT CheckDirModel : public QDirModel
+class DLLEXPORT CheckDirModel : public QFileSystemModel
 {
     Q_OBJECT
 
 public:
     CheckDirModel( QWidget* parent = 0 );
+    virtual ~CheckDirModel();
 
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -41,8 +43,14 @@ public:
 signals:
     void dataChangedByUser( const QModelIndex & index );
 
+private slots:
+    void getFileInfoResult();
+    void volumeShowFinished();
+
 private:
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkTable;
+
+    bool m_shownVolumes;
 };
 
 
@@ -67,6 +75,7 @@ private slots:
     void onExpand( const QModelIndex& idx );
     void updateNode( const QModelIndex& idx );
 
+    void modelReset();
 private:
     CheckDirModel m_dirModel;
     QSet<qint64> m_expandedSet;

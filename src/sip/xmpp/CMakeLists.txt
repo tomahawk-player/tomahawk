@@ -6,16 +6,32 @@ add_definitions( -DQT_PLUGIN )
 add_definitions( -DQT_SHARED )
 add_definitions( -DSIPDLLEXPORT_PRO )
 
+<<<<<<< HEAD:src/sip/xmpp/CMakeLists.txt
 set( xmppSipSources
     xmppsip.cpp
     tomahawkxmppmessage.cpp
     tomahawkxmppmessagefactory.cpp
+=======
+set( jabberSources
+    jabber.cpp
+    tomahawksipmessage.cpp
+    tomahawksipmessagefactory.cpp
+)
+set( jabberSourcesGui
+>>>>>>> origin/master:src/sip/jabber/CMakeLists.txt
     avatarmanager.cpp
     xmlconsole.cpp
 )
 
+<<<<<<< HEAD:src/sip/xmpp/CMakeLists.txt
 set( xmppSipHeaders
     xmppsip.h
+=======
+set( jabberHeaders
+    jabber.h
+)
+set( jabberHeadersGui
+>>>>>>> origin/master:src/sip/jabber/CMakeLists.txt
     avatarmanager.h
     xmlconsole.h
 )
@@ -23,6 +39,11 @@ set( xmppSipHeaders
 set( xmppSipUI
     xmlconsole.ui
 )
+
+if(BUILD_GUI)
+    list(APPEND jabberSources ${jabberSourcesGui})
+    list(APPEND jabberHeaders ${jabberHeadersGui})
+endif()
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
@@ -55,5 +76,11 @@ ENDIF( APPLE )
 
 install( TARGETS tomahawk_sip_xmpp DESTINATION lib${LIB_SUFFIX} )
 
+<<<<<<< HEAD:src/sip/xmpp/CMakeLists.txt
 
 #add_subdirectory(googlewrapper)
+=======
+if(BUILD_GUI)
+    add_subdirectory(googlewrapper)
+endif()
+>>>>>>> origin/master:src/sip/jabber/CMakeLists.txt

@@ -109,6 +109,9 @@ signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
 
+    void albumsAdded( const QList<Tomahawk::album_ptr>& );
+    void artistsAdded( const QList<Tomahawk::artist_ptr>& );
+
     void resultsChanged();
     void solvedStateChanged( bool state );
     void playableStateChanged( bool state );
@@ -118,6 +121,9 @@ public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
     void removeResult( const Tomahawk::result_ptr& );
+
+    void addAlbums( const QList< Tomahawk::album_ptr >& );
+    void addArtists( const QList< Tomahawk::artist_ptr >& );
 
     void onResolvingFinished();
 
@@ -141,6 +147,8 @@ private:
     void updateSortNames();
     static int levenshtein( const QString& source, const QString& target );
 
+    QList< Tomahawk::artist_ptr > m_artists;
+    QList< Tomahawk::album_ptr > m_albums;
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     bool m_playable;

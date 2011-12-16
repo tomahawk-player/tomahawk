@@ -12,9 +12,145 @@ add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 
+set( libGuiSources
+    actioncollection.cpp
+
+    contextmenu.cpp
+    dropjob.cpp
+    globalactionmanager.cpp
+    viewpage.cpp
+    viewmanager.cpp
+    LatchManager.cpp
+    TomahawkSettingsGui.cpp
+
+    context/ContextPage.cpp
+    context/ContextWidget.cpp
+    context/pages/TopTracksContext.cpp
+    context/pages/RelatedArtistsContext.cpp
+    context/pages/WikipediaContext.cpp
+    context/pages/WebContext.cpp
+
+    jobview/JobStatusView.cpp
+    jobview/JobStatusModel.cpp
+    jobview/JobStatusDelegate.cpp
+    jobview/PipelineStatusItem.cpp
+    jobview/TransferStatusItem.cpp
+    jobview/LatchedStatusItem.cpp
+
+    infobar/infobar.cpp
+
+    playlist/treemodel.cpp
+    playlist/treeproxymodel.cpp
+    playlist/treeheader.cpp
+    playlist/treeitemdelegate.cpp
+    playlist/collectionproxymodel.cpp
+    playlist/collectionflatmodel.cpp
+    playlist/collectionview.cpp
+    playlist/playlistmodel.cpp
+    playlist/playlistproxymodel.cpp
+    playlist/playlistview.cpp
+    playlist/playlistitemdelegate.cpp
+    playlist/queueproxymodel.cpp
+    playlist/queueview.cpp
+    playlist/trackmodel.cpp
+    playlist/trackmodelitem.cpp
+    playlist/trackproxymodel.cpp
+    playlist/trackview.cpp
+    playlist/trackheader.cpp
+    playlist/treemodelitem.cpp
+    playlist/albumitem.cpp
+    playlist/albummodel.cpp
+    playlist/albumproxymodel.cpp
+    playlist/albumitemdelegate.cpp
+    playlist/albumview.cpp
+    playlist/artistview.cpp
+    playlist/customplaylistview.cpp
+    playlist/ViewHeader.cpp
+
+    playlist/dynamic/DynamicPlaylist.cpp
+    playlist/dynamic/DynamicView.cpp
+    playlist/dynamic/DynamicModel.cpp
+    playlist/dynamic/echonest/EchonestGenerator.cpp
+    playlist/dynamic/echonest/EchonestControl.cpp
+    playlist/dynamic/echonest/EchonestSteerer.cpp
+    playlist/dynamic/widgets/DynamicWidget.cpp
+    playlist/dynamic/widgets/DynamicControlWrapper.cpp
+    playlist/dynamic/widgets/DynamicControlList.cpp
+    playlist/dynamic/widgets/ReadOrWriteWidget.cpp
+    playlist/dynamic/widgets/MiscControlWidgets.cpp
+    playlist/dynamic/widgets/CollapsibleControls.cpp
+    playlist/dynamic/widgets/DynamicSetupWidget.cpp
+    playlist/dynamic/widgets/LoadingSpinner.cpp
+
+    playlist/topbar/topbar.cpp
+    playlist/topbar/clearbutton.cpp
+    playlist/topbar/searchlineedit.cpp
+    playlist/topbar/lineedit.cpp
+    playlist/topbar/searchbutton.cpp
+
+    ExternalResolverGui.cpp
+    resolvers/scriptresolver.cpp
+    resolvers/qtscriptresolver.cpp
+
+    utils/widgetdragfilter.cpp
+    utils/xspfgenerator.cpp
+    utils/jspfloader.cpp
+    utils/spotifyparser.cpp
+    utils/m3uloader.cpp
+    utils/itunesparser.cpp
+    utils/rdioparser.cpp
+    utils/shortenedlinkparser.cpp
+    utils/stylehelper.cpp
+    utils/dropjobnotifier.cpp
+    utils/proxystyle.cpp
+    utils/tomahawkutilsgui.cpp
+
+    widgets/checkdirtree.cpp
+    widgets/querylabel.cpp
+    widgets/imagebutton.cpp
+    widgets/animatedsplitter.cpp
+    widgets/elidedlabel.cpp
+    widgets/newplaylistwidget.cpp
+    widgets/searchwidget.cpp
+    widgets/SeekSlider.cpp
+    widgets/playlisttypeselectordlg.cpp
+    widgets/welcomewidget.cpp
+    widgets/whatshotwidget.cpp
+    widgets/RecentlyPlayedPlaylistsModel.cpp
+    widgets/RecentPlaylistsModel.cpp
+    widgets/OverlayButton.cpp
+    widgets/overlaywidget.cpp
+    widgets/HeaderLabel.cpp
+    widgets/HeaderWidget.cpp
+    widgets/combobox.cpp
+    widgets/ToggleButton.cpp
+    widgets/SocialPlaylistWidget.cpp
+    widgets/infowidgets/sourceinfowidget.cpp
+    widgets/infowidgets/ArtistInfoWidget.cpp
+    widgets/infowidgets/AlbumInfoWidget.cpp
+    widgets/Breadcrumb.cpp
+    widgets/BreadcrumbButton.cpp
+)
+
 set( libGuiHeaders
+    actioncollection.h
+
+    contextmenu.h
+    dropjob.h
     viewpage.h
     viewmanager.h
+    globalactionmanager.h
+    LatchManager.h
+    TomahawkSettingsGui.h
+
+    context/ContextPage.h
+    context/ContextWidget.h
+    context/pages/TopTracksContext.h
+    context/pages/RelatedArtistsContext.h
+    context/pages/WikipediaContext.h
+    context/pages/WebContext.h
+
+    infobar/infobar.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
@@ -22,17 +158,105 @@ set( libGuiHeaders
     playlist/topbar/lineedit.h
     playlist/topbar/lineedit_p.h
     playlist/topbar/searchbutton.h
-)
 
-set( libGuiSources
-    viewpage.cpp
-    viewmanager.cpp
+    playlist/treemodel.h
+    playlist/treeproxymodel.h
+    playlist/treeheader.h
+    playlist/treeitemdelegate.h
+    playlist/collectionproxymodel.h
+    playlist/collectionflatmodel.h
+    playlist/collectionview.h
+    playlist/playlistmodel.h
+    playlist/playlistproxymodel.h
+    playlist/playlistview.h
+    playlist/playlistitemdelegate.h
+    playlist/queueproxymodel.h
+    playlist/queueview.h
+    playlist/trackmodel.h
+    playlist/trackmodelitem.h
+    playlist/trackproxymodel.h
+    playlist/trackview.h
+    playlist/trackheader.h
+    playlist/treemodelitem.h
+    playlist/albumitem.h
+    playlist/albummodel.h
+    playlist/albumproxymodel.h
+    playlist/albumitemdelegate.h
+    playlist/albumview.h
+    playlist/artistview.h
+    playlist/customplaylistview.h
+    playlist/ViewHeader.h
 
-    playlist/topbar/topbar.cpp
-    playlist/topbar/clearbutton.cpp
-    playlist/topbar/searchlineedit.cpp
-    playlist/topbar/lineedit.cpp
-    playlist/topbar/searchbutton.cpp
+    playlist/dynamic/DynamicPlaylist.h
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/DynamicView.h
+    playlist/dynamic/DynamicModel.h
+    playlist/dynamic/echonest/EchonestGenerator.h
+    playlist/dynamic/echonest/EchonestControl.h
+    playlist/dynamic/echonest/EchonestSteerer.h
+    playlist/dynamic/widgets/DynamicWidget.h
+    playlist/dynamic/widgets/DynamicControlWrapper.h
+    playlist/dynamic/widgets/DynamicControlList.h
+    playlist/dynamic/widgets/ReadOrWriteWidget.h
+    playlist/dynamic/widgets/MiscControlWidgets.h
+    playlist/dynamic/widgets/CollapsibleControls.h
+    playlist/dynamic/widgets/DynamicSetupWidget.h
+    playlist/dynamic/widgets/LoadingSpinner.h
+
+    ExternalResolverGui.h
+    resolvers/scriptresolver.h
+    resolvers/qtscriptresolver.h
+
+    utils/widgetdragfilter.h
+    utils/xspfgenerator.h
+    utils/jspfloader.h
+    utils/spotifyparser.h
+    utils/m3uloader.h
+    utils/itunesparser.h
+    utils/rdioparser.h
+    utils/shortenedlinkparser.h
+    utils/dropjobnotifier.h
+    utils/tomahawkutilsgui.h
+
+    widgets/checkdirtree.h
+    widgets/querylabel.h
+    widgets/animatedcounterlabel.h
+    widgets/imagebutton.h
+    widgets/animatedsplitter.h
+    widgets/elidedlabel.h
+    widgets/newplaylistwidget.h
+    widgets/searchwidget.h
+    widgets/SeekSlider.h
+    widgets/playlisttypeselectordlg.h
+    widgets/welcomewidget.h
+    widgets/whatshotwidget.h
+    widgets/whatshotwidget_p.h
+    widgets/RecentlyPlayedPlaylistsModel.h
+    widgets/RecentPlaylistsModel.h
+    widgets/OverlayButton.h
+    widgets/overlaywidget.h
+    widgets/HeaderLabel.h
+    widgets/HeaderWidget.h
+    widgets/combobox.h
+    widgets/ToggleButton.h
+    widgets/SocialPlaylistWidget.h
+    widgets/infowidgets/sourceinfowidget.h
+    widgets/infowidgets/ArtistInfoWidget.h
+    widgets/infowidgets/ArtistInfoWidget_p.h
+    widgets/infowidgets/AlbumInfoWidget.h
+    widgets/Breadcrumb.h
+    widgets/BreadcrumbButton.h
+
+    jobview/JobStatusView.h
+    jobview/JobStatusModel.h
+    jobview/JobStatusDelegate.h
+    jobview/JobStatusItem.h
+    jobview/PipelineStatusItem.h
+    jobview/TransferStatusItem.h
+    jobview/LatchedStatusItem.h
+
+    thirdparty/Qocoa/qsearchfield.h
+
 )
 
 set( libSources
@@ -41,21 +265,17 @@ set( libSources
     pipeline.cpp
 
     aclsystem.cpp
-    actioncollection.cpp
     artist.cpp
     album.cpp
     collection.cpp
     playlist.cpp
     resolver.cpp
+    ExternalResolver.cpp
     query.cpp
     result.cpp
     source.cpp
     sourceplaylistinterface.cpp
-    globalactionmanager.cpp
-    contextmenu.cpp
-    dropjob.cpp
     playlistinterface.cpp
-    LatchManager.cpp
 
     EchonestCatalogSynchronizer.cpp
 
@@ -69,12 +289,6 @@ set( libSources
 
     audio/audioengine.cpp
 
-    context/ContextPage.cpp
-    context/ContextWidget.cpp
-    context/pages/TopTracksContext.cpp
-    context/pages/RelatedArtistsContext.cpp
-    context/pages/WikipediaContext.cpp
-    context/pages/WebContext.cpp
 
     database/database.cpp
     database/fuzzyindex.cpp
@@ -128,11 +342,10 @@ set( libSources
     database/databasecommand_settrackattributes.cpp
     database/database.cpp
 
-    infobar/infobar.cpp
-
-    infosystem/infosystemcache.cpp
     infosystem/infosystem.cpp
+    infosystem/infosystemcache.cpp
     infosystem/infosystemworker.cpp
+
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
@@ -141,61 +354,6 @@ set( libSources
     infosystem/infoplugins/generic/musixmatchplugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
     infosystem/infoplugins/generic/RoviPlugin.cpp
-
-    playlist/treemodel.cpp
-    playlist/treeproxymodel.cpp
-    playlist/treeheader.cpp
-    playlist/treeitemdelegate.cpp
-    playlist/collectionproxymodel.cpp
-    playlist/collectionflatmodel.cpp
-    playlist/collectionview.cpp
-    playlist/playlistmodel.cpp
-    playlist/playlistproxymodel.cpp
-    playlist/playlistview.cpp
-    playlist/playlistitemdelegate.cpp
-    playlist/queueproxymodel.cpp
-    playlist/queueview.cpp
-    playlist/trackmodel.cpp
-    playlist/trackmodelitem.cpp
-    playlist/trackproxymodel.cpp
-    playlist/trackview.cpp
-    playlist/trackheader.cpp
-    playlist/treemodelitem.cpp
-    playlist/albumitem.cpp
-    playlist/albummodel.cpp
-    playlist/albumproxymodel.cpp
-    playlist/albumitemdelegate.cpp
-    playlist/albumview.cpp
-    playlist/artistview.cpp
-    playlist/customplaylistview.cpp
-    playlist/ViewHeader.cpp
-    playlist/PlaylistUpdaterInterface.cpp
-    playlist/XspfUpdater.cpp
-
-
-    playlist/dynamic/DynamicPlaylist.cpp
-    playlist/dynamic/DynamicControl.cpp
-    playlist/dynamic/GeneratorFactory.cpp
-    playlist/dynamic/GeneratorInterface.cpp
-    playlist/dynamic/DynamicView.cpp
-    playlist/dynamic/DynamicModel.cpp
-    playlist/dynamic/DynamicPlaylistRevision.cpp
-    playlist/dynamic/echonest/EchonestGenerator.cpp
-    playlist/dynamic/echonest/EchonestControl.cpp
-    playlist/dynamic/echonest/EchonestSteerer.cpp
-    playlist/dynamic/widgets/DynamicWidget.cpp
-    playlist/dynamic/widgets/DynamicControlWrapper.cpp
-    playlist/dynamic/widgets/DynamicControlList.cpp
-    playlist/dynamic/widgets/ReadOrWriteWidget.cpp
-    playlist/dynamic/widgets/MiscControlWidgets.cpp
-    playlist/dynamic/widgets/CollapsibleControls.cpp
-    playlist/dynamic/widgets/DynamicSetupWidget.cpp
-    playlist/dynamic/widgets/LoadingSpinner.cpp
-    playlist/dynamic/database/DatabaseControl.cpp
-    playlist/dynamic/database/DatabaseGenerator.cpp
-
-    resolvers/scriptresolver.cpp
-    resolvers/qtscriptresolver.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -207,53 +365,20 @@ set( libSources
     network/connection.cpp
     network/controlconnection.cpp
 
+    playlist/PlaylistUpdaterInterface.cpp
+    playlist/dynamic/DynamicPlaylist.cpp
+    playlist/dynamic/GeneratorFactory.cpp
+    playlist/dynamic/GeneratorInterface.cpp
+    playlist/dynamic/DynamicPlaylistRevision.cpp
+    playlist/XspfUpdater.cpp
+    playlist/dynamic/database/DatabaseGenerator.cpp
+    playlist/dynamic/database/DatabaseControl.cpp
+    playlist/dynamic/DynamicControl.cpp
+
     utils/tomahawkutils.cpp
     utils/logger.cpp
-    utils/proxystyle.cpp
-    utils/widgetdragfilter.cpp
-    utils/xspfloader.cpp
-    utils/xspfgenerator.cpp
-    utils/jspfloader.cpp
-    utils/spotifyparser.cpp
-    utils/itunesparser.cpp
-    utils/rdioparser.cpp
-    utils/shortenedlinkparser.cpp
-    utils/stylehelper.cpp
     utils/qnr_iodevicestream.cpp
-    utils/dropjobnotifier.cpp
-
-    widgets/checkdirtree.cpp
-    widgets/querylabel.cpp
-    widgets/imagebutton.cpp
-    widgets/animatedsplitter.cpp
-    widgets/elidedlabel.cpp
-    widgets/newplaylistwidget.cpp
-    widgets/searchwidget.cpp
-    widgets/SeekSlider.cpp
-    widgets/playlisttypeselectordlg.cpp
-    widgets/welcomewidget.cpp
-    widgets/whatshotwidget.cpp
-    widgets/RecentlyPlayedPlaylistsModel.cpp
-    widgets/RecentPlaylistsModel.cpp
-    widgets/OverlayButton.cpp
-    widgets/overlaywidget.cpp
-    widgets/HeaderLabel.cpp
-    widgets/HeaderWidget.cpp
-    widgets/combobox.cpp
-    widgets/ToggleButton.cpp
-    widgets/SocialPlaylistWidget.cpp
-    widgets/infowidgets/sourceinfowidget.cpp
-    widgets/infowidgets/ArtistInfoWidget.cpp
-    widgets/infowidgets/AlbumInfoWidget.cpp
-    widgets/Breadcrumb.cpp
-    widgets/BreadcrumbButton.cpp
-
-    jobview/JobStatusView.cpp
-    jobview/JobStatusModel.cpp
-    jobview/JobStatusDelegate.cpp
-    jobview/PipelineStatusItem.cpp
-    jobview/TransferStatusItem.cpp
-    jobview/LatchedStatusItem.cpp
+    utils/xspfloader.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -268,17 +393,13 @@ set( libHeaders
     functimeout.h
 
     aclsystem.h
-    actioncollection.h
     collection.h
     query.h
     resolver.h
+    ExternalResolver.h
     result.h
     source.h
     sourceplaylistinterface.h
-    globalactionmanager.h
-    contextmenu.h
-    dropjob.h
-    LatchManager.h
 
     artist.h
     album.h
@@ -295,13 +416,6 @@ set( libHeaders
     sip/sipinfo.h
 
     audio/audioengine.h
-
-    context/ContextPage.h
-    context/ContextWidget.h
-    context/pages/TopTracksContext.h
-    context/pages/RelatedArtistsContext.h
-    context/pages/WikipediaContext.h
-    context/pages/WebContext.h
 
     database/database.h
     database/fuzzyindex.h
@@ -354,11 +468,11 @@ set( libHeaders
     database/databasecommand_trackattributes.h
     database/databasecommand_settrackattributes.h
 
-    infobar/infobar.h
-
+    infosystem/infosystem.h
     infosystem/infosystem.h
     infosystem/infosystemworker.h
     infosystem/infosystemcache.h
+
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
     infosystem/infoplugins/generic/chartsplugin.h
@@ -378,107 +492,19 @@ set( libHeaders
     network/controlconnection.h
     network/portfwdthread.h
 
-    playlist/treemodel.h
-    playlist/treeproxymodel.h
-    playlist/treeheader.h
-    playlist/treeitemdelegate.h
-    playlist/collectionproxymodel.h
-    playlist/collectionflatmodel.h
-    playlist/collectionview.h
-    playlist/playlistmodel.h
-    playlist/playlistproxymodel.h
-    playlist/playlistview.h
-    playlist/playlistitemdelegate.h
-    playlist/queueproxymodel.h
-    playlist/queueview.h
-    playlist/trackmodel.h
-    playlist/trackmodelitem.h
-    playlist/trackproxymodel.h
-    playlist/trackview.h
-    playlist/trackheader.h
-    playlist/treemodelitem.h
-    playlist/albumitem.h
-    playlist/albummodel.h
-    playlist/albumproxymodel.h
-    playlist/albumitemdelegate.h
-    playlist/albumview.h
-    playlist/artistview.h
-    playlist/customplaylistview.h
-    playlist/ViewHeader.h
     playlist/PlaylistUpdaterInterface.h
-    playlist/XspfUpdater.h
-
     playlist/dynamic/DynamicPlaylist.h
-    playlist/dynamic/DynamicControl.h
     playlist/dynamic/GeneratorInterface.h
-    playlist/dynamic/DynamicView.h
-    playlist/dynamic/DynamicModel.h
-    playlist/dynamic/echonest/EchonestGenerator.h
-    playlist/dynamic/echonest/EchonestControl.h
-    playlist/dynamic/echonest/EchonestSteerer.h
-    playlist/dynamic/widgets/DynamicWidget.h
-    playlist/dynamic/widgets/DynamicControlWrapper.h
-    playlist/dynamic/widgets/DynamicControlList.h
-    playlist/dynamic/widgets/ReadOrWriteWidget.h
-    playlist/dynamic/widgets/MiscControlWidgets.h
-    playlist/dynamic/widgets/CollapsibleControls.h
-    playlist/dynamic/widgets/DynamicSetupWidget.h
-    playlist/dynamic/widgets/LoadingSpinner.h
-    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/GeneratorFactory.h
+    playlist/XspfUpdater.h
     playlist/dynamic/database/DatabaseGenerator.h
-
-    resolvers/scriptresolver.h
-    resolvers/qtscriptresolver.h
-
-    utils/widgetdragfilter.h
-    utils/xspfloader.h
-    utils/xspfgenerator.h
-    utils/jspfloader.h
-    utils/spotifyparser.h
-    utils/itunesparser.h
-    utils/rdioparser.h
-    utils/shortenedlinkparser.h
-    utils/qnr_iodevicestream.h
-    utils/dropjobnotifier.h
-
-    widgets/checkdirtree.h
-    widgets/querylabel.h
-    widgets/animatedcounterlabel.h
-    widgets/imagebutton.h
-    widgets/animatedsplitter.h
-    widgets/elidedlabel.h
-    widgets/newplaylistwidget.h
-    widgets/searchwidget.h
-    widgets/SeekSlider.h
-    widgets/playlisttypeselectordlg.h
-    widgets/welcomewidget.h
-    widgets/whatshotwidget.h
-    widgets/RecentlyPlayedPlaylistsModel.h
-    widgets/RecentPlaylistsModel.h
-    widgets/OverlayButton.h
-    widgets/overlaywidget.h
-    widgets/HeaderLabel.h
-    widgets/HeaderWidget.h
-    widgets/combobox.h
-    widgets/ToggleButton.h
-    widgets/SocialPlaylistWidget.h
-    widgets/infowidgets/sourceinfowidget.h
-    widgets/infowidgets/ArtistInfoWidget.h
-    widgets/infowidgets/ArtistInfoWidget_p.h
-    widgets/infowidgets/AlbumInfoWidget.h
-    widgets/Breadcrumb.h
-    widgets/BreadcrumbButton.h
-
-    jobview/JobStatusView.h
-    jobview/JobStatusModel.h
-    jobview/JobStatusDelegate.h
-    jobview/JobStatusItem.h
-    jobview/PipelineStatusItem.h
-    jobview/TransferStatusItem.h
-    jobview/LatchedStatusItem.h
+    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/DynamicControl.h
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
-    thirdparty/Qocoa/qsearchfield.h
+
+    utils/xspfloader.h
+    utils/qnr_iodevicestream.h
 )
 
 set( libHeaders_NoMOC
@@ -487,9 +513,6 @@ set( libHeaders_NoMOC
     accounts/Account.h
 
     infosystem/infoplugins/unix/imageconverter.h
-
-    playlist/dynamic/GeneratorInterface.h
-    playlist/dynamic/GeneratorFactory.h
 
     utils/tomahawkutils.h
 )
@@ -516,7 +539,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
-    ${CLUCENE_INCLUDE_DIR}
+    ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
@@ -538,14 +561,14 @@ IF(LIBATTICA_FOUND)
 ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
-    SET( libSources ${libSources}
+    LIST(APPEND libGuiSources
       infosystem/infoplugins/unix/mprispluginrootadaptor.cpp
       infosystem/infoplugins/unix/mprispluginplayeradaptor.cpp
       infosystem/infoplugins/unix/mprisplugin.cpp
       infosystem/infoplugins/unix/fdonotifyplugin.cpp
       infosystem/infoplugins/unix/imageconverter.cpp )
 
-    SET( libHeaders ${libHeaders}
+    LIST(APPEND libGuiHeaders
       infosystem/infoplugins/unix/mprispluginrootadaptor.h
       infosystem/infoplugins/unix/mprispluginplayeradaptor.h
       infosystem/infoplugins/unix/mprisplugin.h
@@ -599,7 +622,7 @@ IF( APPLE )
         /System/Library/Frameworks/AppKit.framework
     )
 ELSE( APPLE )
-    SET( libSources ${libSources} thirdparty/Qocoa/qsearchfield.cpp )
+    SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)
@@ -612,11 +635,11 @@ IF(BUILD_GUI)
 ENDIF()
 
 qt4_wrap_ui( libUI_H ${libUI} )
-qt4_wrap_cpp( libMoc ${libHeaders} ${libGuiHeaders} )
+qt4_wrap_cpp( libMoc ${libHeaders} )
 
 SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libGuiSources} ${libSources} ${libMoc} )
+ADD_LIBRARY( tomahawklib SHARED ${libSources} ${libMoc} )
 
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
@@ -636,8 +659,9 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
-    ${QT_LIBRARIES}
+    ${QT_QTGUI_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

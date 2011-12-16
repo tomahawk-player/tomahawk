@@ -149,7 +149,7 @@ Portfwd::get_status()
 
     // get external IP adress
     char ip[16];
-    if ( 0 != UPNP_GetExternalIPAddress( m_urls->controlURL, m_data->CIF.servicetype, (char*)&ip ) )
+    if ( 0 != UPNP_GetExternalIPAddress( m_urls->controlURL, m_data->first.servicetype, (char*)&ip ) )
     {
         m_externalip = ""; //failed
     }

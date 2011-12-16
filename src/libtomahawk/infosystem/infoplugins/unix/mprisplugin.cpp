@@ -258,7 +258,7 @@ MprisPlugin::metadata() const
         // Only return art if tempfile exists, and if its name contains the same "artist_album_tomahawk_cover.png"
         if( m_coverTempFile && m_coverTempFile->exists() &&
                 m_coverTempFile->fileName().contains( track->artist()->name() + "_" + track->album()->name() + "_tomahawk_cover.png" ) )
-            metadataMap.insert( "mpris:artUrl", QFileInfo( *m_coverTempFile ).absoluteFilePath() );
+            metadataMap.insert( "mpris:artUrl", QString( QUrl::fromLocalFile( QFileInfo( *m_coverTempFile ).absoluteFilePath() ).toEncoded() ) );
         else
         {
             // Need to fetch the album cover
@@ -275,7 +275,6 @@ MprisPlugin::metadata() const
 
             Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
         }
-
     }
 
     return metadataMap;

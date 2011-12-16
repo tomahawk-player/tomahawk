@@ -172,7 +172,7 @@ DynamicPlaylist::createNewRevision( const QString& newUuid )
     }
     else if( mode() == OnDemand )
     {
-        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls());
+        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls() );
     }
 }
 
@@ -185,6 +185,8 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QList< dyncontrol_ptr>& controls,
                                     const QList< plentry_ptr >& entries )
 {
+    Q_ASSERT( m_source->isLocal() || newrev == oldrev );
+
     if ( busy() )
     {
         m_revisionQueue.enqueue( DynQueueItem( newrev, oldrev, type, controls, (int)Static, entries, oldrev == currentrevision() ) );
@@ -230,6 +232,8 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& type,
                                     const QList< dyncontrol_ptr>& controls )
 {
+    Q_ASSERT( m_source->isLocal() || newrev == oldrev );
+
     if ( busy() )
     {
         m_revisionQueue.enqueue( DynQueueItem( newrev, oldrev, type, controls, (int)OnDemand, QList< plentry_ptr >(), oldrev == currentrevision() ) );
@@ -533,8 +537,15 @@ DynamicPlaylist::checkRevisionQueue()
         if ( item.oldRev != currentrevision() && item.applyToTip )
         {
             // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+            if ( item.oldRev == item.newRev )
+            {
+                checkRevisionQueue();
+                return;
+            }
+
             item.oldRev = currentrevision();
         }
+
         if( item.mode == Static )
             createNewRevision( item.newRev, item.oldRev, item.type, item.controls, item.entries );
         else

@@ -80,7 +80,7 @@ ScanManager::~ScanManager()
         delete m_musicScannerThreadController;
         m_musicScannerThreadController = 0;
     }
-    qDebug() << Q_FUNC_INFO << " scanner thread controller finished, exiting ScanManager";
+    qDebug() << Q_FUNC_INFO << "scanner thread controller finished, exiting ScanManager";
 }
 
 
@@ -140,16 +140,14 @@ ScanManager::runScan( bool manualFull )
         if ( manualFull )
         {
             DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-            connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                                SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
-
+            connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
             Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
             return;
         }
 
         DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
         connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
-                    SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
+                        SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
 
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
     }
@@ -167,9 +165,7 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
     if ( !mtimes.isEmpty() && TomahawkSettings::instance()->scannerPaths().isEmpty() )
     {
         DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-        connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
-                            SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
-
+        connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
@@ -179,12 +175,12 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
 
 
 void
-ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection )
+ScanManager::filesDeleted()
 {
-    Q_UNUSED( files );
-    Q_UNUSED( collection );
     if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
         runDirScan();
+    else
+        scannerFinished();
 }
 
 
@@ -193,16 +189,13 @@ ScanManager::runDirScan()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-        return;
-
     QStringList paths = TomahawkSettings::instance()->scannerPaths();
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_scanTimer->stop();
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths ) );
+        m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
@@ -219,6 +212,7 @@ ScanManager::runDirScan()
 void
 ScanManager::scannerFinished()
 {
+    tDebug() << "deleting scanner";
     if ( !m_scanner.isNull() )
     {
         m_musicScannerThreadController->quit();
@@ -228,6 +222,7 @@ ScanManager::scannerFinished()
         delete m_musicScannerThreadController;
         m_musicScannerThreadController = 0;
     }
+
     m_scanTimer->start();
     SourceList::instance()->getLocal()->scanningFinished( 0 );
     emit finished();

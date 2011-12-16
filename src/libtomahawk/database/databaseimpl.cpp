@@ -49,53 +49,15 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     , m_lastalbid( 0 )
     , m_lasttrkid( 0 )
 {
-    bool schemaUpdated = false;
-    int version = getDatabaseVersion( dbname );
+    QTime t;
+    t.start();
 
-    if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
-    {
-        QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
-        tLog() << endl << "****************************" << endl;
-        tLog() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
-        tLog() << "Moving" << dbname << newname;
-        tLog() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
-        tLog() << endl << "****************************" << endl;
-
-        QFile::copy( dbname, newname );
-        {
-            db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
-            db.setDatabaseName( dbname );
-            if( !db.open() )
-                throw "db moving failed";
-
-            TomahawkSqlQuery query = newquery();
-            query.exec( "PRAGMA auto_vacuum = FULL" );
-
-            schemaUpdated = updateSchema( version );
-            if ( !schemaUpdated )
-            {
-                Q_ASSERT( false );
-                QTimer::singleShot( 0, qApp, SLOT( quit() ) );
-            }
-        }
-    }
-    else
-    {
-        db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
-        db.setDatabaseName( dbname );
-        if ( !db.open() )
-        {
-            tLog() << "Failed to open database" << dbname;
-            throw "failed to open db"; // TODO
-        }
-
-        if ( version < 0 )
-            schemaUpdated = updateSchema( 0 );
-    }
+    bool schemaUpdated = openDatabase( dbname );
+    tDebug( LOGVERBOSE ) << "Opened database:" << t.elapsed();
 
     TomahawkSqlQuery query = newquery();
     query.exec( "SELECT v FROM settings WHERE k='dbid'" );
-    if( query.next() )
+    if ( query.next() )
     {
         m_dbid = query.value( 0 ).toString();
     }
@@ -107,14 +69,17 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     tLog() << "Database ID:" << m_dbid;
 
      // make sqlite behave how we want:
+    query.exec( "PRAGMA auto_vacuum = FULL" );
     query.exec( "PRAGMA synchronous  = ON" );
     query.exec( "PRAGMA foreign_keys = ON" );
     //query.exec( "PRAGMA temp_store = MEMORY" );
+    tDebug( LOGVERBOSE ) << "Tweaked db pragmas:" << t.elapsed();
 
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
 
     m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
+    tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
 }
 
 
@@ -141,7 +106,7 @@ DatabaseImpl::updateSchema( int oldVersion )
         tLog() << "Create tables... old version is" << oldVersion;
         QString sql( get_tomahawk_sql() );
         QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-        db.transaction();
+        m_db.transaction();
 
         foreach ( const QString& sl, statements )
         {
@@ -154,13 +119,13 @@ DatabaseImpl::updateSchema( int oldVersion )
             query.exec( s );
         }
 
-        db.commit();
+        m_db.commit();
         return true;
     }
     else // update in place! run the proper upgrade script
     {
         int cur = oldVersion;
-        db.transaction();
+        m_db.transaction();
         while ( cur < CURRENT_SCHEMA_VERSION )
         {
             cur++;
@@ -186,7 +151,7 @@ DatabaseImpl::updateSchema( int oldVersion )
                 q.exec( clean );
             }
         }
-        db.commit();
+        m_db.commit();
         tLog() << "DB Upgrade successful!";
         return true;
     }
@@ -405,20 +370,27 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool autoCreate )
 QList< QPair<int, float> >
 DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
-    Q_UNUSED( limit );
-
     QList< QPair<int, float> > resultslist;
-    if( table != "artist" && table != "track" && table != "album" )
+    if ( table != "artist" && table != "track" && table != "album" )
         return resultslist;
 
     QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
-    foreach( int i, resultsmap.keys() )
+    foreach ( int i, resultsmap.keys() )
     {
         resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
     }
     qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
 
-    return resultslist;
+    if ( !limit )
+        return resultslist;
+
+    QList< QPair<int, float> > resultscapped;
+    for ( int i = 0; i < (int)limit && i < resultsmap.count(); i++ )
+    {
+        resultscapped << resultslist.at( i );
+    }
+
+    return resultscapped;
 }
 
 
@@ -619,9 +591,10 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 }
 
 
-int
-DatabaseImpl::getDatabaseVersion( const QString& dbname )
+bool
+DatabaseImpl::openDatabase( const QString& dbname )
 {
+    bool schemaUpdated = false;
     int version = -1;
     {
         QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
@@ -639,9 +612,41 @@ DatabaseImpl::getDatabaseVersion( const QString& dbname )
             version = qry.value( 0 ).toInt();
             tLog() << "Database schema of" << dbname << "is" << version;
         }
+
+        if ( version < 0 || version == CURRENT_SCHEMA_VERSION )
+            m_db = db;
     }
 
-    QSqlDatabase::removeDatabase( "tomahawk" );
+    if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
+    {
+        QSqlDatabase::removeDatabase( "tomahawk" );
 
-    return version;
+        QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
+        tLog() << endl << "****************************" << endl;
+        tLog() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
+        tLog() << "Moving" << dbname << newname;
+        tLog() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
+        tLog() << endl << "****************************" << endl;
+
+        QFile::copy( dbname, newname );
+        {
+            m_db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+            m_db.setDatabaseName( dbname );
+            if ( !m_db.open() )
+                throw "db moving failed";
+
+            schemaUpdated = updateSchema( version );
+            if ( !schemaUpdated )
+            {
+                Q_ASSERT( false );
+                QTimer::singleShot( 0, qApp, SLOT( quit() ) );
+            }
+        }
+    }
+    else if ( version < 0 )
+    {
+            schemaUpdated = updateSchema( 0 );
+    }
+
+    return schemaUpdated;
 }

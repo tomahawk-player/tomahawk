@@ -18,16 +18,14 @@
 
 #include "servent.h"
 
-#include <QCoreApplication>
-#include <QMutexLocker>
-#include <QNetworkInterface>
-#include <QFile>
-#include <QThread>
-#include <QNetworkProxy>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QPushButton>
-#include <QMessageBox>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QMutexLocker>
+#include <QtNetwork/QNetworkInterface>
+#include <QtCore/QFile>
+#include <QtCore/QThread>
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #include "result.h"
 #include "source.h"
@@ -65,8 +63,8 @@ Servent::Servent( QObject* parent )
 {
     s_instance = this;
 
+    m_lanHack = qApp->arguments().contains( "--lanhack" );
     new ACLSystem( this );
-
     setProxy( QNetworkProxy::NoProxy );
 
     {
@@ -144,7 +142,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
         case TomahawkSettings::Upnp:
             // TODO check if we have a public/internet IP on this machine directly
-            tLog() << "External address mode set to upnp....";
+            tLog() << "External address mode set to upnp...";
             m_portfwd = new PortFwdThread( m_port );
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                   SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
@@ -161,7 +159,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString _key = ( key.isEmpty() ? uuid() : key );
-    ControlConnection* cc = new ControlConnection( this );
+    ControlConnection* cc = new ControlConnection( this, name );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     if ( !nodeid.isEmpty() )
         cc->setId( nodeid );
@@ -170,6 +168,19 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     tDebug( LOGVERBOSE ) << "Creating connection key with name of" << cc->name() << "and id of" << cc->id() << "and key of" << _key << "; key is once only? :" << (onceOnly ? "true" : "false");
     registerOffer( _key, cc );
     return _key;
+}
+
+
+bool
+Servent::isValidExternalIP( const QHostAddress& addr ) const
+{
+    QString ip = addr.toString();
+    if ( !m_lanHack && ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) ) )
+    {
+        return false;
+    }
+
+    return !addr.isNull();
 }
 
 
@@ -183,7 +194,7 @@ Servent::setInternalAddress()
         if ( ha.toString().contains( ":" ) )
             continue; //ipv6
 
-        if ( qApp->arguments().contains( "--lanhack" ) )
+        if ( m_lanHack && isValidExternalIP( ha ) )
         {
             tLog() << "LANHACK: set external address to lan address" << ha.toString();
             setExternalAddress( ha, m_port );
@@ -201,26 +212,13 @@ Servent::setInternalAddress()
 void
 Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
-    QString ip = ha.toString();
-    if ( !qApp->arguments().contains( "--lanhack" ) )
-    {
-        if ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) )
-        {
-            tDebug() << Q_FUNC_INFO << "Tried to set an invalid ip as external address!";
-            setInternalAddress();
-            return;
-        }
-
-        m_externalAddress = ha;
-        m_externalPort = port;
-    }
-    else
+    if ( isValidExternalIP( ha ) )
     {
         m_externalAddress = ha;
         m_externalPort = port;
     }
 
-    if ( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
     {
         if ( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
              !TomahawkSettings::instance()->externalPort() == 0 )
@@ -230,7 +228,11 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
             tDebug() << "UPnP failed, have external address/port - falling back" << m_externalHostname << m_externalPort << m_externalAddress;
         }
         else
+        {
             tLog() << "No external access, LAN and outbound connections only!";
+            setInternalAddress();
+            return;
+        }
     }
 
     m_ready = true;
@@ -260,6 +262,7 @@ Servent::unregisterControlConnection( ControlConnection* conn )
         if( c!=conn )
             n.append( c );
 
+    m_connectedNodes.removeAll( conn->id() );
     m_controlconnections = n;
 }
 
@@ -327,7 +330,6 @@ Servent::readyRead()
 
     ControlConnection* cc = 0;
     bool ok;
-//    int pport; //FIXME?
     QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
     if( !ok )
@@ -335,9 +337,9 @@ Servent::readyRead()
         tDebug() << "Invalid JSON on new connection, aborting";
         goto closeconnection;
     }
+
     conntype  = m.value( "conntype" ).toString();
     key       = m.value( "key" ).toString();
-//    pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 
@@ -345,13 +347,24 @@ Servent::readyRead()
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
+        bool dupe = false;
+        if ( m_connectedNodes.contains( nodeid ) )
+            dupe = true;
+
         foreach( ControlConnection* con, m_controlconnections )
         {
+            tLog( LOGVERBOSE ) << "known connection:" << con->id() << con->source()->friendlyName();
             if( con->id() == nodeid )
             {
-                tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
-                goto closeconnection;
+                dupe = true;
+                break;
             }
+        }
+
+        if ( dupe )
+        {
+            tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
+            goto closeconnection;
         }
     }
 
@@ -365,17 +378,19 @@ Servent::readyRead()
     }
 
     // they connected to us and want something we are offering
-    if( conntype == "accept-offer" || "push-offer" )
+    if ( conntype == "accept-offer" || conntype == "push-offer" )
     {
         sock->_msg.clear();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock->peerAddress() << "socket peer name = " << sock->peerName();
         Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
-            tLog() << "claimOffer FAILED, key:" << key;
+            tLog() << "claimOffer FAILED, key:" << key << nodeid;
             goto closeconnection;
         }
-        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key;
+        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;
 
+        m_connectedNodes << nodeid;
         if( !nodeid.isEmpty() )
             conn->setId( nodeid );
 
@@ -400,7 +415,7 @@ closeconnection:
 void
 Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key )
 {
-    tDebug( LOGVERBOSE ) << "Servent::createParallelConnection, key:" << key << thread() << orig_conn;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ", key:" << key << thread() << orig_conn;
     // if we can connect to them directly:
     if( orig_conn && orig_conn->outbound() )
     {
@@ -433,7 +448,7 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    tDebug( LOGVERBOSE ) << "Servent::SocketConnected" << thread() << "socket:" << sock;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket: " << sock << ", hostaddr: " << sock->peerAddress() << ", hostname: " << sock->peerName();
 
     Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
@@ -497,7 +512,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
-    ControlConnection* conn = new ControlConnection( this );
+    ControlConnection* conn = new ControlConnection( this, ha );
     QVariantMap m;
     m["conntype"]  = "accept-offer";
     m["key"]       = key;
@@ -549,7 +564,10 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
                      SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
-    sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
+    if ( !conn->peerIpAddress().isNull() )
+        sock->connectToHost( conn->peerIpAddress(), port, QTcpSocket::ReadWrite );
+    else
+        sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
     sock->moveToThread( thread() );
 }
 
@@ -616,7 +634,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if( isIPWhitelisted( peer ) )
         {
             tDebug() << "Connection is from whitelisted IP range (LAN)";
-            Connection* conn = new ControlConnection( this );
+            Connection* conn = new ControlConnection( this, peer.toString() );
             conn->setName( peer.toString() );
             return conn;
         }
@@ -662,7 +680,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     else if ( noauth )
     {
         Connection* conn;
-        conn = new ControlConnection( this );
+        conn = new ControlConnection( this, peer );
         conn->setName( key );
         return conn;
     }
@@ -684,8 +702,9 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
     if( peerStatus == ACLSystem::Deny )
         return false;
 
-#ifndef TOMAHAWK_HEADLESS
     //FIXME: Actually enable it when it makes sense
+    //FIXME: needs refactoring because it depends on QtGui and the servent is part of libtomahawk-core
+    /*
     return true;
     if( peerStatus == ACLSystem::NotFound )
     {
@@ -725,7 +744,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
         Q_ASSERT( false );
         return false;
     }
-#endif
+    */
 
     return true;
 }
@@ -799,11 +818,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
     static QList<range> whitelist;
     if( whitelist.isEmpty() )
     {
-        whitelist   << range( QHostAddress( "10.0.0.0" ), 8 )
-                    << range( QHostAddress( "172.16.0.0" ), 12 )
-                    << range( QHostAddress( "192.168.0.0" ), 16 )
-                    << range( QHostAddress( "169.254.0.0" ), 16 )
-                    << range( QHostAddress( "127.0.0.0" ), 24 );
+        whitelist << range( QHostAddress( "10.0.0.0" ), 8 )
+                  << range( QHostAddress( "172.16.0.0" ), 12 )
+                  << range( QHostAddress( "192.168.0.0" ), 16 )
+                  << range( QHostAddress( "169.254.0.0" ), 16 )
+                  << range( QHostAddress( "127.0.0.0" ), 24 );
 
 //        tDebug( LOGVERBOSE ) << "Loaded whitelist IP range:" << whitelist;
     }

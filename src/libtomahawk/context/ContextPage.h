@@ -52,7 +52,9 @@ public:
     virtual bool jumpToCurrentTrack() = 0;
 
 public slots:
-    virtual void setQuery( const Tomahawk::query_ptr& query ) = 0;
+    virtual void setArtist( const Tomahawk::artist_ptr& artist ) { Q_UNUSED( artist ); }
+    virtual void setAlbum( const Tomahawk::album_ptr& album ) { Q_UNUSED( album ); }
+    virtual void setQuery( const Tomahawk::query_ptr& query ) { Q_UNUSED( query ); }
 
 signals:
     void nameChanged( const QString& );

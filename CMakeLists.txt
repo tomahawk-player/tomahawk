@@ -24,6 +24,7 @@ SET( TOMAHAWK_VERSION_PATCH 99 )
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
+option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 
 # generate version string
 
@@ -108,7 +109,7 @@ macro_optional_find_package(LibAttica)
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "")
 
 macro_optional_find_package(QuaZip)
-macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers autmatically. Will build internal copy instead." "http://quazip.sourceforge.net/" FALSE "" "")
+macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically." "http://quazip.sourceforge.net/" FALSE "" "")
 
 IF( NOT QuaZip_FOUND )
     add_subdirectory( ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip )
@@ -116,6 +117,7 @@ IF( NOT QuaZip_FOUND )
     SET( QuaZip_LIBRARY quazip )
     SET( QuaZip_LIBRARIES ${QuaZip_LIBRARY} )
     SET( QuaZip_FOUND true )
+    macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically. Building internal copy" "http://quazip.sourceforge.net/" FALSE "" "")
 
     # copy headers to build/quazip so we can use proper includes inside the code
     FILE( COPY ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip/quazip/ DESTINATION ${CMAKE_BINARY_DIR}/libtomahawk/thirdparty/quazip )
@@ -211,4 +213,9 @@ ADD_SUBDIRECTORY( src/libtomahawk )
 SET( TOMAHAWK_LIBRARIES tomahawklib )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
-ADD_SUBDIRECTORY( src/breakpad/CrashReporter )
+
+IF( BUILD_GUI )
+    IF( NOT DISABLE_CRASHREPORTER )
+        ADD_SUBDIRECTORY( src/breakpad/CrashReporter )
+    ENDIF()
+ENDIF()

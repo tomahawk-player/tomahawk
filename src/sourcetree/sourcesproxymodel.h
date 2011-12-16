@@ -35,14 +35,19 @@ public slots:
 
     void selectRequested( const QPersistentModelIndex& );
     void expandRequested( const QPersistentModelIndex& );
+    void toggleExpandRequested( const QPersistentModelIndex& );
 
 signals:
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
+    void toggleExpandRequest( const QPersistentModelIndex& idx );
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
+
+private slots:
+    void onModelChanged();
 
 private:
     SourcesModel* m_model;

@@ -50,6 +50,8 @@ public:
     ~ContextWidget();
 
 public slots:
+    void setArtist( const Tomahawk::artist_ptr& artist );
+    void setAlbum( const Tomahawk::album_ptr& album );
     void setQuery( const Tomahawk::query_ptr& query, bool force = false );
 
     void toggleSize();
@@ -63,6 +65,7 @@ private slots:
 protected:
     void paintEvent( QPaintEvent* e );
     void resizeEvent( QResizeEvent* e );
+    void changeEvent( QEvent* e );
 
 private:
     void fadeOut( bool animate );
@@ -81,6 +84,8 @@ private:
 
     int m_currentView;
 
+    Tomahawk::artist_ptr m_artist;
+    Tomahawk::album_ptr m_album;
     Tomahawk::query_ptr m_query;
     bool m_visible;
 };

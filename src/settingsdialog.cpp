@@ -20,7 +20,8 @@
 #include "settingsdialog.h"
 #include "config.h"
 
-#include <QCryptographicHash>
+#include "utils/tomahawkutilsgui.h"
+
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -42,6 +43,7 @@
 #include "musicscanner.h"
 #include "pipeline.h"
 #include "resolver.h"
+#include "ExternalResolverGui.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
 #include "scanmanager.h"
@@ -68,6 +70,7 @@ md5( const QByteArray& src )
     return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
 }
 
+
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
     , ui( new Ui_StackedSettingsDialog )
@@ -88,6 +91,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->addScript->setFixedWidth( 42 );
     ui->removeScript->setFixedWidth( ui->addScript->width() );
 
+    ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
     ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
@@ -99,8 +103,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->listWidget->setFrameShadow( QFrame::Sunken );
     setContentsMargins( 4, 4, 4, 4 );
 #else
-    ui->listWidget->setFixedWidth( 83 );
     setContentsMargins( 0, 4, 4, 4 );
+#endif
+
+#ifdef Q_WS_MAC
+    ui->listWidget->setFixedWidth( 83 );
 #endif
 
 #ifdef Q_WS_MAC
@@ -200,6 +207,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
+    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->checkBoxUpnp, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->checkBoxReporter, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
     connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
 
     ui->listWidget->setCurrentRow( 0 );
@@ -215,6 +225,7 @@ SettingsDialog::~SettingsDialog()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
 
+        s->setCrashReporterEnabled( ui->checkBoxReporter->checkState() == Qt::Checked );
         s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
         s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
         s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
@@ -260,6 +271,8 @@ SettingsDialog::createIcons()
     /// Not fun but QListWidget sucks. Do our max-width calculation manually
     /// so the icons arre lined up.
     // Resolvers is the longest string... in english. fml.
+
+    ensurePolished();
 
     int maxlen = 0;
     QFontMetrics fm( font() );
@@ -307,7 +320,7 @@ SettingsDialog::createIcons()
 
 #ifndef Q_WS_MAC
     // doesn't listen to sizehint...
-    ui->listWidget->setMaximumWidth( maxlen + 8 );
+    ui->listWidget->setFixedWidth( maxlen + 8 );
 #endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
@@ -410,7 +423,7 @@ SettingsDialog::testLastFmLogin()
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken = md5( ( ui->lineEditLastfmUsername->text().toLower() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = TomahawkUtils::md5( ( ui->lineEditLastfmUsername->text().toLower() + TomahawkUtils::md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;
@@ -474,6 +487,7 @@ SettingsDialog::onLastFmFinished()
 #endif
 }
 
+
 void
 SettingsDialog::addScriptResolver()
 {
@@ -502,13 +516,13 @@ SettingsDialog::removeScriptResolver()
     }
 }
 
+
 void
 SettingsDialog::getMoreResolvers()
 {
 #if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
     GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
-    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished(int)));
-
+    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished( int ) ) );
     diag->show();
 #elif defined(LIBATTICA_FOUND)
     GetNewStuffDialog diag( this );
@@ -518,6 +532,7 @@ SettingsDialog::getMoreResolvers()
 
 }
 
+
 #ifdef LIBATTICA_FOUND
 void
 SettingsDialog::atticaResolverInstalled( const QString& resolverId )
@@ -525,12 +540,14 @@ SettingsDialog::atticaResolverInstalled( const QString& resolverId )
     m_resolversModel->atticaResolverInstalled( resolverId );
 }
 
+
 void
 SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
 {
     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
 }
 #endif
+
 
 void
 SettingsDialog::scriptSelectionChanged()
@@ -545,6 +562,7 @@ SettingsDialog::scriptSelectionChanged()
     }
 }
 
+
 void
 SettingsDialog::getMoreResolversFinished( int ret )
 {
@@ -556,10 +574,11 @@ void
 SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( resolver );
-    if( r && r->configUI() )
+    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
+    if( res && res->configUI() )
     {
 #ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
+        DelegateConfigWrapper dialog( res->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted )
@@ -569,13 +588,12 @@ SettingsDialog::openResolverConfig( const QString& resolver )
         }
 #else
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( r->configUI(), "Resolver Configuration", this, Qt::Sheet );
-        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( r ) );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( res->configUI(), "Resolver Configuration", this, Qt::Sheet );
+        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( res ) );
         connect( dialog, SIGNAL( finished( int ) ), this, SLOT( resolverConfigClosed( int ) ) );
 
         dialog->show();
 #endif
-
     }
 }
 
@@ -676,7 +694,8 @@ SettingsDialog::accountFactoryClicked( AccountFactory* factory )
 
         handleAccountAdded( account, added );
 #endif
-    } else
+    }
+    else
     {
         // no config, so just add it
         added = true;
@@ -797,6 +816,13 @@ SettingsDialog::accountDeleted( bool )
             AccountManager::instance()->removeAccount( account );
         }
     }
+}
+
+
+void
+SettingsDialog::requiresRestart()
+{
+    QMessageBox::information( this, tr( "Information" ), tr( "Changing this setting requires a restart of Tomahawk!" ) );
 }
 
 

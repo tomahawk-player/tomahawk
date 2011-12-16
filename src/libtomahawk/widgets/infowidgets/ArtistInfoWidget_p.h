@@ -64,6 +64,12 @@ public:
     virtual QList< Tomahawk::query_ptr > tracks() { return QList< Tomahawk::query_ptr >(); }
     virtual int unfilteredTrackCount() const { return 0; }
 
+    virtual bool hasChildInterface( PlaylistInterface* other )
+    {
+        return ( m_w->ui->albums->playlistInterface() == other ) ||
+               ( m_w->ui->relatedArtists->playlistInterface() == other ) ||
+               ( m_w->ui->topHits->playlistInterface() == other );
+    }
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {

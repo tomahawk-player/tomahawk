@@ -18,13 +18,12 @@
 
 #include "imagebutton.h"
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QLayout>
-#include <QAction>
-#include <QPixmap>
-#include <QIcon>
-#include <QString>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QLayout>
+#include <QtGui/QPixmap>
+#include <QtGui/QIcon>
+#include <QtCore/QString>
 
 #include "utils/logger.h"
 

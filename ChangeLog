@@ -1,3 +1,40 @@
+Version 0.3.3:
+    * Automatically load Super Collection tracks when no official release
+      information is available.
+    * Fixed stations not fetching new tracks under certain circumstances.
+    * Fixed Footnotes not always updating when selecting a new track.
+    * Added support for ow.ly, fb.me, itun.es and tinyurl.com URL shorteners.
+    * Fixed playback issues with non-latin filenames on Windows.
+    * Fixed tomahawk:// protocol not working properly on Windows.
+    * Fixed dupe menu entry appearing on OS X.
+    * Fixed invisible sidebar items on Linux.
+
+Version 0.3.2: 
+    * Improved syncing process, it's faster and more reliable now.
+    * Fixed UPnP issues.
+    * Fixed not updating collections and views after a collection changes.
+    * Fixed not showing a source's proper name at all times.
+    * Improved music scanner reliability.
+    * Fixed various labels not being painted in the right color when selected.
+    * Support .oga (ogg mimetype) files.
+    * Fixed stuck Now Playing indicator icon.
+    * Fixed sidebar width of settings dialog on Windows.
+    * Fixed not always showing delete icon on hovered temporary pages.
+    * Fixed inability to select externally mounted drives.
+    * Fixed bug where speaker would be stuck next to a playlist.
+    * Fixed bug where first startup would show a loading spinner in the
+      Dashboard's "Recent Additions" forever.
+    * Automatically upgrade resolvers when an update is found.
+    * Fixed last played track of a friend never expiring.
+    * Fixed parsing of rdio tracks.
+    * Changed steering mechanism in stations to be user-friendlier.
+    * Fixed loading biographies of artist names with special characters.
+    * Fixed behaviour of dropping Spotify playlists on the sidebar.
+    * Fixed hard to read source-name in the audio control area on OS X.
+    * Fixed crashes when playing Grooveshark tracks.
+    * Fixed bug where clicking the latch button would flicker and unlatch.
+    * Fixed Jabber accounts not connecting properly when proxy is in use.
+
 Version 0.3.1:
     * Fixed not resolving to local files.
     * Fixed shutdown crash on Windows.
@@ -42,7 +79,7 @@ Version 0.3.0:
     * Added new job status view in the bottom of the source list that displays
       current jobs such as resolving, parsing playlists, and loading from
       database.
-    * Parse and convert a Spotify playlist url when dropped anywhere on the
+    * Parse and convert a Spotify playlist URL when dropped anywhere on the
       sidebar.
     * Convert resolvers to use asynchronous calls to avoid blocking Tomahawk's
       UI, greatly increasing responsiveness of Tomahawk while resolving.

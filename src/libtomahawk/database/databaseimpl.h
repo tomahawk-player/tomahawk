@@ -44,19 +44,19 @@ friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
 
 public:
-    static int getDatabaseVersion( const QString& dbname );
-
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();
 
-    TomahawkSqlQuery newquery() { return TomahawkSqlQuery( db ); }
-    QSqlDatabase& database() { return db; }
+    bool openDatabase( const QString& dbname );
+
+    TomahawkSqlQuery newquery() { return TomahawkSqlQuery( m_db ); }
+    QSqlDatabase& database() { return m_db; }
 
     int artistId( const QString& name_orig, bool autoCreate );
     int trackId( int artistid, const QString& name_orig, bool autoCreate );
     int albumId( int artistid, const QString& name_orig, bool autoCreate );
 
-    QList< QPair<int, float> > searchTable( const QString& table, const QString& name, uint limit = 10 );
+    QList< QPair<int, float> > searchTable( const QString& table, const QString& name, uint limit = 0 );
     QList< int > getTrackFids( int tid );
 
     static QString sortname( const QString& str, bool replaceArticle = false );
@@ -86,7 +86,7 @@ private:
     bool updateSchema( int oldVersion );
 
     bool m_ready;
-    QSqlDatabase db;
+    QSqlDatabase m_db;
 
     QString m_lastart, m_lastalb, m_lasttrk;
     int m_lastartid, m_lastalbid, m_lasttrkid;

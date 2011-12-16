@@ -37,7 +37,6 @@
 #include "playlist.h"
 #include "query.h"
 #include "artist.h"
-#include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "accounts/AccountManager.h"
 #include "sourcetree/sourcetreeview.h"
@@ -89,6 +88,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
 
     ui->setupUi( this );
+
+    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
+    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
+
     applyPlatformTweaks();
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
@@ -106,9 +109,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         ui->menu_Help->addSeparator();
         ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
     }
-
-    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
-    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
 
     // set initial state
     onAccountDisconnected();
@@ -150,6 +150,11 @@ TomahawkWindow::loadSettings()
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
+    else
+    {
+        ui->splitter->setStretchFactor( 0, 0 );
+        ui->splitter->setStretchFactor( 1, 1 );
+    }
 
 #ifdef QT_MAC_USE_COCOA
      if ( workaround )
@@ -184,8 +189,6 @@ TomahawkWindow::applyPlatformTweaks()
     setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
-    /// Mac users allready have Tomahawk appmenu, change the name
-    ui->menuApp->setTitle( "&Music Player" );
 #else
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
@@ -245,9 +248,6 @@ TomahawkWindow::setupSideBar()
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
-
-    ui->splitter->setStretchFactor( 0, 1 );
-    ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
@@ -295,8 +295,8 @@ TomahawkWindow::setupSignals()
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
-    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
-                                        SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
+    connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
@@ -487,6 +487,7 @@ TomahawkWindow::pluginMenuRemoved( QMenu* menu )
     }
 }
 
+
 void
 TomahawkWindow::showOfflineSources()
 {
@@ -519,6 +520,7 @@ TomahawkWindow::loadSpiff()
 #endif
 }
 
+
 void
 TomahawkWindow::loadXspfFinished( int ret )
 {
@@ -536,6 +538,7 @@ TomahawkWindow::loadXspfFinished( int ret )
     }
     d->deleteLater();
 }
+
 
 void
 TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
@@ -560,6 +563,17 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
             //FIXME: This includes FetchError
             break;
     }
+}
+
+
+void
+TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
+{
+#ifdef Q_WS_X11
+    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device. Make sure you have a suitable Phonon backend and required plugins installed." ), QMessageBox::Ok );
+#else
+    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device." ), QMessageBox::Ok );
+#endif
 }
 
 
@@ -613,7 +627,9 @@ TomahawkWindow::createPlaylist()
     playlistSelectorDlg->show();
 }
 
-void TomahawkWindow::playlistCreateDialogFinished( int ret )
+
+void
+TomahawkWindow::playlistCreateDialogFinished( int ret )
 {
     PlaylistTypeSelectorDlg* playlistSelectorDlg = qobject_cast< PlaylistTypeSelectorDlg* >( sender() );
     Q_ASSERT( playlistSelectorDlg );
@@ -632,6 +648,7 @@ void TomahawkWindow::playlistCreateDialogFinished( int ret )
     }
     playlistSelectorDlg->deleteLater();
 }
+
 
 void
 TomahawkWindow::audioStarted()
@@ -654,6 +671,7 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
 }
+
 
 void
 TomahawkWindow::onAccountConnected()

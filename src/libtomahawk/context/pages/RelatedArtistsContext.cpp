@@ -32,6 +32,7 @@ RelatedArtistsContext::RelatedArtistsContext()
 {
     m_relatedView = new ArtistView();
     m_relatedView->setGuid( "RelatedArtistsContext" );
+    m_relatedView->setUpdatesContextView( false );
     m_relatedModel = new TreeModel( m_relatedView );
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     m_relatedView->setTreeModel( m_relatedModel );
@@ -58,15 +59,17 @@ RelatedArtistsContext::~RelatedArtistsContext()
 
 
 void
-RelatedArtistsContext::setQuery( const Tomahawk::query_ptr& query )
+RelatedArtistsContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
-    if ( !m_query.isNull() && query->artist() == m_query->artist() )
+    if ( artist.isNull() )
+        return;
+    if ( !m_artist.isNull() && m_artist->name() == artist->name() )
         return;
 
-    m_query = query;
+    m_artist = artist;
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = query->artist();
+    artistInfo["artist"] = artist->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
     requestData.caller = m_infoId;
@@ -75,6 +78,26 @@ RelatedArtistsContext::setQuery( const Tomahawk::query_ptr& query )
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+void
+RelatedArtistsContext::setQuery( const Tomahawk::query_ptr& query )
+{
+    if ( query.isNull() )
+        return;
+
+    setArtist( Artist::get( query->artist(), false ) );
+}
+
+
+void
+RelatedArtistsContext::setAlbum( const Tomahawk::album_ptr& album )
+{
+    if ( album.isNull() )
+        return;
+
+    setArtist( album->artist() );
 }
 
 
@@ -89,9 +112,9 @@ RelatedArtistsContext::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData req
 
     if ( output.canConvert< QVariantMap >() )
     {
-        if ( trackInfo["artist"] != m_query->artist() )
+        if ( trackInfo["artist"] != m_artist->name() )
         {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_query->artist();
+            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
             return;
         }
     }

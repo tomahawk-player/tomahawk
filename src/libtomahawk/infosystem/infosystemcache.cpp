@@ -17,10 +17,14 @@
  */
 
 #include <QtDebug>
-#include <QDesktopServices>
+
 #include <QDir>
 #include <QSettings>
 #include <QCryptographicHash>
+
+#ifndef ENABLE_HEADLESS
+    #include <QDesktopServices>
+#endif
 
 #include "infosystemcache.h"
 #include "tomahawksettings.h"
@@ -36,7 +40,7 @@ namespace InfoSystem
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
-    , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
+    , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/InfoSystemCache/" )
     , m_cacheVersion( 2 )
 {
     tDebug() << Q_FUNC_INFO;

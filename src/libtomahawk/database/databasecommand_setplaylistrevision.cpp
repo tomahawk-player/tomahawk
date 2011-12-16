@@ -104,6 +104,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
     else
     {
+        tDebug() << "Playlist:" << m_playlistguid << m_currentRevision << source()->friendlyName() << source()->id();
         throw "No such playlist, WTF?";
         return;
     }
@@ -212,6 +213,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     else if ( !m_oldrev.isEmpty() )
     {
         tDebug() << "Not updating current revision, optimistic locking fail";
-        Q_ASSERT( false );
+//        Q_ASSERT( false );
     }
 }

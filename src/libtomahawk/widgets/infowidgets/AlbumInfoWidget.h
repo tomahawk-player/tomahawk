@@ -64,8 +64,6 @@ public:
     virtual QString longDescription() const { return m_longDescription; }
     virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
 
-    void setMode( Tomahawk::ModelMode mode );
-
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showStatsBar() const { return false; }
 
@@ -73,6 +71,7 @@ public:
     virtual bool isBeingPlayed() const;
 
 public slots:
+    void setMode( Tomahawk::ModelMode mode );
 
     /** \brief Loads information for a given album.
      *  \param album The album that you want to load information for.
@@ -93,12 +92,15 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
+    void loadAlbums( bool autoRefetch = false );
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
     void onModeToggle();
+    void onAlbumsModeToggle();
+
     void onLoadingStarted();
     void onLoadingFinished();
 
@@ -111,11 +113,14 @@ private:
     TreeModel* m_tracksModel;
 
     OverlayButton* m_button;
+    OverlayButton* m_buttonAlbums;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
+
+    QString m_infoId;
 };
 
 #endif // ALBUMINFOWIDGET_H

@@ -80,11 +80,13 @@ DatabaseCommand::setSource( const Tomahawk::source_ptr& s )
     m_source = s;
 }
 
+
 const Tomahawk::source_ptr&
 DatabaseCommand::source() const
 {
     return m_source;
 }
+
 
 DatabaseCommand*
 DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
@@ -139,7 +141,8 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;
-    } else if( name == "createdynamicplaylist" )
+    }
+    else if( name == "createdynamicplaylist" )
     {
         DatabaseCommand_CreateDynamicPlaylist * cmd = new DatabaseCommand_CreateDynamicPlaylist;
         cmd->setSource( source );
@@ -183,7 +186,7 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
         return cmd;
     }
 
-    qDebug() << "ERROR in" << Q_FUNC_INFO << name;
+    qDebug() << "Unknown database command" << name;
 //    Q_ASSERT( false );
     return NULL;
 }

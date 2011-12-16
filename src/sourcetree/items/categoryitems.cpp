@@ -365,6 +365,8 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
         m_addItem = new CategoryAddItem( model, this, m_category );
     }
     //     endRowsAdded();
+
+    connect( this, SIGNAL( toggleExpandRequest( SourceTreeItem* ) ), model, SLOT( itemToggleExpandRequest( SourceTreeItem* ) ) );
 }
 
 
@@ -405,8 +407,5 @@ CategoryItem::peerSortValue() const
 void
 CategoryItem::activate()
 {
-    if( m_category == SourcesModel::StationsCategory ) {
-        // TODO activate stations page
-    }
-
+    emit toggleExpandRequest( this );
 }

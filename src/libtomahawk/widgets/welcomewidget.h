@@ -29,7 +29,7 @@
 #include "source.h"
 #include "viewpage.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include "dllmacro.h"
 
@@ -84,7 +84,7 @@ public:
     ~WelcomeWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
 
     virtual QString title() const { return tr( "Welcome to Tomahawk" ); }
     virtual QString description() const { return QString(); }
@@ -92,7 +92,7 @@ public:
     virtual bool showStatsBar() const { return false; }
     virtual bool showInfoBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
     virtual bool isBeingPlayed() const;
 
 protected:
@@ -102,11 +102,11 @@ signals:
     void destroyed( QWidget* widget );
 
 public slots:
-    void updateRecentTracks();
     void updatePlaylists();
     void updateRecentAdditions();
 
 private slots:
+    void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( const QModelIndex& );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );

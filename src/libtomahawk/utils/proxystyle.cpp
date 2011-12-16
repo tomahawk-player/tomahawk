@@ -34,14 +34,12 @@ ProxyStyle::drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainte
 {
     if ( pe == PE_IndicatorBranch )
     {
-        if ( opt->state & QStyle::State_Children )
+        if ( opt->state & QStyle::State_Children && !w->property( "flattenBranches" ).toBool() )
         {
-            QRect r = opt->rect;
-
             int hd = ( opt->rect.height() - ARROW_HEIGHT ) / 2;
             int wd = ( opt->rect.width() - ARROW_WIDTH ) / 2;
-            r.adjust( wd, hd, 0, 0 );
 
+            QRect r = opt->rect.adjusted( wd, hd, 0, 0 );
             QPointF pointsOpened[3] = { QPointF( r.x(), r.y() ), QPointF( r.x() + ARROW_WIDTH, r.y() ), QPointF( r.x() + ARROW_WIDTH / 2, r.y() + ARROW_HEIGHT ) };
             QPointF pointsClosed[3] = { QPointF( r.x(), r.y() ), QPointF( r.x() + ARROW_WIDTH, r.y() + ARROW_HEIGHT / 2 ), QPointF( r.x(), r.y() + ARROW_HEIGHT ) };
 

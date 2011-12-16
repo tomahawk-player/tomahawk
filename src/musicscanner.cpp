@@ -91,7 +91,10 @@ DirLister::scanDir( QDir dir, int depth )
 
     m_opcount--;
     if ( m_opcount == 0 )
+    {
+        tDebug() << Q_FUNC_INFO << "emitting finished";
         emit finished();
+    }
 }
 
 
@@ -103,6 +106,7 @@ MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
 {
     m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
     m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
+    m_ext2mime.insert( "oga", TomahawkUtils::extensionToMimetype( "oga" ) );
     m_ext2mime.insert( "mpc", TomahawkUtils::extensionToMimetype( "mpc" ) );
     m_ext2mime.insert( "wma", TomahawkUtils::extensionToMimetype( "wma" ) );
     m_ext2mime.insert( "aac", TomahawkUtils::extensionToMimetype( "aac" ) );
@@ -132,8 +136,10 @@ void
 MusicScanner::startScan()
 {
     tDebug( LOGVERBOSE ) << "Loading mtimes...";
-    m_scanned = m_skipped = 0;
+    m_scanned = m_skipped = m_cmdQueue = 0;
     m_skippedFiles.clear();
+
+    SourceList::instance()->getLocal()->scanningProgress( m_scanned );
 
     // trigger the scan once we've loaded old filemtimes
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
@@ -141,7 +147,7 @@ MusicScanner::startScan()
     //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
     DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
     connect( cmd, SIGNAL( done( QMap< QString, QMap< unsigned int, unsigned int > > ) ),
-                SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
+                    SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
 
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
     return;
@@ -191,17 +197,27 @@ MusicScanner::listerFinished()
     foreach( const QString& key, m_filemtimes.keys() )
         m_filesToDelete << m_filemtimes[ key ].keys().first();
 
-    commitBatch( m_scannedfiles, m_filesToDelete );
-    m_scannedfiles.clear();
-    m_filesToDelete.clear();
-    
-    tDebug( LOGINFO ) << "Scanning complete, saving to database. "
-                         "( scanned" << m_scanned << "skipped" << m_skipped << ")";
+    tDebug() << "Lister finished: to delete:" << m_filesToDelete;
 
-    tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
-    foreach ( const QString& s, m_skippedFiles )
-        tDebug( LOGEXTRA ) << s;
+    if ( m_filesToDelete.length() || m_scannedfiles.length() )
+    {
+        commitBatch( m_scannedfiles, m_filesToDelete );
+        m_scannedfiles.clear();
+        m_filesToDelete.clear();
 
+        tDebug( LOGINFO ) << "Scanning complete, saving to database. ( scanned" << m_scanned << "skipped" << m_skipped << ")";
+        tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
+        foreach ( const QString& s, m_skippedFiles )
+            tDebug( LOGEXTRA ) << s;
+    }
+    else
+        cleanup();
+}
+
+
+void
+MusicScanner::cleanup()
+{
     if ( !m_dirLister.isNull() )
     {
         m_dirListerThreadController->quit();;
@@ -212,6 +228,7 @@ MusicScanner::listerFinished()
         m_dirListerThreadController = 0;
     }
 
+    tDebug() << Q_FUNC_INFO << "emitting finished!";
     emit finished();
 }
 
@@ -222,26 +239,40 @@ MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& delet
     if ( deletethese.length() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "deleting" << deletethese.length() << "tracks";
-        source_ptr localsrc = SourceList::instance()->getLocal();
-        Database::instance()->enqueue(
-            QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) )
-        );
+        executeCommand( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) ) );
     }
+
     if ( tracks.length() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "adding" << tracks.length() << "tracks";
-        source_ptr localsrc = SourceList::instance()->getLocal();
-        Database::instance()->enqueue(
-            QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, localsrc ) )
-        );
+        executeCommand( QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, SourceList::instance()->getLocal() ) ) );
     }
+}
+
+
+void
+MusicScanner::executeCommand( QSharedPointer< DatabaseCommand > cmd )
+{
+    tDebug() << Q_FUNC_INFO << m_cmdQueue;
+    m_cmdQueue++;
+    connect( cmd.data(), SIGNAL( finished() ), SLOT( commandFinished() ) );
+    Database::instance()->enqueue( cmd );
+}
+
+
+void
+MusicScanner::commandFinished()
+{
+    tDebug() << Q_FUNC_INFO << m_cmdQueue;
+
+    if ( --m_cmdQueue == 0 )
+        cleanup();
 }
 
 
 void
 MusicScanner::scanFile( const QFileInfo& fi )
 {
-    tDebug() << Q_FUNC_INFO << " scanning file: " << fi.canonicalFilePath();
     if ( m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
     {
         if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
@@ -254,6 +285,7 @@ MusicScanner::scanFile( const QFileInfo& fi )
         m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Scanning file:" << fi.canonicalFilePath();
     QVariant m = readFile( fi );
     if ( m.toMap().isEmpty() )
         return;
@@ -275,7 +307,6 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     if ( !m_ext2mime.contains( suffix ) )
     {
-        m_skipped++;
         return QVariantMap(); // invalid extension
     }
 

@@ -68,13 +68,6 @@ SipPlugin::account() const
 }
 
 
-QIcon
-SipPlugin::icon() const
-{
-    return m_account->icon();
-}
-
-
 const QStringList
 SipPlugin::peersOnline() const
 {

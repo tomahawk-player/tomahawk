@@ -65,7 +65,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 
         if ( query_track.next() )
         {
-            Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString(), uuid() );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString() );
 
             if ( query.value( 3 ).toUInt() == 0 )
             {
@@ -79,8 +79,6 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
             ql << q;
         }
     }
-
-    qDebug() << Q_FUNC_INFO << ql.length();
 
     if ( ql.count() )
         emit tracks( ql );

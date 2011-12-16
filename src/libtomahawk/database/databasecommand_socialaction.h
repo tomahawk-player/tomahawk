@@ -170,6 +170,7 @@ public:
     void setTimestamp( const int ts ) { m_timestamp = ts; }
 
     virtual bool doesMutates() const { return true; }
+    virtual bool groupable() const { return true; }
 
 private:
     Tomahawk::result_ptr m_result;

@@ -45,7 +45,7 @@ public:
 
     void loadPlaylist( const dynplaylist_ptr& playlist, bool loadEntries = true );
 
-    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
+    virtual void remove( const QModelIndex& index, bool moreToCome = false );
 
     bool searchingForNext() const { return m_searchingForNext; }
 
@@ -56,6 +56,9 @@ public:
     void tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo = -1 );
 
     using PlaylistModel::loadPlaylist;
+
+    bool ignoreRevision( const QString& revisionguid ) const { return waitForRevision( revisionguid ); }
+    void removeRevisionFromIgnore( const QString& revisionguid ) { removeFromWaitList( revisionguid ); }
 
 signals:
     void collapseFromTo( int startRow, int num );

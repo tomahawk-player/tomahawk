@@ -22,15 +22,15 @@
 // time before new connection terminates if no auth received
 #define AUTH_TIMEOUT 180000
 
-#include <QObject>
-#include <QTcpServer>
-#include <QHostInfo>
-#include <QMap>
-#include <QMutex>
-#include <QSharedPointer>
-#include <QTcpSocket>
-#include <QTimer>
-#include <QPointer>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QMutex>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTimer>
+#include <QtCore/QPointer>
+#include <QtNetwork/QTcpServer>
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QHostInfo>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -152,6 +152,7 @@ private slots:
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
+    bool isValidExternalIP( const QHostAddress& addr ) const;
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
     bool checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const;
     void printCurrentTransfers();
@@ -159,10 +160,13 @@ private:
     QJson::Parser parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
     QMap< QString, QWeakPointer<Connection> > m_offers;
+    QStringList m_connectedNodes;
+
     int m_port, m_externalPort;
     QHostAddress m_externalAddress;
     QString m_externalHostname;
     bool m_ready;
+    bool m_lanHack;
 
     // currently active file transfers:
     QList< StreamConnection* > m_scsessions;

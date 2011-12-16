@@ -70,23 +70,20 @@ private slots:
 
     void fetchOpsData( const QString& sinceguid );
     void sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
-    void executeCommands();
+    void lastOpApplied();
 
     void check();
-    void idleTimeout();
 
 private:
     void synced();
     void changeState( State newstate );
 
     Tomahawk::source_ptr m_source;
-    QVariantMap m_us, m_uscache;
+    QVariantMap m_uscache;
 
-    QList< QSharedPointer<DatabaseCommand> > m_cmds;
     QString m_lastSentOp;
 
     State m_state;
-    QTimer m_timer;
 };
 
 #endif // DBSYNCCONNECTION_H

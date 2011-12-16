@@ -26,6 +26,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
 #include "playlistview.h"
+#include "utils/tomahawkutilsgui.h"
 
 using namespace Tomahawk;
 
@@ -59,11 +60,28 @@ QueueView::~QueueView()
 }
 
 
+void
+QueueView::changeEvent( QEvent* e )
+{
+    QWidget::changeEvent( e );
+    switch ( e->type() )
+    {
+        case QEvent::LanguageChange:
+            ui->retranslateUi( this );
+            break;
+
+        default:
+            break;
+    }
+}
+
+
 PlaylistView*
 QueueView::queue() const
 {
     return ui->queue;
 }
+
 
 bool
 QueueView::eventFilter( QObject* obj, QEvent* ev )
@@ -92,6 +110,7 @@ QueueView::eventFilter( QObject* obj, QEvent* ev )
 
     return QObject::eventFilter( obj, ev );
 }
+
 
 void
 QueueView::hide()

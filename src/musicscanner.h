@@ -19,7 +19,8 @@
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
-#include <tomahawksettings.h>
+#include "tomahawksettings.h"
+#include "database/databasecommand.h"
 
 /* taglib */
 #include <taglib/fileref.h>
@@ -34,6 +35,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QWeakPointer>
+#include <database/database.h>
 
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.
@@ -90,6 +92,7 @@ signals:
 
 private:
     QVariant readFile( const QFileInfo& fi );
+    void executeCommand( QSharedPointer< DatabaseCommand > cmd );
 
 private slots:
     void listerFinished();
@@ -97,7 +100,9 @@ private slots:
     void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
     void startScan();
     void scan();
+    void cleanup();
     void commitBatch( const QVariantList& tracks, const QVariantList& deletethese );
+    void commandFinished();
 
 private:
     QStringList m_dirs;
@@ -106,8 +111,9 @@ private:
     unsigned int m_skipped;
 
     QList<QString> m_skippedFiles;
-
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
+
+    unsigned int m_cmdQueue;
 
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;

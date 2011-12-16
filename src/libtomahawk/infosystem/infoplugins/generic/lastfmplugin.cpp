@@ -20,7 +20,6 @@
 
 #include <QDir>
 #include <QSettings>
-#include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QDomElement>
 
@@ -38,13 +37,6 @@
 
 using namespace Tomahawk::InfoSystem;
 
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
-
 
 LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
@@ -52,11 +44,6 @@ LastFmPlugin::LastFmPlugin()
 {
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
-
-/*
-      Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
-      Your secret is ba80f1df6d27ae63e9cb1d33ccf2052f
-*/
 
     // Flush session key cache
     TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
@@ -394,9 +381,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
                 }
 
             }
-            tDebug() << "LastFmPlugin: InfoChart not in cache, fetching";
             QMap<QString, QString> args;
-            tDebug() << "LastFmPlugin: " << "args chart_id" << criteria["chart_id"];
             args["method"] = criteria["chart_id"];
             args["limit"] = "100";
             QNetworkReply* reply = lastfm::ws::get(args);
@@ -412,26 +397,24 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             InfoStringHash c;
             c[ "type" ] = "tracks";
             c[ "id" ] = "chart.getTopTracks";
-            c[ "label" ] = "Top Tracks";
+            c[ "label" ] = tr( "Top Tracks" );
             track_charts.append( c );
             c[ "id" ] = "chart.getLovedTracks";
-            c[ "label" ] = "Loved Tracks";
+            c[ "label" ] = tr( "Loved Tracks" );
             track_charts.append( c );
             c[ "id" ] = "chart.getHypedTracks";
-            c[ "label" ] = "Hyped Tracks";
+            c[ "label" ] = tr( "Hyped Tracks" );
             track_charts.append( c );
 
             QList< InfoStringHash > artist_charts;
             c[ "type" ] = "artists";
             c[ "id" ] = "chart.getTopArtists";
-            c[ "label" ] = "Top Artists";
+            c[ "label" ] = tr( "Top Artists" );
             artist_charts.append( c );
             c[ "id" ] = "chart.getHypedArtists";
-            c[ "label" ] = "Hyped Artists";
+            c[ "label" ] = tr( "Hyped Artists" );
             artist_charts.append( c );
-            
 
-            
             QVariantMap charts;
             charts.insert( "Tracks", QVariant::fromValue< QList< InfoStringHash > >( track_charts ) );
             charts.insert( "Artists", QVariant::fromValue< QList< InfoStringHash > >( artist_charts ) );
@@ -439,7 +422,6 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             QVariantMap result;
             result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
 
-            tDebug() << "LASTFM RETURNING CHART LIST!";
             emit info( requestData, result );
             return;
         }
@@ -531,7 +513,6 @@ LastFmPlugin::similarArtistsReturned()
 void
 LastFmPlugin::chartReturned()
 {
-    tDebug() << "LastfmPlugin: InfoChart data returned!";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     QVariantMap returnedData;
@@ -549,7 +530,6 @@ LastFmPlugin::chartReturned()
             pair[ "track" ] = t.title();
             top_tracks << pair;
         }
-        tDebug() << "LastFmPlugin:" << "\tgot " << top_tracks.size() << " tracks";
         returnedData["tracks"] = QVariant::fromValue( top_tracks );
         returnedData["type"] = "tracks";
 
@@ -558,7 +538,6 @@ LastFmPlugin::chartReturned()
     {
         QList<lastfm::Artist> list = lastfm::Artist::list( reply );
         QStringList al;
-        tDebug() << "LastFmPlugin:"<< "\tgot " << list.size() << " artists";
         foreach ( const lastfm::Artist& a, list )
             al << a.toString();
         returnedData["artists"] = al;
@@ -566,7 +545,7 @@ LastFmPlugin::chartReturned()
     }
     else
     {
-        tDebug() << "LastfmPlugin:: got non tracks and non artists";
+        tDebug() << Q_FUNC_INFO << "got non tracks and non artists";
     }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
@@ -777,7 +756,7 @@ LastFmPlugin::createScrobbler()
     if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
         qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
-        QString authToken = md5( ( lastfm::ws::Username.toLower() + md5( m_pw.toUtf8() ) ).toUtf8() );
+        QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
 
         QMap<QString, QString> query;
         query[ "method" ] = "auth.getMobileSession";

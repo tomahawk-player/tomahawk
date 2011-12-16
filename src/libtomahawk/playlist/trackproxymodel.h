@@ -45,9 +45,9 @@ public:
     virtual int unfilteredTrackCount() const { return sourceModel()->trackCount(); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
-    virtual void removeIndex( const QModelIndex& index );
-    virtual void removeIndexes( const QModelIndexList& indexes );
-    virtual void removeIndexes( const QList<QPersistentModelIndex>& indexes );
+    virtual void remove( const QModelIndex& index );
+    virtual void remove( const QModelIndexList& indexes );
+    virtual void remove( const QList< QPersistentModelIndex >& indexes );
 
     virtual Tomahawk::result_ptr currentItem() const;
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
@@ -75,7 +75,7 @@ signals:
     void filterChanged( const QString& filter );
 
     void nextTrackReady();
-    
+
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }

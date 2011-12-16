@@ -27,6 +27,7 @@
 #include <QStackedWidget>
 
 #include "result.h"
+#include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 
 namespace Tomahawk {
@@ -90,6 +91,8 @@ private slots:
     void onAccountConnected();
     void onAccountDisconnected();
     void onAccountError();
+
+    void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
     void onXSPFOk( const Tomahawk::playlist_ptr& );

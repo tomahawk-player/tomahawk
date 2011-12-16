@@ -58,11 +58,13 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcedelegate.cpp
      sourcetree/animationhelper.cpp
      sourcetree/items/sourcetreeitem.cpp
-     sourcetree/items/collectionitem.cpp
+     sourcetree/items/sourceitem.cpp
      sourcetree/items/playlistitems.cpp
      sourcetree/items/categoryitems.cpp
      sourcetree/items/genericpageitems.cpp
      sourcetree/items/temporarypageitem.cpp
+     sourcetree/items/groupitem.cpp
+     sourcetree/items/historyitem.cpp
 
      breakpad/BreakPad.cpp
 
@@ -97,8 +99,8 @@ IF(LIBLASTFM_FOUND)
 ENDIF(LIBLASTFM_FOUND)
 
 IF(LIBATTICA_FOUND)
-    SET( tomahawkSources ${tomahawkSources} GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
-    SET( tomahawkHeaders ${tomahawkHeaders} GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
+    SET( tomahawkSourcesGui ${tomahawkSourcesGui} GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
+    SET( tomahawkHeadersGui ${tomahawkHeadersGui} GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
 ENDIF(LIBATTICA_FOUND)
 
@@ -110,11 +112,13 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcedelegate.h
      sourcetree/animationhelper.h
      sourcetree/items/sourcetreeitem.h
-     sourcetree/items/collectionitem.h
+     sourcetree/items/sourceitem.h
      sourcetree/items/playlistitems.h
      sourcetree/items/categoryitems.h
      sourcetree/items/genericpageitems.h
      sourcetree/items/temporarypageitem.h
+     sourcetree/items/groupitem.h
+     sourcetree/items/historyitem.h
 
      tomahawktrayicon.h
      audiocontrols.h
@@ -201,10 +205,6 @@ IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
 
-kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
-qt4_add_resources( RC_SRCS "../resources.qrc" )
-qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
@@ -212,12 +212,16 @@ include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
 
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} ${trans_outfile})
 
-IF( "${gui}" STREQUAL "no" )
-ELSE()
+IF( BUILD_GUI )
+    LIST(APPEND tomahawkHeaders ${tomahawkHeadersGui})
+    LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
     qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
-    qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
-    SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
 ENDIF()
+
+kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
+qt4_add_resources( RC_SRCS "../resources.qrc" )
+qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
+SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
 IF( UNIX AND NOT APPLE )
     ADD_EXECUTABLE( tomahawk ${final_src} )
@@ -268,7 +272,7 @@ ENDIF( APPLE )
 
 INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
 
-IF( UNIX AND NOT APPLE AND KDE4_INSTALLED ) #install protocol file
+IF( UNIX AND NOT APPLE AND KDE4_INSTALLED AND LEGACY_KDE_INTEGRATION ) #install protocol file
   FILE( READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol )
   STRING( REPLACE "/path/to/binary" # match this
               "${CMAKE_INSTALL_PREFIX}/bin/tomahawk" # this is linux (kde) so pretty safe I think

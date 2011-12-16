@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Thu Sep 29 17:28:17 EDT 2011.
+    This file was automatically generated from schema.sql on Wed Nov 16 22:47:16 EST 2011.
 */
 
 static const char * tomahawk_schema_sql = 

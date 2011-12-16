@@ -47,6 +47,7 @@ FuzzyIndex::FuzzyIndex( DatabaseImpl& db, bool wipeIndex )
 
     if ( wipeIndex )
     {
+        tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
         beginIndexing();
         endIndexing();
     }

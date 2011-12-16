@@ -28,6 +28,11 @@
 #include "typedefs.h"
 #include "dllmacro.h"
 
+namespace Tomahawk
+{
+    class ContextMenu;
+};
+
 class DLLEXPORT QueryLabel : public QFrame
 {
 Q_OBJECT
@@ -98,6 +103,8 @@ signals:
     void queryChanged( const Tomahawk::query_ptr& query );
 
 protected:
+    virtual void contextMenuEvent( QContextMenuEvent* event );
+
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void mouseMoveEvent( QMouseEvent* event );
@@ -116,6 +123,8 @@ private:
     QString m_text;
     Tomahawk::result_ptr m_result;
     Tomahawk::query_ptr m_query;
+
+    Tomahawk::ContextMenu* m_contextMenu;
 
     Qt::Alignment m_align;
     Qt::TextElideMode m_mode;

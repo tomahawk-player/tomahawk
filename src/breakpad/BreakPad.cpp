@@ -18,11 +18,17 @@
 
 #include "BreakPad.h"
 
+#include "config.h"
+#include "utils/logger.h"
+
 #include <QCoreApplication>
 #include <QString>
+#include <QFileInfo>
 #include <string.h>
 
-#define CRASH_REPORTER_BINARY "CrashReporter"
+#define CRASH_REPORTER_BINARY "tomahawk_crash_reporter"
+
+bool s_active = true;
 
 #ifndef WIN32
 #include <unistd.h>
@@ -38,8 +44,10 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
         return false;
 
     const char* crashReporter = static_cast<BreakPad*>(that)->crashReporter();
-    pid_t pid = fork();
+    if ( !s_active || strlen( crashReporter ) == 0 )
+        return false;
 
+    pid_t pid = fork();
     if ( pid == -1 ) // fork failed
         return false;
     if ( pid == 0 )
@@ -63,14 +71,25 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
 }
 
 
-BreakPad::BreakPad( const QString& path )
+BreakPad::BreakPad( const QString& path, bool active )
 #ifdef Q_OS_LINUX
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true )
 #else
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
 #endif
 {
-    QString reporter = QString( "%1/%2" ).arg( qApp->applicationDirPath() ).arg( CRASH_REPORTER_BINARY );
+    s_active = active;
+
+    QString reporter;
+    QString localReporter = QString( "%1/%2" ).arg( qApp->applicationDirPath() ).arg( CRASH_REPORTER_BINARY );
+    QString globalReporter = QString( "%1/%2" ).arg( CMAKE_INSTALL_PREFIX "/" CMAKE_INSTALL_LIBEXECDIR ).arg( CRASH_REPORTER_BINARY );
+
+    if ( QFileInfo( localReporter ).exists() )
+        reporter = localReporter;
+    else if ( QFileInfo( globalReporter ).exists() )
+        reporter = globalReporter;
+    else
+        tLog() << "Could not find \"" CRASH_REPORTER_BINARY "\" in \"" CMAKE_INSTALL_PREFIX "/" CMAKE_INSTALL_LIBEXECDIR "\" or application path";
 
     char* creporter;
     std::string sreporter = reporter.toStdString();
@@ -126,7 +145,7 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     si.wShowWindow = SW_SHOWNORMAL;
     ZeroMemory( &pi, sizeof(pi) );
 
-    if (CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+    if ( CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) )
     {
         CloseHandle( pi.hProcess );
         CloseHandle( pi.hThread );
@@ -137,9 +156,24 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
 }
 
 
-BreakPad::BreakPad( const QString& path )
+BreakPad::BreakPad( const QString& path, bool active )
     : google_breakpad::ExceptionHandler( path.toStdWString(), 0, LaunchUploader, this, true )
 {
+    s_active = active;
 }
 
 #endif // WIN32
+
+
+void
+BreakPad::setActive( bool enabled )
+{
+    s_active = enabled;
+}
+
+
+bool
+BreakPad::isActive()
+{
+    return s_active;
+}

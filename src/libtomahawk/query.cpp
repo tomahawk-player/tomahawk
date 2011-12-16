@@ -102,8 +102,6 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    tDebug() << Q_FUNC_INFO << toString();
-
     if ( !id().isEmpty() )
     {
         QMutexLocker lock( &s_mutex );
@@ -175,6 +173,30 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
     checkResults();
     emit resultsAdded( newresults );
+}
+
+
+void
+Query::addAlbums( const QList< Tomahawk::album_ptr >& newalbums )
+{
+    {
+        QMutexLocker lock( &m_mutex );
+        m_albums << newalbums;
+    }
+
+    emit albumsAdded( newalbums );
+}
+
+
+void
+Query::addArtists( const QList< Tomahawk::artist_ptr >& newartists )
+{
+    {
+        QMutexLocker lock( &m_mutex );
+        m_artists << newartists;
+    }
+
+    emit artistsAdded( newartists );
 }
 
 
@@ -363,6 +385,9 @@ Query::checkResults()
             {
                 solved = true;
             }
+
+            if ( playable )
+                break;
         }
     }
 
@@ -401,7 +426,10 @@ Query::toVariant() const
 QString
 Query::toString() const
 {
-    return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
+    if ( !isFullTextQuery() )
+        return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
+    else
+        return QString( "Query(%1, Fulltext: %2)" ).arg( id() ).arg( fullTextQuery() );
 }
 
 
@@ -437,7 +465,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     else
     {
         // don't penalize for missing album name
-        if ( m_albumSortname.isEmpty() || rAlbumname.isEmpty() )
+        if ( m_albumSortname.isEmpty() )
             dcalb = 1.0;
 
         // weighted, so album match is worth less than track title

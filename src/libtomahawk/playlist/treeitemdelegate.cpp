@@ -26,7 +26,7 @@
 #include "query.h"
 #include "result.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
 #include "treemodelitem.h"

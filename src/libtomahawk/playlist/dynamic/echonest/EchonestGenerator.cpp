@@ -389,9 +389,6 @@ EchonestGenerator::dynamicFetched()
 
     resetSteering();
 
-    if( !m_steerer.isNull() )
-        m_steerer.data()->resetSteering( true );
-
     try
     {
         Echonest::Song song = m_dynPlaylist->parseNextSong( reply );

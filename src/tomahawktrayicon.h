@@ -19,9 +19,9 @@
 #ifndef TOMAHAWK_TRAYICON_H
 #define TOMAHAWK_TRAYICON_H
 
-#include <QSystemTrayIcon>
-#include <QTimer>
-#include <QMenu>
+#include <QtGui/QSystemTrayIcon>
+#include <QtCore/QTimer>
+#include <QtGui/QMenu>
 
 #include "result.h"
 
@@ -57,12 +57,6 @@ private:
     int m_currentAnimationFrame;
 
     QMenu* m_contextMenu;
-    QAction* m_playPauseAction;
-    //QAction* m_pauseAction;
-    QAction* m_stopAction;
-    QAction* m_prevAction;
-    QAction* m_nextAction;
-    QAction* m_quitAction;
 
     QAction* m_showWindowAction;
 };

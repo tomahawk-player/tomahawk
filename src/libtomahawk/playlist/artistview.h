@@ -23,11 +23,15 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include "contextmenu.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"
 
 #include "dllmacro.h"
+
+namespace Tomahawk
+{
+    class ContextMenu;
+};
 
 class TreeHeader;
 class LoadingSpinner;
@@ -70,6 +74,9 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
+    bool updatesContextView() const { return m_updateContextView; }
+    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
+
 public slots:
     void onItemActivated( const QModelIndex& index );
 
@@ -77,10 +84,13 @@ protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void resizeEvent( QResizeEvent* event );
 
-    void paintEvent( QPaintEvent* event );
-    void keyPressEvent( QKeyEvent* event );
+    virtual void keyPressEvent( QKeyEvent* event );
+
+protected slots:
+    virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 private slots:
+    void onItemCountChanged( unsigned int items );
     void onFilterChanged( const QString& filter );
     void onFilteringStarted();
     void onViewChanged();
@@ -96,6 +106,8 @@ private:
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
     LoadingSpinner* m_loadingSpinner;
+
+    bool m_updateContextView;
 
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;

@@ -22,6 +22,7 @@
 
 #include "functimeout.h"
 #include "database/database.h"
+#include "ExternalResolver.h"
 #include "resolvers/scriptresolver.h"
 #include "resolvers/qtscriptresolver.h"
 
@@ -114,20 +115,30 @@ Pipeline::addResolver( Resolver* r )
 }
 
 
+void
+Pipeline::addExternalResolverFactory( ResolverFactoryFunc resolverFactory )
+{
+    m_resolverFactories << resolverFactory;
+}
+
+
 Tomahawk::ExternalResolver*
 Pipeline::addScriptResolver( const QString& path, bool start )
 {
     ExternalResolver* res = 0;
-    const QFileInfo fi( path );
 
-    if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        res = new QtScriptResolver( path );
-    else
-        res = new ScriptResolver( path );
+    foreach ( ResolverFactoryFunc factory, m_resolverFactories )
+    {
+        res = factory( path );
+        if ( !res )
+            continue;
 
-    m_scriptResolvers << res;
-    if ( start )
-        res->start();
+        m_scriptResolvers << res;
+        if ( start )
+            res->start();
+
+        break;
+    }
 
     return res;
 }
@@ -273,6 +284,64 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
 
     decQIDState( q );
+}
+
+
+void
+Pipeline::reportAlbums( QID qid, const QList< album_ptr >& albums )
+{
+    if ( !m_running )
+        return;
+
+    if ( !m_qids.contains( qid ) )
+    {
+        tDebug() << "Albums arrived too late for:" << qid;
+        return;
+    }
+    const query_ptr& q = m_qids.value( qid );
+    Q_ASSERT( q->isFullTextQuery() );
+
+    QList< album_ptr > cleanAlbums;
+    foreach( const album_ptr& r, albums )
+    {
+//        float score = q->howSimilar( r );
+
+        cleanAlbums << r;
+    }
+
+    if ( !cleanAlbums.isEmpty() )
+    {
+        q->addAlbums( cleanAlbums );
+    }
+}
+
+
+void
+Pipeline::reportArtists( QID qid, const QList< artist_ptr >& artists )
+{
+    if ( !m_running )
+        return;
+
+    if ( !m_qids.contains( qid ) )
+    {
+        tDebug() << "Artists arrived too late for:" << qid;
+        return;
+    }
+    const query_ptr& q = m_qids.value( qid );
+    Q_ASSERT( q->isFullTextQuery() );
+
+    QList< artist_ptr > cleanArtists;
+    foreach( const artist_ptr& r, artists )
+    {
+//        float score = q->howSimilar( r );
+
+        cleanArtists << r;
+    }
+
+    if ( !cleanArtists.isEmpty() )
+    {
+        q->addArtists( cleanArtists );
+    }
 }
 
 

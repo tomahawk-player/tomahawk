@@ -33,10 +33,12 @@ Collection::Collection( const source_ptr& source, const QString& name, QObject* 
     : QObject( parent )
     , m_name( name )
     , m_lastmodified( 0 )
-    , m_isLoaded( false )
+    , m_changed( false )
     , m_source( source )
 {
     qDebug() << Q_FUNC_INFO << name << source->friendlyName();
+
+    connect( source.data(), SIGNAL( synced() ), SLOT( onSynced() ) );
 }
 
 
@@ -209,20 +211,32 @@ Collection::setStations( const QList< dynplaylist_ptr >& stations )
 void
 Collection::setTracks( const QList<unsigned int>& ids )
 {
-    qDebug() << Q_FUNC_INFO << ids.count() << name();
+    tDebug() << Q_FUNC_INFO << ids.count() << name();
 
+    m_changed = true;
     emit tracksAdded( ids );
-    emit changed();
 }
 
 
 void
 Collection::delTracks( const QList<unsigned int>& ids )
 {
-    qDebug() << Q_FUNC_INFO << ids.count() << name();
+    tDebug() << Q_FUNC_INFO << ids.count() << name();
 
+    m_changed = true;
     emit tracksRemoved( ids );
-    emit changed();
+}
+
+
+void
+Collection::onSynced()
+{
+    tDebug() << Q_FUNC_INFO << m_changed;
+    if ( m_changed )
+    {
+        m_changed = false;
+        emit changed();
+    }
 }
 
 

@@ -21,7 +21,7 @@
 #include "xmppconfigwidget.h"
 #include "ui_xmppconfigwidget.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include <QtPlugin>
 #include <QInputDialog>

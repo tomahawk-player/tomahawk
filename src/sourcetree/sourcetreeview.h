@@ -22,8 +22,8 @@
 #include "typedefs.h"
 #include "sourceplaylistinterface.h"
 
-#include <QTreeView>
-#include <QMenu>
+#include <QtGui/QTreeView>
+#include <QtGui/QMenu>
 
 class CollectionModel;
 class PlaylistModel;
@@ -64,6 +64,7 @@ private slots:
     void onItemActivated( const QModelIndex& index );
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
+    void toggleExpandRequest( const QPersistentModelIndex& idx );
 
     void loadPlaylist();
     void deletePlaylist( const QModelIndex& = QModelIndex() );
@@ -74,7 +75,7 @@ private slots:
     void latchOff();
     void latchOnOrCatchUp( const Tomahawk::source_ptr& source );
     void latchOff( const Tomahawk::source_ptr& source );
-    
+
     void onCustomContextMenu( const QPoint& pos );
 
 protected:
@@ -104,13 +105,6 @@ private:
     QMenu m_roPlaylistMenu;
     QMenu m_latchMenu;
     QMenu m_privacyMenu;
-    QAction* m_loadPlaylistAction;
-    QAction* m_renamePlaylistAction;
-    QAction* m_deletePlaylistAction;
-    QAction* m_copyPlaylistAction;
-    QAction* m_addToLocalAction;
-    QAction* m_latchOnAction;
-    QAction* m_latchOffAction;
 
     bool m_dragging;
     QRect m_dropRect;
