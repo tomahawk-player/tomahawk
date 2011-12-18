@@ -31,9 +31,7 @@
 #include "database/database.h"
 #include "network/servent.h"
 
-#include "../sipdllmacro.h"
-
-class SIPDLLEXPORT Node : public QObject
+class Node : public QObject
 {
 Q_OBJECT
 
@@ -71,7 +69,7 @@ private:
 };
 
 
-class SIPDLLEXPORT TomahawkZeroconf : public QObject
+class TomahawkZeroconf : public QObject
 {
 Q_OBJECT
 

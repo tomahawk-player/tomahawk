@@ -162,6 +162,10 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         emit nowAuthenticated( m_twitterAuth, user );
     }
 }
+QIcon
+TwitterAccount::icon() const {
+    return QIcon( ":/twitter-icon.png" );
+}
 
 
 }

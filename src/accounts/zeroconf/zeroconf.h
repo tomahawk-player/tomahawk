@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,55 +21,45 @@
 #define ZEROCONF_H
 
 #include "sip/SipPlugin.h"
+#include "accounts/Account.h"
 #include "tomahawkzeroconf.h"
 
-#include "../sipdllmacro.h"
+#include "../accountdllmacro.h"
 
 #include <QtCore/QTimer>
 
 #define MYNAME "Local Network"
 
-class SIPDLLEXPORT ZeroconfFactory : public SipPluginFactory
+namespace Tomahawk
 {
-    Q_OBJECT
-    Q_INTERFACES( SipPluginFactory )
-public:
-    ZeroconfFactory() {}
-    virtual ~ZeroconfFactory() {}
+namespace Accounts
+{
 
-    virtual QString factoryId() const { return "sipzeroconf"; }
-    virtual QString prettyName() const { return "Local Network"; }
-    virtual bool isUnique() const { return true; }
-#ifndef ENABLE_HEADLESS
-    virtual QIcon icon() const;
-#endif
+class ZeroconfAccount;
 
 
-    virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
-};
-
-class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
+class ACCOUNTDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
 
 public:
-    ZeroconfPlugin();
-    ZeroconfPlugin( const QString& pluginId );
+    ZeroconfPlugin( ZeroconfAccount* acc );
 
     virtual ~ZeroconfPlugin();
 
     virtual const QString name() const;
     virtual const QString friendlyName() const;
     virtual const QString accountName() const;
-    virtual ConnectionState connectionState() const;
+    virtual Account::ConnectionState connectionState() const;
     virtual bool isValid() const { return true; }
 #ifndef ENABLE_HEADLESS
     virtual QIcon icon() const;
 #endif
     virtual void checkSettings() {}
+    virtual void configurationChanged() {}
 
 public slots:
-    virtual bool connectPlugin();
+    void connectPlugin();
     void disconnectPlugin();
 
     void advertise();
@@ -82,9 +73,12 @@ private slots:
 
 private:
     TomahawkZeroconf* m_zeroconf;
-    ConnectionState m_state;
+    Account::ConnectionState m_state;
     QVector<QStringList> m_cachedNodes;
     QTimer m_advertisementTimer;
 };
+
+}
+}
 
 #endif

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,20 +25,15 @@
 
 #include "tomahawksettings.h"
 #include "utils/logger.h"
+#include "zeroconfaccount.h"
 
+using namespace Tomahawk;
+using namespace Accounts;
 
-SipPlugin*
-ZeroconfFactory::createPlugin( const QString& pluginId )
-{
-    return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
-}
-
-ZeroconfPlugin::ZeroconfPlugin() : SipPlugin( "") {}
-
-ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
-    : SipPlugin( pluginId )
+ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
+    : SipPlugin( parent )
     , m_zeroconf( 0 )
-    , m_state( Disconnected )
+    , m_state( Account::Disconnected )
     , m_cachedNodes()
 {
     qDebug() << Q_FUNC_INFO;
@@ -66,21 +62,14 @@ ZeroconfPlugin::friendlyName() const
     return QString( MYNAME );
 }
 
-SipPlugin::ConnectionState
+Account::ConnectionState
 ZeroconfPlugin::connectionState() const
 {
     return m_state;
 }
 
-#ifndef ENABLE_HEADLESS
-QIcon
-ZeroconfFactory::icon() const
-{
-    return QIcon( ":/zeroconf-icon.png" );
-}
-#endif
 
-bool
+void
 ZeroconfPlugin::connectPlugin()
 {
     delete m_zeroconf;
@@ -89,7 +78,7 @@ ZeroconfPlugin::connectPlugin()
                                     SLOT( lanHostFound( QString, int, QString, QString ) ) );
 
     advertise();
-    m_state = Connected;
+    m_state = Account::Connected;
 
     foreach( const QStringList& nodeSet, m_cachedNodes )
     {
@@ -99,15 +88,13 @@ ZeroconfPlugin::connectPlugin()
     m_cachedNodes.clear();
 
     m_advertisementTimer.start();
-
-    return true;
 }
 
 void
 ZeroconfPlugin::disconnectPlugin()
 {
     m_advertisementTimer.stop();
-    m_state = Disconnected;
+    m_state = Account::Disconnected;
 
     delete m_zeroconf;
     m_zeroconf = 0;
@@ -118,7 +105,7 @@ ZeroconfPlugin::disconnectPlugin()
 QIcon
 ZeroconfPlugin::icon() const
 {
-    return QIcon( ":/zeroconf-icon.png" );
+    return account()->icon();
 }
 #endif
 
@@ -138,7 +125,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 
     qDebug() << "Found LAN host:" << host << port << nodeid;
 
-    if ( m_state != Connected )
+    if ( m_state != Account::Connected )
     {
         qDebug() << "Not online, so not connecting.";
         QStringList nodeSet;
@@ -153,5 +140,3 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
         qDebug() << "Already connected to" << host;
 }
 
-
-Q_EXPORT_PLUGIN2( sipfactory, ZeroconfFactory )

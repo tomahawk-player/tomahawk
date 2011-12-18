@@ -58,7 +58,7 @@ public:
     TwitterAccount( const QString &accountId );
     virtual ~TwitterAccount();
 
-    QIcon icon() const { return QIcon( ":/twitter-icon.png" ); }
+    QIcon icon() const;
 
     void authenticate();
     void deauthenticate();
@@ -82,6 +82,7 @@ private slots:
     void connectAuthVerifyReply( const QTweetUser &user );
 
 private:
+    QIcon m_icon;
     bool m_isAuthenticated;
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< TwitterConfigWidget > m_configWidget;

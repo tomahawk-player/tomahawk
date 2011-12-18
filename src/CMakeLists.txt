@@ -198,8 +198,8 @@ IF(GLOOX_FOUND)
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
+
 ADD_SUBDIRECTORY( accounts )
-ADD_SUBDIRECTORY( sip )
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
