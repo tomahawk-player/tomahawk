@@ -28,7 +28,7 @@ using namespace Tomahawk;
 
 SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     : PlaylistInterface( this )
-    , m_source( source )
+    , m_source( source.data() )
     , m_currentItem( 0 )
     , m_gotNextItem( false )
 {
@@ -52,7 +52,7 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
     {
         tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
@@ -65,7 +65,7 @@ SourcePlaylistInterface::nextItem()
     }
 
     m_gotNextItem = false;
-    m_currentItem = m_source->currentTrack()->results().first();
+    m_currentItem = m_source.data()->currentTrack()->results().first();
     return m_currentItem;
 }
 
@@ -81,7 +81,7 @@ bool
 SourcePlaylistInterface::hasNextItem()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
         return false;
 
     return m_gotNextItem;
@@ -96,7 +96,7 @@ SourcePlaylistInterface::tracks()
 }
 
 
-source_ptr
+QWeakPointer< Tomahawk::Source >
 SourcePlaylistInterface::source() const
 {
     return m_source;

@@ -57,7 +57,7 @@ public:
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    virtual Tomahawk::source_ptr source() const;
+    virtual QWeakPointer< Tomahawk::Source > source() const;
 
     virtual void reset();
 
@@ -77,7 +77,7 @@ private slots:
     void resolvingFinished( bool hasResults );
 
 private:
-    Tomahawk::source_ptr m_source;
+    QWeakPointer< Tomahawk::Source > m_source;
     Tomahawk::result_ptr m_currentItem;
     bool m_gotNextItem;
 };
