@@ -40,6 +40,7 @@
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 
+#include "customplaylistview.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
@@ -71,6 +72,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
+    , m_topLovedWidget( 0 )
     , m_currentMode( PlaylistInterface::Tree )
 {
     s_instance = this;
@@ -417,6 +419,15 @@ ViewManager::showWhatsHotPage()
     return show( m_whatsHotWidget );
 }
 
+
+Tomahawk::ViewPage*
+ViewManager::showTopLovedPage()
+{
+    if ( !m_topLovedWidget )
+        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::AllLovedTracks, source_ptr(), m_widget );
+
+    return show( m_topLovedWidget );
+}
 
 
 void

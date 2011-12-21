@@ -77,8 +77,6 @@ private slots:
     void resolvingFinished( bool hasResults );
 
 private:
-    SourcePlaylistInterface();
-
     Tomahawk::source_ptr m_source;
     Tomahawk::result_ptr m_currentItem;
     bool m_gotNextItem;

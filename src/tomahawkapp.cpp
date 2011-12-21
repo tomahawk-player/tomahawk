@@ -226,7 +226,6 @@ TomahawkApp::init()
 #ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
 
-
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";
@@ -282,7 +281,7 @@ TomahawkApp::init()
     GlobalActionManager::instance();
 
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
-    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/playlist/test" ) ) );
+    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 #endif
 
@@ -541,10 +540,10 @@ TomahawkApp::spotifyApiCheckFinished()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
-    if ( reply->error() == QNetworkReply::ContentNotFoundError )
-        DropJob::setCanParseSpotifyPlaylists( true );
-    else
+    if ( reply->error() )
         DropJob::setCanParseSpotifyPlaylists( false );
+    else
+        DropJob::setCanParseSpotifyPlaylists( true );
 #endif
 }
 

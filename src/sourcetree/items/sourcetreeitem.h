@@ -25,6 +25,7 @@
 #include "sourcesmodel.h"
 
 class QMimeData;
+
 class SourceTreeItem : public QObject
 {
     Q_OBJECT
@@ -80,6 +81,7 @@ signals:
     void updated();
     void selectRequest( SourceTreeItem* );
     void expandRequest( SourceTreeItem* );
+    void toggleExpandRequest( SourceTreeItem* );
 
     void beginChildRowsAdded( int fromRow, int toRow );
     void childRowsAdded();
@@ -90,6 +92,7 @@ signals:
 protected:
     void setRowType( SourcesModel::RowType t ) { m_type = t; }
     void setParentItem( SourceTreeItem* item ) { m_parent = item; }
+
 private:
     SourcesModel::RowType m_type;
 

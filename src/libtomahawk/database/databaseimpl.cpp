@@ -385,7 +385,7 @@ DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit
         return resultslist;
 
     QList< QPair<int, float> > resultscapped;
-    for ( unsigned int i = 0; i < limit && i < resultsmap.count(); i++ )
+    for ( int i = 0; i < (int)limit && i < resultsmap.count(); i++ )
     {
         resultscapped << resultslist.at( i );
     }

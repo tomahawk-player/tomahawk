@@ -35,7 +35,7 @@
 #include "sourcelist.h"
 #include "sourcedelegate.h"
 #include "sourcetree/items/playlistitems.h"
-#include "sourcetree/items/collectionitem.h"
+#include "sourcetree/items/sourceitem.h"
 #include "audio/audioengine.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
@@ -56,6 +56,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     , m_latchManager( new LatchManager( this ) )
     , m_dragging( false )
 {
+    setProperty( "flattenBranches", QVariant( true ) );
+
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
@@ -71,11 +73,12 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDropIndicatorShown( false );
     setAllColumnsShowFocus( true );
     setUniformRowHeights( false );
-    setIndentation( 14 );
+    setIndentation( 0 );
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
     setVerticalScrollMode( QTreeView::ScrollPerPixel );
     setMouseTracking( true );
+
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
 //     setAnimated( true );
@@ -93,6 +96,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     m_proxyModel = new SourcesProxyModel( m_model, this );
     connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequest( QPersistentModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), this, SLOT( toggleExpandRequest( QPersistentModelIndex ) ) );
 
     setModel( m_proxyModel );
 
@@ -152,7 +156,7 @@ SourceTreeView::setupMenus()
 
     if ( type == SourcesModel::Collection )
     {
-        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
         source_ptr source = item->source();
         if ( !source.isNull() )
         {
@@ -198,7 +202,7 @@ SourceTreeView::setupMenus()
     connect( deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( latchOnAction,          SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ), Qt::QueuedConnection );
+    connect( latchOnAction,        SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ), Qt::QueuedConnection );
 }
 
 
@@ -235,7 +239,6 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
 void
 SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 {
-    qDebug() << "Select request for:" << idx << idx.data().toString() << selectionModel()->selectedIndexes().contains( idx );
     if ( !selectionModel()->selectedIndexes().contains( idx ) )
     {
         scrollTo( idx, QTreeView::EnsureVisible );
@@ -247,8 +250,17 @@ SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 void
 SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
 {
-    qDebug() << "Expanding idx" << idx << idx.data( Qt::DisplayRole ).toString();
     expand( idx );
+}
+
+
+void
+SourceTreeView::toggleExpandRequest( const QPersistentModelIndex &idx )
+{
+    if ( isExpanded( idx ) )
+        collapse( idx );
+    else
+        expand( idx );
 }
 
 
@@ -359,7 +371,7 @@ SourceTreeView::latchOnOrCatchUp()
     if( type != SourcesModel::Collection )
         return;
 
-    CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+    SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
     source_ptr source = item->source();
 
     latchOnOrCatchUp( source );
@@ -378,7 +390,7 @@ SourceTreeView::latchOff()
     if( type != SourcesModel::Collection )
         return;
 
-    const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+    const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
 
     latchOff( source );
@@ -436,7 +448,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     }
     else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
-        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
         if ( !item->source().isNull() && !item->source()->isLocal() )
             m_latchMenu.exec( mapToGlobal( pos ) );
         else if ( !item->source().isNull() )
