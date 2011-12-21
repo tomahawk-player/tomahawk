@@ -55,7 +55,7 @@ struct DynQueueItem : RevisionQueueItem
         RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
 };
 
-class DLLEXPORT DynamicPlaylist : public Playlist
+class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
 {
     Q_OBJECT
 

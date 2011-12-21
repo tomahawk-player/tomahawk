@@ -30,7 +30,7 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT SourcePlaylistInterface : public QObject, public PlaylistInterface
+class DLLEXPORT SourcePlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 

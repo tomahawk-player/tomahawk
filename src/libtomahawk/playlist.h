@@ -114,7 +114,7 @@ public:
 };
 
 
-class DLLEXPORT Playlist : public QObject, public PlaylistInterface
+class DLLEXPORT Playlist : public QObject, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
