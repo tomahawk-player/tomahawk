@@ -11,6 +11,8 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
+add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
+
 
 set( libGuiSources
     actioncollection.cpp
