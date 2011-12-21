@@ -101,6 +101,7 @@ set( libGuiSources
     utils/m3uloader.cpp
     utils/itunesparser.cpp
     utils/rdioparser.cpp
+    utils/groovesharkparser.cpp
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
     utils/dropjobnotifier.cpp
@@ -218,6 +219,7 @@ set( libGuiHeaders
     utils/m3uloader.h
     utils/itunesparser.h
     utils/rdioparser.h
+    utils/groovesharkparser.h
     utils/shortenedlinkparser.h
     utils/dropjobnotifier.h
     utils/tomahawkutilsgui.h

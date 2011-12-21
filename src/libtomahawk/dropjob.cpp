@@ -26,6 +26,7 @@
 #include "utils/spotifyparser.h"
 #include "utils/itunesparser.h"
 #include "utils/rdioparser.h"
+#include "utils/groovesharkparser.h"
 #include "utils/m3uloader.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/logger.h"
@@ -120,6 +121,9 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
+        
+        if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
+            return true;
     }
 
     if ( acceptedType.testFlag( Track ) )
@@ -187,6 +191,9 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
             return true;
 
         if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
+            return true;
+        
+        if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
             return true;
 
         if ( ShortenedLinkParser::handlesUrl( url ) )
@@ -555,6 +562,27 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
     rdio->parse( urls );
 }
 
+void
+DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
+{
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    tDebug() << "Got Grooveshark urls!" << urls;
+    
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
+    GroovesharkParser* groove = new GroovesharkParser( urls, dropAction() == Create, this );
+    connect( groove, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+
+    if ( dropAction() == Append )
+    {
+        tDebug() << Q_FUNC_INFO << "Asking for grooveshark contents from" << urls;
+        connect( groove, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
+    }
+}
+
+
 
 void
 DropJob::handleAllUrls( const QString& urls )
@@ -569,6 +597,8 @@ DropJob::handleAllUrls( const QString& urls )
         handleSpotifyUrls( urls );
     else if ( urls.contains( "rdio.com" ) )
         handleRdioUrls( urls );
+    else if ( urls.contains( "grooveshark.com" ) )
+        handleGroovesharkUrls( urls );
     else
         handleTrackUrls ( urls );
 }
