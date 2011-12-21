@@ -596,19 +596,19 @@ GlobalActionManager::handleAutoPlaylistCommand( const QUrl& url )
 }
 
 
-dynplaylist_ptr
+Tomahawk::dynplaylist_ptr
 GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
         tLog() << "No specific station command:" << url.toString();
-        return dynplaylist_ptr();
+        return Tomahawk::dynplaylist_ptr();
     }
 
     if( parts[ 0 ] == "create" ) {
         if( !url.hasQueryItem( "title" ) || !url.hasQueryItem( "type" ) ) {
             tLog() << "Station create command needs title and type..." << url.toString();
-            return dynplaylist_ptr();
+            return Tomahawk::dynplaylist_ptr();
         }
         QString title = url.queryItemValue( "title" );
         QString type = url.queryItemValue( "type" );
@@ -737,7 +737,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         return pl;
     }
 
-    return dynplaylist_ptr();
+    return Tomahawk::dynplaylist_ptr();
 }
 
 

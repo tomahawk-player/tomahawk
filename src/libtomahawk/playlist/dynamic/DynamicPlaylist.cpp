@@ -152,7 +152,7 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
                          bool autoLoad
                        )
 {
-    dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared, autoLoad ) );
+    dynplaylist_ptr dynplaylist = Tomahawk::dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared, autoLoad ) );
 
     DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
     connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );

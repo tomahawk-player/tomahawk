@@ -60,7 +60,7 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
     {
 //        qDebug() << "loading playlist" << playlist_guids[i];
 
-        playlist_ptr pl = m_cached.value( playlist_guids[i], playlist_ptr() );
+        playlist_ptr pl = m_cached.value( playlist_guids[i], Tomahawk::playlist_ptr() );
         if( pl.isNull() )
             pl = Tomahawk::Playlist::load( playlist_guids[i] );
         if( pl.isNull() )

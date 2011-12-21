@@ -865,7 +865,7 @@ ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) c
         }
     }
 
-    return playlist_ptr();
+    return Tomahawk::playlist_ptr();
 }
 
 
@@ -880,7 +880,7 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interf
         }
     }
 
-    return dynplaylist_ptr();
+    return Tomahawk::dynplaylist_ptr();
 }
 
 
