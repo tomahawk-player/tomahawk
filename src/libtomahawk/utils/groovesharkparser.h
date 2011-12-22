@@ -1,6 +1,8 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Stefan Derkits <stefan@derkits.at>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2011, Stefan Derkits <stefan@derkits.at>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +25,8 @@
 #include "typedefs.h"
 #include "query.h"
 #include "jobview/JobStatusItem.h"
+
+#include <qca_basic.h>
 
 #include <QObject>
 #include <QSet>
@@ -62,7 +66,7 @@ private:
     void lookupUrl( const QString& url );
     void lookupGroovesharkPlaylist( const QString& playlist );
     void checkTrackFinished();
-    void checkBrowseFinished();
+    void checkPlaylistFinished();
     int  m_limit;
     bool m_trackMode;
     bool m_createNewPlaylist;
@@ -71,6 +75,8 @@ private:
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
+
+    QCA::SymmetricKey m_apiKey;
 
     static QPixmap* s_pixmap;
     
