@@ -48,7 +48,7 @@ public:
     virtual ~TwitterSipPlugin() {}
 
     virtual bool isValid() const;
-    virtual ConnectionState connectionState() const;
+    virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
 public slots:
     virtual void connectPlugin();
@@ -118,7 +118,7 @@ private:
     QVariantHash m_cachedPeers;
     QHash< QString, QPixmap > m_cachedAvatars;
     QSet<QString> m_keyCache;
-    ConnectionState m_state;
+    Tomahawk::Accounts::Account::ConnectionState m_state;
 };
 
 #endif

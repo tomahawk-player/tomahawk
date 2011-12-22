@@ -53,7 +53,7 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
     , m_cachedDirectMessagesSinceId( 0 )
     , m_cachedPeers()
     , m_keyCache()
-    , m_state( Disconnected )
+    , m_state( Tomahawk::Accounts::Account::Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -149,7 +149,7 @@ TwitterSipPlugin::disconnectPlugin()
     m_configuration[ "cachedpeers" ] = m_cachedPeers;
     syncConfig();
     m_cachedPeers.empty();
-    m_state = Disconnected;
+    m_state = Tomahawk::Accounts::Account::Disconnected;
     emit stateChanged( m_state );
 }
 
