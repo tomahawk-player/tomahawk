@@ -50,6 +50,9 @@ public:
     virtual bool isValid() const;
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
+signals:
+    void stateChanged( Tomahawk::Accounts::Account::ConnectionState );
+
 public slots:
     virtual void connectPlugin();
     void disconnectPlugin();

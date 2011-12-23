@@ -64,6 +64,8 @@ public:
     void deauthenticate();
     bool isAuthenticated() const { return m_isAuthenticated; }
 
+    ConnectionState connectionState() const;
+
     Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     SipPlugin* sipPlugin();
 

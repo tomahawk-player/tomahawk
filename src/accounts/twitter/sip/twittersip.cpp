@@ -87,7 +87,7 @@ TwitterSipPlugin::isValid() const
 }
 
 
-SipPlugin::ConnectionState
+Tomahawk::Accounts::Account::ConnectionState
 TwitterSipPlugin::connectionState() const
 {
     return m_state;
@@ -121,7 +121,7 @@ TwitterSipPlugin::connectPlugin()
         m_account->authenticate();
     }
 
-    m_state = Connecting;
+    m_state = Tomahawk::Accounts::Account::Connecting;
     emit stateChanged( m_state );
 }
 
@@ -174,7 +174,7 @@ TwitterSipPlugin::accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter
     connect( m_directMessageNew.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
     connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
     connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
-    m_state = Connected;
+    m_state = Tomahawk::Accounts::Account::Connected;
     emit stateChanged( m_state );
     QStringList peerList = m_cachedPeers.keys();
     qStableSort( peerList.begin(), peerList.end() );
@@ -578,7 +578,7 @@ TwitterSipPlugin::registerOffer( const QString &screenName, const QVariantHash &
         syncConfig();
     }
 
-    if ( m_state == Connected && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
+    if ( m_state == Tomahawk::Accounts::Account::Connected && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, _peerData ) );
 
 }
@@ -698,7 +698,7 @@ void
 TwitterSipPlugin::configurationChanged()
 {
     tDebug() << Q_FUNC_INFO;
-    if ( m_state != Disconnected )
+    if ( m_state != Tomahawk::Accounts::Account::Disconnected )
         m_account->deauthenticate();
     connectPlugin();
 }

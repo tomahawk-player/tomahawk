@@ -79,12 +79,20 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 }
 
 
+Account::ConnectionState
+TwitterAccount::connectionState() const
+{
+    return m_twitterSipPlugin.data()->connectionState();
+}
+
 SipPlugin*
 TwitterAccount::sipPlugin()
 {
     if ( m_twitterSipPlugin.isNull() )
     {
         m_twitterSipPlugin = QWeakPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
+
+        connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
         return m_twitterSipPlugin.data();
     }
     return m_twitterSipPlugin.data();
@@ -96,7 +104,7 @@ TwitterAccount::authenticate()
 {
     tDebug() << Q_FUNC_INFO << "credentials: " << credentials().keys();
 
-    if ( credentials[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
+    if ( credentials()[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
     {
         qDebug() << "TwitterSipPlugin has empty Twitter credentials; not connecting";
         return;
@@ -137,8 +145,8 @@ TwitterAccount::refreshTwitterAuth()
     if( m_twitterAuth.isNull() )
       return false;
 
-    m_twitterAuth.data()->setOAuthToken( m_credentials[ "oauthtoken" ].toString().toLatin1() );
-    m_twitterAuth.data()->setOAuthTokenSecret( m_credentials[ "oauthtokensecret" ].toString().toLatin1() );
+    m_twitterAuth.data()->setOAuthToken( credentials()[ "oauthtoken" ].toString().toLatin1() );
+    m_twitterAuth.data()->setOAuthTokenSecret( credentials()[ "oauthtokensecret" ].toString().toLatin1() );
 
     return true;
 }
