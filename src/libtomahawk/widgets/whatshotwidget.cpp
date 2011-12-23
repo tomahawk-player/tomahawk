@@ -250,7 +250,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             loader->setProperty( "chartid", chartId );
             loader->moveToThread( m_workerThread );
 
-            qDebug() << "SCHEDULING LOADING FROM THREAD:" << QThread::currentThreadId();
             if ( type == "artists" )
             {
                 loader->setType( ChartDataLoader::Artist );
@@ -477,7 +476,6 @@ WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
 void
 WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist_ptr >& artists )
 {
-    qDebug() << "DOING CHART ARTIST DATA LOAD!";
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_artistModels.contains( chartId ) );
 
@@ -495,7 +493,6 @@ void
 WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr >& tracks )
 {
 
-    qDebug() << "DOING CHART TRACK DATA LOAD!";
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_trackModels.contains( chartId ) );
 
@@ -512,7 +509,6 @@ WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_p
 void
 WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_ptr >& albums )
 {
-    qDebug() << "DOING CHART ALBUMS DATA LOAD!";
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_albumModels.contains( chartId ) );
 

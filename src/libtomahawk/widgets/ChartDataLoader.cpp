@@ -28,7 +28,6 @@ ChartDataLoader::ChartDataLoader()
 void
 ChartDataLoader::go()
 {
-    qDebug() << "CHART LOADING DATA!" << QThread::currentThreadId();
     switch ( m_type )
     {
     case Track:
