@@ -119,6 +119,7 @@ set( libGuiSources
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/whatshotwidget.cpp
+    widgets/ChartDataLoader.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
     widgets/OverlayButton.cpp
@@ -237,6 +238,7 @@ set( libGuiHeaders
     widgets/welcomewidget.h
     widgets/whatshotwidget.h
     widgets/whatshotwidget_p.h
+    widgets/ChartDataLoader.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
     widgets/OverlayButton.h

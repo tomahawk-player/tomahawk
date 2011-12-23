@@ -453,7 +453,7 @@ ChartsPlugin::chartReturned()
         QVariantList chartResponse = res.value( "list" ).toList();
         QList< Tomahawk::InfoSystem::InfoStringHash > top_tracks;
         QList< Tomahawk::InfoSystem::InfoStringHash > top_albums;
-        QStringList top_artists;
+        QList< Tomahawk::InfoSystem::InfoStringHash > top_artists;
 
         /// Deside what type, we need to handle it differently
         /// @todo: We allready know the type, append it to breadcrumb hash
@@ -528,7 +528,9 @@ ChartsPlugin::chartReturned()
                     }
                     else
                     {
-                        top_artists.append( artist );
+                        Tomahawk::InfoSystem::InfoStringHash artistHash;
+                        artistHash["artist"] = artist;
+                        top_artists.append( artistHash );
                     }
 
                 }
@@ -538,7 +540,7 @@ ChartsPlugin::chartReturned()
         if( chartType() == Artist )
         {
             tDebug() << "ChartsPlugin:" << "\tgot " << top_artists.size() << " artists";
-            returnedData[ "artists" ] = QVariant::fromValue< QStringList >( top_artists );
+            returnedData[ "artists" ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( top_artists );
             returnedData[ "type" ] = "artists";
         }
 

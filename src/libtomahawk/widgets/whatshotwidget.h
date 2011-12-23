@@ -46,6 +46,11 @@ namespace Ui
     class WhatsHotWidget;
 }
 
+namespace Tomahawk
+{
+    class ChartDataLoader;
+}
+
 /**
  * \class
  * \brief The tomahawk page that shows music charts.
@@ -83,6 +88,11 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
     void leftCrumbIndexChanged( QModelIndex );
+
+    void chartArtistsLoaded( Tomahawk::ChartDataLoader*, const QList< Tomahawk::artist_ptr >& );
+    void chartAlbumsLoaded( Tomahawk::ChartDataLoader*, const QList< Tomahawk::album_ptr >& );
+    void chartTracksLoaded( Tomahawk::ChartDataLoader*, const QList< Tomahawk::query_ptr >& );
+
 private:
     void setLeftViewArtists( TreeModel* artistModel );
     void setLeftViewAlbums( AlbumModel* albumModel );
@@ -95,6 +105,11 @@ private:
 
     QStandardItemModel* m_crumbModelLeft;
     QSortFilterProxyModel* m_sortedProxy;
+
+    // Load artist, album, and track objects in a thread
+    // {Artist,Album,Track}::get() calls are all synchronous db calls
+    // and we don't want to lock up out UI in case the db is busy (e.g. on startup)
+    QThread* m_workerThread;
 
     // Cache our model data
     QHash< QString, AlbumModel* > m_albumModels;
