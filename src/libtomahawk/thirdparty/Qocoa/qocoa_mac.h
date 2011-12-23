@@ -45,6 +45,7 @@ static inline void zeroLayout(void *cocoaView, QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(parent);
     layout->setMargin(0);
+    parent->setAttribute(Qt::WA_NativeWindow);
     layout->addWidget(new QMacCocoaViewContainer(cocoaView, parent));
 }
 
