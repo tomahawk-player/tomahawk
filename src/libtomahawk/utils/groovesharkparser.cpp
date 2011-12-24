@@ -93,7 +93,9 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
 
     QStringList urlParts = linkRaw.split( "/" );
     bool ok;
-    int playlistID = urlParts.last().toInt( &ok, 10 );
+    QString playlistStr = urlParts.last();
+    playlistStr.truncate(playlistStr.indexOf("?"));
+    int playlistID = playlistStr.toInt( &ok, 10 );
     if (!ok)
     {
         tDebug() << "incorrect grooveshark url";
