@@ -253,7 +253,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             if ( type == "artists" )
             {
                 loader->setType( ChartDataLoader::Artist );
-                loader->setData( returnedData[ "artists" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
+                loader->setData( returnedData[ "artists" ].value< QStringList >() );
 
                 connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), this, SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
 
@@ -479,10 +479,12 @@ WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_artistModels.contains( chartId ) );
 
-    if ( !m_artistModels.contains( chartId ) )
+    if ( m_artistModels.contains( chartId ) )
     {
         foreach( const artist_ptr& artist, artists )
+        {
             m_artistModels[ chartId ]->addArtists( artist );
+        }
     }
 
     loader->deleteLater();

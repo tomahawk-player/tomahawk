@@ -45,8 +45,9 @@ ChartDataLoader::go()
     {
         QList< artist_ptr > artist_ptrs;
 
-        foreach ( const Tomahawk::InfoSystem::InfoStringHash& artistname, m_data )        {
-            artist_ptrs << Artist::get( artistname[ "artist" ], false );
+        foreach ( const QString& artistname, m_artists )
+        {
+            artist_ptrs << Artist::get( artistname, false );
         }
 
         emit artists( this, artist_ptrs );

@@ -47,6 +47,7 @@ public:
 
     void setType( DataType type ) { m_type = type; }
     void setData( const QList< InfoSystem::InfoStringHash >& data ) { m_data = data; }
+    void setData( const QStringList& artists ) { m_artists = artists; }
 
 public slots:
     void go();
@@ -60,6 +61,7 @@ signals:
 private:
     DataType m_type;
     QList<InfoSystem::InfoStringHash> m_data;
+    QStringList m_artists;
 };
 
 }
