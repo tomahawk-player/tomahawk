@@ -55,7 +55,7 @@ public:
     virtual bool running() const;
 
 signals:
-    void stopped();
+    void terminated();
 
 public slots:
     virtual void stop();

@@ -175,6 +175,7 @@
       NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
       OSStatus httpResult = LSSetDefaultHandlerForURLScheme((CFStringRef)@"tomahawk", (CFStringRef)bundleID);
 
+      Q_UNUSED(httpResult);
       //TODO: Check httpResult and httpsResult for errors
   }
   return self;

@@ -59,7 +59,6 @@ public:
     // varies depending on the type of the item
     virtual QString text() const { return QString(); }
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
-    virtual void activate() {}
     virtual QIcon icon() const { return QIcon(); }
     virtual bool willAcceptDrag( const QMimeData* ) const { return false; }
     virtual bool dropMimeData( const QMimeData*, Qt::DropAction ) { return false; }
@@ -76,6 +75,9 @@ public:
     void endRowsAdded() { emit childRowsAdded(); }
     void beginRowsRemoved( int from, int to ) { emit beginChildRowsRemoved( from, to ); }
     void endRowsRemoved() { emit childRowsRemoved(); }
+
+public slots:
+    virtual void activate() {}
 
 signals:
     void updated();

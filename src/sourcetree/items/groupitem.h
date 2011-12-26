@@ -25,7 +25,6 @@
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
 
-// generic item that has some name, some text, and calls a certain slot when activated. badabing!
 class GroupItem : public SourceTreeItem
 {
     Q_OBJECT
@@ -35,15 +34,19 @@ public:
     virtual ~GroupItem();
 
     virtual QString text() const;
-    virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const { Q_UNUSED( data ); return false; }
     virtual QIcon icon() const { return QIcon(); }
     virtual int peerSortValue() const { return m_peerSortValue; }
     virtual bool isBeingPlayed() const { return false; }
 
+public slots:
+    virtual void activate();
+
 signals:
     void activated();
-    void toggleExpandRequest( SourceTreeItem* );
+
+private slots:
+    void requestExpanding();
 
 private:
     QString m_text;

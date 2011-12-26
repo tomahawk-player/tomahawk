@@ -84,8 +84,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
-    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( latchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
 
     setItemDelegate( m_delegate );
 
@@ -94,9 +94,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
-    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequest( QPersistentModelIndex ) ) );
-    connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequest( QPersistentModelIndex ) ) );
-    connect( m_proxyModel, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), this, SLOT( toggleExpandRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( selectRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expandRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), SLOT( toggleExpandRequest( QPersistentModelIndex ) ) );
 
     setModel( m_proxyModel );
 
@@ -104,7 +104,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
     connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
-    connect( this, SIGNAL( expanded( QModelIndex ) ), this, SLOT( onItemExpanded( QModelIndex ) ) );
+    connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
@@ -228,8 +228,10 @@ void
 SourceTreeView::onItemExpanded( const QModelIndex& idx )
 {
     // make sure to expand children nodes for collections
-    if( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection ) {
-       for( int i = 0; i < model()->rowCount( idx ); i++ ) {
+    if( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    {
+       for( int i = 0; i < model()->rowCount( idx ); i++ )
+       {
            setExpanded( model()->index( i, 0, idx ), true );
        }
     }

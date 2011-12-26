@@ -300,7 +300,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     if ( m_stopped )
     {
         tLog() << "*** Script resolver stopped ";
-        emit stopped();
+        emit terminated();
 
         return;
     }

@@ -120,6 +120,7 @@ set( libGuiSources
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/whatshotwidget.cpp
+    widgets/ChartDataLoader.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
     widgets/OverlayButton.cpp
@@ -135,6 +136,10 @@ set( libGuiSources
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
 )
+
+IF(QCA2_FOUND)
+    set( libGuiSources ${libGuiSources} utils/groovesharkparser.cpp )
+ENDIF(QCA2_FOUND)
 
 set( libGuiHeaders
     actioncollection.h
@@ -237,6 +242,7 @@ set( libGuiHeaders
     widgets/welcomewidget.h
     widgets/whatshotwidget.h
     widgets/whatshotwidget_p.h
+    widgets/ChartDataLoader.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
     widgets/OverlayButton.h
@@ -262,8 +268,11 @@ set( libGuiHeaders
     jobview/LatchedStatusItem.h
 
     thirdparty/Qocoa/qsearchfield.h
-
 )
+
+IF(QCA2_FOUND)
+    set( libGuiHeaders ${libGuiHeaders} utils/groovesharkparser.h )
+ENDIF(QCA2_FOUND)
 
 set( libSources
     tomahawksettings.cpp

@@ -169,7 +169,7 @@ Pipeline::removeScriptResolver( const QString& scriptPath )
     if ( r )
     {
         r->stop();
-        connect( r, SIGNAL( stopped() ), r, SLOT( deleteLater() ) );
+        r->deleteLater();
     }
 }
 

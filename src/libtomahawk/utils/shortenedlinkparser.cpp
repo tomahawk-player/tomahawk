@@ -56,6 +56,7 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "fb.me" ) ||
              url.contains( "itun.es" ) ||
              url.contains( "tinyurl.com" ) ||
+             url.contains( "tinysong.com" ) ||
              url.contains( "rd.io" ) );
 }
 

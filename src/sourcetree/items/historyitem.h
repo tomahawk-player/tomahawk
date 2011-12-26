@@ -38,11 +38,11 @@ public:
     HistoryItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue = 0 );
     virtual ~HistoryItem();
 
+public slots:
     virtual void activate();
 
 signals:
     void activated();
-    void toggleExpandRequest( SourceTreeItem* );
 
 private slots:
     void tempPageActivated( Tomahawk::ViewPage* );
