@@ -83,6 +83,8 @@ public:
         return m_sharedPtr;
     }
 
+    //virtual void findMoreIfaces() = 0;
+    
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) = 0;
     virtual void setShuffled( bool enabled ) = 0;

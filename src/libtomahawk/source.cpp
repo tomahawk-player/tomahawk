@@ -188,7 +188,7 @@ Source::setOffline()
 
     m_cc = 0;
     DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
 

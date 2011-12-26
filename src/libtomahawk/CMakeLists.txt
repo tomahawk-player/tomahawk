@@ -281,6 +281,7 @@ set( libSources
 
     aclsystem.cpp
     artist.cpp
+    artistplaylistinterface.cpp
     album.cpp
     collection.cpp
     playlist.cpp
@@ -413,6 +414,7 @@ set( libHeaders
     sourceplaylistinterface.h
 
     artist.h
+    artistplaylistinterface.h
     album.h
     playlist.h
 

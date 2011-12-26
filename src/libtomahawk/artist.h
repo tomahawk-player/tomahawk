@@ -23,13 +23,12 @@
 #include <QSharedPointer>
 
 #include "typedefs.h"
-#include "playlistinterface.h"
 #include "dllmacro.h"
 
 namespace Tomahawk
 {
 
-class DLLEXPORT Artist : public QObject, public Tomahawk::PlaylistInterface
+class DLLEXPORT Artist : public QObject
 {
 Q_OBJECT
 
@@ -45,33 +44,10 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
-    virtual QList<Tomahawk::query_ptr> tracks();
-
-    virtual int trackCount() const { return 0; }
-    virtual int unfilteredTrackCount() const { return m_queries.count(); }
-
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
-
-    virtual bool hasNextItem();
-    virtual Tomahawk::result_ptr currentItem() const;
-
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
-    virtual bool shuffled() const { return false; }
-
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
-    virtual void setShuffled( bool ) {}
-
-    virtual void setFilter( const QString& /*pattern*/ ) {}
+    Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
@@ -83,9 +59,7 @@ private:
     QString m_name;
     QString m_sortname;
 
-    QList<Tomahawk::query_ptr> m_queries;
-    result_ptr m_currentItem;
-    unsigned int m_currentTrack;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 }; // ns
