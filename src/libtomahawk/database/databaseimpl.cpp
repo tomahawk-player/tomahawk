@@ -569,10 +569,11 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                             "composer.name as cmpname, "                            //14
                             "file.source, "                                         //15
                             "file_join.albumpos, "                                  //16
-                            "artist.id as artid, "                                  //17
-                            "album.id as albid, "                                   //18
-                            "composer.id as cmpid, "                                //19
-                            "track_attributes.v as year "                           //20
+                            "file_join.discnumber, "                                //17
+                            "artist.id as artid, "                                  //18
+                            "album.id as albid, "                                   //19
+                            "composer.id as cmpid, "                                //20
+                            "track_attributes.v as year "                           //21
                             "FROM file, file_join, artist, track, track_attributes "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "LEFT JOIN artist AS composer on composer.id = file_join.composer "
@@ -610,9 +611,9 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         }
 
         res = Tomahawk::Result::get( url );
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 17 ).toUInt(), query.value( 11 ).toString() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 18 ).toUInt(), query.value( 12 ).toString(), artist );
-        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( query.value( 19 ).toUInt(), query.value( 14 ).toString() );
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 18 ).toUInt(), query.value( 11 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 19 ).toUInt(), query.value( 12 ).toString(), artist );
+        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( query.value( 20 ).toUInt(), query.value( 14 ).toString() );
 
         res->setModificationTime( query.value( 1 ).toUInt() );
         res->setSize( query.value( 2 ).toUInt() );
@@ -625,10 +626,11 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setScore( 1.0 );
         res->setTrack( query.value( 13 ).toString() );
         res->setAlbumPos( query.value( 16 ).toUInt() );
+        res->setDiscNumber( query.value( 17 ).toUInt() );
         res->setRID( uuid() );
         res->setTrackId( query.value( 9 ).toUInt() );
         res->setCollection( s->collection() );
-        res->setYear( query.value( 20 ).toUInt() );
+        res->setYear( query.value( 21 ).toUInt() );
     }
 
     return res;

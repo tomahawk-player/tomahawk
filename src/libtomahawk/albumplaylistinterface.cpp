@@ -90,6 +90,7 @@ AlbumPlaylistInterface::tracks()
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
         cmd->setAlbum( m_album );
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+        //this takes discnumber into account as well
 
         connect( cmd,          SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                  m_album.data(), SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );

@@ -330,8 +330,9 @@ TreeModel::data( const QModelIndex& index, int role ) const
         switch( index.column() )
         {
             case Name:
-                return QString( "%1%2" ).arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
-                                        .arg( query->track() );
+                return QString( "%1%2%3" ).arg( query->discnumber() > 0 ? QString( "%1." ).arg( query->discnumber() ) : QString() )
+                                          .arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
+                                          .arg( query->track() );
 
             case AlbumPosition:
                 return entry->query()->albumpos();
