@@ -111,7 +111,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 WhatsHotWidget::~WhatsHotWidget()
 {
     m_workerThread->exit(0);
-    delete m_playlistInterface;
+    m_playlistInterface.clear();
     delete ui;
 }
 
