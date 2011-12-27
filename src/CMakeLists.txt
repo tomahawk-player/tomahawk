@@ -176,10 +176,10 @@ INCLUDE_DIRECTORIES(
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
 
 IF( WIN32 )
-  INCLUDE( "CMakeLists.win32.txt" )
+  INCLUDE( "CMakeLists.win32.cmake" )
 ENDIF( WIN32 )
 IF( UNIX )
-  INCLUDE( "CMakeLists.unix.txt" )
+  INCLUDE( "CMakeLists.unix.cmake" )
 ENDIF( UNIX )
 
 IF( APPLE )
