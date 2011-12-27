@@ -208,7 +208,7 @@ ResolversModel::addInstalledResolvers()
 
     QDir appDir( qApp->applicationDirPath() );
     QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
-    QDir libexecDir( CMAKE_INSTALL_LIBEXECDIR );
+    QDir libexecDir( CMAKE_INSTALL_FULL_LIBEXECDIR );
 
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
