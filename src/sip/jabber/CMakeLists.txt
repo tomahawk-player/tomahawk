@@ -64,7 +64,7 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_sipjabber DESTINATION ${CMAKE_INSTALL_LIBDIR} )
 
 if(BUILD_GUI)
     add_subdirectory(googlewrapper)

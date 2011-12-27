@@ -51,4 +51,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_siptwitter DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_siptwitter DESTINATION ${CMAKE_INSTALL_LIBDIR} )

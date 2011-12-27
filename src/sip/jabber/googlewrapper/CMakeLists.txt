@@ -29,4 +29,4 @@ target_link_libraries( tomahawk_sipgoogle
     tomahawklib
 )
 
-install( TARGETS tomahawk_sipgoogle DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_sipgoogle DESTINATION ${CMAKE_INSTALL_LIBDIR} )
