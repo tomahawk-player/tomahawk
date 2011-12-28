@@ -92,7 +92,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     {
         QVariant& v = *it;
         QVariantMap m = v.toMap();
-        int fileid = 0, artistid = 0, albumid = 0, trackid = 0;
+
+        int fileid = 0, artistid = 0, albumid = 0, trackid = 0, composerid = 0;
 
         QString url      = m.value( "url" ).toString();
         int mtime        = m.value( "mtime" ).toInt();
@@ -108,10 +109,6 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QString composer = m.value( "composer" ).toString();
         uint discnumber  = m.value( "discnumber" ).toUInt();
         int year         = m.value( "year" ).toInt();
-
-        int fileid = 0, artistid = 0, albumid = 0, trackid = 0, composerid = 0;
-        query_file_del.bindValue( 0, url );
-        query_file_del.exec();
 
         query_file.bindValue( 0, srcid );
         query_file.bindValue( 1, url );
