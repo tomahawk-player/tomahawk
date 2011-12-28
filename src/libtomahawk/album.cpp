@@ -19,6 +19,7 @@
 #include "album.h"
 
 #include "artist.h"
+#include "albumplaylistinterface.h"
 #include "database/database.h"
 #include "database/databaseimpl.h"
 #include "database/databasecommand_alltracks.h"
@@ -63,12 +64,10 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
 
 Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
-    : PlaylistInterface( this )
+    : QObject()
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
-    , m_currentItem( 0 )
-    , m_currentTrack( 0 )
 {
 }
 
@@ -78,44 +77,13 @@ Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_queries << tracks;
+    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( getPlaylistInterface().data() );
+    if ( api )
+        api->addQueries( tracks );
+    
     emit tracksAdded( tracks );
 }
 
-
-Tomahawk::result_ptr
-Album::siblingItem( int itemsAway )
-{
-    int p = m_currentTrack;
-    p += itemsAway;
-
-    if ( p < 0 )
-        return Tomahawk::result_ptr();
-
-    if ( p >= m_queries.count() )
-        return Tomahawk::result_ptr();
-
-    m_currentTrack = p;
-    m_currentItem = m_queries.at( p )->results().first();
-    return m_currentItem;
-}
-
-result_ptr
-Album::currentItem() const
-{
-    return m_currentItem;
-}
-
-bool
-Album::hasNextItem()
-{
-    int p = m_currentTrack;
-    p++;
-    if ( p < 0 || p >= m_queries.count() )
-        return false;
-
-    return true;
-}
 
 artist_ptr
 Album::artist() const
@@ -123,20 +91,14 @@ Album::artist() const
     return m_artist;
 }
 
-QList<Tomahawk::query_ptr>
-Album::tracks()
+
+Tomahawk::playlistinterface_ptr
+Album::getPlaylistInterface()
 {
-    if ( m_queries.isEmpty() )
+    if ( m_playlistInterface.isNull() )
     {
-        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
-        cmd->setAlbum( this );
-        cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
-
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
-
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this ) );
     }
-
-    return m_queries;
+    
+    return m_playlistInterface;
 }

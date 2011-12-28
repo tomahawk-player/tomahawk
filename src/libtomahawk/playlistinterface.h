@@ -19,7 +19,7 @@
 #ifndef PLAYLISTINTERFACE_H
 #define PLAYLISTINTERFACE_H
 
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 
 #include "typedefs.h"
 #include "dllmacro.h"

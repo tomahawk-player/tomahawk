@@ -283,6 +283,7 @@ set( libSources
     artist.cpp
     artistplaylistinterface.cpp
     album.cpp
+    albumplaylistinterface.cpp
     collection.cpp
     playlist.cpp
     resolver.cpp
@@ -416,6 +417,7 @@ set( libHeaders
     artist.h
     artistplaylistinterface.h
     album.h
+    albumplaylistinterface.h
     playlist.h
 
     EchonestCatalogSynchronizer.h

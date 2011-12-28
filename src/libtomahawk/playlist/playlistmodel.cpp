@@ -152,7 +152,7 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
         m_isTemporary = true;
     }
 
-    append( album->tracks() );
+    append( album->getPlaylistInterface()->tracks() );
 }
 
 
