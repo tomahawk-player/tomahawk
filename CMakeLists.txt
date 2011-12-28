@@ -55,6 +55,9 @@ SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 
+# make predefined install dirs available everywhere
+INCLUDE(GNUInstallDirs)
+
 # installer creation
 INCLUDE( TomahawkCPack.cmake )
 

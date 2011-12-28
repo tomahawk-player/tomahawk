@@ -178,10 +178,10 @@ INCLUDE_DIRECTORIES(
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
 
 IF( WIN32 )
-  INCLUDE( "CMakeLists.win32.txt" )
+  INCLUDE( "CMakeLists.win32.cmake" )
 ENDIF( WIN32 )
 IF( UNIX )
-  INCLUDE( "CMakeLists.unix.txt" )
+  INCLUDE( "CMakeLists.unix.cmake" )
 ENDIF( UNIX )
 
 IF( APPLE )
@@ -206,6 +206,7 @@ IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
 
+INCLUDE(GNUInstallDirs)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
@@ -271,12 +272,12 @@ IF( APPLE )
   ENDIF(HAVE_SPARKLE)
 ENDIF( APPLE )
 
-INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
+INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 
 IF( UNIX AND NOT APPLE AND KDE4_INSTALLED AND LEGACY_KDE_INTEGRATION ) #install protocol file
   FILE( READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol )
   STRING( REPLACE "/path/to/binary" # match this
-              "${CMAKE_INSTALL_PREFIX}/bin/tomahawk" # this is linux (kde) so pretty safe I think
+              "${CMAKE_INSTALL_FULL_BINDIR}/tomahawk" # this is linux (kde) so pretty safe I think
               edited_protocol # save in this variable
               "${protocol}" # from the contents of this var
           )
@@ -284,7 +285,7 @@ IF( UNIX AND NOT APPLE AND KDE4_INSTALLED AND LEGACY_KDE_INTEGRATION ) #install 
   IF( ${SERVICES_INSTALL_DIR} )
     SET( PROTOCOL_INSTALL_DIR ${SERVICES_INSTALL_DIR} )
   ELSE()
-    SET( PROTOCOL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/kde4/services" )
+    SET( PROTOCOL_INSTALL_DIR "${CMAKE_INSTALL_FULL_DATADIR}/kde4/services" )
   ENDIF()
   INSTALL( FILES ${CMAKE_BINARY_DIR}/tomahawk.protocol DESTINATION ${PROTOCOL_INSTALL_DIR} )
 ENDIF()

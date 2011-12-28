@@ -75,6 +75,8 @@ private:
     void doSetup( const QVariantMap& m );
     void setupConfWidget( const QVariantMap& m );
 
+    void startProcess();
+
     QProcess m_proc;
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;

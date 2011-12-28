@@ -45,24 +45,13 @@ ScriptResolver::ScriptResolver( const QString& exe )
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    QString runPath = filePath();
-#ifdef WIN32
-    // have to enclose in quotes if path contains spaces on windows...
-    runPath = QString( "\"%1\"" ).arg( filePath() );
-#endif
-
-    if ( !QFile::exists( filePath() ) )
-        m_error = Tomahawk::ExternalResolver::FileNotFound;
-    else
-        m_proc.start( runPath );
+    startProcess();
 
     if ( !TomahawkUtils::nam() )
         return;
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
     m_name = QFileInfo( filePath() ).baseName();
-
-    sendConfig();
 }
 
 
@@ -141,15 +130,7 @@ ScriptResolver::sendConfig()
 void
 ScriptResolver::reload()
 {
-    if ( !QFile::exists( filePath() ) )
-        m_error = Tomahawk::ExternalResolver::FileNotFound;
-    else
-    {
-        m_error = Tomahawk::ExternalResolver::NoError;
-        m_proc.start( filePath() );
-
-        sendConfig();
-    }
+    startProcess();
 }
 
 
@@ -309,7 +290,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     {
         m_num_restarts++;
         tLog() << "*** Restart num" << m_num_restarts;
-        m_proc.start( filePath() );
+        startProcess();
         sendConfig();
     }
     else
@@ -378,6 +359,41 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
+}
+
+
+void ScriptResolver::startProcess()
+{
+    if ( !QFile::exists( filePath() ) )
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    else
+    {
+        m_error = Tomahawk::ExternalResolver::NoError;
+    }
+
+    QFileInfo fi( filePath() );
+
+    QString interpreter;
+    QString runPath = filePath();
+
+#ifdef Q_OS_WIN
+    if(fi.completeSuffix() == "py")
+    {
+        interpreter = "python.exe";
+    }
+    else
+    {
+        // have to enclose in quotes if path contains spaces on windows...
+        runPath = QString( "\"%1\"" ).arg( filePath() );
+    }
+#endif // Q_OS_WIN
+
+    if( interpreter.isEmpty() )
+        m_proc.start( runPath );
+    else
+        m_proc.start( interpreter, QStringList() << filePath() );
+
+    sendConfig();
 }
 
 
