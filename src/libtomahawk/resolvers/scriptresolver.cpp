@@ -30,6 +30,9 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+#ifdef Q_OS_WIN
+#include <shlwapi.h>
+#endif
 
 ScriptResolver::ScriptResolver( const QString& exe )
     : Tomahawk::ExternalResolverGui( exe )
@@ -377,9 +380,26 @@ void ScriptResolver::startProcess()
     QString runPath = filePath();
 
 #ifdef Q_OS_WIN
-    if(fi.completeSuffix() == "py")
+    if ( fi.suffix().toLower() != "exe" )
     {
-        interpreter = "python.exe";
+        DWORD dwSize = MAX_PATH;
+
+        wchar_t path[MAX_PATH] = { 0 };
+        wchar_t *ext = (wchar_t *) ("." + fi.suffix()).utf16();
+
+        HRESULT hr = AssocQueryStringW(
+                (ASSOCF) 0,
+                ASSOCSTR_EXECUTABLE,
+                ext,
+                L"open",
+                path,
+                &dwSize
+        );
+
+        if ( ! FAILED( hr ) )
+        {
+            interpreter = QString( "\"%1\"" ).arg(QString::fromUtf16((const ushort *) path));
+        }
     }
     else
     {
