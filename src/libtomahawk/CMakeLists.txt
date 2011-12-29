@@ -598,6 +598,7 @@ IF( WIN32 )
         "dsound.dll"
         "winmm.dll"
         "advapi32.dll"
+	"shlwapi.dll"
     )
 ENDIF( WIN32 )
 
