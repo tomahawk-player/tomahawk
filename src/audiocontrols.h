@@ -20,6 +20,7 @@
 #define AUDIOCONTROLS_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QTimer>
 #include <QtCore/QTimeLine>
 
 #include "result.h"
@@ -51,7 +52,7 @@ signals:
 public slots:
     void onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
-
+    
 protected:
     void changeEvent( QEvent* e );
     void dragEnterEvent ( QDragEnterEvent* );
@@ -59,6 +60,8 @@ protected:
     void dropEvent ( QDropEvent* );
 
 private slots:
+    void phononTickCheckTimeout();
+    
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
     void onPlaybackPaused();
@@ -93,6 +96,7 @@ private:
     Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;
 
+    QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;
     qint64 m_seekMsecs;
     qint64 m_lastSliderCheck;

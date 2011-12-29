@@ -98,9 +98,12 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
+    m_phononTickCheckTimer.setSingleShot( true );
+    
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
+    connect( &m_phononTickCheckTimer, SIGNAL( timeout() ), SLOT( phononTickCheckTimeout() ) );
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
 
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
@@ -177,6 +180,13 @@ AudioControls::changeEvent( QEvent* e )
 
 
 void
+AudioControls::phononTickCheckTimeout()
+{
+    onPlaybackTimer( m_lastSliderCheck );
+}
+
+
+void
 AudioControls::onVolumeChanged( int volume )
 {
     ui->volumeSlider->blockSignals( true );
@@ -204,6 +214,8 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
 
+    m_phononTickCheckTimer.stop();
+    
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
@@ -344,6 +356,7 @@ AudioControls::onPlaybackSeeked( qint64 msec )
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << " setting current timer to " << msec;
     m_sliderTimeLine.setPaused( true );
     m_sliderTimeLine.setCurrentTime( msec );
+    m_lastSliderCheck = msec;
     m_seekMsecs = msec;
 }
 
@@ -373,16 +386,22 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
-//    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
-    if ( msElapsed > 0 && msElapsed - 500 < m_lastSliderCheck )
+    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
+    if ( msElapsed > 0 && msElapsed != m_lastSliderCheck && m_seekMsecs == -1 && msElapsed - 500 < m_lastSliderCheck )
         return;
     m_lastSliderCheck = msElapsed;
 
     if ( m_currentTrack.isNull() )
+    {
+        m_sliderTimeLine.stop();
         return;
-
+    }
+    
     ui->seekSlider->blockSignals( true );
 
+    if ( sender() != &m_phononTickCheckTimer )
+        m_phononTickCheckTimer.start( 1000 );
+    
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
@@ -391,7 +410,10 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     {
         if ( m_sliderTimeLine.currentTime() != msElapsed )
         {
+            m_sliderTimeLine.setPaused( true );
             m_noTimeChange = false;
+            m_sliderTimeLine.setCurrentTime( msElapsed );
+            m_seekMsecs = -1;
             m_sliderTimeLine.resume();
         }
     }
@@ -405,10 +427,10 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
         m_sliderTimeLine.setCurrentTime( msElapsed );
         m_seekMsecs = -1;
-        if ( AudioEngine::instance()->state() != AudioEngine::Paused )
+        if ( AudioEngine::instance()->state() != AudioEngine::Paused && sender() != &m_phononTickCheckTimer )
             m_sliderTimeLine.resume();
     }
-    else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
+    else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning && AudioEngine::instance()->state() == AudioEngine::Playing )
     {
         ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
         m_sliderTimeLine.start();
