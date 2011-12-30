@@ -40,6 +40,7 @@ ArtistPlaylistInterface::ArtistPlaylistInterface( Tomahawk::Artist *artist )
 
 ArtistPlaylistInterface::~ArtistPlaylistInterface()
 {
+    m_artist.clear();
 }
 
 

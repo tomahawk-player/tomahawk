@@ -61,6 +61,8 @@ public:
 
     virtual void reset();
 
+    virtual void findMoreIfaces() {}
+
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}

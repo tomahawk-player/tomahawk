@@ -114,7 +114,7 @@ public:
 };
 
 
-class DLLEXPORT Playlist : public QObject, public Tomahawk::PlaylistInterface
+class DLLEXPORT Playlist : public QObject
 {
 Q_OBJECT
 Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
@@ -180,27 +180,12 @@ public:
     void setCreatedOn( uint createdOn )         { m_createdOn = createdOn; }
     // </IGNORE>
 
-    virtual QList<Tomahawk::query_ptr> tracks();
-
-    virtual int unfilteredTrackCount() const { return m_entries.count(); }
-    virtual int trackCount() const { return m_entries.count(); }
-
-    virtual bool hasNextItem() { return false; }
-    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
-
-    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
-
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
-    virtual bool shuffled() const { return false; }
-
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
-    virtual void setShuffled( bool ) {}
-
-    virtual void setFilter( const QString& /*pattern*/ ) {}
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
     void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
     PlaylistUpdaterInterface* updater() const { return m_updater; }
+
+    Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
@@ -221,13 +206,6 @@ signals:
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
 
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
@@ -291,8 +269,6 @@ private:
     unsigned int m_createdOn;
     bool m_shared;
 
-    result_ptr m_currentItem;
-
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
 
@@ -303,9 +279,11 @@ private:
     bool m_locallyChanged;
     bool m_deleted;
     bool m_busy;
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
-};
+}
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
 

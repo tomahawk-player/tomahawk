@@ -37,7 +37,9 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
 
 
 SourcePlaylistInterface::~SourcePlaylistInterface()
-{}
+{
+    m_source.clear();
+}
 
 
 Tomahawk::result_ptr

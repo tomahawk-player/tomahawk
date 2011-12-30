@@ -16,48 +16,45 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWKARTISTPLAYLISTINTERFACE_H
-#define TOMAHAWKARTISTPLAYLISTINTERFACE_H
+#ifndef PLAYLISTPLAYLISTINTERFACE_H
+#define PLAYLISTPLAYLISTINTERFACE_H
 
 #include <QObject>
+#include <QList>
 #include <QSharedPointer>
 
 #include "typedefs.h"
+#include "result.h"
 #include "playlistinterface.h"
+#include "query.h"
+
 #include "dllmacro.h"
 
 namespace Tomahawk
 {
 
-class Artist;
-
-class DLLEXPORT ArtistPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+class DLLEXPORT PlaylistPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    ArtistPlaylistInterface( Tomahawk::Artist *artist );
-    virtual ~ArtistPlaylistInterface();
+    PlaylistPlaylistInterface( Tomahawk::Playlist* playlist );
+    virtual ~PlaylistPlaylistInterface();
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
-    virtual int trackCount() const { return 0; }
-    virtual int unfilteredTrackCount() const { return m_queries.count(); }
+    virtual int unfilteredTrackCount() const;
+    virtual int trackCount() const;
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual bool hasNextItem() { return false; }
+    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
 
-    virtual bool hasNextItem();
-    virtual Tomahawk::result_ptr currentItem() const;
+    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
-    virtual void setShuffled( bool ) {}
-
     virtual void setFilter( const QString& /*pattern*/ ) {}
-
-    virtual void addQueries( const QList<Tomahawk::query_ptr>& tracks );
 
     virtual void findMoreIfaces() {}
 
@@ -70,16 +67,19 @@ signals:
 
     void nextTrackReady();
 
+public slots:
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setShuffled( bool ) {}
+
 private:
-    Q_DISABLE_COPY( ArtistPlaylistInterface )
+    PlaylistPlaylistInterface();
+    Q_DISABLE_COPY( PlaylistPlaylistInterface )
 
-    QList< Tomahawk::query_ptr > m_queries;
+    QWeakPointer< Tomahawk::Playlist > m_playlist;
+
     result_ptr m_currentItem;
-    unsigned int m_currentTrack;
-
-    QWeakPointer< Tomahawk::Artist > m_artist;
 };
 
-}; // ns
+}
 
-#endif
+#endif // PLAYLISTPLAYLISTINTERFACE_H

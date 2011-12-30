@@ -59,7 +59,9 @@ public:
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
     virtual void addQueries( const QList<Tomahawk::query_ptr>& tracks );
-    
+
+    virtual void findMoreIfaces() {}
+
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
