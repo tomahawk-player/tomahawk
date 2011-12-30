@@ -93,7 +93,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
 
-    m_playlistInterface = ( new ChartsPlaylistInterface( this ) )->getSharedPointer();
+    m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();

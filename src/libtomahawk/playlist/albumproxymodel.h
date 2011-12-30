@@ -26,7 +26,7 @@
 
 #include "dllmacro.h"
 
-class DLLEXPORT AlbumProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
+class DLLEXPORT AlbumProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 
@@ -38,39 +38,17 @@ public:
     virtual void setSourceAlbumModel( AlbumModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
-    virtual QList<Tomahawk::query_ptr> tracks();
-
-    virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
-    virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual bool hasNextItem() { return true; }
-    virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int direction );
+    virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
-    virtual void setFilter( const QString& pattern );
-
-    virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
-    virtual bool shuffled() const { return m_shuffled; }
-    virtual Tomahawk::PlaylistInterface::ViewMode viewMode() const { return Tomahawk::PlaylistInterface::Album; }
+    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
     void filterChanged( const QString& filter );
-
-    void nextTrackReady();
-
-public slots:
-    virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
-    virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -78,8 +56,8 @@ protected:
 
 private:
     AlbumModel* m_model;
-    RepeatMode m_repeatMode;
-    bool m_shuffled;
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 #endif // ALBUMPROXYMODEL_H

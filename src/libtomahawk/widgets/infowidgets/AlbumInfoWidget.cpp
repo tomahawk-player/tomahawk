@@ -102,7 +102,7 @@ AlbumInfoWidget::~AlbumInfoWidget()
 Tomahawk::playlistinterface_ptr
 AlbumInfoWidget::playlistInterface() const
 {
-    return ui->tracksView->playlistInterface()->getSharedPointer();
+    return ui->tracksView->playlistInterface();
 }
 
 

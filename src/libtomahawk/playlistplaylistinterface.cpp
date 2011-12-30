@@ -27,7 +27,7 @@ using namespace Tomahawk;
 
 
 PlaylistPlaylistInterface::PlaylistPlaylistInterface( Tomahawk::Playlist* playlist )
-    : QObject()
+    : Tomahawk::PlaylistInterface()
     , m_playlist( playlist )
 {
 }

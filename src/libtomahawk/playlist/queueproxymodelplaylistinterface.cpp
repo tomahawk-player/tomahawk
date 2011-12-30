@@ -16,29 +16,35 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "collectionproxymodel.h"
+#include "queueproxymodelplaylistinterface.h"
 
-#include "collectionproxymodelplaylistinterface.h"
-
-#include <QTreeView>
-
-#include "album.h"
-#include "query.h"
+#include "queueproxymodel.h"
 #include "utils/logger.h"
 
+using namespace Tomahawk;
 
-CollectionProxyModel::CollectionProxyModel( QObject* parent )
-    : TrackProxyModel( parent )
+QueueProxyModelPlaylistInterface::QueueProxyModelPlaylistInterface( QueueProxyModel *proxyModel )
+    : PlaylistProxyModelPlaylistInterface( proxyModel )
 {
 }
 
-Tomahawk::playlistinterface_ptr
-CollectionProxyModel::getPlaylistInterface()
-{
-    if ( m_playlistInterface.isNull() )
-    {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::CollectionProxyModelPlaylistInterface( this ) );
-    }
 
-    return m_playlistInterface;
+QueueProxyModelPlaylistInterface::~QueueProxyModelPlaylistInterface()
+{
+    m_proxyModel.clear();
+}
+
+
+Tomahawk::result_ptr
+QueueProxyModelPlaylistInterface::siblingItem( int itemsAway )
+{
+    if ( m_proxyModel.isNull() )
+        return Tomahawk::result_ptr();
+
+    m_proxyModel.data()->setCurrentIndex( QModelIndex() );
+    Tomahawk::result_ptr res = PlaylistProxyModelPlaylistInterface::siblingItem( itemsAway );
+
+    m_proxyModel.data()->remove( m_proxyModel.data()->currentIndex() );
+
+    return res;
 }

@@ -605,16 +605,16 @@ ViewManager::unlinkPlaylist()
 {
     if ( currentPlaylistInterface() )
     {
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
                     this,                                 SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                     this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                     this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                     this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
@@ -644,16 +644,16 @@ ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
                                                        SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                                                        SIGNAL( numShownChanged( unsigned int ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                                                        SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                        SIGNAL( shuffleModeChanged( bool ) ) );
 
         m_infobar->setFilter( currentPlaylistInterface()->filter() );

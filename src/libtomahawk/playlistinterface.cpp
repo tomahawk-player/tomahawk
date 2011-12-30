@@ -22,8 +22,7 @@
 
 using namespace Tomahawk;
 
-PlaylistInterface::PlaylistInterface ( QObject *parent )
-    : m_object( parent )
+PlaylistInterface::PlaylistInterface ()
 {
     qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
 }

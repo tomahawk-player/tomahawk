@@ -20,6 +20,7 @@
 
 #include <QListView>
 
+#include "albumproxymodelplaylistinterface.h"
 #include "artist.h"
 #include "albumitem.h"
 #include "query.h"
@@ -28,10 +29,7 @@
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
-    , PlaylistInterface( this )
     , m_model( 0 )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
-    , m_shuffled( false )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
@@ -59,29 +57,6 @@ AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
         connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
-}
-
-QList< Tomahawk::query_ptr >
-AlbumProxyModel::tracks()
-{
-     Q_ASSERT( FALSE );
-    QList<Tomahawk::query_ptr> queries;
-    return queries;
-}
-
-Tomahawk::result_ptr
-AlbumProxyModel::currentItem() const
-{
-     return Tomahawk::result_ptr();
-}
-
-void
-AlbumProxyModel::setFilter( const QString& pattern )
-{
-    qDebug() << Q_FUNC_INFO;
-    setFilterRegExp( pattern );
-
-    emit filterChanged( pattern );
 }
 
 
@@ -165,10 +140,13 @@ AlbumProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 }
 
 
-Tomahawk::result_ptr
-AlbumProxyModel::siblingItem( int itemsAway )
+Tomahawk::playlistinterface_ptr
+AlbumProxyModel::getPlaylistInterface()
 {
-    Q_UNUSED( itemsAway );
-    qDebug() << Q_FUNC_INFO;
-    return Tomahawk::result_ptr( 0 );
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

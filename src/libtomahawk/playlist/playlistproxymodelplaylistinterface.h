@@ -16,29 +16,27 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "collectionproxymodel.h"
+#ifndef PLAYLISTPROXYMODELPLAYLISTINTERFACE_H
+#define PLAYLISTPROXYMODELPLAYLISTINTERFACE_H
 
-#include "collectionproxymodelplaylistinterface.h"
+#include "trackproxymodelplaylistinterface.h"
 
-#include <QTreeView>
+#include "dllmacro.h"
 
-#include "album.h"
-#include "query.h"
-#include "utils/logger.h"
+class PlaylistProxyModel;
 
-
-CollectionProxyModel::CollectionProxyModel( QObject* parent )
-    : TrackProxyModel( parent )
+namespace Tomahawk
 {
-}
 
-Tomahawk::playlistinterface_ptr
-CollectionProxyModel::getPlaylistInterface()
+class DLLEXPORT PlaylistProxyModelPlaylistInterface : public TrackProxyModelPlaylistInterface
 {
-    if ( m_playlistInterface.isNull() )
-    {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::CollectionProxyModelPlaylistInterface( this ) );
-    }
+Q_OBJECT
 
-    return m_playlistInterface;
-}
+public:
+    explicit PlaylistProxyModelPlaylistInterface( PlaylistProxyModel *proxyModel );
+    virtual ~PlaylistProxyModelPlaylistInterface();
+};
+
+} //ns
+
+#endif // PLAYLISTPROXYMODELPLAYLISTINTERFACE_H

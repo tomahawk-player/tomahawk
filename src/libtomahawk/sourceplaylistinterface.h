@@ -30,12 +30,12 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT SourcePlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::source_ptr& source );
+    SourcePlaylistInterface( Tomahawk::Source *source );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
@@ -60,8 +60,6 @@ public:
     virtual QWeakPointer< Tomahawk::Source > source() const;
 
     virtual void reset();
-
-    virtual void findMoreIfaces() {}
 
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}

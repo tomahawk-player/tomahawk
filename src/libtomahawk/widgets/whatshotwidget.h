@@ -31,7 +31,6 @@
 
 #include "dllmacro.h"
 
-class ChartsPlaylistInterface;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
@@ -49,6 +48,7 @@ namespace Ui
 namespace Tomahawk
 {
     class ChartDataLoader;
+    class ChartsPlaylistInterface;
 }
 
 /**
@@ -119,7 +119,7 @@ private:
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
 
-    friend class ChartsPlaylistInterface;
+    friend class Tomahawk::ChartsPlaylistInterface;
 };
 
 #endif // WHATSHOTWIDGET_H

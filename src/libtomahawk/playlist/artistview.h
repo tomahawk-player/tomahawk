@@ -62,7 +62,7 @@ public:
     void setTreeModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getSharedPointer(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getPlaylistInterface(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }

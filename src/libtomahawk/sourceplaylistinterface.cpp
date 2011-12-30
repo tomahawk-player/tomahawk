@@ -26,13 +26,14 @@
 using namespace Tomahawk;
 
 
-SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
-    : PlaylistInterface( this )
-    , m_source( source.data() )
+SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source )
+    : PlaylistInterface()
+    , m_source( source )
     , m_currentItem( 0 )
     , m_gotNextItem( false )
 {
-    connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
+    if ( !m_source.isNull() )
+        connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 }
 
 

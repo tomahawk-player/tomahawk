@@ -92,7 +92,7 @@ public slots:
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
-    void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue.data()->getSharedPointer(); }
+    void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
 
     void playlistNextTrackReady();
 

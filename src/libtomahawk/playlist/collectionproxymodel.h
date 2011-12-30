@@ -20,6 +20,7 @@
 #define COLLECTIONPROXYMODEL_H
 
 #include "trackproxymodel.h"
+#include "trackproxymodelplaylistinterface.h"
 
 #include "dllmacro.h"
 
@@ -29,8 +30,10 @@ Q_OBJECT
 
 public:
     explicit CollectionProxyModel( QObject* parent = 0 );
+    virtual ~CollectionProxyModel() {}
 
-    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Flat; }
+    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+
 };
 
 #endif // COLLECTIONPROXYMODEL_H

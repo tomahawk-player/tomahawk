@@ -182,7 +182,7 @@ TrackView::onItemActivated( const QModelIndex& index )
     {
         tDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
-        AudioEngine::instance()->playItem( m_proxyModel->getSharedPointer(), item->query()->results().first() );
+        AudioEngine::instance()->playItem( m_proxyModel->getPlaylistInterface(), item->query()->results().first() );
     }
 
     emit itemActivated( index );
@@ -369,9 +369,9 @@ TrackView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() && model()->trackCount() )
+    if ( !proxyModel()->getPlaylistInterface()->filter().isEmpty() && !proxyModel()->getPlaylistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->getPlaylistInterface()->filter() ) );
         m_overlay->show();
     }
     else

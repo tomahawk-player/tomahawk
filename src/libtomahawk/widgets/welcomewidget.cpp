@@ -101,7 +101,7 @@ WelcomeWidget::~WelcomeWidget()
 Tomahawk::playlistinterface_ptr
 WelcomeWidget::playlistInterface() const
 {
-    return ui->tracksView->playlistInterface()->getSharedPointer();
+    return ui->tracksView->playlistInterface();
 }
 
 

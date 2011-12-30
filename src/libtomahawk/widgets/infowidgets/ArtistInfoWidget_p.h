@@ -27,12 +27,12 @@
 
 #include <QObject>
 
-class MetaPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+class MetaPlaylistInterface : public Tomahawk::PlaylistInterface
 {
     Q_OBJECT
 public:
     explicit MetaPlaylistInterface( ArtistInfoWidget* w )
-        : PlaylistInterface( this )
+        : PlaylistInterface()
         , m_w( w )
     {
         connect( m_w->ui->albums->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
@@ -53,9 +53,9 @@ public:
 
 
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->repeatMode(); }
+    virtual RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->getPlaylistInterface()->repeatMode(); }
 
-    virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->shuffled(); }
+    virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->getPlaylistInterface()->shuffled(); }
 
     // Do nothing
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
@@ -70,19 +70,20 @@ public:
                ( m_w->ui->relatedArtists->playlistInterface() == other ) ||
                ( m_w->ui->topHits->playlistInterface() == other );
     }
+
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {
-        m_w->ui->albums->proxyModel()->setRepeatMode( mode );
-        m_w->ui->relatedArtists->proxyModel()->setRepeatMode( mode );
-        m_w->ui->topHits->proxyModel()->setRepeatMode( mode );
+        m_w->ui->albums->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
+        m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
+        m_w->ui->topHits->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->albums->proxyModel()->setShuffled( enabled );
-        m_w->ui->relatedArtists->proxyModel()->setShuffled( enabled );
-        m_w->ui->topHits->proxyModel()->setShuffled( enabled );
+        m_w->ui->albums->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
+        m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
+        m_w->ui->topHits->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
     }
 
 signals:

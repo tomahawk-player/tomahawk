@@ -31,7 +31,7 @@ using namespace Tomahawk;
 AlbumPlaylistInterface::AlbumPlaylistInterface() {}
 
 AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album *album )
-    : Tomahawk::PlaylistInterface( this )
+    : Tomahawk::PlaylistInterface()
     , m_currentItem( 0 )
     , m_currentTrack( 0 )
     , m_album( QWeakPointer< Tomahawk::Album >( album ) )

@@ -16,29 +16,19 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "collectionproxymodel.h"
+#include "playlistproxymodelplaylistinterface.h"
 
-#include "collectionproxymodelplaylistinterface.h"
-
-#include <QTreeView>
-
-#include "album.h"
-#include "query.h"
+#include "playlistproxymodel.h"
 #include "utils/logger.h"
 
+using namespace Tomahawk;
 
-CollectionProxyModel::CollectionProxyModel( QObject* parent )
-    : TrackProxyModel( parent )
+PlaylistProxyModelPlaylistInterface::PlaylistProxyModelPlaylistInterface( PlaylistProxyModel *proxyModel )
+    : TrackProxyModelPlaylistInterface( proxyModel )
 {
 }
 
-Tomahawk::playlistinterface_ptr
-CollectionProxyModel::getPlaylistInterface()
+PlaylistProxyModelPlaylistInterface::~PlaylistProxyModelPlaylistInterface()
 {
-    if ( m_playlistInterface.isNull() )
-    {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::CollectionProxyModelPlaylistInterface( this ) );
-    }
-
-    return m_playlistInterface;
+    m_proxyModel.clear();
 }

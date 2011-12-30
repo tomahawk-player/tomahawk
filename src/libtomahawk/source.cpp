@@ -307,7 +307,7 @@ Source::getPlaylistInterface()
     if ( m_playlistInterface.isNull() )
     {
         Tomahawk::source_ptr source = SourceList::instance()->get( id() );
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source ) );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source.data() ) );
     }
 
     return m_playlistInterface;

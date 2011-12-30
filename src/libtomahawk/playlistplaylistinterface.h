@@ -33,7 +33,7 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT PlaylistPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+class DLLEXPORT PlaylistPlaylistInterface : public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
@@ -55,8 +55,6 @@ public:
     virtual bool shuffled() const { return false; }
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
-
-    virtual void findMoreIfaces() {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

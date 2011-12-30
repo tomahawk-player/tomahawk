@@ -18,6 +18,7 @@
 
 #include "queueproxymodel.h"
 
+#include "queueproxymodelplaylistinterface.h"
 #include "playlist/trackview.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
@@ -48,21 +49,21 @@ QueueProxyModel::onIndexActivated( const QModelIndex& index )
 }
 
 
-Tomahawk::result_ptr
-QueueProxyModel::siblingItem( int itemsAway )
-{
-    setCurrentIndex( QModelIndex() );
-    Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
-
-    remove( currentIndex() );
-
-    return res;
-}
-
-
 void
 QueueProxyModel::onTrackCountChanged( unsigned int count )
 {
     if ( count == 0 )
         ViewManager::instance()->hideQueue();
+}
+
+
+Tomahawk::playlistinterface_ptr
+QueueProxyModel::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::QueueProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

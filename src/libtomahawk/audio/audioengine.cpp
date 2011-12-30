@@ -562,7 +562,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist->getSharedPointer();
+    m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
         loadTrack( result );
@@ -682,8 +682,8 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
     if ( !m_playlist.isNull() )
     {
-        if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
-            disconnect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ) );
+        if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+            disconnect( m_playlist.data(), SIGNAL( nextTrackReady() ) );
         m_playlist.data()->reset();
     }
 
@@ -694,10 +694,10 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         return;
     }
 
-    m_playlist = playlist.data()->getSharedPointer();
+    m_playlist = playlist;
 
-    if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
-        connect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+    if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+        connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
 }

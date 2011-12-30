@@ -64,6 +64,6 @@ private:
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
-}; // ns
+} // ns
 
 #endif

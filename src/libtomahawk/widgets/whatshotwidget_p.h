@@ -28,12 +28,15 @@
 
 #include <QObject>
 
-class ChartsPlaylistInterface : public QObject, public Tomahawk::PlaylistInterface
+namespace Tomahawk
+{
+
+class ChartsPlaylistInterface : public Tomahawk::PlaylistInterface
 {
     Q_OBJECT
 public:
     explicit ChartsPlaylistInterface( WhatsHotWidget* w )
-        : PlaylistInterface( this )
+        : PlaylistInterface()
         , m_w( w )
     {
         connect( m_w->ui->tracksViewLeft->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
@@ -48,11 +51,10 @@ public:
     }
     virtual ~ChartsPlaylistInterface() {}
 
-
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->repeatMode(); }
+    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->repeatMode(); }
 
-    virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->shuffled(); }
+    virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->shuffled(); }
 
     // Do nothing
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
@@ -67,17 +69,18 @@ public:
                m_w->ui->artistsViewLeft->playlistInterface() == other;
 
     }
+
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {
-        m_w->ui->tracksViewLeft->proxyModel()->setRepeatMode( mode );
-        m_w->ui->artistsViewLeft->proxyModel()->setRepeatMode( mode );
+        m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
+        m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->tracksViewLeft->proxyModel()->setShuffled( enabled );
-        m_w->ui->artistsViewLeft->proxyModel()->setShuffled( enabled );
+        m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
+        m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
     }
 
 signals:
@@ -103,5 +106,7 @@ private:
     WhatsHotWidget* m_w;
 
 };
+
+} //ns
 
 #endif
