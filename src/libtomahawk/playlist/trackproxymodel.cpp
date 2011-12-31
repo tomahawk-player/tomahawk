@@ -55,7 +55,7 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
     m_model = sourceModel;
 
     if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), getPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( m_model );
 }
