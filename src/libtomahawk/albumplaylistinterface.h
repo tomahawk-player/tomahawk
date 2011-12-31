@@ -22,15 +22,13 @@
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
 
+#include "album.h"
 #include "typedefs.h"
 #include "playlistinterface.h"
 #include "dllmacro.h"
 
 namespace Tomahawk
 {
-
-class Album;
-
 
 class DLLEXPORT AlbumPlaylistInterface : public Tomahawk::PlaylistInterface
 {

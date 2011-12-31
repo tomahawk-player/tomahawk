@@ -19,17 +19,16 @@
 #ifndef TOMAHAWKARTISTPLAYLISTINTERFACE_H
 #define TOMAHAWKARTISTPLAYLISTINTERFACE_H
 
-#include <QObject>
-#include <QSharedPointer>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
 
+#include "artist.h"
 #include "typedefs.h"
 #include "playlistinterface.h"
 #include "dllmacro.h"
 
 namespace Tomahawk
 {
-
-class Artist;
 
 class DLLEXPORT ArtistPlaylistInterface : public Tomahawk::PlaylistInterface
 {
