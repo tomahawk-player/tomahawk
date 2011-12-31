@@ -19,9 +19,9 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include <QObject>
-#include <QSharedPointer>
-#include <QVariantMap>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QVariantMap>
 
 #include "typedefs.h"
 #include "network/dbsyncconnection.h"
@@ -162,6 +162,6 @@ private:
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
-};
+} //ns
 
 #endif // SOURCE_H

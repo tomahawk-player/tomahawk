@@ -19,8 +19,8 @@
 #ifndef TOMAHAWKARTIST_H
 #define TOMAHAWKARTIST_H
 
-#include <QObject>
-#include <QSharedPointer>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
 
 #include "typedefs.h"
 #include "dllmacro.h"
@@ -35,9 +35,9 @@ Q_OBJECT
 public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
-    Artist( unsigned int id, const QString& name );
+    explicit Artist( unsigned int id, const QString& name );
 
-    Artist();
+    explicit Artist();
     virtual ~Artist();
 
     unsigned int id() const { return m_id; }
@@ -53,7 +53,7 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
-    Q_DISABLE_COPY(Artist)
+    Q_DISABLE_COPY( Artist )
 
     unsigned int m_id;
     QString m_name;
@@ -62,6 +62,6 @@ private:
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
-}; // ns
+} // ns
 
 #endif

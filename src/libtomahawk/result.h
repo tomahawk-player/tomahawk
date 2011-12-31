@@ -19,8 +19,9 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QObject>
-#include <QVariant>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QVariant>
 
 #include "typedefs.h"
 
@@ -125,7 +126,7 @@ private slots:
 private:
     // private constructor
     explicit Result( const QString& url );
-    Result();
+    explicit Result();
 
     void updateAttributes();
     void parseSocialActions();
@@ -156,6 +157,6 @@ private:
     QList< SocialAction > m_allSocialActions;
 };
 
-}; //ns
+} //ns
 
 #endif // RESULT_H

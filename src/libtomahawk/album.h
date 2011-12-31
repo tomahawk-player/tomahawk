@@ -37,7 +37,7 @@ public:
     static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
-    Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
+    explicit Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
     virtual ~Album();
 
     unsigned int id() const { return m_id; }
@@ -54,7 +54,7 @@ private slots:
 
 private:
     Q_DISABLE_COPY( Album )
-    Album();
+    explicit Album();
 
     unsigned int m_id;
     QString m_name;
