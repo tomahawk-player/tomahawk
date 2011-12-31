@@ -32,7 +32,7 @@ QueueProxyModel::QueueProxyModel( TrackView* parent )
     qDebug() << Q_FUNC_INFO;
 
     connect( parent, SIGNAL( itemActivated( QModelIndex ) ), this, SLOT( onIndexActivated( QModelIndex ) ) );
-    connect( this, SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( getPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 

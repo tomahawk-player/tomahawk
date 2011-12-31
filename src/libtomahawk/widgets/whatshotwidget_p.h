@@ -39,14 +39,14 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->tracksViewLeft->proxyModel(), getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->artistsViewLeft->proxyModel(), getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_w->ui->tracksViewLeft->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->artistsViewLeft->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
     virtual ~ChartsPlaylistInterface() {}
