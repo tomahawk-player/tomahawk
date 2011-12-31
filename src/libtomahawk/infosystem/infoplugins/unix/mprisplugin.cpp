@@ -68,7 +68,7 @@ MprisPlugin::MprisPlugin()
     // When a track is added or removed, CanGoNext updated signal is sent
     Tomahawk::playlistinterface_ptr playlist = AudioEngine::instance()->playlist();
     if( !playlist.isNull() )
-        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
                 SLOT( onTrackCountChanged( unsigned int ) ) );
 
     // Connect to AudioEngine's seeked signal
@@ -548,7 +548,7 @@ MprisPlugin::onPlaylistChanged( Tomahawk::playlistinterface_ptr playlist )
         qDebug() << "playlist not null";
 
     if( !playlist.isNull() )
-        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
             SLOT( onTrackCountChanged( unsigned int ) ) );
 
     qDebug() << "connected new playlist";
