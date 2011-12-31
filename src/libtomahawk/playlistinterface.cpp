@@ -29,8 +29,6 @@ PlaylistInterface::PlaylistInterface ()
 
 PlaylistInterface::~PlaylistInterface()
 {
-    tDebug() << Q_FUNC_INFO << "DELETING POINTER " << m_sharedPtr.data();
-    m_sharedPtr.clear();
 }
 
 result_ptr

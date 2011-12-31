@@ -87,8 +87,6 @@ signals:
 private:
     Q_DISABLE_COPY( PlaylistInterface )
 
-    Tomahawk::playlistinterface_ptr m_sharedPtr;
-
     QString m_filter;
 };
 
