@@ -35,6 +35,10 @@
 #include "utils/xspfloader.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#ifdef QCA2_FOUND
+#include "utils/groovesharkparser.h"
+#endif //QCA2_FOUND
+
 
 using namespace Tomahawk;
 
@@ -120,6 +124,9 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
+        
+        if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
+            return true;
     }
 
     if ( acceptedType.testFlag( Track ) )
@@ -188,7 +195,10 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
 
         if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
             return true;
-
+#ifdef QCA2_FOUND
+        if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
+            return true;
+#endif //QCA2_FOUND
         if ( ShortenedLinkParser::handlesUrl( url ) )
             return true;
     }
@@ -555,6 +565,31 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
     rdio->parse( urls );
 }
 
+void
+DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
+{
+#ifdef QCA2_FOUND
+    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    tDebug() << "Got Grooveshark urls!" << urls;
+    
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
+    GroovesharkParser* groove = new GroovesharkParser( urls, dropAction() == Create, this );
+    connect( groove, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+
+    if ( dropAction() == Append )
+    {
+        tDebug() << Q_FUNC_INFO << "Asking for grooveshark contents from" << urls;
+        connect( groove, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
+    }
+#else
+    tLog() << "Tomahawk compiled without QCA support, cannot use groovesharkparser";
+#endif
+}
+
+
 
 void
 DropJob::handleAllUrls( const QString& urls )
@@ -569,6 +604,10 @@ DropJob::handleAllUrls( const QString& urls )
         handleSpotifyUrls( urls );
     else if ( urls.contains( "rdio.com" ) )
         handleRdioUrls( urls );
+#ifdef QCA2_FOUND
+    else if ( urls.contains( "grooveshark.com" ) )
+        handleGroovesharkUrls( urls );
+#endif
     else
         handleTrackUrls ( urls );
 }

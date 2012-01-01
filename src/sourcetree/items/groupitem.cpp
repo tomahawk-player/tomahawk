@@ -32,7 +32,8 @@ GroupItem::GroupItem( SourcesModel* model, SourceTreeItem* parent, const QString
     , m_text( text )
     , m_peerSortValue( peerSortValue )
 {
-    connect( this, SIGNAL( toggleExpandRequest( SourceTreeItem* ) ), model, SLOT( itemToggleExpandRequest( SourceTreeItem* ) ) );
+    // expand by default
+    QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );
 }
 
 
@@ -45,6 +46,13 @@ void
 GroupItem::activate()
 {
     emit toggleExpandRequest( this );
+}
+
+
+void
+GroupItem::requestExpanding()
+{
+    emit expandRequest( this );
 }
 
 

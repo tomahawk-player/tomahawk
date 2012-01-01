@@ -37,7 +37,6 @@ public:
     SourceItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
 
     virtual QString text() const;
-    virtual void activate();
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;
@@ -50,6 +49,9 @@ public:
     CategoryItem* playlistsCategory() const { return m_playlists; }
     void setStationsCategory( CategoryItem* item ) { m_stations = item; }
     void setPlaylistsCategory( CategoryItem* item ) { m_playlists = item; }
+
+public slots:
+    virtual void activate();
 
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );

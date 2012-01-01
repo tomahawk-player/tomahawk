@@ -158,7 +158,6 @@ SourceItem::activate()
         p = ViewManager::instance()->showSuperCollection();
     else
         emit toggleExpandRequest( this );
-//        p = ViewManager::instance()->show( source()->collection() );
 
     model()->linkSourceItemToPage( this, p );
 }

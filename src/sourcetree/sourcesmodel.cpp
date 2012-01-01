@@ -256,8 +256,8 @@ SourcesModel::appendGroups()
 {
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + 2 );
 
-    SourceTreeItem* divider = new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 0 );
-    HistoryItem* history = new HistoryItem( this, m_rootItem, tr( "History" ), 5 );
+    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 0 );
+    new HistoryItem( this, m_rootItem, tr( "History" ), 5 );
     GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 10 );
 
     // super collection
@@ -611,7 +611,7 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 int
 SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
-    if( !item || !item->parent() || !item->parent()->children().contains( item ) )
+    if ( !item || !item->parent() || !item->parent()->children().contains( item ) )
         return -1;
 
     return item->parent()->children().indexOf( item );
@@ -628,7 +628,6 @@ SourcesModel::itemSelectRequest( SourceTreeItem* item )
 void
 SourcesModel::itemExpandRequest( SourceTreeItem *item )
 {
-    qDebug() << "expanding source" << indexFromItem( item ) << item;
     emit expandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }
 

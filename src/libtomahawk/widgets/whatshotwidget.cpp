@@ -29,6 +29,7 @@
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 #include "RecentPlaylistsModel.h"
+#include "ChartDataLoader.h"
 
 #include "audio/audioengine.h"
 #include "dynamic/GeneratorInterface.h"
@@ -53,6 +54,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     , ui( new Ui::WhatsHotWidget )
     , m_playlistInterface( 0 )
     , m_sortedProxy( 0 )
+    , m_workerThread( 0 )
 {
     ui->setupUi( this );
 
@@ -94,6 +96,9 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     m_playlistInterface = new ChartsPlaylistInterface( this );
 
+    m_workerThread = new QThread( this );
+    m_workerThread->start();
+
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
@@ -106,6 +111,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 WhatsHotWidget::~WhatsHotWidget()
 {
+    m_workerThread->exit(0);
     delete m_playlistInterface;
     delete ui;
 }
@@ -239,68 +245,60 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
             m_queuedFetches.remove( chartId );
-            if( type == "artists" )
+
+            ChartDataLoader* loader = new ChartDataLoader();
+            loader->setProperty( "chartid", chartId );
+            loader->moveToThread( m_workerThread );
+
+            if ( type == "artists" )
             {
-                const QStringList artists = returnedData["artists"].toStringList();
+                loader->setType( ChartDataLoader::Artist );
+                loader->setData( returnedData[ "artists" ].value< QStringList >() );
+
+                connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), this, SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setColumnStyle( TreeModel::TrackOnly );
-                foreach ( const QString& artist, artists )
-                {
-                    artist_ptr artistPtr = Artist::get( artist, false );
-                    artistsModel->addArtists( artistPtr );
-                }
 
                 m_artistModels[ chartId ] = artistsModel;
 
                 if ( m_queueItemToShow == chartId )
                     setLeftViewArtists( artistsModel );
             }
-            else if( type == "albums" )
+            else if ( type == "albums" )
             {
-                QList<album_ptr> al;
-                const QList< Tomahawk::InfoSystem::InfoStringHash > albums = returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+
+                loader->setType( ChartDataLoader::Album );
+                loader->setData( returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
+
+                connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
 
                 AlbumModel* albumModel = new AlbumModel( ui->additionsView );
-                foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, albums )
-                {
-                    tDebug( LOGVERBOSE) << Q_FUNC_INFO << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
-                    artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
-                    album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
-                    al << albumPtr;
-
-                }
-                albumModel->addAlbums( al );
 
                 m_albumModels[ chartId ] = albumModel;
 
                 if ( m_queueItemToShow == chartId )
                     setLeftViewAlbums( albumModel );
             }
-            else if( type == "tracks" )
+            else if ( type == "tracks" )
             {
-                const QList< Tomahawk::InfoSystem::InfoStringHash > tracks = returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+
+                loader->setType( ChartDataLoader::Track );
+                loader->setData( returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
+
+                connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->setStyle( TrackModel::Short );
-                QList<query_ptr> tracklist;
-                foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, tracks )
-                {
-                    query_ptr query = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
-                    tracklist << query;
-                }
-                Pipeline::instance()->resolve( tracklist );
-                trackModel->append( tracklist );
 
                 m_trackModels[ chartId ] = trackModel;
 
                 if ( m_queueItemToShow == chartId )
                     setLeftViewTracks( trackModel );
             }
-            else
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: got unknown chart type" << type;
-            }
+
+            QMetaObject::invokeMethod( loader, "go", Qt::QueuedConnection );
+
             break;
         }
 
@@ -472,4 +470,52 @@ WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
     ui->tracksViewLeft->setPlaylistModel( model );
     ui->tracksViewLeft->proxyModel()->sort( -1 );
     ui->stackLeft->setCurrentIndex( 0 );
+}
+
+
+void
+WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist_ptr >& artists )
+{
+    QString chartId = loader->property( "chartid" ).toString();
+    Q_ASSERT( m_artistModels.contains( chartId ) );
+
+    if ( m_artistModels.contains( chartId ) )
+    {
+        foreach( const artist_ptr& artist, artists )
+        {
+            m_artistModels[ chartId ]->addArtists( artist );
+        }
+    }
+
+    loader->deleteLater();
+}
+
+
+void
+WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr >& tracks )
+{
+
+    QString chartId = loader->property( "chartid" ).toString();
+    Q_ASSERT( m_trackModels.contains( chartId ) );
+
+    if ( m_trackModels.contains( chartId ) )
+    {
+        Pipeline::instance()->resolve( tracks );
+        m_trackModels[ chartId ]->append( tracks );
+    }
+
+    loader->deleteLater();
+}
+
+
+void
+WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_ptr >& albums )
+{
+    QString chartId = loader->property( "chartid" ).toString();
+    Q_ASSERT( m_albumModels.contains( chartId ) );
+
+    if ( m_albumModels.contains( chartId ) )
+        m_albumModels[ chartId ]->addAlbums( albums );
+
+    loader->deleteLater();
 }
