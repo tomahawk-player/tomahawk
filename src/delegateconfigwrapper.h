@@ -22,6 +22,7 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QDebug>
 
 class DelegateConfigWrapper : public QDialog
 {
@@ -33,7 +34,6 @@ public:
 #ifdef Q_WS_MAC
         m_widget->setVisible( true );
 #endif
-
         setWindowTitle( title );
         QVBoxLayout* v = new QVBoxLayout( this );
         v->setContentsMargins( 0, 0, 0, 0 );
@@ -59,6 +59,9 @@ public:
 #endif
 
     }
+
+    ~DelegateConfigWrapper() { delete m_widget; }
+
 public slots:
     void toggleOkButton( bool dataError )
     {

@@ -53,7 +53,6 @@ XmppAccount::XmppAccount( const QString &accountId )
 
 XmppAccount::~XmppAccount()
 {
-    delete m_configWidget.data();
     delete m_xmppSipPlugin.data();
 }
 

@@ -731,7 +731,7 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
         AccountManager::instance()->addAccount( account );
         AccountManager::instance()->hookupAndEnable( account );
 
-        if( f && f->isUnique() )
+        if ( f && f->isUnique() )
         {
             // remove from actions list
             QAction* toremove = 0;
@@ -743,12 +743,13 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
                     break;
                 }
             }
-            if( toremove )
+            if ( toremove )
                 ui->addSipButton->removeAction( toremove );
         }
     }
     else
-    { // user pressed cancel
+    {
+        // user pressed cancel
         delete account;
     }
 }
