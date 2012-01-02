@@ -33,20 +33,12 @@ using namespace Tomahawk;
 HistoryItem::HistoryItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue )
     : GroupItem( model, parent, text, peerSortValue )
 {
-    connect( this, SIGNAL( toggleExpandRequest( SourceTreeItem* ) ), model, SLOT( itemToggleExpandRequest( SourceTreeItem* ) ) );
     connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage* ) ), SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
 }
 
 
 HistoryItem::~HistoryItem()
 {
-}
-
-
-void
-HistoryItem::activate()
-{
-    emit toggleExpandRequest( this );
 }
 
 
