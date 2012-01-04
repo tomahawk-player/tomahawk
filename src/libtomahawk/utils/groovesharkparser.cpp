@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
- *   Copyright 2010-2011, Stefan Derkits <stefan@derkits.at>
+ *   Copyright 2010-2012, Stefan Derkits <stefan@derkits.at>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -91,42 +91,56 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
 {
     tLog() << "Parsing Grooveshark Playlist URI:" << linkRaw;
 
-    QStringList urlParts = linkRaw.split( "/" );
+    QString urlFragment = QUrl( linkRaw ).fragment( );
+    if ( urlFragment.isEmpty() ) {
+        tDebug() << "no fragment, setting fragment to path";
+        urlFragment = QUrl(linkRaw).path();
+    }
+    
+    tDebug() << urlFragment;
+
+    int paramStartingPostition = urlFragment.indexOf( "?" );
+
+    if ( paramStartingPostition != -1 )
+        urlFragment.truncate( paramStartingPostition );
+
     bool ok;
-    QString playlistStr = urlParts.last();
-    playlistStr.truncate(playlistStr.indexOf("?"));
-    int playlistID = playlistStr.toInt( &ok, 10 );
+
+    QStringList urlParts = urlFragment.split( "/", QString::SkipEmptyParts );
+    
+    tDebug() << urlParts;
+    
+    int playlistID = urlParts.at( 2 ).toInt( &ok, 10 );
     if (!ok)
     {
         tDebug() << "incorrect grooveshark url";
         return;
     }
     
-    m_title = urlParts.at( urlParts.size()-2 );
+    
+    
+    m_title = urlParts.at( 1 );
     
     tDebug() << "should get playlist " << playlistID;
     
     DropJob::DropType type;
 
-    if ( linkRaw.contains( "playlist" ) )
-        type = DropJob::Playlist;
+    type = DropJob::Playlist;
 
     QString base_url( "http://api.grooveshark.com/ws3.php?sig=" );
 
     QByteArray data = QString( "{\"method\":\"getPlaylistSongs\",\"parameters\":{\"playlistID\":\"%1\"},\"header\":{\"wsKey\":\"tomahawkplayer\"}}" ).arg( playlistID ).toLocal8Bit();
-    
-    
-    
-    
+
+
     QCA::MessageAuthenticationCode hmac( "hmac(md5)", m_apiKey );
 
     QCA::SecureArray secdata( data );
     hmac.update(secdata);
     QCA::SecureArray resultArray = hmac.final();
-    
+
     QString hash = QCA::arrayToHex( resultArray.toByteArray() );
     QUrl url = QUrl( base_url + hash );
-    
+
     tDebug() << "Looking up URL..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->post( QNetworkRequest( url ), data );
