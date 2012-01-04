@@ -35,7 +35,8 @@ ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* par
     : QObject( parent )
 {
     foreach ( const QString& url, urls )
-        lengthenUrl( url );
+        if ( handlesUrl( url ) )
+            lookupUrl( url ) ;
 }
 
 
@@ -60,19 +61,8 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "rd.io" ) );
 }
 
-
 void
-ShortenedLinkParser::lengthenUrl( const QString& url )
-{
-    if ( !handlesUrl( url ) )
-        return;
-    
-    lengthenShortUrl( url );
-
-}
-
-void
-ShortenedLinkParser::lengthenShortUrl ( const QString& url )
+ShortenedLinkParser::lookupUrl ( const QString& url )
 {
     tDebug() << "Looking up..." << url;
 
@@ -94,7 +84,7 @@ ShortenedLinkParser::lookupFinished()
         tDebug() << "RedirectionTargetAttribute set on " << redir;
         m_queries.remove( r );
         r->deleteLater();
-        lengthenShortUrl( redir.toUrl().toString() );
+        lookupUrl( redir.toUrl().toString() );
     }
     else
     {
