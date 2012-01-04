@@ -56,6 +56,7 @@ signals:
 
 private:
     void lengthenUrl( const QString& url );
+    void lengthenShortUrl( const QString& url );
     void checkFinished();
 
     QStringList m_links;

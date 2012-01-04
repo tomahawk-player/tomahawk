@@ -57,7 +57,6 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "itun.es" ) ||
              url.contains( "tinyurl.com" ) ||
              url.contains( "tinysong.com" ) ||
-             url.contains( "grooveshark.com" ) ||
              url.contains( "rd.io" ) );
 }
 
@@ -67,7 +66,14 @@ ShortenedLinkParser::lengthenUrl( const QString& url )
 {
     if ( !handlesUrl( url ) )
         return;
+    
+    lengthenShortUrl( url );
 
+}
+
+void
+ShortenedLinkParser::lengthenShortUrl ( const QString& url )
+{
     tDebug() << "Looking up..." << url;
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
@@ -75,7 +81,6 @@ ShortenedLinkParser::lengthenUrl( const QString& url )
 
     m_queries.insert( reply );
 }
-
 
 void
 ShortenedLinkParser::lookupFinished()
@@ -89,7 +94,7 @@ ShortenedLinkParser::lookupFinished()
         tDebug() << "RedirectionTargetAttribute set on " << redir;
         m_queries.remove( r );
         r->deleteLater();
-        lengthenUrl( redir.toUrl().toString() );
+        lengthenShortUrl( redir.toUrl().toString() );
     }
     else
     {
