@@ -57,6 +57,7 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "itun.es" ) ||
              url.contains( "tinyurl.com" ) ||
              url.contains( "tinysong.com" ) ||
+             url.contains( "grooveshark.com" ) ||
              url.contains( "rd.io" ) );
 }
 
@@ -85,14 +86,19 @@ ShortenedLinkParser::lookupFinished()
     QVariant redir = r->attribute( QNetworkRequest::RedirectionTargetAttribute );
     if ( redir.isValid() && !redir.toUrl().isEmpty() )
     {
-        tLog() << "Got a redirected url:" << redir.toUrl().toString();
-        m_links << redir.toUrl().toString();
+        tDebug() << "RedirectionTargetAttribute set on " << redir;
+        m_queries.remove( r );
+        r->deleteLater();
+        lengthenUrl( redir.toUrl().toString() );
     }
-
-    r->deleteLater();
-
-    m_queries.remove( r );
-    checkFinished();
+    else
+    {
+        tLog() << "Got a redirected url:" << r->url().toString();
+        m_links << r->url().toString();   
+        m_queries.remove( r );
+        r->deleteLater();
+        checkFinished();
+    }
 }
 
 
