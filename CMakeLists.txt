@@ -114,6 +114,13 @@ macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fe
 macro_optional_find_package(QuaZip)
 macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically." "http://quazip.sourceforge.net/" FALSE "" "")
 
+macro_optional_find_package(Jreen)
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin.\n")
+
+macro_optional_find_package(QTweetLib)
+macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
+
+
 IF( NOT QuaZip_FOUND )
     add_subdirectory( ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip )
     SET( QuaZip_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk/thirdparty/quazip )
@@ -133,29 +140,17 @@ ENDIF()
 set(LIBLASTFM_FOUND true)
 
 #### submodules start
+# automatically init submodules here, don't delete this code we may add submodules again
 
 # this installs headers and such and should really be handled in a separate package by packagers
-IF( INTERNAL_JREEN )
-    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.gitmodules)
-        EXECUTE_PROCESS(COMMAND git submodule init WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-        EXECUTE_PROCESS(COMMAND git submodule update WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-    ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.gitmodules)
-ENDIF()
 
-IF( INTERNAL_JREEN )
-    ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/jreen )
-    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
-    SET( LIBJREEN_LIBRARY jreen )
-    SET( LIBJREEN_LIBRARIES ${LIBJREEN_LIBRARY} )
-    SET( LIBJREEN_FOUND  true )
-    MESSAGE(STATUS "INTERNAL libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
-ELSE( INTERNAL_JREEN )
-    macro_optional_find_package(Jreen)
-ENDIF( INTERNAL_JREEN )
-macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
+# IF( FALSE )
+#     IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.gitmodules)
+#         EXECUTE_PROCESS(COMMAND git submodule init WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
+#         EXECUTE_PROCESS(COMMAND git submodule update WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
+#     ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.gitmodules)
+# ENDIF()
 
-macro_optional_find_package(QTweetLib)
-macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
 #### submodules end
 
 ### libportfwd
