@@ -265,12 +265,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-#ifdef Q_WS_MAC
-    font.setPointSize( font.pointSize() - 2 );
-#endif
+    font.setPixelSize( 10 );
 
     QFont boldFont = font;
     boldFont.setBold( true );
+    boldFont.setPixelSize( 11 );
 
     QPixmap icon;
     RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
@@ -314,9 +313,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );
     painter->drawPixmap( r, avatar );
 
-    QFont font2 = font;
-    font2.setPointSize( font2.pointSize() - 1 );
-    painter->setFont( font2 );
+    painter->setFont( font );
     QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
     if ( author.contains( "@" ) )
         author = author.mid( 0, author.indexOf( '@' ) );

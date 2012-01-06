@@ -140,6 +140,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QFont normal = painter->font();
     QFont bold = painter->font();
     bold.setBold( true );
+    QFont figFont = bold;
+    figFont.setPixelSize( 10 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -153,7 +155,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( status && colItem && !colItem->source().isNull() )
     {
         tracks = QString::number( colItem->source()->trackCount() );
-        figWidth = painter->fontMetrics().width( tracks );
+        figWidth = QFontMetrics( figFont ).width( tracks );
         name = colItem->source()->friendlyName();
     }
 
@@ -231,10 +233,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 8, 0, -13, -option.rect.height() + 16 );
         int hd = ( option.rect.height() - figRect.height() ) / 2;
         figRect.adjust( 0, hd, 0, hd );
-#ifdef Q_WS_WIN
-        figRect.adjust( -3, 0, 3, 0 );
-#endif
-        painter->setFont( bold );
+
+        painter->setFont( figFont );
 
         QColor figColor( 167, 183, 211 );
         painter->setPen( figColor );
