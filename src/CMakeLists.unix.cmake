@@ -7,9 +7,9 @@ ADD_DEFINITIONS( -fPIC )
 SET( QXTWEB_LIBRARIES qxtweb-standalone )
 
 IF( APPLE )
-    INCLUDE( "CMakeLists.osx.txt" )
+    INCLUDE( "CMakeLists.osx.cmake" )
 ENDIF( APPLE )
 
 IF( UNIX AND NOT APPLE )
-    INCLUDE( "CMakeLists.linux.txt" )
+    INCLUDE( "CMakeLists.linux.cmake" )
 ENDIF( UNIX AND NOT APPLE )

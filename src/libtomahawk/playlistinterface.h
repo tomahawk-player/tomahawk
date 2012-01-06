@@ -19,7 +19,7 @@
 #ifndef PLAYLISTINTERFACE_H
 #define PLAYLISTINTERFACE_H
 
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 
 #include "typedefs.h"
 #include "dllmacro.h"
@@ -28,8 +28,9 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT PlaylistInterface
+class DLLEXPORT PlaylistInterface : public QObject
 {
+Q_OBJECT
 
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
@@ -39,7 +40,7 @@ public:
     enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
     enum RetryMode { NoRetry, Retry };
 
-    explicit PlaylistInterface( QObject* parent = 0 );
+    explicit PlaylistInterface();
     virtual ~PlaylistInterface();
 
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
@@ -67,43 +68,24 @@ public:
 
     virtual void reset() {}
 
+    //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out
     // Some playlist interfaces can wrap other interfaces. When checking for top-level
     // equality (say, to compare the currently playing interface) this might be needed
-    virtual bool hasChildInterface( PlaylistInterface* ) { return false; }
-
-    QObject* object() const { return m_object; }
-
-    static void dontDelete( Tomahawk::PlaylistInterface* obj )
-    {
-        tDebug() << Q_FUNC_INFO << obj;
-    }
-
-    virtual Tomahawk::playlistinterface_ptr getSharedPointer()
-    {
-        if ( m_sharedPtr.isNull() )
-        {
-            m_sharedPtr = Tomahawk::playlistinterface_ptr( this, dontDelete );
-        }
-
-        return m_sharedPtr;
-    }
+    virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr ) { return false; }
 
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) = 0;
     virtual void setShuffled( bool enabled ) = 0;
 
 signals:
-    virtual void repeatModeChanged( PlaylistInterface::RepeatMode mode ) = 0;
-    virtual void shuffleModeChanged( bool enabled ) = 0;
-    virtual void trackCountChanged( unsigned int tracks ) = 0;
-    virtual void sourceTrackCountChanged( unsigned int tracks ) = 0;
-    virtual void nextTrackReady() = 0;
+    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void shuffleModeChanged( bool enabled );
+    void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
+    void nextTrackReady();
 
 private:
     Q_DISABLE_COPY( PlaylistInterface )
-
-    QObject* m_object;
-    Tomahawk::playlistinterface_ptr m_sharedPtr;
 
     QString m_filter;
 };

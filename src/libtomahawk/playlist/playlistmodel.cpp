@@ -152,7 +152,7 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
         m_isTemporary = true;
     }
 
-    append( album->tracks() );
+    append( album->getPlaylistInterface()->tracks() );
 }
 
 
@@ -172,7 +172,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
         m_isTemporary = true;
     }
 
-    append( artist->tracks() );
+    append( artist->getPlaylistInterface()->tracks() );
 }
 
 
@@ -229,7 +229,7 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     TrackModelItem* plitem;
     foreach( const plentry_ptr& entry, entries )
     {
-        plitem = new TrackModelItem( entry, m_rootItem, row + i );
+        plitem = new TrackModelItem( entry, rootItem(), row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         i++;
 

@@ -19,8 +19,8 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include <QObject>
-#include <QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
@@ -30,15 +30,12 @@
 
 #include "result.h"
 #include "typedefs.h"
+#include "playlistinterface.h"
 
 #include "dllmacro.h"
 
 #define AUDIO_VOLUME_STEP 5
 
-namespace Tomahawk
-{
-    class PlaylistInterface;
-}
 
 class DLLEXPORT AudioEngine : public QObject
 {
@@ -62,10 +59,10 @@ public:
     bool isStopped() const { return m_state == Stopped; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist.data(); }
+    Tomahawk::playlistinterface_ptr currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    Tomahawk::PlaylistInterface* playlist() const { return m_playlist.data(); }
+    Tomahawk::playlistinterface_ptr playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
 
@@ -93,9 +90,9 @@ public slots:
     void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
-    void playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
-    void setPlaylist( Tomahawk::PlaylistInterface* playlist );
-    void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
+    void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
+    void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
 
     void playlistNextTrackReady();
 
@@ -119,7 +116,7 @@ signals:
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
 
-    void playlistChanged( Tomahawk::PlaylistInterface* playlist );
+    void playlistChanged( Tomahawk::playlistinterface_ptr playlist );
 
     void error( AudioEngine::AudioErrorCode errorCode );
 
@@ -147,9 +144,9 @@ private:
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
-    QWeakPointer< Tomahawk::PlaylistInterface > m_playlist;
-    QWeakPointer< Tomahawk::PlaylistInterface > m_currentTrackPlaylist;
-    Tomahawk::PlaylistInterface* m_queue;
+    Tomahawk::playlistinterface_ptr m_playlist;
+    Tomahawk::playlistinterface_ptr m_currentTrackPlaylist;
+    Tomahawk::playlistinterface_ptr m_queue;
 
     Phonon::MediaObject* m_mediaObject;
     Phonon::AudioOutput* m_audioOutput;

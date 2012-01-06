@@ -149,24 +149,24 @@ Collection::deleteStation( const dynplaylist_ptr& s )
 }
 
 
-playlist_ptr
+Tomahawk::playlist_ptr
 Collection::playlist( const QString& guid )
 {
-    return m_playlists.value( guid, playlist_ptr() );
+    return m_playlists.value( guid, Tomahawk::playlist_ptr() );
 }
 
 
-dynplaylist_ptr
+Tomahawk::dynplaylist_ptr
 Collection::autoPlaylist( const QString& guid )
 {
-    return m_autoplaylists.value( guid, dynplaylist_ptr() );
+    return m_autoplaylists.value( guid, Tomahawk::dynplaylist_ptr() );
 }
 
 
-dynplaylist_ptr
+Tomahawk::dynplaylist_ptr
 Collection::station( const QString& guid )
 {
-    return m_stations.value( guid, dynplaylist_ptr() );
+    return m_stations.value( guid, Tomahawk::dynplaylist_ptr() );
 }
 
 

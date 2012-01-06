@@ -19,8 +19,8 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
-#include <QTreeView>
-#include <QSortFilterProxyModel>
+#include <QtGui/QTreeView>
+#include <QtGui/QSortFilterProxyModel>
 
 #include "contextmenu.h"
 #include "playlistitemdelegate.h"

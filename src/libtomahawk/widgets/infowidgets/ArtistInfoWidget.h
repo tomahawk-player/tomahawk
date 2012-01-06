@@ -68,7 +68,7 @@ public:
     void load( const Tomahawk::artist_ptr& artist );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
@@ -107,7 +107,7 @@ private:
     TreeModel* m_relatedModel;
     TreeModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
-    MetaPlaylistInterface* m_plInterface;
+    Tomahawk::playlistinterface_ptr m_plInterface;
 
     OverlayButton* m_button;
 

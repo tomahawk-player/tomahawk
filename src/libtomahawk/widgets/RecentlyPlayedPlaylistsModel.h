@@ -44,8 +44,11 @@ public:
 signals:
     void emptinessChanged( bool isEmpty );
 
+public slots:
+    void sourceOnline();
+    
 private slots:
-    void playlistChanged( Tomahawk::PlaylistInterface* );
+    void playlistChanged( Tomahawk::playlistinterface_ptr );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> );
     void loadFromSettings();
@@ -60,8 +63,6 @@ private:
 
     unsigned int m_maxPlaylists;
     bool m_waitingForSome;
-    public slots:
-     void sourceOnline();
 };
 
 #endif // RECENTLYPLAYEDPLAYLISTSMODEL_H

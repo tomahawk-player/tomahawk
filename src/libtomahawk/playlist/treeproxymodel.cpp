@@ -18,8 +18,9 @@
 
 #include "treeproxymodel.h"
 
-#include <QListView>
+#include <QtGui/QListView>
 
+#include "treeproxymodelplaylistinterface.h"
 #include "source.h"
 #include "query.h"
 #include "database/database.h"
@@ -30,11 +31,8 @@
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
-    , PlaylistInterface( this )
     , m_artistsFilterCmd( 0 )
     , m_model( 0 )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
-    , m_shuffled( false )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
@@ -111,9 +109,8 @@ TreeProxyModel::onModelReset()
     m_albumsFilter.clear();
 }
 
-
 void
-TreeProxyModel::setFilter( const QString& pattern )
+TreeProxyModel::newFilterFromPlaylistInterface( const QString &pattern )
 {
     emit filteringStarted();
 
@@ -144,7 +141,6 @@ TreeProxyModel::setFilter( const QString& pattern )
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
 }
-
 
 void
 TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
@@ -191,15 +187,16 @@ TreeProxyModel::filterFinished()
 {
     m_artistsFilterCmd = 0;
 
-    if ( PlaylistInterface::filter() != m_filter )
+    if ( qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface.data() )->vanillaFilter() != m_filter )
     {
         emit filterChanged( m_filter );
     }
 
-    PlaylistInterface::setFilter( m_filter );
+    qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface )->setVanillaFilter( m_filter );
     setFilterRegExp( m_filter );
 
-    emit trackCountChanged( trackCount() );
+    qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface )->sendTrackCount();
+
     emit filteringFinished();
 }
 
@@ -338,82 +335,6 @@ TreeProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 }
 
 
-bool
-TreeProxyModel::hasNextItem()
-{
-    return !( siblingItem( 1, true ).isNull() );
-}
-
-
-Tomahawk::result_ptr
-TreeProxyModel::siblingItem( int itemsAway )
-{
-    return siblingItem( itemsAway, false );
-}
-
-
-Tomahawk::result_ptr
-TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
-{
-    QModelIndex idx = currentIndex();
-    if ( !idx.isValid() )
-        return Tomahawk::result_ptr();
-
-    if ( m_shuffled )
-    {
-        idx = index( qrand() % rowCount( idx.parent() ), 0, idx.parent() );
-    }
-    else
-    {
-        if ( m_repeatMode != PlaylistInterface::RepeatOne )
-            idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
-    }
-
-    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
-    {
-        if ( itemsAway > 0 )
-        {
-            // reset to first item
-            idx = index( 0, 0, currentIndex().parent() );
-        }
-        else
-        {
-            // reset to last item
-            idx = index( rowCount( currentIndex().parent() ) - 1, 0, currentIndex().parent() );
-        }
-    }
-
-    // Try to find the next available PlaylistItem (with results)
-    while ( idx.isValid() )
-    {
-        TreeModelItem* item = itemFromIndex( mapToSource( idx ) );
-        if ( item && !item->result().isNull() && item->result()->isOnline() )
-        {
-            qDebug() << "Next PlaylistItem found:" << item->result()->url();
-            if ( !readOnly )
-                setCurrentIndex( idx );
-            return item->result();
-        }
-
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
-    }
-
-    if ( !readOnly )
-        setCurrentIndex( QModelIndex() );
-    return Tomahawk::result_ptr();
-}
-
-
-Tomahawk::result_ptr
-TreeProxyModel::currentItem() const
-{
-    TreeModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
-    if ( item && !item->result().isNull() && item->result()->isOnline() )
-        return item->result();
-    return Tomahawk::result_ptr();
-}
-
-
 QString
 TreeProxyModel::textForItem( TreeModelItem* item ) const
 {
@@ -438,4 +359,16 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
     }
 
     return QString();
+}
+
+
+Tomahawk::playlistinterface_ptr
+TreeProxyModel::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::TreeProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

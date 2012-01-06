@@ -18,6 +18,8 @@
 
 #include "collectionproxymodel.h"
 
+#include "collectionproxymodelplaylistinterface.h"
+
 #include <QTreeView>
 
 #include "album.h"
@@ -28,4 +30,15 @@
 CollectionProxyModel::CollectionProxyModel( QObject* parent )
     : TrackProxyModel( parent )
 {
+}
+
+Tomahawk::playlistinterface_ptr
+CollectionProxyModel::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::CollectionProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

@@ -44,4 +44,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_account_zeroconf DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_account_zeroconf DESTINATION ${CMAKE_INSTALL_LIBDIR} )

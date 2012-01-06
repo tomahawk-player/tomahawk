@@ -25,7 +25,7 @@
 #include "album.h"
 #include "utils/tomahawkutils.h"
 
-#include <QPixmap>
+#include <QtGui/QPixmap>
 
 namespace Tomahawk
 {
@@ -43,7 +43,7 @@ public:
     virtual ~ViewPage() {}
 
     virtual QWidget* widget() = 0;
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const = 0;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const = 0;
 
     virtual QString title() const = 0;
 

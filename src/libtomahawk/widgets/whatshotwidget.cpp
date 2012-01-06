@@ -52,7 +52,6 @@ static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
-    , m_playlistInterface( 0 )
     , m_sortedProxy( 0 )
     , m_workerThread( 0 )
 {
@@ -94,7 +93,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( false );
 
-    m_playlistInterface = new ChartsPlaylistInterface( this );
+    m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -112,12 +111,12 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 WhatsHotWidget::~WhatsHotWidget()
 {
     m_workerThread->exit(0);
-    delete m_playlistInterface;
+    m_playlistInterface.clear();
     delete ui;
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 WhatsHotWidget::playlistInterface() const
 {
     return m_playlistInterface;

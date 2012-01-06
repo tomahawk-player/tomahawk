@@ -62,7 +62,7 @@ public:
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
     dynplaylist_ptr playlist();
 
-    virtual PlaylistInterface* playlistInterface() const;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
@@ -88,7 +88,7 @@ public slots:
     void trackStarted();
     void stationFailed( const QString& );
 
-    void playlistChanged( Tomahawk::PlaylistInterface* );
+    void playlistChanged( Tomahawk::playlistinterface_ptr );
     void tracksAdded();
 
 signals:

@@ -28,12 +28,18 @@
 
 class DatabaseCommand_AllArtists;
 
-class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
+namespace Tomahawk
+{
+    class TreeProxyModelPlaylistInterface;
+}
+
+class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 
 public:
     explicit TreeProxyModel( QObject* parent = 0 );
+    virtual ~TreeProxyModel() {}
 
     virtual TreeModel* sourceModel() const { return m_model; }
     virtual void setSourceTreeModel( TreeModel* sourceModel );
@@ -42,45 +48,21 @@ public:
     virtual QPersistentModelIndex currentIndex() const;
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
-    virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
-
-    virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
-    virtual int trackCount() const { return rowCount( QModelIndex() ); }
-    virtual int albumCount() const { return rowCount( QModelIndex() ); }
+    virtual void newFilterFromPlaylistInterface( const QString &pattern );
 
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual bool hasNextItem();
-    virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int direction );
-    virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
+    virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
-    virtual QString filter() const { return filterRegExp().pattern(); }
-    virtual void setFilter( const QString& pattern );
+    virtual TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
-    virtual bool shuffled() const { return m_shuffled; }
-    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Tree; }
-
-    TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
     void filterChanged( const QString& filter );
     void filteringStarted();
     void filteringFinished();
-
-    void nextTrackReady();
-
-public slots:
-    virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
-    virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -104,11 +86,11 @@ private:
     QList<int> m_albumsFilter;
     DatabaseCommand_AllArtists* m_artistsFilterCmd;
 
-    QString m_filter;
+     QString m_filter;
 
     TreeModel* m_model;
-    RepeatMode m_repeatMode;
-    bool m_shuffled;
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 #endif // TREEPROXYMODEL_H

@@ -20,6 +20,7 @@
 
 #include <QTreeView>
 
+#include "trackproxymodelplaylistinterface.h"
 #include "artist.h"
 #include "album.h"
 #include "query.h"
@@ -28,10 +29,7 @@
 
 TrackProxyModel::TrackProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
-    , PlaylistInterface( this )
     , m_model( 0 )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
-    , m_shuffled( false )
     , m_showOfflineResults( true )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
@@ -57,123 +55,9 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
     m_model = sourceModel;
 
     if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), getPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( m_model );
-}
-
-
-void
-TrackProxyModel::setFilter( const QString& pattern )
-{
-    PlaylistInterface::setFilter( pattern );
-    setFilterRegExp( pattern );
-
-    emit filterChanged( pattern );
-    emit trackCountChanged( trackCount() );
-}
-
-
-QList< Tomahawk::query_ptr >
-TrackProxyModel::tracks()
-{
-    QList<Tomahawk::query_ptr> queries;
-
-    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
-    {
-        TrackModelItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
-        if ( item )
-            queries << item->query();
-    }
-
-    return queries;
-}
-
-
-Tomahawk::result_ptr
-TrackProxyModel::siblingItem( int itemsAway )
-{
-    return siblingItem( itemsAway, false );
-}
-
-
-bool
-TrackProxyModel::hasNextItem()
-{
-    return !( siblingItem( 1, true ).isNull() );
-}
-
-
-Tomahawk::result_ptr
-TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    QModelIndex idx = index( 0, 0 );
-    if ( rowCount() )
-    {
-        if ( m_shuffled )
-        {
-            // random mode is enabled
-            // TODO come up with a clever random logic, that keeps track of previously played items
-            idx = index( qrand() % rowCount(), 0 );
-        }
-        else if ( currentIndex().isValid() )
-        {
-            idx = currentIndex();
-
-            // random mode is disabled
-            if ( m_repeatMode != PlaylistInterface::RepeatOne )
-            {
-                // keep progressing through the playlist normally
-                idx = index( idx.row() + itemsAway, 0 );
-            }
-        }
-    }
-
-    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
-    {
-        // repeat all tracks
-        if ( itemsAway > 0 )
-        {
-            // reset to first item
-            idx = index( 0, 0 );
-        }
-        else
-        {
-            // reset to last item
-            idx = index( rowCount() - 1, 0 );
-        }
-    }
-
-    // Try to find the next available PlaylistItem (with results)
-    while ( idx.isValid() )
-    {
-        TrackModelItem* item = itemFromIndex( mapToSource( idx ) );
-        if ( item && item->query()->playable() )
-        {
-            qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
-            if ( !readOnly )
-                setCurrentIndex( idx );
-            return item->query()->results().at( 0 );
-        }
-
-        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0 );
-    }
-
-    if ( !readOnly )
-        setCurrentIndex( QModelIndex() );
-    return Tomahawk::result_ptr();
-}
-
-
-Tomahawk::result_ptr
-TrackProxyModel::currentItem() const
-{
-    TrackModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
-    if ( item && !item->query().isNull() && item->query()->playable() )
-        return item->query()->results().at( 0 );
-    return Tomahawk::result_ptr();
 }
 
 
@@ -387,4 +271,16 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         return id1 < id2;
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
+}
+
+
+Tomahawk::playlistinterface_ptr
+TrackProxyModel::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::TrackProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

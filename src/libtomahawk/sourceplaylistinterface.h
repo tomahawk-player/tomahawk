@@ -30,13 +30,13 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT SourcePlaylistInterface : public QObject, public PlaylistInterface
+class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::source_ptr& source );
-    ~SourcePlaylistInterface();
+    SourcePlaylistInterface( Tomahawk::Source *source );
+    virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
 
@@ -57,7 +57,7 @@ public:
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    virtual Tomahawk::source_ptr source() const;
+    virtual QWeakPointer< Tomahawk::Source > source() const;
 
     virtual void reset();
 
@@ -77,7 +77,7 @@ private slots:
     void resolvingFinished( bool hasResults );
 
 private:
-    Tomahawk::source_ptr m_source;
+    QWeakPointer< Tomahawk::Source > m_source;
     Tomahawk::result_ptr m_currentItem;
     bool m_gotNextItem;
 };

@@ -53,4 +53,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_account_twitter DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_account_twitter DESTINATION ${CMAKE_INSTALL_LIBDIR} )

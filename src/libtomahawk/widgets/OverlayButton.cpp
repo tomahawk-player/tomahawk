@@ -20,12 +20,14 @@
 
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QAbstractScrollArea>
+#include <QScrollBar>
 
 #include "utils/logger.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
-#define FONT_SIZE 16
+#define FONT_SIZE 12
 #define OPACITY 0.70
 
 
@@ -34,7 +36,7 @@ OverlayButton::OverlayButton( QWidget* parent )
     , m_opacity( 0.0 )
     , m_parent( parent )
 {
-    resize( 0, 26 );
+    resize( 0, 28 );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
@@ -78,8 +80,12 @@ OverlayButton::setText( const QString& text )
 {
     m_text = text;
 
-    QFontMetrics fm( font() );
-    resize( fm.width( text ) + 16, height() );
+    QFont f( font() );
+    f.setPixelSize( FONT_SIZE );
+    f.setBold( true );
+
+    QFontMetrics fm( f );
+    resize( fm.width( text ) + 24, height() );
 }
 
 
@@ -120,7 +126,13 @@ void
 OverlayButton::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
-    QPoint corner( m_parent->contentsRect().width() - width() - 12, m_parent->height() - height() - 12 );
+
+    int scrollBarWidth = 0;
+    QAbstractScrollArea* scrollArea = qobject_cast<QAbstractScrollArea*>( m_parent );
+    if ( scrollArea && scrollArea->verticalScrollBar()->isVisible() )
+        scrollBarWidth = scrollArea->verticalScrollBar()->width();
+
+    QPoint corner( m_parent->contentsRect().width() - width() - scrollBarWidth - 12, m_parent->height() - height() - 12 );
     move( corner );
 
     QPainter p( this );
@@ -141,25 +153,10 @@ OverlayButton::paintEvent( QPaintEvent* event )
 
     // shrink to fit if needed
     QFont f( font() );
-    f.setPointSize( FONT_SIZE );
+    f.setPixelSize( FONT_SIZE );
     f.setBold( true );
-
-    QRectF textRect = r.adjusted( 8, 8, -8, -8 );
-    qreal availHeight = textRect.height();
-
-    QFontMetricsF fm( f );
-    qreal textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
-    while ( textHeight > availHeight )
-    {
-        if ( f.pointSize() <= 4 ) // don't try harder
-            break;
-
-        f.setPointSize( f.pointSize() - 1 );
-        fm = QFontMetricsF( f );
-        textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
-    }
 
     p.setFont( f );
     p.setPen( Qt::white );
-    p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
+    p.drawText( r, text(), to );
 }

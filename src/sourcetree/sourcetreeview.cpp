@@ -84,8 +84,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
-    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ) );
 
     setItemDelegate( m_delegate );
 

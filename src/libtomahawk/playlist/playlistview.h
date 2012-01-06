@@ -31,14 +31,14 @@ Q_OBJECT
 
 public:
     explicit PlaylistView( QWidget* parent = 0 );
-    ~PlaylistView();
+    virtual ~PlaylistView();
 
     PlaylistModel* playlistModel() const { return m_model; }
     virtual void setPlaylistModel( PlaylistModel* model );
     virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getPlaylistInterface(); }
 
     virtual bool showFilter() const { return true; }
 

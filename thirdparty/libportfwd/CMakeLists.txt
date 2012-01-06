@@ -48,10 +48,11 @@ ENDIF()
 
 INSTALL( TARGETS tomahawk_portfwd
     RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib${LIB_SUFFIX}
-    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     BUNDLE DESTINATION library
 )
+
 #INSTALL(FILES include/portfwd/portfwddllmacro.h include/portfwd/portfwd.h DESTINATION include/portfwd)
 
 #ADD_EXECUTABLE(portfwd-demo

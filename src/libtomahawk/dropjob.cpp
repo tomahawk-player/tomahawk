@@ -764,7 +764,7 @@ QList< query_ptr >
 DropJob::getArtist( const QString &artist )
 {
     artist_ptr artistPtr = Artist::get( artist );
-    if ( artistPtr->tracks().isEmpty() )
+    if ( artistPtr->getPlaylistInterface()->tracks().isEmpty() )
     {
         connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                                      SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
@@ -772,7 +772,7 @@ DropJob::getArtist( const QString &artist )
         return QList< query_ptr >();
     }
     else
-        return artistPtr->tracks();
+        return artistPtr->getPlaylistInterface()->tracks();
 }
 
 
@@ -785,7 +785,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     if ( albumPtr.isNull() )
         return QList< query_ptr >();
 
-    if ( albumPtr->tracks().isEmpty() )
+    if ( albumPtr->getPlaylistInterface()->tracks().isEmpty() )
     {
         m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
         connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
@@ -796,7 +796,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
         return QList< query_ptr >();
     }
     else
-        return albumPtr->tracks();
+        return albumPtr->getPlaylistInterface()->tracks();
 }
 
 

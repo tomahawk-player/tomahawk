@@ -18,10 +18,22 @@
 
 #include "playlistproxymodel.h"
 
+#include "playlistproxymodelplaylistinterface.h"
 #include "utils/logger.h"
 
 
 PlaylistProxyModel::PlaylistProxyModel( QObject* parent )
     : TrackProxyModel( parent )
 {
+}
+
+Tomahawk::playlistinterface_ptr
+PlaylistProxyModel::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::PlaylistProxyModelPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

@@ -188,7 +188,7 @@ Source::setOffline()
 
     m_cc = 0;
     DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
 
@@ -307,7 +307,7 @@ Source::getPlaylistInterface()
     if ( m_playlistInterface.isNull() )
     {
         Tomahawk::source_ptr source = SourceList::instance()->get( id() );
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source ) );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source.data() ) );
     }
 
     return m_playlistInterface;
@@ -411,7 +411,9 @@ Source::executeCommands()
 void
 Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 {
-    emit socialAttributesChanged();
+    Q_ASSERT( action );
+
+    emit socialAttributesChanged( action->action() );
 
     if ( action->action() == "latchOn" )
     {

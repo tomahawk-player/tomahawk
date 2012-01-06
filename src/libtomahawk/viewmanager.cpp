@@ -107,7 +107,7 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
@@ -390,7 +390,7 @@ ViewManager::showSuperCollection()
 
 
 void
-ViewManager::playlistInterfaceChanged( Tomahawk::PlaylistInterface* interface )
+ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface )
 {
     playlist_ptr pl = playlistForInterface( interface );
     if ( !pl.isNull() )
@@ -605,16 +605,16 @@ ViewManager::unlinkPlaylist()
 {
     if ( currentPlaylistInterface() )
     {
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
                     this,                                 SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                     this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                     this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        disconnect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+        disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                     this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
@@ -644,16 +644,16 @@ ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
                                                        SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                                                        SIGNAL( numShownChanged( unsigned int ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                                                        SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                        SIGNAL( shuffleModeChanged( bool ) ) );
 
         m_infobar->setFilter( currentPlaylistInterface()->filter() );
@@ -824,7 +824,7 @@ ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 
 
 ViewPage*
-ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
@@ -838,13 +838,13 @@ ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
     return 0;
 }
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 ViewManager::currentPlaylistInterface() const
 {
     if ( currentPage() )
         return currentPage()->playlistInterface();
     else
-        return 0;
+        return Tomahawk::playlistinterface_ptr();
 }
 
 
@@ -855,7 +855,7 @@ ViewManager::currentPage() const
 }
 
 Tomahawk::playlist_ptr
-ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<PlaylistView> view, m_playlistViews.values() )
     {
@@ -865,12 +865,12 @@ ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) cons
         }
     }
 
-    return playlist_ptr();
+    return Tomahawk::playlist_ptr();
 }
 
 
 Tomahawk::dynplaylist_ptr
-ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
     {
@@ -880,12 +880,12 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface
         }
     }
 
-    return dynplaylist_ptr();
+    return Tomahawk::dynplaylist_ptr();
 }
 
 
 Tomahawk::collection_ptr
-ViewManager::collectionForInterface( Tomahawk::PlaylistInterface* interface ) const
+ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
     foreach ( QWeakPointer<CollectionView> view, m_collectionViews.values() )
     {

@@ -70,7 +70,7 @@ public:
     static ViewManager* instance();
 
     explicit ViewManager( QObject* parent = 0 );
-    ~ViewManager();
+    virtual ~ViewManager();
 
     QWidget* widget() const { return m_widget; }
     InfoBar* infobar() const { return m_infobar; }
@@ -82,9 +82,9 @@ public:
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
 
-    Tomahawk::PlaylistInterface* currentPlaylistInterface() const;
+    Tomahawk::playlistinterface_ptr currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
-    Tomahawk::ViewPage* pageForInterface( Tomahawk::PlaylistInterface* interface ) const;
+    Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr interface ) const;
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
@@ -158,7 +158,7 @@ public slots:
     void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
 
-    void playlistInterfaceChanged( Tomahawk::PlaylistInterface* );
+    void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
@@ -179,9 +179,9 @@ private:
     void saveCurrentPlaylistSettings();
     void loadCurrentPlaylistSettings();
 
-    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::PlaylistInterface* interface ) const;
-    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface ) const;
-    Tomahawk::collection_ptr collectionForInterface( Tomahawk::PlaylistInterface* interface ) const;
+    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const;
 
     QWidget* m_widget;
     InfoBar* m_infobar;

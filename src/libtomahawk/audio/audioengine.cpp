@@ -554,7 +554,7 @@ AudioEngine::loadNextTrack()
 
 
 void
-AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
@@ -562,7 +562,7 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
         m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist->getSharedPointer();
+    m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
         loadTrack( result );
@@ -678,26 +678,26 @@ AudioEngine::timerTriggered( qint64 time )
 
 
 void
-AudioEngine::setPlaylist( PlaylistInterface* playlist )
+AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
     if ( !m_playlist.isNull() )
     {
-        if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
-            disconnect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ) );
+        if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+            disconnect( m_playlist.data(), SIGNAL( nextTrackReady() ) );
         m_playlist.data()->reset();
     }
 
-    if ( !playlist )
+    if ( playlist.isNull() )
     {
         m_playlist.clear();
         emit playlistChanged( playlist );
         return;
     }
 
-    m_playlist = playlist->getSharedPointer();
+    m_playlist = playlist;
 
-    if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
-        connect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+    if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+        connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
 }

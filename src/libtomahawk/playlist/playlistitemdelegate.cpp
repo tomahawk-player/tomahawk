@@ -79,7 +79,10 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     {
         int style = index.data( TrackModel::StyleRole ).toInt();
         if ( style == TrackModel::Short || style == TrackModel::ShortWithAvatars )
-            size.setHeight( 44 );
+        {
+            int rowHeight = option.fontMetrics.height() + 8;
+            size.setHeight( rowHeight * 2 );
+        }
     }
 
     return size;
@@ -235,8 +238,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
-
-        painter->setFont( opt.font);
+        painter->setFont( opt.font );
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }

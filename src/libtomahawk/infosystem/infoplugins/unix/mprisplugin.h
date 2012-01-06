@@ -146,7 +146,7 @@ protected slots:
 private slots:
     void stateChanged( AudioState newState, AudioState oldState );
     void onVolumeChanged( int volume );
-    void onPlaylistChanged( Tomahawk::PlaylistInterface* playlist);
+    void onPlaylistChanged( Tomahawk::playlistinterface_ptr );
     void onTrackCountChanged( unsigned int tracks );
     void onSeeked( qint64 ms );
 

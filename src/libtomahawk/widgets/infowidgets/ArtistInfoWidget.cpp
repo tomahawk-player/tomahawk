@@ -46,7 +46,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 {
     ui->setupUi( this );
 
-    m_plInterface = new MetaPlaylistInterface( this );
+    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
 
     ui->albums->setFrameShape( QFrame::NoFrame );
     ui->albums->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -97,12 +97,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
-    delete m_plInterface;
     delete ui;
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 ArtistInfoWidget::playlistInterface() const
 {
     return m_plInterface;

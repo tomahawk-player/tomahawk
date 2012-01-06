@@ -19,9 +19,9 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include <QObject>
-#include <QSharedPointer>
-#include <QVariantMap>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QVariantMap>
 
 #include "typedefs.h"
 #include "network/dbsyncconnection.h"
@@ -106,7 +106,7 @@ signals:
     void stateChanged();
     void commandsFinished();
 
-    void socialAttributesChanged();
+    void socialAttributesChanged( const QString& action );
 
     void latchedOn( const Tomahawk::source_ptr& to );
     void latchedOff( const Tomahawk::source_ptr& from );
@@ -162,6 +162,6 @@ private:
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
-};
+} //ns
 
 #endif // SOURCE_H

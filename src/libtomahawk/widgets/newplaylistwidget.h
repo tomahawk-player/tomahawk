@@ -19,8 +19,8 @@
 #ifndef NEWPLAYLISTWIDGET_H
 #define NEWPLAYLISTWIDGET_H
 
-#include <QWidget>
-#include <QTimer>
+#include <QtGui/QWidget>
+#include <QtCore/QTimer>
 
 #include "playlistinterface.h"
 #include "viewpage.h"
@@ -44,7 +44,7 @@ public:
     ~NewPlaylistWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
 
     virtual QString title() const { return tr( "Create a new playlist" ); }
     virtual QString description() const { return QString(); }

@@ -42,7 +42,7 @@ public:
 
     virtual QGraphicsWidget* widget() { return m_proxy; }
 
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
 
     virtual QString title() const { return tr( "Related Artists" ); }
     virtual QString description() const { return QString(); }

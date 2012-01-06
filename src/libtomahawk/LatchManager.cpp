@@ -34,7 +34,7 @@ LatchManager::LatchManager( QObject* parent )
     : QObject( parent )
     , m_state( NotLatched )
 {
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 }
 
 LatchManager::~LatchManager()
@@ -58,11 +58,11 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+    AudioEngine::instance()->playItem( source->getPlaylistInterface(), source->getPlaylistInterface()->nextItem() );
 }
 
 void
-LatchManager::playlistChanged( PlaylistInterface* )
+LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
 {
     // If we were latched on and changed, send the listening along stop
     if ( m_latchedOnTo.isNull() )
@@ -108,7 +108,7 @@ LatchManager::playlistChanged( PlaylistInterface* )
         m_latchedInterface.clear();
 
         // call ourselves to hit the "create latch" condition
-        playlistChanged( 0 );
+        playlistChanged( Tomahawk::playlistinterface_ptr() );
         return;
     }
     m_latchedOnTo.clear();
@@ -133,7 +133,7 @@ LatchManager::unlatchRequest( const source_ptr& source )
 {
     Q_UNUSED( source );
     AudioEngine::instance()->stop();
-    AudioEngine::instance()->setPlaylist( 0 );
+    AudioEngine::instance()->setPlaylist( Tomahawk::playlistinterface_ptr() );
 
     ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
 }

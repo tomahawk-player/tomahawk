@@ -18,8 +18,8 @@
 
 #include "playlist.h"
 
-#include <QDomDocument>
-#include <QDomElement>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 #include "database/database.h"
 #include "database/databasecommand_loadplaylistentries.h"
@@ -32,6 +32,7 @@
 #include "pipeline.h"
 #include "source.h"
 #include "sourcelist.h"
+#include "playlistplaylistinterface.h"
 
 #include "utils/logger.h"
 #include "PlaylistUpdaterInterface.h"
@@ -562,17 +563,6 @@ Playlist::newEntries( const QList< plentry_ptr >& entries )
 }
 
 
-QList<Tomahawk::query_ptr>
-Playlist::tracks()
-{
-    QList<Tomahawk::query_ptr> queries;
-    foreach( const plentry_ptr& p, m_entries )
-        queries << p->query();
-
-    return queries;
-}
-
-
 void
 Playlist::setBusy( bool b )
 {
@@ -601,4 +591,16 @@ Playlist::checkRevisionQueue()
         }
         createNewRevision( item.newRev, item.oldRev, item.entries );
     }
+}
+
+
+Tomahawk::playlistinterface_ptr
+Playlist::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::PlaylistPlaylistInterface( this ) );
+    }
+
+    return m_playlistInterface;
 }

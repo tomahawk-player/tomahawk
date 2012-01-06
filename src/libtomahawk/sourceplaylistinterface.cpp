@@ -26,18 +26,21 @@
 using namespace Tomahawk;
 
 
-SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
-    : PlaylistInterface( this )
+SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source )
+    : PlaylistInterface()
     , m_source( source )
     , m_currentItem( 0 )
     , m_gotNextItem( false )
 {
-    connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
+    if ( !m_source.isNull() )
+        connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 }
 
 
 SourcePlaylistInterface::~SourcePlaylistInterface()
-{}
+{
+    m_source.clear();
+}
 
 
 Tomahawk::result_ptr
@@ -52,7 +55,7 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
     {
         tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
@@ -65,7 +68,7 @@ SourcePlaylistInterface::nextItem()
     }
 
     m_gotNextItem = false;
-    m_currentItem = m_source->currentTrack()->results().first();
+    m_currentItem = m_source.data()->currentTrack()->results().first();
     return m_currentItem;
 }
 
@@ -81,7 +84,7 @@ bool
 SourcePlaylistInterface::hasNextItem()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
         return false;
 
     return m_gotNextItem;
@@ -96,7 +99,7 @@ SourcePlaylistInterface::tracks()
 }
 
 
-source_ptr
+QWeakPointer< Tomahawk::Source >
 SourcePlaylistInterface::source() const
 {
     return m_source;

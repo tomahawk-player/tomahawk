@@ -34,4 +34,4 @@ target_link_libraries( tomahawk_account_google
     tomahawklib
 )
 
-install( TARGETS tomahawk_account_google DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS tomahawk_account_google DESTINATION ${CMAKE_INSTALL_LIBDIR} )

@@ -11,6 +11,8 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
+add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
+
 
 set( libGuiSources
     actioncollection.cpp
@@ -41,26 +43,32 @@ set( libGuiSources
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
+    playlist/treeproxymodelplaylistinterface.cpp
     playlist/treeheader.cpp
     playlist/treeitemdelegate.cpp
     playlist/collectionproxymodel.cpp
+    playlist/collectionproxymodelplaylistinterface.cpp
     playlist/collectionflatmodel.cpp
     playlist/collectionview.cpp
     playlist/playlistmodel.cpp
     playlist/playlistproxymodel.cpp
+    playlist/playlistproxymodelplaylistinterface.cpp
     playlist/playlistview.cpp
     playlist/playlistitemdelegate.cpp
     playlist/queueproxymodel.cpp
+    playlist/queueproxymodelplaylistinterface.cpp
     playlist/queueview.cpp
     playlist/trackmodel.cpp
     playlist/trackmodelitem.cpp
     playlist/trackproxymodel.cpp
+    playlist/trackproxymodelplaylistinterface.cpp
     playlist/trackview.cpp
     playlist/trackheader.cpp
     playlist/treemodelitem.cpp
     playlist/albumitem.cpp
     playlist/albummodel.cpp
     playlist/albumproxymodel.cpp
+    playlist/albumproxymodelplaylistinterface.cpp
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
     playlist/artistview.cpp
@@ -166,26 +174,32 @@ set( libGuiHeaders
 
     playlist/treemodel.h
     playlist/treeproxymodel.h
+    playlist/treeproxymodelplaylistinterface.h
     playlist/treeheader.h
     playlist/treeitemdelegate.h
     playlist/collectionproxymodel.h
+    playlist/collectionproxymodelplaylistinterface.h
     playlist/collectionflatmodel.h
     playlist/collectionview.h
     playlist/playlistmodel.h
     playlist/playlistproxymodel.h
+    playlist/playlistproxymodelplaylistinterface.h
     playlist/playlistview.h
     playlist/playlistitemdelegate.h
     playlist/queueproxymodel.h
+    playlist/queueproxymodelplaylistinterface.h
     playlist/queueview.h
     playlist/trackmodel.h
     playlist/trackmodelitem.h
     playlist/trackproxymodel.h
+    playlist/trackproxymodelplaylistinterface.h
     playlist/trackview.h
     playlist/trackheader.h
     playlist/treemodelitem.h
     playlist/albumitem.h
     playlist/albummodel.h
     playlist/albumproxymodel.h
+    playlist/albumproxymodelplaylistinterface.h
     playlist/albumitemdelegate.h
     playlist/albumview.h
     playlist/artistview.h
@@ -275,9 +289,12 @@ set( libSources
 
     aclsystem.cpp
     artist.cpp
+    artistplaylistinterface.cpp
     album.cpp
+    albumplaylistinterface.cpp
     collection.cpp
     playlist.cpp
+    playlistplaylistinterface.cpp
     resolver.cpp
     ExternalResolver.cpp
     query.cpp
@@ -401,6 +418,8 @@ set( libHeaders
     pipeline.h
     functimeout.h
 
+    playlistinterface.h
+
     aclsystem.h
     collection.h
     query.h
@@ -411,8 +430,11 @@ set( libHeaders
     sourceplaylistinterface.h
 
     artist.h
+    artistplaylistinterface.h
     album.h
+    albumplaylistinterface.h
     playlist.h
+    playlistplaylistinterface.h
 
     accounts/Account.h
     accounts/AccountManager.h
@@ -600,6 +622,7 @@ IF( WIN32 )
         "dsound.dll"
         "winmm.dll"
         "advapi32.dll"
+	"shlwapi.dll"
     )
 ENDIF( WIN32 )
 
@@ -677,7 +700,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
 )
 
 INSTALL( TARGETS tomahawklib
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib${LIB_SUFFIX}
-    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

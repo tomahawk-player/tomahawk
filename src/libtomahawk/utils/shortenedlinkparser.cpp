@@ -35,7 +35,8 @@ ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* par
     : QObject( parent )
 {
     foreach ( const QString& url, urls )
-        lengthenUrl( url );
+        if ( handlesUrl( url ) )
+            lookupUrl( url ) ;
 }
 
 
@@ -60,13 +61,9 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "rd.io" ) );
 }
 
-
 void
-ShortenedLinkParser::lengthenUrl( const QString& url )
+ShortenedLinkParser::lookupUrl ( const QString& url )
 {
-    if ( !handlesUrl( url ) )
-        return;
-
     tDebug() << "Looking up..." << url;
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
@@ -74,7 +71,6 @@ ShortenedLinkParser::lengthenUrl( const QString& url )
 
     m_queries.insert( reply );
 }
-
 
 void
 ShortenedLinkParser::lookupFinished()
@@ -85,14 +81,19 @@ ShortenedLinkParser::lookupFinished()
     QVariant redir = r->attribute( QNetworkRequest::RedirectionTargetAttribute );
     if ( redir.isValid() && !redir.toUrl().isEmpty() )
     {
-        tLog() << "Got a redirected url:" << redir.toUrl().toString();
-        m_links << redir.toUrl().toString();
+        tDebug() << "RedirectionTargetAttribute set on " << redir;
+        m_queries.remove( r );
+        r->deleteLater();
+        lookupUrl( redir.toUrl().toString() );
     }
-
-    r->deleteLater();
-
-    m_queries.remove( r );
-    checkFinished();
+    else
+    {
+        tLog() << "Got a redirected url:" << r->url().toString();
+        m_links << r->url().toString();   
+        m_queries.remove( r );
+        r->deleteLater();
+        checkFinished();
+    }
 }
 
 

@@ -32,11 +32,9 @@ Q_OBJECT
 
 public:
     explicit QueueProxyModel( TrackView* parent = 0 );
-    ~QueueProxyModel();
+    virtual ~QueueProxyModel();
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
-
-    using PlaylistProxyModel::siblingItem;
+    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 private slots:
     void onIndexActivated( const QModelIndex& index );

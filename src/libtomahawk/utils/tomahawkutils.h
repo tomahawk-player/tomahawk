@@ -24,6 +24,7 @@
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
+#include <typedefs.h>
 
 
 #define RESPATH ":/data/"
@@ -87,6 +88,17 @@ namespace TomahawkUtils
 
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
+
+    /**
+     * This helper is designed to help "update" an existing playlist with a newer revision of itself.
+     * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,
+     * it goes through the new playlist and adds only new tracks.
+     *
+     * The new list of tracks is returned
+     *
+     * \return true if some changes were made, false if the new tracks are the same as the current tracks in \param orig
+     */
+    DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks );
 
     DLLEXPORT void crash();
 }

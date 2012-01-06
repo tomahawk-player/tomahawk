@@ -19,9 +19,9 @@
 #ifndef WHATSHOTWIDGET_H
 #define WHATSHOTWIDGET_H
 
-#include <QWidget>
-#include <QListWidgetItem>
-#include <QStyledItemDelegate>
+#include <QtGui/QWidget>
+#include <QtGui/QListWidgetItem>
+#include <QtGui/QStyledItemDelegate>
 
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
@@ -31,7 +31,6 @@
 
 #include "dllmacro.h"
 
-class ChartsPlaylistInterface;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
@@ -49,6 +48,7 @@ namespace Ui
 namespace Tomahawk
 {
     class ChartDataLoader;
+    class ChartsPlaylistInterface;
 }
 
 /**
@@ -64,7 +64,7 @@ public:
     ~WhatsHotWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::PlaylistInterface* playlistInterface() const;
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const { return tr( "Charts" ); }
     virtual QString description() const { return QString(); }
@@ -101,7 +101,7 @@ private:
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
-    ChartsPlaylistInterface* m_playlistInterface;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QStandardItemModel* m_crumbModelLeft;
     QSortFilterProxyModel* m_sortedProxy;
@@ -119,7 +119,7 @@ private:
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
 
-    friend class ChartsPlaylistInterface;
+    friend class Tomahawk::ChartsPlaylistInterface;
 };
 
 #endif // WHATSHOTWIDGET_H

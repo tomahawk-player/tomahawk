@@ -17,13 +17,13 @@
  */
 
 #include "playlistinterface.h"
-
+#include "utils/logger.h"
 #include "result.h"
 
 using namespace Tomahawk;
 
-PlaylistInterface::PlaylistInterface ( QObject *parent )
-    : m_object( parent )
+PlaylistInterface::PlaylistInterface ()
+    : QObject()
 {
     qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
 }

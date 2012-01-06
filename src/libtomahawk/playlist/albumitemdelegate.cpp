@@ -129,7 +129,8 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QString text;
     QFont font = opt.font;
-    QFont boldFont = opt.font;
+    font.setPixelSize( 11 );
+    QFont boldFont = font;
     boldFont.setBold( true );
 
     QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
@@ -140,6 +141,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     else if ( !item->artist().isNull() )
         name = item->artist()->name();
 
+    painter->setFont( boldFont );
     bool oneLiner = false;
     if ( item->album().isNull() || item->album()->artist().isNull() )
         oneLiner = true;
@@ -149,14 +151,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     if ( oneLiner )
     {
-        painter->setFont( boldFont );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
     }
     else
     {
-        painter->setFont( boldFont );
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
         text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );

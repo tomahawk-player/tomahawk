@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -333,6 +334,21 @@ TrackModel::clear()
         m_rootItem = new TrackModelItem( 0, this );
         emit endResetModel();
     }
+}
+
+
+QList< query_ptr >
+TrackModel::queries() const
+{
+    Q_ASSERT( m_rootItem );
+
+    QList< query_ptr > tracks;
+    foreach ( TrackModelItem* item, m_rootItem->children )
+    {
+        tracks << item->query();
+    }
+
+    return tracks;
 }
 
 

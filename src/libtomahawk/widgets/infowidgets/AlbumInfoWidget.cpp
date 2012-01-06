@@ -99,7 +99,7 @@ AlbumInfoWidget::~AlbumInfoWidget()
 }
 
 
-PlaylistInterface*
+Tomahawk::playlistinterface_ptr
 AlbumInfoWidget::playlistInterface() const
 {
     return ui->tracksView->playlistInterface();

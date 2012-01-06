@@ -19,19 +19,20 @@
 #ifndef TRACKPROXYMODEL_H
 #define TRACKPROXYMODEL_H
 
-#include <QSortFilterProxyModel>
+#include <QtGui/QSortFilterProxyModel>
 
 #include "playlistinterface.h"
 #include "playlist/trackmodel.h"
 
 #include "dllmacro.h"
 
-class DLLEXPORT TrackProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
+class DLLEXPORT TrackProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 
 public:
     explicit TrackProxyModel ( QObject* parent = 0 );
+    virtual ~TrackProxyModel() {}
 
     virtual TrackModel* sourceModel() const { return m_model; }
     virtual void setSourceTrackModel( TrackModel* sourceModel );
@@ -40,55 +41,29 @@ public:
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
-    virtual QList<Tomahawk::query_ptr> tracks();
-
-    virtual int unfilteredTrackCount() const { return sourceModel()->trackCount(); }
-    virtual int trackCount() const { return rowCount( QModelIndex() ); }
-
     virtual void remove( const QModelIndex& index );
     virtual void remove( const QModelIndexList& indexes );
     virtual void remove( const QList< QPersistentModelIndex >& indexes );
 
-    virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly );
-    virtual bool hasNextItem();
+    virtual bool showOfflineResults() const { return m_showOfflineResults; }
+    virtual void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
 
-    virtual QString filter() const { return filterRegExp().pattern(); }
-    virtual void setFilter( const QString& pattern );
+    virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
-    virtual bool shuffled() const { return m_shuffled; }
+    virtual TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
-    bool showOfflineResults() const { return m_showOfflineResults; }
-    void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
-
-    TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
     void filterChanged( const QString& filter );
 
-    void nextTrackReady();
-
-public slots:
-    virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
-    virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
-
 protected:
-    bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
-    bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
+    virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
-private:
     TrackModel* m_model;
-    RepeatMode m_repeatMode;
-    bool m_shuffled;
     bool m_showOfflineResults;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 #endif // TRACKPROXYMODEL_H

@@ -62,13 +62,13 @@ MprisPlugin::MprisPlugin()
             SLOT( onVolumeChanged( int ) ) );
 
     // When the playlist changes, signals for several properties are sent
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ),
-            SLOT( onPlaylistChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ),
+            SLOT( onPlaylistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     // When a track is added or removed, CanGoNext updated signal is sent
-    PlaylistInterface *playlist = AudioEngine::instance()->playlist();
-    if( playlist )
-        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+    Tomahawk::playlistinterface_ptr playlist = AudioEngine::instance()->playlist();
+    if( !playlist.isNull() )
+        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
                 SLOT( onTrackCountChanged( unsigned int ) ) );
 
     // Connect to AudioEngine's seeked signal
@@ -182,15 +182,15 @@ bool
 MprisPlugin::canPlay() const
 {
     // If there is a currently playing track, or if there is a playlist with at least 1 track, you can hit play
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    return AudioEngine::instance()->currentTrack() || ( p && p->trackCount() );
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    return AudioEngine::instance()->currentTrack() || ( !p.isNull() && p->trackCount() );
 }
 
 bool
 MprisPlugin::canSeek() const
 {
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    if (!p)
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    if ( p.isNull() )
         return false;
     return p->seekRestrictions() != PlaylistInterface::NoSeek;
 
@@ -199,8 +199,8 @@ MprisPlugin::canSeek() const
 QString
 MprisPlugin::loopStatus() const
 {
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    if (!p)
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    if ( p.isNull() )
         return "None";
     PlaylistInterface::RepeatMode mode = p->repeatMode();
     switch( mode )
@@ -225,8 +225,8 @@ MprisPlugin::loopStatus() const
 void
 MprisPlugin::setLoopStatus( const QString &value )
 {
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    if (!p)
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    if ( p.isNull() )
         return;
     if( value == "Track")
         p->setRepeatMode( PlaylistInterface::RepeatOne );
@@ -314,8 +314,8 @@ MprisPlugin::setRate( double value )
 bool
 MprisPlugin::shuffle() const
 {
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    if (!p)
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    if ( p.isNull() )
         return false;
     return p->shuffled();
 }
@@ -323,8 +323,8 @@ MprisPlugin::shuffle() const
 void
 MprisPlugin::setShuffle( bool value )
 {
-    PlaylistInterface *p = AudioEngine::instance()->playlist();
-    if (!p)
+    Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
+    if ( p.isNull() )
         return;
     return p->setShuffled( value );
 }
@@ -539,16 +539,16 @@ MprisPlugin::onVolumeChanged( int volume )
 }
 
 void
-MprisPlugin::onPlaylistChanged( Tomahawk::PlaylistInterface* playlist )
+MprisPlugin::onPlaylistChanged( Tomahawk::playlistinterface_ptr playlist )
 {
     qDebug() << Q_FUNC_INFO;
     disconnect( this, SLOT( onTrackCountChanged( unsigned int ) ) );
     qDebug() << "disconnected";
-    if( playlist )
+    if( !playlist.isNull() )
         qDebug() << "playlist not null";
 
-    if( playlist )
-        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+    if( !playlist.isNull() )
+        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
             SLOT( onTrackCountChanged( unsigned int ) ) );
 
     qDebug() << "connected new playlist";
