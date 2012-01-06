@@ -219,7 +219,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
     if ( autoFitItems() )
     {
 #ifdef Q_WS_X11
-        int scrollbar = !verticalScrollBar()->isVisible() ? verticalScrollBar()->rect().width() : 0;
+        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0;
 #else
         int scrollbar = verticalScrollBar()->rect().width();
 #endif
