@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -93,7 +94,8 @@ public:
     virtual void ensureResolved();
 
     TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
-    TrackModelItem* m_rootItem;
+    /// Returns a flat list of all tracks in this model
+    QList< Tomahawk::query_ptr > queries() const;
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
@@ -125,11 +127,15 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
+protected:
+    TrackModelItem* rootItem() const { return m_rootItem; }
+
 private slots:
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 
 private:
+    TrackModelItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;
 

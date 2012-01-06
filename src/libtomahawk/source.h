@@ -106,7 +106,7 @@ signals:
     void stateChanged();
     void commandsFinished();
 
-    void socialAttributesChanged();
+    void socialAttributesChanged( const QString& action );
 
     void latchedOn( const Tomahawk::source_ptr& to );
     void latchedOff( const Tomahawk::source_ptr& from );

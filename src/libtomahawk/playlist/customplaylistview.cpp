@@ -41,12 +41,12 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     generateTracks();
 
     if ( m_type == SourceLovedTracks )
-        connect( m_source.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+        connect( m_source.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
     else if ( m_type == AllLovedTracks )
     {
-        connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+        connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
         foreach ( const source_ptr& s, SourceList::instance()->sources( true ) )
-            connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+            connect( s.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
 
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( sourceAdded( Tomahawk::source_ptr ) ) );
     }
@@ -104,7 +104,10 @@ CustomPlaylistView::generateTracks()
 void
 CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
 {
-    m_model->append( tracks );
+    QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks );
+
+    m_model->clear();
+    m_model->append( newTracks );
 }
 
 
@@ -153,15 +156,17 @@ CustomPlaylistView::pixmap() const
 
 
 void
-CustomPlaylistView::reload()
+CustomPlaylistView::socialAttributesChanged( const QString& action )
 {
-    m_model->clear();
-    generateTracks();
+    if ( action == "Love" )
+    {
+        generateTracks();
+    }
 }
 
 
 void
 CustomPlaylistView::sourceAdded( const source_ptr& s )
 {
-    connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+    connect( s.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
 }

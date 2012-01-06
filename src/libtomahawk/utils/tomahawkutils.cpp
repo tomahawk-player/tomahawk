@@ -532,6 +532,36 @@ newerVersion( const QString& oldVersion, const QString& newVersion )
 }
 
 
+QList< Tomahawk::query_ptr >
+mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks )
+{
+    int sameCount = 0;
+    QList< Tomahawk::query_ptr > tosave = newTracks;
+    foreach ( const Tomahawk::query_ptr& newquery, newTracks )
+    {
+        foreach ( const Tomahawk::query_ptr& oldq, orig )
+        {
+            if ( newquery->track() == oldq->track() &&
+                newquery->artist() == oldq->artist() &&
+                newquery->album() == oldq->album() )
+            {
+                sameCount++;
+                if ( tosave.contains( newquery ) )
+                    tosave.replace( tosave.indexOf( newquery ), oldq );
+
+                break;
+            }
+        }
+    }
+
+    // No work to be done if all are the same
+    if ( orig.size() == newTracks.size() && sameCount == orig.size() )
+        return orig;
+
+    return tosave;
+}
+
+
 // taken from util/fileutils.cpp in kdevplatform
 bool
 removeDirectory( const QString& dir )

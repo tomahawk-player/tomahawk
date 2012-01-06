@@ -54,15 +54,6 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
 
-signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
-
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }

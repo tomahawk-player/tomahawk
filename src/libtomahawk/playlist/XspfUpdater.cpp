@@ -20,10 +20,11 @@
 
 #include "playlist.h"
 #include "utils/xspfloader.h"
+#include "tomahawksettings.h"
+#include "pipeline.h"
+#include "utils/tomahawkutils.h"
 
 #include <QTimer>
-#include <tomahawksettings.h>
-#include <pipeline.h>
 
 using namespace Tomahawk;
 
@@ -66,46 +67,15 @@ XspfUpdater::playlistLoaded()
     XSPFLoader* loader = qobject_cast<XSPFLoader*>( sender() );
     Q_ASSERT( loader );
 
-    QList< query_ptr> oldqueries;
-    foreach ( const plentry_ptr& ple, playlist()->entries() )
-        oldqueries << ple->query();
+    QList< query_ptr > tracks;
+    foreach ( const plentry_ptr ple, playlist()->entries() )
+        tracks << ple->query();
 
-    QList< query_ptr > newqueries = loader->entries();
-    int sameCount = 0;
-    QList< query_ptr > tosave = newqueries;
-    foreach ( const query_ptr& newquery, newqueries )
-    {
-        foreach ( const query_ptr& oldq, oldqueries )
-        {
-            if ( newquery->track() == oldq->track() &&
-                 newquery->artist() == oldq->artist() &&
-                 newquery->album() == oldq->album() )
-            {
-                sameCount++;
-                if ( tosave.contains( newquery ) )
-                    tosave.replace( tosave.indexOf( newquery ), oldq );
+    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, loader->entries() );
 
-                break;
-            }
-        }
-    }
-
-    // No work to be done if all are the same
-    if ( oldqueries.size() == newqueries.size() && sameCount == oldqueries.size() )
-        return;
-
-    QList<plentry_ptr> el = playlist()->entriesFromQueries( tosave, true );
+    QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );
 
-//    // if there are any different from the current playlist, clear and use the new one, update
-//    bool changed = ( queries.size() == playlist()->entries().count() );
-//    if ( !changed )
-//    {
-//        foreach( const query_ptr& newSong, queries )
-//        {
-//            if ( !playlist()->entries.contains() )
-//        }
-//    }
 }
 
 void

@@ -411,7 +411,9 @@ Source::executeCommands()
 void
 Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 {
-    emit socialAttributesChanged();
+    Q_ASSERT( action );
+
+    emit socialAttributesChanged( action->action() );
 
     if ( action->action() == "latchOn" )
     {

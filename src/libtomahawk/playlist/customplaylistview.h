@@ -54,7 +54,7 @@ public:
 private slots:
     void tracksGenerated( QList<Tomahawk::query_ptr> tracks );
 
-    void reload();
+    void socialAttributesChanged( const QString& );
     void sourceAdded( const Tomahawk::source_ptr& );
 
 private:
