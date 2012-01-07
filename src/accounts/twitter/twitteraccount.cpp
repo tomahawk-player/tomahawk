@@ -47,12 +47,8 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     : Account( accountId )
     , m_isAuthenticated( false )
 {
-    loadFromConfig( accountId );
-
     setAccountServiceName( "Twitter" );
-    QSet< AccountType > types;
-    types << InfoType << SipType;
-    setTypes( types );
+    setTypes( QSet< AccountType >() << InfoType << SipType );
 
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
@@ -167,6 +163,10 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         config[ "screenname" ] = user.screenName();
         setConfiguration( config );
         sync();
+
+        sipPlugin()->connectPlugin();
+
+        m_isAuthenticated = true;
         emit nowAuthenticated( m_twitterAuth, user );
     }
 }

@@ -97,7 +97,7 @@ private slots:
     void profilePicReply();
 
 private:
-    inline void syncConfig() { m_account->setCredentials( m_credentials ); m_account->setConfiguration( m_configuration ); m_account->sync(); }
+    void syncConfig();
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
@@ -110,7 +110,6 @@ private:
     QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
 
     QVariantHash m_configuration;
-    QVariantHash m_credentials;
 
     QTimer m_checkTimer;
     QTimer m_connectTimer;

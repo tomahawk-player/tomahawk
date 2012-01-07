@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,7 +30,7 @@
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
 
-#define VERSION 5
+#define VERSION 6
 
 using namespace Tomahawk;
 
@@ -111,7 +112,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
             setValue( QString( "%1_legacy/password" ).arg( sipName ), value( "jabber/password" ) );
-            setValue( QString( "%1r_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
+            setValue( QString( "%1_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
             setValue( QString( "%1_legacy/port" ).arg( sipName ), value( "jabber/port" ) );
             setValue( QString( "%1_legacy/server" ).arg( sipName ), value( "jabber/server" ) );
 
@@ -187,6 +188,75 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+    } else if ( oldVersion == 5 )
+    {
+        // Migrate to accounts from sipplugins.
+        // collect old connected and enabled sip plugins
+        const QStringList allSip = sipPlugins();
+        const QStringList enabledSip = enabledSipPlugins();
+
+        QStringList accounts;
+        foreach ( const QString& sipPlugin, allSip )
+        {
+            const QStringList parts = sipPlugin.split( "_" );
+            Q_ASSERT( parts.size() == 2 );
+
+            const QString pluginName = parts[ 0 ];
+            const QString pluginId = parts[ 1 ];
+
+            // new key, <plugin>account_<id>
+            QString rawpluginname = pluginName;
+            rawpluginname.replace( "sip", "" );
+            if ( rawpluginname.contains( "jabber" ) )
+                rawpluginname.replace( "jabber", "xmpp" );
+
+            QString accountKey = QString( "%1account_%2" ).arg( rawpluginname ).arg( pluginId );
+            accounts << accountKey;
+
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
+            setValue( "autoconnect", true );
+            setValue( "configuration", QVariantHash() );
+            setValue( "acl", QVariantMap() );
+            setValue( "types", QStringList() << "SipType" );
+            endGroup();
+            if ( pluginName == "sipjabber" || pluginName == "sipgoogle" )
+            {
+                QVariantHash credentials;
+                credentials[ "username" ] = value( sipPlugin + "/username" );
+                credentials[ "password" ] = value( sipPlugin + "/password" );
+                credentials[ "port" ] = value( sipPlugin + "/port" );
+                credentials[ "server" ] = value( sipPlugin + "/server" );
+
+                setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), value( sipPlugin + "/username" ) );
+
+            }
+            else if ( pluginName == "siptwitter" )
+            {
+                QVariantHash credentials;
+                credentials[ "cachedfriendssinceid" ] = value( sipPlugin + "/cachedfriendssinceid" );
+                credentials[ "cacheddirectmessagessinceid" ] = value( sipPlugin + "/cacheddirectmessagessinceid" );
+                credentials[ "cachedpeers" ] = value( sipPlugin + "/cachedpeers" );
+                credentials[ "oauthtoken" ] = value( sipPlugin + "/oauthtoken" );
+                credentials[ "oauthtokensecret" ] = value( sipPlugin + "/oauthtokensecret" );
+                credentials[ "cachedmentionssinceid" ] = value( sipPlugin + "/cachedmentionssinceid" );
+                credentials[ "username" ] = value( sipPlugin + "/screenname" );
+                credentials[ "saveddbid" ] = value( sipPlugin + "/saveddbid" );
+
+                setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "@" + value( sipPlugin + "/screenname" ).toString() );
+            }
+            else if ( pluginName == "sipzeroconf" )
+            {
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "Local Network" );
+            }
+
+
+            remove( sipPlugin );
+        }
+        setValue( "accounts/allaccounts", accounts );
+        remove( "sip" );
     }
 }
 

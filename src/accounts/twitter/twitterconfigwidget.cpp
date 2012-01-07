@@ -57,7 +57,7 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
     m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
     QVariantHash credentials = m_account->credentials();
-    
+
     if ( credentials[ "oauthtoken" ].toString().isEmpty() ||
          credentials[ "oauthtokensecret" ].toString().isEmpty() ||
          credentials[ "username" ].toString().isEmpty() )
@@ -131,7 +131,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     configuration[ "sipcachedfriendssinceid" ] = 0;
     configuration[ "sipcachedmentionssinceid" ] = 0;
     m_account->setConfiguration( configuration );
-    
+
     m_ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( user.screenName() ) );
     m_ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
     m_ui->twitterSyncGroupBox->setVisible( true );
@@ -202,7 +202,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
 
     qDebug() << "Posting Got Tomahawk status";
     QVariantHash credentials = m_account->credentials();
-    
+
     if ( credentials[ "oauthtoken" ].toString().isEmpty() ||
          credentials[ "oauthtokensecret" ].toString().isEmpty() ||
          credentials[ "username" ].toString().isEmpty() )

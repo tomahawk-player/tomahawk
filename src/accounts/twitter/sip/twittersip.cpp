@@ -59,7 +59,7 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
 
     connect( account, SIGNAL( nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ), SLOT( accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ) );
 
-    if ( Database::instance()->dbid() != m_configuration[ "saveddbid" ].toString() )
+    if ( Database::instance()->dbid() != m_account->configuration()[ "saveddbid" ].toString() )
     {
         m_configuration[ "cachedpeers" ] = QVariantHash();
         m_configuration[ "saveddbid" ] = Database::instance()->dbid();
@@ -158,7 +158,7 @@ TwitterSipPlugin::accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter
 {
     Q_UNUSED( user );
 
-    if ( !isValid() )
+    if ( !m_account->enabled() || !m_account->isAuthenticated() )
         return;
 
     m_cachedTwitterAuth = twitterAuth;
@@ -701,4 +701,12 @@ TwitterSipPlugin::configurationChanged()
     if ( m_state != Tomahawk::Accounts::Account::Disconnected )
         m_account->deauthenticate();
     connectPlugin();
+}
+
+
+void
+TwitterSipPlugin::syncConfig()
+{
+    m_account->setConfiguration( m_configuration );
+    m_account->sync();
 }

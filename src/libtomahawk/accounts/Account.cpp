@@ -33,6 +33,8 @@ Account::Account( const QString& accountId )
 {
     connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
     connect( this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) , this, SLOT( onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+
+    loadFromConfig( accountId );
 }
 
 QWidget*
@@ -77,8 +79,10 @@ Account::isAuthenticated() const
 
 
 void
-Account::onError(int errorCode, const QString& error )
+Account::onError( int errorCode, const QString& error )
 {
+    Q_UNUSED( errorCode );
+
     QMutexLocker locker( &m_mutex );
     m_cachedError = error;
 }

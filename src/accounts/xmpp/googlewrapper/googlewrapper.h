@@ -37,7 +37,7 @@ public:
     virtual ~GoogleWrapperFactory() {}
 
     virtual QString prettyName() const { return "Google"; }
-    virtual QString factoryId() const { return "sipgoogle"; }
+    virtual QString factoryId() const { return "googleaccount"; }
     virtual QIcon icon() const;
     virtual Account* createAccount( const QString& pluginId );
 };

@@ -65,6 +65,8 @@ ZeroconfAccount::ZeroconfAccount( const QString& accountId )
 {
     setAccountServiceName( "Local Network" );
     setAccountFriendlyName( "Local Network" );
+
+    setTypes( QSet< AccountType >() << SipType );
 }
 
 ZeroconfAccount::~ZeroconfAccount()

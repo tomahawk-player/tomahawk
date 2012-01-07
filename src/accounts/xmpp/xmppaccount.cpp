@@ -40,8 +40,6 @@ XmppAccountFactory::createAccount( const QString& accountId )
 XmppAccount::XmppAccount( const QString &accountId )
     : Account( accountId )
 {
-    loadFromConfig( accountId );
-
     setAccountServiceName( "XMPP (Jabber)" );
     QSet< AccountType > types;
     types << SipType;

@@ -78,7 +78,7 @@ public slots:
     virtual void setShuffled( bool enabled ) = 0;
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
