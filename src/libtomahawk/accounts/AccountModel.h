@@ -37,19 +37,11 @@ class DLLEXPORT AccountModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum BasicCapabilities
-    {
-        NoCapabilities = 0,
-        SipCapability = 0x1,
-        ResolverCapability = 0x2
-    };
-
     enum Roles {
         AccountName = Qt::UserRole + 15,
         AccountIcon = Qt::UserRole + 16,
         HeadlineText = Qt::UserRole + 17,
-        DescText = Qt::UserRole + 18,
-        BasicCapabilityRole = Qt::UserRole + 19,
+        AccountTypeRole = Qt::UserRole + 19,
         ConnectionStateRole = Qt::UserRole + 20,
         HasConfig = Qt::UserRole + 21,
         ErrorString = Qt::UserRole + 22,

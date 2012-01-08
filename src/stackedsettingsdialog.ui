@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>393</height>
+    <width>655</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,87 +95,74 @@
          <item>
           <widget class="QGroupBox" name="groupBox_4">
            <property name="title">
-            <string>Accounts</string>
+            <string>Internet Sources</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_14">
             <property name="margin">
              <number>2</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Connect to your friends with Google Chat, Twitter, and more.</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
-               <widget class="QTreeView" name="accountsView">
-                <property name="indentation">
-                 <number>0</number>
-                </property>
-                <property name="rootIsDecorated">
-                 <bool>false</bool>
-                </property>
-                <property name="uniformRowHeights">
-                 <bool>false</bool>
-                </property>
-                <property name="animated">
-                 <bool>true</bool>
-                </property>
-                <property name="headerHidden">
-                 <bool>true</bool>
-                </property>
-                <property name="expandsOnDoubleClick">
-                 <bool>false</bool>
+               <widget class="QPushButton" name="showResolvers">
+                <property name="text">
+                 <string>Show music sources</string>
                 </property>
                </widget>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="addSipLayout">
-                <item>
-                 <widget class="QToolButton" name="addSipButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/data/images/sipplugin-add.png</normaloff>:/data/images/sipplugin-add.png</iconset>
-                  </property>
-                  <property name="popupMode">
-                   <enum>QToolButton::InstantPopup</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QToolButton" name="removeSipButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/data/images/sipplugin-remove.png</normaloff>:/data/images/sipplugin-remove.png</iconset>
-                  </property>
-                  <property name="popupMode">
-                   <enum>QToolButton::DelayedPopup</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="verticalSpacer_6">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
+               <widget class="QPushButton" name="showSIP">
+                <property name="text">
+                 <string>Show friend sources</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="showPushAccounts">
+                <property name="text">
+                 <string>Show update services</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTreeView" name="accountsView">
+              <property name="indentation">
+               <number>0</number>
+              </property>
+              <property name="rootIsDecorated">
+               <bool>false</bool>
+              </property>
+              <property name="uniformRowHeights">
+               <bool>false</bool>
+              </property>
+              <property name="animated">
+               <bool>true</bool>
+              </property>
+              <property name="headerHidden">
+               <bool>true</bool>
+              </property>
+              <property name="expandsOnDoubleClick">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QPushButton" name="addNewServiceBtn">
+                <property name="text">
+                 <string>Add new service...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="removeServiceBtn">
+                <property name="text">
+                 <string>Remove Service</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

@@ -60,7 +60,7 @@ public:
 
     }
 
-    ~DelegateConfigWrapper() { delete m_widget; }
+    ~DelegateConfigWrapper() {}
 
 public slots:
     void toggleOkButton( bool dataError )

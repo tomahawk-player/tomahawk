@@ -318,7 +318,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->setFont( font );
     QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
-    if ( author.contains( "@" ) )
+    if ( author.indexOf( '@' ) > 0 )
         author = author.mid( 0, author.indexOf( '@' ) );
 
     const int w = painter->fontMetrics().width( author ) + 2;

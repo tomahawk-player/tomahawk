@@ -86,8 +86,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkUtils::unmarginLayout( layout() );
     ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
 
-    ui->addSipButton->setFixedWidth( 42 );
-    ui->removeSipButton->setFixedWidth( ui->addSipButton->width() );
     ui->addScript->setFixedWidth( 42 );
     ui->removeScript->setFixedWidth( ui->addScript->width() );
 
@@ -133,8 +131,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
-        ui->addSipButton->setEnabled( false );
-        ui->removeSipButton->setEnabled( false );
+        ui->addNewServiceBtn->setEnabled( false );
+        ui->removeServiceBtn->setEnabled( false );
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
@@ -260,8 +258,8 @@ void
 SettingsDialog::serventReady()
 {
     m_sipSpinner->fadeOut();
-    ui->addSipButton->setEnabled( true );
-    ui->removeSipButton->setEnabled( true );
+    ui->addNewServiceBtn->setEnabled( true );
+    ui->removeScript->setEnabled( true );
 }
 
 
@@ -330,21 +328,21 @@ SettingsDialog::createIcons()
 void
 SettingsDialog::setupAccountButtons()
 {
-    foreach( AccountFactory* f, AccountManager::instance()->factories() )
-    {
-        if( f->isUnique() && AccountManager::instance()->hasPluginWithFactory( f->factoryId() ) )
-        {
-            continue;
-        }
+//     foreach( AccountFactory* f, AccountManager::instance()->factories() )
+//     {
+//         if( f->isUnique() && AccountManager::instance()->hasPluginWithFactory( f->factoryId() ) )
+//         {
+//             continue;
+//         }
+//
+//         QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+//         action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+//         ui->addSipButton->addAction( action );
+//
+//         connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+//     }
 
-        QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-        action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-        ui->addSipButton->addAction( action );
-
-        connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-    }
-
-    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
+    connect( ui->removeServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
 }
 
 
@@ -731,21 +729,21 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
         AccountManager::instance()->addAccount( account );
         AccountManager::instance()->hookupAndEnable( account );
 
-        if ( f && f->isUnique() )
-        {
-            // remove from actions list
-            QAction* toremove = 0;
-            foreach( QAction* a, ui->addSipButton->actions() )
-            {
-                if( f == qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) )
-                {
-                    toremove = a;
-                    break;
-                }
-            }
-            if ( toremove )
-                ui->addSipButton->removeAction( toremove );
-        }
+//         if ( f && f->isUnique() )
+//         {
+//             // remove from actions list
+//             QAction* toremove = 0;
+//             foreach( QAction* a, ui->addSipButton->actions() )
+//             {
+//                 if( f == qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) )
+//                 {
+//                     toremove = a;
+//                     break;
+//                 }
+//             }
+//             if ( toremove )
+//                 ui->addSipButton->removeAction( toremove );
+//         }
     }
     else
     {
@@ -778,14 +776,14 @@ SettingsDialog::onAccountRowDeleted( bool )
 
     if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
     {
-        if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
-        {
-            QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-            action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-            ui->addSipButton->addAction( action );
-
-            connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-        }
+//         if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
+//         {
+//             QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+//             action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+//             ui->addSipButton->addAction( action );
+//
+//             connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+//         }
     }
 
     AccountManager::instance()->removeAccount( account );
@@ -805,14 +803,14 @@ SettingsDialog::accountDeleted( bool )
 
             if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
             {
-                if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
-                {
-                    QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-                    action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-                    ui->addSipButton->addAction( action );
-
-                    connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-                }
+//                 if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
+//                 {
+//                     QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+//                     action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+//                     ui->addSipButton->addAction( action );
+//
+//                     connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+//                 }
             }
             AccountManager::instance()->removeAccount( account );
         }

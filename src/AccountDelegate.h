@@ -42,12 +42,15 @@ public:
     virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
-    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::BasicCapabilityRole; }
+    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::AccountTypeRole; }
 private slots:
     void askedForEdit( const QModelIndex& idx );
 
 signals:
     void openConfig( Tomahawk::Accounts::Account* );
+
+private:
+    QMap< QString, QPixmap > m_cachedIcons;
 };
 
 }

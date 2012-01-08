@@ -175,7 +175,7 @@ AccountManager::connectAll()
 {
     foreach( Account* acc, m_accounts )
     {
-        if ( acc->types().contains( Accounts::SipType ) && acc->sipPlugin() )
+        if ( acc->types() & Accounts::SipType && acc->sipPlugin() )
             acc->sipPlugin()->connectPlugin();
 
     }
@@ -252,8 +252,12 @@ AccountManager::addAccount( Account* account )
     tDebug() << Q_FUNC_INFO << "adding account plugin";
     m_accounts.append( account );
 
-    foreach( AccountType type, account->types() )
-        m_accountsByAccountType[ type ].append( account );
+    if ( account->types() & Accounts::SipType )
+        m_accountsByAccountType[ Accounts::SipType ].append( account );
+    if ( account->types() & Accounts::InfoType )
+        m_accountsByAccountType[ Accounts::InfoType ].append( account );
+    if ( account->types() & Accounts::ResolverType )
+        m_accountsByAccountType[ Accounts::ResolverType ].append( account );
 
     emit added( account );
 }
@@ -330,7 +334,7 @@ AccountManager::onSettingsChanged()
 {
     foreach( Account* account, m_accounts )
     {
-        if ( account->types().contains( Accounts::SipType ) && account->sipPlugin() )
+        if ( account->types() & Accounts::SipType && account->sipPlugin() )
             account->sipPlugin()->checkSettings();
     }
 }

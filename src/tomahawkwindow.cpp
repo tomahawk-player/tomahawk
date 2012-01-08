@@ -690,8 +690,7 @@ TomahawkWindow::onAccountDisconnected()
 void
 TomahawkWindow::onAccountAdded( Account* acc )
 {
-    if ( !acc->types().contains( SipType ) ||
-         !acc->sipPlugin() )
+    if ( !acc->types() & SipType || !acc->sipPlugin() )
         return;
 
     connect( acc->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );

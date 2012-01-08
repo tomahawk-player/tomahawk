@@ -48,7 +48,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     , m_isAuthenticated( false )
 {
     setAccountServiceName( "Twitter" );
-    setTypes( QSet< AccountType >() << InfoType << SipType );
+    setTypes( AccountTypes( InfoType | SipType ) );
 
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );

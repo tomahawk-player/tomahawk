@@ -147,39 +147,33 @@ Account::removeFromConfig()
 
 
 void
-Account::setTypes( const QSet< AccountType > types )
+Account::setTypes( AccountTypes types )
 {
     QMutexLocker locker( &m_mutex );
     m_types = QStringList();
-    foreach ( AccountType type, types )
-    {
-        switch( type )
-        {
-        case InfoType:
-            m_types << "InfoType";
-            break;
-        case SipType:
-            m_types << "SipType";
-            break;
-        }
-    }
+    if ( types & InfoType )
+        m_types << "InfoType";
+    if ( types & SipType )
+        m_types << "SipType";
+    if ( types & ResolverType )
+        m_types << "ResolverType";
     syncConfig();
 }
 
 
-QSet< AccountType >
+AccountTypes
 Account::types() const
 {
     QMutexLocker locker( &m_mutex );
-    QSet< AccountType > set;
-    foreach ( QString type, m_types )
-    {
-        if ( type == "InfoType" )
-            set << InfoType;
-        else if ( type == "SipType" )
-            set << SipType;
-    }
-    return set;
+    AccountTypes types;
+    if ( m_types.contains( "InfoType" ) )
+        types |= InfoType;
+    if ( m_types.contains( "SipType" ) )
+        types |= SipType;
+    if ( m_types.contains( "ResolverType" ) )
+        types |= ResolverType;
+
+    return types;
 }
 
 

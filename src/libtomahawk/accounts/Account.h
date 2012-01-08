@@ -44,7 +44,16 @@ namespace InfoSystem
 namespace Accounts
 {
 
-enum AccountType { InfoType, SipType };
+enum AccountType
+{
+    NoType = 0x00,
+
+    InfoType = 0x01,
+    SipType = 0x02,
+    ResolverType = 0x04
+};
+
+Q_DECLARE_FLAGS(AccountTypes, AccountType);
 
 inline QString generateId( const QString &factoryId )
 {
@@ -92,7 +101,7 @@ public:
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
 
-    QSet< AccountType > types() const;
+    AccountTypes types() const;
 
     void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
     void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
@@ -102,7 +111,7 @@ public:
     void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
     void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
     void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
-    void setTypes( const QSet< AccountType > types );
+    void setTypes( AccountTypes types );
 
     virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
 

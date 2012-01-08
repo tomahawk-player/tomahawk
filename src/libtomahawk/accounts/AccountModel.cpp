@@ -58,6 +58,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
         return account->connectionState();
     case AccountModel::HasConfig:
         return ( account->configurationWidget() != 0 );
+    case AccountModel::AccountTypeRole:
+        return (int)account->types();
     case Qt::DecorationRole:
         return account->icon();
     case AccountModel::AccountData:
@@ -90,7 +92,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         return true;
     }
-    else if ( role == BasicCapabilityRole )
+    else if ( role == AccountTypeRole )
     {
         // TODO
     }
@@ -115,7 +117,7 @@ AccountModel::accountAdded( Account* account )
 {
     // TODO HACK we assume account plugins are added at the end of the list.
     Q_ASSERT( AccountManager::instance()->accounts().last() == account );
-    if ( account->types().contains( SipType ) )
+    if ( account->types() & SipType )
         connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
 
     int size = AccountManager::instance()->accounts().count() - 1;

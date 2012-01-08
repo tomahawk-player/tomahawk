@@ -25,7 +25,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-#define ROW_HEIGHT 50
+#define ROW_HEIGHT 40
 
 ConfigDelegateBase::ConfigDelegateBase ( QObject* parent )
     : QStyledItemDelegate ( parent )

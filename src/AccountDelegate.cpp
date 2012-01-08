@@ -27,9 +27,9 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-#define ICONSIZE 36
+#define ICONSIZE 34
 #define WRENCH_SIZE 24
-#define STATUS_ICON_SIZE 18
+#define STATUS_ICON_SIZE 13
 #define CHECK_LEFT_EDGE 8
 
 using namespace Tomahawk;
@@ -39,6 +39,10 @@ AccountDelegate::AccountDelegate( QObject* parent )
     : ConfigDelegateBase ( parent )
 {
     connect( this, SIGNAL( configPressed( QModelIndex ) ), this, SLOT( askedForEdit( QModelIndex ) ) );
+
+    m_cachedIcons[ "sipplugin-online" ] = QPixmap( RESPATH "images/sipplugin-online.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    m_cachedIcons[ "sipplugin-offline" ] = QPixmap( RESPATH "images/sipplugin-offline.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
 }
 
 bool
@@ -55,24 +59,25 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     const QRect itemRect = opt.rect;
     const int top = itemRect.top();
     const int mid = itemRect.height() / 2;
+    const int quarter = mid - ( itemRect.height() / 4 );
 
     // one line bold for account name
-    // space below it for account description
-    // checkbox, icon, name, online/offline status, config icon
+    // space below it for online/offline status
+    // checkbox, icon, name/status, features, config icon
     QFont name = opt.font;
     name.setPointSize( name.pointSize() + 2 );
     name.setBold( true );
 
-    QFont desc = opt.font;
-    desc.setItalic( true );
-    desc.setPointSize( desc.pointSize() - 2 );
+    QFont smallFont = opt.font;
+    smallFont.setPointSize( smallFont.pointSize() - 1 );
+    QFontMetrics smallFontFM( smallFont );
 
     // draw the background
     const QWidget* w = opt.widget;
     QStyle* style = w ? w->style() : QApplication::style();
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
-    int iconLeftEdge = CHECK_LEFT_EDGE + ICONSIZE + PADDING;
+    int iconLeftEdge = CHECK_LEFT_EDGE + WRENCH_SIZE + PADDING;
     int textLeftEdge = iconLeftEdge + ICONSIZE + PADDING;
 
     // draw checkbox first
@@ -91,6 +96,51 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->restore();
     }
 
+    // name
+    painter->save();
+    painter->setFont( name );
+    QFontMetrics namefm( name );
+    // pos will the top-left point of the text rect
+    pos = quarter - ( namefm.height() / 2 ) + top;
+    const QString nameStr = index.data( AccountModel::AccountName ).toString();
+    const int titleWidth = namefm.width( nameStr );
+    const QRect nameRect( textLeftEdge, pos, titleWidth, namefm.height() );
+    painter->drawText( nameRect, nameStr );
+    painter->restore();
+
+    // draw the online/offline status
+    const int stateY = mid + quarter - ( smallFontFM.height() / 2 ) + top;
+
+    QPixmap p;
+    QString statusText;
+    Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
+    if ( state == Account::Connected )
+    {
+        p = m_cachedIcons[ "sipplugin-online" ];
+        statusText = tr( "Online" );
+    }
+    else if ( state == Account::Connecting )
+    {
+        p = m_cachedIcons[ "sipplugin-offline" ];
+        statusText = tr( "Connecting..." );
+    }
+    else
+    {
+        p = m_cachedIcons[ "sipplugin-offline" ];
+        statusText = tr( "Offline" );
+    }
+    painter->drawPixmap( textLeftEdge, stateY, STATUS_ICON_SIZE, STATUS_ICON_SIZE, p );
+
+    int width = smallFontFM.width( statusText );
+    int statusTextX = textLeftEdge + STATUS_ICON_SIZE + PADDING;
+    painter->save();
+    painter->setFont( smallFont );
+    painter->drawText( QRect( statusTextX, stateY, width, smallFontFM.height() ), statusText );
+    painter->restore();
+
+    // right-most edge of text on left (name, desc) is the cutoff point for the rest of the delegate
+    width = qMax( statusTextX + width, textLeftEdge + titleWidth );
+
     // from the right edge--config status and online/offline
     QRect confRect = QRect( itemRect.width() - WRENCH_SIZE - 2 * PADDING, mid - WRENCH_SIZE / 2 + top, WRENCH_SIZE, WRENCH_SIZE );
     if( index.data( AccountModel::HasConfig ).toBool() ) {
@@ -102,81 +152,34 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         drawConfigWrench( painter, opt, topt );
     }
 
-
-    // draw the online/offline status
-    const bool hasCapability = ( static_cast< AccountModel::BasicCapabilities >( index.data( AccountModel::BasicCapabilityRole ).toInt() ) != AccountModel::NoCapabilities );
-    const int quarter = mid - ( itemRect.height() / 4 );
-    const int statusY = hasCapability ? quarter : mid;
-    const int statusX = confRect.left() - 2*PADDING - STATUS_ICON_SIZE;
-
-    QFont statusF = opt.font;
-    statusF.setPointSize( statusF.pointSize() - 2 );
-    QFontMetrics statusFM( statusF );
-
-    QPixmap p;
-    QString statusText;
-    Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
-    if( state == Account::Connected ) {
-        p = QPixmap( RESPATH "images/sipplugin-online.png" );
-        statusText = tr( "Online" );
-    } else if( state == Account::Connecting ) {
-        p = QPixmap( RESPATH "images/sipplugin-offline.png" );
-        statusText = tr( "Connecting..." );
-    } else {
-        p = QPixmap( RESPATH "images/sipplugin-offline.png" );
-        statusText = tr( "Offline" );
-    }
-    p = p.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-    painter->drawPixmap( statusX, statusY - STATUS_ICON_SIZE / 2 + top, STATUS_ICON_SIZE, STATUS_ICON_SIZE, p );
-    int width = statusFM.width( statusText );
-    int statusTextX = statusX - PADDING - width;
-    painter->save();
-    painter->setFont( statusF );
-    painter->drawText( QRect( statusTextX, statusY - statusFM.height() / 2 + top, width, statusFM.height() ), statusText );
+    const bool hasCapability = ( static_cast< Accounts::AccountTypes >( index.data( AccountModel::AccountTypeRole ).toInt() ) != Accounts::NoType );
 
     // draw optional capability text if it exists
     if ( hasCapability )
     {
         QString capString;
-        AccountModel::BasicCapabilities cap = static_cast< AccountModel::BasicCapabilities >( index.data( AccountModel::BasicCapabilityRole ).toInt() );
-        if ( ( cap & AccountModel::SipCapability ) && ( cap & AccountModel::ResolverCapability ) )
-            capString = tr( "Connect to and play from friends" );
-        else if ( cap & AccountModel::SipCapability )
-            capString = tr( "Connect to friends" );
-        else if ( cap & AccountModel::ResolverCapability )
-            capString = tr( "Find Music");
+        AccountTypes types = AccountTypes( index.data( AccountModel::AccountTypeRole ).toInt() );
+        if ( ( types & Accounts::SipType ) && ( types & Accounts::ResolverType ) )
+            capString = tr( "Connects to, plays from friends" );
+        else if ( types & Accounts::SipType )
+            capString = tr( "Connects to friends" );
+        else if ( types & Accounts::ResolverType )
+            capString = tr( "Finds Music");
 
         // checkbox for capability
-        const int capY = statusY + ( itemRect.height() / 2 );
-        QRect capCheckRect( statusX, capY - STATUS_ICON_SIZE / 2 + top, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
-        opt.rect = capCheckRect;
-        drawCheckBox( opt, painter, w );
+//         QRect capCheckRect( statusX, capY - STATUS_ICON_SIZE / 2 + top, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
+//         opt.rect = capCheckRect;
+//         drawCheckBox( opt, painter, w );
 
         // text to accompany checkbox
-        const int capW = statusFM.width( capString );
-        const int capTextX = statusX - PADDING  - capW;
-        painter->drawText( QRect( capTextX, capY - statusFM.height() / 2 + top, capW, statusFM.height() ), capString );
-
-        if ( capTextX < statusTextX )
-            statusTextX = capTextX;
+        const int capY = mid - ( smallFontFM.height() / 2 ) + top;
+        const int configLeftEdge = confRect.left() - PADDING;
+        const int capW = configLeftEdge - width;
+        // Right-align text
+        const int capTextX = qMax( width, configLeftEdge - smallFontFM.width( capString ) );
+        painter->setFont( smallFont );
+        painter->drawText( QRect( capTextX, capY, configLeftEdge - capTextX, smallFontFM.height() ), Qt::AlignRight, capString );
     }
-    painter->restore();
-
-    // name
-    painter->save();
-    painter->setFont( name );
-    QFontMetrics namefm( name );
-    // pos will the top-left point of the text rect
-    pos = mid - ( namefm.height() / 2 ) + top;
-    // TODO bound with config icon and offline/online status
-    width = itemRect.width() - statusTextX;
-    QRect nameRect( textLeftEdge, pos, width, namefm.height() );
-    painter->drawText( nameRect, index.data( AccountModel::AccountName ).toString() );
-
-    nameRect.translate( mid, 0 ); // move down by half the hight
-    painter->drawText( nameRect, index.data( AccountModel::DescText ).toString() );
-    painter->restore();
-
 }
 
 QRect
@@ -192,7 +195,7 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QM
         QRect checkRect( CHECK_LEFT_EDGE, pos + opt.rect.top(), ICONSIZE, ICONSIZE );
 
         return checkRect;
-    } else if ( role == AccountModel::BasicCapabilityRole )
+    } else if ( role == AccountModel::AccountTypeRole )
     {
         // The capabilities checkbox
         QStyleOptionViewItemV4 opt = option;
