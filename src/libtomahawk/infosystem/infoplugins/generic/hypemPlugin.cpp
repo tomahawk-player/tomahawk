@@ -323,12 +323,12 @@ hypemPlugin::chartReturned()
         QList< InfoStringHash > top_tracks;
         QStringList top_artists;
 
-        if( url.contains( "artists" ) )
+        if ( url.contains( "artists" ) )
             setChartType( Artist );
         else
             setChartType( Track );
 
-        foreach(QVariant result, res )
+        foreach ( QVariant result, res )
         {
             QString title, artist;
             QVariantMap chartMap = result.toMap();
@@ -339,28 +339,21 @@ hypemPlugin::chartReturned()
                 title = chartMap.value( "title" ).toString();
                 artist = chartMap.value( "artist" ).toString();
 
-                if( chartType() == Track )
+                if ( chartType() == Track )
                 {
                     InfoStringHash pair;
                     pair["artist"] = artist;
                     pair["track"] = title;
                     top_tracks << pair;
-
-                    qDebug() << "HypemChart type is track";
                 }
 
 
-                if( chartType() == Artist )
-                {
-
+                if ( chartType() == Artist )
                     top_artists << artist;
-                    qDebug() << "HypemChart type is artist";
-
-                }
             }
         }
 
-        if( chartType() == Track )
+        if ( chartType() == Track )
         {
             tDebug() << "HypemPlugin:" << "\tgot " << top_tracks.size() << " tracks";
             returnedData["tracks"] = QVariant::fromValue( top_tracks );
@@ -369,7 +362,7 @@ hypemPlugin::chartReturned()
 
 
 
-        if( chartType() == Artist )
+        if ( chartType() == Artist )
         {
             tDebug() << "HypemPlugin:" << "\tgot " << top_artists.size() << " artists";
             returnedData["artists"] = top_artists;
