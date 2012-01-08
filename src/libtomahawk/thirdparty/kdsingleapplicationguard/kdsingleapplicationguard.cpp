@@ -341,7 +341,7 @@ d( new Private( this ) )
         #endif
 
         // now listen for commands
-        startTimer( 250 );
+        startTimer( 750 );
 }
 
 /*!
