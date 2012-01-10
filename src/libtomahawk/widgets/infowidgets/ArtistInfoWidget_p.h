@@ -35,18 +35,18 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->albums->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->topHits->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->albums->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->topHits->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
     virtual ~MetaPlaylistInterface() {}
