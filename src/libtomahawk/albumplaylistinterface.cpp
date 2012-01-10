@@ -92,7 +92,7 @@ AlbumPlaylistInterface::tracks()
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                        m_album.data(), SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }

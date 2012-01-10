@@ -65,13 +65,6 @@ public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-    void nextTrackReady();
-
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
     void resolvingFinished( bool hasResults );

@@ -63,7 +63,7 @@ signals:
     void nextTrackReady();
 
 public slots:
-    virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
+    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 private:

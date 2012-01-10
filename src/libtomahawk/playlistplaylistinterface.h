@@ -56,15 +56,6 @@ public:
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
-
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
