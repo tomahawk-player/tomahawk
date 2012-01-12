@@ -118,6 +118,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( latchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
+    connect( this, SIGNAL( latchModeChangeRequest( Tomahawk::source_ptr, bool ) ), m_latchManager, SLOT( latchModeChangeRequest( Tomahawk::source_ptr, bool ) ) );
 
     connect( ActionCollection::instance(), SIGNAL( privacyModeChanged() ), SLOT( repaint() ) );
 }
@@ -162,10 +163,14 @@ SourceTreeView::setupMenus()
         {
             if ( m_latchManager->isLatched( source ) )
             {
-                m_latchMenu.addSeparator();
                 QAction *latchOffAction = ActionCollection::instance()->getAction( "latchOff" );
                 m_latchMenu.addAction( latchOffAction );
-                connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ), Qt::QueuedConnection );
+                connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
+                m_latchMenu.addSeparator();
+                QAction *latchRealtimeAction = ActionCollection::instance()->getAction( "realtimeFollowingAlong" );
+                latchRealtimeAction->setChecked( source->getPlaylistInterface()->latchMode() == Tomahawk::PlaylistInterface::RealTime );
+                m_latchMenu.addAction( latchRealtimeAction );
+                connect( latchRealtimeAction, SIGNAL( toggled( bool ) ), SLOT( latchModeToggled( bool ) ) );
             }
         }
     }
@@ -415,6 +420,24 @@ SourceTreeView::latchOff( const Tomahawk::source_ptr& source )
     emit unlatchRequest( source );
 }
 
+
+void
+SourceTreeView::latchModeToggled( bool checked )
+{
+
+    disconnect( this, SLOT( latchOff() ) );
+    qDebug() << Q_FUNC_INFO;
+    if ( !m_contextMenuIndex.isValid() )
+        return;
+    
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type != SourcesModel::Collection )
+        return;
+    
+    const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
+    const source_ptr source = item->source();
+    emit latchModeChangeRequest( source, checked );
+}
 
 
 void

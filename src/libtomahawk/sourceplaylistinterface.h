@@ -35,7 +35,7 @@ class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::Source *source );
+    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode = PlaylistInterface::RealTime );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
@@ -64,6 +64,7 @@ public:
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
+    virtual void audioPaused() { setLatchMode( PlaylistInterface::StayOnSong ); }
 
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );

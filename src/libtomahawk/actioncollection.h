@@ -21,7 +21,7 @@
 
 #include "dllmacro.h"
 
-#include <QAction>
+#include <QtGui/QAction>
 
 class DLLEXPORT ActionCollection : public QObject
 {

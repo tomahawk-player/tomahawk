@@ -46,6 +46,10 @@ ActionCollection::initActions()
     latchOff->setIcon( QIcon( RESPATH "images/headphones-off.png" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
+    QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
+    realtimeFollowingAlong->setCheckable( true );
+    m_actionCollection[ "realtimeFollowingAlong" ] = realtimeFollowingAlong;
+
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
     QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
     privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );

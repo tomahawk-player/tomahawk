@@ -228,12 +228,12 @@ AudioEngine::canGoNext()
          m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return false;
 
-    if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
-         ( m_playlist.data()->currentItem().isNull() || ( m_currentTrack->id() == m_playlist.data()->currentItem()->id() ) ) )
+    if ( !m_currentTrack.isNull() && !m_playlist->hasNextItem() &&
+         ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "catch up";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "catch up, but same track or can't move on because don't have next track or it wasn't resolved";
         return false;
     }
 
@@ -580,6 +580,14 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 void
 AudioEngine::playlistNextTrackReady()
 {
+    // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
+    if ( m_playlist && m_playlist->latchMode() == PlaylistInterface::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
+    {
+        m_waitingOnNewTrack = false;
+        loadNextTrack();
+        return;
+    }
+    
     if ( !m_waitingOnNewTrack )
         return;
 

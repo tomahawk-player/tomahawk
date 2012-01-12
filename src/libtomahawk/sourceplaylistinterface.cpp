@@ -20,20 +20,26 @@
 
 #include "source.h"
 #include "pipeline.h"
+#include "audio/audioengine.h"
 
 #include "utils/logger.h"
 
 using namespace Tomahawk;
 
 
-SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source )
+SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode )
     : PlaylistInterface()
     , m_source( source )
     , m_currentItem( 0 )
     , m_gotNextItem( false )
 {
+    setLatchMode( latchMode );
+    
     if ( !m_source.isNull() )
         connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
+
+    if ( AudioEngine::instance() )
+        connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
 }
 
 
@@ -95,7 +101,7 @@ QList<Tomahawk::query_ptr>
 SourcePlaylistInterface::tracks()
 {
     QList<Tomahawk::query_ptr> tracks;
-    return tracks; // FIXME
+    return tracks; // FIXME (with what?)
 }
 
 

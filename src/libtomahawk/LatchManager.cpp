@@ -22,8 +22,7 @@
 #include "audio/audioengine.h"
 #include "database/database.h"
 
-#include <QtCore/QStateMachine>
-#include <QtCore/QState>
+#include <QtGui/QAction>
 #include "sourcelist.h"
 #include "database/databasecommand_socialaction.h"
 #include "sourceplaylistinterface.h"
@@ -82,7 +81,9 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
         cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-        ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Catch Up" ) );
+        QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+        latchOnAction->setText( tr( "&Catch Up" ) );
+        latchOnAction->setIcon( QIcon() );
         
         // If not, then keep waiting
         return;
@@ -117,7 +118,9 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
 
     m_state = NotLatched;
 
-    ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
+    QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+    latchOnAction->setText( tr( "&Listen Along" ) );
+    latchOnAction->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
 }
 
 
@@ -128,6 +131,7 @@ LatchManager::catchUpRequest()
     AudioEngine::instance()->next();
 }
 
+
 void
 LatchManager::unlatchRequest( const source_ptr& source )
 {
@@ -135,5 +139,19 @@ LatchManager::unlatchRequest( const source_ptr& source )
     AudioEngine::instance()->stop();
     AudioEngine::instance()->setPlaylist( Tomahawk::playlistinterface_ptr() );
 
-    ActionCollection::instance()->getAction( "latchOn" )->setText( tr( "&Listen Along" ) );
+    QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+    latchOnAction->setText( tr( "&Listen Along" ) );
+    latchOnAction->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
+}
+
+
+void
+LatchManager::latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime )
+{
+    if ( !isLatched( source ) )
+        return;
+
+    source->getPlaylistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistInterface::RealTime : Tomahawk::PlaylistInterface::StayOnSong );
+    if ( realtime )
+        catchUpRequest();
 }
