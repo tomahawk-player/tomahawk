@@ -35,7 +35,7 @@ class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode = PlaylistInterface::RealTime );
+    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode = PlaylistInterface::StayOnSong );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
