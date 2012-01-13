@@ -102,9 +102,9 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
+    QMutexLocker lock( &s_mutex );
     if ( !id().isEmpty() )
     {
-        QMutexLocker lock( &s_mutex );
         if ( s_queries.contains( id() ) )
         {
             s_queries.remove( id() );
@@ -206,7 +206,9 @@ Query::refreshResults()
     if ( m_resolveFinished )
     {
         m_resolveFinished = false;
-        Pipeline::instance()->resolve( s_queries.value( id() ) );
+        QMutexLocker lock( &s_mutex );
+        if ( s_queries.contains( id() ) && !s_queries[ id() ].isNull() )
+            Pipeline::instance()->resolve( s_queries.value( id() ) );
     }
 }
 
