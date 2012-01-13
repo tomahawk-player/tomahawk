@@ -193,6 +193,16 @@ SourceItem::localLatchedOn() const
 }
 
 
+Tomahawk::PlaylistInterface::LatchMode
+SourceItem::localLatchMode() const
+{
+    if ( !m_source.isNull() && !m_source->isLocal() )
+        return m_source->getPlaylistInterface()->latchMode();
+
+    return Tomahawk::PlaylistInterface::StayOnSong;
+}
+
+
 void
 SourceItem::latchedOff( const source_ptr& from, const source_ptr& to )
 {
@@ -215,6 +225,7 @@ SourceItem::latchedOn( const source_ptr& from, const source_ptr& to )
         emit updated();
     }
 }
+
 
 
 void

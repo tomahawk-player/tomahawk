@@ -128,6 +128,8 @@
         <file>data/images/headphones.png</file>
         <file>data/images/headphones-off.png</file>
         <file>data/images/headphones-sidebar.png</file>
+        <file>data/images/closed-padlock.png</file>
+        <file>data/images/open-padlock.png</file>
         <file>data/images/headphones-bigger.png</file>
         <file>data/images/no-album-no-case.png</file>
         <file>data/images/rdio.png</file>

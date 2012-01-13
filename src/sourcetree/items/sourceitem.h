@@ -42,6 +42,7 @@ public:
     virtual int IDValue() const;
 
     virtual bool localLatchedOn() const;
+    virtual Tomahawk::PlaylistInterface::LatchMode localLatchMode() const;
 
     Tomahawk::source_ptr source() const;
 

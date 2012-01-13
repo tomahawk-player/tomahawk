@@ -86,6 +86,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     m_delegate = new SourceDelegate( this );
     connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
     connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ) );
+    connect( m_delegate, SIGNAL( toggleRealtimeLatch( Tomahawk::source_ptr, bool ) ), m_latchManager, SLOT( latchModeChangeRequest( Tomahawk::source_ptr,bool ) ) );
 
     setItemDelegate( m_delegate );
 
