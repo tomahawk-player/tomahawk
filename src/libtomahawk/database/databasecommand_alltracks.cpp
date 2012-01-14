@@ -60,7 +60,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     {
         if ( m_album->id() == 0 )
         {
-            m_artist = m_album->artist().data();
+            m_artist = m_album->artist();
             albumToken = QString( "AND album.id IS NULL" );
         }
         else

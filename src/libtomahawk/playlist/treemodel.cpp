@@ -654,7 +654,7 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool au
     if ( m_mode == DatabaseMode )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-        cmd->setAlbum( album.data() );
+        cmd->setAlbum( album );
         cmd->setData( QVariant( rows ) );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),

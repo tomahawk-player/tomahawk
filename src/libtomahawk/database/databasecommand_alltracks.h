@@ -55,8 +55,8 @@ public:
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "alltracks"; }
 
-    void setArtist( Tomahawk::Artist* artist ) { m_artist = artist; }
-    void setAlbum( Tomahawk::Album* album ) { m_album = album; }
+    void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
+    void setAlbum( const Tomahawk::album_ptr& album ) { m_album = album; }
 
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllTracks::SortOrder order ) { m_sortOrder = order; }
@@ -69,8 +69,8 @@ signals:
 private:
     Tomahawk::collection_ptr m_collection;
 
-    Tomahawk::Artist* m_artist;
-    Tomahawk::Album* m_album;
+    Tomahawk::artist_ptr m_artist;
+    Tomahawk::album_ptr m_album;
 
     unsigned int m_amount;
     DatabaseCommand_AllTracks::SortOrder m_sortOrder;
