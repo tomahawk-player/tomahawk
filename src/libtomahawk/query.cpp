@@ -36,10 +36,6 @@
 
 using namespace Tomahawk;
 
-static QHash< QString, QWeakPointer< Query > > s_queries;
-static QMutex s_mutex;
-
-
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
@@ -47,11 +43,11 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
         autoResolve = false;
 
     query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
-    QMutexLocker lock( &s_mutex );
-    s_queries.insert( q->id(), q );
+    q->setWeakRef( q.toWeakRef() );
 
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
+
     return q;
 }
 
@@ -59,10 +55,13 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 query_ptr
 Query::get( const QString& query, const QID& qid )
 {
+
     query_ptr q = query_ptr( new Query( query, qid ) );
+    q->setWeakRef( q.toWeakRef() );
 
     if ( !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
+
     return q;
 }
 
@@ -102,14 +101,7 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    QMutexLocker lock( &s_mutex );
-    if ( !id().isEmpty() )
-    {
-        if ( s_queries.contains( id() ) )
-        {
-            s_queries.remove( id() );
-        }
-    }
+    m_ownRef.clear();
 }
 
 
@@ -206,9 +198,9 @@ Query::refreshResults()
     if ( m_resolveFinished )
     {
         m_resolveFinished = false;
-        QMutexLocker lock( &s_mutex );
-        if ( s_queries.contains( id() ) && !s_queries[ id() ].isNull() )
-            Pipeline::instance()->resolve( s_queries.value( id() ) );
+        query_ptr q = m_ownRef.toStrongRef();
+        if ( q )
+            Pipeline::instance()->resolve( q );
     }
 }
 

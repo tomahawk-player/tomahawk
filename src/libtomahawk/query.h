@@ -51,9 +51,6 @@ public:
     static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
 
-    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
-    explicit Query( const QString& query, const QID& qid );
-
     virtual ~Query();
 
     /// returns list of all results so far
@@ -105,6 +102,9 @@ public:
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
 
+    QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
+    void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
+
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
@@ -137,6 +137,8 @@ private slots:
 
 private:
     Query();
+    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
+    explicit Query( const QString& query, const QID& qid );
 
     void init();
 
@@ -172,6 +174,8 @@ private:
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
 
     mutable QMutex m_mutex;
+
+    QWeakPointer< Tomahawk::Query > m_ownRef;
 };
 
 }; //ns
