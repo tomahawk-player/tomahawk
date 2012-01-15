@@ -188,7 +188,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );
-            AudioEngine::instance()->playItem( m_proxyModel->getPlaylistInterface(), item->result() );
+            AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
     }
 }
@@ -248,9 +248,9 @@ ArtistView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->getPlaylistInterface()->filter().isEmpty() && !proxyModel()->getPlaylistInterface()->trackCount() && model()->trackCount() )
+    if ( !proxyModel()->playlistInterface()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->getPlaylistInterface()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->playlistInterface()->filter() ) );
         m_overlay->show();
     }
     else
@@ -332,7 +332,7 @@ ArtistView::onScrollTimeout()
     while ( right.isValid() && right.parent().isValid() )
         right = right.parent();
 
-    int max = m_proxyModel->getPlaylistInterface()->trackCount();
+    int max = m_proxyModel->playlistInterface()->trackCount();
     if ( right.isValid() )
         max = right.row() + 1;
 

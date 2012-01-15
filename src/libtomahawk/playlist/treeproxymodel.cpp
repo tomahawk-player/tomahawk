@@ -363,7 +363,7 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
 
 
 Tomahawk::playlistinterface_ptr
-TreeProxyModel::getPlaylistInterface()
+TreeProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

@@ -57,7 +57,7 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
-    AudioEngine::instance()->playItem( source->getPlaylistInterface(), source->getPlaylistInterface()->nextItem() );
+    AudioEngine::instance()->playItem( source->playlistInterface(), source->playlistInterface()->nextItem() );
 }
 
 void
@@ -70,7 +70,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
             return; // Neither latched on nor waiting to be latched on, no-op
 
         m_latchedOnTo = m_waitingForLatch;
-        m_latchedInterface = m_waitingForLatch->getPlaylistInterface();
+        m_latchedInterface = m_waitingForLatch->playlistInterface();
         m_waitingForLatch.clear();
         m_state = Latched;
 
@@ -151,7 +151,7 @@ LatchManager::latchModeChangeRequest( const Tomahawk::source_ptr& source, bool r
     if ( !isLatched( source ) )
         return;
 
-    source->getPlaylistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistInterface::RealTime : Tomahawk::PlaylistInterface::StayOnSong );
+    source->playlistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistInterface::RealTime : Tomahawk::PlaylistInterface::StayOnSong );
     if ( realtime )
         catchUpRequest();
 }

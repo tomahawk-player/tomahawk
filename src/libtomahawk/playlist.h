@@ -185,7 +185,7 @@ public:
     void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
     PlaylistUpdaterInterface* updater() const { return m_updater; }
 
-    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)

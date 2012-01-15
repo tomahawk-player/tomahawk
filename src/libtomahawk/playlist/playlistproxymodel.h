@@ -31,7 +31,7 @@ public:
     explicit PlaylistProxyModel( QObject* parent = 0 );
     virtual ~PlaylistProxyModel() {}
 
-    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    virtual Tomahawk::playlistinterface_ptr playlistInterface();
 };
 
 #endif // PLAYLISTPROXYMODEL_H

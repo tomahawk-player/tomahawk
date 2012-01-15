@@ -44,7 +44,7 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
-    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );

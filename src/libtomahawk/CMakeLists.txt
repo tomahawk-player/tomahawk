@@ -152,7 +152,6 @@ set( libGuiHeaders
 
     contextmenu.h
     dropjob.h
-    viewpage.h
     viewmanager.h
     globalactionmanager.h
     LatchManager.h
@@ -239,7 +238,6 @@ set( libGuiHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
     utils/dropjobnotifier.h
-    utils/tomahawkutilsgui.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h
@@ -436,6 +434,8 @@ set( libHeaders
     playlist.h
     playlistplaylistinterface.h
 
+    viewpage.h
+
     EchonestCatalogSynchronizer.h
 
     sip/SipPlugin.h
@@ -530,6 +530,7 @@ set( libHeaders
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
 
+    utils/tomahawkutilsgui.h
     utils/xspfloader.h
     utils/qnr_iodevicestream.h
 )

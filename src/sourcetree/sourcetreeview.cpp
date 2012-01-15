@@ -169,7 +169,7 @@ SourceTreeView::setupMenus()
                 connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
                 m_latchMenu.addSeparator();
                 QAction *latchRealtimeAction = ActionCollection::instance()->getAction( "realtimeFollowingAlong" );
-                latchRealtimeAction->setChecked( source->getPlaylistInterface()->latchMode() == Tomahawk::PlaylistInterface::RealTime );
+                latchRealtimeAction->setChecked( source->playlistInterface()->latchMode() == Tomahawk::PlaylistInterface::RealTime );
                 m_latchMenu.addAction( latchRealtimeAction );
                 connect( latchRealtimeAction, SIGNAL( toggled( bool ) ), SLOT( latchModeToggled( bool ) ) );
             }

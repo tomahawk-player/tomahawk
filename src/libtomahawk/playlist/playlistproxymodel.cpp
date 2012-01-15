@@ -28,7 +28,7 @@ PlaylistProxyModel::PlaylistProxyModel( QObject* parent )
 }
 
 Tomahawk::playlistinterface_ptr
-PlaylistProxyModel::getPlaylistInterface()
+PlaylistProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

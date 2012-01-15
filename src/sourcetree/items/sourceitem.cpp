@@ -197,7 +197,7 @@ Tomahawk::PlaylistInterface::LatchMode
 SourceItem::localLatchMode() const
 {
     if ( !m_source.isNull() && !m_source->isLocal() )
-        return m_source->getPlaylistInterface()->latchMode();
+        return m_source->playlistInterface()->latchMode();
 
     return Tomahawk::PlaylistInterface::StayOnSong;
 }

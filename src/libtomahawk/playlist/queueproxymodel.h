@@ -34,7 +34,7 @@ public:
     explicit QueueProxyModel( TrackView* parent = 0 );
     virtual ~QueueProxyModel();
 
-    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
 private slots:
     void onIndexActivated( const QModelIndex& index );

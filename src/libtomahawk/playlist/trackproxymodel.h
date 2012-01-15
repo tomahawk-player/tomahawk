@@ -52,7 +52,7 @@ public:
 
     virtual TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
-    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void filterChanged( const QString& filter );

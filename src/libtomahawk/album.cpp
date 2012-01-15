@@ -77,7 +77,7 @@ Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO;
 
-    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( getPlaylistInterface().data() );
+    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( playlistInterface().data() );
     if ( api )
         api->addQueries( tracks );
     
@@ -93,7 +93,7 @@ Album::artist() const
 
 
 Tomahawk::playlistinterface_ptr
-Album::getPlaylistInterface()
+Album::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {
