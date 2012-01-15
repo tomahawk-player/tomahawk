@@ -26,6 +26,8 @@
 #include "collection.h"
 #include "typedefs.h"
 #include "query.h"
+#include "artist.h"
+#include "album.h"
 
 #include "dllmacro.h"
 

@@ -21,6 +21,8 @@
 
 #include "resolver.h"
 #include "result.h"
+#include "artist.h"
+#include "album.h"
 
 #include "dllmacro.h"
 

@@ -24,6 +24,7 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
+#include "artist.h"
 #include "album.h"
 
 #include "dllmacro.h"

@@ -22,6 +22,8 @@
 #include "databasecommand.h"
 #include "databaseimpl.h"
 #include "result.h"
+#include "artist.h"
+#include "album.h"
 
 #include <QVariant>
 
