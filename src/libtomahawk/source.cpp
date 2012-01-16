@@ -361,6 +361,13 @@ Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
 void
 Source::executeCommands()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        tDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "executeCommands", Qt::QueuedConnection );
+        return;
+    }
+
     if ( !m_cmds.isEmpty() )
     {
         QList< QSharedPointer<DatabaseCommand> > cmdGroup;
