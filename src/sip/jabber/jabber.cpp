@@ -49,9 +49,9 @@
     #include <QMessageBox>
 #endif
 
-
 #include <utils/tomahawkutilsgui.h>
 #include "utils/logger.h"
+
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -59,11 +59,13 @@ JabberFactory::createPlugin( const QString& pluginId )
     return new JabberPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
+
 QIcon
 JabberFactory::icon() const
 {
     return QIcon( ":/jabber-icon.png" );
 }
+
 
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
@@ -155,6 +157,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 #endif
 }
 
+
 JabberPlugin::~JabberPlugin()
 {
     delete m_avatarManager;
@@ -173,17 +176,20 @@ JabberPlugin::name() const
     return QString( MYNAME );
 }
 
+
 const QString
 JabberPlugin::friendlyName() const
 {
     return QString( "Jabber" );
 }
 
+
 const QString
 JabberPlugin::accountName() const
 {
     return TomahawkSettings::instance()->value( pluginId() + "/username" ).toString();
 }
+
 
 #ifndef ENABLE_HEADLESS
 QMenu*
@@ -192,11 +198,13 @@ JabberPlugin::menu()
     return m_menu;
 }
 
+
 QWidget*
 JabberPlugin::configWidget()
 {
     return m_configWidget.data();
 }
+
 
 QIcon
 JabberPlugin::icon() const
@@ -204,6 +212,7 @@ JabberPlugin::icon() const
     return QIcon( ":/jabber-icon.png" );
 }
 #endif
+
 
 bool
 JabberPlugin::connectPlugin( bool startup )
@@ -223,12 +232,13 @@ JabberPlugin::connectPlugin( bool startup )
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
     if ( m_client->connection() )
-        connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
+        connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
     return true;
 }
+
 
 void
 JabberPlugin::disconnectPlugin()
@@ -254,6 +264,7 @@ JabberPlugin::disconnectPlugin()
     m_state = Disconnecting;
     emit stateChanged( m_state );
 }
+
 
 void
 JabberPlugin::onConnect()
@@ -297,6 +308,7 @@ JabberPlugin::onConnect()
     addMenuHelper();
 }
 
+
 void
 JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 {
@@ -338,11 +350,13 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     }
 }
 
+
 void
 JabberPlugin::onError( const Jreen::Connection::SocketError& e )
 {
-    tLog() << "JABBER error:" << e;
+    tDebug() << "JABBER error:" << e;
 }
+
 
 QString
 JabberPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
@@ -393,6 +407,7 @@ JabberPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
     return QString();
 }
 
+
 void
 JabberPlugin::sendMsg(const QString& to, const QString& msg)
 {
@@ -438,6 +453,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 }
 
+
 void
 JabberPlugin::broadcastMsg(const QString& msg)
 {
@@ -452,6 +468,7 @@ JabberPlugin::broadcastMsg(const QString& msg)
     }
 }
 
+
 void
 JabberPlugin::addContact(const QString& jid, const QString& msg)
 {
@@ -465,6 +482,7 @@ JabberPlugin::addContact(const QString& jid, const QString& msg)
 
     return;
 }
+
 
 void
 JabberPlugin::showAddFriendDialog()
@@ -481,6 +499,7 @@ JabberPlugin::showAddFriendDialog()
 #endif
 }
 
+
 QString
 JabberPlugin::defaultSuffix() const
 {
@@ -495,6 +514,7 @@ JabberPlugin::showXmlConsole()
    m_xmlConsole->show();
 #endif
 }
+
 
 void
 JabberPlugin::checkSettings()
@@ -548,6 +568,7 @@ JabberPlugin::checkSettings()
     }
 }
 
+
 void JabberPlugin::setupClientHelper()
 {
     Jreen::JID jid = Jreen::JID( m_currentUsername );
@@ -567,6 +588,7 @@ void JabberPlugin::setupClientHelper()
         m_client->setPort( -1 );
     }
 }
+
 
 void JabberPlugin::addMenuHelper()
 {
@@ -589,6 +611,7 @@ void JabberPlugin::addMenuHelper()
 #endif
 }
 
+
 void JabberPlugin::removeMenuHelper()
 {
 #ifndef ENABLE_HEADLESS
@@ -601,6 +624,7 @@ void JabberPlugin::removeMenuHelper()
     }
 #endif
 }
+
 
 void JabberPlugin::onNewMessage(const Jreen::Message& message)
 {
@@ -617,7 +641,7 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 
     if( message.subtype() == Jreen::Message::Error )
     {
-        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
+        tDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
                  << ( message.error().isNull() ? -1 : message.error()->condition() ) << ")";
         return;
     }
@@ -652,7 +676,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
-//    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
+    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
 
     if( jid == m_client->jid() )
         return;
@@ -666,7 +690,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     if( caps )
     {
-//         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
@@ -685,6 +709,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
             handlePeerStatus( jid, Jreen::Presence::Unavailable );
     }
 }
+
 
 void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
 {
@@ -738,6 +763,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
 #endif
 }
 
+
 void
 JabberPlugin::onSubscriptionRequestConfirmed( int result )
 {
@@ -774,6 +800,7 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
     m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
 #endif
 }
+
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq)
 {
@@ -856,6 +883,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq)
     }
 }
 
+
 bool JabberPlugin::presenceMeansOnline(Jreen::Presence::Type p)
 {
     switch(p)
@@ -869,6 +897,7 @@ bool JabberPlugin::presenceMeansOnline(Jreen::Presence::Type p)
             return true;
     }
 }
+
 
 void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type presenceType)
 {
@@ -919,6 +948,7 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
     m_peers[ jid ] = presenceType;
 }
 
+
 void JabberPlugin::onNewAvatar(const QString& jid)
 {
 #ifndef ENABLE_HEADLESS
@@ -947,6 +977,7 @@ void JabberPlugin::onNewAvatar(const QString& jid)
 #endif
 }
 
+
 bool
 JabberPlugin::readXmlConsoleEnabled()
 {
@@ -960,11 +991,13 @@ JabberPlugin::readPassword()
     return TomahawkSettings::instance()->value( pluginId() + "/password" ).toString();
 }
 
+
 int
 JabberPlugin::readPort()
 {
     return TomahawkSettings::instance()->value( pluginId() + "/port", 5222 ).toInt();
 }
+
 
 QString
 JabberPlugin::readServer()
@@ -1009,6 +1042,7 @@ JabberPlugin::saveConfig()
 
     checkSettings();
 }
+
 
 void
 JabberPlugin::deletePlugin()
