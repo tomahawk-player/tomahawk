@@ -110,6 +110,14 @@ private:
 				endTag.name = new QStringRef(endTag.namePointer, tmp.position(), tmp.length());
 			}
 		}
+
+		StackToken(const QString &name)
+		{
+			type = QXmlStreamReader::Characters;
+			charachters.textPointer = new QString(name);
+			charachters.text = new QStringRef(charachters.textPointer);
+		}
+
 		~StackToken()
 		{
 			if (type == QXmlStreamReader::StartElement) {
