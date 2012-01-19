@@ -18,9 +18,9 @@
 
 #include "scanmanager.h"
 
-#include <QThread>
-#include <QCoreApplication>
-#include <QTimer>
+#include <QtCore/QThread>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QTimer>
 
 #include "musicscanner.h"
 #include "tomahawksettings.h"

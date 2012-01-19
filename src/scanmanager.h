@@ -21,12 +21,12 @@
 
 #include "typedefs.h"
 
-#include <QHash>
-#include <QMap>
-#include <QObject>
-#include <QStringList>
-#include <QWeakPointer>
-#include <QSet>
+#include <QtCore/QHash>
+#include <QtCore/QMap>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QWeakPointer>
+#include <QtCore/QSet>
 
 class MusicScanner;
 class QThread;

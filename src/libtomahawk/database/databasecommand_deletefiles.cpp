@@ -18,14 +18,14 @@
 
 #include "databasecommand_deletefiles.h"
 
-#include <QSqlQuery>
+#include <QtSql/QSqlQuery>
 
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
 #include "source.h"
 #include "database/database.h"
-#include "databaseimpl.h"
+#include "database/databaseimpl.h"
 #include "network/servent.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
@@ -60,7 +60,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 {
     Q_ASSERT( !source().isNull() );
 
-    QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
+    int srcid = source()->isLocal() ? 0 : source()->id();
     TomahawkSqlQuery delquery = dbi->newquery();
 
     if ( m_deleteAll )
@@ -68,8 +68,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         TomahawkSqlQuery dirquery = dbi->newquery();
         dirquery.prepare( QString( "SELECT id FROM file WHERE source %1" )
                     .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
-
         dirquery.exec();
+        
         while ( dirquery.next() )
             m_idList << dirquery.value( 0 ).toUInt();
     }
@@ -115,7 +115,8 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             delquery.prepare( QString( "SELECT id FROM file WHERE source = %1 AND url IN ( %2 )" )
                         .arg( source()->id() )
                         .arg( idstring ) );
-
+            delquery.exec();
+            
             idstring = QString();
             while ( delquery.next() )
             {
@@ -128,7 +129,6 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND id IN ( %2 )" )
                              .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
                              .arg( idstring ) );
-
         delquery.exec();
     }
 
