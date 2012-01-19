@@ -196,10 +196,9 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
     {
         QRect pmRect = textRect;
-        pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
         pmRect.setRight( pmRect.left() + pmRect.height() );
         ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
-        textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
+        textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
     }
     if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
     {
@@ -225,25 +224,23 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         if ( !listenAlongPixmap.isNull() )
         {
             QRect pmRect = textRect;
-            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, listenAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-            textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
         }
 
         if ( !realtimeListeningAlongPixmap.isNull() )
         {
             QRect pmRect = textRect;
-            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, realtimeListeningAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-            textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
         }
     }
 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
     QTextOption to( Qt::AlignVCenter );
-    painter->drawText( textRect, text, to );
+    painter->drawText( textRect.adjusted( 0, 0, 0, 2 ), text, to );
 
     if ( status )
     {
