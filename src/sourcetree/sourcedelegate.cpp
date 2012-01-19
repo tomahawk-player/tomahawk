@@ -190,7 +190,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         desc = tr( "Online" );
 
     painter->setFont( normal );
-    textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() - ( painter->fontMetrics().height() + 7 ), -figWidth - 24, -6 );
+    textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
     
     bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
     if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
@@ -199,7 +199,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
         pmRect.setRight( pmRect.left() + pmRect.height() );
         ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
-        textRect.adjust( pmRect.width() + 3, 2, 0, 0 );
+        textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
     }
     if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
     {
@@ -228,7 +228,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, listenAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-            textRect.adjust( pmRect.width() + 3, 2, 0, 0 );
+            textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
         }
 
         if ( !realtimeListeningAlongPixmap.isNull() )
@@ -237,13 +237,13 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, realtimeListeningAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-            textRect.adjust( pmRect.width() + 3, 2, 0, 0 );
+            textRect.adjust( pmRect.width() + 3, 1, 0, 0 );
         }
     }
 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-    QTextOption to( Qt::AlignBottom );
-    painter->drawText( textRect.adjusted( 0, 0, 0, 2 ), text, to );
+    QTextOption to( Qt::AlignVCenter );
+    painter->drawText( textRect, text, to );
 
     if ( status )
     {
