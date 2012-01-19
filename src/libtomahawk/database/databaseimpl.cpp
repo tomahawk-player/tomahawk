@@ -80,6 +80,32 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 
     m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
+
+    if ( qApp->arguments().contains( "--dumpdb" ) )
+    {
+        QFile dump( "dbdump.txt" );
+        if ( !dump.open( QIODevice::WriteOnly | QIODevice::Text ) )
+        {
+            tDebug() << "Couldn't open dbdump.txt for writing!";
+            Q_ASSERT( false );
+        }
+        else
+        {
+            QTextStream dumpout( &dump );
+            query.exec( "SELECT * FROM oplog" );
+            while ( query.next() )
+            {
+                dumpout << "ID: " << query.value( 0 ).toInt() << endl
+                        << "GUID: " << query.value( 2 ).toString() << endl
+                        << "Command: " << query.value( 3 ).toString() << endl
+                        << "Singleton: " << query.value( 4 ).toBool() << endl
+                        << "JSON: " << ( query.value( 5 ).toBool() ? qUncompress( query.value( 6 ).toByteArray() ) : query.value( 6 ).toByteArray() )
+                        << endl << endl << endl;
+            }
+        }
+
+        ::exit( 0 );
+    }
 }
 
 
