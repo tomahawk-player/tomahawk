@@ -32,8 +32,8 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-//#define CHART_URL "http://charts.tomahawk-player.org/"
-#define CHART_URL "http://localhost:8080/"
+#define CHART_URL "http://charts.tomahawk-player.org/"
+//#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
