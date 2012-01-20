@@ -84,6 +84,7 @@ public slots:
 private:
     QString cleanSql( const QString& sql );
     bool updateSchema( int oldVersion );
+    void dumpDatabase();
 
     bool m_ready;
     QSqlDatabase m_db;
