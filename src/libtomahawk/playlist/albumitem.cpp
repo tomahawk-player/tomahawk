@@ -74,6 +74,8 @@ AlbumItem::AlbumItem( const Tomahawk::album_ptr& album, AlbumItem* parent, int r
     }
 
     toberemoved = false;
+
+    connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
 
 
@@ -98,4 +100,6 @@ AlbumItem::AlbumItem( const Tomahawk::artist_ptr& artist, AlbumItem* parent, int
     }
 
     toberemoved = false;
+
+    connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }

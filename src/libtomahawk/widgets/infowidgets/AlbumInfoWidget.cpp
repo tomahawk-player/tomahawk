@@ -87,8 +87,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
     load( album );
 }
 
@@ -192,6 +190,9 @@ AlbumInfoWidget::descriptionType()
 void
 AlbumInfoWidget::load( const album_ptr& album )
 {
+    if ( !m_album.isNull() )
+        disconnect( m_album.data(), SIGNAL( updated() ), this, SLOT( onAlbumCoverUpdated() ) );
+
     m_album = album;
     m_title = album->name();
     m_description = album->artist()->name();
@@ -201,17 +202,8 @@ AlbumInfoWidget::load( const album_ptr& album )
     m_tracksModel->addTracks( album, QModelIndex(), true );
     loadAlbums( true );
 
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["artist"] = album->artist()->name();
-    trackInfo["album"] = album->name();
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = m_infoId;
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-    requestData.customData = QVariantMap();
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    connect( m_album.data(), SIGNAL( updated() ), SLOT( onAlbumCoverUpdated() ) );
+    onAlbumCoverUpdated();
 }
 
 
@@ -246,6 +238,17 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
 
 
 void
+AlbumInfoWidget::onAlbumCoverUpdated()
+{
+    if ( m_album->cover().isNull() )
+        return;
+
+    m_pixmap = QPixmap::fromImage( m_album->cover() );
+    emit pixmapChanged( m_pixmap );
+}
+
+
+void
 AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     QList<Tomahawk::album_ptr> al = albums;
@@ -269,11 +272,6 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
 
     if ( output.canConvert< QVariantMap >() )
     {
-        if ( requestData.type == InfoSystem::InfoAlbumCoverArt && trackInfo["album"] != m_album->name() )
-        {
-            qDebug() << "Returned info was for:" << trackInfo["album"] << "- was looking for:" << m_album->name();
-            return;
-        }
         if ( requestData.type == InfoSystem::InfoArtistReleases && trackInfo["artist"] != m_album->artist()->name() )
         {
             qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_album->artist()->name();
@@ -284,18 +282,6 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
     QVariantMap returnedData = output.value< QVariantMap >();
     switch ( requestData.type )
     {
-        case Tomahawk::InfoSystem::InfoAlbumCoverArt:
-        {
-            const QByteArray ba = returnedData["imgbytes"].toByteArray();
-            if ( ba.length() )
-            {
-                m_pixmap.loadFromData( ba );
-                emit pixmapChanged( m_pixmap );
-            }
-
-            break;
-        }
-
         case Tomahawk::InfoSystem::InfoArtistReleases:
         {
             QStringList albums = returnedData[ "albums" ].toStringList();
@@ -332,13 +318,6 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
         default:
             return;
     }
-}
-
-
-void
-AlbumInfoWidget::infoSystemFinished( QString target )
-{
-    Q_UNUSED( target );
 }
 
 

@@ -97,8 +97,6 @@ public:
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent, bool autoRefetch = false );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
 
-    void getCover( const QModelIndex& index );
-
     ColumnStyle columnStyle() const { return m_columnStyle; }
     void setColumnStyle( ColumnStyle style );
 
@@ -150,7 +148,6 @@ private slots:
     void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
 
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
@@ -174,7 +171,6 @@ private:
     QList<Tomahawk::artist_ptr> m_artistsFilter;
 
     Tomahawk::collection_ptr m_collection;
-    QHash<qlonglong, QPersistentModelIndex> m_coverHash;
     QList<Tomahawk::InfoSystem::InfoStringHash> m_receivedInfoData;
 };
 

@@ -89,8 +89,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
     load( artist );
 }
 
@@ -182,6 +180,9 @@ ArtistInfoWidget::jumpToCurrentTrack()
 void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
+    if ( !m_artist.isNull() )
+        disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
+
     m_artist = artist;
     m_title = artist->name();
     m_albumsModel->addAlbums( artist, QModelIndex(), true );
@@ -199,10 +200,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
-    requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
     requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
     requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -210,6 +207,9 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
     requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
+    onArtistImageUpdated();
 }
 
 
@@ -264,22 +264,6 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
             break;
         }
 
-        case InfoSystem::InfoArtistImages:
-        {
-            const QByteArray ba = returnedData["imgbytes"].toByteArray();
-            if ( ba.length() )
-            {
-                QPixmap pm;
-                pm.loadFromData( ba );
-
-                if ( !pm.isNull() )
-                    m_pixmap = pm.scaledToHeight( 48, Qt::SmoothTransformation );
-
-                emit pixmapChanged( m_pixmap );
-            }
-            break;
-        }
-
         case InfoSystem::InfoArtistSimilars:
         {
             const QStringList artists = returnedData["artists"].toStringList();
@@ -297,9 +281,13 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 
 
 void
-ArtistInfoWidget::infoSystemFinished( QString target )
+ArtistInfoWidget::onArtistImageUpdated()
 {
-    Q_UNUSED( target );
+    if ( m_artist->cover().isNull() )
+        return;
+
+    m_pixmap = QPixmap::fromImage( m_artist->cover() );
+    emit pixmapChanged( m_pixmap );
 }
 
 

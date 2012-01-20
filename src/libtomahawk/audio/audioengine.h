@@ -26,8 +26,6 @@
 #include <phonon/AudioOutput>
 #include <phonon/BackendCapabilities>
 
-#include "infosystem/infosystem.h"
-
 #include "result.h"
 #include "typedefs.h"
 #include "playlistinterface.h"
@@ -87,17 +85,11 @@ public slots:
     void setVolume( int percentage );
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
-    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
-
-    void playlistNextTrackReady();
-
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString caller );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -127,9 +119,12 @@ private slots:
 
     void onAboutToFinish();
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
+    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void timerTriggered( qint64 time );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
+    void onNowPlayingInfoReady();
+    void onPlaylistNextTrackReady();
 
 private:
     void setState( AudioState state );
@@ -154,7 +149,6 @@ private:
     unsigned int m_timeElapsed;
     bool m_expectStop;
     bool m_waitingOnNewTrack;
-    bool m_infoSystemConnected;
 
     mutable QStringList m_supportedMimeTypes;
     AudioState m_state;

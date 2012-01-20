@@ -103,6 +103,8 @@ AudioControls::AudioControls( QWidget* parent )
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
+    m_defaultCover = QPixmap( RESPATH "images/no-album-no-case.png" ).scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+
     connect( &m_phononTickCheckTimer, SIGNAL( timeout() ), SLOT( phononTickCheckTimeout() ) );
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
 
@@ -135,15 +137,6 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ), SLOT( onPlaybackSeeked( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
-
-    m_defaultCover = QPixmap( RESPATH "images/no-album-no-case.png" )
-                     .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-        SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -198,8 +191,6 @@ AudioControls::onVolumeChanged( int volume )
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-
     if ( result.isNull() )
         return;
 
@@ -226,86 +217,62 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     m_noTimeChange = false;
     m_lastSliderCheck = 0;
-
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["artist"] = result->artist()->name();
-    trackInfo["album"] = result->album()->name();
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_acInfoIdentifier;
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-    requestData.customData = QVariantMap();
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-}
-
-
-void
-AudioControls::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-    if ( requestData.caller != s_acInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
-    {
-        return;
-    }
-
-    if ( m_currentTrack.isNull() )
-    {
-        tLog() << "Current track is null when trying to apply fetched cover art";
-        return;
-    }
-
-    if ( !output.canConvert< QVariantMap >() )
-    {
-        tDebug( LOGINFO ) << "Cannot convert fetched art from a QByteArray";
-        return;
-    }
-
-    QVariantMap returnedData = output.value< QVariantMap >();
-    const QByteArray ba = returnedData["imgbytes"].toByteArray();
-    if ( ba.length() )
-    {
-        QPixmap pm;
-        pm.loadFromData( ba );
-
-        if ( pm.isNull() )
-            ui->coverImage->setPixmap( m_defaultCover );
-        else
-            ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-    }
-}
-
-
-void
-AudioControls::infoSystemFinished( QString target )
-{
-    Q_UNUSED( target );
 }
 
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    if ( !m_currentTrack.isNull() )
+    {
+        disconnect( m_currentTrack->album().data(), SIGNAL( updated() ), this, SLOT( onAlbumCoverUpdated() ) );
+        disconnect( m_currentTrack.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+    }
 
     m_currentTrack = result;
+    connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onAlbumCoverUpdated() ) );
+    connect( m_currentTrack.data(), SIGNAL( socialActionsLoaded() ), SLOT( socialActionsLoaded() ) );
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
     ui->ownerLabel->setText( result->friendlySource() );
-    ui->coverImage->setPixmap( m_defaultCover );
 
+    const QString duration = TomahawkUtils::timeToString( result.data()->duration() );
+    ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
-    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result.data()->duration() ) );
+    ui->timeLeftLabel->setFixedWidth( ui->timeLeftLabel->fontMetrics().width( QString( duration.length() + 1, QChar( '0' ) ) ) );
+    ui->timeLeftLabel->setText( "-" + duration );
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
 
+    setAlbumCover();
     result->loadSocialActions();
+}
 
-    connect( result.data(), SIGNAL( socialActionsLoaded() ), SLOT( socialActionsLoaded() ) );
+
+void
+AudioControls::onAlbumCoverUpdated()
+{
+    Album* album = qobject_cast< Album* >( sender() );
+    if ( !album || album != m_currentTrack->album().data() )
+        return;
+
+    setAlbumCover();
+}
+
+
+void
+AudioControls::setAlbumCover()
+{
+    if ( !m_currentTrack->album()->cover().isNull() )
+    {
+        ui->coverImage->setPixmap( QPixmap::fromImage( m_currentTrack->album()->cover() ).scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    }
+    else
+        ui->coverImage->setPixmap( m_defaultCover );
 }
 
 

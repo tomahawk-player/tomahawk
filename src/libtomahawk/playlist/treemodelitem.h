@@ -48,8 +48,6 @@ public:
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
 
-    void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
-
     QString name() const;
     QString artistName() const;
     QString albumName() const;
@@ -60,7 +58,6 @@ public:
     int childCount;
     QPersistentModelIndex index;
     QAbstractItemModel* model;
-    QPixmap cover;
 
     bool toberemoved;
     bool fetchingMore;

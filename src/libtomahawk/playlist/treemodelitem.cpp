@@ -82,6 +82,8 @@ TreeModelItem::TreeModelItem( const Tomahawk::album_ptr& album, TreeModelItem* p
     }
 
     toberemoved = false;
+
+    connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
 
 
@@ -109,6 +111,8 @@ TreeModelItem::TreeModelItem( const Tomahawk::artist_ptr& artist, TreeModelItem*
     }
 
     toberemoved = false;
+
+    connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
 
 

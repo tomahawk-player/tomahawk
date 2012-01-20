@@ -25,7 +25,6 @@
 #include "album.h"
 #include "playlistinterface.h"
 #include "database/databasecommand_allalbums.h"
-#include "infosystem/infosystem.h"
 
 #include "dllmacro.h"
 
@@ -67,8 +66,6 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
 
-    bool getCover( const QModelIndex& index );
-
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
     virtual void setTitle( const QString& title ) { m_title = title; }
@@ -106,9 +103,6 @@ private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onCollectionChanged();
 
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
-
 private:
     QPersistentModelIndex m_currentIndex;
     AlbumItem* m_rootItem;
@@ -118,8 +112,6 @@ private:
     bool m_overwriteOnAdd;
 
     Tomahawk::collection_ptr m_collection;
-
-    QHash<qlonglong, QPersistentModelIndex> m_coverHash;
 };
 
 #endif // ALBUMMODEL_H

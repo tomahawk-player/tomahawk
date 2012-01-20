@@ -29,7 +29,7 @@
 #include "network/servent.h"
 #include "utils/qnr_iodevicestream.h"
 #include "headlesscheck.h"
-
+#include "infosystem/infosystem.h"
 #include "album.h"
 
 #include "utils/logger.h"
@@ -55,7 +55,6 @@ AudioEngine::AudioEngine()
     , m_timeElapsed( 0 )
     , m_expectStop( false )
     , m_waitingOnNewTrack( false )
-    , m_infoSystemConnected( false )
     , m_state( Stopped )
 {
     s_instance = this;
@@ -73,7 +72,7 @@ AudioEngine::AudioEngine()
     connect( m_mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( m_mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
-    connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
+    connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
     onVolumeChanged( m_audioOutput->volume() );
 
@@ -324,74 +323,39 @@ AudioEngine::sendWaitingNotification() const
 void
 AudioEngine::sendNowPlayingNotification()
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-
-    if ( ! m_infoSystemConnected )
+    if ( m_currentTrack->album().isNull() || m_currentTrack->album()->infoLoaded() )
+        onNowPlayingInfoReady();
+    else
     {
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
-        m_infoSystemConnected = true;
+        connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onNowPlayingInfoReady() ), Qt::UniqueConnection );
+        m_currentTrack->album()->cover();
     }
-
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["artist"] = m_currentTrack->album()->artist()->name();
-    trackInfo["album"] = m_currentTrack->album()->name();
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_aeInfoIdentifier;
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-    requestData.customData = QVariantMap();
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
 void
-AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+AudioEngine::onNowPlayingInfoReady()
 {
-    if ( requestData.caller != s_aeInfoIdentifier ||
-         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
-    {
-        return;
-    }
-
     if ( m_currentTrack.isNull() ||
          m_currentTrack->track().isNull() ||
          m_currentTrack->artist().isNull() )
+        return;
+
+    if ( !m_currentTrack->album().isNull() && sender() && m_currentTrack->album().data() != sender() )
         return;
 
     QVariantMap playInfo;
     playInfo["message"] = tr( "Tomahawk is playing \"%1\" by %2%3." )
                         .arg( m_currentTrack->track() )
                         .arg( m_currentTrack->artist()->name() )
-                        .arg( m_currentTrack->album().isNull() ? QString() : tr( " on album %1" ).arg( m_currentTrack->album()->name() ) );
-    if ( !output.isNull() && output.isValid() )
-    {
-        QVariantMap returnedData = output.value< QVariantMap >();
-        const QByteArray ba = returnedData["imgbytes"].toByteArray();
-        if ( ba.length() )
-        {
-            QPixmap pm;
-            pm.loadFromData( ba );
-            playInfo["image"] = QVariant( pm.toImage() );
-        }
-    }
+                        .arg( m_currentTrack->album().isNull() ? QString() : QString( " %1" ).arg( tr( "on album %1" ).arg( m_currentTrack->album()->name() ) ) );
+
+    if ( !m_currentTrack->album().isNull() )
+        playInfo["image"] = QVariant( QPixmap::fromImage( m_currentTrack->album()->cover() ) );
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
         QVariant::fromValue< QVariantMap >( playInfo ) );
-}
-
-
-void
-AudioEngine::infoSystemFinished( QString caller )
-{
-    Q_UNUSED( caller );
 }
 
 
@@ -578,7 +542,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
 
 void
-AudioEngine::playlistNextTrackReady()
+AudioEngine::onPlaylistNextTrackReady()
 {
     // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
     if ( m_playlist && m_playlist->latchMode() == PlaylistInterface::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
@@ -705,7 +669,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
     m_playlist = playlist;
 
     if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
-        connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+        connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( onPlaylistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
 }

@@ -25,7 +25,6 @@
 
 #include "result.h"
 #include "playlistinterface.h"
-#include "infosystem/infosystem.h"
 #include "query.h"
 
 class QDropEvent;
@@ -80,14 +79,15 @@ private slots:
     void onTrackClicked();
     void onLoveButtonClicked( bool );
 
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
+    void onAlbumCoverUpdated();
 
     void droppedTracks( QList<Tomahawk::query_ptr> );
 
     void socialActionsLoaded();
 
 private:
+    void setAlbumCover();
+
     Ui::AudioControls *ui;
 
     QPixmap m_defaultCover;

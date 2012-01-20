@@ -21,9 +21,11 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
+#include <QImage>
 
 #include "typedefs.h"
 #include "dllmacro.h"
+#include "infosystem/infosystem.h"
 
 namespace Tomahawk
 {
@@ -35,22 +37,26 @@ Q_OBJECT
 public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
-    explicit Artist( unsigned int id, const QString& name );
 
-    explicit Artist();
+    explicit Artist( unsigned int id, const QString& name );
     virtual ~Artist();
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
+    QImage cover() const;
+    bool infoLoaded() const { return m_infoLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void updated();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 private:
     Q_DISABLE_COPY( Artist )
@@ -58,6 +64,9 @@ private:
     unsigned int m_id;
     QString m_name;
     QString m_sortname;
+    QImage m_cover;
+    bool m_infoLoaded;
+    mutable QString m_uuid;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

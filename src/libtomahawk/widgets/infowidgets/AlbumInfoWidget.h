@@ -94,9 +94,9 @@ protected:
 private slots:
     void loadAlbums( bool autoRefetch = false );
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
+    void onAlbumCoverUpdated();
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
 
     void onModeToggle();
     void onAlbumsModeToggle();

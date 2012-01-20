@@ -89,7 +89,19 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
     }
 
-    QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
+    QPixmap cover;
+    if ( !item->album().isNull() )
+    {
+        cover = QPixmap::fromImage( item->album()->cover() );
+    }
+    else if ( !item->artist().isNull() )
+    {
+        cover = QPixmap::fromImage( item->artist()->cover() );
+    }
+
+    if ( cover.isNull() )
+        cover = m_defaultCover;
+
     QRect r = option.rect.adjusted( 6, 5, -6, -41 );
 
     if ( option.state & QStyle::State_Selected )

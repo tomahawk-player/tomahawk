@@ -76,9 +76,6 @@ private slots:
 
     void onFilterChanged( const QString& filter );
 
-    void onViewChanged();
-    void onScrollTimeout();
-
 private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
@@ -88,8 +85,6 @@ private:
 
     bool m_inited;
     bool m_autoFitItems;
-
-    QTimer m_timer;
 };
 
 #endif // ALBUMVIEW_H
