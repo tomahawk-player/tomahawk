@@ -25,6 +25,8 @@
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
+#include "database/databasecommand_loadsocialactions.h"
+#include "database/databasecommand_socialaction.h"
 #include "album.h"
 #include "collection.h"
 #include "pipeline.h"
@@ -71,6 +73,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_artist( artist )
     , m_album( album )
     , m_track( track )
+    , m_socialActionsLoaded( false )
 {
     init();
 
@@ -474,6 +477,97 @@ Query::playedBy() const
 {
     return m_playedBy;
 }
+
+
+void
+Query::loadSocialActions()
+{
+    m_socialActionsLoaded = true;
+    query_ptr q = m_ownRef.toStrongRef();
+
+    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( q );
+    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
+
+void
+Query::onSocialActionsLoaded()
+{
+    parseSocialActions();
+
+    emit socialActionsLoaded();
+}
+
+
+void
+Query::setAllSocialActions( const QList< SocialAction >& socialActions )
+{
+    m_allSocialActions = socialActions;
+}
+
+
+QList< SocialAction >
+Query::allSocialActions()
+{
+    return m_allSocialActions;
+}
+
+
+void
+Query::parseSocialActions()
+{
+    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
+    unsigned int highestTimestamp = 0;
+
+    while ( it.hasNext() )
+    {
+        Tomahawk::SocialAction socialAction;
+        socialAction = it.next();
+        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
+        {
+            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
+        }
+    }
+}
+
+
+bool
+Query::loved()
+{
+    if ( m_socialActionsLoaded )
+    {
+        return m_currentSocialActions[ "Love" ].toBool();
+    }
+    else
+    {
+        loadSocialActions();
+    }
+}
+
+
+void
+Query::setLoved( bool loved )
+{
+    query_ptr q = m_ownRef.toStrongRef();
+    if ( q )
+    {
+        m_currentSocialActions[ "Loved" ] = loved;
+
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["title"] = track();
+        trackInfo["artist"] = artist();
+        trackInfo["album"] = album();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            id(), Tomahawk::InfoSystem::InfoLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
+}
+
 
 int
 Query::levenshtein( const QString& source, const QString& target )

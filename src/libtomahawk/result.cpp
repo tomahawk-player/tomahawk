@@ -20,11 +20,11 @@
 
 #include "album.h"
 #include "collection.h"
+#include "source.h"
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"
-#include "database/databasecommand_loadsocialactions.h"
 
 #include "utils/logger.h"
 
@@ -164,15 +164,19 @@ Result::toString() const
 
 
 Tomahawk::query_ptr
-Result::toQuery() const
+Result::toQuery()
 {
-    Tomahawk::query_ptr query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
-    QList<Tomahawk::result_ptr> rl;
-    rl << Result::get( m_url );
+    if ( m_query.isNull() )
+    {
+        m_query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
+        QList<Tomahawk::result_ptr> rl;
+        rl << Result::get( m_url );
 
-    query->addResults( rl );
-    query->setResolveFinished( true );
-    return query;
+        m_query->addResults( rl );
+        m_query->setResolveFinished( true );
+    }
+
+    return m_query;
 }
 
 
@@ -197,55 +201,6 @@ void
 Result::onOffline()
 {
     emit statusChanged();
-}
-
-
-void
-Result::loadSocialActions()
-{
-    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( this );
-    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-}
-
-
-void Result::onSocialActionsLoaded()
-{
-    parseSocialActions();
-
-    emit socialActionsLoaded();
-}
-
-
-void
-Result::setAllSocialActions(QList< SocialAction > socialActions)
-{
-    m_allSocialActions = socialActions;
-}
-
-
-QList< SocialAction >
-Result::allSocialActions()
-{
-    return m_allSocialActions;
-}
-
-
-void
-Result::parseSocialActions()
-{
-    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
-    unsigned int highestTimestamp = 0;
-
-    while ( it.hasNext() )
-    {
-        Tomahawk::SocialAction socialAction;
-        socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
-        {
-            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
-        }
-    }
 }
 
 

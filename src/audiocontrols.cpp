@@ -26,7 +26,6 @@
 #include "audio/audioengine.h"
 #include "playlist/playlistview.h"
 #include "database/database.h"
-#include "database/databasecommand_socialaction.h"
 #include "widgets/imagebutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -36,8 +35,6 @@
 #include "viewmanager.h"
 
 using namespace Tomahawk;
-
-static QString s_acInfoIdentifier = QString( "AUDIOCONTROLS" );
 
 
 AudioControls::AudioControls( QWidget* parent )
@@ -226,12 +223,12 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     if ( !m_currentTrack.isNull() )
     {
         disconnect( m_currentTrack->album().data(), SIGNAL( updated() ), this, SLOT( onAlbumCoverUpdated() ) );
-        disconnect( m_currentTrack.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+        disconnect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
     }
 
     m_currentTrack = result;
     connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onAlbumCoverUpdated() ) );
-    connect( m_currentTrack.data(), SIGNAL( socialActionsLoaded() ), SLOT( socialActionsLoaded() ) );
+    connect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
@@ -249,7 +246,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setVisible( true );
 
     setAlbumCover();
-    result->loadSocialActions();
+    setSocialActions();
 }
 
 
@@ -277,23 +274,28 @@ AudioControls::setAlbumCover()
 
 
 void
-AudioControls::socialActionsLoaded()
+AudioControls::onSocialActionsLoaded()
 {
-    Result* r = qobject_cast< Result* >( sender() );
-    Q_ASSERT( r );
+    Query* query = qobject_cast< Query* >( sender() );
+    if ( !query || query != m_currentTrack->toQuery().data() )
+        return;
 
-    if ( m_currentTrack.data() == r )
+    setSocialActions();
+}
+
+
+void
+AudioControls::setSocialActions()
+{
+    if ( m_currentTrack->toQuery()->loved() )
     {
-        if ( m_currentTrack->loved() )
-        {
-            ui->loveButton->setPixmap( RESPATH "images/loved.png" );
-            ui->loveButton->setChecked( true );
-        }
-        else
-        {
-            ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
-            ui->loveButton->setChecked( false );
-        }
+        ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+        ui->loveButton->setChecked( true );
+    }
+    else
+    {
+        ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+        ui->loveButton->setChecked( false );
     }
 }
 
@@ -583,30 +585,17 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 void
 AudioControls::onLoveButtonClicked( bool checked )
 {
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["title"] = m_currentTrack->track();
-    trackInfo["artist"] = m_currentTrack->artist()->name();
-    trackInfo["album"] = m_currentTrack->album()->name();
-
     if ( checked )
     {
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
-
-        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "true") );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+
+        m_currentTrack->toQuery()->setLoved( true );
     }
     else
     {
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoUnLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
-
-        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+
+        m_currentTrack->toQuery()->setLoved( false );
     }
 }
 

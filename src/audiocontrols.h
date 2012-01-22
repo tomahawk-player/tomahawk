@@ -83,10 +83,11 @@ private slots:
 
     void droppedTracks( QList<Tomahawk::query_ptr> );
 
-    void socialActionsLoaded();
+    void onSocialActionsLoaded();
 
 private:
     void setAlbumCover();
+    void setSocialActions();
 
     Ui::AudioControls *ui;
 

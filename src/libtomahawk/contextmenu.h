@@ -38,7 +38,8 @@ public:
        ActionPlay =         1,
        ActionQueue =        2,
        ActionDelete =       4,
-       ActionCopyLink =     8
+       ActionCopyLink =     8,
+       ActionLove =         16
     };
 
     explicit ContextMenu( QWidget* parent = 0 );
@@ -68,9 +69,13 @@ private slots:
     void copyLink();
     void addToQueue();
 
+    void onSocialActionsLoaded();
+
 private:
     QSignalMapper* m_sigmap;
     int m_supportedActions;
+
+    QAction* m_loveAction;
 
     QList<Tomahawk::query_ptr> m_queries;
     QList<Tomahawk::artist_ptr> m_artists;

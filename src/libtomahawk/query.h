@@ -102,6 +102,13 @@ public:
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
 
+    void setLoved( bool loved );
+    bool loved();
+
+    void loadSocialActions();
+    QList< Tomahawk::SocialAction > allSocialActions();
+    void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
+
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
 
@@ -116,6 +123,9 @@ signals:
     void solvedStateChanged( bool state );
     void playableStateChanged( bool state );
     void resolvingFinished( bool hasResults );
+
+    // emitted when social actions are loaded
+    void socialActionsLoaded();
 
 public slots:
     /// (indirectly) called by resolver plugins when results are found
@@ -134,6 +144,7 @@ public slots:
 private slots:
     void onResultStatusChanged();
     void refreshResults();
+    void onSocialActionsLoaded();
 
 private:
     Query();
@@ -148,6 +159,8 @@ private:
 
     void updateSortNames();
     static int levenshtein( const QString& source, const QString& target );
+
+    void parseSocialActions();
 
     QList< Tomahawk::artist_ptr > m_artists;
     QList< Tomahawk::album_ptr > m_albums;
@@ -176,6 +189,10 @@ private:
     mutable QMutex m_mutex;
 
     QWeakPointer< Tomahawk::Query > m_ownRef;
+
+    bool m_socialActionsLoaded;
+    QHash< QString, QVariant > m_currentSocialActions;
+    QList< SocialAction > m_allSocialActions;
 };
 
 }; //ns

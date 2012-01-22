@@ -39,13 +39,11 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    bool autoCreate = false;
-    int artid = dbi->artistId( m_artist, autoCreate );
+    int artid = dbi->artistId( m_artist, false );
     if( artid < 1 )
         return;
 
-    autoCreate = false; // artistId overwrites autoCreate (reference)
-    int trkid = dbi->trackId( artid, m_track, autoCreate );
+    int trkid = dbi->trackId( artid, m_track, false );
     if( trkid < 1 )
         return;
 
@@ -72,6 +70,6 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
         allSocialActions.append( action );
     }
 
-    m_result->setAllSocialActions( allSocialActions );
+    m_query->setAllSocialActions( allSocialActions );
 }
 

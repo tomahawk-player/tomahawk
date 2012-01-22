@@ -32,11 +32,12 @@ using namespace Tomahawk;
 
 ContextMenu::ContextMenu( QWidget* parent )
     : QMenu( parent )
+    , m_loveAction( 0 )
 {
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove;
 }
 
 
@@ -59,7 +60,7 @@ ContextMenu::clear()
 unsigned int
 ContextMenu::itemCount() const
 {
-   return  m_queries.count() + m_artists.count() + m_albums.count();
+   return m_queries.count() + m_artists.count() + m_albums.count();
 }
 
 
@@ -81,8 +82,17 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     addSeparator();
 
+    if ( m_supportedActions & ActionLove && itemCount() == 1 )
+    {
+        m_loveAction = addAction( tr( "&Love" ) );
+        m_sigmap->setMapping( m_loveAction, ActionLove );
+
+        connect( queries.first().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
+        onSocialActionsLoaded();
+    }
+
     if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Copy Track &Link" ) ), ActionCopyLink );
+        m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
 
     addSeparator();
 
@@ -197,6 +207,10 @@ ContextMenu::onTriggered( int action )
             copyLink();
             break;
 
+        case ActionLove:
+            m_queries.first()->setLoved( !m_queries.first()->loved() );
+            break;
+
         default:
             emit triggered( action );
     }
@@ -230,5 +244,21 @@ ContextMenu::copyLink()
     if ( m_queries.count() )
     {
         GlobalActionManager::instance()->copyToClipboard( m_queries.first() );
+    }
+}
+
+
+void
+ContextMenu::onSocialActionsLoaded()
+{
+    if ( m_queries.first()->loved() )
+    {
+        m_loveAction->setText( tr( "Un-&Love" ) );
+        m_loveAction->setIcon( QIcon( RESPATH "images/not-loved.png" ) );
+    }
+    else
+    {
+        m_loveAction->setText( tr( "&Love" ) );
+        m_loveAction->setIcon( QIcon( RESPATH "images/loved.png" ) );
     }
 }
