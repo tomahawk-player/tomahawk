@@ -543,6 +543,8 @@ Query::loved()
     {
         loadSocialActions();
     }
+
+    return false;
 }
 
 
