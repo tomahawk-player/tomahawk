@@ -208,7 +208,7 @@ DatabaseImpl::file( int fid )
     Tomahawk::result_ptr r;
     TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT url, mtime, size, md5, mimetype, duration, bitrate, "
-                         "file_join.artist, file_join.album, file_join.track, file_join.composer "
+                         "file_join.artist, file_join.album, file_join.track, file_join.composer, "
                          "(select name from artist where id = file_join.artist) as artname, "
                          "(select name from album  where id = file_join.album)  as albname, "
                          "(select name from track  where id = file_join.track)  as trkname, "
