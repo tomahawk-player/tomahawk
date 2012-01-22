@@ -102,14 +102,6 @@ set( libGuiSources
 
     sip/SipModel.cpp
 
-    taghandlers/tag.cpp
-    taghandlers/apetag.cpp
-    taghandlers/asftag.cpp
-    taghandlers/id3v1tag.cpp
-    taghandlers/id3v2tag.cpp
-    taghandlers/mp4tag.cpp
-    taghandlers/oggtag.cpp
-
     utils/widgetdragfilter.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
@@ -406,6 +398,14 @@ set( libSources
     playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
+
+    taghandlers/tag.cpp
+    taghandlers/apetag.cpp
+    taghandlers/asftag.cpp
+    taghandlers/id3v1tag.cpp
+    taghandlers/id3v2tag.cpp
+    taghandlers/mp4tag.cpp
+    taghandlers/oggtag.cpp
 
     utils/tomahawkutils.cpp
     utils/logger.cpp
