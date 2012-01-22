@@ -179,7 +179,8 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Composer:
-                return query->results().first()->composer()->name();
+                if ( !query->results().first()->composer().isNull() )
+                    return query->results().first()->composer()->name();
                 break;
 
             case Duration:
@@ -187,9 +188,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Bitrate:
-                if ( query->results().first()->bitrate() == 0 )
-                    return QString();
-                else
+                if ( query->results().first()->bitrate() > 0 )
                     return query->results().first()->bitrate();
                 break;
 
@@ -198,9 +197,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Year:
-                if ( query->results().first()->year() == 0 )
-                    return QString();
-                else
+                if ( query->results().first()->year() != 0 )
                     return query->results().first()->year();
                 break;
 
@@ -218,9 +215,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
             case AlbumPos:
                 QString tPos;
-                if ( query->results().first()->albumpos() == 0 )
-                    return QString();
-                else
+                if ( query->results().first()->albumpos() != 0 )
                 {
                     tPos = QString::number( query->results().first()->albumpos() );
                     if( query->results().first()->discnumber() == 0 )
