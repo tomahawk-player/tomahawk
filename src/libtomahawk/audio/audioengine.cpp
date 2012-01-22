@@ -351,7 +351,7 @@ AudioEngine::onNowPlayingInfoReady()
                         .arg( m_currentTrack->album().isNull() ? QString() : QString( " %1" ).arg( tr( "on album %1" ).arg( m_currentTrack->album()->name() ) ) );
 
     if ( !m_currentTrack->album().isNull() )
-        playInfo["image"] = QVariant( QPixmap::fromImage( m_currentTrack->album()->cover() ) );
+        playInfo["image"] = QVariant( QPixmap().loadFromData( m_currentTrack->album()->cover() ) );
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
@@ -551,7 +551,7 @@ AudioEngine::onPlaylistNextTrackReady()
         loadNextTrack();
         return;
     }
-    
+
     if ( !m_waitingOnNewTrack )
         return;
 

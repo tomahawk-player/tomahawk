@@ -243,7 +243,7 @@ AlbumInfoWidget::onAlbumCoverUpdated()
     if ( m_album->cover().isNull() )
         return;
 
-    m_pixmap = QPixmap::fromImage( m_album->cover() );
+    m_pixmap.loadFromData( m_album->cover() );
     emit pixmapChanged( m_pixmap );
 }
 

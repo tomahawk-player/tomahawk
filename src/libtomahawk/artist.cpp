@@ -89,7 +89,7 @@ Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 }
 
 
-QImage
+QByteArray
 Artist::cover() const
 {
     if ( !m_infoLoaded )
@@ -128,7 +128,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
-            m_cover.loadFromData( ba );
+            m_cover = ba;
         }
     }
 

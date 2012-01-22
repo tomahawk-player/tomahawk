@@ -85,7 +85,7 @@ Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
     Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( playlistInterface().data() );
     if ( api )
         api->addQueries( tracks );
-    
+
     emit tracksAdded( tracks );
 }
 
@@ -97,7 +97,7 @@ Album::artist() const
 }
 
 
-QImage
+QByteArray
 Album::cover() const
 {
     if ( !m_infoLoaded )
@@ -137,7 +137,7 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
-            m_cover.loadFromData( ba );
+            m_cover = ba;
         }
     }
 
@@ -152,6 +152,6 @@ Album::playlistInterface()
     {
         m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this ) );
     }
-    
+
     return m_playlistInterface;
 }

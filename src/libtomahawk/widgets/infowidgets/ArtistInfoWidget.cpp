@@ -286,7 +286,7 @@ ArtistInfoWidget::onArtistImageUpdated()
     if ( m_artist->cover().isNull() )
         return;
 
-    m_pixmap = QPixmap::fromImage( m_artist->cover() );
+    m_pixmap.loadFromData( m_artist->cover() );
     emit pixmapChanged( m_pixmap );
 }
 

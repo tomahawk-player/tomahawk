@@ -96,7 +96,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
     m_phononTickCheckTimer.setSingleShot( true );
-    
+
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
@@ -203,7 +203,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
 
     m_phononTickCheckTimer.stop();
-    
+
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
@@ -266,7 +266,9 @@ AudioControls::setAlbumCover()
 {
     if ( !m_currentTrack->album()->cover().isNull() )
     {
-        ui->coverImage->setPixmap( QPixmap::fromImage( m_currentTrack->album()->cover() ).scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+        QPixmap cover;
+        cover.loadFromData( m_currentTrack->album()->cover() );
+        ui->coverImage->setPixmap( cover.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
     }
     else
         ui->coverImage->setPixmap( m_defaultCover );
@@ -365,12 +367,12 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
         m_sliderTimeLine.stop();
         return;
     }
-    
+
     ui->seekSlider->blockSignals( true );
 
     if ( sender() != &m_phononTickCheckTimer )
         m_phononTickCheckTimer.start( 1000 );
-    
+
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );

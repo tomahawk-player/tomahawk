@@ -21,7 +21,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
-#include <QImage>
 
 #include "typedefs.h"
 #include "dllmacro.h"
@@ -44,7 +43,7 @@ public:
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
-    QImage cover() const;
+    QByteArray cover() const;
     bool infoLoaded() const { return m_infoLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
@@ -64,7 +63,7 @@ private:
     unsigned int m_id;
     QString m_name;
     QString m_sortname;
-    QImage m_cover;
+    QByteArray m_cover;
     bool m_infoLoaded;
     mutable QString m_uuid;
 

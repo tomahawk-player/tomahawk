@@ -92,11 +92,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     QPixmap cover;
     if ( !item->album().isNull() )
     {
-        cover = QPixmap::fromImage( item->album()->cover() );
+        cover.loadFromData( item->album()->cover() );
     }
     else if ( !item->artist().isNull() )
     {
-        cover = QPixmap::fromImage( item->artist()->cover() );
+        cover.loadFromData( item->artist()->cover() );
     }
 
     if ( cover.isNull() )
