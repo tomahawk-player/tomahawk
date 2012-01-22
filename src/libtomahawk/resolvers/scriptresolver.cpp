@@ -251,6 +251,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
             rp->setYear( m.value( "year ").toUInt() );
+            rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
             rp->setMimetype( m.value( "mimetype" ).toString() );
             if ( rp->mimetype().isEmpty() )
