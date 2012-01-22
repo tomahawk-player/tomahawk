@@ -97,16 +97,6 @@ set( libGuiSources
     playlist/topbar/searchbutton.cpp
 
     ExternalResolverGui.cpp
-    network/bufferiodevice.cpp
-    network/msgprocessor.cpp
-    network/streamconnection.cpp
-    network/dbsyncconnection.cpp
-    network/remotecollection.cpp
-    network/portfwdthread.cpp
-    network/servent.cpp
-    network/connection.cpp
-    network/controlconnection.cpp
-    
     resolvers/scriptresolver.cpp
     resolvers/qtscriptresolver.cpp
 
@@ -555,7 +545,7 @@ set( libHeaders
 
 set( libHeaders_NoMOC
     infosystem/infoplugins/unix/imageconverter.h
-    
+
     taghandlers/tag.h
     taghandlers/apetag.h
     taghandlers/asftag.h
