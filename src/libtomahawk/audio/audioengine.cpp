@@ -351,7 +351,11 @@ AudioEngine::onNowPlayingInfoReady()
                         .arg( m_currentTrack->album().isNull() ? QString() : QString( " %1" ).arg( tr( "on album %1" ).arg( m_currentTrack->album()->name() ) ) );
 
     if ( !m_currentTrack->album().isNull() )
-        playInfo["image"] = QVariant( QPixmap().loadFromData( m_currentTrack->album()->cover() ) );
+    {
+        QPixmap cover;
+        cover.loadFromData( m_currentTrack->album()->cover() );
+        playInfo["image"] = QVariant( cover );
+    }
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
