@@ -27,7 +27,7 @@ TrackHeader::TrackHeader( TrackView* parent )
     , m_parent( parent )
 {
     QList< double > columnWeights;
-    columnWeights << 0.18 << 0.18 << 0.17 << 0.17 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.10; // << 0.05;
+    columnWeights << 0.16 << 0.16 << 0.14 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
 
     setDefaultColumnWeights( columnWeights );
 }
