@@ -243,6 +243,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
             rp->setArtist( ap );
             rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
+            rp->setAlbumPos( m.value( "albumpos" ).toInt() );
             rp->setTrack( m.value( "track" ).toString() );
             rp->setDuration( m.value( "duration" ).toUInt() );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
