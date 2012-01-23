@@ -112,6 +112,8 @@ signals:
 
     void error( AudioEngine::AudioErrorCode errorCode );
 
+    void sendWaitingNotification();
+
 private slots:
     bool loadTrack( const Tomahawk::result_ptr& result );
     void loadPreviousTrack();
@@ -126,13 +128,14 @@ private slots:
     void onNowPlayingInfoReady();
     void onPlaylistNextTrackReady();
 
+    void sendWaitingNotificationSlot() const;
+
 private:
     void setState( AudioState state );
 
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
 
-    void sendWaitingNotification() const;
     void sendNowPlayingNotification();
 
     QSharedPointer<QIODevice> m_input;

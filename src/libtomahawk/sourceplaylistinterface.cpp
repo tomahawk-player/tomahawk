@@ -61,15 +61,15 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
+    if ( !sourceValid() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
-    else if ( !m_gotNextItem )
+    else if ( !hasNextItem() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " This song was already fetched";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " This song was already fetched or the source isn't playing anything";
         return Tomahawk::result_ptr();
     }
 
@@ -87,12 +87,22 @@ SourcePlaylistInterface::currentItem() const
 
 
 bool
-SourcePlaylistInterface::hasNextItem()
+SourcePlaylistInterface::sourceValid()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() || m_source.data()->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source.data()->currentTrack().isNull() )
         return false;
 
+    return true;
+}
+
+
+bool
+SourcePlaylistInterface::hasNextItem()
+{
+    if ( !sourceValid() )
+        return false;
+    
     return m_gotNextItem;
 }
 
@@ -115,10 +125,10 @@ SourcePlaylistInterface::source() const
 void
 SourcePlaylistInterface::reset()
 {
-    if ( !m_currentItem.isNull() )
-        m_gotNextItem = true;
-    else
+    if ( m_currentItem.isNull() )
         m_gotNextItem = false;
+    else
+        m_gotNextItem = true;
 }
 
 
@@ -128,7 +138,7 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
-    m_gotNextItem = true;
+    m_gotNextItem = false;
 }
 
 
@@ -137,5 +147,8 @@ SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
     if ( hasResults )
+    {
+        m_gotNextItem = true;
         emit nextTrackReady();
+    }
 }

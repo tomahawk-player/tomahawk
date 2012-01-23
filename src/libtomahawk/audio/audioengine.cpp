@@ -74,6 +74,8 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
+    connect( this, SIGNAL( sendWaitingNotification() ), SLOT( sendWaitingNotificationSlot() ), Qt::QueuedConnection );
+    
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -178,9 +180,7 @@ AudioEngine::stop()
     map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
 
     if ( m_waitingOnNewTrack )
-    {
-        sendWaitingNotification();
-    }
+        emit sendWaitingNotification();
     else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
         QVariantMap stopInfo;
@@ -310,8 +310,13 @@ AudioEngine::mute()
 
 
 void
-AudioEngine::sendWaitingNotification() const
+AudioEngine::sendWaitingNotificationSlot() const
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    //since it's async, after this is triggered our result could come in, so don't show the popup in that case
+    if ( !m_playlist.isNull() && m_playlist->hasNextItem() )
+        return;
+    
     QVariantMap retryInfo;
     retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
@@ -538,7 +543,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     {
         m_waitingOnNewTrack = true;
         if ( isStopped() )
-            sendWaitingNotification();
+            emit sendWaitingNotification();
         else
             stop();
     }

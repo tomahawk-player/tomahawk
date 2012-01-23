@@ -44,6 +44,7 @@ public:
     virtual int unfilteredTrackCount() const { return 1; }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual bool sourceValid();
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr currentItem() const;
@@ -54,6 +55,8 @@ public:
     virtual PlaylistInterface::RetryMode retryMode() const { return Retry; }
     virtual quint32 retryInterval() const { return 5000; }
 
+    virtual void setLatchMode( PlaylistInterface::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
+    
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 

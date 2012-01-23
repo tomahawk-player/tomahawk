@@ -89,6 +89,7 @@ signals:
     void shuffleModeChanged( bool enabled );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
+    void latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode );
     void nextTrackReady();
 
 protected:
