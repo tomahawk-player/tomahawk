@@ -54,8 +54,6 @@ BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* mode
 void
 BreadcrumbButton::paintEvent( QPaintEvent* )
 {
-    return;
-
     QPainter p( this );
     QStyleOption opt;
     opt.initFrom( this );

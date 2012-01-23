@@ -202,8 +202,9 @@ int
 TreeModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
+
     if ( m_columnStyle == AllColumns )
-        return 7;
+        return 8;
     else if ( m_columnStyle == TrackOnly )
         return 1;
 
@@ -296,6 +297,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
             case Bitrate:
                 if ( result->bitrate() > 0 )
                     return result->bitrate();
+                break;
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
@@ -303,6 +305,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
             case Year:
                 if ( result->year() != 0 )
                     return result->year();
+                break;
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( result->size() );
@@ -316,6 +319,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
             case Composer:
                 if ( !result->composer().isNull() )
                     return result->composer()->name();
+                break;
 
             default:
                 return QVariant();

@@ -27,7 +27,7 @@ TreeHeader::TreeHeader( ArtistView* parent )
     , m_parent( parent )
 {
     QList< double > columnWeights;
-    columnWeights << 0.50 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.12;
+    columnWeights << 0.42 << 0.12 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.11;
 
     setDefaultColumnWeights( columnWeights );
 }
