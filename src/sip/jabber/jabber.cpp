@@ -52,6 +52,7 @@
 #include <utils/tomahawkutilsgui.h>
 #include "utils/logger.h"
 
+using namespace Jreen;
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -232,7 +233,7 @@ JabberPlugin::connectPlugin( bool startup )
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
     if ( m_client->connection() )
-        connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
+        connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
