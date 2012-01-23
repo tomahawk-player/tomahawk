@@ -30,13 +30,12 @@ class HeaderBreadCrumb : public BreadcrumbBar
 {
     Q_OBJECT
     public:
-        HeaderBreadCrumb(BreadcrumbButtonFactory *buttonFactory, QWidget *parent = 0);
-        HeaderBreadCrumb(QWidget *parent = 0);
+        HeaderBreadCrumb( BreadcrumbButtonFactory* buttonFactory, QWidget* parent = 0 );
+        HeaderBreadCrumb( QWidget* parent = 0 );
         ~HeaderBreadCrumb();
 
     protected:
-
-        virtual void paintEvent(QPaintEvent *event);
+        virtual void paintEvent( QPaintEvent* event );
 };
 
 #endif

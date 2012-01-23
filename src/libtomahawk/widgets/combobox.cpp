@@ -19,6 +19,8 @@
 #include "combobox.h"
 
 #include "utils/stylehelper.h"
+#include "utils/tomahawkutilsgui.h"
+#include "utils/logger.h"
 
 #include <QStyle>
 #include <QTextOption>
@@ -37,6 +39,13 @@ ComboBox::~ComboBox()
 }
 
 
+QSize
+ComboBox::sizeHint() const
+{
+    return QComboBox::sizeHint() + QSize( 8, 0 );
+}
+
+
 void
 ComboBox::paintEvent( QPaintEvent* )
 {
@@ -45,24 +54,26 @@ ComboBox::paintEvent( QPaintEvent* )
     QStyleOptionComboBox cb;
     initStyleOption( &cb );
     QRect r = cb.rect;
+    r.setHeight( TomahawkUtils::headerHeight() );
 
     StyleHelper::horizontalHeader( &p, r );
 
     if ( cb.state & QStyle::State_MouseOver )
     {
+        p.save();
         QRect highlightRect( r );
         QSize shrink( 3, 4 );
         QSize hS( highlightRect.size() );
         hS -= shrink;
         highlightRect.setSize( hS );
         highlightRect.translate( 0, 2 );
-        p.save();
         p.setRenderHint( QPainter::Antialiasing );
         p.setBrush( StyleHelper::headerHighlightColor() );
         p.drawRoundedRect( highlightRect, 10.0, 10.0 );
         p.restore();
     }
 
+    p.save();
     QTextOption to( Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
     p.setPen( Qt::white );
@@ -78,4 +89,5 @@ ComboBox::paintEvent( QPaintEvent* )
     QStyleOption arrowOpt = cb;
     arrowOpt.rect = arrowRect;
     StyleHelper::drawArrow( QStyle::PE_IndicatorArrowDown, &p, &arrowOpt );
+    p.restore();
 }
