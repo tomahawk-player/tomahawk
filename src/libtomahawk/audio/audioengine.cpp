@@ -18,8 +18,8 @@
 
 #include "audioengine.h"
 
-#include <QUrl>
-#include <QNetworkReply>
+#include <QtCore/QUrl>
+#include <QtNetwork/QNetworkReply>
 
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
@@ -352,9 +352,9 @@ AudioEngine::onNowPlayingInfoReady()
 
     if ( !m_currentTrack->album().isNull() )
     {
-        QPixmap cover;
+        QImage cover;
         cover.loadFromData( m_currentTrack->album()->cover() );
-        playInfo["image"] = QVariant( cover.toImage() );
+        playInfo["image"] = QVariant( cover );
     }
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
