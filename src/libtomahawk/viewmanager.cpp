@@ -140,13 +140,16 @@ ViewManager::createPageForPlaylist( const playlist_ptr& pl )
     return view;
 }
 
+
 playlist_ptr
 ViewManager::playlistForPage( ViewPage* page ) const
 {
     playlist_ptr p;
     if ( dynamic_cast< PlaylistView* >( page ) && dynamic_cast< PlaylistView* >( page )->playlistModel() &&
         !dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist().isNull() )
+    {
         p = dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist();
+    }
     else if ( dynamic_cast< DynamicWidget* >( page ) )
         p = dynamic_cast< DynamicWidget* >( page )->playlist();
 
@@ -484,19 +487,22 @@ ViewManager::historyBack()
     delete oldPage;
 }
 
+
 void
 ViewManager::removeFromHistory ( ViewPage* p )
 {
     if ( currentPage() == p )
     {
         historyBack();
-    } else
+    }
+    else
     {
         m_pageHistory.removeAll( p );
         delete p;
     }
 
 }
+
 
 void
 ViewManager::setFilter( const QString& filter )
@@ -645,16 +651,16 @@ ViewManager::updateView()
     if ( currentPlaylistInterface() )
     {
         connect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                                                       SIGNAL( numTracksChanged( unsigned int ) ) );
+                                                    SIGNAL( numTracksChanged( unsigned int ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
-                                                       SIGNAL( numShownChanged( unsigned int ) ) );
+                                                    SIGNAL( numShownChanged( unsigned int ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                                                       SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+                                                    SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                                                       SIGNAL( shuffleModeChanged( bool ) ) );
+                                                    SIGNAL( shuffleModeChanged( bool ) ) );
 
         m_infobar->setFilter( currentPlaylistInterface()->filter() );
     }
@@ -717,12 +723,17 @@ ViewManager::loadCurrentPlaylistSettings()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     Tomahawk::playlist_ptr pl = playlistForInterface( currentPlaylistInterface() );
-    if ( !pl.isNull() ) {
+
+    if ( !pl.isNull() )
+    {
         currentPlaylistInterface()->setShuffled( s->shuffleState( pl->guid() ));
         currentPlaylistInterface()->setRepeatMode( s->repeatMode( pl->guid() ));
-    } else {
+    }
+    else
+    {
         Tomahawk::dynplaylist_ptr dynPl = dynamicPlaylistForInterface( currentPlaylistInterface() );
-        if ( !dynPl.isNull() ) {
+        if ( !dynPl.isNull() )
+        {
             currentPlaylistInterface()->setShuffled( s->shuffleState( dynPl->guid() ));
         }
     }
@@ -783,8 +794,7 @@ ViewManager::setShuffled( bool enabled )
 
 
 void
-ViewManager::createPlaylist( const Tomahawk::source_ptr& src,
-                                 const QVariant& contents )
+ViewManager::createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
 {
     Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
     QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
@@ -793,8 +803,7 @@ ViewManager::createPlaylist( const Tomahawk::source_ptr& src,
 
 
 void
-ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
-                                        const QVariant& contents )
+ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
 {
     Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
     QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
@@ -838,6 +847,7 @@ ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
     return 0;
 }
 
+
 Tomahawk::playlistinterface_ptr
 ViewManager::currentPlaylistInterface() const
 {
@@ -853,6 +863,7 @@ ViewManager::currentPage() const
 {
     return m_pageHistory.isEmpty() ? 0 : m_pageHistory.front();
 }
+
 
 Tomahawk::playlist_ptr
 ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const

@@ -132,9 +132,6 @@ TrackView::setTrackModel( TrackModel* model )
         m_proxyModel->setSourceTrackModel( m_model );
     }
 
-    if ( m_model && m_model->metaObject()->indexOfSignal( "itemSizeChanged(QModelIndex)" ) > -1 )
-        connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
-
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 

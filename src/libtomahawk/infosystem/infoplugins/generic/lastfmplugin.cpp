@@ -489,15 +489,26 @@ LastFmPlugin::similarArtistsReturned()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     QMap< int, QString > similarArtists = lastfm::Artist::getSimilar( reply );
+
+    QStringList sortedArtists;
+    QStringList sortedScores;
     QStringList al;
     QStringList sl;
 
-    foreach ( const QString& a, similarArtists.values() )
-        al << a;
+    foreach ( const QString& artist, similarArtists.values() )
+        al << artist;
+    foreach ( int score, similarArtists.keys() )
+        sl << QString::number( score );
+
+    for ( int i = al.count() - 1; i >= 0; i-- )
+    {
+        sortedArtists << al.at( i );
+        sortedScores << sl.at( i );
+    }
 
     QVariantMap returnedData;
-    returnedData["artists"] = al;
-    returnedData["score"] = sl;
+    returnedData["artists"] = sortedArtists;
+    returnedData["score"] = sortedScores;
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
@@ -682,25 +693,25 @@ LastFmPlugin::artistImagesReturned()
 void
 LastFmPlugin::settingsChanged()
 {
-    if( !m_scrobbler && TomahawkSettings::instance()->scrobblingEnabled() )
+    if ( !m_scrobbler && TomahawkSettings::instance()->scrobblingEnabled() )
     { // can simply create the scrobbler
         lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
         m_pw = TomahawkSettings::instance()->lastFmPassword();
 
         createScrobbler();
     }
-    else if( m_scrobbler && !TomahawkSettings::instance()->scrobblingEnabled() )
+    else if ( m_scrobbler && !TomahawkSettings::instance()->scrobblingEnabled() )
     {
         delete m_scrobbler;
         m_scrobbler = 0;
     }
-    else if( TomahawkSettings::instance()->lastFmUsername() != lastfm::ws::Username ||
+    else if ( TomahawkSettings::instance()->lastFmUsername() != lastfm::ws::Username ||
                TomahawkSettings::instance()->lastFmPassword() != m_pw )
     {
         lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
         m_pw = TomahawkSettings::instance()->lastFmPassword();
         // credentials have changed, have to re-create scrobbler for them to take effect
-        if( m_scrobbler )
+        if ( m_scrobbler )
         {
             delete m_scrobbler;
             m_scrobbler = 0;
@@ -715,17 +726,17 @@ void
 LastFmPlugin::onAuthenticated()
 {
     QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
-    if( !authJob )
+    if ( !authJob )
     {
         tLog() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
         return;
     }
 
-    if( authJob->error() == QNetworkReply::NoError )
+    if ( authJob->error() == QNetworkReply::NoError )
     {
         lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
 
-        if( lfm.children( "error" ).size() > 0 )
+        if ( lfm.children( "error" ).size() > 0 )
         {
             tLog() << "Error from authenticating with Last.fm service:" << lfm.text();
             TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
@@ -737,7 +748,7 @@ LastFmPlugin::onAuthenticated()
             TomahawkSettings::instance()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
 //            qDebug() << "Got session key from last.fm";
-            if( TomahawkSettings::instance()->scrobblingEnabled() )
+            if ( TomahawkSettings::instance()->scrobblingEnabled() )
                 m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
     }
@@ -753,7 +764,7 @@ LastFmPlugin::onAuthenticated()
 void
 LastFmPlugin::createScrobbler()
 {
-    if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
+    if ( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
         qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
         QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
@@ -780,14 +791,15 @@ QList<lastfm::Track>
 LastFmPlugin::parseTrackList( QNetworkReply* reply )
 {
     QList<lastfm::Track> tracks;
-    try {
+    try
+    {
         lastfm::XmlQuery lfm = reply->readAll();
         foreach ( lastfm::XmlQuery xq, lfm.children( "track" ) )
         {
             tracks.append( lastfm::Track( xq ) );
         }
     }
-    catch( lastfm::ws::ParseError& e )
+    catch ( lastfm::ws::ParseError& e )
     {
         qWarning() << e.what();
     }

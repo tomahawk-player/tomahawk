@@ -21,6 +21,7 @@
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/audioengine.h"
+#include "playlist/trackheader.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
@@ -68,10 +69,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_relatedModel = new TreeModel( ui->relatedArtists );
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     ui->relatedArtists->setTreeModel( m_relatedModel );
+    ui->relatedArtists->setSortingEnabled( false );
+    ui->relatedArtists->proxyModel()->sort( -1 );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
+    ui->topHits->setSortingEnabled( false );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
@@ -252,15 +256,17 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
         {
             const QStringList tracks = returnedData["tracks"].toStringList();
 
+            QList< query_ptr > queries;
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                query_ptr query = Query::get( m_artist->name(), track, QString(), uuid() );
-                m_topHitsModel->append( query );
+                queries << Query::get( m_artist->name(), track, QString(), uuid() );
 
                 if ( ++i == 15 )
                     break;
             }
+
+            m_topHitsModel->append( queries );
             break;
         }
 

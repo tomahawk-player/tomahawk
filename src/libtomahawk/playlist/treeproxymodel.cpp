@@ -41,6 +41,7 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     setSourceTreeModel( 0 );
 }
 
+
 QPersistentModelIndex
 TreeProxyModel::currentIndex() const
 {
@@ -109,6 +110,7 @@ TreeProxyModel::onModelReset()
     m_albumsFilter.clear();
 }
 
+
 void
 TreeProxyModel::newFilterFromPlaylistInterface( const QString &pattern )
 {
@@ -141,6 +143,7 @@ TreeProxyModel::newFilterFromPlaylistInterface( const QString &pattern )
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }
 }
+
 
 void
 TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
@@ -288,25 +291,25 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     unsigned int albumpos2 = 0;
     unsigned int discnumber1 = 0;
     unsigned int discnumber2 = 0;
-    if( !p1->query().isNull() )
+    if ( !p1->query().isNull() )
     {
         albumpos1 = p1->query()->albumpos();
         discnumber1 = p1->query()->discnumber();
     }
-    if( !p2->query().isNull() )
+    if ( !p2->query().isNull() )
     {
         albumpos2 = p2->query()->albumpos();
         discnumber2 = p2->query()->discnumber();
     }
 
-    if( albumpos1 == 0 && !p1->result().isNull() )
+    if ( albumpos1 == 0 && !p1->result().isNull() )
         albumpos1 = p1->result()->albumpos();
-    if( discnumber1 == 0 && !p1->result().isNull() )
+    if ( discnumber1 == 0 && !p1->result().isNull() )
         discnumber1 = p1->result()->discnumber();
 
-    if( albumpos2 == 0 && !p2->result().isNull() )
+    if ( albumpos2 == 0 && !p2->result().isNull() )
         albumpos2 = p2->result()->albumpos();
-    if( discnumber2 == 0 && !p2->result().isNull() )
+    if ( discnumber2 == 0 && !p2->result().isNull() )
         discnumber2 = p2->result()->discnumber();
 
     const QString& lefts = textForItem( p1 );

@@ -272,9 +272,9 @@ TreeModel::data( const QModelIndex& index, int role ) const
     {
         const result_ptr& result = entry->result();
         unsigned int discnumber = 0;
-        if( !entry->query().isNull() )
+        if ( !entry->query().isNull() )
             discnumber = entry->query()->discnumber();
-        if( discnumber == 0 )
+        if ( discnumber == 0 )
             discnumber = result->discnumber();
 
         unsigned int albumpos = 0;
@@ -294,18 +294,14 @@ TreeModel::data( const QModelIndex& index, int role ) const
                 return TomahawkUtils::timeToString( result->duration() );
 
             case Bitrate:
-                if ( result->bitrate() == 0 )
-                    return QString();
-                else
+                if ( result->bitrate() > 0 )
                     return result->bitrate();
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
 
             case Year:
-                if ( result->year() == 0 )
-                    return QString();
-                else
+                if ( result->year() != 0 )
                     return result->year();
 
             case Filesize:
@@ -318,7 +314,8 @@ TreeModel::data( const QModelIndex& index, int role ) const
                 return result->albumpos();
 
             case Composer:
-                return result->composer()->name();
+                if ( !result->composer().isNull() )
+                    return result->composer()->name();
 
             default:
                 return QVariant();
