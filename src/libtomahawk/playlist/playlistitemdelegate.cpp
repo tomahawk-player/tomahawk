@@ -56,11 +56,11 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    m_centerOption = QTextOption( Qt::AlignVCenter );
-    m_centerOption.setWrapMode( QTextOption::NoWrap );
+    m_verticalCenterOption = QTextOption( Qt::AlignVCenter );
+    m_verticalCenterOption.setWrapMode( QTextOption::NoWrap );
 
-    m_hCenterOption = QTextOption( Qt::AlignHCenter );
-    m_hCenterOption.setWrapMode( QTextOption::NoWrap );
+    m_centerOption = QTextOption( Qt::AlignCenter );
+    m_centerOption.setWrapMode( QTextOption::NoWrap );
 
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 }
@@ -316,8 +316,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     else
     {
         painter->setPen( opt.palette.text().color() );
-        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 3 );
-        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, textOptionForColumn( index.column() ) );
+        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 6 );
+        painter->drawText( opt.rect.adjusted( 3, 1, -3, 0 ), text, textOptionForColumn( index.column() ) );
     }
 
     painter->restore();
@@ -335,10 +335,10 @@ PlaylistItemDelegate::textOptionForColumn( int column ) const
         case TrackModel::Duration:
         case TrackModel::Filesize:
         case TrackModel::Year:
-            return m_hCenterOption;
+            return m_centerOption;
             break;
 
         default:
-            return m_centerOption;
+            return m_verticalCenterOption;
     }
 }

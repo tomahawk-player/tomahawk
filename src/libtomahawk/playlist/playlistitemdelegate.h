@@ -63,7 +63,7 @@ private:
     QTextOption m_topOption;
     QTextOption m_centerOption;
     QTextOption m_bottomOption;
-    QTextOption m_hCenterOption;
+    QTextOption m_verticalCenterOption;
 
     TrackView* m_view;
     TrackProxyModel* m_model;
