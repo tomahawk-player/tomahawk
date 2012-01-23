@@ -354,7 +354,7 @@ AudioEngine::onNowPlayingInfoReady()
     {
         QPixmap cover;
         cover.loadFromData( m_currentTrack->album()->cover() );
-        playInfo["image"] = QVariant( cover );
+        playInfo["image"] = QVariant( cover.toImage() );
     }
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
