@@ -136,6 +136,24 @@ TrackModel::data( const QModelIndex& index, int role ) const
         return QSize( 0, 18 );
     }
 
+    if ( role == Qt::TextAlignmentRole )
+    {
+        switch( index.column() )
+        {
+            case Age:
+            case AlbumPos:
+            case Bitrate:
+            case Duration:
+            case Filesize:
+            case Year:
+                return Qt::AlignHCenter;
+                break;
+
+            default:
+                return Qt::AlignLeft;
+        }
+    }
+
     if ( role == StyleRole )
     {
         return m_style;
