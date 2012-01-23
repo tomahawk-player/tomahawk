@@ -59,6 +59,9 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     m_centerOption = QTextOption( Qt::AlignVCenter );
     m_centerOption.setWrapMode( QTextOption::NoWrap );
 
+    m_hCenterOption = QTextOption( Qt::AlignHCenter );
+    m_hCenterOption.setWrapMode( QTextOption::NoWrap );
+
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 }
 
@@ -307,15 +310,35 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
             painter->setPen( opt.palette.text().color() );
             QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
-            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_centerOption );
+            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, textOptionForColumn( index.column() ) );
         }
     }
     else
     {
         painter->setPen( opt.palette.text().color() );
         QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 3 );
-        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, m_centerOption );
+        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, textOptionForColumn( index.column() ) );
     }
 
     painter->restore();
+}
+
+
+const QTextOption
+PlaylistItemDelegate::textOptionForColumn( int column ) const
+{
+    switch( column )
+    {
+        case TrackModel::Age:
+        case TrackModel::AlbumPos:
+        case TrackModel::Bitrate:
+        case TrackModel::Duration:
+        case TrackModel::Filesize:
+        case TrackModel::Year:
+            return m_hCenterOption;
+            break;
+
+        default:
+            return m_centerOption;
+    }
 }

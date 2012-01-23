@@ -52,6 +52,8 @@ private:
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
 
+    const QTextOption textOptionForColumn( int column ) const;
+
     unsigned int m_removalProgress;
 
     mutable QHash< qint64, QPixmap > m_cache;
@@ -61,6 +63,7 @@ private:
     QTextOption m_topOption;
     QTextOption m_centerOption;
     QTextOption m_bottomOption;
+    QTextOption m_hCenterOption;
 
     TrackView* m_view;
     TrackProxyModel* m_model;
