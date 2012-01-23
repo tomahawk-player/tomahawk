@@ -179,23 +179,24 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
         {
-            TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.5 );
+            TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.1 );
             painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
         }
         else
         {
+            if ( !( option.state & QStyle::State_Selected ) )
 #ifdef Q_WS_MAC
-            painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
+                painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
 #else
-            painter->setPen( opt.palette.color( QPalette::Dark ) );
+                painter->setPen( opt.palette.color( QPalette::Dark ) );
 #endif
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
-        painter->drawText( textRect, text, to );
-        // Calculate rect of artist on-hover button click area
+        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 10 );
+        painter->drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
 
+        // Calculate rect of artist on-hover button click area
         m_artistNameRects[ index ] = r;
     }
 
