@@ -76,9 +76,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      diagnosticsdialog.cpp
      configdelegatebase.cpp
      AccountDelegate.cpp
-     resolverconfigdelegate.cpp
      settingslistdelegate.cpp
-     resolversmodel.cpp
      tomahawkwindow.cpp
      LoadXSPFDialog.cpp
 )
@@ -127,10 +125,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      settingsdialog.h
      diagnosticsdialog.h
      configdelegatebase.h
-     resolverconfigdelegate.h
      AccountDelegate.h
      settingslistdelegate.h
-     resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
      LoadXSPFDialog.h

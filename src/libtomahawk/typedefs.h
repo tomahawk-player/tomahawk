@@ -22,6 +22,7 @@
 #include <QSharedPointer>
 #include <QUuid>
 #include <QPair>
+#include <boost/function.hpp>
 
 //template <typename T> class QSharedPointer;
 
@@ -68,6 +69,9 @@ namespace Tomahawk
         DatabaseMode = 0,
         InfoSystemMode
     };
+
+    class ExternalResolver;
+    typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
 
 }; // ns
 

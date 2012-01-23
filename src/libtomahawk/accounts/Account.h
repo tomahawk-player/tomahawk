@@ -113,7 +113,7 @@ public:
     void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
     void setTypes( AccountTypes types );
 
-    virtual void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
+    void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
 
     /**
      * Removes all the settings held in the config file for this account instance

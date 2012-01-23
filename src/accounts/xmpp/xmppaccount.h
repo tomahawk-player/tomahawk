@@ -40,6 +40,8 @@ class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
 
+    // for settings access
+    friend class XmppConfigWidget;
 public:
     XmppAccountFactory() {}
     virtual ~XmppAccountFactory() {}
@@ -76,12 +78,6 @@ public:
 protected:
     QWeakPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
-
-private:
-
-
-    // for settings access
-    friend class XmppConfigWidget;
 };
 
 };

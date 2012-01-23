@@ -59,7 +59,7 @@ public:
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
-    QList< Tomahawk::ExternalResolver* > scriptResolvers() const { return m_scriptResolvers; }
+    QList< QWeakPointer< ExternalResolver > > scriptResolvers() const { return m_scriptResolvers; }
     Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
     void addResolver( Resolver* r );
@@ -106,7 +106,7 @@ private:
     int decQIDState( const Tomahawk::query_ptr& query );
 
     QList< Resolver* > m_resolvers;
-    QList< Tomahawk::ExternalResolver* > m_scriptResolvers;
+    QList< QWeakPointer<Tomahawk::ExternalResolver> > m_scriptResolvers;
     QList< ResolverFactoryFunc > m_resolverFactories;
     QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;

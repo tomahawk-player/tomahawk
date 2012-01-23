@@ -64,7 +64,10 @@ Pipeline::~Pipeline()
     m_running = false;
 
     // stop script resolvers
-    qDeleteAll( m_scriptResolvers );
+    foreach ( QWeakPointer< ExternalResolver > r, m_scriptResolvers )
+        if ( !r.isNull() )
+            r.data()->deleteLater();
+
     m_scriptResolvers.clear();
 }
 
@@ -133,7 +136,7 @@ Pipeline::addScriptResolver( const QString& path, bool start )
         if ( !res )
             continue;
 
-        m_scriptResolvers << res;
+        m_scriptResolvers << QWeakPointer< ExternalResolver >( res );
         if ( start )
             res->start();
 
@@ -147,10 +150,10 @@ Pipeline::addScriptResolver( const QString& path, bool start )
 void
 Pipeline::stopScriptResolver( const QString& path )
 {
-    foreach ( ExternalResolver* res, m_scriptResolvers )
+    foreach ( QWeakPointer< ExternalResolver > res, m_scriptResolvers )
     {
-        if ( res->filePath() == path )
-            res->stop();
+        if ( res.data()->filePath() == path )
+            res.data()->stop();
     }
 }
 
@@ -158,18 +161,18 @@ Pipeline::stopScriptResolver( const QString& path )
 void
 Pipeline::removeScriptResolver( const QString& scriptPath )
 {
-    ExternalResolver* r = 0;
-    foreach ( ExternalResolver* res, m_scriptResolvers )
+    QWeakPointer< ExternalResolver > r;
+    foreach ( QWeakPointer< ExternalResolver > res, m_scriptResolvers )
     {
-        if ( res->filePath() == scriptPath )
+        if ( res.data()->filePath() == scriptPath )
             r = res;
     }
     m_scriptResolvers.removeAll( r );
 
-    if ( r )
+    if ( !r.isNull() )
     {
-        r->stop();
-        r->deleteLater();
+        r.data()->stop();
+        r.data()->deleteLater();
     }
 }
 
@@ -177,10 +180,10 @@ Pipeline::removeScriptResolver( const QString& scriptPath )
 ExternalResolver*
 Pipeline::resolverForPath( const QString& scriptPath )
 {
-    foreach ( ExternalResolver* res, m_scriptResolvers )
+    foreach ( QWeakPointer< ExternalResolver > res, m_scriptResolvers )
     {
-        if ( res->filePath() == scriptPath )
-            return res;
+        if ( res.data()->filePath() == scriptPath )
+            return res.data();
     }
     return 0;
 }

@@ -20,6 +20,7 @@
 #include "AccountManager.h"
 #include "config.h"
 #include "sourcelist.h"
+#include "ResolverAccount.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -53,6 +54,10 @@ AccountManager::AccountManager( QObject *parent )
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
     loadPluginFactories( findPluginFactories() );
+
+    // We include the resolver factory manually, not in a plugin
+    ResolverAccountFactory* f = new ResolverAccountFactory();
+    m_accountFactories[ f->factoryId() ] = f;
 }
 
 
@@ -171,12 +176,39 @@ AccountManager::loadPluginFactory( const QString& path )
 
 
 void
+AccountManager::enableAccount( Account* account )
+{
+    if ( account->isAuthenticated() )
+        return;
+
+    account->authenticate();
+
+    account->setEnabled( true );
+    m_enabledAccounts << account;
+}
+
+
+void
+AccountManager::disableAccount( Account* account )
+{
+    if ( !account->isAuthenticated() )
+        return;
+
+    account->deauthenticate();
+    account->setEnabled( false );
+    m_enabledAccounts.removeAll( account );
+}
+
+
+void
 AccountManager::connectAll()
 {
     foreach( Account* acc, m_accounts )
     {
-        if ( acc->types() & Accounts::SipType && acc->sipPlugin() )
-            acc->sipPlugin()->connectPlugin();
+        acc->authenticate();
+        m_enabledAccounts << acc;
+//         if ( acc->types() & Accounts::SipType && acc->sipPlugin() )
+//             acc->sipPlugin()->connectPlugin();
 
     }
     m_connected = true;
@@ -186,9 +218,10 @@ AccountManager::connectAll()
 void
 AccountManager::disconnectAll()
 {
-    foreach( Account* acc, m_connectedAccounts )
-        acc->sipPlugin()->disconnectPlugin();
+    foreach( Account* acc, m_enabledAccounts )
+        acc->deauthenticate();
 
+    m_enabledAccounts.clear();
     SourceList::instance()->removeAllRemote();
     m_connected = false;
 }
@@ -224,9 +257,8 @@ void
 AccountManager::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach( Account* account, accounts( Tomahawk::Accounts::SipType ) )
+    foreach( Account* account, accounts() )
     {
-        tDebug() << Q_FUNC_INFO << "adding plugin " << account->accountId();
         hookupAndEnable( account, true );
     }
 }
@@ -300,7 +332,8 @@ void
 AccountManager::hookupAndEnable( Account* account, bool startup )
 {
     SipPlugin* p = account->sipPlugin();
-    SipHandler::instance()->hookUpPlugin( p );
+    if ( p )
+        SipHandler::instance()->hookUpPlugin( p );
 
     if ( account->enabled() && ( !startup || account->autoConnect() ) )
     {

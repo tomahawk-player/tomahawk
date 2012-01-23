@@ -84,10 +84,12 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         Account* account = accounts[ index.row() ];
 
         if( state == Qt::Checked && !account->enabled() ) {
-            account->setEnabled( true );
+            AccountManager::instance()->enableAccount( account );
         } else if( state == Qt::Unchecked ) {
-            account->setEnabled( false );
+            AccountManager::instance()->disableAccount( account );
         }
+
+        account->sync();
         dataChanged( index, index );
 
         return true;

@@ -255,8 +255,34 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             remove( sipPlugin );
         }
-        setValue( "accounts/allaccounts", accounts );
         remove( "sip" );
+
+        // Migrate all resolvers from old resolvers settings to new accounts system
+        const QStringList allResolvers = value( "script/resolvers" ).toStringList();
+        const QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
+
+        foreach ( const QString& resolver, allResolvers )
+        {
+            const QString accountKey = QString( "resolveraccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+            accounts << accountKey;
+
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", enabledResolvers.contains( resolver ) == true );
+            setValue( "autoconnect", true );
+            setValue( "types", QStringList() << "ResolverType" );
+
+            QVariantHash configuration;
+            configuration[ "path" ] = resolver;
+            setValue( "configuration", configuration );
+
+            endGroup();
+
+        }
+
+        remove( "script/resolvers" );
+        remove( "script/loadedresolvers" );
+
+        setValue( "accounts/allaccounts", accounts );
     }
 }
 

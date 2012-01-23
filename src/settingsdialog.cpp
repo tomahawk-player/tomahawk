@@ -44,8 +44,6 @@
 #include "pipeline.h"
 #include "resolver.h"
 #include "ExternalResolverGui.h"
-#include "resolverconfigdelegate.h"
-#include "resolversmodel.h"
 #include "scanmanager.h"
 #include "settingslistdelegate.h"
 #include "AccountDelegate.h"
@@ -77,7 +75,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , m_proxySettings( this )
     , m_rejected( false )
     , m_accountModel( 0 )
-    , m_resolversModel( 0 )
     , m_sipSpinner( 0 )
 {
     ui->setupUi( this );
@@ -183,13 +180,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     // SCRIPT RESOLVER
     ui->removeScript->setEnabled( false );
-    ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
-    connect( del, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
-    ui->scriptList->setItemDelegate( del );
-    m_resolversModel = new ResolversModel( this );
-    ui->scriptList->setModel( m_resolversModel );
     ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    connect( m_resolversModel, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
 
 #ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
@@ -241,8 +232,6 @@ SettingsDialog::~SettingsDialog()
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
         s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
-
-        m_resolversModel->saveScriptResolvers();
 
         s->applyChanges();
         s->sync();
@@ -485,14 +474,13 @@ SettingsDialog::onLastFmFinished()
 #endif
 }
 
-
+/*
 void
 SettingsDialog::addScriptResolver()
 {
     QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
     if( !resolver.isEmpty() )
     {
-        m_resolversModel->addResolver( resolver, true );
 
         QFileInfo resolverAbsoluteFilePath = resolver;
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
@@ -512,7 +500,7 @@ SettingsDialog::removeScriptResolver()
 #endif
         m_resolversModel->removeResolver( resolver );
     }
-}
+}*/
 
 
 void
@@ -532,18 +520,18 @@ SettingsDialog::getMoreResolvers()
 
 
 #ifdef LIBATTICA_FOUND
-void
-SettingsDialog::atticaResolverInstalled( const QString& resolverId )
-{
-    m_resolversModel->atticaResolverInstalled( resolverId );
-}
-
-
-void
-SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
-{
-    m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
-}
+// void
+// SettingsDialog::atticaResolverInstalled( const QString& resolverId )
+// {
+//     m_resolversModel->atticaResolverInstalled( resolverId );
+// }
+//
+//
+// void
+// SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
+// {
+//     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
+// }
 #endif
 
 

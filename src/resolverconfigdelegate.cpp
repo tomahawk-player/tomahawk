@@ -18,7 +18,7 @@
 
 #include "resolverconfigdelegate.h"
 
-#include "resolversmodel.h"
+// #include "resolversmodel.h"
 #include "ExternalResolverGui.h"
 
 #include <QApplication>

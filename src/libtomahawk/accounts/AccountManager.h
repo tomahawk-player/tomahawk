@@ -47,6 +47,9 @@ public:
     void loadFromConfig();
     void initSIP();
 
+    void enableAccount( Account* account );
+    void disableAccount( Account* account );
+
     QList< AccountFactory* > factories() const { return m_accountFactories.values(); }
     bool hasPluginWithFactory( const QString& factory ) const;
     AccountFactory* factoryForAccount( Account* account ) const;

@@ -87,15 +87,9 @@ private slots:
     void testLastFmLogin();
     void onLastFmFinished();
 
-    void addScriptResolver();
     void scriptSelectionChanged();
-    void removeScriptResolver();
     void getMoreResolvers();
     void getMoreResolversFinished( int );
-#ifdef LIBATTICA_FOUND
-    void atticaResolverInstalled( const QString& );
-    void atticaResolverUninstalled( const QString& );
-#endif
 
     void openResolverConfig( const QString& );
 
@@ -129,7 +123,6 @@ private:
     ProxyDialog m_proxySettings;
     bool m_rejected;
     Tomahawk::Accounts::AccountModel* m_accountModel;
-    ResolversModel* m_resolversModel;
     LoadingSpinner* m_sipSpinner;
 };
 

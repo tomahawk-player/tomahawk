@@ -40,7 +40,6 @@ public:
     enum Roles {
         AccountName = Qt::UserRole + 15,
         AccountIcon = Qt::UserRole + 16,
-        HeadlineText = Qt::UserRole + 17,
         AccountTypeRole = Qt::UserRole + 19,
         ConnectionStateRole = Qt::UserRole + 20,
         HasConfig = Qt::UserRole + 21,
