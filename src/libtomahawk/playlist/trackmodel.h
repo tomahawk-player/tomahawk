@@ -136,6 +136,8 @@ private slots:
     void onPlaybackStopped();
 
 private:
+    Qt::Alignment columnAlignment( int column ) const;
+
     TrackModelItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;

@@ -138,20 +138,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
     if ( role == Qt::TextAlignmentRole )
     {
-        switch( index.column() )
-        {
-            case Age:
-            case AlbumPos:
-            case Bitrate:
-            case Duration:
-            case Filesize:
-            case Year:
-                return Qt::AlignHCenter;
-                break;
-
-            default:
-                return Qt::AlignLeft;
-        }
+        return QVariant( columnAlignment( index.column() ) );
     }
 
     if ( role == StyleRole )
@@ -260,6 +247,11 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
     if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
+    }
+
+    if ( role == Qt::TextAlignmentRole )
+    {
+        return QVariant( columnAlignment( section ) );
     }
 
     return QVariant();
@@ -559,4 +551,24 @@ void
 TrackModel::setStyle( TrackModel::TrackItemStyle style )
 {
     m_style = style;
+}
+
+
+Qt::Alignment
+TrackModel::columnAlignment( int column ) const
+{
+    switch( column )
+    {
+        case Age:
+        case AlbumPos:
+        case Bitrate:
+        case Duration:
+        case Filesize:
+        case Year:
+            return Qt::AlignHCenter;
+            break;
+
+        default:
+            return Qt::AlignLeft;
+    }
 }
