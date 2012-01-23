@@ -127,7 +127,7 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
     m_albums << albums;
 
     if ( m_supportedActions & ActionPlay && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
+        m_sigmap->setMapping( addAction( tr( "Show &Album page" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
@@ -166,7 +166,7 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
     m_artists << artists;
 
     if ( m_supportedActions & ActionPlay && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
+        m_sigmap->setMapping( addAction( tr( "Show &Artist page" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
