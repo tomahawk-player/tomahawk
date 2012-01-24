@@ -275,6 +275,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             configuration[ "path" ] = resolver;
             setValue( "configuration", configuration );
 
+            // reasonably ugly check for attica resolvers
+            if ( resolver.contains( "atticaresolvers" ) && resolver.contains( "code" ) )
+                setValue( "atticaresolver", true );
+
             endGroup();
 
         }
