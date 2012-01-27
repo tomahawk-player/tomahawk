@@ -27,11 +27,9 @@
 
 #include "dllmacro.h"
 
-#ifdef LIBATTICA_FOUND
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
-#endif
 
 class DLLEXPORT AtticaManager : public QObject
 {
@@ -68,14 +66,7 @@ public:
     }
 
     explicit AtticaManager ( QObject* parent = 0 );
-#ifdef LIBATTICA_FOUND
-
     virtual ~AtticaManager();
-#else
-    virtual ~AtticaManager() {}
-#endif
-
-#ifdef LIBATTICA_FOUND
 
     bool resolversLoaded() const;
 
@@ -122,13 +113,10 @@ private:
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
-#endif
 
     static AtticaManager* s_instance;
 };
 
-#ifdef LIBATTICA_FOUND
 Q_DECLARE_METATYPE( Attica::Content );
-#endif
 
 #endif // ATTICAMANAGER_H

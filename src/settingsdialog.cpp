@@ -182,14 +182,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->removeScript->setEnabled( false );
     ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-#ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
 
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
-#else
-    ui->getMoreResolvers->hide();
-#endif
 
     connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
@@ -495,9 +491,7 @@ SettingsDialog::removeScriptResolver()
     if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
     {
         QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
-#ifdef LIBATTICA_FOUND
         AtticaManager::instance()->uninstallResolver( resolver );
-#endif
         m_resolversModel->removeResolver( resolver );
     }
 }*/
@@ -506,11 +500,11 @@ SettingsDialog::removeScriptResolver()
 void
 SettingsDialog::getMoreResolvers()
 {
-#if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
+#if defined(Q_WS_MAC)
     GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
     connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished( int ) ) );
     diag->show();
-#elif defined(LIBATTICA_FOUND)
+#else
     GetNewStuffDialog diag( this );
     int ret = diag.exec();
     Q_UNUSED( ret );
@@ -519,7 +513,6 @@ SettingsDialog::getMoreResolvers()
 }
 
 
-#ifdef LIBATTICA_FOUND
 // void
 // SettingsDialog::atticaResolverInstalled( const QString& resolverId )
 // {
@@ -532,7 +525,6 @@ SettingsDialog::getMoreResolvers()
 // {
 //     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
 // }
-#endif
 
 
 void

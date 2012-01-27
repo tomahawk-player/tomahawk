@@ -248,11 +248,9 @@ TomahawkApp::init()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
-#ifdef LIBATTICA_FOUND
 #ifndef ENABLE_HEADLESS
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
-#endif
 #endif
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
@@ -324,9 +322,7 @@ TomahawkApp::~TomahawkApp()
 
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
-    #ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
-    #endif
 #endif
 
 
