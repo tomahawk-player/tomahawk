@@ -262,13 +262,6 @@ SettingsDialog::createIcons()
     lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = qMax( fm.width( lastfmButton->text() ), maxlen );
 
-    QListWidgetItem *resolversButton = new QListWidgetItem( ui->listWidget );
-    resolversButton->setIcon( QIcon( RESPATH "images/resolvers-settings.png" ) );
-    resolversButton->setText( tr( "Resolvers" ) );
-    resolversButton->setTextAlignment( Qt::AlignHCenter );
-    resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( resolversButton->text() ), maxlen );
-
     QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
     advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
     advancedButton->setText( tr( "Advanced" ) );
@@ -280,7 +273,6 @@ SettingsDialog::createIcons()
     accountsButton->setSizeHint( QSize( maxlen, 60 ) );
     musicButton->setSizeHint( QSize( maxlen, 60 ) );
     lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
-    resolversButton->setSizeHint( QSize( maxlen, 60 ) );
     advancedButton->setSizeHint( QSize( maxlen, 60 ) );
 
 #ifndef Q_WS_MAC
