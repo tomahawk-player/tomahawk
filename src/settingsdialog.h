@@ -45,6 +45,7 @@ namespace Tomahawk
         class AccountModel;
         class Account;
         class AccountFactory;
+class Account;
 }
 }
 
@@ -87,21 +88,18 @@ private slots:
     void testLastFmLogin();
     void onLastFmFinished();
 
-    void scriptSelectionChanged();
-    void getMoreResolvers();
-    void getMoreResolversFinished( int );
-
-    void openResolverConfig( const QString& );
-
     void openAccountConfig( Tomahawk::Accounts::Account* );
-    void factoryActionTriggered ( bool );
-    void accountFactoryClicked( Tomahawk::Accounts::AccountFactory* );
+    void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
     void accountContextMenuRequest( const QPoint& );
     void accountDeleted( bool );
     void onAccountRowDeleted( bool );
 
-    // dialog slots
-    void resolverConfigClosed( int value );
+    void accountsSelectionChanged();
+    void getMoreResolvers();
+    void getMoreResolversFinished( int );
+
+    void accountInstalled( Tomahawk::Accounts::Account* account );
+    void accountUninstalled( const QString& acct );
 
     void accountConfigClosed( int value );
     void accountCreateConfigClosed( int value );
@@ -115,7 +113,6 @@ private slots:
 
 private:
     void createIcons();
-    void setupAccountButtons();
     void handleAccountAdded( Tomahawk::Accounts::Account* p, bool added );
 
     Ui_StackedSettingsDialog* ui;

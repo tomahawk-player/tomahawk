@@ -61,14 +61,6 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-static QString
-md5( const QByteArray& src )
-{
-    QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
-}
-
-
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
     , ui( new Ui_StackedSettingsDialog )
@@ -82,9 +74,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     TomahawkUtils::unmarginLayout( layout() );
     ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
-
-    ui->addScript->setFixedWidth( 42 );
-    ui->removeScript->setFixedWidth( ui->addScript->width() );
 
     ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
@@ -123,6 +112,14 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountModel = new AccountModel( this );
     ui->accountsView->setModel( m_accountModel );
 
+    connect( ui->addNewServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( getMoreResolvers() ) );
+    connect( ui->removeServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
+
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( accountUninstalled( QString ) ) );
+
+    connect( ui->accountsView->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( accountsSelectionChanged() ) );
+
     if ( !Servent::instance()->isReady() )
     {
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
@@ -132,9 +129,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->removeServiceBtn->setEnabled( false );
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
-
-    setupAccountButtons();
-
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
     ui->proxyButton->setVisible( true );
@@ -178,18 +172,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->pushButtonTestLastfmLogin->setVisible( false );
 #endif
 
-    // SCRIPT RESOLVER
-    ui->removeScript->setEnabled( false );
-    ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-
-    connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
-
-    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
-    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
-
-    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
-    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
-    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
@@ -244,7 +226,7 @@ SettingsDialog::serventReady()
 {
     m_sipSpinner->fadeOut();
     ui->addNewServiceBtn->setEnabled( true );
-    ui->removeScript->setEnabled( true );
+    ui->removeServiceBtn->setEnabled( true );
 }
 
 
@@ -307,27 +289,6 @@ SettingsDialog::createIcons()
 #endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
-}
-
-
-void
-SettingsDialog::setupAccountButtons()
-{
-//     foreach( AccountFactory* f, AccountManager::instance()->factories() )
-//     {
-//         if( f->isUnique() && AccountManager::instance()->hasPluginWithFactory( f->factoryId() ) )
-//         {
-//             continue;
-//         }
-//
-//         QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-//         action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-//         ui->addSipButton->addAction( action );
-//
-//         connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-//     }
-
-    connect( ui->removeServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
 }
 
 
@@ -470,32 +431,6 @@ SettingsDialog::onLastFmFinished()
 #endif
 }
 
-/*
-void
-SettingsDialog::addScriptResolver()
-{
-    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
-    if( !resolver.isEmpty() )
-    {
-
-        QFileInfo resolverAbsoluteFilePath = resolver;
-        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
-    }
-}
-
-
-void
-SettingsDialog::removeScriptResolver()
-{
-    // only one selection
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
-    {
-        QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
-        AtticaManager::instance()->uninstallResolver( resolver );
-        m_resolversModel->removeResolver( resolver );
-    }
-}*/
-
 
 void
 SettingsDialog::getMoreResolvers()
@@ -513,30 +448,30 @@ SettingsDialog::getMoreResolvers()
 }
 
 
-// void
-// SettingsDialog::atticaResolverInstalled( const QString& resolverId )
-// {
+void
+SettingsDialog::accountInstalled(Account* account)
+{
 //     m_resolversModel->atticaResolverInstalled( resolverId );
-// }
-//
-//
-// void
-// SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
-// {
-//     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
-// }
+}
 
 
 void
-SettingsDialog::scriptSelectionChanged()
+SettingsDialog::accountUninstalled(const QString& acct)
 {
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
+//     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
+}
+
+
+void
+SettingsDialog::accountsSelectionChanged()
+{
+    if( !ui->accountsView->selectionModel()->selectedIndexes().isEmpty() )
     {
-        ui->removeScript->setEnabled( true );
+        ui->removeServiceBtn->setEnabled( true );
     }
     else
     {
-        ui->removeScript->setEnabled( false );
+        ui->addNewServiceBtn->setEnabled( false );
     }
 }
 
@@ -545,46 +480,7 @@ void
 SettingsDialog::getMoreResolversFinished( int ret )
 {
     Q_UNUSED( ret );
-}
-
-
-void
-SettingsDialog::openResolverConfig( const QString& resolver )
-{
-    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( resolver );
-    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
-    if( res && res->configUI() )
-    {
-#ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( res->configUI(), "Resolver Configuration", this );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            r->saveConfig();
-        }
-#else
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( res->configUI(), "Resolver Configuration", this, Qt::Sheet );
-        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( res ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( resolverConfigClosed( int ) ) );
-
-        dialog->show();
-#endif
-    }
-}
-
-
-void
-SettingsDialog::resolverConfigClosed( int value )
-{
-    if( value == QDialog::Accepted )
-    {
-        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        Tomahawk::ExternalResolver* r = qobject_cast< Tomahawk::ExternalResolver* >( dialog->property( "resolver" ).value< QObject* >() );
-        r->saveConfig();
-    }
+    sender()->deleteLater();
 }
 
 
@@ -627,20 +523,7 @@ SettingsDialog::accountConfigClosed( int value )
 
 
 void
-SettingsDialog::factoryActionTriggered( bool )
-{
-    Q_ASSERT( sender() && qobject_cast< QAction* >( sender() ) );
-
-    QAction* a = qobject_cast< QAction* >( sender() );
-    Q_ASSERT( qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) );
-
-    AccountFactory* f = qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() );
-    accountFactoryClicked( f );
-}
-
-
-void
-SettingsDialog::accountFactoryClicked( AccountFactory* factory )
+SettingsDialog::createAccountFromFactory( AccountFactory* factory )
 {
     //if exited with OK, create it, if not, delete it immediately!
     Account* account = factory->createAccount();
@@ -708,22 +591,6 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
         TomahawkSettings::instance()->addAccount( account->accountId() );
         AccountManager::instance()->addAccount( account );
         AccountManager::instance()->hookupAndEnable( account );
-
-//         if ( f && f->isUnique() )
-//         {
-//             // remove from actions list
-//             QAction* toremove = 0;
-//             foreach( QAction* a, ui->addSipButton->actions() )
-//             {
-//                 if( f == qobject_cast< AccountFactory* >( a->property( "factory" ).value< QObject* >() ) )
-//                 {
-//                     toremove = a;
-//                     break;
-//                 }
-//             }
-//             if ( toremove )
-//                 ui->addSipButton->removeAction( toremove );
-//         }
     }
     else
     {
@@ -741,7 +608,7 @@ SettingsDialog::accountContextMenuRequest( const QPoint& p )
     if( idx.isValid() )
     {
         QList< QAction* > acts;
-        acts << new QAction( tr( "Delete Account" ), this );
+        acts << new QAction( tr( "Delete Service" ), this );
         acts.first()->setProperty( "accountplugin", idx.data( AccountModel::AccountData ) );
         connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( onAccountRowDeleted( bool ) ) );
         QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
@@ -753,18 +620,6 @@ void
 SettingsDialog::onAccountRowDeleted( bool )
 {
     Account* account = qobject_cast< Account* >( qobject_cast< QAction* >( sender() )->property( "accountplugin" ).value< QObject* >() );
-
-    if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
-    {
-//         if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
-//         {
-//             QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-//             action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-//             ui->addSipButton->addAction( action );
-//
-//             connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-//         }
-    }
 
     AccountManager::instance()->removeAccount( account );
 }
@@ -780,18 +635,6 @@ SettingsDialog::accountDeleted( bool )
         if( idx.isValid() )
         {
             Account* account = qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() );
-
-            if( AccountFactory* f = AccountManager::instance()->factoryForAccount( account ) )
-            {
-//                 if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
-//                 {
-//                     QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-//                     action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-//                     ui->addSipButton->addAction( action );
-//
-//                     connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-//                 }
-            }
             AccountManager::instance()->removeAccount( account );
         }
     }

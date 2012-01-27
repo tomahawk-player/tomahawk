@@ -19,14 +19,17 @@
 #ifndef GETNEWSTUFFMODEL_H
 #define GETNEWSTUFFMODEL_H
 
-#include <QModelIndex>
+#include "accounts/Account.h"
 
 #include <attica/content.h>
+
+#include <QModelIndex>
 #include <QPixmap>
 
 class GetNewStuffModel: public QAbstractListModel
 {
     Q_OBJECT
+
 public:
     enum NewStuffRoles {
         // DisplayRole is title
@@ -43,8 +46,25 @@ public:
     };
 
     enum Types {
-        ResolverType = 0,
+        AtticaType = 0,
+        AccountType = 1
     };
+
+    enum ItemState {
+        Uninstalled = 0,
+        Installing,
+        Installed,
+        NeedsUpgrade,
+        Upgrading,
+        Failed,
+        CanInstallMore, // accounts that are not unique
+    };
+
+    // plz don't use me kthxbbq
+    typedef struct {
+        Tomahawk::Accounts::AccountFactory* factory;
+        bool alreadyExists;
+    } AccountItem;
 
     explicit GetNewStuffModel( QObject* parent = 0 );
     virtual ~GetNewStuffModel();
@@ -58,7 +78,14 @@ private slots:
     void resolverStateChanged( const QString& resolverId );
 
 private:
-    Attica::Content::List m_contentList;
+    void loadData();
+    bool isAttica( const QVariant& item ) const;
+    Attica::Content atticaFromItem( const QVariant& item ) const;
+    AccountItem* accountFromItem( const QVariant& item ) const;
+
+    QVariantList m_contentList;
 };
+
+Q_DECLARE_METATYPE( GetNewStuffModel::AccountItem* );
 
 #endif // GETNEWSTUFFMODEL_H

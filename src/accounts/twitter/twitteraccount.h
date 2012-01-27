@@ -46,6 +46,7 @@ public:
 
     QString prettyName() const { return "Twitter"; }
     QString factoryId() const { return "twitteraccount"; }
+    QString description() const { return tr( "Connect to your Twitter followers." ); }
     QPixmap icon() const { return QPixmap( ":/twitter-icon.png" ); }
     Account* createAccount( const QString& pluginId = QString() );
 };

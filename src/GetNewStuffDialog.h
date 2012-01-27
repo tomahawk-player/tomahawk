@@ -33,6 +33,9 @@ public:
     explicit GetNewStuffDialog( QWidget *parent = 0, Qt::WindowFlags f = 0 );
     ~GetNewStuffDialog();
 
+private slots:
+    void installFromFile();
+
 private:
     Ui::GetNewStuffDialog *ui;
     GetNewStuffModel* m_model;

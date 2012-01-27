@@ -21,6 +21,9 @@
 #include "ui_GetNewStuffDialog.h"
 #include "GetNewStuffDelegate.h"
 #include "GetNewStuffModel.h"
+#include "tomahawksettings.h"
+
+#include <QtGui/QFileDialog>
 
 GetNewStuffDialog::GetNewStuffDialog( QWidget* parent, Qt::WindowFlags f )
     : QDialog( parent, f )
@@ -29,13 +32,13 @@ GetNewStuffDialog::GetNewStuffDialog( QWidget* parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    ui->listView->setModel( m_model );
-    GetNewStuffDelegate* del = new GetNewStuffDelegate( ui->listView );
-    connect( del, SIGNAL( update( QModelIndex ) ), ui->listView, SLOT( update( QModelIndex ) ) );
-    ui->listView->setItemDelegate( del );
-    ui->listView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    ui->accountsList->setModel( m_model );
+    GetNewStuffDelegate* del = new GetNewStuffDelegate( ui->accountsList );
+    connect( del, SIGNAL( update( QModelIndex ) ), ui->accountsList, SLOT( update( QModelIndex ) ) );
+    ui->accountsList->setItemDelegate( del );
+    ui->accountsList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-    ui->listView->setMouseTracking( true );
+    ui->accountsList->setMouseTracking( true );
 
     setMinimumSize( 560, 350 );
 
@@ -43,12 +46,30 @@ GetNewStuffDialog::GetNewStuffDialog( QWidget* parent, Qt::WindowFlags f )
     setMaximumSize( 560, 350 );
     setSizeGripEnabled( false );
 
-    ui->listView->setAttribute( Qt::WA_MacShowFocusRect, false );
+    ui->accountsList->setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif
+
+    connect( ui->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
 }
 
 
 GetNewStuffDialog::~GetNewStuffDialog()
 {
     delete ui;
+}
+
+
+void
+GetNewStuffDialog::installFromFile()
+{
+    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+
+//     m_resolversModel->addResolver( resolver, true );
+    // TODO
+    if( !resolver.isEmpty() )
+    {
+
+        QFileInfo resolverAbsoluteFilePath = resolver;
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
+    }
 }

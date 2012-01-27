@@ -36,7 +36,9 @@ public:
 
     virtual Account* createAccount(const QString& accountId = QString());
     virtual QString factoryId() const  { return "resolveraccount"; }
+    virtual QString description() const { return QString(); }
     virtual QString prettyName() const { return QString(); } // Internal, not displayed
+    virtual bool allowUserCreation() const { return false; }
 };
 
 /**

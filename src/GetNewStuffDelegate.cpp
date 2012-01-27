@@ -111,27 +111,30 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     // Go from right edge now, stars, install button, and downloaded info
 
     // install / status button
-    AtticaManager::ResolverState state = static_cast< AtticaManager::ResolverState >( index.data( GetNewStuffModel::StateRole ).toInt() );
+    GetNewStuffModel::ItemState state = static_cast< GetNewStuffModel::ItemState >( index.data( GetNewStuffModel::StateRole ).toInt() );
     QString actionText;
     switch( state )
     {
-        case AtticaManager::Uninstalled:
+        case GetNewStuffModel::Uninstalled:
             actionText = tr( "Install" );
             break;
-        case AtticaManager::Installing:
+        case GetNewStuffModel::Installing:
             actionText = tr( "Installing" );
             break;
-        case AtticaManager::Upgrading:
+        case GetNewStuffModel::Upgrading:
             actionText = tr( "Upgrading" );
             break;
-        case AtticaManager::Failed:
+        case GetNewStuffModel::Failed:
             actionText = tr( "Failed" );
             break;
-        case AtticaManager::Installed:
+        case GetNewStuffModel::Installed:
             actionText = tr( "Uninstall" );
             break;
-        case AtticaManager::NeedsUpgrade:
+        case GetNewStuffModel::NeedsUpgrade:
             actionText = tr( "Upgrade" );
+            break;
+        case GetNewStuffModel::CanInstallMore:
+            actionText = tr( "Install Another" );
             break;
     }
 

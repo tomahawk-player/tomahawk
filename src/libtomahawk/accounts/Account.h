@@ -165,9 +165,13 @@ public:
     virtual QString prettyName() const = 0;
     // internal name
     virtual QString factoryId() const = 0;
+    // description to be shown when user views a list of account types
+    virtual QString description() const = 0;
     // if the user can create multiple
-    virtual QPixmap icon() const { return QPixmap(); }
     virtual bool isUnique() const { return false; }
+
+    virtual QPixmap icon() const { return QPixmap(); }
+    virtual bool allowUserCreation() const { return true; }
 
     virtual Account* createAccount( const QString& accountId = QString() ) = 0;
 };
