@@ -88,11 +88,11 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     // draw the icon if it exists
     pos = mid - ( ICONSIZE / 2 );
-    if( !index.data( Qt::DecorationRole ).value< QIcon >().isNull() ) {
+    if( !index.data( Qt::DecorationRole ).value< QPixmap >().isNull() ) {
         QRect prect = QRect( iconLeftEdge, pos + top, ICONSIZE, ICONSIZE );
 
         painter->save();
-        painter->drawPixmap( prect, index.data( Qt::DecorationRole ).value< QIcon >().pixmap( prect.size() ) );
+        painter->drawPixmap( prect, index.data( Qt::DecorationRole ).value< QPixmap >().scaled( prect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
         painter->restore();
     }
 

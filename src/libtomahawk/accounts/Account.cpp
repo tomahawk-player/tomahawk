@@ -51,7 +51,7 @@ Account::aclWidget()
 }
 
 
-QIcon
+QPixmap
 Account::icon() const
 {
     return QPixmap();

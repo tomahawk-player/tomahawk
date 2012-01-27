@@ -36,10 +36,10 @@ GoogleWrapperFactory::createAccount( const QString& pluginId )
 }
 
 
-QIcon
+QPixmap
 GoogleWrapperFactory::icon() const
 {
-    return QIcon( ":/gmail-logo.png" );
+    return QPixmap( ":/gmail-logo.png" );
 }
 
 GoogleWrapperSip::GoogleWrapperSip( Account* account )
@@ -93,10 +93,10 @@ GoogleWrapper::~GoogleWrapper()
 }
 
 
-QIcon
+QPixmap
 GoogleWrapper::icon() const
 {
-    return QIcon( ":/gmail-logo.png" );
+    return QPixmap( ":/gmail-logo.png" );
 }
 
 

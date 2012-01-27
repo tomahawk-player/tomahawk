@@ -91,7 +91,7 @@ public:
     QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
     virtual QWidget* aclWidget() = 0;
 
-    virtual QIcon icon() const = 0;
+    virtual QPixmap icon() const = 0;
 
     virtual ConnectionState connectionState() const = 0;
     virtual bool isAuthenticated() const = 0;
@@ -166,7 +166,7 @@ public:
     // internal name
     virtual QString factoryId() const = 0;
     // if the user can create multiple
-    virtual QIcon icon() const { return QIcon(); }
+    virtual QPixmap icon() const { return QPixmap(); }
     virtual bool isUnique() const { return false; }
 
     virtual Account* createAccount( const QString& accountId = QString() ) = 0;

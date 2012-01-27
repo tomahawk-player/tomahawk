@@ -157,7 +157,7 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     codeDir.cd( "../images" );
 
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
-        m_icon.addFile( codeDir.absoluteFilePath( "icon.png" ) );
+        m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
 }
 
 AtticaResolverAccount::~AtticaResolverAccount()
@@ -165,8 +165,8 @@ AtticaResolverAccount::~AtticaResolverAccount()
 
 }
 
-QIcon
+QPixmap
 AtticaResolverAccount::icon() const
 {
-    return QPixmap;
+    return m_icon;
 }

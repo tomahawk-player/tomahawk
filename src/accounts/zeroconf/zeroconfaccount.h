@@ -41,7 +41,7 @@ public:
     virtual QString prettyName() const { return "Local Network"; }
     virtual bool isUnique() const { return true; }
 #ifndef ENABLE_HEADLESS
-    virtual QIcon icon() const;
+virtual QPixmap icon() const;
 #endif
 
 
@@ -55,7 +55,7 @@ public:
     ZeroconfAccount( const QString &accountId );
     virtual ~ZeroconfAccount();
 
-    QIcon icon() const;
+    QPixmap icon() const;
 
     void authenticate();
     void deauthenticate();

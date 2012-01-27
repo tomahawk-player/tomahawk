@@ -26,13 +26,13 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-QIcon* s_icon = 0;
+QPixmap* s_icon = 0;
 
 ZeroconfFactory::ZeroconfFactory()
 {
 #ifndef ENABLE_HEADLESS
     if ( s_icon == 0 )
-        s_icon = new QIcon( ":/zeroconf-icon.png" );
+        s_icon = new QPixmap( ":/zeroconf-icon.png" );
 #endif
 }
 
@@ -53,7 +53,7 @@ ZeroconfFactory::createAccount( const QString& pluginId )
     return new ZeroconfAccount( pluginId.isEmpty() ? generateId( factoryId() ) : pluginId );
 }
 
-QIcon
+QPixmap
 ZeroconfFactory::icon() const
 {
     return *s_icon;
@@ -74,7 +74,7 @@ ZeroconfAccount::~ZeroconfAccount()
 
 }
 
-QIcon
+QPixmap
 ZeroconfAccount::icon() const
 {
     return *s_icon;

@@ -63,7 +63,7 @@ public:
     virtual void removeFromConfig();
 
     // Not relevant
-    virtual QIcon icon() const { return QIcon(); }
+    virtual QPixmap icon() const { return QPixmap(); }
     virtual SipPlugin* sipPlugin() { return 0; }
     virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     virtual QWidget* aclWidget() { return 0; }
@@ -87,10 +87,10 @@ public:
     explicit AtticaResolverAccount(const QString& accountId);
     virtual ~AtticaResolverAccount();
 
-    virtual QIcon icon() const;
+    virtual QPixmap icon() const;
 
 private:
-    QIcon m_icon;
+    QPixmap m_icon;
 };
 
 }

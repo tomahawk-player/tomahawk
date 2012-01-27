@@ -38,7 +38,7 @@ public:
 
     virtual QString prettyName() const { return "Google"; }
     virtual QString factoryId() const { return "googleaccount"; }
-    virtual QIcon icon() const;
+    virtual QPixmap icon() const;
     virtual Account* createAccount( const QString& pluginId );
 };
 
@@ -65,7 +65,7 @@ public:
 
     virtual const QString name() const { return QString( "Google" ); }
     virtual const QString friendlyName() const { return "Google"; }
-    virtual QIcon icon() const;
+    virtual QPixmap icon() const;
 
     virtual SipPlugin* sipPlugin();
 

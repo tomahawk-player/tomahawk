@@ -46,7 +46,7 @@ public:
 
     QString prettyName() const { return "Twitter"; }
     QString factoryId() const { return "twitteraccount"; }
-    QIcon icon() const { return QIcon( ":/twitter-icon.png" ); }
+    QPixmap icon() const { return QPixmap( ":/twitter-icon.png" ); }
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -58,7 +58,7 @@ public:
     TwitterAccount( const QString &accountId );
     virtual ~TwitterAccount();
 
-    QIcon icon() const;
+    QPixmap icon() const;
 
     void authenticate();
     void deauthenticate();

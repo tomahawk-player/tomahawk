@@ -48,7 +48,7 @@ public:
 
     QString prettyName() const { return "XMPP (Jabber)"; }
     QString factoryId() const { return "xmppaccount"; }
-    QIcon icon() const { return QIcon( ":/xmpp-icon.png" ); }
+    QPixmap icon() const { return QPixmap( ":/xmpp-icon.png" ); }
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -60,7 +60,7 @@ public:
     XmppAccount( const QString &accountId );
     virtual ~XmppAccount();
 
-    QIcon icon() const { return QIcon( ":/xmpp-icon.png" ); }
+    QPixmap icon() const { return QPixmap( ":/xmpp-icon.png" ); }
 
     void authenticate();
     void deauthenticate();

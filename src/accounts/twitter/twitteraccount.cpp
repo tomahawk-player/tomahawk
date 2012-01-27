@@ -170,9 +170,9 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         emit nowAuthenticated( m_twitterAuth, user );
     }
 }
-QIcon
+QPixmap
 TwitterAccount::icon() const {
-    return QIcon( ":/twitter-icon.png" );
+    return QPixmap( ":/twitter-icon.png" );
 }
 
 
