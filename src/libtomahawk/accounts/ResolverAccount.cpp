@@ -45,6 +45,16 @@ ResolverAccountFactory::createAccount( const QString& accountId )
 }
 
 
+Account*
+ResolverAccountFactory::createFromPath( const QString& path, bool isAttica )
+{
+    if ( isAttica )
+        return new AtticaResolverAccount( generateId( "resolveraccount" ), path );
+    else
+        return new ResolverAccount( generateId( "resolveraccount" ), path );
+}
+
+
 ResolverAccount::ResolverAccount( const QString& accountId )
     : Account( accountId )
 {
@@ -55,6 +65,25 @@ ResolverAccount::ResolverAccount( const QString& accountId )
     Q_ASSERT( !path.isEmpty() );
 
     m_resolver = qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, enabled() ) );
+    connect( m_resolver, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+
+    // What resolver do we have here? Should only be types that are 'real' resolvers
+    Q_ASSERT ( m_resolver );
+
+    setAccountFriendlyName( m_resolver->name() );
+    setTypes( AccountType( ResolverType ) );
+}
+
+
+ResolverAccount::ResolverAccount( const QString& accountId, const QString& path )
+    : Account( accountId )
+{
+    QVariantHash configuration;
+    configuration[ "path" ] = path;
+    setConfiguration( configuration );
+    setEnabled( true );
+
+    m_resolver = qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, true ) );
     connect( m_resolver, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
@@ -152,18 +181,33 @@ ResolverAccount::resolverChanged()
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     : ResolverAccount( accountId )
 {
+    loadIcon();
+}
+
+AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path )
+    : ResolverAccount( accountId, path )
+{
+    loadIcon();
+}
+
+
+AtticaResolverAccount::~AtticaResolverAccount()
+{
+
+}
+
+void
+AtticaResolverAccount::loadIcon()
+{
     const QFileInfo fi( m_resolver->filePath() );
     QDir codeDir = fi.absoluteDir();
     codeDir.cd( "../images" );
 
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
         m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
-}
-
-AtticaResolverAccount::~AtticaResolverAccount()
-{
 
 }
+
 
 QPixmap
 AtticaResolverAccount::icon() const

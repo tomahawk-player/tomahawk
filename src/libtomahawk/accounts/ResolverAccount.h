@@ -39,6 +39,10 @@ public:
     virtual QString description() const { return QString(); }
     virtual QString prettyName() const { return QString(); } // Internal, not displayed
     virtual bool allowUserCreation() const { return false; }
+
+    // Used to create a new resolver from a script on disk, either chosen by
+    // the user, or installed from synchrotron
+    static Account* createFromPath( const QString& path, bool isAttica );
 };
 
 /**
@@ -74,7 +78,10 @@ private slots:
     void resolverChanged();
 
 protected:
+    ResolverAccount( const QString& accountId, const QString& path );
     ExternalResolverGui* m_resolver;
+
+    friend class ResolverAccountFactory;
 };
 
 
@@ -92,7 +99,13 @@ public:
     virtual QPixmap icon() const;
 
 private:
+    AtticaResolverAccount( const QString& accountId, const QString& path );
+
+    void loadIcon();
+
     QPixmap m_icon;
+
+    friend class ResolverAccountFactory;
 };
 
 }

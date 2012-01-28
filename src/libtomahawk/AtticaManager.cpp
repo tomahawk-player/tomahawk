@@ -32,6 +32,8 @@
 #include <QTimer>
 
 #include "utils/logger.h"
+#include "accounts/ResolverAccount.h"
+#include "accounts/AccountManager.h"
 
 using namespace Attica;
 
@@ -374,6 +376,9 @@ AtticaManager::payloadFetched()
 
             // Do the install / add to tomahawk
             Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
+            Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
+            Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+
             m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
