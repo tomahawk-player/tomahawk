@@ -68,6 +68,8 @@ public:
     virtual void saveConfig();
     virtual void removeFromConfig();
 
+    QString path() const;
+
     // Not relevant
     virtual QPixmap icon() const { return QPixmap(); }
     virtual SipPlugin* sipPlugin() { return 0; }

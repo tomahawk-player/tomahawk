@@ -168,6 +168,13 @@ void ResolverAccount::saveConfig()
 }
 
 
+QString
+ResolverAccount::path() const
+{
+    return m_resolver->filePath();
+}
+
+
 void
 ResolverAccount::resolverChanged()
 {
