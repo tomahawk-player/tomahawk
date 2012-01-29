@@ -72,7 +72,10 @@ GetNewStuffModel::loadData()
         foreach ( Account* acct, allAccounts )
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
+            {
                 item->alreadyExists = true;
+                break;
+            }
             else
                 item->alreadyExists = false;
         }
