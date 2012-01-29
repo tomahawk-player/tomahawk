@@ -273,12 +273,17 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             QVariantHash configuration;
             configuration[ "path" ] = resolver;
-            setValue( "configuration", configuration );
 
             // reasonably ugly check for attica resolvers
             if ( resolver.contains( "atticaresolvers" ) && resolver.contains( "code" ) )
+            {
                 setValue( "atticaresolver", true );
 
+                QFileInfo info( resolver );
+                configuration[ "atticaId" ] = info.baseName();
+            }
+
+            setValue( "configuration", configuration );
             endGroup();
 
         }

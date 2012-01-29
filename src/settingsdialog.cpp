@@ -573,7 +573,6 @@ SettingsDialog::accountCreateConfigClosed( int finished )
 void
 SettingsDialog::handleAccountAdded( Account* account, bool added )
 {
-    AccountFactory* f = AccountManager::instance()->factoryForAccount( account );
     if ( added )
     {
         account->setEnabled( true );

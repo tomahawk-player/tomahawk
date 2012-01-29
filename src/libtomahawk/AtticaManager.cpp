@@ -464,6 +464,9 @@ AtticaManager::extractPayload( const QString& filename, const QString& resolverI
 void
 AtticaManager::uninstallResolver( const QString& pathToResolver )
 {
+    // when is this used? find and fix
+    Q_ASSERT(false);
+
     // User manually removed a resolver not through attica dialog, simple remove
     QRegExp r( ".*([^/]*)/contents/code/main.js" );
     r.indexIn( pathToResolver );
@@ -495,6 +498,19 @@ AtticaManager::uninstallResolver( const Content& resolver )
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
         TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
+
+        // remove account as well
+        QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::ResolverType );
+        foreach ( Tomahawk::Accounts::Account* account, accounts )
+        {
+            if ( Tomahawk::Accounts::AtticaResolverAccount* atticaAccount = qobject_cast< Tomahawk::Accounts::AtticaResolverAccount* >( account ) )
+            {
+                if ( atticaAccount->atticaId() == resolver.id() ) // this is the account we want to remove
+                {
+                    Tomahawk::Accounts::AccountManager::instance()->removeAccount( atticaAccount );
+                }
+            }
+        }
     }
 
     Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );

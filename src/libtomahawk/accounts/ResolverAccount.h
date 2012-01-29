@@ -54,6 +54,7 @@ class ResolverAccount : public Account
 {
     Q_OBJECT
 public:
+    // Loads from config. Must already exist.
     explicit ResolverAccount( const QString& accountId );
     virtual ~ResolverAccount();
 
@@ -80,6 +81,7 @@ private slots:
     void resolverChanged();
 
 protected:
+    // Created by factory, when user installs a new resolver
     ResolverAccount( const QString& accountId, const QString& path );
     ExternalResolverGui* m_resolver;
 
@@ -95,17 +97,21 @@ class AtticaResolverAccount : public ResolverAccount
 {
     Q_OBJECT
 public:
-    explicit AtticaResolverAccount(const QString& accountId);
+    // Loads from config
+    explicit AtticaResolverAccount( const QString& accountId );
     virtual ~AtticaResolverAccount();
 
     virtual QPixmap icon() const;
 
+    QString atticaId() const { return m_atticaId; }
 private:
-    AtticaResolverAccount( const QString& accountId, const QString& path );
+    // Created by factory, when user installs a new resolver
+    AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );
 
     void loadIcon();
 
     QPixmap m_icon;
+    QString m_atticaId;
 
     friend class ResolverAccountFactory;
 };

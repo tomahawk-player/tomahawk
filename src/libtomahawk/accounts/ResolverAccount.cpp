@@ -49,7 +49,10 @@ Account*
 ResolverAccountFactory::createFromPath( const QString& path, bool isAttica )
 {
     if ( isAttica )
-        return new AtticaResolverAccount( generateId( "resolveraccount" ), path );
+    {
+        QFileInfo info( path );
+        return new AtticaResolverAccount( generateId( "resolveraccount" ), path, info.baseName() );
+    }
     else
         return new ResolverAccount( generateId( "resolveraccount" ), path );
 }
@@ -159,11 +162,13 @@ void
 ResolverAccount::removeFromConfig()
 {
     // TODO
+    Account::removeFromConfig();
 }
 
 
 void ResolverAccount::saveConfig()
 {
+    Account::saveConfig();
     m_resolver->saveConfig();
 }
 
@@ -188,12 +193,18 @@ ResolverAccount::resolverChanged()
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     : ResolverAccount( accountId )
 {
+    m_atticaId = configuration().value( "atticaId" ).toString();
     loadIcon();
 }
 
-AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path )
+AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId )
     : ResolverAccount( accountId, path )
+    , m_atticaId( atticaId )
 {
+    QVariantHash conf = configuration();
+    conf[ "atticaid" ] = atticaId;
+    setConfiguration( conf );
+
     loadIcon();
 }
 
