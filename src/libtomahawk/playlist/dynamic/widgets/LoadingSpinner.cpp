@@ -42,10 +42,11 @@ LoadingSpinner::LoadingSpinner( QWidget* parent )
     connect( m_showHide, SIGNAL( finished() ), this, SLOT( hideFinished() ) );
 
     m_anim = new QMovie( RESPATH "/images/loading-animation.gif" );
+    m_anim->jumpToNextFrame();
 
     connect( m_anim, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
 
-    resize( 31, 31 );
+    resize( m_anim->currentPixmap().size() );
     setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     hide();
 }
@@ -96,7 +97,7 @@ LoadingSpinner::hideFinished()
 QSize
 LoadingSpinner::sizeHint() const
 {
-    return QSize( 31, 31 );
+    return m_anim->currentPixmap().size();
 }
 
 

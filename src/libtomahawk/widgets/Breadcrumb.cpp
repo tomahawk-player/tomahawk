@@ -33,7 +33,6 @@ using namespace Tomahawk;
 Breadcrumb::Breadcrumb( QWidget* parent, Qt::WindowFlags f )
     : QWidget( parent, f )
     , m_model( 0 )
-
     , m_buttonlayout( new QHBoxLayout( this ) )
 {
     m_buttonlayout->setSpacing( 0 );
@@ -48,10 +47,11 @@ Breadcrumb::Breadcrumb( QWidget* parent, Qt::WindowFlags f )
     show();
 }
 
+
 Breadcrumb::~Breadcrumb()
 {
-
 }
+
 
 void
 Breadcrumb::setModel( QAbstractItemModel* model )
@@ -63,6 +63,7 @@ Breadcrumb::setModel( QAbstractItemModel* model )
     m_model = model;
     updateButtons( QModelIndex() );
 }
+
 
 void
 Breadcrumb::setRootIcon( const QPixmap& pm )
@@ -84,6 +85,7 @@ Breadcrumb::paintEvent( QPaintEvent* )
     QStylePainter p( this );
     StyleHelper::horizontalHeader( &p, rect() );
 }
+
 
 // updateFrom is the item that has changed---all children must be recomputed
 // if invalid, redo the whole breadcrumb
@@ -127,7 +129,7 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
             {
                 QPropertyAnimation* animation = new QPropertyAnimation( btn, "pos" );
                 animation->setDuration( 300 );
-                animation->setStartValue( m_buttons.last()->pos());
+                animation->setStartValue( m_buttons.last()->pos() );
                 animation->setEndValue( btn->pos() );
                 animation->start( QAbstractAnimation::DeleteWhenStopped );
             }
@@ -161,6 +163,7 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
     // Now we're at the leaf, lets activate the chart
     emit activateIndex( idx );
 }
+
 
 void
 Breadcrumb::breadcrumbComboChanged( const QModelIndex& childSelected )

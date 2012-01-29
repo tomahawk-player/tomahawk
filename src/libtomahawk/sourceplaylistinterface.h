@@ -35,7 +35,7 @@ class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::Source *source );
+    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode = PlaylistInterface::StayOnSong );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
@@ -44,6 +44,7 @@ public:
     virtual int unfilteredTrackCount() const { return 1; }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual bool sourceValid();
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr currentItem() const;
@@ -54,6 +55,8 @@ public:
     virtual PlaylistInterface::RetryMode retryMode() const { return Retry; }
     virtual quint32 retryInterval() const { return 5000; }
 
+    virtual void setLatchMode( PlaylistInterface::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
+    
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
@@ -64,13 +67,7 @@ public:
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
-
-signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-    void nextTrackReady();
+    virtual void audioPaused() { setLatchMode( PlaylistInterface::StayOnSong ); }
 
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );

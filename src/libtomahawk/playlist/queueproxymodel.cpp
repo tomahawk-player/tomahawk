@@ -32,7 +32,7 @@ QueueProxyModel::QueueProxyModel( TrackView* parent )
     qDebug() << Q_FUNC_INFO;
 
     connect( parent, SIGNAL( itemActivated( QModelIndex ) ), this, SLOT( onIndexActivated( QModelIndex ) ) );
-    connect( getPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 
@@ -58,7 +58,7 @@ QueueProxyModel::onTrackCountChanged( unsigned int count )
 
 
 Tomahawk::playlistinterface_ptr
-QueueProxyModel::getPlaylistInterface()
+QueueProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

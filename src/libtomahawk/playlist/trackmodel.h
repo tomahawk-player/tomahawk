@@ -44,15 +44,16 @@ public:
     enum Columns {
         Artist = 0,
         Track = 1,
-        Album = 2,
-        AlbumPos = 3,
-        Duration = 4,
-        Bitrate = 5,
-        Age = 6,
-        Year = 7,
-        Filesize = 8,
-        Origin = 9,
-        Score = 10,
+        Composer = 2,
+        Album = 3,
+        AlbumPos = 4,
+        Duration = 5,
+        Bitrate = 6,
+        Age = 7,
+        Year = 8,
+        Filesize = 9,
+        Origin = 10,
+        Score = 11
     };
 
     explicit TrackModel( QObject* parent = 0 );
@@ -135,6 +136,8 @@ private slots:
     void onPlaybackStopped();
 
 private:
+    Qt::Alignment columnAlignment( int column ) const;
+
     TrackModelItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;

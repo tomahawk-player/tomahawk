@@ -206,7 +206,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
     }
     catch( CLuceneError& error )
     {
-        qDebug() << "Caught CLucene error:" << error.what();
+        tDebug() << "Caught CLucene error:" << error.what();
         Q_ASSERT( false );
     }
 

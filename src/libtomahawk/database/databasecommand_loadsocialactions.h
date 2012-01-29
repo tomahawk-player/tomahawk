@@ -56,17 +56,17 @@ public:
 
     /**
      * \brief Overloaded constructor for DatabaseCommand_LoadSocialAction.
-     * \param result Pointer to a Tomahawk::Result.
+     * \param result A Tomahawk Query object.
      * \param parent Parent class.
      *
      * Constructor which creates a new database command for loading all social actions.
      */
-    explicit DatabaseCommand_LoadSocialActions( Tomahawk::Result* result, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_result( result )
+    explicit DatabaseCommand_LoadSocialActions( const Tomahawk::query_ptr& query, QObject* parent = 0 )
+        : DatabaseCommand( parent ), m_query( query )
     {
         setSource( SourceList::instance()->getLocal() );
-        setArtist( result->artist()->name() );
-        setTrack( result->track() );
+        setArtist( query->artist() );
+        setTrack( query->track() );
     }
 
     /**
@@ -125,7 +125,7 @@ signals:
     void done( QList< Tomahawk::SocialAction >& allSocialActions );
 
 private:
-    Tomahawk::Result* m_result;
+    Tomahawk::query_ptr m_query;
     QString m_artist;
     QString m_track;
 

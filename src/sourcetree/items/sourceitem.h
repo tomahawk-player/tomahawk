@@ -42,6 +42,7 @@ public:
     virtual int IDValue() const;
 
     virtual bool localLatchedOn() const;
+    virtual Tomahawk::PlaylistInterface::LatchMode localLatchMode() const;
 
     Tomahawk::source_ptr source() const;
 
@@ -63,6 +64,7 @@ private slots:
 
     void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
+    void latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode );
 
     void requestExpanding();
 

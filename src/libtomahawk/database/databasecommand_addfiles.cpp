@@ -80,7 +80,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery query_trackattr = dbi->newquery();
 
     query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos) VALUES (?, ?, ?, ?, ?)" );
+    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos, composer, discnumber) VALUES (?, ?, ?, ?, ?, ?, ?)" );
     query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) VALUES (?, ?, ?)" );
 
     int added = 0;
@@ -92,7 +92,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     {
         QVariant& v = *it;
         QVariantMap m = v.toMap();
-        int fileid = 0, artistid = 0, albumid = 0, trackid = 0;
+
+        int fileid = 0, artistid = 0, albumid = 0, trackid = 0, composerid = 0;
 
         QString url      = m.value( "url" ).toString();
         int mtime        = m.value( "mtime" ).toInt();
@@ -105,6 +106,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QString album    = m.value( "album" ).toString();
         QString track    = m.value( "track" ).toString();
         uint albumpos    = m.value( "albumpos" ).toUInt();
+        QString composer = m.value( "composer" ).toString();
+        uint discnumber  = m.value( "discnumber" ).toUInt();
         int year         = m.value( "year" ).toInt();
 
         query_file.bindValue( 0, srcid );
@@ -134,13 +137,22 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
             continue;
         albumid = dbi->albumId( artistid, album, true );
 
+        if( !composer.trimmed().isEmpty() )
+            composerid = dbi->artistId( composer, true );
+
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
         query_filejoin.bindValue( 1, artistid );
         query_filejoin.bindValue( 2, albumid > 0 ? albumid : QVariant( QVariant::Int ) );
         query_filejoin.bindValue( 3, trackid );
         query_filejoin.bindValue( 4, albumpos );
-        query_filejoin.exec();
+        query_filejoin.bindValue( 5, composerid > 0 ? composerid : QVariant( QVariant::Int ) );
+        query_filejoin.bindValue( 6, discnumber );
+        if ( !query_filejoin.exec() )
+        {
+            qDebug() << "Error inserting into file_join table";
+            continue;
+        }
 
         query_trackattr.bindValue( 0, trackid );
         query_trackattr.bindValue( 1, "releaseyear" );

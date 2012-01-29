@@ -32,7 +32,7 @@ public:
     explicit CollectionProxyModel( QObject* parent = 0 );
     virtual ~CollectionProxyModel() {}
 
-    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
 };
 

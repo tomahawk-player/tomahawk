@@ -72,16 +72,13 @@ private:
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QStringList m_chartResources;
+    QString m_chartVersion;
     QList< InfoStringHash > m_charts;
     ChartType m_chartType;
-
     QVariantMap m_allChartsMap;
-
     uint m_chartsFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
-
     QHash< QString, QString > m_cachedCountries;
-
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 

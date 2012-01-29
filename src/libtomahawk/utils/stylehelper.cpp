@@ -47,6 +47,8 @@ StyleHelper::headerHighlightColor()
 void
 StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
 {
+    painter->save();
+
     QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
     QRect lowerHalf( 0, upperHalf.height(), r.width(), r.height() );
     painter->fillRect( upperHalf, StyleHelper::headerUpperColor() );
@@ -64,6 +66,8 @@ StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
         painter->setPen( lineColor );
         painter->drawLine( line );
     }
+
+    painter->restore();
 }
 
 

@@ -29,8 +29,11 @@
 
 using namespace Tomahawk;
 
-Album::Album() {}
-Album::~Album() {}
+
+Album::~Album()
+{
+}
+
 
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
@@ -68,19 +71,21 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
+    , m_infoLoaded( false )
 {
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 }
 
 
 void
 Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
-    qDebug() << Q_FUNC_INFO;
-
-    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( getPlaylistInterface().data() );
+    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( playlistInterface().data() );
     if ( api )
         api->addQueries( tracks );
-    
+
     emit tracksAdded( tracks );
 }
 
@@ -92,13 +97,61 @@ Album::artist() const
 }
 
 
+QByteArray
+Album::cover() const
+{
+    if ( !m_infoLoaded )
+    {
+        m_uuid = uuid();
+
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = artist()->name();
+        trackInfo["album"] = name();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = m_uuid;
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.customData = QVariantMap();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+
+    return m_cover;
+}
+
+
+void
+Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != m_uuid ||
+         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        return;
+    }
+
+    m_infoLoaded = true;
+    if ( !output.isNull() && output.isValid() )
+    {
+        QVariantMap returnedData = output.value< QVariantMap >();
+        const QByteArray ba = returnedData["imgbytes"].toByteArray();
+        if ( ba.length() )
+        {
+            m_cover = ba;
+        }
+    }
+
+    emit updated();
+}
+
+
 Tomahawk::playlistinterface_ptr
-Album::getPlaylistInterface()
+Album::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {
         m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this ) );
     }
-    
+
     return m_playlistInterface;
 }

@@ -23,6 +23,7 @@
 #include "combobox.h"
 #include "utils/stylehelper.h"
 #include "utils/tomahawkutilsgui.h"
+#include "utils/logger.h"
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -49,6 +50,7 @@ BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* mode
     connect( m_combo, SIGNAL( activated( int ) ), SLOT( comboboxActivated( int ) ) );
 }
 
+
 void
 BreadcrumbButton::paintEvent( QPaintEvent* )
 {
@@ -59,23 +61,22 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
 
     StyleHelper::horizontalHeader( &p, r ); // draw the background
 
-    if( !hasChildren() )
+    if ( !hasChildren() )
         return;
 
     bool reverse = opt.direction == Qt::RightToLeft;
     int menuButtonWidth = 12;
     int rightSpacing = 10;
-    int left = !reverse ? r.right()-rightSpacing - menuButtonWidth : r.left();
-    int right = !reverse ? r.right()-rightSpacing : r.left() + menuButtonWidth;
+    int left = !reverse ? r.right() - rightSpacing - menuButtonWidth : r.left();
+    int right = !reverse ? r.right() - rightSpacing : r.left() + menuButtonWidth;
     int height = r.height();
     QRect arrowRect( ( left + right ) / 2 + ( reverse ? 6 : -6 ), 0, height, height );
 
     QStyleOption arrowOpt = opt;
     arrowOpt.rect = arrowRect;
 
-    QLine l1( left, 0, right, height/2 );
-    QLine l2( left, height, right, height/2 );
-
+    QLine l1( left, 0, right, height / 2 );
+    QLine l2( left, height, right, height / 2 );
 
     p.setRenderHint( QPainter::Antialiasing, true );
 
@@ -93,6 +94,7 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
     p.drawLine( l1 );
     p.drawLine( l2 );
 }
+
 
 QSize
 BreadcrumbButton::sizeHint() const
@@ -125,7 +127,6 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
         }
     }
 
-
     if ( m_combo->count() && list.count() )
     {
         // Check if it's the same, Don't change if it is, as it'll cause flickering
@@ -152,6 +153,7 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
     m_combo->adjustSize();
 }
 
+
 void
 BreadcrumbButton::comboboxActivated( int idx )
 {
@@ -170,6 +172,7 @@ BreadcrumbButton::hasChildren() const
 {
     return m_model->rowCount( m_model->index( m_combo->currentIndex(), 0, m_parentIndex ) ) > 0;
 }
+
 
 QModelIndex
 BreadcrumbButton::currentIndex() const

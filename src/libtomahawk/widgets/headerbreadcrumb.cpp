@@ -24,22 +24,25 @@
 #include <QStylePainter>
 #include <QPaintEvent>
 
-HeaderBreadCrumb::HeaderBreadCrumb(BreadcrumbButtonFactory *buttonFactory, QWidget *parent) :
-    BreadcrumbBar(buttonFactory, parent)
+HeaderBreadCrumb::HeaderBreadCrumb( BreadcrumbButtonFactory* buttonFactory, QWidget* parent )
+    : BreadcrumbBar( buttonFactory, parent )
 {
 }
 
-HeaderBreadCrumb::HeaderBreadCrumb(QWidget *parent) :
-    BreadcrumbBar(parent)
+
+HeaderBreadCrumb::HeaderBreadCrumb( QWidget* parent )
+    : BreadcrumbBar( parent )
 {
 }
+
 
 HeaderBreadCrumb::~HeaderBreadCrumb()
 {
 }
 
-void HeaderBreadCrumb::paintEvent(QPaintEvent *event)
+
+void HeaderBreadCrumb::paintEvent( QPaintEvent* /* event */ )
 {
-    QStylePainter p(this);
-    StyleHelper::horizontalHeader(&p, rect());
+    QStylePainter p( this );
+    StyleHelper::horizontalHeader( &p, rect() );
 }

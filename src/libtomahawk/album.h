@@ -25,6 +25,7 @@
 #include "typedefs.h"
 #include "playlistinterface.h"
 #include "dllmacro.h"
+#include "infosystem/infosystem.h"
 
 namespace Tomahawk
 {
@@ -43,23 +44,29 @@ public:
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     artist_ptr artist() const;
+    QByteArray cover() const;
+    bool infoLoaded() const { return m_infoLoaded; }
 
-    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void updated();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
 
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+
 private:
     Q_DISABLE_COPY( Album )
-    explicit Album();
 
     unsigned int m_id;
     QString m_name;
-
     artist_ptr m_artist;
+    QByteArray m_cover;
+    bool m_infoLoaded;
+    mutable QString m_uuid;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

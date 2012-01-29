@@ -40,7 +40,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             break;
 
         case Album:
-            m_orderToken = "album.name, file_join.albumpos";
+            m_orderToken = "album.name, file_join.discnumber, file_join.albumpos";
             break;
 
         case ModificationTime:
@@ -48,7 +48,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             break;
 
         case AlbumPosition:
-            m_orderToken = "file_join.albumpos";
+            m_orderToken = "file_join.discnumber, file_join.albumpos";
             break;
     }
 
@@ -60,7 +60,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     {
         if ( m_album->id() == 0 )
         {
-            m_artist = m_album->artist().data();
+            m_artist = m_album->artist();
             albumToken = QString( "AND album.id IS NULL" );
         }
         else
@@ -68,11 +68,15 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     }
 
     QString sql = QString(
-            "SELECT file.id, artist.name, album.name, track.name, file.size, "
-                   "file.duration, file.bitrate, file.url, file.source, file.mtime, file.mimetype, file_join.albumpos, artist.id, album.id, track.id "
+            "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
+                   "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
+                   "file.mimetype, file_join.discnumber, file_join.albumpos, artist.id, "       //11
+                   "album.id, track.id, composer.id "                                           //15
             "FROM file, artist, track, file_join "
             "LEFT OUTER JOIN album "
             "ON file_join.album = album.id "
+            "LEFT OUTER JOIN artist AS composer "
+            "ON file_join.composer = composer.id "
             "WHERE file.id = file_join.file "
             "AND file_join.artist = artist.id "
             "AND file_join.track = track.id "
@@ -92,15 +96,15 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     while( query.next() )
     {
         Tomahawk::source_ptr s;
-        QString url = query.value( 7 ).toString();
+        QString url = query.value( 8 ).toString();
 
-        if ( query.value( 8 ).toUInt() == 0 )
+        if ( query.value( 9 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
         }
         else
         {
-            s = SourceList::instance()->get( query.value( 8 ).toUInt() );
+            s = SourceList::instance()->get( query.value( 9 ).toUInt() );
             if ( s.isNull() )
             {
                 Q_ASSERT( false );
@@ -110,26 +114,30 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
-        QString artist, track, album;
+        QString artist, track, album, composer;
         artist = query.value( 1 ).toString();
         album = query.value( 2 ).toString();
         track = query.value( 3 ).toString();
+        composer = query.value( 4 ).toString();
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
-        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 12 ).toUInt(), artist );
-        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 13 ).toUInt(), album, artistptr );
+        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 14 ).toUInt(), artist );
+        Tomahawk::artist_ptr composerptr = Tomahawk::Artist::get( query.value( 17 ).toUInt(), composer );
+        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 15 ).toUInt(), album, artistptr );
 
-        result->setTrackId( query.value( 14 ).toUInt() );
+        result->setTrackId( query.value( 16 ).toUInt() );
         result->setArtist( artistptr );
         result->setAlbum( albumptr );
         result->setTrack( query.value( 3 ).toString() );
-        result->setSize( query.value( 4 ).toUInt() );
-        result->setDuration( query.value( 5 ).toUInt() );
-        result->setBitrate( query.value( 6 ).toUInt() );
-        result->setModificationTime( query.value( 9 ).toUInt() );
-        result->setMimetype( query.value( 10 ).toString() );
-        result->setAlbumPos( query.value( 11 ).toUInt() );
+        result->setComposer( composerptr );
+        result->setSize( query.value( 5 ).toUInt() );
+        result->setDuration( query.value( 6 ).toUInt() );
+        result->setBitrate( query.value( 7 ).toUInt() );
+        result->setModificationTime( query.value( 10 ).toUInt() );
+        result->setMimetype( query.value( 11 ).toString() );
+        result->setDiscNumber( query.value( 12 ).toUInt() );
+        result->setAlbumPos( query.value( 13 ).toUInt() );
         result->setScore( 1.0 );
         result->setCollection( s->collection() );
 

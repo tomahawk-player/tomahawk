@@ -1,4 +1,4 @@
--- Script to migate from db version 6 to 27
+-- Script to migate from db version 26 to 27
 -- Nothing to do
 
 CREATE TABLE IF NOT EXISTS collection_attributes (

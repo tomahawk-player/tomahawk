@@ -86,7 +86,7 @@ ArtistPlaylistInterface::tracks()
     if ( m_queries.isEmpty() && m_artist )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
-        cmd->setArtist( m_artist.data() );
+        cmd->setArtist( m_artist );
         cmd->setSortOrder( DatabaseCommand_AllTracks::Album );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),

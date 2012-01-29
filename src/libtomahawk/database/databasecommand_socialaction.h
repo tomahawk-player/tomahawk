@@ -61,20 +61,20 @@ public:
 
     /**
      * \brief Overloaded constructor for DatabaseCommand_SocialAction.
-     * \param result Pointer to a Tomahawk::Result.
+     * \param query A Tomahawk Query object.
      * \param action Name of the social action to be written to the database.
      * \param comment Comment associated with this social action.
      * \param parent Parent class.
      *
      * Constructor which creates a new database command for the specified social action.
      */
-    explicit DatabaseCommand_SocialAction( const Tomahawk::result_ptr& result, QString action, QString comment="", QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_result( result ), m_action( action )
+    explicit DatabaseCommand_SocialAction( const Tomahawk::query_ptr& query, QString action, QString comment = "", QObject* parent = 0 )
+        : DatabaseCommandLoggable( parent ), m_query( query ), m_action( action )
     {
         setSource( SourceList::instance()->getLocal() );
 
-        setArtist( result->artist()->name() );
-        setTrack( result->track() );
+        setArtist( query->artist() );
+        setTrack( query->track() );
         setComment( comment );
         setTimestamp( QDateTime::currentDateTime().toTime_t() );
     }
@@ -173,7 +173,7 @@ public:
     virtual bool groupable() const { return true; }
 
 private:
-    Tomahawk::result_ptr m_result;
+    Tomahawk::query_ptr m_query;
 
     QString m_artist;
     QString m_track;

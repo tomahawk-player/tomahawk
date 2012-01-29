@@ -58,15 +58,6 @@ public:
 
     virtual void addQueries( const QList<Tomahawk::query_ptr>& tracks );
 
-signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
-
 private:
     Q_DISABLE_COPY( ArtistPlaylistInterface )
 

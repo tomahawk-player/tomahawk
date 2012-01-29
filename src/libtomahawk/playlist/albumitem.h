@@ -24,6 +24,7 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
+#include "artist.h"
 #include "album.h"
 
 #include "dllmacro.h"
@@ -41,7 +42,6 @@ public:
 
     const Tomahawk::artist_ptr& artist() const { return m_artist; }
     const Tomahawk::album_ptr& album() const { return m_album; }
-    void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
 
     AlbumItem* parent;
     QList<AlbumItem*> children;
@@ -49,7 +49,6 @@ public:
     int childCount;
     QPersistentModelIndex index;
     QAbstractItemModel* model;
-    QPixmap cover;
     bool toberemoved;
 
 signals:

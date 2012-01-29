@@ -52,7 +52,7 @@ public:
     TomahawkSqlQuery newquery() { return TomahawkSqlQuery( m_db ); }
     QSqlDatabase& database() { return m_db; }
 
-    int artistId( const QString& name_orig, bool autoCreate );
+    int artistId( const QString& name_orig, bool autoCreate ); //also for composers!
     int trackId( int artistid, const QString& name_orig, bool autoCreate );
     int albumId( int artistid, const QString& name_orig, bool autoCreate );
 
@@ -84,6 +84,7 @@ public slots:
 private:
     QString cleanSql( const QString& sql );
     bool updateSchema( int oldVersion );
+    void dumpDatabase();
 
     bool m_ready;
     QSqlDatabase m_db;

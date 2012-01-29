@@ -43,6 +43,7 @@ public slots:
     void latchRequest( const Tomahawk::source_ptr& source );
     void unlatchRequest( const Tomahawk::source_ptr& source );
     void catchUpRequest();
+    void latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime );
 
 private slots:
     void playlistChanged( Tomahawk::playlistinterface_ptr );

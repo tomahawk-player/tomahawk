@@ -62,7 +62,7 @@ public:
     void setTreeModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getPlaylistInterface(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
@@ -95,8 +95,6 @@ private slots:
     void onItemCountChanged( unsigned int items );
     void onFilterChanged( const QString& filter );
     void onFilteringStarted();
-    void onViewChanged();
-    void onScrollTimeout();
 
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
@@ -115,7 +113,6 @@ private:
     Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_showModes;
-    QTimer m_timer;
     mutable QString m_guid;
 };
 

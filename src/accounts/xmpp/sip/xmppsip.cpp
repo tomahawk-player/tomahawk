@@ -52,7 +52,6 @@
     #include <QMessageBox>
 #endif
 
-
 #include <utils/tomahawkutilsgui.h>
 #include "utils/logger.h"
 
@@ -146,6 +145,7 @@ XmppSipPlugin::~XmppSipPlugin()
     delete m_client;
 }
 
+
 #ifndef ENABLE_HEADLESS
 QMenu*
 XmppSipPlugin::menu()
@@ -178,6 +178,7 @@ XmppSipPlugin::connectPlugin()
     return;
 }
 
+
 void
 XmppSipPlugin::disconnectPlugin()
 {
@@ -202,6 +203,7 @@ XmppSipPlugin::disconnectPlugin()
     m_state = Account::Disconnecting;
     emit stateChanged( m_state );
 }
+
 
 void
 XmppSipPlugin::onConnect()
@@ -245,6 +247,7 @@ XmppSipPlugin::onConnect()
     addMenuHelper();
 }
 
+
 void
 XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 {
@@ -286,11 +289,13 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     }
 }
 
+
 void
 XmppSipPlugin::onError( const Jreen::Connection::SocketError& e )
 {
-    tLog() << "JABBER error:" << e;
+    tDebug() << "JABBER error:" << e;
 }
+
 
 QString
 XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
@@ -341,6 +346,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
     return QString();
 }
 
+
 void
 XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
 {
@@ -386,6 +392,7 @@ XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
     connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 }
 
+
 void
 XmppSipPlugin::broadcastMsg(const QString& msg)
 {
@@ -400,6 +407,7 @@ XmppSipPlugin::broadcastMsg(const QString& msg)
     }
 }
 
+
 void
 XmppSipPlugin::addContact(const QString& jid, const QString& msg)
 {
@@ -413,6 +421,7 @@ XmppSipPlugin::addContact(const QString& jid, const QString& msg)
 
     return;
 }
+
 
 void
 XmppSipPlugin::showAddFriendDialog()
@@ -429,6 +438,7 @@ XmppSipPlugin::showAddFriendDialog()
     addContact( id );
 #endif
 }
+
 
 QString
 XmppSipPlugin::defaultSuffix() const
@@ -577,7 +587,7 @@ void XmppSipPlugin::onNewMessage(const Jreen::Message& message)
 
     if( message.subtype() == Jreen::Message::Error )
     {
-        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
+        tDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
                  << ( message.error().isNull() ? -1 : message.error()->condition() ) << ")";
         return;
     }
@@ -612,7 +622,7 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
-//    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
+    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
 
     if( jid == m_client->jid() )
         return;
@@ -626,7 +636,7 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     if( caps )
     {
-//         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
@@ -697,6 +707,7 @@ void XmppSipPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, c
     confirmBox->open( this, SLOT( onSubscriptionRequestConfirmed( int ) ) );
 #endif
 }
+
 
 void
 XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
@@ -922,7 +933,6 @@ XmppSipPlugin::readUsername()
     QVariantHash credentials = m_account->credentials();
     return credentials.contains( "username" ) ? credentials[ "username" ].toString() : QString();
 }
-
 
 QString
 XmppSipPlugin::readPassword()

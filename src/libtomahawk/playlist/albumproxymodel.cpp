@@ -141,7 +141,7 @@ AlbumProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 
 
 Tomahawk::playlistinterface_ptr
-AlbumProxyModel::getPlaylistInterface()
+AlbumProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

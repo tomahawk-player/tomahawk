@@ -243,24 +243,21 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
             rp->setArtist( ap );
             rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
+            rp->setAlbumPos( m.value( "albumpos" ).toUInt() );
             rp->setTrack( m.value( "track" ).toString() );
             rp->setDuration( m.value( "duration" ).toUInt() );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
+            rp->setYear( m.value( "year ").toUInt() );
+            rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
             rp->setMimetype( m.value( "mimetype" ).toString() );
             if ( rp->mimetype().isEmpty() )
             {
                 rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
                 Q_ASSERT( !rp->mimetype().isEmpty() );
-            }
-            if ( m.contains( "year" ) )
-            {
-                QVariantMap attr;
-                attr[ "releaseyear" ] = m.value( "year" );
-                rp->setAttributes( attr );
             }
 
             results << rp;

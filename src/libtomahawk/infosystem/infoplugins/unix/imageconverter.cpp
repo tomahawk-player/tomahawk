@@ -20,7 +20,7 @@
 
 #include <QtDBus/QDBusArgument>
 #include <QtDBus/QDBusMetaType>
-#include <QImage>
+#include <QtGui/QImage>
 
 #include "utils/logger.h"
 

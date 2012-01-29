@@ -20,11 +20,11 @@
 
 #include "album.h"
 #include "collection.h"
+#include "source.h"
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"
-#include "database/databasecommand_loadsocialactions.h"
 
 #include "utils/logger.h"
 
@@ -58,6 +58,7 @@ Result::Result( const QString& url )
     , m_size( 0 )
     , m_albumpos( 0 )
     , m_modtime( 0 )
+    , m_discnumber( 0 )
     , m_year( 0 )
     , m_score( 0 )
     , m_trackId( 0 )
@@ -80,6 +81,12 @@ artist_ptr
 Result::artist() const
 {
     return m_artist;
+}
+
+artist_ptr
+Result::composer() const
+{
+    return m_composer;
 }
 
 
@@ -151,6 +158,8 @@ Result::toVariant() const
     m.insert( "duration", duration() );
     m.insert( "score", score() );
     m.insert( "sid", id() );
+    m.insert( "discnumber", discnumber() );
+    m.insert( "composer", composer()->name() );
 
     return m;
 }
@@ -164,15 +173,19 @@ Result::toString() const
 
 
 Tomahawk::query_ptr
-Result::toQuery() const
+Result::toQuery()
 {
-    Tomahawk::query_ptr query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
-    QList<Tomahawk::result_ptr> rl;
-    rl << Result::get( m_url );
+    if ( m_query.isNull() )
+    {
+        m_query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
+        QList<Tomahawk::result_ptr> rl;
+        rl << Result::get( m_url );
 
-    query->addResults( rl );
-    query->setResolveFinished( true );
-    return query;
+        m_query->addResults( rl );
+        m_query->setResolveFinished( true );
+    }
+
+    return m_query;
 }
 
 
@@ -201,58 +214,16 @@ Result::onOffline()
 
 
 void
-Result::loadSocialActions()
-{
-    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( this );
-    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-}
-
-
-void Result::onSocialActionsLoaded()
-{
-    parseSocialActions();
-
-    emit socialActionsLoaded();
-}
-
-
-void
-Result::setAllSocialActions(QList< SocialAction > socialActions)
-{
-    m_allSocialActions = socialActions;
-}
-
-
-QList< SocialAction >
-Result::allSocialActions()
-{
-    return m_allSocialActions;
-}
-
-
-void
-Result::parseSocialActions()
-{
-    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
-    unsigned int highestTimestamp = 0;
-
-    while ( it.hasNext() )
-    {
-        Tomahawk::SocialAction socialAction;
-        socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
-        {
-            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
-        }
-    }
-}
-
-
-void
 Result::setArtist( const Tomahawk::artist_ptr& artist )
 {
     m_artist = artist;
+}
+
+
+void
+Result::setComposer( const Tomahawk::artist_ptr &composer )
+{
+    m_composer = composer;
 }
 
 

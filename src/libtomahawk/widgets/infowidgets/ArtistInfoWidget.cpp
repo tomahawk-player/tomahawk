@@ -21,6 +21,7 @@
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/audioengine.h"
+#include "playlist/trackheader.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
@@ -68,10 +69,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_relatedModel = new TreeModel( ui->relatedArtists );
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     ui->relatedArtists->setTreeModel( m_relatedModel );
+    ui->relatedArtists->setSortingEnabled( false );
+    ui->relatedArtists->proxyModel()->sort( -1 );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
+    ui->topHits->setSortingEnabled( false );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
@@ -88,8 +92,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     load( artist );
 }
@@ -182,6 +184,9 @@ ArtistInfoWidget::jumpToCurrentTrack()
 void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
+    if ( !m_artist.isNull() )
+        disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
+
     m_artist = artist;
     m_title = artist->name();
     m_albumsModel->addAlbums( artist, QModelIndex(), true );
@@ -199,10 +204,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 
-    requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
     requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
     requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -210,6 +211,9 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
     requestData.requestId = TomahawkUtils::infosystemRequestId();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
+    onArtistImageUpdated();
 }
 
 
@@ -252,31 +256,17 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
         {
             const QStringList tracks = returnedData["tracks"].toStringList();
 
+            QList< query_ptr > queries;
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                query_ptr query = Query::get( m_artist->name(), track, QString(), uuid() );
-                m_topHitsModel->append( query );
+                queries << Query::get( m_artist->name(), track, QString(), uuid() );
 
                 if ( ++i == 15 )
                     break;
             }
-            break;
-        }
 
-        case InfoSystem::InfoArtistImages:
-        {
-            const QByteArray ba = returnedData["imgbytes"].toByteArray();
-            if ( ba.length() )
-            {
-                QPixmap pm;
-                pm.loadFromData( ba );
-
-                if ( !pm.isNull() )
-                    m_pixmap = pm.scaledToHeight( 48, Qt::SmoothTransformation );
-
-                emit pixmapChanged( m_pixmap );
-            }
+            m_topHitsModel->append( queries );
             break;
         }
 
@@ -297,9 +287,13 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 
 
 void
-ArtistInfoWidget::infoSystemFinished( QString target )
+ArtistInfoWidget::onArtistImageUpdated()
 {
-    Q_UNUSED( target );
+    if ( m_artist->cover().isNull() )
+        return;
+
+    m_pixmap.loadFromData( m_artist->cover() );
+    emit pixmapChanged( m_pixmap );
 }
 
 

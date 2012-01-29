@@ -33,7 +33,7 @@ CollectionProxyModel::CollectionProxyModel( QObject* parent )
 }
 
 Tomahawk::playlistinterface_ptr
-CollectionProxyModel::getPlaylistInterface()
+CollectionProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

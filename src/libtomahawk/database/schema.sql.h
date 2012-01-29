@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Wed Nov 16 22:47:16 EST 2011.
+    This file was automatically generated from ./schema.sql on Fri Nov 18 14:00:37 CET 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -116,7 +116,9 @@ static const char * tomahawk_schema_sql =
 "    artist INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    track INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    album INTEGER REFERENCES album(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    albumpos INTEGER"
+"    albumpos INTEGER,"
+"    composer INTEGER REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    discnumber INTEGER"
 ");"
 "CREATE INDEX file_join_track  ON file_join(track);"
 "CREATE INDEX file_join_artist ON file_join(artist);"
@@ -189,7 +191,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '27');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '28');"
     ;
 
 const char * get_tomahawk_sql()

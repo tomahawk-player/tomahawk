@@ -30,8 +30,6 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
-
 using namespace Tomahawk;
 
 
@@ -40,11 +38,6 @@ AlbumModel::AlbumModel( QObject* parent )
     , m_rootItem( new AlbumItem( 0, this ) )
     , m_overwriteOnAdd( false )
 {
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-               SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -123,11 +116,6 @@ AlbumModel::data( const QModelIndex& index, int role ) const
     if ( !entry )
         return QVariant();
 
-    if ( role == Qt::DecorationRole )
-    {
-        return entry->cover;
-    }
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -187,8 +175,6 @@ AlbumModel::mimeTypes() const
 QMimeData*
 AlbumModel::mimeData( const QModelIndexList &indexes ) const
 {
-    qDebug() << Q_FUNC_INFO;
-
     QByteArray queryData;
     QDataStream queryStream( &queryData, QIODevice::WriteOnly );
 
@@ -401,89 +387,6 @@ AlbumModel::clear()
     delete m_rootItem;
     m_rootItem = new AlbumItem( 0, this );
     endResetModel();
-}
-
-
-bool
-AlbumModel::getCover( const QModelIndex& index )
-{
-    AlbumItem* item = itemFromIndex( index );
-    if ( !item || !item->cover.isNull() )
-        return false;
-
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-
-    if ( !item->artist().isNull() )
-    {
-        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
-
-        trackInfo["artist"] = item->artist()->name();
-    }
-    else if ( !item->album().isNull() && !item->album()->artist().isNull() )
-    {
-        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-
-        trackInfo["artist"] = item->album()->artist()->name();
-        trackInfo["album"] = item->album()->name();
-    }
-
-    m_coverHash.insert( (qlonglong)item, index );
-    trackInfo["pptr"] = QString::number( (qlonglong)item );
-
-    requestData.caller = s_tmInfoIdentifier;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-    requestData.customData = QVariantMap();
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    return true;
-}
-
-
-void
-AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-//    qDebug() << Q_FUNC_INFO << " with caller " << requestData.caller;
-
-    if ( requestData.caller != s_tmInfoIdentifier ||
-       ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
-    {
-        return;
-    }
-
-    if ( !output.canConvert< QVariantMap >() )
-    {
-        qDebug() << "Cannot convert fetched art from a QByteArray";
-        return;
-    }
-
-    Tomahawk::InfoSystem::InfoStringHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-    QVariantMap returnedData = output.value< QVariantMap >();
-    const QByteArray ba = returnedData["imgbytes"].toByteArray();
-    if ( ba.length() )
-    {
-        QPixmap pm;
-        pm.loadFromData( ba );
-
-        bool ok;
-        qlonglong p = pptr["pptr"].toLongLong( &ok );
-        AlbumItem* ai = itemFromIndex( m_coverHash.take( p ) );
-        if ( !ai )
-            return;
-
-        if ( !pm.isNull() )
-            ai->cover = pm;
-
-        if ( ai->index.isValid() )
-            emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
-    }
-}
-
-
-void
-AlbumModel::infoSystemFinished( QString target )
-{
-    Q_UNUSED( target );
 }
 
 

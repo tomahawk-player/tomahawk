@@ -29,11 +29,6 @@
 using namespace Tomahawk;
 
 
-Artist::Artist()
-{
-}
-
-
 Artist::~Artist()
 {
 }
@@ -74,24 +69,75 @@ Artist::Artist( unsigned int id, const QString& name )
     : QObject()
     , m_id( id )
     , m_name( name )
+    , m_infoLoaded( false )
 {
     m_sortname = DatabaseImpl::sortname( name, true );
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 }
 
 
 void
 Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
-    qDebug() << Q_FUNC_INFO;
-
-    Tomahawk::ArtistPlaylistInterface* api = dynamic_cast< Tomahawk::ArtistPlaylistInterface* >( getPlaylistInterface().data() );
+    Tomahawk::ArtistPlaylistInterface* api = dynamic_cast< Tomahawk::ArtistPlaylistInterface* >( playlistInterface().data() );
     if ( api )
         api->addQueries( tracks );
     emit tracksAdded( tracks );
 }
 
+
+QByteArray
+Artist::cover() const
+{
+    if ( !m_infoLoaded )
+    {
+        m_uuid = uuid();
+
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = name();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = m_uuid;
+        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.customData = QVariantMap();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+
+    return m_cover;
+}
+
+
+void
+Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != m_uuid ||
+         requestData.type != Tomahawk::InfoSystem::InfoArtistImages )
+    {
+        return;
+    }
+
+    m_infoLoaded = true;
+    if ( !output.isNull() && output.isValid() )
+    {
+        QVariantMap returnedData = output.value< QVariantMap >();
+        const QByteArray ba = returnedData["imgbytes"].toByteArray();
+        if ( ba.length() )
+        {
+            m_cover = ba;
+        }
+    }
+
+    emit updated();
+}
+
+
 Tomahawk::playlistinterface_ptr
-Artist::getPlaylistInterface()
+Artist::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

@@ -63,12 +63,6 @@ AlbumView::AlbumView( QWidget* parent )
     setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
 
-    m_timer.setInterval( SCROLL_TIMEOUT );
-
-    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
-    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
-    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }
 
@@ -112,13 +106,10 @@ AlbumView::setAlbumModel( AlbumModel* model )
     }
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
-    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
-
-    onViewChanged(); // Fetch covers if albums were added to model before model was attached to view
 }
 
 
@@ -140,16 +131,6 @@ AlbumView::onItemActivated( const QModelIndex& index )
 
 
 void
-AlbumView::onViewChanged()
-{
-    if ( m_timer.isActive() )
-        m_timer.stop();
-
-    m_timer.start();
-}
-
-
-void
 AlbumView::onItemCountChanged( unsigned int items )
 {
     if ( items == 0 )
@@ -163,45 +144,6 @@ AlbumView::onItemCountChanged( unsigned int items )
     }
     else
         m_overlay->hide();
-}
-
-
-void
-AlbumView::onScrollTimeout()
-{
-    if ( m_timer.isActive() )
-        m_timer.stop();
-
-    if ( !m_proxyModel->rowCount() )
-        return;
-
-    QRect viewRect = viewport()->rect();
-    int rowHeight = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize().height();
-    viewRect.adjust( 0, -rowHeight, 0, rowHeight );
-
-    bool started = false;
-    bool done = false;
-    for ( int i = 0; i < m_proxyModel->rowCount(); i++ )
-    {
-        if ( started && done )
-            break;
-
-        for ( int j = 0; j < m_proxyModel->columnCount(); j++ )
-        {
-            QModelIndex idx = m_proxyModel->index( i, j );
-            if ( !viewRect.contains( visualRect( idx ) ) )
-            {
-                done = true;
-                break;
-            }
-
-            started = true;
-            done = false;
-
-            if ( !m_model->getCover( m_proxyModel->mapToSource( idx ) ) )
-                break;
-        }
-    }
 }
 
 

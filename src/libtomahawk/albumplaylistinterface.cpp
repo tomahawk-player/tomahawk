@@ -88,11 +88,12 @@ AlbumPlaylistInterface::tracks()
     if ( m_queries.isEmpty() && m_album )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
-        cmd->setAlbum( m_album.data() );
+        cmd->setAlbum( m_album );
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+        //this takes discnumber into account as well
 
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+        connect( cmd,          SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                 m_album.data(), SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }

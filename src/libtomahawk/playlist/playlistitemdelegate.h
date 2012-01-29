@@ -59,7 +59,6 @@ private:
     mutable QPixmap m_arrowIcon;
 
     QTextOption m_topOption;
-    QTextOption m_centerOption;
     QTextOption m_bottomOption;
 
     TrackView* m_view;

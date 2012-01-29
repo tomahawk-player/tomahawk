@@ -39,22 +39,22 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->tracksViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->artistsViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
     virtual ~ChartsPlaylistInterface() {}
 
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->repeatMode(); }
+    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->repeatMode(); }
 
-    virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->shuffled(); }
+    virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->shuffled(); }
 
     // Do nothing
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
@@ -73,14 +73,14 @@ public:
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {
-        m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
-        m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
+        m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->setRepeatMode( mode );
+        m_w->ui->artistsViewLeft->proxyModel()->playlistInterface()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->tracksViewLeft->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
-        m_w->ui->artistsViewLeft->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
+        m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->setShuffled( enabled );
+        m_w->ui->artistsViewLeft->proxyModel()->playlistInterface()->setShuffled( enabled );
     }
 
 signals:

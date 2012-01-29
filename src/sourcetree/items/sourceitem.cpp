@@ -108,7 +108,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-
+    
     if ( m_source->isLocal() )
         QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );
 }
@@ -193,12 +193,23 @@ SourceItem::localLatchedOn() const
 }
 
 
+Tomahawk::PlaylistInterface::LatchMode
+SourceItem::localLatchMode() const
+{
+    if ( !m_source.isNull() && !m_source->isLocal() )
+        return m_source->playlistInterface()->latchMode();
+
+    return Tomahawk::PlaylistInterface::StayOnSong;
+}
+
+
 void
 SourceItem::latchedOff( const source_ptr& from, const source_ptr& to )
 {
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = false;
+        disconnect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
         m_latchedOnTo.clear();
         emit updated();
     }
@@ -212,8 +223,17 @@ SourceItem::latchedOn( const source_ptr& from, const source_ptr& to )
     {
         m_latchedOn = true;
         m_latchedOnTo = to;
+        connect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ), SLOT( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
         emit updated();
     }
+}
+
+
+void
+SourceItem::latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode )
+{
+    Q_UNUSED( mode );
+    emit updated();
 }
 
 

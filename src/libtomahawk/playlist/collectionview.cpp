@@ -60,6 +60,7 @@ CollectionView::setTrackModel( TrackModel* model )
 
     setColumnHidden( TrackModel::Score, true ); // Hide score column per default
     setColumnHidden( TrackModel::Origin, true ); // Hide origin column per default
+    setColumnHidden( TrackModel::Composer, true ); //Hide composer column per default
 
     setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
     sortByColumn( TrackModel::Artist, Qt::AscendingOrder );

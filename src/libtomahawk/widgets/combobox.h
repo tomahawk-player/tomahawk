@@ -36,6 +36,9 @@ public:
     ComboBox( QWidget* parent = 0 );
     virtual ~ComboBox();
 
+    virtual QSize sizeHint() const;
+
+protected:
     virtual void paintEvent( QPaintEvent* );
 };
 

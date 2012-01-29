@@ -150,7 +150,6 @@ set( libGuiHeaders
 
     contextmenu.h
     dropjob.h
-    viewpage.h
     viewmanager.h
     globalactionmanager.h
     LatchManager.h
@@ -235,7 +234,6 @@ set( libGuiHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
     utils/dropjobnotifier.h
-    utils/tomahawkutilsgui.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h
@@ -402,6 +400,14 @@ set( libSources
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
 
+    taghandlers/tag.cpp
+    taghandlers/apetag.cpp
+    taghandlers/asftag.cpp
+    taghandlers/id3v1tag.cpp
+    taghandlers/id3v2tag.cpp
+    taghandlers/mp4tag.cpp
+    taghandlers/oggtag.cpp
+
     utils/tomahawkutils.cpp
     utils/logger.cpp
     utils/qnr_iodevicestream.cpp
@@ -436,6 +442,7 @@ set( libHeaders
     albumplaylistinterface.h
     playlist.h
     playlistplaylistinterface.h
+    viewpage.h
 
     accounts/Account.h
     accounts/AccountManager.h
@@ -536,6 +543,7 @@ set( libHeaders
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
 
+    utils/tomahawkutilsgui.h
     utils/xspfloader.h
     utils/qnr_iodevicestream.h
 )
@@ -546,6 +554,14 @@ set( libHeaders_NoMOC
     accounts/Account.h
 
     infosystem/infoplugins/unix/imageconverter.h
+
+    taghandlers/tag.h
+    taghandlers/apetag.h
+    taghandlers/asftag.h
+    taghandlers/id3v1tag.h
+    taghandlers/id3v2tag.h
+    taghandlers/mp4tag.h
+    taghandlers/oggtag.h
 
     utils/tomahawkutils.h
 )

@@ -93,7 +93,7 @@ TrackModel::columnCount( const QModelIndex& parent ) const
 
         case Detailed:
         default:
-            return 11;
+            return 12;
             break;
     }
 }
@@ -134,6 +134,11 @@ TrackModel::data( const QModelIndex& index, int role ) const
     if ( role == Qt::SizeHintRole )
     {
         return QSize( 0, 18 );
+    }
+
+    if ( role == Qt::TextAlignmentRole )
+    {
+        return QVariant( columnAlignment( index.column() ) );
     }
 
     if ( role == StyleRole )
@@ -178,14 +183,17 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 return query->results().first()->album()->name();
                 break;
 
+            case Composer:
+                if ( !query->results().first()->composer().isNull() )
+                    return query->results().first()->composer()->name();
+                break;
+
             case Duration:
                 return TomahawkUtils::timeToString( query->results().first()->duration() );
                 break;
 
             case Bitrate:
-                if ( query->results().first()->bitrate() == 0 )
-                    return QString();
-                else
+                if ( query->results().first()->bitrate() > 0 )
                     return query->results().first()->bitrate();
                 break;
 
@@ -194,9 +202,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Year:
-                if ( query->results().first()->year() == 0 )
-                    return QString();
-                else
+                if ( query->results().first()->year() != 0 )
                     return query->results().first()->year();
                 break;
 
@@ -213,9 +219,16 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case AlbumPos:
-                if ( query->results().first()->albumpos() == 0 )
-                    return QString();
-                return QString::number( query->results().first()->albumpos() );
+                QString tPos;
+                if ( query->results().first()->albumpos() != 0 )
+                {
+                    tPos = QString::number( query->results().first()->albumpos() );
+                    if( query->results().first()->discnumber() == 0 )
+                        return tPos;
+                    else
+                        return QString( "%1.%2" ).arg( QString::number( query->results().first()->discnumber() ) )
+                                                 .arg( tPos );
+                }
                 break;
         }
     }
@@ -230,10 +243,15 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
     Q_UNUSED( orientation );
 
     QStringList headers;
-    headers << tr( "Artist" ) << tr( "Title" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
+    headers << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
     if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
+    }
+
+    if ( role == Qt::TextAlignmentRole )
+    {
+        return QVariant( columnAlignment( section ) );
     }
 
     return QVariant();
@@ -533,4 +551,24 @@ void
 TrackModel::setStyle( TrackModel::TrackItemStyle style )
 {
     m_style = style;
+}
+
+
+Qt::Alignment
+TrackModel::columnAlignment( int column ) const
+{
+    switch( column )
+    {
+        case Age:
+        case AlbumPos:
+        case Bitrate:
+        case Duration:
+        case Filesize:
+        case Year:
+            return Qt::AlignHCenter;
+            break;
+
+        default:
+            return Qt::AlignLeft;
+    }
 }

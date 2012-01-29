@@ -302,7 +302,7 @@ Source::trackCount() const
 
 
 Tomahawk::playlistinterface_ptr
-Source::getPlaylistInterface()
+Source::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {
@@ -323,7 +323,7 @@ Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int durati
     m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
     if ( m_playlistInterface.isNull() )
-        getPlaylistInterface();
+        playlistInterface();
     emit playbackStarted( query );
 }
 
@@ -361,6 +361,13 @@ Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
 void
 Source::executeCommands()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        tDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "executeCommands", Qt::QueuedConnection );
+        return;
+    }
+
     if ( !m_cmds.isEmpty() )
     {
         QList< QSharedPointer<DatabaseCommand> > cmdGroup;

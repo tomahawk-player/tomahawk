@@ -47,7 +47,7 @@
      <widget class="QWidget" name="page2">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="AlbumView" name="additionsView">
+        <widget class="AlbumView" name="albumsView">
          <property name="dragEnabled">
           <bool>true</bool>
          </property>

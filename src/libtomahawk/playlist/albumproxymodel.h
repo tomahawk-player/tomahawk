@@ -45,7 +45,7 @@ public:
 
     virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
-    virtual Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void filterChanged( const QString& filter );

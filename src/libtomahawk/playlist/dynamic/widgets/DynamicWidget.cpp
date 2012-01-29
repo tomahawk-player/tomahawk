@@ -203,7 +203,7 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 Tomahawk::playlistinterface_ptr
 DynamicWidget::playlistInterface() const
 {
-    return m_view->proxyModel()->getPlaylistInterface();
+    return m_view->proxyModel()->playlistInterface();
 }
 
 
@@ -243,7 +243,7 @@ DynamicWidget::layoutFloatingWidgets()
 void
 DynamicWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 {
-    if( pl == m_view->proxyModel()->getPlaylistInterface() ) { // same playlist
+    if( pl == m_view->proxyModel()->playlistInterface() ) { // same playlist
         m_activePlaylist = true;
     } else {
         m_activePlaylist = false;

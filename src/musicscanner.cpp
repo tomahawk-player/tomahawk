@@ -18,7 +18,7 @@
 
 #include "musicscanner.h"
 
-#include <QCoreApplication>
+#include <QtCore/QCoreApplication>
 
 #include "utils/tomahawkutils.h"
 #include "tomahawksettings.h"
@@ -29,6 +29,7 @@
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_addfiles.h"
 #include "database/databasecommand_deletefiles.h"
+#include "taghandlers/tag.h"
 
 #include "utils/logger.h"
 
@@ -333,7 +334,9 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     int bitrate = 0;
     int duration = 0;
-    TagLib::Tag *tag = f.tag();
+
+    Tag *tag = Tag::fromFile( f );
+
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();
@@ -341,9 +344,9 @@ MusicScanner::readFile( const QFileInfo& fi )
         bitrate = properties->bitrate();
     }
 
-    QString artist = TStringToQString( tag->artist() ).trimmed();
-    QString album  = TStringToQString( tag->album() ).trimmed();
-    QString track  = TStringToQString( tag->title() ).trimmed();
+    QString artist = tag->artist().trimmed();
+    QString album  = tag->album().trimmed();
+    QString track  = tag->title().trimmed();
     if ( artist.isEmpty() || track.isEmpty() )
     {
         // FIXME: do some clever filename guessing
@@ -367,6 +370,9 @@ MusicScanner::readFile( const QFileInfo& fi )
     m["track"]        = track;
     m["albumpos"]     = tag->track();
     m["year"]         = tag->year();
+    m["albumartist"]  = tag->albumArtist();
+    m["composer"]     = tag->composer();
+    m["discnumber"]   = tag->discNumber();
     m["hash"]         = ""; // TODO
 
     m_scanned++;

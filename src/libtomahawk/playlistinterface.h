@@ -39,6 +39,7 @@ public:
     enum SeekRestrictions { NoSeekRestrictions, NoSeek };
     enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
     enum RetryMode { NoRetry, Retry };
+    enum LatchMode { StayOnSong, RealTime };
 
     explicit PlaylistInterface();
     virtual ~PlaylistInterface();
@@ -55,14 +56,20 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
+
     virtual bool shuffled() const = 0;
+
     virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
+    
     virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return NoSeekRestrictions; }
     virtual PlaylistInterface::SkipRestrictions skipRestrictions() const { return NoSkipRestrictions; }
 
     virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
     virtual quint32 retryInterval() const { return 30000; }
 
+    virtual PlaylistInterface::LatchMode latchMode() const { return m_latchMode; }
+    virtual void setLatchMode( PlaylistInterface::LatchMode latchMode ) { m_latchMode = latchMode; }
+    
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
@@ -82,8 +89,12 @@ signals:
     void shuffleModeChanged( bool enabled );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
+    void latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode );
     void nextTrackReady();
 
+protected:
+    LatchMode m_latchMode;
+    
 private:
     Q_DISABLE_COPY( PlaylistInterface )
 

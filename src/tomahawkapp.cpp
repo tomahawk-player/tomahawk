@@ -315,16 +315,15 @@ TomahawkApp::~TomahawkApp()
 
     Pipeline::instance()->stop();
 
-    if ( !m_database.isNull() )
-        delete m_database.data();
-
-    delete Pipeline::instance();
-
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
     delete AtticaManager::instance();
 #endif
 
+    if ( !m_database.isNull() )
+        delete m_database.data();
+
+    delete Pipeline::instance();
 
     tLog() << "Finished shutdown.";
 }
@@ -346,10 +345,10 @@ TomahawkApp::printHelp()
     echo( "Options are:\n" );
     echo( "  --help         Show this help\n" );
     echo( "  --http         Initialize HTTP server\n" );
-    echo( "  --filescan     Scan for files on startup\n" );
+    echo( "  --filescan     Scan files on startup\n" );
     echo( "  --hide         Hide main window on startup\n" );
     echo( "  --testdb       Use a test database instead of real collection\n" );
-    echo( "  --noupnp       Disable UPNP\n" );
+    echo( "  --noupnp       Disable UPnP\n" );
     echo( "  --nosip        Disable SIP\n" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
@@ -423,10 +422,12 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
-
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
+    
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
+
+    qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
 }
 
 

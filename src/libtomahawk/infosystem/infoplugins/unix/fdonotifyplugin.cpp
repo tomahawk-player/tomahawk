@@ -42,7 +42,7 @@
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
-#include <QImage>
+#include <QtGui/QImage>
 
 #include "utils/logger.h"
 
@@ -84,18 +84,14 @@ FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     arguments << quint32( 0 ); //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
-    arguments << hash["message"].toString(); //body
+    arguments << hash[ "message" ].toString(); //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    if ( hash.contains( "image" ) )
-    {
-        QVariant tempVariant = hash["image"];
-        QImage tempImage = tempVariant.value< QImage >();
-        dict["image_data"] = ImageConverter::variantForImage( tempImage );
-    }
+    if ( hash.contains( "image" ) && hash[ "image" ].canConvert< QImage >() )
+        dict[ "image_data" ] = ImageConverter::variantForImage( hash[ "image" ].value< QImage >() );
     else
-        dict["image_data"] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+        dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );

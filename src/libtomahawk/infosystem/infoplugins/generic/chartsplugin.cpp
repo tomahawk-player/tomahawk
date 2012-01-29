@@ -45,7 +45,9 @@ ChartsPlugin::ChartsPlugin()
     , m_chartsFetchJobs( 0 )
 {
     /// Add resources here
-    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm";
+    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm" << "soundcloudwall.com";
+    /// If you add resource, update version aswell
+    m_chartVersion = "1.0";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -153,7 +155,8 @@ ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requ
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria[ "InfoChartCapabilities" ] = "chartsplugin";
-    emit getCachedInfo( criteria, 604800000, requestData );
+    criteria[ "InfoChartVersion" ] = m_chartVersion;
+    emit getCachedInfo( criteria, 864000000, requestData );
 }
 
 void
@@ -182,8 +185,8 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
 
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
             // we never need to re-fetch
-            if ( !m_allChartsMap.isEmpty() )
-                return;
+            //if ( !m_allChartsMap.isEmpty() )
+            //    return;
 
             /// Then get each chart from resource
 
@@ -333,6 +336,7 @@ ChartsPlugin::chartTypes()
                 if( source == "wearehunted" ){
                     chartName = "WeAreHunted";
                 }
+
             }
 
         }
@@ -422,7 +426,8 @@ ChartsPlugin::chartTypes()
             // update cache
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria[ "InfoChartCapabilities" ] = "chartsplugin";
-            emit updateCache( criteria, 604800000, request.type, m_allChartsMap );
+            criteria[ "InfoChartVersion" ] = m_chartVersion;
+            emit updateCache( criteria, 864000000, request.type, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }

@@ -57,8 +57,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->additionsView->setFrameShape( QFrame::NoFrame );
-    ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->albumsView->setFrameShape( QFrame::NoFrame );
+    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
@@ -91,7 +91,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->artistsViewLeft->header()->setVisible( false );
+    ui->artistsViewLeft->header()->setVisible( true );
 
     m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
 
@@ -257,7 +257,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), this, SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
-                artistsModel->setColumnStyle( TreeModel::TrackOnly );
+                artistsModel->setMode( InfoSystemMode );
+                artistsModel->setColumnStyle( TreeModel::AllColumns );
 
                 m_artistModels[ chartId ] = artistsModel;
 
@@ -272,7 +273,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
 
-                AlbumModel* albumModel = new AlbumModel( ui->additionsView );
+                AlbumModel* albumModel = new AlbumModel( ui->albumsView );
 
                 m_albumModels[ chartId ] = albumModel;
 
@@ -448,8 +449,8 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 void
 WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
 {
-    ui->additionsView->setAlbumModel( model );
-    ui->additionsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    ui->albumsView->setAlbumModel( model );
+    ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
 }
 

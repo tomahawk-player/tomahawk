@@ -44,6 +44,7 @@ public:
 signals:
     void latchOn( const Tomahawk::source_ptr& idx );
     void latchOff( const Tomahawk::source_ptr& idx );
+    void toggleRealtimeLatch( const Tomahawk::source_ptr& idx, bool realtime );
 
 protected:
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -69,7 +70,7 @@ private:
     QMimeData *m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
     QMap< QModelIndex, AnimationHelper* > m_expandedMap;
-    QPixmap m_headphonesOn, m_headphonesOff, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark;
+    QPixmap m_headphonesOn, m_headphonesOff, m_realtimeLocked, m_realtimeUnlocked, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark;
 
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;

@@ -53,7 +53,7 @@ public:
     void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->getPlaylistInterface(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
@@ -76,9 +76,6 @@ private slots:
 
     void onFilterChanged( const QString& filter );
 
-    void onViewChanged();
-    void onScrollTimeout();
-
 private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
@@ -88,8 +85,6 @@ private:
 
     bool m_inited;
     bool m_autoFitItems;
-
-    QTimer m_timer;
 };
 
 #endif // ALBUMVIEW_H

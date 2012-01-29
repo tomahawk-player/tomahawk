@@ -66,6 +66,8 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
 
     m_headphonesOff.load( RESPATH "images/headphones-off.png" );
     m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
+    m_realtimeLocked.load( RESPATH "images/closed-padlock.png" );
+    m_realtimeUnlocked.load( RESPATH "images/open-padlock.png" );
     m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
     m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
 }
@@ -187,13 +189,13 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( desc.isEmpty() )
         desc = tr( "Online" );
 
-    textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 9, -figWidth - 24, -6 );
     painter->setFont( normal );
+    textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
+    
     bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
     if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
     {
         QRect pmRect = textRect;
-        pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
         pmRect.setRight( pmRect.left() + pmRect.height() );
         ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
         textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
@@ -201,30 +203,44 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
     {
         // Show a listen icon
-        QPixmap pm;
+        QPixmap listenAlongPixmap;
+        QPixmap realtimeListeningAlongPixmap;
         if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
         {
             // Currently listening along
-            pm = m_headphonesOn;
+            listenAlongPixmap = m_headphonesOn;
+            if ( !colItem->source()->isLocal() )
+            {
+                realtimeListeningAlongPixmap =
+                    colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistInterface::RealTime ?
+                        m_realtimeLocked : m_realtimeUnlocked;
+            }
         }
         else if ( !colItem->source()->isLocal() )
         {
-            pm = m_headphonesOff;
+            listenAlongPixmap = m_headphonesOff;
         }
 
-        if ( !pm.isNull() )
+        if ( !listenAlongPixmap.isNull() )
         {
             QRect pmRect = textRect;
-            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
             pmRect.setRight( pmRect.left() + pmRect.height() );
-            painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            painter->drawPixmap( pmRect, listenAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+        }
+
+        if ( !realtimeListeningAlongPixmap.isNull() )
+        {
+            QRect pmRect = textRect;
+            pmRect.setRight( pmRect.left() + pmRect.height() );
+            painter->drawPixmap( pmRect, realtimeListeningAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
         }
     }
 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-    QTextOption to( Qt::AlignBottom );
-    painter->drawText( textRect, text, to );
+    QTextOption to( Qt::AlignVCenter );
+    painter->drawText( textRect.adjusted( 0, 0, 0, 2 ), text, to );
 
     if ( status )
     {
@@ -578,15 +594,23 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 const int height = fm.height() + 3;
 
                 QRect headphonesRect( option.rect.height() + 10, o.rect.bottom() - height, height, height );
-                if ( headphonesRect.contains( ev->pos() ) )
+                bool headphonesRectContainsClick = headphonesRect.contains( ev->pos() );
+                QRect lockRect( option.rect.height() + 20, o.rect.bottom() - height, height, height );
+                bool lockRectContainsClick = lockRect.contains( ev->pos() );
+                if ( headphonesRectContainsClick || lockRectContainsClick )
                 {
                     if ( event->type() == QEvent::MouseButtonRelease )
                     {
-                        if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
-                            // unlatch
-                            emit latchOff( colItem->source() );
-                        else
-                            emit latchOn( colItem->source() );
+                        if ( headphonesRectContainsClick )
+                        {
+                            if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+                                // unlatch
+                                emit latchOff( colItem->source() );
+                            else
+                                emit latchOn( colItem->source() );
+                        }
+                        else // it's in the lock rect
+                            emit toggleRealtimeLatch( colItem->source(), !index.data( SourcesModel::LatchedRealtimeRole ).toBool() );
                     }
                     return true;
                 }

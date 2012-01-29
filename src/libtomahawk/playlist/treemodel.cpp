@@ -47,8 +47,6 @@ TreeModel::TreeModel( QObject* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -86,40 +84,6 @@ Tomahawk::collection_ptr
 TreeModel::collection() const
 {
     return m_collection;
-}
-
-
-void
-TreeModel::getCover( const QModelIndex& index )
-{
-    TreeModelItem* item = itemFromIndex( index );
-    if ( !item->cover.isNull() )
-        return;
-
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-
-    if ( !item->artist().isNull() )
-    {
-        trackInfo["artist"] = item->artist()->name();
-        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
-    }
-    else if ( !item->album().isNull() )
-    {
-        trackInfo["artist"] = item->album()->artist()->name();
-        trackInfo["album"] = item->album()->name();
-        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    }
-    else
-        return;
-
-    trackInfo["pptr"] = QString::number( (qlonglong)item );
-    m_coverHash.insert( (qlonglong)item, index );
-
-    requestData.caller = m_infoId;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-    requestData.customData = QVariantMap();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
@@ -238,8 +202,9 @@ int
 TreeModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
+
     if ( m_columnStyle == AllColumns )
-        return 7;
+        return 8;
     else if ( m_columnStyle == TrackOnly )
         return 1;
 
@@ -307,6 +272,12 @@ TreeModel::data( const QModelIndex& index, int role ) const
     else if ( !entry->result().isNull() )
     {
         const result_ptr& result = entry->result();
+        unsigned int discnumber = 0;
+        if ( !entry->query().isNull() )
+            discnumber = entry->query()->discnumber();
+        if ( discnumber == 0 )
+            discnumber = result->discnumber();
+
         unsigned int albumpos = 0;
         if ( !entry->query().isNull() )
             albumpos = entry->query()->albumpos();
@@ -316,26 +287,25 @@ TreeModel::data( const QModelIndex& index, int role ) const
         switch( index.column() )
         {
             case Name:
-                return QString( "%1%2" ).arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
-                                        .arg( result->track() );
+                return QString( "%1%2%3" ).arg( discnumber > 0 ? QString( "%1." ).arg( discnumber ) : QString() )
+                                          .arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
+                                          .arg( result->track() );
 
             case Duration:
                 return TomahawkUtils::timeToString( result->duration() );
 
             case Bitrate:
-                if ( result->bitrate() == 0 )
-                    return QString();
-                else
+                if ( result->bitrate() > 0 )
                     return result->bitrate();
+                break;
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
 
             case Year:
-                if ( result->year() == 0 )
-                    return QString();
-                else
+                if ( result->year() != 0 )
                     return result->year();
+                break;
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( result->size() );
@@ -345,6 +315,11 @@ TreeModel::data( const QModelIndex& index, int role ) const
 
             case AlbumPosition:
                 return result->albumpos();
+
+            case Composer:
+                if ( !result->composer().isNull() )
+                    return result->composer()->name();
+                break;
 
             default:
                 return QVariant();
@@ -356,8 +331,9 @@ TreeModel::data( const QModelIndex& index, int role ) const
         switch( index.column() )
         {
             case Name:
-                return QString( "%1%2" ).arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
-                                        .arg( query->track() );
+                return QString( "%1%2%3" ).arg( query->discnumber() > 0 ? QString( "%1." ).arg( query->discnumber() ) : QString() )
+                                          .arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
+                                          .arg( query->track() );
 
             case AlbumPosition:
                 return entry->query()->albumpos();
@@ -375,7 +351,7 @@ QVariant
 TreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     QStringList headers;
-    headers << tr( "Name" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
+    headers << tr( "Name" ) << tr( "Composer" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
@@ -654,7 +630,7 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool au
     if ( m_mode == DatabaseMode )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-        cmd->setAlbum( album.data() );
+        cmd->setAlbum( album );
         cmd->setData( QVariant( rows ) );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
@@ -807,8 +783,6 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModel
         albumitem = new TreeModelItem( album, parentItem );
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-
-        getCover( albumitem->index );
     }
 
     emit endInsertRows();
@@ -876,31 +850,6 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
     switch ( requestData.type )
     {
-        case Tomahawk::InfoSystem::InfoAlbumCoverArt:
-        case Tomahawk::InfoSystem::InfoArtistImages:
-        {
-            Tomahawk::InfoSystem::InfoStringHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-            QVariantMap returnedData = output.value< QVariantMap >();
-            const QByteArray ba = returnedData["imgbytes"].toByteArray();
-            if ( ba.length() )
-            {
-                QPixmap pm;
-                pm.loadFromData( ba );
-                bool ok;
-                qlonglong p = pptr["pptr"].toLongLong( &ok );
-                TreeModelItem* ai = itemFromIndex( m_coverHash.take( p ) );
-                if ( !ai )
-                    return;
-
-                if ( !pm.isNull() )
-                    ai->cover = pm;
-
-                emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
-            }
-
-            break;
-        }
-
         case Tomahawk::InfoSystem::InfoArtistReleases:
         {
             QVariantMap returnedData = output.value< QVariantMap >();
@@ -957,6 +906,11 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
                 QStringList tracks = returnedData[ "tracks" ].toStringList();
                 QList<query_ptr> ql;
+
+                //TODO: Figure out how to do this with a multi-disk album without breaking the
+                //      current behaviour. I just know too little about InfoSystem to deal with
+                //      it right now, I've only taken the liberty of adding Query::setDiscNumber
+                //      which should make this easier. --Teo 11/2011
                 unsigned int trackNo = 1;
 
                 foreach ( const QString& trackName, tracks )
@@ -994,13 +948,6 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             break;
         }
     }
-}
-
-
-void
-TreeModel::infoSystemFinished( QString target )
-{
-    Q_UNUSED( target );
 }
 
 

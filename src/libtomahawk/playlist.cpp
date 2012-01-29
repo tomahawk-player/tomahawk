@@ -595,7 +595,7 @@ Playlist::checkRevisionQueue()
 
 
 Tomahawk::playlistinterface_ptr
-Playlist::getPlaylistInterface()
+Playlist::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {

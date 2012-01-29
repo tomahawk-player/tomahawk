@@ -85,7 +85,7 @@ public:
     QString textStatus() const { return m_textStatus; }
     DBSyncConnection::State state() const { return m_state; }
 
-    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+    Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
     void syncedWithDatabase();

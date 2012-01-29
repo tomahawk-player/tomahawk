@@ -42,6 +42,7 @@ public:
     // calculated immediately after loading, or what the user has selected if he has made
     // a manua;l selection
     QModelIndex currentIndex() const;
+
 protected:
     virtual void paintEvent( QPaintEvent* );
     virtual QSize sizeHint() const;

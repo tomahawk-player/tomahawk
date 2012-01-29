@@ -56,9 +56,6 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    m_centerOption = QTextOption( Qt::AlignVCenter );
-    m_centerOption.setWrapMode( QTextOption::NoWrap );
-
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 }
 
@@ -252,6 +249,9 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
+    QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );
+    textOption.setWrapMode( QTextOption::NoWrap );
+
     QStyleOptionViewItemV4 opt = option;
     prepareStyleOption( &opt, index, item );
     opt.text.clear();
@@ -294,27 +294,25 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     }
     else if ( item->isPlaying() )
     {
+        QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
+
+        // Paint Now Playing Speaker Icon
+        if ( m_view->header()->visualIndex( index.column() ) == 0 )
         {
-            QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
-
-            // Paint Now Playing Speaker Icon
-            if ( m_view->header()->visualIndex( index.column() ) == 0 )
-            {
-                r.adjust( 0, 0, 0, -3 );
-                painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
-                r.adjust( 25, 0, 0, 3 );
-            }
-
-            painter->setPen( opt.palette.text().color() );
-            QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
-            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_centerOption );
+            r.adjust( 0, 0, 0, -3 );
+            painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+            r.adjust( 25, 0, 0, 3 );
         }
+
+        painter->setPen( opt.palette.text().color() );
+        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, textOption );
     }
     else
     {
         painter->setPen( opt.palette.text().color() );
-        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 3 );
-        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, m_centerOption );
+        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 6 );
+        painter->drawText( opt.rect.adjusted( 3, 1, -3, 0 ), text, textOption );
     }
 
     painter->restore();

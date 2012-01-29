@@ -152,8 +152,17 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
 //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
+    QPixmap cover;
+    if ( !item->album().isNull() )
+    {
+        cover.loadFromData( item->album()->cover() );
+    }
+    else if ( !item->artist().isNull() )
+    {
+        cover.loadFromData( item->artist()->cover() );
+    }
+
     QPixmap scover;
-    QPixmap cover = item->cover;
     if ( cover.isNull() )
     {
         if ( !item->artist().isNull() )

@@ -58,6 +58,7 @@ signals:
     void latchRequest( const Tomahawk::source_ptr& source );
     void unlatchRequest( const Tomahawk::source_ptr& source );
     void catchUpRequest();
+    void latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime );
 
 private slots:
     void onItemExpanded( const QModelIndex& idx );
@@ -75,6 +76,7 @@ private slots:
     void latchOff();
     void latchOnOrCatchUp( const Tomahawk::source_ptr& source );
     void latchOff( const Tomahawk::source_ptr& source );
+    void latchModeToggled( bool checked );
 
     void onCustomContextMenu( const QPoint& pos );
 

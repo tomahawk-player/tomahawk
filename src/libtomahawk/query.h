@@ -51,9 +51,6 @@ public:
     static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
 
-    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
-    explicit Query( const QString& query, const QID& qid );
-
     virtual ~Query();
 
     /// returns list of all results so far
@@ -82,11 +79,13 @@ public:
     QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
     void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
+    void setComposer( const QString& composer ) { m_composer = composer; updateSortNames(); }
     void setAlbum( const QString& album ) { m_album = album; updateSortNames(); }
     void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
+    void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
 
     QVariant toVariant() const;
     QString toString() const;
@@ -96,14 +95,26 @@ public:
     QString albumSortname() const { return m_albumSortname; }
     QString trackSortname() const { return m_trackSortname; }
     QString artist() const { return m_artist; }
+    QString composer() const { return m_composer; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
 
     int duration() const { return m_duration; }
     unsigned int albumpos() const { return m_albumpos; }
+    unsigned int discnumber() const { return m_discnumber; }
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
+
+    void setLoved( bool loved );
+    bool loved();
+
+    void loadSocialActions();
+    QList< Tomahawk::SocialAction > allSocialActions();
+    void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
+
+    QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
+    void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -116,6 +127,9 @@ signals:
     void solvedStateChanged( bool state );
     void playableStateChanged( bool state );
     void resolvingFinished( bool hasResults );
+
+    // emitted when social actions are loaded
+    void socialActionsLoaded();
 
 public slots:
     /// (indirectly) called by resolver plugins when results are found
@@ -134,9 +148,12 @@ public slots:
 private slots:
     void onResultStatusChanged();
     void refreshResults();
+    void onSocialActionsLoaded();
 
 private:
     Query();
+    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
+    explicit Query( const QString& query, const QID& qid );
 
     void init();
 
@@ -147,6 +164,8 @@ private:
     void updateSortNames();
     static int levenshtein( const QString& source, const QString& target );
 
+    void parseSocialActions();
+
     QList< Tomahawk::artist_ptr > m_artists;
     QList< Tomahawk::album_ptr > m_albums;
     QList< Tomahawk::result_ptr > m_results;
@@ -156,22 +175,31 @@ private:
     mutable QID m_qid;
 
     QString m_artistSortname;
+    QString m_composerSortName;
     QString m_albumSortname;
     QString m_trackSortname;
 
     QString m_artist;
+    QString m_composer;
     QString m_album;
     QString m_track;
     QString m_fullTextQuery;
 
     int m_duration;
     unsigned int m_albumpos;
+    unsigned int m_discnumber;
     QString m_resultHint;
 
     QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
 
     mutable QMutex m_mutex;
+
+    QWeakPointer< Tomahawk::Query > m_ownRef;
+
+    bool m_socialActionsLoaded;
+    QHash< QString, QVariant > m_currentSocialActions;
+    QList< SocialAction > m_allSocialActions;
 };
 
 }; //ns

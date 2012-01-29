@@ -35,27 +35,27 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->albums->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->relatedArtists->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
+        connect( m_w->ui->topHits->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
                  SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_w->ui->albums->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->albums->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->relatedArtists->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->relatedArtists->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
-        connect( m_w->ui->topHits->proxyModel(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->topHits->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
     virtual ~MetaPlaylistInterface() {}
 
 
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->getPlaylistInterface()->repeatMode(); }
+    virtual RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->playlistInterface()->repeatMode(); }
 
-    virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->getPlaylistInterface()->shuffled(); }
+    virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->playlistInterface()->shuffled(); }
 
     // Do nothing
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
@@ -74,16 +74,16 @@ public:
 public slots:
     virtual void setRepeatMode( RepeatMode mode )
     {
-        m_w->ui->albums->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
-        m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
-        m_w->ui->topHits->proxyModel()->getPlaylistInterface()->setRepeatMode( mode );
+        m_w->ui->albums->proxyModel()->playlistInterface()->setRepeatMode( mode );
+        m_w->ui->relatedArtists->proxyModel()->playlistInterface()->setRepeatMode( mode );
+        m_w->ui->topHits->proxyModel()->playlistInterface()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->albums->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
-        m_w->ui->relatedArtists->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
-        m_w->ui->topHits->proxyModel()->getPlaylistInterface()->setShuffled( enabled );
+        m_w->ui->albums->proxyModel()->playlistInterface()->setShuffled( enabled );
+        m_w->ui->relatedArtists->proxyModel()->playlistInterface()->setShuffled( enabled );
+        m_w->ui->topHits->proxyModel()->playlistInterface()->setShuffled( enabled );
     }
 
 signals:

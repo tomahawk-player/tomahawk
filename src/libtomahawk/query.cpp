@@ -25,6 +25,8 @@
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
+#include "database/databasecommand_loadsocialactions.h"
+#include "database/databasecommand_socialaction.h"
 #include "album.h"
 #include "collection.h"
 #include "pipeline.h"
@@ -36,10 +38,6 @@
 
 using namespace Tomahawk;
 
-static QHash< QString, QWeakPointer< Query > > s_queries;
-static QMutex s_mutex;
-
-
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
@@ -47,11 +45,11 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
         autoResolve = false;
 
     query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
-    QMutexLocker lock( &s_mutex );
-    s_queries.insert( q->id(), q );
+    q->setWeakRef( q.toWeakRef() );
 
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
+
     return q;
 }
 
@@ -59,10 +57,13 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 query_ptr
 Query::get( const QString& query, const QID& qid )
 {
+
     query_ptr q = query_ptr( new Query( query, qid ) );
+    q->setWeakRef( q.toWeakRef() );
 
     if ( !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
+
     return q;
 }
 
@@ -72,6 +73,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_artist( artist )
     , m_album( album )
     , m_track( track )
+    , m_socialActionsLoaded( false )
 {
     init();
 
@@ -102,14 +104,7 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    if ( !id().isEmpty() )
-    {
-        QMutexLocker lock( &s_mutex );
-        if ( s_queries.contains( id() ) )
-        {
-            s_queries.remove( id() );
-        }
-    }
+    m_ownRef.clear();
 }
 
 
@@ -121,6 +116,7 @@ Query::init()
     m_playable = false;
     m_duration = -1;
     m_albumpos = 0;
+    m_discnumber = 0;
 
     updateSortNames();
 }
@@ -132,12 +128,14 @@ Query::updateSortNames()
     if ( isFullTextQuery() )
     {
         m_artistSortname = DatabaseImpl::sortname( m_fullTextQuery, true );
+        m_composerSortName = DatabaseImpl::sortname( m_composer, true );
         m_albumSortname = DatabaseImpl::sortname( m_fullTextQuery );
         m_trackSortname = m_albumSortname;
     }
     else
     {
         m_artistSortname = DatabaseImpl::sortname( m_artist, true );
+        m_composerSortName = DatabaseImpl::sortname( m_composer, true );
         m_albumSortname = DatabaseImpl::sortname( m_album );
         m_trackSortname = DatabaseImpl::sortname( m_track );
     }
@@ -206,7 +204,9 @@ Query::refreshResults()
     if ( m_resolveFinished )
     {
         m_resolveFinished = false;
-        Pipeline::instance()->resolve( s_queries.value( id() ) );
+        query_ptr q = m_ownRef.toStrongRef();
+        if ( q )
+            Pipeline::instance()->resolve( q );
     }
 }
 
@@ -480,6 +480,99 @@ Query::playedBy() const
 {
     return m_playedBy;
 }
+
+
+void
+Query::loadSocialActions()
+{
+    m_socialActionsLoaded = true;
+    query_ptr q = m_ownRef.toStrongRef();
+
+    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( q );
+    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
+
+void
+Query::onSocialActionsLoaded()
+{
+    parseSocialActions();
+
+    emit socialActionsLoaded();
+}
+
+
+void
+Query::setAllSocialActions( const QList< SocialAction >& socialActions )
+{
+    m_allSocialActions = socialActions;
+}
+
+
+QList< SocialAction >
+Query::allSocialActions()
+{
+    return m_allSocialActions;
+}
+
+
+void
+Query::parseSocialActions()
+{
+    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
+    unsigned int highestTimestamp = 0;
+
+    while ( it.hasNext() )
+    {
+        Tomahawk::SocialAction socialAction;
+        socialAction = it.next();
+        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
+        {
+            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
+        }
+    }
+}
+
+
+bool
+Query::loved()
+{
+    if ( m_socialActionsLoaded )
+    {
+        return m_currentSocialActions[ "Love" ].toBool();
+    }
+    else
+    {
+        loadSocialActions();
+    }
+
+    return false;
+}
+
+
+void
+Query::setLoved( bool loved )
+{
+    query_ptr q = m_ownRef.toStrongRef();
+    if ( q )
+    {
+        m_currentSocialActions[ "Loved" ] = loved;
+
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["title"] = track();
+        trackInfo["artist"] = artist();
+        trackInfo["album"] = album();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            id(), Tomahawk::InfoSystem::InfoLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
+}
+
 
 int
 Query::levenshtein( const QString& source, const QString& target )

@@ -132,9 +132,6 @@ TrackView::setTrackModel( TrackModel* model )
         m_proxyModel->setSourceTrackModel( m_model );
     }
 
-    if ( m_model && m_model->metaObject()->indexOfSignal( "itemSizeChanged(QModelIndex)" ) > -1 )
-        connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
-
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
@@ -182,7 +179,7 @@ TrackView::onItemActivated( const QModelIndex& index )
     {
         tDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
-        AudioEngine::instance()->playItem( m_proxyModel->getPlaylistInterface(), item->query()->results().first() );
+        AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query()->results().first() );
     }
 
     emit itemActivated( index );
@@ -369,9 +366,9 @@ TrackView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->getPlaylistInterface()->filter().isEmpty() && !proxyModel()->getPlaylistInterface()->trackCount() && model()->trackCount() )
+    if ( !proxyModel()->playlistInterface()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->getPlaylistInterface()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->playlistInterface()->filter() ) );
         m_overlay->show();
     }
     else
