@@ -30,8 +30,6 @@
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
 
-#define VERSION 6
-
 using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
@@ -50,24 +48,24 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 
     if( !contains( "configversion") )
     {
-        setValue( "configversion", VERSION );
+        setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
         doInitialSetup();
     }
-    else if( value( "configversion" ).toUInt() != VERSION )
+    else if( value( "configversion" ).toUInt() != TOMAHAWK_SETTINGS_VERSION )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
-                 << "new:" << VERSION
+                 << "new:" << TOMAHAWK_SETTINGS_VERSION
                  << "Doing upgrade, if any...";
 
         int current = value( "configversion" ).toUInt();
-        while( current < VERSION )
+        while( current < TOMAHAWK_SETTINGS_VERSION )
         {
             doUpgrade( current, current + 1 );
 
             current++;
         }
         // insert upgrade code here as required
-        setValue( "configversion", VERSION );
+        setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
     }
 
 }

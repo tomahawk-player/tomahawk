@@ -26,6 +26,9 @@
 #include <QtNetwork/QNetworkProxy>
 
 #include "dllmacro.h"
+
+#define TOMAHAWK_SETTINGS_VERSION 6
+
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
