@@ -129,10 +129,10 @@
             <item>
              <widget class="QTreeView" name="accountsView">
               <property name="indentation">
-               <number>0</number>
+               <number>6</number>
               </property>
               <property name="rootIsDecorated">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="uniformRowHeights">
                <bool>false</bool>

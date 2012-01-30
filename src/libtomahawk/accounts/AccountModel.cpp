@@ -1,156 +1,288 @@
- /*
-    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "AccountModel.h"
 
-#include "tomahawksettings.h"
-#include "accounts/AccountManager.h"
-#include "accounts/Account.h"
+#include "Account.h"
+#include "AccountModelNode.h"
+#include "AccountManager.h"
+#include "AtticaManager.h"
+#include "ResolverAccount.h"
 
-#include "utils/logger.h"
+#include <attica/content.h>
 
 using namespace Tomahawk;
 using namespace Accounts;
 
 AccountModel::AccountModel( QObject* parent )
-    : QAbstractListModel( parent )
+    : QAbstractItemModel( parent )
+    , m_rootItem( 0 )
 {
-    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
-    connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
+    loadData();
 }
 
-
-AccountModel::~AccountModel()
+void
+AccountModel::loadData()
 {
+    beginResetModel();
+
+    delete m_rootItem;
+
+    m_rootItem = new AccountModelNode();
+    // Add all factories
+    QList< AccountFactory* > factories = AccountManager::instance()->factories();
+    QList< Account* > allAccounts = AccountManager::instance()->accounts();
+    foreach ( AccountFactory* fac, factories )
+    {
+        if ( !fac->allowUserCreation() )
+            continue;
+
+        qDebug() << "Creating factory node:" << fac->prettyName();
+        new AccountModelNode( m_rootItem, fac );
+    }
+
+    // add all attica resolvers (installed or uninstalled)
+    Attica::Content::List fromAttica = AtticaManager::instance()->resolvers();
+    foreach ( const Attica::Content& content, fromAttica )
+        new AccountModelNode( m_rootItem, content );
+
+    // Add all non-attica manually installed resolvers
+   foreach ( Account* acct, allAccounts )
+   {
+       if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )
+       {
+           new AccountModelNode( m_rootItem, qobject_cast< ResolverAccount* >( acct ) );
+       }
+   }
+
 }
 
 
 QVariant
 AccountModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() )
+    if ( !index.isValid() )
         return QVariant();
 
-    QList< Account* > accounts = AccountManager::instance()->accounts();
-    Q_ASSERT( index.row() <= accounts.size() );
-    Account* account = accounts[ index.row() ];
-    switch( role )
-    {
-    case Qt::DisplayRole:
-    case AccountModel::AccountName:
-        return account->accountFriendlyName();
-    case AccountModel::ConnectionStateRole:
-        return account->connectionState();
-    case AccountModel::HasConfig:
-        return ( account->configurationWidget() != 0 );
-    case AccountModel::AccountTypeRole:
-        return (int)account->types();
-    case Qt::DecorationRole:
-        return account->icon();
-    case AccountModel::AccountData:
-        return QVariant::fromValue< QObject* >( account );
-    case Qt::CheckStateRole:
-        return account->enabled() ? Qt::Checked : Qt::Unchecked;
-    default:
+    if ( !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
+
+    AccountModelNode* node = nodeFromIndex( index );
+    if ( node->parent == m_rootItem ) {
+        // This is a top-level item. 3 cases
+        Q_ASSERT( node->type != AccountModelNode::AccountType ); // must not be of this type, these should be children (other branch of if)
+
+        switch ( node->type )
+        {
+            case AccountModelNode::FactoryType:
+            {
+                AccountFactory* fac = node->factory;
+                Q_ASSERT( fac );
+
+                switch ( role )
+                {
+                    case Qt::DisplayRole:
+                        return fac->prettyName();
+                    case Qt::DecorationRole:
+                        return fac->icon();
+                    case StateRole:
+                        return ShippedWithTomahawk;
+                    case AccountDescription:
+                        return fac->description();
+                    case AuthorRole:
+                        return "Tomahawk Team";
+                    case RowType:
+                        return TopLevelFactory;
+                    default:
+                        return QVariant();
+                }
+            }
+            case AccountModelNode::AtticaType:
+            {
+                Attica::Content c = node->atticaContent;
+                Q_ASSERT( !c.id().isNull() );
+
+                switch( role )
+                {
+                    case Qt::DisplayRole:
+                        return c.name();
+                    case Qt::DecorationRole:
+                        return QVariant::fromValue< QPixmap >( AtticaManager::instance()->iconForResolver( c ) );
+                    case StateRole:
+                        return (int)AtticaManager::instance()->resolverState( c );
+                    case AccountDescription:
+                        return c.description();
+                    case AuthorRole:
+                        return c.author();
+                    case RatingRole:
+                        return c.rating() / 20; // rating is out of 100
+                    case DownloadCounterRole:
+                        return c.downloads();
+                    case VersionRole:
+                        return c.version();
+                    case UserHasRatedRole:
+                        return AtticaManager::instance()->userHasRated( c );
+                    default:
+                        ;
+                }
+
+                AtticaResolverAccount* atticaAcct = node->atticaAccount;
+                if ( atticaAcct )
+                {
+                    // If the resolver is installed or on disk, we expose some additional data
+                    switch ( role )
+                    {
+                        case HasConfig:
+                            return atticaAcct->configurationWidget() != 0;
+                        case Qt::CheckStateRole:
+                            return atticaAcct->enabled() ? Qt::Checked : Qt::Unchecked;
+                        case AccountData:
+                            return QVariant::fromValue< QObject* >( atticaAcct );
+                        case RowType:
+                            return TopLevelAccount;
+                        case ConnectionStateRole:
+                            return atticaAcct->connectionState();
+                        default:
+                            ;
+                    }
+                }
+                return QVariant();
+            }
+            case AccountModelNode::ManualResolverType:
+            {
+                ResolverAccount* resolver = node->resolverAccount;
+                Q_ASSERT( resolver );
+
+                switch ( role )
+                {
+                    case Qt::DisplayRole:
+                        return resolver->accountFriendlyName();
+                    case Qt::DecorationRole:
+                        return resolver->icon();
+                    case AccountDescription:
+                        return QString();
+                    case Qt::CheckStateRole:
+                        return resolver->enabled() ? Qt::Checked : Qt::Unchecked;
+                    case AccountData:
+                        return QVariant::fromValue< QObject* >( resolver );
+                    case RowType:
+                        return TopLevelAccount;
+                    case ConnectionStateRole:
+                        return resolver->connectionState();
+                    default:
+                        return QVariant();
+                }
+            }
+        }
     }
+    else
+    {
+        // This is a child account* of an accountfactory*
+        Q_ASSERT( node->type == AccountModelNode::AccountType );
+        Q_ASSERT( node->children.isEmpty() );
+        Q_ASSERT( node->account );
+
+        Account* acc = node->account;
+        switch ( role )
+        {
+            case RowType:
+                return ChildAccount;
+            case Qt::DisplayRole:
+                return acc->accountFriendlyName();
+            case ConnectionStateRole:
+                return acc->connectionState();
+            case HasConfig:
+                return ( acc->configurationWidget() != 0 );
+            case ErrorString:
+                return acc->errorMessage();
+            case Qt::CheckStateRole:
+                return acc->enabled() ? Qt::Checked : Qt::Unchecked;
+            case AccountData:
+                return QVariant::fromValue< QObject* >( acc );
+            default:
+                return QVariant();
+        }
+    }
+
     return QVariant();
 }
 
-
-bool
-AccountModel::setData( const QModelIndex& index, const QVariant& value, int role )
+int
+AccountModel::columnCount( const QModelIndex& parent ) const
 {
-    Q_ASSERT( index.isValid() && index.row() <= AccountManager::instance()->accounts().count() );
-
-    if ( role == Qt::CheckStateRole ) {
-        Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
-        QList< Account* > accounts = AccountManager::instance()->accounts();
-        Account* account = accounts[ index.row() ];
-
-        if( state == Qt::Checked && !account->enabled() ) {
-            AccountManager::instance()->enableAccount( account );
-        } else if( state == Qt::Unchecked ) {
-            AccountManager::instance()->disableAccount( account );
-        }
-
-        account->sync();
-        dataChanged( index, index );
-
-        return true;
-    }
-    else if ( role == AccountTypeRole )
-    {
-        // TODO
-    }
-    return false;
+    return 1;
 }
 
 int
-AccountModel::rowCount( const QModelIndex& ) const
+AccountModel::rowCount( const QModelIndex& parent ) const
 {
-    return AccountManager::instance()->accounts().size();
-}
-
-Qt::ItemFlags
-AccountModel::flags( const QModelIndex& index ) const
-{
-    return QAbstractListModel::flags( index ) | Qt::ItemIsUserCheckable;
-}
-
-
-void
-AccountModel::accountAdded( Account* account )
-{
-    // TODO HACK we assume account plugins are added at the end of the list.
-    Q_ASSERT( AccountManager::instance()->accounts().last() == account );
-    if ( account->types() & SipType )
-        connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
-
-    int size = AccountManager::instance()->accounts().count() - 1;
-    beginInsertRows( QModelIndex(), size, size );
-    endInsertRows();
-}
-
-
-void
-AccountModel::accountRemoved( Account* account )
-{
-    int idx = AccountManager::instance()->accounts().indexOf( account );
-    beginRemoveRows( QModelIndex(), idx, idx );
-    endRemoveRows();
-}
-
-
-void
-AccountModel::accountStateChanged( Tomahawk::Accounts::Account::ConnectionState )
-{
-    Account* account = qobject_cast< Account* >( sender() );
-    Q_ASSERT( account );
-
-    for ( int i = 0; i < AccountManager::instance()->accounts().size(); i++ )
+    if ( !parent.isValid() )
     {
-        if ( AccountManager::instance()->accounts()[i] == account )
-        {
-            QModelIndex idx = index( i, 0, QModelIndex() );
-            emit dataChanged( idx, idx );
-            return;
-        }
+        return m_rootItem->children.count();
     }
+
+    // If it's a top-level item, return child count. Only factories will have any.
+    return nodeFromIndex( parent )->children.count();
 }
 
+QModelIndex
+AccountModel::parent( const QModelIndex& child ) const
+{
+    if ( !child.isValid() )
+    {
+        return QModelIndex();
+    }
+
+    AccountModelNode* node = nodeFromIndex( child );
+    AccountModelNode* parent = node->parent;
+
+    // top level, none
+    if( parent == m_rootItem )
+        return QModelIndex();
+
+    // child Account* of an AccountFactory*
+    Q_ASSERT( m_rootItem->children.contains( parent ) );
+    return createIndex( m_rootItem->children.indexOf( parent ), 0, parent );
+}
+
+QModelIndex
+AccountModel::index( int row, int column, const QModelIndex& parent ) const
+{
+    if( row < 0 || column < 0 )
+        return QModelIndex();
+
+    if( hasIndex( row, column, parent ) )
+    {
+        AccountModelNode *parentNode = nodeFromIndex( parent );
+        AccountModelNode *childNode = parentNode->children.at( row );
+        return createIndex( row, column, childNode );
+    }
+
+    return QModelIndex();
+}
+
+AccountModelNode*
+AccountModel::nodeFromIndex( const QModelIndex& idx ) const
+{
+    if( !idx.isValid() )
+        return m_rootItem;
+
+    Q_ASSERT( idx.internalPointer() );
+
+    return reinterpret_cast< AccountModelNode* >( idx.internalPointer() );
+}

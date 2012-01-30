@@ -102,12 +102,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 #endif
 
     // SIP PLUGINS
-    AccountDelegate* sipdel = new AccountDelegate( this );
-    ui->accountsView->setItemDelegate( sipdel );
+//     AccountDelegate* sipdel = new AccountDelegate( this );
+//     ui->accountsView->setItemDelegate( sipdel );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-    connect( sipdel, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+//     connect( sipdel, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
     m_accountModel = new AccountModel( this );
     ui->accountsView->setModel( m_accountModel );
@@ -598,11 +598,11 @@ SettingsDialog::accountContextMenuRequest( const QPoint& p )
     // if it's an account, allow to delete
     if( idx.isValid() )
     {
-        QList< QAction* > acts;
-        acts << new QAction( tr( "Delete Service" ), this );
-        acts.first()->setProperty( "accountplugin", idx.data( AccountModel::AccountData ) );
-        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( onAccountRowDeleted( bool ) ) );
-        QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
+//         QList< QAction* > acts;
+//         acts << new QAction( tr( "Delete Service" ), this );
+//         acts.first()->setProperty( "accountplugin", idx.data( AccountModel::AccountData ) );
+//         connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( onAccountRowDeleted( bool ) ) );
+//         QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
     }
 }
 
@@ -625,8 +625,8 @@ SettingsDialog::accountDeleted( bool )
     {
         if( idx.isValid() )
         {
-            Account* account = qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() );
-            AccountManager::instance()->removeAccount( account );
+//             Account* account = qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() );
+//             AccountManager::instance()->removeAccount( account );
         }
     }
 }
