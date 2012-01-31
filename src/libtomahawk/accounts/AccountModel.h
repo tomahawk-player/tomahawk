@@ -52,7 +52,7 @@ public:
         HasConfig = Qt::UserRole + 26,
         ErrorString = Qt::UserRole + 27,
 
-        // used by individual accounts, needed still?
+        // used by individual accounts
         AccountData = Qt::UserRole + 28 // raw plugin
     };
 

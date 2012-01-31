@@ -42,7 +42,7 @@ public:
     virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
-//     virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::AccountTypeRole; }
+    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::AccountTypeRole; }
 private slots:
     void askedForEdit( const QModelIndex& idx );
 
