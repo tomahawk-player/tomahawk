@@ -36,10 +36,10 @@ class DLLEXPORT AccountModel : public QAbstractItemModel
 
 public:
     enum Roles {
-        RowType = Qt::UserRole + 1, // RowType enum
+        RowTypeRole = Qt::UserRole + 1, // RowType enum
 
         // Used by top-level accounts
-        AccountDescription = Qt::UserRole + 17,
+        DescriptionRole = Qt::UserRole + 17,
         StateRole = Qt::UserRole + 18, // ItemState,
         RatingRole = Qt::UserRole + 19,
         DownloadCounterRole = Qt::UserRole + 20,
@@ -69,7 +69,7 @@ public:
         NeedsUpgrade,
         Upgrading,
         Failed,
-        ShippedWithTomahawk // Can't uninstall or uninstall, just enable/disable
+        ShippedWithTomahawk // Can't uninstall or uninstall, just create
     };
 
     explicit AccountModel( QObject* parent = 0 );

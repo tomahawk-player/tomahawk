@@ -102,11 +102,11 @@ AccountModel::data( const QModelIndex& index, int role ) const
                         return fac->icon();
                     case StateRole:
                         return ShippedWithTomahawk;
-                    case AccountDescription:
+                    case DescriptionRole:
                         return fac->description();
                     case AuthorRole:
                         return "Tomahawk Team";
-                    case RowType:
+                    case RowTypeRole:
                         return TopLevelFactory;
                     default:
                         return QVariant();
@@ -125,10 +125,12 @@ AccountModel::data( const QModelIndex& index, int role ) const
                         return QVariant::fromValue< QPixmap >( AtticaManager::instance()->iconForResolver( c ) );
                     case StateRole:
                         return (int)AtticaManager::instance()->resolverState( c );
-                    case AccountDescription:
+                    case DescriptionRole:
                         return c.description();
                     case AuthorRole:
                         return c.author();
+                    case RowTypeRole:
+                        return TopLevelAccount;
                     case RatingRole:
                         return c.rating() / 20; // rating is out of 100
                     case DownloadCounterRole:
@@ -153,8 +155,6 @@ AccountModel::data( const QModelIndex& index, int role ) const
                             return atticaAcct->enabled() ? Qt::Checked : Qt::Unchecked;
                         case AccountData:
                             return QVariant::fromValue< QObject* >( atticaAcct );
-                        case RowType:
-                            return TopLevelAccount;
                         case ConnectionStateRole:
                             return atticaAcct->connectionState();
                         default:
@@ -174,13 +174,13 @@ AccountModel::data( const QModelIndex& index, int role ) const
                         return resolver->accountFriendlyName();
                     case Qt::DecorationRole:
                         return resolver->icon();
-                    case AccountDescription:
+                    case DescriptionRole:
                         return QString();
                     case Qt::CheckStateRole:
                         return resolver->enabled() ? Qt::Checked : Qt::Unchecked;
                     case AccountData:
                         return QVariant::fromValue< QObject* >( resolver );
-                    case RowType:
+                    case RowTypeRole:
                         return TopLevelAccount;
                     case ConnectionStateRole:
                         return resolver->connectionState();
@@ -200,7 +200,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
         Account* acc = node->account;
         switch ( role )
         {
-            case RowType:
+            case RowTypeRole:
                 return ChildAccount;
             case Qt::DisplayRole:
                 return acc->accountFriendlyName();

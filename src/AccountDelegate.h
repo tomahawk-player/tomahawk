@@ -42,15 +42,26 @@ public:
     virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
-    virtual QList<int> extraCheckRoles() const { return QList<int>() << (int)AccountModel::AccountTypeRole; }
 private slots:
     void askedForEdit( const QModelIndex& idx );
 
 signals:
+    void update( const QModelIndex& idx );
     void openConfig( Tomahawk::Accounts::Account* );
 
 private:
+    void paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
+    void paintChild( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
+    void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
+
     QMap< QString, QPixmap > m_cachedIcons;
+    QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative;
+
+    int m_widestTextWidth;
+    int m_hoveringOver;
+    QPersistentModelIndex m_hoveringItem;
+    mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
 };
 
 }

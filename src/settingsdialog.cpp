@@ -102,8 +102,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 #endif
 
     // SIP PLUGINS
-//     AccountDelegate* sipdel = new AccountDelegate( this );
-//     ui->accountsView->setItemDelegate( sipdel );
+    AccountDelegate* sipdel = new AccountDelegate( this );
+    ui->accountsView->setItemDelegate( sipdel );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
@@ -111,6 +111,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
     m_accountModel = new AccountModel( this );
     ui->accountsView->setModel( m_accountModel );
+    ui->accountsView->expandAll();
 
     connect( ui->addNewServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( getMoreResolvers() ) );
     connect( ui->removeServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
