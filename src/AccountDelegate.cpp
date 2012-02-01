@@ -49,6 +49,7 @@ using namespace Accounts;
 
 AccountDelegate::AccountDelegate( QObject* parent )
     : ConfigDelegateBase ( parent )
+    , m_widestTextWidth( 0 )
 {
 
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
@@ -331,6 +332,9 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
         case AccountModel::ShippedWithTomahawk:
             actionText = tr( "Create" );
             break;
+        case AccountModel::UniqueFactory:
+            actionText = tr( "Installed" );
+            break;
     }
 
     // title and description
@@ -422,37 +426,10 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
             drawConfigWrench( painter, opt, topt );
         }
 
-        const int stateY = center - ( authorMetrics.height() / 2 );
-
-        QPixmap p;
-        QString statusText;
-        Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
-        if ( state == Account::Connected )
-        {
-            p = m_onlineIcon;
-            statusText = tr( "Online" );
-        }
-        else if ( state == Account::Connecting )
-        {
-            p = m_offlineIcon;
-            statusText = tr( "Connecting..." );
-        }
-        else
-        {
-            p = m_offlineIcon;
-            statusText = tr( "Offline" );
-        }
-        const QRect connectIconRect( confRect.x() - PADDING - STATUS_ICON_SIZE, stateY, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
-        painter->drawPixmap( connectIconRect, p );
-
-        int width = installMetrics.width( statusText );
-        int statusTextX = connectIconRect.x() - PADDING - width;
         painter->save();
         painter->setFont( installFont );
-        painter->drawText( QRect( statusTextX, stateY, width, installMetrics.height() ), statusText );
+        edgeOfRightExtras = drawStatus( painter, QPointF( confRect.x() - PADDING, center ), index );
         painter->restore();
-
-        edgeOfRightExtras = statusTextX;
     }
 
     // Title and description!
@@ -470,6 +447,8 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     const QRect descRect( leftTitleEdge, center, descWidth, opt.rect.bottom() - center + PADDING );
     painter->setFont( descFont );
     painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap, desc );
+
+    painter->drawLine( opt.rect.bottomLeft(), opt.rect.bottomRight() );
 }
 
 
@@ -502,6 +481,8 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
     f.setPointSize( 9 );
     painter->setFont( f );
     painter->drawText( option.rect.adjusted( PADDING + checkRect.right(), 0, 0, 0 ), Qt::AlignVCenter | Qt::AlignLeft, username );
+
+
 }
 
 
@@ -540,6 +521,41 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) co
     g.setColorAt( 0.5, QColor(35, 79, 147) );
     painter->fillPath( btnPath, g );
 }
+
+
+int
+AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const
+{
+    QPixmap p;
+    QString statusText;
+    Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
+    if ( state == Account::Connected )
+    {
+        p = m_onlineIcon;
+        statusText = tr( "Online" );
+    }
+    else if ( state == Account::Connecting )
+    {
+        p = m_offlineIcon;
+        statusText = tr( "Connecting..." );
+    }
+    else
+    {
+        p = m_offlineIcon;
+        statusText = tr( "Offline" );
+    }
+
+    const int yPos = rightCenterEdge.y() - painter->fontMetrics().height() / 2;
+    const QRect connectIconRect( rightCenterEdge.x() - STATUS_ICON_SIZE, yPos, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
+    painter->drawPixmap( connectIconRect, p );
+
+    int width = painter->fontMetrics().width( statusText );
+    int statusTextX = connectIconRect.x() - PADDING - width;
+    painter->drawText( QRect( statusTextX, yPos, width, painter->fontMetrics().height() ), statusText );
+
+    return statusTextX;
+}
+
 
 QRect
 AccountDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const

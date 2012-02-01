@@ -164,30 +164,42 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 return QVariant();
             }
             case AccountModelNode::ManualResolverType:
+            case AccountModelNode::UniqueFactoryType:
             {
-                ResolverAccount* resolver = node->resolverAccount;
-                Q_ASSERT( resolver );
+                Account* acct = 0;
+                if ( node->type == AccountModelNode::ManualResolverType )
+                    acct = node->resolverAccount;
+                else if ( node->type == AccountModelNode::UniqueFactoryType )
+                    acct = node->account;
+
+                Q_ASSERT( acct );
 
                 switch ( role )
                 {
                     case Qt::DisplayRole:
-                        return resolver->accountFriendlyName();
+                        return acct->accountFriendlyName();
                     case Qt::DecorationRole:
-                        return resolver->icon();
+                        return acct->icon();
                     case DescriptionRole:
                         return QString();
                     case Qt::CheckStateRole:
-                        return resolver->enabled() ? Qt::Checked : Qt::Unchecked;
+                        return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                     case AccountData:
-                        return QVariant::fromValue< QObject* >( resolver );
+                        return QVariant::fromValue< QObject* >( acct );
                     case RowTypeRole:
                         return TopLevelAccount;
                     case ConnectionStateRole:
-                        return resolver->connectionState();
+                        return acct->connectionState();
+                    case HasConfig:
+                        return acct->configurationWidget() != 0;
+                    case StateRole:
+                        return node->type == AccountModelNode::ManualResolverType ? Installed : UniqueFactory;
                     default:
                         return QVariant();
                 }
             }
+            case AccountModelNode::AccountType:
+                Q_ASSERT( false ); // Should not be here---all account nodes should be children of top level nodes
         }
     }
     else

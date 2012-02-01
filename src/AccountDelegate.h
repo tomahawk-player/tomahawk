@@ -53,6 +53,8 @@ private:
     void paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
     void paintChild( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
+    // Returns new left edge
+    int drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const;
 
     QMap< QString, QPixmap > m_cachedIcons;
     QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative;

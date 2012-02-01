@@ -37,6 +37,7 @@ namespace Accounts {
  * 2) Account* for accounts that are associated with an AccountFactory (children of AccountFactory)
  * 3) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchroton resolvers)
  * 4) ResolverAccount* for manually added resolvers (from file).
+ * 5) AccountFactory* + Account* for factories that are unique
  *
  * These are the top-level items in tree.
  *
@@ -50,6 +51,7 @@ namespace Accounts {
 struct AccountModelNode {
     enum NodeType {
         FactoryType,
+        UniqueFactoryType,
         AccountType,
         AtticaType,
         ManualResolverType
@@ -76,13 +78,25 @@ struct AccountModelNode {
     {
         init();
         factory = fac;
+
+        if ( fac->isUnique() )
+            type = UniqueFactoryType;
+
         // Initialize factory nodes with their children
         foreach ( Account* acct,  AccountManager::instance()->accounts() )
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
                 qDebug() << "Found account for factory:" << acct->accountFriendlyName();
-                new AccountModelNode( this, acct );
+                if ( fac->isUnique() )
+                {
+                    account = acct;
+                    break;
+                }
+                else
+                {
+                    new AccountModelNode( this, acct );
+                }
             }
         }
     }

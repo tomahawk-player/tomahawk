@@ -63,13 +63,14 @@ public:
     };
 
     enum ItemState {
-        Uninstalled = 0,
+        Uninstalled = 0, // Attica resolver states
         Installing,
         Installed,
         NeedsUpgrade,
         Upgrading,
         Failed,
-        ShippedWithTomahawk // Can't uninstall or uninstall, just create
+        ShippedWithTomahawk, // Built-in account/factory state: Can't uninstall or uninstall, just create
+        UniqueFactory // Shipped with tomahawk but is a unique account
     };
 
     explicit AccountModel( QObject* parent = 0 );
