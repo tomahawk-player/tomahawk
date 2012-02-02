@@ -57,8 +57,7 @@ private:
     int drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const;
 
     QMap< QString, QPixmap > m_cachedIcons;
-    QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative;
-
+    QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative, m_removeIcon;
     int m_widestTextWidth;
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem;

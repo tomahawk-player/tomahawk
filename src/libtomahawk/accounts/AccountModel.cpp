@@ -104,8 +104,6 @@ AccountModel::data( const QModelIndex& index, int role ) const
                         return ShippedWithTomahawk;
                     case DescriptionRole:
                         return fac->description();
-                    case AuthorRole:
-                        return "Tomahawk Team";
                     case RowTypeRole:
                         return TopLevelFactory;
                     default:
@@ -172,16 +170,38 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 else if ( node->type == AccountModelNode::UniqueFactoryType )
                     acct = node->account;
 
-                Q_ASSERT( acct );
-
-                switch ( role )
+                // If there's no account*, then it means it's a unique factory that hasn't been created
+                if ( !acct )
                 {
+                    Q_ASSERT( node->type == AccountModelNode::UniqueFactoryType );
+                    Q_ASSERT( node->factory );
+
+                    switch( role )
+                    {
+                    case Qt::DisplayRole:
+                        return node->factory->prettyName();
+                    case Qt::DecorationRole:
+                        return node->factory->icon();
+                    case DescriptionRole:
+                        return node->factory->description();
+                    case RowTypeRole:
+                        return TopLevelFactory;
+                    case StateRole:
+                        return Uninstalled;
+                    default:
+                        return QVariant();
+                    }
+                }
+                else
+                {
+                    switch ( role )
+                    {
                     case Qt::DisplayRole:
                         return acct->accountFriendlyName();
                     case Qt::DecorationRole:
                         return acct->icon();
                     case DescriptionRole:
-                        return QString();
+                        return node->type == AccountModelNode::ManualResolverType ? QString() : node->factory->description();
                     case Qt::CheckStateRole:
                         return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                     case AccountData:
@@ -193,9 +213,10 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     case HasConfig:
                         return acct->configurationWidget() != 0;
                     case StateRole:
-                        return node->type == AccountModelNode::ManualResolverType ? Installed : UniqueFactory;
+                        return Installed;
                     default:
                         return QVariant();
+                    }
                 }
             }
             case AccountModelNode::AccountType:

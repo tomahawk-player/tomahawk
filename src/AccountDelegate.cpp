@@ -41,8 +41,10 @@
 
 #define ICONSIZE 40
 #define WRENCH_SIZE 24
+#define SMALL_WRENCH_SIZE 16
 #define STATUS_ICON_SIZE 13
 #define CHECK_LEFT_EDGE 8
+#define REMOVE_ICON_SIZE 12
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -58,12 +60,14 @@ AccountDelegate::AccountDelegate( QObject* parent )
     m_onHoverStar.load( RESPATH "images/star-hover.png" );
     m_onlineIcon.load( RESPATH "images/sipplugin-online.png" );
     m_offlineIcon.load( RESPATH "images/sipplugin-offline.png" );
+    m_removeIcon.load( RESPATH "images/list-remove.png" );
 
     m_ratingStarPositive = m_ratingStarPositive.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_ratingStarNegative = m_ratingStarNegative.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_onlineIcon = m_onlineIcon.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_offlineIcon = m_offlineIcon.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_onHoverStar = m_onHoverStar.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
+    m_removeIcon = m_removeIcon.scaled( REMOVE_ICON_SIZE, REMOVE_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
     const int w = TOPLEVEL_ACCOUNT_HEIGHT - 2*PADDING;
     m_defaultCover = m_defaultCover.scaled( w, w, Qt::KeepAspectRatio, Qt::SmoothTransformation );
@@ -262,6 +266,9 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     QFont authorFont = opt.font;
     authorFont.setItalic( true );
     authorFont.setPointSize( authorFont.pointSize() - 1 );
+#ifdef Q_OS_MAC
+    authorFont.setPointSize( authorFont.pointSize() - 1 );
+#endif
     const QFontMetrics authorMetrics( authorFont );
 
     QFont descFont = authorFont;
@@ -354,66 +361,71 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     painter->setPen( saved );
 
 
-    // rating stars
-    const int rating = index.data( AccountModel::RatingRole ).toInt();
-    const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
-    int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
-    for ( int i = 1; i < 6; i++ )
+    int edgeOfRightExtras = btnRect.x();
+    if ( rowType == AccountModel::TopLevelAccount )
     {
-        QRect r( runningEdge, btnRect.top() - m_ratingStarPositive.height() - PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
-        if ( i == 1 )
-            m_cachedStarRects[ index ] = r;
+        // rating stars
+        const int rating = index.data( AccountModel::RatingRole ).toInt();
+        const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
+        int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
+        for ( int i = 1; i < 6; i++ )
+        {
+            QRect r( runningEdge, btnRect.top() - m_ratingStarPositive.height() - PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
+            if ( i == 1 )
+                m_cachedStarRects[ index ] = r;
 
-        const bool userHasRated = index.data( AccountModel::UserHasRatedRole ).toBool();
-        if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
-             m_hoveringOver > -1 &&
-             m_hoveringItem == index )
-        {
-            if ( i <= m_hoveringOver ) // positive star
-                painter->drawPixmap( r, m_onHoverStar );
-            else
-                painter->drawPixmap( r, m_ratingStarNegative );
-        }
-        else
-        {
-            if ( i <= rating ) // positive or rated star
+            const bool userHasRated = index.data( AccountModel::UserHasRatedRole ).toBool();
+            if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
+                 m_hoveringOver > -1 &&
+                 m_hoveringItem == index )
             {
-                if ( userHasRated )
+                if ( i <= m_hoveringOver ) // positive star
                     painter->drawPixmap( r, m_onHoverStar );
                 else
-                    painter->drawPixmap( r, m_ratingStarPositive );
+                    painter->drawPixmap( r, m_ratingStarNegative );
             }
             else
-                painter->drawPixmap( r, m_ratingStarNegative );
+            {
+                if ( i <= rating ) // positive or rated star
+                {
+                    if ( userHasRated )
+                        painter->drawPixmap( r, m_onHoverStar );
+                    else
+                        painter->drawPixmap( r, m_ratingStarPositive );
+                }
+                else
+                    painter->drawPixmap( r, m_ratingStarNegative );
+            }
+            runningEdge += m_ratingStarPositive.width() + PADDING_BETWEEN_STARS;
         }
-        runningEdge += m_ratingStarPositive.width() + PADDING_BETWEEN_STARS;
+
+        // downloaded num times, underneath button
+        QString count = tr( "%1 downloads" ).arg( index.data( AccountModel::DownloadCounterRole ).toInt() );
+        const QRect countRect( btnRect.left(), btnRect.bottom() + PADDING, btnRect.width(), opt.rect.bottom() - PADDING - btnRect.bottom() );
+        QFont countFont = descFont;
+        countFont.setPointSize( countFont.pointSize() - 2 );
+        countFont.setBold( true );
+        painter->setFont( countFont );
+        painter->drawText( countRect, Qt::AlignCenter | Qt::TextWordWrap, count );
+
+        // author and version
+        QString author = index.data( AccountModel::AuthorRole ).toString();
+        const int authorWidth = authorMetrics.width( author );
+        const int topTextLine = opt.rect.top() + PADDING;
+        const QRect authorRect( btnRect.x() - 3*PADDING - authorWidth, topTextLine, authorWidth + 6, authorMetrics.height() );
+        painter->setFont( authorFont );
+        painter->drawText( authorRect, Qt::AlignCenter, author );
+
+        // Disable version for now, that space is used
+        //     const QRect versionRect = authorRect.translated( 0, authorRect.height() );
+        //     QString version = index.data( AccountModel::VersionRole ).toString();
+        //     painter->drawText( versionRect, Qt::AlignCenter, version );
+
+        edgeOfRightExtras = authorRect.x();
     }
 
-
-    // downloaded num times, underneath button
-    QString count = tr( "%1 downloads" ).arg( index.data( AccountModel::DownloadCounterRole ).toInt() );
-    const QRect countRect( btnRect.left(), btnRect.bottom() + PADDING, btnRect.width(), opt.rect.bottom() - PADDING - btnRect.bottom() );
-    QFont countFont = descFont;
-    countFont.setPointSize( countFont.pointSize() - 2 );
-    countFont.setBold( true );
-    painter->setFont( countFont );
-    painter->drawText( countRect, Qt::AlignCenter | Qt::TextWordWrap, count );
-
-    // author and version
-    QString author = index.data( AccountModel::AuthorRole ).toString();
-    const int authorWidth = authorMetrics.width( author );
-    const int topTextLine = opt.rect.top() + PADDING;
-    const QRect authorRect( btnRect.x() - 3*PADDING - authorWidth, topTextLine, authorWidth + 6, authorMetrics.height() );
-    painter->setFont( authorFont );
-    painter->drawText( authorRect, Qt::AlignCenter, author );
-
-    // Disable version for now, that space is used
-//     const QRect versionRect = authorRect.translated( 0, authorRect.height() );
-//     QString version = index.data( AccountModel::VersionRole ).toString();
-//     painter->drawText( versionRect, Qt::AlignCenter, version );
-
     // if this is a real resolver, show config wrench, state/status, and string
-    int edgeOfRightExtras = btnRect.x();
+    edgeOfRightExtras = btnRect.x();
     if ( rowType == AccountModel::TopLevelAccount )
     {
         const QRect confRect = QRect( btnRect.x() - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
@@ -424,20 +436,21 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
             topt.pos = confRect.topLeft();
 
             drawConfigWrench( painter, opt, topt );
+            edgeOfRightExtras = confRect.left();
         }
 
         painter->save();
         painter->setFont( installFont );
-        edgeOfRightExtras = drawStatus( painter, QPointF( confRect.x() - PADDING, center ), index );
+        edgeOfRightExtras = drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
         painter->restore();
     }
 
     // Title and description!
     // title
     QString title = index.data( Qt::DisplayRole ).toString();
-    const int rightTitleEdge = authorRect.x() - PADDING;
+    const int rightTitleEdge = edgeOfRightExtras - PADDING;
     const int leftTitleEdge = pixmapRect.right() + PADDING;
-    const QRect textRect( leftTitleEdge, topTextLine, rightTitleEdge - leftTitleEdge, center - opt.rect.top() - PADDING );
+    const QRect textRect( leftTitleEdge, opt.rect.top() + PADDING, rightTitleEdge - leftTitleEdge, center - opt.rect.top() - PADDING );
     painter->setFont( titleFont );
     painter->drawText( textRect, Qt::AlignVCenter | Qt::AlignLeft, title );
 
@@ -448,6 +461,7 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     painter->setFont( descFont );
     painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap, desc );
 
+    painter->setRenderHints( QPainter::RenderHints() );
     painter->drawLine( opt.rect.bottomLeft(), opt.rect.bottomRight() );
 }
 
@@ -457,14 +471,16 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
 {
     const int radius = 6;
     const int top = option.rect.top();
+    const int center = top + option.rect.height() / 2;
     QPainterPath outline;
     outline.moveTo( option.rect.topLeft() );
 
+    const int rightPadding = 2;
     outline.lineTo( option.rect.left(), option.rect.bottom() - radius );
     outline.quadTo( option.rect.bottomLeft(), QPointF( option.rect.left() + radius, option.rect.bottom() ) );
-    outline.lineTo( option.rect.right() - radius, option.rect.bottom() );
-    outline.quadTo( option.rect.bottomRight(), QPointF( option.rect.right() - 1, top ) );
-    outline.lineTo( option.rect.right(), top );
+    outline.lineTo( option.rect.right() - radius - rightPadding, option.rect.bottom() );
+    outline.quadTo( QPointF( option.rect.right() - rightPadding, option.rect.bottom() ), QPointF( option.rect.right() - rightPadding, option.rect.bottom() - radius ) );
+    outline.lineTo( option.rect.right() - 2, top );
 
     painter->drawPath( outline );
 
@@ -482,7 +498,32 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
     painter->setFont( f );
     painter->drawText( option.rect.adjusted( PADDING + checkRect.right(), 0, 0, 0 ), Qt::AlignVCenter | Qt::AlignLeft, username );
 
+    // draw remove icon, config wrench, and then status from right edge
+    const QRect removeRect( option.rect.right() - rightPadding - PADDING - REMOVE_ICON_SIZE, center - REMOVE_ICON_SIZE/2, REMOVE_ICON_SIZE, REMOVE_ICON_SIZE );
+    painter->drawPixmap( removeRect, m_removeIcon );
 
+    int edgeOfRightExtras = removeRect.left();
+
+    if ( index.data( AccountModel::HasConfig ).toBool() )
+    {
+        const QRect confRect = QRect( removeRect.x() - PADDING - SMALL_WRENCH_SIZE, center - SMALL_WRENCH_SIZE / 2, SMALL_WRENCH_SIZE, SMALL_WRENCH_SIZE );
+
+        QStyleOptionToolButton topt;
+        topt.rect = confRect;
+        topt.pos = confRect.topLeft();
+
+        QStyleOptionViewItemV4 opt3 = option;
+        drawConfigWrench( painter, opt3, topt );
+
+        edgeOfRightExtras = confRect.left();
+    }
+
+    painter->save();
+    QFont smallFont = option.font;
+    smallFont.setPointSize( smallFont.pointSize() - 2 );
+    painter->setFont( smallFont );
+    drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
+    painter->restore();
 }
 
 
