@@ -44,6 +44,8 @@ public:
     explicit PlaylistInterface();
     virtual ~PlaylistInterface();
 
+    const QString id() { return m_id; }
+    
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
 
     virtual int unfilteredTrackCount() const = 0;
@@ -98,6 +100,7 @@ protected:
 private:
     Q_DISABLE_COPY( PlaylistInterface )
 
+    QString m_id;
     QString m_filter;
 };
 
