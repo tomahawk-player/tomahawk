@@ -695,6 +695,8 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 bool
 Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
 {
+    Q_UNUSED( conn );
+    Q_UNUSED( showDialog );
     tDebug( LOGVERBOSE ) << "Checking ACLs";
 
     ACLSystem* aclSystem = ACLSystem::instance();
