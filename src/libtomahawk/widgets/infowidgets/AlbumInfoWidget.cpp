@@ -161,10 +161,10 @@ AlbumInfoWidget::isBeingPlayed() const
     //tDebug() << Q_FUNC_INFO << "audioengine playlistInterface = " << AudioEngine::instance()->currentTrackPlaylist()->id();
     //tDebug() << Q_FUNC_INFO << "albumsView playlistInterface = " << ui->albumsView->playlistInterface()->id();
     //tDebug() << Q_FUNC_INFO << "tracksView playlistInterface = " << ui->tracksView->playlistInterface()->id();
-    if ( ui->albumsView->playlistInterface()->id() == AudioEngine::instance()->currentTrackPlaylist()->id() )
+    if ( ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
-    if ( ui->tracksView->playlistInterface()->id() == AudioEngine::instance()->currentTrackPlaylist()->id() )
+    if ( ui->tracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
     return false;
