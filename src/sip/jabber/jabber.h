@@ -42,7 +42,7 @@
 #include <jreen/mucroom.h>
 
 #ifndef ENABLE_HEADLESS
-    #include <QMessageBox>
+    #include <QtGui/QMessageBox>
 #endif
 
 #define MYNAME "SIPJREEN"
@@ -112,7 +112,7 @@ protected:
 private slots:
     void showXmlConsole();
     void onConnect();
-    void onDisconnect(Jreen::Client::DisconnectReason reason);
+    void onDisconnect( Jreen::Client::DisconnectReason reason );
 
     void onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
     void onSubscriptionReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
