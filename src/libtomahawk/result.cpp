@@ -159,7 +159,9 @@ Result::toVariant() const
     m.insert( "score", score() );
     m.insert( "sid", id() );
     m.insert( "discnumber", discnumber() );
-    m.insert( "composer", composer()->name() );
+
+    if ( !composer().isNull() )
+        m.insert( "composer", composer()->name() );
 
     return m;
 }
