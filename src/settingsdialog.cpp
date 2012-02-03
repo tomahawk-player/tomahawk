@@ -39,7 +39,6 @@
 #include "tomahawkapp.h"
 #include "tomahawksettings.h"
 #include "delegateconfigwrapper.h"
-#include "GetNewStuffDialog.h"
 #include "musicscanner.h"
 #include "pipeline.h"
 #include "resolver.h"
@@ -102,19 +101,21 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 #endif
 
     // SIP PLUGINS
-    AccountDelegate* sipdel = new AccountDelegate( this );
-    ui->accountsView->setItemDelegate( sipdel );
+    AccountDelegate* accountDelegate = new AccountDelegate( this );
+    ui->accountsView->setItemDelegate( accountDelegate );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-//     connect( sipdel, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
+
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
     m_accountModel = new AccountModel( this );
+
     ui->accountsView->setModel( m_accountModel );
     ui->accountsView->expandAll();
 
-    connect( ui->addNewServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( getMoreResolvers() ) );
-    connect( ui->removeServiceBtn, SIGNAL( clicked( bool ) ), this, SLOT( accountDeleted( bool ) ) );
+    connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( accountUninstalled( QString ) ) );
@@ -426,22 +427,6 @@ SettingsDialog::onLastFmFinished()
 
 
 void
-SettingsDialog::getMoreResolvers()
-{
-#if defined(Q_WS_MAC)
-    GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
-    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished( int ) ) );
-    diag->show();
-#else
-    GetNewStuffDialog diag( this );
-    int ret = diag.exec();
-    Q_UNUSED( ret );
-#endif
-
-}
-
-
-void
 SettingsDialog::accountInstalled(Account* account)
 {
 //     m_resolversModel->atticaResolverInstalled( resolverId );
@@ -466,14 +451,6 @@ SettingsDialog::accountsSelectionChanged()
     {
         ui->addNewServiceBtn->setEnabled( false );
     }
-}
-
-
-void
-SettingsDialog::getMoreResolversFinished( int ret )
-{
-    Q_UNUSED( ret );
-    sender()->deleteLater();
 }
 
 

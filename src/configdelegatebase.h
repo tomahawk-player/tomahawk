@@ -45,8 +45,6 @@ signals:
     void configPressed( const QModelIndex& idx );
 
 protected:
-    void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
-    void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
 
 private:
     QModelIndex m_configPressed;

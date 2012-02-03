@@ -74,7 +74,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      audiocontrols.cpp
      settingsdialog.cpp
      diagnosticsdialog.cpp
-     configdelegatebase.cpp
      AccountDelegate.cpp
      settingslistdelegate.cpp
      tomahawkwindow.cpp
@@ -98,13 +97,6 @@ IF(LIBLASTFM_FOUND)
     )
 ENDIF(LIBLASTFM_FOUND)
 
-IF(LIBATTICA_FOUND)
-    SET( tomahawkSourcesGui ${tomahawkSourcesGui} GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
-    SET( tomahawkHeadersGui ${tomahawkHeadersGui} GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
-    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
-ENDIF(LIBATTICA_FOUND)
-
-
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
      sourcetree/sourcesproxymodel.h
@@ -124,7 +116,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      audiocontrols.h
      settingsdialog.h
      diagnosticsdialog.h
-     configdelegatebase.h
      AccountDelegate.h
      settingslistdelegate.h
      delegateconfigwrapper.h
@@ -140,7 +131,6 @@ SET( tomahawkUI ${tomahawkUI}
 
      audiocontrols.ui
 
-     GetNewStuffDialog.ui
      LoadXSPFDialog.ui
 )
 
@@ -167,6 +157,7 @@ INCLUDE_DIRECTORIES(
     ${TAGLIB_INCLUDES}
     ${PHONON_INCLUDES}
     ${QJSON_INCLUDE_DIR}
+    ${LIBATTICA_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
 )

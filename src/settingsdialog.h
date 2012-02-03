@@ -95,8 +95,6 @@ private slots:
     void onAccountRowDeleted( bool );
 
     void accountsSelectionChanged();
-    void getMoreResolvers();
-    void getMoreResolversFinished( int );
 
     void accountInstalled( Tomahawk::Accounts::Account* account );
     void accountUninstalled( const QString& acct );
@@ -125,4 +123,3 @@ private:
 
 #endif // SETTINGSDIALOG_H
 
-struct A;

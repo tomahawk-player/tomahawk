@@ -210,6 +210,24 @@ AtticaManager::resolversList( BaseJob* j )
     m_resolvers = job->itemList();
     m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
 
+    // Sanity check. if any resolvers are installed that don't exist on the hd, remove them.
+    foreach ( const QString& rId, m_resolverStates.keys() )
+    {
+        if ( m_resolverStates[ rId ].state == Installed ||
+             m_resolverStates[ rId ].state == NeedsUpgrade )
+        {
+            // Guess location on disk
+            QDir dir( QString( "%1/atticaresolvers/%2" ).arg( TomahawkUtils::appDataDir().absolutePath() ).arg( rId ) );
+            if ( !dir.exists() )
+            {
+                // Uh oh
+                qWarning() << "Found attica resolver marked as installed that didn't exist on disk! Setting to uninstalled: " << rId << dir.absolutePath();
+                m_resolverStates[ rId ].state = Uninstalled;
+                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( rId, Uninstalled );
+            }
+        }
+    }
+
     // load icon cache from disk, and fetch any we are missing
     loadPixmapsFromCache();
 

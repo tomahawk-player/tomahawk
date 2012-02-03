@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
@@ -50,7 +51,7 @@ using namespace Tomahawk;
 using namespace Accounts;
 
 AccountDelegate::AccountDelegate( QObject* parent )
-    : ConfigDelegateBase ( parent )
+    : QStyledItemDelegate ( parent )
     , m_widestTextWidth( 0 )
 {
 
@@ -87,12 +88,6 @@ AccountDelegate::AccountDelegate( QObject* parent )
     }
 }
 
-bool
-AccountDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
-{
-    return ConfigDelegateBase::editorEvent( event, model, option, index );
-}
-
 
 QSize
 AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -125,131 +120,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         paintChild( painter, opt, index );
 
     return;
-
-//     const QRect itemRect = opt.rect;
-//     const int top = itemRect.top();
-//     const int mid = itemRect.height() / 2;
-//     const int quarter = mid - ( itemRect.height() / 4 );
-//
-//     // one line bold for account name
-//     // space below it for online/offline status
-//     // checkbox, icon, name/status, features, config icon
-//     QFont name = opt.font;
-//     name.setPointSize( name.pointSize() + 2 );
-//     name.setBold( true );
-//
-//     QFont smallFont = opt.font;
-//     smallFont.setPointSize( smallFont.pointSize() - 1 );
-//     QFontMetrics smallFontFM( smallFont );
-//
-//     // draw the background
-//     const QWidget* w = opt.widget;
-//     QStyle* style = w ? w->style() : QApplication::style();
-//     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
-/*
-    int iconLeftEdge = CHECK_LEFT_EDGE + WRENCH_SIZE + PADDING;
-    int textLeftEdge = iconLeftEdge + ICONSIZE + PADDING;
-
-    // draw checkbox first
-    int pos = ( mid ) - ( WRENCH_SIZE / 2 );
-    QRect checkRect = QRect( CHECK_LEFT_EDGE, pos + top, WRENCH_SIZE, WRENCH_SIZE );
-    opt.rect = checkRect;
-    drawCheckBox( opt, painter, w );
-
-    // draw the icon if it exists
-    pos = mid - ( ICONSIZE / 2 );
-    if( !index.data( Qt::DecorationRole ).value< QPixmap >().isNull() ) {
-        QRect prect = QRect( iconLeftEdge, pos + top, ICONSIZE, ICONSIZE );
-
-        painter->save();
-        painter->drawPixmap( prect, index.data( Qt::DecorationRole ).value< QPixmap >().scaled( prect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-        painter->restore();
-    }
-
-    // name
-    painter->save();
-    painter->setFont( name );
-    QFontMetrics namefm( name );
-    // pos will the top-left point of the text rect
-    pos = quarter - ( namefm.height() / 2 ) + top;
-    const QString nameStr = index.data( AccountModel::AccountName ).toString();
-    const int titleWidth = namefm.width( nameStr );
-    const QRect nameRect( textLeftEdge, pos, titleWidth, namefm.height() );
-    painter->drawText( nameRect, nameStr );
-    painter->restore();
-
-    // draw the online/offline status
-    const int stateY = mid + quarter - ( smallFontFM.height() / 2 ) + top;
-
-    QPixmap p;
-    QString statusText;
-    Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
-    if ( state == Account::Connected )
-    {
-        p = m_cachedIcons[ "sipplugin-online" ];
-        statusText = tr( "Online" );
-    }
-    else if ( state == Account::Connecting )
-    {
-        p = m_cachedIcons[ "sipplugin-offline" ];
-        statusText = tr( "Connecting..." );
-    }
-    else
-    {
-        p = m_cachedIcons[ "sipplugin-offline" ];
-        statusText = tr( "Offline" );
-    }
-    painter->drawPixmap( textLeftEdge, stateY, STATUS_ICON_SIZE, STATUS_ICON_SIZE, p );
-
-    int width = smallFontFM.width( statusText );
-    int statusTextX = textLeftEdge + STATUS_ICON_SIZE + PADDING;
-    painter->save();
-    painter->setFont( smallFont );
-    painter->drawText( QRect( statusTextX, stateY, width, smallFontFM.height() ), statusText );
-    painter->restore();
-
-    // right-most edge of text on left (name, desc) is the cutoff point for the rest of the delegate
-    width = qMax( statusTextX + width, textLeftEdge + titleWidth );
-
-    // from the right edge--config status and online/offline
-    QRect confRect = QRect( itemRect.width() - WRENCH_SIZE - 2 * PADDING, mid - WRENCH_SIZE / 2 + top, WRENCH_SIZE, WRENCH_SIZE );
-    if( index.data( AccountModel::HasConfig ).toBool() ) {
-
-        QStyleOptionToolButton topt;
-        topt.rect = confRect;
-        topt.pos = confRect.topLeft();
-
-        drawConfigWrench( painter, opt, topt );
-    }
-
-    const bool hasCapability = ( static_cast< Accounts::AccountTypes >( index.data( AccountModel::AccountTypeRole ).toInt() ) != Accounts::NoType );
-
-    // draw optional capability text if it exists
-    if ( hasCapability )
-    {
-        QString capString;
-        AccountTypes types = AccountTypes( index.data( AccountModel::AccountTypeRole ).toInt() );
-        if ( ( types & Accounts::SipType ) && ( types & Accounts::ResolverType ) )
-            capString = tr( "Connects to, plays from friends" );
-        else if ( types & Accounts::SipType )
-            capString = tr( "Connects to friends" );
-        else if ( types & Accounts::ResolverType )
-            capString = tr( "Finds Music");
-
-        // checkbox for capability
-//         QRect capCheckRect( statusX, capY - STATUS_ICON_SIZE / 2 + top, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
-//         opt.rect = capCheckRect;
-//         drawCheckBox( opt, painter, w );
-
-        // text to accompany checkbox
-        const int capY = mid - ( smallFontFM.height() / 2 ) + top;
-        const int configLeftEdge = confRect.left() - PADDING;
-        const int capW = configLeftEdge - width;
-        // Right-align text
-        const int capTextX = qMax( width, configLeftEdge - smallFontFM.width( capString ) );
-        painter->setFont( smallFont );
-        painter->drawText( QRect( capTextX, capY, configLeftEdge - capTextX, smallFontFM.height() ), Qt::AlignRight, capString );
-    }*/
 }
 
 
@@ -294,7 +164,8 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
         opt2.rect = checkRect;
         const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
         const bool canCheck = ( state == AccountModel::Installed || state == AccountModel::ShippedWithTomahawk );
-        opt2.state = canCheck ? QStyle::State_On : QStyle::State_Off;
+        if ( !canCheck )
+            opt2.state &= ~QStyle::State_Enabled;
         drawCheckBox( opt2, painter, opt.widget );
     }
     leftEdge += WRENCH_SIZE + PADDING / 2;
@@ -315,62 +186,69 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
 
     // install / status button
     const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
-    QString actionText;
-    switch( state )
+    int edgeOfRightExtras = opt.rect.right();
+    if ( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
     {
-        case AccountModel::Uninstalled:
-            actionText = tr( "Install" );
-            break;
-        case AccountModel::Installing:
-            actionText = tr( "Installing" );
-            break;
-        case AccountModel::Upgrading:
-            actionText = tr( "Upgrading" );
-            break;
-        case AccountModel::Failed:
-            actionText = tr( "Failed" );
-            break;
-        case AccountModel::Installed:
-            actionText = tr( "Uninstall" );
-            break;
-        case AccountModel::NeedsUpgrade:
-            actionText = tr( "Upgrade" );
-            break;
-        case AccountModel::ShippedWithTomahawk:
-            actionText = tr( "Create" );
-            break;
-        case AccountModel::UniqueFactory:
-            actionText = tr( "Installed" );
-            break;
+        QString actionText;
+        switch( state )
+        {
+            case AccountModel::Uninstalled:
+                actionText = tr( "Install" );
+                break;
+            case AccountModel::Installing:
+                actionText = tr( "Installing" );
+                break;
+            case AccountModel::Upgrading:
+                actionText = tr( "Upgrading" );
+                break;
+            case AccountModel::Failed:
+                actionText = tr( "Failed" );
+                break;
+            case AccountModel::Installed:
+                actionText = tr( "Uninstall" );
+                break;
+            case AccountModel::NeedsUpgrade:
+                actionText = tr( "Upgrade" );
+                break;
+            case AccountModel::ShippedWithTomahawk:
+                actionText = tr( "Create" );
+                break;
+            case AccountModel::UniqueFactory:
+                actionText = tr( "Installed" );
+                break;
+        }
+        // title and description
+        const int btnWidth = m_widestTextWidth + 7;
+        leftEdge = opt.rect.width() - PADDING - btnWidth - 3;
+        const QRect btnRect( leftEdge, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 4 );
+        m_cachedButtonRects[ index ] = btnRect;
+
+
+        painter->save();
+        painter->setPen( opt.palette.color( QPalette::Active, QPalette::AlternateBase ) );
+
+        drawRoundedButton( painter, btnRect );
+
+        painter->setFont( installFont );
+        painter->drawText( btnRect, Qt::AlignCenter, actionText );
+        painter->restore();
+
+        edgeOfRightExtras = btnRect.left();
     }
 
-    // title and description
-    const int btnWidth = m_widestTextWidth + 7;
-    leftEdge = opt.rect.width() - PADDING - btnWidth - 3;
-    const QRect btnRect( leftEdge, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 4 );
-    m_cachedButtonRects[ index ] = btnRect;
 
-    const QPen saved = painter->pen();
-    painter->setPen( opt.palette.color( QPalette::Active, QPalette::AlternateBase ) );
-
-    drawRoundedButton( painter, btnRect );
-
-    painter->setFont( installFont );
-    painter->drawText( btnRect, Qt::AlignCenter, actionText );
-
-    painter->setPen( saved );
-
-
-    int edgeOfRightExtras = btnRect.x();
     if ( rowType == AccountModel::TopLevelAccount )
     {
         // rating stars
         const int rating = index.data( AccountModel::RatingRole ).toInt();
         const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
-        int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
+
+//         int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
+        int runningEdge = opt.rect.right() - PADDING - ratingWidth;
+        edgeOfRightExtras = runningEdge;
         for ( int i = 1; i < 6; i++ )
         {
-            QRect r( runningEdge, btnRect.top() - m_ratingStarPositive.height() - PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
+            QRect r( runningEdge, opt.rect.top() + PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
             if ( i == 1 )
                 m_cachedStarRects[ index ] = r;
 
@@ -401,19 +279,23 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
 
         // downloaded num times, underneath button
         QString count = tr( "%1 downloads" ).arg( index.data( AccountModel::DownloadCounterRole ).toInt() );
-        const QRect countRect( btnRect.left(), btnRect.bottom() + PADDING, btnRect.width(), opt.rect.bottom() - PADDING - btnRect.bottom() );
+
         QFont countFont = descFont;
         countFont.setPointSize( countFont.pointSize() - 2 );
         countFont.setBold( true );
+        painter->setFont( countFont );
+        const int countW = painter->fontMetrics().width( count );
+
+        const QRect countRect( opt.rect.right() - PADDING - countW, opt.rect.bottom() - PADDING - painter->fontMetrics().height(), countW, painter->fontMetrics().height() );
         painter->setFont( countFont );
         painter->drawText( countRect, Qt::AlignCenter | Qt::TextWordWrap, count );
 
         // author and version
         QString author = index.data( AccountModel::AuthorRole ).toString();
+        painter->setFont( authorFont );
         const int authorWidth = authorMetrics.width( author );
         const int topTextLine = opt.rect.top() + PADDING;
-        const QRect authorRect( btnRect.x() - 3*PADDING - authorWidth, topTextLine, authorWidth + 6, authorMetrics.height() );
-        painter->setFont( authorFont );
+        const QRect authorRect( edgeOfRightExtras - 2*PADDING - authorWidth, topTextLine, authorWidth + 6, authorMetrics.height() );
         painter->drawText( authorRect, Qt::AlignCenter, author );
 
         // Disable version for now, that space is used
@@ -425,10 +307,10 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     }
 
     // if this is a real resolver, show config wrench, state/status, and string
-    edgeOfRightExtras = btnRect.x();
+    m_cachedConfigRects.remove( index );
     if ( rowType == AccountModel::TopLevelAccount )
     {
-        const QRect confRect = QRect( btnRect.x() - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
+        const QRect confRect = QRect( edgeOfRightExtras - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
         if( index.data( AccountModel::HasConfig ).toBool() ) {
 
             QStyleOptionToolButton topt;
@@ -436,13 +318,17 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
             topt.pos = confRect.topLeft();
 
             drawConfigWrench( painter, opt, topt );
+            m_cachedConfigRects[ index ] = confRect;
             edgeOfRightExtras = confRect.left();
         }
 
-        painter->save();
-        painter->setFont( installFont );
-        edgeOfRightExtras = drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
-        painter->restore();
+        if ( state == AccountModel::Installed || state == AccountModel::ShippedWithTomahawk || state == AccountModel::NeedsUpgrade )
+        {
+            painter->save();
+            painter->setFont( installFont );
+            edgeOfRightExtras = drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
+            painter->restore();
+        }
     }
 
     // Title and description!
@@ -500,10 +386,12 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
 
     // draw remove icon, config wrench, and then status from right edge
     const QRect removeRect( option.rect.right() - rightPadding - PADDING - REMOVE_ICON_SIZE, center - REMOVE_ICON_SIZE/2, REMOVE_ICON_SIZE, REMOVE_ICON_SIZE );
+    m_cachedButtonRects[ index ] = removeRect;
     painter->drawPixmap( removeRect, m_removeIcon );
 
     int edgeOfRightExtras = removeRect.left();
 
+    m_cachedConfigRects.remove( index );
     if ( index.data( AccountModel::HasConfig ).toBool() )
     {
         const QRect confRect = QRect( removeRect.x() - PADDING - SMALL_WRENCH_SIZE, center - SMALL_WRENCH_SIZE / 2, SMALL_WRENCH_SIZE, SMALL_WRENCH_SIZE );
@@ -514,6 +402,7 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
 
         QStyleOptionViewItemV4 opt3 = option;
         drawConfigWrench( painter, opt3, topt );
+        m_cachedConfigRects[ index ] = confRect;
 
         edgeOfRightExtras = confRect.left();
     }
@@ -524,6 +413,103 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
     painter->setFont( smallFont );
     drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
     painter->restore();
+}
+
+
+bool
+AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+    if ( event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseButtonDblClick &&
+         event->type() != QEvent::MouseMove )
+        return false;
+
+    if ( event->type() == QEvent::MouseButtonPress )
+    {
+        // Show the config wrench as depressed on click
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+        if ( me->button() == Qt::LeftButton && m_cachedConfigRects.contains( index ) && m_cachedConfigRects[ index ].contains( me->pos() ) )
+        {
+            m_configPressed = index;
+
+            Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
+            Q_ASSERT( acct ); // Should not be showing a config wrench if there is no account!
+            emit openConfig( acct );
+            return true;
+        }
+    } else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
+    {
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+        if ( m_configPressed.isValid() )
+            emit update( m_configPressed );
+
+        m_configPressed = QModelIndex();
+
+        const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
+        const bool canCheck = ( state == AccountModel::Installed || state == AccountModel::ShippedWithTomahawk );
+        if ( !canCheck )
+            return false;
+
+        // A few options. First, could be the checkbox on/off.
+        // second, could be the install/uninstall/create button
+        // third could be the config button
+        if ( checkRectForIndex( option, index ).contains( me->pos() ) )
+        {
+            // Check box for this row
+
+            // eat the double click events inside the check rect
+            if( event->type() == QEvent::MouseButtonDblClick ) {
+                return true;
+            }
+
+            Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
+            Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
+            return model->setData( index, newState, AccountModel::CheckboxClickedRole );
+        }
+        else if ( m_cachedButtonRects.contains( index ) && m_cachedButtonRects[ index ].contains( me->pos() ) )
+        {
+            // Install/create/etc button for this row
+            model->setData( index, true, AccountModel::ButtonClickedRole );
+        }
+    }
+
+    if ( m_cachedStarRects.contains( index ) )
+    {
+        QRect fullStars = m_cachedStarRects[ index ];
+        const int starsWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
+        fullStars.setWidth( starsWidth );
+
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+
+        if ( fullStars.contains( me->pos() ) )
+        {
+            const int eachStar = starsWidth / 5;
+            const int clickOffset = me->pos().x() - fullStars.x();
+            const int whichStar = (clickOffset / eachStar) + 1;
+
+            if ( event->type() == QEvent::MouseButtonRelease )
+            {
+                model->setData( index, whichStar, AccountModel::RatingRole );
+            }
+            else if ( event->type() == QEvent::MouseMove )
+            {
+                // 0-indexed
+                m_hoveringOver = whichStar;
+                m_hoveringItem = index;
+            }
+
+            return true;
+        }
+    }
+
+    if ( m_hoveringOver > -1 )
+    {
+        emit update( m_hoveringItem );
+        m_hoveringOver = -1;
+        m_hoveringItem = QPersistentModelIndex();
+    }
+    return false;
 }
 
 
@@ -598,46 +584,62 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightCenterEdge, 
 }
 
 
-QRect
-AccountDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const
+void
+AccountDelegate::drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const
 {
-//     if ( role == Qt::CheckStateRole )
-//     {
-//         // the whole resolver checkbox
-//         QStyleOptionViewItemV4 opt = option;
-//         initStyleOption( &opt, idx );
-//         const int mid = opt.rect.height() / 2;
-//         const int pos = mid - ( ICONSIZE / 2 );
-//         QRect checkRect( CHECK_LEFT_EDGE, pos + opt.rect.top(), ICONSIZE, ICONSIZE );
-//
-//         return checkRect;
-//     } else if ( role == AccountModel::AccountTypeRole )
-//     {
-//         // The capabilities checkbox
-//         QStyleOptionViewItemV4 opt = option;
-//         initStyleOption( &opt, idx );
-//         const int quarter = opt.rect.height() / 4 + opt.rect.height()  / 2;
-//         const int leftEdge = opt.rect.width() - PADDING - WRENCH_SIZE - PADDING - WRENCH_SIZE;
-//         QRect checkRect( leftEdge, quarter, WRENCH_SIZE, WRENCH_SIZE );
-//         return checkRect;
-//     }
-    return QRect();
+    QStyle* style = w ? w->style() : QApplication::style();
+    opt.checkState == Qt::Checked ? opt.state |= QStyle::State_On : opt.state |= QStyle::State_Off;
+    style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt, p, w );
 }
 
-QRect
-AccountDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
-{
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, idx );
-    QRect itemRect = opt.rect;
-    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
-    return confRect;
-}
 
 void
-AccountDelegate::askedForEdit( const QModelIndex& idx )
+AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& opt, QStyleOptionToolButton& topt ) const
 {
-    emit openConfig( qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() ) );
+    const QWidget* w = opt.widget;
+    QStyle* style = w ? w->style() : QApplication::style();
+
+    // draw it the same size as the check belox
+    topt.font = opt.font;
+    topt.icon = QIcon( RESPATH "images/configure.png" );
+    topt.iconSize = QSize( 16, 16 );
+    topt.subControls = QStyle::SC_ToolButton;
+    topt.activeSubControls = QStyle::SC_None;
+    topt.features = QStyleOptionToolButton::None;
+    bool pressed = ( m_configPressed == opt.index );
+    topt.state = pressed ? QStyle::State_On : QStyle::State_Raised;
+    if( opt.state & QStyle::State_MouseOver || pressed )
+        topt.state |= QStyle::State_HasFocus;
+    style->drawComplexControl( QStyle::CC_ToolButton, &topt, painter, w );
+}
+
+
+
+QRect
+AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
+{
+    // the checkbox for this row was hit
+    const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( idx.data( AccountModel::RowTypeRole ).toInt() );
+
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, idx );
+
+    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::TopLevelFactory )
+    {
+        // Top level item, return the corresponding rect
+        const int ypos = ( opt.rect.top() + opt.rect.height() / 2 ) - ( WRENCH_SIZE / 2 );
+        QRect checkRect = QRect( PADDING, ypos, WRENCH_SIZE, WRENCH_SIZE );
+        return checkRect;
+    } else if ( rowType == AccountModel::ChildAccount )
+    {
+        // Return smaller rect of individual child account
+        const int smallWrenchSize = opt.rect.height() - PADDING;
+        int ypos = ( opt.rect.center().y() ) - ( smallWrenchSize  / 2 );
+        QRect checkRect = QRect( opt.rect.left() + PADDING, ypos, smallWrenchSize, smallWrenchSize );
+        return checkRect;
+    }
+
+    return QRect();
 }
 
 

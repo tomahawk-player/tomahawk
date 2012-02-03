@@ -19,7 +19,7 @@
 #ifndef ACCOUNTDELEGATE_H
 #define ACCOUNTDELEGATE_H
 
-#include "configdelegatebase.h"
+#include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
 namespace Tomahawk
@@ -29,21 +29,17 @@ namespace Accounts
 
 class Account;
 
-class AccountDelegate : public ConfigDelegateBase
+class AccountDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
     AccountDelegate( QObject* parent = 0);
 
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
-    virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
-
-private slots:
-    void askedForEdit( const QModelIndex& idx );
+protected:
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 signals:
     void update( const QModelIndex& idx );
@@ -52,17 +48,23 @@ signals:
 private:
     void paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
     void paintChild( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
+
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
     // Returns new left edge
     int drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const;
+    void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
+    void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
+
+    QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
     QMap< QString, QPixmap > m_cachedIcons;
     QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative, m_removeIcon;
     int m_widestTextWidth;
     int m_hoveringOver;
-    QPersistentModelIndex m_hoveringItem;
+    QPersistentModelIndex m_hoveringItem, m_configPressed;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
 };
 
 }

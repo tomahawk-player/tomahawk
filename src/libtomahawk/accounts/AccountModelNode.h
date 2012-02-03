@@ -35,7 +35,7 @@ namespace Accounts {
  * Basically a union with possible types:
  * 1) AccountFactory* for accounts that are not unique (jabber, google, twitter)
  * 2) Account* for accounts that are associated with an AccountFactory (children of AccountFactory)
- * 3) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchroton resolvers)
+ * 3) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchrotron resolvers)
  * 4) ResolverAccount* for manually added resolvers (from file).
  * 5) AccountFactory* + Account* for factories that are unique
  *

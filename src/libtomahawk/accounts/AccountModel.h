@@ -21,6 +21,8 @@
 
 #include "dllmacro.h"
 
+#include "Account.h"
+
 #include <QAbstractItemModel>
 
 
@@ -53,7 +55,10 @@ public:
         ErrorString = Qt::UserRole + 27,
 
         // used by individual accounts
-        AccountData = Qt::UserRole + 28 // raw plugin
+        AccountData = Qt::UserRole + 28, // raw plugin
+
+        CheckboxClickedRole = Qt::UserRole + 29, // the checkbox for this row was toggled
+        ButtonClickedRole = Qt::UserRole + 30, // the generic install/create/remove/etc/ button was clicked
     };
 
     enum RowType {
@@ -80,6 +85,15 @@ public:
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
+signals:
+    void createAccount( Tomahawk::Accounts::AccountFactory* factory );
+
+private slots:
+    void accountAdded( Tomahawk::Accounts::Account* );
+    void accountRemoved( Tomahawk::Accounts::Account* );
+    void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
 private:
     AccountModelNode* nodeFromIndex( const QModelIndex& index ) const;
