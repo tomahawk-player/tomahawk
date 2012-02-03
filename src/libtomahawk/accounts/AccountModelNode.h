@@ -33,11 +33,9 @@ namespace Accounts {
  * Node for account tree.
  *
  * Basically a union with possible types:
- * 1) AccountFactory* for accounts that are not unique (jabber, google, twitter)
- * 2) Account* for accounts that are associated with an AccountFactory (children of AccountFactory)
- * 3) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchrotron resolvers)
- * 4) ResolverAccount* for manually added resolvers (from file).
- * 5) AccountFactory* + Account* for factories that are unique
+ * 1) AccountFactory* for all factories that have child accounts. Also a list of children
+ * 2) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchrotron resolvers)
+ * 3) ResolverAccount* for manually added resolvers (from file).
  *
  * These are the top-level items in tree.
  *
@@ -52,29 +50,25 @@ struct AccountModelNode {
     enum NodeType {
         FactoryType,
         UniqueFactoryType,
-        AccountType,
         AtticaType,
         ManualResolverType
     };
     AccountModelNode* parent;
     NodeType type;
-    QList< AccountModelNode* > children; // list of children accounts (actually existing and configured accounts)
 
-    /// 1.
+    /// 1, 4
     AccountFactory* factory;
+    QList< Account* > accounts; // list of children accounts (actually existing and configured accounts)
 
     /// 2.
-    Account* account;
-
-    /// 3.
     Attica::Content atticaContent;
     AtticaResolverAccount* atticaAccount;
 
-    /// 4.
+    /// 3.
     ResolverAccount* resolverAccount;
 
     // Construct in one of four ways. Then access the corresponding members
-    explicit AccountModelNode( AccountModelNode* p, AccountFactory* fac ) : parent( p ), type( FactoryType )
+    explicit AccountModelNode( AccountFactory* fac ) : type( FactoryType )
     {
         init();
         factory = fac;
@@ -88,26 +82,12 @@ struct AccountModelNode {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
                 qDebug() << "Found account for factory:" << acct->accountFriendlyName();
-                if ( fac->isUnique() )
-                {
-                    account = acct;
-                    break;
-                }
-                else
-                {
-                    new AccountModelNode( this, acct );
-                }
+                accounts.append( acct );
             }
         }
     }
 
-    AccountModelNode( AccountModelNode* p, Account* acct ) : parent( p ), type( AccountType )
-    {
-        init();
-        account = acct;
-    }
-
-    explicit AccountModelNode( AccountModelNode* p, Attica::Content cnt ) : parent( p ), type( AtticaType )
+    explicit AccountModelNode( Attica::Content cnt ) : type( AtticaType )
     {
         init();
         atticaContent = cnt;
@@ -128,26 +108,15 @@ struct AccountModelNode {
         }
     }
 
-    explicit AccountModelNode( AccountModelNode* p, ResolverAccount* ra ) : parent( p ), type( ManualResolverType )
+    explicit AccountModelNode( ResolverAccount* ra ) : type( ManualResolverType )
     {
         init();
         resolverAccount = ra;
     }
 
-    AccountModelNode() : parent( 0 ) {}
-
-    ~AccountModelNode()
-    {
-        qDeleteAll( children );
-    }
-
-
     void init()
     {
-        parent->children.append( this );
-
         factory = 0;
-        account = 0;
         atticaAccount = 0;
         resolverAccount = 0;
     }

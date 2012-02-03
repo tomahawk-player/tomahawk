@@ -23,7 +23,7 @@
 
 #include "Account.h"
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 
 
 namespace Tomahawk {
@@ -32,7 +32,7 @@ namespace Accounts {
 
 class AccountModelNode;
 
-class DLLEXPORT AccountModel : public QAbstractItemModel
+class DLLEXPORT AccountModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -58,7 +58,7 @@ public:
         AccountData = Qt::UserRole + 28, // raw plugin
 
         CheckboxClickedRole = Qt::UserRole + 29, // the checkbox for this row was toggled
-        ButtonClickedRole = Qt::UserRole + 30, // the generic install/create/remove/etc/ button was clicked
+        AddAccountButtonRole = Qt::UserRole + 30, // the add account button
     };
 
     enum RowType {
@@ -81,11 +81,8 @@ public:
     explicit AccountModel( QObject* parent = 0 );
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QModelIndex parent( const QModelIndex& child ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
 signals:
     void createAccount( Tomahawk::Accounts::AccountFactory* factory );
@@ -95,11 +92,12 @@ private slots:
     void accountRemoved( Tomahawk::Accounts::Account* );
     void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
+    void atticaInstalled( const QString& atticaId );
 private:
-    AccountModelNode* nodeFromIndex( const QModelIndex& index ) const;
     void loadData();
 
-    AccountModelNode* m_rootItem;
+    QList< AccountModelNode* > m_accounts;
+    QSet< QString > m_waitingForAtticaInstall;
 };
 
 }

@@ -127,26 +127,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QTreeView" name="accountsView">
-              <property name="indentation">
-               <number>6</number>
-              </property>
-              <property name="rootIsDecorated">
-               <bool>false</bool>
-              </property>
-              <property name="uniformRowHeights">
-               <bool>false</bool>
-              </property>
-              <property name="animated">
-               <bool>true</bool>
-              </property>
-              <property name="headerHidden">
-               <bool>true</bool>
-              </property>
-              <property name="expandsOnDoubleClick">
-               <bool>false</bool>
-              </property>
-             </widget>
+             <widget class="QListView" name="accountsView"/>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">

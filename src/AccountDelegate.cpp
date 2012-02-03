@@ -470,7 +470,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         else if ( m_cachedButtonRects.contains( index ) && m_cachedButtonRects[ index ].contains( me->pos() ) )
         {
             // Install/create/etc button for this row
-            model->setData( index, true, AccountModel::ButtonClickedRole );
+            model->setData( index, true, AccountModel::AddAccountButtonRole );
         }
     }
 

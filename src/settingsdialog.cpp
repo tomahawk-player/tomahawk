@@ -113,7 +113,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountModel = new AccountModel( this );
 
     ui->accountsView->setModel( m_accountModel );
-    ui->accountsView->expandAll();
 
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
