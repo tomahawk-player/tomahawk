@@ -104,8 +104,16 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return ShippedWithTomahawk;
                 case DescriptionRole:
                     return fac->description();
+                case CanRateRole:
+                    return false;
                 case RowTypeRole:
                     return TopLevelFactory;
+                case AccountData:
+                    return QVariant::fromValue< QObject* >( node->factory );
+                case ChildrenOfFactoryRole:
+                    return QVariant::fromValue< QList< Tomahawk::Accounts::Account* > >( node->accounts );
+                case HasConfig:
+                    return !node->accounts.isEmpty();
                 default:
                     return QVariant();
             }
@@ -133,6 +141,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return c.rating() / 20; // rating is out of 100
                 case DownloadCounterRole:
                     return c.downloads();
+                case CanRateRole:
+                    return true;
                 case VersionRole:
                     return c.version();
                 case UserHasRatedRole:
@@ -188,6 +198,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return TopLevelFactory;
                 case StateRole:
                     return Uninstalled;
+                case CanRateRole:
+                    return false;
                 default:
                     return QVariant();
                 }

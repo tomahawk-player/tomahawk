@@ -46,20 +46,18 @@ signals:
     void openConfig( Tomahawk::Accounts::Account* );
 
 private:
-    void paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
-    void paintChild( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const;
-
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
     // Returns new left edge
-    int drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const;
+    int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct ) const;
     void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
     void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
+    // returns new left edge
+    int drawAccountList( QPainter* painter, QStyleOptionViewItemV4& option, const QList< Account* > accounts, int rightEdge ) const;
 
     QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
     QMap< QString, QPixmap > m_cachedIcons;
     QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative, m_removeIcon;
-    int m_widestTextWidth;
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;

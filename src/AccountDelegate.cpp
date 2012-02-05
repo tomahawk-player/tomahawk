@@ -35,9 +35,9 @@
 #define STAR_SIZE 12
 
 #ifdef Q_WS_MAC
-#define TOPLEVEL_ACCOUNT_HEIGHT 70
+#define TOPLEVEL_ACCOUNT_HEIGHT 72
 #else
-#define TOPLEVEL_ACCOUNT_HEIGHT 60
+#define TOPLEVEL_ACCOUNT_HEIGHT 62
 #endif
 
 #define ICONSIZE 40
@@ -52,7 +52,6 @@ using namespace Accounts;
 
 AccountDelegate::AccountDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
-    , m_widestTextWidth( 0 )
 {
 
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
@@ -70,22 +69,10 @@ AccountDelegate::AccountDelegate( QObject* parent )
     m_onHoverStar = m_onHoverStar.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_removeIcon = m_removeIcon.scaled( REMOVE_ICON_SIZE, REMOVE_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
-    const int w = TOPLEVEL_ACCOUNT_HEIGHT - 2*PADDING;
-    m_defaultCover = m_defaultCover.scaled( w, w, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    m_defaultCover = m_defaultCover.scaled( ICONSIZE, ICONSIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
     m_cachedIcons[ "sipplugin-online" ] = QPixmap( RESPATH "images/sipplugin-online.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
     m_cachedIcons[ "sipplugin-offline" ] = QPixmap( RESPATH "images/sipplugin-offline.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
-    // save the widest width
-    QFont f( QApplication::font() );
-    f.setPointSize( f.pointSize() - 1 );
-    QFontMetrics fm( f );
-    QStringList l = QStringList() << tr( "Installed" ) << tr( "Installing" ) << tr( "Failed" ) << tr( "Uninstalling" ) << tr( "Create" );
-    foreach ( const QString& str, l )
-    {
-        if ( fm.width( str ) > m_widestTextWidth )
-            m_widestTextWidth = fm.width( str );
-    }
 }
 
 
@@ -93,10 +80,20 @@ QSize
 AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
-    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::TopLevelFactory )
+    if ( rowType == AccountModel::TopLevelAccount )
         return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
-    else // individual child account
-        return QSize( 200, CHILD_ACCOUNT_HEIGHT );
+    else if ( rowType == AccountModel::TopLevelFactory )
+    {
+        // Make more space for eacha ccount we have to show.
+        AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
+        if ( fac->isUnique() )
+            return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
+
+        const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
+        return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT + 14 * accts.size() );
+    }
+
+    return QSize();
 }
 
 
@@ -113,21 +110,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->setRenderHint( QPainter::Antialiasing );
 
-    AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
-    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::TopLevelFactory )
-        paintTopLevel( painter, opt, index );
-    else // individual child account
-        paintChild( painter, opt, index );
-
-    return;
-}
-
-
-void
-AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const
-{
-    QStyleOptionViewItemV4 opt = option;
-
     QFont titleFont = opt.font;
     titleFont.setBold( true );
     titleFont.setPointSize( titleFont.pointSize() + 2 );
@@ -136,9 +118,9 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     QFont authorFont = opt.font;
     authorFont.setItalic( true );
     authorFont.setPointSize( authorFont.pointSize() - 1 );
-#ifdef Q_OS_MAC
+    #ifdef Q_OS_MAC
     authorFont.setPointSize( authorFont.pointSize() - 1 );
-#endif
+    #endif
     const QFontMetrics authorMetrics( authorFont );
 
     QFont descFont = authorFont;
@@ -152,28 +134,20 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
     const int height = opt.rect.height();
     const int center = height / 2 + opt.rect.top();
 
-    // Left account enable/disable checkbox if this is not a factory
+    // Left account enable/disable checkbox
     const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
     int leftEdge = PADDING;
-    if ( rowType != AccountModel::TopLevelFactory )
-    {
-        // draw checkbox first
-        int ypos = ( center ) - ( WRENCH_SIZE / 2 );
-        QRect checkRect = QRect( leftEdge, ypos, WRENCH_SIZE, WRENCH_SIZE );
-        QStyleOptionViewItemV4 opt2 = opt;
-        opt2.rect = checkRect;
-        const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
-        const bool canCheck = ( state == AccountModel::Installed || state == AccountModel::ShippedWithTomahawk );
-        if ( !canCheck )
-            opt2.state &= ~QStyle::State_Enabled;
-        drawCheckBox( opt2, painter, opt.widget );
-    }
+    // draw checkbox first
+    const int checkboxYPos = ( center ) - ( WRENCH_SIZE / 2 );
+    QRect checkRect = QRect( leftEdge, checkboxYPos, WRENCH_SIZE, WRENCH_SIZE );
+    QStyleOptionViewItemV4 opt2 = opt;
+    opt2.rect = checkRect;
+    drawCheckBox( opt2, painter, opt.widget );
     leftEdge += WRENCH_SIZE + PADDING / 2;
 
     // Pixmap
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    const int pixmapWidth = height - 2*PADDING;
-    QRect pixmapRect( leftEdge + PADDING, PADDING + opt.rect.top(), pixmapWidth, pixmapWidth );
+    QRect pixmapRect( leftEdge + PADDING, center - ICONSIZE/2, ICONSIZE, ICONSIZE );
     if ( p.isNull() ) // default image... TODO
         p = m_defaultCover;
     else
@@ -181,48 +155,53 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
 
     painter->drawPixmap( pixmapRect, p );
 
+    // Draw config wrench if there is one
+    const bool hasConfigWrench = index.data( AccountModel::HasConfig ).toBool();
+    int rightEdge = opt.rect.right();
+    if ( hasConfigWrench )
+    {
+        const QRect confRect = QRect( rightEdge - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
+        QStyleOptionToolButton topt;
+        topt.rect = confRect;
+        topt.pos = confRect.topLeft();
 
-    // Go from right edge now, stars, install/create button, downloaded info, config wrench and status etc
+        drawConfigWrench( painter, opt, topt );
+        m_cachedConfigRects[ index ] = confRect;
+        rightEdge = confRect.left();
 
-    // install / status button
-    const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
-    int edgeOfRightExtras = opt.rect.right();
+    }
+
+    // Draw individual accounts and add account button for factories
     if ( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
     {
-        QString actionText;
-        switch( state )
-        {
-            case AccountModel::Uninstalled:
-                actionText = tr( "Install" );
-                break;
-            case AccountModel::Installing:
-                actionText = tr( "Installing" );
-                break;
-            case AccountModel::Upgrading:
-                actionText = tr( "Upgrading" );
-                break;
-            case AccountModel::Failed:
-                actionText = tr( "Failed" );
-                break;
-            case AccountModel::Installed:
-                actionText = tr( "Uninstall" );
-                break;
-            case AccountModel::NeedsUpgrade:
-                actionText = tr( "Upgrade" );
-                break;
-            case AccountModel::ShippedWithTomahawk:
-                actionText = tr( "Create" );
-                break;
-            case AccountModel::UniqueFactory:
-                actionText = tr( "Installed" );
-                break;
-        }
-        // title and description
-        const int btnWidth = m_widestTextWidth + 7;
-        leftEdge = opt.rect.width() - PADDING - btnWidth - 3;
-        const QRect btnRect( leftEdge, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 4 );
-        m_cachedButtonRects[ index ] = btnRect;
+        const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
 
+        QRect btnRect;
+        const QString btnText = tr( "Add Account" );
+        const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
+
+        if ( accts.isEmpty() )
+        {
+            Q_ASSERT( !hasConfigWrench );
+
+            // Draw button in center of row
+            btnRect= QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 4 );
+            rightEdge = btnRect.left();
+        }
+        else
+        {
+            painter->save();
+            painter->setFont( installFont );
+            int oldRightEdge = rightEdge;
+            rightEdge = drawAccountList( painter, opt, accts, rightEdge );
+            painter->restore();
+
+            int centeredUnderAccounts = oldRightEdge - (oldRightEdge - rightEdge)/2 - (btnWidth/2);
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
+        }
+
+        leftEdge = btnRect.left();
+        m_cachedButtonRects[ index ] = btnRect;
 
         painter->save();
         painter->setPen( opt.palette.color( QPalette::Active, QPalette::AlternateBase ) );
@@ -230,20 +209,104 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
         drawRoundedButton( painter, btnRect );
 
         painter->setFont( installFont );
-        painter->drawText( btnRect, Qt::AlignCenter, actionText );
+        painter->drawText( btnRect, Qt::AlignCenter, btnText );
         painter->restore();
-
-        edgeOfRightExtras = btnRect.left();
     }
 
+    // Draw the title and description
+    // title
+    QString title = index.data( Qt::DisplayRole ).toString();
+    const int rightTitleEdge = rightEdge - PADDING;
+    const int leftTitleEdge = pixmapRect.right() + PADDING;
+    painter->setFont( titleFont );
+    QRect textRect;
+    if ( index.data( AccountModel::CanRateRole ).toBool() )
+    {
+        textRect = QRect( leftTitleEdge, opt.rect.top() + PADDING, rightTitleEdge - leftTitleEdge, painter->fontMetrics().height() );
+    }
+    else
+    {
+        textRect = QRect( leftTitleEdge, opt.rect.top() + PADDING, rightTitleEdge - leftTitleEdge, center - opt.rect.top() - PADDING );
+    }
+    painter->drawText( textRect, Qt::AlignVCenter | Qt::AlignLeft, title );
 
+    // description
+    QString desc = index.data( AccountModel::DescriptionRole ).toString();
+    const int descWidth = rightEdge - leftTitleEdge - PADDING;
+    painter->setFont( descFont );
+    const QRect descRect( leftTitleEdge, textRect.bottom() + PADDING/2, descWidth, painter->fontMetrics().height() );
+    painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignTop, desc );
+
+//     install / status button
+
+    if ( index.data( AccountModel::CanRateRole ).toBool() )
+    {
+        // rating stars
+        const int rating = index.data( AccountModel::RatingRole ).toInt();
+        const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
+
+        //         int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
+        int runningEdge = textRect.left();
+        for ( int i = 1; i < 6; i++ )
+        {
+            QRect r( runningEdge, opt.rect.bottom() - 4*PADDING - m_ratingStarNegative.height(), m_ratingStarPositive.width(), m_ratingStarPositive.height() );
+            if ( i == 1 )
+                m_cachedStarRects[ index ] = r;
+
+            const bool userHasRated = index.data( AccountModel::UserHasRatedRole ).toBool();
+            if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
+                 m_hoveringOver > -1 &&
+                 m_hoveringItem == index )
+            {
+                if ( i <= m_hoveringOver ) // positive star
+                    painter->drawPixmap( r, m_onHoverStar );
+                else
+                    painter->drawPixmap( r, m_ratingStarNegative );
+            }
+            else
+            {
+                if ( i <= rating ) // positive or rated star
+                {
+                    if ( userHasRated )
+                        painter->drawPixmap( r, m_onHoverStar );
+                    else
+                        painter->drawPixmap( r, m_ratingStarPositive );
+                }
+                else
+                    painter->drawPixmap( r, m_ratingStarNegative );
+            }
+            runningEdge += m_ratingStarPositive.width() + PADDING_BETWEEN_STARS;
+        }
+
+        // author
+        QString author = index.data( AccountModel::AuthorRole ).toString();
+        painter->setFont( authorFont );
+        const int authorWidth = authorMetrics.width( author );
+        const int topTextLine = opt.rect.top() + PADDING;
+        const QRect authorRect( opt.rect.right() - 2*PADDING - authorWidth,  opt.rect.bottom() - 2*PADDING - painter->fontMetrics().height(), authorWidth + 6, authorMetrics.height() );
+        painter->drawText( authorRect, Qt::AlignLeft, author );
+
+        // downloaded num times, underneath button
+        QString count = tr( "%1 downloads" ).arg( index.data( AccountModel::DownloadCounterRole ).toInt() );
+
+        painter->setFont( descFont );
+        const int countW = painter->fontMetrics().width( count );
+
+        const QRect countRect( authorRect.right() - 25*PADDING - countW, authorRect.top(), countW, painter->fontMetrics().height() );
+        count = painter->fontMetrics().elidedText( count, Qt::ElideRight, authorRect.left() - countRect.left() );
+        painter->drawText( countRect, Qt::AlignLeft | Qt::TextWordWrap, count );
+
+
+//         runningEdge = authorRect.x();
+    }
+    /*
     if ( rowType == AccountModel::TopLevelAccount )
     {
         // rating stars
         const int rating = index.data( AccountModel::RatingRole ).toInt();
         const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
 
-//         int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
+        //         int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
         int runningEdge = opt.rect.right() - PADDING - ratingWidth;
         edgeOfRightExtras = runningEdge;
         for ( int i = 1; i < 6; i++ )
@@ -304,8 +367,8 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
         //     painter->drawText( versionRect, Qt::AlignCenter, version );
 
         edgeOfRightExtras = authorRect.x();
-    }
-
+    }*/
+/*
     // if this is a real resolver, show config wrench, state/status, and string
     m_cachedConfigRects.remove( index );
     if ( rowType == AccountModel::TopLevelAccount )
@@ -329,29 +392,54 @@ AccountDelegate::paintTopLevel( QPainter* painter, const QStyleOptionViewItemV4&
             edgeOfRightExtras = drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
             painter->restore();
         }
-    }
+    }*/
 
     // Title and description!
-    // title
-    QString title = index.data( Qt::DisplayRole ).toString();
-    const int rightTitleEdge = edgeOfRightExtras - PADDING;
-    const int leftTitleEdge = pixmapRect.right() + PADDING;
-    const QRect textRect( leftTitleEdge, opt.rect.top() + PADDING, rightTitleEdge - leftTitleEdge, center - opt.rect.top() - PADDING );
-    painter->setFont( titleFont );
-    painter->drawText( textRect, Qt::AlignVCenter | Qt::AlignLeft, title );
-
-    // description
-    QString desc = index.data( AccountModel::DescriptionRole ).toString();
-    const int descWidth = edgeOfRightExtras - leftTitleEdge - PADDING;
-    const QRect descRect( leftTitleEdge, center, descWidth, opt.rect.bottom() - center + PADDING );
-    painter->setFont( descFont );
-    painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap, desc );
-
-    painter->setRenderHints( QPainter::RenderHints() );
-    painter->drawLine( opt.rect.bottomLeft(), opt.rect.bottomRight() );
+    return;
 }
 
 
+int
+AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt, const QList< Account* > accts, int rightEdge ) const
+{
+    // list each account name, and show the online, offline icon
+    const int textHeight = painter->fontMetrics().height() + 1;
+    const int mid = opt.rect.bottom() - opt.rect.height() / 2;
+    int runningRightEdge = rightEdge;
+    int current = 0;
+
+    int leftOfAccounts = 0;
+
+    if ( accts.size() % 2 == 1 )
+    {
+        // If there's an odd number, the center one is centered
+        current = mid - ((textHeight + PADDING/2) * (accts.size()/2) ) - textHeight / 2;
+    }
+    else
+    {
+        // Even number, center between the middle ones
+        current = mid - ((textHeight + PADDING/2) * (accts.size()/2) );
+    }
+
+    for ( int i = 0; i < accts.size(); i++ )
+    {
+        // draw lightbulb and text
+        runningRightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, current), accts.at( i ) );
+
+        const QString label = accts.at( i )->accountFriendlyName();
+        const QPoint textTopLeft( runningRightEdge - PADDING - painter->fontMetrics().width( label ), current);
+        painter->drawText( QRect( textTopLeft, QSize( painter->fontMetrics().width( label ) + 1, textHeight ) ), label );
+
+        current += textHeight + PADDING/2;
+
+        leftOfAccounts = qMax( leftOfAccounts, textTopLeft.x() );
+    }
+
+    return leftOfAccounts;
+}
+
+
+/*
 void
 AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& option, const QModelIndex& index ) const
 {
@@ -413,7 +501,7 @@ AccountDelegate::paintChild( QPainter* painter, const QStyleOptionViewItemV4& op
     painter->setFont( smallFont );
     drawStatus( painter, QPointF( edgeOfRightExtras - PADDING, center ), index );
     painter->restore();
-}
+}*/
 
 
 bool
@@ -551,11 +639,11 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) co
 
 
 int
-AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightCenterEdge, const QModelIndex& index ) const
+AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct ) const
 {
     QPixmap p;
     QString statusText;
-    Account::ConnectionState state = static_cast< Account::ConnectionState >( index.data( AccountModel::ConnectionStateRole ).toInt() );
+    Account::ConnectionState state = acct->connectionState();
     if ( state == Account::Connected )
     {
         p = m_onlineIcon;
@@ -572,15 +660,16 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightCenterEdge, 
         statusText = tr( "Offline" );
     }
 
-    const int yPos = rightCenterEdge.y() - painter->fontMetrics().height() / 2;
-    const QRect connectIconRect( rightCenterEdge.x() - STATUS_ICON_SIZE, yPos, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
+    const int yPos = rightTopEdge.y();
+    const QRect connectIconRect( rightTopEdge.x() - STATUS_ICON_SIZE, yPos, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
     painter->drawPixmap( connectIconRect, p );
 
-    int width = painter->fontMetrics().width( statusText );
-    int statusTextX = connectIconRect.x() - PADDING - width;
-    painter->drawText( QRect( statusTextX, yPos, width, painter->fontMetrics().height() ), statusText );
+    // For now, disable text next to icon
+//     int width = painter->fontMetrics().width( statusText );
+//     int statusTextX = connectIconRect.x() - PADDING - width;
+//     painter->drawText( QRect( statusTextX, yPos, width, painter->fontMetrics().height() ), statusText );
 
-    return statusTextX;
+    return connectIconRect.x();
 }
 
 
@@ -630,14 +719,14 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QM
         const int ypos = ( opt.rect.top() + opt.rect.height() / 2 ) - ( WRENCH_SIZE / 2 );
         QRect checkRect = QRect( PADDING, ypos, WRENCH_SIZE, WRENCH_SIZE );
         return checkRect;
-    } else if ( rowType == AccountModel::ChildAccount )
+    } /*else if ( rowType == AccountModel::ChildAccount )
     {
         // Return smaller rect of individual child account
         const int smallWrenchSize = opt.rect.height() - PADDING;
         int ypos = ( opt.rect.center().y() ) - ( smallWrenchSize  / 2 );
         QRect checkRect = QRect( opt.rect.left() + PADDING, ypos, smallWrenchSize, smallWrenchSize );
         return checkRect;
-    }
+    }*/
 
     return QRect();
 }
