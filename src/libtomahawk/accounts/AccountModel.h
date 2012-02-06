@@ -67,7 +67,8 @@ public:
 
     enum RowType {
         TopLevelFactory,
-        TopLevelAccount
+        TopLevelAccount,
+        UniqueFactory
     };
 
     enum ItemState {
@@ -78,7 +79,6 @@ public:
         Upgrading,
         Failed,
         ShippedWithTomahawk, // Built-in account/factory state: Can't uninstall or uninstall, just create
-        UniqueFactory // Shipped with tomahawk but is a unique account
     };
 
     explicit AccountModel( QObject* parent = 0 );

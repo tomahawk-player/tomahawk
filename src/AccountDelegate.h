@@ -48,7 +48,7 @@ signals:
 private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
     // Returns new left edge
-    int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct ) const;
+    int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct, bool drawText = false ) const;
     void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
     void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
     // returns new left edge

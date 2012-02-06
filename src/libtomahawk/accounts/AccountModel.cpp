@@ -174,6 +174,9 @@ AccountModel::data( const QModelIndex& index, int role ) const
         case AccountModelNode::ManualResolverType:
         case AccountModelNode::UniqueFactoryType:
         {
+            if ( role == RowTypeRole )
+                return UniqueFactory;
+
             Account* acct = 0;
             if ( node->type == AccountModelNode::ManualResolverType )
                 acct = node->resolverAccount;
@@ -194,8 +197,6 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return node->factory->icon();
                 case DescriptionRole:
                     return node->factory->description();
-                case RowTypeRole:
-                    return TopLevelFactory;
                 case StateRole:
                     return Uninstalled;
                 case CanRateRole:
@@ -218,14 +219,14 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                 case AccountData:
                     return QVariant::fromValue< QObject* >( acct );
-                case RowTypeRole:
-                    return TopLevelAccount;
                 case ConnectionStateRole:
                     return acct->connectionState();
                 case HasConfig:
                     return acct->configurationWidget() != 0;
                 case StateRole:
                     return Installed;
+                case ChildrenOfFactoryRole:
+                    return QVariant::fromValue< QList< Tomahawk::Accounts::Account* > >( node->accounts );
                 default:
                     return QVariant();
                 }

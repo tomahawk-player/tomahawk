@@ -80,7 +80,7 @@ QSize
 AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
-    if ( rowType == AccountModel::TopLevelAccount )
+    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory )
         return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
     else if ( rowType == AccountModel::TopLevelFactory )
     {
@@ -211,6 +211,18 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->setFont( installFont );
         painter->drawText( btnRect, Qt::AlignCenter, btnText );
         painter->restore();
+    }
+    else if ( rowType == AccountModel::UniqueFactory )
+    {
+        // Display as usual, except if it has an account, show the status.
+        const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
+        if ( !accts.isEmpty() )
+        {
+            Q_ASSERT( accts.size() == 1 );
+
+            rightEdge = drawStatus( painter, QPointF( rightEdge, center - painter->fontMetrics().height()/2 ), accts.first(), true );
+        }
+
     }
 
     // Draw the title and description
@@ -487,7 +499,7 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) co
 
 
 int
-AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct ) const
+AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct, bool drawText ) const
 {
     QPixmap p;
     QString statusText;
@@ -512,12 +524,18 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
     const QRect connectIconRect( rightTopEdge.x() - STATUS_ICON_SIZE, yPos, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
     painter->drawPixmap( connectIconRect, p );
 
+    int leftEdge = connectIconRect.x();
     // For now, disable text next to icon
-//     int width = painter->fontMetrics().width( statusText );
-//     int statusTextX = connectIconRect.x() - PADDING - width;
-//     painter->drawText( QRect( statusTextX, yPos, width, painter->fontMetrics().height() ), statusText );
+    if ( drawText )
+    {
+        int width = painter->fontMetrics().width( statusText );
+        int statusTextX = connectIconRect.x() - PADDING - width;
+        painter->drawText( QRect( statusTextX, yPos, width, painter->fontMetrics().height() ), statusText );
 
-    return connectIconRect.x();
+        leftEdge = statusTextX;
+    }
+
+    return leftEdge;
 }
 
 
