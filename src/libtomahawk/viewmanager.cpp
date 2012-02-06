@@ -52,6 +52,7 @@
 #include "widgets/animatedsplitter.h"
 
 #include "utils/logger.h"
+#include "nowplaying/nowplayingpage.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -432,6 +433,14 @@ ViewManager::showTopLovedPage()
     return show( m_topLovedWidget );
 }
 
+Tomahawk::ViewPage*
+ViewManager::showNowPlayingPage()
+{
+    if ( !m_nowPlayingWidget )
+        m_nowPlayingWidget = new NowPlayingPage(m_widget);
+
+    return show( m_nowPlayingWidget );
+}
 
 void
 ViewManager::setTableMode()

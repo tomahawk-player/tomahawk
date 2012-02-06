@@ -33,6 +33,7 @@
 
 #include "dllmacro.h"
 
+class NowPlayingPage;
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
@@ -91,6 +92,7 @@ public:
     Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
     Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
     Tomahawk::ViewPage* topLovedWidget() const { return m_topLovedWidget; }
+    Tomahawk::ViewPage* nowPlayingWidget() const { return m_nowPlayingWidget; }
     ArtistView* superCollectionView() const { return m_superCollectionView; }
 
     /// Get the view page for the given item. Not pretty...
@@ -135,6 +137,7 @@ public slots:
     Tomahawk::ViewPage* showWelcomePage();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showTopLovedPage();
+    Tomahawk::ViewPage* showNowPlayingPage();
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -197,6 +200,7 @@ private:
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
     Tomahawk::ViewPage* m_topLovedWidget;
+    Tomahawk::ViewPage* m_nowPlayingWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

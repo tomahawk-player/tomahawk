@@ -285,6 +285,11 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
     hot->setSortValue( -300 );
+    
+    GenericPageItem* nowPlaying = new GenericPageItem( this, browse, tr( "Now Playing" ), QIcon( RESPATH "images/charts.png" ),
+                                                boost::bind( &ViewManager::showNowPlayingPage, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::nowPlayingWidget, ViewManager::instance() ) );
+    hot->setSortValue( -400 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 15 );
 

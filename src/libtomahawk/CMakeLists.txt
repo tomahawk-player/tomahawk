@@ -6,6 +6,10 @@ SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
 SET( QT_USE_QTUITOOLS TRUE )
 
+IF(VSXU_FOUND)
+  SET( QT_USE_QTOPENGL TRUE )
+ENDIF(VSXU_FOUND)
+
 include( ${QT_USE_FILE} )
 
 add_definitions( ${QT_DEFINITIONS} )
@@ -146,6 +150,9 @@ set( libGuiSources
 IF(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/groovesharkparser.cpp )
 ENDIF(QCA2_FOUND)
+IF(VSXU_FOUND)
+    set(libGuiSources ${libGuiSources} nowplaying/VSXuWidget.cpp nowplaying/nowplayingpage.cpp)
+ENDIF(VSXU_FOUND)
 
 set( libGuiHeaders
     actioncollection.h
@@ -283,6 +290,9 @@ set( libGuiHeaders
 IF(QCA2_FOUND)
     set( libGuiHeaders ${libGuiHeaders} utils/groovesharkparser.h )
 ENDIF(QCA2_FOUND)
+IF(VSXU_FOUND)
+    set( libGuiHeaders ${libGuiHeaders} nowplaying/VSXuWidget.h nowplaying/nowplayingpage.h)
+ENDIF(VSXU_FOUND)
 
 set( libSources
     tomahawksettings.cpp
@@ -594,6 +604,10 @@ IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
 
+IF(VSXU_FOUND)
+    INCLUDE_DIRECTORIES(${VSXU_INCLUDE_DIRS})
+ENDIF(VSXU_FOUND)
+
 IF(LIBATTICA_FOUND)
     SET( libGuiSources ${libGuiSources} AtticaManager.cpp )
     SET( libGuiHeaders ${libGuiHeaders} AtticaManager.h )
@@ -686,6 +700,10 @@ IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 
+IF(VSXU_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${VSXU_LIBRARIES})
+ENDIF(VSXU_FOUND)
+
 IF(LIBATTICA_FOUND)
     SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
 ENDIF(LIBATTICA_FOUND)
@@ -700,9 +718,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
-    ${QT_QTSQL_LIBRARY}
-    ${QT_QTUITOOLS_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    ${QT_LIBRARIES} #This should do as long as we use ${SET (QT_USE_QTXYZ TRUE)}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

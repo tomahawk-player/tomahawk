@@ -120,6 +120,8 @@ macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/e
 macro_optional_find_package(QTweetLib)
 macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
 
+macro_optional_find_package(VSXu)
+macro_log_feature(VSXU_FOUND "VSXu" "Vovoid VSXu Ultra" "https://www.vsxu.com" FALSE "" "VSXu is needed for some really cool music visualization.\n")
 
 IF( NOT QuaZip_FOUND )
     add_subdirectory( ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip )
