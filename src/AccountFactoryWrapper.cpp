@@ -58,7 +58,7 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
 
 #ifdef Q_OS_MAC
     setContentsMargins( 0, 0, 0, 0 );
-    m_ui->verticalLayout->setSpacing( 4 );
+    m_ui->verticalLayout->setSpacing( 6 );
 #endif
 }
 

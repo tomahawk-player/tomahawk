@@ -112,7 +112,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
     connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
 
-    connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
     m_accountModel = new AccountModel( this );
 
     ui->accountsView->setModel( m_accountModel );
