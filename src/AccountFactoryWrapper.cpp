@@ -48,10 +48,10 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
 
     load();
 
-
     connect( m_ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
     connect( m_ui->buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
-    connect( m_ui->buttonBox, SIGNAL( clicked( QAbstractButton*) ), this, SLOT( buttonClicked() ) );
+    connect( m_ui->buttonBox, SIGNAL( clicked( QAbstractButton*) ), this, SLOT( buttonClicked( QAbstractButton* ) ) );
+
 #ifdef Q_OS_MAC
     setContentsMargins( 0, 0, 0, 0 );
     m_ui->verticalLayout->setSpacing( 4 );
@@ -70,8 +70,13 @@ AccountFactoryWrapper::load()
             item->setData( 0, AccountRole, QVariant::fromValue< QObject *>( acc ) );
         }
     }
+#ifndef Q_OS_MAC
+    const int padding = 7;
+#else
+    const int padding = 8;
+#endif
+    const int height = m_ui->accountsList->model()->rowCount( QModelIndex() ) * ACCOUNT_ROW_HEIGHT + padding;
 
-    const int height = m_ui->accountsList->model()->rowCount( QModelIndex() ) * ACCOUNT_ROW_HEIGHT + 7;
     m_ui->accountsList->setFixedHeight( height );
 }
 

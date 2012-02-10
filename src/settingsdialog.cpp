@@ -119,9 +119,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
-    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
-    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( accountUninstalled( QString ) ) );
-
     connect( ui->accountsView->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( accountsSelectionChanged() ) );
 
     if ( !Servent::instance()->isReady() )
