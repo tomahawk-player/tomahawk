@@ -54,10 +54,9 @@ public slots:
 
 private slots:
     void buttonClicked( QAbstractButton* );
-
-private:
     void load();
 
+private:
     Tomahawk::Accounts::AccountFactory* m_factory;
     Ui_AccountFactoryWrapper* m_ui;
     QPushButton* m_addButton;

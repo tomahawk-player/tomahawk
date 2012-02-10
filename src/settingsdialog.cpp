@@ -511,11 +511,11 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
     if ( accts.size() == 1 )
     {
         // If there's just one, open the config directly w/ the delete button. Otherwise open the multi dialog
-        openAccountConfig( accts.first() );
+        openAccountConfig( accts.first(), true );
         return;
     }
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     AccountFactoryWrapper dialog( factory, this );
     QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
 
@@ -525,7 +525,7 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 #else
     // on osx a sheet needs to be non-modal
     AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
-    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
+    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
     dialog->show();
 #endif

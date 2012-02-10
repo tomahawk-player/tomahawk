@@ -90,6 +90,7 @@ public slots:
         {
             m_deleted = true;
             emit deleted();
+            reject();
         }
         else
             done( QDialog::Rejected );

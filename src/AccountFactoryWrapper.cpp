@@ -52,6 +52,10 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
     connect( m_ui->buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
     connect( m_ui->buttonBox, SIGNAL( clicked( QAbstractButton*) ), this, SLOT( buttonClicked( QAbstractButton* ) ) );
 
+
+    connect ( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( load() ) );
+    connect ( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( load() ) );
+
 #ifdef Q_OS_MAC
     setContentsMargins( 0, 0, 0, 0 );
     m_ui->verticalLayout->setSpacing( 4 );
@@ -70,6 +74,10 @@ AccountFactoryWrapper::load()
             item->setData( 0, AccountRole, QVariant::fromValue< QObject *>( acc ) );
         }
     }
+
+    if ( m_ui->accountsList->model()->rowCount() == 0 )
+        accept();
+
 #ifndef Q_OS_MAC
     const int padding = 7;
 #else
@@ -133,7 +141,7 @@ AccountFactoryWrapper::buttonClicked( QAbstractButton* button )
     {
         m_createAccount = true;
         emit createAccount( m_factory );
-        accept();
+//         accept();
         return;
     }
     else

@@ -156,6 +156,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     // Draw config wrench if there is one
     const bool hasConfigWrench = index.data( AccountModel::HasConfig ).toBool();
     int rightEdge = opt.rect.right();
+    m_cachedConfigRects[ index ] = QRect();
     if ( hasConfigWrench )
     {
         const QRect confRect = QRect( rightEdge - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
@@ -170,6 +171,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
     // Draw individual accounts and add account button for factories
+    m_cachedButtonRects[ index ] = QRect();
     if ( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
     {
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
@@ -183,7 +185,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             Q_ASSERT( !hasConfigWrench );
 
             // Draw button in center of row
-            btnRect= QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 4 );
+            btnRect= QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
             rightEdge = btnRect.left();
         }
         else
