@@ -443,7 +443,7 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
     if( account->configurationWidget() )
     {
-#ifndef Q_WS_MAC
+#if 0
         DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
         dialog.setShowDelete( showDelete );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
@@ -490,8 +490,6 @@ SettingsDialog::accountConfigDelete()
     Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
     Q_ASSERT( account );
     AccountManager::instance()->removeAccount( account );
-
-    sender()->deleteLater();
 }
 
 
