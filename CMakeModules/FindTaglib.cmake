@@ -56,7 +56,7 @@ ELSE()
 	  include(FindLibraryWithDebug)
 	  include(FindPackageHandleStandardArgs)
 
-	  find_path(TAGLIB_CFLAGS
+	  find_path(TAGLIB_INCLUDES
 		NAMES
 		tag.h
 		PATH_SUFFIXES taglib
