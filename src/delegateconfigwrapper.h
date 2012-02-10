@@ -89,7 +89,7 @@ public slots:
         else if ( b == m_deleteButton )
         {
             m_deleted = true;
-            emit deleted();
+            emit closedWithDelete();
             reject();
         }
         else
