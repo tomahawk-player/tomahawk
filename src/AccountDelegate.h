@@ -44,6 +44,7 @@ protected:
 signals:
     void update( const QModelIndex& idx );
     void openConfig( Tomahawk::Accounts::Account* );
+    void openConfig( Tomahawk::Accounts::AccountFactory* );
 
 private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
@@ -56,7 +57,6 @@ private:
 
     QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
-    QMap< QString, QPixmap > m_cachedIcons;
     QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative, m_removeIcon;
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;

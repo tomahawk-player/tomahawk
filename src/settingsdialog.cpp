@@ -53,6 +53,7 @@
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
 #include "utils/logger.h"
+#include "AccountFactoryWrapper.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
@@ -105,8 +106,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->accountsView->setItemDelegate( accountDelegate );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    ui->accountsView->setMouseTracking( true );
 
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
     connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
 
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( accountContextMenuRequest( QPoint ) ) );
@@ -426,20 +429,6 @@ SettingsDialog::onLastFmFinished()
 
 
 void
-SettingsDialog::accountInstalled(Account* account)
-{
-//     m_resolversModel->atticaResolverInstalled( resolverId );
-}
-
-
-void
-SettingsDialog::accountUninstalled(const QString& acct)
-{
-//     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
-}
-
-
-void
 SettingsDialog::accountsSelectionChanged()
 {
     if( !ui->accountsView->selectionModel()->selectedIndexes().isEmpty() )
@@ -454,15 +443,20 @@ SettingsDialog::accountsSelectionChanged()
 
 
 void
-SettingsDialog::openAccountConfig( Account* account )
+SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
     if( account->configurationWidget() )
     {
 #ifndef Q_WS_MAC
         DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
+        dialog.setShowDelete( showDelete );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
+        if ( !watcher.isNull() && dialog.deleted() )
+        {
+            AccountManager::instance()->removeAccount( account );
+        }
+        else if( !watcher.isNull() && ret == QDialog::Accepted )
         {
             // send changed config to resolver
             account->saveConfig();
@@ -470,8 +464,10 @@ SettingsDialog::openAccountConfig( Account* account )
 #else
         // on osx a sheet needs to be non-modal
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
+        dialog->setShowDelete( showDelete );
         dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
         connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountConfigClosed( int ) ) );
+        connect( dialog, SIGNAL( closedWithDelete() ), this, SLOT( accountConfigDelete() ) );
 
         dialog->show();
 #endif
@@ -488,6 +484,54 @@ SettingsDialog::accountConfigClosed( int value )
         Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
         account->saveConfig();
     }
+}
+
+
+void
+SettingsDialog::accountConfigDelete()
+{
+    DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+    Q_ASSERT( account );
+    AccountManager::instance()->removeAccount( account );
+
+    sender()->deleteLater();
+}
+
+
+void
+SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
+{
+    QList< Account* > accts;
+    foreach ( Account* acct, AccountManager::instance()->accounts() )
+    {
+        if ( AccountManager::instance()->factoryForAccount( acct ) == factory )
+            accts << acct;
+        if ( accts.size() > 1 )
+            break;
+    }
+    Q_ASSERT( accts.size() > 0 ); // Shouldn't have a config wrench if there are no accounts!
+    if ( accts.size() == 1 )
+    {
+        // If there's just one, open the config directly w/ the delete button. Otherwise open the multi dialog
+        openAccountConfig( accts.first() );
+        return;
+    }
+
+#ifndef Q_WS_MAC
+    AccountFactoryWrapper dialog( factory, this );
+    QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
+
+    int ret = dialog.exec();
+    if ( !watcher.isNull() && dialog.doCreateAccount() )
+        createAccountFromFactory( factory );
+#else
+    // on osx a sheet needs to be non-modal
+    AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
+    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
+
+    dialog->show();
+#endif
 }
 
 
@@ -564,47 +608,6 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
     {
         // user pressed cancel
         delete account;
-    }
-}
-
-
-void
-SettingsDialog::accountContextMenuRequest( const QPoint& p )
-{
-    QModelIndex idx = ui->accountsView->indexAt( p );
-    // if it's an account, allow to delete
-    if( idx.isValid() )
-    {
-//         QList< QAction* > acts;
-//         acts << new QAction( tr( "Delete Service" ), this );
-//         acts.first()->setProperty( "accountplugin", idx.data( AccountModel::AccountData ) );
-//         connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( onAccountRowDeleted( bool ) ) );
-//         QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
-    }
-}
-
-
-void
-SettingsDialog::onAccountRowDeleted( bool )
-{
-    Account* account = qobject_cast< Account* >( qobject_cast< QAction* >( sender() )->property( "accountplugin" ).value< QObject* >() );
-
-    AccountManager::instance()->removeAccount( account );
-}
-
-
-void
-SettingsDialog::accountDeleted( bool )
-{
-    QModelIndexList indexes = ui->accountsView->selectionModel()->selectedIndexes();
-    // if it's an account, allow to delete
-    foreach( const QModelIndex& idx, indexes )
-    {
-        if( idx.isValid() )
-        {
-//             Account* account = qobject_cast< Account* >( idx.data( AccountModel::AccountData ).value< QObject* >() );
-//             AccountManager::instance()->removeAccount( account );
-        }
     }
 }
 

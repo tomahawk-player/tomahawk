@@ -71,8 +71,6 @@ AccountDelegate::AccountDelegate( QObject* parent )
 
     m_defaultCover = m_defaultCover.scaled( ICONSIZE, ICONSIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
-    m_cachedIcons[ "sipplugin-online" ] = QPixmap( RESPATH "images/sipplugin-online.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-    m_cachedIcons[ "sipplugin-offline" ] = QPixmap( RESPATH "images/sipplugin-offline.png" ).scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -381,9 +379,28 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         {
             m_configPressed = index;
 
-            Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
-            Q_ASSERT( acct ); // Should not be showing a config wrench if there is no account!
-            emit openConfig( acct );
+            const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
+            if ( rowType == AccountModel::TopLevelAccount )
+            {
+                Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
+                Q_ASSERT( acct ); // Should not be showing a config wrench if there is no account!
+
+                emit openConfig( acct );
+            }
+            else if ( rowType == AccountModel::TopLevelFactory )
+            {
+                AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
+                Q_ASSERT( fac ); // Should not be showing a config wrench if there is no account!
+                emit openConfig( fac );
+            }
+            else if ( rowType == AccountModel::UniqueFactory )
+            {
+                const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
+
+                Q_ASSERT( !accts.isEmpty() ); // If there's no account, why is there a config widget for this factory?
+                Q_ASSERT( accts.size() == 1 );
+                emit openConfig( accts.first() );
+            }
             return true;
         }
     } else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
@@ -395,13 +412,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         m_configPressed = QModelIndex();
 
         const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
-        const bool canCheck = ( state == AccountModel::Installed || state == AccountModel::ShippedWithTomahawk );
-        if ( !canCheck )
-            return false;
 
-        // A few options. First, could be the checkbox on/off.
-        // second, could be the install/uninstall/create button
-        // third could be the config button
         if ( checkRectForIndex( option, index ).contains( me->pos() ) )
         {
             // Check box for this row
@@ -525,7 +536,6 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
     painter->drawPixmap( connectIconRect, p );
 
     int leftEdge = connectIconRect.x();
-    // For now, disable text next to icon
     if ( drawText )
     {
         int width = painter->fontMetrics().width( statusText );
@@ -557,7 +567,7 @@ AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& o
     // draw it the same size as the check belox
     topt.font = opt.font;
     topt.icon = QIcon( RESPATH "images/configure.png" );
-    topt.iconSize = QSize( 16, 16 );
+    topt.iconSize = QSize( 14, 14 );
     topt.subControls = QStyle::SC_ToolButton;
     topt.activeSubControls = QStyle::SC_None;
     topt.features = QStyleOptionToolButton::None;

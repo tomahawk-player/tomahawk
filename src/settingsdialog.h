@@ -88,18 +88,14 @@ private slots:
     void testLastFmLogin();
     void onLastFmFinished();
 
-    void openAccountConfig( Tomahawk::Accounts::Account* );
     void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
-    void accountContextMenuRequest( const QPoint& );
-    void accountDeleted( bool );
-    void onAccountRowDeleted( bool );
 
     void accountsSelectionChanged();
 
-    void accountInstalled( Tomahawk::Accounts::Account* account );
-    void accountUninstalled( const QString& acct );
-
+    void openAccountConfig( Tomahawk::Accounts::Account*, bool showDelete = false );
+    void openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* );
     void accountConfigClosed( int value );
+    void accountConfigDelete();
     void accountCreateConfigClosed( int value );
 
     void updateScanOptionsView();

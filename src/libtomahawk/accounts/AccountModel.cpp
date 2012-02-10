@@ -72,6 +72,7 @@ AccountModel::loadData()
    connect ( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
    connect ( AccountManager::instance(), SIGNAL( stateChanged( Account* ,Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Account*, Accounts::Account::ConnectionState ) ) );
 
+   connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
 }
 
 
@@ -175,7 +176,12 @@ AccountModel::data( const QModelIndex& index, int role ) const
         case AccountModelNode::UniqueFactoryType:
         {
             if ( role == RowTypeRole )
-                return UniqueFactory;
+            {
+                if ( node->type == AccountModelNode::ManualResolverType )
+                    return TopLevelAccount;
+                else
+                    return UniqueFactory;
+            }
 
             Account* acct = 0;
             if ( node->type == AccountModelNode::ManualResolverType )
@@ -270,7 +276,6 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                 }
                 else
                 {
-                    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
                     m_waitingForAtticaInstall.insert( resolver.id() );
 
                     AtticaManager::instance()->installResolver( resolver );
@@ -461,7 +466,54 @@ AccountModel::accountRemoved( Account* account )
 void
 AccountModel::atticaInstalled( const QString& atticaId )
 {
+    if ( !m_waitingForAtticaInstall.contains( atticaId ) )
+        return;
 
+    m_waitingForAtticaInstall.remove( atticaId );
+
+    // find associated Account*, set on to the saved resolver, and update state
+    AccountModelNode* node = 0;
+    AtticaResolverAccount* acct = 0;
+
+    foreach ( AccountModelNode* n, m_accounts )
+    {
+        if ( n->type == AccountModelNode::AtticaType &&
+             n->atticaContent.id() == atticaId )
+        {
+            node = n;
+            break;
+        }
+    }
+
+    if ( !node )
+    {
+        Q_ASSERT( false );
+        return; // Couldn't find it??
+    }
+
+    foreach ( Account* acc, AccountManager::instance()->accounts( ResolverType ) )
+    {
+        if ( AtticaResolverAccount* ra = qobject_cast< AtticaResolverAccount* >( acc ) )
+        {
+            if ( ra->atticaId() == atticaId )
+            {
+                acct = ra;
+                break;
+            }
+        }
+    }
+
+    if ( !acct )
+    {
+        qWarning() << "Got installed attica resolver but couldnt' find a resolver account for it??";
+        return;
+    }
+
+    AccountManager::instance()->enableAccount( acct );
+
+    node->atticaAccount = acct;
+    const QModelIndex idx = index( m_accounts.indexOf( node ), 0, QModelIndex() );
+    emit dataChanged( idx, idx );
 }
 
 

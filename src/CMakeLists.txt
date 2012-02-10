@@ -78,6 +78,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      settingslistdelegate.cpp
      tomahawkwindow.cpp
      LoadXSPFDialog.cpp
+     AccountFactoryWrapper.cpp
+     AccountFactoryWrapperDelegate.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -121,6 +123,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      delegateconfigwrapper.h
      tomahawkwindow.h
      LoadXSPFDialog.h
+     AccountFactoryWrapper.h
+     AccountFactoryWrapperDelegate.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -132,6 +136,8 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
 
      LoadXSPFDialog.ui
+
+     AccountFactoryWrapper.ui
 )
 
 INCLUDE_DIRECTORIES(

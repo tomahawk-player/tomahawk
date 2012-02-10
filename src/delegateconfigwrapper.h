@@ -28,7 +28,7 @@ class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
+    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf ), m_deleted( false )
     {
         m_widget->setWindowFlags( Qt::Sheet );
 #ifdef Q_WS_MAC
@@ -39,11 +39,11 @@ public:
         v->setContentsMargins( 0, 0, 0, 0 );
         v->addWidget( m_widget );
 
-        QDialogButtonBox* buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
-        m_okButton = buttons->button( QDialogButtonBox::Ok );
-        connect( buttons, SIGNAL( clicked( QAbstractButton*)  ), this, SLOT( closed( QAbstractButton* ) ) );
+        m_buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
+        m_okButton = m_buttons->button( QDialogButtonBox::Ok );
+        connect( m_buttons, SIGNAL( clicked( QAbstractButton*)  ), this, SLOT( closed( QAbstractButton* ) ) );
         connect( this, SIGNAL( rejected() ), this, SLOT( rejected() ) );
-        v->addWidget( buttons );
+        v->addWidget( m_buttons );
 
         setLayout( v );
 
@@ -62,6 +62,14 @@ public:
 
     ~DelegateConfigWrapper() {}
 
+    void setShowDelete( bool del )
+    {
+        if ( del )
+            m_deleteButton = m_buttons->addButton( tr( "Delete Account" ), QDialogButtonBox::DestructiveRole );
+    }
+
+    bool deleted() const { return m_deleted; }
+
 public slots:
     void toggleOkButton( bool dataError )
     {
@@ -78,6 +86,11 @@ public slots:
         QDialogButtonBox* buttons = qobject_cast< QDialogButtonBox* >( sender() );
         if( buttons->standardButton( b ) == QDialogButtonBox::Ok )
             done( QDialog::Accepted );
+        else if ( b == m_deleteButton )
+        {
+            m_deleted = true;
+            emit deleted();
+        }
         else
             done( QDialog::Rejected );
     }
@@ -100,9 +113,14 @@ public slots:
         show();
     }
 
+signals:
+    void closedWithDelete();
+
 private:
+    QDialogButtonBox* m_buttons;
     QWidget* m_widget;
-    QPushButton* m_okButton;
+    QPushButton *m_okButton, *m_deleteButton;
+    bool m_deleted;
 };
 
 #endif
