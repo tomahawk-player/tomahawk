@@ -348,7 +348,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-JabberPlugin::sendMsg( const QString& to, const QString& msg )
+XmppSipPlugin::sendMsg( const QString& to, const QString& msg )
 {
     qDebug() << Q_FUNC_INFO << to << msg;
 
@@ -373,7 +373,7 @@ JabberPlugin::sendMsg( const QString& to, const QString& msg )
     TomahawkXmppMessage *sipMessage;
     if(m["visible"].toBool())
     {
-        sipMessage = new TomahawkSipMessage( m["ip"].toString(),
+        sipMessage = new TomahawkXmppMessage( m["ip"].toString(),
                                              m["port"].toInt(),
                                              m["uniqname"].toString(),
                                              m["key"].toString()
@@ -394,7 +394,7 @@ JabberPlugin::sendMsg( const QString& to, const QString& msg )
 
 
 void
-JabberPlugin::broadcastMsg( const QString& msg )
+XmppSipPlugin::broadcastMsg( const QString& msg )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -409,7 +409,7 @@ JabberPlugin::broadcastMsg( const QString& msg )
 
 
 void
-JabberPlugin::addContact( const QString& jid, const QString& msg )
+XmppSipPlugin::addContact( const QString& jid, const QString& msg )
 {
     // Add contact to the Tomahawk group on the roster
 
@@ -573,7 +573,7 @@ void XmppSipPlugin::removeMenuHelper()
 }
 
 
-void JabberPlugin::onNewMessage( const Jreen::Message& message )
+void XmppSipPlugin::onNewMessage( const Jreen::Message& message )
 {
     if ( m_state != Account::Connected )
         return;
@@ -658,7 +658,7 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
 }
 
 
-void JabberPlugin::onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence )
+void XmppSipPlugin::onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence )
 {
     if ( m_state != Account::Connected )
         return;
@@ -749,7 +749,7 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
 }
 
 
-void JabberPlugin::onNewIq( const Jreen::IQ& iq )
+void XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
 {
     if ( m_state != Account::Connected )
         return;
@@ -801,7 +801,7 @@ void JabberPlugin::onNewIq( const Jreen::IQ& iq )
     }*/
     else
     {
-        TomahawkSipMessage::Ptr sipMessage = iq.payload< TomahawkSipMessage >();
+        TomahawkXmppMessage::Ptr sipMessage = iq.payload< TomahawkXmppMessage >();
         if(sipMessage)
         {
             iq.accept();
@@ -831,7 +831,7 @@ void JabberPlugin::onNewIq( const Jreen::IQ& iq )
 }
 
 
-bool JabberPlugin::presenceMeansOnline( Jreen::Presence::Type p )
+bool XmppSipPlugin::presenceMeansOnline( Jreen::Presence::Type p )
 {
     switch( p )
     {
@@ -846,7 +846,7 @@ bool JabberPlugin::presenceMeansOnline( Jreen::Presence::Type p )
 }
 
 
-void JabberPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType )
+void XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType )
 {
     QString fulljid = jid.full();
 
@@ -896,7 +896,7 @@ void JabberPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Typ
 }
 
 
-void JabberPlugin::onNewAvatar( const QString& jid )
+void XmppSipPlugin::onNewAvatar( const QString& jid )
 {
 #ifndef ENABLE_HEADLESS
 //    qDebug() << Q_FUNC_INFO << jid;
