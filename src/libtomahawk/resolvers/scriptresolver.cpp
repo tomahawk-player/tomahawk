@@ -250,7 +250,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
-            rp->setYear( m.value( "year ").toUInt() );
+            rp->setYear( m.value( "year").toUInt() );
             rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
             rp->setMimetype( m.value( "mimetype" ).toString() );

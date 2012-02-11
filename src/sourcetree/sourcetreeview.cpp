@@ -323,8 +323,9 @@ SourceTreeView::copyPlaylistLink()
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
 
+        QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
         QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
-                                                         TomahawkSettings::instance()->playlistDefaultPath(), tr( "Playlists (*.xspf)" ) );
+                                                         suggestedFilename, tr( "Playlists (*.xspf)" ) );
         if ( !filename.isEmpty() )
         {
             QFileInfo playlistAbsoluteFilePath = filename;

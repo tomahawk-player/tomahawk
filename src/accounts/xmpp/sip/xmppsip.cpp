@@ -37,19 +37,19 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include <QtPlugin>
-#include <QStringList>
-#include <QDateTime>
-#include <QTimer>
+#include <QtCore/QtPlugin>
+#include <QtCore/QStringList>
+#include <QtCore/QDateTime>
+#include <QtCore/QTimer>
 
 #include <utils/tomahawkutils.h>
 #include <utils/logger.h>
 #include <accounts/AccountManager.h>
 
 #ifndef ENABLE_HEADLESS
-    #include <QInputDialog>
-    #include <QLineEdit>
-    #include <QMessageBox>
+    #include <QtGui/QInputDialog>
+    #include <QtGui/QLineEdit>
+    #include <QtGui/QMessageBox>
 #endif
 
 #include <utils/tomahawkutilsgui.h>
@@ -348,7 +348,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
+JabberPlugin::sendMsg( const QString& to, const QString& msg )
 {
     qDebug() << Q_FUNC_INFO << to << msg;
 
@@ -373,11 +373,11 @@ XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
     TomahawkXmppMessage *sipMessage;
     if(m["visible"].toBool())
     {
-        sipMessage = new TomahawkXmppMessage(m["ip"].toString(),
-                                            m["port"].toInt(),
-                                            m["uniqname"].toString(),
-                                            m["key"].toString()
-                                            );
+        sipMessage = new TomahawkSipMessage( m["ip"].toString(),
+                                             m["port"].toInt(),
+                                             m["uniqname"].toString(),
+                                             m["key"].toString()
+                                             );
     }
     else
     {
@@ -387,14 +387,14 @@ XmppSipPlugin::sendMsg(const QString& to, const QString& msg)
     qDebug() << "Send sip messsage to " << to;
     Jreen::IQ iq( Jreen::IQ::Set, to );
     iq.addExtension( sipMessage );
-    Jreen::IQReply *reply = m_client->send(iq);
-    reply->setData(SipMessageSent);
-    connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+    Jreen::IQReply *reply = m_client->send( iq );
+    reply->setData( SipMessageSent );
+    connect( reply, SIGNAL( received( Jreen::IQ ) ), SLOT( onNewIq( Jreen::IQ ) ) );
 }
 
 
 void
-XmppSipPlugin::broadcastMsg(const QString& msg)
+JabberPlugin::broadcastMsg( const QString& msg )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -409,7 +409,7 @@ XmppSipPlugin::broadcastMsg(const QString& msg)
 
 
 void
-XmppSipPlugin::addContact(const QString& jid, const QString& msg)
+JabberPlugin::addContact( const QString& jid, const QString& msg )
 {
     // Add contact to the Tomahawk group on the roster
 
@@ -572,7 +572,8 @@ void XmppSipPlugin::removeMenuHelper()
 #endif
 }
 
-void XmppSipPlugin::onNewMessage(const Jreen::Message& message)
+
+void JabberPlugin::onNewMessage( const Jreen::Message& message )
 {
     if ( m_state != Account::Connected )
         return;
@@ -644,9 +645,9 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
         Jreen::IQ featuresIq( Jreen::IQ::Get, jid );
         featuresIq.addExtension( new Jreen::Disco::Info( node ) );
 
-        Jreen::IQReply *reply = m_client->send(featuresIq);
-        reply->setData(RequestDisco);
-        connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+        Jreen::IQReply *reply = m_client->send( featuresIq );
+        reply->setData( RequestDisco );
+        connect( reply, SIGNAL( received( Jreen::IQ ) ), SLOT( onNewIq( Jreen::IQ ) ) );
     }
     else if( !caps )
     {
@@ -656,7 +657,8 @@ void XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, cons
     }
 }
 
-void XmppSipPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
+
+void JabberPlugin::onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence )
 {
     if ( m_state != Account::Connected )
         return;
@@ -718,9 +720,9 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
     QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
     Jreen::JID jid;
 
-    foreach( QMessageBox* currentBox, confirmBoxes )
+    foreach ( QMessageBox* currentBox, confirmBoxes )
     {
-        if( currentBox == sender() )
+        if ( currentBox == sender() )
         {
             jid = m_subscriptionConfirmBoxes.key( currentBox );
         }
@@ -730,7 +732,7 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
     m_subscriptionConfirmBoxes.remove( jid );
     sender()->deleteLater();
 
-    QMessageBox::StandardButton allowSubscription = static_cast<QMessageBox::StandardButton>( result );
+    QMessageBox::StandardButton allowSubscription = static_cast< QMessageBox::StandardButton >( result );
 
     if ( allowSubscription == QMessageBox::Yes )
     {
@@ -746,19 +748,20 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
 #endif
 }
 
-void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
+
+void JabberPlugin::onNewIq( const Jreen::IQ& iq )
 {
     if ( m_state != Account::Connected )
         return;
 
-    Jreen::IQReply *reply = qobject_cast<Jreen::IQReply*>(sender());
+    Jreen::IQReply *reply = qobject_cast< Jreen::IQReply* >( sender() );
     int context = reply ? reply->data().toInt() : NoContext;
 
-    if( context == RequestDisco )
+    if ( context == RequestDisco )
     {
 //        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
-        Jreen::Disco::Info *discoInfo = iq.payload<Jreen::Disco::Info>().data();
-        if(!discoInfo)
+        Jreen::Disco::Info *discoInfo = iq.payload< Jreen::Disco::Info >().data();
+        if ( !discoInfo )
             return;
         iq.accept();
 
@@ -766,7 +769,7 @@ void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
 
         Jreen::DataForm::Ptr form = discoInfo->form();
 
-        if(discoInfo->features().contains( TOMAHAWK_FEATURE ))
+        if ( discoInfo->features().contains( TOMAHAWK_FEATURE ) )
         {
             qDebug() << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: yes";
 
@@ -774,17 +777,17 @@ void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
             handlePeerStatus( jid, Jreen::Presence::Available );
         }
     }
-    else if(context == RequestVersion)
+    else if ( context == RequestVersion)
     {
         Jreen::SoftwareVersion::Ptr softwareVersion = iq.payload<Jreen::SoftwareVersion>();
-        if( softwareVersion )
+        if ( softwareVersion )
         {
             QString versionString = QString("%1 %2 %3").arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
             qDebug() << Q_FUNC_INFO << "Received software version for " << iq.from().full() << ":" << versionString;
             emit softwareVersionReceived( iq.from().full(), versionString );
         }
     }
-    else if(context == RequestedDisco)
+    else if ( context == RequestedDisco )
     {
         qDebug() << "Sent IQ(Set), what should be happening here?";
     }
@@ -798,7 +801,7 @@ void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
     }*/
     else
     {
-        TomahawkXmppMessage::Ptr sipMessage = iq.payload<TomahawkXmppMessage>();
+        TomahawkSipMessage::Ptr sipMessage = iq.payload< TomahawkSipMessage >();
         if(sipMessage)
         {
             iq.accept();
@@ -827,9 +830,10 @@ void XmppSipPlugin::onNewIq(const Jreen::IQ& iq)
     }
 }
 
-bool XmppSipPlugin::presenceMeansOnline(Jreen::Presence::Type p)
+
+bool JabberPlugin::presenceMeansOnline( Jreen::Presence::Type p )
 {
-    switch(p)
+    switch( p )
     {
         case Jreen::Presence::Invalid:
         case Jreen::Presence::Unavailable:
@@ -841,7 +845,8 @@ bool XmppSipPlugin::presenceMeansOnline(Jreen::Presence::Type p)
     }
 }
 
-void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type presenceType)
+
+void JabberPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType )
 {
     QString fulljid = jid.full();
 
@@ -860,7 +865,7 @@ void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Typ
     }
 
     // "coming online" event
-    if( presenceMeansOnline( presenceType ) &&
+    if ( presenceMeansOnline( presenceType ) &&
         ( !m_peers.contains( jid ) ||
           !presenceMeansOnline( m_peers.value( jid ) )
         )
@@ -872,16 +877,16 @@ void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Typ
         emit peerOnline( fulljid );
 
 #ifndef ENABLE_HEADLESS
-        if(!m_avatarManager->avatar(jid.bare()).isNull())
+        if ( !m_avatarManager->avatar( jid.bare() ).isNull() )
             onNewAvatar( jid.bare() );
 #endif
 
         // request software version
         Jreen::IQ versionIq( Jreen::IQ::Get, jid );
         versionIq.addExtension( new Jreen::SoftwareVersion() );
-        Jreen::IQReply *reply = m_client->send(versionIq);
-        reply->setData(RequestVersion);
-        connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+        Jreen::IQReply *reply = m_client->send( versionIq );
+        reply->setData( RequestVersion );
+        connect( reply, SIGNAL( received( Jreen::IQ ) ), SLOT( onNewIq( Jreen::IQ ) ) );
 
         return;
     }
@@ -890,18 +895,19 @@ void XmppSipPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Typ
     m_peers[ jid ] = presenceType;
 }
 
-void XmppSipPlugin::onNewAvatar(const QString& jid)
+
+void JabberPlugin::onNewAvatar( const QString& jid )
 {
 #ifndef ENABLE_HEADLESS
 //    qDebug() << Q_FUNC_INFO << jid;
     if ( m_state != Account::Connected )
         return;
 
-    Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
+    Q_ASSERT( !m_avatarManager->avatar( jid ).isNull() );
 
     // find peers for the jid
-    QList<Jreen::JID> peers =  m_peers.keys();
-    foreach(const Jreen::JID &peer, peers)
+    QList< Jreen::JID > peers =  m_peers.keys();
+    foreach ( const Jreen::JID &peer, peers )
     {
         if( peer.bare() == jid )
         {
@@ -909,7 +915,7 @@ void XmppSipPlugin::onNewAvatar(const QString& jid)
         }
     }
 
-    if( jid == m_client->jid().bare() )
+    if ( jid == m_client->jid().bare() )
         // own avatar
         emit avatarReceived ( m_avatarManager->avatar( jid ) );
     else

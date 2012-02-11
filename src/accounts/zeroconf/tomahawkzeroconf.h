@@ -53,10 +53,13 @@ signals:
 public slots:
     void resolved( QHostInfo i )
     {
-        emit tomahawkHostFound( ip, port, i.hostName(), nid );
+        if ( i.hostName().length() )
+            emit tomahawkHostFound( ip, port, i.hostName(), nid );
+        else
+            emit tomahawkHostFound( ip, port, "Unknown", nid );
         this->deleteLater();
     }
-
+    
     void resolve()
     {
         QHostInfo::lookupHost( ip, this, SLOT( resolved( QHostInfo ) ) );

@@ -123,16 +123,7 @@ ControlConnection::setup()
         return;
     }
 
-    QString friendlyName;
-    if ( Servent::isIPWhitelisted( m_sock->peerAddress() ) )
-    {
-        // FIXME TODO blocking DNS lookup if LAN, slow/fails on windows?
-        QHostInfo i = QHostInfo::fromName( m_sock->peerAddress().toString() );
-        if( i.hostName().length() )
-            friendlyName = i.hostName();
-    }
-    else
-        friendlyName = name();
+    QString friendlyName = name();
 
     tDebug() << "Detected name:" << name() << friendlyName << m_sock->peerAddress();
 

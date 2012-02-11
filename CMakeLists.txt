@@ -72,7 +72,7 @@ IF( NOT BUILD_GUI )
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
 ELSE()
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" )
+    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" )
 ENDIF()
 
 IF( BUILD_GUI AND UNIX AND NOT APPLE )
@@ -80,7 +80,7 @@ IF( BUILD_GUI AND UNIX AND NOT APPLE )
 ENDIF()
 
 macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
-macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether \n     the qtwebkit-devel package is installed as well")
+macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
 
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
