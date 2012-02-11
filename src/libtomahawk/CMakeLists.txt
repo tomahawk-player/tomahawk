@@ -306,6 +306,7 @@ set( libSources
     accounts/AccountManager.cpp
     accounts/Account.cpp
     accounts/AccountModel.cpp
+    accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
 
     sip/SipPlugin.cpp
@@ -447,6 +448,7 @@ set( libHeaders
     accounts/Account.h
     accounts/AccountManager.h
     accounts/AccountModel.h
+    accounts/AccountModelFilterProxy.h
     accounts/ResolverAccount.h
 
     EchonestCatalogSynchronizer.h

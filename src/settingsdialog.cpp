@@ -52,6 +52,7 @@
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
+#include <accounts/AccountModelFilterProxy.h>
 #include "utils/logger.h"
 #include "AccountFactoryWrapper.h"
 
@@ -113,8 +114,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
 
     m_accountModel = new AccountModel( this );
+    m_accountProxy = new AccountModelFilterProxy( m_accountModel );
+    m_accountProxy->setSourceModel( m_accountModel );
 
-    ui->accountsView->setModel( m_accountModel );
+    ui->accountsView->setModel( m_accountProxy );
 
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
@@ -428,11 +431,19 @@ SettingsDialog::onLastFmFinished()
 
 
 void
+SettingsDialog::accountsFilterChanged( int )
+{
+    AccountType filter = static_cast< AccountType >( ui->accountsFilterCombo->itemData( ui->accountsFilterCombo->currentIndex() ).toInt() );
+    m_accountProxy->setFilterType( filter );
+}
+
+
+void
 SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
     if( account->configurationWidget() )
     {
-#if 0
+#ifndef Q_OS_MAC
         DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
         dialog.setShowDelete( showDelete );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );

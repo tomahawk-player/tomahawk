@@ -31,12 +31,14 @@ accountTypeToString( AccountType type )
     switch ( type )
     {
         case SipType:
-            return tr( "Friend Finders" );
+            return QObject::tr( "Friend Finders" );
         case ResolverType:
-            return tr( "Music Finders" );
+            return QObject::tr( "Music Finders" );
         case InfoType:
-            return tr( "Status Updaters" );
+            return QObject::tr( "Status Updaters" );
     }
+
+    return QString();
 }
 
 

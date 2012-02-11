@@ -19,11 +19,15 @@
 #ifndef ACCOUNTMODELFILTERPROXY_H
 #define ACCOUNTMODELFILTERPROXY_H
 
-#include <QSortFilterProxyModel>
 #include "Account.h"
+#include "dllmacro.h"
 
+#include <QSortFilterProxyModel>
 
-class AccountModelFilterProxy : public QSortFilterProxyModel
+namespace Tomahawk {
+namespace Accounts {
+
+class DLLEXPORT AccountModelFilterProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
@@ -38,4 +42,7 @@ private:
     Tomahawk::Accounts::AccountType m_filterType;
 };
 
+}
+
+}
 #endif // ACCOUNTMODELFILTERPROXY_H

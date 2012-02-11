@@ -115,6 +115,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return QVariant::fromValue< QList< Tomahawk::Accounts::Account* > >( node->accounts );
                 case HasConfig:
                     return !node->accounts.isEmpty();
+                case AccountTypeRole:
+                    return QVariant::fromValue< AccountTypes >( node->factory->types() );
                 default:
                     return QVariant();
             }
@@ -144,6 +146,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return c.downloads();
                 case CanRateRole:
                     return true;
+                case AccountTypeRole:
+                    return QVariant::fromValue< AccountTypes >( AccountTypes( ResolverType ) );
                 case VersionRole:
                     return c.version();
                 case UserHasRatedRole:
@@ -207,6 +211,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return Uninstalled;
                 case CanRateRole:
                     return false;
+                case AccountTypeRole:
+                    return QVariant::fromValue< AccountTypes >( node->factory->types() );
                 default:
                     return QVariant();
                 }
@@ -233,6 +239,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return Installed;
                 case ChildrenOfFactoryRole:
                     return QVariant::fromValue< QList< Tomahawk::Accounts::Account* > >( node->accounts );
+                case AccountTypeRole:
+                    return QVariant::fromValue< AccountTypes >( acct->types() );
                 default:
                     return QVariant();
                 }

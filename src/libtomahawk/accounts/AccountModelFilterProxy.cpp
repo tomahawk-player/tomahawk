@@ -20,11 +20,13 @@
 
 #include "AccountModel.h"
 
+
 using namespace Tomahawk;
 using namespace Accounts;
 
 AccountModelFilterProxy::AccountModelFilterProxy( QObject* parent )
     : QSortFilterProxyModel(parent)
+    , m_filterType( NoType )
 {
 
 }
@@ -35,10 +37,20 @@ AccountModelFilterProxy::filterAcceptsRow( int sourceRow, const QModelIndex& sou
     if ( m_filterType == NoType )
         return true;
 
-    const QModeIndex idx = sourceParent.child( sourceRow, 0 );
-    const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( idx.data( AccountModel::RowTypeRole ).toInt() );
+    const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
+    const AccountTypes types = static_cast< AccountTypes >( idx.data( AccountModel::AccountTypeRole ).value< AccountTypes >() );
 
-
+    return types.testFlag( m_filterType );
 
 }
 
+
+void
+AccountModelFilterProxy::setFilterType( AccountType type )
+{
+    if ( type == m_filterType )
+        return;
+
+    m_filterType = type;
+    invalidate();
+}

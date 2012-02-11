@@ -46,6 +46,7 @@ namespace Tomahawk
         class Account;
         class AccountFactory;
 class Account;
+class AccountModelFilterProxy;
 }
 }
 
@@ -114,6 +115,7 @@ private:
     ProxyDialog m_proxySettings;
     bool m_rejected;
     Tomahawk::Accounts::AccountModel* m_accountModel;
+    Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
     LoadingSpinner* m_sipSpinner;
 };
 
