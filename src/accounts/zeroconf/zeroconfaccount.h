@@ -41,6 +41,7 @@ public:
     virtual QString prettyName() const { return "Local Network"; }
     QString description() const { return tr( "Automatically connect to Tomahawks on the local network" ); }
     virtual bool isUnique() const { return true; }
+    AccountTypes types() const { return AccountTypes( SipType ); };
 #ifndef ENABLE_HEADLESS
 virtual QPixmap icon() const;
 #endif

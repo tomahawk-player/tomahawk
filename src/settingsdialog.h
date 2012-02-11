@@ -88,6 +88,8 @@ private slots:
     void testLastFmLogin();
     void onLastFmFinished();
 
+    void accountsFilterChanged( int );
+
     void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
 
     void openAccountConfig( Tomahawk::Accounts::Account*, bool showDelete = false );

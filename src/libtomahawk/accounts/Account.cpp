@@ -25,6 +25,21 @@ namespace Tomahawk
 namespace Accounts
 {
 
+QString
+accountTypeToString( AccountType type )
+{
+    switch ( type )
+    {
+        case SipType:
+            return tr( "Friend Finders" );
+        case ResolverType:
+            return tr( "Music Finders" );
+        case InfoType:
+            return tr( "Status Updaters" );
+    }
+}
+
+
 Account::Account( const QString& accountId )
     : QObject()
     , m_enabled( false )

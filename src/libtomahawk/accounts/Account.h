@@ -53,6 +53,8 @@ enum AccountType
     ResolverType = 0x04
 };
 
+DLLEXPORT QString accountTypeToString( AccountType type );
+
 Q_DECLARE_FLAGS(AccountTypes, AccountType);
 
 inline QString generateId( const QString &factoryId )
@@ -172,6 +174,9 @@ public:
 
     virtual QPixmap icon() const { return QPixmap(); }
     virtual bool allowUserCreation() const { return true; }
+
+    // What are the supported types for accounts this factory creates?
+    virtual AccountTypes types() const = 0;
 
     virtual Account* createAccount( const QString& accountId = QString() ) = 0;
 };

@@ -101,7 +101,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     p->setFixedSize( 0, 0 );
 #endif
 
-    // SIP PLUGINS
+    // Accounts
     AccountDelegate* accountDelegate = new AccountDelegate( this );
     ui->accountsView->setItemDelegate( accountDelegate );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -118,6 +118,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
+    ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( InfoType ), InfoType );
+
+    connect( ui->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
+
     if ( !Servent::instance()->isReady() )
     {
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
@@ -125,6 +132,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
+
+    // ADVANCED
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
     ui->proxyButton->setVisible( true );

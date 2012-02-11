@@ -48,6 +48,7 @@ public:
     QString factoryId() const { return "twitteraccount"; }
     QString description() const { return tr( "Connect to your Twitter followers." ); }
     QPixmap icon() const { return QPixmap( ":/twitter-icon.png" ); }
+    AccountTypes types() const { return AccountTypes( SipType ); };
     Account* createAccount( const QString& pluginId = QString() );
 };
 
