@@ -118,15 +118,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
-    connect( ui->accountsView->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( accountsSelectionChanged() ) );
-
     if ( !Servent::instance()->isReady() )
     {
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
-        ui->addNewServiceBtn->setEnabled( false );
-        ui->removeServiceBtn->setEnabled( false );
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
     ui->staticHostName->setText( s->externalHostname() );
@@ -225,8 +221,6 @@ void
 SettingsDialog::serventReady()
 {
     m_sipSpinner->fadeOut();
-    ui->addNewServiceBtn->setEnabled( true );
-    ui->removeServiceBtn->setEnabled( true );
 }
 
 
@@ -421,20 +415,6 @@ SettingsDialog::onLastFmFinished()
         }
     }
 #endif
-}
-
-
-void
-SettingsDialog::accountsSelectionChanged()
-{
-    if( !ui->accountsView->selectionModel()->selectedIndexes().isEmpty() )
-    {
-        ui->removeServiceBtn->setEnabled( true );
-    }
-    else
-    {
-        ui->addNewServiceBtn->setEnabled( false );
-    }
 }
 
 

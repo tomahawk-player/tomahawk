@@ -90,8 +90,6 @@ private slots:
 
     void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
 
-    void accountsSelectionChanged();
-
     void openAccountConfig( Tomahawk::Accounts::Account*, bool showDelete = false );
     void openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* );
     void accountConfigClosed( int value );
