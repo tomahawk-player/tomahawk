@@ -28,8 +28,8 @@
 
 ; We use official release plugins
 ; mingw32-vlc from obs misses a lot and has even broken ones probably
-!define VLC_PATH "${SOURCE_PATH}\admin\win\vlc\prefix" ; SIC! ^
-!define VLC_BIN "${VLC_PATH}\bin"
+!define VLC_PATH "${SOURCE_PATH}\admin\win\vlc\" ; SIC! ^
+!define VLC_BIN "${VLC_PATH}"
 !define VLC_PLUGIN_PATH "${VLC_BIN}\plugins"
 
 !define NSI_PATH "${SOURCE_PATH}/admin/win/nsi"
@@ -279,7 +279,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
-        File "${INSTALL_PATH}\bin\libquazip.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
    !endif
@@ -294,7 +293,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
         File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
-        File "${BUILD_PATH}\libquazip.dll"
         File "${BUILD_PATH}\libtomahawk_sip*.dll"
    !endif
 
@@ -307,8 +305,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${QT_DLL_PATH}\QtGui4.dll"
    File "${QT_DLL_PATH}\QtNetwork4.dll"
    File "${QT_DLL_PATH}\QtSql4.dll"
-   File "${QT_DLL_PATH}\QtXml4.dll"
+   File "${QT_DLL_PATH}\QtScript4.dll"
+   File "${QT_DLL_PATH}\QtUiTools4.dll"
    File "${QT_DLL_PATH}\QtWebKit4.dll"
+   File "${QT_DLL_PATH}\QtXml4.dll"
 
    ;SQLite driver
    SetOutPath "$INSTDIR\sqldrivers"
@@ -329,13 +329,12 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libstdc++-6.dll"
 
    ;Phonon stuff
-   File "${VLC_BIN}\libphonon.dll"
+   File "${MING_BIN}\libphonon.dll"
    SetOutPath "$INSTDIR\phonon_backend"
    File "${VLC_BIN}\phonon_backend\phonon_vlc.dll"
    SetOutPath "$INSTDIR"
 
    ;VLC
-   ;SetOutPath "$INSTDIR\phonon_backend"
    File "${VLC_BIN}\libvlc.dll"
    File "${VLC_BIN}\libvlccore.dll"
    SetOutPath "$INSTDIR\plugins"
@@ -351,6 +350,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_BIN}\libechonest.dll"
    File "${MING_BIN}\libQTweetLib.dll"
+   File "${MING_BIN}\libquazip.dll"
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"

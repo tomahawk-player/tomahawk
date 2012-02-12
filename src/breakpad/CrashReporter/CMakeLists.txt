@@ -21,5 +21,4 @@ ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
 TARGET_LINK_LIBRARIES( tomahawk_crash_reporter ${QT_LIBRARIES} tomahawklib )
 
-INCLUDE(GNUInstallDirs)
-install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_LIBEXECDIR})
+install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
