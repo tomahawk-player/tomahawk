@@ -185,6 +185,8 @@ AccountManager::enableAccount( Account* account )
 
     account->setEnabled( true );
     m_enabledAccounts << account;
+
+    account->sync();
 }
 
 
@@ -197,6 +199,8 @@ AccountManager::disableAccount( Account* account )
     account->deauthenticate();
     account->setEnabled( false );
     m_enabledAccounts.removeAll( account );
+
+    account->sync();
 }
 
 

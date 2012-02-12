@@ -117,6 +117,27 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return !node->accounts.isEmpty();
                 case AccountTypeRole:
                     return QVariant::fromValue< AccountTypes >( node->factory->types() );
+                case Qt::CheckStateRole:
+                {
+                    if ( node->accounts.isEmpty() )
+                        return Qt::Unchecked;
+
+                    // If all are checked or unchecked, return that
+                    bool someOn = false, someOff = false;
+                    foreach ( const Account* acct, node->accounts )
+                    {
+                        if ( acct->enabled() )
+                            someOn = true;
+                        else
+                            someOff = true;
+                    }
+                    if ( someOn && !someOff )
+                        return Qt::Checked;
+                    else if ( someOff & !someOn )
+                        return Qt::Unchecked;
+                    else
+                        return Qt::PartiallyChecked;
+                }
                 default:
                     return QVariant();
             }
@@ -300,9 +321,18 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         if ( node->type == AccountModelNode::FactoryType )
         {
-            // TODO handle overall on/off
+            // Turn on or off all accounts for this factory
 
-            return false;
+            Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
+
+            foreach ( Account* acct, node->accounts )
+            {
+                state == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
+                                     : AccountManager::instance()->disableAccount( acct );
+            }
+
+            emit dataChanged( index, index );
+            return true;
         }
 
         Q_ASSERT( acct );
@@ -313,7 +343,6 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         else if( state == Qt::Unchecked )
             AccountManager::instance()->disableAccount( acct );
 
-        acct->sync();
         emit dataChanged( index, index );
 
         return true;
