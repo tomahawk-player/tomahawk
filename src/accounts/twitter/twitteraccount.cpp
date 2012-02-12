@@ -50,6 +50,8 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     setAccountServiceName( "Twitter" );
     setTypes( AccountTypes( InfoType | SipType ) );
 
+    qDebug() << "Got cached peers:" << configuration() << configuration()[ "cachedpeers" ];
+
     m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
 
@@ -86,6 +88,7 @@ TwitterAccount::sipPlugin()
 {
     if ( m_twitterSipPlugin.isNull() )
     {
+        qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
         m_twitterSipPlugin = QWeakPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
 
         connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );

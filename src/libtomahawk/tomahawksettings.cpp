@@ -231,17 +231,22 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                     continue;
 
                 QVariantHash credentials;
-                credentials[ "cachedfriendssinceid" ] = value( sipPlugin + "/cachedfriendssinceid" );
-                credentials[ "cacheddirectmessagessinceid" ] = value( sipPlugin + "/cacheddirectmessagessinceid" );
-                credentials[ "cachedpeers" ] = value( sipPlugin + "/cachedpeers" );
                 credentials[ "oauthtoken" ] = value( sipPlugin + "/oauthtoken" );
                 credentials[ "oauthtokensecret" ] = value( sipPlugin + "/oauthtokensecret" );
-                credentials[ "cachedmentionssinceid" ] = value( sipPlugin + "/cachedmentionssinceid" );
                 credentials[ "username" ] = value( sipPlugin + "/screenname" );
-                credentials[ "saveddbid" ] = value( sipPlugin + "/saveddbid" );
+
+                QVariantHash configuration;
+                configuration[ "cachedfriendssinceid" ] = value( sipPlugin + "/cachedfriendssinceid" );
+                configuration[ "cacheddirectmessagessinceid" ] = value( sipPlugin + "/cacheddirectmessagessinceid" );
+                configuration[ "cachedpeers" ] = value( sipPlugin + "/cachedpeers" );
+                qDebug() << "FOUND CACHED PEERS:" << value( sipPlugin + "/cachedpeers" ).toHash();
+                configuration[ "cachedmentionssinceid" ] = value( sipPlugin + "/cachedmentionssinceid" );
+                configuration[ "saveddbid" ] = value( sipPlugin + "/saveddbid" );
 
                 setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/configuration" ).arg( accountKey ), configuration );
                 setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "@" + value( sipPlugin + "/screenname" ).toString() );
+                sync();
             }
             else if ( pluginName == "sipzeroconf" )
             {
@@ -251,7 +256,6 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             beginGroup( "accounts/" + accountKey );
             setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
             setValue( "autoconnect", true );
-            setValue( "configuration", QVariantHash() );
             setValue( "acl", QVariantMap() );
             setValue( "types", QStringList() << "SipType" );
             endGroup();

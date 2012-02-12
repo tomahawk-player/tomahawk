@@ -59,6 +59,8 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
 
     connect( account, SIGNAL( nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ), SLOT( accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &, const QTweetUser & ) ) );
 
+    m_configuration = account->configuration();
+    qDebug() << "SIP configuration:" << m_configuration << m_configuration[ "cachedpeers" ];
     if ( Database::instance()->dbid() != m_account->configuration()[ "saveddbid" ].toString() )
     {
         m_configuration[ "cachedpeers" ] = QVariantHash();
