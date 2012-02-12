@@ -30,6 +30,7 @@
 
 #include "database/database.h"
 #include "network/servent.h"
+#include "accounts/accountdllmacro.h"
 
 class Node : public QObject
 {
@@ -59,7 +60,7 @@ public slots:
             emit tomahawkHostFound( ip, port, "Unknown", nid );
         this->deleteLater();
     }
-    
+
     void resolve()
     {
         QHostInfo::lookupHost( ip, this, SLOT( resolved( QHostInfo ) ) );
@@ -72,7 +73,7 @@ private:
 };
 
 
-class TomahawkZeroconf : public QObject
+class ACCOUNTDLLEXPORT TomahawkZeroconf : public QObject
 {
 Q_OBJECT
 

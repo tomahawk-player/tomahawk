@@ -19,7 +19,7 @@
 #ifndef TWITTERACCOUNTCONFIGWIDGET_H
 #define TWITTERACCOUNTCONFIGWIDGET_H
 
-#include "dllmacro.h"
+#include "accounts/accountdllmacro.h"
 
 #include <QTweetLib/qtweetstatus.h>
 #include <QTweetLib/qtweetdmstatus.h>
@@ -42,7 +42,7 @@ namespace Accounts
 class TwitterAccount;
 
 
-class DLLEXPORT TwitterConfigWidget : public QWidget
+class ACCOUNTDLLEXPORT TwitterConfigWidget : public QWidget
 {
     Q_OBJECT
 

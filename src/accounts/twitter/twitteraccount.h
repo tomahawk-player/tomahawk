@@ -52,7 +52,7 @@ public:
     Account* createAccount( const QString& pluginId = QString() );
 };
 
-class DLLEXPORT TwitterAccount : public Account
+class ACCOUNTDLLEXPORT TwitterAccount : public Account
 {
     Q_OBJECT
 

@@ -19,7 +19,7 @@
 #ifndef JABBERACCOUNTCONFIGWIDGET_H
 #define JABBERACCOUNTCONFIGWIDGET_H
 
-#include "dllmacro.h"
+#include "accounts/accountdllmacro.h"
 
 #include <QWidget>
 
@@ -38,7 +38,7 @@ class XmppAccount;
 class GoogleWrapper;
 
 
-class DLLEXPORT XmppConfigWidget : public QWidget
+class ACCOUNTDLLEXPORT XmppConfigWidget : public QWidget
 {
     Q_OBJECT
 

@@ -37,7 +37,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 qt4_wrap_cpp( xmppAccountMoc ${xmppAccountHeaders} )
 qt4_wrap_ui( xmppAccountUI_H ${xmppAccountUI} )
 qt4_add_resources( RC_SRCS "resources.qrc" )
-add_library( tomahawk_account_xmpp SHARED ${xmppAccountUI_H} ${xmppAccountSources} ${xmppAccountMoc} ${RC_SRCS} )
+add_library( tomahawk_account_xmpp MODULE ${xmppAccountUI_H} ${xmppAccountSources} ${xmppAccountMoc} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

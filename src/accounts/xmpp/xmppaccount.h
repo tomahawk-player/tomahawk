@@ -54,7 +54,7 @@ public:
     Account* createAccount( const QString& pluginId = QString() );
 };
 
-class DLLEXPORT XmppAccount : public Account
+class ACCOUNTDLLEXPORT XmppAccount : public Account
 {
     Q_OBJECT
 
