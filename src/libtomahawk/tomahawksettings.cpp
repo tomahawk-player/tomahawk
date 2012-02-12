@@ -209,15 +209,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 rawpluginname.replace( "jabber", "xmpp" );
 
             QString accountKey = QString( "%1account_%2" ).arg( rawpluginname ).arg( pluginId );
-            accounts << accountKey;
 
-            beginGroup( "accounts/" + accountKey );
-            setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
-            setValue( "autoconnect", true );
-            setValue( "configuration", QVariantHash() );
-            setValue( "acl", QVariantMap() );
-            setValue( "types", QStringList() << "SipType" );
-            endGroup();
             if ( pluginName == "sipjabber" || pluginName == "sipgoogle" )
             {
                 QVariantHash credentials;
@@ -232,6 +224,12 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             }
             else if ( pluginName == "siptwitter" )
             {
+                // Only port twitter plugin if there's a valid twitter config
+                if ( value( sipPlugin + "/oauthtokensecret" ).toString().isEmpty() &&
+                     value( sipPlugin + "/oauthtoken" ).toString().isEmpty() &&
+                     value( sipPlugin + "/screenname" ).toString().isEmpty() )
+                    continue;
+
                 QVariantHash credentials;
                 credentials[ "cachedfriendssinceid" ] = value( sipPlugin + "/cachedfriendssinceid" );
                 credentials[ "cacheddirectmessagessinceid" ] = value( sipPlugin + "/cacheddirectmessagessinceid" );
@@ -250,6 +248,14 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "Local Network" );
             }
 
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
+            setValue( "autoconnect", true );
+            setValue( "configuration", QVariantHash() );
+            setValue( "acl", QVariantMap() );
+            setValue( "types", QStringList() << "SipType" );
+            endGroup();
+            accounts << accountKey;
 
             remove( sipPlugin );
         }
