@@ -172,6 +172,8 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     // Draw individual accounts and add account button for factories
     m_cachedButtonRects[ index ] = QRect();
+
+    bool canDelete = index.data( AccountModel::CanDeleteRole ) .toBool();
     if ( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
     {
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
@@ -223,6 +225,29 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             rightEdge = drawStatus( painter, QPointF( rightEdge, center - painter->fontMetrics().height()/2 ), accts.first(), true );
         }
 
+    }
+    else if ( canDelete )
+    {
+        const QString btnText = tr( "Remove Account" );
+        const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
+        QRect btnRect;
+
+        if ( hasConfigWrench )
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
+        else
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
+
+        leftEdge = btnRect.left();
+        m_cachedButtonRects[ index ] = btnRect;
+
+        painter->save();
+        painter->setPen( opt.palette.color( QPalette::Active, QPalette::AlternateBase ) );
+
+        drawRoundedButton( painter, btnRect, true );
+
+        painter->setFont( installFont );
+        painter->drawText( btnRect, Qt::AlignCenter, btnText );
+        painter->restore();
     }
 
     // Draw the title and description
@@ -431,7 +456,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         else if ( m_cachedButtonRects.contains( index ) && m_cachedButtonRects[ index ].contains( me->pos() ) )
         {
             // Install/create/etc button for this row
-            model->setData( index, true, AccountModel::AddAccountButtonRole );
+            model->setData( index, true, AccountModel::CustomButtonRole );
         }
     }
 
@@ -475,7 +500,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
 
 
 void
-AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) const
+AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
     QPainterPath btnPath;
     const int radius = 3;
@@ -490,8 +515,16 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) co
     btnPath.lineTo( btnRect.left(), btnCenter );
 
     QLinearGradient g;
-    g.setColorAt( 0, QColor(54, 127, 211) );
-    g.setColorAt( 0.5, QColor(43, 104, 182) );
+    if ( !red )
+    {
+        g.setColorAt( 0, QColor(54, 127, 211) );
+        g.setColorAt( 0.5, QColor(43, 104, 182) );
+    }
+    else
+    {
+        g.setColorAt( 0, QColor(206, 63, 63) );
+        g.setColorAt( 0.5, QColor(170, 52, 52) );
+    }
     //painter->setPen( bg.darker() );
     painter->fillPath( btnPath, g );
     //painter->drawPath( btnPath );
@@ -505,8 +538,16 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect ) co
     btnPath.lineTo( btnRect.right(), btnCenter );
     btnPath.lineTo( btnRect.left(), btnCenter );
 
-    g.setColorAt( 0, QColor(34, 85, 159) );
-    g.setColorAt( 0.5, QColor(35, 79, 147) );
+    if ( !red )
+    {
+        g.setColorAt( 0, QColor(34, 85, 159) );
+        g.setColorAt( 0.5, QColor(35, 79, 147) );
+    }
+    else
+    {
+        g.setColorAt( 0, QColor(150, 50, 50) );
+        g.setColorAt( 0.5, QColor(130, 40, 40) );
+    }
     painter->fillPath( btnPath, g );
 }
 

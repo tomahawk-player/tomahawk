@@ -53,6 +53,7 @@
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
 #include <accounts/AccountModelFilterProxy.h>
+#include <accounts/ResolverAccount.h>
 #include "utils/logger.h"
 #include "AccountFactoryWrapper.h"
 
@@ -119,7 +120,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     ui->accountsView->setModel( m_accountProxy );
 
+    connect( ui->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
+    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), ui->accountsView, SLOT( scrollToBottom() ) );
 
     ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
     ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
@@ -602,6 +605,25 @@ SettingsDialog::handleAccountAdded( Account* account, bool added )
     {
         // user pressed cancel
         delete account;
+    }
+}
+
+
+void
+SettingsDialog::installFromFile()
+{
+    const QString resolver = QFileDialog::getOpenFileName( this, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+
+    if( !resolver.isEmpty() )
+    {
+        Account* acct = ResolverAccountFactory::createFromPath( resolver, false );
+        AccountManager::instance()->addAccount( acct );
+        TomahawkSettings::instance()->addAccount( acct->accountId() );
+        AccountManager::instance()->enableAccount( acct );
+
+
+        QFileInfo resolverAbsoluteFilePath( resolver );
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
 }
 

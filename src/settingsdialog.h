@@ -99,6 +99,8 @@ private slots:
     void accountConfigDelete();
     void accountCreateConfigClosed( int value );
 
+    void installFromFile();
+
     void updateScanOptionsView();
 
     void changePage( QListWidgetItem*, QListWidgetItem* );

@@ -20,6 +20,7 @@
 #define RESOLVERACCOUNT_H
 
 #include "accounts/Account.h"
+#include "dllmacro.h"
 
 namespace Tomahawk {
 
@@ -27,7 +28,7 @@ class ExternalResolverGui;
 
 namespace Accounts {
 
-class ResolverAccountFactory : public AccountFactory
+class DLLEXPORT ResolverAccountFactory : public AccountFactory
 {
     Q_OBJECT
 public:
@@ -51,7 +52,7 @@ public:
  *
  * Contains the resolver* that is it wrapping
  */
-class ResolverAccount : public Account
+class DLLEXPORT ResolverAccount : public Account
 {
     Q_OBJECT
 public:

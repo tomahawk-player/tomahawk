@@ -58,9 +58,10 @@ public:
         AccountData = Qt::UserRole + 28, // raw plugin
         CanRateRole = Qt::UserRole + 32,
         AccountTypeRole = Qt::UserRole + 33,
+        CanDeleteRole = Qt::UserRole + 34,
 
         CheckboxClickedRole = Qt::UserRole + 29, // the checkbox for this row was toggled
-        AddAccountButtonRole = Qt::UserRole + 30, // the add account button
+        CustomButtonRole = Qt::UserRole + 30, // the add account or remove account button
 
         // Used by factories
         ChildrenOfFactoryRole = Qt::UserRole + 31

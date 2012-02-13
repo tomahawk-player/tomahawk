@@ -207,6 +207,10 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 else
                     return UniqueFactory;
             }
+            else if ( role == CanDeleteRole )
+            {
+                return node->type == AccountModelNode::ManualResolverType;
+            }
 
             Account* acct = 0;
             if ( node->type == AccountModelNode::ManualResolverType )
@@ -349,12 +353,23 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
     }
 
     // The install/create/remove/etc button was clicked. Handle it properly depending on this item
-    if ( role == AddAccountButtonRole )
+    if ( role == CustomButtonRole )
     {
-        Q_ASSERT( node->type == AccountModelNode::FactoryType );
-        // Make a new account of this factory type
-        emit createAccount( node->factory );
-        return true;
+        if ( node->type == AccountModelNode::FactoryType )
+        {
+            // Make a new account of this factory type
+            emit createAccount( node->factory );
+            return true;
+        }
+        else if ( node->type == AccountModelNode::ManualResolverType )
+        {
+            Q_ASSERT( node->resolverAccount );
+            AccountManager::instance()->removeAccount( node->resolverAccount );
+
+            return true;
+        }
+        Q_ASSERT( false ); // Should not be here, only the above two types should have this button
+        return false;
     }
 
 

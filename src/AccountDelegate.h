@@ -47,7 +47,7 @@ signals:
     void openConfig( Tomahawk::Accounts::AccountFactory* );
 
 private:
-    void drawRoundedButton( QPainter* painter, const QRect& buttonRect ) const;
+    void drawRoundedButton( QPainter* painter, const QRect& buttonRect, bool red = false ) const;
     // Returns new left edge
     int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct, bool drawText = false ) const;
     void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
