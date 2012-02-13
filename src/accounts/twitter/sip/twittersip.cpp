@@ -405,7 +405,7 @@ TwitterSipPlugin::pollDirectMessages()
         return;
 
     if ( m_cachedDirectMessagesSinceId == 0 )
-            m_cachedDirectMessagesSinceId = m_configuration[ "cacheddirectmentionssinceid" ].toLongLong();
+        m_cachedDirectMessagesSinceId = m_configuration[ "cacheddirectmessagessinceid" ].toLongLong();
 
     tDebug() << "TwitterSipPlugin looking for direct messages since id " << m_cachedDirectMessagesSinceId;
 
