@@ -301,9 +301,9 @@ Api_v1::get_results( QxtWebRequestEvent* event )
 
     QVariantMap r;
     r.insert( "qid", qry->id() );
-    r.insert( "poll_interval", 1000 );
+    r.insert( "poll_interval", 1300 );
     r.insert( "refresh_interval", 1000 );
-    r.insert( "poll_limit", 6 );
+    r.insert( "poll_limit", 14 );
     r.insert( "solved", qry->playable() );
     r.insert( "query", qry->toVariant() );
 
