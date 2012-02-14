@@ -108,6 +108,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return fac->icon();
                 case StateRole:
                     return ShippedWithTomahawk;
+                case Qt::ToolTipRole:
                 case DescriptionRole:
                     return fac->description();
                 case CanRateRole:
@@ -160,6 +161,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return QVariant::fromValue< QPixmap >( AtticaManager::instance()->iconForResolver( c ) );
                 case StateRole:
                     return (int)AtticaManager::instance()->resolverState( c );
+                case Qt::ToolTipRole:
                 case DescriptionRole:
                     return c.description();
                 case AuthorRole:
@@ -235,6 +237,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return node->factory->prettyName();
                 case Qt::DecorationRole:
                     return node->factory->icon();
+                case Qt::ToolTipRole:
                 case DescriptionRole:
                     return node->factory->description();
                 case StateRole:

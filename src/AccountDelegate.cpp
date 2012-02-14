@@ -295,6 +295,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     const int descWidth = rightEdge - leftTitleEdge - PADDING;
     painter->setFont( descFont );
     const QRect descRect( leftTitleEdge, runningBottom + PADDING, descWidth, painter->fontMetrics().height() );
+    desc = painter->fontMetrics().elidedText( desc, Qt::ElideRight, descWidth );
     painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignTop, desc );
     runningBottom = descRect.bottom();
 
