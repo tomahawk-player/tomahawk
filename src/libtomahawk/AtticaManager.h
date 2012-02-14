@@ -86,7 +86,7 @@ public slots:
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
-    void resolversReloaded( const Attica::Content::List& resolvers );
+    void resolversLoaded( const Attica::Content::List& resolvers );
 
     void resolverStateChanged( const QString& resolverId );
     void resolverInstalled( const QString& resolverId );

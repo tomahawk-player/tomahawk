@@ -31,6 +31,15 @@ AccountModelFilterProxy::AccountModelFilterProxy( QObject* parent )
 
 }
 
+
+void
+AccountModelFilterProxy::setSourceModel( QAbstractItemModel* sourceModel )
+{
+    connect( sourceModel, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( onScrollTo( QModelIndex ) ) );
+    QSortFilterProxyModel::setSourceModel( sourceModel );
+}
+
+
 bool
 AccountModelFilterProxy::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
@@ -53,4 +62,11 @@ AccountModelFilterProxy::setFilterType( AccountType type )
 
     m_filterType = type;
     invalidate();
+}
+
+
+void
+AccountModelFilterProxy::onScrollTo( const QModelIndex& idx )
+{
+    emit scrollTo( mapFromSource( idx ) );
 }

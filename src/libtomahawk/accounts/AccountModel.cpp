@@ -32,6 +32,7 @@ using namespace Accounts;
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
+    connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
     loadData();
 }
 
@@ -41,6 +42,7 @@ AccountModel::loadData()
     beginResetModel();
 
     qDeleteAll( m_accounts );
+    m_accounts.clear();
 
     // Add all factories
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
@@ -73,6 +75,8 @@ AccountModel::loadData()
    connect ( AccountManager::instance(), SIGNAL( stateChanged( Account* ,Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Account*, Accounts::Account::ConnectionState ) ) );
 
    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
+
+   endResetModel();
 }
 
 
@@ -216,7 +220,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
             if ( node->type == AccountModelNode::ManualResolverType )
                 acct = node->resolverAccount;
             else if ( node->type == AccountModelNode::UniqueFactoryType )
-                acct = node->accounts.first();
+                acct = node->accounts.isEmpty() ? 0 : node->accounts.first();
 
             // If there's no account*, then it means it's a unique factory that hasn't been created
             if ( !acct )
@@ -443,6 +447,8 @@ AccountModel::accountAdded( Account* account )
         beginInsertRows( QModelIndex(), count, count );
         m_accounts << new AccountModelNode( resolver );
         endInsertRows();
+
+        emit scrollTo( index( m_accounts.size() - 1, 0, QModelIndex() ) );
     }
 }
 

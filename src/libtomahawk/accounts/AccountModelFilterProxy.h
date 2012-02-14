@@ -35,8 +35,16 @@ public:
 
     void setFilterType( Tomahawk::Accounts::AccountType type );
 
+    virtual void setSourceModel( QAbstractItemModel* sourceModel );
+
+signals:
+    void scrollTo( const QModelIndex& idx );
+
 protected:
     virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
+
+private slots:
+    void onScrollTo( const QModelIndex& idx );
 
 private:
     Tomahawk::Accounts::AccountType m_filterType;

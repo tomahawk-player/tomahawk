@@ -118,11 +118,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
     m_accountProxy->setSourceModel( m_accountModel );
 
+    connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
+
     ui->accountsView->setModel( m_accountProxy );
 
     connect( ui->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
-    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), ui->accountsView, SLOT( scrollToBottom() ) );
 
     ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
     ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
@@ -625,6 +626,13 @@ SettingsDialog::installFromFile()
         QFileInfo resolverAbsoluteFilePath( resolver );
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
+}
+
+
+void
+SettingsDialog::scrollTo( const QModelIndex& idx )
+{
+    ui->accountsView->scrollTo( idx, QAbstractItemView::PositionAtBottom );
 }
 
 

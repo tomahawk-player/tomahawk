@@ -82,13 +82,19 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
         return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
     else if ( rowType == AccountModel::TopLevelFactory )
     {
-        // Make more space for eacha ccount we have to show.
+        // Make more space for each account we have to show.
         AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
         if ( fac->isUnique() )
             return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
 
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
-        return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT + 12 * accts.size()-1 );
+        const QSize s = QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT + 12 * accts.size()-1 );
+
+        if ( s != m_sizeHints[ index ] )
+            const_cast< AccountDelegate* >( this )->sizeHintChanged( index ); // FU KTHBBQ
+
+        m_sizeHints[ index ] = s;
+        return s;
     }
 
     return QSize();

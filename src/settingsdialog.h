@@ -100,6 +100,7 @@ private slots:
     void accountCreateConfigClosed( int value );
 
     void installFromFile();
+    void scrollTo( const QModelIndex& );
 
     void updateScanOptionsView();
 

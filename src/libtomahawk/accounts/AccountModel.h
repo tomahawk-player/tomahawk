@@ -91,16 +91,18 @@ public:
 
 signals:
     void createAccount( Tomahawk::Accounts::AccountFactory* factory );
+    void scrollTo( const QModelIndex& idx );
 
 private slots:
+    void loadData();
+
     void accountAdded( Tomahawk::Accounts::Account* );
     void accountRemoved( Tomahawk::Accounts::Account* );
     void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
     void atticaInstalled( const QString& atticaId );
-private:
-    void loadData();
 
+private:
     QList< AccountModelNode* > m_accounts;
     QSet< QString > m_waitingForAtticaInstall;
 };

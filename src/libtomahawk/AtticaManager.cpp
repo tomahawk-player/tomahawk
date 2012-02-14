@@ -246,6 +246,8 @@ AtticaManager::resolversList( BaseJob* j )
     }
 
     syncServerData();
+
+    emit resolversLoaded( m_resolvers );
 }
 
 
