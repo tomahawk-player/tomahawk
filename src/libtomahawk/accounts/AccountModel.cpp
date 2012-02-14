@@ -302,6 +302,13 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
                 Attica::Content resolver = node->atticaContent;
                 AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
+                if ( state == AtticaManager::Installed && !node->resolverAccount )
+                {
+                    // Something is wrong, reinstall
+                    AtticaManager::instance()->uninstallResolver( resolver );
+                    state = AtticaManager::Uninstalled;
+                }
+
                 if ( state == AtticaManager::Installed )
                 {
                     acct = node->atticaAccount;
@@ -401,12 +408,26 @@ AccountModel::accountAdded( Account* account )
 {
     // Find the factory this belongs up, and update
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
+    AtticaResolverAccount* attica = qobject_cast< AtticaResolverAccount* >( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
+        bool thisIsTheOne = false;
         if ( n->factory == factory )
         {
             n->accounts << account;
+            thisIsTheOne = true;
+
+            return;
+        }
+        else if ( attica && n->atticaContent.id() == attica->atticaId() )
+        {
+            n->resolverAccount = attica;
+            thisIsTheOne = true;
+        }
+
+        if ( thisIsTheOne )
+        {
             const QModelIndex idx = index( i, 0, QModelIndex() );
             dataChanged( idx, idx );
 
@@ -414,28 +435,10 @@ AccountModel::accountAdded( Account* account )
         }
     }
 
-    // Not matched with a factory. Then just add it at the end
-    if ( AtticaResolverAccount* attica = qobject_cast< AtticaResolverAccount* >( account ) )
-    {
-        Attica::Content::List allAtticaContent = AtticaManager::instance()->resolvers();
-        foreach ( const Attica::Content& c, allAtticaContent )
-        {
-            if ( attica->atticaId() == c.id() )
-            {
-                // This is us. Create the row
-                const int count = m_accounts.size();
-                beginInsertRows( QModelIndex(), count, count );
-                m_accounts << new AccountModelNode( c );
-                endInsertRows();
-
-                return;
-            }
-        }
-    }
-
     // Ok, just a plain resolver. add it at the end
     if ( ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account ) )
     {
+        Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
         const int count = m_accounts.size();
         beginInsertRows( QModelIndex(), count, count );
         m_accounts << new AccountModelNode( resolver );
