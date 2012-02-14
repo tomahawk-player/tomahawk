@@ -33,6 +33,13 @@ AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
+
+    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
+    connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
+    connect( AccountManager::instance(), SIGNAL( stateChanged( Account* ,Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Account*, Accounts::Account::ConnectionState ) ) );
+
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
+
     loadData();
 }
 
@@ -69,12 +76,6 @@ AccountModel::loadData()
            m_accounts << new AccountModelNode( qobject_cast< ResolverAccount* >( acct ) );
        }
    }
-
-   connect ( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
-   connect ( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
-   connect ( AccountManager::instance(), SIGNAL( stateChanged( Account* ,Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Account*, Accounts::Account::ConnectionState ) ) );
-
-   connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
 
    endResetModel();
 }
@@ -296,8 +297,14 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
-                Q_ASSERT( node->accounts.size() == 1 );
-                acct = node->accounts.first();
+                if ( node->accounts.isEmpty() )
+                {
+                    // No account for this unique factory, create it
+                    // Don't add it to node->accounts here, slot attached to accountmanager::accountcreated will do it for us
+                    acct = node->factory->createAccount();
+                    AccountManager::instance()->addAccount( acct );
+                    TomahawkSettings::instance()->addAccount( acct->accountId() );
+                }
                 break;
             case AccountModelNode::AtticaType:
             {
@@ -411,6 +418,7 @@ void
 AccountModel::accountAdded( Account* account )
 {
     // Find the factory this belongs up, and update
+    qDebug() << "IN ACCOUNT ADDED!!!!";
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
     AtticaResolverAccount* attica = qobject_cast< AtticaResolverAccount* >( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
@@ -421,8 +429,6 @@ AccountModel::accountAdded( Account* account )
         {
             n->accounts << account;
             thisIsTheOne = true;
-
-            return;
         }
         else if ( attica && n->atticaContent.id() == attica->atticaId() )
         {

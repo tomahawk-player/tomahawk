@@ -632,28 +632,15 @@ AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& o
 QRect
 AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    // the checkbox for this row was hit
-    const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( idx.data( AccountModel::RowTypeRole ).toInt() );
-
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, idx );
 
-    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::TopLevelFactory )
-    {
-        // Top level item, return the corresponding rect
-        const int ypos = ( opt.rect.top() + opt.rect.height() / 2 ) - ( WRENCH_SIZE / 2 );
-        QRect checkRect = QRect( PADDING, ypos, WRENCH_SIZE, WRENCH_SIZE );
-        return checkRect;
-    } /*else if ( rowType == AccountModel::ChildAccount )
-    {
-        // Return smaller rect of individual child account
-        const int smallWrenchSize = opt.rect.height() - PADDING;
-        int ypos = ( opt.rect.center().y() ) - ( smallWrenchSize  / 2 );
-        QRect checkRect = QRect( opt.rect.left() + PADDING, ypos, smallWrenchSize, smallWrenchSize );
-        return checkRect;
-    }*/
+    // Top level item, return the corresponding rect
+    const int ypos = ( opt.rect.top() + opt.rect.height() / 2 ) - ( WRENCH_SIZE / 2 );
+    const QRect checkRect = QRect( PADDING, ypos, WRENCH_SIZE, WRENCH_SIZE );
 
-    return QRect();
+    return checkRect;
+
 }
 
 

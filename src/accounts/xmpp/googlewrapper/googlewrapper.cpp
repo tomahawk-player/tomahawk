@@ -81,6 +81,7 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     config->m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
     config->m_ui->emailLabel->setText( tr( "Google Address" ) );
     config->m_ui->xmppBlurb->setText( tr( "Enter your Google login to connect with your friends using Tomahawk!" ) );
+    config->m_ui->xmppUsername->setPlaceholderText( tr( "username@gmail.com" ) );
     config->m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
     config->m_ui->xmppServer->setText( "talk.google.com" );
     config->m_ui->xmppPort->setValue( 5222 );

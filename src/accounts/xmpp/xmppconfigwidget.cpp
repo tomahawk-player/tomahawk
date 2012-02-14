@@ -57,12 +57,16 @@ void
 XmppConfigWidget::saveConfig()
 {
     QVariantHash credentials = m_account->credentials();
-    credentials[ "username" ] = m_ui->xmppUsername->text();
-    credentials[ "password" ] = m_ui->xmppPassword->text();
-    credentials[ "server" ] = m_ui->xmppServer->text();
-    credentials[ "port" ] = m_ui->xmppPort->text();
+    credentials[ "username" ] = m_ui->xmppUsername->text().trimmed();
+    credentials[ "password" ] = m_ui->xmppPassword->text().trimmed();
+
+    QVariantHash configuration = m_account->configuration();
+    configuration[ "server" ] = m_ui->xmppServer->text().trimmed();
+    configuration[ "port" ] = m_ui->xmppPort->text().trimmed();
+
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
     m_account->setCredentials( credentials );
+    m_account->setConfiguration( configuration);
     m_account->sync();
 
     static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
