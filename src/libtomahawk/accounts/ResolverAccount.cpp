@@ -107,6 +107,9 @@ ResolverAccount::~ResolverAccount()
 void
 ResolverAccount::authenticate()
 {
+    qDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver;
+    Q_ASSERT( m_resolver );
+
     if ( !m_resolver->running() )
         m_resolver->start();
 
