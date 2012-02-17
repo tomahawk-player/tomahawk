@@ -421,13 +421,16 @@ void
 AccountModel::accountAdded( Account* account )
 {
     // Find the factory this belongs up, and update
-    qDebug() << "IN ACCOUNT ADDED!!!!";
+    qDebug() << "IN ACCOUNT ADDED, new account:" << account->accountFriendlyName();
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
     AtticaResolverAccount* attica = qobject_cast< AtticaResolverAccount* >( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
         bool thisIsTheOne = false;
+        qDebug() << "Checking for added account's related factory or attica:" << n->factory << attica;
+        if ( attica )
+            qDebug() << n->atticaContent.id() << attica->atticaId();
         if ( n->factory == factory )
         {
             n->accounts << account;
