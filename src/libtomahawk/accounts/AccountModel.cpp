@@ -511,6 +511,7 @@ AccountModel::accountRemoved( Account* account )
 {
     // Find the row this belongs to and update/remove
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
+    qDebug() << "AccountModel got account removed:" << account->accountFriendlyName();
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
@@ -533,6 +534,7 @@ AccountModel::accountRemoved( Account* account )
 
         if ( found )
         {
+            qDebug() << "Found account removed but we don't want to delete a row!" << i << n->type << n->factory;
             const QModelIndex idx = index( i, 0, QModelIndex() );
             emit dataChanged( idx, idx );
 
@@ -542,6 +544,8 @@ AccountModel::accountRemoved( Account* account )
         // Manual resolver added, remove the row now
         if ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account )
         {
+            qDebug() << "Found account removed AND REMOVING IT FROM THE LIST!" << n->factory << n->type << n->accounts << i;
+
             beginRemoveRows( QModelIndex(), i, i );
             m_accounts.removeAt( i );
             endRemoveRows();
