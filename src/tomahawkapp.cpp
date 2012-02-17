@@ -119,6 +119,8 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_headless( false )
+    , m_loaded( false )
 {
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
@@ -423,7 +425,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
-    
+
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
@@ -516,7 +518,7 @@ TomahawkApp::initServent()
     }
 }
 
-
+// Called after Servent emits ready()
 void
 TomahawkApp::initSIP()
 {
@@ -531,6 +533,9 @@ TomahawkApp::initSIP()
         //SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
+
+    m_loaded = true;
+    emit tomahawkLoaded();
 }
 
 

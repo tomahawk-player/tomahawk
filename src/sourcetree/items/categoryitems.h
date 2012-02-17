@@ -75,9 +75,6 @@ public:
 
     SourcesModel::CategoryType categoryType() { return m_category; }
 
-signals:
-    void toggleExpandRequest( SourceTreeItem* );
-
 private:
     SourcesModel::CategoryType m_category;
     CategoryAddItem* m_addItem;

@@ -80,7 +80,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );
-    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
@@ -95,6 +94,14 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 WelcomeWidget::~WelcomeWidget()
 {
     delete ui;
+}
+
+
+void
+WelcomeWidget::loadData()
+{
+
+    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
 

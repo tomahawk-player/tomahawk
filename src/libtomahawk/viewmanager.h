@@ -106,6 +106,8 @@ public:
     // linked to the sidebar. call it right after creating the playlist
     PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
 
+    bool isTomahawkLoaded() const { return m_loaded; }
+
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );
@@ -130,6 +132,7 @@ signals:
     void showQueueRequested();
     void hideQueueRequested();
 
+    void tomahawkLoaded();
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
@@ -163,6 +166,8 @@ public slots:
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+
+    void setTomahawkLoaded();
 
 private slots:
     void setFilter( const QString& filter );
@@ -216,6 +221,8 @@ private:
 
     QTimer m_filterTimer;
     QString m_filter;
+
+    bool m_loaded;
 
     static ViewManager* s_instance;
 };

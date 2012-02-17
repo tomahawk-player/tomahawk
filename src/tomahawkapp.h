@@ -89,6 +89,11 @@ public:
     // PlatformInterface
     virtual bool loadUrl( const QString& url );
 
+    bool isTomahawkLoaded() const { return m_loaded; }
+
+signals:
+    void tomahawkLoaded();
+
 public slots:
     virtual void activate();
     void instanceStarted( KDSingleApplicationGuard::Instance );
@@ -128,7 +133,7 @@ private:
     TomahawkWindow* m_mainwindow;
 #endif
 
-    bool m_headless;
+    bool m_headless, m_loaded;
 
     QxtHttpServerConnector m_connector;
     QxtHttpSessionManager m_session;

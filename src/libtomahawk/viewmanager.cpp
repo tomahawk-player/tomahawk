@@ -74,6 +74,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_topLovedWidget( 0 )
     , m_currentMode( PlaylistInterface::Tree )
+    , m_loaded( false )
 {
     s_instance = this;
 
@@ -112,6 +113,10 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
     connect( m_infobar, SIGNAL( autoUpdateChanged( int ) ), SLOT( autoUpdateChanged( int ) ) );
+
+    connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
+    connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
+
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
     connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
@@ -809,6 +814,15 @@ ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVari
     QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
     p->reportCreated( p );
 }
+
+
+void
+ViewManager::setTomahawkLoaded()
+{
+    m_loaded = true;
+    emit tomahawkLoaded();
+}
+
 
 
 ViewPage*
