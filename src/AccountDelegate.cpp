@@ -365,7 +365,7 @@ AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt
     int runningRightEdge = rightEdge;
     int current = 0;
 
-    int leftOfAccounts = 0;
+    int leftOfAccounts = rightEdge;
 
     if ( accts.size() % 2 == 1 )
     {
