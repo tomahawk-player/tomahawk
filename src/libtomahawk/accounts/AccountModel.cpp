@@ -66,7 +66,10 @@ AccountModel::loadData()
     // add all attica resolvers (installed or uninstalled)
     Attica::Content::List fromAttica = AtticaManager::instance()->resolvers();
     foreach ( const Attica::Content& content, fromAttica )
+    {
+        qDebug() << "Loading ATTICA ACCOUNT with content:" << content.id() << content.name();
         m_accounts << new AccountModelNode( content );
+    }
 
     // Add all non-attica manually installed resolvers
    foreach ( Account* acct, allAccounts )
@@ -430,7 +433,7 @@ AccountModel::accountAdded( Account* account )
         bool thisIsTheOne = false;
         qDebug() << "Checking for added account's related factory or attica:" << n->factory << attica;
         if ( attica )
-            qDebug() << n->atticaContent.id() << attica->atticaId();
+            qDebug() << n->atticaContent.id() << n->atticaContent.name() << attica->atticaId();
         if ( n->factory == factory )
         {
             n->accounts << account;
