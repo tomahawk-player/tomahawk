@@ -100,8 +100,6 @@ private slots:
     void accountRemoved( Tomahawk::Accounts::Account* );
     void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
-    void atticaInstalled( const QString& atticaId );
-
 private:
     QList< AccountModelNode* > m_accounts;
     QSet< QString > m_waitingForAtticaInstall;
