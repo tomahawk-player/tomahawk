@@ -389,7 +389,7 @@ AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt
 
         current += textHeight + PADDING/2;
 
-        leftOfAccounts = qMax( leftOfAccounts, textTopLeft.x() );
+        leftOfAccounts = qMin( leftOfAccounts, textTopLeft.x() );
     }
 
     return leftOfAccounts;
