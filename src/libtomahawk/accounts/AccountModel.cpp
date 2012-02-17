@@ -509,25 +509,38 @@ AccountModel::accountStateChanged( Account* account , Account::ConnectionState )
 void
 AccountModel::accountRemoved( Account* account )
 {
-    // Find the factory this belongs up, and update
+    // Find the row this belongs to and update/remove
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
 
-        if ( n->type == AccountModelNode::FactoryType &&
-             n->factory == factory )
+        bool found = false;
+        // Account in a factory, remove child and update
+        if ( ( n->type == AccountModelNode::FactoryType && n->factory == factory ) ||
+             ( n->type == AccountModelNode::UniqueFactoryType && n->accounts.size() && n->accounts.first() == account ) )
         {
             n->accounts.removeAll( account );
+            found = true;
+        }
+
+        // Attica account, just clear the account but leave the attica shell
+        if ( n->type == AccountModelNode::AtticaType && n->atticaAccount && n->atticaAccount == account )
+        {
+            n->resolverAccount = 0;
+            found = true;
+        }
+
+        if ( found )
+        {
             const QModelIndex idx = index( i, 0, QModelIndex() );
             emit dataChanged( idx, idx );
 
             return;
         }
 
-        if ( ( n->type == AccountModelNode::UniqueFactoryType && n->accounts.size() && n->accounts.first() == account ) ||
-             ( n->type == AccountModelNode::AtticaType && n->atticaAccount && n->atticaAccount == account ) ||
-             ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account ) )
+        // Manual resolver added, remove the row now
+        if ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account )
         {
             beginRemoveRows( QModelIndex(), i, i );
             m_accounts.removeAt( i );
