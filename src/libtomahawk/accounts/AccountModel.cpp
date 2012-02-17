@@ -38,8 +38,6 @@ AccountModel::AccountModel( QObject* parent )
     connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
     connect( AccountManager::instance(), SIGNAL( stateChanged( Account* ,Accounts::Account::ConnectionState ) ), this, SLOT( accountStateChanged( Account*, Accounts::Account::ConnectionState ) ) );
 
-    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaInstalled( QString ) ) );
-
     loadData();
 }
 
@@ -319,20 +317,24 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
                 Attica::Content resolver = node->atticaContent;
                 AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
+                qDebug() << "Attica resolver was checked! Current state is:" << state << "and so..";
                 if ( state == AtticaManager::Installed && !node->resolverAccount )
                 {
                     // Something is wrong, reinstall
+                    qDebug() << "Found installed state but no resolver, uninstalling first";
                     AtticaManager::instance()->uninstallResolver( resolver );
                     state = AtticaManager::Uninstalled;
                 }
 
                 if ( state == AtticaManager::Installed )
                 {
+                    qDebug() << "Already installed with resolver, just enabling";
                     acct = node->atticaAccount;
                     break;
                 }
                 else
                 {
+                    qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 
                     AtticaManager::instance()->installResolver( resolver );
@@ -441,8 +443,15 @@ AccountModel::accountAdded( Account* account )
         }
         else if ( attica && n->atticaContent.id() == attica->atticaId() )
         {
+
             n->resolverAccount = attica;
+            n->atticaContent = AtticaManager::instance()->resolverForId( attica->atticaId() );
             thisIsTheOne = true;
+
+            if ( m_waitingForAtticaInstall.contains( attica->atticaId() ) )
+                AccountManager::instance()->enableAccount( account );
+
+            m_waitingForAtticaInstall.remove( attica->atticaId() );
         }
 
         if ( thisIsTheOne )
@@ -605,6 +614,7 @@ AccountModel::atticaInstalled( const QString& atticaId )
     AccountManager::instance()->enableAccount( acct );
 
     node->atticaAccount = acct;
+    node->atticaContent = AtticaManager::instance()->resolverForId( atticaId );
     const QModelIndex idx = index( m_accounts.indexOf( node ), 0, QModelIndex() );
     emit dataChanged( idx, idx );
 }

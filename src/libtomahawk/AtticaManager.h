@@ -71,6 +71,8 @@ public:
     bool resolversLoaded() const;
 
     Attica::Content::List resolvers() const;
+    Attica::Content resolverForId( const QString& id ) const;
+
     ResolverState resolverState( const Attica::Content& resolver ) const;
     QPixmap iconForResolver( const Attica::Content& id ); // Looks up in icon cache
 

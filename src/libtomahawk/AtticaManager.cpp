@@ -125,6 +125,20 @@ AtticaManager::resolvers() const
 }
 
 
+Content
+AtticaManager::resolverForId( const QString& id ) const
+{
+    foreach ( const Attica::Content& c, m_resolvers )
+    {
+        if ( c.id() == id )
+            return c;
+    }
+
+    return Content();
+}
+
+
+
 AtticaManager::ResolverState
 AtticaManager::resolverState ( const Content& resolver ) const
 {
