@@ -37,7 +37,9 @@ namespace Tomahawk {
 
 namespace InfoSystem {
 
-   
+class InfoSystemCache;
+
+
 class DLLEXPORT InfoSystemWorker : public QObject
 {
     Q_OBJECT
@@ -47,33 +49,36 @@ public:
     ~InfoSystemWorker();
 
     void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
-    QNetworkAccessManager* nam() const;
-    
+
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
-    
+
 public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    
+
+    void addInfoPlugin( InfoPlugin* plugin );
 private slots:
     void checkTimeoutsTimerFired();
-    
+
 private:
 
     void checkFinished( const Tomahawk::InfoSystem::InfoRequestData &target );
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
-    
+
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
     QMultiMap< qint64, quint64 > m_timeRequestMapper;
     QHash< uint, bool > m_requestSatisfiedMap;
     QHash< uint, InfoRequestData* > m_savedRequestMap;
-    
+
+    // NOTE Cache object lives in a different thread, do not call methods on it directly
+    InfoSystemCache* m_cache;
+
     // For now, statically instantiate plugins; this is just somewhere to keep them
     QList< InfoPluginPtr > m_plugins;
 

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,7 +28,6 @@
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/chartsplugin.h"
 #include "infoplugins/generic/spotifyPlugin.h"
-#include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "infoplugins/generic/hypemPlugin.h"
 #include "utils/tomahawkutils.h"
@@ -41,7 +41,6 @@
 #include "infoplugins/unix/mprisplugin.h"
 #endif
 
-#include "lastfm/NetworkAccessManager"
 #include "infoplugins/generic/RoviPlugin.h"
 
 namespace Tomahawk
@@ -78,71 +77,56 @@ void
 InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 {
     tDebug() << Q_FUNC_INFO;
+    m_cache = cache;
 #ifndef ENABLE_HEADLESS
-    InfoPluginPtr enptr( new EchoNestPlugin() );
-    m_plugins.append( enptr );
-    registerInfoTypes( enptr, enptr.data()->supportedGetTypes(), enptr.data()->supportedPushTypes() );
-    InfoPluginPtr mmptr( new MusixMatchPlugin() );
-    m_plugins.append( mmptr );
-    registerInfoTypes( mmptr, mmptr.data()->supportedGetTypes(), mmptr.data()->supportedPushTypes() );
-    InfoPluginPtr mbptr( new MusicBrainzPlugin() );
-    m_plugins.append( mbptr );
-    registerInfoTypes( mbptr, mbptr.data()->supportedGetTypes(), mbptr.data()->supportedPushTypes() );
-    InfoPluginPtr lfmptr( new LastFmPlugin() );
-    m_plugins.append( lfmptr );
-    registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
-    InfoPluginPtr sptr( new ChartsPlugin() );
-    m_plugins.append( sptr );
-    registerInfoTypes( sptr, sptr.data()->supportedGetTypes(), sptr.data()->supportedPushTypes() );
-    InfoPluginPtr roviptr( new RoviPlugin() );
-    m_plugins.append( roviptr );
-    registerInfoTypes( roviptr, roviptr.data()->supportedGetTypes(), roviptr.data()->supportedPushTypes() );
-    InfoPluginPtr spotptr( new SpotifyPlugin() );
-    m_plugins.append( spotptr );
-    registerInfoTypes( spotptr, spotptr.data()->supportedGetTypes(), spotptr.data()->supportedPushTypes() );
-    InfoPluginPtr hypeptr( new hypemPlugin() );
-    m_plugins.append( hypeptr );
-    registerInfoTypes( hypeptr, hypeptr.data()->supportedGetTypes(), hypeptr.data()->supportedPushTypes() );
+    addInfoPlugin( new EchoNestPlugin() );
+    addInfoPlugin( new MusixMatchPlugin() );
+    addInfoPlugin( new MusicBrainzPlugin() );
+    addInfoPlugin( new ChartsPlugin() );
+    addInfoPlugin( new RoviPlugin() );
+    addInfoPlugin( new SpotifyPlugin() );
+    addInfoPlugin( new hypemPlugin() );
 #endif
 
-    #ifdef Q_WS_MAC
-    InfoPluginPtr admptr( new AdiumPlugin() );
-    m_plugins.append( admptr );
-    registerInfoTypes( admptr, admptr.data()->supportedGetTypes(), admptr.data()->supportedPushTypes() );
-    #endif
-#ifndef ENABLE_HEADLESS
-    #ifdef Q_WS_X11
-    InfoPluginPtr fdonotifyptr( new FdoNotifyPlugin() );
-    m_plugins.append( fdonotifyptr );
-    registerInfoTypes( fdonotifyptr, fdonotifyptr.data()->supportedGetTypes(), fdonotifyptr.data()->supportedPushTypes() );
-    InfoPluginPtr mprisptr( new MprisPlugin() );
-    m_plugins.append( mprisptr );
-    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );
-    #endif
+#ifdef Q_WS_MAC
+    addInfoPlugin( new AdiumPlugin() );
 #endif
-    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
-    {
-        connect(
-                plugin.data(),
-                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                this,
-                SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                Qt::UniqueConnection
-            );
+#ifndef ENABLE_HEADLESS
+#ifdef Q_WS_X11
+    addInfoPlugin( new FdoNotifyPlugin() );
+    addInfoPlugin( new MprisPlugin() );
+#endif
+#endif
+}
 
-        connect(
-                plugin.data(),
-                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
-                cache,
-                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
-            );
-        connect(
-                plugin.data(),
-                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-                cache,
-                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
-            );
-    }
+
+void
+InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
+{
+    InfoPluginPtr weakptr( plugin );
+    m_plugins.append( weakptr );
+    registerInfoTypes( weakptr, weakptr.data()->supportedGetTypes(), weakptr.data()->supportedPushTypes() );
+
+    connect(
+        plugin,
+            SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+            this,
+            SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+            Qt::UniqueConnection
+    );
+
+    connect(
+        plugin,
+            SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+            m_cache,
+            SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
+    );
+    connect(
+        plugin,
+            SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+            m_cache,
+            SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+    );
 }
 
 

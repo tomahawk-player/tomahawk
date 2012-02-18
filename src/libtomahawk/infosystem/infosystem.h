@@ -134,7 +134,7 @@ struct InfoRequestData {
     QVariantMap customData;
     uint timeoutMillis;
     bool allSources;
-    
+
     InfoRequestData()
         : requestId( TomahawkUtils::infosystemRequestId() )
         , internalId( TomahawkUtils::infosystemRequestId() )
@@ -145,7 +145,7 @@ struct InfoRequestData {
         , timeoutMillis( 10000 )
         , allSources( false )
         {}
-    
+
     InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
         : requestId( rId )
         , internalId( TomahawkUtils::infosystemRequestId() )
@@ -242,6 +242,9 @@ public:
     bool pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     bool pushInfo( const QString &caller, const InfoTypeMap &input );
 
+    // InfoSystem takes ownership of InfoPlugins
+    void addInfoPlugin( InfoPlugin* plugin );
+
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
@@ -249,7 +252,7 @@ signals:
 
 private slots:
     void init();
-    
+
 private:
     bool m_inited;
     InfoSystemCacheThread* m_infoSystemCacheThreadController;
@@ -289,5 +292,6 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

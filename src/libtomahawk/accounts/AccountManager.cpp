@@ -291,7 +291,14 @@ AccountManager::addAccount( Account* account )
     if ( account->types() & Accounts::SipType )
         m_accountsByAccountType[ Accounts::SipType ].append( account );
     if ( account->types() & Accounts::InfoType )
+    {
         m_accountsByAccountType[ Accounts::InfoType ].append( account );
+
+        if ( account->infoPlugin() )
+        {
+            InfoSystem::InfoSystem::instance()->addInfoPlugin( account->infoPlugin() );
+        }
+    }
     if ( account->types() & Accounts::ResolverType )
         m_accountsByAccountType[ Accounts::ResolverType ].append( account );
 

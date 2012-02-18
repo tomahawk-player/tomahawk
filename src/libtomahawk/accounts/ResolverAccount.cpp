@@ -67,13 +67,13 @@ ResolverAccount::ResolverAccount( const QString& accountId )
     // We should have a valid saved path
     Q_ASSERT( !path.isEmpty() );
 
-    m_resolver = qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, enabled() ) );
-    connect( m_resolver, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, enabled() ) ) );
+    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
-    Q_ASSERT ( m_resolver );
+    Q_ASSERT ( !m_resolver.isNull() );
 
-    setAccountFriendlyName( m_resolver->name() );
+    setAccountFriendlyName( m_resolver.data()->name() );
     setTypes( AccountType( ResolverType ) );
 }
 
