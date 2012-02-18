@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS file (
 );
 CREATE UNIQUE INDEX file_url_src_uniq ON file(source, url);
 CREATE INDEX file_source ON file(source);
+CREATE INDEX file_mtime ON file(mtime);
 
 -- mtime of dir when last scanned.
 -- load into memory when rescanning, skip stuff that's unchanged
