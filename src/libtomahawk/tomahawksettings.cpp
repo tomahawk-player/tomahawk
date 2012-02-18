@@ -156,8 +156,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             QStringList toremove;
             QStringList resolvers = resolverDir.entryList( QDir::Dirs | QDir::NoDotAndDotDot );
-            QStringList listedResolvers = allScriptResolvers();
-            QStringList enabledResolvers = enabledScriptResolvers();
+            QStringList listedResolvers = value( "script/resolvers" ).toStringList();
+            QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
             foreach ( const QString& resolver, resolvers )
             {
                 foreach ( const QString& r, listedResolvers )
@@ -177,8 +177,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                     }
                 }
             }
-            setAllScriptResolvers( listedResolvers );
-            setEnabledScriptResolvers( enabledResolvers );
+            setValue( "script/resolvers", listedResolvers );
+            setValue( "script/loadedresolvers", enabledResolvers );
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
@@ -1001,41 +1001,6 @@ void
 TomahawkSettings::setXmppBotPort( const int port )
 {
     setValue( "xmppBot/port", port );
-}
-
-
-void
-TomahawkSettings::addScriptResolver(const QString& resolver)
-{
-    setValue( "script/resolvers", allScriptResolvers() << resolver );
-}
-
-
-QStringList
-TomahawkSettings::allScriptResolvers() const
-{
-    return value( "script/resolvers" ).toStringList();
-}
-
-
-void
-TomahawkSettings::setAllScriptResolvers( const QStringList& resolver )
-{
-    setValue( "script/resolvers", resolver );
-}
-
-
-QStringList
-TomahawkSettings::enabledScriptResolvers() const
-{
-    return value( "script/loadedresolvers" ).toStringList();
-}
-
-
-void
-TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
-{
-    setValue( "script/loadedresolvers", resolvers );
 }
 
 

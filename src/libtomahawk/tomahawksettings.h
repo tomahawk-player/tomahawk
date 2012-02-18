@@ -191,14 +191,6 @@ public:
     int xmppBotPort() const;
     void setXmppBotPort( const int port );
 
-    /// Script resolver settings
-    QStringList allScriptResolvers() const;
-    void setAllScriptResolvers( const QStringList& resolvers );
-    void addScriptResolver( const QString& resolver );
-    QStringList enabledScriptResolvers() const;
-    void setEnabledScriptResolvers( const QStringList& resolvers );
-
-
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
     QString playlistDefaultPath() const;

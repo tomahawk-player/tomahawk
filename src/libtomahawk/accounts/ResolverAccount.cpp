@@ -86,20 +86,24 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path 
     setConfiguration( configuration );
     setEnabled( true );
 
-    m_resolver = qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, true ) );
-    connect( m_resolver, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, true ) ) );
+    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
-    Q_ASSERT ( m_resolver );
+    Q_ASSERT ( m_resolver.data() );
 
-    setAccountFriendlyName( m_resolver->name() );
+    setAccountFriendlyName( m_resolver.data()->name() );
     setTypes( AccountType( ResolverType ) );
 }
 
 
 ResolverAccount::~ResolverAccount()
 {
-    delete m_resolver;
+    if ( m_resolver.isNull() )
+        return;
+
+    Pipeline::instance()->removeScriptResolver( m_resolver.data()->filePath() );
+    delete m_resolver.data();
 }
 
 
@@ -107,11 +111,11 @@ ResolverAccount::~ResolverAccount()
 void
 ResolverAccount::authenticate()
 {
+    Q_ASSERT( !m_resolver.isNull() );
     qDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver;
-    Q_ASSERT( m_resolver );
 
-    if ( !m_resolver->running() )
-        m_resolver->start();
+    if ( !m_resolver.data()->running() )
+        m_resolver.data()->start();
 
     emit connectionStateChanged( connectionState() );
 }
@@ -120,15 +124,15 @@ ResolverAccount::authenticate()
 bool
 ResolverAccount::isAuthenticated() const
 {
-    return m_resolver->running();
+    return m_resolver.data()->running();
 }
 
 
 void
 ResolverAccount::deauthenticate()
 {
-    if ( m_resolver->running() )
-        m_resolver->stop();
+    if ( m_resolver.data()->running() )
+        m_resolver.data()->stop();
 
     emit connectionStateChanged( connectionState() );
 
@@ -138,7 +142,7 @@ ResolverAccount::deauthenticate()
 Account::ConnectionState
 ResolverAccount::connectionState() const
 {
-    if ( m_resolver->running() )
+    if ( m_resolver.data()->running() )
         return Connected;
     else
         return Disconnected;
@@ -148,7 +152,7 @@ ResolverAccount::connectionState() const
 QWidget*
 ResolverAccount::configurationWidget()
 {
-    return m_resolver->configUI();
+    return m_resolver.data()->configUI();
 }
 
 
@@ -172,21 +176,21 @@ ResolverAccount::removeFromConfig()
 void ResolverAccount::saveConfig()
 {
     Account::saveConfig();
-    m_resolver->saveConfig();
+    m_resolver.data()->saveConfig();
 }
 
 
 QString
 ResolverAccount::path() const
 {
-    return m_resolver->filePath();
+    return m_resolver.data()->filePath();
 }
 
 
 void
 ResolverAccount::resolverChanged()
 {
-    setAccountFriendlyName( m_resolver->name() );
+    setAccountFriendlyName( m_resolver.data()->name() );
     emit connectionStateChanged( connectionState() );
 }
 
@@ -220,7 +224,7 @@ AtticaResolverAccount::~AtticaResolverAccount()
 void
 AtticaResolverAccount::loadIcon()
 {
-    const QFileInfo fi( m_resolver->filePath() );
+    const QFileInfo fi( m_resolver.data()->filePath() );
     QDir codeDir = fi.absoluteDir();
     codeDir.cd( "../images" );
 

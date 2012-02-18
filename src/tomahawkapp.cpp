@@ -423,7 +423,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
-    
+
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
@@ -471,13 +471,6 @@ TomahawkApp::initPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
-    // load script resolvers
-    QStringList enabled = TomahawkSettings::instance()->enabledScriptResolvers();
-    foreach ( QString resolver, TomahawkSettings::instance()->allScriptResolvers() )
-    {
-        const bool enable = enabled.contains( resolver );
-        Pipeline::instance()->addScriptResolver( resolver, enable );
-    }
 }
 
 

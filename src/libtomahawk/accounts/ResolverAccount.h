@@ -85,7 +85,7 @@ private slots:
 protected:
     // Created by factory, when user installs a new resolver
     ResolverAccount( const QString& accountId, const QString& path );
-    ExternalResolverGui* m_resolver;
+    QWeakPointer<ExternalResolverGui> m_resolver;
 
     friend class ResolverAccountFactory;
 };

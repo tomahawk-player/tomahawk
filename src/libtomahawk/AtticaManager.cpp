@@ -409,7 +409,6 @@ AtticaManager::payloadFetched()
             m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
             // Do the install / add to tomahawk
-            Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
             Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
             Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
 
@@ -547,7 +546,6 @@ AtticaManager::uninstallResolver( const Content& resolver )
         }
     }
 
-    Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
     doResolverRemove( resolver.id() );
 }
 
