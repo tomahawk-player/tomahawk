@@ -30,11 +30,6 @@
 #include <QVBoxLayout>
 #include <QSizeGrip>
 
-#ifdef LIBLASTFM_FOUND
-#include <lastfm/ws.h>
-#include <lastfm/XmlQuery>
-#endif
-
 #include "AtticaManager.h"
 #include "tomahawkapp.h"
 #include "tomahawksettings.h"
@@ -168,21 +163,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     }
 
     // NOW PLAYING
-#ifdef Q_WS_MAC
-    ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
-#else
-    ui->checkBoxEnableAdium->hide();
-#endif
-
-    // LAST FM
-    ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
-    ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
-    ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
-    connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), SLOT( testLastFmLogin() ) );
-
-#ifdef Q_WS_MAC // FIXME
-    ui->pushButtonTestLastfmLogin->setVisible( false );
-#endif
+// #ifdef Q_WS_MAC
+//     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
+// #else
+//     ui->checkBoxEnableAdium->hide();
+// #endif
 
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
@@ -217,11 +202,7 @@ SettingsDialog::~SettingsDialog()
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
         s->setEnableEchonestCatalogs( ui->enableEchonestCatalog->isChecked() );
 
-        s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
-
-        s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
-        s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
-        s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
+//         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
         s->applyChanges();
         s->sync();
@@ -265,13 +246,6 @@ SettingsDialog::createIcons()
     musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = qMax( fm.width( musicButton->text() ), maxlen );
 
-    QListWidgetItem *lastfmButton = new QListWidgetItem( ui->listWidget );
-    lastfmButton->setIcon( QIcon( RESPATH "images/lastfm-settings.png" ) );
-    lastfmButton->setText( tr( "Last.fm" ) );
-    lastfmButton->setTextAlignment( Qt::AlignHCenter );
-    lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( lastfmButton->text() ), maxlen );
-
     QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
     advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
     advancedButton->setText( tr( "Advanced" ) );
@@ -282,7 +256,6 @@ SettingsDialog::createIcons()
     maxlen += 15; // padding
     accountsButton->setSizeHint( QSize( maxlen, 60 ) );
     musicButton->setSizeHint( QSize( maxlen, 60 ) );
-    lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
     advancedButton->setSizeHint( QSize( maxlen, 60 ) );
 
 #ifndef Q_WS_MAC
@@ -359,78 +332,6 @@ SettingsDialog::updateScanOptionsView()
         ui->scanTimeLabel->hide();
         ui->scannerTimeSpinBox->hide();
     }
-}
-
-
-void
-SettingsDialog::testLastFmLogin()
-{
-#ifdef LIBLASTFM_FOUND
-    ui->pushButtonTestLastfmLogin->setEnabled( false );
-    ui->pushButtonTestLastfmLogin->setText( "Testing..." );
-
-    QString authToken = TomahawkUtils::md5( ( ui->lineEditLastfmUsername->text().toLower() + TomahawkUtils::md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
-
-    // now authenticate w/ last.fm and get our session key
-    QMap<QString, QString> query;
-    query[ "method" ] = "auth.getMobileSession";
-    query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
-    query[ "authToken" ] = authToken;
-
-    // ensure they have up-to-date settings
-    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
-
-    QNetworkReply* authJob = lastfm::ws::post( query );
-
-    connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
-#endif
-}
-
-
-void
-SettingsDialog::onLastFmFinished()
-{
-#ifdef LIBLASTFM_FOUND
-    QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
-    if( !authJob )
-    {
-        qDebug() << Q_FUNC_INFO << "No auth job returned!";
-        return;
-    }
-    if( authJob->error() == QNetworkReply::NoError )
-    {
-        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
-
-        if( lfm.children( "error" ).size() > 0 )
-        {
-            qDebug() << "ERROR from last.fm:" << lfm.text();
-            ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( true );
-        }
-        else
-        {
-            ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( false );
-        }
-    }
-    else
-    {
-        switch( authJob->error() )
-        {
-            case QNetworkReply::ContentOperationNotPermittedError:
-            case QNetworkReply::AuthenticationRequiredError:
-                ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-                ui->pushButtonTestLastfmLogin->setEnabled( true );
-                break;
-
-            default:
-                qDebug() << "Couldn't get last.fm auth result";
-                ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
-                ui->pushButtonTestLastfmLogin->setEnabled( true );
-                return;
-        }
-    }
-#endif
 }
 
 

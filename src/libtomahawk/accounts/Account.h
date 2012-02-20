@@ -50,7 +50,8 @@ enum AccountType
 
     InfoType = 0x01,
     SipType = 0x02,
-    ResolverType = 0x04
+    ResolverType = 0x04,
+    StatusPushType = 0x08
 };
 
 DLLEXPORT QString accountTypeToString( AccountType type );
@@ -88,7 +89,7 @@ public:
     virtual QWidget* configurationWidget() = 0;
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
-    QVariantHash credentials() { QMutexLocker locker( &m_mutex ); return m_credentials; }
+    QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_credentials; }
 
     QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
     virtual QWidget* aclWidget() = 0;

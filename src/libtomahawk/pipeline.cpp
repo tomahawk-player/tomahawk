@@ -164,6 +164,9 @@ Pipeline::removeScriptResolver( const QString& scriptPath )
     QWeakPointer< ExternalResolver > r;
     foreach ( QWeakPointer< ExternalResolver > res, m_scriptResolvers )
     {
+        if ( res.isNull() )
+            continue;
+
         if ( res.data()->filePath() == scriptPath )
             r = res;
     }

@@ -308,6 +308,8 @@ set( libSources
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
+    accounts/LastFmAccount.cpp
+    accounts/LastFmConfig.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -450,6 +452,8 @@ set( libHeaders
     accounts/AccountModel.h
     accounts/AccountModelFilterProxy.h
     accounts/ResolverAccount.h
+    accounts/LastFmAccount.h
+    accounts/LastFmConfig.h
 
     EchonestCatalogSynchronizer.h
 
@@ -582,6 +586,7 @@ set( libUI ${libUI}
     playlist/queueview.ui
     context/ContextWidget.ui
     infobar/infobar.ui
+    accounts/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

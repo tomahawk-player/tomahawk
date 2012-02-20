@@ -62,7 +62,8 @@ public slots:
 
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-    void addInfoPlugin( InfoPlugin* plugin );
+    void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
+
 private slots:
     void checkTimeoutsTimerFired();
 

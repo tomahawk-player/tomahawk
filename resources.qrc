@@ -133,6 +133,7 @@
         <file>data/images/headphones-bigger.png</file>
         <file>data/images/no-album-no-case.png</file>
         <file>data/images/rdio.png</file>
+        <file>data/images/lastfm-icon.png</file>
         <file>data/sql/dbmigrate-27_to_28.sql</file>
     </qresource>
 </RCC>

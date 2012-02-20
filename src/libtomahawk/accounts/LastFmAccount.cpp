@@ -1,0 +1,194 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "LastFmAccount.h"
+#include "LastFmConfig.h"
+
+#include "infosystem/infosystem.h"
+#include "infosystem/infoplugins/generic/lastfmplugin.h"
+#include "utils/tomahawkutils.h"
+#include "resolvers/qtscriptresolver.h"
+
+using namespace Tomahawk;
+using namespace InfoSystem;
+using namespace Accounts;
+
+LastFmAccountFactory::LastFmAccountFactory()
+{
+    m_icon.load( RESPATH "images/lastfm-icon.png" );
+}
+
+
+Account*
+LastFmAccountFactory::createAccount( const QString& accountId )
+{
+    return new LastFmAccount( accountId.isEmpty() ? generateId( factoryId() ) : accountId );
+}
+
+
+QPixmap
+LastFmAccountFactory::icon() const
+{
+    return m_icon;
+}
+
+
+LastFmAccount::LastFmAccount( const QString& accountId )
+    : Account( accountId )
+{
+    m_infoPlugin = new LastFmPlugin( this );
+
+    setAccountFriendlyName( "Last.Fm" );
+    m_icon.load( RESPATH "images/lastfm-icon.png" );
+}
+
+
+LastFmAccount::~LastFmAccount()
+{
+    delete m_infoPlugin;
+    delete m_resolver.data();
+}
+
+
+void
+LastFmAccount::authenticate()
+{
+
+}
+
+
+void
+LastFmAccount::deauthenticate()
+{
+
+}
+
+
+QWidget*
+LastFmAccount::configurationWidget()
+{
+    if ( m_configWidget.isNull() )
+        m_configWidget = QWeakPointer<LastFmConfig>( new LastFmConfig( this ) );
+
+    return m_configWidget.data();
+}
+
+
+Account::ConnectionState
+LastFmAccount::connectionState() const
+{
+    return m_authenticated ? Account::Connected : Account::Disconnected;
+}
+
+
+QPixmap
+LastFmAccount::icon() const
+{
+    return m_icon;
+}
+
+
+InfoPlugin*
+LastFmAccount::infoPlugin()
+{
+    return m_infoPlugin;
+}
+
+bool
+LastFmAccount::isAuthenticated() const
+{
+    return m_authenticated;
+}
+
+
+void
+LastFmAccount::saveConfig()
+{
+    if ( !m_configWidget.isNull() )
+    {
+        setUsername( m_configWidget.data()->username() );
+        setPassword( m_configWidget.data()->password() );
+        setScrobble( m_configWidget.data()->scrobble() );
+    }
+
+    m_infoPlugin->settingsChanged();
+}
+
+
+QString
+LastFmAccount::password() const
+{
+    return credentials().value( "password" ).toString();
+}
+
+
+void
+LastFmAccount::setPassword( const QString& password )
+{
+    QVariantHash creds;
+    creds[ "password" ] = password;
+    setCredentials( creds );
+}
+
+QString
+LastFmAccount::sessionKey() const
+{
+    return credentials().value( "sessionkey" ).toString();
+}
+
+
+void
+LastFmAccount::setSessionKey( const QString& sessionkey )
+{
+    QVariantHash creds;
+    creds[ "sessionkey" ] = sessionkey;
+    setCredentials( creds );
+}
+
+
+QString
+LastFmAccount::username() const
+{
+    return credentials().value( "username" ).toString();
+}
+
+
+void
+LastFmAccount::setUsername( const QString& username )
+{
+    QVariantHash creds;
+    creds[ "username" ] = username;
+    setCredentials( creds );
+}
+
+
+bool
+LastFmAccount::scrobble() const
+{
+    return configuration().value( "scrobble" ).toBool();
+}
+
+
+void
+LastFmAccount::setScrobble( bool scrobble )
+{
+    QVariantHash conf;
+    conf[ "scrobble" ] = scrobble;
+    setConfiguration( conf );
+}
+

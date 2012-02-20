@@ -35,6 +35,7 @@ accountTypeToString( AccountType type )
         case ResolverType:
             return QObject::tr( "Music Finders" );
         case InfoType:
+        case StatusPushType:
             return QObject::tr( "Status Updaters" );
     }
 
@@ -174,6 +175,8 @@ Account::setTypes( AccountTypes types )
         m_types << "SipType";
     if ( types & ResolverType )
         m_types << "ResolverType";
+    if ( types & StatusPushType )
+        m_types << "StatusPushType";
     syncConfig();
 }
 
@@ -189,6 +192,8 @@ Account::types() const
         types |= SipType;
     if ( m_types.contains( "ResolverType" ) )
         types |= ResolverType;
+    if ( m_types.contains( "StatusPushTypeType" ) )
+        types |= StatusPushType;
 
     return types;
 }

@@ -26,34 +26,37 @@
 #include "album.h"
 #include "typedefs.h"
 #include "audio/audioengine.h"
-#include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "accounts/LastFmAccount.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
 
 #include <qjson/parser.h>
 
+using namespace Tomahawk::Accounts;
 using namespace Tomahawk::InfoSystem;
 
 
-LastFmPlugin::LastFmPlugin()
+LastFmPlugin::LastFmPlugin( LastFmAccount* account )
     : InfoPlugin()
+    , m_account( account )
     , m_scrobbler( 0 )
 {
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
     // Flush session key cache
-    TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
+    // TODO WHY FLUSH
+//     m_account->setSessionKey( QByteArray() );
 
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
-    lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
+    lastfm::ws::Username = m_account->username();
     lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 
-    m_pw = TomahawkSettings::instance()->lastFmPassword();
+    m_pw = m_account->password();
 
     //HACK work around a bug in liblastfm---it doesn't create its config dir, so when it
     // tries to write the track cache, it fails silently. until we have a fixed version, do this
@@ -68,9 +71,6 @@ LastFmPlugin::LastFmPlugin()
 #endif
 
     m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" );
-
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ),
-                                             SLOT( settingsChanged() ), Qt::QueuedConnection );
 
     QTimer::singleShot( 0, this, SLOT( settingsChanged() ) );
 }
@@ -693,23 +693,23 @@ LastFmPlugin::artistImagesReturned()
 void
 LastFmPlugin::settingsChanged()
 {
-    if ( !m_scrobbler && TomahawkSettings::instance()->scrobblingEnabled() )
+    if ( !m_scrobbler && m_account->enabled() )
     { // can simply create the scrobbler
-        lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
-        m_pw = TomahawkSettings::instance()->lastFmPassword();
+    lastfm::ws::Username = m_account->username();
+    m_pw = m_account->password();
 
         createScrobbler();
     }
-    else if ( m_scrobbler && !TomahawkSettings::instance()->scrobblingEnabled() )
+    else if ( m_scrobbler && !m_account->enabled() )
     {
         delete m_scrobbler;
         m_scrobbler = 0;
     }
-    else if ( TomahawkSettings::instance()->lastFmUsername() != lastfm::ws::Username ||
-               TomahawkSettings::instance()->lastFmPassword() != m_pw )
+    else if ( m_account->username() != lastfm::ws::Username ||
+        m_account->password() != m_pw )
     {
-        lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
-        m_pw = TomahawkSettings::instance()->lastFmPassword();
+        lastfm::ws::Username = m_account->username();
+        m_pw = m_account->password();
         // credentials have changed, have to re-create scrobbler for them to take effect
         if ( m_scrobbler )
         {
@@ -739,16 +739,16 @@ LastFmPlugin::onAuthenticated()
         if ( lfm.children( "error" ).size() > 0 )
         {
             tLog() << "Error from authenticating with Last.fm service:" << lfm.text();
-            TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
+            m_account->setSessionKey( QByteArray() );
         }
         else
         {
             lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
 
-            TomahawkSettings::instance()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
+            m_account->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
 //            qDebug() << "Got session key from last.fm";
-            if ( TomahawkSettings::instance()->scrobblingEnabled() )
+            if ( m_account->enabled() )
                 m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
     }
@@ -764,7 +764,7 @@ LastFmPlugin::onAuthenticated()
 void
 LastFmPlugin::createScrobbler()
 {
-    if ( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
+    if ( m_account->sessionKey().isEmpty() ) // no session key, so get one
     {
         qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
         QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
@@ -780,7 +780,7 @@ LastFmPlugin::createScrobbler()
     else
     {
         qDebug() << "LastFmPlugin::createScrobbler Already have session key";
-        lastfm::ws::SessionKey = TomahawkSettings::instance()->lastFmSessionKey();
+        lastfm::ws::SessionKey = m_account->sessionKey();
 
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
     }

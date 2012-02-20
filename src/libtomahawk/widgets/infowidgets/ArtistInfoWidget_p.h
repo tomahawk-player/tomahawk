@@ -87,11 +87,6 @@ public slots:
     }
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
     void nextTrackReady();
 
 private slots:

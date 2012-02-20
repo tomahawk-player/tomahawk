@@ -46,6 +46,9 @@ InfoSystem* InfoSystem::s_instance = 0;
 InfoSystem*
 InfoSystem::instance()
 {
+    if ( !s_instance )
+        s_instance = new InfoSystem( 0 );
+
     return s_instance;
 }
 
@@ -101,6 +104,9 @@ void
 InfoSystem::init()
 {
     tDebug() << Q_FUNC_INFO;
+    if ( m_inited )
+        return;
+
     if ( !m_infoSystemCacheThreadController->cache() || !m_infoSystemWorkerThreadController->worker() )
     {
         QTimer::singleShot( 0, this, SLOT( init() ) );
@@ -199,6 +205,12 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
 void
 InfoSystem::addInfoPlugin( InfoPlugin* plugin )
 {
+    // Init is not complete (waiting for worker th read to start and create worker object) so keep trying till then
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        QMetaObject::invokeMethod( this, "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
+        return;
+    }
     QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
 }
 

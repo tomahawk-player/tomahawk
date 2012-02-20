@@ -75,10 +75,10 @@ AccountDelegate::AccountDelegate( QObject* parent )
 
 
 QSize
-AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+AccountDelegate::sizeHint( const QStyleOptionViewItem&, const QModelIndex& index ) const
 {
     AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
-    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory )
+    if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory || rowType == AccountModel::CustomAccount )
         return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
     else if ( rowType == AccountModel::TopLevelFactory )
     {
@@ -204,7 +204,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             rightEdge = drawAccountList( painter, opt, accts, rightEdge );
             painter->restore();
 
-            int centeredUnderAccounts = oldRightEdge - (oldRightEdge - rightEdge)/2 - (btnWidth/2);
             btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
         }
 
@@ -303,7 +302,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         // rating stars
         const int rating = index.data( AccountModel::RatingRole ).toInt();
-        const int ratingWidth = 5 * ( m_ratingStarPositive.width() + PADDING_BETWEEN_STARS );
 
 //         int runningEdge = opt.rect.right() - 2*PADDING - ratingWidth;
         int runningEdge = textRect.left();
@@ -414,7 +412,8 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
             m_configPressed = index;
 
             const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
-            if ( rowType == AccountModel::TopLevelAccount )
+            if ( rowType == AccountModel::TopLevelAccount ||
+                 rowType == AccountModel::CustomAccount )
             {
                 Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
                 Q_ASSERT( acct ); // Should not be showing a config wrench if there is no account!
@@ -444,8 +443,6 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
             emit update( m_configPressed );
 
         m_configPressed = QModelIndex();
-
-        const AccountModel::ItemState state = static_cast< AccountModel::ItemState >( index.data( AccountModel::StateRole ).toInt() );
 
         if ( checkRectForIndex( option, index ).contains( me->pos() ) )
         {

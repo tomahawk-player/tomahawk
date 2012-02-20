@@ -59,6 +59,13 @@ AccountModel::loadData()
 
         qDebug() << "Creating factory node:" << fac->prettyName();
         m_accounts << new AccountModelNode( fac );
+
+        // remove the accounts we are dealing with
+        foreach ( Account* acct, allAccounts )
+        {
+            if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
+                allAccounts.removeAll( acct );
+        }
     }
 
     // add all attica resolvers (installed or uninstalled)
@@ -67,15 +74,26 @@ AccountModel::loadData()
     {
         qDebug() << "Loading ATTICA ACCOUNT with content:" << content.id() << content.name();
         m_accounts << new AccountModelNode( content );
+
+        foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
+        {
+            if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
+            {
+                if ( resolver->atticaId() == content.id() )
+                {
+                    allAccounts.removeAll( acct );
+                }
+            }
+        }
     }
 
-    // Add all non-attica manually installed resolvers
+    // All other accounts we haven't dealt with yet
    foreach ( Account* acct, allAccounts )
    {
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )
-       {
            m_accounts << new AccountModelNode( qobject_cast< ResolverAccount* >( acct ) );
-       }
+       else
+           m_accounts << new AccountModelNode( acct );
    }
 
    endResetModel();
@@ -280,6 +298,41 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 }
             }
         }
+        case AccountModelNode::CustomAccountType:
+        {
+            Q_ASSERT( node->customAccount );
+            Q_ASSERT( node->factory );
+
+            Account* account = node->customAccount;
+            switch ( role )
+            {
+                case Qt::DisplayRole:
+                    return account->accountFriendlyName();
+                case Qt::DecorationRole:
+                    return account->icon();
+                case StateRole:
+                    return ShippedWithTomahawk;
+                case Qt::ToolTipRole:
+                case DescriptionRole:
+                    return node->factory->description();
+                case CanRateRole:
+                    return false;
+                case RowTypeRole:
+                    return CustomAccount;
+                case AccountData:
+                    return QVariant::fromValue< QObject* >( account );
+                case HasConfig:
+                    return account->configurationWidget() != 0;
+                case AccountTypeRole:
+                    return QVariant::fromValue< AccountTypes >( account->types() );
+                case Qt::CheckStateRole:
+                    return account->enabled();
+                case ConnectionStateRole:
+                    return account->connectionState();
+                default:
+                    return QVariant();
+            }
+        }
     }
 
     return QVariant();
@@ -344,6 +397,9 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
             }
             case AccountModelNode::ManualResolverType:
                 acct = node->resolverAccount;
+                break;
+            case AccountModelNode::CustomAccountType:
+                acct = node->customAccount;
                 break;
             default:
                 ;

@@ -165,19 +165,6 @@ public:
     QStringList aclEntries() const;
     void setAclEntries( const QStringList &entries );
 
-    /// Last.fm settings
-    bool scrobblingEnabled() const; /// false by default
-    void setScrobblingEnabled( bool enable );
-
-    QString lastFmUsername() const;
-    void setLastFmUsername( const QString& username );
-
-    QString lastFmPassword() const;
-    void setLastFmPassword( const QString& password );
-
-    QByteArray lastFmSessionKey() const;
-    void setLastFmSessionKey( const QByteArray& key );
-
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );

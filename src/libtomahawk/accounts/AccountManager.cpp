@@ -21,6 +21,7 @@
 #include "config.h"
 #include "sourcelist.h"
 #include "ResolverAccount.h"
+#include "LastFmAccount.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -58,6 +59,9 @@ AccountManager::AccountManager( QObject *parent )
     // We include the resolver factory manually, not in a plugin
     ResolverAccountFactory* f = new ResolverAccountFactory();
     m_accountFactories[ f->factoryId() ] = f;
+
+    LastFmAccountFactory* l = new LastFmAccountFactory();
+    m_accountFactories[ l->factoryId() ] = l;
 }
 
 
@@ -291,16 +295,14 @@ AccountManager::addAccount( Account* account )
     if ( account->types() & Accounts::SipType )
         m_accountsByAccountType[ Accounts::SipType ].append( account );
     if ( account->types() & Accounts::InfoType )
-    {
         m_accountsByAccountType[ Accounts::InfoType ].append( account );
-
-        if ( account->infoPlugin() )
-        {
-            InfoSystem::InfoSystem::instance()->addInfoPlugin( account->infoPlugin() );
-        }
-    }
     if ( account->types() & Accounts::ResolverType )
         m_accountsByAccountType[ Accounts::ResolverType ].append( account );
+    if ( account->types() & Accounts::StatusPushType )
+        m_accountsByAccountType[ Accounts::StatusPushType ].append( account );
+
+    if ( account->infoPlugin() )
+        InfoSystem::InfoSystem::instance()->addInfoPlugin( account->infoPlugin() );
 
     emit added( account );
 }

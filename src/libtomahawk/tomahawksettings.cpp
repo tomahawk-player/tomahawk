@@ -296,6 +296,28 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         }
 
+        // Add a Last.Fm account since we now moved the infoplugin into the account
+        const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+        accounts << accountKey;
+        const QString lfmUsername = value( "lastfm/username" ).toString();
+        const QString lfmPassword = value( "lastfm/password" ).toString();
+        const bool scrobble = value( "lastfm/enablescrobbling", false ).toBool();
+        beginGroup( "accounts/" + accountKey );
+//         setValue( "enabled", false );
+        setValue( "autoconnect", true );
+        setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
+        QVariantHash credentials;
+        credentials[ "username" ] = lfmUsername;
+        credentials[ "password" ] = lfmPassword;
+        credentials[ "session" ] = value( "lastfm/session" ).toString();
+        setValue( "credentials", credentials );
+        QVariantHash configuration;
+        configuration[ "scrobble" ] = scrobble;
+        setValue( "configuration", configuration );
+        endGroup();
+
+        remove( "lastfm" );
+
         remove( "script/resolvers" );
         remove( "script/loadedresolvers" );
 
@@ -889,62 +911,6 @@ TomahawkSettings::setExternalPort(int externalPort)
         setValue( "network/external-port", 50210);
     else
         setValue( "network/external-port", externalPort);
-}
-
-
-QString
-TomahawkSettings::lastFmPassword() const
-{
-    return value( "lastfm/password" ).toString();
-}
-
-
-void
-TomahawkSettings::setLastFmPassword( const QString& password )
-{
-    setValue( "lastfm/password", password );
-}
-
-
-QByteArray
-TomahawkSettings::lastFmSessionKey() const
-{
-    return value( "lastfm/session" ).toByteArray();
-}
-
-
-void
-TomahawkSettings::setLastFmSessionKey( const QByteArray& key )
-{
-    setValue( "lastfm/session", key );
-}
-
-
-QString
-TomahawkSettings::lastFmUsername() const
-{
-    return value( "lastfm/username" ).toString();
-}
-
-
-void
-TomahawkSettings::setLastFmUsername( const QString& username )
-{
-    setValue( "lastfm/username", username );
-}
-
-
-bool
-TomahawkSettings::scrobblingEnabled() const
-{
-    return value( "lastfm/enablescrobbling", false ).toBool();
-}
-
-
-void
-TomahawkSettings::setScrobblingEnabled( bool enable )
-{
-    setValue( "lastfm/enablescrobbling", enable );
 }
 
 

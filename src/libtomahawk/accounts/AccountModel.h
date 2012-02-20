@@ -70,7 +70,8 @@ public:
     enum RowType {
         TopLevelFactory,
         TopLevelAccount,
-        UniqueFactory
+        UniqueFactory,
+        CustomAccount
     };
 
     enum ItemState {

@@ -86,9 +86,6 @@ private slots:
     void toggleUpnp( bool preferStaticEnabled );
     void showProxySettings();
 
-    void testLastFmLogin();
-    void onLastFmFinished();
-
     void accountsFilterChanged( int );
 
     void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );

@@ -242,8 +242,9 @@ public:
     bool pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     bool pushInfo( const QString &caller, const InfoTypeMap &input );
 
+public slots:
     // InfoSystem takes ownership of InfoPlugins
-    void addInfoPlugin( InfoPlugin* plugin );
+    void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
 
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );

@@ -36,13 +36,14 @@ namespace Accounts {
  * 1) AccountFactory* for all factories that have child accounts. Also a list of children
  * 2) Attica::Content for AtticaResolverAccounts (with associated AtticaResolverAccount*) (all synchrotron resolvers)
  * 3) ResolverAccount* for manually added resolvers (from file).
+ * 4) Account* for custom accounts. These may be hybrid infosystem/resolver/sip plugins or other special accounts
  *
  * These are the top-level items in tree.
  *
  * Top level nodes all look the same to the user. The only difference is that services that have login (and thus
  *  can have multiple logins at once) allow a user to create multiple children with specific login information.
  *  All other top level accounts (Account*, Attica::Content, ResolverAccount*) behave the same to the user, they can
- *  simply click "Install" or toggle on/off.
+ *  simply toggle on/off.
  *
  */
 
@@ -51,7 +52,8 @@ struct AccountModelNode {
         FactoryType,
         UniqueFactoryType,
         AtticaType,
-        ManualResolverType
+        ManualResolverType,
+        CustomAccountType
     };
     AccountModelNode* parent;
     NodeType type;
@@ -66,6 +68,9 @@ struct AccountModelNode {
 
     /// 3.
     ResolverAccount* resolverAccount;
+
+    /// 4.
+    Account* customAccount;
 
     // Construct in one of four ways. Then access the corresponding members
     explicit AccountModelNode( AccountFactory* fac ) : type( FactoryType )
@@ -114,11 +119,19 @@ struct AccountModelNode {
         resolverAccount = ra;
     }
 
+    explicit AccountModelNode( Account* account ) : type( CustomAccountType )
+    {
+        init();
+        customAccount = account;
+        factory = AccountManager::instance()->factoryForAccount( account );
+    }
+
     void init()
     {
         factory = 0;
         atticaAccount = 0;
         resolverAccount = 0;
+        customAccount = 0;
     }
 };
 
