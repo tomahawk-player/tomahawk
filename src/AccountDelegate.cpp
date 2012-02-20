@@ -205,6 +205,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             painter->restore();
 
             btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
+#ifdef Q_WS_MAC
+            btnRect.adjust( -4, 0, 4, 0 );
+#endif
         }
 
         leftEdge = btnRect.left();
@@ -242,6 +245,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         else
             btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
 
+#ifdef Q_WS_MAC
+        btnRect.adjust( -4, 2, 4, -2 );
+#endif
         leftEdge = btnRect.left();
         m_cachedButtonRects[ index ] = btnRect;
 
