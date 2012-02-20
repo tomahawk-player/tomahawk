@@ -51,7 +51,7 @@ LastFmAccountFactory::icon() const
 LastFmAccount::LastFmAccount( const QString& accountId )
     : Account( accountId )
 {
-    m_infoPlugin = new LastFmPlugin( this );
+    m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
 
     setAccountFriendlyName( "Last.Fm" );
     m_icon.load( RESPATH "images/lastfm-icon.png" );
@@ -60,7 +60,7 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 
 LastFmAccount::~LastFmAccount()
 {
-    delete m_infoPlugin;
+    delete m_infoPlugin.data();
     delete m_resolver.data();
 }
 
@@ -106,7 +106,7 @@ LastFmAccount::icon() const
 InfoPlugin*
 LastFmAccount::infoPlugin()
 {
-    return m_infoPlugin;
+    return m_infoPlugin.data();
 }
 
 bool
@@ -126,7 +126,7 @@ LastFmAccount::saveConfig()
         setScrobble( m_configWidget.data()->scrobble() );
     }
 
-    m_infoPlugin->settingsChanged();
+    m_infoPlugin.data()->settingsChanged();
 }
 
 

@@ -91,7 +91,7 @@ public:
 private:
     bool m_authenticated;
     QWeakPointer<QtScriptResolver> m_resolver;
-    Tomahawk::InfoSystem::LastFmPlugin* m_infoPlugin;
+    QWeakPointer<Tomahawk::InfoSystem::LastFmPlugin> m_infoPlugin;
     QWeakPointer<LastFmConfig> m_configWidget;
     QPixmap m_icon;
 };
