@@ -68,10 +68,39 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     return in;
 }
 
+#ifdef Q_OS_WIN
+#include <io.h>
+#define argc __argc
+#define argv __argv
+// code taken from AbiWord, (c) AbiSource Inc.
+
+int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
+    PSTR szCmdLine, int iCmdShow)
+{
+    if (fileno (stdout) != -1 && _get_osfhandle (fileno (stdout)) != -1)
+    {
+        /* stdout is fine, presumably redirected to a file or pipe */
+    }
+    else
+    {
+        typedef BOOL (WINAPI * AttachConsole_t) (DWORD);
+
+        AttachConsole_t p_AttachConsole = (AttachConsole_t) GetProcAddress (GetModuleHandleW(L"kernel32.dll"), "AttachConsole");
+
+        if (p_AttachConsole != NULL && p_AttachConsole (ATTACH_PARENT_PROCESS))
+        {
+            _wfreopen (L"CONOUT$", L"w", stdout);
+            dup2 (fileno (stdout), 1);
+            _wfreopen (L"CONOUT$", L"w", stderr);
+            dup2 (fileno (stderr), 2);
+        }
+    }
+#else // Q_OS_WIN
+
 int
 main( int argc, char *argv[] )
 {
-#ifdef Q_WS_MAC
+    #ifdef Q_WS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
@@ -79,7 +108,8 @@ main( int argc, char *argv[] )
     // used for url handler
     AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-#endif
+    #endif // Q_WS_MAC
+#endif //Q_OS_WIN
 
     TomahawkApp a( argc, argv );
 

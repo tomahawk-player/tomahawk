@@ -103,8 +103,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
-    QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
 

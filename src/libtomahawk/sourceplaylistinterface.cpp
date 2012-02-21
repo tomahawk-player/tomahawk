@@ -137,7 +137,7 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
-    Pipeline::instance()->resolve( query, true );
+    Pipeline::instance()->resolve( query );
     m_gotNextItem = false;
 }
 

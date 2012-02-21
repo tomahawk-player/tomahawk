@@ -119,6 +119,8 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_headless( false )
+    , m_loaded( false )
 {
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
@@ -510,7 +512,7 @@ TomahawkApp::initServent()
     }
 }
 
-
+// Called after Servent emits ready()
 void
 TomahawkApp::initSIP()
 {
@@ -525,6 +527,9 @@ TomahawkApp::initSIP()
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }
+
+    m_loaded = true;
+    emit tomahawkLoaded();
 }
 
 

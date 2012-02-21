@@ -83,9 +83,9 @@ signals:
     void destroyed( QWidget* widget );
 
 public slots:
+    void fetchData();
 
 private slots:
-    void fetchData();
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
     void leftCrumbIndexChanged( QModelIndex );

@@ -86,6 +86,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ViewManager* vm = new ViewManager( this );
     connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
     connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
+    connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
 
     ui->setupUi( this );
 

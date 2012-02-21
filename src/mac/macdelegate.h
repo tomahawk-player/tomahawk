@@ -12,7 +12,7 @@ namespace Tomahawk {
     class PlatformInterface;
 }
 
-#ifdef SNOW_LEOPARD
+#if ( defined MAC_OS_X_VERSION_10_7 || defined SNOW_LEOPARD )
 @interface AppDelegate :NSObject <NSApplicationDelegate> {
 #else
 @interface AppDelegate :NSObject {
