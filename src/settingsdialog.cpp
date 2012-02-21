@@ -437,6 +437,13 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 void
 SettingsDialog::createAccountFromFactory( AccountFactory* factory )
 {
+#ifdef Q_WS_MAC
+    // On mac we need to close the dialog we came from before showing another dialog
+    Q_ASSERT( sender() && qobject_cast< AccountFactoryWrapper* >( sender() ) );
+    AccountFactoryWrapper* dialog = qobject_cast< AccountFactoryWrapper* >( sender() );
+    dialog->accept();
+#endif
+
     //if exited with OK, create it, if not, delete it immediately!
     Account* account = factory->createAccount();
     bool added = false;

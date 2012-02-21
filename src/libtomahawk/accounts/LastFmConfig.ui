@@ -7,13 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>178</height>
+    <height>220</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>4</number>
+   </property>
    <item>
     <widget class="QLabel" name="label">
      <property name="text">

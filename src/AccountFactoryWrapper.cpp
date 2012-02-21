@@ -141,7 +141,6 @@ AccountFactoryWrapper::buttonClicked( QAbstractButton* button )
     {
         m_createAccount = true;
         emit createAccount( m_factory );
-//         accept();
         return;
     }
     else
