@@ -61,6 +61,7 @@ Pipeline::Pipeline( QObject* parent )
 
 Pipeline::~Pipeline()
 {
+    tDebug() << Q_FUNC_INFO;
     m_running = false;
 
     // stop script resolvers

@@ -19,8 +19,6 @@
 
 #include "tomahawkapp.h"
 
-#include <iostream>
-
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
 #include <QtCore/QMetaType>
@@ -170,7 +168,7 @@ TomahawkApp::init()
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
 
     // init pipeline and resolver factories
-    new Pipeline( this );
+    new Pipeline();
 
 #ifndef ENABLE_HEADLESS
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
@@ -298,6 +296,8 @@ TomahawkApp::~TomahawkApp()
 {
     tLog() << "Shutting down Tomahawk...";
 
+    Pipeline::instance()->stop();
+
     if ( !m_servent.isNull() )
         delete m_servent.data();
     if ( !m_scanManager.isNull() )
@@ -313,8 +313,6 @@ TomahawkApp::~TomahawkApp()
 
     delete SipHandler::instance();
 
-    Pipeline::instance()->stop();
-
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
     #ifdef LIBATTICA_FOUND
@@ -322,10 +320,10 @@ TomahawkApp::~TomahawkApp()
     #endif
 #endif
 
+    delete Pipeline::instance();
+
     if ( !m_database.isNull() )
         delete m_database.data();
-
-    delete Pipeline::instance();
 
     tLog() << "Finished shutdown.";
 }
@@ -464,7 +462,6 @@ TomahawkApp::initHTTP()
 
     tLog() << "Starting HTTPd on" << m_session.listenInterface().toString() << m_session.port();
     m_session.start();
-
 }
 
 
@@ -517,6 +514,7 @@ TomahawkApp::initServent()
         exit( 1 );
     }
 }
+
 
 // Called after Servent emits ready()
 void

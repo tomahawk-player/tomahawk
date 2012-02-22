@@ -20,6 +20,7 @@
 
 #include "artist.h"
 #include "album.h"
+#include "pipeline.h"
 #include "sourcelist.h"
 #include "utils/logger.h"
 
@@ -30,10 +31,14 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( const query_ptr& query )
     : DatabaseCommand()
     , m_query( query )
 {
+    Q_ASSERT( Pipeline::instance()->isRunning() );
 }
 
+
 DatabaseCommand_Resolve::~DatabaseCommand_Resolve()
-{}
+{
+}
+
 
 void
 DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
