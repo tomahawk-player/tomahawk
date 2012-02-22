@@ -19,6 +19,8 @@
 
 #include "tomahawkapp.h"
 
+#include <iostream>
+
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
 #include <QtCore/QMetaType>
@@ -59,7 +61,6 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
 
-#include <lastfm/ws.h>
 #include "config.h"
 
 #ifndef ENABLE_HEADLESS
@@ -308,8 +309,6 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
-
-    //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
     delete SipHandler::instance();
 
