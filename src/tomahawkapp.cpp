@@ -352,9 +352,11 @@ TomahawkApp::printHelp()
     echo( "  --nosip        Disable SIP\n" );
     echo( "Playback Controls:" );
     echo( "  --playpause    Toggle playing/paused state" );
-    echo( "  --play    Start/resume playback" );
-    echo( "  --pause   Pause playback" );
-    echo( "  --stop    Stop playback" );
+    echo( "  --play         Start/resume playback" );
+    echo( "  --pause        Pause playback" );
+    echo( "  --stop         Stop playback" );
+    echo( "  --next         Advances to the next track (if available)" );
+    echo( "  --prev         Advances to the next track (if available)" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
