@@ -795,6 +795,8 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModel
         albumitem = new TreeModelItem( album, parentItem );
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        
+        getCover( albumitem->index );
     }
 
     emit endInsertRows();
