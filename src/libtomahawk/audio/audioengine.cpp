@@ -18,6 +18,8 @@
 
 #include "audioengine.h"
 
+#include "config.h"
+
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkReply>
 
@@ -328,6 +330,7 @@ AudioEngine::sendWaitingNotificationSlot() const
 void
 AudioEngine::sendNowPlayingNotification()
 {
+#ifndef ENABLE_HEADLESS
     if ( m_currentTrack->album().isNull() || m_currentTrack->album()->infoLoaded() )
         onNowPlayingInfoReady();
     else
@@ -335,6 +338,7 @@ AudioEngine::sendNowPlayingNotification()
         connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onNowPlayingInfoReady() ), Qt::UniqueConnection );
         m_currentTrack->album()->cover( QSize( 0, 0 ) );
     }
+#endif
 }
 
 
