@@ -47,19 +47,24 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 {
     s_instance = this;
 
-    if( !contains( "configversion") )
+    #ifdef Q_OS_LINUX
+        QFile file( fileName() );
+        file.setPermissions( file.permissions() & ~(QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
+    #endif
+
+    if ( !contains( "configversion" ) )
     {
         setValue( "configversion", VERSION );
         doInitialSetup();
     }
-    else if( value( "configversion" ).toUInt() != VERSION )
+    else if ( value( "configversion" ).toUInt() != VERSION )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
                  << "new:" << VERSION
                  << "Doing upgrade, if any...";
 
         int current = value( "configversion" ).toUInt();
-        while( current < VERSION )
+        while ( current < VERSION )
         {
             doUpgrade( current, current + 1 );
 
@@ -68,7 +73,6 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
     }
-
 }
 
 
@@ -91,22 +95,23 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 {
     Q_UNUSED( newVersion );
 
-    if( oldVersion == 1 )
+    if ( oldVersion == 1 )
     {
         qDebug() << "Migrating config from verson 1 to 2: script resolver config name";
         if( contains( "script/resolvers" ) ) {
             setValue( "script/loadedresolvers", value( "script/resolvers" ) );
             remove( "script/resolvers" );
         }
-    } else if( oldVersion == 2 )
+    }
+    else if ( oldVersion == 2 )
     {
         qDebug() << "Migrating config from version 2 to 3: Converting jabber and twitter accounts to new SIP Factory approach";
         // migrate old accounts to new system. only jabber and twitter, and max one each. create a new plugin for each if needed
         // not pretty as we hardcode a plugin id and assume that we know how the config layout is, but hey, this is migration after all
-        if( contains( "jabber/username" ) && contains( "jabber/password" ) )
+        if ( contains( "jabber/username" ) && contains( "jabber/password" ) )
         {
             QString sipName = "sipjabber";
-            if( value( "jabber/username" ).toString().contains( "@gmail" ) )
+            if ( value( "jabber/username" ).toString().contains( "@gmail" ) )
                 sipName = "sipgoogle";
 
             setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
@@ -123,7 +128,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             remove( "jabber/server" );
             remove( "jabber/port" );
         }
-        if( contains( "twitter/ScreenName" ) && contains( "twitter/OAuthToken" ) )
+        if ( contains( "twitter/ScreenName" ) && contains( "twitter/OAuthToken" ) )
         {
             setValue( "siptwitter_legacy/ScreenName", value( "twitter/ScreenName" ) );
             setValue( "siptwitter_legacy/OAuthToken", value( "twitter/OAuthToken" ) );
@@ -144,7 +149,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         }
         // create a zeroconf plugin too
         addSipPlugin( "sipzeroconf_legacy" );
-    } else if ( oldVersion == 3 )
+    }
+    else if ( oldVersion == 3 )
     {
         if ( contains( "script/atticaresolverstates" ) )
         {
@@ -183,7 +189,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
-    } else if ( oldVersion == 4 )
+    }
+    else if ( oldVersion == 4 )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
@@ -934,6 +941,7 @@ TomahawkSettings::setNowPlayingEnabled( bool enable )
 {
     setValue( "adium/enablenowplaying", enable );
 }
+
 
 TomahawkSettings::PrivateListeningMode
 TomahawkSettings::privateListeningMode() const
