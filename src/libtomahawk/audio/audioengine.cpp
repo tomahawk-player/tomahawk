@@ -361,9 +361,11 @@ AudioEngine::onNowPlayingInfoReady()
 
     if ( !m_currentTrack->album().isNull() )
     {
+#ifndef ENABLE_HEADLESS
         QImage cover;
         cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
         playInfo["image"] = QVariant( cover );
+#endif
     }
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
