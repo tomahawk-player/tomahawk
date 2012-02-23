@@ -264,11 +264,11 @@ AudioControls::onAlbumCoverUpdated()
 void
 AudioControls::setAlbumCover()
 {
-    if ( !m_currentTrack->album()->cover().isNull() )
+    if ( !m_currentTrack->album()->cover( ui->coverImage->size() ).isNull() )
     {
         QPixmap cover;
-        cover.loadFromData( m_currentTrack->album()->cover() );
-        ui->coverImage->setPixmap( cover.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+        cover = m_currentTrack->album()->cover( ui->coverImage->size() );
+        ui->coverImage->setPixmap( cover );
     }
     else
         ui->coverImage->setPixmap( m_defaultCover );

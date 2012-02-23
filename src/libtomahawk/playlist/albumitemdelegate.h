@@ -49,7 +49,6 @@ private:
     QAbstractItemView* m_view;
     AlbumProxyModel* m_model;
 
-    mutable QHash< qint64, QPixmap > m_cache;
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     QPersistentModelIndex m_hoveringOver;
 

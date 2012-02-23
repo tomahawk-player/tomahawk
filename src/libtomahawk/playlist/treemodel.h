@@ -98,6 +98,8 @@ public:
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent, bool autoRefetch = false );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
 
+    void getCover( const QModelIndex& index );
+
     ColumnStyle columnStyle() const { return m_columnStyle; }
     void setColumnStyle( ColumnStyle style );
 

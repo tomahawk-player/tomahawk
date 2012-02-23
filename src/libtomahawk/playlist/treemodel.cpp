@@ -88,6 +88,18 @@ TreeModel::collection() const
 
 
 void
+TreeModel::getCover( const QModelIndex& index )
+{
+    TreeModelItem* item = itemFromIndex( index );
+
+    if ( !item->artist().isNull() && !item->artist()->infoLoaded() )
+        item->artist()->cover( QSize( 0, 0 ) );
+    else if ( !item->album().isNull() && !item->album()->infoLoaded() )
+        item->album()->cover( QSize( 0, 0 ) );
+}
+
+
+void
 TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;

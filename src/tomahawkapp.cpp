@@ -543,10 +543,7 @@ TomahawkApp::spotifyApiCheckFinished()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
-    if ( reply->error() )
-        DropJob::setCanParseSpotifyPlaylists( false );
-    else
-        DropJob::setCanParseSpotifyPlaylists( true );
+    DropJob::setCanParseSpotifyPlaylists( !reply->error() );
 #endif
 }
 

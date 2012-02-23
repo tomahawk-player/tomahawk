@@ -333,7 +333,7 @@ AudioEngine::sendNowPlayingNotification()
     else
     {
         connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onNowPlayingInfoReady() ), Qt::UniqueConnection );
-        m_currentTrack->album()->cover();
+        m_currentTrack->album()->cover( QSize( 0, 0 ) );
     }
 }
 
@@ -358,7 +358,7 @@ AudioEngine::onNowPlayingInfoReady()
     if ( !m_currentTrack->album().isNull() )
     {
         QImage cover;
-        cover.loadFromData( m_currentTrack->album()->cover() );
+        cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
         playInfo["image"] = QVariant( cover );
     }
 

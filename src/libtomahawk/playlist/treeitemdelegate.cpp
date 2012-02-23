@@ -155,14 +155,13 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QPixmap cover;
     if ( !item->album().isNull() )
     {
-        cover.loadFromData( item->album()->cover() );
+        cover = item->album()->cover( r.size(), false );
     }
     else if ( !item->artist().isNull() )
     {
-        cover.loadFromData( item->artist()->cover() );
+        cover = item->artist()->cover( r.size(), false );
     }
 
-    QPixmap scover;
     if ( cover.isNull() )
     {
         if ( !item->artist().isNull() )
@@ -171,16 +170,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             cover = m_defaultAlbumCover;
     }
 
-    if ( m_cache.contains( cover.cacheKey() ) )
-    {
-        scover = m_cache.value( cover.cacheKey() );
-    }
-    else
-    {
-        scover = cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-        m_cache.insert( cover.cacheKey(), scover );
-    }
-    painter->drawPixmap( r, scover );
+    painter->drawPixmap( r, cover );
 
     QTextOption to;
     to.setAlignment( Qt::AlignVCenter );

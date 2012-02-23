@@ -243,10 +243,10 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
 void
 AlbumInfoWidget::onAlbumCoverUpdated()
 {
-    if ( m_album->cover().isNull() )
+    if ( m_album->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap.loadFromData( m_album->cover() );
+    m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 

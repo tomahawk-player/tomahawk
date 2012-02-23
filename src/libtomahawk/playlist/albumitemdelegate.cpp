@@ -89,20 +89,19 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
     }
 
+    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
     QPixmap cover;
     if ( !item->album().isNull() )
     {
-        cover.loadFromData( item->album()->cover() );
+        cover = item->album()->cover( r.size() );
     }
     else if ( !item->artist().isNull() )
     {
-        cover.loadFromData( item->artist()->cover() );
+        cover = item->artist()->cover( r.size() );
     }
 
     if ( cover.isNull() )
         cover = m_defaultCover;
-
-    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
 
     if ( option.state & QStyle::State_Selected )
     {
@@ -123,17 +122,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 #endif
     }
 
-    QPixmap scover;
-    if ( m_cache.contains( cover.cacheKey() ) )
-    {
-        scover = m_cache.value( cover.cacheKey() );
-    }
-    else
-    {
-        scover = cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-        m_cache.insert( cover.cacheKey(), scover );
-    }
-    painter->drawPixmap( r, scover );
+    painter->drawPixmap( r, cover );
 
     painter->setPen( opt.palette.color( QPalette::Text ) );
     QTextOption to;
