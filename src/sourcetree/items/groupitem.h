@@ -36,7 +36,6 @@ public:
     virtual QString text() const;
     virtual bool willAcceptDrag( const QMimeData* data ) const { Q_UNUSED( data ); return false; }
     virtual QIcon icon() const { return QIcon(); }
-    virtual int peerSortValue() const { return m_peerSortValue; }
     virtual bool isBeingPlayed() const { return false; }
 
 public slots:
@@ -50,7 +49,6 @@ private slots:
 
 private:
     QString m_text;
-    int m_peerSortValue;
 };
 
 #endif

@@ -82,7 +82,7 @@ SourceDelegate::~SourceDelegate()
 QSize
 SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    SourceTreeItem *item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+    SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
     if ( type == SourcesModel::Collection )
@@ -92,6 +92,10 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     else if ( type == SourcesModel::Divider )
     {
         return QSize( option.rect.width(), 6 );
+    }
+    else if ( type == SourcesModel::Group && index.row() > 0 )
+    {
+        return QSize( option.rect.width(), 24 );
     }
     else if ( m_expandedMap.contains( index ) )
     {
@@ -305,7 +309,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
     font.setBold( true );
     painter->setFont( font );
 
-    QTextOption to( Qt::AlignVCenter );
+    QTextOption to( Qt::AlignBottom );
 
     painter->setPen( option.palette.color( QPalette::Base ) );
     painter->setBrush( option.palette.color( QPalette::Base ) );
@@ -325,7 +329,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 
         font.setPixelSize( font.pixelSize() - 1 );
         painter->setFont( font );
-        QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
+        QTextOption to( Qt::AlignBottom | Qt::AlignRight );
 
         // draw close icon
         painter->setPen( Qt::white );

@@ -66,7 +66,7 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 
     if ( item && item->type() != SourcesModel::Divider && item->parent()->parent() == 0 && !item->children().count() )
         return false;
-
+   
     if ( !m_filtered )
         return true;
 
