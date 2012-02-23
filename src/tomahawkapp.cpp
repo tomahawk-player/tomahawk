@@ -356,7 +356,7 @@ TomahawkApp::printHelp()
     echo( "  --pause        Pause playback" );
     echo( "  --stop         Stop playback" );
     echo( "  --next         Advances to the next track (if available)" );
-    echo( "  --prev         Advances to the next track (if available)" );
+    echo( "  --prev         Returns to the previous track (if available)" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
@@ -613,7 +613,7 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     QString arg1 = instance.arguments[ 1 ];
     loadUrl( arg1 );
 
-    if ( instance.arguments.contains("--next") || instance.arguments.contains("--prev") || instance.arguments.contains( "--playpause" )  || instance.arguments.contains( "--play" )  || instance.arguments.contains( "--pause" )  || instance.arguments.contains( "--stop" ) )
+    if ( instance.arguments.contains( "--next" ) || instance.arguments.contains( "--prev" ) || instance.arguments.contains( "--playpause" )  || instance.arguments.contains( "--play" )  || instance.arguments.contains( "--pause" )  || instance.arguments.contains( "--stop" ) )
     {
         if ( instance.arguments.contains( "--next" ) )
         {
