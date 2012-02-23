@@ -242,9 +242,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         }
     }
 
-    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
+    textRect.adjust( 0, 0, 0, 2 );
+    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 4 );
     QTextOption to( Qt::AlignVCenter );
-    painter->drawText( textRect.adjusted( 0, 0, 0, 2 ), text, to );
+    to.setWrapMode( QTextOption::NoWrap );
+    painter->drawText( textRect, text, to );
 
     if ( status )
     {
