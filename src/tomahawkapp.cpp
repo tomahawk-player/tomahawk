@@ -645,10 +645,5 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
             AudioEngine::instance()->stop();
         }
 
-        if ( instance.arguments.contains( "--stop" ) )
-        {
-            AudioEngine::instance()->stop();
-        }
-
     }
 }
