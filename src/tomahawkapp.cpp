@@ -139,7 +139,6 @@ TomahawkApp::init()
         ::exit( 0 );
     }
 
-
     qDebug() << "TomahawkApp thread:" << thread();
     Logger::setupLogfile();
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
@@ -350,13 +349,13 @@ TomahawkApp::printHelp()
     echo( "  --testdb       Use a test database instead of real collection\n" );
     echo( "  --noupnp       Disable UPnP\n" );
     echo( "  --nosip        Disable SIP\n" );
-    echo( "Playback Controls:" );
-    echo( "  --playpause    Toggle playing/paused state" );
-    echo( "  --play         Start/resume playback" );
-    echo( "  --pause        Pause playback" );
-    echo( "  --stop         Stop playback" );
-    echo( "  --next         Advances to the next track (if available)" );
-    echo( "  --prev         Returns to the previous track (if available)" );
+    echo( "\nPlayback Controls:\n" );
+    echo( "  --playpause    Toggle playing/paused state\n" );
+    echo( "  --play         Start/resume playback\n" );
+    echo( "  --pause        Pause playback\n" );
+    echo( "  --stop         Stop playback\n" );
+    echo( "  --next         Advances to the next track (if available)\n" );
+    echo( "  --prev         Returns to the previous track (if available)\n" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
@@ -611,39 +610,19 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         return;
 
     QString arg1 = instance.arguments[ 1 ];
-    loadUrl( arg1 );
+    if ( loadUrl( arg1 ) )
+        return;
 
-    if ( instance.arguments.contains( "--next" ) || instance.arguments.contains( "--prev" ) || instance.arguments.contains( "--playpause" )  || instance.arguments.contains( "--play" )  || instance.arguments.contains( "--pause" )  || instance.arguments.contains( "--stop" ) )
-    {
-        if ( instance.arguments.contains( "--next" ) )
-        {
-            AudioEngine::instance()->next();
-        }
-
-        if ( instance.arguments.contains( "--prev" ) )
-        {
-            AudioEngine::instance()->previous();
-        }
-
-        if ( instance.arguments.contains( "--playpause" ) )
-        {
-            AudioEngine::instance()->playPause();
-        }
-
-        if ( instance.arguments.contains( "--play" ) )
-        {
-            AudioEngine::instance()->play();
-        }
-
-        if ( instance.arguments.contains( "--pause" ) )
-        {
-            AudioEngine::instance()->pause();
-        }
-
-        if ( instance.arguments.contains( "--stop" ) )
-        {
-            AudioEngine::instance()->stop();
-        }
-
-    }
+    if ( instance.arguments.contains( "--next" ) )
+        AudioEngine::instance()->next();
+    else if ( instance.arguments.contains( "--prev" ) )
+        AudioEngine::instance()->previous();
+    else if ( instance.arguments.contains( "--playpause" ) )
+        AudioEngine::instance()->playPause();
+    else if ( instance.arguments.contains( "--play" ) )
+        AudioEngine::instance()->play();
+    else if ( instance.arguments.contains( "--pause" ) )
+        AudioEngine::instance()->pause();
+    else if ( instance.arguments.contains( "--stop" ) )
+        AudioEngine::instance()->stop();
 }
