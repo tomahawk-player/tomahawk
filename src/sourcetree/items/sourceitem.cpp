@@ -486,7 +486,7 @@ ViewPage*
 SourceItem::lovedTracksClicked()
 {
     if ( !m_lovedTracksPage )
-        m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::AllLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
+        m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
 
     ViewManager::instance()->show( m_lovedTracksPage );
     return m_lovedTracksPage;

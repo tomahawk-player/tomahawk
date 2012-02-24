@@ -33,7 +33,7 @@ class DLLEXPORT CustomPlaylistView : public PlaylistView
 public:
     enum PlaylistType {
         SourceLovedTracks,
-        AllLovedTracks
+        TopLovedTracks
     };
 
     explicit CustomPlaylistView( PlaylistType type, const source_ptr& s, QWidget* parent = 0 );

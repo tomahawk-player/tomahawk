@@ -432,7 +432,7 @@ Tomahawk::ViewPage*
 ViewManager::showTopLovedPage()
 {
     if ( !m_topLovedWidget )
-        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::AllLovedTracks, source_ptr(), m_widget );
+        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
 
     return show( m_topLovedWidget );
 }
