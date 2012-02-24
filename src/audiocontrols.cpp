@@ -277,10 +277,16 @@ void
 AudioControls::onSocialActionsLoaded()
 {
     Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || query != m_currentTrack->toQuery().data() )
+    if ( !query )
         return;
 
-    setSocialActions();
+    query_ptr currentQuery = m_currentTrack->toQuery();
+    if ( query->artist() == currentQuery->artist() &&
+         query->track() == currentQuery->track() &&
+         query->album() == currentQuery->album() )
+    {
+        setSocialActions();
+    }
 }
 
 
