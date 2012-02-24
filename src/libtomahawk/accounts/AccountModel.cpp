@@ -370,8 +370,9 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
             case AccountModelNode::UniqueFactoryType:
             {
                 const Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
-                if ( node->accounts.isEmpty() && state == Qt::Checked )
+                if ( node->accounts.isEmpty() )
                 {
+                    Q_ASSERT( state == Qt::Checked ); // How could we have a checked unique factory w/ no account??
                     // No account for this unique factory, create it
                     // Don't add it to node->accounts here, slot attached to accountmanager::accountcreated will do it for us
                     acct = node->factory->createAccount();
