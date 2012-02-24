@@ -368,15 +368,22 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
-                if ( node->accounts.isEmpty() )
+            {
+                const Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
+                if ( node->accounts.isEmpty() && state == Qt::Checked )
                 {
                     // No account for this unique factory, create it
                     // Don't add it to node->accounts here, slot attached to accountmanager::accountcreated will do it for us
                     acct = node->factory->createAccount();
                     AccountManager::instance()->addAccount( acct );
                     TomahawkSettings::instance()->addAccount( acct->accountId() );
+                } else if ( !node->accounts.isEmpty() )
+                {
+                    Q_ASSERT( node->accounts.size() == 1 );
+                    acct = node->accounts.first();
                 }
                 break;
+            }
             case AccountModelNode::AtticaType:
             {
                 // This may or may not be installed. if it's not installed yet, install it, then go ahead and enable it
