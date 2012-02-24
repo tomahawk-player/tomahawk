@@ -132,7 +132,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
     if ( playable && playing && item->isBeingPlayed() )
     {
         const int iconW = option.rect.height() - 4;
-        QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );
+        QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
         QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
         speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
         painter->drawPixmap( iconRect, speaker );
@@ -406,8 +406,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( type != SourcesModel::Group && type != SourcesModel::Category && type != SourcesModel::Divider )
         QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
 
-    paintDecorations( painter, o3, index );
-
     if ( type == SourcesModel::Collection )
     {
         paintCollection( painter, o, index );
@@ -537,6 +535,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             }
         }
     }
+
+    paintDecorations( painter, o3, index );
 
     painter->restore();
 }
