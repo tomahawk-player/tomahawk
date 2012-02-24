@@ -76,8 +76,12 @@ AccountModel::loadData()
         if ( AtticaManager::instance()->hasCustomAccountForAttica( content.id() ) )
         {
             Account* acct = AtticaManager::instance()->customAccountForAttica( content.id() );
-            m_accounts << new AccountModelNode( acct );
-            allAccounts.removeAll( acct );
+            Q_ASSERT( acct );
+            if ( acct )
+            {
+                m_accounts << new AccountModelNode( acct );
+                allAccounts.removeAll( acct );
+            }
         } else
         {
             m_accounts << new AccountModelNode( content );

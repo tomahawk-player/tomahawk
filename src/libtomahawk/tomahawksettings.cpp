@@ -82,6 +82,16 @@ TomahawkSettings::doInitialSetup()
 {
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
+
+    // Add a last.fm account for scrobbling and infosystem
+    const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+    addAccount( accountKey );
+
+    beginGroup( "accounts/" + accountKey );
+    setValue( "enabled", false );
+    setValue( "autoconnect", true );
+    setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
+    endGroup();
 }
 
 
