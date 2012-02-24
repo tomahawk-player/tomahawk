@@ -53,7 +53,6 @@ private:
     QPersistentModelIndex m_hoveringOver;
 
     QPixmap m_shadowPixmap;
-    QPixmap m_defaultCover;
 };
 
 #endif // ALBUMITEMDELEGATE_H

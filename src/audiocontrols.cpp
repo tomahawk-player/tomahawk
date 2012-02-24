@@ -100,8 +100,6 @@ AudioControls::AudioControls( QWidget* parent )
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
-    m_defaultCover = QPixmap( RESPATH "images/no-album-no-case.png" ).scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-
     connect( &m_phononTickCheckTimer, SIGNAL( timeout() ), SLOT( phononTickCheckTimeout() ) );
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
 
@@ -271,7 +269,7 @@ AudioControls::setAlbumCover()
         ui->coverImage->setPixmap( cover );
     }
     else
-        ui->coverImage->setPixmap( m_defaultCover );
+        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, ui->coverImage->size() ) );
 }
 
 

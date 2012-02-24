@@ -40,7 +40,6 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_view( parent )
     , m_model( proxy )
 {
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
 }
 
 
@@ -94,14 +93,13 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     if ( !item->album().isNull() )
     {
         cover = item->album()->cover( r.size() );
+        if ( cover.isNull() )
+            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, r.size() );
     }
     else if ( !item->artist().isNull() )
     {
         cover = item->artist()->cover( r.size() );
     }
-
-    if ( cover.isNull() )
-        cover = m_defaultCover;
 
     if ( option.state & QStyle::State_Selected )
     {

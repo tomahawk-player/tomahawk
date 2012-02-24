@@ -156,18 +156,14 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( !item->album().isNull() )
     {
         cover = item->album()->cover( r.size(), false );
+        if ( cover.isNull() )
+            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, r.size() );
     }
     else if ( !item->artist().isNull() )
     {
         cover = item->artist()->cover( r.size(), false );
-    }
-
-    if ( cover.isNull() )
-    {
-        if ( !item->artist().isNull() )
-            cover = m_defaultArtistImage;
-        else
-            cover = m_defaultAlbumCover;
+        if ( cover.isNull() )
+            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, r.size() );
     }
 
     painter->drawPixmap( r, cover );

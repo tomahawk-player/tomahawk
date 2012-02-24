@@ -113,29 +113,29 @@ Artist::cover( const QSize& size, bool forceLoad ) const
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
-    if ( !m_cover )
-        m_cover = new QPixmap();
-
-    if ( m_cover->isNull() && !m_coverBuffer.isEmpty() )
+    if ( !m_cover && !m_coverBuffer.isEmpty() )
     {
+        m_cover = new QPixmap();
         m_cover->loadFromData( m_coverBuffer );
     }
 
-    if ( !m_cover->isNull() && !size.isEmpty() )
+    if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
     {
         if ( m_coverCache.contains( size.width() ) )
         {
             return m_coverCache.value( size.width() );
         }
-        else
-        {
-            QPixmap scaledCover;
-            scaledCover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-            m_coverCache.insert( size.width(), scaledCover );
-        }
+
+        QPixmap scaledCover;
+        scaledCover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_coverCache.insert( size.width(), scaledCover );
+        return scaledCover;
     }
 
-    return *m_cover;
+    if ( m_cover )
+        return *m_cover;
+    else
+        return QPixmap();
 }
 #endif
 

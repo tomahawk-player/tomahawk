@@ -42,6 +42,18 @@ namespace TomahawkUtils
         MediaTypeTrack
     };
 
+    enum ImageType
+    {
+        DefaultAlbumCover,
+        DefaultArtistImage
+    };
+    enum ImageMode
+    {
+        NoDefaultCover,
+        CoverInCase,
+        ScaledCover
+    };
+
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
     public:

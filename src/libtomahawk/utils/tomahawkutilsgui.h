@@ -19,6 +19,8 @@
 #ifndef TOMAHAWKUTILSGUI_H
 #define TOMAHAWKUTILSGUI_H
 
+#include <QSize>
+
 #include "tomahawkutils.h"
 #include "dllmacro.h"
 
@@ -46,6 +48,8 @@ namespace TomahawkUtils
 
     DLLEXPORT int headerHeight();
     DLLEXPORT void setHeaderHeight( int height );
+    
+    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode, const QSize& size = QSize( 0, 0 ) );
 }
 
 #endif // TOMAHAWKUTILSGUI_H
