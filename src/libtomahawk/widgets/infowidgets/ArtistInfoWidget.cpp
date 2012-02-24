@@ -77,7 +77,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setTrackModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->albums );
     m_button->setText( tr( "Click to show Super Collection Albums" ) );
@@ -289,10 +289,10 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 void
 ArtistInfoWidget::onArtistImageUpdated()
 {
-    if ( m_artist->cover().isNull() )
+    if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap.loadFromData( m_artist->cover() );
+    m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 

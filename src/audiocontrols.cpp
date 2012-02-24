@@ -100,8 +100,6 @@ AudioControls::AudioControls( QWidget* parent )
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
-    m_defaultCover = QPixmap( RESPATH "images/no-album-no-case.png" ).scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-
     connect( &m_phononTickCheckTimer, SIGNAL( timeout() ), SLOT( phononTickCheckTimeout() ) );
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
 
@@ -264,14 +262,14 @@ AudioControls::onAlbumCoverUpdated()
 void
 AudioControls::setAlbumCover()
 {
-    if ( !m_currentTrack->album()->cover().isNull() )
+    if ( !m_currentTrack->album()->cover( ui->coverImage->size() ).isNull() )
     {
         QPixmap cover;
-        cover.loadFromData( m_currentTrack->album()->cover() );
-        ui->coverImage->setPixmap( cover.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+        cover = m_currentTrack->album()->cover( ui->coverImage->size() );
+        ui->coverImage->setPixmap( cover );
     }
     else
-        ui->coverImage->setPixmap( m_defaultCover );
+        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, ui->coverImage->size() ) );
 }
 
 
@@ -279,10 +277,16 @@ void
 AudioControls::onSocialActionsLoaded()
 {
     Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || query != m_currentTrack->toQuery().data() )
+    if ( !query )
         return;
 
-    setSocialActions();
+    query_ptr currentQuery = m_currentTrack->toQuery();
+    if ( query->artist() == currentQuery->artist() &&
+         query->track() == currentQuery->track() &&
+         query->album() == currentQuery->album() )
+    {
+        setSocialActions();
+    }
 }
 
 

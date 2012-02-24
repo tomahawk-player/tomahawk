@@ -48,6 +48,8 @@ public:
     explicit Pipeline( QObject* parent = 0 );
     virtual ~Pipeline();
 
+    bool isRunning() const { return m_running; }
+
     unsigned int pendingQueryCount() const { return m_queries_pending.count(); }
     unsigned int activeQueryCount() const { return m_qidsState.count(); }
 

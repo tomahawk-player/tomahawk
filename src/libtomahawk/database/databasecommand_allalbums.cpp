@@ -169,7 +169,6 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
 void
 DatabaseCommand_AllAlbums::exec( DatabaseImpl* dbi )
 {
-    return;
     if ( !m_artist.isNull() )
     {
         execForArtist( dbi );

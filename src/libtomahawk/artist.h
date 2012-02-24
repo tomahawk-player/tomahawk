@@ -19,8 +19,13 @@
 #ifndef TOMAHAWKARTIST_H
 #define TOMAHAWKARTIST_H
 
+#include "config.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
+#ifndef ENABLE_HEADLESS
+    #include <QtGui/QPixmap>
+#endif
 
 #include "typedefs.h"
 #include "dllmacro.h"
@@ -43,7 +48,9 @@ public:
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
-    QByteArray cover() const;
+#ifndef ENABLE_HEADLESS
+    QPixmap cover( const QSize& size, bool forceLoad = true ) const;
+#endif
     bool infoLoaded() const { return m_infoLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
@@ -63,9 +70,12 @@ private:
     unsigned int m_id;
     QString m_name;
     QString m_sortname;
-    QByteArray m_cover;
+    QByteArray m_coverBuffer;
+    mutable QPixmap* m_cover;
     bool m_infoLoaded;
     mutable QString m_uuid;
+
+    mutable QHash< int, QPixmap > m_coverCache;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

@@ -88,6 +88,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         m_sigmap->setMapping( m_loveAction, ActionLove );
 
         connect( queries.first().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
+        m_queries.first()->loadSocialActions();
         onSocialActionsLoaded();
     }
 

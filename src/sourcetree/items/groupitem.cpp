@@ -28,9 +28,8 @@ using namespace Tomahawk;
 
 
 GroupItem::GroupItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue )
-    : SourceTreeItem( model, parent, SourcesModel::Group )
+    : SourceTreeItem( model, parent, SourcesModel::Group, peerSortValue )
     , m_text( text )
-    , m_peerSortValue( peerSortValue )
 {
     // expand by default
     QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );

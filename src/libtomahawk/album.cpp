@@ -32,6 +32,7 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
+    delete m_cover;
 }
 
 
@@ -71,6 +72,7 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
+    , m_cover( 0 )
     , m_infoLoaded( false )
 {
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
@@ -97,11 +99,14 @@ Album::artist() const
 }
 
 
-QByteArray
-Album::cover() const
+#ifndef ENABLE_HEADLESS
+QPixmap
+Album::cover( const QSize& size, bool forceLoad ) const
 {
     if ( !m_infoLoaded )
     {
+        if ( !forceLoad )
+            return QPixmap();
         m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
@@ -117,8 +122,31 @@ Album::cover() const
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
-    return m_cover;
+    if ( !m_cover && !m_coverBuffer.isEmpty() )
+    {
+        m_cover = new QPixmap();
+        m_cover->loadFromData( m_coverBuffer );
+    }
+
+    if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
+    {
+        if ( m_coverCache.contains( size.width() ) )
+        {
+            return m_coverCache.value( size.width() );
+        }
+
+        QPixmap scaledCover;
+        scaledCover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_coverCache.insert( size.width(), scaledCover );
+        return scaledCover;
+    }
+
+    if ( m_cover )
+        return *m_cover;
+    else
+        return QPixmap();
 }
+#endif
 
 
 void
@@ -137,7 +165,7 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
-            m_cover = ba;
+            m_coverBuffer = ba;
         }
     }
 

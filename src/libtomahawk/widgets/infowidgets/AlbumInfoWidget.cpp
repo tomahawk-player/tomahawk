@@ -61,7 +61,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->tracksView );
     m_button->setCheckable( true );
@@ -243,10 +243,10 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
 void
 AlbumInfoWidget::onAlbumCoverUpdated()
 {
-    if ( m_album->cover().isNull() )
+    if ( m_album->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap.loadFromData( m_album->cover() );
+    m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 

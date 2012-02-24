@@ -42,7 +42,7 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
 
     if ( m_type == SourceLovedTracks )
         connect( m_source.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
-    else if ( m_type == AllLovedTracks )
+    else if ( m_type == TopLovedTracks )
     {
         connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
         foreach ( const source_ptr& s, SourceList::instance()->sources( true ) )
@@ -86,12 +86,12 @@ CustomPlaylistView::generateTracks()
                            "GROUP BY track.id "
                            "ORDER BY counter DESC, social_attributes.timestamp DESC " ).arg( m_source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_source->id() ) );
             break;
-        case AllLovedTracks:
+        case TopLovedTracks:
             sql = QString( "SELECT track.name, artist.name, source, COUNT(*) as counter "
                            "FROM social_attributes, track, artist "
-                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true'"
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' "
                            "GROUP BY track.id "
-                           "ORDER BY counter DESC, social_attributes.timestamp DESC " );
+                           "ORDER BY counter DESC, social_attributes.timestamp DESC LIMIT 0, 50" );
             break;
     }
 

@@ -489,7 +489,7 @@ Query::loadSocialActions()
     query_ptr q = m_ownRef.toStrongRef();
 
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( q );
-    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
+    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 

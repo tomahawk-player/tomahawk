@@ -61,6 +61,7 @@ Pipeline::Pipeline( QObject* parent )
 
 Pipeline::~Pipeline()
 {
+    tDebug() << Q_FUNC_INFO;
     m_running = false;
 
     // stop script resolvers
@@ -418,10 +419,11 @@ Pipeline::shunt( const query_ptr& q )
         r->resolve( q );
         emit resolving( q );
 
-        m_qidsTimeout.insert( q->id(), true );
-
         if ( r->timeout() > 0 )
+        {
+            m_qidsTimeout.insert( q->id(), true );
             new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+        }
     }
     else
     {

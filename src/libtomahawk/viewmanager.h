@@ -133,6 +133,7 @@ signals:
     void hideQueueRequested();
 
     void tomahawkLoaded();
+
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();

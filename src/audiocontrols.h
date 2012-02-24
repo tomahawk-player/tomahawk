@@ -91,8 +91,6 @@ private:
 
     Ui::AudioControls *ui;
 
-    QPixmap m_defaultCover;
-
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;

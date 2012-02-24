@@ -39,6 +39,7 @@
 #include "globalactionmanager.h"
 #include "dropjob.h"
 #include "items/playlistitems.h"
+#include "playlist/artistview.h"
 #include "playlist/playlistview.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 
@@ -53,8 +54,6 @@ SourcesModel::SourcesModel( QObject* parent )
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
     appendGroups();
-    appendItem( source_ptr() );
-
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
@@ -265,28 +264,34 @@ SourcesModel::appendGroups()
 {
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + 2 );
 
-    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 0 );
-    new HistoryItem( this, m_rootItem, tr( "History" ), 5 );
-    GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 10 );
+    GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
+    new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
+//    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
+    m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
     // super collection
+    GenericPageItem* sc = new GenericPageItem( this, browse, tr( "SuperCollection" ), QIcon( RESPATH "images/supercollection.png" ),
+                                                  boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
+                                                  boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
+    sc->setSortValue( 1 );
+
+    // browse section
     GenericPageItem* loved = new GenericPageItem( this, browse, tr( "Top Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
                                                   boost::bind( &ViewManager::showTopLovedPage, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::topLovedWidget, ViewManager::instance() ) );
-    loved->setSortValue( -250 );
+    loved->setSortValue( 2 );
 
-    // add misc children of root node
     GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
                                                    boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() ) );
-    recent->setSortValue( -300 );
+    recent->setSortValue( 0 );
 
     GenericPageItem* hot = new GenericPageItem( this, browse, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
-    hot->setSortValue( -300 );
+    hot->setSortValue( 3 );
 
-    m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 15 );
+    m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 
     endInsertRows();
 }
@@ -298,7 +303,7 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
     SourceTreeItem* parent;
     if ( !source.isNull() && source->isLocal() )
     {
-        parent = m_rootItem;
+        parent = m_myMusicGroup;
     }
     else
     {

@@ -82,7 +82,7 @@ SourceDelegate::~SourceDelegate()
 QSize
 SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    SourceTreeItem *item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
+    SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
     if ( type == SourcesModel::Collection )
@@ -92,6 +92,10 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     else if ( type == SourcesModel::Divider )
     {
         return QSize( option.rect.width(), 6 );
+    }
+    else if ( type == SourcesModel::Group && index.row() > 0 )
+    {
+        return QSize( option.rect.width(), 24 );
     }
     else if ( m_expandedMap.contains( index ) )
     {
@@ -128,7 +132,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
     if ( playable && playing && item->isBeingPlayed() )
     {
         const int iconW = option.rect.height() - 4;
-        QRect iconRect = QRect( option.rect.x() - iconW - 4, option.rect.y() + 2, iconW, iconW );
+        QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
         QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
         speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
         painter->drawPixmap( iconRect, speaker );
@@ -238,9 +242,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         }
     }
 
-    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
+    textRect.adjust( 0, 0, 0, 2 );
+    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 4 );
     QTextOption to( Qt::AlignVCenter );
-    painter->drawText( textRect.adjusted( 0, 0, 0, 2 ), text, to );
+    to.setWrapMode( QTextOption::NoWrap );
+    painter->drawText( textRect, text, to );
 
     if ( status )
     {
@@ -305,7 +311,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
     font.setBold( true );
     painter->setFont( font );
 
-    QTextOption to( Qt::AlignVCenter );
+    QTextOption to( Qt::AlignBottom );
 
     painter->setPen( option.palette.color( QPalette::Base ) );
     painter->setBrush( option.palette.color( QPalette::Base ) );
@@ -325,7 +331,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 
         font.setPixelSize( font.pixelSize() - 1 );
         painter->setFont( font );
-        QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
+        QTextOption to( Qt::AlignBottom | Qt::AlignRight );
 
         // draw close icon
         painter->setPen( Qt::white );
@@ -399,8 +405,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     if ( type != SourcesModel::Group && type != SourcesModel::Category && type != SourcesModel::Divider )
         QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
-
-    paintDecorations( painter, o3, index );
 
     if ( type == SourcesModel::Collection )
     {
@@ -531,6 +535,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             }
         }
     }
+
+    paintDecorations( painter, o3, index );
 
     painter->restore();
 }
