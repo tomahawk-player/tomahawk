@@ -256,14 +256,14 @@ SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 
 
 void
-SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
+SourceTreeView::expandRequest( const QPersistentModelIndex& idx )
 {
     expand( idx );
 }
 
 
 void
-SourceTreeView::toggleExpandRequest( const QPersistentModelIndex &idx )
+SourceTreeView::toggleExpandRequest( const QPersistentModelIndex& idx )
 {
     if ( isExpanded( idx ) )
         collapse( idx );
