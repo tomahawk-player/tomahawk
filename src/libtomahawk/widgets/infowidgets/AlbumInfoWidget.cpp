@@ -61,7 +61,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->tracksView );
     m_button->setCheckable( true );
