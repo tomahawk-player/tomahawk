@@ -202,6 +202,38 @@ AtticaManager::userHasRated( const Content& c ) const
 }
 
 
+bool
+AtticaManager::hasCustomAccountForAttica( const QString &id ) const
+{
+    // Only last.fm at the moment contains a custom account
+    if ( id == "lastfm" )
+        return true;
+
+    return false;
+}
+
+
+Tomahawk::Accounts::Account*
+AtticaManager::customAccountForAttica( const QString &id ) const
+{
+    return m_customAccounts.value( id );
+}
+
+
+void
+AtticaManager::registerCustomAccount( const QString &atticaId, Tomahawk::Accounts::Account *account )
+{
+    m_customAccounts.insert( atticaId, account );
+}
+
+
+AtticaManager::Resolver
+AtticaManager::resolverData(const QString &atticaId) const
+{
+    return m_resolverStates.value( atticaId );
+}
+
+
 void
 AtticaManager::providerAdded( const Provider& provider )
 {
@@ -324,7 +356,7 @@ AtticaManager::syncServerData()
 
 
 void
-AtticaManager::installResolver( const Content& resolver )
+AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
@@ -338,6 +370,7 @@ AtticaManager::installResolver( const Content& resolver )
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
+    job->setProperty( "createAccount", autoCreateAccount );
 
     job->start();
 }
@@ -373,6 +406,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
+        reply->setProperty( "createAccount", job->property( "createAccount" ) );
     }
     else
     {
@@ -408,9 +442,12 @@ AtticaManager::payloadFetched()
             // update with absolute, not relative, path
             m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
-            // Do the install / add to tomahawk
-            Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
-            Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+            if ( reply->property( "createAccount" ).toBool() )
+            {
+                // Do the install / add to tomahawk
+                Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
+                Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+            }
 
             m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );

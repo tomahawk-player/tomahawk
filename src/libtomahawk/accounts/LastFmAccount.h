@@ -23,9 +23,9 @@
 
 #include <QObject>
 
-class QtScriptResolver;
-
 namespace Tomahawk {
+class ExternalResolverGui;
+
 namespace InfoSystem {
     class LastFmPlugin;
 }
@@ -88,9 +88,15 @@ public:
     bool scrobble() const;
     void setScrobble( bool scrobble );
 
+private slots:
+    void resolverInstalled( const QString& resolverId );
+
+    void resolverChanged();
 private:
+    void hookupResolver();
+
     bool m_authenticated;
-    QWeakPointer<QtScriptResolver> m_resolver;
+    QWeakPointer<Tomahawk::ExternalResolverGui> m_resolver;
     QWeakPointer<Tomahawk::InfoSystem::LastFmPlugin> m_infoPlugin;
     QWeakPointer<LastFmConfig> m_configWidget;
     QPixmap m_icon;

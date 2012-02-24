@@ -23,6 +23,9 @@
 #include "infosystem/infoplugins/generic/lastfmplugin.h"
 #include "utils/tomahawkutils.h"
 #include "resolvers/qtscriptresolver.h"
+#include "AtticaManager.h"
+#include "pipeline.h"
+#include "accounts/AccountManager.h"
 
 using namespace Tomahawk;
 using namespace InfoSystem;
@@ -55,6 +58,18 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 
     setAccountFriendlyName( "Last.Fm" );
     m_icon.load( RESPATH "images/lastfm-icon.png" );
+
+    AtticaManager::instance()->registerCustomAccount( "lastfm", this );
+
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( resolverInstalled( QString ) ) );
+
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+
+    if ( state == AtticaManager::Installed )
+    {
+        hookupResolver();
+    }
 }
 
 
@@ -68,14 +83,28 @@ LastFmAccount::~LastFmAccount()
 void
 LastFmAccount::authenticate()
 {
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
+    if ( state == AtticaManager::Installed )
+    {
+        hookupResolver();
+    } else
+    {
+        AtticaManager::instance()->installResolver( res, false );
+    }
+
+    emit connectionStateChanged( connectionState() );
 }
 
 
 void
 LastFmAccount::deauthenticate()
 {
+    if ( m_resolver.data()->running() )
+        m_resolver.data()->stop();
 
+    emit connectionStateChanged( connectionState() );
 }
 
 
@@ -192,3 +221,35 @@ LastFmAccount::setScrobble( bool scrobble )
     setConfiguration( conf );
 }
 
+
+void
+LastFmAccount::resolverInstalled( const QString &resolverId )
+{
+    if ( resolverId == "lastfm" )
+    {
+        // We requested this install, so we want to launch it
+        hookupResolver();
+        AccountManager::instance()->enableAccount( this );
+    }
+}
+
+void
+LastFmAccount::resolverChanged()
+{
+    emit connectionStateChanged( connectionState() );
+}
+
+
+void
+LastFmAccount::hookupResolver()
+{
+    // If there is a last.fm resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+    Q_ASSERT( state == AtticaManager::Installed );
+
+    const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
+
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
+    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+}

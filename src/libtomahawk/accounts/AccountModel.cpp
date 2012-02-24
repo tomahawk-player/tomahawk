@@ -73,15 +73,23 @@ AccountModel::loadData()
     foreach ( const Attica::Content& content, fromAttica )
     {
         qDebug() << "Loading ATTICA ACCOUNT with content:" << content.id() << content.name();
-        m_accounts << new AccountModelNode( content );
-
-        foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
+        if ( AtticaManager::instance()->hasCustomAccountForAttica( content.id() ) )
         {
-            if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
+            Account* acct = AtticaManager::instance()->customAccountForAttica( content.id() );
+            m_accounts << new AccountModelNode( acct );
+            allAccounts.removeAll( acct );
+        } else
+        {
+            m_accounts << new AccountModelNode( content );
+
+            foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
             {
-                if ( resolver->atticaId() == content.id() )
+                if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
                 {
-                    allAccounts.removeAll( acct );
+                    if ( resolver->atticaId() == content.id() )
+                    {
+                        allAccounts.removeAll( acct );
+                    }
                 }
             }
         }
@@ -90,6 +98,8 @@ AccountModel::loadData()
     // All other accounts we haven't dealt with yet
    foreach ( Account* acct, allAccounts )
    {
+       Q_ASSERT( !qobject_cast< AtticaResolverAccount* >( acct ) ); // This should be caught above in the attica list
+
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )
            m_accounts << new AccountModelNode( qobject_cast< ResolverAccount* >( acct ) );
        else
@@ -326,7 +336,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 case AccountTypeRole:
                     return QVariant::fromValue< AccountTypes >( account->types() );
                 case Qt::CheckStateRole:
-                    return account->enabled();
+                    return account->enabled() ? Qt::Checked : Qt::Unchecked;
                 case ConnectionStateRole:
                     return account->connectionState();
                 default:

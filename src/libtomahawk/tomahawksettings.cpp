@@ -303,7 +303,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         const QString lfmPassword = value( "lastfm/password" ).toString();
         const bool scrobble = value( "lastfm/enablescrobbling", false ).toBool();
         beginGroup( "accounts/" + accountKey );
-//         setValue( "enabled", false );
+        setValue( "enabled", enabledResolvers.contains( "lastfm" ) == true );
         setValue( "autoconnect", true );
         setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
         QVariantHash credentials;

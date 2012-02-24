@@ -31,6 +31,12 @@
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
+namespace Tomahawk {
+namespace Accounts {
+class Account;
+}
+}
+
 class DLLEXPORT AtticaManager : public QObject
 {
     Q_OBJECT
@@ -83,8 +89,18 @@ public:
     void uploadRating( const Attica::Content& c );
     bool userHasRated( const Attica::Content& c ) const;
 
+    /**
+      If the resolver coming from libattica has a native custom c++ account
+      as well. For example the last.fm account.
+      */
+    bool hasCustomAccountForAttica( const QString& id ) const;
+    Tomahawk::Accounts::Account* customAccountForAttica( const QString& id ) const;
+    void registerCustomAccount( const QString& atticaId, Tomahawk::Accounts::Account* account );
+
+    AtticaManager::Resolver resolverData( const QString& atticaId ) const;
+
 public slots:
-    void installResolver( const Attica::Content& resolver );
+    void installResolver( const Attica::Content& resolver, bool autoCreateAccount = true );
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
@@ -115,6 +131,8 @@ private:
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
+
+    QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;
 };
