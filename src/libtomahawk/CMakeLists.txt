@@ -310,6 +310,7 @@ set( libSources
     accounts/ResolverAccount.cpp
     accounts/LastFmAccount.cpp
     accounts/LastFmConfig.cpp
+    accounts/SpotifyAccount.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -454,7 +455,7 @@ set( libHeaders
     accounts/ResolverAccount.h
     accounts/LastFmAccount.h
     accounts/LastFmConfig.h
-
+    accounts/SpotifyAccount.h
     EchonestCatalogSynchronizer.h
 
     sip/SipPlugin.h

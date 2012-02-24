@@ -27,7 +27,7 @@
 
 #include "query.h"
 #include "ExternalResolverGui.h"
-
+#include "accounts/SpotifyAccount.h"
 #include "dllmacro.h"
 
 class QWidget;
@@ -90,6 +90,7 @@ private:
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;
+    Tomahawk::Accounts::SpotifyResolverAccount *m_account;
 };
 
 #endif // SCRIPTRESOLVER_H
