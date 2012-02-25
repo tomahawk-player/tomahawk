@@ -307,9 +307,6 @@ TomahawkApp::~TomahawkApp()
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();
-
     delete SipHandler::instance();
 
 #ifndef ENABLE_HEADLESS
@@ -323,6 +320,9 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_database.isNull() )
         delete m_database.data();
+
+    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
 
     tLog() << "Finished shutdown.";
 }
