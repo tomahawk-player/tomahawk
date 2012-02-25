@@ -127,7 +127,7 @@ LastFmAccount::configurationWidget()
 Account::ConnectionState
 LastFmAccount::connectionState() const
 {
-    return m_resolver.data()->running() ? Account::Connected : Account::Disconnected;
+    return (!m_resolver.isNull() && m_resolver.data()->running()) ? Account::Connected : Account::Disconnected;
 }
 
 
