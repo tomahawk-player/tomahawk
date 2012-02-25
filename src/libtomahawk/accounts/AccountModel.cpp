@@ -318,6 +318,12 @@ AccountModel::data( const QModelIndex& index, int role ) const
             Q_ASSERT( node->factory );
 
             Account* account = node->customAccount;
+            // This is sort of ugly. CustomAccounts are pure Account*, but we know that
+            // some might also be linked to attica resolvers (not always). If that is the case
+            // they have a Attica::Content set on the node, so we use that to display some
+            // extra metadata and rating
+            const bool hasAttica = !node->atticaContent.id().isEmpty();
+
             switch ( role )
             {
                 case Qt::DisplayRole:
@@ -328,9 +334,15 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return ShippedWithTomahawk;
                 case Qt::ToolTipRole:
                 case DescriptionRole:
-                    return node->factory->description();
+                    return hasAttica ? node->atticaContent.description() : node->factory->description();
                 case CanRateRole:
-                    return false;
+                    return hasAttica;
+                case AuthorRole:
+                    return hasAttica ? node->atticaContent.author() : QString();
+                case RatingRole:
+                    return hasAttica ? node->atticaContent.rating() / 20 : 0; // rating is out of 100
+                case DownloadCounterRole:
+                    return hasAttica ? node->atticaContent.downloads() : QVariant();
                 case RowTypeRole:
                     return CustomAccount;
                 case AccountData:
@@ -378,7 +390,8 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     acct = node->factory->createAccount();
                     AccountManager::instance()->addAccount( acct );
                     TomahawkSettings::instance()->addAccount( acct->accountId() );
-                } else if ( !node->accounts.isEmpty() )
+                }
+                else
                 {
                     Q_ASSERT( node->accounts.size() == 1 );
                     acct = node->accounts.first();

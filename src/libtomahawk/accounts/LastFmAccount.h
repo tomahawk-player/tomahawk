@@ -20,6 +20,9 @@
 #define LASTFMACCOUNT_H
 
 #include "accounts/Account.h"
+#include "AtticaManager.h"
+
+#include <attica/content.h>
 
 #include <QObject>
 
@@ -58,7 +61,7 @@ private:
  * but the user can install the attica resolver on-demand. So we take care of both there.
  *
  */
-class LastFmAccount : public Account
+class LastFmAccount : public CustomAtticaAccount
 {
     Q_OBJECT
 public:
@@ -88,6 +91,8 @@ public:
     bool scrobble() const;
     void setScrobble( bool scrobble );
 
+    Attica::Content atticaContent() const;
+
 private slots:
     void resolverInstalled( const QString& resolverId );
 
@@ -95,7 +100,6 @@ private slots:
 private:
     void hookupResolver();
 
-    bool m_authenticated;
     QWeakPointer<Tomahawk::ExternalResolverGui> m_resolver;
     QWeakPointer<Tomahawk::InfoSystem::LastFmPlugin> m_infoPlugin;
     QWeakPointer<LastFmConfig> m_configWidget;

@@ -52,7 +52,7 @@ LastFmAccountFactory::icon() const
 
 
 LastFmAccount::LastFmAccount( const QString& accountId )
-    : Account( accountId )
+    : CustomAtticaAccount( accountId )
 {
     m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
 
@@ -86,12 +86,18 @@ LastFmAccount::authenticate()
     const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
-    if ( state == AtticaManager::Installed )
+    qDebug() << "Last.FM account authenticating...";
+    if ( m_resolver.isNull() && state == AtticaManager::Installed )
     {
         hookupResolver();
-    } else
+    }
+    else if ( m_resolver.isNull() )
     {
         AtticaManager::instance()->installResolver( res, false );
+    }
+    else
+    {
+        m_resolver.data()->start();
     }
 
     emit connectionStateChanged( connectionState() );
@@ -121,7 +127,7 @@ LastFmAccount::configurationWidget()
 Account::ConnectionState
 LastFmAccount::connectionState() const
 {
-    return m_authenticated ? Account::Connected : Account::Disconnected;
+    return m_resolver.data()->running() ? Account::Connected : Account::Disconnected;
 }
 
 
@@ -141,7 +147,7 @@ LastFmAccount::infoPlugin()
 bool
 LastFmAccount::isAuthenticated() const
 {
-    return m_authenticated;
+    return !m_resolver.isNull() && m_resolver.data()->running();
 }
 
 
@@ -252,4 +258,11 @@ LastFmAccount::hookupResolver()
 
     m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+}
+
+
+Attica::Content
+LastFmAccount::atticaContent() const
+{
+    return AtticaManager::instance()->resolverForId( "lastfm" );
 }

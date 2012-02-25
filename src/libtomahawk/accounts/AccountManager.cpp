@@ -215,8 +215,6 @@ AccountManager::connectAll()
     {
         acc->authenticate();
         m_enabledAccounts << acc;
-//         if ( acc->types() & Accounts::SipType && acc->sipPlugin() )
-//             acc->sipPlugin()->connectPlugin();
 
     }
     m_connected = true;
