@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -46,7 +47,7 @@ public:
     ~SearchWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
     virtual bool isTemporaryPage() const { return true; }
 
     virtual QString title() const { return QString( tr( "Search: %1" ) ).arg( m_search ); }
@@ -55,7 +56,7 @@ public:
 
     virtual bool showStatsBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
 
 protected:
     void changeEvent( QEvent* e );
