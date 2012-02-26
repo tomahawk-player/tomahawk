@@ -51,6 +51,8 @@ private:
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkTable;
 
     bool m_shownVolumes;
+    QString m_setFilePath;
+    QString m_getFileInfoPath;
 };
 
 

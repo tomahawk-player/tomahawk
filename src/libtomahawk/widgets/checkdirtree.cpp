@@ -22,6 +22,7 @@
 #include "utils/logger.h"
 #include "tomahawksettings.h"
 
+#include <QCoreApplication>
 #include <QProcess>
 
 static QString s_macVolumePath = "/Volumes";
@@ -31,9 +32,12 @@ CheckDirModel::CheckDirModel( QWidget* parent )
     , m_shownVolumes( false )
 {
 #ifdef Q_WS_MAC
+    m_setFilePath = QString( "%1/SetFile" )        .arg( QCoreApplication::applicationDirPath() );
+    m_getFileInfoPath = QString( "%1/GetFileInfo" ).arg( QCoreApplication::applicationDirPath() );
+
     QProcess* checkVolumeVisible = new QProcess( this );
     connect( checkVolumeVisible, SIGNAL( readyReadStandardOutput() ), this, SLOT( getFileInfoResult() ) );
-    checkVolumeVisible->start( "GetFileInfo", QStringList() <<  "-aV" << s_macVolumePath );
+    checkVolumeVisible->start( m_getFileInfoPath, QStringList() <<  "-aV" << s_macVolumePath );
 #endif
 }
 
@@ -42,7 +46,7 @@ CheckDirModel::~CheckDirModel()
 #ifdef Q_WS_MAC
     // reset to previous state
     if ( m_shownVolumes )
-        QProcess::startDetached( QString( "SetFile -a V %1" ).arg( s_macVolumePath ) );
+        QProcess::startDetached( QString( "%1 -a V %2" ).arg( m_setFilePath).arg( s_macVolumePath ) );
 #endif
 }
 
@@ -60,7 +64,7 @@ CheckDirModel::getFileInfoResult()
         // Remove the hidden flag for the /Volumnes folder so all mount points are visible in the default (Q)FileSystemModel
         QProcess* p = new QProcess( this );
         connect( p, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( volumeShowFinished() ) );
-        p->start( QString( "SetFile -a v %1" ).arg( s_macVolumePath ) );
+        p->start( QString( "%1 -a v %2" ).arg( m_setFilePath ).arg( s_macVolumePath ) );
         m_shownVolumes = true;
     }
 
