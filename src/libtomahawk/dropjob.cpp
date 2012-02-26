@@ -701,10 +701,18 @@ DropJob::removeDuplicates()
     {
         bool contains = false;
         foreach( const Tomahawk::query_ptr &tmpItem, list )
+        {
             if ( item->album() == tmpItem->album()
                  && item->artist() == tmpItem->artist()
                  && item->track() == tmpItem->track() )
+            {
+                if ( item->playable() && !tmpItem->playable() )
+                    list.replace( list.indexOf( tmpItem ), item );
+
                 contains = true;
+                break;
+            }
+        }
         if ( !contains )
             list.append( item );
     }
