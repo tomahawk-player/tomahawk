@@ -181,6 +181,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+        m_data.first = m_currentType;
     } else if( selectedType() == "Artist Description" ) {
         m_currentType = Echonest::DynamicPlaylist::Description;
 
@@ -199,6 +200,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+        m_data.first = m_currentType;
     } else if( selectedType() == "User Radio" ) {
         m_currentType = Echonest::DynamicPlaylist::SourceCatalog;
 
@@ -246,6 +248,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+        m_data.first = m_currentType;
     } else if( selectedType() == "Variety" ) {
         m_currentType = Echonest::DynamicPlaylist::Variety;
 
@@ -266,6 +269,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+        m_data.first = m_currentType;
     } else if( selectedType() == "Adventurousness" ) {
         m_currentType = Echonest::DynamicPlaylist::Adventurousness;
 
@@ -287,6 +291,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+        m_data.first = m_currentType;
     } else if( selectedType() == "Tempo" ) {
         m_currentType = Echonest::DynamicPlaylist::MinTempo;
 
