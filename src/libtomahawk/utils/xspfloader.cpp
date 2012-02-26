@@ -47,6 +47,8 @@ XSPFLoader::errorToString( XSPFErrorCode error )
         return tr( "Some playlist entries were found without artist and track name, they will be omitted");
     case FetchError:
         return tr( "Failed to fetch the desired playlist from the network, or the desired file does not exist" );
+    default:
+        return QString();
     }
 }
 
