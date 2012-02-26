@@ -24,8 +24,8 @@
 
 QPixmap* ErrorStatusMessage::s_pixmap = 0;
 
-ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs ) :
-    JobStatusItem()
+ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs )
+  : JobStatusItem()
   , m_message( message )
 {
     m_timer = new QTimer( this );

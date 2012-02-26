@@ -20,11 +20,12 @@
 #define ERRORSTATUSMESSAGE_H
 
 #include "JobStatusItem.h"
+#include "dllmacro.h"
 
 class QTimer;
 class QPixmap;
 
-class ErrorStatusMessage : public JobStatusItem
+class DLLEXPORT ErrorStatusMessage : public JobStatusItem
 {
     Q_OBJECT
 public:

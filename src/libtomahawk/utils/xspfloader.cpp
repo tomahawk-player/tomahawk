@@ -25,9 +25,12 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+
+#ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#endif
 
 #include "sourcelist.h"
 #include "playlist.h"
@@ -117,7 +120,9 @@ void
 XSPFLoader::reportError()
 {
     emit error( FetchError );
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorToString( FetchError) ) );
+#endif
     deleteLater();
 }
 
