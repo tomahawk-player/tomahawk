@@ -24,7 +24,7 @@
 #include "query.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
-#include "jobview/JobStatusView.h"=
+#include "jobview/JobStatusView.h"
 
 #include <qjson/parser.h>
 

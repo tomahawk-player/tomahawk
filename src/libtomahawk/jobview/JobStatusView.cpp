@@ -40,6 +40,7 @@ JobStatusView* JobStatusView::s_instance = 0;
 JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , m_parent( parent )
+    , m_cachedHeight( -1 )
 {
     s_instance = this;
 
@@ -84,12 +85,14 @@ JobStatusView::setModel( JobStatusModel* m )
 
     connect( m_view->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
+    connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
 }
 
 
 void
 JobStatusView::checkCount()
 {
+    m_cachedHeight = -1;
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
     else
@@ -100,8 +103,10 @@ JobStatusView::checkCount()
 QSize
 JobStatusView::sizeHint() const
 {
+    if ( m_cachedHeight >= 0 )
+        return QSize( 0, m_cachedHeight );
+
     unsigned int y = 0;
-//     y += m_tree->header()->height();
     y += m_view->contentsMargins().top() + m_view->contentsMargins().bottom();
 
     if ( m_view->model()->rowCount() )
@@ -113,5 +118,6 @@ JobStatusView::sizeHint() const
         y += 2; // some padding
     }
 
+    m_cachedHeight = y;
     return QSize( 0, y );
 }
