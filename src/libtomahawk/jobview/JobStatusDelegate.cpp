@@ -47,6 +47,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
+    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
     opt.state &= ~QStyle::State_MouseOver;
     QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
@@ -54,7 +55,9 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 //     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
 
     painter->setRenderHint( QPainter::Antialiasing );
-    const QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
+    QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
+    if ( allowMultiLine )
+        iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
     painter->drawPixmap( iconRect, p );
@@ -72,7 +75,6 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     const int mainW = rightEdge - 3*PADDING - iconRect.right();
-    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
