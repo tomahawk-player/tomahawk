@@ -88,7 +88,8 @@
 }
 -(void)printBacktrace;
 {
-	for(int x = 3; x < frameCount; x++) {
+        int x;
+        for(x = 3; x < frameCount; x++) {
 		if(frameStrings[x] == NULL) { break; }
 		printf("%s\n", frameStrings[x]);
 	}
