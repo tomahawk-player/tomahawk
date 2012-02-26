@@ -56,9 +56,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 
     m_view->setFrameShape( QFrame::NoFrame );
     m_view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-//     new QTreeWidgetItem( m_tree );
-    m_view->setUniformItemSizes( true );
+    m_view->setUniformItemSizes( false );
 
 #ifndef Q_WS_WIN
     QFont f = font();

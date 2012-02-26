@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,28 +16,32 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOBSTATUSDELEGATE_H
-#define JOBSTATUSDELEGATE_H
+#ifndef ERRORSTATUSMESSAGE_H
+#define ERRORSTATUSMESSAGE_H
 
-#include <QStyledItemDelegate>
+#include "JobStatusItem.h"
 
-class QPainter;
-class QListView;
+class QTimer;
+class QPixmap;
 
-class JobStatusDelegate : public QStyledItemDelegate
+class ErrorStatusMessage : public JobStatusItem
 {
     Q_OBJECT
-
 public:
-    explicit JobStatusDelegate ( QObject* parent = 0 );
-    virtual ~JobStatusDelegate();
+    explicit ErrorStatusMessage( const QString& errorMessage, int defaultTimeoutSecs = 8 );
 
-    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QString type() const { return "errormessage"; }
+    QString rightColumnText() const { return QString(); }
 
+    QPixmap icon() const;
+    QString mainText() const;
+
+    bool allowMultiLine() const { return true; }
 private:
-    mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
-    QListView* m_parentView;
+    QString m_message;
+    QTimer* m_timer;
+
+    static QPixmap* s_pixmap;
 };
 
-#endif // JOBSTATUSDELEGATE_H
+#endif // ERRORSTATUSMESSAGE_H

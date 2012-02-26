@@ -22,6 +22,9 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 #include "query.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"=
 
 #include <qjson/parser.h>
 
@@ -77,6 +80,9 @@ ShortenedLinkParser::lookupFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+
+    if ( r->error() != QNetworkReply::NoError )
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Network error parsing shortened link!" ) ) );
 
     QVariant redir = r->attribute( QNetworkRequest::RedirectionTargetAttribute );
     if ( redir.isValid() && !redir.toUrl().isEmpty() )

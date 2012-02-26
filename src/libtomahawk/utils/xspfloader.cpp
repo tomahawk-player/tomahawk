@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,6 +25,9 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 
 #include "sourcelist.h"
 #include "playlist.h"
@@ -31,6 +35,20 @@
 #include <pipeline.h>
 
 using namespace Tomahawk;
+
+QString
+XSPFLoader::errorToString( XSPFErrorCode error )
+{
+    switch ( error )
+    {
+    case ParseError:
+        return tr( "Failed to parse contents of XSPF playlist" );
+    case InvalidTrackError:
+        return tr( "Some playlist entries were found without artist and track name, they will be omitted");
+    case FetchError:
+        return tr( "Failed to fetch the desired playlist from the network, or the desired file does not exist" );
+    }
+}
 
 XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     : QObject( parent )
@@ -97,6 +115,7 @@ void
 XSPFLoader::reportError()
 {
     emit error( FetchError );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorToString( FetchError) ) );
     deleteLater();
 }
 

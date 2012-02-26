@@ -35,6 +35,8 @@
 #include "utils/xspfloader.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+
 #ifdef QCA2_FOUND
 #include "utils/groovesharkparser.h"
 #endif //QCA2_FOUND

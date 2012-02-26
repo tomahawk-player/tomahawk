@@ -23,14 +23,16 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QListView>
 
 #define ROW_HEIGHT 20
 #define ICON_PADDING 1
 #define PADDING 2
 JobStatusDelegate::JobStatusDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
+    , m_parentView( qobject_cast< QListView* >( parent ) )
 {
-
+    Q_ASSERT( m_parentView );
 }
 
 JobStatusDelegate::~JobStatusDelegate()
@@ -70,16 +72,36 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     const int mainW = rightEdge - 3*PADDING - iconRect.right();
+    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
     QString mainText = index.data( Qt::DisplayRole ).toString();
-    mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
-    painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), Qt::AlignLeft | Qt::AlignVCenter, mainText );
+    QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
+    if ( !allowMultiLine )
+        mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
+    else
+        to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
+    painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), mainText, to );
 }
 
 QSize
 JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-//     return QStyledItemDelegate::sizeHint( option, index );
-    const int w = QStyledItemDelegate::sizeHint ( option, index ).width();
-    return QSize( w, ROW_HEIGHT );
+    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
+
+    if ( !allowMultiLine )
+        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
+    else if ( m_cachedMultiLineHeights.contains( index ) )
+        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), m_cachedMultiLineHeights[ index ] );
+
+    // Don't elide, but stretch across as many rows as required
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, index );
+
+    const QString text = index.data( Qt::DisplayRole ).toString();
+    const int leftEdge =  ICON_PADDING + ROW_HEIGHT + 2*PADDING;
+    const QRect rect = opt.fontMetrics.boundingRect( leftEdge, opt.rect.top(), m_parentView->width() - leftEdge, 200, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text );
+
+    m_cachedMultiLineHeights.insert( index, rect.height() + 4*PADDING );
+
+    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), rect.height() + 4*PADDING );
 }
 
