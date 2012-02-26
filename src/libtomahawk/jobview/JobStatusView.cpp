@@ -106,8 +106,11 @@ JobStatusView::sizeHint() const
 
     if ( m_view->model()->rowCount() )
     {
-        unsigned int rowheight = m_view->sizeHintForRow( 0 );
-        y += rowheight * m_view->model()->rowCount() + 2;
+        for ( int i = 0; i < m_view->model()->rowCount(); i++ )
+        {
+            y += m_view->sizeHintForRow( i );
+        }
+        y += 2; // some padding
     }
 
     return QSize( 0, y );
