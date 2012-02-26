@@ -46,6 +46,7 @@ private slots:
     void enablePlay();
     void enablePause();
 
+    void menuAboutToShow();
 private:
     void refreshToolTip();
     ~TomahawkTrayIcon();

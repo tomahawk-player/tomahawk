@@ -58,6 +58,8 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_showWindowAction = m_contextMenu->addAction( tr( "Hide Tomahawk Window" ) );
     m_showWindowAction->setData( true );
     connect( m_showWindowAction, SIGNAL( triggered() ), this, SLOT( showWindow() ) );
+
+    connect( m_contextMenu, SIGNAL( aboutToShow() ), this, SLOT( menuAboutToShow() ) );
 #endif
 
     m_contextMenu->addSeparator();
@@ -115,6 +117,16 @@ TomahawkTrayIcon::showWindow()
 
         setShowHideWindow( false );
     }
+}
+
+
+void
+TomahawkTrayIcon::menuAboutToShow()
+{
+    // When using Cmd-H on mac to hide a window, it is an OS-level hide that is different from QWidget::hide().
+    // Qt returns isVisible() == true for windows that are hidden with Cmd-H, which is weird. isActiveWindow() returns
+    // the proper information though.
+    setShowHideWindow( APP->mainWindow()->isActiveWindow() );
 }
 
 
