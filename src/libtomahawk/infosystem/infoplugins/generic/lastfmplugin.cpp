@@ -451,8 +451,15 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             QString artistName = criteria["artist"];
             QString albumName = criteria["album"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
-            QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
+            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
+            imgurl.addQueryItem( "method", "album.imageredirect" );
+            imgurl.addQueryItem( "artist", artistName );
+            imgurl.addQueryItem( "album", albumName );
+            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
+            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
+
+            QNetworkRequest req( imgurl );
             QNetworkReply* reply = TomahawkUtils::nam()->get( req );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
@@ -464,8 +471,14 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
         {
             QString artistName = criteria["artist"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
-            QNetworkRequest req( imgurl.arg( artistName ) );
+            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
+            imgurl.addQueryItem( "method", "artist.imageredirect" );
+            imgurl.addQueryItem( "artist", artistName );
+            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
+            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
+
+            QNetworkRequest req( imgurl );
             QNetworkReply* reply = TomahawkUtils::nam()->get( req );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
