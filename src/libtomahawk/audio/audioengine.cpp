@@ -590,10 +590,10 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
     if ( newState == Phonon::ErrorState )
     {
+        stop();
+
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
         emit error( UnknownError );
-
-        stop();
         return;
     }
     if ( newState == Phonon::PlayingState )
