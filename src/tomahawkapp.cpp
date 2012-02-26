@@ -316,10 +316,10 @@ TomahawkApp::~TomahawkApp()
     #endif
 #endif
 
-    delete Pipeline::instance();
-
     if ( !m_database.isNull() )
         delete m_database.data();
+
+    delete Pipeline::instance();
 
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
