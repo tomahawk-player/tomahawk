@@ -58,4 +58,7 @@ if (APPLE)
   FILE(COPY ${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem
     DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Resources")
 
+  FILE(COPY /usr/bin/SetFile DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/MacOS")
+  FILE(COPY /usr/bin/GetFileInfo DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/MacOS")
+
 endif (APPLE)

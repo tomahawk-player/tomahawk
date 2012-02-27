@@ -40,6 +40,7 @@ JobStatusView* JobStatusView::s_instance = 0;
 JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , m_parent( parent )
+    , m_cachedHeight( -1 )
 {
     s_instance = this;
 
@@ -56,9 +57,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 
     m_view->setFrameShape( QFrame::NoFrame );
     m_view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-//     new QTreeWidgetItem( m_tree );
-    m_view->setUniformItemSizes( true );
+    m_view->setUniformItemSizes( false );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -86,12 +85,14 @@ JobStatusView::setModel( JobStatusModel* m )
 
     connect( m_view->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
+    connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
 }
 
 
 void
 JobStatusView::checkCount()
 {
+    m_cachedHeight = -1;
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
     else
@@ -102,15 +103,21 @@ JobStatusView::checkCount()
 QSize
 JobStatusView::sizeHint() const
 {
+    if ( m_cachedHeight >= 0 )
+        return QSize( 0, m_cachedHeight );
+
     unsigned int y = 0;
-//     y += m_tree->header()->height();
     y += m_view->contentsMargins().top() + m_view->contentsMargins().bottom();
 
     if ( m_view->model()->rowCount() )
     {
-        unsigned int rowheight = m_view->sizeHintForRow( 0 );
-        y += rowheight * m_view->model()->rowCount() + 2;
+        for ( int i = 0; i < m_view->model()->rowCount(); i++ )
+        {
+            y += m_view->sizeHintForRow( i );
+        }
+        y += 2; // some padding
     }
 
+    m_cachedHeight = y;
     return QSize( 0, y );
 }

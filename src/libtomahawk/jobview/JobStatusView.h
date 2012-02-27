@@ -56,6 +56,7 @@ private:
     QListView* m_view;
     JobStatusModel* m_model;
     AnimatedSplitter* m_parent;
+    mutable int m_cachedHeight;
 
     static JobStatusView* s_instance;
 };

@@ -319,10 +319,13 @@ TomahawkApp::~TomahawkApp()
     delete AtticaManager::instance();
 #endif
 
-    delete Pipeline::instance();
-
     if ( !m_database.isNull() )
         delete m_database.data();
+
+    delete Pipeline::instance();
+
+    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
 
     tLog() << "Finished shutdown.";
 }

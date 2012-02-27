@@ -100,6 +100,8 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
         else
             return item->rightColumnText();
     }
+    case AllowMultiLineRole:
+        return item->allowMultiLine();
     }
 
     return QVariant();

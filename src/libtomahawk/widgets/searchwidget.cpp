@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -109,6 +110,20 @@ SearchWidget::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+Tomahawk::playlistinterface_ptr
+SearchWidget::playlistInterface() const
+{
+    return ui->resultsView->playlistInterface();
+}
+
+
+bool
+SearchWidget::jumpToCurrentTrack()
+{
+    return ui->resultsView->jumpToCurrentTrack();
 }
 
 

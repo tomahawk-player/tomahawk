@@ -26,6 +26,7 @@
 #include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "dropjobnotifier.h"
 #include "viewmanager.h"
 #include "sourcelist.h"
@@ -189,6 +190,7 @@ RdioParser::rdioReturned()
 
     } else
     {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Rdio information from the network!" ) ) );
         tLog() << "Error in network request to Rdio for track decoding:" << r->errorString();
     }
 

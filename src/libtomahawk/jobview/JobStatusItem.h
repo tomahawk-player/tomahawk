@@ -53,6 +53,7 @@ public:
      * and a count will be shown instead.
      */
     virtual bool collapseItem() const { return false; }
+    virtual bool allowMultiLine() const { return false; }
 
 signals:
     /// Ask for an update

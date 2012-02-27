@@ -31,7 +31,8 @@ public:
     enum JobRoles {
         // DecorationRole is icon
         // DisplayRole is main col
-        RightColumnRole = Qt::UserRole + 1
+        RightColumnRole = Qt::UserRole + 1,
+        AllowMultiLineRole = Qt::UserRole + 2
     };
 
     explicit JobStatusModel( QObject* parent = 0 );

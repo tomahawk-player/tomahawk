@@ -27,6 +27,7 @@
 #include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "dropjobnotifier.h"
 #include "viewmanager.h"
 
@@ -198,6 +199,7 @@ GroovesharkParser::groovesharkLookupFinished()
 
     } else
     {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Grooveshark information from the network!" ) ) );
         tLog() << "Error in network request to grooveshark for track decoding:" << r->errorString();
     }
 
