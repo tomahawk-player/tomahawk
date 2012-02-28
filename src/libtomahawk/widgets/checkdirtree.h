@@ -46,7 +46,7 @@ signals:
 private slots:
     void getFileInfoResult();
     void volumeShowFinished();
-
+    void processErrorOutput();
 private:
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkTable;
 

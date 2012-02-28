@@ -31,19 +31,20 @@ CheckDirModel::CheckDirModel( QWidget* parent )
     : QFileSystemModel( parent )
     , m_shownVolumes( false )
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     m_setFilePath = QString( "%1/SetFile" )        .arg( QCoreApplication::applicationDirPath() );
     m_getFileInfoPath = QString( "%1/GetFileInfo" ).arg( QCoreApplication::applicationDirPath() );
 
     QProcess* checkVolumeVisible = new QProcess( this );
     connect( checkVolumeVisible, SIGNAL( readyReadStandardOutput() ), this, SLOT( getFileInfoResult() ) );
+    qDebug() << "Running GetFileInfo:" << m_getFileInfoPath << "-aV" << s_macVolumePath;
     checkVolumeVisible->start( m_getFileInfoPath, QStringList() <<  "-aV" << s_macVolumePath );
 #endif
 }
 
 CheckDirModel::~CheckDirModel()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // reset to previous state
     if ( m_shownVolumes )
         QProcess::startDetached( QString( "%1 -a V %2" ).arg( m_setFilePath).arg( s_macVolumePath ) );
@@ -53,21 +54,25 @@ CheckDirModel::~CheckDirModel()
 void
 CheckDirModel::getFileInfoResult()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     QProcess* p = qobject_cast< QProcess* >( sender() );
     Q_ASSERT( p );
 
     QByteArray res = p->readAll().trimmed();
+    qDebug() << "Got output from GetFileInfo:" << res;
     // 1 means /Volumes is hidden, so we show it while the dialog is visible
     if ( res == "1" )
     {
         // Remove the hidden flag for the /Volumnes folder so all mount points are visible in the default (Q)FileSystemModel
         QProcess* p = new QProcess( this );
         connect( p, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( volumeShowFinished() ) );
+        qDebug() << "Running SetFile:" << QString( "%1 -a v %2" ).arg( m_setFilePath ).arg( s_macVolumePath );
         p->start( QString( "%1 -a v %2" ).arg( m_setFilePath ).arg( s_macVolumePath ) );
+        connect( p, SIGNAL( readyReadStandardError() ), this, SLOT( processErrorOutput() ) );
         m_shownVolumes = true;
     }
 
+    p->terminate();
     p->deleteLater();
 #endif
 }
@@ -75,8 +80,26 @@ CheckDirModel::getFileInfoResult()
 void
 CheckDirModel::volumeShowFinished()
 {
+#ifdef Q_OS_MAC
+    QProcess* p = qobject_cast< QProcess* >( sender() );
+    Q_ASSERT( p );
+    qDebug() << "Got output from GetFileInfo:" << p->readAll();
+
+    p->terminate();
+    p->deleteLater();
+#endif
     reset();
 }
+
+
+void
+CheckDirModel::processErrorOutput()
+{
+    QProcess* p = qobject_cast< QProcess* >( sender() );
+    Q_ASSERT( p );
+    qDebug() << "Got ERROR OUTPUT from subprocess in CheckDirModel:" << p->readAll();
+}
+
 
 Qt::ItemFlags
 CheckDirModel::flags( const QModelIndex& index ) const
