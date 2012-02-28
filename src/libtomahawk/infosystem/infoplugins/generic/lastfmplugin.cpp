@@ -706,14 +706,14 @@ LastFmPlugin::artistImagesReturned()
 void
 LastFmPlugin::settingsChanged()
 {
-    if ( !m_scrobbler && m_account->enabled() )
+    if ( !m_scrobbler && m_account->scrobble() )
     { // can simply create the scrobbler
-    lastfm::ws::Username = m_account->username();
-    m_pw = m_account->password();
+        lastfm::ws::Username = m_account->username();
+        m_pw = m_account->password();
 
         createScrobbler();
     }
-    else if ( m_scrobbler && !m_account->enabled() )
+    else if ( m_scrobbler && !m_account->scrobble() )
     {
         delete m_scrobbler;
         m_scrobbler = 0;
@@ -761,7 +761,7 @@ LastFmPlugin::onAuthenticated()
             m_account->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
 //            qDebug() << "Got session key from last.fm";
-            if ( m_account->enabled() )
+            if ( m_account->scrobble() )
                 m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
     }
