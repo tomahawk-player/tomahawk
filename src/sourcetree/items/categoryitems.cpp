@@ -120,6 +120,7 @@ CategoryAddItem::flags() const
         case SourcesModel::PlaylistsCategory:
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
         case SourcesModel::StationsCategory:
+            return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
         default:
             return Qt::ItemIsEnabled;
             break;
