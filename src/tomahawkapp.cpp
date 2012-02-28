@@ -309,9 +309,6 @@ TomahawkApp::~TomahawkApp()
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();
-
     delete Tomahawk::Accounts::AccountManager::instance();
 
 #ifndef ENABLE_HEADLESS
