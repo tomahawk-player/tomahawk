@@ -65,11 +65,12 @@ CheckDirModel::getFileInfoResult()
     {
         // Remove the hidden flag for the /Volumnes folder so all mount points are visible in the default (Q)FileSystemModel
         QProcess* p = new QProcess( this );
-        connect( p, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( volumeShowFinished() ) );
         qDebug() << "Running SetFile:" << QString( "%1 -a v %2" ).arg( m_setFilePath ).arg( s_macVolumePath );
         p->start( QString( "%1 -a v %2" ).arg( m_setFilePath ).arg( s_macVolumePath ) );
         connect( p, SIGNAL( readyReadStandardError() ), this, SLOT( processErrorOutput() ) );
         m_shownVolumes = true;
+
+        QTimer::singleShot( 0, this, SLOT( volumeShowFinished() ) );
     }
 
     p->terminate();
@@ -80,14 +81,6 @@ CheckDirModel::getFileInfoResult()
 void
 CheckDirModel::volumeShowFinished()
 {
-#ifdef Q_OS_MAC
-    QProcess* p = qobject_cast< QProcess* >( sender() );
-    Q_ASSERT( p );
-    qDebug() << "Got output from GetFileInfo:" << p->readAll();
-
-    p->terminate();
-    p->deleteLater();
-#endif
     reset();
 }
 
