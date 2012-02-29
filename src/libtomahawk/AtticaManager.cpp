@@ -288,7 +288,7 @@ AtticaManager::syncServerData()
 
 
 void
-AtticaManager::installResolver( const Content& resolver )
+AtticaManager::installResolver( const Content& resolver, bool autoEnable )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
@@ -302,6 +302,7 @@ AtticaManager::installResolver( const Content& resolver )
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
+    job->setProperty( "autoEnable", autoEnable );
 
     job->start();
 }
@@ -316,11 +317,12 @@ AtticaManager::upgradeResolver( const Content& resolver )
     if ( !m_resolverStates.contains( resolver.id() ) || m_resolverStates[ resolver.id() ].state != NeedsUpgrade )
         return;
 
+    const bool enabled = TomahawkSettings::instance()->enabledScriptResolvers().contains( m_resolverStates[ resolver.id() ].scriptPath );
     m_resolverStates[ resolver.id() ].state = Upgrading;
     emit resolverStateChanged( resolver.id() );
 
     uninstallResolver( resolver );
-    installResolver( resolver );
+    installResolver( resolver, enabled );
 }
 
 
@@ -337,6 +339,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
+        reply->setProperty( "autoEnable", job->property( "autoEnable" ) );
     }
     else
     {
@@ -372,8 +375,10 @@ AtticaManager::payloadFetched()
             // update with absolute, not relative, path
             m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
+            const bool autoEnable = reply->property( "autoEnable" ).toBool();
+
             // Do the install / add to tomahawk
-            Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
+            Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, autoEnable );
             m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );

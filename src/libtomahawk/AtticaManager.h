@@ -91,7 +91,7 @@ public:
     bool userHasRated( const Attica::Content& c ) const;
 
 public slots:
-    void installResolver( const Attica::Content& resolver );
+    void installResolver( const Attica::Content& resolver, bool autoEnable = true );
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
