@@ -36,7 +36,7 @@ signals:
     void indexUpdated();
 
 private:
-    void indexTable( DatabaseImpl* db, const QString& table );
+    void indexTable( DatabaseImpl* db, const QString& table, const QString& query );
 
     QString table;
 };

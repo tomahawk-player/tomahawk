@@ -459,7 +459,15 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 
     if ( isFullTextQuery() )
     {
+        const QString artistTrackname = DatabaseImpl::sortname( fullTextQuery() );
+        const QString rArtistTrackname  = DatabaseImpl::sortname( r->artist()->name() + " " + r->track() );
+
+        int atrdist = levenshtein( artistTrackname, rArtistTrackname );
+        int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
+        float dcatr = (float)( mlatr - atrdist ) / mlatr;
+
         float res = qMax( dcart, dcalb );
+        res = qMax( res, dcatr );
         return qMax( res, dctrk );
     }
     else

@@ -29,7 +29,7 @@
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
 
-#define VERSION 5
+#define VERSION 6
 
 using namespace Tomahawk;
 
@@ -190,7 +190,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
     }
-    else if ( oldVersion == 4 )
+    else if ( oldVersion == 4 || oldVersion == 5 )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );

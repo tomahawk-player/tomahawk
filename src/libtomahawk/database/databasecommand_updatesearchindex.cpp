@@ -22,6 +22,8 @@
 #include "tomahawksqlquery.h"
 #include "utils/logger.h"
 
+#include <QSqlRecord>
+
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
@@ -31,18 +33,23 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
 
 
 void
-DatabaseCommand_UpdateSearchIndex::indexTable( DatabaseImpl* db, const QString& table )
+DatabaseCommand_UpdateSearchIndex::indexTable( DatabaseImpl* db, const QString& table, const QString& query )
 {
     qDebug() << Q_FUNC_INFO;
 
-    TomahawkSqlQuery query = db->newquery();
+    TomahawkSqlQuery q = db->newquery();
     qDebug() << "Building index for" << table;
-    query.exec( QString( "SELECT id, name FROM %1" ).arg( table ) );
+    q.exec( QString( "SELECT %1" ).arg( query ) );
 
     QMap< unsigned int, QString > fields;
-    while ( query.next() )
+    QString value;
+    while ( q.next() )
     {
-        fields.insert( query.value( 0 ).toUInt(), query.value( 1 ).toString() );
+        value = "";
+        for ( int v = 1; v < q.record().count(); v++ )
+            value += q.value( v ).toString() + " ";
+            
+        fields.insert( q.value( 0 ).toUInt(), value.trimmed() );
     }
 
     db->m_fuzzyIndex->appendFields( table, fields );
@@ -55,9 +62,10 @@ DatabaseCommand_UpdateSearchIndex::exec( DatabaseImpl* db )
 {
     db->m_fuzzyIndex->beginIndexing();
 
-    indexTable( db, "artist" );
-    indexTable( db, "album" );
-    indexTable( db, "track" );
+    indexTable( db, "artist", "id, name FROM artist" );
+    indexTable( db, "album", "id, name FROM album" );
+    indexTable( db, "track", "id, name FROM track" );
+    indexTable( db, "trackartist", "track.id, artist.name, track.name FROM track, artist WHERE artist.id = track.artist" );
 
     db->m_fuzzyIndex->endIndexing();
 }
