@@ -332,7 +332,9 @@ ChartsPlugin::chartTypes()
                 if( source == "itunes" ){
                     chartName = "iTunes";
                 }
-
+                if( source == "soundcloudwall" ){
+                    chartName = "SoundcloudWall";
+                }
                 if( source == "wearehunted" ){
                     chartName = "WeAreHunted";
                 }
