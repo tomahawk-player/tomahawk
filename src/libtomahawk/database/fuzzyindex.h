@@ -66,7 +66,7 @@ signals:
 public slots:
     void loadLuceneIndex();
 
-    QMap< int, float > search( const QString& table, const QString& name );
+    QMap< int, float > search( const QString& table, const QString& name, bool fulltext );
 
 private:
     DatabaseImpl& m_db;

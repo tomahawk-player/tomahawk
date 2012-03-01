@@ -45,9 +45,9 @@ ChartsPlugin::ChartsPlugin()
     , m_chartsFetchJobs( 0 )
 {
     /// Add resources here
-    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm" << "soundcloudwall.com";
+    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm" << "soundcloudwall";
     /// If you add resource, update version aswell
-    m_chartVersion = "1.0";
+    m_chartVersion = "2.1";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -333,7 +333,7 @@ ChartsPlugin::chartTypes()
                     chartName = "iTunes";
                 }
                 if( source == "soundcloudwall" ){
-                    chartName = "SoundcloudWall";
+                    chartName = "SoundCloudWall";
                 }
                 if( source == "wearehunted" ){
                     chartName = "WeAreHunted";

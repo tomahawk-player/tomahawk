@@ -78,7 +78,11 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
 
+//    schemaUpdated = true; // REMOVE ME
     m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
+    if ( schemaUpdated )
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
 
     if ( qApp->arguments().contains( "--dumpdb" ) )
@@ -405,13 +409,13 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool autoCreate )
 
 
 QList< QPair<int, float> >
-DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
+DatabaseImpl::searchTable( const QString& table, const QString& name, bool fulltext, uint limit )
 {
     QList< QPair<int, float> > resultslist;
-    if ( table != "artist" && table != "track" && table != "album" )
+    if ( table != "artist" && table != "track" && table != "album" && table != "trackartist" )
         return resultslist;
 
-    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
+    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name, fulltext );
     foreach ( int i, resultsmap.keys() )
     {
         resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
@@ -695,4 +699,12 @@ DatabaseImpl::openDatabase( const QString& dbname )
     }
 
     return schemaUpdated;
+}
+
+
+void
+DatabaseImpl::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

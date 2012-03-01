@@ -389,7 +389,7 @@ AtticaManager::upgradeResolver( const Content& resolver )
     emit resolverStateChanged( resolver.id() );
 
     uninstallResolver( resolver );
-    installResolver( resolver );
+    installResolver( resolver, false );
 }
 
 

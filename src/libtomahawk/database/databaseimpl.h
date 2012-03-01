@@ -56,7 +56,7 @@ public:
     int trackId( int artistid, const QString& name_orig, bool autoCreate );
     int albumId( int artistid, const QString& name_orig, bool autoCreate );
 
-    QList< QPair<int, float> > searchTable( const QString& table, const QString& name, uint limit = 0 );
+    QList< QPair<int, float> > searchTable( const QString& table, const QString& name, bool fulltext, uint limit = 0 );
     QList< int > getTrackFids( int tid );
 
     static QString sortname( const QString& str, bool replaceArticle = false );
@@ -80,6 +80,9 @@ signals:
     void indexReady();
 
 public slots:
+
+private slots:
+    void updateIndex();
 
 private:
     QString cleanSql( const QString& sql );

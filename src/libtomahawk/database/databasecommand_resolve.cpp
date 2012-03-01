@@ -81,9 +81,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist() );
-    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track() );
-    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album() );
+    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist(), false );
+    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track(), false );
+    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album(), false );
 
     if ( artists.length() == 0 || tracks.length() == 0 )
     {
@@ -201,9 +201,16 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artistPairs = lib->searchTable( "artist", m_query->fullTextQuery(), 20 );
-    QList< QPair<int, float> > trackPairs = lib->searchTable( "track", m_query->fullTextQuery(), 20 );
-    QList< QPair<int, float> > albumPairs = lib->searchTable( "album", m_query->fullTextQuery(), 20 );
+    QList< QPair<int, float> > artistPairs = lib->searchTable( "artist", m_query->fullTextQuery(), false, 20 );
+    QList< QPair<int, float> > albumPairs = lib->searchTable( "album", m_query->fullTextQuery(), false, 20 );
+    QList< QPair<int, float> > trackArtistPairs = lib->searchTable( "trackartist", m_query->fullTextQuery(), true, 20 );
+
+    if ( artistPairs.length() == 0 && albumPairs.length() == 0 && trackArtistPairs.length() == 0 )
+    {
+        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
+        emit results( m_query->id(), res );
+        return;
+    }
 
     foreach ( const scorepair_t& artistPair, artistPairs )
     {
@@ -241,28 +248,14 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         emit albums( m_query->id(), albumList );
     }
 
-    if ( artistPairs.length() == 0 && trackPairs.length() == 0 && albumPairs.length() == 0 )
-    {
-        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
-        emit results( m_query->id(), res );
-        return;
-    }
-
     // STEP 2
     TomahawkSqlQuery files_query = lib->newquery();
 
-    QStringList artsl, trksl, albsl;
-    for ( int k = 0; k < artistPairs.count(); k++ )
-        artsl.append( QString::number( artistPairs.at( k ).first ) );
-    for ( int k = 0; k < trackPairs.count(); k++ )
-        trksl.append( QString::number( trackPairs.at( k ).first ) );
-    for ( int k = 0; k < albumPairs.count(); k++ )
-        albsl.append( QString::number( albumPairs.at( k ).first ) );
+    QStringList trksl;
+    for ( int k = 0; k < trackArtistPairs.count(); k++ )
+        trksl.append( QString::number( trackArtistPairs.at( k ).first ) );
 
-    QString artsToken = QString( "file_join.artist IN (%1)" ).arg( artsl.join( "," ) );
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
-    QString albsToken = QString( "file_join.album IN (%1)" ).arg( albsl.join( "," ) );
-
     QString sql = QString( "SELECT "
                             "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
                             "file_join.artist, file_join.album, file_join.track, "  //7
@@ -284,7 +277,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
                             "track.id = file_join.track AND "
                             "file.id = file_join.file AND "
                             "%1" )
-                        .arg( trackPairs.length() > 0 ? trksToken : QString( "0" ) );
+                        .arg( trksl.length() > 0 ? trksToken : QString( "0" ) );
 
     files_query.prepare( sql );
     files_query.exec();
@@ -332,11 +325,11 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setAlbumPos( files_query.value( 17 ).toUInt() );
         result->setTrackId( files_query.value( 9 ).toUInt() );
 
-        for ( int k = 0; k < trackPairs.count(); k++ )
+        for ( int k = 0; k < trackArtistPairs.count(); k++ )
         {
-            if ( trackPairs.at( k ).first == (int)result->trackId() )
+            if ( trackArtistPairs.at( k ).first == (int)result->trackId() )
             {
-                result->setScore( trackPairs.at( k ).second );
+                result->setScore( trackArtistPairs.at( k ).second );
                 break;
             }
         }

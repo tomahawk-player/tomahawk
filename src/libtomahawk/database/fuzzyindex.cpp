@@ -28,6 +28,7 @@
 #include "utils/logger.h"
 
 using namespace lucene::analysis;
+using namespace lucene::analysis::standard;
 using namespace lucene::document;
 using namespace lucene::store;
 using namespace lucene::index;
@@ -106,7 +107,7 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
 {
     try
     {
-        qDebug() << "Appending to index:" << fields.count();
+        tDebug() << "Appending to index:" << table << fields.count();
         bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
         Document doc;
@@ -117,16 +118,14 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
             it.next();
             unsigned int id = it.key();
             QString name = it.value();
-
             {
                 Field* field = _CLNEW Field( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str(),
-                                            Field::STORE_YES | Field::INDEX_UNTOKENIZED );
+                                             Field::STORE_YES | Field::INDEX_TOKENIZED );
                 doc.add( *field );
             }
 
             {
-                Field* field = _CLNEW Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
-                Field::STORE_YES | Field::INDEX_NO );
+                Field* field = _CLNEW Field( _T( "id" ), QString::number( id ).toStdWString().c_str(), Field::STORE_YES | Field::INDEX_NO );
                 doc.add( *field );
             }
 
@@ -134,6 +133,7 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
             doc.clear();
         }
 
+        luceneWriter.optimize();
         luceneWriter.close();
     }
     catch( CLuceneError& error )
@@ -152,7 +152,7 @@ FuzzyIndex::loadLuceneIndex()
 
 
 QMap< int, float >
-FuzzyIndex::search( const QString& table, const QString& name )
+FuzzyIndex::search( const QString& table, const QString& name, bool fulltext )
 {
     QMutexLocker lock( &m_mutex );
 
@@ -174,13 +174,27 @@ FuzzyIndex::search( const QString& table, const QString& name )
         if ( name.isEmpty() )
             return resultsmap;
 
-        SimpleAnalyzer analyzer;
-        QueryParser parser( table.toStdWString().c_str(), m_analyzer );
         Hits* hits = 0;
+        Query* qry = 0;
+        QueryParser parser( table.toStdWString().c_str(), m_analyzer );
 
-        FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str() ) );
+        if ( fulltext )
+        {
+            QString escapedName = QString::fromWCharArray( parser.escape( name.toStdWString().c_str() ) );
+
+            QStringList sl = DatabaseImpl::sortname( escapedName ).split( " ", QString::SkipEmptyParts );
+            qry = parser.parse( QString( "%1:%2~" ).arg( table ).arg( sl.join( "~ " ) ).toStdWString().c_str() );
+        }
+        else
+        {
+//            qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str() ) );
+            QString escapedName = QString::fromWCharArray( parser.escape( name.toStdWString().c_str() ) );
+
+            QStringList sl = DatabaseImpl::sortname( escapedName ).split( " ", QString::SkipEmptyParts );
+            qry = parser.parse( QString( "%1:\"%2\"~" ).arg( table ).arg( sl.join( " " ) ).toStdWString().c_str() );
+        }
+
         hits = m_luceneSearcher->search( qry );
-
         for ( uint i = 0; i < hits->length(); i++ )
         {
             Document* d = &hits->doc( i );
@@ -194,7 +208,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
             else
                 score = qMin( score, (float)0.99 );
 
-            if ( score > 0.05 )
+            if ( score > 0.20 )
             {
                 resultsmap.insert( id, score );
 //                qDebug() << "Hitres:" << result << id << score << table << name;

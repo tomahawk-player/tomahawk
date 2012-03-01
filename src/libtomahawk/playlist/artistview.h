@@ -93,7 +93,7 @@ protected slots:
 
 private slots:
     void onItemCountChanged( unsigned int items );
-    void onFilterChanged( const QString& filter );
+    void onFilterChangeFinished();
     void onFilteringStarted();
     void onViewChanged();
     void onScrollTimeout();
