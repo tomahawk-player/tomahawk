@@ -31,7 +31,6 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
-    qDebug() << "DELETING ALBUM:" << m_name;
     delete m_cover;
 }
 

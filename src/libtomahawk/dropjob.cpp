@@ -678,9 +678,6 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
         m_dropJob = 0;
     }
 
-    foreach ( const query_ptr & q, tracksList )
-        qDebug() << "DropJob got track added:" << q->track() << q->artist() << q->solved() << q->playable() << q->results().count();
-
     m_resultList.append( tracksList );
 
     if ( --m_queryCount == 0 )
@@ -703,12 +700,10 @@ DropJob::tracksFromDB( const QList< query_ptr >& tracks )
     // Tracks that we get from databasecommand_alltracks are resolved only against the database and explicitly marked
     // as finished. if the source they resolve to is offline they will not resolve against any resolver.
     // explicitly resolve them if they fall in that case first
-    qDebug() << "Got track results in dropjob from database" << tracks.size();
     foreach( const query_ptr& track, tracks )
     {
         if ( !track->playable() && !track->solved() && track->results().size() ) // we have offline results
         {
-            qDebug() << "Found a db track that is not playable but marked as finished, forcing re-resolve";
             track->setResolveFinished( false );
             Pipeline::instance()->resolve( track );
         }
