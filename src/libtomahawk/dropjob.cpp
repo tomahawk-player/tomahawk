@@ -832,6 +832,9 @@ DropJob::getAlbum(const QString &artist, const QString &album)
 
     if ( albumPtr->playlistInterface()->tracks().isEmpty() )
     {
+        // For albums that don't exist until this moment, we are the main shared pointer holding on.
+        // fetching the tracks is asynchronous, so the resulting signal is queued. when we go out of scope we delete
+        // the artist_ptr which means we never get the signal delivered. so we hold on to the album pointer till we're done
         m_albumsToKeep.insert( albumPtr );
 
         m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
