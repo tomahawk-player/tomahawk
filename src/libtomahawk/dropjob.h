@@ -125,7 +125,6 @@ private slots:
     void tracksFromDB( const QList< Tomahawk::query_ptr >& );
 private:
     /// handle parsing mime data
-
     void handleAllUrls( const QString& urls );
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
@@ -138,6 +137,7 @@ private:
     QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
 
     void getTopTen( const QString& artist );
+    void getAlbumFromInfoystem( const QString& artist, const QString& album );
 
     void removeDuplicates();
     void removeRemoteSources();
