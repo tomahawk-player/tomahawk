@@ -122,6 +122,7 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
+    void tracksFromDB( const QList< Tomahawk::query_ptr >& );
 private:
     /// handle parsing mime data
 
@@ -153,6 +154,8 @@ private:
     Tomahawk::DropJobNotifier* m_dropJob;
 
     QList< Tomahawk::query_ptr > m_resultList;
+    QSet< Tomahawk::album_ptr > m_albumsToKeep;
+    QSet< Tomahawk::artist_ptr > m_artistsToKeep;
 
     static bool s_canParseSpotifyPlaylists;
 };

@@ -39,6 +39,7 @@
 
 #ifdef QCA2_FOUND
 #include "utils/groovesharkparser.h"
+#include "pipeline.h"
 #endif //QCA2_FOUND
 
 
@@ -126,7 +127,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Not the most elegant
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
-        
+
         if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
             return true;
     }
@@ -573,7 +574,7 @@ DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 #ifdef QCA2_FOUND
     QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
     tDebug() << "Got Grooveshark urls!" << urls;
-    
+
     if ( dropAction() == Default )
         setDropAction( Create );
 
@@ -694,6 +695,38 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 
 
 void
+DropJob::tracksFromDB( const QList< query_ptr >& tracks )
+{
+    // Tracks that we get from databasecommand_alltracks are resolved only against the database and explicitly marked
+    // as finished. if the source they resolve to is offline they will not resolve against any resolver.
+    // explicitly resolve them if they fall in that case first
+    foreach( const query_ptr& track, tracks )
+    {
+        if ( !track->playable() && !track->solved() && track->results().size() ) // we have offline results
+        {
+            track->setResolveFinished( false );
+            Pipeline::instance()->resolve( track );
+        }
+    }
+
+    onTracksAdded( tracks );
+
+    if ( Tomahawk::Album* album = qobject_cast< Tomahawk::Album* >( sender() ) )
+    {
+        foreach ( const album_ptr& ptr, m_albumsToKeep )
+            if ( ptr.data() == album )
+                m_albumsToKeep.remove( ptr );
+    }
+    else if ( Tomahawk::Artist* artist = qobject_cast< Tomahawk::Artist* >( sender() ) )
+    {
+        foreach ( const artist_ptr& ptr, m_artistsToKeep )
+            if ( ptr.data() == artist )
+                m_artistsToKeep.remove( ptr );
+    }
+}
+
+
+void
 DropJob::removeDuplicates()
 {
     QList< Tomahawk::query_ptr > list;
@@ -776,8 +809,10 @@ DropJob::getArtist( const QString &artist )
     artist_ptr artistPtr = Artist::get( artist );
     if ( artistPtr->playlistInterface()->tracks().isEmpty() )
     {
+        m_artistsToKeep.insert( artistPtr );
+
         connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                                     SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
         m_queryCount++;
         return QList< query_ptr >();
     }
@@ -797,9 +832,11 @@ DropJob::getAlbum(const QString &artist, const QString &album)
 
     if ( albumPtr->playlistInterface()->tracks().isEmpty() )
     {
+        m_albumsToKeep.insert( albumPtr );
+
         m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
         connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                                    SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
         JobStatusView::instance()->model()->addJob( m_dropJob );
 
         m_queryCount++;
