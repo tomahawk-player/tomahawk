@@ -443,8 +443,7 @@ DynamicWidget::steeringChanged()
 void
 DynamicWidget::showPreview()
 {
-    if ( m_playlist->mode() == OnDemand &&
-        !m_runningOnDemand )
+    if ( m_playlist->mode() == OnDemand && !m_runningOnDemand )
     {
         // if this is a not running station, preview matching tracks
         m_model->clear();
