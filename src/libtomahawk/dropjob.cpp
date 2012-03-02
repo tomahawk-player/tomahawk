@@ -36,10 +36,10 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "pipeline.h"
 
 #ifdef QCA2_FOUND
 #include "utils/groovesharkparser.h"
-#include "pipeline.h"
 #endif //QCA2_FOUND
 
 
