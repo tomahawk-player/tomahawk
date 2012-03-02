@@ -515,6 +515,9 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
     {
         o.state &= ~QStyle::State_MouseOver;
+        if ( !index.parent().parent().isValid() )
+            o.rect.adjust( 7, 0, 0, 0 );
+
         QStyledItemDelegate::paint( painter, o, index );
 
         if ( type == SourcesModel::TemporaryPage )
