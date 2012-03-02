@@ -462,12 +462,16 @@ DynamicWidget::showPreview()
 void
 DynamicWidget::generatorError( const QString& title, const QString& content )
 {
-    if ( m_runningOnDemand )
-        stopStation( false );
-
     m_view->setDynamicWorking( false );
     m_loading->fadeOut();
-    m_view->showMessageTimeout( title, content );
+
+    if ( m_runningOnDemand )
+    {
+        stopStation( false );
+        m_view->showMessage( tr( "Station ran out of tracks!\n\nTry tweaking the filters for a new set of songs to play." ) );
+    }
+    else
+        m_view->showMessageTimeout( title, content );
 }
 
 
