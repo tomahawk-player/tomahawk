@@ -30,9 +30,8 @@ using namespace Tomahawk;
 GroupItem::GroupItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue )
     : SourceTreeItem( model, parent, SourcesModel::Group, peerSortValue )
     , m_text( text )
+    , m_defaultExpanded( true )
 {
-    // expand by default
-    QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );
 }
 
 
@@ -52,6 +51,18 @@ void
 GroupItem::requestExpanding()
 {
     emit expandRequest( this );
+}
+
+
+void
+GroupItem::checkExpandedState()
+{
+    if ( m_defaultExpanded )
+    {
+        // only default expand once
+        m_defaultExpanded = false;
+        requestExpanding();
+    }
 }
 
 

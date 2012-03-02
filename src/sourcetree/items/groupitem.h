@@ -38,6 +38,9 @@ public:
     virtual QIcon icon() const { return QIcon(); }
     virtual bool isBeingPlayed() const { return false; }
 
+    void checkExpandedState();
+    void setDefaultExpanded( bool b ) { m_defaultExpanded = b; }
+
 public slots:
     virtual void activate();
 
@@ -49,6 +52,7 @@ private slots:
 
 private:
     QString m_text;
+    bool m_defaultExpanded;
 };
 
 #endif

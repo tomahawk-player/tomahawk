@@ -300,7 +300,7 @@ SourcesModel::appendGroups()
 void
 SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
-    SourceTreeItem* parent;
+    GroupItem* parent;
     if ( !source.isNull() && source->isLocal() )
     {
         parent = m_myMusicGroup;
@@ -314,6 +314,8 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
     beginInsertRows( idx, rowCount( idx ), rowCount( idx ) );
     new SourceItem( this, parent, source );
     endInsertRows();
+    
+    parent->checkExpandedState();
 }
 
 
