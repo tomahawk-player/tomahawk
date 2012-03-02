@@ -188,6 +188,7 @@ ArtistView::onScrollTimeout()
     }
 }
 
+
 void
 ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
