@@ -70,7 +70,7 @@ CheckDirModel::getFileInfoResult()
         connect( showProcess, SIGNAL( readyReadStandardError() ), this, SLOT( processErrorOutput() ) );
         m_shownVolumes = true;
 
-        QTimer::singleShot( 25, this, SLOT( volumeShowFinished() ) );
+        QTimer::singleShot( 500, this, SLOT( volumeShowFinished() ) );
     }
 
     p->terminate();
