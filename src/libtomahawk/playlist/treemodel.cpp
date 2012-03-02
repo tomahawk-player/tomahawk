@@ -20,6 +20,7 @@
 
 #include <QMimeData>
 
+#include "pipeline.h"
 #include "source.h"
 #include "sourcelist.h"
 #include "audio/audioengine.h"
@@ -929,10 +930,11 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
                 foreach ( const QString& trackName, tracks )
                 {
-                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
+                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ] );
                     query->setAlbumPos( trackNo++ );
                     ql << query;
                 }
+                Pipeline::instance()->resolve( ql );
 
                 onTracksAdded( ql, idx );
             }

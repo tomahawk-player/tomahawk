@@ -36,6 +36,8 @@
 #include "widgets/OverlayButton.h"
 #include "widgets/overlaywidget.h"
 
+#include "pipeline.h"
+
 using namespace Tomahawk;
 
 
@@ -260,7 +262,8 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                queries << Query::get( m_artist->name(), track, QString(), uuid() );
+                queries << Query::get( m_artist->name(), track, QString() );
+                Pipeline::instance()->resolve( queries );
 
                 if ( ++i == 15 )
                     break;
