@@ -453,8 +453,8 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
 
             QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
             imgurl.addQueryItem( "method", "album.imageredirect" );
-            imgurl.addQueryItem( "artist", artistName );
-            imgurl.addQueryItem( "album", albumName );
+            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
+            imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
             imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
             imgurl.addQueryItem( "size", "large" );
             imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
@@ -473,7 +473,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
 
             QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
             imgurl.addQueryItem( "method", "artist.imageredirect" );
-            imgurl.addQueryItem( "artist", artistName );
+            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
             imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
             imgurl.addQueryItem( "size", "large" );
             imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
