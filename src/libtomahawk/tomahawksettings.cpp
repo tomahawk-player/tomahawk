@@ -203,7 +203,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
-    } else if ( oldVersion == 5 )
+    } else if ( oldVersion == 6 )
     {
         // Migrate to accounts from sipplugins.
         // collect old connected and enabled sip plugins

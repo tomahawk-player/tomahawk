@@ -55,6 +55,13 @@ Account::Account( const QString& accountId )
     loadFromConfig( accountId );
 }
 
+
+Account::~Account()
+{
+    sync();
+}
+
+
 QWidget*
 Account::configurationWidget()
 {

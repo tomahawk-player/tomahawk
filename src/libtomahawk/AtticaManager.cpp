@@ -447,6 +447,7 @@ AtticaManager::payloadFetched()
                 // Do the install / add to tomahawk
                 Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
                 Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+                TomahawkSettings::instance()->addAccount( resolver->accountId() );
             }
 
             m_resolverStates[ resolverId ].state = Installed;

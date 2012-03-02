@@ -422,6 +422,12 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                 }
                 else
                 {
+                    if ( m_waitingForAtticaInstall.contains( resolver.id() ) )
+                    {
+                        // in progress, ignore
+                        return true;
+                    }
+
                     qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 

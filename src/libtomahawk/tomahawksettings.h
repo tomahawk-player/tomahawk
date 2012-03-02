@@ -27,7 +27,7 @@
 
 #include "dllmacro.h"
 
-#define TOMAHAWK_SETTINGS_VERSION 6
+#define TOMAHAWK_SETTINGS_VERSION 7
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config

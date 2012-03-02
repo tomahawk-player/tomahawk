@@ -200,6 +200,8 @@ ResolverAccount::resolverChanged()
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     : ResolverAccount( accountId )
 {
+    TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
+
     m_atticaId = configuration().value( "atticaId" ).toString();
     loadIcon();
 }
@@ -209,8 +211,10 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
     , m_atticaId( atticaId )
 {
     QVariantHash conf = configuration();
-    conf[ "atticaid" ] = atticaId;
+    conf[ "atticaId" ] = atticaId;
     setConfiguration( conf );
+
+    TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
 
     loadIcon();
 }

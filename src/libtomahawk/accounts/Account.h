@@ -73,7 +73,7 @@ public:
     enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
     explicit Account( const QString &accountId );
-    virtual ~Account() {}
+    virtual ~Account();
 
     QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
     QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
