@@ -89,8 +89,8 @@ ArtistPlaylistInterface::tracks()
         cmd->setArtist( m_artist );
         cmd->setSortOrder( DatabaseCommand_AllTracks::Album );
 
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+        connect( cmd,           SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                 m_artist.data(), SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
     }
