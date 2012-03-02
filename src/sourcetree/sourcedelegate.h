@@ -42,6 +42,7 @@ public:
     SourceTreeItem::DropType hoveredDropType() const;
 
 signals:
+    void clicked( const QModelIndex& idx );
     void latchOn( const Tomahawk::source_ptr& idx );
     void latchOff( const Tomahawk::source_ptr& idx );
     void toggleRealtimeLatch( const Tomahawk::source_ptr& idx, bool realtime );

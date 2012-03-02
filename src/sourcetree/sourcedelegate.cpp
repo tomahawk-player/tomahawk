@@ -195,7 +195,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
-    
+
     bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
     if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
     {
@@ -626,6 +626,12 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             }
         }
     }
+
+    // We emit our own clicked() signal instead of relying on QTreeView's, because that is fired whether or not a delegate accepts
+    // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here wemake sure we only
+    // emit if we really want to
+    if ( event->type() == QEvent::MouseButtonRelease )
+        emit clicked( index );
 
     return QStyledItemDelegate::editorEvent ( event, model, option, index );
 }
