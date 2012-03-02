@@ -87,7 +87,7 @@ public:
 
     Q_PROPERTY( QString LoopStatus READ loopStatus WRITE setLoopStatus )
     QString loopStatus() const;
-    void setLoopStatus( const QString &value );
+    void setLoopStatus( const QString& value );
 
     Q_PROPERTY( double MaximumRate READ maximumRate )
     double maximumRate() const;
@@ -129,15 +129,14 @@ public slots:
 
     // org.mpris.MediaPlayer2.Player
     void Next();
-    void OpenUri( const QString &Uri );
+    void OpenUri( const QString& Uri );
     void Pause();
     void Play();
     void PlayPause();
     void Previous();
     void Seek( qlonglong Offset );
-    void SetPosition( const QDBusObjectPath &TrackId, qlonglong Position );
+    void SetPosition( const QDBusObjectPath& TrackId, qlonglong Position );
     void Stop();
-
 
 protected slots:
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -160,16 +159,16 @@ private:
     // Get Info
 
     // Push Info
-    void audioStarted( const QVariant &input );
-    void audioFinished( const QVariant &input );
+    void audioStarted( const QVariant& input );
+    void audioFinished( const QVariant& input );
     void audioStopped();
     void audioPaused();
-    void audioResumed( const QVariant &input );
+    void audioResumed( const QVariant& input );
 
     // DBus
     void notifyPropertyChanged( const QString& interface, const QString& propertyName );
     QString m_playbackStatus;
-    QTemporaryFile *m_coverTempFile;
+    QTemporaryFile* m_coverTempFile;
 };
 
 };
