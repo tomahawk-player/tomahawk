@@ -76,7 +76,10 @@ AtticaManager::loadPixmapsFromCache()
         }
 
         QPixmap* icon = new QPixmap( cacheDir.absoluteFilePath( file ) );
-        m_resolverStates[ info.baseName() ].pixmap = icon;
+        if ( !icon->isNull() )
+        {
+            m_resolverStates[ info.baseName() ].pixmap = icon;
+        }
     }
 }
 
@@ -93,14 +96,21 @@ AtticaManager::savePixmapsToCache()
 
     foreach( const QString& id, m_resolverStates.keys() )
     {
-        if ( !m_resolverStates[ id ].pixmap )
+        if ( !m_resolverStates[ id ].pixmap || !m_resolverStates[ id ].pixmapDirty )
             continue;
 
         const QString filename = cacheDir.absoluteFilePath( QString( "%1.png" ).arg( id ) );
-        if ( !m_resolverStates[ id ].pixmap->save( filename ) )
+        QFile f( filename );
+        if ( !f.open( QIODevice::WriteOnly ) )
         {
             tLog() << "Failed to open cache file for writing:" << filename;
-            continue;
+        }
+        else
+        {
+            if ( !m_resolverStates[ id ].pixmap->save( &f ) )
+            {
+                tLog() << "Failed to save pixmap into opened file for writing:" << filename;
+            }
         }
     }
 }
@@ -247,6 +257,7 @@ AtticaManager::resolverIconFetched()
     QPixmap* icon = new QPixmap;
     icon->loadFromData( data );
     m_resolverStates[ resolverId ].pixmap = icon;
+    m_resolverStates[ resolverId ].pixmapDirty = true;
 }
 
 
