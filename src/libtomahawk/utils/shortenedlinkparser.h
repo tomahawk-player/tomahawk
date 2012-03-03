@@ -26,11 +26,14 @@
 #include <QObject>
 #include <QSet>
 #include <QStringList>
+#include <QPixmap>
 
 class QNetworkReply;
 
 namespace Tomahawk
 {
+
+class DropJobNotifier;
 
 /**
  * Small class to parse whitelisted shortened links into the redirected urls
@@ -58,8 +61,13 @@ private:
     void lookupUrl( const QString& url );
     void checkFinished();
 
+    static QPixmap pixmap();
+
     QStringList m_links;
     QSet< QNetworkReply* > m_queries;
+    DropJobNotifier* m_expandJob;
+
+    static QPixmap* s_pixmap;
 };
 
 }

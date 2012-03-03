@@ -21,6 +21,7 @@
 
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
+#include "dropjobnotifier.h"
 #include "query.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
@@ -33,6 +34,7 @@
 
 using namespace Tomahawk;
 
+QPixmap* ShortenedLinkParser::s_pixmap = 0;
 
 ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* parent )
     : QObject( parent )
@@ -61,6 +63,8 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "itun.es" ) ||
              url.contains( "tinyurl.com" ) ||
              url.contains( "tinysong.com" ) ||
+             url.contains( "grooveshark.com/s/~/" ) || // These redirect to the 'real' grooveshark track url
+             url.contains( "grooveshark.com/#/s/~/" ) ||
              url.contains( "rd.io" ) );
 }
 
@@ -68,11 +72,18 @@ void
 ShortenedLinkParser::lookupUrl ( const QString& url )
 {
     tDebug() << "Looking up..." << url;
+    QString cleaned = url;
+    if ( cleaned.contains( "/#/s/" ) )
+        cleaned.replace( "/#", "" );
 
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( lookupFinished() ) );
 
     m_queries.insert( reply );
+
+    m_expandJob = new DropJobNotifier( pixmap(), "shortened", DropJob::Track, reply );
+    JobStatusView::instance()->model()->addJob( m_expandJob );
+
 }
 
 void
@@ -95,7 +106,7 @@ ShortenedLinkParser::lookupFinished()
     else
     {
         tLog() << "Got a redirected url:" << r->url().toString();
-        m_links << r->url().toString();   
+        m_links << r->url().toString();
         m_queries.remove( r );
         r->deleteLater();
         checkFinished();
@@ -113,4 +124,14 @@ ShortenedLinkParser::checkFinished()
 
         deleteLater();
     }
+}
+
+
+QPixmap
+ShortenedLinkParser::pixmap()
+{
+    if ( !s_pixmap )
+        s_pixmap = new QPixmap( RESPATH "images/add.png" );
+
+    return *s_pixmap;
 }

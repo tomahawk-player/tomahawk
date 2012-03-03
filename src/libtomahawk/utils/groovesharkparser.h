@@ -42,7 +42,7 @@ class QNetworkReply;
 
 namespace Tomahawk
 {
-    
+
 class DropJobNotifier;
 
 class DLLEXPORT GroovesharkParser : public QObject
@@ -58,6 +58,7 @@ signals:
 
 private slots:
     void groovesharkLookupFinished();
+    void trackPageFetchFinished();
 
     void playlistCreated();
 private:
@@ -65,6 +66,8 @@ private:
 
     void lookupUrl( const QString& url );
     void lookupGroovesharkPlaylist( const QString& playlist );
+    void lookupGroovesharkTrack( const QString& track );
+
     void checkTrackFinished();
     void checkPlaylistFinished();
     int  m_limit;
@@ -79,7 +82,7 @@ private:
     QCA::SymmetricKey m_apiKey;
 
     static QPixmap* s_pixmap;
-    
+
 };
 
 }
