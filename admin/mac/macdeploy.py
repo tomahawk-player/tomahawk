@@ -491,7 +491,7 @@ def FindVLCPlugin(name):
 FixBinary(binary)
 
 for plugin in VLC_PLUGINS:
-  FixVLCPlugin(FindVLCPlugin(plugin), '.')
+  FixVLCPlugin(FindVLCPlugin(plugin), '../Frameworks/vlc/plugins')
 
 for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
