@@ -650,6 +650,8 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
+    SET_SOURCE_FILES_PROPERTIES(utils/tomahawkutils_mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
+
     SET( libHeaders ${libHeaders}
       infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
