@@ -71,7 +71,11 @@ XspfUpdater::playlistLoaded()
     foreach ( const plentry_ptr ple, playlist()->entries() )
         tracks << ple->query();
 
-    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, loader->entries() );
+    bool changed = false;
+    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, loader->entries(), changed );
+
+    if ( !changed )
+        return;
 
     QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );

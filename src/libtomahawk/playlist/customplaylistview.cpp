@@ -104,7 +104,11 @@ CustomPlaylistView::generateTracks()
 void
 CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
 {
-    QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks );
+    bool changed = false;
+    QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks, changed);
+
+    if ( !changed )
+        return;
 
     m_model->clear();
     m_model->append( newTracks );

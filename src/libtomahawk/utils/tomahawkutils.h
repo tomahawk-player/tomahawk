@@ -110,7 +110,7 @@ namespace TomahawkUtils
      *
      * \return true if some changes were made, false if the new tracks are the same as the current tracks in \param orig
      */
-    DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks );
+    DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
 }
