@@ -371,7 +371,7 @@ ViewManager::showSuperCollection()
         }
     }
 
-    m_superCollectionModel->setTitle( tr( "All available tracks" ) );
+    m_superCollectionModel->setTitle( tr( "SuperCollection" ) );
     m_superCollectionModel->setDescription( tr( "Combined libraries of all your online friends" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
