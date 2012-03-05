@@ -22,11 +22,14 @@
 #include "databasecommand.h"
 #include "dllmacro.h"
 
+class IndexingJobItem;
+
 class DLLEXPORT DatabaseCommand_UpdateSearchIndex : public DatabaseCommand
 {
 Q_OBJECT
 public:
     explicit DatabaseCommand_UpdateSearchIndex();
+    virtual ~DatabaseCommand_UpdateSearchIndex();
 
     virtual QString commandname() const { return "updatesearchindex"; }
     virtual bool doesMutates() const { return true; }
@@ -39,6 +42,7 @@ private:
     void indexTable( DatabaseImpl* db, const QString& table, const QString& query );
 
     QString table;
+    IndexingJobItem* m_statusJob;
 };
 
 #endif // DATABASECOMMAND_UPDATESEARCHINDEX_H

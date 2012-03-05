@@ -21,14 +21,26 @@
 #include "databaseimpl.h"
 #include "tomahawksqlquery.h"
 #include "utils/logger.h"
+#include "jobview/IndexingJobItem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 
 #include <QSqlRecord>
 
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
+    , m_statusJob( new IndexingJobItem )
 {
     tLog() << Q_FUNC_INFO << "Updating index.";
+
+    JobStatusView::instance()->model()->addJob( m_statusJob );
+}
+
+
+DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
+{
+    m_statusJob->done();
 }
 
 
@@ -48,7 +60,7 @@ DatabaseCommand_UpdateSearchIndex::indexTable( DatabaseImpl* db, const QString& 
         value = "";
         for ( int v = 1; v < q.record().count(); v++ )
             value += q.value( v ).toString() + " ";
-            
+
         fields.insert( q.value( 0 ).toUInt(), value.trimmed() );
     }
 

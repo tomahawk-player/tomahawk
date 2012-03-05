@@ -39,6 +39,7 @@ set( libGuiSources
     jobview/TransferStatusItem.cpp
     jobview/LatchedStatusItem.cpp
     jobview/ErrorStatusMessage.cpp
+    jobview/IndexingJobItem.cpp
 
     infobar/infobar.cpp
 
@@ -278,6 +279,7 @@ set( libGuiHeaders
     jobview/TransferStatusItem.h
     jobview/LatchedStatusItem.h
     jobview/ErrorStatusMessage.h
+    jobview/IndexingJobItem.h
 
     thirdparty/Qocoa/qsearchfield.h
 )
