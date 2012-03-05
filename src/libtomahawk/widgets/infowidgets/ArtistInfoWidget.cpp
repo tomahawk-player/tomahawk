@@ -82,7 +82,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show Super Collection Albums" ) );
+    m_button->setText( tr( "Click to show SuperCollection Albums" ) );
     m_button->setCheckable( true );
     m_button->setChecked( true );
 
@@ -121,7 +121,7 @@ ArtistInfoWidget::setMode( ModelMode mode )
         onModeToggle();
 
     if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show Super Collection Albums" ) );
+        m_button->setText( tr( "Click to show SuperCollection Albums" ) );
     else
         m_button->setText( tr( "Click to show Official Albums" ) );
 }

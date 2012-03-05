@@ -124,7 +124,7 @@ SourceItem::source() const
 QString
 SourceItem::text() const
 {
-    return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
+    return m_source.isNull() ? tr( "SuperCollection" ) : m_source->friendlyName();
 }
 
 
