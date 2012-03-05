@@ -200,6 +200,12 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
         }
         break;
 
+        case QSystemTrayIcon::MiddleClick:
+        {
+            AudioEngine::instance()->playPause();
+        }
+        break;
+
         default:
             break;
     }
