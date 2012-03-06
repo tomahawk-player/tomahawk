@@ -104,6 +104,7 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
+    QMutexLocker lock( &m_mutex );
     m_ownRef.clear();
 }
 
