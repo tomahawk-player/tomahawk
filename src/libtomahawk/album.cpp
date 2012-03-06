@@ -38,6 +38,9 @@ Album::~Album()
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
 {
+    if ( !Database::instance() || !Database::instance()->impl() )
+        return album_ptr();
+
     int albid = Database::instance()->impl()->albumId( artist->id(), name, autoCreate );
     if ( albid < 1 && autoCreate )
         return album_ptr();

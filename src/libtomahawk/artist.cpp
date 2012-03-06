@@ -38,6 +38,9 @@ Artist::~Artist()
 artist_ptr
 Artist::get( const QString& name, bool autoCreate )
 {
+    if ( !Database::instance() || !Database::instance()->impl() )
+        return artist_ptr();
+
     int artid = Database::instance()->impl()->artistId( name, autoCreate );
     if ( artid < 1 && autoCreate )
         return artist_ptr();
