@@ -49,6 +49,7 @@ namespace Tomahawk
 {
     class ChartDataLoader;
     class ChartsPlaylistInterface;
+    class ChartDataLoader;
 }
 
 /**
@@ -110,6 +111,7 @@ private:
     // {Artist,Album,Track}::get() calls are all synchronous db calls
     // and we don't want to lock up out UI in case the db is busy (e.g. on startup)
     QThread* m_workerThread;
+    QSet< Tomahawk::ChartDataLoader* > m_workers;
 
     // Cache our model data
     QHash< QString, AlbumModel* > m_albumModels;

@@ -126,6 +126,10 @@ ViewManager::ViewManager( QObject* parent )
 ViewManager::~ViewManager()
 {
     saveCurrentPlaylistSettings();
+    delete m_whatsHotWidget;
+    delete m_welcomeWidget;
+    delete m_topLovedWidget;
+    delete m_contextWidget;
     delete m_widget;
 }
 
