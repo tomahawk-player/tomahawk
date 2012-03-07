@@ -78,7 +78,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
 
-    schemaUpdated = true; // REMOVE ME
     m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
     if ( schemaUpdated )
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
