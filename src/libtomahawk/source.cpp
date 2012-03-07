@@ -350,6 +350,12 @@ Source::trackTimerFired()
 void
 Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "addCommand", Qt::QueuedConnection, Q_ARG( const QSharedPointer<DatabaseCommand>, command ) );
+        return;
+    }
+
     m_cmds << command;
     if ( !command->singletonCmd() )
         m_lastCmdGuid = command->guid();
@@ -363,7 +369,6 @@ Source::executeCommands()
 {
     if ( QThread::currentThread() != thread() )
     {
-        tDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
         QMetaObject::invokeMethod( this, "executeCommands", Qt::QueuedConnection );
         return;
     }

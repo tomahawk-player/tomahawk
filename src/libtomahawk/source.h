@@ -129,9 +129,9 @@ private slots:
     void trackTimerFired();
 
     void executeCommands();
+    void addCommand( const QSharedPointer<DatabaseCommand>& command );
 
 private:
-    void addCommand( const QSharedPointer<DatabaseCommand>& command );
     void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 
