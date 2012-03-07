@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ public:
     explicit ResolverConfigDelegate( QObject* parent = 0 );
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
 private slots:

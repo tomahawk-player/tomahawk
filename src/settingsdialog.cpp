@@ -30,43 +30,40 @@
 #include <QVBoxLayout>
 #include <QSizeGrip>
 
-#ifdef LIBLASTFM_FOUND
-#include <lastfm/ws.h>
-#include <lastfm/XmlQuery>
-#endif
-
 #include "AtticaManager.h"
 #include "tomahawkapp.h"
 #include "tomahawksettings.h"
 #include "delegateconfigwrapper.h"
-#include "GetNewStuffDialog.h"
 #include "musicscanner.h"
 #include "pipeline.h"
 #include "resolver.h"
 #include "ExternalResolverGui.h"
-#include "resolverconfigdelegate.h"
-#include "resolversmodel.h"
 #include "scanmanager.h"
 #include "settingslistdelegate.h"
-#include "sipconfigdelegate.h"
+#include "AccountDelegate.h"
 #include "database/database.h"
 #include "network/servent.h"
 #include "playlist/dynamic/widgets/LoadingSpinner.h"
-#include "sip/SipHandler.h"
-#include "sip/SipModel.h"
+#include "accounts/AccountModel.h"
+#include "accounts/Account.h"
+#include "accounts/AccountManager.h"
+#include <accounts/AccountModelFilterProxy.h>
+#include <accounts/ResolverAccount.h>
 #include "utils/logger.h"
+#include "AccountFactoryWrapper.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 
+using namespace Tomahawk;
+using namespace Accounts;
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
     , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
-    , m_sipModel( 0 )
-    , m_resolversModel( 0 )
+    , m_accountModel( 0 )
     , m_sipSpinner( 0 )
 {
     ui->setupUi( this );
@@ -74,11 +71,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     TomahawkUtils::unmarginLayout( layout() );
     ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
-
-    ui->addSipButton->setFixedWidth( 42 );
-    ui->removeSipButton->setFixedWidth( ui->addSipButton->width() );
-    ui->addScript->setFixedWidth( 42 );
-    ui->removeScript->setFixedWidth( ui->addScript->width() );
 
     ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
@@ -106,30 +98,44 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     p->setFixedSize( 0, 0 );
 #endif
 
-    // SIP PLUGINS
-    SipConfigDelegate* sipdel = new SipConfigDelegate( this );
-    ui->accountsView->setItemDelegate( sipdel );
+    // Accounts
+    AccountDelegate* accountDelegate = new AccountDelegate( this );
+    ui->accountsView->setItemDelegate( accountDelegate );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    ui->accountsView->setMouseTracking( true );
 
-    connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
-    connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
-    connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
-    m_sipModel = new SipModel( this );
-    ui->accountsView->setModel( m_sipModel );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
+    connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
+
+    m_accountModel = new AccountModel( this );
+    m_accountProxy = new AccountModelFilterProxy( m_accountModel );
+    m_accountProxy->setSourceModel( m_accountModel );
+
+    connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
+
+    ui->accountsView->setModel( m_accountProxy );
+
+    connect( ui->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
+    connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
+
+    ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( InfoType ), InfoType );
+
+    connect( ui->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
 
     if ( !Servent::instance()->isReady() )
     {
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
-        ui->addSipButton->setEnabled( false );
-        ui->removeSipButton->setEnabled( false );
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
-    setupSipButtons();
-
+    // ADVANCED
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
     ui->proxyButton->setVisible( true );
@@ -157,44 +163,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     }
 
     // NOW PLAYING
-#ifdef Q_WS_MAC
-    ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
-#else
-    ui->checkBoxEnableAdium->hide();
-#endif
+// #ifdef Q_WS_MAC
+//     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
+// #else
+//     ui->checkBoxEnableAdium->hide();
+// #endif
 
-    // LAST FM
-    ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
-    ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
-    ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
-    connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), SLOT( testLastFmLogin() ) );
-
-#ifdef Q_WS_MAC // FIXME
-    ui->pushButtonTestLastfmLogin->setVisible( false );
-#endif
-
-    // SCRIPT RESOLVER
-    ui->removeScript->setEnabled( false );
-    ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
-    connect( del, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
-    ui->scriptList->setItemDelegate( del );
-    m_resolversModel = new ResolversModel( this );
-    ui->scriptList->setModel( m_resolversModel );
-    ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    connect( m_resolversModel, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
-
-#ifdef LIBATTICA_FOUND
-    connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
-
-    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
-    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
-#else
-    ui->getMoreResolvers->hide();
-#endif
-
-    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
-    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
-    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
@@ -228,13 +202,7 @@ SettingsDialog::~SettingsDialog()
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
         s->setEnableEchonestCatalogs( ui->enableEchonestCatalog->isChecked() );
 
-        s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
-
-        s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
-        s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
-        s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
-
-        m_resolversModel->saveScriptResolvers();
+//         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
         s->applyChanges();
         s->sync();
@@ -250,8 +218,6 @@ void
 SettingsDialog::serventReady()
 {
     m_sipSpinner->fadeOut();
-    ui->addSipButton->setEnabled( true );
-    ui->removeSipButton->setEnabled( true );
 }
 
 
@@ -268,7 +234,7 @@ SettingsDialog::createIcons()
     QFontMetrics fm( font() );
     QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
     accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    accountsButton->setText( tr( "Accounts" ) );
+    accountsButton->setText( tr( "Services" ) );
     accountsButton->setTextAlignment( Qt::AlignHCenter );
     accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = fm.width( accountsButton->text() );
@@ -280,20 +246,6 @@ SettingsDialog::createIcons()
     musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = qMax( fm.width( musicButton->text() ), maxlen );
 
-    QListWidgetItem *lastfmButton = new QListWidgetItem( ui->listWidget );
-    lastfmButton->setIcon( QIcon( RESPATH "images/lastfm-settings.png" ) );
-    lastfmButton->setText( tr( "Last.fm" ) );
-    lastfmButton->setTextAlignment( Qt::AlignHCenter );
-    lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( lastfmButton->text() ), maxlen );
-
-    QListWidgetItem *resolversButton = new QListWidgetItem( ui->listWidget );
-    resolversButton->setIcon( QIcon( RESPATH "images/resolvers-settings.png" ) );
-    resolversButton->setText( tr( "Resolvers" ) );
-    resolversButton->setTextAlignment( Qt::AlignHCenter );
-    resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( resolversButton->text() ), maxlen );
-
     QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
     advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
     advancedButton->setText( tr( "Advanced" ) );
@@ -304,8 +256,6 @@ SettingsDialog::createIcons()
     maxlen += 15; // padding
     accountsButton->setSizeHint( QSize( maxlen, 60 ) );
     musicButton->setSizeHint( QSize( maxlen, 60 ) );
-    lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
-    resolversButton->setSizeHint( QSize( maxlen, 60 ) );
     advancedButton->setSizeHint( QSize( maxlen, 60 ) );
 
 #ifndef Q_WS_MAC
@@ -314,27 +264,6 @@ SettingsDialog::createIcons()
 #endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
-}
-
-
-void
-SettingsDialog::setupSipButtons()
-{
-    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() )
-    {
-        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) )
-        {
-            continue;
-        }
-
-        QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-        action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-        ui->addSipButton->addAction( action );
-
-        connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-    }
-
-    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
 }
 
 
@@ -407,413 +336,214 @@ SettingsDialog::updateScanOptionsView()
 
 
 void
-SettingsDialog::testLastFmLogin()
+SettingsDialog::accountsFilterChanged( int )
 {
-#ifdef LIBLASTFM_FOUND
-    ui->pushButtonTestLastfmLogin->setEnabled( false );
-    ui->pushButtonTestLastfmLogin->setText( "Testing..." );
-
-    QString authToken = TomahawkUtils::md5( ( ui->lineEditLastfmUsername->text().toLower() + TomahawkUtils::md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
-
-    // now authenticate w/ last.fm and get our session key
-    QMap<QString, QString> query;
-    query[ "method" ] = "auth.getMobileSession";
-    query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
-    query[ "authToken" ] = authToken;
-
-    // ensure they have up-to-date settings
-    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
-
-    QNetworkReply* authJob = lastfm::ws::post( query );
-
-    connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
-#endif
+    AccountType filter = static_cast< AccountType >( ui->accountsFilterCombo->itemData( ui->accountsFilterCombo->currentIndex() ).toInt() );
+    m_accountProxy->setFilterType( filter );
 }
 
 
 void
-SettingsDialog::onLastFmFinished()
+SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
-#ifdef LIBLASTFM_FOUND
-    QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
-    if( !authJob )
+    if( account->configurationWidget() )
     {
-        qDebug() << Q_FUNC_INFO << "No auth job returned!";
+#ifndef Q_OS_MAC
+        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
+        dialog.setShowDelete( showDelete );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if ( !watcher.isNull() && dialog.deleted() )
+        {
+            AccountManager::instance()->removeAccount( account );
+        }
+        else if( !watcher.isNull() && ret == QDialog::Accepted )
+        {
+            // send changed config to resolver
+            account->saveConfig();
+        }
+#else
+        // on osx a sheet needs to be non-modal
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
+        dialog->setShowDelete( showDelete );
+        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountConfigClosed( int ) ) );
+        connect( dialog, SIGNAL( closedWithDelete() ), this, SLOT( accountConfigDelete() ) );
+
+        dialog->show();
+#endif
+    }
+}
+
+
+void
+SettingsDialog::accountConfigClosed( int value )
+{
+    if( value == QDialog::Accepted )
+    {
+        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+        Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+        account->saveConfig();
+    }
+}
+
+
+void
+SettingsDialog::accountConfigDelete()
+{
+    DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+    Q_ASSERT( account );
+    AccountManager::instance()->removeAccount( account );
+}
+
+
+void
+SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
+{
+    QList< Account* > accts;
+    foreach ( Account* acct, AccountManager::instance()->accounts() )
+    {
+        if ( AccountManager::instance()->factoryForAccount( acct ) == factory )
+            accts << acct;
+        if ( accts.size() > 1 )
+            break;
+    }
+    Q_ASSERT( accts.size() > 0 ); // Shouldn't have a config wrench if there are no accounts!
+    if ( accts.size() == 1 )
+    {
+        // If there's just one, open the config directly w/ the delete button. Otherwise open the multi dialog
+        openAccountConfig( accts.first(), true );
         return;
     }
-    if( authJob->error() == QNetworkReply::NoError )
-    {
-        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
 
-        if( lfm.children( "error" ).size() > 0 )
-        {
-            qDebug() << "ERROR from last.fm:" << lfm.text();
-            ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( true );
-        }
-        else
-        {
-            ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( false );
-        }
-    }
-    else
-    {
-        switch( authJob->error() )
-        {
-            case QNetworkReply::ContentOperationNotPermittedError:
-            case QNetworkReply::AuthenticationRequiredError:
-                ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-                ui->pushButtonTestLastfmLogin->setEnabled( true );
-                break;
+#ifndef Q_OS_MAC
+    AccountFactoryWrapper dialog( factory, this );
+    QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
 
-            default:
-                qDebug() << "Couldn't get last.fm auth result";
-                ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
-                ui->pushButtonTestLastfmLogin->setEnabled( true );
-                return;
-        }
-    }
-#endif
-}
-
-
-void
-SettingsDialog::addScriptResolver()
-{
-    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
-    if( !resolver.isEmpty() )
-    {
-        m_resolversModel->addResolver( resolver, true );
-
-        QFileInfo resolverAbsoluteFilePath = resolver;
-        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
-    }
-}
-
-
-void
-SettingsDialog::removeScriptResolver()
-{
-    // only one selection
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
-    {
-        QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
-#ifdef LIBATTICA_FOUND
-        AtticaManager::instance()->uninstallResolver( resolver );
-#endif
-        m_resolversModel->removeResolver( resolver );
-    }
-}
-
-
-void
-SettingsDialog::getMoreResolvers()
-{
-#if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
-    GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
-    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished( int ) ) );
-    diag->show();
-#elif defined(LIBATTICA_FOUND)
-    GetNewStuffDialog diag( this );
-    int ret = diag.exec();
-    Q_UNUSED( ret );
-#endif
-
-}
-
-
-#ifdef LIBATTICA_FOUND
-void
-SettingsDialog::atticaResolverInstalled( const QString& resolverId )
-{
-    m_resolversModel->atticaResolverInstalled( resolverId );
-}
-
-
-void
-SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
-{
-    m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
-}
-#endif
-
-
-void
-SettingsDialog::scriptSelectionChanged()
-{
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
-    {
-        ui->removeScript->setEnabled( true );
-    }
-    else
-    {
-        ui->removeScript->setEnabled( false );
-    }
-}
-
-
-void
-SettingsDialog::getMoreResolversFinished( int ret )
-{
-    Q_UNUSED( ret );
-}
-
-
-void
-SettingsDialog::openResolverConfig( const QString& resolver )
-{
-    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( resolver );
-    Tomahawk::ExternalResolverGui* res = qobject_cast< Tomahawk::ExternalResolverGui* >( r );
-    if( res && res->configUI() )
-    {
-#ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( res->configUI(), "Resolver Configuration", this );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            r->saveConfig();
-        }
+    int ret = dialog.exec();
+    if ( !watcher.isNull() && dialog.doCreateAccount() )
+        createAccountFromFactory( factory );
 #else
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( res->configUI(), "Resolver Configuration", this, Qt::Sheet );
-        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( res ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( resolverConfigClosed( int ) ) );
+    // on osx a sheet needs to be non-modal
+    AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
+    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
-        dialog->show();
+    dialog->show();
 #endif
-    }
 }
 
 
 void
-SettingsDialog::resolverConfigClosed( int value )
+SettingsDialog::createAccountFromFactory( AccountFactory* factory )
 {
-    if( value == QDialog::Accepted )
+#ifdef Q_WS_MAC
+    // On mac we need to close the dialog we came from before showing another dialog, if we are b eing called from a dialog
+    if ( sender() )
     {
-        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        Tomahawk::ExternalResolver* r = qobject_cast< Tomahawk::ExternalResolver* >( dialog->property( "resolver" ).value< QObject* >() );
-        r->saveConfig();
+        Q_ASSERT( qobject_cast< AccountFactoryWrapper* >( sender() ) );
+        AccountFactoryWrapper* dialog = qobject_cast< AccountFactoryWrapper* >( sender() );
+        dialog->accept();
     }
-}
-
-
-void
-SettingsDialog::sipItemClicked( const QModelIndex& item )
-{
-    if( item.data( SipModel::FactoryRole ).toBool() )
-        if( ui->accountsView->isExpanded( item ) )
-            ui->accountsView->collapse( item );
-        else
-            ui->accountsView->expand( item );
-    else if( item.data( SipModel::FactoryItemRole ).toBool() )
-        sipFactoryClicked( qobject_cast<SipPluginFactory* >( item.data( SipModel::SipPluginFactoryData ).value< QObject* >() ) );
-}
-
-
-void
-SettingsDialog::openSipConfig( SipPlugin* p )
-{
-    if( p->configWidget() )
-    {
-#ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            p->saveConfig();
-        }
-#else
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipConfigClosed( int ) ) );
-
-        dialog->show();
 #endif
-    }
-}
 
-
-void
-SettingsDialog::sipConfigClosed( int value )
-{
-    if( value == QDialog::Accepted )
-    {
-        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
-        p->saveConfig();
-    }
-}
-
-
-void
-SettingsDialog::factoryActionTriggered( bool )
-{
-    Q_ASSERT( sender() && qobject_cast< QAction* >( sender() ) );
-
-    QAction* a = qobject_cast< QAction* >( sender() );
-    Q_ASSERT( qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) );
-
-    SipPluginFactory* f = qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() );
-    sipFactoryClicked( f );
-}
-
-
-void
-SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
-{
     //if exited with OK, create it, if not, delete it immediately!
-    SipPlugin* p = factory->createPlugin();
+    Account* account = factory->createAccount();
     bool added = false;
-    if( p->configWidget() )
+    if( account->configurationWidget() )
     {
 #ifdef Q_WS_MAC
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipCreateConfigClosed( int ) ) );
-        connect( p, SIGNAL( datatError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ) );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
+        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountCreateConfigClosed( int ) ) );
+
+        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
 
         dialog->show();
 #else
-        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
+
+        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
+
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            p->saveConfig();
-
-            // accepted, so add it to tomahawk
-            TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-            SipHandler::instance()->addSipPlugin( p );
-
+        if( !watcher.isNull() && ret == QDialog::Accepted ) // send changed config to account
             added = true;
-        }
-        else
-        {
-            // canceled, delete it
+        else // canceled, delete it
             added = false;
-        }
 
-        handleSipPluginAdded( p, added );
+        handleAccountAdded( account, added );
 #endif
     }
     else
     {
         // no config, so just add it
         added = true;
-        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-        SipHandler::instance()->addSipPlugin( p );
-
-        handleSipPluginAdded( p, added );
+        handleAccountAdded( account, added );
     }
 }
 
 
 void
-SettingsDialog::sipCreateConfigClosed( int finished )
+SettingsDialog::accountCreateConfigClosed( int finished )
 {
     DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-    SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
-    Q_ASSERT( p );
+    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
+    Q_ASSERT( account );
 
-    bool added = false;
-    if( finished == QDialog::Accepted )
-    {
+    bool added = ( finished == QDialog::Accepted );
 
-        p->saveConfig();
-        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
-        SipHandler::instance()->addSipPlugin( p );
-
-        added = true;
-    }
-
-    handleSipPluginAdded( p, added );
+    handleAccountAdded( account, added );
 }
 
 
 void
-SettingsDialog::handleSipPluginAdded( SipPlugin* p, bool added )
+SettingsDialog::handleAccountAdded( Account* account, bool added )
 {
-    SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
-    if( added && f && f->isUnique() )
+    if ( added )
     {
-        // remove from actions list
-        QAction* toremove = 0;
-        foreach( QAction* a, ui->addSipButton->actions() )
-        {
-            if( f == qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) )
-            {
-                toremove = a;
-                break;
-            }
-        }
-        if( toremove )
-            ui->addSipButton->removeAction( toremove );
+        account->setEnabled( true );
+        account->setAutoConnect( true );
+        account->saveConfig();
+
+        TomahawkSettings::instance()->addAccount( account->accountId() );
+        AccountManager::instance()->addAccount( account );
+        AccountManager::instance()->hookupAndEnable( account );
     }
-    else if( added == false )
-    { // user pressed cancel
-        delete p;
+    else
+    {
+        // user pressed cancel
+        delete account;
     }
 }
 
 
 void
-SettingsDialog::sipContextMenuRequest( const QPoint& p )
+SettingsDialog::installFromFile()
 {
-    QModelIndex idx = ui->accountsView->indexAt( p );
-    // if it's an account, allow to delete
-    if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+    const QString resolver = QFileDialog::getOpenFileName( this, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+
+    if( !resolver.isEmpty() )
     {
-        QList< QAction* > acts;
-        acts << new QAction( tr( "Delete Account" ), this );
-        acts.first()->setProperty( "sipplugin", idx.data( SipModel::SipPluginData ) );
-        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( sipPluginRowDeleted( bool ) ) );
-        QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
+        Account* acct = ResolverAccountFactory::createFromPath( resolver, false );
+        AccountManager::instance()->addAccount( acct );
+        TomahawkSettings::instance()->addAccount( acct->accountId() );
+        AccountManager::instance()->enableAccount( acct );
+
+
+        QFileInfo resolverAbsoluteFilePath( resolver );
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
 }
 
 
 void
-SettingsDialog::sipPluginRowDeleted( bool )
+SettingsDialog::scrollTo( const QModelIndex& idx )
 {
-    SipPlugin* p = qobject_cast< SipPlugin* >( qobject_cast< QAction* >( sender() )->property( "sipplugin" ).value< QObject* >() );
-    SipHandler::instance()->removeSipPlugin( p );
-}
-
-
-void
-SettingsDialog::sipPluginDeleted( bool )
-{
-    QModelIndexList indexes = ui->accountsView->selectionModel()->selectedIndexes();
-    // if it's an account, allow to delete
-    foreach( const QModelIndex& idx, indexes )
-    {
-        if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
-        {
-            SipPlugin* p = qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() );
-
-            if( SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p ) )
-            {
-                if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
-                {
-                    QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
-                    action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
-                    ui->addSipButton->addAction( action );
-
-                    connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
-                }
-            }
-            SipHandler::instance()->removeSipPlugin( p );
-        }
-    }
+    ui->accountsView->scrollTo( idx, QAbstractItemView::PositionAtBottom );
 }
 
 

@@ -26,12 +26,12 @@
 #include <QPixmap>
 
 #include "dllmacro.h"
+#include "accounts/Account.h"
 
-#ifdef LIBATTICA_FOUND
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
-#endif
+
 
 class DLLEXPORT AtticaManager : public QObject
 {
@@ -71,18 +71,13 @@ public:
     }
 
     explicit AtticaManager ( QObject* parent = 0 );
-#ifdef LIBATTICA_FOUND
-
     virtual ~AtticaManager();
-#else
-    virtual ~AtticaManager() {}
-#endif
-
-#ifdef LIBATTICA_FOUND
 
     bool resolversLoaded() const;
 
     Attica::Content::List resolvers() const;
+    Attica::Content resolverForId( const QString& id ) const;
+
     ResolverState resolverState( const Attica::Content& resolver ) const;
     QPixmap iconForResolver( const Attica::Content& id ); // Looks up in icon cache
 
@@ -93,12 +88,22 @@ public:
     void uploadRating( const Attica::Content& c );
     bool userHasRated( const Attica::Content& c ) const;
 
+    /**
+      If the resolver coming from libattica has a native custom c++ account
+      as well. For example the last.fm account.
+      */
+    bool hasCustomAccountForAttica( const QString& id ) const;
+    Tomahawk::Accounts::Account* customAccountForAttica( const QString& id ) const;
+    void registerCustomAccount( const QString& atticaId, Tomahawk::Accounts::Account* account );
+
+    AtticaManager::Resolver resolverData( const QString& atticaId ) const;
+
 public slots:
-    void installResolver( const Attica::Content& resolver, bool autoEnable = true );
+    void installResolver( const Attica::Content& resolver, bool autoCreateAccount = true );
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
-    void resolversReloaded( const Attica::Content::List& resolvers );
+    void resolversLoaded( const Attica::Content::List& resolvers );
 
     void resolverStateChanged( const QString& resolverId );
     void resolverInstalled( const QString& resolverId );
@@ -125,13 +130,25 @@ private:
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
-#endif
+
+    QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;
 };
 
-#ifdef LIBATTICA_FOUND
+class DLLEXPORT CustomAtticaAccount : public Tomahawk::Accounts::Account
+{
+    Q_OBJECT
+public:
+    virtual ~CustomAtticaAccount() {}
+
+    virtual Attica::Content atticaContent() const = 0;
+
+protected:
+    // No, you can't.
+    CustomAtticaAccount( const QString& id ) : Tomahawk::Accounts::Account( id ) {}
+};
+
 Q_DECLARE_METATYPE( Attica::Content );
-#endif
 
 #endif // ATTICAMANAGER_H

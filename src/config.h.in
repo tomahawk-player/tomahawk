@@ -20,6 +20,5 @@
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine GLOOX_FOUND
 #cmakedefine QCA2_FOUND
-#cmakedefine LIBATTICA_FOUND
 
 #endif // CONFIG_H_IN

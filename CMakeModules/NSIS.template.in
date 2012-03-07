@@ -280,7 +280,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_account_*.dll"
    !endif
    !ifndef INSTALL_PATH
         ;Main executable.
@@ -293,7 +293,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
         File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
-        File "${BUILD_PATH}\libtomahawk_sip*.dll"
+        File "${BUILD_PATH}\libtomahawk_account_*.dll"
    !endif
 
    ;License & release notes.

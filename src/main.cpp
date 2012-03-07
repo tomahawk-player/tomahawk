@@ -36,6 +36,38 @@
     #include "breakpad/BreakPad.h"
 #endif
 
+inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
+{
+    out <<  TOMAHAWK_SETTINGS_VERSION;
+    out << (quint32)states.count();
+    foreach( const QString& key, states.keys() )
+    {
+        AtticaManager::Resolver resolver = states[ key ];
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
+    }
+    return out;
+}
+
+
+inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
+{
+    quint32 count = 0, version = 0;
+    in >> version;
+    in >> count;
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key, version, scriptPath;
+        qint32 state, userRating;
+        in >> key;
+        in >> version;
+        in >> scriptPath;
+        in >> state;
+        in >> userRating;
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
+    }
+    return in;
+}
+
 #ifdef Q_OS_WIN
 #include <io.h>
 #define argc __argc
@@ -64,6 +96,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
         }
     }
 #else // Q_OS_WIN
+
 int
 main( int argc, char *argv[] )
 {
@@ -78,16 +111,11 @@ main( int argc, char *argv[] )
     #endif // Q_WS_MAC
 #endif //Q_OS_WIN
 
-/*    // Unity hack taken from Clementine's main.cpp
-#ifdef Q_OS_LINUX
-    // In 11.04 Ubuntu decided that the system tray should be reserved for certain
-    // whitelisted applications.  Tomahawk will override this setting and insert
-    // itself into the list of whitelisted apps.
-    setenv( "QT_X11_NO_NATIVE_MENUBAR", "1", true );
-    UbuntuUnityHack hack;
-#endif*/
-
     TomahawkApp a( argc, argv );
+
+    // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type
+    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
+    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
 
 #ifdef ENABLE_HEADLESS
     new TomahawkSettings( &a );

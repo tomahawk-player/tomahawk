@@ -30,9 +30,14 @@
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 
+namespace Tomahawk {
+namespace Accounts {
+    class Account;
+}
+}
+
 class JobStatusModel;
 class QSearchField;
-class SipPlugin;
 class SourceTreeView;
 class QAction;
 
@@ -82,9 +87,10 @@ public slots:
     void showOfflineSources();
 
 private slots:
-    void onSipConnected();
-    void onSipDisconnected();
-    void onSipError();
+    void onAccountAdded( Tomahawk::Accounts::Account* account );
+    void onAccountConnected();
+    void onAccountDisconnected();
+    void onAccountError();
 
     void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
@@ -100,9 +106,6 @@ private slots:
 
     void showAboutTomahawk();
     void checkForUpdates();
-
-    void onSipPluginAdded( SipPlugin* p );
-    void onSipPluginRemoved( SipPlugin* p );
 
     void onSearch( const QString& search );
     void onFilterEdited();

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,9 +28,7 @@
 class LoadingSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
-class SipPluginFactory;
 class SipPlugin;
-class SipModel;
 class ResolversModel;
 class QNetworkReply;
 
@@ -37,6 +36,18 @@ namespace Ui
 {
     class SettingsDialog;
     class ProxyDialog;
+}
+
+namespace Tomahawk
+{
+    namespace Accounts
+    {
+        class AccountModel;
+        class Account;
+        class AccountFactory;
+class Account;
+class AccountModelFilterProxy;
+}
 }
 
 class ProxyDialog : public QDialog
@@ -75,34 +86,20 @@ private slots:
     void toggleUpnp( bool preferStaticEnabled );
     void showProxySettings();
 
-    void testLastFmLogin();
-    void onLastFmFinished();
+    void accountsFilterChanged( int );
 
-    void addScriptResolver();
-    void scriptSelectionChanged();
-    void removeScriptResolver();
-    void getMoreResolvers();
-    void getMoreResolversFinished( int );
-#ifdef LIBATTICA_FOUND
-    void atticaResolverInstalled( const QString& );
-    void atticaResolverUninstalled( const QString& );
-#endif
+    void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
 
-    void openResolverConfig( const QString& );
-    void sipItemClicked ( const QModelIndex& );
-    void openSipConfig( SipPlugin* );
-    void factoryActionTriggered ( bool );
-    void sipFactoryClicked( SipPluginFactory* );
-    void sipContextMenuRequest( const QPoint& );
-    void sipPluginDeleted( bool );
-    void sipPluginRowDeleted( bool );
+    void openAccountConfig( Tomahawk::Accounts::Account*, bool showDelete = false );
+    void openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* );
+    void accountConfigClosed( int value );
+    void accountConfigDelete();
+    void accountCreateConfigClosed( int value );
+
+    void installFromFile();
+    void scrollTo( const QModelIndex& );
 
     void updateScanOptionsView();
-
-    // dialog slots
-    void resolverConfigClosed( int value );
-    void sipConfigClosed( int value );
-    void sipCreateConfigClosed( int value );
 
     void changePage( QListWidgetItem*, QListWidgetItem* );
     void serventReady();
@@ -111,16 +108,16 @@ private slots:
 
 private:
     void createIcons();
-    void setupSipButtons();
-    void handleSipPluginAdded( SipPlugin* p, bool added );
+    void handleAccountAdded( Tomahawk::Accounts::Account* p, bool added );
 
     Ui_StackedSettingsDialog* ui;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
-    SipModel* m_sipModel;
-    ResolversModel* m_resolversModel;
+    Tomahawk::Accounts::AccountModel* m_accountModel;
+    Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
     LoadingSpinner* m_sipSpinner;
 };
 
 #endif // SETTINGSDIALOG_H
+

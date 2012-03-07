@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,8 +31,12 @@
     #include <QPixmap>
 #endif
 
+/**
+ * Manages SIP plugins for connecting to friends. External interface to SIP plugins is
+ * through AccountManager, this is an internal class.
+ */
 
-class DLLEXPORT SipHandler : public QObject
+class SipHandler : public QObject
 {
     Q_OBJECT
 
@@ -41,17 +46,7 @@ public:
     SipHandler( QObject* parent );
     ~SipHandler();
 
-    QList< SipPluginFactory* > pluginFactories() const;
-    QList< SipPlugin* > allPlugins() const;
-    QList< SipPlugin* > enabledPlugins() const;
-    QList< SipPlugin* > connectedPlugins() const;
-    void loadFromConfig( bool startup = false );
-
-    void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
-    void removeSipPlugin( SipPlugin* p );
-
-    bool hasPluginType( const QString& factoryId ) const;
-    SipPluginFactory* factoryFromPlugin( SipPlugin* p ) const;
+    void loadFromAccountManager();
 
 #ifndef ENABLE_HEADLESS
     const QPixmap avatar( const QString& name ) const;
@@ -61,37 +56,7 @@ public:
     const SipInfo sipInfo( const QString& peerId ) const;
     const QString versionString( const QString& peerId ) const;
 
-public slots:
-    void checkSettings();
-
-    void enablePlugin( SipPlugin* p );
-    void disablePlugin( SipPlugin* p );
-
-    void connectPlugin( bool startup = false, const QString &pluginId = QString() );
-    void disconnectPlugin( const QString &pluginId = QString() );
-    void connectAll();
-    void disconnectAll();
-
-    void toggleConnect();
-
-    void refreshProxy();
-
-    // create a new plugin of the given name. the name is the value returned in SipPluginFactory::pluginName
-    // be default sip plugins are NOt connected when created
-    SipPlugin* createPlugin( const QString& factoryName );
-    // load a plugin with the given id
-    SipPlugin* loadPlugin( const QString& pluginId );
-    void removePlugin( SipPlugin* p );
-
-signals:
-    void connected( SipPlugin* );
-    void disconnected( SipPlugin* );
-    void authError( SipPlugin* );
-
-    void stateChanged( SipPlugin* p, SipPlugin::ConnectionState state );
-
-    void pluginAdded( SipPlugin* p );
-    void pluginRemoved( SipPlugin* p );
+    void hookUpPlugin( SipPlugin* p );
 
 private slots:
     void onSipInfo( const QString& peerId, const SipInfo& info );
@@ -99,10 +64,6 @@ private slots:
     void onMessage( const QString&, const QString& );
     void onPeerOffline( const QString& );
     void onPeerOnline( const QString& );
-    void onError( int code, const QString& msg );
-    void onStateChanged( SipPlugin::ConnectionState );
-
-    void onSettingsChanged();
 
 #ifndef ENABLE_HEADLESS
     // set data for local source
@@ -114,20 +75,6 @@ private slots:
 
 private:
     static SipHandler *s_instance;
-
-    QStringList findPluginFactories();
-    bool pluginLoaded( const QString& pluginId ) const;
-    void hookUpPlugin( SipPlugin* p );
-
-    void loadPluginFactories( const QStringList& paths );
-    void loadPluginFactory( const QString& path );
-    QString factoryFromId( const QString& pluginId ) const;
-
-    QHash< QString, SipPluginFactory* > m_pluginFactories;
-    QList< SipPlugin* > m_allPlugins;
-    QList< SipPlugin* > m_enabledPlugins;
-    QList< SipPlugin* > m_connectedPlugins;
-    bool m_connected;
 
     //TODO: move this to source
     QHash<QString, SipInfo> m_peersSipInfos;

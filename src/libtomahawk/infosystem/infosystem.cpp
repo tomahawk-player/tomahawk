@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -45,6 +46,9 @@ InfoSystem* InfoSystem::s_instance = 0;
 InfoSystem*
 InfoSystem::instance()
 {
+    if ( !s_instance )
+        s_instance = new InfoSystem( 0 );
+
     return s_instance;
 }
 
@@ -100,6 +104,9 @@ void
 InfoSystem::init()
 {
     tDebug() << Q_FUNC_INFO;
+    if ( m_inited )
+        return;
+
     if ( !m_infoSystemCacheThreadController->cache() || !m_infoSystemWorkerThreadController->worker() )
     {
         QTimer::singleShot( 0, this, SLOT( init() ) );
@@ -111,17 +118,17 @@ InfoSystem::init()
 
     connect( cache, SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              worker, SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-    
+
     connect( worker, SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              this,       SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-    
+
     connect( worker, SIGNAL( finished( QString ) ), this, SIGNAL( finished( QString ) ), Qt::UniqueConnection );
-    
+
     connect( worker, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
              this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
 
     QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
-    
+
     m_inited = true;
 }
 
@@ -192,6 +199,19 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
         QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ) );
 
     return true;
+}
+
+
+void
+InfoSystem::addInfoPlugin( InfoPlugin* plugin )
+{
+    // Init is not complete (waiting for worker th read to start and create worker object) so keep trying till then
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        QMetaObject::invokeMethod( this, "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
+        return;
+    }
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
 }
 
 

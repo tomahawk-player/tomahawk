@@ -250,6 +250,7 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = m_dbimpl->newquery();
+    qDebug() << "INSERTING INTO OPTLOG:" << command->source()->id() << command->guid() << command->commandname();
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
 

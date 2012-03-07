@@ -339,6 +339,8 @@ ScriptResolver::doSetup( const QVariantMap& m )
 
     if ( !m_stopped )
         Tomahawk::Pipeline::instance()->addResolver( this );
+
+    emit changed();
 }
 
 

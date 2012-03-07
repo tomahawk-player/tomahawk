@@ -102,8 +102,6 @@ set( libGuiSources
     resolvers/scriptresolver.cpp
     resolvers/qtscriptresolver.cpp
 
-    sip/SipModel.cpp
-
     utils/widgetdragfilter.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
@@ -229,8 +227,6 @@ set( libGuiHeaders
     resolvers/scriptresolver.h
     resolvers/qtscriptresolver.h
 
-    sip/SipModel.h
-
     utils/widgetdragfilter.h
     utils/xspfgenerator.h
     utils/jspfloader.h
@@ -310,6 +306,14 @@ set( libSources
     playlistinterface.cpp
 
     EchonestCatalogSynchronizer.cpp
+
+    accounts/AccountManager.cpp
+    accounts/Account.cpp
+    accounts/AccountModel.cpp
+    accounts/AccountModelFilterProxy.cpp
+    accounts/ResolverAccount.cpp
+    accounts/LastFmAccount.cpp
+    accounts/LastFmConfig.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -445,8 +449,15 @@ set( libHeaders
     albumplaylistinterface.h
     playlist.h
     playlistplaylistinterface.h
-
     viewpage.h
+
+    accounts/Account.h
+    accounts/AccountManager.h
+    accounts/AccountModel.h
+    accounts/AccountModelFilterProxy.h
+    accounts/ResolverAccount.h
+    accounts/LastFmAccount.h
+    accounts/LastFmConfig.h
 
     EchonestCatalogSynchronizer.h
 
@@ -548,6 +559,10 @@ set( libHeaders
 )
 
 set( libHeaders_NoMOC
+    viewpage.h
+
+    accounts/Account.h
+
     infosystem/infoplugins/unix/imageconverter.h
 
     taghandlers/tag.h
@@ -575,6 +590,7 @@ set( libUI ${libUI}
     playlist/queueview.ui
     context/ContextWidget.ui
     infobar/infobar.ui
+    accounts/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

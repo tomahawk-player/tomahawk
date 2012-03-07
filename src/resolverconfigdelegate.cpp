@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #include "resolverconfigdelegate.h"
 
-#include "resolversmodel.h"
+// #include "resolversmodel.h"
 #include "ExternalResolverGui.h"
 
 #include <QApplication>
@@ -133,8 +133,10 @@ ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, 
 }
 
 QRect
-ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const
+ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const
 {
+    Q_UNUSED( role );
+
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, idx );
     QRect itemRect = opt.rect;

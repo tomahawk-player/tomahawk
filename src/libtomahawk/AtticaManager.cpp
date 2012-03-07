@@ -32,6 +32,8 @@
 #include <QTimer>
 
 #include "utils/logger.h"
+#include "accounts/ResolverAccount.h"
+#include "accounts/AccountManager.h"
 
 using namespace Attica;
 
@@ -133,6 +135,20 @@ AtticaManager::resolvers() const
 }
 
 
+Content
+AtticaManager::resolverForId( const QString& id ) const
+{
+    foreach ( const Attica::Content& c, m_resolvers )
+    {
+        if ( c.id() == id )
+            return c;
+    }
+
+    return Content();
+}
+
+
+
 AtticaManager::ResolverState
 AtticaManager::resolverState ( const Content& resolver ) const
 {
@@ -196,6 +212,38 @@ AtticaManager::userHasRated( const Content& c ) const
 }
 
 
+bool
+AtticaManager::hasCustomAccountForAttica( const QString &id ) const
+{
+    // Only last.fm at the moment contains a custom account
+    if ( id == "lastfm" )
+        return true;
+
+    return false;
+}
+
+
+Tomahawk::Accounts::Account*
+AtticaManager::customAccountForAttica( const QString &id ) const
+{
+    return m_customAccounts.value( id );
+}
+
+
+void
+AtticaManager::registerCustomAccount( const QString &atticaId, Tomahawk::Accounts::Account *account )
+{
+    m_customAccounts.insert( atticaId, account );
+}
+
+
+AtticaManager::Resolver
+AtticaManager::resolverData(const QString &atticaId) const
+{
+    return m_resolverStates.value( atticaId );
+}
+
+
 void
 AtticaManager::providerAdded( const Provider& provider )
 {
@@ -218,6 +266,24 @@ AtticaManager::resolversList( BaseJob* j )
     m_resolvers = job->itemList();
     m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
 
+    // Sanity check. if any resolvers are installed that don't exist on the hd, remove them.
+    foreach ( const QString& rId, m_resolverStates.keys() )
+    {
+        if ( m_resolverStates[ rId ].state == Installed ||
+             m_resolverStates[ rId ].state == NeedsUpgrade )
+        {
+            // Guess location on disk
+            QDir dir( QString( "%1/atticaresolvers/%2" ).arg( TomahawkUtils::appDataDir().absolutePath() ).arg( rId ) );
+            if ( !dir.exists() )
+            {
+                // Uh oh
+                qWarning() << "Found attica resolver marked as installed that didn't exist on disk! Setting to uninstalled: " << rId << dir.absolutePath();
+                m_resolverStates[ rId ].state = Uninstalled;
+                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( rId, Uninstalled );
+            }
+        }
+    }
+
     // load icon cache from disk, and fetch any we are missing
     loadPixmapsFromCache();
 
@@ -236,6 +302,8 @@ AtticaManager::resolversList( BaseJob* j )
     }
 
     syncServerData();
+
+    emit resolversLoaded( m_resolvers );
 }
 
 
@@ -299,7 +367,7 @@ AtticaManager::syncServerData()
 
 
 void
-AtticaManager::installResolver( const Content& resolver, bool autoEnable )
+AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
@@ -313,7 +381,7 @@ AtticaManager::installResolver( const Content& resolver, bool autoEnable )
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
-    job->setProperty( "autoEnable", autoEnable );
+    job->setProperty( "createAccount", autoCreateAccount );
 
     job->start();
 }
@@ -328,12 +396,11 @@ AtticaManager::upgradeResolver( const Content& resolver )
     if ( !m_resolverStates.contains( resolver.id() ) || m_resolverStates[ resolver.id() ].state != NeedsUpgrade )
         return;
 
-    const bool enabled = TomahawkSettings::instance()->enabledScriptResolvers().contains( m_resolverStates[ resolver.id() ].scriptPath );
     m_resolverStates[ resolver.id() ].state = Upgrading;
     emit resolverStateChanged( resolver.id() );
 
     uninstallResolver( resolver );
-    installResolver( resolver, enabled );
+    installResolver( resolver, false );
 }
 
 
@@ -350,7 +417,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
-        reply->setProperty( "autoEnable", job->property( "autoEnable" ) );
+        reply->setProperty( "createAccount", job->property( "createAccount" ) );
     }
     else
     {
@@ -386,10 +453,14 @@ AtticaManager::payloadFetched()
             // update with absolute, not relative, path
             m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
-            const bool autoEnable = reply->property( "autoEnable" ).toBool();
+            if ( reply->property( "createAccount" ).toBool() )
+            {
+                // Do the install / add to tomahawk
+                Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
+                Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+                TomahawkSettings::instance()->addAccount( resolver->accountId() );
+            }
 
-            // Do the install / add to tomahawk
-            Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, autoEnable );
             m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
@@ -475,6 +546,9 @@ AtticaManager::extractPayload( const QString& filename, const QString& resolverI
 void
 AtticaManager::uninstallResolver( const QString& pathToResolver )
 {
+    // when is this used? find and fix
+    Q_ASSERT(false);
+
     // User manually removed a resolver not through attica dialog, simple remove
     QRegExp r( ".*([^/]*)/contents/code/main.js" );
     r.indexIn( pathToResolver );
@@ -506,9 +580,21 @@ AtticaManager::uninstallResolver( const Content& resolver )
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
         TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
+
+        // remove account as well
+        QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::ResolverType );
+        foreach ( Tomahawk::Accounts::Account* account, accounts )
+        {
+            if ( Tomahawk::Accounts::AtticaResolverAccount* atticaAccount = qobject_cast< Tomahawk::Accounts::AtticaResolverAccount* >( account ) )
+            {
+                if ( atticaAccount->atticaId() == resolver.id() ) // this is the account we want to remove
+                {
+                    Tomahawk::Accounts::AccountManager::instance()->removeAccount( atticaAccount );
+                }
+            }
+        }
     }
 
-    Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
     doResolverRemove( resolver.id() );
 }
 

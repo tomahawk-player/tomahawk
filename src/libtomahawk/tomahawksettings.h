@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,6 +26,9 @@
 #include <QtNetwork/QNetworkProxy>
 
 #include "dllmacro.h"
+
+#define TOMAHAWK_SETTINGS_VERSION 7
+
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -97,9 +101,6 @@ public:
     void setSipPlugins( const QStringList& plugins );
     QStringList sipPlugins() const;
 
-    void setBookmarkPlaylist( const QString& guid );
-    QString bookmarkPlaylist() const;
-
     // just the enabled sip plugins.
     void setEnabledSipPlugins( const QStringList& list );
     QStringList enabledSipPlugins() const;
@@ -108,6 +109,15 @@ public:
 
     void addSipPlugin( const QString& pluginId, bool enable = true );
     void removeSipPlugin( const QString& pluginId );
+
+    void setAccounts( const QStringList& accountIds );
+    QStringList accounts() const;
+    void addAccount( const QString& accountId );
+    void removeAccount( const QString& accountId );
+
+
+    void setBookmarkPlaylist( const QString& guid );
+    QString bookmarkPlaylist() const;
 
     /// Network settings
     enum ExternalAddressMode { Lan, Upnp };
@@ -155,19 +165,6 @@ public:
     QStringList aclEntries() const;
     void setAclEntries( const QStringList &entries );
 
-    /// Last.fm settings
-    bool scrobblingEnabled() const; /// false by default
-    void setScrobblingEnabled( bool enable );
-
-    QString lastFmUsername() const;
-    void setLastFmUsername( const QString& username );
-
-    QString lastFmPassword() const;
-    void setLastFmPassword( const QString& password );
-
-    QByteArray lastFmSessionKey() const;
-    void setLastFmSessionKey( const QByteArray& key );
-
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );
@@ -180,14 +177,6 @@ public:
 
     int xmppBotPort() const;
     void setXmppBotPort( const int port );
-
-    /// Script resolver settings
-    QStringList allScriptResolvers() const;
-    void setAllScriptResolvers( const QStringList& resolvers );
-    void addScriptResolver( const QString& resolver );
-    QStringList enabledScriptResolvers() const;
-    void setEnabledScriptResolvers( const QStringList& resolvers );
-
 
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );

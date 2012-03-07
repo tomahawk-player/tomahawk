@@ -21,52 +21,7 @@
 #include <QDesktopServices>
 #include "settingsdialog.h"
 
-// #include <QDir>
-//
-// #include "sip/SipHandler.h"
-// #include "playlistinterface.h"
-//
-// #include "utils/logger.h"
-// #include "utils/tomahawkutils.h"
-//
-// #include "database/databasecommand_updatesearchindex.h"
-// #include "database/database.h"
-
-#define VERSION 5
-
 using namespace Tomahawk;
-
-inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
-{
-    out <<  VERSION;
-    out << (quint32)states.count();
-    foreach( const QString& key, states.keys() )
-    {
-        AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
-    }
-    return out;
-}
-
-
-inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
-{
-    quint32 count = 0, version = 0;
-    in >> version;
-    in >> count;
-    for ( uint i = 0; i < count; i++ )
-    {
-        QString key, version, scriptPath;
-        qint32 state, userRating;
-        in >> key;
-        in >> version;
-        in >> scriptPath;
-        in >> state;
-        in >> userRating;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
-    }
-    return in;
-}
 
 TomahawkSettingsGui*
 TomahawkSettingsGui::instanceGui()
@@ -78,8 +33,6 @@ TomahawkSettingsGui::instanceGui()
 TomahawkSettingsGui::TomahawkSettingsGui( QObject* parent )
     : TomahawkSettings( parent )
 {
-    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
-    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
 }
 
 

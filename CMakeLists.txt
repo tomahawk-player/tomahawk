@@ -111,10 +111,10 @@ macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions required for Grooveshark resolver" "http://delta.affinix.com/qca/" FALSE "" "")
 
 macro_optional_find_package(LibAttica)
-macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "")
+macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" TRUE "" "")
 
 macro_optional_find_package(QuaZip)
-macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically." "http://quazip.sourceforge.net/" FALSE "" "")
+macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically." "http://quazip.sourceforge.net/" TRUE "" "")
 
 macro_optional_find_package(Jreen)
 macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin.\n")

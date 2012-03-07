@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,8 +30,6 @@
 #include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
 
-#define VERSION 6
-
 using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
@@ -54,24 +53,24 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 
     if ( !contains( "configversion" ) )
     {
-        setValue( "configversion", VERSION );
+        setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
         doInitialSetup();
     }
-    else if ( value( "configversion" ).toUInt() != VERSION )
+    else if ( value( "configversion" ).toUInt() != TOMAHAWK_SETTINGS_VERSION )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
-                 << "new:" << VERSION
+                 << "new:" << TOMAHAWK_SETTINGS_VERSION
                  << "Doing upgrade, if any...";
 
         int current = value( "configversion" ).toUInt();
-        while ( current < VERSION )
+        while ( current < TOMAHAWK_SETTINGS_VERSION )
         {
             doUpgrade( current, current + 1 );
 
             current++;
         }
         // insert upgrade code here as required
-        setValue( "configversion", VERSION );
+        setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
     }
 }
 
@@ -86,7 +85,17 @@ void
 TomahawkSettings::doInitialSetup()
 {
     // by default we add a local network resolver
-    addSipPlugin( "sipzeroconf_autocreated" );
+    addAccount( "sipzeroconf_autocreated" );
+
+    // Add a last.fm account for scrobbling and infosystem
+    const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+    addAccount( accountKey );
+
+    beginGroup( "accounts/" + accountKey );
+    setValue( "enabled", false );
+    setValue( "autoconnect", true );
+    setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
+    endGroup();
 }
 
 
@@ -116,7 +125,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
             setValue( QString( "%1_legacy/password" ).arg( sipName ), value( "jabber/password" ) );
-            setValue( QString( "%1r_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
+            setValue( QString( "%1_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
             setValue( QString( "%1_legacy/port" ).arg( sipName ), value( "jabber/port" ) );
             setValue( QString( "%1_legacy/server" ).arg( sipName ), value( "jabber/server" ) );
 
@@ -163,8 +172,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             QStringList toremove;
             QStringList resolvers = resolverDir.entryList( QDir::Dirs | QDir::NoDotAndDotDot );
-            QStringList listedResolvers = allScriptResolvers();
-            QStringList enabledResolvers = enabledScriptResolvers();
+            QStringList listedResolvers = value( "script/resolvers" ).toStringList();
+            QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
             foreach ( const QString& resolver, resolvers )
             {
                 foreach ( const QString& r, listedResolvers )
@@ -184,8 +193,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                     }
                 }
             }
-            setAllScriptResolvers( listedResolvers );
-            setEnabledScriptResolvers( enabledResolvers );
+            setValue( "script/resolvers", listedResolvers );
+            setValue( "script/loadedresolvers", enabledResolvers );
             tDebug() << "UPGRADING AND DELETING:" << resolverDir.absolutePath();
             TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
         }
@@ -194,6 +203,142 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+    } else if ( oldVersion == 6 )
+    {
+        // Migrate to accounts from sipplugins.
+        // collect old connected and enabled sip plugins
+        const QStringList allSip = sipPlugins();
+        const QStringList enabledSip = enabledSipPlugins();
+
+        QStringList accounts;
+        foreach ( const QString& sipPlugin, allSip )
+        {
+            const QStringList parts = sipPlugin.split( "_" );
+            Q_ASSERT( parts.size() == 2 );
+
+            const QString pluginName = parts[ 0 ];
+            const QString pluginId = parts[ 1 ];
+
+            // new key, <plugin>account_<id>
+            QString rawpluginname = pluginName;
+            rawpluginname.replace( "sip", "" );
+            if ( rawpluginname.contains( "jabber" ) )
+                rawpluginname.replace( "jabber", "xmpp" );
+
+            QString accountKey = QString( "%1account_%2" ).arg( rawpluginname ).arg( pluginId );
+
+            if ( pluginName == "sipjabber" || pluginName == "sipgoogle" )
+            {
+                QVariantHash credentials;
+                credentials[ "username" ] = value( sipPlugin + "/username" );
+                credentials[ "password" ] = value( sipPlugin + "/password" );
+                credentials[ "port" ] = value( sipPlugin + "/port" );
+                credentials[ "server" ] = value( sipPlugin + "/server" );
+
+                setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), value( sipPlugin + "/username" ) );
+
+            }
+            else if ( pluginName == "siptwitter" )
+            {
+                // Only port twitter plugin if there's a valid twitter config
+                if ( value( sipPlugin + "/oauthtokensecret" ).toString().isEmpty() &&
+                     value( sipPlugin + "/oauthtoken" ).toString().isEmpty() &&
+                     value( sipPlugin + "/screenname" ).toString().isEmpty() )
+                    continue;
+
+                QVariantHash credentials;
+                credentials[ "oauthtoken" ] = value( sipPlugin + "/oauthtoken" );
+                credentials[ "oauthtokensecret" ] = value( sipPlugin + "/oauthtokensecret" );
+                credentials[ "username" ] = value( sipPlugin + "/screenname" );
+
+                QVariantHash configuration;
+                configuration[ "cachedfriendssinceid" ] = value( sipPlugin + "/cachedfriendssinceid" );
+                configuration[ "cacheddirectmessagessinceid" ] = value( sipPlugin + "/cacheddirectmessagessinceid" );
+                configuration[ "cachedpeers" ] = value( sipPlugin + "/cachedpeers" );
+                qDebug() << "FOUND CACHED PEERS:" << value( sipPlugin + "/cachedpeers" ).toHash();
+                configuration[ "cachedmentionssinceid" ] = value( sipPlugin + "/cachedmentionssinceid" );
+                configuration[ "saveddbid" ] = value( sipPlugin + "/saveddbid" );
+
+                setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/configuration" ).arg( accountKey ), configuration );
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "@" + value( sipPlugin + "/screenname" ).toString() );
+                sync();
+            }
+            else if ( pluginName == "sipzeroconf" )
+            {
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "Local Network" );
+            }
+
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
+            setValue( "autoconnect", true );
+            setValue( "acl", QVariantMap() );
+            setValue( "types", QStringList() << "SipType" );
+            endGroup();
+            accounts << accountKey;
+
+            remove( sipPlugin );
+        }
+        remove( "sip" );
+
+        // Migrate all resolvers from old resolvers settings to new accounts system
+        const QStringList allResolvers = value( "script/resolvers" ).toStringList();
+        const QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
+
+        foreach ( const QString& resolver, allResolvers )
+        {
+            const QString accountKey = QString( "resolveraccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+            accounts << accountKey;
+
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", enabledResolvers.contains( resolver ) == true );
+            setValue( "autoconnect", true );
+            setValue( "types", QStringList() << "ResolverType" );
+
+            QVariantHash configuration;
+            configuration[ "path" ] = resolver;
+
+            // reasonably ugly check for attica resolvers
+            if ( resolver.contains( "atticaresolvers" ) && resolver.contains( "code" ) )
+            {
+                setValue( "atticaresolver", true );
+
+                QFileInfo info( resolver );
+                configuration[ "atticaId" ] = info.baseName();
+            }
+
+            setValue( "configuration", configuration );
+            endGroup();
+
+        }
+
+        // Add a Last.Fm account since we now moved the infoplugin into the account
+        const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+        accounts << accountKey;
+        const QString lfmUsername = value( "lastfm/username" ).toString();
+        const QString lfmPassword = value( "lastfm/password" ).toString();
+        const bool scrobble = value( "lastfm/enablescrobbling", false ).toBool();
+        beginGroup( "accounts/" + accountKey );
+        setValue( "enabled", enabledResolvers.contains( "lastfm" ) == true );
+        setValue( "autoconnect", true );
+        setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
+        QVariantHash credentials;
+        credentials[ "username" ] = lfmUsername;
+        credentials[ "password" ] = lfmPassword;
+        credentials[ "session" ] = value( "lastfm/session" ).toString();
+        setValue( "credentials", credentials );
+        QVariantHash configuration;
+        configuration[ "scrobble" ] = scrobble;
+        setValue( "configuration", configuration );
+        endGroup();
+
+        remove( "lastfm" );
+
+        remove( "script/resolvers" );
+        remove( "script/loadedresolvers" );
+
+        setValue( "accounts/allaccounts", accounts );
     }
 }
 
@@ -690,6 +835,38 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
 }
 
 
+QStringList
+TomahawkSettings::accounts() const
+{
+    return value( "accounts/allaccounts", QStringList() ).toStringList();
+}
+
+
+void
+TomahawkSettings::setAccounts( const QStringList& accountIds )
+{
+    setValue( "accounts/allaccounts", accountIds );
+}
+
+
+void
+TomahawkSettings::addAccount( const QString& accountId )
+{
+    QStringList list = accounts();
+    list << accountId;
+    setAccounts( list );
+}
+
+
+void
+TomahawkSettings::removeAccount( const QString& accountId )
+{
+    QStringList list = accounts();
+    list.removeAll( accountId );
+    setAccounts( list );
+}
+
+
 TomahawkSettings::ExternalAddressMode
 TomahawkSettings::externalAddressMode() const
 {
@@ -755,62 +932,6 @@ TomahawkSettings::setExternalPort(int externalPort)
 
 
 QString
-TomahawkSettings::lastFmPassword() const
-{
-    return value( "lastfm/password" ).toString();
-}
-
-
-void
-TomahawkSettings::setLastFmPassword( const QString& password )
-{
-    setValue( "lastfm/password", password );
-}
-
-
-QByteArray
-TomahawkSettings::lastFmSessionKey() const
-{
-    return value( "lastfm/session" ).toByteArray();
-}
-
-
-void
-TomahawkSettings::setLastFmSessionKey( const QByteArray& key )
-{
-    setValue( "lastfm/session", key );
-}
-
-
-QString
-TomahawkSettings::lastFmUsername() const
-{
-    return value( "lastfm/username" ).toString();
-}
-
-
-void
-TomahawkSettings::setLastFmUsername( const QString& username )
-{
-    setValue( "lastfm/username", username );
-}
-
-
-bool
-TomahawkSettings::scrobblingEnabled() const
-{
-    return value( "lastfm/enablescrobbling", false ).toBool();
-}
-
-
-void
-TomahawkSettings::setScrobblingEnabled( bool enable )
-{
-    setValue( "lastfm/enablescrobbling", enable );
-}
-
-
-QString
 TomahawkSettings::xmppBotServer() const
 {
     return value( "xmppBot/server", QString() ).toString();
@@ -863,41 +984,6 @@ void
 TomahawkSettings::setXmppBotPort( const int port )
 {
     setValue( "xmppBot/port", port );
-}
-
-
-void
-TomahawkSettings::addScriptResolver(const QString& resolver)
-{
-    setValue( "script/resolvers", allScriptResolvers() << resolver );
-}
-
-
-QStringList
-TomahawkSettings::allScriptResolvers() const
-{
-    return value( "script/resolvers" ).toStringList();
-}
-
-
-void
-TomahawkSettings::setAllScriptResolvers( const QStringList& resolver )
-{
-    setValue( "script/resolvers", resolver );
-}
-
-
-QStringList
-TomahawkSettings::enabledScriptResolvers() const
-{
-    return value( "script/loadedresolvers" ).toStringList();
-}
-
-
-void
-TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
-{
-    setValue( "script/loadedresolvers", resolvers );
 }
 
 

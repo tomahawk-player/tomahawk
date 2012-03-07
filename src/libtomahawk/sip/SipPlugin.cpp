@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
+ *             2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,40 +20,40 @@
 
 #include "sip/SipPlugin.h"
 
-#include <QUuid>
-
 #include "utils/logger.h"
 
-
-QString
-SipPluginFactory::generateId()
-{
-    QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
-    return factoryId() + "_" + uniq;
-}
 
 SipPlugin::SipPlugin() : QObject() {}
 SipPlugin::~SipPlugin() {}
 
-SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
+SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
     : QObject( parent )
-    , m_pluginId( pluginId )
+    , m_account( account )
 {
-    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
-    connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
-    connect( this, SIGNAL( peerOnline( QString ) ), this, SLOT( onPeerOnline( QString ) ) );
-    connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
 }
 
 
 QString
 SipPlugin::pluginId() const
 {
-    return m_pluginId;
+    return m_account->accountId();
 }
 
 
-#ifndef ENABLE_HEADLESS
+const QString
+SipPlugin::friendlyName() const
+{
+    return m_account->accountFriendlyName();
+}
+
+
+const QString
+SipPlugin::serviceName() const
+{
+    return m_account->accountServiceName();
+}
+
+
 QMenu*
 SipPlugin::menu()
 {
@@ -60,25 +61,10 @@ SipPlugin::menu()
 }
 
 
-QWidget*
-SipPlugin::configWidget()
+Tomahawk::Accounts::Account*
+SipPlugin::account() const
 {
-    return 0;
-}
-
-
-QIcon
-SipPlugin::icon() const
-{
-    return QIcon();
-}
-#endif
-
-
-QString
-SipPlugin::errorMessage() const
-{
-    return m_cachedError;
+    return m_account;
 }
 
 
@@ -86,29 +72,6 @@ const QStringList
 SipPlugin::peersOnline() const
 {
     return m_peersOnline;
-}
-
-
-void
-SipPlugin::refreshProxy()
-{
-    qDebug() << Q_FUNC_INFO << "Not implemented";
-}
-
-
-void
-SipPlugin::onError( int code, const QString& error )
-{
-    Q_UNUSED( code );
-    m_cachedError = error;
-}
-
-
-void
-SipPlugin::onStateChange( SipPlugin::ConnectionState state )
-{
-    Q_UNUSED( state );
-    m_cachedError.clear();
 }
 
 
@@ -126,10 +89,4 @@ void
 SipPlugin::onPeerOffline( const QString& peerId )
 {
     m_peersOnline.removeAll( peerId );
-}
-
-
-void
-SipPlugin::deletePlugin()
-{
 }

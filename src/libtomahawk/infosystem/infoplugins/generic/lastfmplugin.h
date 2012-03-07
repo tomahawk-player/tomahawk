@@ -32,6 +32,11 @@ class QNetworkReply;
 namespace Tomahawk
 {
 
+namespace Accounts
+{
+    class LastFmAccount;
+}
+
 namespace InfoSystem
 {
 
@@ -40,7 +45,7 @@ class LastFmPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    LastFmPlugin();
+    LastFmPlugin( Accounts::LastFmAccount* account );
     virtual ~LastFmPlugin();
 
 public slots:
@@ -74,6 +79,7 @@ private:
 
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
+    Accounts::LastFmAccount* m_account;
     QList<lastfm::Track> parseTrackList( QNetworkReply * reply );
 
     lastfm::MutableTrack m_track;
@@ -88,3 +94,5 @@ private:
 }
 
 #endif // LASTFMPLUGIN_H
+
+class A;

@@ -74,13 +74,12 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      audiocontrols.cpp
      settingsdialog.cpp
      diagnosticsdialog.cpp
-     configdelegatebase.cpp
-     sipconfigdelegate.cpp
-     resolverconfigdelegate.cpp
+     AccountDelegate.cpp
      settingslistdelegate.cpp
-     resolversmodel.cpp
      tomahawkwindow.cpp
      LoadXSPFDialog.cpp
+     AccountFactoryWrapper.cpp
+     AccountFactoryWrapperDelegate.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -99,13 +98,6 @@ IF(LIBLASTFM_FOUND)
         scrobbler.h
     )
 ENDIF(LIBLASTFM_FOUND)
-
-IF(LIBATTICA_FOUND)
-    SET( tomahawkSourcesGui ${tomahawkSourcesGui} GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
-    SET( tomahawkHeadersGui ${tomahawkHeadersGui} GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
-    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
-ENDIF(LIBATTICA_FOUND)
-
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
@@ -126,14 +118,13 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      audiocontrols.h
      settingsdialog.h
      diagnosticsdialog.h
-     configdelegatebase.h
-     resolverconfigdelegate.h
-     sipconfigdelegate.h
+     AccountDelegate.h
      settingslistdelegate.h
-     resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
      LoadXSPFDialog.h
+     AccountFactoryWrapper.h
+     AccountFactoryWrapperDelegate.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -144,8 +135,9 @@ SET( tomahawkUI ${tomahawkUI}
 
      audiocontrols.ui
 
-     GetNewStuffDialog.ui
      LoadXSPFDialog.ui
+
+     AccountFactoryWrapper.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -171,6 +163,7 @@ INCLUDE_DIRECTORIES(
     ${TAGLIB_INCLUDES}
     ${PHONON_INCLUDES}
     ${QJSON_INCLUDE_DIR}
+    ${LIBATTICA_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
 )
@@ -200,7 +193,8 @@ IF(GLOOX_FOUND)
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
-ADD_SUBDIRECTORY( sip )
+
+ADD_SUBDIRECTORY( accounts )
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )

@@ -34,11 +34,11 @@
 #include "album.h"
 #include "collection.h"
 #include "infosystem/infosystem.h"
+#include "accounts/AccountManager.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databaseresolver.h"
-#include "sip/SipHandler.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
@@ -221,7 +221,11 @@ TomahawkApp::init()
     }
 
     tDebug() << "Init InfoSystem.";
-    m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
+    m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( Tomahawk::InfoSystem::InfoSystem::instance() );
+
+    tDebug() << "Init AccountManager.";
+    m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
+    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 #ifndef ENABLE_HEADLESS
@@ -245,11 +249,9 @@ TomahawkApp::init()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
-#ifdef LIBATTICA_FOUND
 #ifndef ENABLE_HEADLESS
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
-#endif
 #endif
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
@@ -307,13 +309,11 @@ TomahawkApp::~TomahawkApp()
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-    delete SipHandler::instance();
+    delete Tomahawk::Accounts::AccountManager::instance();
 
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
-    #ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
-    #endif
 #endif
 
     if ( !m_database.isNull() )
@@ -428,6 +428,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoPlugin* >( "Tomahawk::InfoSystem::InfoPlugin*" );
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
 
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
@@ -476,13 +477,6 @@ TomahawkApp::initPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
-    // load script resolvers
-    QStringList enabled = TomahawkSettings::instance()->enabledScriptResolvers();
-    foreach ( QString resolver, TomahawkSettings::instance()->allScriptResolvers() )
-    {
-        const bool enable = enabled.contains( resolver );
-        Pipeline::instance()->addScriptResolver( resolver, enable );
-    }
 }
 
 
@@ -526,6 +520,7 @@ TomahawkApp::initServent()
 void
 TomahawkApp::initSIP()
 {
+    tDebug() << Q_FUNC_INFO;
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
@@ -534,8 +529,7 @@ TomahawkApp::initSIP()
 #endif
 
         tDebug( LOGINFO ) << "Connecting SIP classes";
-        //SipHandler::instance()->refreshProxy();
-        SipHandler::instance()->loadFromConfig( true );
+        Accounts::AccountManager::instance()->initSIP();
     }
 
     m_loaded = true;

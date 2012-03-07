@@ -38,7 +38,7 @@
 #include "query.h"
 #include "artist.h"
 #include "viewmanager.h"
-#include "sip/SipHandler.h"
+#include "accounts/AccountManager.h"
 #include "sourcetree/sourcetreeview.h"
 #include "network/servent.h"
 #include "utils/proxystyle.h"
@@ -74,7 +74,7 @@
 #include <actioncollection.h>
 
 using namespace Tomahawk;
-
+using namespace Accounts;
 
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
@@ -115,7 +115,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     }
 
     // set initial state
-    onSipDisconnected();
+    onAccountDisconnected();
     vm->setQueue( m_queueView );
     vm->showWelcomePage();
 }
@@ -310,7 +310,7 @@ TomahawkWindow::setupSignals()
     //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
-    connect( ui->actionToggleConnect, SIGNAL( triggered() ), SipHandler::instance(), SLOT( toggleConnect() ) );
+    connect( ui->actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
     connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -332,18 +332,20 @@ TomahawkWindow::setupSignals()
     ui->menuWindow->menuAction()->setVisible( false );
 #endif
 
-    // <SipHandler>
-    connect( SipHandler::instance(), SIGNAL( connected( SipPlugin* ) ), SLOT( onSipConnected() ) );
-    connect( SipHandler::instance(), SIGNAL( disconnected( SipPlugin* ) ), SLOT( onSipDisconnected() ) );
-    connect( SipHandler::instance(), SIGNAL( authError( SipPlugin* ) ), SLOT( onSipError() ) );
+    // <AccountHandler>
+    connect( AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountConnected() ) );
+    connect( AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountDisconnected() ) );
+    connect( AccountManager::instance(), SIGNAL( authError( Tomahawk::Accounts::Account* ) ), SLOT( onAccountError() ) );
 
-    // <SipMenu>
-    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SipPlugin* ) ) );
-    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SipPlugin* ) ) );
-    foreach( SipPlugin *plugin, SipHandler::instance()->allPlugins() )
+    // Menus for accounts that support them
+    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
+    foreach( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
     {
-        connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
-        connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
+        if ( !account || !account->sipPlugin() )
+            continue;
+
+        connect( account->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+        connect( account->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
 }
 
@@ -683,39 +685,36 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
 
 void
-TomahawkWindow::onSipConnected()
+TomahawkWindow::onAccountConnected()
 {
     ui->actionToggleConnect->setText( tr( "Go &offline" ) );
 }
 
 
 void
-TomahawkWindow::onSipDisconnected()
+TomahawkWindow::onAccountDisconnected()
 {
     ui->actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
 
 void
-TomahawkWindow::onSipPluginAdded( SipPlugin* p )
+TomahawkWindow::onAccountAdded( Account* acc )
 {
-    connect( p, SIGNAL( addMenu( QMenu* ) ), SLOT( pluginMenuAdded( QMenu* ) ) );
-    connect( p, SIGNAL( removeMenu( QMenu* ) ), SLOT( pluginMenuRemoved( QMenu* ) ) );
+    if ( !acc->types() & SipType || !acc->sipPlugin() )
+        return;
+
+    connect( acc->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+    connect( acc->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
-
 void
-TomahawkWindow::onSipPluginRemoved( SipPlugin* p )
+TomahawkWindow::onAccountError()
 {
-    Q_UNUSED( p );
-}
+    // TODO fix.
+//     onAccountDisconnected();
 
-
-void
-TomahawkWindow::onSipError()
-{
-    onSipDisconnected();
-
+    // TODO real error message from plugin kthxbbq
     QMessageBox::warning( this,
                           tr( "Authentication Error" ),
                           QString( "Error connecting to SIP: Authentication failed!" ),
