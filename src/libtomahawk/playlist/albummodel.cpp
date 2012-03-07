@@ -304,7 +304,18 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( m_overwriteOnAdd )
         clear();
 
-    if ( !albums.count() )
+    QList<Tomahawk::album_ptr> trimmedAlbums;
+    foreach ( const album_ptr& album, albums )
+    {
+        if ( !album.isNull() && album->name().length() )
+        {
+            if ( findItem( album ) || trimmedAlbums.contains( album ) )
+                continue;
+            trimmedAlbums << album;
+        }
+    }
+
+    if ( !trimmedAlbums.count() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
         return;
@@ -313,12 +324,12 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
     crows.first = c;
-    crows.second = c + albums.count() - 1;
+    crows.second = c + trimmedAlbums.count() - 1;
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     AlbumItem* albumitem;
-    foreach( const album_ptr& album, albums )
+    foreach( const album_ptr& album, trimmedAlbums )
     {
         albumitem = new AlbumItem( album, m_rootItem );
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
@@ -339,7 +350,18 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     if ( m_overwriteOnAdd )
         clear();
 
-    if ( !artists.count() )
+    QList<Tomahawk::artist_ptr> trimmedArtists;
+    foreach ( const artist_ptr& artist, artists )
+    {
+        if ( !artist.isNull() && artist->name().length() )
+        {
+            if ( findItem( artist ) || trimmedArtists.contains( artist ) )
+                continue;
+            trimmedArtists << artist;
+        }
+    }
+
+    if ( !trimmedArtists.count() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
         return;
@@ -348,12 +370,12 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
     crows.first = c;
-    crows.second = c + artists.count() - 1;
+    crows.second = c + trimmedArtists.count() - 1;
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     AlbumItem* albumitem;
-    foreach( const artist_ptr& artist, artists )
+    foreach ( const artist_ptr& artist, trimmedArtists )
     {
         albumitem = new AlbumItem( artist, m_rootItem );
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
@@ -395,4 +417,36 @@ AlbumModel::onDataChanged()
 {
     AlbumItem* p = (AlbumItem*)sender();
     emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
+}
+
+
+AlbumItem*
+AlbumModel::findItem( const artist_ptr& artist ) const
+{
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        AlbumItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        if ( !item->artist().isNull() && item->artist() == artist )
+        {
+            return item;
+        }
+    }
+    
+    return 0;
+}
+
+
+AlbumItem*
+AlbumModel::findItem( const album_ptr& album ) const
+{
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        AlbumItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        if ( !item->album().isNull() && item->album() == album )
+        {
+            return item;
+        }
+    }
+    
+    return 0;
 }

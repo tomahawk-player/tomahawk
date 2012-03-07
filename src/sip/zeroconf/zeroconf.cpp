@@ -32,7 +32,7 @@ ZeroconfFactory::createPlugin( const QString& pluginId )
     return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
-ZeroconfPlugin::ZeroconfPlugin() : SipPlugin( "") {}
+ZeroconfPlugin::ZeroconfPlugin() : SipPlugin( "" ) {}
 
 ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
     : SipPlugin( pluginId )

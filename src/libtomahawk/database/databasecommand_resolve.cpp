@@ -81,11 +81,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist(), false );
-    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track(), false );
-    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album(), false );
+    QList< QPair<int, float> > tracks = lib->search( m_query );
 
-    if ( artists.length() == 0 || tracks.length() == 0 )
+    if ( tracks.length() == 0 )
     {
         qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
         emit results( m_query->id(), res );
@@ -95,13 +93,10 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     // STEP 2
     TomahawkSqlQuery files_query = lib->newquery();
 
-    QStringList artsl, trksl;
-    for ( int k = 0; k < artists.count(); k++ )
-        artsl.append( QString::number( artists.at( k ).first ) );
+    QStringList trksl;
     for ( int k = 0; k < tracks.count(); k++ )
         trksl.append( QString::number( tracks.at( k ).first ) );
 
-    QString artsToken = QString( "file_join.artist IN (%1)" ).arg( artsl.join( "," ) );
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
 
     QString sql = QString( "SELECT "
@@ -124,8 +119,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
                             "file.id = file_join.file AND "
-                            "(%1 AND %2)" )
-         .arg( artsToken )
+                            "(%1)" )
          .arg( trksToken );
 
     files_query.prepare( sql );
@@ -201,34 +195,9 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< QPair<int, float> > artistPairs = lib->searchTable( "artist", m_query->fullTextQuery(), false, 20 );
-    QList< QPair<int, float> > albumPairs = lib->searchTable( "album", m_query->fullTextQuery(), false, 20 );
-    QList< QPair<int, float> > trackArtistPairs = lib->searchTable( "trackartist", m_query->fullTextQuery(), true, 20 );
+    QList< QPair<int, float> > trackPairs = lib->search( m_query );
+    QList< QPair<int, float> > albumPairs = lib->searchAlbum( m_query, 20 );
 
-    if ( artistPairs.length() == 0 && albumPairs.length() == 0 && trackArtistPairs.length() == 0 )
-    {
-        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
-        emit results( m_query->id(), res );
-        return;
-    }
-
-    foreach ( const scorepair_t& artistPair, artistPairs )
-    {
-        TomahawkSqlQuery query = lib->newquery();
-
-        QString sql = QString( "SELECT name FROM artist WHERE id = %1" ).arg( artistPair.first );
-        query.prepare( sql );
-        query.exec();
-
-        QList<Tomahawk::artist_ptr> artistList;
-        while ( query.next() )
-        {
-            Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistPair.first, query.value( 0 ).toString() );
-            artistList << artist;
-        }
-
-        emit artists( m_query->id(), artistList );
-    }
     foreach ( const scorepair_t& albumPair, albumPairs )
     {
         TomahawkSqlQuery query = lib->newquery();
@@ -247,13 +216,20 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
         emit albums( m_query->id(), albumList );
     }
+    
+    if ( trackPairs.length() == 0 )
+    {
+        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->fullTextQuery();
+        emit results( m_query->id(), res );
+        return;
+    }
 
     // STEP 2
     TomahawkSqlQuery files_query = lib->newquery();
 
     QStringList trksl;
-    for ( int k = 0; k < trackArtistPairs.count(); k++ )
-        trksl.append( QString::number( trackArtistPairs.at( k ).first ) );
+    for ( int k = 0; k < trackPairs.count(); k++ )
+        trksl.append( QString::number( trackPairs.at( k ).first ) );
 
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
     QString sql = QString( "SELECT "
@@ -325,11 +301,11 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setAlbumPos( files_query.value( 17 ).toUInt() );
         result->setTrackId( files_query.value( 9 ).toUInt() );
 
-        for ( int k = 0; k < trackArtistPairs.count(); k++ )
+        for ( int k = 0; k < trackPairs.count(); k++ )
         {
-            if ( trackArtistPairs.at( k ).first == (int)result->trackId() )
+            if ( trackPairs.at( k ).first == (int)result->trackId() )
             {
-                result->setScore( trackArtistPairs.at( k ).second );
+                result->setScore( trackPairs.at( k ).second );
                 break;
             }
         }

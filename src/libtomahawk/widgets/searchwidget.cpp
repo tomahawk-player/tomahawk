@@ -130,6 +130,9 @@ SearchWidget::jumpToCurrentTrack()
 void
 SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    QList<Tomahawk::artist_ptr> artists;
+    QList<Tomahawk::album_ptr> albums;
+
     foreach( const Tomahawk::result_ptr& result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
@@ -143,7 +146,13 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         q->addResults( rl );
 
         m_resultsModel->append( q );
+        
+        artists << result->artist();
+        albums << result->album();
     }
+
+    m_artistsModel->addArtists( artists );
+    m_albumsModel->addAlbums( albums );
 }
 
 

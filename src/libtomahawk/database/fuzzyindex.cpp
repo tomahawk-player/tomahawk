@@ -22,6 +22,7 @@
 #include <QTime>
 
 #include <CLucene.h>
+#include <CLucene/queryParser/MultiFieldQueryParser.h>
 
 #include "databaseimpl.h"
 #include "utils/tomahawkutils.h"
@@ -84,7 +85,7 @@ FuzzyIndex::beginIndexing()
         }
 
         qDebug() << "Creating new index writer.";
-        IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
+        IndexWriter luceneWriter( m_luceneDir, m_analyzer, true );
     }
     catch( CLuceneError& error )
     {
@@ -103,31 +104,49 @@ FuzzyIndex::endIndexing()
 
 
 void
-FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QString >& fields )
+FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& trackData )
 {
     try
     {
-        tDebug() << "Appending to index:" << table << fields.count();
+        tDebug() << "Appending to index:" << trackData.count();
         bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
-        IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
+        IndexWriter luceneWriter( m_luceneDir, m_analyzer, create );
         Document doc;
 
-        QMapIterator< unsigned int, QString > it( fields );
+        QMapIterator< unsigned int, QMap< QString, QString > > it( trackData );
         while ( it.hasNext() )
         {
             it.next();
             unsigned int id = it.key();
-            QString name = it.value();
-            {
-                Field* field = _CLNEW Field( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str(),
-                                             Field::STORE_YES | Field::INDEX_TOKENIZED );
-                doc.add( *field );
-            }
+            QMap< QString, QString > values = it.value();
 
+            if ( values.contains( "track" ) )
             {
-                Field* field = _CLNEW Field( _T( "id" ), QString::number( id ).toStdWString().c_str(), Field::STORE_YES | Field::INDEX_NO );
-                doc.add( *field );
+                doc.add( *( _CLNEW Field( _T( "fulltext" ), DatabaseImpl::sortname( QString( "%1 %2" ).arg( values.value( "artist" ) ).arg( values.value( "track" ) ) ).toStdWString().c_str(),
+                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+
+                doc.add( *( _CLNEW Field( _T( "track" ), DatabaseImpl::sortname( values.value( "track" ) ).toStdWString().c_str(),
+                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+
+                doc.add( *( _CLNEW Field( _T( "artist" ), DatabaseImpl::sortname( values.value( "artist" ) ).toStdWString().c_str(),
+                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+
+                doc.add( *( _CLNEW Field( _T( "artistid" ), values.value( "artistid" ).toStdWString().c_str(),
+                                          Field::STORE_YES | Field::INDEX_NO ) ) );
+
+                doc.add( *( _CLNEW Field( _T( "trackid" ), QString::number( id ).toStdWString().c_str(),
+                                          Field::STORE_YES | Field::INDEX_NO ) ) );
             }
+            else if ( values.contains( "album" ) )
+            {
+                doc.add( *( _CLNEW Field( _T( "album" ), DatabaseImpl::sortname( values.value( "album" ) ).toStdWString().c_str(),
+                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+
+                doc.add( *( _CLNEW Field( _T( "albumid" ), QString::number( id ).toStdWString().c_str(),
+                                          Field::STORE_YES | Field::INDEX_NO ) ) );
+            }
+            else
+                Q_ASSERT( false );
 
             luceneWriter.addDocument( &doc );
             doc.clear();
@@ -152,7 +171,7 @@ FuzzyIndex::loadLuceneIndex()
 
 
 QMap< int, float >
-FuzzyIndex::search( const QString& table, const QString& name, bool fulltext )
+FuzzyIndex::search( const Tomahawk::query_ptr& query )
 {
     QMutexLocker lock( &m_mutex );
 
@@ -171,47 +190,112 @@ FuzzyIndex::search( const QString& table, const QString& name, bool fulltext )
             m_luceneSearcher = _CLNEW IndexSearcher( m_luceneReader );
         }
 
-        if ( name.isEmpty() )
-            return resultsmap;
+        float minScore;
+        const TCHAR** fields = 0;
+        MultiFieldQueryParser parser( fields, m_analyzer );
+        BooleanQuery* qry = _CLNEW BooleanQuery();
 
-        Hits* hits = 0;
-        Query* qry = 0;
-        QueryParser parser( table.toStdWString().c_str(), m_analyzer );
-
-        if ( fulltext )
+        if ( query->isFullTextQuery() )
         {
-            QString escapedName = QString::fromWCharArray( parser.escape( name.toStdWString().c_str() ) );
+            QString escapedQuery = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
+            
+            Term* term = _CLNEW Term( _T( "track" ), escapedQuery.toStdWString().c_str() );
+            Query* fqry = _CLNEW FuzzyQuery( term );
+            qry->add( fqry, true, BooleanClause::SHOULD );
 
-            QStringList sl = DatabaseImpl::sortname( escapedName ).split( " ", QString::SkipEmptyParts );
-            qry = parser.parse( QString( "%1:%2~" ).arg( table ).arg( sl.join( "~ " ) ).toStdWString().c_str() );
+            term = _CLNEW Term( _T( "artist" ), escapedQuery.toStdWString().c_str() );
+            fqry = _CLNEW FuzzyQuery( term );
+            qry->add( fqry, true, BooleanClause::SHOULD );
+
+            term = _CLNEW Term( _T( "fulltext" ), escapedQuery.toStdWString().c_str() );
+            fqry = _CLNEW FuzzyQuery( term );
+            qry->add( fqry, true, BooleanClause::SHOULD );
+
+            minScore = 0.00;
         }
         else
         {
-//            qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str() ) );
-            QString escapedName = QString::fromWCharArray( parser.escape( name.toStdWString().c_str() ) );
+            QString track = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->track() ).toStdWString().c_str() ) );
+            QString artist = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->artist() ).toStdWString().c_str() ) );
+//            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
 
-            QStringList sl = DatabaseImpl::sortname( escapedName ).split( " ", QString::SkipEmptyParts );
-            qry = parser.parse( QString( "%1:\"%2\"~" ).arg( table ).arg( sl.join( " " ) ).toStdWString().c_str() );
+            Term* term = _CLNEW Term( _T( "track" ), track.toStdWString().c_str() );
+            Query* fqry = _CLNEW FuzzyQuery( term );
+            qry->add( fqry, true, BooleanClause::MUST );
+
+            term = _CLNEW Term( _T( "artist" ), artist.toStdWString().c_str() );
+            fqry = _CLNEW FuzzyQuery( term );
+            qry->add( fqry, true, BooleanClause::MUST );
+
+            minScore = 0.05;
         }
 
-        hits = m_luceneSearcher->search( qry );
+        Hits* hits = m_luceneSearcher->search( qry );
         for ( uint i = 0; i < hits->length(); i++ )
         {
             Document* d = &hits->doc( i );
 
             float score = hits->score( i );
-            int id = QString::fromWCharArray( d->get( _T( "id" ) ) ).toInt();
-            QString result = QString::fromWCharArray( d->get( table.toStdWString().c_str() ) );
+            int id = QString::fromWCharArray( d->get( _T( "trackid" ) ) ).toInt();
 
-            if ( DatabaseImpl::sortname( result ) == DatabaseImpl::sortname( name ) )
-                score = 1.0;
-            else
-                score = qMin( score, (float)0.99 );
-
-            if ( score > 0.20 )
+            if ( score > minScore )
             {
                 resultsmap.insert( id, score );
-//                qDebug() << "Hitres:" << result << id << score << table << name;
+//                tDebug() << "Index hit:" << id << score << QString::fromWCharArray( ((Query*)qry)->toString() );
+            }
+        }
+
+        delete hits;
+        delete qry;
+    }
+    catch( CLuceneError& error )
+    {
+        tDebug() << "Caught CLucene error:" << error.what();
+        Q_ASSERT( false );
+    }
+
+    return resultsmap;
+}
+
+
+QMap< int, float >
+FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
+{
+    Q_ASSERT( query->isFullTextQuery() );
+
+    QMutexLocker lock( &m_mutex );
+
+    QMap< int, float > resultsmap;
+    try
+    {
+        if ( !m_luceneReader )
+        {
+            if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
+            {
+                qDebug() << Q_FUNC_INFO << "index didn't exist.";
+                return resultsmap;
+            }
+
+            m_luceneReader = IndexReader::open( m_luceneDir );
+            m_luceneSearcher = _CLNEW IndexSearcher( m_luceneReader );
+        }
+
+        QueryParser parser( _T( "album" ), m_analyzer );
+        QString escapedName = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
+
+        Query* qry = _CLNEW FuzzyQuery( _CLNEW Term( _T( "album" ), escapedName.toStdWString().c_str() ) );
+        Hits* hits = m_luceneSearcher->search( qry );
+        for ( uint i = 0; i < hits->length(); i++ )
+        {
+            Document* d = &hits->doc( i );
+
+            float score = hits->score( i );
+            int id = QString::fromWCharArray( d->get( _T( "albumid" ) ) ).toInt();
+
+            if ( score > 0.30 )
+            {
+                resultsmap.insert( id, score );
+//                tDebug() << "Index hit:" << id << score;
             }
         }
 

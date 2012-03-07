@@ -35,13 +35,7 @@ public:
     virtual bool doesMutates() const { return true; }
     virtual void exec( DatabaseImpl* db );
 
-signals:
-    void indexUpdated();
-
 private:
-    void indexTable( DatabaseImpl* db, const QString& table, const QString& query );
-
-    QString table;
     IndexingJobItem* m_statusJob;
 };
 
