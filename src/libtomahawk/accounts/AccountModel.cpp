@@ -82,7 +82,6 @@ AccountModel::loadData()
         if ( AtticaManager::instance()->hasCustomAccountForAttica( content.id() ) )
         {
             Account* acct = AtticaManager::instance()->customAccountForAttica( content.id() );
-            qDebug() << "Found custom attica account for resolver:" << content.id() << acct->accountFriendlyName() << acct->accountId();
             Q_ASSERT( acct );
             if ( acct )
             {
