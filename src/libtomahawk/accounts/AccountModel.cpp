@@ -29,6 +29,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+#define ACCOUNTMODEL_DEBUG 0
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
@@ -52,10 +53,11 @@ AccountModel::loadData()
     // Add all factories
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
     QList< Account* > allAccounts = AccountManager::instance()->accounts();
+#if ACCOUNTMODEL_DEBUG
     qDebug() << "All accounts:";
     foreach ( Account* acct, allAccounts )
         qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();
-
+#endif
     foreach ( AccountFactory* fac, factories )
     {
         if ( !fac->allowUserCreation() )
@@ -86,11 +88,12 @@ AccountModel::loadData()
             {
                 m_accounts << new AccountModelNode( acct );
                 const int removed = allAccounts.removeAll( acct );
-
+#if ACCOUNTMODEL_DEBUG
                 qDebug() << "Removed custom account from misc accounts list, found:" << removed;
                 qDebug() << "All accounts after remove:";
                 foreach ( Account* acct, allAccounts )
                     qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#endif
             }
         } else
         {
@@ -112,10 +115,11 @@ AccountModel::loadData()
         }
     }
 
-
+#if ACCOUNTMODEL_DEBUG
     qDebug() << "All accounts left:";
     foreach ( Account* acct, allAccounts )
         qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#endif
    foreach ( Account* acct, allAccounts )
    {
        qDebug() << "Resolver is left over:" << acct->accountFriendlyName();

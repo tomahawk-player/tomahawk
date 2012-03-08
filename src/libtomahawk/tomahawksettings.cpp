@@ -288,6 +288,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         foreach ( const QString& resolver, allResolvers )
         {
+            // We handle last.fm resolvers differently.
+            if ( resolver.contains( "lastfm" ) )
+                continue;
+
             const QString accountKey = QString( "resolveraccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
             accounts << accountKey;
 
