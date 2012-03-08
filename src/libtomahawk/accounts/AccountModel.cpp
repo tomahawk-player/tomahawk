@@ -86,10 +86,13 @@ AccountModel::loadData()
         {
             m_accounts << new AccountModelNode( content );
 
+            qDebug() << "No custom attica account, looking for normal resolver account";
             foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
             {
+                qDebug() << "Found ResolverAccount" << acct->accountFriendlyName();
                 if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
                 {
+                    qDebug() << "Which is an attica resolver with id:" << resolver->atticaId();
                     if ( resolver->atticaId() == content.id() )
                     {
                         allAccounts.removeAll( acct );
@@ -102,6 +105,7 @@ AccountModel::loadData()
     // All other accounts we haven't dealt with yet
    foreach ( Account* acct, allAccounts )
    {
+       qDebug() << "Resolver is left over:" << acct->accountFriendlyName();
        Q_ASSERT( !qobject_cast< AtticaResolverAccount* >( acct ) ); // This should be caught above in the attica list
 
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )

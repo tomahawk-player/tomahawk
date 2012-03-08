@@ -48,6 +48,7 @@ ResolverAccountFactory::createAccount( const QString& accountId )
 Account*
 ResolverAccountFactory::createFromPath( const QString& path, bool isAttica )
 {
+    qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
     if ( isAttica )
     {
         QFileInfo info( path );
