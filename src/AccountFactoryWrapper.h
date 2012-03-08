@@ -49,7 +49,6 @@ signals:
 
 public slots:
     void openAccountConfig( Tomahawk::Accounts::Account* );
-    void accountConfigClosed( int value );
     void removeAccount( Tomahawk::Accounts::Account* );
 
 private slots:

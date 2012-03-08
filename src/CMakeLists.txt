@@ -70,61 +70,19 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      breakpad/BreakPad.cpp
 
+     utils/guihelpers.cpp
+
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
      diagnosticsdialog.cpp
      AccountDelegate.cpp
      settingslistdelegate.cpp
+     delegateconfigwrapper.cpp
      tomahawkwindow.cpp
      LoadXSPFDialog.cpp
      AccountFactoryWrapper.cpp
      AccountFactoryWrapperDelegate.cpp
-)
-
-SET( tomahawkHeaders ${tomahawkHeaders}
-     tomahawkapp.h
-
-     web/api_v1.h
-
-     musicscanner.h
-     scanmanager.h
-     ubuntuunityhack.h
-     shortcuthandler.h
-)
-
-IF(LIBLASTFM_FOUND)
-    SET(tomahawkHeaders ${tomahawkHeaders}
-        scrobbler.h
-    )
-ENDIF(LIBLASTFM_FOUND)
-
-SET( tomahawkHeadersGui ${tomahawkHeadersGui}
-     sourcetree/sourcesmodel.h
-     sourcetree/sourcesproxymodel.h
-     sourcetree/sourcetreeview.h
-     sourcetree/sourcedelegate.h
-     sourcetree/animationhelper.h
-     sourcetree/items/sourcetreeitem.h
-     sourcetree/items/sourceitem.h
-     sourcetree/items/playlistitems.h
-     sourcetree/items/categoryitems.h
-     sourcetree/items/genericpageitems.h
-     sourcetree/items/temporarypageitem.h
-     sourcetree/items/groupitem.h
-     sourcetree/items/historyitem.h
-
-     tomahawktrayicon.h
-     audiocontrols.h
-     settingsdialog.h
-     diagnosticsdialog.h
-     AccountDelegate.h
-     settingslistdelegate.h
-     delegateconfigwrapper.h
-     tomahawkwindow.h
-     LoadXSPFDialog.h
-     AccountFactoryWrapper.h
-     AccountFactoryWrapperDelegate.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -180,17 +138,11 @@ ENDIF( UNIX )
 IF( APPLE )
     INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/thirdparty/SPMediaKeyTap )
 
-    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h )
     SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm mac/macshortcuthandler.cpp )
-
-    IF(HAVE_SPARKLE)
-        SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
-    ENDIF(HAVE_SPARKLE)
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)
   INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
-  SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
 
@@ -206,26 +158,26 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
 
 include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
 
-SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} ${trans_outfile})
+SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 
 IF( BUILD_GUI )
-    LIST(APPEND tomahawkHeaders ${tomahawkHeadersGui})
     LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
     qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
 ENDIF()
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
-qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
+
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
 IF( UNIX AND NOT APPLE )
     ADD_EXECUTABLE( tomahawk ${final_src} )
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES AUTOMOC TRUE)
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
-    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
-)
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist")
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES AUTOMOC TRUE)
 ENDIF( APPLE )
 IF( WIN32 )
     ADD_EXECUTABLE( tomahawk WIN32 ${final_src} )

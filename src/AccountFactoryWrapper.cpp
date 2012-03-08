@@ -19,7 +19,8 @@
 #include "AccountFactoryWrapper.h"
 
 #include "accounts/Account.h"
-#include <accounts/AccountManager.h>
+#include "accounts/AccountManager.h"
+#include "guihelpers.h"
 #include "AccountFactoryWrapperDelegate.h"
 #include "delegateconfigwrapper.h"
 #include "ui_AccountFactoryWrapper.h"
@@ -92,39 +93,9 @@ AccountFactoryWrapper::load()
 void
 AccountFactoryWrapper::openAccountConfig( Account* account )
 {
-    if( account->configurationWidget() )
-    {
-#ifndef Q_WS_MAC
-        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            account->saveConfig();
-        }
-#else
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountConfigClosed( int ) ) );
-
-        dialog->show();
-#endif
-    }
+    TomahawkUtils::openAccountConfig( account, this, false );
 }
 
-
-void
-AccountFactoryWrapper::accountConfigClosed( int value )
-{
-    if( value == QDialog::Accepted )
-    {
-        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
-        account->saveConfig();
-    }
-}
 
 void
 AccountFactoryWrapper::removeAccount( Tomahawk::Accounts::Account* acct )

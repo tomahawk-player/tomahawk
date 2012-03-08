@@ -89,12 +89,8 @@ private slots:
     void accountsFilterChanged( int );
 
     void createAccountFromFactory( Tomahawk::Accounts::AccountFactory* );
-
     void openAccountConfig( Tomahawk::Accounts::Account*, bool showDelete = false );
     void openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* );
-    void accountConfigClosed( int value );
-    void accountConfigDelete();
-    void accountCreateConfigClosed( int value );
 
     void installFromFile();
     void scrollTo( const QModelIndex& );
@@ -108,7 +104,6 @@ private slots:
 
 private:
     void createIcons();
-    void handleAccountAdded( Tomahawk::Accounts::Account* p, bool added );
 
     Ui_StackedSettingsDialog* ui;
 

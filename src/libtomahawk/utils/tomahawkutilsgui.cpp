@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 #include "config.h"
 #include "tomahawkutilsgui.h"
 
+#include "logger.h"
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
@@ -36,7 +38,6 @@
     #include <windowsx.h>
 #endif
 
-#include "logger.h"
 
 namespace TomahawkUtils
 {
@@ -321,7 +322,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         if ( subcache.contains( mode ) )
         {
             subsubcache = subcache.value( mode );
-            
+
             if ( subsubcache.contains( size.width() ) )
                 return subsubcache.value( size.width() );
         }
@@ -339,7 +340,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultArtistImage:
                 pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
             break;
-            
+
         default:
             break;
     }
@@ -352,12 +353,13 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
     if ( !size.isNull() )
         pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-    
+
     subsubcache.insert( size.width(), pixmap );
     subcache.insert( mode, subsubcache );
     cache.insert( type, subcache );
 
     return pixmap;
 }
+
 
 } // ns
