@@ -52,6 +52,10 @@ AccountModel::loadData()
     // Add all factories
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
     QList< Account* > allAccounts = AccountManager::instance()->accounts();
+    qDebug() << "All accounts:";
+    foreach ( Account* acct, allAccounts )
+        qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();
+
     foreach ( AccountFactory* fac, factories )
     {
         if ( !fac->allowUserCreation() )
@@ -84,6 +88,9 @@ AccountModel::loadData()
                 const int removed = allAccounts.removeAll( acct );
 
                 qDebug() << "Removed custom account from misc accounts list, found:" << removed;
+                qDebug() << "All accounts after remove:";
+                foreach ( Account* acct, allAccounts )
+                    qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
             }
         } else
         {
@@ -105,7 +112,10 @@ AccountModel::loadData()
         }
     }
 
-    // All other accounts we haven't dealt with yet
+
+    qDebug() << "All accounts left:";
+    foreach ( Account* acct, allAccounts )
+        qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
    foreach ( Account* acct, allAccounts )
    {
        qDebug() << "Resolver is left over:" << acct->accountFriendlyName();
