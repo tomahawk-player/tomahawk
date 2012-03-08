@@ -123,7 +123,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
     ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
     ui->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
-    ui->accountsFilterCombo->addItem( accountTypeToString( InfoType ), InfoType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( StatusPushType ), StatusPushType );
 
     connect( ui->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
 
