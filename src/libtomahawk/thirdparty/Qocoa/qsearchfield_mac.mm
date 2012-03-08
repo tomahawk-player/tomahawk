@@ -22,6 +22,7 @@ THE SOFTWARE.
 */
 
 #include "qsearchfield.h"
+#include "moc_qsearchfield.cpp"
 
 #include "qocoa_mac.h"
 
