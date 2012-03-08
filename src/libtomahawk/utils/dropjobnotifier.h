@@ -27,7 +27,8 @@
 
 #include <QObject>
 #include <QSet>
-#include <QtCore/QStringList>
+#include <QStringList>
+#include <QPixmap>
 
 class QNetworkReply;
 namespace Tomahawk

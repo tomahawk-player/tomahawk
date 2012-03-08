@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,34 +16,32 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ERRORSTATUSMESSAGE_H
-#define ERRORSTATUSMESSAGE_H
 
-#include "JobStatusItem.h"
-#include "dllmacro.h"
+#include "functimeout.h"
 
-#include <QPixmap>
+#include <QTimer>
 
-class QTimer;
 
-class DLLEXPORT ErrorStatusMessage : public JobStatusItem
+using namespace Tomahawk;
+
+
+FuncTimeout::FuncTimeout( int ms, boost::function< void() > func, QObject* besafe )
+    : m_func( func )
+    , m_watch( QWeakPointer< QObject >( besafe ) )
 {
-    Q_OBJECT
-public:
-    explicit ErrorStatusMessage( const QString& errorMessage, int defaultTimeoutSecs = 8 );
+    //qDebug() << Q_FUNC_INFO;
+    QTimer::singleShot( ms, this, SLOT( exec() ) );
+}
 
-    QString type() const { return "errormessage"; }
-    QString rightColumnText() const { return QString(); }
 
-    QPixmap icon() const;
-    QString mainText() const;
+FuncTimeout::~FuncTimeout()
+{
+}
 
-    bool allowMultiLine() const { return true; }
-private:
-    QString m_message;
-    QTimer* m_timer;
 
-    static QPixmap* s_pixmap;
-};
-
-#endif // ERRORSTATUSMESSAGE_H
+void FuncTimeout::exec()
+{
+    if( !m_watch.isNull() )
+        m_func();
+    this->deleteLater();
+}

@@ -22,6 +22,8 @@
 #include "jobview/JobStatusItem.h"
 #include "query.h"
 
+#include <QPixmap>
+
 class PipelineStatusItem : public JobStatusItem
 {
     Q_OBJECT

@@ -20,7 +20,8 @@
 #define JOB_STATUS_ITEM
 
 #include <QObject>
-#include <QPixmap>
+
+class QPixmap;
 
 /**
  * Implement your own JobStatusItem if you want to add some sort of job status entry in the JobStatusView.
@@ -37,8 +38,8 @@ class JobStatusItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit JobStatusItem() : QObject() {}
-    virtual ~JobStatusItem() {}
+    explicit JobStatusItem();
+    virtual ~JobStatusItem();
 
     virtual QString type() const = 0;
 
@@ -52,8 +53,8 @@ public:
      * instead of showing each individually. In this case, the right column from the item will be ignored
      * and a count will be shown instead.
      */
-    virtual bool collapseItem() const { return false; }
-    virtual bool allowMultiLine() const { return false; }
+    virtual bool collapseItem() const;
+    virtual bool allowMultiLine() const;
 
 signals:
     /// Ask for an update

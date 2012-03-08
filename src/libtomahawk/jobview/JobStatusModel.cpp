@@ -21,6 +21,7 @@
 #include "JobStatusItem.h"
 #include "utils/logger.h"
 
+#include <QPixmap>
 
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )

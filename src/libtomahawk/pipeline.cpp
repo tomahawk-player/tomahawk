@@ -28,6 +28,8 @@
 
 #include "utils/logger.h"
 
+#include "boost/bind.hpp"
+
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000

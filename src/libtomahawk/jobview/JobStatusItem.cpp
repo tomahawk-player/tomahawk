@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,34 +16,27 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ERRORSTATUSMESSAGE_H
-#define ERRORSTATUSMESSAGE_H
 
 #include "JobStatusItem.h"
-#include "dllmacro.h"
 
-#include <QPixmap>
 
-class QTimer;
-
-class DLLEXPORT ErrorStatusMessage : public JobStatusItem
+JobStatusItem::JobStatusItem()
+    : QObject()
 {
-    Q_OBJECT
-public:
-    explicit ErrorStatusMessage( const QString& errorMessage, int defaultTimeoutSecs = 8 );
+}
 
-    QString type() const { return "errormessage"; }
-    QString rightColumnText() const { return QString(); }
 
-    QPixmap icon() const;
-    QString mainText() const;
+JobStatusItem::~JobStatusItem()
+{
+}
 
-    bool allowMultiLine() const { return true; }
-private:
-    QString m_message;
-    QTimer* m_timer;
 
-    static QPixmap* s_pixmap;
-};
+bool JobStatusItem::allowMultiLine() const
+{
+    return false;
+}
 
-#endif // ERRORSTATUSMESSAGE_H
+bool JobStatusItem::collapseItem() const
+{
+    return false;
+}

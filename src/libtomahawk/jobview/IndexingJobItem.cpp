@@ -20,6 +20,8 @@
 
 #include "utils/tomahawkutils.h"
 
+#include <QPixmap>
+
 static QPixmap* s_indexIcon = 0;
 
 

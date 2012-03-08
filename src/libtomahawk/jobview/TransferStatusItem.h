@@ -21,6 +21,8 @@
 
 #include "JobStatusItem.h"
 
+#include <QPixmap>
+
 class StreamConnection;
 
 class TransferStatusManager : public QObject
