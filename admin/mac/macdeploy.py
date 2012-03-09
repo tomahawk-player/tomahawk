@@ -199,11 +199,10 @@ QT_PLUGINS = [
 ]
 
 TOMAHAWK_PLUGINS = [
-  'libtomahawk_sipjabber.dylib',
-  'libtomahawk_sipgoogle.dylib',
-  'libtomahawk_siptwitter.dylib',
-  'libtomahawk_sipzeroconf.dylib',
-  'libtomahawk_qtweetlib.dylib',
+  'libtomahawk_account_xmpp.so.dylib',
+  'libtomahawk_account_google.so.dylib',
+  'libtomahawk_account_twitter.so.dylib',
+  'libtomahawk_account_zeroconf.so.dylib',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
