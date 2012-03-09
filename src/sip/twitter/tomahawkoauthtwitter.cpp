@@ -12,15 +12,15 @@ TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject*
 }
 
 
-int
+const QString
 TomahawkOAuthTwitter::authorizationWidget()
 {
     bool ok;
-    int i = QInputDialog::getInt(0, tr( "Twitter PIN" ), tr( "After authenticating on Twitter's web site,\nenter the displayed PIN number here:" ), 0, 0, 2147483647, 1, &ok);
-    if (ok)
-        return i;
+    const QString str = QInputDialog::getText(0, tr( "Twitter PIN" ), tr( "After authenticating on Twitter's web site,\nenter the displayed PIN number here:" ), QLineEdit::Normal, QString(), &ok);
+    if ( ok && !str.isEmpty() )
+        return str;
 
-    return 0;
+    return QString();
 }
 
 void
