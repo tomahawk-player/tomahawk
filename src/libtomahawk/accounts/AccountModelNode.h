@@ -87,7 +87,7 @@ struct AccountModelNode {
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
-                qDebug() << "Found account for factory:" << acct->accountFriendlyName();
+//                 qDebug() << "Found account for factory:" << acct->accountFriendlyName();
                 accounts.append( acct );
             }
         }
@@ -98,7 +98,7 @@ struct AccountModelNode {
         init();
         atticaContent = cnt;
 
-        qDebug() << "Creating attica model node for resolver:" << cnt.id();
+//         qDebug() << "Creating attica model node for resolver:" << cnt.id();
 
         foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
         {
@@ -106,7 +106,7 @@ struct AccountModelNode {
             {
                 if ( resolver->atticaId() == atticaContent.id() )
                 {
-                    qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
+//                     qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
                     atticaAccount = resolver;
                     break;
                 }
