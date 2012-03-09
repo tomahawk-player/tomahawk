@@ -301,10 +301,11 @@ extensionToMimetype( const QString& extension )
     return s_ext2mime.value( extension, "unknown" );
 }
 
+static QMutex s_noProxyHostsMutex;
+static QStringList s_noProxyHosts;
 
 NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 {
-    m_noProxyHosts = QStringList( other.m_noProxyHosts );
     m_proxy = QNetworkProxy( other.m_proxy );
 }
 
@@ -312,13 +313,17 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
+    tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
-    if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || m_noProxyHosts.contains( hostname ) || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
+    s_noProxyHostsMutex.lock();
+    if ( s_noProxyHosts.contains( hostname ) )
+        proxies << QNetworkProxy::NoProxy << systemProxyForQuery( query );
+    else if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
         proxies << systemProxyForQuery( query );
     else
         proxies << m_proxy << systemProxyForQuery( query );
-
+    s_noProxyHostsMutex.unlock();
     return proxies;
 }
 
@@ -335,7 +340,9 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
         //TODO: wildcard support
     }
     tDebug() << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
-    m_noProxyHosts = newList;
+    s_noProxyHostsMutex.lock();
+    s_noProxyHosts = newList;
+    s_noProxyHostsMutex.unlock();
 }
 
 
@@ -357,7 +364,6 @@ NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
     if ( this != &rhs )
     {
         m_proxy = QNetworkProxy( rhs.m_proxy );
-        m_noProxyHosts = QStringList( rhs.m_noProxyHosts );
     }
 
     return *this;
@@ -367,7 +373,7 @@ NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
 bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other ) const
 {
     tDebug() << Q_FUNC_INFO;
-    if ( m_noProxyHosts != other.m_noProxyHosts || m_proxy != other.m_proxy )
+    if ( m_proxy != other.m_proxy )
         return false;
 
     return true;
@@ -378,25 +384,29 @@ static QMap< QThread*, NetworkProxyFactory* > s_threadProxyFactoryHash;
 static QMutex s_namAccessMutex;
 
 NetworkProxyFactory*
-proxyFactory( bool noMutexLocker )
+proxyFactory( bool makeClone, bool noMutexLocker )
 {
     // Don't lock if being called from nam()
     tDebug() << Q_FUNC_INFO;
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
 
-    if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
-        return s_threadProxyFactoryHash[ QThread::currentThread() ];
+    if ( !makeClone )
+    {
+        if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
+            return s_threadProxyFactoryHash[ QThread::currentThread() ];
 
-    if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-        return 0;
+        if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+            return 0;
+    }
 
     // create a new proxy factory for this thread
     TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
     *newProxyFactory = *mainProxyFactory;
 
-    s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
+    if ( !makeClone )
+        s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
 
     return newProxyFactory;
 }
@@ -455,7 +465,7 @@ nam()
 
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
     newNam->setNetworkAccessible( mainNam->networkAccessible() );
-    newNam->setProxyFactory( proxyFactory( true ) );
+    newNam->setProxyFactory( proxyFactory( false, true ) );
 
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
@@ -485,9 +495,15 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
             QNetworkProxy proxy( s->proxyType(), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
             proxyFactory->setProxy( proxy );
             //FIXME: Jreen is broke without this
-            QNetworkProxy::setApplicationProxy( proxy );
-            if ( !s->proxyNoProxyHosts().isEmpty() )
+            //QNetworkProxy::setApplicationProxy( proxy );
+            s_noProxyHostsMutex.lock();
+            if ( !s->proxyNoProxyHosts().isEmpty() && s_noProxyHosts.isEmpty() )
+            {
+                s_noProxyHostsMutex.unlock();
                 proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
+            }
+            else
+                s_noProxyHostsMutex.unlock();
         }
 
         nam->setProxyFactory( proxyFactory );

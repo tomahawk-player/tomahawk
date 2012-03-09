@@ -102,6 +102,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 
     // general client setup
     m_client = new Jreen::Client( jid, m_currentPassword );
+    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
     setupClientHelper();
 
     m_client->registerPayload(new TomahawkSipMessageFactory);

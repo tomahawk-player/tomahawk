@@ -28,7 +28,6 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtNetwork/QNetworkProxy>
 
 #include "artist.h"
 #include "album.h"

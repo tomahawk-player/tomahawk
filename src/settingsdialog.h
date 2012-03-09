@@ -19,8 +19,8 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QDialog>
-#include <QModelIndex>
+#include <QtGui/QDialog>
+#include <QtCore/QModelIndex>
 
 #include "config.h"
 
