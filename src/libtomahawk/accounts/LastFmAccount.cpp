@@ -93,7 +93,9 @@ LastFmAccount::authenticate()
     }
     else if ( m_resolver.isNull() )
     {
-        AtticaManager::instance()->installResolver( res, false );
+        qDebug() << "Got null resolver but asked to authenticate, so installing i we have one from attica:" << res.isValid() << res.id();
+        if ( res.isValid() && !res.id().isEmpty() )
+            AtticaManager::instance()->installResolver( res, false );
     }
     else
     {
