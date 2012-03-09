@@ -34,6 +34,12 @@
 #define PADDING_BETWEEN_STARS 2
 #define STAR_SIZE 12
 
+#ifdef Q_OS_MAC
+#define ROW_HEIGHT_MULTIPLIER 4.9
+#else
+#define ROW_HEIGHT_MULTIPLIER 5.7
+#endif
+
 #define ICONSIZE 40
 #define WRENCH_SIZE 24
 #define SMALL_WRENCH_SIZE 16
@@ -78,7 +84,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
         // Haven't calculated normal item height yet, do it once and save it
         QStyleOptionViewItemV4 opt( option );
         initStyleOption( &opt, index );
-        m_accountRowHeight = 6 * opt.fontMetrics.height();
+        m_accountRowHeight = ROW_HEIGHT_MULTIPLIER * opt.fontMetrics.height();
     }
 
     if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory || rowType == AccountModel::CustomAccount )
