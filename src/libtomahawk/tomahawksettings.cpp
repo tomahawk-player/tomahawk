@@ -232,10 +232,13 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 QVariantHash credentials;
                 credentials[ "username" ] = value( sipPlugin + "/username" );
                 credentials[ "password" ] = value( sipPlugin + "/password" );
-                credentials[ "port" ] = value( sipPlugin + "/port" );
-                credentials[ "server" ] = value( sipPlugin + "/server" );
+
+                QVariantHash configuration;
+                configuration[ "port" ] = value( sipPlugin + "/port" );
+                configuration[ "server" ] = value( sipPlugin + "/server" );
 
                 setValue( QString( "accounts/%1/credentials" ).arg( accountKey ), credentials );
+                setValue( QString( "accounts/%1/configuration" ).arg( accountKey ), configuration );
                 setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), value( sipPlugin + "/username" ) );
 
             }
