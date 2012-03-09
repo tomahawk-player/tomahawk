@@ -212,7 +212,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         {
             painter->save();
             painter->setFont( installFont );
-            int oldRightEdge = rightEdge;
             rightEdge = drawAccountList( painter, opt, accts, rightEdge );
             painter->restore();
 
