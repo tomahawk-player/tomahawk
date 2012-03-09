@@ -60,8 +60,22 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
                  << "new:" << TOMAHAWK_SETTINGS_VERSION
-                 << "Doing upgrade, if any...";
+                 << "Doing upgrade, if any, and backing up";
 
+//         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
+        if ( format() == IniFormat ||
+             ( format() == NativeFormat
+#ifdef Q_OS_WIN
+               && false
+#endif
+             ) )
+        {
+            qDebug() << "Backing up old ini-style config file";
+            const QString path = fileName();
+            const QString newname = path + QString( ".v%1" ).arg( value( "configversion" ).toString() );
+            QFile::copy( path, newname );
+
+        }
         int current = value( "configversion" ).toUInt();
         while ( current < TOMAHAWK_SETTINGS_VERSION )
         {
