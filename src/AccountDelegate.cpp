@@ -91,7 +91,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
         // Make more space for each account we have to show.
         AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
         if ( fac->isUnique() )
-            return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
+            return QSize( 200, m_accountRowHeight );
 
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
         const QSize s = QSize( 200, m_accountRowHeight + 12 * accts.size()-1 );
