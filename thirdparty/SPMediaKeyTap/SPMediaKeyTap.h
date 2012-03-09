@@ -31,4 +31,13 @@
 -(void)mediaKeyTap:(SPMediaKeyTap*)keyTap receivedMediaKeyEvent:(NSEvent*)event;
 @end
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern NSString *kMediaKeyUsingBundleIdentifiersDefaultsKey;
+extern NSString *kIgnoreMediaKeysDefaultsKey;
+
+#ifdef __cplusplus
+}
+#endif

@@ -25,6 +25,7 @@
 #include <qmath.h>
 
 #include "audio/audioengine.h"
+#include "context/ContextWidget.h"
 #include "tomahawksettings.h"
 #include "artist.h"
 #include "albumitem.h"
@@ -110,6 +111,20 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+}
+
+
+void
+AlbumView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
+{
+    QListView::currentChanged( current, previous );
+
+    AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    if ( item )
+    {
+        if ( !item->album().isNull() )
+            ViewManager::instance()->context()->setAlbum( item->album() );
+    }
 }
 
 

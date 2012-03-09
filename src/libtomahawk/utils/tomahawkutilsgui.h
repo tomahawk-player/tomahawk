@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,6 +19,8 @@
 
 #ifndef TOMAHAWKUTILSGUI_H
 #define TOMAHAWKUTILSGUI_H
+
+#include <QSize>
 
 #include "tomahawkutils.h"
 #include "dllmacro.h"
@@ -46,6 +49,9 @@ namespace TomahawkUtils
 
     DLLEXPORT int headerHeight();
     DLLEXPORT void setHeaderHeight( int height );
+
+    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode, const QSize& size = QSize( 0, 0 ) );
+
 }
 
 #endif // TOMAHAWKUTILSGUI_H

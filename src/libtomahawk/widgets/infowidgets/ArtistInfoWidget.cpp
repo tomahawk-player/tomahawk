@@ -36,6 +36,8 @@
 #include "widgets/OverlayButton.h"
 #include "widgets/overlaywidget.h"
 
+#include "pipeline.h"
+
 using namespace Tomahawk;
 
 
@@ -77,10 +79,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setTrackModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-no-case.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show Super Collection Albums" ) );
+    m_button->setText( tr( "Click to show SuperCollection Albums" ) );
     m_button->setCheckable( true );
     m_button->setChecked( true );
 
@@ -119,7 +121,7 @@ ArtistInfoWidget::setMode( ModelMode mode )
         onModeToggle();
 
     if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show Super Collection Albums" ) );
+        m_button->setText( tr( "Click to show SuperCollection Albums" ) );
     else
         m_button->setText( tr( "Click to show Official Albums" ) );
 }
@@ -260,7 +262,8 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                queries << Query::get( m_artist->name(), track, QString(), uuid() );
+                queries << Query::get( m_artist->name(), track, QString() );
+                Pipeline::instance()->resolve( queries );
 
                 if ( ++i == 15 )
                     break;
@@ -289,10 +292,10 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 void
 ArtistInfoWidget::onArtistImageUpdated()
 {
-    if ( m_artist->cover().isNull() )
+    if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap.loadFromData( m_artist->cover() );
+    m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 

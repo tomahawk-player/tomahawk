@@ -28,6 +28,8 @@
 
 #include "utils/logger.h"
 
+#include "boost/bind.hpp"
+
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000
@@ -61,6 +63,7 @@ Pipeline::Pipeline( QObject* parent )
 
 Pipeline::~Pipeline()
 {
+    tDebug() << Q_FUNC_INFO;
     m_running = false;
 
     // stop script resolvers
@@ -418,10 +421,11 @@ Pipeline::shunt( const query_ptr& q )
         r->resolve( q );
         emit resolving( q );
 
-        m_qidsTimeout.insert( q->id(), true );
-
         if ( r->timeout() > 0 )
+        {
+            m_qidsTimeout.insert( q->id(), true );
             new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+        }
     }
     else
     {

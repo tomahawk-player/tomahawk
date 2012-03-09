@@ -80,6 +80,11 @@ ArtistView::ArtistView( QWidget* parent )
     setFont( f );
     #endif
 
+    m_timer.setInterval( SCROLL_TIMEOUT );
+    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
+
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
     connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
@@ -128,7 +133,8 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( filteringFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
-    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( m_proxyModel, SIGNAL( filteringFinished() ), SLOT( onFilterChangeFinished() ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     guid(); // this will set the guid on the header
 
@@ -141,6 +147,44 @@ ArtistView::setTreeModel( TreeModel* model )
     {
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
+}
+
+
+void
+ArtistView::onViewChanged()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    m_timer.start();
+}
+
+
+void
+ArtistView::onScrollTimeout()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    QModelIndex left = indexAt( viewport()->rect().topLeft() );
+    while ( left.isValid() && left.parent().isValid() )
+        left = left.parent();
+
+    QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
+    while ( right.isValid() && right.parent().isValid() )
+        right = right.parent();
+
+    int max = m_proxyModel->playlistInterface()->trackCount();
+    if ( right.isValid() )
+        max = right.row() + 1;
+
+    if ( !max )
+        return;
+
+    for ( int i = left.row(); i < max; i++ )
+    {
+        m_model->getCover( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
     }
 }
 
@@ -236,7 +280,7 @@ ArtistView::onItemCountChanged( unsigned int items )
 
 
 void
-ArtistView::onFilterChanged( const QString& )
+ArtistView::onFilterChangeFinished()
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );

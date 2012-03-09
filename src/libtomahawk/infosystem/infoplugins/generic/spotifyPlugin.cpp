@@ -43,7 +43,6 @@ SpotifyPlugin::SpotifyPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
-
     m_supportedGetTypes << InfoChart << InfoChartCapabilities;
 
 }
@@ -71,7 +70,6 @@ SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
-
     switch ( requestData.type )
     {
         case InfoChart:
@@ -87,6 +85,7 @@ SpotifyPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         case InfoChartCapabilities:
             fetchChartCapabilities( requestData );
             break;
+
         default:
             dataError( requestData );
     }
@@ -110,7 +109,6 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required params!";
         dataError( requestData );
         return;
-
     }
     /// Set the criterias for current chart
     criteria["chart_id"] = hash["chart_id"];
@@ -118,6 +116,8 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 
     emit getCachedInfo( criteria, 86400000 /* Expire chart cache in 1 day */, requestData );
 }
+
+
 void
 SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -132,12 +132,12 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
     emit getCachedInfo( criteria, 604800000, requestData );
 }
 
+
 void
 SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
-
         case InfoChart:
         {
             /// Fetch the chart, we need source and id
@@ -149,8 +149,6 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
-
-
         }
         case InfoChartCapabilities:
         {
@@ -212,9 +210,8 @@ SpotifyPlugin::chartTypes()
         }
 
         QVariantMap charts;
-        foreach(QVariant geos, chartObj.value("Charts").toList().takeLast().toMap().value("geo").toList() )
+        foreach( QVariant geos, chartObj.value( "Charts" ).toList().takeLast().toMap().value( "geo" ).toList() )
         {
-
            const QString geo = geos.toMap().value( "name" ).toString();
            const QString geoId = geos.toMap().value( "id" ).toString();
            QString country;
@@ -225,7 +222,6 @@ SpotifyPlugin::chartTypes()
                country = geo;
            else
            {
-
                QLocale l( QString( "en_%1" ).arg( geo ) );
                country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
 
@@ -240,7 +236,7 @@ SpotifyPlugin::chartTypes()
            }
 
            QList< InfoStringHash > chart_types;
-           foreach(QVariant types, chartObj.value("Charts").toList().takeFirst().toMap().value("types").toList() )
+           foreach( QVariant types, chartObj.value( "Charts" ).toList().takeFirst().toMap().value( "types" ).toList() )
            {
                QString type = types.toMap().value( "id" ).toString();
                QString label = types.toMap().value( "name" ).toString();
@@ -251,18 +247,15 @@ SpotifyPlugin::chartTypes()
                c[ "type" ] = type;
 
                chart_types.append( c );
-
            }
 
            charts.insert( country.toUtf8(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
-
         }
 
         QVariantMap defaultMap;
         defaultMap[ "spotify" ] = QStringList() << "United States" << "Top Albums";
         m_allChartsMap[ "defaults" ] = defaultMap;
         m_allChartsMap.insert( "Spotify", QVariant::fromValue<QVariantMap>( charts ) );
-
     }
     else
     {
@@ -281,13 +274,12 @@ SpotifyPlugin::chartTypes()
         }
         m_cachedRequests.clear();
     }
-
 }
+
 
 void
 SpotifyPlugin::chartReturned()
 {
-
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     QString url = reply->url().toString();
@@ -318,14 +310,13 @@ SpotifyPlugin::chartReturned()
         else
             setChartType( None );
 
-        foreach(QVariant result, res.value("toplist").toMap().value("result").toList() )
+        foreach( QVariant result, res.value( "toplist" ).toMap().value( "result" ).toList() )
         {
             QString title, artist;
             QVariantMap chartMap = result.toMap();
 
             if ( !chartMap.isEmpty() )
             {
-
                 title = chartMap.value( "title" ).toString();
                 artist = chartMap.value( "artist" ).toString();
 
@@ -341,7 +332,6 @@ SpotifyPlugin::chartReturned()
 
                 if( chartType() == Album )
                 {
-
                     InfoStringHash pair;
                     pair["artist"] = artist;
                     pair["album"] = title;
@@ -351,10 +341,8 @@ SpotifyPlugin::chartReturned()
 
                 if( chartType() == Artist )
                 {
-
                     top_artists << chartMap.value( "name" ).toString();
                     qDebug() << "SpotifyChart type is artist";
-
                 }
             }
         }
@@ -393,5 +381,4 @@ SpotifyPlugin::chartReturned()
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
-
 }

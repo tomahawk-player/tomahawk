@@ -182,7 +182,7 @@ AccountManager::loadPluginFactory( const QString& path )
 void
 AccountManager::enableAccount( Account* account )
 {
-    if ( account->isAuthenticated() )
+    if ( account->enabled() )
         return;
 
     account->authenticate();
@@ -197,7 +197,7 @@ AccountManager::enableAccount( Account* account )
 void
 AccountManager::disableAccount( Account* account )
 {
-    if ( !account->isAuthenticated() )
+    if ( !account->enabled() )
         return;
 
     account->deauthenticate();
@@ -215,8 +215,6 @@ AccountManager::connectAll()
     {
         acc->authenticate();
         m_enabledAccounts << acc;
-//         if ( acc->types() & Accounts::SipType && acc->sipPlugin() )
-//             acc->sipPlugin()->connectPlugin();
 
     }
     m_connected = true;

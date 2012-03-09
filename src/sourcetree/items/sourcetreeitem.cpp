@@ -23,11 +23,12 @@
 using namespace Tomahawk;
 
 
-SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index )
+SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int peerSortValue, int index )
     : QObject()
     , m_type( thisType )
     , m_parent( parent )
     , m_model( model )
+    , m_peerSortValue( peerSortValue )
 {
     connect( this, SIGNAL( beginChildRowsAdded( int, int ) ), m_model, SLOT( onItemRowsAddedBegin( int, int ) ) );
     connect( this, SIGNAL( beginChildRowsRemoved( int, int ) ), m_model, SLOT( onItemRowsRemovedBegin( int, int ) ) );

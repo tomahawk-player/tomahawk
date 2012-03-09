@@ -31,12 +31,16 @@ using namespace Tomahawk;
 
 Artist::~Artist()
 {
+    delete m_cover;
 }
 
 
 artist_ptr
 Artist::get( const QString& name, bool autoCreate )
 {
+    if ( !Database::instance() || !Database::instance()->impl() )
+        return artist_ptr();
+
     int artid = Database::instance()->impl()->artistId( name, autoCreate );
     if ( artid < 1 && autoCreate )
         return artist_ptr();
@@ -69,6 +73,7 @@ Artist::Artist( unsigned int id, const QString& name )
     : QObject()
     , m_id( id )
     , m_name( name )
+    , m_cover( 0 )
     , m_infoLoaded( false )
 {
     m_sortname = DatabaseImpl::sortname( name, true );
@@ -89,11 +94,14 @@ Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 }
 
 
-QByteArray
-Artist::cover() const
+#ifndef ENABLE_HEADLESS
+QPixmap
+Artist::cover( const QSize& size, bool forceLoad ) const
 {
     if ( !m_infoLoaded )
     {
+        if ( !forceLoad )
+            return QPixmap();
         m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
@@ -108,8 +116,31 @@ Artist::cover() const
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
-    return m_cover;
+    if ( !m_cover && !m_coverBuffer.isEmpty() )
+    {
+        m_cover = new QPixmap();
+        m_cover->loadFromData( m_coverBuffer );
+    }
+
+    if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
+    {
+        if ( m_coverCache.contains( size.width() ) )
+        {
+            return m_coverCache.value( size.width() );
+        }
+
+        QPixmap scaledCover;
+        scaledCover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_coverCache.insert( size.width(), scaledCover );
+        return scaledCover;
+    }
+
+    if ( m_cover )
+        return *m_cover;
+    else
+        return QPixmap();
 }
+#endif
 
 
 void
@@ -128,7 +159,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
-            m_cover = ba;
+            m_coverBuffer = ba;
         }
     }
 

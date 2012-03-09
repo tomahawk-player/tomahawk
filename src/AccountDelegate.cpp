@@ -34,10 +34,10 @@
 #define PADDING_BETWEEN_STARS 2
 #define STAR_SIZE 12
 
-#ifdef Q_WS_MAC
-#define TOPLEVEL_ACCOUNT_HEIGHT 72
+#ifdef Q_OS_MAC
+#define ROW_HEIGHT_MULTIPLIER 4.9
 #else
-#define TOPLEVEL_ACCOUNT_HEIGHT 68
+#define ROW_HEIGHT_MULTIPLIER 5.7
 #endif
 
 #define ICONSIZE 40
@@ -52,6 +52,7 @@ using namespace Accounts;
 
 AccountDelegate::AccountDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
+    , m_accountRowHeight( -1 )
 {
 
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
@@ -75,20 +76,31 @@ AccountDelegate::AccountDelegate( QObject* parent )
 
 
 QSize
-AccountDelegate::sizeHint( const QStyleOptionViewItem&, const QModelIndex& index ) const
+AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
+    if ( m_accountRowHeight < 0 )
+    {
+        // Haven't calculated normal item height yet, do it once and save it
+        QStyleOptionViewItemV4 opt( option );
+        initStyleOption( &opt, index );
+        m_accountRowHeight = ROW_HEIGHT_MULTIPLIER * opt.fontMetrics.height();
+    }
+
     if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory || rowType == AccountModel::CustomAccount )
-        return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
+    {
+
+        return QSize( 200, m_accountRowHeight );
+    }
     else if ( rowType == AccountModel::TopLevelFactory )
     {
         // Make more space for each account we have to show.
         AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
         if ( fac->isUnique() )
-            return QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT );
+            return QSize( 200, m_accountRowHeight );
 
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
-        const QSize s = QSize( 200, TOPLEVEL_ACCOUNT_HEIGHT + 12 * accts.size()-1 );
+        const QSize s = QSize( 200, m_accountRowHeight + 12 * accts.size()-1 );
 
         if ( s != m_sizeHints[ index ] )
             const_cast< AccountDelegate* >( this )->sizeHintChanged( index ); // FU KTHBBQ
@@ -200,7 +212,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         {
             painter->save();
             painter->setFont( installFont );
-            int oldRightEdge = rightEdge;
             rightEdge = drawAccountList( painter, opt, accts, rightEdge );
             painter->restore();
 

@@ -20,8 +20,6 @@
 #include "settingsdialog.h"
 #include "config.h"
 
-#include "utils/tomahawkutilsgui.h"
-
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -38,6 +36,8 @@
 #include "pipeline.h"
 #include "resolver.h"
 #include "ExternalResolverGui.h"
+#include "utils/tomahawkutilsgui.h"
+#include "guihelpers.h"
 #include "scanmanager.h"
 #include "settingslistdelegate.h"
 #include "AccountDelegate.h"
@@ -123,7 +123,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
     ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
     ui->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
-    ui->accountsFilterCombo->addItem( accountTypeToString( InfoType ), InfoType );
+    ui->accountsFilterCombo->addItem( accountTypeToString( StatusPushType ), StatusPushType );
 
     connect( ui->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
 
@@ -234,7 +234,7 @@ SettingsDialog::createIcons()
     QFontMetrics fm( font() );
     QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
     accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    accountsButton->setText( tr( "Accounts" ) );
+    accountsButton->setText( tr( "Services" ) );
     accountsButton->setTextAlignment( Qt::AlignHCenter );
     accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = fm.width( accountsButton->text() );
@@ -344,61 +344,6 @@ SettingsDialog::accountsFilterChanged( int )
 
 
 void
-SettingsDialog::openAccountConfig( Account* account, bool showDelete )
-{
-    if( account->configurationWidget() )
-    {
-#ifndef Q_OS_MAC
-        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this );
-        dialog.setShowDelete( showDelete );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        int ret = dialog.exec();
-        if ( !watcher.isNull() && dialog.deleted() )
-        {
-            AccountManager::instance()->removeAccount( account );
-        }
-        else if( !watcher.isNull() && ret == QDialog::Accepted )
-        {
-            // send changed config to resolver
-            account->saveConfig();
-        }
-#else
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Configuration" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
-        dialog->setShowDelete( showDelete );
-        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountConfigClosed( int ) ) );
-        connect( dialog, SIGNAL( closedWithDelete() ), this, SLOT( accountConfigDelete() ) );
-
-        dialog->show();
-#endif
-    }
-}
-
-
-void
-SettingsDialog::accountConfigClosed( int value )
-{
-    if( value == QDialog::Accepted )
-    {
-        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-        Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
-        account->saveConfig();
-    }
-}
-
-
-void
-SettingsDialog::accountConfigDelete()
-{
-    DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
-    Q_ASSERT( account );
-    AccountManager::instance()->removeAccount( account );
-}
-
-
-void
 SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 {
     QList< Account* > accts;
@@ -421,14 +366,10 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
     AccountFactoryWrapper dialog( factory, this );
     QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
 
-    int ret = dialog.exec();
-    if ( !watcher.isNull() && dialog.doCreateAccount() )
-        createAccountFromFactory( factory );
+    dialog.exec();
 #else
     // on osx a sheet needs to be non-modal
     AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
-    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
-
     dialog->show();
 #endif
 }
@@ -437,84 +378,14 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 void
 SettingsDialog::createAccountFromFactory( AccountFactory* factory )
 {
-#ifdef Q_WS_MAC
-    // On mac we need to close the dialog we came from before showing another dialog
-    Q_ASSERT( sender() && qobject_cast< AccountFactoryWrapper* >( sender() ) );
-    AccountFactoryWrapper* dialog = qobject_cast< AccountFactoryWrapper* >( sender() );
-    dialog->accept();
-#endif
-
-    //if exited with OK, create it, if not, delete it immediately!
-    Account* account = factory->createAccount();
-    bool added = false;
-    if( account->configurationWidget() )
-    {
-#ifdef Q_WS_MAC
-        // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this, Qt::Sheet );
-        dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
-        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( accountCreateConfigClosed( int ) ) );
-
-        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
-            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
-
-        dialog->show();
-#else
-        DelegateConfigWrapper dialog( account->configurationWidget(), QString("%1 Config" ).arg( account->accountFriendlyName() ), this );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-
-        if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
-            connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
-
-        int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted ) // send changed config to account
-            added = true;
-        else // canceled, delete it
-            added = false;
-
-        handleAccountAdded( account, added );
-#endif
-    }
-    else
-    {
-        // no config, so just add it
-        added = true;
-        handleAccountAdded( account, added );
-    }
+    TomahawkUtils::createAccountFromFactory( factory, this );
 }
 
 
 void
-SettingsDialog::accountCreateConfigClosed( int finished )
+SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
-    DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
-    Account* account = qobject_cast< Account* >( dialog->property( "accountplugin" ).value< QObject* >() );
-    Q_ASSERT( account );
-
-    bool added = ( finished == QDialog::Accepted );
-
-    handleAccountAdded( account, added );
-}
-
-
-void
-SettingsDialog::handleAccountAdded( Account* account, bool added )
-{
-    if ( added )
-    {
-        account->setEnabled( true );
-        account->setAutoConnect( true );
-        account->saveConfig();
-
-        TomahawkSettings::instance()->addAccount( account->accountId() );
-        AccountManager::instance()->addAccount( account );
-        AccountManager::instance()->hookupAndEnable( account );
-    }
-    else
-    {
-        // user pressed cancel
-        delete account;
-    }
+    TomahawkUtils::openAccountConfig( account, this, showDelete );
 }
 
 

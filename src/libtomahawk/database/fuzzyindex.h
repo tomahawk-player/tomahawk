@@ -25,6 +25,8 @@
 #include <QString>
 #include <QMutex>
 
+#include "query.h"
+
 namespace lucene
 {
     namespace analysis
@@ -58,7 +60,7 @@ public:
 
     void beginIndexing();
     void endIndexing();
-    void appendFields( const QString& table, const QMap< unsigned int, QString >& fields );
+    void appendFields( const QMap< unsigned int, QMap< QString, QString > >& trackData );
     
 signals:
     void indexReady();
@@ -66,7 +68,8 @@ signals:
 public slots:
     void loadLuceneIndex();
 
-    QMap< int, float > search( const QString& table, const QString& name );
+    QMap< int, float > search( const Tomahawk::query_ptr& query );
+    QMap< int, float > searchAlbum( const Tomahawk::query_ptr& query );
 
 private:
     DatabaseImpl& m_db;

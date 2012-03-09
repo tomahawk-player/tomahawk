@@ -71,6 +71,9 @@ public:
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
 
+    AlbumItem* findItem( const Tomahawk::artist_ptr& artist ) const;
+    AlbumItem* findItem( const Tomahawk::album_ptr& album ) const;
+
     AlbumItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )

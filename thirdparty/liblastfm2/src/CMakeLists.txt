@@ -87,6 +87,7 @@ endif(WIN32)
 qt4_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 
 IF( WIN32 )
+    add_definitions( -DLASTFM_LIB )
     add_library(tomahawk_lastfm2 SHARED
     ${SOURCES}
     ${MOC_SOURCES}

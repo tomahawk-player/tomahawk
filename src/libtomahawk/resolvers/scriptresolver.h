@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -90,7 +91,6 @@ private:
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;
-    Tomahawk::Accounts::SpotifyResolverAccount *m_account;
 };
 
 #endif // SCRIPTRESOLVER_H

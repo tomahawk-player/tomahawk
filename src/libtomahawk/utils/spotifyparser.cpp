@@ -26,6 +26,7 @@
 #include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "dropjobnotifier.h"
 #include "viewmanager.h"
 
@@ -220,6 +221,7 @@ SpotifyParser::spotifyBrowseFinished()
 
     } else
     {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Spotify information from the network!" ) ) );
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
     }
 

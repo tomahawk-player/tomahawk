@@ -85,7 +85,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -95,7 +95,7 @@
          <item>
           <widget class="QGroupBox" name="groupBox_4">
            <property name="title">
-            <string>Internet Sources</string>
+            <string>Internet Services</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <property name="margin">
@@ -136,7 +136,11 @@
              </layout>
             </item>
             <item>
-             <widget class="QListView" name="accountsView"/>
+             <widget class="QListView" name="accountsView">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

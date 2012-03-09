@@ -36,8 +36,10 @@ public:
     virtual QString text() const;
     virtual bool willAcceptDrag( const QMimeData* data ) const { Q_UNUSED( data ); return false; }
     virtual QIcon icon() const { return QIcon(); }
-    virtual int peerSortValue() const { return m_peerSortValue; }
     virtual bool isBeingPlayed() const { return false; }
+
+    void checkExpandedState();
+    void setDefaultExpanded( bool b ) { m_defaultExpanded = b; }
 
 public slots:
     virtual void activate();
@@ -50,7 +52,7 @@ private slots:
 
 private:
     QString m_text;
-    int m_peerSortValue;
+    bool m_defaultExpanded;
 };
 
 #endif

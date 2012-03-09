@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -112,9 +113,26 @@ SearchWidget::changeEvent( QEvent* e )
 }
 
 
+Tomahawk::playlistinterface_ptr
+SearchWidget::playlistInterface() const
+{
+    return ui->resultsView->playlistInterface();
+}
+
+
+bool
+SearchWidget::jumpToCurrentTrack()
+{
+    return ui->resultsView->jumpToCurrentTrack();
+}
+
+
 void
 SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    QList<Tomahawk::artist_ptr> artists;
+    QList<Tomahawk::album_ptr> albums;
+
     foreach( const Tomahawk::result_ptr& result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
@@ -128,7 +146,13 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         q->addResults( rl );
 
         m_resultsModel->append( q );
+        
+        artists << result->artist();
+        albums << result->album();
     }
+
+    m_artistsModel->addArtists( artists );
+    m_albumsModel->addAlbums( albums );
 }
 
 

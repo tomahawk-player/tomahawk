@@ -20,6 +20,7 @@
 
 #include <QMimeData>
 
+#include "pipeline.h"
 #include "source.h"
 #include "sourcelist.h"
 #include "audio/audioengine.h"
@@ -84,6 +85,18 @@ Tomahawk::collection_ptr
 TreeModel::collection() const
 {
     return m_collection;
+}
+
+
+void
+TreeModel::getCover( const QModelIndex& index )
+{
+    TreeModelItem* item = itemFromIndex( index );
+
+    if ( !item->artist().isNull() && !item->artist()->infoLoaded() )
+        item->artist()->cover( QSize( 0, 0 ) );
+    else if ( !item->album().isNull() && !item->album()->infoLoaded() )
+        item->album()->cover( QSize( 0, 0 ) );
 }
 
 
@@ -783,6 +796,8 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModel
         albumitem = new TreeModelItem( album, parentItem );
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        
+        getCover( albumitem->index );
     }
 
     emit endInsertRows();
@@ -915,10 +930,11 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
                 foreach ( const QString& trackName, tracks )
                 {
-                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
+                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ] );
                     query->setAlbumPos( trackNo++ );
                     ql << query;
                 }
+                Pipeline::instance()->resolve( ql );
 
                 onTracksAdded( ql, idx );
             }

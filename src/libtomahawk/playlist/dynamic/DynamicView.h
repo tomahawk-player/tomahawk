@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -32,33 +32,33 @@ namespace Tomahawk
 
 class DynamicModel;
 
-    
+
 class DynamicView : public PlaylistView
 {
     Q_OBJECT
 public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
-    
+
     virtual void setDynamicModel( DynamicModel* model );
-    
+
     void setOnDemand( bool onDemand );
     void setReadOnly( bool readOnly );
-    
+
     void setDynamicWorking( bool working );
-    
+
     virtual void paintEvent( QPaintEvent* event );
-    
+
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );
     void showMessage( const QString& message );
-    
+
     // collapse and animate the transition
     // there MUST be a row *after* startRow + num. that is, you can't collapse
     // entries unless there is at least one entry after the last collapsed row
     // optionally you can specify how  many rows are past the block of collapsed rows
     void collapseEntries( int startRow, int num, int numToKeep = 1 );
-    
+
 private slots:
     void onTrackCountChanged( unsigned int );
     void checkForOverflow();
@@ -70,7 +70,7 @@ private:
     DynamicModel* m_model;
     QString m_title;
     QString m_body;
-    
+
     bool m_onDemand;
     bool m_readOnly;
     bool m_checkOnCollapse;
@@ -88,7 +88,7 @@ private:
     QTimeLine m_fadeOutAnim;
     QTimeLine m_slideAnim;
 };
-    
+
 };
 
 

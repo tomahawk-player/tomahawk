@@ -43,7 +43,7 @@ public:
     Q_DECLARE_FLAGS( DropTypes, DropType )
 
     SourceTreeItem() : m_type( SourcesModel::Invalid ), m_parent( 0 ), m_model( 0 ) {}
-    SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index = -1 ); // if index is -1, append at end of parent's child list
+    SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int peerSortValue = 0, int index = -1 ); // if index is -1, append at end of parent's child list
     virtual ~SourceTreeItem();
 
     // generic info used by the tree model
@@ -63,7 +63,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* ) const { return false; }
     virtual bool dropMimeData( const QMimeData*, Qt::DropAction ) { return false; }
     virtual bool setData( const QVariant&, bool ) { return false; }
-    virtual int peerSortValue() const { return 0; } // How to sort relative to peers in the tree.
+    virtual int peerSortValue() const { return m_peerSortValue; } // How to sort relative to peers in the tree.
     virtual int IDValue() const { return 0; }
     virtual DropTypes supportedDropTypes( const QMimeData* mimeData ) const { Q_UNUSED( mimeData ); return DropTypesNone; }
     virtual void setDropType( DropType type ) { m_dropType = type; }
@@ -101,6 +101,7 @@ private:
     SourceTreeItem* m_parent;
     QList< SourceTreeItem* > m_children;
     SourcesModel* m_model;
+    int m_peerSortValue;
 
     DropType m_dropType;
 };

@@ -20,7 +20,6 @@
 #define FUNCTIMEOUT_H
 
 #include <QObject>
-#include <QTimer>
 #include <QWeakPointer>
 
 #include "boost/function.hpp"
@@ -43,26 +42,12 @@ class DLLEXPORT FuncTimeout : public QObject
 Q_OBJECT
 
 public:
-    FuncTimeout( int ms, boost::function<void()> func, QObject* besafe )
-        : m_func( func )
-        , m_watch( QWeakPointer< QObject >( besafe ) )
-    {
-        //qDebug() << Q_FUNC_INFO;
-        QTimer::singleShot( ms, this, SLOT( exec() ) );
-    };
+    FuncTimeout( int ms, boost::function<void()> func, QObject* besafe );
 
-    ~FuncTimeout()
-    {
-        //qDebug() << Q_FUNC_INFO;
-    };
+    ~FuncTimeout();
 
 public slots:
-    void exec()
-    {
-        if( !m_watch.isNull() )
-            m_func();
-        this->deleteLater();
-    };
+    void exec();
 
 private:
     boost::function<void()> m_func;

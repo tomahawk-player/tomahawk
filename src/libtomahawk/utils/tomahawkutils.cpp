@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -533,10 +534,12 @@ newerVersion( const QString& oldVersion, const QString& newVersion )
 
 
 QList< Tomahawk::query_ptr >
-mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks )
+mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed )
 {
     int sameCount = 0;
     QList< Tomahawk::query_ptr > tosave = newTracks;
+    changed = false;
+
     foreach ( const Tomahawk::query_ptr& newquery, newTracks )
     {
         foreach ( const Tomahawk::query_ptr& oldq, orig )
@@ -558,6 +561,7 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
     if ( orig.size() == newTracks.size() && sameCount == orig.size() )
         return orig;
 
+    changed = true;
     return tosave;
 }
 

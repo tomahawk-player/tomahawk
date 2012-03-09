@@ -22,26 +22,54 @@
 #include "PlaylistUpdaterInterface.h"
 #include "sourcelist.h"
 
+#include <QPixmap>
+
 using namespace Tomahawk;
 using namespace Accounts;
 
-SpotifyResolverAccount::SpotifyResolverAccount()
+static QPixmap* s_icon = 0;
+
+Account*
+SpotifyAccountFactory::createAccount( const QString& accountId )
 {
-    qDebug() << Q_FUNC_INFO;
-}
-SpotifyResolverAccount::~SpotifyResolverAccount()
-{
-    qDebug() << Q_FUNC_INFO;
+    return new SpotifyAccount( accountId );
 }
 
+QPixmap
+SpotifyAccountFactory::icon() const
+{
+    if ( !s_icon )
+        s_icon = new QPixmap( RESPATH "images/spotify-logo.png" );
+
+    return *s_icon;
+}
+
+
+SpotifyAccount::SpotifyAccount( const QString& accountId )
+    : ResolverAccount( accountId )
+{
+
+}
+
+
+QPixmap
+SpotifyAccount::icon() const
+{
+    if ( !s_icon )
+        s_icon = new QPixmap( RESPATH "images/spotify-logo.png" );
+
+    return *s_icon;
+}
+
+
 void
-SpotifyResolverAccount::addPlaylist(const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks)
+SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks )
 {
     Sync sync;
     sync.id_ = qid;
     int index =  m_syncPlaylists.indexOf( sync );
 
-    if( !m_syncPlaylists.contains( sync ) )
+    if(  !m_syncPlaylists.contains( sync ) )
     {
          qDebug() << Q_FUNC_INFO << "Adding playlist to sync" << qid;
          playlist_ptr pl;
@@ -56,11 +84,12 @@ SpotifyResolverAccount::addPlaylist(const QString &qid, const QString& title, QL
          sync.uuid = pl->guid();
          m_syncPlaylists.append( sync );
     }
-    else{
+    else
+    {
 
         qDebug() << Q_FUNC_INFO << "Found playlist";
 
-        if( index != -1 && !tracks.isEmpty())
+        if ( index != -1 && !tracks.isEmpty())
         {
 
             qDebug() << Q_FUNC_INFO << "Got pl" << m_syncPlaylists[ index ].playlist->guid();
@@ -71,11 +100,14 @@ SpotifyResolverAccount::addPlaylist(const QString &qid, const QString& title, QL
 
             qDebug() << Q_FUNC_INFO << "tracks" << currTracks;
 
-            QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( currTracks, tracks );
+            bool changed = false;
+            QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( currTracks, tracks, changed );
 
-            QList<Tomahawk::plentry_ptr> el = m_syncPlaylists[ index ].playlist->entriesFromQueries( mergedTracks, true );
-            m_syncPlaylists[ index ].playlist->createNewRevision( uuid(), m_syncPlaylists[ index ].playlist->currentrevision(), el );
-
+            if ( changed )
+            {
+                QList<Tomahawk::plentry_ptr> el = m_syncPlaylists[ index ].playlist->entriesFromQueries( mergedTracks, true );
+                m_syncPlaylists[ index ].playlist->createNewRevision( uuid(), m_syncPlaylists[ index ].playlist->currentrevision(), el );
+            }
         }
     }
 
@@ -84,9 +116,9 @@ SpotifyResolverAccount::addPlaylist(const QString &qid, const QString& title, QL
 
 
 
-bool operator==(SpotifyResolverAccount::Sync one, SpotifyResolverAccount::Sync two)
+bool operator==( SpotifyAccount::Sync one, SpotifyAccount::Sync two )
 {
-    if(one.id_ == two.id_)
+    if( one.id_ == two.id_ )
         return true;
     return false;
 }

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -40,6 +41,18 @@ namespace TomahawkUtils
         MediaTypeArtist,
         MediaTypeAlbum,
         MediaTypeTrack
+    };
+
+    enum ImageType
+    {
+        DefaultAlbumCover,
+        DefaultArtistImage
+    };
+    enum ImageMode
+    {
+        NoDefaultCover,
+        CoverInCase,
+        ScaledCover
     };
 
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
@@ -98,7 +111,7 @@ namespace TomahawkUtils
      *
      * \return true if some changes were made, false if the new tracks are the same as the current tracks in \param orig
      */
-    DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks );
+    DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
 }

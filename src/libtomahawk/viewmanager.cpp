@@ -126,6 +126,10 @@ ViewManager::ViewManager( QObject* parent )
 ViewManager::~ViewManager()
 {
     saveCurrentPlaylistSettings();
+    delete m_whatsHotWidget;
+    delete m_welcomeWidget;
+    delete m_topLovedWidget;
+    delete m_contextWidget;
     delete m_widget;
 }
 
@@ -371,7 +375,8 @@ ViewManager::showSuperCollection()
         }
     }
 
-    m_superCollectionModel->setTitle( tr( "All available tracks" ) );
+    m_superCollectionModel->setTitle( tr( "SuperCollection" ) );
+    m_superCollectionModel->setDescription( tr( "Combined libraries of all your online friends" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
     ViewPage* shown = 0;
@@ -432,7 +437,7 @@ Tomahawk::ViewPage*
 ViewManager::showTopLovedPage()
 {
     if ( !m_topLovedWidget )
-        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::AllLovedTracks, source_ptr(), m_widget );
+        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
 
     return show( m_topLovedWidget );
 }

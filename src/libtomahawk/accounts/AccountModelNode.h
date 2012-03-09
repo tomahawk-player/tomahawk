@@ -22,6 +22,7 @@
 #include "Account.h"
 #include "AccountManager.h"
 #include "ResolverAccount.h"
+#include "AtticaManager.h"
 
 #include <attica/content.h>
 
@@ -86,7 +87,7 @@ struct AccountModelNode {
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
-                qDebug() << "Found account for factory:" << acct->accountFriendlyName();
+//                 qDebug() << "Found account for factory:" << acct->accountFriendlyName();
                 accounts.append( acct );
             }
         }
@@ -97,7 +98,7 @@ struct AccountModelNode {
         init();
         atticaContent = cnt;
 
-        qDebug() << "Creating attica model node for resolver:" << cnt.id();
+//         qDebug() << "Creating attica model node for resolver:" << cnt.id();
 
         foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
         {
@@ -105,7 +106,7 @@ struct AccountModelNode {
             {
                 if ( resolver->atticaId() == atticaContent.id() )
                 {
-                    qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
+//                     qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
                     atticaAccount = resolver;
                     break;
                 }
@@ -124,6 +125,9 @@ struct AccountModelNode {
         init();
         customAccount = account;
         factory = AccountManager::instance()->factoryForAccount( account );
+
+        if ( CustomAtticaAccount* customAtticaAccount = qobject_cast< CustomAtticaAccount* >( account ) )
+            atticaContent = customAtticaAccount->atticaContent();
     }
 
     void init()

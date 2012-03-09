@@ -87,6 +87,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
     connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ) );
     connect( m_delegate, SIGNAL( toggleRealtimeLatch( Tomahawk::source_ptr, bool ) ), m_latchManager, SLOT( latchModeChangeRequest( Tomahawk::source_ptr,bool ) ) );
+    connect( m_delegate, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 
     setItemDelegate( m_delegate );
 
@@ -104,7 +105,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setStretchLastSection( false );
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
-    connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
@@ -256,14 +256,14 @@ SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 
 
 void
-SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
+SourceTreeView::expandRequest( const QPersistentModelIndex& idx )
 {
     expand( idx );
 }
 
 
 void
-SourceTreeView::toggleExpandRequest( const QPersistentModelIndex &idx )
+SourceTreeView::toggleExpandRequest( const QPersistentModelIndex& idx )
 {
     if ( isExpanded( idx ) )
         collapse( idx );
@@ -431,11 +431,11 @@ SourceTreeView::latchModeToggled( bool checked )
     qDebug() << Q_FUNC_INFO;
     if ( !m_contextMenuIndex.isValid() )
         return;
-    
+
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
     if( type != SourcesModel::Collection )
         return;
-    
+
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
     emit latchModeChangeRequest( source, checked );

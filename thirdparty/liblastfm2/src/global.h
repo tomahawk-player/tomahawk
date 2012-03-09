@@ -30,25 +30,21 @@
 
 #include <QtGlobal>
 
-#ifdef Q_CC_MSVC
-    #ifdef LASTFM_LIB
-        #define LASTFM_DLLEXPORT __declspec(dllexport)
-    #else
-        #define LASTFM_DLLEXPORT __declspec(dllimport)
-    #endif
-	#ifdef LASTFM_FINGERPRINT_LIB
-        #define LASTFM_FINGERPRINT_DLLEXPORT __declspec(dllexport)
-    #else
-        #define LASTFM_FINGERPRINT_DLLEXPORT __declspec(dllimport)
-    #endif
-#elif __GNUC__ >= 4
-    #define LASTFM_DLLEXPORT __attribute__ ((visibility("default")))
-	#define LASTFM_FINGERPRINT_DLLEXPORT __attribute__ ((visibility("default")))
+#ifndef LASTFM_LIB_STATIC
+#ifdef LASTFM_LIB
+    #define LASTFM_DLLEXPORT Q_DECL_EXPORT
 #else
-    #define LASTFM_DLLEXPORT
-	#define LASTFM_FINGERPRINT_DLLEXPORT
+    #define LASTFM_DLLEXPORT Q_DECL_IMPORT
 #endif
-
+#ifdef LASTFM_FINGERPRINT_LIB
+    #define LASTFM_FINGERPRINT_DLLEXPORT Q_DECL_EXPORT
+#else
+    #define LASTFM_FINGERPRINT_DLLEXPORT Q_DECL_IMPORT
+#endif
+#else // LASTFM_LIB_STATIC
+    #define LASTFM_DLLEXPORT
+    #define LASTFM_FINGERPRINT_DLLEXPORT
+#endif // LASTFM_LIB_STATIC
 
 
 #include <QMetaEnum>

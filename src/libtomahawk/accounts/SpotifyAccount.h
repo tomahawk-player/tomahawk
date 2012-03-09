@@ -23,6 +23,7 @@
 #include "utils/tomahawkutils.h"
 #include "sourcelist.h"
 #include "ResolverAccount.h"
+
 class QTimer;
 
 namespace Tomahawk {
@@ -31,24 +32,40 @@ class ExternalResolverGui;
 
 namespace Accounts {
 
-class SpotifyResolverAccount : public QObject // : public AccountFactory
+
+class SpotifyAccountFactory : public AccountFactory
 {
     Q_OBJECT
 public:
-    SpotifyResolverAccount();
-    virtual ~SpotifyResolverAccount();
+    SpotifyAccountFactory() {}
 
-    /*virtual Account* createAccount(const QString& accountId = QString());
-    virtual QString description() const { return tr( "Play and sync your playlists with Spotify" ); }
+    virtual Account* createAccount( const QString& accountId = QString() );
+    virtual QString description() const { return tr( "Play music from and sync your playlists with Spotify" ); }
     virtual QString factoryId() const { return "spotifyaccount"; }
     virtual QString prettyName() const { return "Spotify"; }
 
     virtual AccountTypes types() const { return AccountTypes( ResolverType ); }
     virtual bool allowUserCreation() const { return false; }
-    virtual QPixmap icon() const { return m_icon; }
+    virtual QPixmap icon() const;
     virtual bool isUnique() const { return true; }
-    */
-    void addPlaylist(const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks);
+
+};
+
+class SpotifyAccount : public ResolverAccount
+{
+    Q_OBJECT
+public:
+    SpotifyAccount( const QString& accountId );
+    virtual ~SpotifyAccount() {}
+
+    virtual QPixmap icon() const;
+
+    virtual QWidget* aclWidget() { return 0; }
+    virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
+    virtual SipPlugin* sipPlugin() { return 0; }
+
+    void addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks );
+
     struct Sync {
          QString id_;
          QString uuid;

@@ -21,32 +21,26 @@
 #include "databaseimpl.h"
 #include "tomahawksqlquery.h"
 #include "utils/logger.h"
+#include "jobview/IndexingJobItem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+
+#include <QSqlRecord>
 
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
+    , m_statusJob( new IndexingJobItem )
 {
     tLog() << Q_FUNC_INFO << "Updating index.";
+
+    JobStatusView::instance()->model()->addJob( m_statusJob );
 }
 
 
-void
-DatabaseCommand_UpdateSearchIndex::indexTable( DatabaseImpl* db, const QString& table )
+DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
 {
-    qDebug() << Q_FUNC_INFO;
-
-    TomahawkSqlQuery query = db->newquery();
-    qDebug() << "Building index for" << table;
-    query.exec( QString( "SELECT id, name FROM %1" ).arg( table ) );
-
-    QMap< unsigned int, QString > fields;
-    while ( query.next() )
-    {
-        fields.insert( query.value( 0 ).toUInt(), query.value( 1 ).toString() );
-    }
-
-    db->m_fuzzyIndex->appendFields( table, fields );
-    qDebug() << "Building index for" << table << "finished.";
+    m_statusJob->done();
 }
 
 
@@ -55,9 +49,35 @@ DatabaseCommand_UpdateSearchIndex::exec( DatabaseImpl* db )
 {
     db->m_fuzzyIndex->beginIndexing();
 
-    indexTable( db, "artist" );
-    indexTable( db, "album" );
-    indexTable( db, "track" );
+    QMap< unsigned int, QMap< QString, QString > > data;
+    TomahawkSqlQuery q = db->newquery();
+
+    q.exec( "SELECT track.id, track.name, artist.name, artist.id FROM track, artist WHERE artist.id = track.artist" );
+    while ( q.next() )
+    {
+        QMap< QString, QString > track;
+        track.insert( "track", q.value( 1 ).toString() );
+        track.insert( "artist", q.value( 2 ).toString() );
+        track.insert( "artistid", q.value( 3 ).toString() );
+
+        data.insert( q.value( 0 ).toUInt(), track );
+    }
+
+    db->m_fuzzyIndex->appendFields( data );
+    data.clear();
+
+    q.exec( "SELECT album.id, album.name FROM album" );
+    while ( q.next() )
+    {
+        QMap< QString, QString > album;
+        album.insert( "album", q.value( 1 ).toString() );
+
+        data.insert( q.value( 0 ).toUInt(), album );
+    }
+
+    db->m_fuzzyIndex->appendFields( data );
+
+    qDebug() << "Building index finished.";
 
     db->m_fuzzyIndex->endIndexing();
 }

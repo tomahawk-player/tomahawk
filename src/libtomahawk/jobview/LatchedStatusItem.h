@@ -21,7 +21,9 @@
 
 #include "JobStatusItem.h"
 #include "typedefs.h"
+
 #include <QHash>
+#include <QPixmap>
 
 class LatchedStatusManager;
 

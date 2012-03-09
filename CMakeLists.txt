@@ -1,5 +1,5 @@
 PROJECT( tomahawk )
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8.6 )
 SET( CMAKE_MODULE_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 
 IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
@@ -15,11 +15,13 @@ SET( TOMAHAWK_APPLICATION_NAME  "Tomahawk" )
 SET( TOMAHAWK_DESCRIPTION_SUMMARY "The social media player" )
 
 SET( TOMAHAWK_VERSION_MAJOR 0 )
-SET( TOMAHAWK_VERSION_MINOR 3 )
+SET( TOMAHAWK_VERSION_MINOR 4 )
 SET( TOMAHAWK_VERSION_PATCH 99 )
 
 #SET( TOMAHAWK_VERSION_RC 0 )
 
+# enforce proper symbol exporting on all platforms
+add_definitions( "-fvisibility=hidden" )
 
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
@@ -119,19 +121,6 @@ macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/e
 
 macro_optional_find_package(QTweetLib)
 macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
-
-
-IF( NOT QuaZip_FOUND )
-    add_subdirectory( ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip )
-    SET( QuaZip_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk/thirdparty/quazip )
-    SET( QuaZip_LIBRARY quazip )
-    SET( QuaZip_LIBRARIES ${QuaZip_LIBRARY} )
-    SET( QuaZip_FOUND true )
-    macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically. Building internal copy" "http://quazip.sourceforge.net/" FALSE "" "")
-
-    # copy headers to build/quazip so we can use proper includes inside the code
-    FILE( COPY ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip/quazip/ DESTINATION ${CMAKE_BINARY_DIR}/libtomahawk/thirdparty/quazip )
-ENDIF()
 
 # required
 #While we distribute our own liblastfm2, don't need to look for it

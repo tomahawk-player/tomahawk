@@ -25,6 +25,7 @@
 #include "sourcelist.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 
 #include <qjson/parser.h>
 
@@ -166,6 +167,7 @@ ItunesParser::itunesResponseLookupFinished()
 
     } else
     {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching iTunes information from the network!" ) ) );
         tLog() << "Error in network request to Itunes for track decoding:" << r->errorString();
     }
 

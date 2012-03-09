@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 #include "config.h"
 #include "tomahawkutilsgui.h"
 
+#include "logger.h"
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
@@ -35,6 +37,7 @@
     #include <windows.h>
     #include <windowsx.h>
 #endif
+
 
 namespace TomahawkUtils
 {
@@ -83,15 +86,15 @@ createDragPixmap( MediaType type, int itemCount )
     QPixmap pixmap;
     switch ( type )
     {
-    case MediaTypeArtist:
-        pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
-        break;
-    case MediaTypeAlbum:
-        pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
-        break;
-    case MediaTypeTrack:
-        pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
-        break;
+        case MediaTypeArtist:
+            pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+            break;
+        case MediaTypeAlbum:
+            pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+            break;
+        case MediaTypeTrack:
+            pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+            break;
     }
 
     int x = 0;
@@ -302,5 +305,61 @@ alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
 
     return QColor( r, g, b );
 }
+
+
+QPixmap
+defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
+{
+    QPixmap pixmap;
+    QHash< int, QPixmap > subsubcache;
+    QHash< int, QHash< int, QPixmap > > subcache;
+    static QHash< int, QHash< int, QHash< int, QPixmap > > > cache;
+
+    if ( cache.contains( type ) )
+    {
+        subcache = cache.value( type );
+
+        if ( subcache.contains( mode ) )
+        {
+            subsubcache = subcache.value( mode );
+
+            if ( subsubcache.contains( size.width() ) )
+                return subsubcache.value( size.width() );
+        }
+    }
+
+    switch ( type )
+    {
+        case DefaultAlbumCover:
+            if ( mode == CoverInCase )
+                pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+            else
+                pixmap = QPixmap( RESPATH "images/no-album-no-case.png" );
+            break;
+
+        case DefaultArtistImage:
+                pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
+            break;
+
+        default:
+            break;
+    }
+
+    if ( pixmap.isNull() )
+    {
+        Q_ASSERT( false );
+        return QPixmap();
+    }
+
+    if ( !size.isNull() )
+        pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+
+    subsubcache.insert( size.width(), pixmap );
+    subcache.insert( mode, subsubcache );
+    cache.insert( type, subcache );
+
+    return pixmap;
+}
+
 
 } // ns

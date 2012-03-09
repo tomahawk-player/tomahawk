@@ -79,6 +79,9 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     query.exec( "UPDATE source SET isonline = 'false'" );
 
     m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
+    if ( schemaUpdated )
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
 
     if ( qApp->arguments().contains( "--dumpdb" ) )
@@ -405,13 +408,36 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool autoCreate )
 
 
 QList< QPair<int, float> >
-DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
+DatabaseImpl::search( const Tomahawk::query_ptr& query, uint limit )
 {
     QList< QPair<int, float> > resultslist;
-    if ( table != "artist" && table != "track" && table != "album" )
+
+    QMap< int, float > resultsmap = m_fuzzyIndex->search( query );
+    foreach ( int i, resultsmap.keys() )
+    {
+        resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
+    }
+    qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
+
+    if ( !limit )
         return resultslist;
 
-    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
+    QList< QPair<int, float> > resultscapped;
+    for ( int i = 0; i < (int)limit && i < resultsmap.count(); i++ )
+    {
+        resultscapped << resultslist.at( i );
+    }
+
+    return resultscapped;
+}
+
+
+QList< QPair<int, float> >
+DatabaseImpl::searchAlbum( const Tomahawk::query_ptr& query, uint limit )
+{
+    QList< QPair<int, float> > resultslist;
+
+    QMap< int, float > resultsmap = m_fuzzyIndex->searchAlbum( query );
     foreach ( int i, resultsmap.keys() )
     {
         resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
@@ -695,4 +721,12 @@ DatabaseImpl::openDatabase( const QString& dbname )
     }
 
     return schemaUpdated;
+}
+
+
+void
+DatabaseImpl::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

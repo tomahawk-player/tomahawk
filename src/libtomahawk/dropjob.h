@@ -23,6 +23,8 @@
 #include "query.h"
 
 #include "infosystem/infosystem.h"
+#include "utils/xspfloader.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QMimeData>
@@ -120,9 +122,9 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
+    void tracksFromDB( const QList< Tomahawk::query_ptr >& );
 private:
     /// handle parsing mime data
-
     void handleAllUrls( const QString& urls );
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
@@ -135,6 +137,7 @@ private:
     QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
 
     void getTopTen( const QString& artist );
+    void getAlbumFromInfoystem( const QString& artist, const QString& album );
 
     void removeDuplicates();
     void removeRemoteSources();
@@ -151,6 +154,8 @@ private:
     Tomahawk::DropJobNotifier* m_dropJob;
 
     QList< Tomahawk::query_ptr > m_resultList;
+    QSet< Tomahawk::album_ptr > m_albumsToKeep;
+    QSet< Tomahawk::artist_ptr > m_artistsToKeep;
 
     static bool s_canParseSpotifyPlaylists;
 };

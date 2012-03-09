@@ -22,6 +22,7 @@
 #include <QStyledItemDelegate>
 
 class QPainter;
+class QListView;
 
 class JobStatusDelegate : public QStyledItemDelegate
 {
@@ -33,6 +34,10 @@ public:
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+private:
+    mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
+    QListView* m_parentView;
 };
 
 #endif // JOBSTATUSDELEGATE_H

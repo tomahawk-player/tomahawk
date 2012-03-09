@@ -93,8 +93,10 @@ protected slots:
 
 private slots:
     void onItemCountChanged( unsigned int items );
-    void onFilterChanged( const QString& filter );
+    void onFilterChangeFinished();
     void onFilteringStarted();
+    void onViewChanged();
+    void onScrollTimeout();
 
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
@@ -113,6 +115,7 @@ private:
     Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_showModes;
+    QTimer m_timer;
     mutable QString m_guid;
 };
 

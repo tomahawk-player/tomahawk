@@ -61,20 +61,20 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
-    m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     m_button = new OverlayButton( ui->tracksView );
     m_button->setCheckable( true );
     m_button->setChecked( m_tracksModel->mode() == InfoSystemMode );
     if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
     else
         m_button->setText( tr( "Click to show Official Tracks" ) );
 
     m_buttonAlbums = new OverlayButton( ui->albumsView );
     m_buttonAlbums->setCheckable( true );
     m_buttonAlbums->setChecked( true );
-    m_buttonAlbums->setText( tr( "Click to show Super Collection Albums" ) );
+    m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
     m_buttonAlbums->show();
 
     connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
@@ -113,7 +113,7 @@ AlbumInfoWidget::setMode( ModelMode mode )
         onModeToggle();
 
     if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show Super Collection Tracks" ) );
+        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
     else
         m_button->setText( tr( "Click to show Official Tracks" ) );
 }
@@ -131,7 +131,7 @@ void
 AlbumInfoWidget::onAlbumsModeToggle()
 {
     if ( m_buttonAlbums->isChecked() )
-        m_buttonAlbums->setText( tr( "Click to show Super Collection Albums" ) );
+        m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
     else
         m_buttonAlbums->setText( tr( "Click to show Official Albums" ) );
 
@@ -243,10 +243,10 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
 void
 AlbumInfoWidget::onAlbumCoverUpdated()
 {
-    if ( m_album->cover().isNull() )
+    if ( m_album->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap.loadFromData( m_album->cover() );
+    m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 

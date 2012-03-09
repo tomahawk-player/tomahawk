@@ -26,16 +26,12 @@
 #include <QPixmap>
 
 #include "dllmacro.h"
+#include "accounts/Account.h"
 
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
-namespace Tomahawk {
-namespace Accounts {
-class Account;
-}
-}
 
 class DLLEXPORT AtticaManager : public QObject
 {
@@ -56,9 +52,12 @@ public:
         ResolverState state;
         QPixmap* pixmap;
 
+        // internal
+        bool pixmapDirty;
+
         Resolver( const QString& v, const QString& path, int userR, ResolverState s )
-            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ) {}
-        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ) {}
+            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), pixmapDirty( false ) {}
+        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), pixmapDirty( false ) {}
     };
 
     typedef QHash< QString, AtticaManager::Resolver > StateHash;
@@ -135,6 +134,19 @@ private:
     QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;
+};
+
+class DLLEXPORT CustomAtticaAccount : public Tomahawk::Accounts::Account
+{
+    Q_OBJECT
+public:
+    virtual ~CustomAtticaAccount() {}
+
+    virtual Attica::Content atticaContent() const = 0;
+
+protected:
+    // No, you can't.
+    CustomAtticaAccount( const QString& id ) : Tomahawk::Accounts::Account( id ) {}
 };
 
 Q_DECLARE_METATYPE( Attica::Content );

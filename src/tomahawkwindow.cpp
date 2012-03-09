@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -58,6 +58,8 @@
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "tomahawktrayicon.h"
 #include "scanmanager.h"
 #include "tomahawkapp.h"
@@ -80,6 +82,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_searchWidget( 0 )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
+    , m_audioRetryCounter( 0 )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
@@ -570,11 +573,17 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
 void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 {
+    QString msg;
 #ifdef Q_WS_X11
-    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device. Make sure you have a suitable Phonon backend and required plugins installed." ), QMessageBox::Ok );
+    msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed." );
 #else
-    QMessageBox::warning( this, tr( "Playback Error" ), tr( "Sorry, there is a problem accessing your audio device." ), QMessageBox::Ok );
+    msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
 #endif
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
+
+    if ( m_audioRetryCounter < 3 )
+        AudioEngine::instance()->play();
+    m_audioRetryCounter++;
 }
 
 
@@ -654,6 +663,7 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
 void
 TomahawkWindow::audioStarted()
 {
+    m_audioRetryCounter = 0;
     ui->actionPlay->setText( tr( "Pause" ) );
 }
 

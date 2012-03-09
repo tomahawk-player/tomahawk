@@ -29,6 +29,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+#define ACCOUNTMODEL_DEBUG 0
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
@@ -52,6 +53,11 @@ AccountModel::loadData()
     // Add all factories
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
     QList< Account* > allAccounts = AccountManager::instance()->accounts();
+#if ACCOUNTMODEL_DEBUG
+    qDebug() << "All accounts:";
+    foreach ( Account* acct, allAccounts )
+        qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();
+#endif
     foreach ( AccountFactory* fac, factories )
     {
         if ( !fac->allowUserCreation() )
@@ -76,16 +82,28 @@ AccountModel::loadData()
         if ( AtticaManager::instance()->hasCustomAccountForAttica( content.id() ) )
         {
             Account* acct = AtticaManager::instance()->customAccountForAttica( content.id() );
-            m_accounts << new AccountModelNode( acct );
-            allAccounts.removeAll( acct );
+            Q_ASSERT( acct );
+            if ( acct )
+            {
+                m_accounts << new AccountModelNode( acct );
+                const int removed = allAccounts.removeAll( acct );
+#if ACCOUNTMODEL_DEBUG
+                qDebug() << "Removed custom account from misc accounts list, found:" << removed;
+                qDebug() << "All accounts after remove:";
+                foreach ( Account* acct, allAccounts )
+                    qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#endif
+            }
         } else
         {
             m_accounts << new AccountModelNode( content );
 
             foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
             {
+//                 qDebug() << "Found ResolverAccount" << acct->accountFriendlyName();
                 if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
                 {
+//                     qDebug() << "Which is an attica resolver with id:" << resolver->atticaId();
                     if ( resolver->atticaId() == content.id() )
                     {
                         allAccounts.removeAll( acct );
@@ -95,9 +113,14 @@ AccountModel::loadData()
         }
     }
 
-    // All other accounts we haven't dealt with yet
+#if ACCOUNTMODEL_DEBUG
+    qDebug() << "All accounts left:";
+    foreach ( Account* acct, allAccounts )
+        qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#endif
    foreach ( Account* acct, allAccounts )
    {
+       qDebug() << "Resolver is left over:" << acct->accountFriendlyName();
        Q_ASSERT( !qobject_cast< AtticaResolverAccount* >( acct ) ); // This should be caught above in the attica list
 
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )
@@ -314,6 +337,12 @@ AccountModel::data( const QModelIndex& index, int role ) const
             Q_ASSERT( node->factory );
 
             Account* account = node->customAccount;
+            // This is sort of ugly. CustomAccounts are pure Account*, but we know that
+            // some might also be linked to attica resolvers (not always). If that is the case
+            // they have a Attica::Content set on the node, so we use that to display some
+            // extra metadata and rating
+            const bool hasAttica = !node->atticaContent.id().isEmpty();
+
             switch ( role )
             {
                 case Qt::DisplayRole:
@@ -324,9 +353,15 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return ShippedWithTomahawk;
                 case Qt::ToolTipRole:
                 case DescriptionRole:
-                    return node->factory->description();
+                    return hasAttica ? node->atticaContent.description() : node->factory->description();
                 case CanRateRole:
-                    return false;
+                    return hasAttica;
+                case AuthorRole:
+                    return hasAttica ? node->atticaContent.author() : QString();
+                case RatingRole:
+                    return hasAttica ? node->atticaContent.rating() / 20 : 0; // rating is out of 100
+                case DownloadCounterRole:
+                    return hasAttica ? node->atticaContent.downloads() : QVariant();
                 case RowTypeRole:
                     return CustomAccount;
                 case AccountData:
@@ -364,15 +399,24 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
+            {
+                const Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
                 if ( node->accounts.isEmpty() )
                 {
+                    Q_ASSERT( state == Qt::Checked ); // How could we have a checked unique factory w/ no account??
                     // No account for this unique factory, create it
                     // Don't add it to node->accounts here, slot attached to accountmanager::accountcreated will do it for us
                     acct = node->factory->createAccount();
                     AccountManager::instance()->addAccount( acct );
                     TomahawkSettings::instance()->addAccount( acct->accountId() );
                 }
+                else
+                {
+                    Q_ASSERT( node->accounts.size() == 1 );
+                    acct = node->accounts.first();
+                }
                 break;
+            }
             case AccountModelNode::AtticaType:
             {
                 // This may or may not be installed. if it's not installed yet, install it, then go ahead and enable it
@@ -397,6 +441,12 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                 }
                 else
                 {
+                    if ( m_waitingForAtticaInstall.contains( resolver.id() ) )
+                    {
+                        // in progress, ignore
+                        return true;
+                    }
+
                     qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 

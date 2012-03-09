@@ -139,6 +139,7 @@ private:
 
     SourceTreeItem* m_rootItem;
     GroupItem* m_collectionsGroup;
+    GroupItem* m_myMusicGroup;
 
     QList< Tomahawk::source_ptr > m_sourcesWithViewPage;
     QHash< Tomahawk::source_ptr, SourceTreeItem* > m_sourcesWithViewPageItems;

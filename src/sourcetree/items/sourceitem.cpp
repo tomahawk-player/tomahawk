@@ -124,7 +124,7 @@ SourceItem::source() const
 QString
 SourceItem::text() const
 {
-    return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
+    return m_source.isNull() ? tr( "SuperCollection" ) : m_source->friendlyName();
 }
 
 
@@ -486,7 +486,7 @@ ViewPage*
 SourceItem::lovedTracksClicked()
 {
     if ( !m_lovedTracksPage )
-        m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::AllLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
+        m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
 
     ViewManager::instance()->show( m_lovedTracksPage );
     return m_lovedTracksPage;

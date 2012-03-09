@@ -68,7 +68,6 @@ signals:
     void nextTrackReady();
 
 private:
-    Q_DISABLE_COPY( AlbumPlaylistInterface )
     AlbumPlaylistInterface();
 
     QList< Tomahawk::query_ptr > m_queries;

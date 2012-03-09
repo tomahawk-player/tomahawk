@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -55,7 +56,6 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
     m_name = QFileInfo( filePath() ).baseName();
-    m_account = new Tomahawk::Accounts::SpotifyResolverAccount();
 }
 
 
@@ -283,9 +283,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
                 tracks << q;
             }
-
-            if(m_account)
-                m_account->addPlaylist( qid, title, tracks);
         }
     }
 }
@@ -309,7 +306,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
         return;
     }
 
-    if ( m_num_restarts < 10 )
+    if ( m_num_restarts < 0 )
     {
         m_num_restarts++;
         tLog() << "*** Restart num" << m_num_restarts;

@@ -55,6 +55,13 @@ Account::Account( const QString& accountId )
     loadFromConfig( accountId );
 }
 
+
+Account::~Account()
+{
+    sync();
+}
+
+
 QWidget*
 Account::configurationWidget()
 {
@@ -192,7 +199,7 @@ Account::types() const
         types |= SipType;
     if ( m_types.contains( "ResolverType" ) )
         types |= ResolverType;
-    if ( m_types.contains( "StatusPushTypeType" ) )
+    if ( m_types.contains( "StatusPushType" ) )
         types |= StatusPushType;
 
     return types;

@@ -108,6 +108,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 WhatsHotWidget::~WhatsHotWidget()
 {
+    qDeleteAll( m_workers );
+    m_workers.clear();
     m_workerThread->exit(0);
     m_playlistInterface.clear();
     delete ui;
@@ -485,6 +487,7 @@ WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist
         }
     }
 
+    m_workers.remove( loader );
     loader->deleteLater();
 }
 
@@ -502,6 +505,7 @@ WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_p
         m_trackModels[ chartId ]->append( tracks );
     }
 
+    m_workers.remove( loader );
     loader->deleteLater();
 }
 
@@ -515,5 +519,6 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
     if ( m_albumModels.contains( chartId ) )
         m_albumModels[ chartId ]->addAlbums( albums );
 
+    m_workers.remove( loader );
     loader->deleteLater();
 }

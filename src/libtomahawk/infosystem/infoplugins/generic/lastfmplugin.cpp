@@ -451,8 +451,15 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             QString artistName = criteria["artist"];
             QString albumName = criteria["album"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
-            QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
+            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
+            imgurl.addQueryItem( "method", "album.imageredirect" );
+            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
+            imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
+            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
+            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
+
+            QNetworkRequest req( imgurl );
             QNetworkReply* reply = TomahawkUtils::nam()->get( req );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
@@ -464,8 +471,14 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
         {
             QString artistName = criteria["artist"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
-            QNetworkRequest req( imgurl.arg( artistName ) );
+            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
+            imgurl.addQueryItem( "method", "artist.imageredirect" );
+            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
+            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
+            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
+
+            QNetworkRequest req( imgurl );
             QNetworkReply* reply = TomahawkUtils::nam()->get( req );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
@@ -693,14 +706,14 @@ LastFmPlugin::artistImagesReturned()
 void
 LastFmPlugin::settingsChanged()
 {
-    if ( !m_scrobbler && m_account->enabled() )
+    if ( !m_scrobbler && m_account->scrobble() )
     { // can simply create the scrobbler
-    lastfm::ws::Username = m_account->username();
-    m_pw = m_account->password();
+        lastfm::ws::Username = m_account->username();
+        m_pw = m_account->password();
 
         createScrobbler();
     }
-    else if ( m_scrobbler && !m_account->enabled() )
+    else if ( m_scrobbler && !m_account->scrobble() )
     {
         delete m_scrobbler;
         m_scrobbler = 0;
@@ -748,7 +761,7 @@ LastFmPlugin::onAuthenticated()
             m_account->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
 //            qDebug() << "Got session key from last.fm";
-            if ( m_account->enabled() )
+            if ( m_account->scrobble() )
                 m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
     }

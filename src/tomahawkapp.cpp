@@ -61,7 +61,6 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
 
-#include <lastfm/ws.h>
 #include "config.h"
 
 #ifndef ENABLE_HEADLESS
@@ -170,7 +169,7 @@ TomahawkApp::init()
     m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
 
     // init pipeline and resolver factories
-    new Pipeline( this );
+    new Pipeline();
 
 #ifndef ENABLE_HEADLESS
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
@@ -300,6 +299,8 @@ TomahawkApp::~TomahawkApp()
 {
     tLog() << "Shutting down Tomahawk...";
 
+    Pipeline::instance()->stop();
+
     if ( !m_servent.isNull() )
         delete m_servent.data();
     if ( !m_scanManager.isNull() )
@@ -308,14 +309,7 @@ TomahawkApp::~TomahawkApp()
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();
-
-    //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
-
     delete Tomahawk::Accounts::AccountManager::instance();
-
-    Pipeline::instance()->stop();
 
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
@@ -326,6 +320,9 @@ TomahawkApp::~TomahawkApp()
         delete m_database.data();
 
     delete Pipeline::instance();
+
+    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
 
     tLog() << "Finished shutdown.";
 }
@@ -352,6 +349,13 @@ TomahawkApp::printHelp()
     echo( "  --testdb       Use a test database instead of real collection\n" );
     echo( "  --noupnp       Disable UPnP\n" );
     echo( "  --nosip        Disable SIP\n" );
+    echo( "\nPlayback Controls:\n" );
+    echo( "  --playpause    Toggle playing/paused state\n" );
+    echo( "  --play         Start/resume playback\n" );
+    echo( "  --pause        Pause playback\n" );
+    echo( "  --stop         Stop playback\n" );
+    echo( "  --next         Advances to the next track (if available)\n" );
+    echo( "  --prev         Returns to the previous track (if available)\n" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
@@ -465,7 +469,6 @@ TomahawkApp::initHTTP()
 
     tLog() << "Starting HTTPd on" << m_session.listenInterface().toString() << m_session.port();
     m_session.start();
-
 }
 
 
@@ -512,6 +515,7 @@ TomahawkApp::initServent()
     }
 }
 
+
 // Called after Servent emits ready()
 void
 TomahawkApp::initSIP()
@@ -540,10 +544,7 @@ TomahawkApp::spotifyApiCheckFinished()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
-    if ( reply->error() )
-        DropJob::setCanParseSpotifyPlaylists( false );
-    else
-        DropJob::setCanParseSpotifyPlaylists( true );
+    DropJob::setCanParseSpotifyPlaylists( !reply->error() );
 #endif
 }
 
@@ -603,5 +604,19 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         return;
 
     QString arg1 = instance.arguments[ 1 ];
-    loadUrl( arg1 );
+    if ( loadUrl( arg1 ) )
+        return;
+
+    if ( instance.arguments.contains( "--next" ) )
+        AudioEngine::instance()->next();
+    else if ( instance.arguments.contains( "--prev" ) )
+        AudioEngine::instance()->previous();
+    else if ( instance.arguments.contains( "--playpause" ) )
+        AudioEngine::instance()->playPause();
+    else if ( instance.arguments.contains( "--play" ) )
+        AudioEngine::instance()->play();
+    else if ( instance.arguments.contains( "--pause" ) )
+        AudioEngine::instance()->pause();
+    else if ( instance.arguments.contains( "--stop" ) )
+        AudioEngine::instance()->stop();
 }

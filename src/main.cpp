@@ -124,7 +124,7 @@ main( int argc, char *argv[] )
 #endif
 
 #ifndef ENABLE_HEADLESS
-   // new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
 #endif
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );

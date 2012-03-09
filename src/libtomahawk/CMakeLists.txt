@@ -35,9 +35,12 @@ set( libGuiSources
     jobview/JobStatusView.cpp
     jobview/JobStatusModel.cpp
     jobview/JobStatusDelegate.cpp
+    jobview/JobStatusItem.cpp
     jobview/PipelineStatusItem.cpp
     jobview/TransferStatusItem.cpp
     jobview/LatchedStatusItem.cpp
+    jobview/ErrorStatusMessage.cpp
+    jobview/IndexingJobItem.cpp
 
     infobar/infobar.cpp
 
@@ -113,6 +116,7 @@ set( libGuiSources
     utils/proxystyle.cpp
     utils/tomahawkutilsgui.cpp
 
+    widgets/animatedcounterlabel.cpp
     widgets/checkdirtree.cpp
     widgets/querylabel.cpp
     widgets/imagebutton.cpp
@@ -145,137 +149,6 @@ IF(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/groovesharkparser.cpp )
 ENDIF(QCA2_FOUND)
 
-set( libGuiHeaders
-    actioncollection.h
-
-    contextmenu.h
-    dropjob.h
-    viewmanager.h
-    globalactionmanager.h
-    LatchManager.h
-    TomahawkSettingsGui.h
-
-    context/ContextPage.h
-    context/ContextWidget.h
-    context/pages/TopTracksContext.h
-    context/pages/RelatedArtistsContext.h
-    context/pages/WikipediaContext.h
-    context/pages/WebContext.h
-
-    infobar/infobar.h
-
-    playlist/topbar/topbar.h
-    playlist/topbar/clearbutton.h
-    playlist/topbar/searchlineedit.h
-    playlist/topbar/lineedit.h
-    playlist/topbar/lineedit_p.h
-    playlist/topbar/searchbutton.h
-
-    playlist/treemodel.h
-    playlist/treeproxymodel.h
-    playlist/treeproxymodelplaylistinterface.h
-    playlist/treeheader.h
-    playlist/treeitemdelegate.h
-    playlist/collectionproxymodel.h
-    playlist/collectionproxymodelplaylistinterface.h
-    playlist/collectionflatmodel.h
-    playlist/collectionview.h
-    playlist/playlistmodel.h
-    playlist/playlistproxymodel.h
-    playlist/playlistproxymodelplaylistinterface.h
-    playlist/playlistview.h
-    playlist/playlistitemdelegate.h
-    playlist/queueproxymodel.h
-    playlist/queueproxymodelplaylistinterface.h
-    playlist/queueview.h
-    playlist/trackmodel.h
-    playlist/trackmodelitem.h
-    playlist/trackproxymodel.h
-    playlist/trackproxymodelplaylistinterface.h
-    playlist/trackview.h
-    playlist/trackheader.h
-    playlist/treemodelitem.h
-    playlist/albumitem.h
-    playlist/albummodel.h
-    playlist/albumproxymodel.h
-    playlist/albumproxymodelplaylistinterface.h
-    playlist/albumitemdelegate.h
-    playlist/albumview.h
-    playlist/artistview.h
-    playlist/customplaylistview.h
-    playlist/ViewHeader.h
-
-    playlist/dynamic/DynamicPlaylist.h
-    playlist/dynamic/GeneratorInterface.h
-    playlist/dynamic/DynamicView.h
-    playlist/dynamic/DynamicModel.h
-    playlist/dynamic/echonest/EchonestGenerator.h
-    playlist/dynamic/echonest/EchonestControl.h
-    playlist/dynamic/echonest/EchonestSteerer.h
-    playlist/dynamic/widgets/DynamicWidget.h
-    playlist/dynamic/widgets/DynamicControlWrapper.h
-    playlist/dynamic/widgets/DynamicControlList.h
-    playlist/dynamic/widgets/ReadOrWriteWidget.h
-    playlist/dynamic/widgets/MiscControlWidgets.h
-    playlist/dynamic/widgets/CollapsibleControls.h
-    playlist/dynamic/widgets/DynamicSetupWidget.h
-    playlist/dynamic/widgets/LoadingSpinner.h
-
-    ExternalResolverGui.h
-    resolvers/scriptresolver.h
-    resolvers/qtscriptresolver.h
-
-    utils/widgetdragfilter.h
-    utils/xspfgenerator.h
-    utils/jspfloader.h
-    utils/spotifyparser.h
-    utils/m3uloader.h
-    utils/itunesparser.h
-    utils/rdioparser.h
-    utils/shortenedlinkparser.h
-    utils/dropjobnotifier.h
-
-    widgets/checkdirtree.h
-    widgets/querylabel.h
-    widgets/animatedcounterlabel.h
-    widgets/imagebutton.h
-    widgets/animatedsplitter.h
-    widgets/elidedlabel.h
-    widgets/newplaylistwidget.h
-    widgets/searchwidget.h
-    widgets/SeekSlider.h
-    widgets/playlisttypeselectordlg.h
-    widgets/welcomewidget.h
-    widgets/whatshotwidget.h
-    widgets/whatshotwidget_p.h
-    widgets/ChartDataLoader.h
-    widgets/RecentlyPlayedPlaylistsModel.h
-    widgets/RecentPlaylistsModel.h
-    widgets/OverlayButton.h
-    widgets/overlaywidget.h
-    widgets/HeaderLabel.h
-    widgets/HeaderWidget.h
-    widgets/combobox.h
-    widgets/ToggleButton.h
-    widgets/SocialPlaylistWidget.h
-    widgets/infowidgets/sourceinfowidget.h
-    widgets/infowidgets/ArtistInfoWidget.h
-    widgets/infowidgets/ArtistInfoWidget_p.h
-    widgets/infowidgets/AlbumInfoWidget.h
-    widgets/Breadcrumb.h
-    widgets/BreadcrumbButton.h
-
-    jobview/JobStatusView.h
-    jobview/JobStatusModel.h
-    jobview/JobStatusDelegate.h
-    jobview/JobStatusItem.h
-    jobview/PipelineStatusItem.h
-    jobview/TransferStatusItem.h
-    jobview/LatchedStatusItem.h
-
-    thirdparty/Qocoa/qsearchfield.h
-)
-
 IF(QCA2_FOUND)
     set( libGuiHeaders ${libGuiHeaders} utils/groovesharkparser.h )
 ENDIF(QCA2_FOUND)
@@ -291,6 +164,7 @@ set( libSources
     album.cpp
     albumplaylistinterface.cpp
     collection.cpp
+    functimeout.cpp
     playlist.cpp
     playlistplaylistinterface.cpp
     resolver.cpp
@@ -423,156 +297,6 @@ set( libSources
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
-set( libHeaders
-    tomahawksettings.h
-    sourcelist.h
-    pipeline.h
-    functimeout.h
-
-    playlistinterface.h
-
-    aclsystem.h
-    collection.h
-    query.h
-    resolver.h
-    ExternalResolver.h
-    result.h
-    source.h
-    sourceplaylistinterface.h
-
-    artist.h
-    artistplaylistinterface.h
-    album.h
-    albumplaylistinterface.h
-    playlist.h
-    playlistplaylistinterface.h
-    viewpage.h
-
-    accounts/Account.h
-    accounts/AccountManager.h
-    accounts/AccountModel.h
-    accounts/AccountModelFilterProxy.h
-    accounts/ResolverAccount.h
-    accounts/LastFmAccount.h
-    accounts/LastFmConfig.h
-    accounts/SpotifyAccount.h
-    EchonestCatalogSynchronizer.h
-
-    sip/SipPlugin.h
-    sip/SipHandler.h
-    sip/sipinfo.h
-
-    audio/audioengine.h
-
-    database/database.h
-    database/fuzzyindex.h
-    database/databaseworker.h
-    database/databaseimpl.h
-    database/databaseresolver.h
-    database/databasecommand.h
-    database/databasecommandloggable.h
-    database/databasecommand_resolve.h
-    database/databasecommand_allartists.h
-    database/databasecommand_allalbums.h
-    database/databasecommand_alltracks.h
-    database/databasecommand_addfiles.h
-    database/databasecommand_deletefiles.h
-    database/databasecommand_dirmtimes.h
-    database/databasecommand_filemtimes.h
-    database/databasecommand_loadfiles.h
-    database/databasecommand_logplayback.h
-    database/databasecommand_addsource.h
-    database/databasecommand_sourceoffline.h
-    database/databasecommand_collectionstats.h
-    database/databasecommand_loadplaylistentries.h
-    database/databasecommand_modifyplaylist.h
-    database/databasecommand_playbackhistory.h
-    database/databasecommand_setplaylistrevision.h
-    database/databasecommand_loadallplaylists.h
-    database/databasecommand_loadallsortedplaylists.h
-    database/databasecommand_loadallsources.h
-    database/databasecommand_createplaylist.h
-    database/databasecommand_deleteplaylist.h
-    database/databasecommand_renameplaylist.h
-    database/databasecommand_loadops.h
-    database/databasecommand_updatesearchindex.h
-    database/databasecollection.h
-    database/localcollection.h
-    database/databasecommand_setdynamicplaylistrevision.h
-    database/databasecommand_createdynamicplaylist.h
-    database/databasecommand_loaddynamicplaylist.h
-    database/databasecommand_loaddynamicplaylistentries.h
-    database/databasecommand_deletedynamicplaylist.h
-    database/databasecommand_loadallautoplaylists.h
-    database/databasecommand_loadallstations.h
-    database/databasecommand_addclientauth.h
-    database/databasecommand_clientauthvalid.h
-    database/databasecommand_socialaction.h
-    database/databasecommand_loadsocialactions.h
-    database/databasecommand_genericselect.h
-    database/databasecommand_setcollectionattributes.h
-    database/databasecommand_collectionattributes.h
-    database/databasecommand_trackattributes.h
-    database/databasecommand_settrackattributes.h
-
-    infosystem/infosystem.h
-    infosystem/infosystem.h
-    infosystem/infosystemworker.h
-    infosystem/infosystemcache.h
-
-    infosystem/infoplugins/generic/echonestplugin.h
-    infosystem/infoplugins/generic/lastfmplugin.h
-    infosystem/infoplugins/generic/chartsplugin.h
-    infosystem/infoplugins/generic/spotifyPlugin.h
-    infosystem/infoplugins/generic/hypemPlugin.h
-    infosystem/infoplugins/generic/musixmatchplugin.h
-    infosystem/infoplugins/generic/musicbrainzPlugin.h
-    infosystem/infoplugins/generic/RoviPlugin.h
-
-    network/bufferiodevice.h
-    network/msgprocessor.h
-    network/remotecollection.h
-    network/streamconnection.h
-    network/dbsyncconnection.h
-    network/servent.h
-    network/connection.h
-    network/controlconnection.h
-    network/portfwdthread.h
-
-    playlist/PlaylistUpdaterInterface.h
-    playlist/dynamic/DynamicPlaylist.h
-    playlist/dynamic/GeneratorInterface.h
-    playlist/dynamic/GeneratorFactory.h
-    playlist/XspfUpdater.h
-    playlist/dynamic/database/DatabaseGenerator.h
-    playlist/dynamic/database/DatabaseControl.h
-    playlist/dynamic/DynamicControl.h
-
-    thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
-
-    utils/tomahawkutilsgui.h
-    utils/xspfloader.h
-    utils/qnr_iodevicestream.h
-)
-
-set( libHeaders_NoMOC
-    viewpage.h
-
-    accounts/Account.h
-
-    infosystem/infoplugins/unix/imageconverter.h
-
-    taghandlers/tag.h
-    taghandlers/apetag.h
-    taghandlers/asftag.h
-    taghandlers/id3v1tag.h
-    taghandlers/id3v2tag.h
-    taghandlers/mp4tag.h
-    taghandlers/oggtag.h
-
-    utils/tomahawkutils.h
-)
-
 set( libUI ${libUI}
     widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
@@ -665,9 +389,7 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
-    SET( libHeaders ${libHeaders}
-      infosystem/infoplugins/mac/adium.h
-      infosystem/infoplugins/mac/adiumplugin.h )
+    SET_SOURCE_FILES_PROPERTIES(utils/tomahawkutils_mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
@@ -689,15 +411,14 @@ ENDIF(LIBLASTFM_FOUND)
 
 IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
-    LIST(APPEND libHeaders ${libGuiHeaders} )
 ENDIF()
 
 qt4_wrap_ui( libUI_H ${libUI} )
-qt4_wrap_cpp( libMoc ${libHeaders} )
 
-SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
+SET( libSources ${libSources} ${libUI_H} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libSources} ${libMoc} )
+ADD_LIBRARY( tomahawklib SHARED ${libSources})
+set_target_properties(tomahawklib PROPERTIES AUTOMOC TRUE)
 
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )

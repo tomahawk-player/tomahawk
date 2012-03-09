@@ -104,7 +104,9 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
+    QMutexLocker lock( &m_mutex );
     m_ownRef.clear();
+    m_results.clear();
 }
 
 
@@ -459,7 +461,15 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 
     if ( isFullTextQuery() )
     {
+        const QString artistTrackname = DatabaseImpl::sortname( fullTextQuery() );
+        const QString rArtistTrackname  = DatabaseImpl::sortname( r->artist()->name() + " " + r->track() );
+
+        int atrdist = levenshtein( artistTrackname, rArtistTrackname );
+        int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
+        float dcatr = (float)( mlatr - atrdist ) / mlatr;
+
         float res = qMax( dcart, dcalb );
+        res = qMax( res, dcatr );
         return qMax( res, dctrk );
     }
     else
@@ -489,7 +499,7 @@ Query::loadSocialActions()
     query_ptr q = m_ownRef.toStrongRef();
 
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( q );
-    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
+    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 

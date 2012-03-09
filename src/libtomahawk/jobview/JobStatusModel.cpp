@@ -21,6 +21,7 @@
 #include "JobStatusItem.h"
 #include "utils/logger.h"
 
+#include <QPixmap>
 
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
@@ -100,6 +101,8 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
         else
             return item->rightColumnText();
     }
+    case AllowMultiLineRole:
+        return item->allowMultiLine();
     }
 
     return QVariant();
