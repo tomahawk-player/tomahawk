@@ -64,6 +64,7 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
+    mutable int m_accountRowHeight;
 };
 
 }
