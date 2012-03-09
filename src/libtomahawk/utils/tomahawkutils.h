@@ -93,7 +93,7 @@ namespace TomahawkUtils
     DLLEXPORT QString extensionToMimetype( const QString& extension );
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
-    DLLEXPORT NetworkProxyFactory* proxyFactory( bool noMutexLocker = false );
+    DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
     DLLEXPORT QNetworkAccessManager* nam();
     DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );

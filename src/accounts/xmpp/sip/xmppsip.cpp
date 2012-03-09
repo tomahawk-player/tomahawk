@@ -60,11 +60,11 @@ using namespace Accounts;
 
 XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
+    , m_state( Account::Disconnected )
 #ifndef ENABLE_HEADLESS
     , m_menu( 0 )
     , m_xmlConsole( 0 )
 #endif
-    , m_state( Account::Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -79,6 +79,7 @@ XmppSipPlugin::XmppSipPlugin( Account *account )
 
     // general client setup
     m_client = new Jreen::Client( jid, m_currentPassword );
+    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );

@@ -20,13 +20,13 @@
 #include "settingsdialog.h"
 #include "config.h"
 
-#include <QDesktopServices>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QNetworkConfiguration>
-#include <QNetworkProxy>
-#include <QVBoxLayout>
-#include <QSizeGrip>
+#include <QtGui/QDesktopServices>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+#include <QtNetwork/QNetworkConfiguration>
+#include <QtNetwork/QNetworkProxy>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSizeGrip>
 
 #include "AtticaManager.h"
 #include "tomahawkapp.h"
@@ -457,7 +457,6 @@ ProxyDialog::ProxyDialog( QWidget *parent )
         ui->userLineEdit->setEnabled( false );
         ui->passwordLineEdit->setEnabled( false );
         ui->checkBoxUseProxyForDns->setEnabled( false );
-        ui->noHostLineEdit->setEnabled( false );
     }
 
     connect( ui->typeBox, SIGNAL( currentIndexChanged( int ) ), SLOT( proxyTypeChangedSlot( int ) ) );
@@ -474,7 +473,6 @@ ProxyDialog::proxyTypeChangedSlot( int index )
         ui->userLineEdit->setEnabled( false );
         ui->passwordLineEdit->setEnabled( false );
         ui->checkBoxUseProxyForDns->setEnabled( false );
-        ui->noHostLineEdit->setEnabled( false );
     }
     else
     {
@@ -483,7 +481,6 @@ ProxyDialog::proxyTypeChangedSlot( int index )
         ui->userLineEdit->setEnabled( true );
         ui->passwordLineEdit->setEnabled( true );
         ui->checkBoxUseProxyForDns->setEnabled( true );
-        ui->noHostLineEdit->setEnabled( true );
     }
 }
 
@@ -521,8 +518,8 @@ ProxyDialog::saveSettings()
         proxyFactory->setProxy( QNetworkProxy( type, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
         if ( !ui->noHostLineEdit->text().isEmpty() )
         {
-            tDebug() << Q_FUNC_INFO << "hosts line edit is " << ui->noHostLineEdit->text();
-            tDebug() << Q_FUNC_INFO << "split hosts line edit is " << ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts );
+            tDebug() << Q_FUNC_INFO << "noproxy line edit is " << ui->noHostLineEdit->text();
+            tDebug() << Q_FUNC_INFO << "split noproxy line edit is " << ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts );
             proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts ) );
         }
     }
