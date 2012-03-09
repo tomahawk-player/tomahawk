@@ -30,7 +30,6 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
     : QDialog( parent, Qt::Sheet )
     , m_factory( factory )
     , m_ui( new Ui_AccountFactoryWrapper )
-    , m_createAccount( false )
 {
     m_ui->setupUi( this );
 
@@ -110,9 +109,7 @@ AccountFactoryWrapper::buttonClicked( QAbstractButton* button )
 {
     if ( button == m_addButton )
     {
-        m_createAccount = true;
-        emit createAccount( m_factory );
-        return;
+        TomahawkUtils::createAccountFromFactory( m_factory, this );
     }
     else
         reject();

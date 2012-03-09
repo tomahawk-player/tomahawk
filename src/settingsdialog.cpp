@@ -366,14 +366,10 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
     AccountFactoryWrapper dialog( factory, this );
     QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
 
-    int ret = dialog.exec();
-    if ( !watcher.isNull() && dialog.doCreateAccount() )
-        createAccountFromFactory( factory );
+    dialog.exec();
 #else
     // on osx a sheet needs to be non-modal
     AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
-    connect( dialog, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
-
     dialog->show();
 #endif
 }
@@ -391,7 +387,6 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
     TomahawkUtils::openAccountConfig( account, this, showDelete );
 }
-
 
 
 void

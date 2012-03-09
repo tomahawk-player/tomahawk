@@ -42,11 +42,6 @@ public:
 
     explicit AccountFactoryWrapper( Tomahawk::Accounts::AccountFactory* factory, QWidget* parent = 0 );
 
-    bool doCreateAccount() const { return m_createAccount; }
-
-signals:
-    void createAccount( Tomahawk::Accounts::AccountFactory* factory );
-
 public slots:
     void openAccountConfig( Tomahawk::Accounts::Account* );
     void removeAccount( Tomahawk::Accounts::Account* );
@@ -59,7 +54,6 @@ private:
     Tomahawk::Accounts::AccountFactory* m_factory;
     Ui_AccountFactoryWrapper* m_ui;
     QPushButton* m_addButton;
-    bool m_createAccount;
 };
 
 #endif // ACCOUNTFACTORYWRAPPER_H
