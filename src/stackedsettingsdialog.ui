@@ -85,7 +85,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -136,7 +136,11 @@
              </layout>
             </item>
             <item>
-             <widget class="QListView" name="accountsView"/>
+             <widget class="QListView" name="accountsView">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
