@@ -107,7 +107,7 @@ LastFmAccount::authenticate()
 void
 LastFmAccount::deauthenticate()
 {
-    if ( m_resolver.data()->running() )
+    if ( !m_resolver.isNull() && m_resolver.data()->running() )
         m_resolver.data()->stop();
 
     emit connectionStateChanged( connectionState() );
