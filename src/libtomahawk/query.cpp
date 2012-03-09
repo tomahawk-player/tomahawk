@@ -106,6 +106,7 @@ Query::~Query()
 {
     QMutexLocker lock( &m_mutex );
     m_ownRef.clear();
+    m_results.clear();
 }
 
 
