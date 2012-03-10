@@ -61,6 +61,21 @@ public:
     QList< Account* > accounts() const { return m_accounts; };
     QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
 
+    /**
+     * Returns a new Account for a certain path on disk. This will go through all on-disk resolver account providers
+     * to find the most specific account that matches this.
+     *
+     * The fallback is ResolverAccount, which handles our generic external script resolvers.
+     */
+    Account* accountFromPath( const QString& path );
+
+    /**
+     * Registers an account factory as being able to "handle" resolvers on disk. When accountFromPath is called
+     * AccountManager will go through all registered account factories in order until it finds one that can handle the path.
+     * This is searched in LIFO order.
+     */
+    void registerAccountFactoryForFilesystem( AccountFactory* factory );
+
 public slots:
     void connectAll();
     void disconnectAll();
@@ -97,6 +112,7 @@ private:
 
     QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;
+    QList< AccountFactory* > m_factoriesForFilesytem;
 
     static AccountManager* s_instance;
 };

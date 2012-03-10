@@ -22,6 +22,7 @@
 #include "sourcelist.h"
 #include "ResolverAccount.h"
 #include "LastFmAccount.h"
+#include "SpotifyAccount.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -59,9 +60,14 @@ AccountManager::AccountManager( QObject *parent )
     // We include the resolver factory manually, not in a plugin
     ResolverAccountFactory* f = new ResolverAccountFactory();
     m_accountFactories[ f->factoryId() ] = f;
+    registerAccountFactoryForFilesystem( f );
 
     LastFmAccountFactory* l = new LastFmAccountFactory();
     m_accountFactories[ l->factoryId() ] = l;
+
+    SpotifyAccountFactory* s = new SpotifyAccountFactory;
+    m_accountFactories[ s->factoryId() ] = s;
+    registerAccountFactoryForFilesystem( s );
 }
 
 
@@ -329,6 +335,30 @@ AccountManager::removeAccount( Account* account )
     account->removeFromConfig();
     account->deleteLater();
 }
+
+
+Account*
+AccountManager::accountFromPath( const QString& accountPath )
+{
+    foreach ( AccountFactory* factory, m_factoriesForFilesytem )
+    {
+        if ( factory->acceptsPath( accountPath ) )
+        {
+            return factory->createFromPath( accountPath );
+        }
+    }
+
+    Q_ASSERT_X( false, "Shouldn't have had no account factory accepting a path.. at least ResolverAccount!!", "");
+    return 0;
+}
+
+
+void
+AccountManager::registerAccountFactoryForFilesystem( AccountFactory* factory )
+{
+    m_factoriesForFilesytem.prepend( factory );
+}
+
 
 
 void

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -228,7 +229,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         return;
     }
 
-    if ( msgtype == "results" )
+    else if ( msgtype == "results" )
     {
         const QString qid = m.value( "qid" ).toString();
         QList< Tomahawk::result_ptr > results;
@@ -264,6 +265,25 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         }
 
         Tomahawk::Pipeline::instance()->reportResults( qid, results );
+    }
+    else if ( msgtype == "playlist" )
+    {
+
+        QList< Tomahawk::query_ptr > tracks;
+        const QString qid = m.value( "qid" ).toString();
+        const QString title = m.value( "identifier" ).toString();
+        const QVariantList reslist = m.value( "playlist" ).toList();
+
+        if( !reslist.isEmpty() )
+        {
+            foreach( const QVariant& rv, reslist )
+            {
+                QVariantMap m = rv.toMap();
+                qDebug() << "Found playlist result:" << m;
+                Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
+                tracks << q;
+            }
+        }
     }
 }
 

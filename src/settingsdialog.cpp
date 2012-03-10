@@ -396,7 +396,8 @@ SettingsDialog::installFromFile()
 
     if( !resolver.isEmpty() )
     {
-        Account* acct = ResolverAccountFactory::createFromPath( resolver, false );
+        Account* acct = AccountManager::instance()->accountFromPath( resolver );
+
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );

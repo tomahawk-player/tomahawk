@@ -118,6 +118,7 @@ struct AccountModelNode {
     {
         init();
         resolverAccount = ra;
+        factory = AccountManager::instance()->factoryForAccount( ra );
     }
 
     explicit AccountModelNode( Account* account ) : type( CustomAccountType )

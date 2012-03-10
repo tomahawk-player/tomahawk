@@ -83,6 +83,13 @@ LastFmAccount::~LastFmAccount()
 void
 LastFmAccount::authenticate()
 {
+    if ( !AtticaManager::instance()->resolversLoaded() )
+    {
+        // If we're still waiting to load, wait for the attica resolvers to come down the pipe
+        connect( AtticaManager::instance(), SIGNAL(resolversLoaded(Attica::Content::List)), this, SLOT( atticaLoaded( Attica::Content::List ) ), Qt::UniqueConnection );
+        return;
+    }
+
     const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
@@ -103,6 +110,14 @@ LastFmAccount::authenticate()
     }
 
     emit connectionStateChanged( connectionState() );
+}
+
+
+void
+LastFmAccount::atticaLoaded( Attica::Content::List )
+{
+    disconnect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded( Attica::Content::List ) ) );
+    authenticate();
 }
 
 

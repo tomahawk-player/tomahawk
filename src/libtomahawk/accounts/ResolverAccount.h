@@ -35,7 +35,7 @@ public:
     ResolverAccountFactory() {}
     virtual ~ResolverAccountFactory() {}
 
-    virtual Account* createAccount(const QString& accountId = QString());
+    virtual Account* createAccount( const QString& accountId = QString() );
     virtual QString factoryId() const  { return "resolveraccount"; }
     virtual QString description() const { return QString(); }
     virtual QString prettyName() const { return QString(); } // Internal, not displayed
@@ -44,7 +44,11 @@ public:
 
     // Used to create a new resolver from a script on disk, either chosen by
     // the user, or installed from synchrotron
-    static Account* createFromPath( const QString& path, bool isAttica );
+    virtual bool acceptsPath( const QString& path ) const { return true; } // This is the catch-all filesystem account
+    virtual Account* createFromPath( const QString& path );
+
+    // Internal use
+    static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
 };
 
 /**

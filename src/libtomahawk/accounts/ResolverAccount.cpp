@@ -46,16 +46,23 @@ ResolverAccountFactory::createAccount( const QString& accountId )
 
 
 Account*
-ResolverAccountFactory::createFromPath( const QString& path, bool isAttica )
+ResolverAccountFactory::createFromPath( const QString& path )
+{
+    return createFromPath( path, factoryId(), false );
+}
+
+
+Account*
+ResolverAccountFactory::createFromPath( const QString& path, const QString& factory,  bool isAttica )
 {
     qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
     if ( isAttica )
     {
         QFileInfo info( path );
-        return new AtticaResolverAccount( generateId( "resolveraccount" ), path, info.baseName() );
+        return new AtticaResolverAccount( generateId( factory ), path, info.baseName() );
     }
     else
-        return new ResolverAccount( generateId( "resolveraccount" ), path );
+        return new ResolverAccount( generateId( factory ), path );
 }
 
 

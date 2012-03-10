@@ -184,6 +184,7 @@ set( libSources
     accounts/ResolverAccount.cpp
     accounts/LastFmAccount.cpp
     accounts/LastFmConfig.cpp
+    accounts/SpotifyAccount.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp

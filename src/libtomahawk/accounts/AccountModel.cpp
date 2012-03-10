@@ -311,7 +311,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 case Qt::DecorationRole:
                     return acct->icon();
                 case DescriptionRole:
-                    return node->type == AccountModelNode::ManualResolverType ? QString() : node->factory->description();
+                    return node->factory ? node->factory->description() : QString();
                 case Qt::CheckStateRole:
                     return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                 case AccountData:
@@ -597,7 +597,6 @@ void
 AccountModel::accountStateChanged( Account* account , Account::ConnectionState )
 {
     // Find the factory this belongs up, and update
-    AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
