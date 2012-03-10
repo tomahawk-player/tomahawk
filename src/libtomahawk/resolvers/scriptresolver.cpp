@@ -306,7 +306,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
         return;
     }
 
-    if ( m_num_restarts < 0 )
+    if ( m_num_restarts < 10 )
     {
         m_num_restarts++;
         tLog() << "*** Restart num" << m_num_restarts;

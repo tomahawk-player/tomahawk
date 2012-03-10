@@ -28,7 +28,6 @@
 
 #include "query.h"
 #include "ExternalResolverGui.h"
-#include "accounts/SpotifyAccount.h"
 #include "dllmacro.h"
 
 class QWidget;
