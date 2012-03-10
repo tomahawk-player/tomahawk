@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -88,7 +89,7 @@ SpotifyAccount::icon() const
 void
 SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks )
 {
-    Sync sync;
+/*    Sync sync;
     sync.id_ = qid;
     int index =  m_syncPlaylists.indexOf( sync );
 
@@ -134,15 +135,14 @@ SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< To
         }
     }
 
-
+    */
 }
 
 
-
-bool operator==( SpotifyAccount::Sync one, SpotifyAccount::Sync two )
+bool
+operator==( Tomahawk::Accounts::SpotifyAccount::Sync one, Tomahawk::Accounts::SpotifyAccount::Sync two )
 {
     if( one.id_ == two.id_ )
         return true;
     return false;
 }
-
