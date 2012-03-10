@@ -35,6 +35,22 @@ SpotifyAccountFactory::createAccount( const QString& accountId )
     return new SpotifyAccount( accountId );
 }
 
+
+bool
+SpotifyAccountFactory::acceptsPath( const QString& path ) const
+{
+    QFileInfo info( path );
+    return info.baseName().startsWith( "spotify_" );
+}
+
+
+Account*
+SpotifyAccountFactory::createFromPath( const QString& path )
+{
+    return new SpotifyAccount( generateId( "spotifyaccount" ), path );
+}
+
+
 QPixmap
 SpotifyAccountFactory::icon() const
 {
@@ -47,6 +63,13 @@ SpotifyAccountFactory::icon() const
 
 SpotifyAccount::SpotifyAccount( const QString& accountId )
     : ResolverAccount( accountId )
+{
+
+}
+
+
+SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
+    : ResolverAccount( accountId, path )
 {
 
 }

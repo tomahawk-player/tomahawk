@@ -44,6 +44,9 @@ public:
     virtual QString factoryId() const { return "spotifyaccount"; }
     virtual QString prettyName() const { return "Spotify"; }
 
+    virtual bool acceptsPath( const QString& path ) const;
+    virtual Account* createFromPath( const QString& path );
+
     virtual AccountTypes types() const { return AccountTypes( ResolverType ); }
     virtual bool allowUserCreation() const { return false; }
     virtual QPixmap icon() const;
@@ -56,6 +59,7 @@ class SpotifyAccount : public ResolverAccount
     Q_OBJECT
 public:
     SpotifyAccount( const QString& accountId );
+    SpotifyAccount( const QString& accountId, const QString& path );
     virtual ~SpotifyAccount() {}
 
     virtual QPixmap icon() const;

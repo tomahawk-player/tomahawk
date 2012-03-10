@@ -46,6 +46,13 @@ ResolverAccountFactory::createAccount( const QString& accountId )
 
 
 Account*
+ResolverAccountFactory::createFromPath( const QString& path )
+{
+    return createFromPath( path, false );
+}
+
+
+Account*
 ResolverAccountFactory::createFromPath( const QString& path, bool isAttica )
 {
     qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
