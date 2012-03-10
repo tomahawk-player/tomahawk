@@ -94,6 +94,8 @@ public:
     Attica::Content atticaContent() const;
 
 private slots:
+    void atticaLoaded( Attica::Content::List );
+
     void resolverInstalled( const QString& resolverId );
 
     void resolverChanged();
