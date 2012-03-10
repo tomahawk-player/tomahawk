@@ -58,7 +58,6 @@ Account::Account( const QString& accountId )
 
 Account::~Account()
 {
-    sync();
 }
 
 
