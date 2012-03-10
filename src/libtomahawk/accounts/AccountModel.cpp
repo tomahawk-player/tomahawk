@@ -311,7 +311,7 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 case Qt::DecorationRole:
                     return acct->icon();
                 case DescriptionRole:
-                    return node->type == AccountModelNode::ManualResolverType ? QString() : node->factory->description();
+                    return node->factory ? node->factory->description() : QString();
                 case Qt::CheckStateRole:
                     return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                 case AccountData:
