@@ -456,7 +456,7 @@ AtticaManager::payloadFetched()
             if ( reply->property( "createAccount" ).toBool() )
             {
                 // Do the install / add to tomahawk
-                Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, true );
+                Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, "resolveraccount", true );
                 Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
                 TomahawkSettings::instance()->addAccount( resolver->accountId() );
             }

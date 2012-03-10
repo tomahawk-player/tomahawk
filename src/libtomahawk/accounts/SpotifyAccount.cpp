@@ -47,7 +47,7 @@ SpotifyAccountFactory::acceptsPath( const QString& path ) const
 Account*
 SpotifyAccountFactory::createFromPath( const QString& path )
 {
-    return new SpotifyAccount( generateId( "spotifyaccount" ), path );
+    return new SpotifyAccount( generateId( factoryId() ), path );
 }
 
 

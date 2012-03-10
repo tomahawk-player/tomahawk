@@ -48,7 +48,7 @@ public:
     virtual Account* createFromPath( const QString& path );
 
     // Internal use
-    static Account* createFromPath( const QString& path, bool isAttica );
+    static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
 };
 
 /**

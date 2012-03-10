@@ -182,8 +182,8 @@ public:
     virtual Account* createAccount( const QString& accountId = QString() ) = 0;
 
     /// If this resolver type accepts this path on disk (For general and special resolver accounts)
-    virtual bool acceptsPath( const QString& path ) const { return false; }
-    virtual Account* createFromPath( const QString& path ) { return 0; }
+    virtual bool acceptsPath( const QString& ) const { return false; }
+    virtual Account* createFromPath( const QString& ) { return 0; }
 };
 
 };
