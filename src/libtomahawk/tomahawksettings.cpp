@@ -361,6 +361,41 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         setValue( "accounts/allaccounts", accounts );
     }
+    else if ( oldVersion == 7 )
+    {
+        // Upgrade spotify resolver to standalone account, if one exists
+        beginGroup( "accounts" );
+        QStringList allAccounts = value( "allaccounts" ).toStringList();
+        foreach ( const QString& account, allAccounts )
+        {
+            if ( account.startsWith( "resolveraccount_" ) && value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString() == "spotify_tomahawkresolver" )
+            {
+                // This is a spotify resolver, convert!
+                const QVariantHash configuration = value( QString( "%1/configuration" ).arg( account ) ).toHash();
+                const bool enabled = value( QString( "%1/enabled" ).arg( account ) ).toBool();
+                const bool autoconnect = value( QString( "%1/autoconnect" ).arg( account ) ).toBool();
+
+                qDebug() << "Migrating Spotify resolver from legacy resolver type, path is:" << configuration[ "path" ].toString();
+
+                remove( account );
+
+                // Create new account
+                QString newAccount = account;
+                newAccount.replace( "resolveraccount_", "spotifyaccount_" );
+                beginGroup( newAccount );
+                setValue( "enabled", enabled );
+                setValue( "autoconnect", autoconnect );
+                setValue( "types", QStringList() << "ResolverType" );
+                setValue( "configuration", configuration );
+                endGroup();
+
+                allAccounts.replace( allAccounts.indexOf( account ), newAccount );
+            }
+        }
+
+        setValue( "allaccounts", allAccounts );
+        endGroup();
+    }
 }
 
 

@@ -44,7 +44,7 @@ public:
 
     // Used to create a new resolver from a script on disk, either chosen by
     // the user, or installed from synchrotron
-    virtual bool acceptsPath( const QString& path ) const { return true; } // This is the catch-all filesystem account
+    virtual bool acceptsPath( const QString&  ) const { return true; } // This is the catch-all filesystem account
     virtual Account* createFromPath( const QString& path );
 
     // Internal use
