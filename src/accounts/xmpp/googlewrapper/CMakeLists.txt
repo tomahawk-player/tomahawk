@@ -25,7 +25,7 @@ add_definitions(-DGOOGLE_WRAPPER)
 qt4_add_resources( RCX_SRCS "resources.qrc" )
 
 qt4_wrap_cpp( googleMoc ${googleHeaders} )
-add_library( tomahawk_account_google MODULE ${googleSources} ${googleMoc} ${googleMoc} ${RCX_SRCS} )
+add_library( tomahawk_account_google SHARED ${googleSources} ${googleMoc} ${googleMoc} ${RCX_SRCS} )
 
 target_link_libraries( tomahawk_account_google
     ${QT_LIBRARIES}

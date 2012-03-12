@@ -32,7 +32,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 qt4_wrap_cpp( twitterAccountMoc ${twitterAccountHeaders} )
 qt4_wrap_ui( twitterAccountUI_H ${twitterAccountUI} )
 qt4_add_resources( RC_SRCS "resources.qrc" )
-add_library( tomahawk_account_twitter MODULE ${twitterAccountUI_H} ${twitterAccountSources} ${twitterAccountMoc} ${RC_SRCS} )
+add_library( tomahawk_account_twitter SHARED ${twitterAccountUI_H} ${twitterAccountSources} ${twitterAccountMoc} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

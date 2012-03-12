@@ -199,10 +199,10 @@ QT_PLUGINS = [
 ]
 
 TOMAHAWK_PLUGINS = [
-  'libtomahawk_account_xmpp.so.dylib',
-  'libtomahawk_account_google.so.dylib',
-  'libtomahawk_account_twitter.so.dylib',
-  'libtomahawk_account_zeroconf.so.dylib',
+  'libtomahawk_account_xmpp.dylib',
+  'libtomahawk_account_google.dylib',
+  'libtomahawk_account_twitter.dylib',
+  'libtomahawk_account_zeroconf.dylib',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
