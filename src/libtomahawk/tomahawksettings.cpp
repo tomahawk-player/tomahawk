@@ -217,7 +217,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
-    } else if ( oldVersion == 6 )
+    }
+    else if ( oldVersion == 6 )
     {
         // Migrate to accounts from sipplugins.
         // collect old connected and enabled sip plugins
@@ -313,6 +314,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             accounts << accountKey;
 
             beginGroup( "accounts/" + accountKey );
+            setValue( "accountfriendlyname", resolver );
             setValue( "enabled", enabledResolvers.contains( resolver ) == true );
             setValue( "autoconnect", true );
             setValue( "types", QStringList() << "ResolverType" );
@@ -377,7 +379,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         QStringList allAccounts = value( "allaccounts" ).toStringList();
         foreach ( const QString& account, allAccounts )
         {
-            if ( account.startsWith( "resolveraccount_" ) && value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString() == "spotify_tomahawkresolver" )
+            if ( account.startsWith( "resolveraccount_" ) && value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString().endsWith( "spotify_tomahawkresolver" ) )
             {
                 // This is a spotify resolver, convert!
                 const QVariantHash configuration = value( QString( "%1/configuration" ).arg( account ) ).toHash();
