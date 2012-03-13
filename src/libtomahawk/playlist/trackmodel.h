@@ -98,6 +98,8 @@ public:
     /// Returns a flat list of all tracks in this model
     QList< Tomahawk::query_ptr > queries() const;
 
+    void getCover( const QModelIndex& index );
+
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );

@@ -588,9 +588,6 @@ Query::setLoved( bool loved )
 QPixmap
 Query::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !forceLoad )
-        return QPixmap();
-
     if ( m_albumPtr.isNull() )
     {
         m_artistPtr = Artist::get( artist(), false );
@@ -599,7 +596,7 @@ Query::cover( const QSize& size, bool forceLoad ) const
         connect( m_albumPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
     }
 
-    m_albumPtr->cover( size );
+    m_albumPtr->cover( size, forceLoad );
     if ( m_albumPtr->infoLoaded() )
     {
         if ( !m_albumPtr->cover( size ).isNull() )

@@ -36,6 +36,8 @@
 #include "artist.h"
 #include "album.h"
 
+#define SCROLL_TIMEOUT 280
+
 using namespace Tomahawk;
 
 
@@ -80,6 +82,11 @@ TrackView::TrackView( QWidget* parent )
     f.setPointSize( f.pointSize() - 2 );
     setFont( f );
 #endif
+
+    m_timer.setInterval( SCROLL_TIMEOUT );
+    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
@@ -136,6 +143,7 @@ TrackView::setTrackModel( TrackModel* model )
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( true );
 
@@ -148,6 +156,44 @@ TrackView::setTrackModel( TrackModel* model )
     {
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
+}
+
+
+void
+TrackView::onViewChanged()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    m_timer.start();
+}
+
+
+void
+TrackView::onScrollTimeout()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    QModelIndex left = indexAt( viewport()->rect().topLeft() );
+    while ( left.isValid() && left.parent().isValid() )
+        left = left.parent();
+
+    QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
+    while ( right.isValid() && right.parent().isValid() )
+        right = right.parent();
+
+    int max = m_proxyModel->playlistInterface()->trackCount();
+    if ( right.isValid() )
+        max = right.row();
+
+    if ( !max )
+        return;
+
+    for ( int i = left.row(); i <= max; i++ )
+    {
+        m_model->getCover( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
     }
 }
 

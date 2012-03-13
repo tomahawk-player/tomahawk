@@ -21,6 +21,7 @@
 
 #include <QtGui/QTreeView>
 #include <QtGui/QSortFilterProxyModel>
+#include <QtCore/QTimer>
 
 #include "contextmenu.h"
 #include "playlistitemdelegate.h"
@@ -70,6 +71,9 @@ public slots:
     void playItem();
     void onMenuTriggered( int action );
 
+    void onViewChanged();
+    void onScrollTimeout();
+
 signals:
     void itemActivated( const QModelIndex& index );
 
@@ -118,6 +122,8 @@ private:
     QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
+    
+    QTimer m_timer;
 };
 
 #endif // TRACKVIEW_H

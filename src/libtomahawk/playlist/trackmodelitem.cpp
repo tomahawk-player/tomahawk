@@ -110,15 +110,9 @@ TrackModelItem::setupItem( const Tomahawk::query_ptr& query, TrackModelItem* par
     m_isPlaying = false;
     toberemoved = false;
     m_query = query;
-    if ( !query->numResults() )
-    {
-        connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
-                               SIGNAL( dataChanged() ) );
 
-        connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
-                               SIGNAL( dataChanged() ) );
-
-        connect( query.data(), SIGNAL( resultsChanged() ),
-                               SIGNAL( dataChanged() ) );
-    }
+    connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SIGNAL( dataChanged() ) );
+    connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ), SIGNAL( dataChanged() ) );
+    connect( query.data(), SIGNAL( resultsChanged() ), SIGNAL( dataChanged() ) );
+    connect( query.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }

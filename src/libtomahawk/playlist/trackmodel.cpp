@@ -259,6 +259,14 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 
 
 void
+TrackModel::getCover( const QModelIndex& index )
+{
+    TrackModelItem* item = itemFromIndex( index );
+    item->query()->cover( QSize( 0, 0 ) );
+}
+
+
+void
 TrackModel::setCurrentItem( const QModelIndex& index )
 {
     TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );

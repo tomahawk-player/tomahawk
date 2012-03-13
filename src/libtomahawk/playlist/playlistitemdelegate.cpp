@@ -204,7 +204,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         if ( useAvatars )
             pixmap = source->avatar( Source::FancyStyle, ir.size() );
         else
-            pixmap = item->query()->cover( ir.size() );
+            pixmap = item->query()->cover( ir.size(), false );
 
         if ( pixmap.isNull() )
         {
