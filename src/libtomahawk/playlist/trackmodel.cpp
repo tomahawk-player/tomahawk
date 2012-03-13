@@ -262,7 +262,8 @@ void
 TrackModel::getCover( const QModelIndex& index )
 {
     TrackModelItem* item = itemFromIndex( index );
-    item->query()->cover( QSize( 0, 0 ) );
+    if ( !item->query().isNull() )
+        item->query()->cover( QSize( 0, 0 ) );
 }
 
 
