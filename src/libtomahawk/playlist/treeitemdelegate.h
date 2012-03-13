@@ -42,10 +42,6 @@ protected:
 private:
     ArtistView* m_view;
     TreeProxyModel* m_model;
-
-    QPixmap m_nowPlayingIcon;
-    QPixmap m_defaultAlbumCover;
-    QPixmap m_defaultArtistImage;
 };
 
 #endif // TREEITEMDELEGATE_H

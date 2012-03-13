@@ -39,9 +39,6 @@ TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
     , m_view( parent )
     , m_model( proxy )
 {
-    m_nowPlayingIcon = QPixmap( RESPATH "images/now-playing-speaker.png" );
-    m_defaultAlbumCover = QPixmap( RESPATH "images/no-album-no-case.png" );
-    m_defaultArtistImage = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
 }
 
 
@@ -112,7 +109,8 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 if ( item->isPlaying() && m_view->header()->visualIndex( index.column() ) == 0 )
                 {
                     r.adjust( 0, 0, 0, -3 );
-                    painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+                    QRect npr = r.adjusted( 3, 1, 18 - r.width(), 1 );
+                    painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
                     r.adjust( 25, 0, 0, 3 );
                 }
 
