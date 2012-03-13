@@ -103,6 +103,10 @@ public:
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int discnumber() const { return m_discnumber; }
 
+#ifndef ENABLE_HEADLESS
+    QPixmap cover( const QSize& size, bool forceLoad = true ) const;
+#endif
+
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
 
@@ -130,6 +134,7 @@ signals:
 
     // emitted when social actions are loaded
     void socialActionsLoaded();
+    void updated();
 
 public slots:
     /// (indirectly) called by resolver plugins when results are found
@@ -144,7 +149,7 @@ public slots:
     // resolve if not solved()
     void onResolverAdded();
     void onResolverRemoved();
-
+    
 private slots:
     void onResultStatusChanged();
     void refreshResults();
@@ -189,6 +194,9 @@ private:
     unsigned int m_albumpos;
     unsigned int m_discnumber;
     QString m_resultHint;
+
+    mutable Tomahawk::artist_ptr m_artistPtr;
+    mutable Tomahawk::album_ptr m_albumPtr;
 
     QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;

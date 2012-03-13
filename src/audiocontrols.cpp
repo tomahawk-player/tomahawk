@@ -220,12 +220,12 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     if ( !m_currentTrack.isNull() )
     {
-        disconnect( m_currentTrack->album().data(), SIGNAL( updated() ), this, SLOT( onAlbumCoverUpdated() ) );
+        disconnect( m_currentTrack->toQuery().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
     }
 
     m_currentTrack = result;
-    connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onAlbumCoverUpdated() ) );
+    connect( m_currentTrack->toQuery().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
     connect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
     ui->artistTrackLabel->setResult( result );
@@ -243,29 +243,29 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
 
-    setAlbumCover();
+    setCover();
     setSocialActions();
 }
 
 
 void
-AudioControls::onAlbumCoverUpdated()
+AudioControls::onCoverUpdated()
 {
-    Album* album = qobject_cast< Album* >( sender() );
-    if ( !album || album != m_currentTrack->album().data() )
+    Query* query = qobject_cast< Query* >( sender() );
+    if ( !query || query != m_currentTrack->toQuery().data() )
         return;
 
-    setAlbumCover();
+    setCover();
 }
 
 
 void
-AudioControls::setAlbumCover()
+AudioControls::setCover()
 {
-    if ( !m_currentTrack->album()->cover( ui->coverImage->size() ).isNull() )
+    if ( !m_currentTrack->toQuery()->cover( ui->coverImage->size() ).isNull() )
     {
         QPixmap cover;
-        cover = m_currentTrack->album()->cover( ui->coverImage->size() );
+        cover = m_currentTrack->toQuery()->cover( ui->coverImage->size() );
         ui->coverImage->setPixmap( cover );
     }
     else
@@ -277,16 +277,10 @@ void
 AudioControls::onSocialActionsLoaded()
 {
     Query* query = qobject_cast< Query* >( sender() );
-    if ( !query )
+    if ( !query || query != m_currentTrack->toQuery().data() )
         return;
 
-    query_ptr currentQuery = m_currentTrack->toQuery();
-    if ( query->artist() == currentQuery->artist() &&
-         query->track() == currentQuery->track() &&
-         query->album() == currentQuery->album() )
-    {
-        setSocialActions();
-    }
+    setSocialActions();
 }
 
 

@@ -36,9 +36,6 @@
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 
-#define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
-#define ARROW_ICON QString( RESPATH "images/info.png" )
-
 using namespace Tomahawk;
 
 
@@ -47,16 +44,11 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_view( parent )
     , m_model( proxy )
 {
-    m_nowPlayingIcon = QPixmap( PLAYING_ICON );
-    m_arrowIcon = QPixmap( ARROW_ICON );
-
     m_topOption = QTextOption( Qt::AlignTop );
     m_topOption.setWrapMode( QTextOption::NoWrap );
 
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
-
-    m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 }
 
 
@@ -140,6 +132,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             break;
         case TrackModel::ShortWithAvatars:
             paintShort( painter, option, index, true );
+            break;
     }
 }
 
@@ -188,15 +181,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
             lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
         else
             lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
-
-        if ( useAvatars )
-            pixmap = source->avatar( Source::FancyStyle );
     }
-
-    if ( pixmap.isNull() && !useAvatars )
-        pixmap = QPixmap( RESPATH "images/track-placeholder.png" );
-    else if ( pixmap.isNull() && useAvatars )
-        pixmap = m_defaultAvatar;
 
     painter->save();
     {
@@ -205,27 +190,31 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         // Paint Now Playing Speaker Icon
         if ( item->isPlaying() )
         {
-            r.adjust( 0, 0, 0, 0 );
-            QRect npr = r.adjusted( 3, r.height() / 2 - m_nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() / 2 + m_nowPlayingIcon.height() / 2  );
-            painter->drawPixmap( npr, m_nowPlayingIcon );
+            QPixmap nowPlayingIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker );
+            QRect npr = r.adjusted( 3, r.height() / 2 - nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() / 2 + nowPlayingIcon.height() / 2  );
+            nowPlayingIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() );
+            painter->drawPixmap( npr, nowPlayingIcon );
             r.adjust( 22, 0, 0, 0 );
         }
 
         painter->setPen( opt.palette.text().color() );
 
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-
-        QPixmap scover;
-        if ( m_cache.contains( pixmap.cacheKey() ) )
-        {
-            scover = m_cache.value( pixmap.cacheKey() );
-        }
+        
+        if ( useAvatars )
+            pixmap = source->avatar( Source::FancyStyle, ir.size() );
         else
+            pixmap = item->query()->cover( ir.size() );
+
+        if ( pixmap.isNull() )
         {
-            scover = pixmap.scaled( ir.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-            m_cache.insert( pixmap.cacheKey(), scover );
+            if ( !useAvatars )
+                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, ir.size() );
+            else
+                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::AvatarInFrame, ir.size() );
         }
-        painter->drawPixmap( ir, scover );
+
+        painter->drawPixmap( ir, pixmap );
 
         QFont boldFont = opt.font;
         boldFont.setBold( true );
@@ -263,9 +252,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         opt.rect.setWidth( opt.rect.width() - 16 );
         QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
 
-        if ( m_arrowIcon.height() != arrowRect.height() )
-            m_arrowIcon = m_arrowIcon.scaled( arrowRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-        painter->drawPixmap( arrowRect, m_arrowIcon );
+        QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
+        painter->drawPixmap( arrowRect, infoIcon );
     }
 
     painter->save();
@@ -300,7 +288,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         if ( m_view->header()->visualIndex( index.column() ) == 0 )
         {
             r.adjust( 0, 0, 0, -3 );
-            painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+            painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker ) );
             r.adjust( 25, 0, 0, 3 );
         }
 

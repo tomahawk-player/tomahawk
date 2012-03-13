@@ -65,7 +65,7 @@ public:
 
 #ifndef ENABLE_HEADLESS
     void setAvatar( const QPixmap& avatar );
-    QPixmap avatar( AvatarStyle style = Original ) const;
+    QPixmap avatar( AvatarStyle style = Original, const QSize& size = QSize() ) const;
 #endif
 
     collection_ptr collection() const;
@@ -158,6 +158,7 @@ private:
 
     QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
+    mutable QHash< int, QPixmap > m_coverCache;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

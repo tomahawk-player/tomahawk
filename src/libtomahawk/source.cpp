@@ -128,17 +128,31 @@ Source::setAvatar( const QPixmap& avatar )
 
 
 QPixmap
-Source::avatar( AvatarStyle style ) const
+Source::avatar( AvatarStyle style, const QSize& size ) const
 {
     if ( style == FancyStyle && m_avatar && !m_fancyAvatar )
         m_fancyAvatar = new QPixmap( TomahawkUtils::createAvatarFrame( QPixmap( *m_avatar ) ) );
 
+    QPixmap pixmap;
     if ( style == Original && m_avatar )
-        return QPixmap( *m_avatar );
+        pixmap = *m_avatar;
     else if ( style == FancyStyle && m_fancyAvatar )
-        return QPixmap( *m_fancyAvatar );
-    else
-        return QPixmap();
+        pixmap = *m_fancyAvatar;
+
+    if ( !pixmap.isNull() && !size.isEmpty() )
+    {
+        if ( m_coverCache.contains( size.width() ) )
+        {
+            return m_coverCache.value( size.width() );
+        }
+
+        QPixmap scaledCover;
+        scaledCover = pixmap.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_coverCache.insert( size.width(), scaledCover );
+        return scaledCover;
+    }
+
+    return pixmap;
 }
 #endif
 

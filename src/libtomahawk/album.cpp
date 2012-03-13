@@ -80,6 +80,10 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+    
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( finished( QString ) ),
+             SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -109,6 +113,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
     {
         if ( !forceLoad )
             return QPixmap();
+        
         m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
@@ -160,7 +165,6 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
         return;
     }
 
-    m_infoLoaded = true;
     if ( !output.isNull() && output.isValid() )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
@@ -170,7 +174,18 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
             m_coverBuffer = ba;
         }
     }
+}
 
+
+void
+Album::infoSystemFinished( QString target )
+{
+    Q_UNUSED( target );
+
+    if ( target != m_uuid )
+        return;
+
+    m_infoLoaded = true;
     emit updated();
 }
 

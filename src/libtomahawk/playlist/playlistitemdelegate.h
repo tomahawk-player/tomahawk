@@ -38,9 +38,6 @@ public:
 
     void updateRowSize( const QModelIndex& index );
 
-public slots:
-    void setRemovalProgress( unsigned int progress ) { m_removalProgress = progress; }
-
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -51,12 +48,6 @@ private:
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
-
-    unsigned int m_removalProgress;
-
-    mutable QHash< qint64, QPixmap > m_cache;
-    QPixmap m_nowPlayingIcon, m_defaultAvatar;
-    mutable QPixmap m_arrowIcon;
 
     QTextOption m_topOption;
     QTextOption m_bottomOption;

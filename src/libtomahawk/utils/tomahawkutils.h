@@ -46,12 +46,17 @@ namespace TomahawkUtils
     enum ImageType
     {
         DefaultAlbumCover,
-        DefaultArtistImage
+        DefaultArtistImage,
+        DefaultTrackImage,
+        DefaultSourceAvatar,
+        NowPlayingSpeaker,
+        InfoIcon
     };
     enum ImageMode
     {
-        NoDefaultCover,
+        Original,
         CoverInCase,
+        AvatarInFrame,
         ScaledCover
     };
 

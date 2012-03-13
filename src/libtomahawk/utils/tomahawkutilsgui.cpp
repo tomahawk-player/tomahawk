@@ -341,6 +341,24 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
                 pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
             break;
 
+        case DefaultTrackImage:
+                pixmap = QPixmap( RESPATH "images/track-placeholder.png" );
+            break;
+            
+        case DefaultSourceAvatar:
+            if ( mode == AvatarInFrame )
+                pixmap = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+            else
+                pixmap = QPixmap( RESPATH "images/user-avatar.png" );
+            break;
+
+        case NowPlayingSpeaker:
+            pixmap = QPixmap( RESPATH "images/now-playing-speaker.png" );
+            break;
+
+        case InfoIcon:
+            pixmap = QPixmap( RESPATH "images/info.png" );
+
         default:
             break;
     }

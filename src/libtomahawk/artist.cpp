@@ -81,6 +81,10 @@ Artist::Artist( unsigned int id, const QString& name )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+    
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( finished( QString ) ),
+             SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -152,7 +156,6 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         return;
     }
 
-    m_infoLoaded = true;
     if ( !output.isNull() && output.isValid() )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
@@ -162,7 +165,18 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             m_coverBuffer = ba;
         }
     }
+}
 
+
+void
+Artist::infoSystemFinished( QString target )
+{
+    Q_UNUSED( target );
+    
+    if ( target != m_uuid )
+        return;
+
+    m_infoLoaded = true;
     emit updated();
 }
 

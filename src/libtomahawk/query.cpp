@@ -584,6 +584,35 @@ Query::setLoved( bool loved )
 }
 
 
+#ifndef ENABLE_HEADLESS
+QPixmap
+Query::cover( const QSize& size, bool forceLoad ) const
+{
+    if ( !forceLoad )
+        return QPixmap();
+
+    if ( m_albumPtr.isNull() )
+    {
+        m_artistPtr = Artist::get( artist(), false );
+        m_albumPtr = Album::get( m_artistPtr, album(), false );
+        connect( m_artistPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
+        connect( m_albumPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
+    }
+
+    m_albumPtr->cover( size );
+    if ( m_albumPtr->infoLoaded() )
+    {
+        if ( !m_albumPtr->cover( size ).isNull() )
+            return m_albumPtr->cover( size );
+
+        return m_artistPtr->cover( size );
+    }
+    
+    return QPixmap();
+}
+#endif
+
+
 int
 Query::levenshtein( const QString& source, const QString& target )
 {

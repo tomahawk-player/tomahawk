@@ -79,14 +79,13 @@ private slots:
     void onTrackClicked();
     void onLoveButtonClicked( bool );
 
-    void onAlbumCoverUpdated();
-
     void droppedTracks( QList<Tomahawk::query_ptr> );
 
+    void onCoverUpdated();
     void onSocialActionsLoaded();
 
 private:
-    void setAlbumCover();
+    void setCover();
     void setSocialActions();
 
     Ui::AudioControls *ui;

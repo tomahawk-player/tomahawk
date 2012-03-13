@@ -50,7 +50,7 @@ namespace TomahawkUtils
     DLLEXPORT int headerHeight();
     DLLEXPORT void setHeaderHeight( int height );
 
-    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode, const QSize& size = QSize( 0, 0 ) );
+    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
 
 }
 
