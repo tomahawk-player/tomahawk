@@ -16,7 +16,7 @@ public:
     ~TomahawkOAuthTwitter() {}
 
 protected:
-    virtual int authorizationWidget();
+    virtual const QString authorizationWidget();
 
 private slots:
     void error();
