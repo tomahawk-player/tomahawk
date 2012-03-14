@@ -182,10 +182,6 @@ set( libSources
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
-    accounts/LastFmAccount.cpp
-    accounts/LastFmConfig.cpp
-    accounts/SpotifyAccount.cpp
-
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/sipinfo.cpp
@@ -250,7 +246,6 @@ set( libSources
     infosystem/infosystemworker.cpp
 
     infosystem/infoplugins/generic/echonestplugin.cpp
-    infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
     infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/hypemPlugin.cpp
@@ -311,7 +306,6 @@ set( libUI ${libUI}
     playlist/queueview.ui
     context/ContextWidget.ui
     infobar/infobar.ui
-    accounts/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

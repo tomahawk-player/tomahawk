@@ -72,6 +72,12 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      utils/guihelpers.cpp
 
+     accounts/lastfm/LastFmAccount.cpp
+     accounts/lastfm/LastFmConfig.cpp
+     accounts/lastfm/lastfmplugin.cpp
+
+     accounts/spotify/SpotifyAccount.cpp
+
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
@@ -90,6 +96,8 @@ SET( tomahawkUI ${tomahawkUI}
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
+
+     accounts/lastfm/LastFmConfig.ui
 
      audiocontrols.ui
 

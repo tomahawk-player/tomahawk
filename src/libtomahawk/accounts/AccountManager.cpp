@@ -21,8 +21,6 @@
 #include "config.h"
 #include "sourcelist.h"
 #include "ResolverAccount.h"
-#include "LastFmAccount.h"
-#include "SpotifyAccount.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -61,13 +59,6 @@ AccountManager::AccountManager( QObject *parent )
     ResolverAccountFactory* f = new ResolverAccountFactory();
     m_accountFactories[ f->factoryId() ] = f;
     registerAccountFactoryForFilesystem( f );
-
-    LastFmAccountFactory* l = new LastFmAccountFactory();
-    m_accountFactories[ l->factoryId() ] = l;
-
-    SpotifyAccountFactory* s = new SpotifyAccountFactory;
-    m_accountFactories[ s->factoryId() ] = s;
-    registerAccountFactoryForFilesystem( s );
 }
 
 
@@ -77,6 +68,7 @@ AccountManager::~AccountManager()
 
     disconnectAll();
     qDeleteAll( m_accounts );
+    qDeleteAll( m_accountFactories );
 }
 
 
@@ -359,6 +351,12 @@ AccountManager::registerAccountFactoryForFilesystem( AccountFactory* factory )
     m_factoriesForFilesytem.prepend( factory );
 }
 
+
+void
+AccountManager::addAccountFactory( AccountFactory* factory )
+{
+    m_accountFactories[ factory->factoryId() ] = factory;
+}
 
 
 void

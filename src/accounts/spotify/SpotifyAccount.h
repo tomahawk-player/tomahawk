@@ -23,7 +23,7 @@
 #include "playlist.h"
 #include "utils/tomahawkutils.h"
 #include "sourcelist.h"
-#include "ResolverAccount.h"
+#include "accounts/ResolverAccount.h"
 
 class QTimer;
 

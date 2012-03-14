@@ -20,7 +20,7 @@
 #include "LastFmConfig.h"
 
 #include "infosystem/infosystem.h"
-#include "infosystem/infoplugins/generic/lastfmplugin.h"
+#include "lastfmplugin.h"
 #include "utils/tomahawkutils.h"
 #include "resolvers/qtscriptresolver.h"
 #include "AtticaManager.h"

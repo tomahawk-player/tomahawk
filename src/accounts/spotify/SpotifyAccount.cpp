@@ -20,7 +20,7 @@
 #include "SpotifyAccount.h"
 #include "playlist.h"
 #include "utils/tomahawkutils.h"
-#include "PlaylistUpdaterInterface.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "sourcelist.h"
 
 #include <QPixmap>

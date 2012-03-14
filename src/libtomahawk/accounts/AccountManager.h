@@ -76,6 +76,8 @@ public:
      */
     void registerAccountFactoryForFilesystem( AccountFactory* factory );
 
+    void addAccountFactory( AccountFactory* factory );
+
 public slots:
     void connectAll();
     void disconnectAll();

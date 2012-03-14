@@ -28,7 +28,7 @@
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "accounts/LastFmAccount.h"
+#include "accounts/lastfm/LastFmAccount.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>

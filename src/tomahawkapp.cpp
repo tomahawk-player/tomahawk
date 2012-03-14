@@ -59,6 +59,8 @@
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
+#include "accounts/lastfm/LastFmAccount.h"
+#include "accounts/spotify/SpotifyAccount.h"
 
 #include "config.h"
 
@@ -224,6 +226,14 @@ TomahawkApp::init()
 
     tDebug() << "Init AccountManager.";
     m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
+
+    Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
+    m_accountManager.data()->addAccountFactory( lastfmFactory );
+
+    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
+    m_accountManager.data()->addAccountFactory( spotifyFactory );
+    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
+
     Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
