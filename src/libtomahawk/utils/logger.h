@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef TOMAHAWK_LOGGER_H
+#define TOMAHAWK_LOGGER_H
 
 #include <QDebug>
 #include <QStringList>
@@ -58,4 +58,4 @@ namespace Logger
 #define LOGVERBOSE 8
 #define LOGTHIRDPARTY 9
 
-#endif
+#endif // TOMAHAWK_LOGGER_H

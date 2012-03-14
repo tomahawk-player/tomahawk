@@ -33,6 +33,7 @@
 #include <jreen/tcpconnection.h>
 #include <jreen/softwareversion.h>
 #include <jreen/iqreply.h>
+#include <jreen/logger.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -58,6 +59,29 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+// instead of simply copying this function for another thirdparty lib
+// please make it a meta-function or a macro and put it in logger.h. kthxbbq
+#define JREEN_LOG_INFIX "Jreen"
+void
+JreenMessageHandler(QtMsgType type, const char *msg)
+{
+    switch (type)
+    {
+        case QtDebugMsg:
+            tDebug(LOGTHIRDPARTY).nospace() << JREEN_LOG_INFIX << ": " << "Debug: " <<  msg;
+            break;
+        case QtWarningMsg:
+            tDebug(LOGTHIRDPARTY).nospace() << JREEN_LOG_INFIX << ": " << "Warning: " <<  msg;
+            break;
+        case QtCriticalMsg:
+            tDebug(LOGTHIRDPARTY).nospace() << JREEN_LOG_INFIX << ": " << "Critical: " <<  msg;
+            break;
+        case QtFatalMsg:
+            tDebug(LOGTHIRDPARTY).nospace() << JREEN_LOG_INFIX << ": " << "Fatal: " <<  msg;
+            abort();
+    }
+}
+
 XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
     , m_state( Account::Disconnected )
@@ -66,7 +90,7 @@ XmppSipPlugin::XmppSipPlugin( Account *account )
     , m_xmlConsole( 0 )
 #endif
 {
-    qDebug() << Q_FUNC_INFO;
+    Jreen::Logger::addHandler( JreenMessageHandler );
 
     m_currentUsername = readUsername();
 
