@@ -195,6 +195,7 @@ ScanManager::runDirScan()
     {
         m_scanTimer->stop();
         m_musicScannerThreadController = new QThread( this );
+        m_musicScannerThreadController->setPriority( QThread::IdlePriority );
         m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );

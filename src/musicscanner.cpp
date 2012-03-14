@@ -173,6 +173,7 @@ MusicScanner::scan()
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
     m_dirListerThreadController = new QThread( this );
+    m_dirListerThreadController->setPriority( QThread::IdlePriority );
 
     m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
