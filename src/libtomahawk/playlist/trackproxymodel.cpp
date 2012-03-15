@@ -69,7 +69,7 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
         return false;
 
     const Tomahawk::query_ptr& q = pi->query();
-    if( q.isNull() ) // uh oh? filter out invalid queries i guess
+    if ( q.isNull() ) // uh oh? filter out invalid queries i guess
         return false;
 
     Tomahawk::result_ptr r;
@@ -190,7 +190,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         album1 = r->album()->name();
         track1 = r->track();
         albumpos1 = r->albumpos();
-        discnumber1 = r->discnumber();
+        discnumber1 = qMax( 1, (int)r->discnumber() );
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
         id1 = r->trackId();
@@ -203,7 +203,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         album2 = r->album()->name();
         track2 = r->track();
         albumpos2 = r->albumpos();
-        discnumber2 = r->discnumber();
+        discnumber2 = qMax( 1, (int)r->discnumber() );
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
         id2 = r->trackId();
@@ -223,7 +223,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         {
             if ( album1 == album2 )
             {
-                if( discnumber1 == discnumber2 )
+                if ( discnumber1 == discnumber2 )
                 {
                     if ( albumpos1 == albumpos2 )
                         return id1 < id2;
@@ -243,7 +243,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     {
         if ( album1 == album2 )
         {
-            if( discnumber1 == discnumber2 )
+            if ( discnumber1 == discnumber2 )
             {
                 if ( albumpos1 == albumpos2 )
                     return id1 < id2;
@@ -276,6 +276,18 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
             return id1 < id2;
 
         return size1 < size2;
+    }
+    else if ( left.column() == TrackModel::AlbumPos ) // sort by album pos
+    {
+        if ( discnumber1 != discnumber2 )
+        {
+            return discnumber1 < discnumber2;
+        }
+        else
+        {
+            if ( albumpos1 != albumpos2 )
+                return albumpos1 < albumpos2;
+        }
     }
 
     const QString& lefts = sourceModel()->data( left ).toString();
