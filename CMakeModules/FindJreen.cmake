@@ -25,7 +25,7 @@ FIND_LIBRARY(JREEN_LIBRARIES NAMES jreen
 )
 
 IF(JREEN_LIBRARIES AND JREEN_INCLUDE_DIR AND NOT PC_JREEN_VERSION)
-    MESSAGE(WARNING "You don't have pkg-config the Jreen version check does not work!")
+    MESSAGE(WARNING "You don't have pkg-config and so the Jreen version check does not work!")
 ENDIF()
 
 INCLUDE(FindPackageHandleStandardArgs)
