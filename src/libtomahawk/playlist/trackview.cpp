@@ -163,6 +163,9 @@ TrackView::setTrackModel( TrackModel* model )
 void
 TrackView::onViewChanged()
 {
+    if ( m_model->style() != TrackModel::Short ) // eventual FIXME?
+        return;
+
     if ( m_timer.isActive() )
         m_timer.stop();
 

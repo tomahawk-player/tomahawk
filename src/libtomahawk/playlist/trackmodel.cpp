@@ -261,6 +261,9 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 void
 TrackModel::getCover( const QModelIndex& index )
 {
+    if ( style() != TrackModel::Short )
+        return;
+
     TrackModelItem* item = itemFromIndex( index );
     if ( !item->query().isNull() )
         item->query()->cover( QSize( 0, 0 ) );
