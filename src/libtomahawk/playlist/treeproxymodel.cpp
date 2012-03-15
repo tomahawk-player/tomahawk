@@ -301,28 +301,35 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
         albumpos2 = p2->query()->albumpos();
         discnumber2 = p2->query()->discnumber();
     }
+    if ( !p1->result().isNull() )
+    {
+        if ( albumpos1 == 0 )
+            albumpos1 = p1->result()->albumpos();
+        if ( discnumber1 == 0 )
+            discnumber1 = p1->result()->discnumber();
+    }
+    if ( !p2->result().isNull() )
+    {
+        if ( albumpos2 == 0 )
+            albumpos2 = p2->result()->albumpos();
+        if ( discnumber2 == 0 )
+            discnumber2 = p2->result()->discnumber();
+    }
+    discnumber1 = qMax( 1, (int)discnumber1 );
+    discnumber2 = qMax( 1, (int)discnumber2 );
 
-    if ( albumpos1 == 0 && !p1->result().isNull() )
-        albumpos1 = p1->result()->albumpos();
-    if ( discnumber1 == 0 && !p1->result().isNull() )
-        discnumber1 = p1->result()->discnumber();
-
-    if ( albumpos2 == 0 && !p2->result().isNull() )
-        albumpos2 = p2->result()->albumpos();
-    if ( discnumber2 == 0 && !p2->result().isNull() )
-        discnumber2 = p2->result()->discnumber();
-
-    const QString& lefts = textForItem( p1 );
-    const QString& rights = textForItem( p2 );
-
-    if( discnumber1 != discnumber2 )
+    if ( discnumber1 != discnumber2 )
+    {
         return discnumber1 < discnumber2;
+    }
     else
     {
         if ( albumpos1 != albumpos2 )
             return albumpos1 < albumpos2;
     }
 
+    const QString& lefts = textForItem( p1 );
+    const QString& rights = textForItem( p2 );
     if ( lefts == rights )
         return (qint64)&p1 < (qint64)&p2;
 
