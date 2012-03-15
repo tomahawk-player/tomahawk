@@ -227,7 +227,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             fqry = _CLNEW FuzzyQuery( term );
             qry->add( fqry, true, BooleanClause::MUST );
 
-            minScore = 0.05;
+            minScore = 0.00;
         }
 
         Hits* hits = m_luceneSearcher->search( qry );
