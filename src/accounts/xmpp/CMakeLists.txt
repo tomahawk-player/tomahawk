@@ -31,7 +31,7 @@ set( xmppAccountUI
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
-   ${LIBJREEN_INCLUDE_DIR}
+   ${JREEN_INCLUDE_DIR}
 )
 
 qt4_wrap_cpp( xmppAccountMoc ${xmppAccountHeaders} )
@@ -49,7 +49,7 @@ ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_account_xmpp
     ${TOMAHAWK_LIBRARIES}
-    ${LIBJREEN_LIBRARY}
+    ${JREEN_LIBRARIES}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
 )
