@@ -27,9 +27,11 @@ qt4_add_resources( RCX_SRCS "resources.qrc" )
 qt4_wrap_cpp( googleMoc ${googleHeaders} )
 add_library( tomahawk_account_google SHARED ${googleSources} ${googleMoc} ${googleMoc} ${RCX_SRCS} )
 
+include_directories( ${JREEN_INCLUDE_DIR} )
+
 target_link_libraries( tomahawk_account_google
     ${QT_LIBRARIES}
-    ${LIBJREEN_LIBRARY}
+    ${JREEN_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     tomahawklib
 )
