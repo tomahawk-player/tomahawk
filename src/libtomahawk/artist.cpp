@@ -61,7 +61,7 @@ Artist::get( unsigned int id, const QString& name )
         return s_artists.value( id );
     }
 
-    artist_ptr a = artist_ptr( new Artist( id, name ) );
+    artist_ptr a = artist_ptr( new Artist( id, name ), &QObject::deleteLater );
     if ( id > 0 )
         s_artists.insert( id, a );
 

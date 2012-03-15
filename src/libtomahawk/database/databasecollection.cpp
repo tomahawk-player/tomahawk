@@ -142,7 +142,7 @@ DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVarian
                                             static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
-                                            data[9].toString() ) );  //GUID
+                                            data[9].toString() ), &QObject::deleteLater );  //GUID
     addAutoPlaylist( p );
 }
 
@@ -160,7 +160,7 @@ DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList
                                             static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
-                                            data[9].toString() ) );  //GUID
+                                            data[9].toString() ), &QObject::deleteLater );  //GUID
     addStation( p );
 }
 

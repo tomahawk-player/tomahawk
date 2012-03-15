@@ -61,7 +61,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
         return s_albums.value( id );
     }
 
-    album_ptr a = album_ptr( new Album( id, name, artist ) );
+    album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     if ( id > 0 )
         s_albums.insert( id, a );
 
