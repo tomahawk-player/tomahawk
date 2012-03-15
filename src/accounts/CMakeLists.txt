@@ -1,5 +1,5 @@
 
-IF( LIBJREEN_FOUND )
+IF( JREEN_FOUND )
     add_subdirectory( xmpp )
 ENDIF()
 
