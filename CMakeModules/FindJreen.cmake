@@ -5,40 +5,34 @@
 # LIBJREEN_LIBRARY, the path to libjreen
 # LIBJREEN_FOUND, whether libjreen was found
 
+FIND_PACKAGE(PkgConfig QUIET)
+PKG_CHECK_MODULES(PC_JREEN QUIET libjreen)
 
-find_path(LIBJREEN_INCLUDE_DIR NAMES jreen/jreen.h
-   HINTS
-   ~/usr/include
-   /opt/local/include
-   /usr/include
-   /usr/local/include
-   /opt/kde4/include
-   ${CMAKE_INSTALL_PREFIX}/include
-   ${KDE4_INCLUDE_DIR}
+FIND_PATH(LIBJREEN_INCLUDE_DIR NAMES jreen/jreen.h
+    HINTS
+        ${PC_JREEN_INCLUDEDIR}
+        ${PC_JREEN_INCLUDE_DIRS}
+        ${CMAKE_INSTALL_INCLUDEDIR}
+        ${KDE4_INCLUDE_DIR}
 )
 
-find_library( LIBJREEN_LIBRARY NAMES jreen
-    PATHS
-    ~/usr/lib
-   /opt/local/lib
-   /usr/lib
-   /usr/lib64
-   /usr/local/lib
-   /opt/kde4/lib
-   ${CMAKE_INSTALL_PREFIX}/lib
-   ${CMAKE_INSTALL_PREFIX}/lib64
-   ${KDE4_LIB_DIR}
+FIND_LIBRARY(LIBJREEN_LIBRARY NAMES jreen
+    HINTS
+        ${PC_JREEN_LIBDIR}
+        ${PC_JREEN_LIBRARY_DIRS}
+        ${CMAKE_INSTALL_LIBDIR}
+        ${KDE4_LIB_DIR}
 )
 
+IF(PC_JREEN_VERSION)
+    SET(JREEN_VERSION_STRING ${PC_JREEN_VERSION})
+ELSE()
+    MESSAGE(WARNING "You don't have pkg-config the Jreen version check does not work!")
+ENDIF()
 
-if(LIBJREEN_INCLUDE_DIR AND LIBJREEN_LIBRARY)
-   set(LIBJREEN_FOUND TRUE)
-   message(STATUS "Found libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
-else(LIBJREEN_INCLUDE_DIR AND LIBJREEN_LIBRARY)
-   set(LIBJREEN_FOUND FALSE)
-   if (LIBJREEN_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find required package libjreen")
-   endif(LIBJREEN_FIND_REQUIRED)
-endif(LIBJREEN_INCLUDE_DIR AND LIBJREEN_LIBRARY)
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Jreen
+                                  REQUIRED_VARS JREEN_LIBRARIES JREEN_INCLUDE_DIR
+                                  VERSION_VAR JREEN_VERSION_STRING)
 
-mark_as_advanced(LIBJREEN_INCLUDE_DIR LIBJREEN_LIBRARY)
+MARK_AS_ADVANCED(JREEN_INCLUDE_DIR JREEN_LIBRARY)
