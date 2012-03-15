@@ -71,7 +71,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                                       query.value(5).toBool(),   //shared
                                       query.value(4).toInt(),    //lastmod
                                       query.value(0).toString()  //GUID
-                                    ) );
+                                    ), &QObject::deleteLater );
         plists.append( p );
     }
 

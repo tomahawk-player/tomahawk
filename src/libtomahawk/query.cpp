@@ -44,7 +44,7 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
     if ( qid.isEmpty() )
         autoResolve = false;
 
-    query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
+    query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ), &QObject::deleteLater );
     q->setWeakRef( q.toWeakRef() );
 
     if ( autoResolve )
@@ -58,7 +58,7 @@ query_ptr
 Query::get( const QString& query, const QID& qid )
 {
 
-    query_ptr q = query_ptr( new Query( query, qid ) );
+    query_ptr q = query_ptr( new Query( query, qid ), &QObject::deleteLater );
     q->setWeakRef( q.toWeakRef() );
 
     if ( !qid.isEmpty() )

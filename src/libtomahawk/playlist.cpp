@@ -185,7 +185,7 @@ Playlist::create( const source_ptr& author,
         entries << p;
     }
 
-    playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared, entries ) );
+    playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared, entries ), &QObject::deleteLater );
 
     // save to DB in the background
     // Watch for the created() signal if you need to be sure it's written.

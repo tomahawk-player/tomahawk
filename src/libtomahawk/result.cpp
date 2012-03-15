@@ -43,7 +43,7 @@ Result::get( const QString& url )
         return s_results.value( url );
     }
 
-    result_ptr r = result_ptr( new Result( url ) );
+    result_ptr r = result_ptr( new Result( url ), &QObject::deleteLater );
     s_results.insert( url, r );
 
     return r;
