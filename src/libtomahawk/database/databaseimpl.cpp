@@ -482,7 +482,7 @@ DatabaseImpl::sortname( const QString& str, bool replaceArticle )
 
     if ( replaceArticle && s.startsWith( "the " ) )
     {
-        s = s.right( s.length() - 4 );
+        s = s.mid( 4 );
     }
 
     return s;
