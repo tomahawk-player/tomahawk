@@ -76,10 +76,10 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
+    , m_infoLoaded( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
-    , m_infoLoaded( false )
 {
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),

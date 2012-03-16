@@ -75,10 +75,10 @@ Artist::Artist( unsigned int id, const QString& name )
     : QObject()
     , m_id( id )
     , m_name( name )
+    , m_infoLoaded( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
-    , m_infoLoaded( false )
 {
     m_sortname = DatabaseImpl::sortname( name, true );
 
