@@ -34,6 +34,16 @@ namespace Accounts {
 
 class SpotifyAccountConfig;
 
+struct SpotifyPlaylist {
+    QString name, plid, revid;
+    bool sync;
+
+    SpotifyPlaylist( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ) {}
+
+    SpotifyPlaylist() : sync( false ) {}
+};
+
 class SpotifyAccountFactory : public AccountFactory
 {
     Q_OBJECT
@@ -82,15 +92,25 @@ public:
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
+    // SpotifyResolver message handlers, all take msgtype, msg as argument
+  //  void <here>( const QString& msgType, const QVariantMap& msg );
 private:
     void init();
+    void loadPlaylists();
+    void sendMessage( const QVariantMap& msg, const QString& slot );
 
     QList<Sync> m_syncPlaylists;
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
+
+    QMap<QString, QString> m_qidToSlotMap;
+
+    QList< SpotifyPlaylist* > m_allSpotifyPlaylists;
 };
 
 }
 }
+
+Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylist* );
 
 #endif // SpotifyAccount_H

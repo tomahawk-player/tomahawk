@@ -273,25 +273,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
 
         Tomahawk::Pipeline::instance()->reportResults( qid, results );
     }
-    else if ( msgtype == "playlist" )
-    {
-
-        QList< Tomahawk::query_ptr > tracks;
-        const QString qid = m.value( "qid" ).toString();
-        const QString title = m.value( "identifier" ).toString();
-        const QVariantList reslist = m.value( "playlist" ).toList();
-
-        if( !reslist.isEmpty() )
-        {
-            foreach( const QVariant& rv, reslist )
-            {
-                QVariantMap m = rv.toMap();
-                qDebug() << "Found playlist result:" << m;
-                Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
-                tracks << q;
-            }
-        }
-    }
     else
     {
         // Unknown message, give up for custom implementations

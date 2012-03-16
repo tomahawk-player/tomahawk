@@ -14,6 +14,7 @@ namespace Accounts
 {
 
 class SpotifyAccount;
+struct SpotifyPlaylist;
 
 class SpotifyAccountConfig : public QWidget
 {
@@ -25,9 +26,10 @@ public:
     QString password() const;
     bool highQuality() const;
 
-    QStringList playlistsToSync() const;
+    void setPlaylists( const QList< SpotifyPlaylist* >& playlists );
 
     void loadFromConfig();
+    void saveSettings();
 
 private:
     Ui::SpotifyConfig* m_ui;

@@ -80,6 +80,8 @@ SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
 void
 SpotifyAccount::init()
 {
+    qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylist* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
+
     m_spotifyResolver = dynamic_cast< ScriptResolver* >( m_resolver.data() );
 
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
@@ -92,6 +94,9 @@ SpotifyAccount::init()
         msg[ "_msgtype" ] = "getCredentials";
         m_spotifyResolver.data()->sendMessage( msg );
     }
+
+    // TODO add caching
+    loadPlaylists();
 }
 
 
@@ -111,6 +116,63 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         config[ "hasMigrated" ] = true;
         setConfiguration( config );
         sync();
+
+        return;
+    }
+
+
+    const QString qid = msg.value( "qid" ).toString();
+    if ( m_qidToSlotMap.contains( qid ) )
+    {
+        const QString& slot = m_qidToSlotMap[ qid ];
+        m_qidToSlotMap.remove( qid );
+
+        QMetaObject::invokeMethod( this, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ) );
+    }
+    else if ( msgType == "allPlaylists" )
+    {
+        const QVariantList playlists = msg.value( "playlists" ).toList();
+        qDeleteAll( m_allSpotifyPlaylists );
+        m_allSpotifyPlaylists.clear();
+
+        foreach ( const QVariant& playlist, playlists )
+        {
+            const QVariantMap plMap = playlist.toMap();
+            const QString name = plMap.value( "name" ).toString();
+            const QString plid = plMap.value( "id" ).toString();
+            const QString revid = plMap.value( "revid" ).toString();
+            const bool sync = plMap.value( "map" ).toBool();
+
+            if ( name.isNull() || plid.isNull() || revid.isNull() )
+            {
+                qDebug() << "Did not get name and plid and revid for spotify playlist:" << name << plid << revid << plMap;
+                continue;
+            }
+            m_allSpotifyPlaylists << new SpotifyPlaylist( name, plid, revid, sync );
+        }
+
+        if ( !m_configWidget.isNull() )
+        {
+            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+        }
+    }
+    else if ( msgType == "playlists" )
+    {
+//        QList< Tomahawk::query_ptr > tracks;
+//        const QString qid = m.value( "qid" ).toString();
+//        const QString title = m.value( "identifier" ).toString();
+//        const QVariantList reslist = m.value( "playlist" ).toList();
+
+//        if( !reslist.isEmpty() )
+//        {
+//            foreach( const QVariant& rv, reslist )
+//            {
+//                QVariantMap m = rv.toMap();
+//                qDebug() << "Found playlist result:" << m;
+//                Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
+//                tracks << q;
+//            }
+//        }
     }
 }
 
@@ -144,14 +206,26 @@ SpotifyAccount::saveConfig()
     if ( m_configWidget.isNull() )
         return;
 
-    // Send the result to the resolver
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "saveSettings";
-    msg[ "username" ] = m_configWidget.data()->username();
-    msg[ "password" ] = m_configWidget.data()->password();
-    msg[ "highQuality" ] = m_configWidget.data()->highQuality();
+    QVariantHash creds = credentials();
+    if ( creds.value( "username" ).toString() != m_configWidget.data()->username() ||
+         creds.value( "password" ).toString() != m_configWidget.data()->password() ||
+         creds.value( "highQuality" ).toBool() != m_configWidget.data()->highQuality() )
+    {
+        creds[ "username" ] = m_configWidget.data()->username();
+        creds[ "password" ] = m_configWidget.data()->password();
+        creds[ "highQuality" ] = m_configWidget.data()->highQuality();
+        setCredentials( creds );
+        sync();
 
-    m_spotifyResolver.data()->sendMessage( msg );
+        // Send the result to the resolver
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "saveSettings";
+        msg[ "username" ] = m_configWidget.data()->username();
+        msg[ "password" ] = m_configWidget.data()->password();
+        msg[ "highQuality" ] = m_configWidget.data()->highQuality();
+
+        m_spotifyResolver.data()->sendMessage( msg );
+    }
 }
 
 
@@ -205,6 +279,29 @@ SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< To
     }
 
     */
+}
+
+
+void
+SpotifyAccount::sendMessage( const QVariantMap &m, const QString& slot )
+{
+    QVariantMap msg = m;
+    const QString qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
+
+    m_qidToSlotMap[ qid ] = slot;
+    msg[ "qid" ] = qid;
+
+    m_spotifyResolver.data()->sendMessage( msg );
+}
+
+
+void
+SpotifyAccount::loadPlaylists()
+{
+    // TODO cache this and only get changed?
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "getAllPlaylists";
+    sendMessage( msg, "allPlaylistsLoaded" );
 }
 
 
