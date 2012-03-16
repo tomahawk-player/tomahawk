@@ -31,7 +31,9 @@ using namespace Tomahawk;
 
 Artist::~Artist()
 {
+#ifndef ENABLE_HEADLESS
     delete m_cover;
+#endif
 }
 
 

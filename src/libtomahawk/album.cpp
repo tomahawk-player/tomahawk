@@ -31,7 +31,9 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
+#ifndef ENABLE_HEADLESS
     delete m_cover;
+#endif
 }
 
 
