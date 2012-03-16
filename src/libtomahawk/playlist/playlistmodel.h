@@ -84,7 +84,6 @@ protected:
     void removeFromWaitList( const QString& revisionguid ) { m_waitForRevision.removeAll( revisionguid ); }
 
 private slots:
-    void onDataChanged();
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
     void trackResolved( bool );

@@ -258,15 +258,6 @@ PlaylistModel::trackResolved( bool )
 
 
 void
-PlaylistModel::onDataChanged()
-{
-    TrackModelItem* p = (TrackModelItem*)sender();
-    if ( p && p->index.isValid() )
-        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
-}
-
-
-void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
     if ( !m_waitForRevision.contains( revision.revisionguid ) )

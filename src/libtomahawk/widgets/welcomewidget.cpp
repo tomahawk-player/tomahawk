@@ -95,7 +95,6 @@ WelcomeWidget::~WelcomeWidget()
 void
 WelcomeWidget::loadData()
 {
-
     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 

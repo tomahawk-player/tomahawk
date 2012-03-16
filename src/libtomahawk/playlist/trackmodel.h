@@ -134,6 +134,8 @@ protected:
     TrackModelItem* rootItem() const { return m_rootItem; }
 
 private slots:
+    void onDataChanged();
+
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 

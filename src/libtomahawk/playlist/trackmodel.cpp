@@ -584,3 +584,12 @@ TrackModel::columnAlignment( int column ) const
             return Qt::AlignLeft;
     }
 }
+
+
+void
+TrackModel::onDataChanged()
+{
+    TrackModelItem* p = (TrackModelItem*)sender();
+    if ( p && p->index.isValid() )
+        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+}
