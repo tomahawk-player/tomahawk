@@ -27,6 +27,10 @@
 #include "utils/logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/customplaylistview.h"
+#include "playlist/collectionview.h"
+#include "playlist/playlistview.h"
+#include "playlist/RecentlyAddedModel.h"
+#include "playlist/RecentlyPlayedModel.h"
 #include "source.h"
 #include "sourcelist.h"
 
@@ -40,12 +44,14 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_playlists( 0 )
     , m_stations( 0 )
     , m_latchedOn( false )
-    , m_sourceInfoItem( 0   )
+    , m_sourceInfoItem( 0 )
     , m_coolPlaylistsItem( 0 )
     , m_collectionPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
+    , m_latestAdditionsPage( 0 )
+    , m_recentPlaysPage( 0 )
     , m_whatsHotPage( 0 )
 {
     if ( m_source.isNull() )
@@ -54,20 +60,31 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         return;
     }
 
-    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
-                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
-                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
-    m_lovedTracksItem->setSortValue( -250 );
-
     m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/drop-song.png" ), //FIXME different icon
                                             boost::bind( &SourceItem::collectionClicked, this ),
                                             boost::bind( &SourceItem::getCollectionPage, this ) );
-    m_collectionItem->setSortValue( -350 );
 
-    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
+/*    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
                                             boost::bind( &SourceItem::sourceInfoClicked, this ),
-                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );
-    m_sourceInfoItem->setSortValue( -300 );
+                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );*/
+
+    m_latestAdditionsItem = new GenericPageItem( model(), this, tr( "Latest Additions" ), QIcon( RESPATH "images/new-additions.png" ),
+                                                 boost::bind( &SourceItem::latestAdditionsClicked, this ),
+                                                 boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
+
+    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/new-additions.png" ),
+                                             boost::bind( &SourceItem::recentPlaysClicked, this ),
+                                             boost::bind( &SourceItem::getRecentPlaysPage, this ) );
+
+    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
+                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
+                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
+
+    m_collectionItem->setSortValue( -350 );
+//    m_sourceInfoItem->setSortValue( -300 );
+    m_latestAdditionsItem->setSortValue( -250 );
+    m_recentPlaysItem->setSortValue( -200 );
+    m_lovedTracksItem->setSortValue( -150 );
 
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
@@ -497,4 +514,55 @@ ViewPage*
 SourceItem::getLovedTracksPage() const
 {
     return m_lovedTracksPage;
+}
+
+
+ViewPage*
+SourceItem::latestAdditionsClicked()
+{
+    if ( !m_latestAdditionsPage )
+    {
+        CollectionView* cv = new CollectionView( ViewManager::instance()->widget() );
+        RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
+
+        cv->setTrackModel( raModel );
+        cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
+
+        m_latestAdditionsPage = cv;
+    }
+
+    ViewManager::instance()->show( m_latestAdditionsPage );
+    return m_latestAdditionsPage;
+}
+
+
+ViewPage*
+SourceItem::getLatestAdditionsPage() const
+{
+    return m_latestAdditionsPage;
+}
+
+
+ViewPage*
+SourceItem::recentPlaysClicked()
+{
+    if ( !m_recentPlaysPage )
+    {
+        PlaylistView* pv = new PlaylistView( ViewManager::instance()->widget() );
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
+
+        pv->setPlaylistModel( raModel );
+
+        m_recentPlaysPage = pv;
+    }
+
+    ViewManager::instance()->show( m_recentPlaysPage );
+    return m_recentPlaysPage;
+}
+
+
+ViewPage*
+SourceItem::getRecentPlaysPage() const
+{
+    return m_recentPlaysPage;
 }

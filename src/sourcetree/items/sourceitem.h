@@ -80,6 +80,12 @@ private slots:
     Tomahawk::ViewPage* lovedTracksClicked();
     Tomahawk::ViewPage* getLovedTracksPage() const;
 
+    Tomahawk::ViewPage* latestAdditionsClicked();
+    Tomahawk::ViewPage* getLatestAdditionsPage() const;
+
+    Tomahawk::ViewPage* recentPlaysClicked();
+    Tomahawk::ViewPage* getRecentPlaysPage() const;
+
 private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
     template< typename T >
@@ -97,11 +103,15 @@ private:
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_lovedTracksItem;
+    GenericPageItem* m_latestAdditionsItem;
+    GenericPageItem* m_recentPlaysItem;
 
     Tomahawk::ViewPage* m_collectionPage;
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_lovedTracksPage;
+    Tomahawk::ViewPage* m_latestAdditionsPage;
+    Tomahawk::ViewPage* m_recentPlaysPage;
     Tomahawk::ViewPage* m_whatsHotPage;
 };
 
