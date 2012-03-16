@@ -24,7 +24,7 @@
 
 #include "playlist/albummodel.h"
 #include "playlist/collectionflatmodel.h"
-#include "playlist/playlistmodel.h"
+#include "playlist/RecentlyPlayedModel.h"
 
 #include "database/database.h"
 #include "database/databasecommand_alltracks.h"
@@ -66,10 +66,9 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
 
-    m_historyModel = new PlaylistModel( ui->historyView );
+    m_historyModel = new RecentlyPlayedModel( source, ui->historyView );
     m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
-    m_historyModel->loadHistory( source, 25 );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
@@ -78,7 +77,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     onCollectionChanged();
 
     connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
 
     m_title = tr( "New Additions" );
     if ( source->isLocal() )
@@ -135,13 +133,6 @@ SourceInfoWidget::onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& querie
 {
     m_recentCollectionModel->clear();
     m_recentCollectionModel->append( queries );
-}
-
-
-void
-SourceInfoWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
-{
-    m_historyModel->insert( query, 0 );
 }
 
 

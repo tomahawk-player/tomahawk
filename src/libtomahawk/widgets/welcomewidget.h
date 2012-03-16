@@ -34,7 +34,7 @@
 #include "dllmacro.h"
 
 class AlbumModel;
-class PlaylistModel;
+class RecentlyPlayedModel;
 class OverlayWidget;
 
 namespace Ui
@@ -106,21 +106,17 @@ public slots:
     void updateRecentAdditions();
 
     void loadData();
+
 private slots:
     void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( const QModelIndex& );
-    void onPlaybackFinished( const Tomahawk::query_ptr& query );
-
-    void checkQueries();
 
 private:
     Ui::WelcomeWidget *ui;
 
-    PlaylistModel* m_tracksModel;
+    RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
-
-    QTimer* m_timer;
 };
 
 #endif // WELCOMEWIDGET_H

@@ -87,26 +87,6 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
 
 void
-PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amount )
-{
-    if ( rowCount( QModelIndex() ) )
-    {
-        clear();
-    }
-
-    m_playlist.clear();
-
-    DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( source );
-    cmd->setLimit( amount );
-
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
-                    SLOT( append( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
-void
 PlaylistModel::clear()
 {
     TrackModel::clear();

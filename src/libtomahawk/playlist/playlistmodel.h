@@ -47,14 +47,12 @@ public:
     explicit PlaylistModel( QObject* parent = 0 );
     ~PlaylistModel();
 
-    virtual QMimeData* mimeData ( const QModelIndexList& indexes ) const;
+    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
     Tomahawk::playlist_ptr playlist() const { return m_playlist; }
 
     virtual void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
-    void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 50 );
-
     bool isTemporary() const;
 
 public slots:
