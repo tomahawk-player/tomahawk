@@ -27,12 +27,12 @@
 
 class QTimer;
 
+class ScriptResolver;
+
 namespace Tomahawk {
-
-class ExternalResolverGui;
-
 namespace Accounts {
 
+class SpotifyAccountConfig;
 
 class SpotifyAccountFactory : public AccountFactory
 {
@@ -64,6 +64,8 @@ public:
     virtual ~SpotifyAccount() {}
 
     virtual QPixmap icon() const;
+    virtual QWidget* configurationWidget();
+    virtual void saveConfig();
 
     virtual QWidget* aclWidget() { return 0; }
     virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
@@ -77,11 +79,18 @@ public:
          Tomahawk::playlist_ptr playlist;
      };
 
-private:
-    QList<Sync> m_syncPlaylists;
-};
-}
+private slots:
+    void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
+private:
+    void init();
+
+    QList<Sync> m_syncPlaylists;
+    QWeakPointer<SpotifyAccountConfig> m_configWidget;
+    QWeakPointer<ScriptResolver> m_spotifyResolver;
+};
+
+}
 }
 
 #endif // SpotifyAccount_H

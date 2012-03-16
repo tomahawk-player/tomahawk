@@ -22,7 +22,8 @@
 #include "utils/tomahawkutils.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "sourcelist.h"
-
+#include "SpotifyAccountConfig.h"
+#include "resolvers/scriptresolver.h"
 #include <QPixmap>
 
 using namespace Tomahawk;
@@ -65,14 +66,52 @@ SpotifyAccountFactory::icon() const
 SpotifyAccount::SpotifyAccount( const QString& accountId )
     : ResolverAccount( accountId )
 {
-
+    init();
 }
 
 
 SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
     : ResolverAccount( accountId, path )
 {
+    init();
+}
 
+
+void
+SpotifyAccount::init()
+{
+    m_spotifyResolver = dynamic_cast< ScriptResolver* >( m_resolver.data() );
+
+    connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
+
+    const bool hasMigrated = configuration().value( "hasMigrated" ).toBool();
+    if ( !hasMigrated )
+    {
+        qDebug() << "Getting credentials from spotify resolver to migrate to in-app config";
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "getCredentials";
+        m_spotifyResolver.data()->sendMessage( msg );
+    }
+}
+
+
+void
+SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg )
+{
+    if ( msgType == "credentials" )
+    {
+        QVariantHash creds = credentials();
+        creds[ "username" ] = msg.value( "username" );
+        creds[ "password" ] = msg.value( "password" );
+        creds[ "highQuality" ] = msg.value( "highQuality" );
+        setCredentials( creds );
+        sync();
+
+        QVariantHash config = configuration();
+        config[ "hasMigrated" ] = true;
+        setConfiguration( config );
+        sync();
+    }
 }
 
 
@@ -83,6 +122,36 @@ SpotifyAccount::icon() const
         s_icon = new QPixmap( RESPATH "images/spotify-logo.png" );
 
     return *s_icon;
+}
+
+
+QWidget*
+SpotifyAccount::configurationWidget()
+{
+    if ( m_configWidget.isNull() )
+        m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
+    else
+        m_configWidget.data()->loadFromConfig();
+
+    return static_cast< QWidget* >( m_configWidget.data() );
+}
+
+
+void
+SpotifyAccount::saveConfig()
+{
+    Q_ASSERT( !m_configWidget.isNull() );
+    if ( m_configWidget.isNull() )
+        return;
+
+    // Send the result to the resolver
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "saveSettings";
+    msg[ "username" ] = m_configWidget.data()->username();
+    msg[ "password" ] = m_configWidget.data()->password();
+    msg[ "highQuality" ] = m_configWidget.data()->highQuality();
+
+    m_spotifyResolver.data()->sendMessage( msg );
 }
 
 
@@ -140,7 +209,7 @@ SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< To
 
 
 bool
-operator==( Tomahawk::Accounts::SpotifyAccount::Sync one, Tomahawk::Accounts::SpotifyAccount::Sync two )
+operator==( Accounts::SpotifyAccount::Sync one, Accounts::SpotifyAccount::Sync two )
 {
     if( one.id_ == two.id_ )
         return true;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>487</height>
+    <width>457</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,21 +20,33 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="icon">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap>spotify-logo.png</pixmap>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
+   <property name="margin">
+    <number>4</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="icon">
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../../../resources.qrc">:/data/images/spotify-logo.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QLabel" name="titleText">
        <property name="font">
@@ -45,7 +57,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Configure your Spotify credentials</string>
+        <string>Configure your Spotify account</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -69,7 +81,10 @@
      <item row="0" column="1">
       <widget class="QLineEdit" name="usernameEdit">
        <property name="text">
-        <string>placeholderUsername</string>
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Username or Facebook Email</string>
        </property>
       </widget>
      </item>
@@ -83,7 +98,7 @@
      <item row="1" column="1">
       <widget class="QLineEdit" name="passwordEdit">
        <property name="text">
-        <string>placeholderPw</string>
+        <string/>
        </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
@@ -95,7 +110,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <spacer name="horizontalSpacer_5">
+      <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -113,15 +128,15 @@
         <enum>Qt::RightToLeft</enum>
        </property>
        <property name="text">
-        <string>High Quality Streaming</string>
+        <string>High Quality Streams</string>
        </property>
        <property name="checked">
-        <bool>STREAMING_DEFAULT</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_6">
+      <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -134,6 +149,16 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Spotify playlists to keep in sync:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -152,11 +177,35 @@
      </item>
      <item>
       <widget class="QLabel" name="spotifyLogo">
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>spotifycore-logo.png</pixmap>
+        <pixmap resource="../../../resources.qrc">:/data/images/spotifycore-logo.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -175,25 +224,10 @@
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

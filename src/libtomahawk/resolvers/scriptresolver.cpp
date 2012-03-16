@@ -144,6 +144,13 @@ ScriptResolver::running() const
     return !m_stopped;
 }
 
+void
+ScriptResolver::sendMessage( const QVariantMap& map )
+{
+    QByteArray data = m_serializer.serialize( map );
+    sendMsg( data );
+}
+
 
 void
 ScriptResolver::readStderr()
@@ -284,6 +291,11 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 tracks << q;
             }
         }
+    }
+    else
+    {
+        // Unknown message, give up for custom implementations
+        emit customMessage( msgtype, m );
     }
 }
 

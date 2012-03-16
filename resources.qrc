@@ -135,6 +135,7 @@
         <file>data/images/rdio.png</file>
         <file>data/images/grooveshark.png</file>
         <file>data/images/lastfm-icon.png</file>
+	<file>data/images/spotifycore-logo.png</file>
         <file>data/sql/dbmigrate-27_to_28.sql</file>
         <file>data/images/process-stop.png</file>
     </qresource>

@@ -94,5 +94,3 @@ private:
 }
 
 #endif // LASTFMPLUGIN_H
-
-class A;
