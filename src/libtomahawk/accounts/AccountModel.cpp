@@ -544,16 +544,18 @@ AccountModel::accountAdded( Account* account )
     // Find the factory this belongs up, and update
     qDebug() << "IN ACCOUNT ADDED, new account:" << account->accountFriendlyName();
     AccountFactory* factory = AccountManager::instance()->factoryForAccount( account );
+    ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account );
     AtticaResolverAccount* attica = qobject_cast< AtticaResolverAccount* >( account );
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         AccountModelNode* n = m_accounts.at( i );
         bool thisIsTheOne = false;
-        qDebug() << "Checking for added account's related factory or attica:" << n->factory << attica;
+        qDebug() << "Checking for added account's related factory or attica:" << n->factory << attica << resolver;
         if ( attica )
             qDebug() << n->atticaContent.id() << n->atticaContent.name() << attica->atticaId();
-        if ( n->factory == factory )
+        if ( n->factory == factory && !(resolver && !attica) ) // Specifically ignore manual resolvers, as the user added them directly
         {
+            qDebug() << "Found added account with factory we already havel" << n->factory << factory;
             n->accounts << account;
             thisIsTheOne = true;
         }
@@ -582,6 +584,7 @@ AccountModel::accountAdded( Account* account )
     // Ok, just a plain resolver. add it at the end
     if ( ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account ) )
     {
+        qDebug() << "Plain old manual resolver added, appending at end";
         Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
         const int count = m_accounts.size();
         beginInsertRows( QModelIndex(), count, count );
