@@ -48,6 +48,9 @@ friend class ::DatabaseCommand_LoadPlaylistEntries;
 friend class Pipeline;
 
 public:
+    enum DescriptionMode
+    { Detailed = 0, Short = 1 };
+
     static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
 
@@ -116,7 +119,7 @@ public:
     void loadSocialActions();
     QList< Tomahawk::SocialAction > allSocialActions() const;
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
-    QString socialActionDescription( const QString& action ) const;
+    QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
 
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }

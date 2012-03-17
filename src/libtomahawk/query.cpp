@@ -585,7 +585,7 @@ Query::setLoved( bool loved )
 
 
 QString
-Query::socialActionDescription( const QString& action ) const
+Query::socialActionDescription( const QString& action, DescriptionMode mode ) const
 {
     QString desc;
     QList< Tomahawk::SocialAction > socialActions = allSocialActions();
@@ -626,18 +626,22 @@ Query::socialActionDescription( const QString& action ) const
             if ( sa.source->isLocal() )
             {
                 if ( loveCounter == 1 )
-                    desc += tr( "You" );
+                    desc += "<b>" + tr( "You" ) + "</b>";
                 else
-                    desc += tr( "you" );
+                    desc += "<b>" + tr( "you" ) + "</b>";
             }
             else
-                desc += sa.source->friendlyName();
+                desc += "<b>" + sa.source->friendlyName() + "</b>";
         }
     }
     if ( loveCounter > 0 )
     {
         if ( loveCounter > 3 )
-            desc += " " + tr( "and %1 others" ).arg( loveCounter - 3 );
+            desc += " " + tr( "and %1%2 others%3" ).arg( "<b>" ).arg( loveCounter - 3 ).arg( "</b>" );
+        
+        if ( mode == Short )
+            desc = "<b>" + tr( "%1 people" ).arg( loveCounter ) + "</b>";
+
         desc += " " + tr( "loved this track" ); //FIXME: more action descs required
     }
     

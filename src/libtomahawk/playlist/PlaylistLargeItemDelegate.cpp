@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QAbstractTextDocumentLayout>
 
 #include "query.h"
 #include "result.h"
@@ -110,6 +111,29 @@ PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 
 
 void
+PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const
+{
+    text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
+    QAbstractTextDocumentLayout* layout = text.documentLayout();
+
+    const int height = qRound( layout->documentSize().height() );
+    int y = rect.y();
+    if ( flags & Qt::AlignBottom )
+        y += ( rect.height() - height );
+    else if ( flags & Qt::AlignVCenter )
+        y += ( rect.height() - height ) / 2;
+
+    QAbstractTextDocumentLayout::PaintContext context;
+    context.palette.setColor( QPalette::Text, painter->pen().color() );
+
+    painter->save();
+    painter->translate( rect.x(), y );
+    layout->draw( painter, context );
+    painter->restore();
+}
+
+
+void
 PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
@@ -141,8 +165,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         track = item->query()->track();
     }
 
-    lowerText = item->query()->socialActionDescription( "Love" );
-    
+    lowerText = item->query()->socialActionDescription( "Love", Query::Detailed );
+
     if ( source.isNull() )
     {
     }
@@ -201,9 +225,12 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         smallBoldFont.setBold( true );
         smallBoldFont.setWeight( 80 );
 
+        QFont smallFont = opt.font;
+        smallFont.setPixelSize( 10 );
+
         r.adjust( pixmapRect.width() + 12, 1, -28 - avatar.width(), 0 );
-        QRect leftRect = r.adjusted( 0, 0, -r.width() / 2 - 4, 0 );
-        QRect rightRect = r.adjusted( r.width() / 2 + 4, 0, 0, 0 );
+        QRect leftRect = r.adjusted( 0, 0, -48, 0 );
+        QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
@@ -213,9 +240,17 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect.adjusted( 0, 19, 0, 0 ), text, m_topOption );
 
-        painter->setFont( opt.font );
-        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, leftRect.width() );
-        painter->drawText( leftRect, text, m_bottomOption );
+        painter->setFont( smallFont );
+        QTextDocument textDoc;
+        textDoc.setHtml( lowerText );
+        textDoc.setDocumentMargin( 0 );
+        textDoc.setDefaultFont( painter->font() );
+        textDoc.setDefaultTextOption( m_bottomOption );
+        
+        if ( textDoc.idealWidth() > leftRect.width() )
+            textDoc.setHtml( item->query()->socialActionDescription( "Love", Query::Short ) );
+
+        drawRichText( painter, leftRect, Qt::AlignBottom, textDoc );
 
         if ( duration > 0 )
         {

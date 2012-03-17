@@ -20,6 +20,7 @@
 #define PLAYLISTLARGEITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTextDocument>
 #include <QTextOption>
 
 #include "dllmacro.h"
@@ -43,6 +44,7 @@ protected:
 
 private:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
+    void drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const;
 
     QTextOption m_topOption;
     QTextOption m_centerRightOption;
