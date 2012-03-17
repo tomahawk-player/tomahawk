@@ -188,13 +188,29 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QFont smallBoldFont = opt.font;
         smallBoldFont.setPixelSize( 12 );
         smallBoldFont.setWeight( 80 );
-        
+
+        QFont durationFont = opt.font;
+        durationFont.setPixelSize( 12 );
+        durationFont.setWeight( 80 );
+
         if ( index.row() == 0 )
+        {
             figureFont.setPixelSize( 36 );
+            boldFont.setPixelSize( 26 );
+            smallBoldFont.setPixelSize( 22 );
+        }
         else if ( index.row() == 1 )
+        {
             figureFont.setPixelSize( 30 );
+            boldFont.setPixelSize( 22 );
+            smallBoldFont.setPixelSize( 18 );
+        }
         else if ( index.row() == 2 )
+        {
             figureFont.setPixelSize( 24 );
+            boldFont.setPixelSize( 18 );
+            smallBoldFont.setPixelSize( 14 );
+        }
         else if ( index.row() >= 10 )
         {
             boldFont.setPixelSize( 12 );
@@ -223,11 +239,11 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setFont( smallBoldFont );
         text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
-        painter->drawText( index.row() >= 10 ? leftRect : leftRect.adjusted( 0, 19, 0, 0 ), text, index.row() >= 10 ? m_bottomOption : m_topOption );
+        painter->drawText( index.row() >= 10 ? leftRect : leftRect.adjusted( 0, painter->fontMetrics().height() + 6, 0, 0 ), text, index.row() >= 10 ? m_bottomOption : m_topOption );
 
         if ( duration > 0 )
         {
-            painter->setFont( smallBoldFont );
+            painter->setFont( durationFont );
             text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
             painter->drawText( rightRect, text, m_centerRightOption );
         }
