@@ -56,9 +56,9 @@ friend class ::DatabaseCommand_LoadFile;
 
 public:
     static Tomahawk::result_ptr get( const QString& url );
+    static bool isCached( const QString& url );
     virtual ~Result();
 
-    bool isValid() const;
     QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery();
