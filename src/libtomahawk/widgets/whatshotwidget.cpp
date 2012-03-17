@@ -35,6 +35,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
+#include "playlist/PlaylistChartItemDelegate.h"
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -81,6 +82,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksViewLeft->overlay()->setEnabled( false );
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->tracksViewLeft->setItemDelegate( new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() ) );
+    ui->tracksViewLeft->setUniformRowHeights( false );
 
     TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
     artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
@@ -289,7 +292,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
-                trackModel->setStyle( TrackModel::Short );
+                trackModel->setStyle( TrackModel::Large );
 
                 m_trackModels[ chartId ] = trackModel;
 
