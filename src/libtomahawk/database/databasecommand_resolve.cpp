@@ -147,6 +147,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         if ( result->isValid() )
         {
             qDebug() << "Result already cached:" << result->toString();
+            res << result;
             continue;
         }
 
@@ -284,6 +285,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         if ( result->isValid() )
         {
             qDebug() << "Result already cached:" << result->toString();
+            res << result;
             continue;
         }
 
