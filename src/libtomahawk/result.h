@@ -58,6 +58,7 @@ public:
     static Tomahawk::result_ptr get( const QString& url );
     virtual ~Result();
 
+    bool isValid() const;
     QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery();
@@ -108,6 +109,9 @@ public:
     unsigned int trackId() const { return m_trackId; }
     unsigned int fileId() const { return m_fileId; }
 
+public slots:
+    void deleteLater();
+
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
@@ -115,7 +119,7 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
-
+    
 private:
     // private constructor
     explicit Result( const QString& url );
