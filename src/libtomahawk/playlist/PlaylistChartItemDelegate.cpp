@@ -70,8 +70,10 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
             stretch = 6;
             break;
         case 1:
-        case 2:
             stretch = 5;
+            break;
+        case 2:
+            stretch = 4;
             break;
             
         default:
