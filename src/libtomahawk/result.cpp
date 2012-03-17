@@ -50,6 +50,14 @@ Result::get( const QString& url )
 }
 
 
+bool
+Result::isCached( const QString& url )
+{
+    QMutexLocker lock( &s_mutex );
+    return ( s_results.contains( url ) );
+}
+
+
 Result::Result( const QString& url )
     : QObject()
     , m_url( url )
@@ -83,13 +91,6 @@ Result::deleteLater()
     }
 
     QObject::deleteLater();
-}
-
-
-bool
-Result::isValid() const
-{
-    return !m_rid.isEmpty();
 }
 
 

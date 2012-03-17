@@ -143,8 +143,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        if ( result->isValid() )
+        if ( cached )
         {
             qDebug() << "Result already cached:" << result->toString();
             res << result;
@@ -281,8 +282,9 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        if ( result->isValid() )
+        if ( cached )
         {
             qDebug() << "Result already cached:" << result->toString();
             res << result;
