@@ -43,7 +43,7 @@ Result::get( const QString& url )
         return s_results.value( url );
     }
 
-    result_ptr r = result_ptr( new Result( url ), &QObject::deleteLater );
+    result_ptr r = result_ptr( new Result( url ), &Result::deleteLater );
     s_results.insert( url, r );
 
     return r;
@@ -69,11 +69,27 @@ Result::Result( const QString& url )
 
 Result::~Result()
 {
+}
+
+
+void
+Result::deleteLater()
+{
     QMutexLocker lock( &s_mutex );
+
     if ( s_results.contains( m_url ) )
     {
         s_results.remove( m_url );
     }
+
+    QObject::deleteLater();
+}
+
+
+bool
+Result::isValid() const
+{
+    return !m_rid.isEmpty();
 }
 
 
