@@ -637,7 +637,7 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
     if ( loveCounter > 0 )
     {
         if ( loveCounter > 3 )
-            desc += " " + tr( "and %1%2 others%3" ).arg( "<b>" ).arg( loveCounter - 3 ).arg( "</b>" );
+            desc += " " + tr( "and" ) + " <b>" + tr( "%n other(s)", "", loveCounter - 3 ) + "</b>";
         
         if ( mode == Short )
             desc = "<b>" + tr( "%1 people" ).arg( loveCounter ) + "</b>";
