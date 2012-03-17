@@ -175,8 +175,6 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             r.adjust( 22, 0, 0, 0 );
         }
 
-        painter->setPen( opt.palette.text().color() );
-
         QFont figureFont = opt.font;
         figureFont.setPixelSize( 18 );
         figureFont.setWeight( 99 );
@@ -219,7 +217,9 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         QRect figureRect = r.adjusted( 0, 0, -option.rect.width() + 60 - 6 + r.left(), 0 );
         painter->setFont( figureFont );
+        painter->setPen( option.palette.text().color().lighter( 450 ) );
         painter->drawText( figureRect, QString::number( index.row() + 1 ), m_centerOption );
+        painter->setPen( opt.palette.text().color() );
 
         QRect pixmapRect = r.adjusted( figureRect.width() + 6, 0, -option.rect.width() + figureRect.width() + option.rect.height() - 6 + r.left(), 0 );
         pixmap = item->query()->cover( pixmapRect.size(), false );
