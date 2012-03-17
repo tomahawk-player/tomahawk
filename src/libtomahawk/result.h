@@ -41,7 +41,7 @@ struct SocialAction
     QVariant action;
     QVariant value;
     QVariant timestamp;
-    QVariant source;
+    Tomahawk::source_ptr source;
 };
 
 

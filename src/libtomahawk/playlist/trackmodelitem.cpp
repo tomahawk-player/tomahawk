@@ -1,3 +1,4 @@
+
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
@@ -115,4 +116,5 @@ TrackModelItem::setupItem( const Tomahawk::query_ptr& query, TrackModelItem* par
     connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ), SIGNAL( dataChanged() ) );
     connect( query.data(), SIGNAL( resultsChanged() ), SIGNAL( dataChanged() ) );
     connect( query.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
+    connect( query.data(), SIGNAL( socialActionsLoaded() ), SIGNAL( dataChanged() ) );
 }

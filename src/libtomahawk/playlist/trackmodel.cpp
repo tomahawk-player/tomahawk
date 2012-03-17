@@ -88,6 +88,7 @@ TrackModel::columnCount( const QModelIndex& parent ) const
     {
         case Short:
         case ShortWithAvatars:
+        case Large:
             return 1;
             break;
 
@@ -259,14 +260,24 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 
 
 void
-TrackModel::getCover( const QModelIndex& index )
+TrackModel::updateDetailedInfo( const QModelIndex& index )
 {
-    if ( style() != TrackModel::Short )
+    if ( style() != TrackModel::Short && style() != TrackModel::Large )
+        return;
+    
+    TrackModelItem* item = itemFromIndex( index );
+    if ( item->query().isNull() )
         return;
 
-    TrackModelItem* item = itemFromIndex( index );
-    if ( !item->query().isNull() )
+    if ( style() == TrackModel::Short || style() == TrackModel::Large )
+    {
         item->query()->cover( QSize( 0, 0 ) );
+    }
+    
+    if ( style() == TrackModel::Large )
+    {
+        item->query()->loadSocialActions();
+    }
 }
 
 

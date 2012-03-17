@@ -79,6 +79,7 @@ set( libGuiSources
     playlist/ViewHeader.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
+    playlist/PlaylistLargeItemDelegate.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp

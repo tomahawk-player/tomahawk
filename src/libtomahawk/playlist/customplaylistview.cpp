@@ -37,6 +37,7 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
+    m_model->setStyle( TrackModel::Large );
     setPlaylistModel( m_model );
     generateTracks();
 

@@ -114,8 +114,9 @@ public:
     bool loved();
 
     void loadSocialActions();
-    QList< Tomahawk::SocialAction > allSocialActions();
+    QList< Tomahawk::SocialAction > allSocialActions() const;
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
+    QString socialActionDescription( const QString& action ) const;
 
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
