@@ -35,7 +35,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     , m_currentAnimationFrame( 0 )
     , m_showWindowAction( 0 )
 {
-    QIcon icon( RESPATH "icons/tomahawk-icon-128x128.png" );
+    QIcon icon( RESPATH "icons/tomahawk-icon-128x128-grayscale.png" );
     setIcon( icon );
 
     refreshToolTip();

@@ -137,5 +137,6 @@
         <file>data/images/lastfm-icon.png</file>
         <file>data/sql/dbmigrate-27_to_28.sql</file>
         <file>data/images/process-stop.png</file>
+        <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
     </qresource>
 </RCC>
