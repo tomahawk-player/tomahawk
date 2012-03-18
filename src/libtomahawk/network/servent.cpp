@@ -38,7 +38,7 @@
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
-#include <aclsystem.h>
+#include "libtomahawk/aclregistry.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -64,7 +64,7 @@ Servent::Servent( QObject* parent )
     s_instance = this;
 
     m_lanHack = qApp->arguments().contains( "--lanhack" );
-    new ACLSystem( this );
+    ACLRegistry::instance();
     setProxy( QNetworkProxy::NoProxy );
 
     {
@@ -89,6 +89,7 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
+    delete ACLRegistry::instance();
     delete m_portfwd;
 }
 
@@ -696,9 +697,11 @@ bool
 Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
 {
     Q_UNUSED( conn );
+    Q_UNUSED( nodeid );
     Q_UNUSED( showDialog );
-    tDebug( LOGVERBOSE ) << "Checking ACLs";
 
+    /*
+    tDebug( LOGVERBOSE ) << "Checking ACLs";    
     ACLSystem* aclSystem = ACLSystem::instance();
     ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
     if( peerStatus == ACLSystem::Deny )
@@ -706,7 +709,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
 
     //FIXME: Actually enable it when it makes sense
     //FIXME: needs refactoring because it depends on QtGui and the servent is part of libtomahawk-core
-    /*
+
     return true;
     if( peerStatus == ACLSystem::NotFound )
     {

@@ -162,7 +162,7 @@ set( libSources
     sourcelist.cpp
     pipeline.cpp
 
-    aclsystem.cpp
+    aclregistry.cpp
     artist.cpp
     artistplaylistinterface.cpp
     album.cpp

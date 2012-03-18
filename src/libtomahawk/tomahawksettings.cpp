@@ -291,7 +291,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             beginGroup( "accounts/" + accountKey );
             setValue( "enabled", enabledSip.contains( sipPlugin ) == true );
             setValue( "autoconnect", true );
-            setValue( "acl", QVariantMap() );
+            setValue( "acl", QVariantHash() );
             setValue( "types", QStringList() << "SipType" );
             endGroup();
             accounts << accountKey;
@@ -627,15 +627,19 @@ TomahawkSettings::setProxyDns( bool lookupViaProxy )
 }
 
 
-QStringList
+QVariantHash
 TomahawkSettings::aclEntries() const
 {
-    return value( "acl/entries", QStringList() ).toStringList();
+    QVariant retVal = value( "acl/entries", QVariantHash() );
+    if ( retVal.isValid() && retVal.canConvert< QVariantHash >() )
+        return retVal.toHash();
+
+    return QVariantHash();
 }
 
 
 void
-TomahawkSettings::setAclEntries( const QStringList &entries )
+TomahawkSettings::setAclEntries( const QVariantHash &entries )
 {
     setValue( "acl/entries", entries );
 }

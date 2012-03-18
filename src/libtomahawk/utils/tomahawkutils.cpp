@@ -314,7 +314,7 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
+    //tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     s_noProxyHostsMutex.lock();

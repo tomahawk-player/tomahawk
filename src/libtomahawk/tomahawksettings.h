@@ -162,8 +162,8 @@ public:
     void setProxyDns( bool lookupViaProxy );
 
     /// ACL settings
-    QStringList aclEntries() const;
-    void setAclEntries( const QStringList &entries );
+    QVariantHash aclEntries() const;
+    void setAclEntries( const QVariantHash &entries );
 
     /// XMPP Component Settings
     QString xmppBotServer() const;
