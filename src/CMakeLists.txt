@@ -78,6 +78,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      accounts/spotify/SpotifyAccount.cpp
      accounts/spotify/SpotifyAccountConfig.cpp
+     accounts/spotify/SpotifyPlaylistUpdater.cpp
 
      tomahawktrayicon.cpp
      audiocontrols.cpp

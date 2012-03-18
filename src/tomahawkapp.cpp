@@ -62,6 +62,7 @@
 #include "utils/tomahawkutilsgui.h"
 #include "accounts/lastfm/LastFmAccount.h"
 #include "accounts/spotify/SpotifyAccount.h"
+#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 
 #include "config.h"
 
