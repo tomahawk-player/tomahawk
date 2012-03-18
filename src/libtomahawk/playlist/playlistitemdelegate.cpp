@@ -169,8 +169,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
     if ( source.isNull() )
     {
-        upperText = artist;
-        lowerText = track;
+        upperText = track;
+        lowerText = artist;
     }
     else
     {
