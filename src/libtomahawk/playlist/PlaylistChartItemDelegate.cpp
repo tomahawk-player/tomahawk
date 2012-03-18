@@ -187,7 +187,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         QFont smallBoldFont = opt.font;
         smallBoldFont.setPixelSize( 12 );
-        smallBoldFont.setWeight( 80 );
+        smallBoldFont.setWeight( 60 );
 
         QFont durationFont = opt.font;
         durationFont.setPixelSize( 12 );
@@ -236,11 +236,11 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
 
         painter->setFont( boldFont );
-        QString text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
+        QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( smallBoldFont );
-        text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
+        text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
         painter->drawText( index.row() >= 10 ? leftRect : leftRect.adjusted( 0, painter->fontMetrics().height() + 6, 0, 0 ), text, index.row() >= 10 ? m_bottomOption : m_topOption );
 
         if ( duration > 0 )

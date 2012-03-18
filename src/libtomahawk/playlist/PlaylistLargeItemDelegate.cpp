@@ -223,7 +223,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QFont smallBoldFont = opt.font;
         smallBoldFont.setPixelSize( 12 );
         smallBoldFont.setBold( true );
-        smallBoldFont.setWeight( 80 );
+        smallBoldFont.setWeight( 60 );
 
         QFont smallFont = opt.font;
         smallFont.setPixelSize( 10 );
@@ -233,14 +233,15 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
 
         painter->setFont( boldFont );
-        QString text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
+        QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( smallBoldFont );
-        text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
+        text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect.adjusted( 0, 19, 0, 0 ), text, m_topOption );
 
         painter->setFont( smallFont );
+        painter->setPen( Qt::gray );
         QTextDocument textDoc;
         textDoc.setHtml( lowerText );
         textDoc.setDocumentMargin( 0 );
