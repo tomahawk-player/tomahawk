@@ -22,7 +22,9 @@
 #include "dllmacro.h"
 #include "typedefs.h"
 #include "playlist.h"
+
 #include <QTimer>
+#include <QMutex>
 
 namespace Tomahawk
 {
@@ -31,6 +33,8 @@ namespace Tomahawk
   *
   * Default is auto-updating.
   */
+
+class PlaylistUpdaterFactory;
 
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
@@ -58,6 +62,7 @@ public:
     /// updater if one was saved
     static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
 
+    static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 public slots:
     virtual void updateNow() {}
 
@@ -73,6 +78,19 @@ private:
     QTimer* m_timer;
     bool m_autoUpdate;
     playlist_ptr m_playlist;
+
+    static QMap< QString, PlaylistUpdaterFactory* > s_factories;
+};
+
+
+class DLLEXPORT PlaylistUpdaterFactory
+{
+public:
+    PlaylistUpdaterFactory() {}
+    virtual ~PlaylistUpdaterFactory() {}
+
+    virtual QString type() const = 0;
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr& ) = 0;
 };
 
 }

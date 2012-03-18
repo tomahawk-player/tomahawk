@@ -41,6 +41,7 @@
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
+#include "playlist/XspfUpdater.h"
 #include "network/servent.h"
 #include "web/api_v1.h"
 #include "sourcelist.h"
@@ -287,6 +288,9 @@ TomahawkApp::init()
 
     // Set up echonest catalog synchronizer
     Tomahawk::EchonestCatalogSynchronizer::instance();
+
+    PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
+    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
 #ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread

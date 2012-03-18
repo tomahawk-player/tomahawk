@@ -18,9 +18,18 @@
 
 #include "PlaylistUpdaterInterface.h"
 #include "tomahawksettings.h"
-#include "XspfUpdater.h"
 
 using namespace Tomahawk;
+
+QMap< QString, PlaylistUpdaterFactory* > PlaylistUpdaterInterface::s_factories = QMap< QString, PlaylistUpdaterFactory* >();
+
+void
+PlaylistUpdaterInterface::registerUpdaterFactory( PlaylistUpdaterFactory* f )
+{
+    s_factories[ f->type() ] = f;
+}
+
+
 
 PlaylistUpdaterInterface*
 PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
@@ -32,10 +41,17 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
         // Ok, we have one we can try to load
         const QString type = s->value( QString( "%1/type" ).arg( key ) ).toString();
         PlaylistUpdaterInterface* updater = 0;
-        if ( type == "xspf" )
-            updater = new XspfUpdater( pl );
 
-        // You forgot to register your new updater type with the factory above. 00ps.
+        if ( !s_factories.contains( type ) )
+        {
+            Q_ASSERT( false );
+            // You forgot to register your new updater type with the factory....
+            return 0;
+        }
+
+
+        updater = s_factories[ type ]->create( pl );
+
         if ( !updater )
         {
             Q_ASSERT( false );

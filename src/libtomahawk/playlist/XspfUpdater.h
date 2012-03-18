@@ -20,13 +20,15 @@
 #define XSPFUPDATER_H
 
 #include "PlaylistUpdaterInterface.h"
+#include "dllmacro.h"
 
 class QTimer;
 
 namespace Tomahawk
 {
 
-class XspfUpdater : public PlaylistUpdaterInterface
+
+class DLLEXPORT XspfUpdater : public PlaylistUpdaterInterface
 {
     Q_OBJECT
 public:
@@ -50,6 +52,15 @@ private slots:
 
 private:
     QString m_url;
+};
+
+class DLLEXPORT XspfUpdaterFactory : public PlaylistUpdaterFactory
+{
+public:
+    XspfUpdaterFactory() {}
+
+    virtual QString type() const { return "type"; }
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl ) { return new XspfUpdater( pl ); }
 };
 
 }
