@@ -36,12 +36,12 @@ class SpotifyAccountConfig;
 
 struct SpotifyPlaylist {
     QString name, plid, revid;
-    bool sync;
+    bool sync, changed;
 
     SpotifyPlaylist( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ) {}
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
 
-    SpotifyPlaylist() : sync( false ) {}
+    SpotifyPlaylist() : sync( false ), changed( false ) {}
 };
 
 class SpotifyAccountFactory : public AccountFactory
@@ -82,12 +82,12 @@ public:
     virtual SipPlugin* sipPlugin() { return 0; }
 
     void addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks );
-
+/*
     struct Sync {
          QString id_;
          QString uuid;
          Tomahawk::playlist_ptr playlist;
-     };
+     };*/
 
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
@@ -99,7 +99,10 @@ private:
     void loadPlaylists();
     void sendMessage( const QVariantMap& msg, const QString& slot );
 
-    QList<Sync> m_syncPlaylists;
+    void startPlaylistSync( SpotifyPlaylist* playlist );
+    void stopPlaylistSync( SpotifyPlaylist* playlist );
+
+//     QList<Sync> m_syncPlaylists;
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
 

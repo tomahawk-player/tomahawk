@@ -110,12 +110,15 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         creds[ "password" ] = msg.value( "password" );
         creds[ "highQuality" ] = msg.value( "highQuality" );
         setCredentials( creds );
-        sync();
+
+        qDebug() << "Set creds:" << creds.value( "username" ) << creds.value( "password" ) << msg.value( "username" ) << msg.value( "password" );
 
         QVariantHash config = configuration();
         config[ "hasMigrated" ] = true;
         setConfiguration( config );
         sync();
+
+        qDebug() << "SET SPOTIFY CREDS:" << credentials().value( "username" ) << credentials().value( "password" );
 
         return;
     }
@@ -226,6 +229,19 @@ SpotifyAccount::saveConfig()
 
         m_spotifyResolver.data()->sendMessage( msg );
     }
+
+    m_configWidget.data()->saveSettings();
+    foreach ( SpotifyPlaylist* pl, m_allSpotifyPlaylists )
+    {
+        if ( pl->changed )
+        {
+            pl->changed = false;
+            if ( pl->sync )
+                startPlaylistSync( pl );
+            else
+                stopPlaylistSync( pl );
+        }
+    }
 }
 
 
@@ -296,6 +312,21 @@ SpotifyAccount::sendMessage( const QVariantMap &m, const QString& slot )
 
 
 void
+SpotifyAccount::startPlaylistSync( SpotifyPlaylist* playlist )
+{
+
+}
+
+
+void
+SpotifyAccount::stopPlaylistSync( SpotifyPlaylist* playlist )
+{
+
+}
+
+
+
+void
 SpotifyAccount::loadPlaylists()
 {
     // TODO cache this and only get changed?
@@ -305,10 +336,10 @@ SpotifyAccount::loadPlaylists()
 }
 
 
-bool
-operator==( Accounts::SpotifyAccount::Sync one, Accounts::SpotifyAccount::Sync two )
-{
-    if( one.id_ == two.id_ )
-        return true;
-    return false;
-}
+// bool
+// operator==( Accounts::SpotifyAccount::Sync one, Accounts::SpotifyAccount::Sync two )
+// {
+//     if( one.id_ == two.id_ )
+//         return true;
+//     return false;
+// }
