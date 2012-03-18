@@ -51,7 +51,7 @@ public:
     SpotifyAccountFactory() {}
 
     virtual Account* createAccount( const QString& accountId = QString() );
-    virtual QString description() const { return tr( "Play music from and sync your playlists with Spotify" ); }
+    virtual QString description() const { return tr( "Play music from and sync your playlists with Spotify Premium" ); }
     virtual QString factoryId() const { return "spotifyaccount"; }
     virtual QString prettyName() const { return "Spotify"; }
 

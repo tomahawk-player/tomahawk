@@ -147,15 +147,18 @@ TrackView::setTrackModel( TrackModel* model )
 
     setAcceptDrops( true );
 
-    if ( model->style() == TrackModel::Short || model->style() == TrackModel::ShortWithAvatars )
+    switch( model->style() )
     {
-        setHeaderHidden( true );
-        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    }
-    else
-    {
-        setHeaderHidden( false );
-        setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+        case TrackModel::Short:
+        case TrackModel::ShortWithAvatars:
+        case TrackModel::Large:
+            setHeaderHidden( true );
+            setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        break;
+            
+        default:
+            setHeaderHidden( false );
+            setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 }
 
@@ -163,7 +166,7 @@ TrackView::setTrackModel( TrackModel* model )
 void
 TrackView::onViewChanged()
 {
-    if ( m_model->style() != TrackModel::Short ) // eventual FIXME?
+    if ( m_model->style() != TrackModel::Short && m_model->style() != TrackModel::Large ) // eventual FIXME?
         return;
 
     if ( m_timer.isActive() )
@@ -196,7 +199,7 @@ TrackView::onScrollTimeout()
 
     for ( int i = left.row(); i <= max; i++ )
     {
-        m_model->getCover( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
+        m_model->updateDetailedInfo( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
     }
 }
 
@@ -519,7 +522,7 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( !m_model || m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
+    if ( !m_model || m_model->style() != TrackModel::Detailed )
         return;
 
     if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )

@@ -26,6 +26,8 @@
 
 #include <attica/content.h>
 
+#define ACCOUNTMODELNODE_DEBUG 0
+
 namespace Tomahawk {
 
 namespace Accounts {
@@ -87,7 +89,9 @@ struct AccountModelNode {
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
-//                 qDebug() << "Found account for factory:" << acct->accountFriendlyName();
+#if ACCOUNTMODELNODE_DEBUG
+                qDebug() << "Found account for factory:" << acct->accountFriendlyName();
+#endif
                 accounts.append( acct );
             }
         }
@@ -98,15 +102,24 @@ struct AccountModelNode {
         init();
         atticaContent = cnt;
 
-//         qDebug() << "Creating attica model node for resolver:" << cnt.id();
-
+#if ACCOUNTMODELNODE_DEBUG
+        qDebug() << "Creating attica model node for resolver:" << cnt.id();
+#endif
         foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
         {
+#if ACCOUNTMODELNODE_DEBUG
+            qDebug() << "Checking account:" << acct->accountFriendlyName() << qobject_cast< AtticaResolverAccount* >( acct );
+#endif
             if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
             {
+#if ACCOUNTMODELNODE_DEBUG
+                qDebug() << "With attica id:" << resolver->atticaId();
+#endif
                 if ( resolver->atticaId() == atticaContent.id() )
                 {
-//                     qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
+#if ACCOUNTMODELNODE_DEBUG
+                    qDebug() << "found atticaaccount :" << resolver->accountFriendlyName();
+#endif
                     atticaAccount = resolver;
                     break;
                 }

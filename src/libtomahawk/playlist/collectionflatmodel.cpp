@@ -138,13 +138,3 @@ CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks )
         }
     }
 }
-
-
-void
-CollectionFlatModel::onDataChanged()
-{
-    TrackModelItem* p = (TrackModelItem*)sender();
-
-    if ( p )
-        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
-}

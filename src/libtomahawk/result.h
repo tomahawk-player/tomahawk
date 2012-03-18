@@ -41,7 +41,7 @@ struct SocialAction
     QVariant action;
     QVariant value;
     QVariant timestamp;
-    QVariant source;
+    Tomahawk::source_ptr source;
 };
 
 
@@ -56,6 +56,7 @@ friend class ::DatabaseCommand_LoadFile;
 
 public:
     static Tomahawk::result_ptr get( const QString& url );
+    static bool isCached( const QString& url );
     virtual ~Result();
 
     QVariant toVariant() const;
@@ -108,6 +109,9 @@ public:
     unsigned int trackId() const { return m_trackId; }
     unsigned int fileId() const { return m_fileId; }
 
+public slots:
+    void deleteLater();
+
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
@@ -115,7 +119,7 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
-
+    
 private:
     // private constructor
     explicit Result( const QString& url );

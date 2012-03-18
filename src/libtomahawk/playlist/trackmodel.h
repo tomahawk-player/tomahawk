@@ -36,7 +36,7 @@ Q_OBJECT
 
 public:
     enum TrackItemStyle
-    { Detailed = 0, Short = 1, ShortWithAvatars = 2 };
+    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3 };
 
     enum TrackModelRole
     { StyleRole = Qt::UserRole + 1 };
@@ -98,7 +98,7 @@ public:
     /// Returns a flat list of all tracks in this model
     QList< Tomahawk::query_ptr > queries() const;
 
-    void getCover( const QModelIndex& index );
+    void updateDetailedInfo( const QModelIndex& index );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
@@ -134,6 +134,8 @@ protected:
     TrackModelItem* rootItem() const { return m_rootItem; }
 
 private slots:
+    void onDataChanged();
+
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 

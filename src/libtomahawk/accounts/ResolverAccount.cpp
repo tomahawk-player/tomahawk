@@ -102,6 +102,8 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path 
 
     setAccountFriendlyName( m_resolver.data()->name() );
     setTypes( AccountType( ResolverType ) );
+
+    sync();
 }
 
 
@@ -225,6 +227,7 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
     TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
 
     loadIcon();
+    sync();
 }
 
 

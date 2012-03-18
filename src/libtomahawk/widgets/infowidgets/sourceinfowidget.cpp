@@ -24,10 +24,10 @@
 
 #include "playlist/albummodel.h"
 #include "playlist/collectionflatmodel.h"
-#include "playlist/playlistmodel.h"
+#include "playlist/RecentlyAddedModel.h"
+#include "playlist/RecentlyPlayedModel.h"
 
 #include "database/database.h"
-#include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
 
 #include "utils/tomahawkutils.h"
@@ -61,24 +61,21 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 
     ui->historyView->overlay()->setEnabled( false );
 
-    m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
-    m_recentCollectionModel->setStyle( TrackModel::Short );
-    ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
+    m_recentTracksModel = new RecentlyAddedModel( source, ui->recentCollectionView );
+    m_recentTracksModel->setStyle( TrackModel::Short );
+    ui->recentCollectionView->setTrackModel( m_recentTracksModel );
     ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
 
-    m_historyModel = new PlaylistModel( ui->historyView );
+    m_historyModel = new RecentlyPlayedModel( source, ui->historyView );
     m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
-    m_historyModel->loadHistory( source, 25 );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
     ui->recentAlbumView->proxyModel()->sort( -1 );
 
     onCollectionChanged();
-
     connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ) );
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
 
     m_title = tr( "New Additions" );
     if ( source->isLocal() )
@@ -103,7 +100,6 @@ SourceInfoWidget::~SourceInfoWidget()
 void
 SourceInfoWidget::onCollectionChanged()
 {
-    loadTracks();
     loadRecentAdditions();
 }
 
@@ -112,36 +108,6 @@ void
 SourceInfoWidget::loadRecentAdditions()
 {
     m_recentAlbumModel->addFilteredCollection( m_source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
-}
-
-
-void
-SourceInfoWidget::loadTracks()
-{
-    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_source->collection() );
-    cmd->setLimit( 250 );
-    cmd->setSortOrder( DatabaseCommand_AllTracks::ModificationTime );
-    cmd->setSortDescending( true );
-
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( onLoadedTrackHistory( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
-void
-SourceInfoWidget::onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& queries )
-{
-    m_recentCollectionModel->clear();
-    m_recentCollectionModel->append( queries );
-}
-
-
-void
-SourceInfoWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
-{
-    m_historyModel->insert( query, 0 );
 }
 
 

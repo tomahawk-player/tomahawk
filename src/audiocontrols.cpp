@@ -252,7 +252,7 @@ void
 AudioControls::onCoverUpdated()
 {
     Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || query != m_currentTrack->toQuery().data() )
+    if ( !query || !m_currentTrack || query != m_currentTrack->toQuery().data() )
         return;
 
     setCover();
@@ -277,7 +277,7 @@ void
 AudioControls::onSocialActionsLoaded()
 {
     Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || query != m_currentTrack->toQuery().data() )
+    if ( !query || !m_currentTrack || query != m_currentTrack->toQuery().data() )
         return;
 
     setSocialActions();

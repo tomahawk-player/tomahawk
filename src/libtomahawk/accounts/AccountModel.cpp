@@ -30,6 +30,7 @@ using namespace Tomahawk;
 using namespace Accounts;
 
 #define ACCOUNTMODEL_DEBUG 0
+
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {

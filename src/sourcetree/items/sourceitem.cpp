@@ -27,6 +27,11 @@
 #include "utils/logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/customplaylistview.h"
+#include "playlist/collectionview.h"
+#include "playlist/playlistview.h"
+#include "playlist/RecentlyAddedModel.h"
+#include "playlist/RecentlyPlayedModel.h"
+#include "playlist/PlaylistLargeItemDelegate.h"
 #include "source.h"
 #include "sourcelist.h"
 
@@ -40,12 +45,14 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_playlists( 0 )
     , m_stations( 0 )
     , m_latchedOn( false )
-    , m_sourceInfoItem( 0   )
+    , m_sourceInfoItem( 0 )
     , m_coolPlaylistsItem( 0 )
     , m_collectionPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
+    , m_latestAdditionsPage( 0 )
+    , m_recentPlaysPage( 0 )
     , m_whatsHotPage( 0 )
 {
     if ( m_source.isNull() )
@@ -54,20 +61,31 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         return;
     }
 
-    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
-                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
-                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
-    m_lovedTracksItem->setSortValue( -250 );
-
     m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/drop-song.png" ), //FIXME different icon
                                             boost::bind( &SourceItem::collectionClicked, this ),
                                             boost::bind( &SourceItem::getCollectionPage, this ) );
-    m_collectionItem->setSortValue( -350 );
 
-    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
+/*    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
                                             boost::bind( &SourceItem::sourceInfoClicked, this ),
-                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );
-    m_sourceInfoItem->setSortValue( -300 );
+                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );*/
+
+    m_latestAdditionsItem = new GenericPageItem( model(), this, tr( "Latest Additions" ), QIcon( RESPATH "images/new-additions.png" ),
+                                                 boost::bind( &SourceItem::latestAdditionsClicked, this ),
+                                                 boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
+
+    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/new-additions.png" ),
+                                             boost::bind( &SourceItem::recentPlaysClicked, this ),
+                                             boost::bind( &SourceItem::getRecentPlaysPage, this ) );
+
+    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
+                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
+                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
+
+    m_collectionItem->setSortValue( -350 );
+//    m_sourceInfoItem->setSortValue( -300 );
+    m_latestAdditionsItem->setSortValue( -250 );
+    m_recentPlaysItem->setSortValue( -200 );
+    m_lovedTracksItem->setSortValue( -150 );
 
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
@@ -86,7 +104,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         onStationsAdded( stations );
     }
 
-    if( ViewManager::instance()->pageForCollection( source->collection() ) )
+    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
 
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
@@ -284,7 +302,7 @@ SourceItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
     for( int i = 0; i < curCount; i++ )
     {
         PlaylistItem* pl = qobject_cast< PlaylistItem* >( parent->children().at( i ) );
-        if( pl && pl->playlist() == p )
+        if ( pl && pl->playlist() == p )
         {
             parent->beginRowsRemoved( i, i );
             parent->removeChild( pl );
@@ -295,20 +313,20 @@ SourceItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
         }
     }
 
-    if( ( parent == m_playlists || parent == m_stations ) &&
+    if ( ( parent == m_playlists || parent == m_stations ) &&
          parent->children().isEmpty() && parent->parent() ) // Don't leave an empty Playlist or Station category
     {
         int idx = parent->parent()->children().indexOf( parent );
-        if( idx < 0 )
+        if ( idx < 0 )
             return;
 
         parent->parent()->beginRowsRemoved( idx, idx );
         parent->parent()->removeChild( parent );
         parent->parent()->endRowsRemoved();
 
-        if( parent == m_playlists )
+        if ( parent == m_playlists )
             m_playlists = 0;
-        else if( parent == m_stations )
+        else if ( parent == m_stations )
             m_stations = 0;
         delete parent;
     }
@@ -318,12 +336,10 @@ SourceItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
 void
 SourceItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
-//    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
-
-    if( playlists.isEmpty() )
+    if ( playlists.isEmpty() )
         return;
 
-    if( !m_playlists )
+    if ( !m_playlists )
     {
         // add the category too
         int cur = children().count();
@@ -337,19 +353,18 @@ SourceItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 
     int from = m_playlists->children().count() - addOffset;
     m_playlists->beginRowsAdded( from, from + playlists.count() - 1 );
-    foreach( const playlist_ptr& p, playlists )
+    foreach ( const playlist_ptr& p, playlists )
     {
         PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p, m_playlists->children().count() - addOffset );
-//        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
 
-        if( m_source->isLocal() )
+        if ( m_source->isLocal() )
             connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::playlist_ptr ) ),
-                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+                     SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
         else
             connect( p.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ),
-                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+                     SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
 
     }
     m_playlists->endRowsAdded();
@@ -357,7 +372,7 @@ SourceItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 
 
 void
-SourceItem::onPlaylistDeleted( const  playlist_ptr& playlist )
+SourceItem::onPlaylistDeleted( const playlist_ptr& playlist )
 {
     playlistDeletedInternal( m_playlists, playlist );
 }
@@ -366,10 +381,10 @@ SourceItem::onPlaylistDeleted( const  playlist_ptr& playlist )
 void
 SourceItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
 {
-    if( playlists.isEmpty() )
+    if ( playlists.isEmpty() )
         return;
 
-    if( !m_playlists )
+    if ( !m_playlists )
     {
         // add the category too
         int cur = children().count();
@@ -385,8 +400,8 @@ SourceItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
 void
 SourceItem::onAutoPlaylistDeleted( const dynplaylist_ptr& playlist )
 {
-    if( !m_playlists )
-        qDebug() << "NO playlist category item for a deleting playlist..";
+    if ( !m_playlists )
+        qDebug() << "NO playlist category item for a deleting playlist...";
 
     playlistDeletedInternal( m_playlists, playlist );
 }
@@ -395,10 +410,10 @@ SourceItem::onAutoPlaylistDeleted( const dynplaylist_ptr& playlist )
 void
 SourceItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
 {
-    if( stations.isEmpty() )
+    if ( stations.isEmpty() )
         return;
 
-    if( !m_stations )
+    if ( !m_stations )
     {
         // add the category too
         int cur = children().count();
@@ -428,7 +443,7 @@ SourceItem::requestExpanding()
 ViewPage*
 SourceItem::sourceInfoClicked()
 {
-    if( m_source.isNull() )
+    if ( m_source.isNull() )
         return 0;
 
     m_sourceInfoPage = ViewManager::instance()->show( m_source );
@@ -446,7 +461,7 @@ SourceItem::getSourceInfoPage() const
 ViewPage*
 SourceItem::collectionClicked()
 {
-    if( m_source.isNull() )
+    if ( m_source.isNull() )
         return 0;
 
     m_collectionPage = ViewManager::instance()->show( m_source->collection() );
@@ -486,7 +501,12 @@ ViewPage*
 SourceItem::lovedTracksClicked()
 {
     if ( !m_lovedTracksPage )
-        m_lovedTracksPage = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
+    {
+        CustomPlaylistView* view = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
+        view->setItemDelegate( new PlaylistLargeItemDelegate( view, view->proxyModel() ) );
+
+        m_lovedTracksPage = view;
+    }
 
     ViewManager::instance()->show( m_lovedTracksPage );
     return m_lovedTracksPage;
@@ -497,4 +517,65 @@ ViewPage*
 SourceItem::getLovedTracksPage() const
 {
     return m_lovedTracksPage;
+}
+
+
+ViewPage*
+SourceItem::latestAdditionsClicked()
+{
+    if ( !m_latestAdditionsPage )
+    {
+        CollectionView* cv = new CollectionView( ViewManager::instance()->widget() );
+        cv->setFrameShape( QFrame::NoFrame );
+        cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
+        raModel->setStyle( TrackModel::Large );
+
+        cv->setItemDelegate( new PlaylistLargeItemDelegate( cv, cv->proxyModel() ) );
+        cv->setTrackModel( raModel );
+        cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
+
+        m_latestAdditionsPage = cv;
+    }
+
+    ViewManager::instance()->show( m_latestAdditionsPage );
+    return m_latestAdditionsPage;
+}
+
+
+ViewPage*
+SourceItem::getLatestAdditionsPage() const
+{
+    return m_latestAdditionsPage;
+}
+
+
+ViewPage*
+SourceItem::recentPlaysClicked()
+{
+    if ( !m_recentPlaysPage )
+    {
+        PlaylistView* pv = new PlaylistView( ViewManager::instance()->widget() );
+        pv->setFrameShape( QFrame::NoFrame );
+        pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
+        raModel->setStyle( TrackModel::Large );
+
+        pv->setItemDelegate( new PlaylistLargeItemDelegate( pv, pv->proxyModel() ) );
+        pv->setPlaylistModel( raModel );
+
+        m_recentPlaysPage = pv;
+    }
+
+    ViewManager::instance()->show( m_recentPlaysPage );
+    return m_recentPlaysPage;
+}
+
+
+ViewPage*
+SourceItem::getRecentPlaysPage() const
+{
+    return m_recentPlaysPage;
 }

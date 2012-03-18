@@ -43,10 +43,18 @@ Result::get( const QString& url )
         return s_results.value( url );
     }
 
-    result_ptr r = result_ptr( new Result( url ), &QObject::deleteLater );
+    result_ptr r = result_ptr( new Result( url ), &Result::deleteLater );
     s_results.insert( url, r );
 
     return r;
+}
+
+
+bool
+Result::isCached( const QString& url )
+{
+    QMutexLocker lock( &s_mutex );
+    return ( s_results.contains( url ) );
 }
 
 
@@ -69,11 +77,20 @@ Result::Result( const QString& url )
 
 Result::~Result()
 {
+}
+
+
+void
+Result::deleteLater()
+{
     QMutexLocker lock( &s_mutex );
+
     if ( s_results.contains( m_url ) )
     {
         s_results.remove( m_url );
     }
+
+    QObject::deleteLater();
 }
 
 

@@ -28,7 +28,8 @@
 
 class AlbumModel;
 class CollectionFlatModel;
-class PlaylistModel;
+class RecentlyAddedModel;
+class RecentlyPlayedModel;
 
 namespace Ui
 {
@@ -58,18 +59,15 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void loadTracks();
     void loadRecentAdditions();
 
     void onCollectionChanged();
-    void onPlaybackFinished( const Tomahawk::query_ptr& query );
-    void onLoadedTrackHistory( const QList<Tomahawk::query_ptr>& queries );
 
 private:
     Ui::SourceInfoWidget *ui;
 
-    CollectionFlatModel* m_recentCollectionModel;
-    PlaylistModel* m_historyModel;
+    RecentlyAddedModel* m_recentTracksModel;
+    RecentlyPlayedModel* m_historyModel;
     AlbumModel* m_recentAlbumModel;
 
     Tomahawk::source_ptr m_source;

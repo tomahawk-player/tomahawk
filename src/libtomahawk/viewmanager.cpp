@@ -41,6 +41,7 @@
 #include "tomahawksettings.h"
 
 #include "customplaylistview.h"
+#include "PlaylistLargeItemDelegate.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
@@ -437,7 +438,12 @@ Tomahawk::ViewPage*
 ViewManager::showTopLovedPage()
 {
     if ( !m_topLovedWidget )
-        m_topLovedWidget = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
+    {
+        CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
+        view->setItemDelegate( new PlaylistLargeItemDelegate( view, view->proxyModel() ) );
+
+        m_topLovedWidget = view;
+    }
 
     return show( m_topLovedWidget );
 }

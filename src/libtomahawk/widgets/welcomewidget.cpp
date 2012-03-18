@@ -29,16 +29,14 @@
 
 #include "audio/audioengine.h"
 #include "playlist/albummodel.h"
-#include "playlist/playlistmodel.h"
+#include "playlist/RecentlyPlayedModel.h"
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dynamic/GeneratorInterface.h"
 #include "RecentlyPlayedPlaylistsModel.h"
 
-#define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
-#define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
 
@@ -72,7 +70,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     updatePlaylists();
 
-    m_tracksModel = new PlaylistModel( ui->tracksView );
+    m_tracksModel = new RecentlyPlayedModel( source_ptr(), ui->tracksView );
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
@@ -80,9 +78,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );
-
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
@@ -100,7 +95,6 @@ WelcomeWidget::~WelcomeWidget()
 void
 WelcomeWidget::loadData()
 {
-
     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
@@ -129,10 +123,15 @@ WelcomeWidget::isBeingPlayed() const
 void
 WelcomeWidget::onSourcesReady()
 {
-    m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
-
     foreach ( const source_ptr& source, SourceList::instance()->sources() )
         onSourceAdded( source );
+}
+
+
+void
+WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
+{
+    connect( source->collection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ), Qt::UniqueConnection );
 }
 
 
@@ -154,66 +153,6 @@ WelcomeWidget::updatePlaylists()
     }
     else
         ui->playlistWidget->overlay()->hide();
-}
-
-
-void
-WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
-{
-    connect( source->collection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ), Qt::UniqueConnection );
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::UniqueConnection );
-}
-
-
-void
-WelcomeWidget::checkQueries()
-{
-    if ( m_timer->isActive() )
-        m_timer->stop();
-
-    m_tracksModel->ensureResolved();
-}
-
-
-void
-WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
-{
-    int count = m_tracksModel->trackCount();
-    unsigned int playtime = query->playedBy().second;
-
-    if ( count )
-    {
-        TrackModelItem* oldestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( count - 1, 0, QModelIndex() ) );
-        if ( oldestItem->query()->playedBy().second >= playtime )
-            return;
-
-        TrackModelItem* youngestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( 0, 0, QModelIndex() ) );
-        if ( youngestItem->query()->playedBy().second <= playtime )
-            m_tracksModel->insert( query, 0 );
-        else
-        {
-            for ( int i = 0; i < count - 1; i++ )
-            {
-                TrackModelItem* item1 = m_tracksModel->itemFromIndex( m_tracksModel->index( i, 0, QModelIndex() ) );
-                TrackModelItem* item2 = m_tracksModel->itemFromIndex( m_tracksModel->index( i + 1, 0, QModelIndex() ) );
-
-                if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
-                {
-                    m_tracksModel->insert( query, i + 1 );
-                    break;
-                }
-            }
-        }
-    }
-    else
-        m_tracksModel->insert( query, 0 );
-
-    if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
-        m_tracksModel->remove( HISTORY_TRACK_ITEMS );
-
-    if ( m_timer->isActive() )
-        m_timer->stop();
-    m_timer->start( HISTORY_RESOLVING_TIMEOUT );
 }
 
 

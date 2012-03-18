@@ -31,7 +31,9 @@ using namespace Tomahawk;
 
 Artist::~Artist()
 {
+#ifndef ENABLE_HEADLESS
     delete m_cover;
+#endif
 }
 
 
@@ -73,8 +75,10 @@ Artist::Artist( unsigned int id, const QString& name )
     : QObject()
     , m_id( id )
     , m_name( name )
-    , m_cover( 0 )
     , m_infoLoaded( false )
+#ifndef ENABLE_HEADLESS
+    , m_cover( 0 )
+#endif
 {
     m_sortname = DatabaseImpl::sortname( name, true );
 

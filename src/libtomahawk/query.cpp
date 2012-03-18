@@ -521,7 +521,7 @@ Query::setAllSocialActions( const QList< SocialAction >& socialActions )
 
 
 QList< SocialAction >
-Query::allSocialActions()
+Query::allSocialActions() const
 {
     return m_allSocialActions;
 }
@@ -537,7 +537,7 @@ Query::parseSocialActions()
     {
         Tomahawk::SocialAction socialAction;
         socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
+        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source->id() == SourceList::instance()->getLocal()->id() )
         {
             m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
         }
@@ -581,6 +581,71 @@ Query::setLoved( bool loved )
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     }
+}
+
+
+QString
+Query::socialActionDescription( const QString& action, DescriptionMode mode ) const
+{
+    QString desc;
+    QList< Tomahawk::SocialAction > socialActions = allSocialActions();
+
+    QStringList actionSources;
+    int loveTotal = 0;
+    foreach ( const Tomahawk::SocialAction& sa, socialActions )
+    {
+        if ( sa.action == action )
+        {
+            if ( actionSources.contains( sa.source->friendlyName() ) )
+                continue;
+            actionSources << sa.source->friendlyName();
+            loveTotal++;
+        }
+    }
+
+    actionSources.clear();
+    int loveCounter = 0;
+    foreach ( const Tomahawk::SocialAction& sa, socialActions )
+    {
+        if ( sa.action == action )
+        {
+            if ( actionSources.contains( sa.source->friendlyName() ) )
+                continue;
+            actionSources << sa.source->friendlyName();
+
+            if ( ++loveCounter > 3 )
+                continue;
+            else if ( loveCounter > 1 )
+            {
+                if ( loveCounter == loveTotal )
+                    desc += tr( " and " );
+                else
+                    desc += ", ";
+            }
+           
+            if ( sa.source->isLocal() )
+            {
+                if ( loveCounter == 1 )
+                    desc += "<b>" + tr( "You" ) + "</b>";
+                else
+                    desc += "<b>" + tr( "you" ) + "</b>";
+            }
+            else
+                desc += "<b>" + sa.source->friendlyName() + "</b>";
+        }
+    }
+    if ( loveCounter > 0 )
+    {
+        if ( loveCounter > 3 )
+            desc += " " + tr( "and" ) + " <b>" + tr( "%n other(s)", "", loveCounter - 3 ) + "</b>";
+        
+        if ( mode == Short )
+            desc = "<b>" + tr( "%1 people" ).arg( loveCounter ) + "</b>";
+
+        desc += " " + tr( "loved this track" ); //FIXME: more action descs required
+    }
+    
+    return desc;
 }
 
 

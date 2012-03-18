@@ -55,9 +55,6 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
         Tomahawk::result_ptr result = lib->resultFromHint( m_query );
-        /*        qDebug() << "Result null:" << result.isNull();
-         *        qDebug() << "Collection null:" << result->collection().isNull();
-         *        qDebug() << "Source null:" << result->collection()->source().isNull();*/
         if ( !result.isNull() && !result->collection().isNull() && result->collection()->source()->isOnline() )
         {
             QList<Tomahawk::result_ptr> res;
@@ -137,7 +134,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         else
         {
             s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
-            if( s.isNull() )
+            if ( s.isNull() )
             {
                 qDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
                 continue;
@@ -146,13 +143,18 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        Tomahawk::artist_ptr artist =
-                Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
-        Tomahawk::album_ptr album =
-                Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
-        Tomahawk::artist_ptr composer =
-                Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
+        if ( cached )
+        {
+            qDebug() << "Result already cached:" << result->toString();
+            res << result;
+            continue;
+        }
+
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
+        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
@@ -181,6 +183,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
         result->setAttributes( attr );
         result->setCollection( s->collection() );
+
         res << result;
     }
 
@@ -270,7 +273,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         else
         {
             s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
-            if( s.isNull() )
+            if ( s.isNull() )
             {
                 qDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
                 continue;
@@ -279,13 +282,18 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        Tomahawk::artist_ptr artist =
-                Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
-        Tomahawk::album_ptr album =
-                Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
-        Tomahawk::artist_ptr composer =
-                Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
+        if ( cached )
+        {
+            qDebug() << "Result already cached:" << result->toString();
+            res << result;
+            continue;
+        }
+
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
+        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
@@ -322,8 +330,8 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         }
 
         result->setAttributes( attr );
-
         result->setCollection( s->collection() );
+
         res << result;
     }
 

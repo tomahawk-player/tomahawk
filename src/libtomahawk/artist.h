@@ -72,11 +72,13 @@ private:
     QString m_name;
     QString m_sortname;
     QByteArray m_coverBuffer;
-    mutable QPixmap* m_cover;
     bool m_infoLoaded;
     mutable QString m_uuid;
 
+#ifndef ENABLE_HEADLESS
+    mutable QPixmap* m_cover;
     mutable QHash< int, QPixmap > m_coverCache;
+#endif
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

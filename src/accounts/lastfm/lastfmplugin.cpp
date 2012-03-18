@@ -456,7 +456,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
             imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
             imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
-            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "size", "largesquare" );
             imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
 
             QNetworkRequest req( imgurl );
@@ -475,7 +475,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             imgurl.addQueryItem( "method", "artist.imageredirect" );
             imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
             imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
-            imgurl.addQueryItem( "size", "large" );
+            imgurl.addQueryItem( "size", "largesquare" );
             imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
 
             QNetworkRequest req( imgurl );

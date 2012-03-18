@@ -31,7 +31,9 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
+#ifndef ENABLE_HEADLESS
     delete m_cover;
+#endif
 }
 
 
@@ -74,8 +76,10 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
-    , m_cover( 0 )
     , m_infoLoaded( false )
+#ifndef ENABLE_HEADLESS
+    , m_cover( 0 )
+#endif
 {
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),

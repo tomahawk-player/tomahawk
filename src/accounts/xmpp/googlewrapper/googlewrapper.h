@@ -38,7 +38,7 @@ public:
 
     virtual QString prettyName() const { return "Google"; }
     virtual QString factoryId() const { return "googleaccount"; }
-    QString description() const { return tr( "Connect to GChat to find your friends" ); }
+    QString description() const { return tr( "Connect to Google Talk to find your friends" ); }
     virtual QPixmap icon() const;
     virtual Account* createAccount( const QString& pluginId );
 };
