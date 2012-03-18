@@ -73,7 +73,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
                                                  boost::bind( &SourceItem::latestAdditionsClicked, this ),
                                                  boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
 
-    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/new-additions.png" ),
+    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
                                              boost::bind( &SourceItem::recentPlaysClicked, this ),
                                              boost::bind( &SourceItem::getRecentPlaysPage, this ) );
 
