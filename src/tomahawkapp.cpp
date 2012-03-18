@@ -613,13 +613,15 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
 
-    activate();
     if ( instance.arguments.size() < 2 )
         return;
 
     QString arg1 = instance.arguments[ 1 ];
     if ( loadUrl( arg1 ) )
+    {
+        activate();
         return;
+    }
 
     if ( instance.arguments.contains( "--next" ) )
         AudioEngine::instance()->next();
