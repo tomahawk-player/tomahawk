@@ -52,7 +52,7 @@ SpotifyAccountConfig::saveSettings()
     for( int i = 0; i < m_ui->playlistList->count(); i++ )
     {
         const QListWidgetItem* item = m_ui->playlistList->itemAt( i, 0 );
-        SpotifyPlaylist* pl = item->data( Qt::UserRole ).value< SpotifyPlaylist* >();
+        SpotifyPlaylistInfo* pl = item->data( Qt::UserRole ).value< SpotifyPlaylistInfo* >();
         const bool toSync = ( item->checkState() == Qt::Checked );
         if ( pl->sync != toSync )
         {
@@ -83,13 +83,13 @@ SpotifyAccountConfig::highQuality() const
 
 
 void
-SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylist *>& playlists )
+SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlists )
 {
     m_ui->playlistList->clear();
-    foreach ( SpotifyPlaylist* pl, playlists )
+    foreach ( SpotifyPlaylistInfo* pl, playlists )
     {
         QListWidgetItem* item = new QListWidgetItem( pl->name, m_ui->playlistList );
-        item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylist* >( pl ) );
+        item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylistInfo* >( pl ) );
         item->setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         item->setCheckState( pl->sync ? Qt::Checked : Qt::Unchecked );
     }

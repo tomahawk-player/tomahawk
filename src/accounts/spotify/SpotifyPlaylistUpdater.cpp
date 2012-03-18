@@ -18,7 +18,35 @@
 
 #include "SpotifyPlaylistUpdater.h"
 
-SpotifyPlaylistUpdater::SpotifyPlaylistUpdater(const Tomahawk::playlist_ptr& pl): PlaylistUpdaterInterface(pl)
+#include "accounts/AccountManager.h"
+#include "SpotifyAccount.h"
+
+using namespace Tomahawk;
+using namespace Accounts;
+
+Tomahawk::PlaylistUpdaterInterface*
+SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
+{
+    if ( !m_account )
+    {
+        // Find the spotify account
+        foreach ( Account* account, AccountManager::instance()->accounts() )
+        {
+            if ( SpotifyAccount* spotify = qobject_cast< SpotifyAccount* >( account ) )
+            {
+                m_account = spotify;
+                break;
+            }
+        }
+    }
+
+    return new SpotifyPlaylistUpdater( m_account, pl );
+}
+
+
+SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const playlist_ptr& pl )
+    : PlaylistUpdaterInterface( pl )
+    , m_spotify( acct )
 {
 
 }

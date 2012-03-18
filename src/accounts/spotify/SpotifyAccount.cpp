@@ -23,6 +23,7 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "sourcelist.h"
 #include "SpotifyAccountConfig.h"
+#include "SpotifyPlaylistUpdater.h"
 #include "resolvers/scriptresolver.h"
 #include <QPixmap>
 
@@ -80,7 +81,7 @@ SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
 void
 SpotifyAccount::init()
 {
-    qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylist* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
+    qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
     m_spotifyResolver = dynamic_cast< ScriptResolver* >( m_resolver.data() );
 
@@ -151,7 +152,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
                 qDebug() << "Did not get name and plid and revid for spotify playlist:" << name << plid << revid << plMap;
                 continue;
             }
-            m_allSpotifyPlaylists << new SpotifyPlaylist( name, plid, revid, sync );
+            m_allSpotifyPlaylists << new SpotifyPlaylistInfo( name, plid, revid, sync );
         }
 
         if ( !m_configWidget.isNull() )
@@ -231,17 +232,58 @@ SpotifyAccount::saveConfig()
     }
 
     m_configWidget.data()->saveSettings();
-    foreach ( SpotifyPlaylist* pl, m_allSpotifyPlaylists )
+    foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists )
     {
         if ( pl->changed )
         {
             pl->changed = false;
             if ( pl->sync )
-                startPlaylistSync( pl );
+            {
+                // Fetch full playlist contents, then begin the sync
+                QVariantMap msg;
+                msg[ "_msgtype" ] = "getPlaylist";
+                msg[ "playlistid" ] = pl->plid;
+                msg[ "sync" ] = pl->sync;
+
+                sendMessage( msg, "startPlaylistSyncWithPlaylist" );
+            }
             else
                 stopPlaylistSync( pl );
         }
     }
+}
+
+
+void
+SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg )
+{
+    qDebug() << Q_FUNC_INFO <<  "Got full spotify playlist body, creating a tomahawk playlist and enabling sync!!";
+    const QString id = msg.value( "id" ).toString();
+    const QString name = msg.value( "name" ).toString();
+
+    qDebug() << "Starting sync with pl:" << id << name;
+    QVariantList tracks = msg.value( "tracks" ).toList();
+
+    // create a list of query/plentries directly
+    QList< query_ptr > queries;
+    foreach ( const QVariant& trackV, tracks )
+    {
+        const QVariantMap trackMap = trackV.toMap();
+        qDebug() << "Adding spotify track to new tomahawk playlist:" << trackMap.value( "track" ).toString() << trackMap.value( "artist" ).toString()  << trackMap.value( "album" ).toString();
+        query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
+        q->setProperty( "spotifytrackid", trackMap.value( "id" ) );
+
+        queries << q;
+    }
+
+    playlist_ptr plPtr = Tomahawk::Playlist::create( SourceList::instance()->getLocal(),
+                                                     uuid(),
+                                                     name,
+                                                     QString(),
+                                                     QString(),
+                                                     false,
+                                                     queries );
+    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( this, plPtr );
 }
 
 
@@ -312,14 +354,35 @@ SpotifyAccount::sendMessage( const QVariantMap &m, const QString& slot )
 
 
 void
-SpotifyAccount::startPlaylistSync( SpotifyPlaylist* playlist )
+SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 {
 
 }
 
 
 void
-SpotifyAccount::stopPlaylistSync( SpotifyPlaylist* playlist )
+SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
+{
+    /**
+     * Begin syncing a playlist. Two options:
+     * 1) This is a playlist that has never been synced to tomahawk. Create a new one
+     *    and attach a new SpotifyPlaylistUpdater to it
+     * 2) This was previously synced, and has since been unsynced. THe playlist is still around
+     *    with an inactive SpotifyPlaylistUpdater, so just enable it and bring it up to date.
+     */
+    if ( m_updaters.contains( playlist->plid ) )
+    {
+        // update and re-sync
+    }
+    else
+    {
+
+    }
+}
+
+
+void
+SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
 {
 
 }
@@ -334,12 +397,3 @@ SpotifyAccount::loadPlaylists()
     msg[ "_msgtype" ] = "getAllPlaylists";
     sendMessage( msg, "allPlaylistsLoaded" );
 }
-
-
-// bool
-// operator==( Accounts::SpotifyAccount::Sync one, Accounts::SpotifyAccount::Sync two )
-// {
-//     if( one.id_ == two.id_ )
-//         return true;
-//     return false;
-// }

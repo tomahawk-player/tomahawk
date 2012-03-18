@@ -32,7 +32,7 @@ class SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
 {
     Q_OBJECT
 public:
-    SpotifyPlaylistUpdater( const Tomahawk::playlist_ptr& pl );
+    SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const Tomahawk::playlist_ptr& pl );
 
     virtual ~SpotifyPlaylistUpdater();
 
@@ -52,10 +52,13 @@ private:
 class SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 {
 public:
-    SpotifyUpdaterFactory() {}
+    SpotifyUpdaterFactory() : m_account( 0 ) {}
 
-    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl ) { return new SpotifyPlaylistUpdater( pl ); }
+    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl );
     virtual QString type() const { return "spotify"; }
+
+private:
+    Tomahawk::Accounts::SpotifyAccount* m_account;
 };
 
 #endif // SPOTIFYPLAYLISTUPDATER_H

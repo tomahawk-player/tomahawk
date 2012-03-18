@@ -32,7 +32,7 @@ namespace Accounts
 {
 
 class SpotifyAccount;
-struct SpotifyPlaylist;
+struct SpotifyPlaylistInfo;
 
 class SpotifyAccountConfig : public QWidget
 {
@@ -44,7 +44,7 @@ public:
     QString password() const;
     bool highQuality() const;
 
-    void setPlaylists( const QList< SpotifyPlaylist* >& playlists );
+    void setPlaylists( const QList< SpotifyPlaylistInfo* >& playlists );
 
     void loadFromConfig();
     void saveSettings();

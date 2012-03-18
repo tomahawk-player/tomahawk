@@ -25,6 +25,7 @@
 #include "sourcelist.h"
 #include "accounts/ResolverAccount.h"
 
+class SpotifyPlaylistUpdater;
 class QTimer;
 
 class ScriptResolver;
@@ -34,15 +35,18 @@ namespace Accounts {
 
 class SpotifyAccountConfig;
 
-struct SpotifyPlaylist {
+// metadata for a playlist
+struct SpotifyPlaylistInfo {
     QString name, plid, revid;
     bool sync, changed;
 
-    SpotifyPlaylist( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
+
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
         : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
 
-    SpotifyPlaylist() : sync( false ), changed( false ) {}
+    SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
 };
+
 
 class SpotifyAccountFactory : public AccountFactory
 {
@@ -94,13 +98,17 @@ private slots:
 
     // SpotifyResolver message handlers, all take msgtype, msg as argument
   //  void <here>( const QString& msgType, const QVariantMap& msg );
+    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
+
 private:
     void init();
     void loadPlaylists();
     void sendMessage( const QVariantMap& msg, const QString& slot );
 
-    void startPlaylistSync( SpotifyPlaylist* playlist );
-    void stopPlaylistSync( SpotifyPlaylist* playlist );
+    void startPlaylistSync( SpotifyPlaylistInfo* playlist );
+    void stopPlaylistSync( SpotifyPlaylistInfo* playlist );
+
+    void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
 //     QList<Sync> m_syncPlaylists;
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
@@ -108,12 +116,15 @@ private:
 
     QMap<QString, QString> m_qidToSlotMap;
 
-    QList< SpotifyPlaylist* > m_allSpotifyPlaylists;
+    // List of synced spotify playlists in config UI
+    QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
+    QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
+
 };
 
 }
 }
 
-Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylist* );
+Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylistInfo* );
 
 #endif // SpotifyAccount_H
