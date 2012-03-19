@@ -1,5 +1,6 @@
 /*
  *  Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *  Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

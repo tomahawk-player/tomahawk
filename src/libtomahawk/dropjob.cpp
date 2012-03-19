@@ -2,6 +2,7 @@
  *
  *   Copyright 2011, Michael Zanetti <mzanetti@kde.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by

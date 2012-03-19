@@ -2,6 +2,7 @@
  *
  *   Copyright 2011, Ruslan Nigmatullin <euroelessar@ya.ru>
  *   Copyright 2011, Dominik Schmidt <dev@dominik-schmidt.de>
+ *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
