@@ -251,7 +251,10 @@ QWidget*
 SpotifyAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
+    {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
+        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+    }
     else
         m_configWidget.data()->loadFromConfig();
 
