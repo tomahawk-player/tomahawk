@@ -26,6 +26,7 @@
 #include <QMutex>
 #include <QVariant>
 
+#include "headlesscheck.h"
 #include "dllmacro.h"
 
 class DLLEXPORT ACLRegistry : public QObject
@@ -39,7 +40,9 @@ public:
     enum ACL {
         Allow = 0,
         Deny = 1,
-        NotFound = 2
+        NotFound = 2,
+        AllowOnce = 3,
+        DenyOnce = 4
     };
 
     ACLRegistry( QObject *parent = 0 );
@@ -50,9 +53,10 @@ public:
      *
      * @param dbid DBID of peer
      * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
+     * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return ACLRegistry::ACL
      **/
-    ACLRegistry::ACL isAuthorizedPeer( const QString &dbid, ACLRegistry::ACL globalType = ACLRegistry::NotFound );
+    ACLRegistry::ACL isAuthorizedPeer( const QString &dbid, ACLRegistry::ACL globalType = ACLRegistry::NotFound, const QString &username = QString() );
 
     /**
      * @brief Registers the global ACL value for this peer
@@ -80,8 +84,12 @@ public:
      * @param username Username of the peer to be added to the entry
      * @return void
      **/
-    void registerAlias( const QString &dbid, QString username );
+    void registerAlias( const QString &dbid, const QString &username );
 
+#ifndef ENABLE_HEADLESS
+    ACLRegistry::ACL getUserDecision( const QString &username );
+#endif
+    
 //     ACLRegistry::ACL isAuthorizedPath( const QString &dbid, const QString &path );
 //     void authorizePath( const QString &dbid, const QString &path, ACLRegistry::ACL type );
 
@@ -94,7 +102,6 @@ private:
     void save();
 
     QVariantHash m_cache;
-    QMutex m_cacheMutex;
 
     static ACLRegistry* s_instance;
 };

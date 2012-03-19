@@ -305,34 +305,34 @@ void
 Servent::readyRead()
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
-    QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
+    QWeakPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
 
-    if( sock->_disowned )
+    if( sock.isNull() || sock.data()->_disowned )
     {
         return;
     }
 
-    if( sock->_msg.isNull() )
+    if( sock.data()->_msg.isNull() )
     {
         char msgheader[ Msg::headerSize() ];
-        if( sock->bytesAvailable() < Msg::headerSize() )
+        if( sock.data()->bytesAvailable() < Msg::headerSize() )
             return;
 
-        sock->read( (char*) &msgheader, Msg::headerSize() );
-        sock->_msg = Msg::begin( (char*) &msgheader );
+        sock.data()->read( (char*) &msgheader, Msg::headerSize() );
+        sock.data()->_msg = Msg::begin( (char*) &msgheader );
     }
 
-    if( sock->bytesAvailable() < sock->_msg->length() )
+    if( sock.data()->bytesAvailable() < sock.data()->_msg->length() )
         return;
 
-    QByteArray ba = sock->read( sock->_msg->length() );
-    sock->_msg->fill( ba );
-    Q_ASSERT( sock->_msg->is( Msg::JSON ) );
+    QByteArray ba = sock.data()->read( sock.data()->_msg->length() );
+    sock.data()->_msg->fill( ba );
+    Q_ASSERT( sock.data()->_msg->is( Msg::JSON ) );
 
     ControlConnection* cc = 0;
     bool ok;
     QString key, conntype, nodeid, controlid;
-    QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
+    QVariantMap m = parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
     if( !ok )
     {
         tDebug() << "Invalid JSON on new connection, aborting";
@@ -381,21 +381,31 @@ Servent::readyRead()
     // they connected to us and want something we are offering
     if ( conntype == "accept-offer" || conntype == "push-offer" )
     {
-        sock->_msg.clear();
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock->peerAddress() << "socket peer name = " << sock->peerName();
-        Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
-        if( !conn )
+        sock.data()->_msg.clear();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock.data()->peerAddress() << "socket peer name = " << sock.data()->peerName();
+        Connection* conn = claimOffer( cc, nodeid, key, sock.data()->peerAddress() );
+        if ( !conn )
         {
             tLog() << "claimOffer FAILED, key:" << key << nodeid;
             goto closeconnection;
         }
-        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;
-
+        if ( sock.isNull() )
+        {
+            tLog() << "Socket has become null, possibly took too long to make an ACL decision, key:" << key << nodeid;
+            return;
+        }
+        else if ( !sock.data()->isValid() )
+        {
+            tLog() << "Socket has become invalid, possibly took too long to make an ACL decision, key:" << key << nodeid;
+            goto closeconnection;
+        }
+        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;        
+        
         m_connectedNodes << nodeid;
         if( !nodeid.isEmpty() )
             conn->setId( nodeid );
 
-        handoverSocket( conn, sock );
+        handoverSocket( conn, sock.data() );
         return;
     }
     else
@@ -406,8 +416,8 @@ Servent::readyRead()
     // fallthru to cleanup:
 closeconnection:
     tLog() << "Closing incoming connection, something was wrong.";
-    sock->_msg.clear();
-    sock->disconnectFromHost();
+    sock.data()->_msg.clear();
+    sock.data()->disconnectFromHost();
 }
 
 
@@ -661,7 +671,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if( !nodeid.isEmpty() )
         {
             // If there isn't a nodeid it's not the first connection and will already have been stopped
-            if( !checkACL( conn.data(), nodeid, true ) )
+            if( !checkACL( conn, nodeid ) )
             {
                 tLog() << "Connection not allowed due to ACL";
                 return NULL;
@@ -694,64 +704,18 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
 
 bool
-Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
+Servent::checkACL( const QWeakPointer< Connection > conn, const QString &nodeid ) const
 {
-    Q_UNUSED( conn );
-    Q_UNUSED( nodeid );
-    Q_UNUSED( showDialog );
-
-    /*
-    tDebug( LOGVERBOSE ) << "Checking ACLs";    
-    ACLSystem* aclSystem = ACLSystem::instance();
-    ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
-    if( peerStatus == ACLSystem::Deny )
+    if ( conn.isNull() )
         return false;
+    
+    tDebug( LOGVERBOSE ) << "Checking ACL for" << conn.data()->name();
+    ACLRegistry::ACL peerStatus = ACLRegistry::instance()->isAuthorizedPeer( nodeid, ACLRegistry::NotFound, conn.data()->name() );
+    tDebug( LOGVERBOSE ) << "ACL status is" << peerStatus;
+    if ( peerStatus == ACLRegistry::Allow || peerStatus == ACLRegistry::AllowOnce )
+        return true;
 
-    //FIXME: Actually enable it when it makes sense
-    //FIXME: needs refactoring because it depends on QtGui and the servent is part of libtomahawk-core
-
-    return true;
-    if( peerStatus == ACLSystem::NotFound )
-    {
-        if( !showDialog )
-            return false;
-
-        QMessageBox msgBox;
-        msgBox.setIcon( QMessageBox::Question );
-        msgBox.setText( tr( "Incoming Connection Attempt" ) );
-        msgBox.setInformativeText( tr( "Another Tomahawk instance is attempting to connect to you. Select whether to allow or deny this connection.\n\nPeer name: %1\nPeer ID: %2\n\nRemember: Only allow peers to connect if you have the legal right for them to stream music from you.").arg( conn->name(), nodeid ) );
-        QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::HelpRole );
-        QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
-        QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
-        QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
-
-        msgBox.setDefaultButton( denyButton );
-        msgBox.setEscapeButton( denyButton );
-
-        msgBox.exec();
-
-        if( msgBox.clickedButton() == denyButton )
-            return false;
-        else if( msgBox.clickedButton() == alwaysDenyButton )
-        {
-            aclSystem->authorizeUser( nodeid, ACLSystem::Deny );
-            return false;
-        }
-        else if( msgBox.clickedButton() == alwaysAllowButton )
-        {
-            aclSystem->authorizeUser( nodeid, ACLSystem::Allow );
-            return true;
-        }
-        else if( msgBox.clickedButton() == allowButton )
-            return true;
-
-        //How could we get here?
-        Q_ASSERT( false );
-        return false;
-    }
-    */
-
-    return true;
+    return false;
 }
 
 

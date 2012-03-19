@@ -18,10 +18,11 @@
 
 #include "aclregistry.h"
 
-#include <QMutexLocker>
+#include <QThread>
 #include <QVariant>
 
 #include "tomahawksettings.h"
+#include "tomahawkapp.h"
 
 #include "utils/logger.h"
 
@@ -53,17 +54,20 @@ ACLRegistry::~ACLRegistry()
 
 
 ACLRegistry::ACL
-ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType )
+ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType, const QString &username )
 {
-//    qDebug() << Q_FUNC_INFO;
-    QMutexLocker locker( &m_cacheMutex );
+    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
+        return globalType;
+    
     qDebug() << "Current cache keys =" << m_cache.keys();
-//    qDebug() << "Looking up dbid";
     if( m_cache.contains( dbid ) )
     {
         QVariantHash peerHash = m_cache[ dbid ].toHash();
         if( peerHash.contains( "global" ) )
+        {
+            registerAlias( dbid, username );
             return ACLRegistry::ACL( peerHash[ "global" ].toInt() );
+        }
 
         if ( globalType == ACLRegistry::NotFound )
             return globalType;
@@ -71,54 +75,54 @@ ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType 
         peerHash[ "global" ] = int( globalType );
         m_cache[ dbid ] = peerHash;
         save();
+        registerAlias( dbid, username );
         return globalType;
     }
 
-    //not found
-    if ( globalType == ACLRegistry::NotFound )
-        return globalType;
+    ACLRegistry::ACL acl = globalType;
+    tDebug( LOGVERBOSE ) << "ACL is intially" << acl;
+#ifndef ENABLE_HEADLESS
+    acl = getUserDecision( username );
+    tDebug( LOGVERBOSE ) << "after getUserDecision acl is" << acl;
+#endif
+    
+    if ( acl == ACLRegistry::NotFound || acl == ACLRegistry::AllowOnce || acl == ACLRegistry::DenyOnce )
+        return acl;
 
     QVariantHash peerHash;
-    peerHash[ "global" ] = int( globalType );
+    peerHash[ "global" ] = int( acl );
     m_cache[ dbid ] = peerHash;
     save();
-    return globalType;
+    registerAlias( dbid, username );
+    return acl;
 }
 
 
 void
 ACLRegistry::registerPeer( const QString& dbid, ACLRegistry::ACL globalType, const QString &username )
 {
-//    qDebug() << Q_FUNC_INFO;
-    if( globalType == ACLRegistry::NotFound )
+    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
+        return;
+    
+    if ( globalType == ACLRegistry::NotFound || globalType == ACLRegistry::DenyOnce || globalType == ACLRegistry::AllowOnce )
         return;
 
-    QMutexLocker locker( &m_cacheMutex );
-
     QVariantHash peerHash;
-    if( m_cache.contains( dbid ) )
+    if ( m_cache.contains( dbid ) )
         peerHash = m_cache[ dbid ].toHash();
     peerHash[ "global" ] = int( globalType );
-    if ( !username.isEmpty() )
-    {
-        if ( peerHash.contains( "usernames" ) )
-        {
-            if ( !peerHash[ "usernames" ].toStringList().contains( username ) )
-                peerHash[ "usernames" ] = peerHash[ "usernames" ].toStringList() + QStringList( username );
-        }
-        else
-            peerHash[ "usernames" ] = QStringList( username );
-    }
     m_cache[ dbid ] = peerHash;
     save();
+    registerAlias( dbid, username );
 }
 
 
 QPair< QString, ACLRegistry::ACL >
 ACLRegistry::isAuthorizedUser( const QString &username, ACLRegistry::ACL globalType )
 {
-//    qDebug() << Q_FUNC_INFO;
-    QMutexLocker locker( &m_cacheMutex );
+    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
+        return QPair< QString, ACLRegistry::ACL >( QString(), ACLRegistry::NotFound );
+
     qDebug() << "Current cache keys =" << m_cache.keys();
     foreach ( QString dbid, m_cache.keys() )
     {
@@ -142,6 +146,31 @@ ACLRegistry::isAuthorizedUser( const QString &username, ACLRegistry::ACL globalT
     }
 
     return QPair< QString, ACLRegistry::ACL >( QString(), ACLRegistry::NotFound );
+}
+
+
+void
+ACLRegistry::registerAlias( const QString& dbid, const QString &username )
+{
+    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
+        return;
+
+    if ( dbid.isEmpty() || username.isEmpty() )
+        return;
+
+    if ( !m_cache.contains( dbid ) )
+        return;
+
+    QVariantHash peerHash = m_cache[ dbid ].toHash();
+    if ( !peerHash.contains( "usernames" ) )
+        peerHash[ "usernames" ] = QStringList( username );
+    else if ( !peerHash[ "usernames" ].toStringList().contains( username ) )
+        peerHash[ "usernames" ] = peerHash[ "usernames" ].toStringList() + QStringList( username );
+    else
+        return;
+
+    m_cache[ dbid ] = peerHash;
+    save();
 }
 
 
@@ -181,6 +210,43 @@ ACLRegistry::isAuthorizedUser( const QString &username, ACLRegistry::ACL globalT
 //     m_cache[dbid] = peerHash;
 // }
 
+#ifndef ENABLE_HEADLESS
+
+#include <QMessageBox>
+
+ACLRegistry::ACL
+ACLRegistry::getUserDecision( const QString &username )
+{
+    QMessageBox msgBox;
+    msgBox.setIcon( QMessageBox::Question );
+    msgBox.setText( tr( "Connect to Peer?" ) );
+    msgBox.setInformativeText( tr( "Another Tomahawk instance that claims to be owned by %1 is attempting to connect to you. Select whether to allow or deny this connection.\n\nRemember: Only allow peers to connect if you trust who they are and if you have the legal right for them to stream music from you.").arg( username ) );
+    QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::HelpRole );
+    QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
+    QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
+    QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
+
+    msgBox.setDefaultButton( allowButton );
+    msgBox.setEscapeButton( denyButton );
+
+    msgBox.exec();
+
+    if( msgBox.clickedButton() == denyButton )
+        return ACLRegistry::DenyOnce;
+    else if( msgBox.clickedButton() == alwaysDenyButton )
+        return ACLRegistry::Deny;
+    else if( msgBox.clickedButton() == allowButton )
+        return ACLRegistry::AllowOnce;
+    else if( msgBox.clickedButton() == alwaysAllowButton )
+        return ACLRegistry::Allow;
+
+    //How could we get here?
+    tDebug( LOGVERBOSE ) << "ERROR: returning NotFound";
+    Q_ASSERT( false );
+    return ACLRegistry::NotFound;
+}
+
+#endif
 
 void
 ACLRegistry::save()

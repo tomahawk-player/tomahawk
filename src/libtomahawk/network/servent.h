@@ -110,7 +110,7 @@ public:
     QString externalAddress() const { return !m_externalHostname.isNull() ? m_externalHostname : m_externalAddress.toString(); }
     int externalPort() const { return m_externalPort; }
 
-    QSharedPointer<QIODevice> remoteIODeviceFactory( const Tomahawk::result_ptr& );
+    QSharedPointer< QIODevice > remoteIODeviceFactory( const Tomahawk::result_ptr& );
     static bool isIPWhitelisted( QHostAddress ip );
 
     bool connectedToSession( const QString& session );
@@ -118,10 +118,10 @@ public:
 
     QList< StreamConnection* > streams() const { return m_scsessions; }
 
-    QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
-    void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );
-    QSharedPointer<QIODevice> localFileIODeviceFactory( const Tomahawk::result_ptr& result );
-    QSharedPointer<QIODevice> httpIODeviceFactory( const Tomahawk::result_ptr& result );
+    QSharedPointer< QIODevice > getIODeviceForUrl( const Tomahawk::result_ptr& result );
+    void registerIODeviceFactory( const QString &proto, boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > fac );
+    QSharedPointer< QIODevice > localFileIODeviceFactory( const Tomahawk::result_ptr& result );
+    QSharedPointer< QIODevice > httpIODeviceFactory( const Tomahawk::result_ptr& result );
 
     bool isReady() const { return m_ready; };
 
@@ -154,12 +154,12 @@ private slots:
 private:
     bool isValidExternalIP( const QHostAddress& addr ) const;
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
-    bool checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const;
+    bool checkACL( const QWeakPointer< Connection > conn, const QString &nodeid ) const;
     void printCurrentTransfers();
 
     QJson::Parser parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
-    QMap< QString, QWeakPointer<Connection> > m_offers;
+    QMap< QString, QWeakPointer< Connection > > m_offers;
     QStringList m_connectedNodes;
 
     int m_port, m_externalPort;
@@ -172,7 +172,7 @@ private:
     QList< StreamConnection* > m_scsessions;
     QMutex m_ftsession_mut;
 
-    QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;
+    QMap< QString,boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > > m_iofactories;
 
     PortFwdThread* m_portfwd;
     static Servent* s_instance;
