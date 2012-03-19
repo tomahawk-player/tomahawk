@@ -40,6 +40,7 @@ PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
     , m_isTemporary( false )
     , m_changesOngoing( false )
+    , m_savedInsertPos( -1 )
 {
     m_dropStorage.parent = QPersistentModelIndex();
     m_dropStorage.row = -10;
@@ -201,6 +202,9 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     QPair< int, int > crows;
     crows.first = c;
     crows.second = c + entries.count() - 1;
+
+    m_savedInsertPos = row;
+    m_savedInsertTracks = entries;
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
@@ -398,6 +402,18 @@ PlaylistModel::endPlaylistChanges()
     {
         m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
     }
+
+    if ( m_savedInsertPos >= 0 )
+    {
+        emit m_playlist->tracksInserted( m_savedInsertTracks, m_savedInsertPos );
+        m_savedInsertPos = -1;
+        m_savedInsertTracks.clear();
+    }
+    else if ( !m_savedRemoveTracks.isEmpty() )
+    {
+        emit m_playlist->tracksRemoved( m_savedRemoveTracks );
+        m_savedRemoveTracks.clear();
+    }
 }
 
 
@@ -441,6 +457,9 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 
     if ( !m_changesOngoing )
         beginPlaylistChanges();
+
+    if ( item )
+        m_savedRemoveTracks << item->query();
 
     TrackModel::remove( index, moreToCome );
 

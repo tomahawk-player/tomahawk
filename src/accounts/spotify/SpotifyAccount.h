@@ -93,6 +93,9 @@ public:
          Tomahawk::playlist_ptr playlist;
      };*/
 
+    void sendMessage( const QVariantMap& msg, QObject* receiver, const QString& slot );
+    void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
+
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
@@ -103,9 +106,7 @@ private slots:
 private:
     void init();
     void loadPlaylists();
-    void sendMessage( const QVariantMap& msg, const QString& slot );
 
-    void startPlaylistSync( SpotifyPlaylistInfo* playlist );
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist );
 
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
@@ -114,7 +115,7 @@ private:
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
 
-    QMap<QString, QString> m_qidToSlotMap;
+    QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
 
     // List of synced spotify playlists in config UI
     QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;

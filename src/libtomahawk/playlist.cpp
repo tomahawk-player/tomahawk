@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -515,6 +516,27 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
+}
+
+void
+Playlist::insertEntries( const QList< query_ptr >& queries, const int position, const QString& oldrev )
+{
+    QList<plentry_ptr> toInsert = entriesFromQueries( queries, true );
+    QList<plentry_ptr> entries = m_entries;
+
+    Q_ASSERT( position < m_entries.size() );
+    if ( position >= m_entries.size() )
+    {
+        qWarning() << "ERROR trying to insert tracks past end of playlist! Appending!!";
+        addEntries( queries, oldrev );
+        return;
+    }
+
+    for ( QList< plentry_ptr >::iterator iter = toInsert.end(); iter != toInsert.begin(); iter-- )
+        entries.insert( position, *iter );
+
+    qDebug() << "Done inserting playlist entries in the middle of the playlist! Committing...";
+    createNewRevision( uuid(), oldrev, entries );
 }
 
 

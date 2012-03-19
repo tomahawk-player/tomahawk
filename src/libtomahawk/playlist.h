@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -37,6 +38,8 @@ class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
+class PlaylistModel;
+
 namespace Tomahawk
 {
 
@@ -116,20 +119,21 @@ public:
 
 class DLLEXPORT Playlist : public QObject
 {
-Q_OBJECT
-Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
-Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevision )
-Q_PROPERTY( QString title           READ title              WRITE setTitle )
-Q_PROPERTY( QString info            READ info               WRITE setInfo )
-Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
-Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
-Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
+    Q_OBJECT
+    Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
+    Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevision )
+    Q_PROPERTY( QString title           READ title              WRITE setTitle )
+    Q_PROPERTY( QString info            READ info               WRITE setInfo )
+    Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
+    Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
+    Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
 friend class ::DatabaseCommand_LoadAllPlaylists;
 friend class ::DatabaseCommand_LoadAllSortedPlaylists;
 friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;
+friend class ::PlaylistModel;
 
 public:
     virtual ~Playlist();
@@ -165,6 +169,7 @@ public:
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
     virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
+    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position, const QString& oldrev );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
@@ -182,6 +187,7 @@ public:
 
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
+
     void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
     PlaylistUpdaterInterface* updater() const { return m_updater; }
 
@@ -205,6 +211,13 @@ signals:
 
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
+
+    /// Notification for tracks being inserted at a specific point
+    /// Contiguous range from startPosition
+    void tracksInserted( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
+
+    /// Notification for tracks being removed from playlist
+    void tracksRemoved( const QList< Tomahawk::query_ptr >& tracks );
 
 public slots:
     // want to update the playlist from the model?

@@ -20,6 +20,7 @@
 #define SPOTIFYPLAYLISTUPDATER_H
 
 #include "playlist/PlaylistUpdaterInterface.h"
+#include <QVariant>
 
 namespace Tomahawk {
 namespace Accounts {
@@ -27,25 +28,53 @@ namespace Accounts {
 }
 }
 
-
 class SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
 {
     Q_OBJECT
+
+    friend class Tomahawk::Accounts::SpotifyAccount;
 public:
+    // used when creating anew
+    SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const QString& revid, const QString& spotifyId, const Tomahawk::playlist_ptr& pl );
+
+    // used when inflating from config file
     SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const Tomahawk::playlist_ptr& pl );
 
     virtual ~SpotifyPlaylistUpdater();
 
     virtual QString type() const;
-    virtual void updateNow();
+    virtual void updateNow() {}
+
+    bool sync() const;
+    void setSync( bool sync );
+
+    /// Spotify callbacks when we are directly instructed from the resolver
+    void spotifyTracksAdded( const QVariantList& tracks, int startPos, const QString& newRev, const QString& oldRev );
+    void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
+    void spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
 
 protected:
     virtual void removeFromSettings(const QString& group) const;
     virtual void saveToSettings(const QString& group) const;
     virtual void loadFromSettings(const QString& group);
 
+private slots:
+    void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>& ,int );
+    void tomahawkTracksRemoved( const QList<Tomahawk::query_ptr>& );
+
+    // SpotifyResolver message handlers, all take msgtype, msg as argument
+    void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg );
+    void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );
+
 private:
+    void init();
+    static QVariantList queriesToVariant( const QList< Tomahawk::query_ptr >& queries );
+    static QVariant queryToVariant( const Tomahawk::query_ptr& query );
+    static QList< Tomahawk::query_ptr > variantToQueries( const QVariantList& list );
+
     Tomahawk::Accounts::SpotifyAccount* m_spotify;
+    QString m_latestRev, m_spotifyId;
+    bool m_sync;
 };
 
 

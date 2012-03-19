@@ -100,6 +100,10 @@ private:
     QList< Tomahawk::Query* > m_waitingForResolved;
     QStringList m_waitForRevision;
 
+    int m_savedInsertPos;
+    QList< Tomahawk::plentry_ptr > m_savedInsertTracks;
+    QList< Tomahawk::query_ptr > m_savedRemoveTracks;
+
     DropStorageData m_dropStorage;
 };
 
