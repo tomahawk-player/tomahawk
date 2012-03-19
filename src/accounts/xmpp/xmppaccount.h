@@ -46,7 +46,7 @@ public:
     XmppAccountFactory() {}
     virtual ~XmppAccountFactory() {}
 
-    QString prettyName() const { return "XMPP (Jabber)"; }
+    QString prettyName() const { return "Jabber (XMPP)"; }
     QString description() const { return tr( "Log on to your Jabber/XMPP account to connect to your friends" ); }
     QString factoryId() const { return "xmppaccount"; }
     QPixmap icon() const { return QPixmap( ":/xmpp-icon.png" ); }

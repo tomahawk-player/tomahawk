@@ -40,7 +40,7 @@ XmppAccountFactory::createAccount( const QString& accountId )
 XmppAccount::XmppAccount( const QString &accountId )
     : Account( accountId )
 {
-    setAccountServiceName( "XMPP (Jabber)" );
+    setAccountServiceName( "Jabber (XMPP)" );
     setTypes( SipType );
 
     m_configWidget = QWeakPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
