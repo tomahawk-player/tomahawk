@@ -954,8 +954,9 @@ void XmppSipPlugin::onNewAvatar( const QString& jid )
 bool
 XmppSipPlugin::readXmlConsoleEnabled()
 {
-    QVariantHash configuration = m_account->configuration();
-    return configuration.contains( "xmlconsole" ) && configuration[ "xmlconsole" ].toBool();
+    // HACK we want to allow xmlconsole to be set manually in the onfig file, which means we can't hide it in a QVariantHash
+    const bool xmlConsole = TomahawkSettings::instance()->value( QString( "accounts/%1/xmlconsole" ).arg( account()->accountId() ), false ).toBool();
+    return xmlConsole;
 }
 
 
