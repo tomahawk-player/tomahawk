@@ -170,7 +170,7 @@ Result::toVariant() const
 QString
 Result::toString() const
 {
-    return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist()->name() ).arg( track() ).arg( url() );
+    return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist().isNull() ? QString() : artist()->name() ).arg( track() ).arg( url() );
 }
 
 
