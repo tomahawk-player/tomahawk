@@ -20,6 +20,8 @@
 #define SPOTIFYACCOUNTCONFIG_H
 
 #include <QWidget>
+#include <QVariantMap>
+#include <QTimer>
 
 namespace Ui
 {
@@ -49,10 +51,17 @@ public:
     void loadFromConfig();
     void saveSettings();
 
+public slots:
+    void verifyResult( const QString& msgType, const QVariantMap& msg );
+
+private slots:
+    void verifyLogin();
+    void resetVerifyButton();
+
 private:
     Ui::SpotifyConfig* m_ui;
     SpotifyAccount* m_account;
-
+    QTimer m_resetTimer;
 };
 
 }

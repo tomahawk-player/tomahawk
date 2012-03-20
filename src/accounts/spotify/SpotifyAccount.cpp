@@ -127,7 +127,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     if ( m_qidToSlotMap.contains( qid ) )
     {
         QObject* receiver = m_qidToSlotMap[ qid ].first;
-        const QString& slot = m_qidToSlotMap[ qid ].second;
+        QString slot = m_qidToSlotMap[ qid ].second;
         m_qidToSlotMap.remove( qid );
 
         QMetaObject::invokeMethod( receiver, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ) );
