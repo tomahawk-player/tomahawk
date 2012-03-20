@@ -248,8 +248,11 @@ PlaylistModel::trackResolved( bool )
         return;
     }
 
-    m_waitingForResolved.removeAll( q );
-    disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
+    if ( m_waitingForResolved.contains( q ) )
+    {
+        m_waitingForResolved.removeAll( q );
+        disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
+    }
 
     if ( m_waitingForResolved.isEmpty() )
     {
@@ -435,6 +438,7 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 
     if ( item && m_waitingForResolved.contains( item->query().data() ) )
     {
+        disconnect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
         m_waitingForResolved.removeAll( item->query().data() );
         if ( m_waitingForResolved.isEmpty() )
             emit loadingFinished();
