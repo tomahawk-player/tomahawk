@@ -125,6 +125,15 @@ SpotifyAccountConfig::verifyLogin()
 void
 SpotifyAccountConfig::resetVerifyButton()
 {
+    m_ui->verifyCreds->setText( tr( "Failed!" ) );
+    m_ui->verifyCreds->setEnabled( true );
+    m_ui->verifyCreds->setToolTip( tr( "No response from Spotify, bad credentials likely." ) );
+}
+
+
+void
+SpotifyAccountConfig::clearVerifyButton()
+{
     m_ui->verifyCreds->setText( tr( "Verify" ) );
     m_ui->verifyCreds->setEnabled( true );
     m_ui->verifyCreds->setToolTip( QString() );

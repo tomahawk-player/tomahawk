@@ -57,6 +57,7 @@ public slots:
 private slots:
     void verifyLogin();
     void resetVerifyButton();
+    void clearVerifyButton();
 
 private:
     Ui::SpotifyConfig* m_ui;
