@@ -38,6 +38,7 @@
 
 #include "msg.h"
 #include "msgprocessor.h"
+#include "libtomahawk/aclregistry.h"
 
 #include "dllmacro.h"
 
@@ -118,6 +119,8 @@ private slots:
     void socketDisconnectedError( QAbstractSocket::SocketError );
     void readyRead();
     void doSetup();
+    void checkACL();
+    void checkACLResult( const QString &id, ACLRegistry::ACL peerStatus );
     void authCheckTimeout();
     void bytesWritten( qint64 );
     void calcStats();

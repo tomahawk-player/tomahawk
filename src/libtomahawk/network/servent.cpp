@@ -39,7 +39,6 @@
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
-#include "libtomahawk/aclregistry.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -671,12 +670,9 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
         if( !nodeid.isEmpty() )
         {
+            // Used by the connection for the ACL check
             // If there isn't a nodeid it's not the first connection and will already have been stopped
-            if( !checkACL( conn, nodeid ) )
-            {
-                tLog() << "Connection not allowed due to ACL";
-                return NULL;
-            }
+            conn.data()->setProperty( "nodeid", nodeid );
         }
 
         if( conn.data()->onceOnly() )
@@ -701,22 +697,6 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         tLog() << "Invalid offer key:" << key;
         return NULL;
     }
-}
-
-
-bool
-Servent::checkACL( const QWeakPointer< Connection > conn, const QString &nodeid ) const
-{
-    if ( conn.isNull() )
-        return false;
-    
-    tDebug( LOGVERBOSE ) << "Checking ACL for" << conn.data()->name();
-    ACLRegistry::ACL peerStatus = ACLRegistry::instance()->isAuthorizedPeer( nodeid, ACLRegistry::NotFound, conn.data()->name() );
-    tDebug( LOGVERBOSE ) << "ACL status is" << peerStatus;
-    if ( peerStatus == ACLRegistry::Allow || peerStatus == ACLRegistry::AllowOnce )
-        return true;
-
-    return false;
 }
 
 

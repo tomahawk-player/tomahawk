@@ -48,17 +48,7 @@ public:
 
     ACLRegistry( QObject *parent = 0 );
     ~ACLRegistry();
-
-    /**
-     * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
-     *
-     * @param dbid DBID of peer
-     * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
-     * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return ACLRegistry::ACL
-     **/
-    ACLRegistry::ACL isAuthorizedPeer( const QString &dbid, ACLRegistry::ACL globalType = ACLRegistry::NotFound, const QString &username = QString() );
-
+    
     /**
      * @brief Registers the global ACL value for this peer
      *
@@ -87,6 +77,21 @@ public:
      **/
     void registerAlias( const QString &dbid, const QString &username );
 
+signals:
+    void aclResult( QString nodeid, ACLRegistry::ACL peerStatus );
+    
+public slots:
+    /**
+     * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
+     *
+     * @param dbid DBID of peer
+     * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
+     * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
+     * @return ACLRegistry::ACL
+     **/
+    void isAuthorizedPeer( const QString &dbid, ACLRegistry::ACL globalType = ACLRegistry::NotFound, const QString &username = QString() );
+
+    
 #ifndef ENABLE_HEADLESS
     ACLRegistry::ACL getUserDecision( const QString &username );
 #endif
