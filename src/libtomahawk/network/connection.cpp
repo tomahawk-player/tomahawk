@@ -199,20 +199,20 @@ Connection::checkACL()
 
     QString nodeid = property( "nodeid" ).toString();
     tDebug( LOGVERBOSE ) << "Checking ACL for" << name();
-    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedPeer", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ), Q_ARG( QString, name() ) );
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( QString, name() ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
 }
 
 
 void
-Connection::checkACLResult( const QString &nodeid, ACLRegistry::ACL peerStatus )
+Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
 {
-    if ( nodeid != property( "nodeid" ).toString() )
+    if ( nodeid != property( "nodeid" ).toString() || username != name() )
         return;
 
-    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, ACLRegistry::ACL ) ) );
+    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ) );
     tDebug( LOGVERBOSE ) << "ACL status is" << peerStatus;
-    if ( peerStatus == ACLRegistry::Allow || peerStatus == ACLRegistry::AllowOnce )
+    if ( peerStatus == ACLRegistry::Stream )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;

@@ -628,19 +628,19 @@ TomahawkSettings::setProxyDns( bool lookupViaProxy )
 }
 
 
-QVariantHash
+QVariantList
 TomahawkSettings::aclEntries() const
 {
-    QVariant retVal = value( "acl/entries", QVariantHash() );
-    if ( retVal.isValid() && retVal.canConvert< QVariantHash >() )
-        return retVal.toHash();
+    QVariant retVal = value( "acl/entries", QVariantList() );
+    if ( retVal.isValid() && retVal.canConvert< QVariantList >() )
+        return retVal.toList();
 
-    return QVariantHash();
+    return QVariantList();
 }
 
 
 void
-TomahawkSettings::setAclEntries( const QVariantHash &entries )
+TomahawkSettings::setAclEntries( const QVariantList &entries )
 {
     setValue( "acl/entries", entries );
 }
