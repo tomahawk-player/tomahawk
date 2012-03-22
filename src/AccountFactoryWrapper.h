@@ -20,6 +20,7 @@
 #define ACCOUNTFACTORYWRAPPER_H
 
 #include <QDialog>
+#include <QModelIndex>
 
 class QAbstractButton;
 namespace Tomahawk {
@@ -45,6 +46,7 @@ public:
 public slots:
     void openAccountConfig( Tomahawk::Accounts::Account* );
     void removeAccount( Tomahawk::Accounts::Account* );
+    void accountCheckedOrUnchecked( const QModelIndex& , Tomahawk::Accounts::Account* , Qt::CheckState );
 
 private slots:
     void buttonClicked( QAbstractButton* );

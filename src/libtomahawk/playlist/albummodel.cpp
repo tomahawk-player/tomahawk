@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -178,6 +179,7 @@ AlbumModel::mimeData( const QModelIndexList &indexes ) const
     QByteArray queryData;
     QDataStream queryStream( &queryData, QIODevice::WriteOnly );
 
+    bool isAlbumData = true;
     foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 )
@@ -185,16 +187,25 @@ AlbumModel::mimeData( const QModelIndexList &indexes ) const
 
         QModelIndex idx = index( i.row(), 0, i.parent() );
         AlbumItem* item = itemFromIndex( idx );
-        if ( item )
+        if ( item && !item->album().isNull() )
         {
             const album_ptr& album = item->album();
             queryStream << album->artist()->name();
             queryStream << album->name();
+
+            isAlbumData = true;
+        }
+        else if ( item && !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            queryStream << artist->name();
+
+            isAlbumData = false;
         }
     }
 
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.metadata.album", queryData );
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setData( isAlbumData ? "application/tomahawk.metadata.album" : "application/tomahawk.metadata.artist", queryData );
 
     return mimeData;
 }
@@ -431,7 +442,7 @@ AlbumModel::findItem( const artist_ptr& artist ) const
             return item;
         }
     }
-    
+
     return 0;
 }
 
@@ -447,6 +458,6 @@ AlbumModel::findItem( const album_ptr& album ) const
             return item;
         }
     }
-    
+
     return 0;
 }

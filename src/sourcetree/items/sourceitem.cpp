@@ -1,5 +1,6 @@
 /*
  *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *    Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -73,7 +74,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
                                                  boost::bind( &SourceItem::latestAdditionsClicked, this ),
                                                  boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
 
-    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/new-additions.png" ),
+    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
                                              boost::bind( &SourceItem::recentPlaysClicked, this ),
                                              boost::bind( &SourceItem::getRecentPlaysPage, this ) );
 

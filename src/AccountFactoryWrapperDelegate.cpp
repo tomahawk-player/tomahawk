@@ -62,8 +62,16 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     Account* acc = qobject_cast< Account* >( index.data( AccountFactoryWrapper::AccountRole ).value< QObject* >() );
     Q_ASSERT( acc );
 
+    // Checkbox on left edge, then text
+    const QRect checkRect( PADDING/4, PADDING/4 + opt.rect.top(), opt.rect.height() - PADDING/4, opt.rect.height() - PADDING/4 );
+    m_cachedCheckRects[ index ] = checkRect;
+    QStyleOptionViewItemV4 opt2 = opt;
+    opt2.rect = checkRect;
+    opt.checkState == Qt::Checked ? opt2.state |= QStyle::State_On : opt2.state |= QStyle::State_Off;
+    style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt2, painter, w );
+
     // name on left
-    painter->drawText( opt.rect.adjusted( PADDING, PADDING, -PADDING, -PADDING ), Qt::AlignLeft | Qt::AlignVCenter, acc->accountFriendlyName() );
+    painter->drawText( opt.rect.adjusted( checkRect.right() + PADDING, PADDING, -PADDING, -PADDING ), Qt::AlignLeft | Qt::AlignVCenter, acc->accountFriendlyName() );
 
     // remove, config, status on right
     const QRect pmRect( opt.rect.right() - PADDING - m_removePixmap.width(), topIcon, ICON_SIZE, ICON_SIZE );
@@ -152,10 +160,22 @@ AccountFactoryWrapperDelegate::editorEvent( QEvent* event, QAbstractItemModel*, 
             emit update( m_configPressed );
 
         m_configPressed = QModelIndex();
+        Account* acct = qobject_cast< Account* >( index.data( AccountFactoryWrapper::AccountRole ).value< QObject* >() );
 
+        if ( m_cachedCheckRects.contains( index ) && m_cachedCheckRects[ index ].contains( me->pos() ) )
+        {
+            // Check box for this row
+            // eat the double click events inside the check rect
+            if( event->type() == QEvent::MouseButtonDblClick ) {
+                return true;
+            }
+
+            Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
+            Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
+            emit checkOrUncheck( index, acct, newState );
+        }
         if ( m_cachedButtonRects.contains( index ) && m_cachedButtonRects[ index ].contains( me->pos() ) )
         {
-            Account* acct = qobject_cast< Account* >( index.data( AccountFactoryWrapper::AccountRole ).value< QObject* >() );
             emit removeAccount( acct );
 
             return true;

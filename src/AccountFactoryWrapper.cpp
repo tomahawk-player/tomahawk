@@ -45,7 +45,7 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
 
     connect( del, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
     connect( del, SIGNAL( removeAccount( Tomahawk::Accounts::Account* ) ), this, SLOT( removeAccount( Tomahawk::Accounts::Account* ) ) );
-
+    connect( del, SIGNAL( checkOrUncheck( QModelIndex, Tomahawk::Accounts::Account* , Qt::CheckState ) ), this, SLOT( accountCheckedOrUnchecked( QModelIndex ,Tomahawk::Accounts::Account* ,Qt::CheckState ) ) );
     load();
 
     connect( m_ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
@@ -72,6 +72,7 @@ AccountFactoryWrapper::load()
         {
             QTreeWidgetItem* item = new QTreeWidgetItem( m_ui->accountsList );
             item->setData( 0, AccountRole, QVariant::fromValue< QObject *>( acc ) );
+            item->setCheckState( 0, acc->enabled() ? Qt::Checked : Qt::Unchecked );
         }
     }
 
@@ -103,6 +104,25 @@ AccountFactoryWrapper::removeAccount( Tomahawk::Accounts::Account* acct )
 
     load();
 }
+
+void
+AccountFactoryWrapper::accountCheckedOrUnchecked( const QModelIndex& index, Account* acct, Qt::CheckState newstate )
+{
+    QTreeWidgetItem* item = m_ui->accountsList->topLevelItem( index.row() );
+    Q_ASSERT( item );
+
+    if ( newstate == Qt::Checked )
+    {
+        item->setCheckState( 0, Qt::Checked );
+        AccountManager::instance()->enableAccount( acct );
+    }
+    else if ( newstate == Qt::Unchecked )
+    {
+        item->setCheckState( 0, Qt::Unchecked );
+        AccountManager::instance()->disableAccount( acct );
+    }
+}
+
 
 void
 AccountFactoryWrapper::buttonClicked( QAbstractButton* button )

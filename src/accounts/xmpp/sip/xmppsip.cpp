@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -953,8 +954,9 @@ void XmppSipPlugin::onNewAvatar( const QString& jid )
 bool
 XmppSipPlugin::readXmlConsoleEnabled()
 {
-    QVariantHash configuration = m_account->configuration();
-    return configuration.contains( "xmlconsole" ) && configuration[ "xmlconsole" ].toBool();
+    // HACK we want to allow xmlconsole to be set manually in the onfig file, which means we can't hide it in a QVariantHash
+    const bool xmlConsole = TomahawkSettings::instance()->value( QString( "accounts/%1/xmlconsole" ).arg( account()->accountId() ), false ).toBool();
+    return xmlConsole;
 }
 
 

@@ -393,10 +393,13 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setArtist( ap );
         rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
         rp->setTrack( m.value( "track" ).toString() );
+        rp->setAlbumPos( m.value( "albumpos" ).toUInt() );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
         rp->setFriendlySource( name() );
+        rp->setScore( m.value( "score" ).toFloat() );
+        rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
         if ( m.contains( "year" ) )
         {

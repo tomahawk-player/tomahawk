@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -314,7 +315,7 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
+    //tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     s_noProxyHostsMutex.lock();

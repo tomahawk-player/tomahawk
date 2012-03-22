@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -169,8 +170,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
     if ( source.isNull() )
     {
-        upperText = artist;
-        lowerText = track;
+        upperText = track;
+        lowerText = artist;
     }
     else
     {
@@ -225,6 +226,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
         painter->setFont( opt.font );
+        painter->setPen( Qt::gray );
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }
