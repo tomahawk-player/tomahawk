@@ -184,7 +184,41 @@ Connection::start( QTcpSocket* sock )
         m_name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
     }
 
-    QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+    QTimer::singleShot( 0, this, SLOT( checkACL() ) );
+}
+
+
+void
+Connection::checkACL()
+{
+    if ( !property( "nodeid" ).isValid() )
+    {
+        QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        return;
+    }
+
+    QString nodeid = property( "nodeid" ).toString();
+    tDebug( LOGVERBOSE ) << "Checking ACL for" << name();
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedPeer", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ), Q_ARG( QString, name() ) );
+}
+
+
+void
+Connection::checkACLResult( const QString &nodeid, ACLRegistry::ACL peerStatus )
+{
+    if ( nodeid != property( "nodeid" ).toString() )
+        return;
+
+    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, ACLRegistry::ACL ) ) );
+    tDebug( LOGVERBOSE ) << "ACL status is" << peerStatus;
+    if ( peerStatus == ACLRegistry::Allow || peerStatus == ACLRegistry::AllowOnce )
+    {
+        QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        return;
+    }
+
+    shutdown();
 }
 
 

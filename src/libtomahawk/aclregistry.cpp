@@ -43,7 +43,7 @@ ACLRegistry::ACLRegistry( QObject* parent )
     : QObject( parent )
 {
     s_instance = this;
-    //qRegisterMetaType< QHash< QString, QHash< QString, ACL > > >("ACLRegistry::ACLCacheHash");
+    qRegisterMetaType< ACLRegistry::ACL >("ACLRegistry::ACL");
 
     m_cache = TomahawkSettings::instance()->aclEntries();
 }
@@ -54,11 +54,14 @@ ACLRegistry::~ACLRegistry()
 }
 
 
-ACLRegistry::ACL
+void
 ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType, const QString &username )
 {
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
-        return globalType;
+    {
+        emit aclResult( dbid, globalType );
+        return;
+    }
     
     qDebug() << "Current cache keys =" << m_cache.keys();
     if( m_cache.contains( dbid ) )
@@ -67,17 +70,22 @@ ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType,
         if( peerHash.contains( "global" ) )
         {
             registerAlias( dbid, username );
-            return ACLRegistry::ACL( peerHash[ "global" ].toInt() );
+            emit aclResult( dbid, ACLRegistry::ACL( peerHash[ "global" ].toInt() ) );
+            return;
         }
 
         if ( globalType == ACLRegistry::NotFound )
-            return globalType;
+        {
+            emit aclResult( dbid, globalType );
+            return;
+        }
 
         peerHash[ "global" ] = int( globalType );
         m_cache[ dbid ] = peerHash;
         save();
         registerAlias( dbid, username );
-        return globalType;
+        emit aclResult( dbid, globalType );
+        return;
     }
 
     ACLRegistry::ACL acl = globalType;
@@ -88,14 +96,18 @@ ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType,
 #endif
     
     if ( acl == ACLRegistry::NotFound || acl == ACLRegistry::AllowOnce || acl == ACLRegistry::DenyOnce )
-        return acl;
+    {
+        emit aclResult( dbid, acl );
+        return;
+    }
 
     QVariantHash peerHash;
     peerHash[ "global" ] = int( acl );
     m_cache[ dbid ] = peerHash;
     save();
     registerAlias( dbid, username );
-    return acl;
+    emit aclResult( dbid, acl );
+    return;
 }
 
 

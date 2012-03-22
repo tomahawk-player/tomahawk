@@ -155,7 +155,6 @@ private slots:
 private:
     bool isValidExternalIP( const QHostAddress& addr ) const;
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
-    bool checkACL( const QWeakPointer< Connection > conn, const QString &nodeid ) const;
     void printCurrentTransfers();
 
     QJson::Parser parser;
