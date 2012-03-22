@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-#  This file is part of Clementine.
+#  This file is part of Tomahawk.
+#  It was inspired in large part by the macdeploy script in Clementine.
 #
 #  Clementine is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -249,7 +250,7 @@ frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
-plugins_dir = os.path.join(bundle_dir, 'Contents', 'plugins')
+plugins_dir = os.path.join(bundle_dir, 'Contents', 'PlugIns')
 binary = os.path.join(bundle_dir, 'Contents', 'MacOS', bundle_name)
 
 fixed_libraries = []
