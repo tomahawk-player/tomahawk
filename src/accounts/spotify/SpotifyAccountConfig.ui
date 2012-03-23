@@ -172,6 +172,13 @@
     <widget class="QListWidget" name="playlistList"/>
    </item>
    <item>
+    <widget class="QCheckBox" name="deleteOnUnsync">
+     <property name="text">
+      <string>Delete Tomahawk playlist when removing Spotify sync</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <spacer name="horizontalSpacer">

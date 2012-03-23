@@ -84,8 +84,6 @@ public:
     virtual QWidget* aclWidget() { return 0; }
     virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     virtual SipPlugin* sipPlugin() { return 0; }
-
-    void addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks );
 /*
     struct Sync {
          QString id_;

@@ -97,6 +97,7 @@ private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_isTemporary;
     bool m_changesOngoing;
+    bool m_isLoading;
     QList< Tomahawk::Query* > m_waitingForResolved;
     QStringList m_waitForRevision;
 

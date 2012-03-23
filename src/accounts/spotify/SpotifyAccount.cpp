@@ -95,9 +95,6 @@ SpotifyAccount::init()
         msg[ "_msgtype" ] = "getCredentials";
         m_spotifyResolver.data()->sendMessage( msg );
     }
-
-    // TODO add caching
-    loadPlaylists();
 }
 
 
@@ -144,7 +141,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             const QString name = plMap.value( "name" ).toString();
             const QString plid = plMap.value( "id" ).toString();
             const QString revid = plMap.value( "revid" ).toString();
-            const bool sync = plMap.value( "map" ).toBool();
+            const bool sync = plMap.value( "sync" ).toBool();
 
             if ( name.isNull() || plid.isNull() || revid.isNull() )
             {
@@ -216,24 +213,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyTracksMoved( tracksList, newRev, oldRev  );
     }
-    else if ( msgType == "playlists" )
-    {
-//        QList< Tomahawk::query_ptr > tracks;
-//        const QString qid = m.value( "qid" ).toString();
-//        const QString title = m.value( "identifier" ).toString();
-//        const QVariantList reslist = m.value( "playlist" ).toList();
-
-//        if( !reslist.isEmpty() )
-//        {
-//            foreach( const QVariant& rv, reslist )
-//            {
-//                QVariantMap m = rv.toMap();
-//                qDebug() << "Found playlist result:" << m;
-//                Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
-//                tracks << q;
-//            }
-//        }
-    }
 }
 
 
@@ -293,6 +272,7 @@ SpotifyAccount::saveConfig()
     m_configWidget.data()->saveSettings();
     foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists )
     {
+        qDebug() << "Checking changed state:" << pl->changed << pl->name << pl->sync;
         if ( pl->changed )
         {
             pl->changed = false;
@@ -360,59 +340,6 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
 
 
 void
-SpotifyAccount::addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks )
-{
-/*    Sync sync;
-    sync.id_ = qid;
-    int index =  m_syncPlaylists.indexOf( sync );
-
-    if(  !m_syncPlaylists.contains( sync ) )
-    {
-         qDebug() << Q_FUNC_INFO << "Adding playlist to sync" << qid;
-         playlist_ptr pl;
-         pl = Tomahawk::Playlist::create( SourceList::instance()->getLocal(),
-                                                   uuid(),
-                                                   title,
-                                                   QString(),
-                                                   QString(),
-                                                   false,
-                                                   tracks );
-         sync.playlist = pl;
-         sync.uuid = pl->guid();
-         m_syncPlaylists.append( sync );
-    }
-    else
-    {
-
-        qDebug() << Q_FUNC_INFO << "Found playlist";
-
-        if ( index != -1 && !tracks.isEmpty())
-        {
-
-            qDebug() << Q_FUNC_INFO << "Got pl" << m_syncPlaylists[ index ].playlist->guid();
-
-            QList< query_ptr > currTracks;
-            foreach ( const plentry_ptr ple, m_syncPlaylists[ index ].playlist->entries() )
-                currTracks << ple->query();
-
-            qDebug() << Q_FUNC_INFO << "tracks" << currTracks;
-
-            bool changed = false;
-            QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( currTracks, tracks, changed );
-
-            if ( changed )
-            {
-                QList<Tomahawk::plentry_ptr> el = m_syncPlaylists[ index ].playlist->entriesFromQueries( mergedTracks, true );
-                m_syncPlaylists[ index ].playlist->createNewRevision( uuid(), m_syncPlaylists[ index ].playlist->currentrevision(), el );
-            }
-        }
-    }
-
-    */
-}
-
-
-void
 SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& slot )
 {
     QVariantMap msg = m;
@@ -442,7 +369,11 @@ SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 void
 SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
 {
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "removeFromSyncList";
+    msg[ "playlistid" ] = playlist->plid;
 
+    m_spotifyResolver.data()->sendMessage( msg );
 }
 
 

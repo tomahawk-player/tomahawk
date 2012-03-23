@@ -238,6 +238,7 @@ SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks 
     qDebug() << Q_FUNC_INFO  << "updating spotify resolver with removed tracks:" << tracks;
     QVariantMap msg;
     msg[ "_msgtype" ] = "removeTracksFromPlaylist";
+    msg[ "playlistid" ] = m_spotifyId;
     msg[ "oldrev" ] = m_latestRev;
     msg[ "tracks" ] = queriesToVariant( tracks );
 

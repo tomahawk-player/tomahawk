@@ -41,6 +41,7 @@ PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
     , m_isTemporary( false )
     , m_changesOngoing( false )
+    , m_isLoading( false )
     , m_savedInsertPos( -1 )
 {
     m_dropStorage.parent = QPersistentModelIndex();
@@ -65,6 +66,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         disconnect( m_playlist.data(), SIGNAL( changed() ), this, SIGNAL( playlistChanged() ) );
     }
 
+    m_isLoading = true;
+
     if ( loadEntries )
         clear();
 
@@ -80,11 +83,17 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
                   .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true ) ) );
 
     m_isTemporary = false;
+
     if ( !loadEntries )
+    {
+        m_isLoading = false;
         return;
+    }
 
     QList<plentry_ptr> entries = playlist->entries();
     append( entries );
+
+    m_isLoading = false;
 }
 
 
@@ -204,8 +213,11 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     crows.first = c;
     crows.second = c + entries.count() - 1;
 
-    m_savedInsertPos = row;
-    m_savedInsertTracks = entries;
+    if ( !m_isLoading )
+    {
+        m_savedInsertPos = row;
+        m_savedInsertTracks = entries;
+    }
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
@@ -463,7 +475,7 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
     if ( !m_changesOngoing )
         beginPlaylistChanges();
 
-    if ( item )
+    if ( item && !m_isLoading )
         m_savedRemoveTracks << item->query();
 
     TrackModel::remove( index, moreToCome );

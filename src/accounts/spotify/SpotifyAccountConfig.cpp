@@ -60,7 +60,8 @@ SpotifyAccountConfig::saveSettings()
 {
     for( int i = 0; i < m_ui->playlistList->count(); i++ )
     {
-        const QListWidgetItem* item = m_ui->playlistList->itemAt( i, 0 );
+        const QListWidgetItem* item = m_ui->playlistList->item( i );
+
         SpotifyPlaylistInfo* pl = item->data( Qt::UserRole ).value< SpotifyPlaylistInfo* >();
         const bool toSync = ( item->checkState() == Qt::Checked );
         if ( pl->sync != toSync )
