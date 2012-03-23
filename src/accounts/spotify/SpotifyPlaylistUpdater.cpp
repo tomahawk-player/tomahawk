@@ -203,6 +203,7 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
     msg[ "_msgtype" ] = "addTracksToPlaylist";
     msg[ "oldrev" ] = m_latestRev;
     msg[ "startPosition" ] = pos;
+    msg[ "playlistid" ] = m_spotifyId;
 
     QVariantList tracksJson;
     foreach ( const plentry_ptr& ple, tracks )
