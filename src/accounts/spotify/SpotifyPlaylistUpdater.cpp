@@ -140,8 +140,11 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, int star
 
     qDebug() << Q_FUNC_INFO << "inserting tracks in middle of tomahawk playlist, from spotify command!" << tracks << startPos << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
-    Q_ASSERT( m_latestRev == oldRev );
-    m_latestRev = newRev;
+//     Q_ASSERT( m_latestRev == oldRev );
+//     m_latestRev = newRev;
+
+    //NOTE: remove 1 from the position, as spotify gives the *newly inserted* position, not the index to insert at
+    startPos--;
 
     playlist()->insertEntries( queries, startPos, playlist()->currentrevision() );
 }
@@ -152,8 +155,8 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& tracks, const 
 {
     qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << tracks << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
-    Q_ASSERT( m_latestRev == oldRev );
-    m_latestRev = newRev;
+//     Q_ASSERT( m_latestRev == oldRev );
+//     m_latestRev = newRev;
 
     QList< plentry_ptr > entries = playlist()->entries();
 
