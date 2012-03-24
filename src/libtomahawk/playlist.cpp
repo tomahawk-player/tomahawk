@@ -515,8 +515,18 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
     QList<plentry_ptr> el = entriesFromQueries( queries );
 
+    const int prevSize = m_entries.size();
+
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
+
+
+    // We are appending at end, so notify listeners.
+    // PlaylistModel also emits during appends, but since we call
+    // createNewRevision, it reloads instead of appends.
+    const QList<plentry_ptr> added = el.mid( prevSize );
+    qDebug() << "Playlist got" << queries.size() << "tracks added, emitting tracksInserted with:" << added.size() << "at pos:" << prevSize - 1;
+    emit tracksInserted( added, prevSize );
 }
 
 void
@@ -536,8 +546,15 @@ Playlist::insertEntries( const QList< query_ptr >& queries, const int position, 
     for ( QList< plentry_ptr >::iterator iter = toInsert.end(); iter != toInsert.begin(); iter-- )
         entries.insert( position, *iter );
 
+    const int prevSize = m_entries.size();
     qDebug() << "Done inserting playlist entries in the middle of the playlist! Committing...";
     createNewRevision( uuid(), oldrev, entries );
+
+    // We are appending at end, so notify listeners.
+    // PlaylistModel also emits during appends, but since we call
+    // createNewRevision, it reloads instead of appends.
+    qDebug() << "Playlist got" << toInsert.size() << "tracks added, emitting tracksInserted at pos:" << position;
+    emit tracksInserted( toInsert, position );
 }
 
 
