@@ -63,8 +63,14 @@ ScriptResolver::~ScriptResolver()
 {
     disconnect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    m_proc.kill();
-    m_proc.waitForFinished();
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "quit";
+    sendMessage( msg );
+
+   // QEventLoop::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+   // m_proc.terminate();
+    m_proc.waitForFinished( 1000 );
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
