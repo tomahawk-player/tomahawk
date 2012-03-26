@@ -43,9 +43,10 @@ ACLRegistry::ACLRegistry( QObject* parent )
     : QObject( parent )
 {
     s_instance = this;
-    qRegisterMetaType< ACLRegistry::ACL >("ACLRegistry::ACL");
+    qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
+    qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
 
-    m_cache = TomahawkSettings::instance()->aclEntries();
+    load();
 }
 
 
@@ -55,173 +56,76 @@ ACLRegistry::~ACLRegistry()
 
 
 void
-ACLRegistry::isAuthorizedPeer( const QString& dbid, ACLRegistry::ACL globalType, const QString &username )
+ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType )
 {
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
-        emit aclResult( dbid, globalType );
+        emit aclResult( dbid, username, globalType );
         return;
     }
-    
-    qDebug() << "Current cache keys =" << m_cache.keys();
-    if( m_cache.contains( dbid ) )
+
+    bool found = false;
+    QMutableListIterator< ACLRegistry::User > i( m_cache );
+    while ( i.hasNext() )
     {
-        QVariantHash peerHash = m_cache[ dbid ].toHash();
-        if( peerHash.contains( "global" ) )
+        ACLRegistry::User user = i.next();
+        foreach ( QString knowndbid, user.knownDbids )
         {
-            registerAlias( dbid, username );
-            emit aclResult( dbid, ACLRegistry::ACL( peerHash[ "global" ].toInt() ) );
+            if ( dbid == knowndbid )
+            {
+                if ( !user.knownAccountIds.contains( username ) )
+                    user.knownAccountIds.append( username );
+                found = true;
+            }
+        }
+        
+        foreach ( QString knownaccountid, user.knownAccountIds )
+        {
+            if ( username == knownaccountid )
+            {
+                if ( !user.knownDbids.contains( dbid ) )
+                    user.knownDbids.append( dbid );
+                found = true;
+            }
+        }
+
+        if ( found )
+        {
+            emit aclResult( dbid, username, user.acl );
+            i.setValue( user );
+            return;
+        }
+    }
+
+    // User was not found, create a new user entry
+    ACLRegistry::User user;
+    user.knownDbids.append( dbid );
+    user.knownAccountIds.append( username );
+    if ( globalType != ACLRegistry::NotFound )
+        user.acl = globalType;
+    else
+    {    
+        ACLRegistry::ACL acl = globalType;
+        tDebug( LOGVERBOSE ) << "ACL is intially" << acl;
+        #ifndef ENABLE_HEADLESS
+            acl = getUserDecision( username );
+            tDebug( LOGVERBOSE ) << "after getUserDecision acl is" << acl;
+        #endif
+
+        if ( acl == ACLRegistry::NotFound )
+        {
+            emit aclResult( dbid, username, acl );
             return;
         }
 
-        if ( globalType == ACLRegistry::NotFound )
-        {
-            emit aclResult( dbid, globalType );
-            return;
-        }
-
-        peerHash[ "global" ] = int( globalType );
-        m_cache[ dbid ] = peerHash;
-        save();
-        registerAlias( dbid, username );
-        emit aclResult( dbid, globalType );
-        return;
+        user.acl = acl;
     }
 
-    ACLRegistry::ACL acl = globalType;
-    tDebug( LOGVERBOSE ) << "ACL is intially" << acl;
-#ifndef ENABLE_HEADLESS
-    acl = getUserDecision( username );
-    tDebug( LOGVERBOSE ) << "after getUserDecision acl is" << acl;
-#endif
-    
-    if ( acl == ACLRegistry::NotFound || acl == ACLRegistry::AllowOnce || acl == ACLRegistry::DenyOnce )
-    {
-        emit aclResult( dbid, acl );
-        return;
-    }
-
-    QVariantHash peerHash;
-    peerHash[ "global" ] = int( acl );
-    m_cache[ dbid ] = peerHash;
-    save();
-    registerAlias( dbid, username );
-    emit aclResult( dbid, acl );
+    m_cache.append( user );
+    emit aclResult( dbid, username, user.acl );
     return;
 }
 
-
-void
-ACLRegistry::registerPeer( const QString& dbid, ACLRegistry::ACL globalType, const QString &username )
-{
-    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
-        return;
-    
-    if ( globalType == ACLRegistry::NotFound || globalType == ACLRegistry::DenyOnce || globalType == ACLRegistry::AllowOnce )
-        return;
-
-    QVariantHash peerHash;
-    if ( m_cache.contains( dbid ) )
-        peerHash = m_cache[ dbid ].toHash();
-    peerHash[ "global" ] = int( globalType );
-    m_cache[ dbid ] = peerHash;
-    save();
-    registerAlias( dbid, username );
-}
-
-
-QPair< QString, ACLRegistry::ACL >
-ACLRegistry::isAuthorizedUser( const QString &username, ACLRegistry::ACL globalType )
-{
-    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
-        return QPair< QString, ACLRegistry::ACL >( QString(), ACLRegistry::NotFound );
-
-    qDebug() << "Current cache keys =" << m_cache.keys();
-    foreach ( QString dbid, m_cache.keys() )
-    {
-        //    qDebug() << "Looking up dbid";
-        QVariantHash peerHash = m_cache[ dbid ].toHash();
-        if ( !peerHash.contains( "usernames" ) )
-            continue;
-        
-        if ( !peerHash[ "usernames" ].toStringList().contains( username ) )
-            continue;
-        
-        if ( globalType != ACLRegistry::NotFound )
-        {
-            peerHash[ "global" ] = int( globalType );
-            m_cache[ dbid ] = peerHash;
-            save();
-            return QPair< QString, ACLRegistry::ACL >( dbid, globalType );
-        }
-        
-        return QPair< QString, ACLRegistry::ACL >( dbid, ACLRegistry::ACL( peerHash[ "global" ].toInt() ) );
-    }
-
-    return QPair< QString, ACLRegistry::ACL >( QString(), ACLRegistry::NotFound );
-}
-
-
-void
-ACLRegistry::registerAlias( const QString& dbid, const QString &username )
-{
-    if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
-        return;
-
-    if ( dbid.isEmpty() || username.isEmpty() )
-        return;
-
-    if ( !m_cache.contains( dbid ) )
-        return;
-
-    QVariantHash peerHash = m_cache[ dbid ].toHash();
-    if ( !peerHash.contains( "usernames" ) )
-        peerHash[ "usernames" ] = QStringList( username );
-    else if ( !peerHash[ "usernames" ].toStringList().contains( username ) )
-        peerHash[ "usernames" ] = peerHash[ "usernames" ].toStringList() + QStringList( username );
-    else
-        return;
-
-    m_cache[ dbid ] = peerHash;
-    save();
-}
-
-
-// ACLRegistry::ACL
-// ACLRegistry::isAuthorizedPath( const QString& dbid, const QString& path )
-// {
-//     QMutexLocker locker( &m_cacheMutex );
-// 
-//     if( !m_cache.contains( dbid ) )
-//         return ACLRegistry::NotFound;
-// 
-//     QHash< QString, ACL > peerHash = m_cache[dbid];
-//     if( !peerHash.contains( path ) )
-//     {
-//         if( peerHash.contains( "global" ) )
-//             return peerHash["global"];
-//         else
-//             return ACLRegistry::Deny;
-//     }
-//     return peerHash[path];
-// }
-// 
-// void
-// ACLRegistry::authorizePath( const QString& dbid, const QString& path, ACLRegistry::ACL type )
-// {
-//     TomahawkSettings *s = TomahawkSettings::instance();
-//     if( !s->scannerPaths().contains( path ) )
-//     {
-//         qDebug() << "path selected is not in our scanner path!";
-//         return;
-//     }
-//     QMutexLocker locker( &m_cacheMutex );
-//     QHash< QString, ACLRegistry::ACL > peerHash;
-//     if ( m_cache.contains( dbid ) )
-//         peerHash = m_cache[dbid];
-//     peerHash[path] = type;
-//     m_cache[dbid] = peerHash;
-// }
 
 #ifndef ENABLE_HEADLESS
 
@@ -230,14 +134,13 @@ ACLRegistry::registerAlias( const QString& dbid, const QString &username )
 ACLRegistry::ACL
 ACLRegistry::getUserDecision( const QString &username )
 {
+    return ACLRegistry::Stream;
     QMessageBox msgBox;
     msgBox.setIcon( QMessageBox::Question );
     msgBox.setText( tr( "Connect to Peer?" ) );
     msgBox.setInformativeText( tr( "Another Tomahawk instance that claims to be owned by %1 is attempting to connect to you. Select whether to allow or deny this connection.\n\nRemember: Only allow peers to connect if you trust who they are and if you have the legal right for them to stream music from you.").arg( username ) );
-    QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::HelpRole );
-    QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
-    QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
-    QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
+    QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::YesRole );
+    QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::ActionRole );
 
     msgBox.setDefaultButton( allowButton );
     msgBox.setEscapeButton( denyButton );
@@ -245,13 +148,9 @@ ACLRegistry::getUserDecision( const QString &username )
     msgBox.exec();
 
     if( msgBox.clickedButton() == denyButton )
-        return ACLRegistry::DenyOnce;
-    else if( msgBox.clickedButton() == alwaysDenyButton )
         return ACLRegistry::Deny;
     else if( msgBox.clickedButton() == allowButton )
-        return ACLRegistry::AllowOnce;
-    else if( msgBox.clickedButton() == alwaysAllowButton )
-        return ACLRegistry::Allow;
+        return ACLRegistry::Stream;
 
     //How could we get here?
     tDebug( LOGVERBOSE ) << "ERROR: returning NotFound";
@@ -261,8 +160,26 @@ ACLRegistry::getUserDecision( const QString &username )
 
 #endif
 
+
+void
+ACLRegistry::load()
+{
+    QVariantList entryList = TomahawkSettings::instance()->aclEntries();
+    foreach ( QVariant entry, entryList )
+    {
+        if ( !entry.isValid() || !entry.canConvert< ACLRegistry::User >() )
+            continue;
+        ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
+        m_cache.append( entryUser );
+    }
+}
+
+
 void
 ACLRegistry::save()
 {
-    TomahawkSettings::instance()->setAclEntries( m_cache );
+    QVariantList entryList;
+    foreach ( ACLRegistry::User user, m_cache )
+        entryList.append( QVariant::fromValue< ACLRegistry::User >( user ) );
+    TomahawkSettings::instance()->setAclEntries( entryList );
 }

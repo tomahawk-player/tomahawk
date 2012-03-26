@@ -74,6 +74,7 @@ private:
 
     Tomahawk::Accounts::SpotifyAccount* m_spotify;
     QString m_latestRev, m_spotifyId;
+    QString m_plRevisionBeforeUpdate;
     bool m_sync;
 };
 

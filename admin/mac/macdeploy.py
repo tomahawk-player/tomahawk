@@ -1,4 +1,5 @@
 #!/usr/bin/python
+<<<<<<< HEAD
 #  This file is part of Tomahawk. 
 #  It was inspired in large part by the macdeploy script in Clementine.
 #
@@ -249,7 +250,7 @@ frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
-plugins_dir = os.path.join(bundle_dir, 'Contents', 'plugins')
+plugins_dir = os.path.join(bundle_dir, 'Contents', 'PlugIns')
 binary = os.path.join(bundle_dir, 'Contents', 'MacOS', bundle_name)
 
 fixed_libraries = []

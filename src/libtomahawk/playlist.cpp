@@ -316,6 +316,10 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     foreach( const plentry_ptr& p, entries )
         orderedguids << p->guid();
 
+    qDebug() << "INSERTING ORDERED GUIDS:" << orderedguids << "and with new entries:";
+    foreach( const plentry_ptr& p, added )
+        qDebug() << p->guid();
+
     // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
     // command writes new rev to DB and calls setRevision, which emits our signal
@@ -396,20 +400,38 @@ Playlist::setNewRevision( const QString& rev,
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
     foreach ( const plentry_ptr& p, m_entries )
+    {
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
         entriesmap.insert( p->guid(), p );
+    }
+
 
     QList<plentry_ptr> entries;
+    qDebug() << "Going through neworderedguids:" << neworderedguids << neworderedguids.size();
     foreach ( const QString& id, neworderedguids )
     {
         if ( entriesmap.contains( id ) )
         {
+            qDebug() << "Adding original entry to entries:" << id;
             entries.append( entriesmap.value( id ) );
         }
         else if ( addedmap.contains( id ) )
         {
+            qDebug() << "Adding new entry to entries:" << id << addedmap.value( id );
+            if( ! addedmap.value( id ).isNull() ) qDebug() << addedmap.value( id )->query()->track() << addedmap.value( id )->query()->artist();
             entries.append( addedmap.value( id ) );
             if ( is_newest_rev )
-                m_entries.append( addedmap.value( id ) );
+            {
+                // We want to insert the new entries into the appropriate place in m_entries, not just at the end. so find the index in neworderedguids, and use that. since we go from 0,
+                // it should be valid
+                int insertIdx = neworderedguids.indexOf( id );
+                if ( insertIdx < 0 || insertIdx > m_entries.size() )
+                {
+                    qWarning() << "Trying to insert new track in a playlist, but beyond the end! Appending at end to be safe";
+                    insertIdx = m_entries.size();
+                }
+                m_entries.insert( insertIdx, addedmap.value( id ) );
+            }
         }
         else
         {
@@ -423,6 +445,7 @@ Playlist::setNewRevision( const QString& rev,
             Q_ASSERT( false ); // XXX
         }
     }
+    qDebug() << "and got:" << entries.size() << entries << m_entries.size() << m_entries;
 
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;
@@ -535,16 +558,24 @@ Playlist::insertEntries( const QList< query_ptr >& queries, const int position, 
     QList<plentry_ptr> toInsert = entriesFromQueries( queries, true );
     QList<plentry_ptr> entries = m_entries;
 
-    Q_ASSERT( position < m_entries.size() );
-    if ( position >= m_entries.size() )
+    Q_ASSERT( position <= m_entries.size() );
+    if ( position > m_entries.size() )
     {
         qWarning() << "ERROR trying to insert tracks past end of playlist! Appending!!";
         addEntries( queries, oldrev );
         return;
     }
 
-    for ( QList< plentry_ptr >::iterator iter = toInsert.end(); iter != toInsert.begin(); iter-- )
-        entries.insert( position, *iter );
+    qDebug() << "inserting entries. GUIDs before:";
+    foreach( const plentry_ptr& p, entries )
+        qDebug() << p->guid();
+
+    for ( int i = toInsert.size()-1; i >= 0; --i )
+        entries.insert( position, toInsert.at(i) );
+
+    qDebug() << "inserting entries. GUIDs AFTER:";
+    foreach( const plentry_ptr& p, entries )
+        qDebug() << p->guid();
 
     const int prevSize = m_entries.size();
     qDebug() << "Done inserting playlist entries in the middle of the playlist! Committing...";

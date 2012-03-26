@@ -160,7 +160,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     {
         const QString plid = msg.value( "playlistid" ).toString();
         // We should already be syncing this playlist if we get updates for it
-        Q_ASSERT( m_updaters.contains( plid ) );
+//         Q_ASSERT( m_updaters.contains( plid ) );
 
         if ( !m_updaters.contains( plid ) )
             return;
@@ -179,7 +179,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     {
         const QString plid = msg.value( "playlistid" ).toString();
         // We should already be syncing this playlist if we get updates for it
-        Q_ASSERT( m_updaters.contains( plid ) );
+//         Q_ASSERT( m_updaters.contains( plid ) );
 
         if ( !m_updaters.contains( plid ) )
             return;
@@ -187,7 +187,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
-        const QVariantList tracksList = msg.value( "tracks" ).toList();
+        const QVariantList tracksList = msg.value( "trackPositions" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
@@ -206,7 +206,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
-        const QVariantList tracksList = msg.value( "tracks" ).toList();
+        const QVariantList tracksList = msg.value( "trackPositions" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 

@@ -40,6 +40,12 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
         }
     }
 
+    if ( !m_account )
+    {
+        qWarning() << "Found a spotify updater with no spotify account... ignoreing for now!!";
+        return 0;
+    }
+
     // Register the updater with the account
     const QString spotifyId = QString( "playlistupdaters/%1" ).arg( pl->guid() );
     Q_ASSERT( !spotifyId.isEmpty() );
@@ -143,49 +149,53 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, int star
 //     Q_ASSERT( m_latestRev == oldRev );
 //     m_latestRev = newRev;
 
-    //NOTE: remove 1 from the position, as spotify gives the *newly inserted* position, not the index to insert at
-    startPos--;
+    if ( startPos > playlist()->entries().size() )
+        startPos = playlist()->entries().size();
+
+    m_plRevisionBeforeUpdate = playlist()->currentrevision();
 
     playlist()->insertEntries( queries, startPos, playlist()->currentrevision() );
 }
 
 
 void
-SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev )
+SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackPositions, const QString& newRev, const QString& oldRev )
 {
-    qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << tracks << newRev << oldRev;
+    qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackPositions << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
 //     m_latestRev = newRev;
 
     QList< plentry_ptr > entries = playlist()->entries();
 
-    // FIXME UGH have to do a manual lookup for each track we want to remove... any ideas?
-    foreach( const QVariant& blob, tracks )
+    // Collect list of tracks to remove (can't remove in-place as that might modify the indices)
+    QList<plentry_ptr> toRemove;
+    foreach( const QVariant posV, trackPositions )
     {
-        const QVariantMap trackMap = blob.toMap();
-        for ( QList<plentry_ptr>::iterator iter = entries.begin(); iter != entries.end(); ++iter )
+        bool ok;
+        const int pos = posV.toInt( &ok );
+        if ( !ok || pos < 0 || pos >= entries.size() )
         {
-            const QString trackId = iter->data()->query()->property( "spotifytrackid" ).toString();
-            // easy case, we have a track id on both sides, so we're sure
-            if ( trackId.isEmpty() && trackId == trackMap.value( "id" ).toString() )
-            {
-                iter = entries.erase( iter );
-                continue;
-            }
-
-            // fuzzy case, check metadata
-            if ( iter->data()->query()->track() == trackMap[ "track" ].toString() &&
-                 iter->data()->query()->artist() == trackMap[ "artist" ].toString() &&
-                 iter->data()->query()->album() == trackMap[ "album" ].toString() )
-            {
-                iter = entries.erase( iter );
-                continue;
-            }
+            qWarning() << Q_FUNC_INFO << "Tried to get track position to remove, but either couldn't convert to int, or out of bounds:" << ok << pos << entries.size() << entries << trackPositions;
+            continue;
         }
+
+        toRemove << entries.at(pos);
     }
 
-    qDebug() << "We were asked to delete:" << tracks.size() << "tracks from the playlist, and we deleted:" << ( playlist()->entries().size() - entries.size() );
+
+    // Now remove them all
+    foreach( const plentry_ptr& torm, toRemove )
+        entries.removeAll( torm );
+
+
+    m_plRevisionBeforeUpdate = playlist()->currentrevision();
+
+    qDebug() << "We were asked to delete:" << trackPositions.size() << "tracks from the playlist, and we deleted:" << ( playlist()->entries().size() - entries.size() );
+    if ( trackPositions.size() != ( playlist()->entries().size() - entries.size() ) )
+        qWarning() << "========================= Failed to delete all the tracks we were asked for!! Didn't find some indicesss... ===================";
+
+
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), entries );
 }
 
@@ -200,6 +210,12 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
 void
 SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& tracks, int pos )
 {
+    if ( playlist()->currentrevision() == m_plRevisionBeforeUpdate )
+    {
+        // We did the insert. Don't get in an infinite loop!
+        return;
+    }
+
     // Notify the resolver that we've updated
     qDebug() << Q_FUNC_INFO  << "updating spotify resolver with inserted tracks at:" << pos << tracks;
     QVariantMap msg;

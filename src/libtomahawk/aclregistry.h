@@ -39,46 +39,35 @@ public:
     static ACLRegistry* instance();
 
     enum ACL {
-        Allow = 0,
+        NotFound = 0,
         Deny = 1,
-        NotFound = 2,
-        AllowOnce = 3,
-        DenyOnce = 4
+        Read = 2,
+        Stream = 3
+    };
+
+    struct User {
+        QString uuid;
+        QStringList knownDbids;
+        QStringList knownAccountIds;
+        ACL acl;
+
+        User()
+            : uuid( QUuid::createUuid().toString() )
+            {}
+
+        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACL p_acl )
+            : uuid( p_uuid )
+            , knownDbids( p_knownDbids )
+            , knownAccountIds( p_knownAccountIds )
+            , acl( p_acl )
+            {}
     };
 
     ACLRegistry( QObject *parent = 0 );
     ~ACLRegistry();
-    
-    /**
-     * @brief Registers the global ACL value for this peer
-     *
-     * @param dbid DBID of peer
-     * @param globalType Global ACL to use for this peer. ACLRegistry::NotFound is invalid and will return immediately.
-     * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return void
-     **/
-    void registerPeer( const QString &dbid, ACLRegistry::ACL globalType, const QString &username = QString() );
-
-    /**
-     * @brief Checks if peer is authorized, using the username. Optionally, can change authorization of the peer, but only if the peer is found.
-     *
-     * @param username Username for the peer
-     * @param globalType Global ACL to store if peer is found; if ACLRegistry::NotFound, does not change the ACL. Defaults to ACLRegistry::NotFound.
-     * @return QPair< QString, ACLRegistry::ACL >
-     **/
-    QPair< QString, ACLRegistry::ACL > isAuthorizedUser( const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound );
-
-    /**
-     * @brief Registers an alias for a known peer. If you do not know the DBID, you can retrieve it via isAuthorizedUser first.
-     *
-     * @param dbid DBID of peer
-     * @param username Username of the peer to be added to the entry
-     * @return void
-     **/
-    void registerAlias( const QString &dbid, const QString &username );
 
 signals:
-    void aclResult( QString nodeid, ACLRegistry::ACL peerStatus );
+    void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
     
 public slots:
     /**
@@ -89,16 +78,13 @@ public slots:
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return ACLRegistry::ACL
      **/
-    void isAuthorizedPeer( const QString &dbid, ACLRegistry::ACL globalType = ACLRegistry::NotFound, const QString &username = QString() );
+    void isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound );
 
     
 #ifndef ENABLE_HEADLESS
     ACLRegistry::ACL getUserDecision( const QString &username );
 #endif
     
-//     ACLRegistry::ACL isAuthorizedPath( const QString &dbid, const QString &path );
-//     void authorizePath( const QString &dbid, const QString &path, ACLRegistry::ACL type );
-
 private:
     /**
      * @brief Saves the cache.
@@ -107,9 +93,14 @@ private:
      **/
     void save();
 
-    QVariantHash m_cache;
+    void load();
+
+    QList< ACLRegistry::User > m_cache;
 
     static ACLRegistry* s_instance;
 };
+
+Q_DECLARE_METATYPE( ACLRegistry::ACL );
+Q_DECLARE_METATYPE( ACLRegistry::User );
 
 #endif // TOMAHAWK_ACLREGISTRY_H

@@ -54,7 +54,6 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
 
         if ( !updater )
         {
-            Q_ASSERT( false );
             return 0;
         }
         updater->setAutoUpdate( s->value( QString( "%1/autoupdate" ).arg( key ) ).toBool() );
