@@ -39,6 +39,7 @@ public:
     virtual ~XspfUpdater();
 
     virtual QString type() const { return "xspf"; }
+
 public slots:
     void updateNow();
 
@@ -48,7 +49,7 @@ protected:
     virtual void removeFromSettings(const QString& group) const;
 
 private slots:
-    void playlistLoaded();
+    void playlistLoaded( const QList<Tomahawk::query_ptr> & );
 
 private:
     QString m_url;

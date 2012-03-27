@@ -79,6 +79,8 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
 
     QTimer::singleShot( 0, this, SLOT( doSave() ) );
+
+    setAutoUpdate( m_autoUpdate );
 }
 
 PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate )
