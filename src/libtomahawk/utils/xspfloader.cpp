@@ -61,6 +61,7 @@ XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
     , m_autoCreate( autoCreate )
     , m_autoUpdate( autoUpdate )
     , m_autoResolve( true )
+    , m_autoDelete( true )
     , m_NS("http://xspf.org/ns/0/")
 {
     qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
@@ -266,12 +267,14 @@ XSPFLoader::gotBody()
         new Tomahawk::XspfUpdater( m_playlist, 600000, m_autoUpdate, m_url.toString() );
         emit ok( m_playlist );
     }
-    else{
+    else
+    {
 
         if( !m_entries.isEmpty() )
             emit tracks( m_entries );
     }
 
-    deleteLater();
+    if ( m_autoDelete )
+        deleteLater();
 
 }

@@ -58,28 +58,24 @@ XspfUpdater::updateNow()
     XSPFLoader* l = new XSPFLoader( false, false );
     l->setAutoResolveTracks( false );
     l->load( m_url );
-    connect( l, SIGNAL( ok ( Tomahawk::playlist_ptr ) ), this, SLOT( playlistLoaded() ) );
+    connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( playlistLoaded( QList<Tomahawk::query_ptr> ) ) );
 }
 
 void
-XspfUpdater::playlistLoaded()
+XspfUpdater::playlistLoaded( const QList<Tomahawk::query_ptr>& newEntries )
 {
-    XSPFLoader* loader = qobject_cast<XSPFLoader*>( sender() );
-    Q_ASSERT( loader );
-
     QList< query_ptr > tracks;
     foreach ( const plentry_ptr ple, playlist()->entries() )
         tracks << ple->query();
 
     bool changed = false;
-    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, loader->entries(), changed );
+    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newEntries, changed );
 
     if ( !changed )
         return;
 
     QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );
-
 }
 
 void
