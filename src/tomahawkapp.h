@@ -108,6 +108,7 @@ public slots:
 private slots:
     void initServent();
     void initSIP();
+    void initHTTP();
 
     void spotifyApiCheckFinished();
 
@@ -120,8 +121,6 @@ private:
     void initDatabase();
     void initLocalCollection();
     void initPipeline();
-
-    void initHTTP();
 
     QWeakPointer<Database> m_database;
     QWeakPointer<ScanManager> m_scanManager;
@@ -143,8 +142,8 @@ private:
 
     bool m_headless, m_loaded;
 
-    QxtHttpServerConnector m_connector;
-    QxtHttpSessionManager m_session;
+    QWeakPointer< QxtHttpServerConnector > m_connector;
+    QWeakPointer< QxtHttpSessionManager > m_session;
 };
 
 Q_DECLARE_METATYPE( QPersistentModelIndex )
