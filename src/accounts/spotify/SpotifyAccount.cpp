@@ -168,7 +168,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
-        const int startPos = msg.value( "startPosition" ).toInt();
+        const QString startPos = msg.value( "startPosition" ).toString();
         const QVariantList tracksList = msg.value( "tracks" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
@@ -209,7 +209,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QVariantList tracksList = msg.value( "trackPositions" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
-
 
         updater->spotifyTracksMoved( tracksList, newRev, oldRev  );
     }

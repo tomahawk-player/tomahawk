@@ -193,7 +193,11 @@ PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
             entry->setDuration( 0 );
 
         entry->setLastmodified( 0 );
-        entry->setAnnotation( "" ); // FIXME
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        entry->setAnnotation( annotation );
+
         entry->setQuery( query );
         entry->setGuid( uuid() );
 

@@ -60,7 +60,7 @@ class DLLEXPORT XspfUpdaterFactory : public PlaylistUpdaterFactory
 public:
     XspfUpdaterFactory() {}
 
-    virtual QString type() const { return "type"; }
+    virtual QString type() const { return "xspf"; }
     virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl ) { return new XspfUpdater( pl ); }
 };
 

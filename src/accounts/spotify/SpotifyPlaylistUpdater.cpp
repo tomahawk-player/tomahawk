@@ -47,7 +47,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
     }
 
     // Register the updater with the account
-    const QString spotifyId = QString( "playlistupdaters/%1" ).arg( pl->guid() );
+    const QString spotifyId = TomahawkSettings::instance()->value( QString( "playlistupdaters/%1/spotifyId" ).arg( pl->guid() ) ).toString();
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account, pl );
     m_account->registerUpdaterForPlaylist( spotifyId, updater );
@@ -140,28 +140,40 @@ SpotifyPlaylistUpdater::sync() const
 
 
 void
-SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, int startPos, const QString& newRev, const QString& oldRev )
+SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev )
 {
     const QList< query_ptr > queries = variantToQueries( tracks );
 
-    qDebug() << Q_FUNC_INFO << "inserting tracks in middle of tomahawk playlist, from spotify command!" << tracks << startPos << newRev << oldRev;
+    qDebug() << Q_FUNC_INFO << "inserting tracks in middle of tomahawk playlist, from spotify command!" << tracks << startPosId << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
 //     m_latestRev = newRev;
 
-    if ( startPos > playlist()->entries().size() )
-        startPos = playlist()->entries().size();
+    // Find the position of the track to insert from
+    int pos = -1;
+    QList< plentry_ptr > entries = playlist()->entries();
+    for ( int i = 0; i < entries.size(); i++ )
+    {
+        if ( entries[ i ]->annotation() == startPosId )
+        {
+            pos = i;
+            break;
+        }
+    }
+    if ( pos == -1 )
+        pos = entries.size();
 
+    qDebug() << Q_FUNC_INFO << "inserting tracks at position:" << pos;
     m_plRevisionBeforeUpdate = playlist()->currentrevision();
 
-    playlist()->insertEntries( queries, startPos, playlist()->currentrevision() );
+    playlist()->insertEntries( queries, pos, playlist()->currentrevision() );
 }
 
 
 void
-SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackPositions, const QString& newRev, const QString& oldRev )
+SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, const QString& newRev, const QString& oldRev )
 {
-    qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackPositions << newRev << oldRev;
+    qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackIds << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
 //     m_latestRev = newRev;
@@ -170,17 +182,23 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackPositions
 
     // Collect list of tracks to remove (can't remove in-place as that might modify the indices)
     QList<plentry_ptr> toRemove;
-    foreach( const QVariant posV, trackPositions )
+    foreach( const QVariant trackIdV, trackIds )
     {
-        bool ok;
-        const int pos = posV.toInt( &ok );
-        if ( !ok || pos < 0 || pos >= entries.size() )
+        const QString id = trackIdV.toString();
+        if ( id.isEmpty() )
         {
-            qWarning() << Q_FUNC_INFO << "Tried to get track position to remove, but either couldn't convert to int, or out of bounds:" << ok << pos << entries.size() << entries << trackPositions;
+            qWarning() << Q_FUNC_INFO << "Tried to get track id to remove, but either couldn't convert to qstring:" << trackIdV;
             continue;
         }
 
-        toRemove << entries.at(pos);
+        foreach ( const plentry_ptr& entry, entries )
+        {
+            if ( entry->annotation() == id )
+            {
+                toRemove << entry;
+                break;
+            }
+        }
     }
 
 
@@ -191,12 +209,13 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackPositions
 
     m_plRevisionBeforeUpdate = playlist()->currentrevision();
 
-    qDebug() << "We were asked to delete:" << trackPositions.size() << "tracks from the playlist, and we deleted:" << ( playlist()->entries().size() - entries.size() );
-    if ( trackPositions.size() != ( playlist()->entries().size() - entries.size() ) )
+    const int sizeDiff = playlist()->entries().size() - entries.size();
+    qDebug() << "We were asked to delete:" << trackIds.size() << "tracks from the playlist, and we deleted:" << sizeDiff;
+    if ( trackIds.size() != ( playlist()->entries().size() - entries.size() ) )
         qWarning() << "========================= Failed to delete all the tracks we were asked for!! Didn't find some indicesss... ===================";
 
-
-    playlist()->createNewRevision( uuid(), playlist()->currentrevision(), entries );
+    if ( sizeDiff > 0 )
+        playlist()->createNewRevision( uuid(), playlist()->currentrevision(), entries );
 }
 
 
@@ -221,7 +240,20 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
     QVariantMap msg;
     msg[ "_msgtype" ] = "addTracksToPlaylist";
     msg[ "oldrev" ] = m_latestRev;
-    msg[ "startPosition" ] = pos;
+
+    // Find the trackid of the nearest spotify track
+    QList< plentry_ptr > plTracks = playlist()->entries();
+    Q_ASSERT( pos-1 < plTracks.size() );
+
+    for ( int i = pos-1; i >= 0; i-- )
+    {
+        if ( !plTracks[ i ]->annotation().isEmpty() && plTracks[ i ]->annotation().contains( "spotify:track") )
+        {
+            msg[ "startPosition" ] = plTracks[ i ]->annotation();
+            break;
+        }
+    }
+
     msg[ "playlistid" ] = m_spotifyId;
 
     QVariantList tracksJson;
@@ -300,8 +332,8 @@ SpotifyPlaylistUpdater::queryToVariant( const query_ptr& query )
     m[ "artist" ] = query->artist();
     m[ "album" ] = query->album();
 
-    if ( !query->property( "spotifytrackid" ).isNull() )
-        m[ "id" ] = query->property( "spotifytrackid" );
+    if ( !query->property( "annotation" ).isNull() )
+        m[ "id" ] = query->property( "annotation" );
 
     return m;
 }
@@ -316,7 +348,7 @@ SpotifyPlaylistUpdater::variantToQueries( const QVariantList& list )
         QVariantMap trackMap = blob.toMap();
         const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
         if ( trackMap.contains( "id" ) )
-            q->setProperty( "spotifytrackid", trackMap.value( "id" ) );
+            q->setProperty( "annotation", trackMap.value( "id" ) );
 
         queries << q;
     }

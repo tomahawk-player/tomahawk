@@ -77,6 +77,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 
             Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString() );
             q->setResultHint( query.value( 8 ).toString() );
+            q->setProperty( "annotation", e->annotation() );
             e->setQuery( q );
 
             m_entrymap.insert( e->guid(), e );

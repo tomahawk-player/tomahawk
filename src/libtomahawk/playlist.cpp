@@ -181,7 +181,10 @@ Playlist::create( const source_ptr& author,
         p->setGuid( uuid() );
         p->setDuration( query->duration() );
         p->setLastmodified( 0 );
-        p->setAnnotation( "" );
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        p->setAnnotation( annotation );
         p->setQuery( query );
 
         entries << p;
@@ -607,7 +610,10 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
             e->setDuration( 0 );
 
         e->setLastmodified( 0 );
-        e->setAnnotation( "" ); // FIXME
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        e->setAnnotation( annotation ); // FIXME
         e->setQuery( query );
 
         el << e;

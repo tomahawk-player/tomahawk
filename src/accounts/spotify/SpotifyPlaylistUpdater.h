@@ -49,7 +49,7 @@ public:
     void setSync( bool sync );
 
     /// Spotify callbacks when we are directly instructed from the resolver
-    void spotifyTracksAdded( const QVariantList& tracks, int startPos, const QString& newRev, const QString& oldRev );
+    void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
     void spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
 
@@ -68,6 +68,7 @@ private slots:
 
 private:
     void init();
+
     static QVariantList queriesToVariant( const QList< Tomahawk::query_ptr >& queries );
     static QVariant queryToVariant( const Tomahawk::query_ptr& query );
     static QList< Tomahawk::query_ptr > variantToQueries( const QVariantList& list );
