@@ -85,7 +85,7 @@ public:
 
     Tomahawk::playlistinterface_ptr currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
-    Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
@@ -186,9 +186,9 @@ private:
     void saveCurrentPlaylistSettings();
     void loadCurrentPlaylistSettings();
 
-    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
-    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
-    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
+    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
+    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     QWidget* m_widget;
     InfoBar* m_infobar;
