@@ -393,7 +393,7 @@
                <enum>Qt::RightToLeft</enum>
               </property>
               <property name="text">
-               <string>Allow web browsers to detect Tomahawk</string>
+               <string>Allow web browsers to interact with Tomahawk</string>
               </property>
               <property name="checked">
                <bool>true</bool>
