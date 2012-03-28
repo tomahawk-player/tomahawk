@@ -42,6 +42,7 @@ public:
     };
 
     explicit AccountFactoryWrapper( Tomahawk::Accounts::AccountFactory* factory, QWidget* parent = 0 );
+    virtual ~AccountFactoryWrapper() {}
 
 public slots:
     void openAccountConfig( Tomahawk::Accounts::Account* );
