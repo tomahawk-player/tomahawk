@@ -185,7 +185,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             return;
 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
-        Q_ASSERT( updater->sync() );
+
+        // If we're not syncing with this, the resolver is quite misinformed.
+        Q_ASSERT( updater && updater->sync() );
+        if ( !updater || !updater->sync() )
+            return;
 
         const QVariantList tracksList = msg.value( "trackPositions" ).toList();
         const QString newRev = msg.value( "revid" ).toString();

@@ -134,6 +134,18 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
     else
     {
+        // DEBUG only
+        qDebug() << "Current entries in the playlist_item table for this playlist:" << m_playlistguid;
+        TomahawkSqlQuery q = lib->newquery();
+        q.prepare( "SELECT guid, playlist, trackname, artistname, annotation FROM playlist_item WHERE playlist = ?" );
+        q.addBindValue( m_playlistguid );
+        if ( q.exec() )
+        {
+            while ( q.next() )
+            {
+                qDebug() << "====" << q.value( 0 ).toString() << q.value( 1 ).toString()  << q.value( 2 ).toString()  << q.value( 3 ).toString()  << q.value( 4 ).toString() << "====";
+            }
+        }
         QString sql = "INSERT INTO playlist_item( guid, playlist, trackname, artistname, albumname, "
                                                  "annotation, duration, addedon, addedby, result_hint ) "
                       "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
@@ -142,6 +154,8 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         qDebug() << "Num new playlist_items to add:" << m_addedentries.length();
         foreach( const plentry_ptr& e, m_addedentries )
         {
+            qDebug() << "Adding:" << e->guid() << e->query()->track() << e->query()->artist();
+
             m_addedmap.insert( e->guid(), e ); // needed in postcommithook
 
             QString resultHint;

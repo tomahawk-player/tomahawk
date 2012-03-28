@@ -142,6 +142,12 @@ SpotifyPlaylistUpdater::sync() const
 void
 SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev )
 {
+    if ( m_plRevisionBeforeSpotifyUpdate == playlist()->currentrevision() )
+    {
+        m_plRevisionBeforeSpotifyUpdate.clear();
+        return;
+    }
+
     const QList< query_ptr > queries = variantToQueries( tracks );
 
     qDebug() << Q_FUNC_INFO << "inserting tracks in middle of tomahawk playlist, from spotify command!" << tracks << startPosId << newRev << oldRev;
@@ -164,7 +170,7 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QS
         pos = entries.size();
 
     qDebug() << Q_FUNC_INFO << "inserting tracks at position:" << pos;
-    m_plRevisionBeforeUpdate = playlist()->currentrevision();
+    m_plRevisionBeforeTomahawkUpdate = playlist()->currentrevision();
 
     playlist()->insertEntries( queries, pos, playlist()->currentrevision() );
 }
@@ -173,6 +179,12 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QS
 void
 SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, const QString& newRev, const QString& oldRev )
 {
+    if ( m_plRevisionBeforeSpotifyUpdate == playlist()->currentrevision() )
+    {
+        m_plRevisionBeforeSpotifyUpdate.clear();
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackIds << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
@@ -207,7 +219,7 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
         entries.removeAll( torm );
 
 
-    m_plRevisionBeforeUpdate = playlist()->currentrevision();
+    m_plRevisionBeforeTomahawkUpdate = playlist()->currentrevision();
 
     const int sizeDiff = playlist()->entries().size() - entries.size();
     qDebug() << "We were asked to delete:" << trackIds.size() << "tracks from the playlist, and we deleted:" << sizeDiff;
@@ -229,9 +241,10 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
 void
 SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& tracks, int pos )
 {
-    if ( playlist()->currentrevision() == m_plRevisionBeforeUpdate )
+    if ( playlist()->currentrevision() == m_plRevisionBeforeTomahawkUpdate )
     {
         // We did the insert. Don't get in an infinite loop!
+        m_plRevisionBeforeTomahawkUpdate.clear();
         return;
     }
 
@@ -270,6 +283,7 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
     }
     msg[ "tracks" ] = tracksJson;
 
+    m_plRevisionBeforeSpotifyUpdate = playlist()->currentrevision();
     m_spotify->sendMessage( msg, this, "onTracksInsertedReturn" );
 }
 
@@ -287,6 +301,14 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
 void
 SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks )
 {
+
+    if ( playlist()->currentrevision() == m_plRevisionBeforeTomahawkUpdate )
+    {
+        // We did the insert. Don't get in an infinite loop!
+        m_plRevisionBeforeTomahawkUpdate.clear();
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO  << "updating spotify resolver with removed tracks:" << tracks;
     QVariantMap msg;
     msg[ "_msgtype" ] = "removeTracksFromPlaylist";
@@ -294,6 +316,7 @@ SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks 
     msg[ "oldrev" ] = m_latestRev;
     msg[ "tracks" ] = queriesToVariant( tracks );
 
+    m_plRevisionBeforeSpotifyUpdate = playlist()->currentrevision();
     m_spotify->sendMessage( msg, this, "onTracksRemovedReturn" );
 }
 
