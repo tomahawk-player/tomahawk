@@ -22,6 +22,7 @@
 #include "xmppconfigwidget.h"
 #include "sip/SipPlugin.h"
 #include "ui_xmppconfigwidget.h"
+#include "XmppInfoPlugin.h"
 
 #include <QtCore/QtPlugin>
 
@@ -87,6 +88,16 @@ XmppAccount::saveConfig()
 {
     if ( !m_configWidget.isNull() )
         static_cast< XmppConfigWidget* >( m_configWidget.data() )->saveConfig();
+}
+
+
+InfoSystem::InfoPlugin*
+XmppAccount::infoPlugin()
+{
+    if( !m_xmppSipPlugin.isNull() )
+        m_xmppSipPlugin.data()->infoPlugin();
+
+    return 0;
 }
 
 

@@ -7,6 +7,7 @@ set( googleHeaders
     ../sip/xmppsip.h
     ../sip/avatarmanager.h
     ../sip/xmlconsole.h
+    ../XmppInfoPlugin.h
     googlewrapper.h )
 
 set( googleSources
@@ -17,6 +18,7 @@ set( googleSources
     ../sip/tomahawkxmppmessagefactory.cpp
     ../sip/avatarmanager.cpp
     ../sip/xmlconsole.cpp
+    ../XmppInfoPlugin.cpp
 
     googlewrapper.cpp )
 

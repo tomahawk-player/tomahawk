@@ -78,7 +78,7 @@ AudioEngine::AudioEngine()
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
     connect( this, SIGNAL( sendWaitingNotification() ), SLOT( sendWaitingNotificationSlot() ), Qt::QueuedConnection );
-    
+
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -134,14 +134,22 @@ AudioEngine::play()
     {
         m_mediaObject->play();
         emit resumed();
-        Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
-        trackInfo["title"] = m_currentTrack->track();
-        trackInfo["artist"] = m_currentTrack->artist()->name();
-        trackInfo["album"] = m_currentTrack->album()->name();
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+        if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
+        {
+            Tomahawk::InfoSystem::InfoStringHash trackInfo;
+
+            trackInfo["title"] = m_currentTrack->track();
+            trackInfo["artist"] = m_currentTrack->artist()->name();
+            trackInfo["album"] = m_currentTrack->album()->name();
+            trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
+            trackInfo["duration"] = QString::number( m_currentTrack->duration() );
+
+
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+        }
     }
     else
         next();
@@ -319,7 +327,7 @@ AudioEngine::sendWaitingNotificationSlot() const
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
     if ( !m_playlist.isNull() && m_playlist->hasNextItem() )
         return;
-    
+
     QVariantMap retryInfo;
     retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
@@ -460,6 +468,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 trackInfo["title"] = m_currentTrack->track();
                 trackInfo["artist"] = m_currentTrack->artist()->name();
                 trackInfo["album"] = m_currentTrack->album()->name();
+                trackInfo["duration"] = QString::number( m_currentTrack->duration() );
+                trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
 
                 Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                     s_aeInfoIdentifier,
