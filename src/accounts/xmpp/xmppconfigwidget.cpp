@@ -65,7 +65,7 @@ XmppConfigWidget::saveConfig()
     QVariantHash configuration = m_account->configuration();
     configuration[ "server" ] = m_ui->xmppServer->text().trimmed();
     configuration[ "port" ] = m_ui->xmppPort->text().trimmed();
-    configuration[ "publishtracks"] = m_ui->xmppPublishTracksCheckbox->checkState() == Qt::Checked ? true : false;
+    configuration[ "publishtracks"] = m_ui->xmppPublishTracksCheckbox->checkState() == Qt::Checked;
 
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
     m_account->setCredentials( credentials );
