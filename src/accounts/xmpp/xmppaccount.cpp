@@ -95,7 +95,7 @@ InfoSystem::InfoPlugin*
 XmppAccount::infoPlugin()
 {
     if( !m_xmppSipPlugin.isNull() )
-        m_xmppSipPlugin.data()->infoPlugin();
+        return m_xmppSipPlugin.data()->infoPlugin();
 
     return 0;
 }
