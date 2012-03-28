@@ -43,6 +43,7 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent ) :
     m_ui->xmppPassword->setText( account->credentials().contains( "password" ) ? account->credentials()[ "password" ].toString() : QString() );
     m_ui->xmppServer->setText( account->configuration().contains( "server" ) ? account->configuration()[ "server" ].toString() : QString() );
     m_ui->xmppPort->setValue( account->configuration().contains( "port" ) ? account->configuration()[ "port" ].toInt() : 5222 );
+    m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true);
     m_ui->jidExistsLabel->hide();
 
     connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
@@ -64,6 +65,7 @@ XmppConfigWidget::saveConfig()
     QVariantHash configuration = m_account->configuration();
     configuration[ "server" ] = m_ui->xmppServer->text().trimmed();
     configuration[ "port" ] = m_ui->xmppPort->text().trimmed();
+    configuration[ "publishtracks"] = m_ui->xmppPublishTracksCheckbox->checkState() == Qt::Checked ? true : false;
 
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
     m_account->setCredentials( credentials );

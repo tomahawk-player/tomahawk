@@ -59,7 +59,13 @@ Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input)
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
+
+    if( m_sipPlugin->m_account->configuration().value("publishtracks").toBool() == false )
+    {
+        tDebug() << Q_FUNC_INFO <<  m_sipPlugin->m_client->jid().full() << "Not publishing now playing info (disabled in account config)";
+        return;
+    }
 
     switch ( type )
     {
