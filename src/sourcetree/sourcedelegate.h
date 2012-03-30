@@ -43,6 +43,7 @@ public:
 
 signals:
     void clicked( const QModelIndex& idx );
+    void doubleClicked( const QModelIndex& idx );
     void latchOn( const Tomahawk::source_ptr& idx );
     void latchOff( const Tomahawk::source_ptr& idx );
     void toggleRealtimeLatch( const Tomahawk::source_ptr& idx, bool realtime );
@@ -72,6 +73,7 @@ private:
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
     QMap< QModelIndex, AnimationHelper* > m_expandedMap;
     QPixmap m_headphonesOn, m_headphonesOff, m_realtimeLocked, m_realtimeUnlocked, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark;
+    qint64 m_lastClicked;
 
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;

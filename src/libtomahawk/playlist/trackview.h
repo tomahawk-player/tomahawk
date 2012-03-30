@@ -64,6 +64,9 @@ public:
     bool updatesContextView() const { return m_updateContextView; }
     void setUpdatesContextView( bool b ) { m_updateContextView = b; }
 
+    // Starts playing from the beginning if resolved, or waits until a track is playable
+    void startPlayingFromStart();
+
 public slots:
     virtual void onItemActivated( const QModelIndex& index );
 
@@ -98,7 +101,11 @@ private slots:
 
     void onCustomContextMenu( const QPoint& pos );
 
+    void autoPlayResolveFinished( const Tomahawk::query_ptr& query, int row  );
+
 private:
+    void startAutoPlay( const QModelIndex& index );
+    bool tryToPlayItem( const QModelIndex& index );
     void updateHoverIndex( const QPoint& pos );
 
     QString m_guid;
@@ -117,6 +124,9 @@ private:
 
     QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
+
+    Tomahawk::query_ptr m_autoPlaying;
+
     Tomahawk::ContextMenu* m_contextMenu;
 };
 

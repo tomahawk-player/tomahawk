@@ -31,7 +31,6 @@ public:
     virtual QString text() const;
     virtual Tomahawk::playlist_ptr playlist() const;
     virtual Qt::ItemFlags flags() const;
-    virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
@@ -42,6 +41,10 @@ public:
     virtual bool isBeingPlayed() const;
 
     virtual SourceTreeItem* activateCurrent();
+
+public slots:
+    virtual void activate();
+    virtual void doubleClicked();
 
 protected:
     void setLoaded( bool loaded );

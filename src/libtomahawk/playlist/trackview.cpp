@@ -32,6 +32,7 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "utils/closure.h"
 #include "dropjob.h"
 #include "artist.h"
 #include "album.h"
@@ -153,6 +154,41 @@ TrackView::setTrackModel( TrackModel* model )
 
 
 void
+TrackView::startPlayingFromStart()
+{
+    if ( m_proxyModel->rowCount() == 0 )
+        return;
+
+    const QModelIndex index = m_proxyModel->index( 0, 0 );
+    startAutoPlay( index );
+}
+
+
+void
+TrackView::autoPlayResolveFinished( const query_ptr& query, int row )
+{
+    Q_ASSERT( !query.isNull() );
+    Q_ASSERT( row >= 0 );
+
+    if ( query.isNull() || row < 0  || query != m_autoPlaying )
+        return;
+
+    const QModelIndex index = m_proxyModel->index( row, 0 );
+    if ( query->playable() )
+    {
+        onItemActivated( index );
+        return;
+    }
+
+    // Try the next one..
+    const QModelIndex sib = index.sibling( index.row() + 1, index.column() );
+    if ( sib.isValid() )
+        startAutoPlay( sib );
+
+}
+
+
+void
 TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
     QTreeView::currentChanged( current, previous );
@@ -174,15 +210,48 @@ TrackView::onItemActivated( const QModelIndex& index )
     if ( !index.isValid() )
         return;
 
+    tryToPlayItem( index );
+    emit itemActivated( index );
+}
+
+
+void
+TrackView::startAutoPlay( const QModelIndex& index )
+{
+    if ( tryToPlayItem( index ) )
+        return;
+
+    // item isn't playable but still resolving
+    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    if ( item && !item->query().isNull() && !item->query()->resolvingFinished() )
+    {
+        m_autoPlaying = item->query(); // So we can kill it if user starts autoplaying this playlist again
+        NewClosure( item->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( autoPlayResolveFinished( Tomahawk::query_ptr, int ) ),
+                    item->query(), index.row() );
+        return;
+    }
+
+    // not playable at all, try next
+    const QModelIndex sib = index.sibling( index.row() + 1, index.column() );
+    if ( sib.isValid() )
+        startAutoPlay( sib );
+}
+
+
+bool
+TrackView::tryToPlayItem( const QModelIndex& index )
+{
     TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && !item->query().isNull() && item->query()->numResults() )
     {
         tDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query()->results().first() );
+
+        return true;
     }
 
-    emit itemActivated( index );
+    return false;
 }
 
 
