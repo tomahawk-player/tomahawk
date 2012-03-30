@@ -270,6 +270,7 @@ LastFmAccount::hookupResolver()
     const Attica::Content res = AtticaManager::instance()->resolverForId( "lastfm" );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
     Q_ASSERT( state == AtticaManager::Installed );
+    Q_UNUSED( state );
 
     const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
 
