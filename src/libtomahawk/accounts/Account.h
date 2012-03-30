@@ -78,7 +78,6 @@ public:
     QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
     QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
     bool enabled() const { QMutexLocker locker( &m_mutex ); return m_enabled; }
-    bool autoConnect() const { QMutexLocker locker( &m_mutex ); return m_autoConnect; }
     QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
 
     QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_configuration; }
@@ -109,7 +108,6 @@ public:
     void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
     void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
     void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_enabled = enabled; }
-    void setAutoConnect( bool autoConnect ) { QMutexLocker locker( &m_mutex ); m_autoConnect = autoConnect; }
     void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
     void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
     void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
@@ -148,7 +146,6 @@ private:
     QString m_accountFriendlyName;
     QString m_cachedError;
     bool m_enabled;
-    bool m_autoConnect;
     QString m_accountId;
     QVariantHash m_credentials;
     QVariantHash m_configuration;

@@ -374,7 +374,7 @@ AccountManager::hookupAndEnable( Account* account, bool startup )
     if ( p )
         SipHandler::instance()->hookUpPlugin( p );
 
-    if ( account->enabled() && ( !startup || account->autoConnect() ) )
+    if ( account->enabled() )
     {
         account->authenticate();
         m_enabledAccounts << account;

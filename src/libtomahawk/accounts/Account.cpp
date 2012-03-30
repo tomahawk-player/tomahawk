@@ -46,7 +46,6 @@ accountTypeToString( AccountType type )
 Account::Account( const QString& accountId )
     : QObject()
     , m_enabled( false )
-    , m_autoConnect( false )
     , m_accountId( accountId )
 {
     connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
@@ -126,7 +125,6 @@ Account::syncConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->setValue( "accountfriendlyname", m_accountFriendlyName );
     s->setValue( "enabled", m_enabled );
-    s->setValue( "autoconnect", m_autoConnect );
     s->setValue( "credentials", m_credentials );
     s->setValue( "configuration", m_configuration );
     s->setValue( "acl", m_acl );
@@ -144,7 +142,6 @@ Account::loadFromConfig( const QString& accountId )
     s->beginGroup( "accounts/" + m_accountId );
     m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
     m_enabled = s->value( "enabled", false ).toBool();
-    m_autoConnect = s->value( "autoconnect", false ).toBool();
     m_credentials = s->value( "credentials", QVariantHash() ).toHash();
     m_configuration = s->value( "configuration", QVariantHash() ).toHash();
     m_acl = s->value( "acl", QVariantMap() ).toMap();
@@ -160,7 +157,6 @@ Account::removeFromConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->remove( "accountfriendlyname" );
     s->remove( "enabled" );
-    s->remove( "autoconnect" );
     s->remove( "credentials" );
     s->remove( "configuration" );
     s->remove( "acl" );

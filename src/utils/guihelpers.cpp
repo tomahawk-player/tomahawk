@@ -33,7 +33,6 @@ handleAccountAdded( Tomahawk::Accounts::Account* account, bool added )
     if ( added )
     {
         account->setEnabled( true );
-        account->setAutoConnect( true );
         account->saveConfig();
 
         TomahawkSettings::instance()->addAccount( account->accountId() );
