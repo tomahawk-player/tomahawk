@@ -68,8 +68,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/groupitem.cpp
      sourcetree/items/historyitem.cpp
 
-     breakpad/BreakPad.cpp
-
      utils/guihelpers.cpp
 
      accounts/lastfm/LastFmAccount.cpp
@@ -90,6 +88,10 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      AccountFactoryWrapper.cpp
      AccountFactoryWrapperDelegate.cpp
 )
+
+IF( WITH_BREAKPAD )
+    LIST(APPEND tomahawkSourcesGui breakpad/BreakPad.cpp)
+ENDIF()
 
 SET( tomahawkUI ${tomahawkUI}
      tomahawkwindow.ui
@@ -171,6 +173,10 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 IF( BUILD_GUI )
     LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
     qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+
+    IF( WITH_CRASHREPORTER )
+        ADD_SUBDIRECTORY( breakpad/CrashReporter )
+    ENDIF()
 ENDIF()
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
@@ -203,9 +209,11 @@ ENDIF(GLOOX_FOUND)
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
+IF(WITH_BREAKPAD)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad)
+ENDIF()
 
 TARGET_LINK_LIBRARIES( tomahawk
-    tomahawk_breakpad
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
     ${PHONON_LIBS}
