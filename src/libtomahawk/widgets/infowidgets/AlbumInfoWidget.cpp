@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -231,7 +232,7 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
         artistInfo["artist"] = m_album->artist()->name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.customData["refetch"] = QVariant( autoRefetch );
+        requestData.customData["refetch"] = autoRefetch;
         requestData.caller = m_infoId;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
@@ -308,7 +309,7 @@ AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDa
                 tDebug() << "Adding" << al.count() << "albums";
                 gotAlbums( al );
             }
-            else if ( requestData.customData[ "refetch" ].toInt() > 0 )
+            else if ( requestData.customData[ "refetch" ].toBool() )
             {
                 tDebug() << "Auto refetching";
                 m_buttonAlbums->setChecked( false );

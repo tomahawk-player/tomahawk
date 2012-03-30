@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012,      Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -622,7 +623,7 @@ TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent, bool 
         requestData.caller = m_infoId;
         requestData.customData["row"] = parent.row();
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-        requestData.customData["refetch"] = QVariant( autoRefetch );
+        requestData.customData["refetch"] = autoRefetch;
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
@@ -660,8 +661,8 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool au
         m_receivedInfoData.removeAll( artistInfo );
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = m_infoId;
-        requestData.customData["rows"] = QVariant( rows );
-        requestData.customData["refetch"] = QVariant( autoRefetch );
+        requestData.customData["rows"] = rows;
+        requestData.customData["refetch"] = autoRefetch;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
         requestData.timeoutMillis = 0;
@@ -796,7 +797,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModel
         albumitem = new TreeModelItem( album, parentItem );
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-        
+
         getCover( albumitem->index );
     }
 
@@ -886,7 +887,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
             QModelIndex idx = index( requestData.customData[ "row" ].toInt(), 0, QModelIndex() );
 
-            if ( requestData.customData[ "refetch" ].toInt() > 0 && !al.count() )
+            if ( requestData.customData[ "refetch" ].toBool() && !al.count() )
             {
                 setMode( DatabaseMode );
 
@@ -940,7 +941,13 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             }
             else if ( m_receivedInfoData.count() == 2 /* FIXME */ )
             {
-                if ( requestData.customData[ "refetch" ].toInt() > 0 )
+                // If the second load got no data, but the first load did, don't do anything
+                QList< QVariant > rows = requestData.customData[ "rows" ].toList();
+                QModelIndex idx = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
+                if ( rowCount( idx ) )
+                    return;
+
+                if ( requestData.customData[ "refetch" ].toBool() )
                 {
                     setMode( DatabaseMode );
 
