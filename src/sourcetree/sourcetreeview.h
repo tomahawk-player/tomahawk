@@ -67,6 +67,7 @@ private slots:
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
     void toggleExpandRequest( const QPersistentModelIndex& idx );
+    void onItemDoubleClicked( const QModelIndex& idx );
 
     void loadPlaylist();
     void deletePlaylist( const QModelIndex& = QModelIndex() );

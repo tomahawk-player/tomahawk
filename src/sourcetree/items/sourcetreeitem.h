@@ -78,6 +78,7 @@ public:
 
 public slots:
     virtual void activate() {}
+    virtual void doubleClicked() {}
 
 signals:
     void updated();

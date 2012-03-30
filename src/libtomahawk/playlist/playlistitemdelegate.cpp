@@ -97,10 +97,13 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-        option->state |= QStyle::State_Selected;
+
+        option->backgroundBrush = option->palette.color( QPalette::Mid );
+        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
+
     }
 
-    if ( option->state & QStyle::State_Selected )
+    if ( option->state & QStyle::State_Selected && !item->isPlaying() )
     {
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }

@@ -49,6 +49,7 @@ public:
     void setOverrideTitle( const QString& newTitle );
     void setAutoResolveTracks( bool autoResolve ) { m_autoResolve = autoResolve; }
     void setAutoDelete( bool autoDelete ) { m_autoDelete = autoDelete; }
+    void setErrorTitle( const QString& error ) { m_errorTitle = error; }
 
     static QString errorToString( XSPFErrorCode error );
 
@@ -73,7 +74,7 @@ private:
     bool m_autoCreate, m_autoUpdate, m_autoResolve, m_autoDelete;
     QString m_NS,m_overrideTitle;
     QList< Tomahawk::query_ptr > m_entries;
-    QString m_title, m_info, m_creator;
+    QString m_title, m_info, m_creator, m_errorTitle;
 
     QUrl m_url;
     QByteArray m_body;

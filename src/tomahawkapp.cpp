@@ -314,7 +314,7 @@ TomahawkApp::~TomahawkApp()
         delete m_session.data();
     if ( !m_connector.isNull() )
         delete m_connector.data();
-    
+
     Pipeline::instance()->stop();
 
     if ( !m_servent.isNull() )
@@ -491,7 +491,7 @@ TomahawkApp::initHTTP()
         tLog() << "HTTPd session already exists, returning";
         return;
     }
-    
+
     m_session = QWeakPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
     m_connector = QWeakPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
     if ( m_session.isNull() || m_connector.isNull() )
@@ -503,7 +503,7 @@ TomahawkApp::initHTTP()
         tLog() << "Failed to start HTTPd, could not create object";
         return;
     }
-    
+
     m_session.data()->setPort( 60210 ); //TODO config
     m_session.data()->setListenInterface( QHostAddress::LocalHost );
     m_session.data()->setConnector( m_connector.data() );

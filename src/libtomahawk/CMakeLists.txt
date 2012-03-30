@@ -119,6 +119,7 @@ set( libGuiSources
     utils/dropjobnotifier.cpp
     utils/proxystyle.cpp
     utils/tomahawkutilsgui.cpp
+    utils/closure.cpp
 
     widgets/animatedcounterlabel.cpp
     widgets/checkdirtree.cpp

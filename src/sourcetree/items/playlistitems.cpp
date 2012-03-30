@@ -24,6 +24,7 @@
 #include "query.h"
 #include "viewmanager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/playlistview.h"
 #include "categoryitems.h"
 #include "sourceitem.h"
 #include "utils/tomahawkutils.h"
@@ -133,6 +134,17 @@ PlaylistItem::activate()
 {
     ViewPage* p = ViewManager::instance()->show( m_playlist );
     model()->linkSourceItemToPage( this, p );
+}
+
+
+void
+PlaylistItem::doubleClicked()
+{
+    ViewPage* p = ViewManager::instance()->currentPage();
+    if ( PlaylistView* view = dynamic_cast< PlaylistView* >( p ) )
+    {
+        view->startPlayingFromStart();
+    }
 }
 
 
