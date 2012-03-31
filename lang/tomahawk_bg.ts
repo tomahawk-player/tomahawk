@@ -1602,13 +1602,13 @@ Spotify e TM на Spotify Group.</translation>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="74"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="136"/>
         <source>Status: Credentials saved for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Няма запазени данни за вход</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="75"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="137"/>
         <source>De-authenticate</source>
-        <translation type="unfinished">Премахни усостоверяване</translation>
+        <translation type="unfinished">Премахни удостоверяване</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="122"/>
@@ -1619,87 +1619,91 @@ Spotify e TM на Spotify Group.</translation>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="290"/>
         <source>Tweetin&apos; Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Грешка при изпращане на съобщение</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="122"/>
         <source>The credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Данните за вход не могат да бъдат потвърдени.
+Моля, опитай отново.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="152"/>
         <source>Status: Error validating credentials</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Грешка при валидиране на данни за вход</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="179"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общо съобщение</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="184"/>
         <source>Direct Message</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лично съобщение</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="185"/>
         <source>Send Message!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Чурулик!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="186"/>
         <source>@Mention</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@Споменаване</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="187"/>
         <source>Send Mention!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Чурулик!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="200"/>
         <source>You must enter a user name for this type of tweet.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Въведи име на потребител, за този вид съобщение.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="211"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Данните ти за вход не могат да бъдат заредени.
+Моля, оторизирай програмата отново.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="229"/>
         <source>Your saved credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запаметените данни за вход не могат да бъдат потвърдени.
+Моля, оторизирай програмата отново.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="271"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="290"/>
         <source>There was an error posting your status -- sorry!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Грешка при побликуване. Опитай отново.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="273"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
         <source>Tweeted!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изчуруликано!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="273"/>
         <source>Your tweet has been posted!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Съобщението ти беше побликувано.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
         <source>There was an error posting your direct message -- sorry!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Грешка при изпращане на лично съобщение.
+Опитай отново.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Съобщението беще побликувано.</translation>
     </message>
 </context>
 <context>
@@ -3115,7 +3119,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="322"/>
         <source>e.g. @tomahawk</source>
-        <translation type="unfinished">т.е. @tomahawk</translation>
+        <translation type="unfinished">напр. @tomahawk</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="351"/>
