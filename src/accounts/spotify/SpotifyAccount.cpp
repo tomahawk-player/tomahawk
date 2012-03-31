@@ -187,7 +187,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
 
         // If we're not syncing with this, the resolver is quite misinformed.
-        Q_ASSERT( updater && updater->sync() );
+//         Q_ASSERT( updater && updater->sync() );
         if ( !updater || !updater->sync() )
             return;
 
