@@ -178,6 +178,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
     }
 
+    if ( m_mode == LatestAdditions && item->query()->numResults() )
+    {
+        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
+
+        lowerText = QString( tr( "added %1" ) ).arg( playtime );
+    }
+
     if ( m_mode == LovedTracks )
         lowerText = item->query()->socialActionDescription( "Love", Query::Detailed );
 
