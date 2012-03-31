@@ -99,7 +99,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
-    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( selectRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( selectRequest( QPersistentModelIndex ) ), Qt::QueuedConnection );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expandRequest( QPersistentModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), SLOT( toggleExpandRequest( QPersistentModelIndex ) ) );
 

@@ -85,7 +85,7 @@ InfoBar::InfoBar( QWidget* parent )
     m_autoUpdate->setText( tr( "Automatically update" ) );
     m_autoUpdate->setLayoutDirection( Qt::RightToLeft );
     m_autoUpdate->setPalette( whitePal );
-    connect( m_autoUpdate, SIGNAL( stateChanged( int ) ), this, SIGNAL( autoUpdateChanged( int ) ) );
+    connect( m_autoUpdate, SIGNAL( toggled( bool ) ), this, SIGNAL( autoUpdateChanged( bool ) ) );
 
     ui->horizontalLayout->addWidget( m_autoUpdate );
 
