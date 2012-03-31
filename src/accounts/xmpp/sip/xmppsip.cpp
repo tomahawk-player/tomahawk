@@ -198,10 +198,16 @@ XmppSipPlugin::connectPlugin()
     if( m_client->isConnected() )
     {
         qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
-        return; //FIXME: should i return false here?!
+        return;
     }
 
-    qDebug() << "Connecting to the Xmpp server..." << m_client->jid().full();
+    if( m_account->configuration().contains("enforcesecure") && m_account->configuration().value("enforcesecure").toBool() )
+    {
+        tLog() << Q_FUNC_INFO << "Enforcing secure connection...";
+        m_client->setFeatureConfig(Jreen::Client::Encryption, Jreen::Client::Force);
+    }
+
+    tDebug() << "Connecting to the Xmpp server..." << m_client->jid().full();
 
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
@@ -313,6 +319,10 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
         case Jreen::Client::SystemShutdown:
         case Jreen::Client::Conflict:
         case Jreen::Client::Unknown:
+        case Jreen::Client::NoCompressionSupport:
+        case Jreen::Client::NoEncryptionSupport:
+        case Jreen::Client::NoAuthorizationSupport:
+        case Jreen::Client::NoSupportedFeature:
             emit error( Account::ConnectionError, errorMessage( reason ) );
             break;
 
@@ -375,6 +385,22 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
         case Jreen::Client::Unknown:
             return tr("Unknown");
+            break;
+
+        case Jreen::Client::NoCompressionSupport:
+            return tr("No Compression Support");
+            break;
+
+        case Jreen::Client::NoEncryptionSupport:
+            return tr("No Encryption Support");
+            break;
+
+        case Jreen::Client::NoAuthorizationSupport:
+            return tr("No Authorization Support");
+            break;
+
+        case Jreen::Client::NoSupportedFeature:
+            return tr("No Supported Feature");
             break;
 
         default:

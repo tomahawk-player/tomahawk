@@ -303,6 +303,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="xmppEnforceSecureCheckbox">
+        <property name="text">
+         <string>Enforce secure connection</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
