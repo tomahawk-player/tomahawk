@@ -221,7 +221,7 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
 
     if ( sizeDiff > 0 )
     {
-        m_blockUpdatesForNextRevision = true;
+        // Won't get a tomahawkTracksInserted or tomahawkTracksRemoved slot called, no need to block
         playlist()->createNewRevision( uuid(), playlist()->currentrevision(), entries );
     }
 }
