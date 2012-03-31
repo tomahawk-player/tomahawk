@@ -64,6 +64,8 @@ public:
     Tomahawk::playlistinterface_ptr playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
+    
+    Tomahawk::query_ptr stopAfterTrack() const  { return m_stopAfterTrack; }
 
     qint64 currentTime() const { return m_mediaObject->currentTime(); }
     qint64 currentTrackTotalTime() const { return m_mediaObject->totalTime(); }
@@ -91,6 +93,8 @@ public slots:
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
+    
+    void setStopAfterTrack( const Tomahawk::query_ptr& query ) { m_stopAfterTrack = query; }
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -141,8 +145,8 @@ private:
 
     QSharedPointer<QIODevice> m_input;
 
+    Tomahawk::query_ptr m_stopAfterTrack;
     Tomahawk::result_ptr m_currentTrack;
-    Tomahawk::result_ptr m_lastTrack;
     Tomahawk::playlistinterface_ptr m_playlist;
     Tomahawk::playlistinterface_ptr m_currentTrackPlaylist;
     Tomahawk::playlistinterface_ptr m_queue;

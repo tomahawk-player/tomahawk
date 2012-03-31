@@ -558,7 +558,12 @@ TrackView::onCustomContextMenu( const QPoint& pos )
 
         TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
         if ( item && !item->query().isNull() )
-            queries << item->query();
+        {
+            if ( item->query()->numResults() > 0 )
+                queries << item->query()->results().first()->toQuery();
+            else
+                queries << item->query();
+        }
     }
 
     m_contextMenu->setQueries( queries );

@@ -82,10 +82,7 @@ TrackModelItem::entry() const
 const Tomahawk::query_ptr&
 TrackModelItem::query() const
 {
-    if ( !m_entry.isNull() )
-        return m_entry->query();
-    else
-        return m_query;
+    return m_query;
 }
 
 

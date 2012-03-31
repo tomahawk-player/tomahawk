@@ -516,6 +516,16 @@ AudioEngine::loadNextTrack()
 
     Tomahawk::result_ptr result;
 
+    if ( !m_stopAfterTrack.isNull() && !m_currentTrack.isNull() )
+    {
+        if ( m_stopAfterTrack.data() == m_currentTrack->toQuery().data() )
+        {
+            m_stopAfterTrack.clear();
+            stop();
+            return;
+        }
+    }
+
     if ( m_queue && m_queue->trackCount() )
     {
         result = m_queue->nextItem();
@@ -555,7 +565,9 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
+    {
         loadTrack( result );
+    }
     else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
@@ -678,6 +690,9 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
+    if ( m_playlist == playlist )
+        return;
+
     if ( !m_playlist.isNull() )
     {
         if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
@@ -691,8 +706,9 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         emit playlistChanged( playlist );
         return;
     }
-
+    
     m_playlist = playlist;
+    m_stopAfterTrack.clear();
 
     if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
         connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( onPlaylistNextTrackReady() ) );
@@ -704,16 +720,16 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
-    m_lastTrack = m_currentTrack;
-    if ( !m_lastTrack.isNull() )
+    Tomahawk::result_ptr lastTrack = m_currentTrack;
+    if ( !lastTrack.isNull() )
     {
         if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
 
-        emit finished( m_lastTrack );
+        emit finished( lastTrack );
     }
 
     m_currentTrack = result;
