@@ -585,6 +585,8 @@ LastFmPlugin::topTracksReturned()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     QStringList topTracks = lastfm::Artist::getTopTracks( reply );
+    topTracks.removeDuplicates();
+
     QVariantMap returnedData;
     returnedData["tracks"] = topTracks;
 
