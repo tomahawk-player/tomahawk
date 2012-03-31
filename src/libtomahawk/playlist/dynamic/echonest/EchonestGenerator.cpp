@@ -597,7 +597,9 @@ EchonestGenerator::sentenceSummary()
                     suffix = ", ";
                 else
                     suffix = ".";
-            } else
+            } else if ( i < required.size() - 2 ) // An item in the list that is before the second to last one, don't use ", and", we only want that for the last item
+                suffix += ", ";
+            else
                 suffix += ", and ";
         }
         sentence += center + suffix;
