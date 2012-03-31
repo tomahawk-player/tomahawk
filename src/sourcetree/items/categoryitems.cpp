@@ -295,6 +295,7 @@ CategoryAddItem::playlistToRenameLoaded()
         QTimer::singleShot( 400, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
 
     disconnect( pl, SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
+    disconnect( pl, SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
 }
 
 
@@ -306,8 +307,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, tracks );
         ViewManager::instance()->show( newpl );
 
-        // Give a shot to try to rename it. The playlist has to be created first. ugly.
-        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+        connect( newpl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
     } else if( m_categoryType == SourcesModel::StationsCategory ) {
         // seed the playlist with these song or artist filters
         QString name;
