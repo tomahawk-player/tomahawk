@@ -43,6 +43,7 @@
 
 #include "customplaylistview.h"
 #include "PlaylistLargeItemDelegate.h"
+#include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
@@ -75,6 +76,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_topLovedWidget( 0 )
+    , m_recentPlaysWidget( 0 )
     , m_currentMode( PlaylistInterface::Tree )
     , m_loaded( false )
 {
@@ -131,6 +133,7 @@ ViewManager::~ViewManager()
     delete m_whatsHotWidget;
     delete m_welcomeWidget;
     delete m_topLovedWidget;
+    delete m_recentPlaysWidget;
     delete m_contextWidget;
     delete m_widget;
 }
@@ -447,6 +450,28 @@ ViewManager::showTopLovedPage()
     }
 
     return show( m_topLovedWidget );
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::showRecentPlaysPage()
+{
+    if ( !m_recentPlaysWidget )
+    {
+        PlaylistView* pv = new PlaylistView( m_widget );
+        pv->setFrameShape( QFrame::NoFrame );
+        pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
+        raModel->setStyle( TrackModel::Large );
+
+        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
+        pv->setPlaylistModel( raModel );
+
+        m_recentPlaysWidget = pv;
+    }
+
+    return show( m_recentPlaysWidget );
 }
 
 
