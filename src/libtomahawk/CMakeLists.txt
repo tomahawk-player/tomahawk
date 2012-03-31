@@ -142,6 +142,7 @@ set( libGuiSources
     widgets/HeaderWidget.cpp
     widgets/combobox.cpp
     widgets/ToggleButton.cpp
+    widgets/FadingPixmap.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
@@ -152,9 +153,6 @@ set( libGuiSources
 
 IF(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/groovesharkparser.cpp )
-ENDIF(QCA2_FOUND)
-
-IF(QCA2_FOUND)
     set( libGuiHeaders ${libGuiHeaders} utils/groovesharkparser.h )
 ENDIF(QCA2_FOUND)
 
