@@ -516,9 +516,9 @@ AudioEngine::loadNextTrack()
 
     Tomahawk::result_ptr result;
 
-    if ( !m_stopAfterTrack.isNull() && !m_currentTrack.isNull() )
+    if ( !m_stopAfterTrack.isNull() )
     {
-        if ( m_stopAfterTrack.data() == m_currentTrack->toQuery().data() )
+        if ( m_stopAfterTrack->equals( m_currentTrack->toQuery() ) )
         {
             m_stopAfterTrack.clear();
             stop();

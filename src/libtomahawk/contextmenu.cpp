@@ -1,3 +1,4 @@
+
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
@@ -220,7 +221,7 @@ ContextMenu::onTriggered( int action )
             break;
 
         case ActionStopAfter:
-            if ( AudioEngine::instance()->stopAfterTrack() == m_queries.first() )
+            if ( m_queries.first()->equals( AudioEngine::instance()->stopAfterTrack() ) )
                 AudioEngine::instance()->setStopAfterTrack( query_ptr() );
             else
                 AudioEngine::instance()->setStopAfterTrack( m_queries.first() );

@@ -168,7 +168,6 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
         {
-            rp->setQuery( q );
             connect( rp.data(), SIGNAL( statusChanged() ), SLOT( onResultStatusChanged() ) );
         }
     }
@@ -410,6 +409,18 @@ Query::checkResults()
         m_solved = solved;
         emit solvedStateChanged( m_solved );
     }
+}
+
+
+bool
+Query::equals( const Tomahawk::query_ptr& other ) const
+{
+    if ( other.isNull() )
+        return false;
+
+    return ( artist() == other->artist() &&
+             album() == other->album() &&
+             track() == other->track() );
 }
 
 

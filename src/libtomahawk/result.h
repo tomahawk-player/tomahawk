@@ -85,7 +85,6 @@ public:
     int year() const { return m_year; }
     unsigned int discnumber() const { return m_discnumber; }
 
-    void setQuery( const Tomahawk::query_ptr& query ) { m_query = query; }
     void setScore( float score ) { m_score = score; }
     void setTrackId( unsigned int id ) { m_trackId = id; }
     void setFileId( unsigned int id ) { m_fileId = id; }
