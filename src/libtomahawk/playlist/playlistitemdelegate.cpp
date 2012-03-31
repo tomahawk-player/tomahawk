@@ -97,10 +97,13 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-        option->state |= QStyle::State_Selected;
+
+        option->backgroundBrush = option->palette.color( QPalette::Mid );
+        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
+
     }
 
-    if ( option->state & QStyle::State_Selected )
+    if ( option->state & QStyle::State_Selected && !item->isPlaying() )
     {
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }
@@ -203,7 +206,10 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
 
         if ( useAvatars )
-            pixmap = source->avatar( Source::FancyStyle, ir.size() );
+        {
+            if ( !source.isNull() )
+                pixmap = source->avatar( Source::FancyStyle, ir.size() );
+        }
         else
             pixmap = item->query()->cover( ir.size(), false );
 

@@ -263,12 +263,17 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendGroups()
 {
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 2 );
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 3 );
 
     GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
     new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
+
+    GenericPageItem* dashboard = new GenericPageItem( this, browse, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
+                                                      boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
+                                                      boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() ) );
+    dashboard->setSortValue( 0 );
 
     // super collection
     GenericPageItem* sc = new GenericPageItem( this, browse, tr( "SuperCollection" ), QIcon( RESPATH "images/supercollection.png" ),
@@ -282,15 +287,15 @@ SourcesModel::appendGroups()
                                                   boost::bind( &ViewManager::topLovedWidget, ViewManager::instance() ) );
     loved->setSortValue( 2 );
 
-    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
-                                                   boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
-                                                   boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() ) );
-    recent->setSortValue( 0 );
+    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+                                                   boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
+                                                   boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
+    recent->setSortValue( 3 );
 
     GenericPageItem* hot = new GenericPageItem( this, browse, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
-    hot->setSortValue( 3 );
+    hot->setSortValue( 4 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 

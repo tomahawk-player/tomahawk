@@ -26,7 +26,20 @@ add_definitions( "-fvisibility=hidden" )
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
+option(WITH_BREAKPAD "Build with breakpad integration" ON)
+option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
+
+IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
+    message(STATUS "Build of breakpad library disabled on this platform.")
+    SET(WITH_BREAKPAD OFF)
+    SET(WITH_CRASHREPORTER OFF)
+ENDIF()
+
+# add definitions based on build options
+IF(WITH_BREAKPAD)
+    message(STATUS "Build with support for breakpad.")
+ENDIF()
 
 # generate version string
 
@@ -200,9 +213,3 @@ ADD_SUBDIRECTORY( src/libtomahawk )
 SET( TOMAHAWK_LIBRARIES tomahawklib )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
-
-IF( BUILD_GUI )
-    IF( NOT DISABLE_CRASHREPORTER )
-        ADD_SUBDIRECTORY( src/breakpad/CrashReporter )
-    ENDIF()
-ENDIF()

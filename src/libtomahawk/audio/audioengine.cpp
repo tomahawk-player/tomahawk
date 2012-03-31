@@ -78,7 +78,7 @@ AudioEngine::AudioEngine()
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
     connect( this, SIGNAL( sendWaitingNotification() ), SLOT( sendWaitingNotificationSlot() ), Qt::QueuedConnection );
-    
+
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -134,14 +134,22 @@ AudioEngine::play()
     {
         m_mediaObject->play();
         emit resumed();
-        Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
-        trackInfo["title"] = m_currentTrack->track();
-        trackInfo["artist"] = m_currentTrack->artist()->name();
-        trackInfo["album"] = m_currentTrack->album()->name();
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+        if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
+        {
+            Tomahawk::InfoSystem::InfoStringHash trackInfo;
+
+            trackInfo["title"] = m_currentTrack->track();
+            trackInfo["artist"] = m_currentTrack->artist()->name();
+            trackInfo["album"] = m_currentTrack->album()->name();
+            trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
+            trackInfo["duration"] = QString::number( m_currentTrack->duration() );
+
+
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+        }
     }
     else
         next();
@@ -319,7 +327,7 @@ AudioEngine::sendWaitingNotificationSlot() const
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
     if ( !m_playlist.isNull() && m_playlist->hasNextItem() )
         return;
-    
+
     QVariantMap retryInfo;
     retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
@@ -460,6 +468,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 trackInfo["title"] = m_currentTrack->track();
                 trackInfo["artist"] = m_currentTrack->artist()->name();
                 trackInfo["album"] = m_currentTrack->album()->name();
+                trackInfo["duration"] = QString::number( m_currentTrack->duration() );
+                trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
 
                 Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                     s_aeInfoIdentifier,
@@ -506,6 +516,16 @@ AudioEngine::loadNextTrack()
 
     Tomahawk::result_ptr result;
 
+    if ( !m_stopAfterTrack.isNull() )
+    {
+        if ( m_stopAfterTrack->equals( m_currentTrack->toQuery() ) )
+        {
+            m_stopAfterTrack.clear();
+            stop();
+            return;
+        }
+    }
+
     if ( m_queue && m_queue->trackCount() )
     {
         result = m_queue->nextItem();
@@ -545,7 +565,9 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
+    {
         loadTrack( result );
+    }
     else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
@@ -668,6 +690,9 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
+    if ( m_playlist == playlist )
+        return;
+
     if ( !m_playlist.isNull() )
     {
         if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
@@ -681,8 +706,9 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         emit playlistChanged( playlist );
         return;
     }
-
+    
     m_playlist = playlist;
+    m_stopAfterTrack.clear();
 
     if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
         connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( onPlaylistNextTrackReady() ) );
@@ -694,16 +720,16 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
-    m_lastTrack = m_currentTrack;
-    if ( !m_lastTrack.isNull() )
+    Tomahawk::result_ptr lastTrack = m_currentTrack;
+    if ( !lastTrack.isNull() )
     {
         if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
 
-        emit finished( m_lastTrack );
+        emit finished( lastTrack );
     }
 
     m_currentTrack = result;

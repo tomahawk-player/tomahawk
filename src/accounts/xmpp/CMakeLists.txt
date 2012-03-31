@@ -14,6 +14,7 @@ set( xmppAccountSources
     sip/tomahawkxmppmessagefactory.cpp
     sip/avatarmanager.cpp
     sip/xmlconsole.cpp
+    XmppInfoPlugin.cpp
 )
 
 set( xmppAccountHeaders
@@ -22,6 +23,7 @@ set( xmppAccountHeaders
     sip/xmppsip.h
     sip/avatarmanager.h
     sip/xmlconsole.h
+    XmppInfoPlugin.h
 )
 
 set( xmppAccountUI

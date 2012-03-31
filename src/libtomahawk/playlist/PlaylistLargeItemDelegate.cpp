@@ -40,10 +40,11 @@
 using namespace Tomahawk;
 
 
-PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( TrackView* parent, TrackProxyModel* proxy )
+PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, TrackProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
+    , m_mode( mode )
 {
     m_topOption = QTextOption( Qt::AlignTop );
     m_topOption.setWrapMode( QTextOption::NoWrap );
@@ -149,8 +150,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         return;
 
     QPixmap pixmap, avatar;
-    QString artist, track, upperText, lowerText;
-    source_ptr source = item->query()->playedBy().first;
+    QString artist, track, lowerText;
     unsigned int duration = 0;
 
     if ( item->query()->results().count() )
@@ -165,14 +165,11 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         track = item->query()->track();
     }
 
-    lowerText = item->query()->socialActionDescription( "Love", Query::Detailed );
-
-    if ( source.isNull() )
+    QSize avatarSize( 32, 32 );
+    source_ptr source = item->query()->playedBy().first;
+    if ( m_mode == RecentlyPlayed && !source.isNull() )
     {
-    }
-    else
-    {
-        upperText = QString( "%1 - %2" ).arg( artist ).arg( track );
+        avatar = source->avatar( Source::FancyStyle, avatarSize );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
@@ -180,6 +177,16 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         else
             lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
     }
+
+    if ( m_mode == LatestAdditions && item->query()->numResults() )
+    {
+        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
+
+        lowerText = QString( tr( "added %1" ) ).arg( playtime );
+    }
+
+    if ( m_mode == LovedTracks )
+        lowerText = item->query()->socialActionDescription( "Love", Query::Detailed );
 
     painter->save();
     {
@@ -197,14 +204,10 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setPen( opt.palette.text().color() );
 
-        QSize avatarSize( 32, 32 );
         QRect pixmapRect = r.adjusted( 6, 0, -option.rect.width() + option.rect.height() - 6 + r.left(), 0 );
         QRect avatarRect = r.adjusted( option.rect.width() - r.left() - 12 - avatarSize.width(), ( option.rect.height() - avatarSize.height() ) / 2 - 5, 0, 0 );
         avatarRect.setSize( avatarSize );
         
-        if ( source )
-            avatar = source->avatar( Source::FancyStyle, avatarRect.size() );
-
         pixmap = item->query()->cover( pixmapRect.size(), false );
         if ( !pixmap )
         {

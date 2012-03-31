@@ -52,9 +52,13 @@
 
 #include "accounts/accountdllmacro.h"
 
+#include "XmppInfoPlugin.h"
+
 class ACCOUNTDLLEXPORT XmppSipPlugin : public SipPlugin
 {
     Q_OBJECT
+
+friend class Tomahawk::InfoSystem::XmppInfoPlugin;
 
 public:
     XmppSipPlugin( Tomahawk::Accounts::Account* account );
@@ -62,6 +66,8 @@ public:
 
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
+
+    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
 
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
@@ -123,9 +129,10 @@ private:
     QString m_currentPassword;
     QString m_currentServer;
     int m_currentPort;
-    Tomahawk::Accounts::Account::ConnectionState m_state;
-
     QString m_currentResource;
+
+    Tomahawk::InfoSystem::InfoPlugin* m_infoPlugin;
+    Tomahawk::Accounts::Account::ConnectionState m_state;
 
     // sort out
     Jreen::Client *m_client;

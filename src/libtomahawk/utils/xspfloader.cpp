@@ -123,7 +123,11 @@ XSPFLoader::reportError()
 {
     emit error( FetchError );
 #ifndef ENABLE_HEADLESS
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorToString( FetchError) ) );
+    const QString errorMsg = errorToString( FetchError);
+    if ( !m_errorTitle.isEmpty() )
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "%1: %2" ).arg( m_errorTitle ).arg( errorMsg ) ) );
+    else
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMsg ) );
 #endif
     deleteLater();
 }

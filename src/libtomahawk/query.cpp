@@ -58,7 +58,6 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 query_ptr
 Query::get( const QString& query, const QID& qid )
 {
-
     query_ptr q = query_ptr( new Query( query, qid ), &QObject::deleteLater );
     q->setWeakRef( q.toWeakRef() );
 
@@ -164,6 +163,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
         m_results << newresults;
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+        query_ptr q = m_ownRef.toStrongRef();
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -412,6 +412,18 @@ Query::checkResults()
 }
 
 
+bool
+Query::equals( const Tomahawk::query_ptr& other ) const
+{
+    if ( other.isNull() )
+        return false;
+
+    return ( artist() == other->artist() &&
+             album() == other->album() &&
+             track() == other->track() );
+}
+
+
 QVariant
 Query::toVariant() const
 {
@@ -538,7 +550,7 @@ Query::parseSocialActions()
     {
         Tomahawk::SocialAction socialAction;
         socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source->id() == SourceList::instance()->getLocal()->id() )
+        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source->isLocal() )
         {
             m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
         }
@@ -568,7 +580,7 @@ Query::setLoved( bool loved )
     query_ptr q = m_ownRef.toStrongRef();
     if ( q )
     {
-        m_currentSocialActions[ "Loved" ] = loved;
+        m_currentSocialActions[ "Love" ] = loved;
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["title"] = track();
@@ -581,6 +593,8 @@ Query::setLoved( bool loved )
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        
+        emit socialActionsLoaded();
     }
 }
 

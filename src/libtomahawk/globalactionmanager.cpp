@@ -89,12 +89,13 @@ GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
 {
     QString title, artist, album;
 
-    if( !query->results().isEmpty() && !query->results().first().isNull() )
+    if ( !query->results().isEmpty() && !query->results().first().isNull() )
     {
         title = query->results().first()->track();
         artist = query->results().first()->artist().isNull() ? QString() : query->results().first()->artist()->name();
         album = query->results().first()->album().isNull() ? QString() : query->results().first()->album()->name();
-    } else
+    }
+    else
     {
         title = query->track();
         artist = query->artist();
@@ -110,11 +111,11 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 {
     QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
 
-    if( !title.isEmpty() )
-        link.addQueryItem( "title", title );
-    if( !artist.isEmpty() )
+    if ( !artist.isEmpty() )
         link.addQueryItem( "artist", artist );
-    if( !album.isEmpty() )
+    if ( !title.isEmpty() )
+        link.addQueryItem( "title", title );
+    if ( !album.isEmpty() )
         link.addQueryItem( "album", album );
 
     return link;

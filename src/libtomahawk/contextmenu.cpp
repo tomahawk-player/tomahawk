@@ -1,3 +1,4 @@
+
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
@@ -37,7 +38,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter;
 }
 
 
@@ -80,6 +81,14 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
 
+    if ( m_supportedActions & ActionStopAfter && itemCount() == 1 )
+    {
+        if ( AudioEngine::instance()->stopAfterTrack() == queries.first() )
+            m_sigmap->setMapping( addAction( tr( "&Continue playback after this track" ) ), ActionStopAfter );
+        else
+            m_sigmap->setMapping( addAction( tr( "&Stop playback after this track" ) ), ActionStopAfter );
+    }
+
     addSeparator();
 
     if ( m_supportedActions & ActionLove && itemCount() == 1 )
@@ -110,7 +119,6 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 void
 ContextMenu::setQuery( const Tomahawk::query_ptr& query )
 {
-
     QList<query_ptr> queries;
     queries << query;
     setQueries( queries );
@@ -210,6 +218,13 @@ ContextMenu::onTriggered( int action )
 
         case ActionLove:
             m_queries.first()->setLoved( !m_queries.first()->loved() );
+            break;
+
+        case ActionStopAfter:
+            if ( m_queries.first()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+                AudioEngine::instance()->setStopAfterTrack( query_ptr() );
+            else
+                AudioEngine::instance()->setStopAfterTrack( m_queries.first() );
             break;
 
         default:

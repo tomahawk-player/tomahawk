@@ -44,6 +44,7 @@
 SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     : QStyledItemDelegate( parent )
     , m_parent( parent )
+    , m_lastClicked( -1 )
 {
     m_dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
     m_dropTypeMap.insert( 1, SourceTreeItem::DropTypeThisAlbum );
@@ -632,7 +633,27 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here wemake sure we only
     // emit if we really want to
     if ( event->type() == QEvent::MouseButtonRelease )
-        emit clicked( index );
+    {
+        if ( m_lastClicked == -1 )
+        {
+            m_lastClicked = QDateTime::currentMSecsSinceEpoch();
+            emit clicked( index );
+        }
+        else
+        {
+            qint64 elapsed = QDateTime::currentMSecsSinceEpoch() - m_lastClicked;
+            if ( elapsed < QApplication::doubleClickInterval() )
+            {
+                m_lastClicked = -1;
+                emit doubleClicked( index );
+            } else
+            {
+                m_lastClicked = QDateTime::currentMSecsSinceEpoch();
+                emit clicked( index );
+            }
+        }
+
+    }
 
     return QStyledItemDelegate::editorEvent ( event, model, option, index );
 }

@@ -270,6 +270,7 @@ TomahawkApp::init()
     {
         initHTTP();
     }
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( initHTTP() ) );
 
 #ifndef ENABLE_HEADLESS
     if ( !s->hasScannerPaths() )
@@ -313,6 +314,11 @@ TomahawkApp::init()
 TomahawkApp::~TomahawkApp()
 {
     tLog() << "Shutting down Tomahawk...";
+
+    if ( !m_session.isNull() )
+        delete m_session.data();
+    if ( !m_connector.isNull() )
+        delete m_connector.data();
 
     Pipeline::instance()->stop();
 
@@ -475,15 +481,43 @@ TomahawkApp::initDatabase()
 void
 TomahawkApp::initHTTP()
 {
-    m_session.setPort( 60210 ); //TODO config
-    m_session.setListenInterface( QHostAddress::LocalHost );
-    m_session.setConnector( &m_connector );
+    if ( !TomahawkSettings::instance()->httpEnabled() )
+    {
+        tLog() << "Stopping HTTPd, not enabled";
+        if ( !m_session.isNull() )
+            delete m_session.data();
+        if ( !m_connector.isNull() )
+            delete m_connector.data();
+        return;
+    }
 
-    Api_v1* api = new Api_v1( &m_session );
-    m_session.setStaticContentService( api );
+    if ( m_session )
+    {
+        tLog() << "HTTPd session already exists, returning";
+        return;
+    }
 
-    tLog() << "Starting HTTPd on" << m_session.listenInterface().toString() << m_session.port();
-    m_session.start();
+    m_session = QWeakPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
+    m_connector = QWeakPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
+    if ( m_session.isNull() || m_connector.isNull() )
+    {
+        if ( !m_session.isNull() )
+            delete m_session.data();
+        if ( !m_connector.isNull() )
+            delete m_connector.data();
+        tLog() << "Failed to start HTTPd, could not create object";
+        return;
+    }
+
+    m_session.data()->setPort( 60210 ); //TODO config
+    m_session.data()->setListenInterface( QHostAddress::LocalHost );
+    m_session.data()->setConnector( m_connector.data() );
+
+    Api_v1* api = new Api_v1( m_session.data() );
+    m_session.data()->setStaticContentService( api );
+
+    tLog() << "Starting HTTPd on" << m_session.data()->listenInterface().toString() << m_session.data()->port();
+    m_session.data()->start();
 }
 
 

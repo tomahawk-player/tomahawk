@@ -80,7 +80,7 @@ void
 QueryLabel::init()
 {
     m_contextMenu = new ContextMenu( this );
-    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink );
+    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink | ContextMenu::ActionStopAfter | ContextMenu::ActionLove );
 
     m_hoverType = None;
     setContentsMargins( 0, 0, 0, 0 );

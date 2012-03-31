@@ -142,7 +142,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="coverImage">
+       <widget class="FadingPixmap" name="coverImage">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -560,6 +560,11 @@
    <class>QueryLabel</class>
    <extends>QLabel</extends>
    <header>widgets/querylabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FadingPixmap</class>
+   <extends>QLabel</extends>
+   <header>widgets/FadingPixmap.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

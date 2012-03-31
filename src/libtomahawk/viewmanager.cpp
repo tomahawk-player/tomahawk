@@ -43,6 +43,7 @@
 
 #include "customplaylistview.h"
 #include "PlaylistLargeItemDelegate.h"
+#include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
@@ -75,6 +76,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_topLovedWidget( 0 )
+    , m_recentPlaysWidget( 0 )
     , m_currentMode( PlaylistInterface::Tree )
     , m_loaded( false )
 {
@@ -114,7 +116,7 @@ ViewManager::ViewManager( QObject* parent )
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-    connect( m_infobar, SIGNAL( autoUpdateChanged( int ) ), SLOT( autoUpdateChanged( int ) ) );
+    connect( m_infobar, SIGNAL( autoUpdateChanged( bool ) ), SLOT( autoUpdateChanged( bool ) ) );
 
     connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
@@ -131,6 +133,7 @@ ViewManager::~ViewManager()
     delete m_whatsHotWidget;
     delete m_welcomeWidget;
     delete m_topLovedWidget;
+    delete m_recentPlaysWidget;
     delete m_contextWidget;
     delete m_widget;
 }
@@ -441,12 +444,34 @@ ViewManager::showTopLovedPage()
     if ( !m_topLovedWidget )
     {
         CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( view, view->proxyModel() ) );
+        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
 
         m_topLovedWidget = view;
     }
 
     return show( m_topLovedWidget );
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::showRecentPlaysPage()
+{
+    if ( !m_recentPlaysWidget )
+    {
+        PlaylistView* pv = new PlaylistView( m_widget );
+        pv->setFrameShape( QFrame::NoFrame );
+        pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
+        raModel->setStyle( TrackModel::Large );
+
+        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
+        pv->setPlaylistModel( raModel );
+
+        m_recentPlaysWidget = pv;
+    }
+
+    return show( m_recentPlaysWidget );
 }
 
 
@@ -544,9 +569,9 @@ ViewManager::applyFilter()
 
 
 void
-ViewManager::autoUpdateChanged( int state )
+ViewManager::autoUpdateChanged( bool toggled )
 {
-    currentPage()->setAutoUpdate( state == Qt::Checked );
+    currentPage()->setAutoUpdate( toggled );
 }
 
 

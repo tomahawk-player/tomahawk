@@ -38,6 +38,8 @@ RelatedArtistsContext::RelatedArtistsContext()
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     m_relatedView->setTreeModel( m_relatedModel );
     m_relatedView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_relatedView->setSortingEnabled( false );
+    m_relatedView->proxyModel()->sort( -1 );
 
     QPalette pal = m_relatedView->palette();
     pal.setColor( QPalette::Window, QColor( 0, 0, 0, 0 ) );

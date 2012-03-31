@@ -60,7 +60,7 @@ public slots:
     void setAutoUpdateAvailable( bool b );
 signals:
     void filterTextChanged( const QString& filter );
-    void autoUpdateChanged( int state );
+    void autoUpdateChanged( bool checked );
 
 protected:
     void changeEvent( QEvent* e );

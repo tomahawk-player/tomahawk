@@ -209,7 +209,7 @@
      <property name="title">
       <string>Advanced Xmpp Settings</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
@@ -292,6 +292,16 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="xmppPublishTracksCheckbox">
+        <property name="toolTip">
+         <string>Lots of servers don't support this (e.g. GTalk, jabber.org)</string>
+        </property>
+        <property name="text">
+         <string>Publish currently playing track</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

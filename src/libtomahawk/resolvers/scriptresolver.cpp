@@ -42,6 +42,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_ready( false )
     , m_stopped( true )
     , m_configSent( false )
+    , m_deleting( false )
     , m_error( Tomahawk::ExternalResolver::NoError )
 {
     tLog() << Q_FUNC_INFO << "Created script resolver:" << exe;
@@ -62,15 +63,13 @@ ScriptResolver::ScriptResolver( const QString& exe )
 ScriptResolver::~ScriptResolver()
 {
     disconnect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
+    m_deleting = true;
 
     QVariantMap msg;
     msg[ "_msgtype" ] = "quit";
     sendMessage( msg );
 
-   // QEventLoop::processEvents(QEventLoop::ExcludeUserInputEvents);
-
-   // m_proc.terminate();
-    m_proc.waitForFinished( 1000 );
+    m_proc.waitForFinished( 1000 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
@@ -220,6 +219,10 @@ void
 ScriptResolver::handleMsg( const QByteArray& msg )
 {
 //    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
+
+    // Might be called from waitForFinished() in ~ScriptResolver, no database in that case, abort.
+    if ( m_deleting )
+        return;
 
     bool ok;
     QVariant v = m_parser.parse( msg, &ok );

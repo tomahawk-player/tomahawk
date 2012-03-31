@@ -188,8 +188,7 @@ public:
 
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
-
-    void setUpdater( PlaylistUpdaterInterface* interface ) { m_updater = interface; }
+    void setUpdater( PlaylistUpdaterInterface* pluinterface ) { m_updater = pluinterface; }
     PlaylistUpdaterInterface* updater() const { return m_updater; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();

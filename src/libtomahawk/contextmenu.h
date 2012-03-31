@@ -40,7 +40,8 @@ public:
        ActionQueue =        2,
        ActionDelete =       4,
        ActionCopyLink =     8,
-       ActionLove =         16
+       ActionLove =         16,
+       ActionStopAfter =    32
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

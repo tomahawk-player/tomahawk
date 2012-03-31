@@ -85,13 +85,14 @@ public:
 
     Tomahawk::playlistinterface_ptr currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
-    Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
     Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
     Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
     Tomahawk::ViewPage* topLovedWidget() const { return m_topLovedWidget; }
+    Tomahawk::ViewPage* recentPlaysWidget() const { return m_recentPlaysWidget; }
     ArtistView* superCollectionView() const { return m_superCollectionView; }
 
     /// Get the view page for the given item. Not pretty...
@@ -140,6 +141,7 @@ public slots:
     Tomahawk::ViewPage* showWelcomePage();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showTopLovedPage();
+    Tomahawk::ViewPage* showRecentPlaysPage();
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -175,7 +177,7 @@ private slots:
     void setFilter( const QString& filter );
     void applyFilter();
 
-    void autoUpdateChanged( int );
+    void autoUpdateChanged( bool );
 
     void onWidgetDestroyed( QWidget* widget );
 
@@ -186,9 +188,9 @@ private:
     void saveCurrentPlaylistSettings();
     void loadCurrentPlaylistSettings();
 
-    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
-    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const;
-    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const;
+    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
+    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
+    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     QWidget* m_widget;
     InfoBar* m_infobar;
@@ -204,6 +206,7 @@ private:
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
     Tomahawk::ViewPage* m_topLovedWidget;
+    Tomahawk::ViewPage* m_recentPlaysWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

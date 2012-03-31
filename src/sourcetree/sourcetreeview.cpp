@@ -79,6 +79,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     sortByColumn( 0, Qt::AscendingOrder );
     setVerticalScrollMode( QTreeView::ScrollPerPixel );
     setMouseTracking( true );
+    setEditTriggers( NoEditTriggers );
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
@@ -89,6 +90,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), SLOT( latchOff( Tomahawk::source_ptr ) ) );
     connect( m_delegate, SIGNAL( toggleRealtimeLatch( Tomahawk::source_ptr, bool ) ), m_latchManager, SLOT( latchModeChangeRequest( Tomahawk::source_ptr,bool ) ) );
     connect( m_delegate, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( m_delegate, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemDoubleClicked( QModelIndex ) ) );
 
     setItemDelegate( m_delegate );
 
@@ -97,7 +99,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
-    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( selectRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( selectRequest( QPersistentModelIndex ) ), Qt::QueuedConnection );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expandRequest( QPersistentModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), SLOT( toggleExpandRequest( QPersistentModelIndex ) ) );
 
@@ -228,6 +230,17 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
 
     SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
     item->activate();
+}
+
+
+void
+SourceTreeView::onItemDoubleClicked( const QModelIndex& idx )
+{
+    if ( !selectionModel()->selectedIndexes().contains( idx ) )
+        onItemActivated( idx );
+
+    SourceTreeItem* item = itemFromIndex< SourceTreeItem >( idx );
+    item->doubleClicked();
 }
 
 

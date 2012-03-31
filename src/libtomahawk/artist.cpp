@@ -82,14 +82,6 @@ Artist::Artist( unsigned int id, const QString& name )
 #endif
 {
     m_sortname = DatabaseImpl::sortname( name, true );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-    
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( finished( QString ) ),
-             SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -121,6 +113,14 @@ Artist::cover( const QSize& size, bool forceLoad ) const
         requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
         requestData.customData = QVariantMap();
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+        
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( finished( QString ) ),
+                SLOT( infoSystemFinished( QString ) ) );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
@@ -180,6 +180,12 @@ Artist::infoSystemFinished( QString target )
     
     if ( target != m_uuid )
         return;
+
+    disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+        
+    disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
+                this, SLOT( infoSystemFinished( QString ) ) );
 
     m_infoLoaded = true;
     emit updated();

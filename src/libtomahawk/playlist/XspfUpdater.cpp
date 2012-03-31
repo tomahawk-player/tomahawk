@@ -55,8 +55,15 @@ XspfUpdater::~XspfUpdater()
 void
 XspfUpdater::updateNow()
 {
+    if ( m_url.isEmpty() )
+    {
+        qWarning() << "XspfUpdater not updating because we have an empty url...";
+        return;
+    }
+
     XSPFLoader* l = new XSPFLoader( false, false );
     l->setAutoResolveTracks( false );
+    l->setErrorTitle( playlist()->title() );
     l->load( m_url );
     connect( l, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( playlistLoaded( QList<Tomahawk::query_ptr> ) ) );
 }

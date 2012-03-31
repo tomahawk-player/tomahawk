@@ -56,6 +56,7 @@
 
 #include <utils/tomahawkutilsgui.h>
 #include "utils/logger.h"
+#include "XmppInfoPlugin.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -85,6 +86,7 @@ JreenMessageHandler(QtMsgType type, const char *msg)
 
 XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
+    , m_infoPlugin( 0 )
     , m_state( Account::Disconnected )
 #ifndef ENABLE_HEADLESS
     , m_menu( 0 )
@@ -163,12 +165,20 @@ XmppSipPlugin::XmppSipPlugin( Account *account )
 
 XmppSipPlugin::~XmppSipPlugin()
 {
+    delete m_infoPlugin;
     delete m_avatarManager;
     delete m_roster;
 #ifndef ENABLE_HEADLESS
     delete m_xmlConsole;
 #endif
     delete m_client;
+}
+
+
+InfoSystem::InfoPlugin*
+XmppSipPlugin::infoPlugin()
+{
+    return m_infoPlugin;
 }
 
 
@@ -254,6 +264,13 @@ XmppSipPlugin::onConnect()
 
     // load roster
     m_roster->load();
+
+    // load XmppInfoPlugin
+    if( !m_infoPlugin )
+    {
+        m_infoPlugin = new Tomahawk::InfoSystem::XmppInfoPlugin( this );
+        InfoSystem::InfoSystem::instance()->addInfoPlugin( m_infoPlugin );
+    }
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
     // join MUC with bare jid as nickname
