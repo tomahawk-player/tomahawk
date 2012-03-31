@@ -112,7 +112,7 @@ ViewManager::ViewManager( QObject* parent )
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-    connect( m_infobar, SIGNAL( autoUpdateChanged( int ) ), SLOT( autoUpdateChanged( int ) ) );
+    connect( m_infobar, SIGNAL( autoUpdateChanged( bool ) ), SLOT( autoUpdateChanged( bool ) ) );
 
     connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
@@ -537,9 +537,9 @@ ViewManager::applyFilter()
 
 
 void
-ViewManager::autoUpdateChanged( int state )
+ViewManager::autoUpdateChanged( bool toggled )
 {
-    currentPage()->setAutoUpdate( state == Qt::Checked );
+    currentPage()->setAutoUpdate( toggled );
 }
 
 

@@ -174,7 +174,7 @@ private slots:
     void setFilter( const QString& filter );
     void applyFilter();
 
-    void autoUpdateChanged( int );
+    void autoUpdateChanged( bool );
 
     void onWidgetDestroyed( QWidget* widget );
 
