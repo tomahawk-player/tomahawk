@@ -441,7 +441,7 @@ ViewManager::showTopLovedPage()
     if ( !m_topLovedWidget )
     {
         CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( view, view->proxyModel() ) );
+        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
 
         m_topLovedWidget = view;
     }

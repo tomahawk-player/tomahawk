@@ -504,7 +504,7 @@ SourceItem::lovedTracksClicked()
     if ( !m_lovedTracksPage )
     {
         CustomPlaylistView* view = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( view, view->proxyModel() ) );
+        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
 
         m_lovedTracksPage = view;
     }
@@ -533,7 +533,7 @@ SourceItem::latestAdditionsClicked()
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
         raModel->setStyle( TrackModel::Large );
 
-        cv->setItemDelegate( new PlaylistLargeItemDelegate( cv, cv->proxyModel() ) );
+        cv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() ) );
         cv->setTrackModel( raModel );
         cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
 
@@ -564,7 +564,7 @@ SourceItem::recentPlaysClicked()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
         raModel->setStyle( TrackModel::Large );
 
-        pv->setItemDelegate( new PlaylistLargeItemDelegate( pv, pv->proxyModel() ) );
+        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
         pv->setPlaylistModel( raModel );
 
         m_recentPlaysPage = pv;

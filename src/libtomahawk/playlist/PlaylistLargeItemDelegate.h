@@ -35,7 +35,10 @@ class DLLEXPORT PlaylistLargeItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistLargeItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
+    enum DisplayMode
+    { LovedTracks, RecentlyPlayed, LatestAdditions };
+
+    PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent = 0, TrackProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -52,6 +55,7 @@ private:
 
     TrackView* m_view;
     TrackProxyModel* m_model;
+    DisplayMode m_mode;
 };
 
 #endif // PLAYLISTLARGEITEMDELEGATE_H
