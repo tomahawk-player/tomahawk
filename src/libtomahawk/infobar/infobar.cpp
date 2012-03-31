@@ -27,6 +27,8 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <QCheckBox>
+#include <QPaintEvent>
+#include <QPainter>
 #include <widgets/querylabel.h>
 
 #define ANIMATION_TIME 400
@@ -96,17 +98,13 @@ InfoBar::InfoBar( QWidget* parent )
 
     ui->horizontalLayout->addWidget( m_searchWidget );
 
-    QLinearGradient gradient = QLinearGradient( QPoint( 0, 0 ), QPoint( 500, 200 ) ); //HACK
-    gradient.setColorAt( 0.0, QColor( 100, 100, 100 ) );
-    gradient.setColorAt( 0.8, QColor( 63, 63, 63 ) );
-
-    QPalette p = palette();
-    p.setBrush( QPalette::Window, QBrush( gradient ) );
-    setPalette( p );
     setAutoFillBackground( true );
 
     setMinimumHeight( geometry().height() );
     setMaximumHeight( geometry().height() );
+
+    createTile();
+
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( autoUpdateAvailable( bool ) ), SLOT( setAutoUpdateAvailable( bool ) ) );
 }
@@ -224,6 +222,63 @@ InfoBar::onFilterEdited()
 {
     emit filterTextChanged( m_searchWidget->text() );
 }
+
+
+void
+InfoBar::createTile( int w )
+{
+    QImage tile = QImage( RESPATH "images/playlist-header-tiled.png" );
+
+    if ( tile.isNull() )
+        return;
+
+    if ( tile.height() < height() )
+    {
+        // image must be at least as tall as we are
+        QImage taller( tile.width(), height(), QImage::Format_ARGB32_Premultiplied );
+        QPainter p( &taller );
+        int curY = 0;
+        while ( curY < taller.height() )
+        {
+            const int thisHeight = (curY + tile.height() > height()) ? height() - curY : tile.height();
+            p.drawImage( QRect( 0, curY, tile.width(), thisHeight ), tile, QRect( 0, 0, tile.width(), thisHeight ) );
+            curY += tile.height();
+        }
+        tile = taller;
+    }
+
+    m_bgTile = QPixmap( w, height() );
+    m_bgTile.fill( Qt::transparent );
+
+    int curWidth = 0;
+    QPainter p( &m_bgTile );
+    while ( curWidth < w )
+    {
+        const int thisWidth = (curWidth + tile.width() > w) ? w - curWidth : tile.width();
+
+        const QRect source( 0, 0, thisWidth, m_bgTile.height() );
+        const QRect dest( curWidth, 0, thisWidth, m_bgTile.height() );
+        p.drawImage( dest, tile, source );
+        curWidth += thisWidth;
+    }
+}
+
+
+void
+InfoBar::paintEvent( QPaintEvent* e )
+{
+    if ( m_bgTile.isNull() || width() > m_bgTile.width() )
+        createTile( width() );
+
+    if ( m_bgTile.isNull() )
+        return;
+
+    QPainter p( this );
+
+    // Truncate bg pixmap and paint into bg
+    p.drawPixmap( rect(), m_bgTile, rect() );
+}
+
 
 void
 InfoBar::changeEvent( QEvent* e )
