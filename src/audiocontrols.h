@@ -100,6 +100,7 @@ private:
     qint64 m_seekMsecs;
     qint64 m_lastSliderCheck;
     bool m_noTimeChange;
+    qint64 m_lastTextSecondShown;
 };
 
 #endif // AUDIOCONTROLS_H
