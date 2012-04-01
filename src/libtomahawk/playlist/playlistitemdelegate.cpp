@@ -94,30 +94,7 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
 {
     initStyleOption( option, index );
 
-    if ( item->isPlaying() )
-    {
-        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-
-        option->backgroundBrush = option->palette.color( QPalette::Mid );
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
-
-    }
-
-    if ( option->state & QStyle::State_Selected && !item->isPlaying() )
-    {
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
-    }
-    else
-    {
-        float opacity = 0.0;
-        if ( item->query()->results().count() )
-            opacity = item->query()->results().first()->score();
-
-        opacity = qMax( (float)0.3, opacity );
-        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
-
-        option->palette.setColor( QPalette::Text, textColor );
-    }
+    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 

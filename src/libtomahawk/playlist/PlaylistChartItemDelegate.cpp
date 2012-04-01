@@ -75,7 +75,7 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
         case 2:
             stretch = 4;
             break;
-            
+
         default:
             if ( index.row() < 10 )
                 stretch = 3;
@@ -108,27 +108,7 @@ PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 {
     initStyleOption( option, index );
 
-    if ( item->isPlaying() )
-    {
-        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-        option->state |= QStyle::State_Selected;
-    }
-
-    if ( option->state & QStyle::State_Selected )
-    {
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
-    }
-    else
-    {
-        float opacity = 0.0;
-        if ( item->query()->results().count() )
-            opacity = item->query()->results().first()->score();
-
-        opacity = qMax( (float)0.3, opacity );
-        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
-
-        option->palette.setColor( QPalette::Text, textColor );
-    }
+    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 
@@ -230,7 +210,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, pixmapRect.size() );
         }
         painter->drawPixmap( pixmapRect, pixmap );
-        
+
         r.adjust( pixmapRect.width() + figureRect.width() + 18, 1, -28, 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
