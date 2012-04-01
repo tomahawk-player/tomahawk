@@ -238,6 +238,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setFixedWidth( ui->timeLeftLabel->fontMetrics().width( QString( duration.length() + 1, QChar( '0' ) ) ) );
     ui->timeLeftLabel->setText( "-" + duration );
+    m_lastTextSecondShown = 0;
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
@@ -356,6 +357,14 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
+    const int seconds = msElapsed / 1000;
+    if ( seconds != m_lastTextSecondShown )
+    {
+        ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
+        ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
+        m_lastTextSecondShown = seconds;
+    }
+    
     //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
     if ( msElapsed > 0 && msElapsed != m_lastSliderCheck && m_seekMsecs == -1 && msElapsed - 500 < m_lastSliderCheck )
         return;
@@ -371,10 +380,6 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
     if ( sender() != &m_phononTickCheckTimer )
         m_phononTickCheckTimer.start( 1000 );
-
-    const int seconds = msElapsed / 1000;
-    ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
-    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
 
     if ( m_noTimeChange )
     {
