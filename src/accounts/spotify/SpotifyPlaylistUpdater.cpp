@@ -201,11 +201,6 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
                 toRemove << entry;
                 break;
             }
-            // TODO
-            // We have to try a fuzzy comparison as well, because if we added a track from tomahawk in this session to this spotify playlist,
-            // we don't have a spotify id for it (the track came from here, not from spotify).
-            // OR we have to get spotify ids for each track when it's added to a spotify-synced playlist.
-            // TODO
         }
     }
 
@@ -263,6 +258,8 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
         }
     }
 
+    m_waitingForIds = tracks;
+
     msg[ "playlistid" ] = m_spotifyId;
 
     QVariantList tracksJson;
@@ -290,6 +287,53 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
 
     qDebug() << Q_FUNC_INFO << "GOT RETURN FOR tracksInserted call from spotify!" << msgType << msg << "Succeeded?" << success;
     m_latestRev = msg.value( "revid" ).toString();
+
+
+    const QVariantList trackPositionsInserted = msg.value( "trackPosInserted" ).toList();
+    const QVariantList trackIdsInserted = msg.value( "trackIdInserted" ).toList();
+
+    Q_ASSERT( trackPositionsInserted.size() == trackIdsInserted.size() );
+
+    const QList< plentry_ptr > curEntries = playlist()->entries();
+
+    int changed = 0;
+    for ( int i = 0; i < trackPositionsInserted.size(); i++ )
+    {
+        const QVariant posV = trackPositionsInserted[ i ];
+
+        bool ok;
+        const int pos = posV.toInt( &ok );
+        if ( !ok )
+            continue;
+
+        if ( pos < 0 || pos >= m_waitingForIds.size() )
+        {
+            qWarning() << Q_FUNC_INFO << "Got position that's not in the bounds of the tracks that we think we added... WTF?";
+            continue;
+        }
+
+        if ( !curEntries.contains( m_waitingForIds.at( pos ) ) )
+        {
+            qDebug() << Q_FUNC_INFO << "Got an id at a position for a plentry that's no longer in our playlist? WTF";
+            continue;
+        }
+
+        if ( i >= trackIdsInserted.size() )
+        {
+            qWarning() << Q_FUNC_INFO << "Help! Got more track positions than track IDS, wtf?";
+            continue;
+        }
+
+        qDebug() << "Setting annotation for track:" << m_waitingForIds[ pos ]->query()->track() << m_waitingForIds[ pos ]->query()->artist() << trackIdsInserted.at( i ).toString();
+        m_waitingForIds[ pos ]->setAnnotation( trackIdsInserted.at( i ).toString() );
+        changed++;
+    }
+
+    m_waitingForIds.clear();
+    // Save our changes if we added some IDs
+    if ( changed > 0 )
+        playlist()->createNewRevision( uuid(), playlist()->currentrevision(), playlist()->entries() );
+
 }
 
 
