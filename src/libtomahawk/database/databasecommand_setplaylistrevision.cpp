@@ -43,6 +43,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
     , m_oldrev( oldrev )
     , m_addedentries( addedentries )
     , m_entries( entries )
+    , m_metadataUpdate( false )
 {
     Q_ASSERT( !newrev.isEmpty() );
     m_localOnly = ( newrev == oldrev );
@@ -54,6 +55,33 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
         tmp << s;
 
     setOrderedguids( tmp );
+}
+
+
+DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
+                        const source_ptr& s,
+                        const QString& playlistguid,
+                        const QString& newrev,
+                        const QString& oldrev,
+                        const QStringList& orderedguids,
+                        const QList<plentry_ptr>& entriesToUpdate )
+    : DatabaseCommandLoggable( s )
+    , m_applied( false )
+    , m_newrev( newrev )
+    , m_oldrev( oldrev )
+    , m_entries( entriesToUpdate )
+    , m_metadataUpdate( true )
+{
+    Q_ASSERT( !newrev.isEmpty() );
+    m_localOnly = false;
+
+    QVariantList tmp;
+    foreach( const QString& s, orderedguids )
+        tmp << s;
+
+    setOrderedguids( tmp );
+
+    setPlaylistguid( playlistguid );
 }
 
 
@@ -105,7 +133,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     else
     {
         tDebug() << "Playlist:" << m_playlistguid << m_currentRevision << source()->friendlyName() << source()->id();
-        throw "No such playlist, WTF?";
+        Q_ASSERT_X( false, "DatabaseCommand_SetPlaylistRevision::exec", "No such playlist, WTF?" );
         return;
     }
 
@@ -132,20 +160,28 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
         return;
     }
+    else if ( m_metadataUpdate )
+    {
+        QString sql = "UPDATE playlist_item SET trackname = ?, artistname = ?, albumname = ?, annotation = ?, duration = ?, addedon = ?, addedby = ? WHERE guid = ?";
+        adde.prepare( sql );
+
+        foreach( const plentry_ptr& e, m_entries )
+        {
+
+            adde.bindValue( 0, e->query()->track() );
+            adde.bindValue( 1, e->query()->artist() );
+            adde.bindValue( 2, e->query()->album() );
+            adde.bindValue( 3, e->annotation() );
+            adde.bindValue( 4, (int) e->duration() );
+            adde.bindValue( 5, e->lastmodified() );
+            adde.bindValue( 6, source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
+            adde.bindValue( 7, e->guid() );
+
+            adde.exec();
+        }
+    }
     else
     {
-        // DEBUG only
-        qDebug() << "Current entries in the playlist_item table for this playlist:" << m_playlistguid;
-        TomahawkSqlQuery q = lib->newquery();
-        q.prepare( "SELECT guid, playlist, trackname, artistname, annotation FROM playlist_item WHERE playlist = ?" );
-        q.addBindValue( m_playlistguid );
-        if ( q.exec() )
-        {
-            while ( q.next() )
-            {
-                qDebug() << "====" << q.value( 0 ).toString() << q.value( 1 ).toString()  << q.value( 2 ).toString()  << q.value( 3 ).toString()  << q.value( 4 ).toString() << "====";
-            }
-        }
         QString sql = "INSERT INTO playlist_item( guid, playlist, trackname, artistname, albumname, "
                                                  "annotation, duration, addedon, addedby, result_hint ) "
                       "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
@@ -154,7 +190,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         qDebug() << "Num new playlist_items to add:" << m_addedentries.length();
         foreach( const plentry_ptr& e, m_addedentries )
         {
-            qDebug() << "Adding:" << e->guid() << e->query()->track() << e->query()->artist();
+//             qDebug() << "Adding:" << e->guid() << e->query()->track() << e->query()->artist();
 
             m_addedmap.insert( e->guid(), e ); // needed in postcommithook
 

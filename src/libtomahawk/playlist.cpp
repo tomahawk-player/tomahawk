@@ -319,9 +319,9 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     foreach( const plentry_ptr& p, entries )
         orderedguids << p->guid();
 
-    qDebug() << "INSERTING ORDERED GUIDS:" << orderedguids << "and with new entries:";
-    foreach( const plentry_ptr& p, added )
-        qDebug() << p->guid();
+//     qDebug() << "INSERTING ORDERED GUIDS:" << orderedguids << "and with new entries:";
+//     foreach( const plentry_ptr& p, added )
+//         qDebug() << p->guid();
 
     // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
@@ -334,6 +334,38 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      orderedguids,
                                                      added,
                                                      entries );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+Playlist::updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries )
+{
+    tDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
+    Q_ASSERT( m_source->isLocal() || newrev == oldrev );
+
+    if ( busy() )
+    {
+        m_updateQueue.enqueue( RevisionQueueItem( newrev, oldrev, entries, oldrev == currentrevision() ) );
+        return;
+    }
+
+    if ( newrev != oldrev )
+        setBusy( true );
+
+    QStringList orderedguids;
+    foreach( const plentry_ptr& p, m_entries )
+        orderedguids << p->guid();
+
+    qDebug() << "Updating playlist metadata:" << entries;
+    DatabaseCommand_SetPlaylistRevision* cmd =
+    new DatabaseCommand_SetPlaylistRevision( SourceList::instance()->getLocal(),
+                                             guid(),
+                                             newrev,
+                                             oldrev,
+                                             orderedguids,
+                                             entries );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -569,19 +601,9 @@ Playlist::insertEntries( const QList< query_ptr >& queries, const int position, 
         return;
     }
 
-    qDebug() << "inserting entries. GUIDs before:";
-    foreach( const plentry_ptr& p, entries )
-        qDebug() << p->guid();
-
     for ( int i = toInsert.size()-1; i >= 0; --i )
         entries.insert( position, toInsert.at(i) );
 
-    qDebug() << "inserting entries. GUIDs AFTER:";
-    foreach( const plentry_ptr& p, entries )
-        qDebug() << p->guid();
-
-    const int prevSize = m_entries.size();
-    qDebug() << "Done inserting playlist entries in the middle of the playlist! Committing...";
     createNewRevision( uuid(), oldrev, entries );
 
     // We are appending at end, so notify listeners.
@@ -667,6 +689,23 @@ Playlist::checkRevisionQueue()
             item.oldRev = currentrevision();
         }
         createNewRevision( item.newRev, item.oldRev, item.entries );
+    }
+    if ( !m_updateQueue.isEmpty() )
+    {
+        RevisionQueueItem item = m_updateQueue.dequeue();
+
+        if ( item.oldRev != currentrevision() && item.applyToTip )
+        {
+            // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+            if ( item.oldRev == item.newRev )
+            {
+                checkRevisionQueue();
+                return;
+            }
+
+            item.oldRev = currentrevision();
+        }
+        updateEntries( item.newRev, item.oldRev, item.entries );
     }
 }
 

@@ -223,6 +223,12 @@ public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     void createNewRevision( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
+
+    // Want to update some metadata of a plentry_ptr? this gets you a new revision too.
+    // entries should be <= entries(), with changed metadata.
+    void updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
+
+
     void reportCreated( const Tomahawk::playlist_ptr& self );
     void reportDeleted( const Tomahawk::playlist_ptr& self );
 
@@ -286,6 +292,7 @@ private:
     QList< plentry_ptr > m_entries;
 
     QQueue<RevisionQueueItem> m_revisionQueue;
+    QQueue<RevisionQueueItem> m_updateQueue;
 
     PlaylistUpdaterInterface* m_updater;
 

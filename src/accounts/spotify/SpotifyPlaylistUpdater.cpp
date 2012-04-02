@@ -295,8 +295,8 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
     Q_ASSERT( trackPositionsInserted.size() == trackIdsInserted.size() );
 
     const QList< plentry_ptr > curEntries = playlist()->entries();
+    QList< plentry_ptr > changed;
 
-    int changed = 0;
     for ( int i = 0; i < trackPositionsInserted.size(); i++ )
     {
         const QVariant posV = trackPositionsInserted[ i ];
@@ -326,13 +326,13 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
 
         qDebug() << "Setting annotation for track:" << m_waitingForIds[ pos ]->query()->track() << m_waitingForIds[ pos ]->query()->artist() << trackIdsInserted.at( i ).toString();
         m_waitingForIds[ pos ]->setAnnotation( trackIdsInserted.at( i ).toString() );
-        changed++;
+        changed << m_waitingForIds[ pos ];
     }
 
     m_waitingForIds.clear();
     // Save our changes if we added some IDs
-    if ( changed > 0 )
-        playlist()->createNewRevision( uuid(), playlist()->currentrevision(), playlist()->entries() );
+    if ( changed.size() > 0 )
+        playlist()->updateEntries( uuid(), playlist()->currentrevision(), changed );
 
 }
 

@@ -35,21 +35,33 @@ Q_PROPERTY( QString newrev            READ newrev        WRITE setNewrev )
 Q_PROPERTY( QString oldrev            READ oldrev        WRITE setOldrev )
 Q_PROPERTY( QVariantList orderedguids READ orderedguids  WRITE setOrderedguids )
 Q_PROPERTY( QVariantList addedentries READ addedentriesV WRITE setAddedentriesV )
+Q_PROPERTY( bool metadataUpdate       READ metadataUpdate WRITE setMetadataUpdate )
 
 public:
     explicit DatabaseCommand_SetPlaylistRevision( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
         , m_applied( false )
         , m_localOnly( false )
+        , m_metadataUpdate( false )
     {}
 
-    explicit DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
+    // Constructor for inserting or removing entries
+    DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
                                                   const QString& playlistguid,
                                                   const QString& newrev,
                                                   const QString& oldrev,
                                                   const QStringList& orderedguids,
                                                   const QList<Tomahawk::plentry_ptr>& addedentries,
                                                   const QList<Tomahawk::plentry_ptr>& entries );
+
+    // constructor for updating metadata only
+    DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
+                                                  const QString& playlistguid,
+                                                  const QString& newrev,
+                                                  const QString& oldrev,
+                                                  const QStringList& orderedguids,
+                                                  const QList<Tomahawk::plentry_ptr>& entriesToUpdate );
+
 
     QString commandname() const { return "setplaylistrevision"; }
 
@@ -89,6 +101,8 @@ public:
     QString newrev() const { return m_newrev; }
     QString oldrev() const { return m_oldrev; }
     QString playlistguid() const { return m_playlistguid; }
+    bool metadataUpdate() const { return m_metadataUpdate; }
+    void setMetadataUpdate( bool metadataUpdate ) { m_metadataUpdate = metadataUpdate; }
 
     void setOrderedguids( const QVariantList& l ) { m_orderedguids = l; }
     QVariantList orderedguids() const { return m_orderedguids; }
@@ -106,7 +120,7 @@ private:
     QVariantList m_orderedguids;
     QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
 
-    bool m_localOnly;
+    bool m_localOnly, m_metadataUpdate;
 };
 
 #endif // DATABASECOMMAND_SETPLAYLISTREVISION_H
