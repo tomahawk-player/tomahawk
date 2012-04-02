@@ -748,7 +748,7 @@ TomahawkWindow::showAboutTomahawk()
          .arg( TomahawkUtils::appFriendlyVersion() )
          .arg( qApp->applicationVersion() );
 #else
-    head = tr( "<h2><b>Tomahawk %1</h2>" );
+    head = tr( "<h2><b>Tomahawk %1</h2>" )
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
