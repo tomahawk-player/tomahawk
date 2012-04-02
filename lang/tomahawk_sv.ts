@@ -4,24 +4,26 @@
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="140"/>
         <source>Connect to Peer?</source>
-        <translation type="unfinished"/>
+        <translation>Anslut till klient?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="141"/>
         <source>Another Tomahawk instance that claims to be owned by %1 is attempting to connect to you. Select whether to allow or deny this connection.
 
 Remember: Only allow peers to connect if you trust who they are and if you have the legal right for them to stream music from you.</source>
-        <translation type="unfinished"/>
+        <translation>En annan Tomahawk instans som påstås vara ägd av %1 försöker ansluta till dig. Välj om du vill tillåta eller neka detta.
+
+Kom ihåg: Tillåt endast anslutning från klienter du litar på, och som har laglig rätt att streama musik från dig.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="142"/>
         <source>Deny</source>
-        <translation type="unfinished"/>
+        <translation>Neka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="143"/>
         <source>Allow</source>
-        <translation type="unfinished"/>
+        <translation>Tillåt</translation>
     </message>
 </context>
 <context>
@@ -29,17 +31,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation type="unfinished"/>
+        <translation>Beskrivning här</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till konto</translation>
     </message>
 </context>
 <context>
@@ -47,17 +49,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="105"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="110"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Ansluter...</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="115"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -65,29 +67,29 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="43"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lyssna med</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="46"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>Sluta &amp;Lyssna med</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="50"/>
         <source>&amp;Follow in real-time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lyssna med i realtid</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
         <source>&amp;Listen Privately</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lyssna privat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
         <source>&amp;Listen Publicly</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lyssna publikt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="61"/>
@@ -152,18 +154,18 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="118"/>
         <source>Click to show SuperCollection Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Klicka för att visa SuperCollection spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="79"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="136"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>Klicka för att visa SuperCollection Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="138"/>
         <source>Click to show Official Albums</source>
-        <translation type="unfinished"/>
+        <translation>Klicka för att visa Officiella Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="205"/>
@@ -195,12 +197,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="155"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
-        <translation type="unfinished"/>
+        <translation>Efter att du har scannat din musiksamling kommer du finna dina senaste tillagda album här.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="157"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
-        <translation type="unfinished"/>
+        <translation>Den här samlingen inga nya album.</translation>
     </message>
 </context>
 <context>
@@ -229,12 +231,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>Klicka för att visa SuperCollection Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
         <source>Click to show Official Albums</source>
-        <translation type="unfinished"/>
+        <translation>Klicka för visa Officiella Album</translation>
     </message>
 </context>
 <context>
@@ -242,12 +244,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="272"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Efter att du har scannat din musiksamling kommer du finna dina senaste tillagda låtar här.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="274"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Denna samling är tom.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="291"/>
@@ -333,7 +335,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/audio/audioengine.cpp" line="198"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk är stoppad.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/audioengine.cpp" line="366"/>
@@ -343,7 +345,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/audio/audioengine.cpp" line="369"/>
         <source>on album %1</source>
-        <translation type="unfinished"/>
+        <translation>på album %1</translation>
     </message>
 </context>
 <context>
@@ -436,12 +438,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="23"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk kraschrapport</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;p&gt;&lt;b&gt;Oj!&lt;/b&gt;&amp;nbsp; Tomahawk kraschade. Information om denna krasch skickas nu till Tomahawk HQ så att vi kan lösa problemet.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="172"/>
@@ -451,12 +453,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="192"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>Du kan välja att inte skicka kraschrapporter i konfigurationsdialogen. </translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="153"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>Laddade upp %L1 av %L2 KB.</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="167"/>
@@ -472,7 +474,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>Misslyckades skicka kraschrapport.</translation>
     </message>
 </context>
 <context>
@@ -488,7 +490,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/delegateconfigwrapper.cpp" line="61"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort konto</translation>
     </message>
 </context>
 <context>
@@ -514,7 +516,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/dropjob.cpp" line="832"/>
         <source>No tracks found for given %1</source>
-        <translation type="unfinished"/>
+        <translation>Inga låtar hittades för %1</translation>
     </message>
 </context>
 <context>
@@ -530,7 +532,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="31"/>
         <source>Indexing database</source>
-        <translation type="unfinished"/>
+        <translation>Indexerar databasen</translation>
     </message>
 </context>
 <context>
@@ -574,27 +576,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formulär</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="41"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation type="unfinished"/>
+        <translation>Scrobbla låtar till Last.fm</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="50"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="60"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="76"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Testinloggning</translation>
     </message>
 </context>
 <context>
@@ -623,7 +625,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>URL för spellista</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="29"/>
@@ -651,7 +653,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/LoadXSPFDialog.cpp" line="47"/>
         <source>XSPF Files (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>XSPF Filer (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -700,12 +702,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="162"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>%1 spelades av dig</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="164"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 spelades av %2</translation>
     </message>
 </context>
 <context>
@@ -713,17 +715,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="156"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>%1 spelades av dig</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="158"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 spelades av %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="165"/>
         <source>added %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 tillagd</translation>
     </message>
 </context>
 <context>
@@ -820,7 +822,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/proxydialog.ui" line="104"/>
         <source>Proxy login</source>
-        <translation type="unfinished"/>
+        <translation>Proxy login</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="111"/>
@@ -835,7 +837,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/proxydialog.ui" line="128"/>
         <source>Proxy password</source>
-        <translation type="unfinished"/>
+        <translation>Proxy lösenord</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="135"/>
@@ -846,17 +848,18 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/proxydialog.ui" line="142"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation type="unfinished"/>
+        <translation>Ingen Proxy host
+(Skriver över systemproxyn)</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="150"/>
         <source>localhost *.example.com (space separated)</source>
-        <translation type="unfinished"/>
+        <translation>localhost *.example.com (separeras med mellanslag)</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="167"/>
         <source>Use proxy for DNS lookups?</source>
-        <translation type="unfinished"/>
+        <translation>Använd proxy för DNS kontroll?</translation>
     </message>
 </context>
 <context>
@@ -864,62 +867,62 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="214"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n år sedan</numerusform><numerusform>%n år sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="216"/>
         <source>%n year(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n år sedan</numerusform><numerusform>%n år sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="222"/>
         <source>%n month(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n månad sedan</numerusform><numerusform>%n månader sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="224"/>
         <source>%n month(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n månad</numerusform><numerusform>%n månader</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="230"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n vecka sedan</numerusform><numerusform>%n veckor sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="232"/>
         <source>%n week(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n vecka</numerusform><numerusform>%n veckor</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="238"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n dag sedan</numerusform><numerusform>%n dagar sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="240"/>
         <source>%n day(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n dag</numerusform><numerusform>%n dagar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="246"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n timme sedan</numerusform><numerusform>%n timmar sedan</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="248"/>
         <source>%n hour(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n timme</numerusform><numerusform>%n timmar</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="254"/>
         <source>%1 minutes ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 minuter sedan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="256"/>
         <source>%1 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 minuter</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="260"/>
@@ -929,17 +932,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="34"/>
         <source>Friend Finders</source>
-        <translation type="unfinished"/>
+        <translation>Hitta vänner</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
         <source>Music Finders</source>
-        <translation type="unfinished"/>
+        <translation>Hitta musik</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="39"/>
         <source>Status Updaters</source>
-        <translation type="unfinished"/>
+        <translation>Status uppdaterare</translation>
     </message>
 </context>
 <context>
@@ -1026,27 +1029,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/settingsdialog.cpp" line="124"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Alla</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="238"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Tjänster</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="396"/>
         <source>Install resolver from file</source>
-        <translation type="unfinished"/>
+        <translation>Installera resolver från fil</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
         <source>Changing this setting requires a restart of Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Ändring av detta kräver omstart av Tomahawk!</translation>
     </message>
 </context>
 <context>
@@ -1113,13 +1116,13 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="289"/>
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="330"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Visa</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="291"/>
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="332"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Göm</translation>
     </message>
 </context>
 <context>
@@ -1160,27 +1163,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="65"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Samling</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="73"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Senast tillagda</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="77"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Senast spelade spår</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="81"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Älskade låtar</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="146"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperCollection</translation>
     </message>
 </context>
 <context>
@@ -1216,7 +1219,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="78"/>
         <source>Group</source>
-        <translation type="unfinished"/>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="81"/>
@@ -1241,27 +1244,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="268"/>
         <source>Browse</source>
-        <translation type="unfinished"/>
+        <translation>Bläddra</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="269"/>
         <source>Search History</source>
-        <translation type="unfinished"/>
+        <translation>Sökhistorik</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="271"/>
         <source>My Music</source>
-        <translation type="unfinished"/>
+        <translation>Min Musik</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="279"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperCollection</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="285"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Mest älskade spår</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="273"/>
