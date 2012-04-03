@@ -156,7 +156,7 @@ public slots:
     // resolve if not solved()
     void onResolverAdded();
     void onResolverRemoved();
-    
+
 private slots:
     void onResultStatusChanged();
     void refreshResults();
@@ -218,5 +218,7 @@ private:
 };
 
 }; //ns
+
+Q_DECLARE_METATYPE(Tomahawk::query_ptr);
 
 #endif // QUERY_H
