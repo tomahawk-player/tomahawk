@@ -2502,7 +2502,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <source>After authenticating on Twitter's web site,
 enter the displayed PIN number here:</source>
         <translation>След удостоверяване в Twitter,
- въведете генерираният код тук:</translation>
+ въведи генерираният код тук:</translation>
     </message>
 </context>
 <context>
@@ -3058,12 +3058,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation type="unfinished"/>
+        <translation>Настрой Twitter профил</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>Тази приставка за Twitter ще ти позволи да откриваш и изпълняваш музика, от твоите приятели в Twitter ползващи Tomahawk и побликуващи съобщения в твоя профил.</translation>
+        <translation>Приставката за Twitter ще ти позволи да откриваш и изпълняваш музика, от твоите приятели ползващи Tomahawk и побликуващи съобщения в твоят профил.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="137"/>
@@ -3089,12 +3089,12 @@ If you want to connect Tomahawk to your friends using Twitter, select the type o
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
         <translation>
-Ако само желаете да побликуваш съобщения, си готов.
-
 Ако желаеш да се свържеш с твои приятели, ползващи Twitter, избери тип на съобщението и натисни бутонът от долу, за изпращане. 
-Трябва взаимно да се следвате, за да можете да ползвате функцията DM. След изпращане, бъди търпелив. Може да изминат няколко минути преди побликуване.
+Трябва взаимно да се следвате, за да можете да ползвате функцията DM. 
+След изпращане, бъди търпелив.
+Може да изминат няколко минути преди побликуване.
 
-Можеш да изпращаш съобщения за повторно свързване по всяко време, само като натиснеш бутонът.</translation>
+Можеш да изпращаш съобщения за повторно свързване по всяко време, само като натиснеш бутонът по-долу.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="244"/>
