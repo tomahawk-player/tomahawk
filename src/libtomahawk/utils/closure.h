@@ -42,7 +42,7 @@ class ClosureArgument : public ClosureArgumentWrapper {
   explicit ClosureArgument(const T& data) : data_(data) {}
 
   virtual QGenericArgument arg() const {
-    return Q_ARG(T, data_);
+      return QArgument<T>(QMetaType::typeName(qMetaTypeId<T>()), data_);
   }
 
  private:
