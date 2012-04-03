@@ -87,27 +87,7 @@ PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 {
     initStyleOption( option, index );
 
-    if ( item->isPlaying() )
-    {
-        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-        option->state |= QStyle::State_Selected;
-    }
-
-    if ( option->state & QStyle::State_Selected )
-    {
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
-    }
-    else
-    {
-        float opacity = 0.0;
-        if ( item->query()->results().count() )
-            opacity = item->query()->results().first()->score();
-
-        opacity = qMax( (float)0.3, opacity );
-        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
-
-        option->palette.setColor( QPalette::Text, textColor );
-    }
+    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 
@@ -207,7 +187,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QRect pixmapRect = r.adjusted( 6, 0, -option.rect.width() + option.rect.height() - 6 + r.left(), 0 );
         QRect avatarRect = r.adjusted( option.rect.width() - r.left() - 12 - avatarSize.width(), ( option.rect.height() - avatarSize.height() ) / 2 - 5, 0, 0 );
         avatarRect.setSize( avatarSize );
-        
+
         pixmap = item->query()->cover( pixmapRect.size(), false );
         if ( !pixmap )
         {
@@ -215,7 +195,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }
 
         painter->drawPixmap( pixmapRect, pixmap );
-        
+
         if ( !avatar.isNull() )
             painter->drawPixmap( avatarRect, avatar );
 
@@ -250,7 +230,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_bottomOption );
-        
+
         if ( textDoc.idealWidth() > leftRect.width() )
             textDoc.setHtml( item->query()->socialActionDescription( "Love", Query::Short ) );
 

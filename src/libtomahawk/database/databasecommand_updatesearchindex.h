@@ -36,7 +36,7 @@ public:
     virtual void exec( DatabaseImpl* db );
 
 private:
-    IndexingJobItem* m_statusJob;
+    QWeakPointer<IndexingJobItem> m_statusJob;
 };
 
 #endif // DATABASECOMMAND_UPDATESEARCHINDEX_H

@@ -34,13 +34,14 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
 {
     tLog() << Q_FUNC_INFO << "Updating index.";
 
-    JobStatusView::instance()->model()->addJob( m_statusJob );
+    JobStatusView::instance()->model()->addJob( m_statusJob.data() );
 }
 
 
 DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
 {
-    m_statusJob->done();
+    if (! m_statusJob.isNull() )
+        m_statusJob.data()->done();
 }
 
 

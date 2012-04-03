@@ -21,10 +21,13 @@
 #define TOMAHAWKUTILSGUI_H
 
 #include <QSize>
+#include <QModelIndex>
 
 #include "tomahawkutils.h"
 #include "dllmacro.h"
 
+class TrackModelItem;
+class QStyleOptionViewItemV4;
 class QPainter;
 class QColor;
 class QPixmap;
@@ -51,6 +54,8 @@ namespace TomahawkUtils
     DLLEXPORT void setHeaderHeight( int height );
 
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
+
+    DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item );
 
 }
 

@@ -17,16 +17,21 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
 #include "tomahawkutilsgui.h"
 
+#include "config.h"
+#include "query.h"
+#include "result.h"
 #include "logger.h"
+#include "trackmodelitem.h"
+
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QPalette>
 #include <QtGui/QApplication>
 #include <QtGui/QWidget>
+#include <QStyleOption>
 
 #ifdef Q_WS_X11
     #include <QtGui/QX11Info>
@@ -344,7 +349,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultTrackImage:
                 pixmap = QPixmap( RESPATH "images/track-placeholder.png" );
             break;
-            
+
         case DefaultSourceAvatar:
             if ( mode == AvatarInFrame )
                 pixmap = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
@@ -379,5 +384,34 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
     return pixmap;
 }
 
+
+void
+prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item )
+{
+    if ( item->isPlaying() )
+    {
+        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
+
+        option->backgroundBrush = option->palette.color( QPalette::Mid );
+        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
+
+    }
+
+    if ( option->state & QStyle::State_Selected && !item->isPlaying() )
+    {
+        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
+    }
+    else
+    {
+        float opacity = 0.0;
+        if ( item->query()->results().count() )
+            opacity = item->query()->results().first()->score();
+
+        opacity = qMax( (float)0.3, opacity );
+        QColor textColor = alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
+
+        option->palette.setColor( QPalette::Text, textColor );
+    }
+}
 
 } // ns
