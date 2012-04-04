@@ -2313,27 +2313,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="400"/>
         <source>Top Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Най-актуални песни</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="403"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Харесвани песни</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="406"/>
         <source>Hyped Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Песни слушани най-често</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="412"/>
         <source>Top Artists</source>
-        <translation type="unfinished"/>
+        <translation>Най-слушани артисти</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="415"/>
         <source>Hyped Artists</source>
-        <translation type="unfinished"/>
+        <translation>Артисти слушани най-често</translation>
     </message>
 </context>
 <context>
@@ -2349,27 +2349,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="137"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Нов списък</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>Неуспех при запаметяване на песни</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation type="unfinished"/>
+        <translation>Някои песни в списъкът за изпълнение нямат артист и заглавие. Те ще бъдат игнорирани.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="182"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>XSPF грешка</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="182"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Това не е валиден XSPF списък</translation>
     </message>
 </context>
 <context>
@@ -2411,7 +2411,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/query.cpp" line="655"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform>% други</numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
@@ -2421,7 +2421,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="660"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>хареса тази песен</translation>
     </message>
 </context>
 <context>
@@ -2446,32 +2446,32 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/source.cpp" line="242"/>
         <location filename="../src/libtomahawk/source.cpp" line="293"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation type="unfinished"/>
+        <translation>Сканиране (%L1 песни)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="244"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>Сканирам</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="278"/>
         <source>Checking</source>
-        <translation type="unfinished"/>
+        <translation>Проверявам</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="283"/>
         <source>Fetching</source>
-        <translation type="unfinished"/>
+        <translation>Извличам</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="288"/>
         <source>Parsing</source>
-        <translation type="unfinished"/>
+        <translation>Сортирам</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="417"/>
         <source>Saving (%1%)</source>
-        <translation type="unfinished"/>
+        <translation>Запазвам (%1%)</translation>
     </message>
 </context>
 <context>
@@ -2511,17 +2511,17 @@ enter the displayed PIN number here:</source>
         <location filename="../src/tomahawktrayicon.cpp" line="59"/>
         <location filename="../src/tomahawktrayicon.cpp" line="93"/>
         <source>Hide Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Скрий главният прозорец</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="98"/>
         <source>Show Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Покажи главният прозорец</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="158"/>
         <source>Currently not playing.</source>
-        <translation type="unfinished"/>
+        <translation>В момента не се изпълнява нищо</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="219"/>
@@ -2629,12 +2629,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="196"/>
         <source>Show Offline Sources</source>
-        <translation>Покажи източници извън интернет</translation>
+        <translation>Покажи източници извън линия</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="201"/>
         <source>Hide Offline Sources</source>
-        <translation>Скрий източници извън интернет</translation>
+        <translation>Скрий източници извън линия</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="206"/>
