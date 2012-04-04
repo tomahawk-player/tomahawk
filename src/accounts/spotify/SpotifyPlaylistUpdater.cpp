@@ -40,7 +40,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
         }
     }
 
-    if ( !m_account )
+    if ( m_account.isNull() )
     {
         qWarning() << "Found a spotify updater with no spotify account... ignoreing for now!!";
         return 0;
@@ -49,8 +49,8 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
     // Register the updater with the account
     const QString spotifyId = TomahawkSettings::instance()->value( QString( "playlistupdaters/%1/spotifyId" ).arg( pl->guid() ) ).toString();
     Q_ASSERT( !spotifyId.isEmpty() );
-    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account, pl );
-    m_account->registerUpdaterForPlaylist( spotifyId, updater );
+    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), pl );
+    m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
 }
@@ -232,6 +232,9 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
 void
 SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& tracks, int pos )
 {
+    if ( m_spotify.isNull() )
+        return;
+
     if ( m_blockUpdatesForNextRevision )
     {
         qDebug() << "Ignoring tracks inserted message since we just did an insert ourselves!";
@@ -276,7 +279,7 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
     }
     msg[ "tracks" ] = tracksJson;
 
-    m_spotify->sendMessage( msg, this, "onTracksInsertedReturn" );
+    m_spotify.data()->sendMessage( msg, this, "onTracksInsertedReturn" );
 }
 
 
@@ -340,6 +343,9 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
 void
 SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks )
 {
+    if ( m_spotify.isNull() )
+        return;
+
     if ( m_blockUpdatesForNextRevision )
     {
         qDebug() << "Ignoring tracks removed message since we just did a remove ourselves!";
@@ -354,7 +360,7 @@ SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks 
     msg[ "oldrev" ] = m_latestRev;
     msg[ "tracks" ] = queriesToVariant( tracks );
 
-    m_spotify->sendMessage( msg, this, "onTracksRemovedReturn" );
+    m_spotify.data()->sendMessage( msg, this, "onTracksRemovedReturn" );
 }
 
 

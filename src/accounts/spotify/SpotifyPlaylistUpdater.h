@@ -73,7 +73,7 @@ private:
     static QVariant queryToVariant( const Tomahawk::query_ptr& query );
     static QList< Tomahawk::query_ptr > variantToQueries( const QVariantList& list );
 
-    Tomahawk::Accounts::SpotifyAccount* m_spotify;
+    QWeakPointer<Tomahawk::Accounts::SpotifyAccount> m_spotify;
     QString m_latestRev, m_spotifyId;
     QList< Tomahawk::plentry_ptr > m_waitingForIds;
 
@@ -85,13 +85,13 @@ private:
 class SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 {
 public:
-    SpotifyUpdaterFactory() : m_account( 0 ) {}
+    SpotifyUpdaterFactory()  {}
 
     virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl );
     virtual QString type() const { return "spotify"; }
 
 private:
-    Tomahawk::Accounts::SpotifyAccount* m_account;
+    QWeakPointer<Tomahawk::Accounts::SpotifyAccount> m_account;
 };
 
 #endif // SPOTIFYPLAYLISTUPDATER_H
