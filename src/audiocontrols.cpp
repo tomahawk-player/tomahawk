@@ -358,7 +358,7 @@ void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
     const int seconds = msElapsed / 1000;
-    if ( seconds != m_lastTextSecondShown )
+    if ( seconds != m_lastTextSecondShown && !m_currentTrack.isNull() )
     {
         ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
         ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
