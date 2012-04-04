@@ -139,5 +139,6 @@
         <file>data/sql/dbmigrate-27_to_28.sql</file>
         <file>data/images/process-stop.png</file>
         <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
+        <file>data/images/collection.png</file>
     </qresource>
 </RCC>

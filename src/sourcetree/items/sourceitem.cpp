@@ -62,7 +62,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         return;
     }
 
-    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/drop-song.png" ), //FIXME different icon
+    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/collection.png" ), //FIXME different icon
                                             boost::bind( &SourceItem::collectionClicked, this ),
                                             boost::bind( &SourceItem::getCollectionPage, this ) );
 
