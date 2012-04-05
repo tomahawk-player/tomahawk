@@ -44,6 +44,10 @@ Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin(XmppSipPlugin* sipPlugin)
     m_pubSubManager = new Jreen::PubSub::Manager( sipPlugin->m_client );
     m_pubSubManager->addEntityType< Jreen::Tune >();
 
+    // Clear status
+    Jreen::Tune::Ptr tune( new Jreen::Tune() );
+    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+    
     m_pauseTimer.setSingleShot( true );
     connect( &m_pauseTimer, SIGNAL( timeout() ),
              this, SLOT( audioStopped() ) );
@@ -52,7 +56,10 @@ Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin(XmppSipPlugin* sipPlugin)
 
 Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 {
-    delete m_pubSubManager;
+    //Note: the next two lines don't currently work, because the deletion wipes out internally posted events, need to talk to euro about a fix
+    Jreen::Tune::Ptr tune( new Jreen::Tune() );
+    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+    m_pubSubManager->deleteLater();
 }
 
 
