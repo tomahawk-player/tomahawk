@@ -150,7 +150,7 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
     m_currentArtist = hash["artist"];
 
     // Request a short URL
-    m_currentLongUrl = GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
+    m_currentLongUrl = GlobalActionManager::instance()->openLink( hash.value( "title" ), hash.value( "artist" ), hash.value( "album" ) );
 
     QUrl shortUrl = m_currentLongUrl;
     if ( pushInfoPair.first.contains( "shortUrl" ) )
