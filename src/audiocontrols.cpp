@@ -237,6 +237,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setFixedWidth( ui->timeLeftLabel->fontMetrics().width( QString( duration.length() + 1, QChar( '0' ) ) ) );
     ui->timeLeftLabel->setText( "-" + duration );
+    m_lastTextSecondShown = 0;
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
