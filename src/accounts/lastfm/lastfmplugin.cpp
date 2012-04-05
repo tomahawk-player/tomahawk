@@ -127,13 +127,14 @@ LastFmPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
+LastFmPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
 {
     Q_UNUSED( caller )
+    Q_UNUSED( pushFlags )
     switch ( type )
     {
         case InfoSubmitNowPlaying:
-            nowPlaying( input );
+            nowPlaying( pushInfoPair.second );
             break;
 
         case InfoSubmitScrobble:
@@ -142,7 +143,7 @@ LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
 
         case InfoLove:
         case InfoUnLove:
-            sendLoveSong( type, input );
+            sendLoveSong( type, pushInfoPair.second );
             break;
 
         default:

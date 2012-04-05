@@ -589,7 +589,8 @@ Query::setLoved( bool loved )
 
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             id(), Tomahawk::InfoSystem::InfoLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+            Tomahawk::InfoSystem::PushNoFlag );
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

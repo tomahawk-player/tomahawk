@@ -74,9 +74,6 @@ AdiumPlugin::AdiumPlugin()
     m_pauseTimer->setSingleShot( true );
     connect( m_pauseTimer, SIGNAL( timeout() ),
              this, SLOT( clearStatus() ) );
-
-    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl ) ),
-             SLOT( shortLinkReady( QUrl, QUrl ) ) );
 }
 
 
@@ -87,33 +84,6 @@ AdiumPlugin::~AdiumPlugin()
       setStatus( "" );
 }
 
-void
-AdiumPlugin::shortLinkReady( QUrl longUrl, QUrl shortUrl )
-{
-    // The URL we received is either from a previous track, or not requested by us
-    if( longUrl != m_currentLongUrl )
-        return;
-
-    // Build the core of the now-playing string
-    QString nowPlaying = "";
-    nowPlaying.append( m_currentArtist );
-    nowPlaying.append(" - ");
-    nowPlaying.append( m_currentTitle );
-    nowPlaying.replace( "\"", "\\\"" );  // Escape quotes, or Applescript gets confused
-
-    // We failed to get the short URL, just update the status with the metadata
-    if( ( longUrl.toString() == "" ) )
-    {
-        setStatus( nowPlaying );
-        return;
-    }
-
-    // Add the short URL
-    nowPlaying.append( " " );
-    nowPlaying.append( shortUrl.toEncoded() );
-    setStatus( nowPlaying );
-
-}
 
 void
 AdiumPlugin::clearStatus()
@@ -131,7 +101,7 @@ AdiumPlugin::settingsChanged()
 
 
 void
-AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
+AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -141,13 +111,13 @@ AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
     switch ( type )
     {
         case InfoNowPlaying:
-          audioStarted( input );
+          audioStarted( pushInfoPair );
           break;
         case InfoNowPaused:
           audioPaused();
           return;
         case InfoNowResumed:
-          audioResumed( input );
+          audioResumed( pushInfoPair );
           break;
         case InfoNowStopped:
           audioStopped();
@@ -164,14 +134,15 @@ AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
 
 /** Audio state slots */
 void
-AdiumPlugin::audioStarted( const QVariant &input )
+AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair )
 {
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    if ( !pushInfoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 
-    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash hash = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
+
+    qDebug() << Q_FUNC_INFO;
+
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
@@ -179,24 +150,29 @@ AdiumPlugin::audioStarted( const QVariant &input )
     m_currentArtist = hash["artist"];
 
     // Request a short URL
-    m_currentLongUrl = openLinkFromHash( hash );
-    GlobalActionManager::instance()->shortenLink( m_currentLongUrl );
-}
+    m_currentLongUrl = GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
 
-QUrl
-AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoStringHash& hash ) const
-{
-    QString title, artist, album;
+    QUrl shortUrl = m_currentLongUrl;
+    if ( pushInfoPair.first.contains( "shortUrl" ) )
+        shortUrl = pushInfoPair.first[ "shortUrl" ].toUrl();
+        
+    QString nowPlaying = "";
+    nowPlaying.append( m_currentArtist );
+    nowPlaying.append(" - ");
+    nowPlaying.append( m_currentTitle );
+    nowPlaying.replace( "\"", "\\\"" );  // Escape quotes, or Applescript gets confused
 
-    if( !hash.isEmpty() && hash.contains( "title" ) && hash.contains( "artist" ) )
+    // We failed to get the short URL, just update the status with the metadata
+    if( ( m_currentLongUrl.toString() == "" ) )
     {
-        title = hash["title"];
-        artist = hash["artist"];
-        if( hash.contains( "album" ) )
-            album = hash["album"];
+        setStatus( nowPlaying );
+        return;
     }
 
-    return GlobalActionManager::instance()->openLink( title, artist, album );
+    // Add the short URL
+    nowPlaying.append( " " );
+    nowPlaying.append( shortUrl.toEncoded() );
+    setStatus( nowPlaying );
 }
 
 void
@@ -220,9 +196,9 @@ AdiumPlugin::audioPaused()
 }
 
 void
-AdiumPlugin::audioResumed( const QVariant &input )
+AdiumPlugin::audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair )
 {
     qDebug() << Q_FUNC_INFO;
-    audioStarted( input );
+    audioStarted( pushInfoPair );
 }
 

@@ -47,7 +47,7 @@ protected slots:
         Q_UNUSED( requestData );
     }
     
-    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
+    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
 
 public slots:
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -57,19 +57,15 @@ public slots:
     }
 
 private slots:
-    void shortLinkReady( QUrl longUrl, QUrl shortUrl );
-
     void clearStatus();
     void settingsChanged();
 
 private:
-    void audioStarted( const QVariant &input );
+    void audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
     void audioFinished( const QVariant &input );
     void audioStopped();
     void audioPaused();
-    void audioResumed( const QVariant &input );
-
-    QUrl openLinkFromHash( const InfoStringHash& hash ) const;
+    void audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
 
     bool m_active;
     QString m_beforeStatus;

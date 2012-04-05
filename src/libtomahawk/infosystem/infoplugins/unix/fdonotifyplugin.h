@@ -42,7 +42,7 @@ protected slots:
         Q_UNUSED( requestData );
     }
 
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant pushData );
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
 
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {

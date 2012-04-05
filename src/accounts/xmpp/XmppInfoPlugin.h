@@ -47,11 +47,11 @@ namespace Tomahawk {
             void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
         protected slots:
-            void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
+            void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
             void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
         private slots:
-            void audioStarted( const Tomahawk::InfoSystem::InfoStringHash& info );
+            void audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair );
             void audioStopped();
             void audioPaused();
 

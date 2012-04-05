@@ -57,8 +57,11 @@ Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input)
+Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
 {
+    Q_UNUSED( caller )
+    Q_UNUSED( pushFlags )
+    
     tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
 
     if( m_sipPlugin->m_account->configuration().value("publishtracks").toBool() == false )
@@ -72,8 +75,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo(QString caller, Tomahawk::InfoSys
         case InfoNowPlaying:
         case InfoNowResumed:
             m_pauseTimer.stop();
-            if ( input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
-                audioStarted( input.value< Tomahawk::InfoSystem::InfoStringHash >() );
+            audioStarted( pushInfoPair );
             break;
         case InfoNowPaused:
             m_pauseTimer.start( PAUSE_TIMEOUT * 1000 );
@@ -91,18 +93,29 @@ Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo(QString caller, Tomahawk::InfoSys
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted(const Tomahawk::InfoSystem::InfoStringHash& info)
+Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair &pushInfoPair )
 {
+    if ( !pushInfoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
+        tDebug() << Q_FUNC_INFO << "did not find an infostringhash";
+        return;
+    }
+    
+    Tomahawk::InfoSystem::InfoStringHash info = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
     tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full() << info;
-
+    
     Jreen::Tune::Ptr tune( new Jreen::Tune() );
 
     tune->setTitle( info.value( "title" ) );
     tune->setArtist( info.value( "artist" ) );
     tune->setLength( info.value("duration").toInt() );
     tune->setTrack( info.value("albumpos") );
-    tune->setUri( GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) ) );
+    if ( pushInfoPair.first.contains( "shorturl" ) )
+        tune->setUri( pushInfoPair.first[ "shorturl" ].toUrl() );
+    else
+        tune->setUri( GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) ) );
 
+    tDebug() << Q_FUNC_INFO << "Setting URI of " << tune->uri().toString();
     //TODO: provide a rating once available in Tomahawk
     tune->setRating( 10 );
 

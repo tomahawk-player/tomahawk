@@ -44,6 +44,11 @@ namespace InfoSystem {
 class InfoSystemCache;
 class InfoSystemWorker;
 
+enum PushInfoFlags { // must be powers of 2
+    PushNoFlag = 1,
+    PushShortUrlFlag = 2
+};
+
 enum InfoType { // as items are saved in cache, mark them here to not change them
     InfoNoInfo = 0, //WARNING: *ALWAYS* keep this first!
     InfoTrackID = 1,
@@ -162,6 +167,7 @@ struct InfoRequestData {
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QHash< QString, QString > InfoStringHash;
+typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
 class DLLEXPORT InfoPlugin : public QObject
 {
@@ -183,7 +189,7 @@ signals:
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
 protected:
@@ -240,8 +246,8 @@ public:
     bool getInfo( const InfoRequestData &requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
     bool getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
-    bool pushInfo( const QString &caller, const InfoType type, const QVariant &input );
-    bool pushInfo( const QString &caller, const InfoTypeMap &input );
+    bool pushInfo( const QString &caller, const InfoType type, const QVariant &input, const PushInfoFlags pushFlags );
+    bool pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags );
 
 public slots:
     // InfoSystem takes ownership of InfoPlugins
@@ -292,6 +298,9 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoPair );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoType );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );

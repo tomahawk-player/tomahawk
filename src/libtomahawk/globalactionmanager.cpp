@@ -123,12 +123,12 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 
 
 void
-GlobalActionManager::shortenLink( const QUrl& url )
+GlobalActionManager::shortenLink( const QUrl& url, const QVariantMap &callbackMap )
 {
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ) );
+        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ), Q_ARG( QVariantMap, callbackMap ) );
         return;
     }
 
@@ -136,6 +136,8 @@ GlobalActionManager::shortenLink( const QUrl& url )
     request.setUrl( url );
 
     QNetworkReply *reply = TomahawkUtils::nam()->get( request );
+    if ( !callbackMap.empty() )
+        reply->setProperty( "callbackMap", callbackMap );
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
@@ -894,10 +896,14 @@ GlobalActionManager::shortenLinkRequestFinished()
     // NOTE: this should never happen
     if( !reply )
     {
-        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        emit shortLinkReady( QUrl( "" ), QUrl( "" ), QVariantMap() );
         return;
     }
 
+    QVariantMap callbackMap;
+    if ( reply->property( "callbackMap" ).canConvert< QVariantMap >() && !reply->property( "callbackMap" ).toMap().isEmpty() )
+        callbackMap = reply->property( "callbackMap" ).toMap();
+    
     // Check for the redirect attribute, as this should be the shortened link
     QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
 
@@ -926,9 +932,9 @@ GlobalActionManager::shortenLinkRequestFinished()
     else
     {
         if ( !error )
-            emit shortLinkReady( longUrl, shortUrl );
+            emit shortLinkReady( longUrl, shortUrl, callbackMap );
         else
-            emit shortLinkReady( longUrl, longUrl );
+            emit shortLinkReady( longUrl, longUrl, callbackMap );
     }
 
     reply->deleteLater();
@@ -946,12 +952,15 @@ GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error 
     // NOTE: this should never happen
     if( !reply )
     {
-        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        emit shortLinkReady( QUrl( "" ), QUrl( "" ), QVariantMap() );
         return;
     }
 
+    QVariantMap callbackMap;
+    if ( reply->property( "callbackMap" ).canConvert< QVariantMap >() && !reply->property( "callbackMap" ).toMap().isEmpty() )
+        callbackMap = reply->property( "callbackMap" ).toMap();
     reply->deleteLater();
-    emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+    emit shortLinkReady( QUrl( "" ), QUrl( "" ), callbackMap );
 }
 
 
