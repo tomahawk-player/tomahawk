@@ -75,6 +75,7 @@ private:
     QString m_sortname;
     QByteArray m_coverBuffer;
     bool m_infoLoaded;
+    mutable bool m_infoLoading;
     mutable QString m_uuid;
 
 #ifndef ENABLE_HEADLESS

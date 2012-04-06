@@ -76,6 +76,7 @@ private:
     artist_ptr m_artist;
     QByteArray m_coverBuffer;
     bool m_infoLoaded;
+    mutable bool m_infoLoading;
     mutable QString m_uuid;
 
 #ifndef ENABLE_HEADLESS

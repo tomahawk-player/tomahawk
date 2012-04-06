@@ -77,6 +77,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_id( id )
     , m_name( name )
     , m_infoLoaded( false )
+    , m_infoLoading( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
@@ -99,7 +100,7 @@ Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 QPixmap
 Artist::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded )
+    if ( !m_infoLoaded || !m_infoLoading )
     {
         if ( !forceLoad )
             return QPixmap();
@@ -123,6 +124,8 @@ Artist::cover( const QSize& size, bool forceLoad ) const
                 SLOT( infoSystemFinished( QString ) ) );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+        m_infoLoading = true;
     }
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
