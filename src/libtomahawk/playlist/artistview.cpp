@@ -102,7 +102,9 @@ void
 ArtistView::setProxyModel( TreeProxyModel* model )
 {
     m_proxyModel = model;
-    setItemDelegate( new TreeItemDelegate( this, m_proxyModel ) );
+    TreeItemDelegate* del = new TreeItemDelegate( this, m_proxyModel );
+    connect( del, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
+    setItemDelegate( del );
 
     QTreeView::setModel( m_proxyModel );
 }

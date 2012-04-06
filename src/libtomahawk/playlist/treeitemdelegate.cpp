@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,6 +29,8 @@
 
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
+#include "utils/closure.h"
+#include "utils/PixmapDelegateFader.h"
 
 #include "treemodelitem.h"
 #include "treeproxymodel.h"
@@ -150,19 +153,23 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
 //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
-    QPixmap cover;
-    if ( !item->album().isNull() )
+    if ( !m_pixmaps.contains( index ) )
     {
-        cover = item->album()->cover( r.size(), false );
-        if ( cover.isNull() )
-            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, r.size() );
+        if ( !item->album().isNull() )
+        {
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size() ) ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<TreeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            closure->setAutoDelete( false );
+        }
+        else if ( !item->artist().isNull() )
+        {
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size() ) ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<TreeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            closure->setAutoDelete( false );
+        }
     }
-    else if ( !item->artist().isNull() )
-    {
-        cover = item->artist()->cover( r.size(), false );
-        if ( cover.isNull() )
-            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, r.size() );
-    }
+
+    const QPixmap cover = m_pixmaps[ index ]->currentPixmap();
 
     painter->drawPixmap( r, cover );
 
@@ -175,3 +182,11 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->restore();
 }
+
+
+void
+TreeItemDelegate::doUpdateIndex( const QPersistentModelIndex& index )
+{
+    emit updateIndex( index );
+}
+

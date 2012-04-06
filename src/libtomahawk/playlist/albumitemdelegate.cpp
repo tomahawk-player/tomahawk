@@ -278,6 +278,8 @@ AlbumItemDelegate::modelChanged()
 void
 AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
+    if ( !idx.isValid() )
+        return;
     emit updateIndex( idx );
 }
 
