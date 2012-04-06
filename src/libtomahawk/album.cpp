@@ -166,7 +166,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 
 
 void
-Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
     if ( requestData.caller != m_uuid ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
@@ -189,10 +189,8 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
 
 
 void
-Album::infoSystemFinished( QString target )
+Album::infoSystemFinished( const QString& target )
 {
-    Q_UNUSED( target );
-
     if ( target != m_uuid )
         return;
 
