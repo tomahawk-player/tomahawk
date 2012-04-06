@@ -24,6 +24,11 @@
 #include <QTextOption>
 
 #include "dllmacro.h"
+#include <signal.h>
+
+namespace Tomahawk {
+class PixmapDelegateFader;
+}
 
 class TrackModel;
 class TrackModelItem;
@@ -45,6 +50,13 @@ protected:
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+signals:
+    void updateIndex( const QModelIndex& idx );
+
+private slots:
+    void modelChanged();
+    void doUpdateIndex( const QPersistentModelIndex& idx );
+
 private:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
     void drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const;
@@ -52,6 +64,8 @@ private:
     QTextOption m_topOption;
     QTextOption m_centerRightOption;
     QTextOption m_bottomOption;
+
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 
     TrackView* m_view;
     TrackProxyModel* m_model;

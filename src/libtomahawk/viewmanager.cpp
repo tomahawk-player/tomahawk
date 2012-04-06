@@ -444,7 +444,9 @@ ViewManager::showTopLovedPage()
     if ( !m_topLovedWidget )
     {
         CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
+        view->setItemDelegate( del );
 
         m_topLovedWidget = view;
     }
@@ -465,7 +467,10 @@ ViewManager::showRecentPlaysPage()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
         raModel->setStyle( TrackModel::Large );
 
-        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
+        pv->setItemDelegate( del );
+
         pv->setPlaylistModel( raModel );
 
         m_recentPlaysWidget = pv;

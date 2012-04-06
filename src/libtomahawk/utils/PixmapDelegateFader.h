@@ -21,6 +21,7 @@
 
 #include "artist.h"
 #include "album.h"
+#include "query.h"
 
 #include <QObject>
 #include <QTimeLine>
@@ -41,6 +42,7 @@ class PixmapDelegateFader : public QObject
 public:
     PixmapDelegateFader( const artist_ptr& artist, const QSize& size, bool forceLoad = true );
     PixmapDelegateFader( const album_ptr& album, const QSize& size, bool forceLoad = true );
+    PixmapDelegateFader( const query_ptr& track, const QSize& size, bool forceLoad = true );
 
     virtual ~PixmapDelegateFader();
 
@@ -54,6 +56,7 @@ signals:
 private slots:
     void artistChanged();
     void albumChanged();
+    void trackChanged();
 
     void onAnimationStep( int );
     void onAnimationFinished();
@@ -62,6 +65,7 @@ private:
 
     artist_ptr m_artist;
     album_ptr m_album;
+    query_ptr m_track;
     QSize m_size;
 
     QQueue<QPixmap> m_pixmapQueue;

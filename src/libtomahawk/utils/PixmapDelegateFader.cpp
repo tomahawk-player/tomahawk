@@ -53,6 +53,20 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
 }
 
 
+PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& size, bool forceLoad )
+    : m_track( track )
+    , m_size( size )
+{
+    if ( !m_track.isNull() )
+    {
+        connect( m_track.data(), SIGNAL( coverChanged() ), this, SLOT( trackChanged() ) );
+        m_currentReference = m_track->cover( size, forceLoad );
+    }
+
+    init();
+}
+
+
 PixmapDelegateFader::~PixmapDelegateFader()
 {
 
@@ -75,7 +89,13 @@ PixmapDelegateFader::init()
     if ( m_currentReference.isNull() )
     {
         // No cover loaded yet, use default and don't fade in
-        m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, m_size );
+        if ( !m_album.isNull() )
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, m_size );
+        else if ( !m_artist.isNull() )
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::CoverInCase, m_size );
+        else if ( !m_track.isNull() )
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::CoverInCase, m_size );
+
         return;
     }
 
@@ -99,6 +119,16 @@ PixmapDelegateFader::artistChanged()
         return;
 
     setPixmap( m_artist->cover( m_size ) );
+}
+
+
+void
+PixmapDelegateFader::trackChanged()
+{
+    if ( m_track.isNull() || m_track->cover( m_size ).isNull() )
+        return;
+
+    setPixmap( m_track->cover( m_size ) );
 }
 
 

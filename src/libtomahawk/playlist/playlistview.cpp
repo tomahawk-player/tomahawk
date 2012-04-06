@@ -80,6 +80,8 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
+
+    emit modelChanged();
 }
 
 

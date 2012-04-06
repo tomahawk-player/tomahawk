@@ -504,7 +504,9 @@ SourceItem::lovedTracksClicked()
     if ( !m_lovedTracksPage )
     {
         CustomPlaylistView* view = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
+        view->setItemDelegate( del );
 
         m_lovedTracksPage = view;
     }
@@ -533,7 +535,10 @@ SourceItem::latestAdditionsClicked()
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
         raModel->setStyle( TrackModel::Large );
 
-        cv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
+        cv->setItemDelegate( del );
+
         cv->setTrackModel( raModel );
         cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
 
@@ -564,7 +569,10 @@ SourceItem::recentPlaysClicked()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
         raModel->setStyle( TrackModel::Large );
 
-        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
+        pv->setItemDelegate( del );
+
         pv->setPlaylistModel( raModel );
 
         m_recentPlaysPage = pv;
