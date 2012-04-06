@@ -7,6 +7,7 @@ Version 0.4.1:
     * Fixed issues with changing proxy.
     * Fixed Twitter authentication issues.
     * Fixed Grooveshark support on Windows.
+    * Fixed volume issue (too quiet) on Windows.
 
 Version 0.4.0:
     * Added visual notification for database indexing job.
