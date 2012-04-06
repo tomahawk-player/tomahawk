@@ -42,7 +42,7 @@ namespace InfoSystem
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
     , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/InfoSystemCache/" )
-    , m_cacheVersion( 2 )
+    , m_cacheVersion( 3 )
 {
     tDebug() << Q_FUNC_INFO;
     TomahawkSettings *s = TomahawkSettings::instance();
@@ -73,6 +73,27 @@ InfoSystemCache::~InfoSystemCache()
     tDebug() << Q_FUNC_INFO;
 }
 
+
+void
+InfoSystemCache::performWipe( QString directory )
+{
+    QDir dir;
+    for ( int i = InfoNoInfo; i <= InfoLastInfo; i++ )
+    {
+        InfoType type = (InfoType)(i);
+        const QString cacheDirName = directory + QString::number( (int)type );
+        QFileInfoList fileList = QDir( cacheDirName ).entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
+        foreach ( QFileInfo file, fileList )
+        {
+            if ( !QFile::remove( file.canonicalFilePath() ) )
+                tLog() << "During upgrade, failed to remove cache file " << file.canonicalFilePath();
+        }
+        dir.rmdir( cacheDirName );
+    }
+    dir.rmdir( directory );
+}
+
+
 void
 InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
 {
@@ -82,17 +103,16 @@ InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
     {
         qDebug() << Q_FUNC_INFO << "Wiping cache";
 
-        for ( int i = InfoNoInfo; i <= InfoLastInfo; i++ )
-        {
-            InfoType type = (InfoType)(i);
-            const QString cacheDirName = m_cacheBaseDir + QString::number( (int)type );
-            QFileInfoList fileList = QDir( cacheDirName ).entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
-            foreach ( QFileInfo file, fileList )
-            {
-                if ( !QFile::remove( file.canonicalFilePath() ) )
-                    tLog() << "During upgrade, failed to remove cache file " << file.canonicalFilePath();
-            }
-        }
+        performWipe( m_cacheBaseDir );
+    }
+
+    if ( oldVersion == 2 )
+    {
+        qDebug() << Q_FUNC_INFO << "Wiping cache";
+
+        performWipe( m_cacheBaseDir );
+
+        performWipe( m_cacheBaseDir + "/InfoSystemCache/" );
     }
 }
 
