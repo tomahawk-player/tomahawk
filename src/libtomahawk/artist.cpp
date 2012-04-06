@@ -100,7 +100,7 @@ Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 QPixmap
 Artist::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded || !m_infoLoading )
+    if ( !m_infoLoaded && !m_infoLoading )
     {
         if ( !forceLoad )
             return QPixmap();
