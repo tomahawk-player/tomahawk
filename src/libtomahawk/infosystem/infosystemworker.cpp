@@ -115,20 +115,22 @@ InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
             this,
             SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-            Qt::UniqueConnection
+            Qt::QueuedConnection
     );
 
     connect(
         plugin,
             SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
             m_cache,
-            SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) )
+            SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+            Qt::QueuedConnection
     );
     connect(
         plugin,
             SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             m_cache,
-            SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+            SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+            Qt::QueuedConnection
     );
 }
 
