@@ -39,8 +39,8 @@ class PixmapDelegateFader : public QObject
 {
     Q_OBJECT
 public:
-    PixmapDelegateFader( const artist_ptr& artist, const QSize& size );
-    PixmapDelegateFader( const album_ptr& album, const QSize& size );
+    PixmapDelegateFader( const artist_ptr& artist, const QSize& size, bool forceLoad = true );
+    PixmapDelegateFader( const album_ptr& album, const QSize& size, bool forceLoad = true );
 
     virtual ~PixmapDelegateFader();
 

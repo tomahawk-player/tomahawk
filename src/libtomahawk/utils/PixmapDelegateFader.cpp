@@ -26,27 +26,27 @@ using namespace Tomahawk;
 
 #define COVER_FADEIN 1000
 
-PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size )
+PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size, bool forceLoad )
     : m_artist( artist )
     , m_size( size )
 {
     if ( !m_artist.isNull() )
     {
         connect( m_artist.data(), SIGNAL( coverChanged() ), this, SLOT( artistChanged() ) );
-        m_currentReference = m_artist->cover( size );
+        m_currentReference = m_artist->cover( size, forceLoad );
     }
 
     init();
 }
 
-PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& size )
+PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& size, bool forceLoad )
     : m_album( album )
     , m_size( size )
 {
     if ( !m_album.isNull() )
     {
         connect( m_album.data(), SIGNAL( coverChanged() ), this, SLOT( albumChanged() ) );
-        m_currentReference = m_album->cover( size );
+        m_currentReference = m_album->cover( size, forceLoad );
     }
 
     init();
