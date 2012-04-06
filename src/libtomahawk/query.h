@@ -139,6 +139,8 @@ signals:
     void playableStateChanged( bool state );
     void resolvingFinished( bool hasResults );
 
+    void coverChanged();
+
     // emitted when social actions are loaded
     void socialActionsLoaded();
     void updated();
@@ -156,7 +158,7 @@ public slots:
     // resolve if not solved()
     void onResolverAdded();
     void onResolverRemoved();
-    
+
 private slots:
     void onResultStatusChanged();
     void refreshResults();
