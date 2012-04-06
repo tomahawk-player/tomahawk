@@ -121,7 +121,6 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "Setting album or artist pixmap to fade into";
     m_oldReference = m_currentReference;
     m_currentReference = pixmap;
 
@@ -141,7 +140,6 @@ PixmapDelegateFader::onAnimationStep( int step )
 
     if ( !m_oldReference.isNull() )
     {
-        qDebug() << Q_FUNC_INFO << "Drawing old pixmap w/ opacity;" << oldOpacity;
         p.setOpacity( oldOpacity );
         p.drawPixmap( 0, 0, m_oldReference );
     }
@@ -149,7 +147,6 @@ PixmapDelegateFader::onAnimationStep( int step )
     Q_ASSERT( !m_currentReference.isNull() );
     if ( !m_currentReference.isNull() ) // Should never be null..
     {
-        qDebug() << Q_FUNC_INFO << "Drawing NEW pixmap w/ opacity;" << opacity;
         p.setOpacity( opacity );
         p.drawPixmap( 0, 0, m_currentReference );
     }
