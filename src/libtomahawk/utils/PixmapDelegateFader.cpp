@@ -109,7 +109,7 @@ PixmapDelegateFader::init()
 void
 PixmapDelegateFader::albumChanged()
 {
-    if ( m_album.isNull() || m_album->cover( m_size ).isNull() )
+    if ( m_album.isNull() )
         return;
 
     setPixmap( m_album->cover( m_size ) );
@@ -118,7 +118,7 @@ PixmapDelegateFader::albumChanged()
 void
 PixmapDelegateFader::artistChanged()
 {
-    if ( m_artist.isNull() || m_artist->cover( m_size ).isNull() )
+    if ( m_artist.isNull() )
         return;
 
     setPixmap( m_artist->cover( m_size ) );
@@ -128,7 +128,7 @@ PixmapDelegateFader::artistChanged()
 void
 PixmapDelegateFader::trackChanged()
 {
-    if ( m_track.isNull() || m_track->cover( m_size ).isNull() )
+    if ( m_track.isNull() )
         return;
 
     setPixmap( m_track->cover( m_size ) );
