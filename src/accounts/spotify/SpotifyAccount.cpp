@@ -216,6 +216,26 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyTracksMoved( tracksList, newRev, oldRev  );
     }
+    else if( msgType == "playlistRenamed" )
+    {
+        const QString plid = msg.value( "id" ).toString();
+        // We should already be syncing this playlist if we get updates for it
+        Q_ASSERT( m_updaters.contains( plid ) );
+
+        qDebug() << Q_FUNC_INFO;
+        if ( !m_updaters.contains( plid ) )
+            return;
+
+        SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
+        Q_ASSERT( updater->sync() );
+
+        qDebug() << "Playlist renamed fetched in tomahawk";
+        const QString title = msg.value( "name" ).toString();
+        const QString newRev = msg.value( "revid" ).toString();
+        const QString oldRev = msg.value( "oldRev" ).toString();
+
+        updater->spotifyPlaylistRenamed( title, newRev, oldRev  );
+    }
 }
 
 

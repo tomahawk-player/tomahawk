@@ -52,7 +52,7 @@ public:
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
     void spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
-
+    void spotifyPlaylistRenamed( const QString title, const QString& newRev, const QString& oldRev  );
 protected:
     virtual void removeFromSettings(const QString& group) const;
     virtual void saveToSettings(const QString& group) const;
