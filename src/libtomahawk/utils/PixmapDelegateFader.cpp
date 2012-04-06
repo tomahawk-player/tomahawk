@@ -26,9 +26,10 @@ using namespace Tomahawk;
 
 #define COVER_FADEIN 1000
 
-PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size, bool forceLoad )
+PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size, TomahawkUtils::ImageMode mode, bool forceLoad )
     : m_artist( artist )
     , m_size( size )
+    , m_mode( mode )
 {
     if ( !m_artist.isNull() )
     {
@@ -39,9 +40,10 @@ PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize&
     init();
 }
 
-PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& size, bool forceLoad )
+PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& size, TomahawkUtils::ImageMode mode, bool forceLoad )
     : m_album( album )
     , m_size( size )
+    , m_mode( mode )
 {
     if ( !m_album.isNull() )
     {
@@ -53,9 +55,10 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
 }
 
 
-PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& size, bool forceLoad )
+PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& size, TomahawkUtils::ImageMode mode, bool forceLoad )
     : m_track( track )
     , m_size( size )
+    , m_mode( mode )
 {
     if ( !m_track.isNull() )
     {
@@ -90,11 +93,11 @@ PixmapDelegateFader::init()
     {
         // No cover loaded yet, use default and don't fade in
         if ( !m_album.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
         else if ( !m_artist.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::CoverInCase, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
         else if ( !m_track.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::CoverInCase, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, m_mode, m_size );
 
         return;
     }

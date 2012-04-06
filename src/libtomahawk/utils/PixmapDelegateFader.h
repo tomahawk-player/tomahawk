@@ -40,9 +40,9 @@ class PixmapDelegateFader : public QObject
 {
     Q_OBJECT
 public:
-    PixmapDelegateFader( const artist_ptr& artist, const QSize& size, bool forceLoad = true );
-    PixmapDelegateFader( const album_ptr& album, const QSize& size, bool forceLoad = true );
-    PixmapDelegateFader( const query_ptr& track, const QSize& size, bool forceLoad = true );
+    PixmapDelegateFader( const artist_ptr& artist, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
+    PixmapDelegateFader( const album_ptr& album, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
+    PixmapDelegateFader( const query_ptr& track, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
 
     virtual ~PixmapDelegateFader();
 
@@ -67,6 +67,7 @@ private:
     album_ptr m_album;
     query_ptr m_track;
     QSize m_size;
+    TomahawkUtils::ImageMode m_mode;
 
     QQueue<QPixmap> m_pixmapQueue;
     QTimeLine m_crossfadeTimeline;
