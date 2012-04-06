@@ -174,12 +174,13 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
         return;
     }
 
-    if ( !output.isNull() && output.isValid() )
+    if ( !output.isNull() && output.isValid() && !m_infoLoaded )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
+            m_infoLoaded = true;
             m_coverBuffer = ba;
 
             emit coverChanged();
@@ -200,8 +201,8 @@ Album::infoSystemFinished( const QString& target )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    m_infoLoaded = true;
-    emit updated();
+    if ( m_infoLoaded )
+        emit updated();
 }
 
 
