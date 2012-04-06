@@ -170,9 +170,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
-            m_infoLoaded = true;
             m_coverBuffer = ba;
-
             emit coverChanged();
         }
     }
@@ -193,8 +191,8 @@ Artist::infoSystemFinished( QString target )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    if ( m_infoLoaded )
-        emit updated();
+    m_infoLoaded = true;
+    emit updated();
 }
 
 
