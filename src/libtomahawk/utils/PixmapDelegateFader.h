@@ -65,7 +65,7 @@ private:
     QSize m_size;
 
     QQueue<QPixmap> m_pixmapQueue;
-    QTimeLine m_crossfadeTimeline, m_initialTimeline;
+    QTimeLine m_crossfadeTimeline;
     QPixmap m_currentReference, m_oldReference, m_current;
 };
 

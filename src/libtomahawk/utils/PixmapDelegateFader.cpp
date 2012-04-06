@@ -24,8 +24,7 @@
 
 using namespace Tomahawk;
 
-#define INITIAL_FADEIN 250
-#define TRANSITION_LENGTH 1000
+#define COVER_FADEIN 1000
 
 PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size )
     : m_artist( artist )
@@ -66,27 +65,21 @@ PixmapDelegateFader::init()
     m_current = QPixmap( m_size );
     m_current.fill( Qt::transparent );
 
-    if ( m_currentReference.isNull() )
-    {
-        // No cover loaded yet, use default
-        m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, m_size );
-    }
-
-    m_initialTimeline.setDuration( INITIAL_FADEIN );
-    m_initialTimeline.setUpdateInterval( 20 );
-    m_initialTimeline.setFrameRange( 0, 1000 );
-    m_initialTimeline.setDirection( QTimeLine::Forward );
-    connect( &m_initialTimeline, SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
-    connect( &m_initialTimeline, SIGNAL( finished() ), this, SLOT( onAnimationFinished() ) );
-
-    m_crossfadeTimeline.setDuration( TRANSITION_LENGTH );
+    m_crossfadeTimeline.setDuration( COVER_FADEIN );
     m_crossfadeTimeline.setUpdateInterval( 20 );
     m_crossfadeTimeline.setFrameRange( 0, 1000 );
     m_crossfadeTimeline.setDirection( QTimeLine::Forward );
     connect( &m_crossfadeTimeline, SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
     connect( &m_crossfadeTimeline, SIGNAL( finished() ), this, SLOT( onAnimationFinished() ) );
 
-    m_initialTimeline.start();
+    if ( m_currentReference.isNull() )
+    {
+        // No cover loaded yet, use default and don't fade in
+        m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, m_size );
+        return;
+    }
+
+    m_crossfadeTimeline.start();
 }
 
 
@@ -115,7 +108,7 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
     if ( pixmap.isNull() )
         return;
 
-    if ( m_crossfadeTimeline.state() == QTimeLine::Running || m_initialTimeline.state() == QTimeLine::Running )
+    if ( m_crossfadeTimeline.state() == QTimeLine::Running )
     {
         m_pixmapQueue.enqueue( pixmap );
         return;
