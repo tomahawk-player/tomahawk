@@ -60,6 +60,7 @@ public:
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void updated();
+    void coverChanged();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );

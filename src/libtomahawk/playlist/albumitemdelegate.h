@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +24,10 @@
 
 #include "dllmacro.h"
 
+namespace Tomahawk {
+    class PixmapDelegateFader;
+}
+
 class QEvent;
 class AlbumProxyModel;
 
@@ -40,16 +45,21 @@ protected:
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
-//    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 signals:
     void updateIndex( const QModelIndex& idx );
+
+private slots:
+    void modelChanged();
+    void doUpdateIndex( const QPersistentModelIndex& idx );
 
 private:
     QAbstractItemView* m_view;
     AlbumProxyModel* m_model;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
+
     QPersistentModelIndex m_hoveringOver;
 
     QPixmap m_shadowPixmap;

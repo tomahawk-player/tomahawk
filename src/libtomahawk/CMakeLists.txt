@@ -120,6 +120,7 @@ set( libGuiSources
     utils/proxystyle.cpp
     utils/tomahawkutilsgui.cpp
     utils/closure.cpp
+    utils/PixmapDelegateFader.cpp
 
     widgets/animatedcounterlabel.cpp
     widgets/checkdirtree.cpp

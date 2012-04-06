@@ -111,7 +111,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
     {
         if ( !forceLoad )
             return QPixmap();
-        
+
         m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
@@ -127,7 +127,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-        
+
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( finished( QString ) ),
                 SLOT( infoSystemFinished( QString ) ) );
@@ -178,6 +178,8 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
         if ( ba.length() )
         {
             m_coverBuffer = ba;
+
+            emit coverChanged();
         }
     }
 }
@@ -193,7 +195,7 @@ Album::infoSystemFinished( QString target )
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-        
+
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 

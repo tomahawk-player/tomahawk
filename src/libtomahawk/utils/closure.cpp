@@ -29,6 +29,7 @@ Closure::Closure(QObject* sender,
                  const ClosureArgumentWrapper* val3)
     : QObject(receiver),
       callback_(NULL),
+      autoDelete_( true ),
       val0_(val0),
       val1_(val1),
       val2_(val2),
@@ -72,7 +73,9 @@ void Closure::Invoked() {
         val2_ ? val2_->arg() : QGenericArgument(),
         val3_ ? val3_->arg() : QGenericArgument());
   }
-  deleteLater();
+
+  if ( autoDelete_ )
+    deleteLater();
 }
 
 void Closure::Cleanup() {
