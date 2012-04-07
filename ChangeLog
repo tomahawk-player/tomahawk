@@ -1,3 +1,10 @@
+Version 0.4.2:
+    * Updated translations for various languages.
+    * Resuming playback restores correct volume settings.
+    * Reduced CPU usage during playback.
+    * Fixed not starting up due to case sensitivity issue on OS X.
+    * Fixed volume issue (too quiet) on Windows.
+
 Version 0.4.1:
     * Fixed various crashes.
     * Fixed issues with auto-updating XSPF playlists.
@@ -7,7 +14,6 @@ Version 0.4.1:
     * Fixed issues with changing proxy.
     * Fixed Twitter authentication issues.
     * Fixed Grooveshark support on Windows.
-    * Fixed volume issue (too quiet) on Windows.
 
 Version 0.4.0:
     * Added visual notification for database indexing job.
@@ -20,9 +26,7 @@ Version 0.4.0:
     * Fixed bug where resolvers would enable themselves after auto-updating.
     * Fixed occasional crash when dropping tracks onto New Station item.
     * Added jump-to-current-track support for search results page. 
-    * Fixed out of sync Show/Hide menu items on OS X when hidden with cmd-h.
     * Fixed non-resolving tracks when dragging from album view.
-    * Fixed /Volumes directory not showing up on OS X.
     * Fixed fetching album covers for albums with special characters.
     * Show errors and continue gracefully when resolved audio is not available.
     * Fixed various crashes on exit.
@@ -36,7 +40,6 @@ Version 0.4.0:
     * Added SoundCloudWall.com charts.
     * Added ability to "lock on" to a user when listening along, to skip along.
     * Fixed bug where loved tracks would be refreshed much too often.
-    * Fixed startup crash on OS X.
     * Fixed some font size issues.
     * Sped up Tomahawk startup by moving chart loading into a separate thread.
     * Added support for parsing Grooveshark and Tinysong tracks and playlists.
@@ -44,6 +47,9 @@ Version 0.4.0:
     * Added artist and album results to global searches.
     * Fixed style and contrast issues when using GTK styles.
     * Fixed paths to artwork when using MPRIS2 interface.
+    * Fixed out of sync Show/Hide menu items on OS X when hidden with cmd-h.
+    * Fixed /Volumes directory not showing up on OS X.
+    * Fixed startup crash on OS X.
  
 Version 0.3.3:
     * Automatically load Super Collection tracks when no official release
