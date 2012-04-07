@@ -59,11 +59,15 @@ signals:
 public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
-    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
+    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
+    
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
+    
+    void getShortUrl( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
+    void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariantMap callbackMap );
 
 private slots:
     void checkTimeoutsTimerFired();
@@ -88,6 +92,8 @@ private:
     QMap< InfoType, QList< InfoPluginPtr > > m_infoPushMap;
 
     QTimer m_checkTimeoutsTimer;
+
+    quint64 m_shortLinksWaiting;
 };
 
 }

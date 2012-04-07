@@ -112,6 +112,8 @@ AlbumView::setAlbumModel( AlbumModel* model )
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+
+    emit modelChanged();
 }
 
 

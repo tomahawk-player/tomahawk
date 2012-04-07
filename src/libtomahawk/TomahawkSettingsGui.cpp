@@ -44,7 +44,7 @@ TomahawkSettingsGui::~TomahawkSettingsGui()
 QString
 TomahawkSettingsGui::storageCacheLocation() const
 {
-    return QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/";
+    return QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
 }
 
 

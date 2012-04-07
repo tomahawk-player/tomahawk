@@ -469,16 +469,17 @@ MprisPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
+MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
 {
     Q_UNUSED( caller );
+    Q_UNUSED( pushFlags );
     bool isPlayingInfo = false;
 
     switch ( type )
     {
         case InfoNowPlaying:
           isPlayingInfo = true;
-          audioStarted( input );
+          audioStarted( pushInfoPair.second );
           break;
         case InfoNowPaused:
           isPlayingInfo = true;
@@ -486,7 +487,7 @@ MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
           break;
         case InfoNowResumed:
           isPlayingInfo = true;
-          audioResumed( input );
+          audioResumed( pushInfoPair.second );
           break;
         case InfoNowStopped:
           isPlayingInfo = true;

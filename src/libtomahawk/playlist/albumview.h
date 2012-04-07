@@ -66,6 +66,9 @@ public:
 public slots:
     void onItemActivated( const QModelIndex& index );
 
+signals:
+    void modelChanged();
+
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
 

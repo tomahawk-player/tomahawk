@@ -27,6 +27,7 @@
 #include "source.h"
 #include "sourcelist.h"
 
+#include "playlistview.h"
 #include "trackmodel.h"
 #include "trackmodelitem.h"
 #include "trackproxymodel.h"
@@ -35,6 +36,8 @@
 
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
+#include <utils/PixmapDelegateFader.h>
+#include <utils/closure.h>
 
 using namespace Tomahawk;
 
@@ -55,6 +58,11 @@ PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, TrackPr
 
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
+
+    connect( m_model->sourceModel(), SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
+    if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
+        connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+
 }
 
 
@@ -127,7 +135,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
-    QPixmap pixmap, avatar;
+    QPixmap avatar;
     QString artist, track, upperText, lowerText;
     unsigned int duration = 0;
 
@@ -204,11 +212,15 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->setPen( opt.palette.text().color() );
 
         QRect pixmapRect = r.adjusted( figureRect.width() + 6, 0, -option.rect.width() + figureRect.width() + option.rect.height() - 6 + r.left(), 0 );
-        pixmap = item->query()->cover( pixmapRect.size(), false );
-        if ( !pixmap )
+
+        if ( !m_pixmaps.contains( index ) )
         {
-            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, pixmapRect.size() );
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::ScaledCover, false ) ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistChartItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            closure->setAutoDelete( false );
         }
+
+        const QPixmap pixmap = m_pixmaps[ index ]->currentPixmap();
         painter->drawPixmap( pixmapRect, pixmap );
 
         r.adjust( pixmapRect.width() + figureRect.width() + 18, 1, -28, 0 );
@@ -232,3 +244,18 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     }
     painter->restore();
 }
+
+
+void
+PlaylistChartItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
+{
+    emit updateRequest( idx );
+}
+
+
+void
+PlaylistChartItemDelegate::modelChanged()
+{
+    m_pixmaps.clear();
+}
+

@@ -589,11 +589,12 @@ Query::setLoved( bool loved )
 
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             id(), Tomahawk::InfoSystem::InfoLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+            Tomahawk::InfoSystem::PushNoFlag );
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-        
+
         emit socialActionsLoaded();
     }
 }
@@ -637,7 +638,7 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
                 else
                     desc += ", ";
             }
-           
+
             if ( sa.source->isLocal() )
             {
                 if ( loveCounter == 1 )
@@ -653,13 +654,13 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
     {
         if ( loveCounter > 3 )
             desc += " " + tr( "and" ) + " <b>" + tr( "%n other(s)", "", loveCounter - 3 ) + "</b>";
-        
+
         if ( mode == Short )
             desc = "<b>" + tr( "%1 people" ).arg( loveCounter ) + "</b>";
 
         desc += " " + tr( "loved this track" ); //FIXME: more action descs required
     }
-    
+
     return desc;
 }
 
@@ -673,7 +674,9 @@ Query::cover( const QSize& size, bool forceLoad ) const
         m_artistPtr = Artist::get( artist(), false );
         m_albumPtr = Album::get( m_artistPtr, album(), false );
         connect( m_artistPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
+        connect( m_artistPtr.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ), Qt::UniqueConnection );
         connect( m_albumPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
+        connect( m_albumPtr.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ), Qt::UniqueConnection );
     }
 
     m_albumPtr->cover( size, forceLoad );
@@ -684,7 +687,7 @@ Query::cover( const QSize& size, bool forceLoad ) const
 
         return m_artistPtr->cover( size );
     }
-    
+
     return QPixmap();
 }
 #endif

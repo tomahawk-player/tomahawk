@@ -63,10 +63,12 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 }
 
 void
-FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant pushData )
+FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
 {
     Q_UNUSED( caller );
+    Q_UNUSED( pushFlags );
     qDebug() << Q_FUNC_INFO;
+    QVariant pushData = pushInfoPair.second;
     if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< QVariantMap >() )
     {
         qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";

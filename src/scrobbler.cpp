@@ -88,7 +88,8 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitNowPlaying,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+        Tomahawk::InfoSystem::PushNoFlag );
 
     // liblastfm forces 0-length tracks to scrobble after 4 minutes, stupid.
     if ( track->duration() == 0 )
@@ -140,7 +141,7 @@ Scrobbler::scrobble()
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitScrobble,
-        QVariant() );
+        QVariant(), Tomahawk::InfoSystem::PushNoFlag );
 }
 
 

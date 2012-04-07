@@ -24,6 +24,10 @@
 
 #include "dllmacro.h"
 
+namespace Tomahawk {
+class PixmapDelegateFader;
+}
+
 class TrackModel;
 class TrackModelItem;
 class TrackProxyModel;
@@ -36,10 +40,17 @@ Q_OBJECT
 public:
     PlaylistChartItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
 
+signals:
+    void updateRequest( const QModelIndex& idx );
+
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+private slots:
+    void modelChanged();
+    void doUpdateIndex( const QPersistentModelIndex& idx );
 
 private:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
@@ -51,6 +62,8 @@ private:
 
     TrackView* m_view;
     TrackProxyModel* m_model;
+
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 };
 
 #endif // PLAYLISTCHARTITEMDELEGATE_H

@@ -42,8 +42,13 @@ public:
 protected:
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    virtual void pushInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant )
-    {}
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+    {
+        Q_UNUSED( caller )
+        Q_UNUSED( type)
+        Q_UNUSED( pushInfoPair )
+        Q_UNUSED( pushFlags )
+    }
 
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 

@@ -447,6 +447,8 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< Tomahawk::InfoSystem::InfoStringHash >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
+    qRegisterMetaType< Tomahawk::InfoSystem::PushInfoFlags >( "Tomahawk::InfoSystem::PushInfoFlags" );
+    qRegisterMetaType< Tomahawk::InfoSystem::PushInfoPair >( "Tomahawk::InfoSystem::PushInfoPair" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoPlugin* >( "Tomahawk::InfoSystem::InfoPlugin*" );

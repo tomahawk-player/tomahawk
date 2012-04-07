@@ -56,6 +56,7 @@ public:
 signals:
     void nameChanged( const QString& title );
     void destroyed( QWidget* widget );
+    void modelChanged();
 
 protected:
     void keyPressEvent( QKeyEvent* event );

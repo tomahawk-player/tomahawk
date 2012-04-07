@@ -23,6 +23,10 @@
 
 #include "dllmacro.h"
 
+namespace Tomahawk {
+class PixmapDelegateFader;
+}
+
 class ArtistView;
 class TreeProxyModel;
 
@@ -39,9 +43,17 @@ protected:
 
 //    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+signals:
+    void updateIndex( const QModelIndex& idx );
+
+private slots:
+    void doUpdateIndex( const QPersistentModelIndex& index );
+
 private:
     ArtistView* m_view;
     TreeProxyModel* m_model;
+
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 };
 
 #endif // TREEITEMDELEGATE_H

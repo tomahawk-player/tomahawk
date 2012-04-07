@@ -172,23 +172,24 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
 
 
 bool
-InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant& input )
+InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant& input, const PushInfoFlags pushFlags )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << "type is " << type;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();
         return false;
     }
 
-    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+    PushInfoPair currPair( QVariantMap(), input );
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, currPair ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
 
     return true;
 }
 
 
 bool
-InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
+InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags )
 {
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
@@ -197,7 +198,10 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
     }
 
     Q_FOREACH( InfoType type, input.keys() )
-        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ) );
+    {
+        PushInfoPair currPair( QVariantMap(), input[ type ] );
+        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, currPair ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+    }
 
     return true;
 }

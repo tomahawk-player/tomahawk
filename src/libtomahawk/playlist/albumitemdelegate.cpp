@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,9 +29,12 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "utils/PixmapDelegateFader.h"
+#include <utils/closure.h>
 
 #include "playlist/albumitem.h"
 #include "playlist/albumproxymodel.h"
+#include "albumview.h"
 #include <QMouseEvent>
 #include <viewmanager.h>
 
@@ -40,6 +44,8 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_view( parent )
     , m_model( proxy )
 {
+    if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
+        connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 }
 
 
@@ -89,17 +95,15 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     QRect r = option.rect.adjusted( 6, 5, -6, -41 );
-    QPixmap cover;
-    if ( !item->album().isNull() )
+
+    if ( !m_covers.contains( index ) )
     {
-        cover = item->album()->cover( r.size() );
-        if ( cover.isNull() )
-            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::CoverInCase, r.size() );
+        m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::CoverInCase ) ) );
+        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+        closure->setAutoDelete( false );
     }
-    else if ( !item->artist().isNull() )
-    {
-        cover = item->artist()->cover( r.size() );
-    }
+
+    const QPixmap cover = m_covers[ index ]->currentPixmap();
 
     if ( option.state & QStyle::State_Selected )
     {
@@ -258,3 +262,24 @@ AlbumItemDelegate::whitespaceMouseEvent()
         emit updateIndex( old );
     }
 }
+
+
+void
+AlbumItemDelegate::modelChanged()
+{
+    m_artistNameRects.clear();
+    m_hoveringOver = QPersistentModelIndex();
+
+    if ( AlbumView* view = qobject_cast< AlbumView* >( m_view ) )
+        m_model = view->proxyModel();
+}
+
+
+void
+AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
+{
+    if ( !idx.isValid() )
+        return;
+    emit updateIndex( idx );
+}
+

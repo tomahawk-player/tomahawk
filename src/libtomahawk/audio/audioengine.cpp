@@ -148,7 +148,8 @@ AudioEngine::play()
 
             Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                 s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+                Tomahawk::InfoSystem::PushNoFlag );
         }
     }
     else
@@ -164,7 +165,7 @@ AudioEngine::pause()
     m_mediaObject->pause();
     emit paused();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
 }
 
 
@@ -199,7 +200,7 @@ AudioEngine::stop()
         map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
     }
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map, Tomahawk::InfoSystem::PushNoFlag );
 }
 
 
@@ -332,7 +333,8 @@ AudioEngine::sendWaitingNotificationSlot() const
     retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< QVariantMap >( retryInfo ) );
+        QVariant::fromValue< QVariantMap >( retryInfo ),
+        Tomahawk::InfoSystem::PushNoFlag );
 }
 
 
@@ -354,6 +356,7 @@ AudioEngine::sendNowPlayingNotification()
 void
 AudioEngine::onNowPlayingInfoReady()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_currentTrack.isNull() ||
          m_currentTrack->track().isNull() ||
          m_currentTrack->artist().isNull() )
@@ -379,7 +382,8 @@ AudioEngine::onNowPlayingInfoReady()
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< QVariantMap >( playInfo ) );
+        QVariant::fromValue< QVariantMap >( playInfo ),
+        Tomahawk::InfoSystem::PushNoFlag );
 }
 
 
@@ -474,7 +478,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                     s_aeInfoIdentifier,
                     Tomahawk::InfoSystem::InfoNowPlaying,
-                    QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ) );
+                    QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+                    Tomahawk::InfoSystem::PushShortUrlFlag );
             }
         }
     }

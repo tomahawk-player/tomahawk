@@ -62,7 +62,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         return;
     }
 
-    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/drop-song.png" ), //FIXME different icon
+    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/collection.png" ), //FIXME different icon
                                             boost::bind( &SourceItem::collectionClicked, this ),
                                             boost::bind( &SourceItem::getCollectionPage, this ) );
 
@@ -127,7 +127,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-    
+
     if ( m_source->isLocal() )
         QTimer::singleShot( 0, this, SLOT( requestExpanding() ) );
 }
@@ -504,7 +504,9 @@ SourceItem::lovedTracksClicked()
     if ( !m_lovedTracksPage )
     {
         CustomPlaylistView* view = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
-        view->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
+        view->setItemDelegate( del );
 
         m_lovedTracksPage = view;
     }
@@ -533,7 +535,10 @@ SourceItem::latestAdditionsClicked()
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
         raModel->setStyle( TrackModel::Large );
 
-        cv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
+        cv->setItemDelegate( del );
+
         cv->setTrackModel( raModel );
         cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
 
@@ -564,7 +569,10 @@ SourceItem::recentPlaysClicked()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
         raModel->setStyle( TrackModel::Large );
 
-        pv->setItemDelegate( new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() ) );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
+        pv->setItemDelegate( del );
+
         pv->setPlaylistModel( raModel );
 
         m_recentPlaysPage = pv;

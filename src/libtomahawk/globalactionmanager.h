@@ -56,7 +56,7 @@ public:
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
 public slots:
-    void shortenLink( const QUrl& url );
+    void shortenLink( const QUrl& url, const QVariantMap &callbackMap = QVariantMap() );
 
     bool parseTomahawkLink( const QString& link );
     void waitingForResolved( bool );
@@ -67,7 +67,7 @@ public slots:
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 
 signals:
-    void shortLinkReady( QUrl longUrl, QUrl shortUrl ) const;
+    void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariantMap callbackMap ) const;
 
 private slots:
     void shortenLinkRequestFinished();

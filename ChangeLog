@@ -1,40 +1,49 @@
 Version 0.4.1:
+    * Fixed various crashes.
+    * Fixed issues with auto-updating XSPF playlists.
+    * Double-clicking a playlist starts playing it.
+    * Resolvers can now return disc number and album position for results.
+    * Fixed sorting playlists by track number.
+    * Fixed issues with changing proxy.
+    * Fixed Twitter authentication issues.
+    * Fixed Grooveshark support on Windows.
+    * Fixed volume issue (too quiet) on Windows.
 
 Version 0.4.0:
-  * Added visual notification for database indexing job.
-  * Fixed icons not appearing in resolvers list.
-  * Fixed various UI glitches and stray error messages in stations.
-  * Fixed bug where album page would resolve bottom-to-top.
-  * Fixed bug where Footnotes would not update when changing selected album in Album View.
-  * Fixed dragging albums and artists from charts, album, and artist views.
-  * Fixed bug where filter text would be one step behind filter value.
-  * Fixed bug where resolvers would enable themselves after auto-updating.
-  * Fixed occasional crash when dropping tracks onto New Station item.
-  * Added jump-to-current-track support for search results page. 
-  * Fixed out of sync Show/Hide menu items on OS X when hidden with cmd-h.
-  * Fixed non-resolving tracks when dragging from album view.
-  * Fixed /Volumes directory not showing up on OS X.
-  * Fixed fetching album covers for albums with special characters.
-  * Show errors and continue gracefully when resolved audio is not available.
-  * Fixed various crashes on exit.
-  * Added basic command-line options for playback control.
-  * Bumped up web api timeouts to allow web clients to finish resolving.
-  * Added filename suggestion when exporting a playlist.
-  * Cleaned up highlighting of artist names in album view.
-  * Cleaned up alignment of playlist items.
-  * Fixed potential crash when searching.
-  * Added support for disc number.
-  * Added SoundCloudWall.com charts.
-  * Added ability to "lock on" to a user when listening along, to skip along.
-  * Fixed bug where loved tracks would be refreshed much too often.
-  * Fixed startup crash on OS X.
-  * Fixed some font size issues.
-  * Sped up Tomahawk startup by moving chart loading into a separate thread.
-  * Added support for parsing Grooveshark and Tinysong tracks and playlists.
-  * Reorganized sidebar to follow more logical item groupings.
-  * Added artist and album results to global searches.
-  * Fixed style and contrast issues when using GTK styles.
-  * Fixed paths to artwork when using MPRIS2 interface.
+    * Added visual notification for database indexing job.
+    * Fixed icons not appearing in resolvers list.
+    * Fixed various UI glitches and stray error messages in stations.
+    * Fixed bug where album page would resolve bottom-to-top.
+    * Fixed bug where Footnotes would not update when changing selected album in Album View.
+    * Fixed dragging albums and artists from charts, album, and artist views.
+    * Fixed bug where filter text would be one step behind filter value.
+    * Fixed bug where resolvers would enable themselves after auto-updating.
+    * Fixed occasional crash when dropping tracks onto New Station item.
+    * Added jump-to-current-track support for search results page. 
+    * Fixed out of sync Show/Hide menu items on OS X when hidden with cmd-h.
+    * Fixed non-resolving tracks when dragging from album view.
+    * Fixed /Volumes directory not showing up on OS X.
+    * Fixed fetching album covers for albums with special characters.
+    * Show errors and continue gracefully when resolved audio is not available.
+    * Fixed various crashes on exit.
+    * Added basic command-line options for playback control.
+    * Bumped up web api timeouts to allow web clients to finish resolving.
+    * Added filename suggestion when exporting a playlist.
+    * Cleaned up highlighting of artist names in album view.
+    * Cleaned up alignment of playlist items.
+    * Fixed potential crash when searching.
+    * Added support for disc number.
+    * Added SoundCloudWall.com charts.
+    * Added ability to "lock on" to a user when listening along, to skip along.
+    * Fixed bug where loved tracks would be refreshed much too often.
+    * Fixed startup crash on OS X.
+    * Fixed some font size issues.
+    * Sped up Tomahawk startup by moving chart loading into a separate thread.
+    * Added support for parsing Grooveshark and Tinysong tracks and playlists.
+    * Reorganized sidebar to follow more logical item groupings.
+    * Added artist and album results to global searches.
+    * Fixed style and contrast issues when using GTK styles.
+    * Fixed paths to artwork when using MPRIS2 interface.
  
 Version 0.3.3:
     * Automatically load Super Collection tracks when no official release

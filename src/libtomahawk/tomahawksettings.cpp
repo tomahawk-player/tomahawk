@@ -435,7 +435,7 @@ TomahawkSettings::setInfoSystemCacheVersion( uint version )
 uint
 TomahawkSettings::infoSystemCacheVersion() const
 {
-    return value( "infosystemcacheversion", 0 ).toUInt();
+    return value( "infosystemcacheversion", 3 ).toUInt();
 }
 
 

@@ -63,6 +63,8 @@ class Closure : public QObject, boost::noncopyable {
   Closure(QObject* sender, const char* signal,
           std::tr1::function<void()> callback);
 
+  void setAutoDelete( bool autoDelete ) { autoDelete_ = autoDelete; }
+
   virtual ~Closure();
 
  private slots:
@@ -74,6 +76,7 @@ class Closure : public QObject, boost::noncopyable {
 
   QMetaMethod slot_;
   std::tr1::function<void()> callback_;
+  bool autoDelete_;
 
   boost::scoped_ptr<const ClosureArgumentWrapper> val0_;
   boost::scoped_ptr<const ClosureArgumentWrapper> val1_;

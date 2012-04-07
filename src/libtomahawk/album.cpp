@@ -78,6 +78,7 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_name( name )
     , m_artist( artist )
     , m_infoLoaded( false )
+    , m_infoLoading( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
@@ -107,11 +108,11 @@ Album::artist() const
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded )
+    if ( !m_infoLoaded && !m_infoLoading )
     {
         if ( !forceLoad )
             return QPixmap();
-        
+
         m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
@@ -127,12 +128,14 @@ Album::cover( const QSize& size, bool forceLoad ) const
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-        
+
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( finished( QString ) ),
                 SLOT( infoSystemFinished( QString ) ) );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+        m_infoLoading = true;
     }
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
@@ -163,7 +166,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 
 
 void
-Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
     if ( requestData.caller != m_uuid ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
@@ -178,22 +181,22 @@ Album::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
         if ( ba.length() )
         {
             m_coverBuffer = ba;
+
+            emit coverChanged();
         }
     }
 }
 
 
 void
-Album::infoSystemFinished( QString target )
+Album::infoSystemFinished( const QString& target )
 {
-    Q_UNUSED( target );
-
     if ( target != m_uuid )
         return;
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-        
+
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
