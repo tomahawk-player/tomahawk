@@ -72,19 +72,15 @@ SeekSlider::mousePressEvent( QMouseEvent* event )
 void
 SeekSlider::setValue( int value )
 {
-    int newVal = value;
-    if ( value > maximum() )
-        newVal = maximum();
-    if ( value < minimum() )
-        newVal = minimum();
+//    int newVal = qBound( minimum(), value, maximum() );
     
     if ( !m_timeLine || sender() != m_timeLine ) 
     {
-        QSlider::setValue( newVal );
+        QSlider::setValue( value );
         return;
     }
 
     blockSignals( true );
-    QSlider::setValue( newVal );
+    QSlider::setValue( value );
     blockSignals( false );
 }
