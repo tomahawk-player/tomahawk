@@ -296,7 +296,7 @@ SpotifyAccount::saveConfig()
     m_configWidget.data()->saveSettings();
     foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists )
     {
-        qDebug() << "Checking changed state:" << pl->changed << pl->name << pl->sync;
+//        qDebug() << "Checking changed state:" << pl->changed << pl->name << pl->sync;
         if ( pl->changed )
         {
             pl->changed = false;
