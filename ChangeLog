@@ -1,3 +1,7 @@
+Version 0.4.2:
+    * Fixed not starting up due to case sensitivity issue on OS X.
+    * Fixed volume issue (too quiet) on Windows.
+
 Version 0.4.1:
     * Fixed various crashes.
     * Fixed issues with auto-updating XSPF playlists.
