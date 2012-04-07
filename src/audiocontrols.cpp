@@ -93,13 +93,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setEnabled( true );
+    ui->seekSlider->setTimeLine( &m_sliderTimeLine );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
     m_phononTickCheckTimer.setSingleShot( true );
-
-    m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
-    ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
     connect( &m_phononTickCheckTimer, SIGNAL( timeout() ), SLOT( phononTickCheckTimeout() ) );
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
@@ -200,6 +198,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
+    ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
 
     m_phononTickCheckTimer.stop();
 
@@ -208,8 +207,11 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seekMsecs = -1;
-
+    
     ui->seekSlider->setVisible( true );
+
+    int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
+    m_sliderTimeLine.setUpdateInterval( qBound( 40, updateRate, 500 ) );
 
     m_noTimeChange = false;
     m_lastSliderCheck = 0;
@@ -380,10 +382,11 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
     if ( sender() != &m_phononTickCheckTimer )
         m_phononTickCheckTimer.start( 1000 );
-
+    
+    int currentTime = m_sliderTimeLine.currentTime();
     if ( m_noTimeChange )
     {
-        if ( m_sliderTimeLine.currentTime() != msElapsed )
+        if ( currentTime != msElapsed )
         {
             m_sliderTimeLine.setPaused( true );
             m_noTimeChange = false;
@@ -392,12 +395,12 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
             m_sliderTimeLine.resume();
         }
     }
-    else if ( m_sliderTimeLine.currentTime() >= msElapsed || m_seekMsecs != -1 )
+    else if ( currentTime >= msElapsed || m_seekMsecs != -1 )
     {
         m_sliderTimeLine.setPaused( true );
 
         m_noTimeChange = false;
-        if ( m_sliderTimeLine.currentTime() == msElapsed )
+        if ( currentTime == msElapsed )
             m_noTimeChange = true;
 
         m_sliderTimeLine.setCurrentTime( msElapsed );
@@ -407,12 +410,10 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     }
     else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning && AudioEngine::instance()->state() == AudioEngine::Playing )
     {
-        ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
         m_sliderTimeLine.start();
     }
     else if ( m_sliderTimeLine.state() == QTimeLine::Paused && AudioEngine::instance()->state() != AudioEngine::Paused )
     {
-        ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
         m_sliderTimeLine.resume();
     }
 
