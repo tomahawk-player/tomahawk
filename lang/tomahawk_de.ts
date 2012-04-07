@@ -333,17 +333,17 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="199"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
         <source>Tomahawk is stopped.</source>
         <translation>Tomahawk ist gestoppt.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="369"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk spielt &quot;%1&quot; von %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="372"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
         <source>on album %1</source>
         <translation>auf dem Album %1</translation>
     </message>

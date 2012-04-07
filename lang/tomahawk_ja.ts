@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="140"/>
         <source>Connect to Peer?</source>
-        <translation type="unfinished"/>
+        <translation>ピアに接続しますか？</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="141"/>
@@ -65,17 +65,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="43"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>共有聴取</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="46"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>共有聴取を中止</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="50"/>
         <source>&amp;Follow in real-time</source>
-        <translation type="unfinished"/>
+        <translation>実時間にフォロー</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
@@ -97,7 +97,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="62"/>
         <source>&amp;Rename Playlist</source>
-        <translation type="unfinished"/>
+        <translation>プレイリスト名を変更</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="63"/>
@@ -107,12 +107,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="65"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished"/>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/actioncollection.cpp" line="66"/>
@@ -176,7 +176,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="145"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>アルバム</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="260"/>
@@ -229,12 +229,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>クリクしてスーパーコレクションアルバムを表示</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
         <source>Click to show Official Albums</source>
-        <translation type="unfinished"/>
+        <translation>クリクして公式アルバムを表示</translation>
     </message>
 </context>
 <context>
@@ -247,7 +247,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="276"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>このコレクションは現在空です。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="293"/>
@@ -295,27 +295,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/audiocontrols.ui" line="302"/>
         <source>love</source>
-        <translation type="unfinished"/>
+        <translation>Love</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="346"/>
         <source>Time</source>
-        <translation type="unfinished"/>
+        <translation>時間</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="375"/>
         <source>Time Left</source>
-        <translation type="unfinished"/>
+        <translation>残り時間</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="453"/>
         <source>Shuffle</source>
-        <translation type="unfinished"/>
+        <translation>シャッフル</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="466"/>
         <source>Repeat</source>
-        <translation type="unfinished"/>
+        <translation>リピート</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="504"/>
@@ -331,17 +331,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="199"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkは中止しています。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="369"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="372"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
         <source>on album %1</source>
         <translation type="unfinished"/>
     </message>
@@ -352,7 +352,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="61"/>
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="100"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>新規プレイリスト</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="63"/>
@@ -360,7 +360,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="316"/>
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="318"/>
         <source>New Station</source>
-        <translation type="unfinished"/>
+        <translation>新規ステーション</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="207"/>
@@ -375,12 +375,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/sourcetree/items/categoryitems.h" line="63"/>
         <source>Playlists</source>
-        <translation type="unfinished"/>
+        <translation>プレイリスト</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/categoryitems.h" line="65"/>
         <source>Stations</source>
-        <translation type="unfinished"/>
+        <translation>ステーション</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/clearbutton.cpp" line="38"/>
         <source>Clear</source>
-        <translation type="unfinished"/>
+        <translation>クリアー</translation>
     </message>
 </context>
 <context>
@@ -401,7 +401,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/collectionflatmodel.cpp" line="74"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>%1のコレクション</translation>
     </message>
 </context>
 <context>
@@ -409,7 +409,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/collectionview.cpp" line="85"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>このコレクションは空です。</translation>
     </message>
 </context>
 <context>
@@ -800,7 +800,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/proxydialog.ui" line="17"/>
         <source>Proxy Settings</source>
-        <translation type="unfinished"/>
+        <translation>プロクシ設定</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="70"/>
@@ -810,12 +810,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/proxydialog.ui" line="77"/>
         <source>Host</source>
-        <translation type="unfinished"/>
+        <translation>ホスト</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="84"/>
         <source>Port</source>
-        <translation type="unfinished"/>
+        <translation>ポート</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="104"/>
@@ -997,7 +997,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/searchlineedit.cpp" line="58"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>検索</translation>
     </message>
 </context>
 <context>
@@ -1043,7 +1043,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
@@ -1182,7 +1182,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="146"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>スーパーコレクション</translation>
     </message>
 </context>
 <context>
@@ -1190,7 +1190,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcetreeview.cpp" line="188"/>
         <source>&amp;Copy Link</source>
-        <translation type="unfinished"/>
+        <translation>リンクをコピー</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
@@ -1205,7 +1205,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcetreeview.cpp" line="341"/>
         <source>Save XSPF</source>
-        <translation type="unfinished"/>
+        <translation>XSPFを保存する</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcetreeview.cpp" line="342"/>
@@ -1223,12 +1223,12 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="81"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>コレクション</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="84"/>
         <source>Playlist</source>
-        <translation type="unfinished"/>
+        <translation>プレイリスト</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="87"/>
@@ -1238,7 +1238,7 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="90"/>
         <source>Station</source>
-        <translation type="unfinished"/>
+        <translation>ステーション</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="268"/>
@@ -1253,12 +1253,12 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="271"/>
         <source>My Music</source>
-        <translation type="unfinished"/>
+        <translation>マイミュージック</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="279"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>スーパーコレクション</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="285"/>
@@ -1268,12 +1268,12 @@ other: %n年前</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="273"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>ダッシュボード</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="290"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>最近聴いたトラック</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="295"/>
@@ -1614,12 +1614,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="184"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>ダイレクトメッセージ</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="185"/>
         <source>Send Message!</source>
-        <translation type="unfinished"/>
+        <translation>メッセージを送信！</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="186"/>
@@ -1673,7 +1673,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>あなたのメッセージが投稿されました！</translation>
     </message>
 </context>
 <context>
@@ -1697,7 +1697,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="79"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="82"/>
@@ -1720,7 +1720,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="277"/>
         <source>&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Love</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="105"/>
@@ -1730,27 +1730,27 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="139"/>
         <source>Show &amp;Album page</source>
-        <translation type="unfinished"/>
+        <translation>アルバムページを表示</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="178"/>
         <source>Show &amp;Artist page</source>
-        <translation type="unfinished"/>
+        <translation>アーティストページを表示</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="272"/>
         <source>Un-&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>Loveじゃないトラック</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
         <source>&amp;Delete Items</source>
-        <translation type="unfinished"/>
+        <translation>項目を削除</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
         <source>&amp;Delete Item</source>
-        <translation type="unfinished"/>
+        <translation>項目を削除</translation>
     </message>
 </context>
 <context>
@@ -1927,57 +1927,57 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>0 secs</source>
-        <translation type="unfinished"/>
+        <translation>0秒</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>3600 secs</source>
-        <translation type="unfinished"/>
+        <translation>3600秒</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>-100 dB</source>
-        <translation type="unfinished"/>
+        <translation>-100dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>100 dB</source>
-        <translation type="unfinished"/>
+        <translation>100dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="343"/>
         <source>Major</source>
-        <translation type="unfinished"/>
+        <translation>長調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="344"/>
         <source>Minor</source>
-        <translation type="unfinished"/>
+        <translation>短調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>ハ調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="363"/>
         <source>C Sharp</source>
-        <translation type="unfinished"/>
+        <translation>嬰ハ調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>ニ調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="365"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>変ホ調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="366"/>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>ホ調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
@@ -2336,12 +2336,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="137"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>新規プレイリスト</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>トラックの保存に失敗しました。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
@@ -2438,7 +2438,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="244"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>走査中</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="278"/>
@@ -2448,12 +2448,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="283"/>
         <source>Fetching</source>
-        <translation type="unfinished"/>
+        <translation>取得中</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="288"/>
         <source>Parsing</source>
-        <translation type="unfinished"/>
+        <translation>解析中</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/source.cpp" line="417"/>
@@ -2497,12 +2497,12 @@ enter the displayed PIN number here:</source>
         <location filename="../src/tomahawktrayicon.cpp" line="59"/>
         <location filename="../src/tomahawktrayicon.cpp" line="93"/>
         <source>Hide Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkのウインドウを隠す</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="98"/>
         <source>Show Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkのウインドウを表示</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="158"/>
@@ -2512,12 +2512,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="219"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../src/tomahawktrayicon.cpp" line="226"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>一時停止</translation>
     </message>
 </context>
 <context>
@@ -2525,12 +2525,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="75"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>設定</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="81"/>
@@ -2540,22 +2540,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="100"/>
         <source>&amp;Network</source>
-        <translation type="unfinished"/>
+        <translation>ネットワーク</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="107"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>ウインドウ</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="114"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>ヘルプ</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="128"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"/>
+        <translation>終了</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="131"/>
@@ -2580,27 +2580,27 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="152"/>
         <source>Update Collection</source>
-        <translation type="unfinished"/>
+        <translation>コレクションを更新</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="157"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkを設定...</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="165"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>XSPFを読み込み...</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="170"/>
         <source>Create &amp;New Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>新規プレイリストを作成...</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="175"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk について...</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="183"/>
@@ -2625,7 +2625,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="206"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>最小か</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="209"/>
@@ -2635,7 +2635,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="214"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>ズーム</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.ui" line="217"/>
@@ -2744,7 +2744,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="614"/>
         <source>Create New Station</source>
-        <translation type="unfinished"/>
+        <translation>新規ステーションを作成</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="614"/>
@@ -2844,17 +2844,17 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="49"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>トラック</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="50"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>アーティスト</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="54"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>フィルター</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="84"/>
