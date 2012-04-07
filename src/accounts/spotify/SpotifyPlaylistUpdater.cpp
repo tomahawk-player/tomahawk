@@ -223,7 +223,7 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
 }
 
 void
-SpotifyPlaylistUpdater::spotifyPlaylistRenamed( const QString title, const QString& newRev, const QString& oldRev )
+SpotifyPlaylistUpdater::spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev )
 {
     Q_UNUSED( newRev );
     Q_UNUSED( oldRev );
