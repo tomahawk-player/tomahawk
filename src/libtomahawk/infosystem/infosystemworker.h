@@ -60,14 +60,14 @@ public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
+    void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
     
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
     
-    void getShortUrl( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
-    void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariantMap callbackMap );
+    void getShortUrl( Tomahawk::InfoSystem::InfoPushData data );
+    void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj );
 
 private slots:
     void checkTimeoutsTimerFired();

@@ -131,6 +131,13 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
 };
 
+
+typedef QMap< InfoType, QVariant > InfoTypeMap;
+typedef QMap< InfoType, uint > InfoTimeoutMap;
+typedef QHash< QString, QString > InfoStringHash;
+typedef QPair< QVariantMap, QVariant > PushInfoPair;
+
+
 struct InfoRequestData {
     quint64 requestId;
     quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
@@ -164,10 +171,32 @@ struct InfoRequestData {
         {}
 };
 
-typedef QMap< InfoType, QVariant > InfoTypeMap;
-typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QHash< QString, QString > InfoStringHash;
-typedef QPair< QVariantMap, QVariant > PushInfoPair;
+
+struct InfoPushData {
+    QString caller;
+    InfoType type;
+    QVariant input;
+    PushInfoFlags pushFlags;
+    PushInfoPair infoPair;
+
+    InfoPushData()
+        : caller( QString() )
+        , type( Tomahawk::InfoSystem::InfoNoInfo )
+        , input( QVariant() )
+        , pushFlags( Tomahawk::InfoSystem::PushNoFlag )
+        , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
+        {}
+
+    InfoPushData( const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const Tomahawk::InfoSystem::PushInfoFlags pflags )
+        : caller( callr )
+        , type( typ )
+        , input( inputvar )
+        , pushFlags( pflags )
+        , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
+        {}
+    
+};
+
 
 class DLLEXPORT InfoPlugin : public QObject
 {
@@ -189,7 +218,7 @@ signals:
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags ) = 0;
+    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
 protected:
@@ -200,6 +229,7 @@ protected:
 private:
     friend class InfoSystem;
 };
+
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
@@ -218,6 +248,7 @@ private:
     QWeakPointer< InfoSystemCache > m_cache;
 };
 
+
 class InfoSystemWorkerThread : public QThread
 {
     Q_OBJECT
@@ -233,6 +264,7 @@ private:
     QWeakPointer< InfoSystemWorker > m_worker;
 };
 
+
 class DLLEXPORT InfoSystem : public QObject
 {
     Q_OBJECT
@@ -246,7 +278,7 @@ public:
     bool getInfo( const InfoRequestData &requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
     bool getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
-    bool pushInfo( const QString &caller, const InfoType type, const QVariant &input, const PushInfoFlags pushFlags );
+    bool pushInfo( InfoPushData pushData );
     bool pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags );
 
 public slots:
@@ -297,6 +329,7 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPushData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoPair );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags );

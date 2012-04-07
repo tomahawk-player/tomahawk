@@ -101,23 +101,23 @@ AdiumPlugin::settingsChanged()
 
 
 void
-AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+AdiumPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     qDebug() << Q_FUNC_INFO;
 
     if( !m_active )
         return;
 
-    switch ( type )
+    switch ( pushData.type )
     {
         case InfoNowPlaying:
-          audioStarted( pushInfoPair );
+          audioStarted( pushData.infoPair );
           break;
         case InfoNowPaused:
           audioPaused();
           return;
         case InfoNowResumed:
-          audioResumed( pushInfoPair );
+          audioResumed( pushData.infoPair );
           break;
         case InfoNowStopped:
           audioStopped();

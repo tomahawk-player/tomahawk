@@ -172,17 +172,18 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
 
 
 bool
-InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant& input, const PushInfoFlags pushFlags )
+InfoSystem::pushInfo( InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << type;
+    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();
         return false;
     }
 
-    PushInfoPair currPair( QVariantMap(), input );
-    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, currPair ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+    PushInfoPair pushInfoPair( QVariantMap(), pushData.input );
+    pushData.infoPair = pushInfoPair;
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
 
     return true;
 }
@@ -199,8 +200,9 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input, const Pus
 
     Q_FOREACH( InfoType type, input.keys() )
     {
-        PushInfoPair currPair( QVariantMap(), input[ type ] );
-        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, currPair ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+        InfoPushData pushData( caller, type, input[ type ], pushFlags );
+        pushData.infoPair = PushInfoPair( QVariantMap(), pushData.input );
+        QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
     }
 
     return true;

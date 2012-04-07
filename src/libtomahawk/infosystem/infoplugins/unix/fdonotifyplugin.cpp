@@ -63,18 +63,16 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 }
 
 void
-FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    Q_UNUSED( caller );
-    Q_UNUSED( pushFlags );
     qDebug() << Q_FUNC_INFO;
-    QVariant pushData = pushInfoPair.second;
-    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< QVariantMap >() )
+    QVariant inputData = pushData.infoPair.second;
+    if ( pushData.type != Tomahawk::InfoSystem::InfoNotifyUser || !inputData.canConvert< QVariantMap >() )
     {
         qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";
         return;
     }
-    QVariantMap hash = pushData.value< QVariantMap >();
+    QVariantMap hash = inputData.value< QVariantMap >();
     if ( !hash.contains( "message" ) )
     {
         qDebug() << Q_FUNC_INFO << " hash did not contain a message";

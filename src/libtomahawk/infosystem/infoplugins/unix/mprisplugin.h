@@ -141,7 +141,7 @@ public slots:
 
 protected slots:
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
-    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
+    void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
 private slots:
     void stateChanged( AudioState newState, AudioState oldState );

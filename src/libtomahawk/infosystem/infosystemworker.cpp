@@ -220,43 +220,43 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-InfoSystemWorker::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << type;
+    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
     
-    if ( pushFlags != PushNoFlag )
+    if ( pushData.pushFlags != PushNoFlag )
     {
-        if ( pushFlags & PushShortUrlFlag )
+        if ( pushData.pushFlags & PushShortUrlFlag )
         {
-            pushFlags = Tomahawk::InfoSystem::PushInfoFlags( pushFlags & ~PushShortUrlFlag );
-            QMetaObject::invokeMethod( this, "getShortUrl", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, input ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+            pushData.pushFlags = Tomahawk::InfoSystem::PushInfoFlags( pushData.pushFlags & ~PushShortUrlFlag );
+            QMetaObject::invokeMethod( this, "getShortUrl", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
             return;
         }
     }
 
-    Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ type ] )
+    Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
         if( ptr )
-            QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, input ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+            QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
     }
 }
 
 
 void
-InfoSystemWorker::getShortUrl( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair input, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << type;
-    if ( !input.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
+    if ( !pushData.infoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, input ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
         return;
     }
 
-    Tomahawk::InfoSystem::InfoStringHash hash = input.second.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash hash = pushData.infoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
 
     if ( hash.isEmpty() || !hash.contains( "title" ) || !hash.contains( "artist" ) )
     {
-        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, input ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
         return;
     }
 
@@ -268,46 +268,38 @@ InfoSystemWorker::getShortUrl( QString caller, Tomahawk::InfoSystem::InfoType ty
 
     QUrl longUrl = GlobalActionManager::instance()->openLink( title, artist, album );
 
-    QVariantMap callbackMap;
-    callbackMap[ "caller" ] = caller;
-    callbackMap[ "type" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoType >( type );
-    callbackMap[ "pushinfopair" ] = QVariant::fromValue< Tomahawk::InfoSystem::PushInfoPair >( input );
-    callbackMap[ "pushflags" ] = QVariant::fromValue< Tomahawk::InfoSystem::PushInfoFlags >( pushFlags );
-    GlobalActionManager::instance()->shortenLink( longUrl, callbackMap );
-    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariantMap ) ), this, SLOT( shortLinkReady( QUrl, QUrl, QVariantMap ) ), Qt::UniqueConnection );
+    GlobalActionManager::instance()->shortenLink( longUrl, QVariant::fromValue< Tomahawk::InfoSystem::InfoPushData >( pushData ) );
+    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), this, SLOT( shortLinkReady( QUrl, QUrl, QVariant ) ), Qt::UniqueConnection );
     m_shortLinksWaiting++;
 }
 
 
 void
-InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariantMap callbackMap )
+InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj )
 {
     tDebug() << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
     m_shortLinksWaiting--;
     if ( !m_shortLinksWaiting )
-        disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariantMap ) ) );
+        disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
     
-    if ( callbackMap.isEmpty() || !callbackMap.contains( "caller" ) || !callbackMap.contains( "type" ) || !callbackMap.contains( "pushinfopair" ) || !callbackMap.contains( "pushflags" ) )
+    if ( !callbackObj.isValid() )
     {
-        tDebug() << Q_FUNC_INFO << "callback map was empty, cannot continue";
+        tDebug() << Q_FUNC_INFO << "callback object was not valid, cannot continue";
         return;
     }
 
-    QString caller = callbackMap[ "caller" ].toString();
-    Tomahawk::InfoSystem::InfoType type = callbackMap[ "type" ].value< Tomahawk::InfoSystem::InfoType >();
-    Tomahawk::InfoSystem::PushInfoPair pushInfoPair = callbackMap[ "pushinfopair" ].value< Tomahawk::InfoSystem::PushInfoPair >();
-    Tomahawk::InfoSystem::PushInfoFlags pushFlags = callbackMap[ "pushflags" ].value< Tomahawk::InfoSystem::PushInfoFlags >();
+    Tomahawk::InfoSystem::InfoPushData pushData = callbackObj.value< Tomahawk::InfoSystem::InfoPushData >();
 
     if ( !shortUrl.isEmpty() && longUrl != shortUrl )
     {
-        QVariantMap flagProps = pushInfoPair.first;
+        QVariantMap flagProps = pushData.infoPair.first;
         flagProps[ "shorturl" ] = shortUrl;
-        pushInfoPair.first = flagProps;
+        pushData.infoPair.first = flagProps;
     }
 
-    tDebug() << Q_FUNC_INFO << "pushInfoPair first is: " << pushInfoPair.first.keys();
+    tDebug() << Q_FUNC_INFO << "pushInfoPair first is: " << pushData.infoPair.first.keys();
 
-    QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::PushInfoPair, pushInfoPair ), Q_ARG( Tomahawk::InfoSystem::PushInfoFlags, pushFlags ) );
+    QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
 }
 
 

@@ -587,10 +587,12 @@ Query::setLoved( bool loved )
         trackInfo["artist"] = artist();
         trackInfo["album"] = album();
 
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-            id(), Tomahawk::InfoSystem::InfoLove,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
-            Tomahawk::InfoSystem::PushNoFlag );
+        Tomahawk::InfoSystem::InfoPushData pushData ( id(),
+                                                      Tomahawk::InfoSystem::InfoLove,
+                                                      QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+                                                      Tomahawk::InfoSystem::PushNoFlag );
+        
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( q, QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
