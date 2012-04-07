@@ -132,7 +132,9 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
+        setVolume( m_volume );
         m_mediaObject->play();
+        setVolume( m_volume );
         emit resumed();
 
         if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
@@ -144,7 +146,6 @@ AudioEngine::play()
             trackInfo["album"] = m_currentTrack->album()->name();
             trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
             trackInfo["duration"] = QString::number( m_currentTrack->duration() );
-
 
             Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
                 s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
@@ -162,6 +163,7 @@ AudioEngine::pause()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
+    m_volume = volume();
     m_mediaObject->pause();
     emit paused();
 
