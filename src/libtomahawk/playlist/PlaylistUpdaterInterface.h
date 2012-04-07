@@ -29,9 +29,9 @@
 namespace Tomahawk
 {
 /**
-  * If a playlist needs periodic updating, implement a updater interface.
+  * If a playlist needs updating, implement a updater interface.
   *
-  * Default is auto-updating.
+  * Default is auto-updating and on a periodic timer.
   */
 
 class PlaylistUpdaterFactory;
@@ -40,7 +40,9 @@ class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
+    // No periodic updating
     PlaylistUpdaterInterface( const playlist_ptr& pl );
+    // Periodic updating based on interval
     PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate );
 
     virtual ~PlaylistUpdaterInterface(){}

@@ -69,14 +69,13 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
 
 PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
     : QObject( 0 )
-    , m_timer( new QTimer( this ) )
+    , m_timer( 0 )
     , m_autoUpdate( true )
     , m_playlist( pl )
 {
     Q_ASSERT( !m_playlist.isNull() );
 
     m_playlist->setUpdater( this );
-    connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
 
     QTimer::singleShot( 0, this, SLOT( doSave() ) );
 }
@@ -106,7 +105,7 @@ PlaylistUpdaterInterface::doSave()
     {
         s->setValue( QString( "%1/type" ).arg( key ), type() );
         s->setValue( QString( "%1/autoupdate" ).arg( key ), m_autoUpdate );
-        s->setValue( QString( "%1/interval" ).arg( key ), m_timer->interval() );
+        s->setValue( QString( "%1/interval" ).arg( key ), m_timer ? m_timer->interval() : -1 );
         saveToSettings( key );
     }
 }
@@ -132,10 +131,14 @@ void
 PlaylistUpdaterInterface::setAutoUpdate( bool autoUpdate )
 {
     m_autoUpdate = autoUpdate;
-    if ( m_autoUpdate )
-        m_timer->start();
-    else
-        m_timer->stop();
+
+    if ( m_timer )
+    {
+        if ( m_autoUpdate )
+            m_timer->start();
+        else
+            m_timer->stop();
+    }
 
     const QString key = QString( "playlistupdaters/%1/autoupdate" ).arg( m_playlist->guid() );
     TomahawkSettings::instance()->setValue( key, m_autoUpdate );
@@ -150,6 +153,17 @@ PlaylistUpdaterInterface::setInterval( int intervalMsecs )
 {
     const QString key = QString( "playlistupdaters/%1/interval" ).arg( m_playlist->guid() );
     TomahawkSettings::instance()->setValue( key, intervalMsecs );
+
+    if ( intervalMsecs == -1 )
+    {
+        if ( m_timer )
+            delete m_timer;
+
+        return;
+    }
+
+    if ( !m_timer )
+        m_timer = new QTimer( this );
 
     m_timer->setInterval( intervalMsecs );
 }
