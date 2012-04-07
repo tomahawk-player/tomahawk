@@ -178,12 +178,12 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit Playlist( const source_ptr& author );
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
-    void setTitle( const QString& s )           { m_title = s; emit changed(); }
     void setInfo( const QString& s )            { m_info = s; }
     void setCreator( const QString& s )         { m_creator = s; }
     void setGuid( const QString& s )            { m_guid = s; }
     void setShared( bool b )                    { m_shared = b; }
     void setCreatedOn( uint createdOn )         { m_createdOn = createdOn; }
+    void setTitle( const QString& s );
     // </IGNORE>
 
 
@@ -202,6 +202,7 @@ signals:
 
     /// renamed etc.
     void changed();
+    void renamed( const QString&, const QString& );
 
     /**
      *   delete command is scheduled but not completed. Do not call remove() again once this

@@ -220,7 +220,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     {
         const QString plid = msg.value( "id" ).toString();
         // We should already be syncing this playlist if we get updates for it
-        Q_ASSERT( m_updaters.contains( plid ) );
+        //Q_ASSERT( m_updaters.contains( plid ) );
 
         qDebug() << Q_FUNC_INFO;
         if ( !m_updaters.contains( plid ) )

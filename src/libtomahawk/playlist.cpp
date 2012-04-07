@@ -248,6 +248,18 @@ Playlist::rename( const QString& title )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
+void
+Playlist::setTitle( const QString& title )
+{
+    if( title == m_title )
+        return;
+
+    const QString oldTitle = m_title;
+    const QString newTitle = title;
+    m_title = title;
+    emit changed();
+    emit renamed( newTitle, oldTitle );
+}
 
 void
 Playlist::reportCreated( const playlist_ptr& self )

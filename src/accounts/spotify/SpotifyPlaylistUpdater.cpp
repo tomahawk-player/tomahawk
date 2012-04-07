@@ -84,6 +84,7 @@ SpotifyPlaylistUpdater::init()
 
     connect( playlist().data(), SIGNAL( tracksInserted( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksInserted( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tomahawkTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
+    connect( playlist().data(), SIGNAL( renamed(const QString&, const QString& ) ), this, SLOT( tomahawkPlaylistRenamed( const QString&, const QString& ) ) );
     // TODO reorders in a playlist
 }
 
@@ -229,6 +230,19 @@ SpotifyPlaylistUpdater::spotifyPlaylistRenamed( const QString title, const QStri
     /// @note to self: should do some checking before trying to update
     playlist()->rename( title );
 
+}
+
+void
+SpotifyPlaylistUpdater::tomahawkPlaylistRenamed(const QString &newT, const QString &oldT)
+{
+    qDebug() << Q_FUNC_INFO;
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "playlistRenamed";
+    msg[ "oldrev" ] = m_latestRev;
+    msg[ "newTitle" ] = newT;
+    msg[ "oldTitle" ] = oldT;
+    msg[ "playlistid" ] = m_spotifyId;
+    m_spotify.data()->sendMessage( msg, this, "onPlaylistRename" );
 }
 
 void
