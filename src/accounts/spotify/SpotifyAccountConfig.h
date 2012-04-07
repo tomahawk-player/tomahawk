@@ -23,6 +23,8 @@
 #include <QVariantMap>
 #include <QTimer>
 
+class QShowEvent;
+
 namespace Ui
 {
     class SpotifyConfig;
@@ -45,6 +47,7 @@ public:
     QString username() const;
     QString password() const;
     bool highQuality() const;
+    bool deleteOnUnsync() const;
 
     void setPlaylists( const QList< SpotifyPlaylistInfo* >& playlists );
 
@@ -53,6 +56,9 @@ public:
 
 public slots:
     void verifyResult( const QString& msgType, const QVariantMap& msg );
+
+protected:
+    void showEvent( QShowEvent* event );
 
 private slots:
     void verifyLogin();

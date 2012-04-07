@@ -84,16 +84,11 @@ public:
     virtual QWidget* aclWidget() { return 0; }
     virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     virtual SipPlugin* sipPlugin() { return 0; }
-/*
-    struct Sync {
-         QString id_;
-         QString uuid;
-         Tomahawk::playlist_ptr playlist;
-     };*/
 
     void sendMessage( const QVariantMap& msg, QObject* receiver, const QString& slot );
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
 
+    bool deleteOnUnsync() const;
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
@@ -106,10 +101,9 @@ private:
     void loadPlaylists();
 
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist );
-
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
-//     QList<Sync> m_syncPlaylists;
+
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
 

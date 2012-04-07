@@ -257,8 +257,6 @@ SpotifyAccount::configurationWidget()
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
     }
-    else
-        m_configWidget.data()->loadFromConfig();
 
     return static_cast< QWidget* >( m_configWidget.data() );
 }
@@ -280,7 +278,6 @@ SpotifyAccount::saveConfig()
         creds[ "password" ] = m_configWidget.data()->password();
         creds[ "highQuality" ] = m_configWidget.data()->highQuality();
         setCredentials( creds );
-        sync();
 
         // Send the result to the resolver
         QVariantMap msg;
@@ -291,6 +288,11 @@ SpotifyAccount::saveConfig()
 
         m_spotifyResolver.data()->sendMessage( msg );
     }
+
+    QVariantHash config = configuration();
+    config[ "deleteOnUnsync" ] = m_configWidget.data()->deleteOnUnsync();
+    qDebug() << "Saved deleteOnUnsync to:" << m_configWidget.data()->deleteOnUnsync();
+    setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
     foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists )
@@ -313,6 +315,7 @@ SpotifyAccount::saveConfig()
                 stopPlaylistSync( pl );
         }
     }
+    sync();
 }
 
 
@@ -389,6 +392,13 @@ SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 }
 
 
+bool
+SpotifyAccount::deleteOnUnsync() const
+{
+    qDebug() << "READ deleteOnUnsync:" << configuration().value( "deleteOnUnsync", false ).toBool();
+    return configuration().value( "deleteOnUnsync", false ).toBool();
+}
+
 void
 SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
 {
@@ -397,6 +407,18 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
     msg[ "playlistid" ] = playlist->plid;
 
     m_spotifyResolver.data()->sendMessage( msg );
+
+    if ( deleteOnUnsync() )
+    {
+        SpotifyPlaylistUpdater* updater = m_updaters.take( playlist->plid );
+        playlist_ptr tomahawkPl = updater->playlist();
+
+        if ( !tomahawkPl.isNull() )
+            Playlist::remove( tomahawkPl );
+
+        updater->deleteLater();
+
+    }
 }
 
 

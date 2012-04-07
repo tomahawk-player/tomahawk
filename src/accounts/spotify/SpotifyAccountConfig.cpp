@@ -23,6 +23,7 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QShowEvent>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -42,7 +43,13 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     connect( &m_resetTimer, SIGNAL( timeout() ), this, SLOT( resetVerifyButton() ) );
     connect( m_ui->usernameEdit, SIGNAL( textChanged( QString ) ), this, SLOT( clearVerifyButton() ) );
     connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( clearVerifyButton() ) );
+    loadFromConfig();
+}
 
+
+void
+SpotifyAccountConfig::showEvent( QShowEvent *event )
+{
     loadFromConfig();
 }
 
@@ -53,6 +60,9 @@ SpotifyAccountConfig::loadFromConfig()
     m_ui->usernameEdit->setText( m_account->credentials().value( "username" ).toString() );
     m_ui->passwordEdit->setText( m_account->credentials().value( "password" ).toString() );
     m_ui->streamingCheckbox->setChecked( m_account->credentials().value( "highQuality" ).toBool() );
+
+    qDebug() << "Loaded deleteOnUnsync:" << m_account->deleteOnUnsync();
+    m_ui->deleteOnUnsync->setChecked( m_account->deleteOnUnsync() );
 }
 
 void
@@ -89,6 +99,13 @@ bool
 SpotifyAccountConfig::highQuality() const
 {
     return m_ui->streamingCheckbox->isChecked();
+}
+
+
+bool
+SpotifyAccountConfig::deleteOnUnsync() const
+{
+    return m_ui->deleteOnUnsync->isChecked();
 }
 
 
