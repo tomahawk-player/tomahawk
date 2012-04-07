@@ -291,7 +291,6 @@ SpotifyAccount::saveConfig()
 
     QVariantHash config = configuration();
     config[ "deleteOnUnsync" ] = m_configWidget.data()->deleteOnUnsync();
-    qDebug() << "Saved deleteOnUnsync to:" << m_configWidget.data()->deleteOnUnsync();
     setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
@@ -395,7 +394,6 @@ SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 bool
 SpotifyAccount::deleteOnUnsync() const
 {
-    qDebug() << "READ deleteOnUnsync:" << configuration().value( "deleteOnUnsync", false ).toBool();
     return configuration().value( "deleteOnUnsync", false ).toBool();
 }
 

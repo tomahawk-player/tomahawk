@@ -442,17 +442,14 @@ Playlist::setNewRevision( const QString& rev,
 
 
     QList<plentry_ptr> entries;
-    qDebug() << "Going through neworderedguids:" << neworderedguids << neworderedguids.size();
     foreach ( const QString& id, neworderedguids )
     {
         if ( entriesmap.contains( id ) )
         {
-            qDebug() << "Adding original entry to entries:" << id;
             entries.append( entriesmap.value( id ) );
         }
         else if ( addedmap.contains( id ) )
         {
-            qDebug() << "Adding new entry to entries:" << id << addedmap.value( id );
             if( ! addedmap.value( id ).isNull() ) qDebug() << addedmap.value( id )->query()->track() << addedmap.value( id )->query()->artist();
             entries.append( addedmap.value( id ) );
             if ( is_newest_rev )
@@ -480,7 +477,6 @@ Playlist::setNewRevision( const QString& rev,
             Q_ASSERT( false ); // XXX
         }
     }
-    qDebug() << "and got:" << entries.size() << entries << m_entries.size() << m_entries;
 
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;

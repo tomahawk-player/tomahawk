@@ -60,8 +60,6 @@ SpotifyAccountConfig::loadFromConfig()
     m_ui->usernameEdit->setText( m_account->credentials().value( "username" ).toString() );
     m_ui->passwordEdit->setText( m_account->credentials().value( "password" ).toString() );
     m_ui->streamingCheckbox->setChecked( m_account->credentials().value( "highQuality" ).toBool() );
-
-    qDebug() << "Loaded deleteOnUnsync:" << m_account->deleteOnUnsync();
     m_ui->deleteOnUnsync->setChecked( m_account->deleteOnUnsync() );
 }
 
