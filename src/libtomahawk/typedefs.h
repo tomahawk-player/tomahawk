@@ -23,6 +23,7 @@
 #include <QSharedPointer>
 #include <QUuid>
 #include <QPair>
+#include <QPersistentModelIndex>
 #include <boost/function.hpp>
 
 //template <typename T> class QSharedPointer;
@@ -89,5 +90,7 @@ inline static QString uuid()
     q.chop( 1 );
     return q;
 }
+
+Q_DECLARE_METATYPE( QPersistentModelIndex )
 
 #endif // TYPEDEFS_H

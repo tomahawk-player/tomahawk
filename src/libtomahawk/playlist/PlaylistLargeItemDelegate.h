@@ -24,7 +24,7 @@
 #include <QTextOption>
 
 #include "dllmacro.h"
-#include <signal.h>
+#include "typedefs.h"
 
 namespace Tomahawk {
 class PixmapDelegateFader;
