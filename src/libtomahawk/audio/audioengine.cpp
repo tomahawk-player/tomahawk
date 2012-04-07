@@ -131,8 +131,11 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
+        setVolume( m_volume );
         m_mediaObject->play();
+        setVolume( m_volume );
         emit resumed();
+
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
         trackInfo["title"] = m_currentTrack->track();
@@ -152,6 +155,7 @@ AudioEngine::pause()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
+    m_volume = volume();
     m_mediaObject->pause();
     emit paused();
 

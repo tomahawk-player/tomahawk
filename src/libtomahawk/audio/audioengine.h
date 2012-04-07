@@ -155,6 +155,7 @@ private:
 
     mutable QStringList m_supportedMimeTypes;
     AudioState m_state;
+    unsigned int m_volume;
 
     static AudioEngine* s_instance;
 };
