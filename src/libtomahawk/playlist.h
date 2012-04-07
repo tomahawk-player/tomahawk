@@ -202,7 +202,7 @@ signals:
 
     /// renamed etc.
     void changed();
-    void renamed( const QString&, const QString& );
+    void renamed( const QString& newTitle, const QString& oldTitle );
 
     /**
      *   delete command is scheduled but not completed. Do not call remove() again once this

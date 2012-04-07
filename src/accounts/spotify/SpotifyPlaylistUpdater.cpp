@@ -84,7 +84,7 @@ SpotifyPlaylistUpdater::init()
 
     connect( playlist().data(), SIGNAL( tracksInserted( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksInserted( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tomahawkTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
-    connect( playlist().data(), SIGNAL( renamed(const QString&, const QString& ) ), this, SLOT( tomahawkPlaylistRenamed( const QString&, const QString& ) ) );
+    connect( playlist().data(), SIGNAL( renamed( QString, QString ) ), this, SLOT( tomahawkPlaylistRenamed( QString, QString ) ) );
     // TODO reorders in a playlist
 }
 

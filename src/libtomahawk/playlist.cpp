@@ -251,14 +251,14 @@ Playlist::rename( const QString& title )
 void
 Playlist::setTitle( const QString& title )
 {
-    if( title == m_title )
+    if ( title == m_title )
         return;
 
     const QString oldTitle = m_title;
-    const QString newTitle = title;
     m_title = title;
+
     emit changed();
-    emit renamed( newTitle, oldTitle );
+    emit renamed( m_title, oldTitle );
 }
 
 void
