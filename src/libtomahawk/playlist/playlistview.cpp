@@ -119,23 +119,13 @@ PlaylistView::canAutoUpdate() const
 }
 
 
-bool
-PlaylistView::autoUpdate() const
+PlaylistUpdaterInterface*
+PlaylistView::autoUpdateInterface() const
 {
-    if ( canAutoUpdate() )
-        return m_model->playlist()->updater()->autoUpdate();
+    if ( !m_model->playlist().isNull() && m_model->playlist()->updater() )
+        return m_model->playlist()->updater();
 
-    return false;
-}
-
-
-void
-PlaylistView::setAutoUpdate( bool autoUpdate )
-{
-    if ( !canAutoUpdate() )
-        return;
-
-    m_model->playlist()->updater()->setAutoUpdate( autoUpdate );
+    return 0;
 }
 
 

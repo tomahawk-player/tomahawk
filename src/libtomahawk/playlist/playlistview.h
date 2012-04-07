@@ -44,8 +44,7 @@ public:
     virtual bool showFilter() const { return true; }
 
     virtual bool canAutoUpdate() const;
-    virtual void setAutoUpdate( bool autoUpdate );
-    virtual bool autoUpdate() const;
+    virtual Tomahawk::PlaylistUpdaterInterface* autoUpdateInterface() const;
 
     virtual QString title() const { return playlistModel()->title(); }
     virtual QString description() const { return m_model->description(); }

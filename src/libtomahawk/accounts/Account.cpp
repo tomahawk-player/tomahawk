@@ -37,6 +37,8 @@ accountTypeToString( AccountType type )
         case InfoType:
         case StatusPushType:
             return QObject::tr( "Status Updaters" );
+        default:
+            return QString();
     }
 
     return QString();

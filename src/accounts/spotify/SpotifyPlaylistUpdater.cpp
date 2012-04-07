@@ -25,7 +25,7 @@ using namespace Tomahawk;
 using namespace Accounts;
 
 Tomahawk::PlaylistUpdaterInterface*
-SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
+SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QString &key )
 {
     if ( !m_account )
     {
@@ -47,22 +47,16 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl )
     }
 
     // Register the updater with the account
-    const QString spotifyId = TomahawkSettings::instance()->value( QString( "playlistupdaters/%1/spotifyId" ).arg( pl->guid() ) ).toString();
+    const QString spotifyId = TomahawkSettings::instance()->value( QString( "%1/spotifyId" ).arg( key ) ).toString();
+    const QString latestRev = TomahawkSettings::instance()->value( QString( "%1/latestrev" ).arg( key ) ).toString();
+    const bool sync = TomahawkSettings::instance()->value( QString( "%1/sync" ).arg( key ) ).toBool();
+
     Q_ASSERT( !spotifyId.isEmpty() );
-    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), pl );
+    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
+    updater->setSync( sync );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
-}
-
-
-SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const playlist_ptr& pl )
-    : PlaylistUpdaterInterface( pl )
-    , m_spotify( acct )
-    , m_sync( false )
-{
-    // values will be loaded from settings
-    init();
 }
 
 
@@ -94,13 +88,6 @@ SpotifyPlaylistUpdater::~SpotifyPlaylistUpdater()
 
 }
 
-void
-SpotifyPlaylistUpdater::loadFromSettings( const QString& group )
-{
-    m_latestRev = TomahawkSettings::instance()->value( QString( "%1/latestrev" ).arg( group ) ).toString();
-    m_sync = TomahawkSettings::instance()->value( QString( "%1/sync" ).arg( group ) ).toBool();
-    m_spotifyId = TomahawkSettings::instance()->value( QString( "%1/spotifyId" ).arg( group ) ).toString();
-}
 
 void
 SpotifyPlaylistUpdater::removeFromSettings( const QString& group ) const

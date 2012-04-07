@@ -34,16 +34,16 @@ class SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
 
     friend class Tomahawk::Accounts::SpotifyAccount;
 public:
-    // used when creating anew
     SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const QString& revid, const QString& spotifyId, const Tomahawk::playlist_ptr& pl );
-
-    // used when inflating from config file
-    SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const Tomahawk::playlist_ptr& pl );
 
     virtual ~SpotifyPlaylistUpdater();
 
     virtual QString type() const;
     virtual void updateNow() {}
+
+#ifndef ENABLE_HEADLESS
+    virtual QWidget* configurationWidget() const { return 0; }
+#endif
 
     bool sync() const;
     void setSync( bool sync );
@@ -56,7 +56,6 @@ public:
 protected:
     virtual void removeFromSettings(const QString& group) const;
     virtual void saveToSettings(const QString& group) const;
-    virtual void loadFromSettings(const QString& group);
 
 private slots:
     void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>& ,int );
@@ -87,7 +86,7 @@ class SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 public:
     SpotifyUpdaterFactory()  {}
 
-    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl );
+    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl, const QString& key );
     virtual QString type() const { return "spotify"; }
 
 private:

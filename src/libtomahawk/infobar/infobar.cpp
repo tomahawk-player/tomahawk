@@ -40,6 +40,8 @@ using namespace Tomahawk;
 InfoBar::InfoBar( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::InfoBar )
+    , m_updaterInterface( 0 )
+    , m_updaterConfiguration( 0 )
     , m_queryLabel( 0 )
 {
     ui->setupUi( this );
@@ -59,12 +61,12 @@ InfoBar::InfoBar( QWidget* parent )
     regFont.setPixelSize( 11 );
     ui->longDescriptionLabel->setFont( regFont );
 
-    QPalette whitePal = ui->captionLabel->palette();
-    whitePal.setColor( QPalette::Foreground, Qt::white );
+    m_whitePal = ui->captionLabel->palette();
+    m_whitePal.setColor( QPalette::Foreground, Qt::white );
 
-    ui->captionLabel->setPalette( whitePal );
-    ui->descriptionLabel->setPalette( whitePal );
-    ui->longDescriptionLabel->setPalette( whitePal );
+    ui->captionLabel->setPalette( m_whitePal );
+    ui->descriptionLabel->setPalette( m_whitePal );
+    ui->longDescriptionLabel->setPalette( m_whitePal );
 
     ui->captionLabel->setMargin( 6 );
     ui->descriptionLabel->setMargin( 6 );
@@ -83,14 +85,6 @@ InfoBar::InfoBar( QWidget* parent )
     m_queryLabel->hide();
     connect( m_queryLabel, SIGNAL( clickedArtist() ), this, SLOT( artistClicked() ) );
 
-    m_autoUpdate = new QCheckBox( this );
-    m_autoUpdate->setText( tr( "Automatically update" ) );
-    m_autoUpdate->setLayoutDirection( Qt::RightToLeft );
-    m_autoUpdate->setPalette( whitePal );
-    connect( m_autoUpdate, SIGNAL( toggled( bool ) ), this, SIGNAL( autoUpdateChanged( bool ) ) );
-
-    ui->horizontalLayout->addWidget( m_autoUpdate );
-
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
     m_searchWidget->setMinimumWidth( 180 );
@@ -106,7 +100,6 @@ InfoBar::InfoBar( QWidget* parent )
     createTile();
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
-    connect( ViewManager::instance(), SIGNAL( autoUpdateAvailable( bool ) ), SLOT( setAutoUpdateAvailable( bool ) ) );
 }
 
 
@@ -207,13 +200,36 @@ InfoBar::setFilterAvailable( bool b )
     m_searchWidget->setVisible( b );
 }
 
-void
-InfoBar::setAutoUpdateAvailable( bool b )
-{
-    if ( b )
-        m_autoUpdate->setChecked( ViewManager::instance()->currentPage()->autoUpdate() );
 
-    m_autoUpdate->setVisible( b );
+void
+InfoBar::setAutoUpdateInterface( PlaylistUpdaterInterface *interface )
+{
+    if ( m_updaterConfiguration )
+        m_updaterConfiguration->hide();
+
+    if ( m_updaterConfiguration && ( interface ? (m_updaterConfiguration != interface->configurationWidget()) : true ) )
+        ui->horizontalLayout->removeWidget( m_updaterConfiguration );
+
+    m_updaterInterface = interface;
+    m_updaterConfiguration = interface ? interface->configurationWidget() : 0;
+
+    if ( !m_updaterInterface || !m_updaterConfiguration )
+        return;
+
+    m_updaterConfiguration->setPalette( m_whitePal );
+    int insertIdx = -1; // Ugh, no indexOf for QSpacerItem*
+    for ( int i = 0; i < ui->horizontalLayout->count(); i++ )
+    {
+        if ( ui->horizontalLayout->itemAt( i )->spacerItem() == ui->horizontalSpacer_4 )
+        {
+            insertIdx = i;
+            break;
+        }
+    }
+    insertIdx++;
+    ui->horizontalLayout->insertWidget( insertIdx, m_updaterConfiguration );
+
+    m_updaterConfiguration->show();
 }
 
 

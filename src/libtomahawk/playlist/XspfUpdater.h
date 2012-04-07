@@ -23,6 +23,7 @@
 #include "dllmacro.h"
 
 class QTimer;
+class QCheckBox;
 
 namespace Tomahawk
 {
@@ -32,27 +33,40 @@ class DLLEXPORT XspfUpdater : public PlaylistUpdaterInterface
 {
     Q_OBJECT
 public:
-    XspfUpdater( const playlist_ptr& pl, const QString& xspfUrl );
     XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate, const QString& xspfUrl );
-    explicit XspfUpdater( const playlist_ptr& pl ); // used by factory
 
     virtual ~XspfUpdater();
 
     virtual QString type() const { return "xspf"; }
 
+#ifndef ENABLE_HEADLESS
+    virtual QWidget* configurationWidget() const;
+#endif
+
+    bool autoUpdate() const { return m_autoUpdate; }
+
+    void setInterval( int intervalMsecs ) ;
+    int intervalMsecs() const { return m_timer->interval(); }
+
 public slots:
     void updateNow();
+    void setAutoUpdate( bool autoUpdate );
 
 protected:
-    void loadFromSettings( const QString& group );
     void saveToSettings( const QString& group ) const;
-    virtual void removeFromSettings(const QString& group) const;
+    void removeFromSettings(const QString& group) const;
 
 private slots:
     void playlistLoaded( const QList<Tomahawk::query_ptr> & );
 
 private:
+    QTimer* m_timer;
+    bool m_autoUpdate;
     QString m_url;
+
+#ifndef ENABLE_HEADLESS
+    QCheckBox* m_toggleCheckbox;
+#endif
 };
 
 class DLLEXPORT XspfUpdaterFactory : public PlaylistUpdaterFactory
@@ -61,7 +75,7 @@ public:
     XspfUpdaterFactory() {}
 
     virtual QString type() const { return "xspf"; }
-    virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl ) { return new XspfUpdater( pl ); }
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl, const QString& settingsKey );
 };
 
 }

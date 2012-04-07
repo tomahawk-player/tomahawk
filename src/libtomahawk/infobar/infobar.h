@@ -35,6 +35,11 @@ namespace Ui
     class InfoBar;
 }
 
+namespace Tomahawk
+{
+class PlaylistUpdaterInterface;
+}
+
 class DLLEXPORT InfoBar : public QWidget
 {
 Q_OBJECT
@@ -57,10 +62,9 @@ public slots:
     void setFilter( const QString& filter );
     void setFilterAvailable( bool b );
 
-    void setAutoUpdateAvailable( bool b );
+    void setAutoUpdateInterface( Tomahawk::PlaylistUpdaterInterface* interface );
 signals:
     void filterTextChanged( const QString& filter );
-    void autoUpdateChanged( bool checked );
 
 protected:
     void changeEvent( QEvent* e );
@@ -76,9 +80,12 @@ private:
     Ui::InfoBar* ui;
 
     QPixmap m_bgTile;
+    QPalette m_whitePal;
+
+    Tomahawk::PlaylistUpdaterInterface* m_updaterInterface;
+    QWidget* m_updaterConfiguration;
 
     QSearchField* m_searchWidget;
-    QCheckBox* m_autoUpdate;
     QueryLabel* m_queryLabel;
 };
 

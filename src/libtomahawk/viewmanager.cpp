@@ -116,7 +116,6 @@ ViewManager::ViewManager( QObject* parent )
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-    connect( m_infobar, SIGNAL( autoUpdateChanged( bool ) ), SLOT( autoUpdateChanged( bool ) ) );
 
     connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
@@ -574,13 +573,6 @@ ViewManager::applyFilter()
 
 
 void
-ViewManager::autoUpdateChanged( bool toggled )
-{
-    currentPage()->setAutoUpdate( toggled );
-}
-
-
-void
 ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
@@ -735,8 +727,6 @@ ViewManager::updateView()
     emit modesAvailable( currentPage()->showModes() );
     emit filterAvailable( currentPage()->showFilter() );
 
-    emit autoUpdateAvailable( currentPage()->canAutoUpdate() );
-
 /*    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
         m_topbar->setVisible( false );
     else
@@ -744,6 +734,9 @@ ViewManager::updateView()
 
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
+
+    m_infobar->setAutoUpdateInterface( currentPage()->autoUpdateInterface() );
+
     switch( currentPage()->descriptionType() )
     {
         case ViewPage::TextType:

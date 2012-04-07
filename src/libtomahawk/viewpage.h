@@ -31,6 +31,8 @@
 namespace Tomahawk
 {
 
+class PlaylistUpdaterInterface;
+
 class DLLEXPORT ViewPage
 {
 public:
@@ -68,8 +70,7 @@ public:
     virtual bool isBeingPlayed() const { return false; }
 
     virtual bool canAutoUpdate() const { return false; }
-    virtual void setAutoUpdate( bool ) {}
-    virtual bool autoUpdate() const { return false; }
+    virtual PlaylistUpdaterInterface* autoUpdateInterface() const { return 0; }
 
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )
