@@ -326,8 +326,7 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
         onNowPlayingInfoReady( type );
     else
     {
-        _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast<AudioEngine*>(this), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
-            closure->setAutoDelete( false );
+        _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
         m_currentTrack->album()->cover( QSize( 0, 0 ) );
     }
 #endif
@@ -353,7 +352,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 #ifndef ENABLE_HEADLESS
         QImage cover;
         cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
-        playInfo["cover"] = QVariant( cover );
+        playInfo["cover"] = cover;
 #endif
     }
 
