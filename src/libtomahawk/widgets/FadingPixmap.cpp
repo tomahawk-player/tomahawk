@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011 - 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,22 +19,33 @@
 
 #include "FadingPixmap.h"
 
+#include "utils/logger.h"
+
+#include <QTimer>
+#include <QBuffer>
 #include <QPainter>
 
 #define ANIMATION_TIME 1000
 
+QWeakPointer< TomahawkUtils::SharedTimeLine > FadingPixmap::s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine >();
+
+QWeakPointer< TomahawkUtils::SharedTimeLine >
+FadingPixmap::stlInstance()
+{
+    if ( s_stlInstance.isNull() )
+        s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine> ( new TomahawkUtils::SharedTimeLine() );
+
+    return s_stlInstance;
+}
+
+
 FadingPixmap::FadingPixmap( QWidget* parent )
     : QLabel( parent )
+    , m_oldPixmap( QPixmap() )
     , m_fadePct( 100 )
+    , m_startFrame( 0 )
 {
 //    setCursor( Qt::PointingHandCursor );
-
-    m_timeLine = new QTimeLine( ANIMATION_TIME, this );
-    m_timeLine->setUpdateInterval( 20 );
-    m_timeLine->setEasingCurve( QEasingCurve::Linear );
-
-    connect( m_timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
-    connect( m_timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
 }
 
 
@@ -45,8 +57,14 @@ FadingPixmap::~FadingPixmap()
 void
 FadingPixmap::onAnimationStep( int frame )
 {
-    m_fadePct = (float)frame / 10.0;
+    m_fadePct = (float)( frame - m_startFrame ) / 10.0;
+    if ( m_fadePct > 100.0 )
+        m_fadePct = 100.0;
+    
     repaint();
+
+    if ( m_fadePct == 100.0 )
+        QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
 }
 
 
@@ -55,18 +73,28 @@ FadingPixmap::onAnimationFinished()
 {
     m_oldPixmap = QPixmap();
     repaint();
+
+    disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
     
     if ( m_pixmapQueue.count() )
-    {
         setPixmap( m_pixmapQueue.takeFirst() );
-    }
 }
 
 
 void
 FadingPixmap::setPixmap( const QPixmap& pixmap, bool clearQueue )
 {
-    if ( m_timeLine->state() == QTimeLine::Running )
+    QByteArray ba;
+    QBuffer buffer( &ba );
+    buffer.open( QIODevice::WriteOnly );
+    pixmap.save( &buffer, "PNG" );
+    QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
+    if ( m_oldImageMd5 == newImageMd5 )
+        return;
+
+    m_oldImageMd5 = newImageMd5;
+
+    if ( !m_oldPixmap.isNull() )
     {
         if ( clearQueue )
             m_pixmapQueue.clear();
@@ -78,9 +106,10 @@ FadingPixmap::setPixmap( const QPixmap& pixmap, bool clearQueue )
     m_oldPixmap = m_pixmap;
     m_pixmap = pixmap;
 
-    m_timeLine->setFrameRange( 0, 1000 );
-    m_timeLine->setDirection( QTimeLine::Forward );
-    m_timeLine->start();
+    stlInstance().data()->setUpdateInterval( 20 );
+    m_startFrame = stlInstance().data()->currentFrame();
+    m_fadePct = 0;
+    connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 }
 
 

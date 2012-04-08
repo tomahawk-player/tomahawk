@@ -26,8 +26,8 @@
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
+#include <QTimeLine>
 #include <typedefs.h>
-
 
 #define RESPATH ":/data/"
 
@@ -61,6 +61,34 @@ namespace TomahawkUtils
         ScaledCover
     };
 
+
+    class DLLEXPORT SharedTimeLine : public QObject
+    {
+        Q_OBJECT
+        
+    public:
+        SharedTimeLine();
+
+        virtual ~SharedTimeLine() {}
+
+        int currentFrame() { return m_timeline.currentFrame(); }
+
+        void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
+
+    signals:
+        void frameChanged( int );
+
+    protected slots:
+        virtual void connectNotify( const char *signal );
+
+        virtual void disconnectNotify( const char *signal );
+
+    private:
+        int m_refcount;
+        QTimeLine m_timeline;
+    };
+    
+
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
     public:
@@ -85,6 +113,7 @@ namespace TomahawkUtils
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
     };
+    
 
     DLLEXPORT QString appFriendlyVersion();
 
@@ -107,7 +136,7 @@ namespace TomahawkUtils
 
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
-
+    
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
      * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,

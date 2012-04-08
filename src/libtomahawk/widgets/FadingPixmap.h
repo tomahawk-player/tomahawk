@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011 - 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,9 +20,12 @@
 #ifndef FADINGPIXMAP_H
 #define FADINGPIXMAP_H
 
+#include "utils/tomahawkutils.h"
+
 #include <QLabel>
 #include <QPaintEvent>
 #include <QTimeLine>
+#include <QWeakPointer>
 
 #include "dllmacro.h"
 
@@ -33,12 +37,15 @@ class DLLEXPORT FadingPixmap : public QLabel
 {
 Q_OBJECT
 
+    static QWeakPointer< TomahawkUtils::SharedTimeLine > stlInstance();
+
 public:
     FadingPixmap( QWidget* parent = 0 );
     virtual ~FadingPixmap();
 
 public slots:
     virtual void setPixmap( const QPixmap& pixmap, bool clearQueue = true );
+    void onAnimationStep( int frame );
 
 signals:
     void clicked();
@@ -48,17 +55,21 @@ protected:
     void mouseReleaseEvent( QMouseEvent* event );
 
 private slots:
-    void onAnimationStep( int frame );
     void onAnimationFinished();
 
 private:
     QPixmap m_pixmap;
     QPixmap m_oldPixmap;
+
+    QString m_oldImageMd5;
     
     QList<QPixmap> m_pixmapQueue;
     
-    QTimeLine* m_timeLine;
     int m_fadePct;
+
+    int m_startFrame;
+
+    static QWeakPointer< TomahawkUtils::SharedTimeLine > s_stlInstance;
 };
 
 #endif

@@ -1,7 +1,8 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
- *
+ *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
+ * 
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -20,16 +21,33 @@
 #include "tomahawkutilsgui.h"
 
 #include <QPainter>
+#include <QBuffer>
 #include <QPaintEngine>
+#include <QTimer>
 
 using namespace Tomahawk;
 
 #define COVER_FADEIN 1000
 
+QWeakPointer< TomahawkUtils::SharedTimeLine > PixmapDelegateFader::s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine >();
+
+QWeakPointer< TomahawkUtils::SharedTimeLine >
+PixmapDelegateFader::stlInstance()
+{
+    if ( s_stlInstance.isNull() )
+        s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine> ( new TomahawkUtils::SharedTimeLine() );
+
+    return s_stlInstance;
+}
+
+
 PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize& size, TomahawkUtils::ImageMode mode, bool forceLoad )
     : m_artist( artist )
     , m_size( size )
     , m_mode( mode )
+    , m_startFrame( 0 )
+    , m_connectedToStl( false )
+    , m_fadePct( 100 )
 {
     if ( !m_artist.isNull() )
     {
@@ -44,6 +62,9 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
     : m_album( album )
     , m_size( size )
     , m_mode( mode )
+    , m_startFrame( 0 )
+    , m_connectedToStl( false )
+    , m_fadePct( 100 )
 {
     if ( !m_album.isNull() )
     {
@@ -59,6 +80,9 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
     : m_track( track )
     , m_size( size )
     , m_mode( mode )
+    , m_startFrame( 0 )
+    , m_connectedToStl( false )
+    , m_fadePct( 100 )
 {
     if ( !m_track.isNull() )
     {
@@ -82,13 +106,8 @@ PixmapDelegateFader::init()
     m_current = QPixmap( m_size );
     m_current.fill( Qt::transparent );
 
-    m_crossfadeTimeline.setDuration( COVER_FADEIN );
-    m_crossfadeTimeline.setUpdateInterval( 20 );
-    m_crossfadeTimeline.setFrameRange( 0, 1000 );
-    m_crossfadeTimeline.setDirection( QTimeLine::Forward );
-    connect( &m_crossfadeTimeline, SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
-    connect( &m_crossfadeTimeline, SIGNAL( finished() ), this, SLOT( onAnimationFinished() ) );
-
+    stlInstance().data()->setUpdateInterval( 20 );
+    
     if ( m_currentReference.isNull() )
     {
         // No cover loaded yet, use default and don't fade in
@@ -102,7 +121,11 @@ PixmapDelegateFader::init()
         return;
     }
 
-    m_crossfadeTimeline.start();
+    stlInstance().data()->setUpdateInterval( 20 );
+    m_startFrame = stlInstance().data()->currentFrame();
+    m_connectedToStl = true;
+    m_fadePct = 0;
+    connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 }
 
 
@@ -141,7 +164,17 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
     if ( pixmap.isNull() )
         return;
 
-    if ( m_crossfadeTimeline.state() == QTimeLine::Running )
+    QByteArray ba;
+    QBuffer buffer( &ba );
+    buffer.open( QIODevice::WriteOnly );
+    pixmap.save( &buffer, "PNG" );
+    QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
+    if ( m_oldImageMd5 == newImageMd5 )
+        return;
+
+    m_oldImageMd5 = newImageMd5;
+    
+    if ( m_connectedToStl )
     {
         m_pixmapQueue.enqueue( pixmap );
         return;
@@ -150,15 +183,25 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
     m_oldReference = m_currentReference;
     m_currentReference = pixmap;
 
-    m_crossfadeTimeline.start();
+    m_startFrame = stlInstance().data()->currentFrame();
+    m_connectedToStl = true;
+    m_fadePct = 0;
+    connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 }
 
 
 void
 PixmapDelegateFader::onAnimationStep( int step )
 {
-    const qreal opacity = ((qreal)step / 1000.);
-    const qreal oldOpacity =  ( 1000. - step ) / 1000. ;
+    m_fadePct = (float)( step - m_startFrame ) / 10.0;
+    if ( m_fadePct > 100.0 )
+        m_fadePct = 100.0;
+
+    if ( m_fadePct == 100.0 )
+        QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
+    
+    const qreal opacity = m_fadePct / 100.0;
+    const qreal oldOpacity =  ( 100.0 - m_fadePct ) / 100.0;
     m_current.fill( Qt::transparent );
 
     // Update our pixmap with the new opacity
@@ -227,12 +270,12 @@ void
 PixmapDelegateFader::onAnimationFinished()
 {
     m_oldReference = QPixmap();
-    onAnimationStep( 1000 );
+    onAnimationStep( INT_MAX );
+
+    disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 
     if ( !m_pixmapQueue.isEmpty() )
-    {
         setPixmap( m_pixmapQueue.dequeue() );
-    }
 }
 
 

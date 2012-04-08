@@ -64,11 +64,8 @@ Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags )
+Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    Q_UNUSED( caller )
-    Q_UNUSED( pushFlags )
-    
     tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
 
     if( m_sipPlugin->m_account->configuration().value("publishtracks").toBool() == false )
@@ -77,12 +74,12 @@ Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( QString caller, Tomahawk::InfoSy
         return;
     }
 
-    switch ( type )
+    switch ( pushData.type )
     {
         case InfoNowPlaying:
         case InfoNowResumed:
             m_pauseTimer.stop();
-            audioStarted( pushInfoPair );
+            audioStarted( pushData.infoPair );
             break;
         case InfoNowPaused:
             m_pauseTimer.start( PAUSE_TIMEOUT * 1000 );

@@ -333,17 +333,17 @@ Kom ihåg: Tillåt endast anslutning från klienter du litar på, och som har la
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="199"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
         <source>Tomahawk is stopped.</source>
         <translation>Tomahawk är stoppad.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="369"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk spelar upp &quot;%1&quot; av %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="372"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
         <source>on album %1</source>
         <translation>på album %1</translation>
     </message>

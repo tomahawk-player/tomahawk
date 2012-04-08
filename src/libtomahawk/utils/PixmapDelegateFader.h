@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 #include <QObject>
 #include <QTimeLine>
 #include <QQueue>
+#include <QWeakPointer>
 
 namespace Tomahawk
 {
@@ -39,6 +41,9 @@ namespace Tomahawk
 class PixmapDelegateFader : public QObject
 {
     Q_OBJECT
+
+    static QWeakPointer< TomahawkUtils::SharedTimeLine > stlInstance();
+    
 public:
     PixmapDelegateFader( const artist_ptr& artist, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
     PixmapDelegateFader( const album_ptr& album, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
@@ -68,10 +73,16 @@ private:
     query_ptr m_track;
     QSize m_size;
     TomahawkUtils::ImageMode m_mode;
-
+    int m_startFrame;
+    bool m_connectedToStl;
+    float m_fadePct;
+    QString m_oldImageMd5;
+    
     QQueue<QPixmap> m_pixmapQueue;
-    QTimeLine m_crossfadeTimeline;
+    
     QPixmap m_currentReference, m_oldReference, m_current;
+
+    static QWeakPointer< TomahawkUtils::SharedTimeLine > s_stlInstance;
 };
 
 }

@@ -123,12 +123,12 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 
 
 void
-GlobalActionManager::shortenLink( const QUrl& url, const QVariantMap &callbackMap )
+GlobalActionManager::shortenLink( const QUrl& url, const QVariant &callbackObj )
 {
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ), Q_ARG( QVariantMap, callbackMap ) );
+        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ), Q_ARG( QVariant, callbackObj ) );
         return;
     }
 
@@ -136,8 +136,8 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariantMap &callbackMa
     request.setUrl( url );
 
     QNetworkReply *reply = TomahawkUtils::nam()->get( request );
-    if ( !callbackMap.empty() )
-        reply->setProperty( "callbackMap", callbackMap );
+    if ( !callbackObj.isValid() )
+        reply->setProperty( "callbackobj", callbackObj );
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
@@ -900,9 +900,9 @@ GlobalActionManager::shortenLinkRequestFinished()
         return;
     }
 
-    QVariantMap callbackMap;
-    if ( reply->property( "callbackMap" ).canConvert< QVariantMap >() && !reply->property( "callbackMap" ).toMap().isEmpty() )
-        callbackMap = reply->property( "callbackMap" ).toMap();
+    QVariant callbackObj;
+    if ( reply->property( "callbackobj" ).canConvert< QVariant >() && reply->property( "callbackobj" ).isValid() )
+        callbackObj = reply->property( "callbackobj" );
     
     // Check for the redirect attribute, as this should be the shortened link
     QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
@@ -932,9 +932,9 @@ GlobalActionManager::shortenLinkRequestFinished()
     else
     {
         if ( !error )
-            emit shortLinkReady( longUrl, shortUrl, callbackMap );
+            emit shortLinkReady( longUrl, shortUrl, callbackObj );
         else
-            emit shortLinkReady( longUrl, longUrl, callbackMap );
+            emit shortLinkReady( longUrl, longUrl, callbackObj );
     }
 
     reply->deleteLater();

@@ -333,17 +333,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="199"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
         <source>Tomahawk is stopped.</source>
         <translation>Tomahawk е спрян</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="369"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk изпълнява &quot;%1&quot; от %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="372"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
         <source>on album %1</source>
         <translation>от албум %1</translation>
     </message>

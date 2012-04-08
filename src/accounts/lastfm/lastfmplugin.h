@@ -62,7 +62,7 @@ protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, Tomahawk::InfoSystem::PushInfoPair pushInfoPair, Tomahawk::InfoSystem::PushInfoFlags pushFlags );
+    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
 private:
     void fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData );
