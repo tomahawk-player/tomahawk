@@ -609,7 +609,8 @@ removeDirectory( const QString& dir )
 }
 
 
-quint64 infosystemRequestId()
+quint64
+infosystemRequestId()
 {
     QMutexLocker locker( &s_infosystemRequestIdMutex );
     quint64 result = s_infosystemRequestId;
@@ -632,5 +633,43 @@ crash()
     volatile int* a = (int*)(NULL);
     *a = 1;
 }
+
+
+SharedTimeLine::SharedTimeLine()
+    : QObject( 0 )
+    , m_refcount( 0 )
+{
+    m_timeline.setCurveShape( QTimeLine::LinearCurve );
+    m_timeline.setFrameRange( 0, INT_MAX );
+    m_timeline.setDuration( INT_MAX );
+    m_timeline.setUpdateInterval( 40 );
+    connect( &m_timeline, SIGNAL( frameChanged( int ) ), SIGNAL( frameChanged( int ) ) );
+}
+
+void
+SharedTimeLine::connectNotify( const char* signal )
+{
+    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) ) {
+        m_refcount++;
+        if ( m_timeline.state() != QTimeLine::Running )
+            m_timeline.start();
+    }
+}
+
+
+void
+SharedTimeLine::disconnectNotify( const char* signal )
+{
+    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+    {
+        m_refcount--;
+        if ( m_timeline.state() == QTimeLine::Running && m_refcount == 0 )
+        {
+            m_timeline.stop();
+            deleteLater();
+        }
+    }
+}
+
 
 } // ns
