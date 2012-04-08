@@ -272,6 +272,7 @@ PixmapDelegateFader::onAnimationFinished()
     m_oldReference = QPixmap();
     onAnimationStep( INT_MAX );
 
+    m_connectedToStl = false;
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 
     if ( !m_pixmapQueue.isEmpty() )
