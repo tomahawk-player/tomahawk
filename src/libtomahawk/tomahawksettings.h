@@ -212,5 +212,6 @@ private:
     static TomahawkSettings* s_instance;
 };
 
+Q_DECLARE_METATYPE( TomahawkSettings::PrivateListeningMode );
 
 #endif

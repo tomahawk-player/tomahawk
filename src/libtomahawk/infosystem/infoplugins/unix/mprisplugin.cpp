@@ -513,10 +513,18 @@ MprisPlugin::stateChanged( AudioState newState, AudioState oldState )
 void
 MprisPlugin::audioStarted( const QVariant& input )
 {
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    if ( !input.canConvert< QVariantMap >() )
         return;
 
-    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    QVariantMap map = input.toMap();
+
+    if ( map.contains( "private" ) && map[ "private" ].value< TomahawkSettings::PrivateListeningMode >() == TomahawkSettings::FullyPrivate )
+        return;
+    
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        return;
+
+    InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
