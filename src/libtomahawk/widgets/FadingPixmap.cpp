@@ -141,7 +141,6 @@ FadingPixmap::mouseReleaseEvent( QMouseEvent* event )
 void
 FadingPixmap::paintEvent( QPaintEvent* event )
 {
-    tDebug() << Q_FUNC_INFO;
     Q_UNUSED( event );
     
     QPainter p( this );
