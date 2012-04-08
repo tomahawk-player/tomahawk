@@ -50,9 +50,7 @@ public:
     PixmapDelegateFader( const query_ptr& track, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
 
     virtual ~PixmapDelegateFader();
-
-    void setPixmap( const QPixmap& pixmap );
-
+    
     QPixmap currentPixmap() const;
 
 signals:
@@ -65,6 +63,8 @@ private slots:
 
     void onAnimationStep( int );
     void onAnimationFinished();
+    void setPixmap( const QPixmap& pixmap );
+
 private:
     void init();
 

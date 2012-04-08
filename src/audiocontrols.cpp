@@ -271,10 +271,10 @@ AudioControls::setCover()
     {
         QPixmap cover;
         cover = m_currentTrack->toQuery()->cover( ui->coverImage->size() );
-        ui->coverImage->setPixmap( cover );
+        ui->coverImage->setPixmap( cover, false );
     }
     else
-        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, ui->coverImage->size() ) );
+        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, ui->coverImage->size() ), true );
 }
 
 
@@ -346,7 +346,7 @@ AudioControls::onPlaybackStopped()
     ui->ownerLabel->setText( "" );
     ui->timeLabel->setText( "" );
     ui->timeLeftLabel->setText( "" );
-    ui->coverImage->setPixmap( QPixmap() );
+    ui->coverImage->setPixmap( QPixmap(), true );
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
