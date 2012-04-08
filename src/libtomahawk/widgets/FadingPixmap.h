@@ -44,7 +44,7 @@ public:
     virtual ~FadingPixmap();
 
 public slots:
-    virtual void setPixmap( const QPixmap& pixmap, bool clearQueue = true );
+    virtual void setPixmap( const QPixmap& pixmap, bool isDefault );
     void onAnimationStep( int frame );
 
 signals:
@@ -66,8 +66,8 @@ private:
     QList<QPixmap> m_pixmapQueue;
     
     int m_fadePct;
-
     int m_startFrame;
+    bool m_isDefault;
 
     static QWeakPointer< TomahawkUtils::SharedTimeLine > s_stlInstance;
 };
