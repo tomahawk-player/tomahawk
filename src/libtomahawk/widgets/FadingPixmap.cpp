@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011 - 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -72,13 +73,11 @@ FadingPixmap::onAnimationFinished()
 {
     m_oldPixmap = QPixmap();
     repaint();
-    
-    if ( m_pixmapQueue.count() )
-    {
-        setPixmap( m_pixmapQueue.takeFirst() );
-    }
 
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
+    
+    if ( m_pixmapQueue.count() )
+        setPixmap( m_pixmapQueue.takeFirst() );
 }
 
 
