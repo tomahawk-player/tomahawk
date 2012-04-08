@@ -333,17 +333,17 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="203"/>
         <source>Tomahawk is stopped.</source>
         <translation>Tomahawk ist gestoppt.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="375"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk spielt &quot;%1&quot; von %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="378"/>
         <source>on album %1</source>
         <translation>auf dem Album %1</translation>
     </message>
@@ -2302,27 +2302,27 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="401"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
         <source>Top Tracks</source>
         <translation>Größte Hits</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="404"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="402"/>
         <source>Loved Tracks</source>
         <translation>Lieblings Lieder</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="407"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="405"/>
         <source>Hyped Tracks</source>
         <translation>Angesagte Stücke</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="413"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="411"/>
         <source>Top Artists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="416"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="414"/>
         <source>Hyped Artists</source>
         <translation type="unfinished"/>
     </message>
@@ -2380,37 +2380,37 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="637"/>
+        <location filename="../src/libtomahawk/query.cpp" line="639"/>
         <source> and </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="645"/>
+        <location filename="../src/libtomahawk/query.cpp" line="647"/>
         <source>You</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="647"/>
+        <location filename="../src/libtomahawk/query.cpp" line="649"/>
         <source>you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="656"/>
+        <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/query.cpp" line="656"/>
+        <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>%n other(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="659"/>
+        <location filename="../src/libtomahawk/query.cpp" line="661"/>
         <source>%1 people</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/query.cpp" line="663"/>
         <source>loved this track</source>
         <translation type="unfinished"/>
     </message>
@@ -2476,7 +2476,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="534"/>
+        <location filename="../src/tomahawkapp.cpp" line="535"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
