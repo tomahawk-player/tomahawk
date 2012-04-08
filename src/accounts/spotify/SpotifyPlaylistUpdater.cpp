@@ -85,7 +85,10 @@ SpotifyPlaylistUpdater::init()
 
 SpotifyPlaylistUpdater::~SpotifyPlaylistUpdater()
 {
-
+    if ( !m_spotify.isNull() )
+    {
+        m_spotify.data()->unregisterUpdater( m_spotifyId );
+    }
 }
 
 

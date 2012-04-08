@@ -385,6 +385,13 @@ SpotifyAccount::registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylist
 
 
 void
+SpotifyAccount::unregisterUpdater( const QString& plid )
+{
+    m_updaters.remove( plid );
+}
+
+
+void
 SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 {
 
@@ -406,7 +413,7 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
 
     m_spotifyResolver.data()->sendMessage( msg );
 
-    if ( deleteOnUnsync() )
+    if ( deleteOnUnsync() && m_updaters.contains( playlist->plid ) )
     {
         SpotifyPlaylistUpdater* updater = m_updaters.take( playlist->plid );
         playlist_ptr tomahawkPl = updater->playlist();

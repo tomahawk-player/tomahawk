@@ -86,7 +86,9 @@ public:
     virtual SipPlugin* sipPlugin() { return 0; }
 
     void sendMessage( const QVariantMap& msg, QObject* receiver, const QString& slot );
+
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
+    void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
 private slots:
