@@ -134,7 +134,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     QString messageText = tr( "Tomahawk is playing \"%1\" by %2%3." )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
-                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on album %1" ).arg( hash[ "album" ] ) ) );
+                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
     
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
     QList<QVariant> arguments;
