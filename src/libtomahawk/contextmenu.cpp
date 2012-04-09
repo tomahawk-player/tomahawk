@@ -84,9 +84,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionStopAfter && itemCount() == 1 )
     {
         if ( AudioEngine::instance()->stopAfterTrack() == queries.first() )
-            m_sigmap->setMapping( addAction( tr( "&Continue playback after this track" ) ), ActionStopAfter );
+            m_sigmap->setMapping( addAction( tr( "&Continue Playback after this Track" ) ), ActionStopAfter );
         else
-            m_sigmap->setMapping( addAction( tr( "&Stop playback after this track" ) ), ActionStopAfter );
+            m_sigmap->setMapping( addAction( tr( "&Stop Playback after this Track" ) ), ActionStopAfter );
     }
 
     addSeparator();
