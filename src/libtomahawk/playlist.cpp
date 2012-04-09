@@ -96,7 +96,6 @@ PlaylistEntry::setLastSource( source_ptr s )
 Playlist::Playlist( const source_ptr& author )
     : m_source( author )
     , m_lastmodified( 0 )
-    , m_updater( 0 )
 {
 }
 
@@ -121,7 +120,6 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
-    , m_updater( 0 )
 {
     init();
 }
@@ -144,7 +142,6 @@ Playlist::Playlist( const source_ptr& author,
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
     , m_initEntries( entries )
-    , m_updater( 0 )
 {
     init();
 }
@@ -273,8 +270,8 @@ void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
-    if ( m_updater )
-        m_updater->remove();
+    if ( !m_updater.isNull() )
+        m_updater.data()->remove();
 
     m_deleted = true;
     m_source->collection()->deletePlaylist( self );
@@ -285,12 +282,12 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 void
 Playlist::setUpdater( PlaylistUpdaterInterface* pluinterface )
 {
-    if ( m_updater )
-        disconnect( m_updater, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+    if ( !m_updater.isNull() )
+        disconnect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
-    m_updater = pluinterface;
+    m_updater = QWeakPointer< PlaylistUpdaterInterface >( pluinterface );
 
-    connect( m_updater, SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
+    connect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
 
     emit changed();
 }

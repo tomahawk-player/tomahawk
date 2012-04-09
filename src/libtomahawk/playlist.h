@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011920-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -189,7 +189,7 @@ public:
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
     void setUpdater( PlaylistUpdaterInterface* pluinterface );
-    PlaylistUpdaterInterface* updater() const { return m_updater; }
+    PlaylistUpdaterInterface* updater() const { return m_updater.data(); }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -295,7 +295,7 @@ private:
     QQueue<RevisionQueueItem> m_revisionQueue;
     QQueue<RevisionQueueItem> m_updateQueue;
 
-    PlaylistUpdaterInterface* m_updater;
+    QWeakPointer<PlaylistUpdaterInterface> m_updater;
 
     bool m_locallyChanged;
     bool m_deleted;
