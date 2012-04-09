@@ -99,13 +99,27 @@ Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushDa
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair &pushInfoPair )
 {
-    if ( !pushInfoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    if ( !pushInfoPair.second.canConvert< QVariantMap >() )
+    {
+        tDebug() << Q_FUNC_INFO << "Failed to convert data to a QVariantMap";
+        return;
+    }
+    
+    QVariantMap map = pushInfoPair.second.toMap();
+    if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+    {
+        Jreen::Tune::Ptr tune( new Jreen::Tune() );
+        m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
+        return;
+    }
+        
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         tDebug() << Q_FUNC_INFO << "did not find an infostringhash";
         return;
     }
     
-    Tomahawk::InfoSystem::InfoStringHash info = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
+    Tomahawk::InfoSystem::InfoStringHash info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full() << info;
     
     Jreen::Tune::Ptr tune( new Jreen::Tune() );
