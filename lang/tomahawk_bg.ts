@@ -196,7 +196,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="157"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
-        <translation>След като сканирате музикалната ви колекция, ще откриете най-скоро добавените албуми тук.</translation>
+        <translation>След като бъде сканирана музикалната ти колекция, ще откриеш тук най-скоро добавените албуми.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="159"/>
@@ -328,24 +328,6 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/audiocontrols.ui" line="536"/>
         <source>High</source>
         <translation>100%</translation>
-    </message>
-</context>
-<context>
-    <name>AudioEngine</name>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="203"/>
-        <source>Tomahawk is stopped.</source>
-        <translation>Tomahawk е спрян</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="375"/>
-        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk изпълнява &quot;%1&quot; от %2%3.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="378"/>
-        <source>on album %1</source>
-        <translation>от албум %1</translation>
     </message>
 </context>
 <context>
@@ -1717,16 +1699,6 @@ You may wish to try re-authenticating.</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
-        <source>&amp;Continue playback after this track</source>
-        <translation>&amp;Продължи възпроизвеждането след тази песен</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
-        <source>&amp;Stop playback after this track</source>
-        <translation>&amp;Спри възпроизвеждането след тази песен</translation>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="277"/>
         <source>&amp;Love</source>
@@ -1756,6 +1728,16 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Изтрий позициите</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
+        <source>&amp;Continue Playback after this Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
+        <source>&amp;Stop Playback after this Track</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
@@ -2309,6 +2291,19 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
+    <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="134"/>
+        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="137"/>
+        <source>on &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
@@ -2485,7 +2480,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="535"/>
+        <location filename="../src/tomahawkapp.cpp" line="537"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
