@@ -20,9 +20,14 @@
 
 #include "accounts/AccountManager.h"
 #include "SpotifyAccount.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
+
+#ifndef ENABLE_HEADLESS
+QPixmap* SpotifyPlaylistUpdater::s_typePixmap = 0;
+#endif
 
 Tomahawk::PlaylistUpdaterInterface*
 SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QString &key )
@@ -49,7 +54,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QString &
     // Register the updater with the account
     const QString spotifyId = TomahawkSettings::instance()->value( QString( "%1/spotifyId" ).arg( key ) ).toString();
     const QString latestRev = TomahawkSettings::instance()->value( QString( "%1/latestrev" ).arg( key ) ).toString();
-    const bool sync = TomahawkSettings::instance()->value( QString( "%1/sync" ).arg( key ) ).toBool();
+    const bool sync         = TomahawkSettings::instance()->value( QString( "%1/sync" ).arg( key ) ).toBool();
 
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
@@ -87,6 +92,17 @@ SpotifyPlaylistUpdater::~SpotifyPlaylistUpdater()
 {
     if ( !m_spotify.isNull() )
     {
+        if ( m_sync )
+        {
+            QVariantMap msg;
+            msg[ "_msgtype" ] = "removeFromSyncList";
+            msg[ "playlistid" ] = m_spotifyId;
+
+            m_spotify.data()->sendMessage( msg );
+
+            m_spotify.data()->setSyncForPlaylist( m_spotifyId, false );
+        }
+
         m_spotify.data()->unregisterUpdater( m_spotifyId );
     }
 }
@@ -117,10 +133,33 @@ SpotifyPlaylistUpdater::type() const
 }
 
 
+#ifndef ENABLE_HEADLESS
+QPixmap
+SpotifyPlaylistUpdater::typeIcon() const
+{
+    if ( !s_typePixmap )
+    {
+        QPixmap pm( RESPATH "images/spotify-logo.png" );
+        s_typePixmap = new QPixmap( pm.scaled( 32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+    }
+
+    if ( !m_sync )
+        return QPixmap();
+
+    return *s_typePixmap;
+}
+#endif
+
+
 void
 SpotifyPlaylistUpdater::setSync( bool sync )
 {
+    if ( m_sync == sync )
+        return;
+
     m_sync = sync;
+
+    emit changed();
 }
 
 

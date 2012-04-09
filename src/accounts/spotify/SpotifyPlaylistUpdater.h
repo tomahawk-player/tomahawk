@@ -20,6 +20,7 @@
 #define SPOTIFYPLAYLISTUPDATER_H
 
 #include "playlist/PlaylistUpdaterInterface.h"
+
 #include <QVariant>
 
 namespace Tomahawk {
@@ -43,6 +44,8 @@ public:
 
 #ifndef ENABLE_HEADLESS
     virtual QWidget* configurationWidget() const { return 0; }
+
+    virtual QPixmap typeIcon() const;
 #endif
 
     bool sync() const;
@@ -78,6 +81,10 @@ private:
 
     bool m_blockUpdatesForNextRevision;
     bool m_sync;
+
+#ifndef ENABLE_HEADLESS
+    static QPixmap* s_typePixmap;
+#endif
 };
 
 

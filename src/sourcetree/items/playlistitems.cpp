@@ -20,6 +20,7 @@
 #include "playlistitems.h"
 
 #include <QMimeData>
+#include <QPainter>
 
 #include "query.h"
 #include "viewmanager.h"
@@ -44,12 +45,15 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
              SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
     connect( pl.data(), SIGNAL( changed() ),
-             SIGNAL( updated() ), Qt::QueuedConnection );
+             SLOT( onUpdated() ), Qt::QueuedConnection );
 
     m_icon = QIcon( RESPATH "images/playlist-icon.png" );
 
     if( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
+
+    if ( m_playlist->updater() && !m_playlist->updater()->typeIcon().isNull() )
+        createOverlay();
 }
 
 
@@ -244,10 +248,54 @@ PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 }
 
 
+void
+PlaylistItem::onUpdated()
+{
+    if ( m_playlist->updater() && !m_playlist->updater()->typeIcon().isNull() &&
+         m_overlaidIcon.isNull() ) // create overlay
+    {
+        createOverlay();
+    }
+    else if ( !m_playlist->updater() || m_playlist->updater()->typeIcon().isNull() &&
+              !m_overlaidIcon.isNull() )
+    {
+        // No longer an updater with an icon
+        m_overlaidIcon = QIcon();
+    }
+
+    emit updated();
+}
+
+
+void
+PlaylistItem::createOverlay()
+{
+    Q_ASSERT( !m_playlist.isNull() );
+    Q_ASSERT( m_playlist->updater() );
+    Q_ASSERT( !m_playlist->updater()->typeIcon().isNull() );
+
+    m_overlaidIcon = QIcon();
+
+    QPixmap base = m_icon.pixmap( 48, 48 );
+    const QPixmap overlay = m_playlist->updater()->typeIcon();
+
+    QPainter p( &base );
+    const int w = base.width() / 2;
+    const QRect overlayRect( base.rect().right() - w, base.rect().height() - w, w, w );
+    p.drawPixmap( overlayRect, overlay );
+    p.end();
+
+    m_overlaidIcon.addPixmap( base );
+}
+
+
 QIcon
 PlaylistItem::icon() const
 {
-    return m_icon;
+    if ( !m_overlaidIcon.isNull() )
+        return m_overlaidIcon;
+    else
+        return m_icon;
 }
 
 

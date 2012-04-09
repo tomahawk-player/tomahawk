@@ -85,7 +85,7 @@ public:
     virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     virtual SipPlugin* sipPlugin() { return 0; }
 
-    void sendMessage( const QVariantMap& msg, QObject* receiver, const QString& slot );
+    void sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
     void unregisterUpdater( const QString& plid );
@@ -105,6 +105,7 @@ private:
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist );
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
+    void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
 
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
@@ -115,6 +116,7 @@ private:
     QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
+    friend class ::SpotifyPlaylistUpdater;
 };
 
 }

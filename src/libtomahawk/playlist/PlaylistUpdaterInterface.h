@@ -26,6 +26,10 @@
 #include <QTimer>
 #include <QMutex>
 
+#ifndef ENABLE_HEADLESS
+#include <QPixmap>
+#endif
+
 namespace Tomahawk
 {
 /**
@@ -50,6 +54,10 @@ public:
 #ifndef ENABLE_HEADLESS
     // Small widget to show in playlist header that configures the updater
     virtual QWidget* configurationWidget() const = 0;
+
+    // Small overlay over playlist icon in the sidebar to indicate that it has this updater type
+    // Should be around 16x16 or something
+    virtual QPixmap typeIcon() const { return QPixmap(); }
 #endif
 
     void remove();
@@ -61,11 +69,14 @@ public:
     static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
+
+signals:
+    void changed();
+
 public slots:
     virtual void updateNow() {}
 
-private slots:
-    void doSave();
+    void save();
 
 protected:
     virtual void saveToSettings( const QString& group ) const = 0;

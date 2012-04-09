@@ -255,7 +255,7 @@ Playlist::setTitle( const QString& title )
         return;
 
     const QString oldTitle = m_title;
-    m_title = title;
+//     m_title = title;
 
     emit changed();
     emit renamed( m_title, oldTitle );
@@ -280,6 +280,19 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     m_source->collection()->deletePlaylist( self );
 
     emit deleted( self );
+}
+
+void
+Playlist::setUpdater( PlaylistUpdaterInterface* pluinterface )
+{
+    if ( m_updater )
+        disconnect( m_updater, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+
+    m_updater = pluinterface;
+
+    connect( m_updater, SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
+
+    emit changed();
 }
 
 

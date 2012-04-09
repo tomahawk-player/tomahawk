@@ -368,10 +368,14 @@ void
 SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& slot )
 {
     QVariantMap msg = m;
-    const QString qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
 
-    m_qidToSlotMap[ qid ] = qMakePair( obj, slot );
-    msg[ "qid" ] = qid;
+    if ( obj )
+    {
+        const QString qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
+
+        m_qidToSlotMap[ qid ] = qMakePair( obj, slot );
+        msg[ "qid" ] = qid;
+    }
 
     m_spotifyResolver.data()->sendMessage( msg );
 }
@@ -413,16 +417,23 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
 
     m_spotifyResolver.data()->sendMessage( msg );
 
-    if ( deleteOnUnsync() && m_updaters.contains( playlist->plid ) )
+    if ( m_updaters.contains( playlist->plid ) )
     {
-        SpotifyPlaylistUpdater* updater = m_updaters.take( playlist->plid );
-        playlist_ptr tomahawkPl = updater->playlist();
+        SpotifyPlaylistUpdater* updater = m_updaters[ playlist->plid ];
+        updater->setSync( false );
 
-        if ( !tomahawkPl.isNull() )
-            Playlist::remove( tomahawkPl );
+        if ( deleteOnUnsync() )
+        {
+            playlist_ptr tomahawkPl = updater->playlist();
 
-        updater->deleteLater();
+            if ( !tomahawkPl.isNull() )
+                Playlist::remove( tomahawkPl );
 
+            updater->deleteLater();
+
+        }
+
+        updater->save();
     }
 }
 
@@ -436,3 +447,18 @@ SpotifyAccount::loadPlaylists()
     msg[ "_msgtype" ] = "getAllPlaylists";
     sendMessage( msg, this, "allPlaylistsLoaded" );
 }
+
+
+void
+SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync )
+{
+    foreach ( SpotifyPlaylistInfo* info, m_allSpotifyPlaylists )
+    {
+        if( info->plid == spotifyPlaylistId )
+            info->sync = sync;
+    }
+
+    if ( !m_configWidget.isNull() )
+        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+}
+

@@ -65,12 +65,12 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
 
     m_playlist->setUpdater( this );
 
-    QTimer::singleShot( 0, this, SLOT( doSave() ) );
+    QTimer::singleShot( 0, this, SLOT( save() ) );
 }
 
 
 void
-PlaylistUpdaterInterface::doSave()
+PlaylistUpdaterInterface::save()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );

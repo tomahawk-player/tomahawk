@@ -54,10 +54,13 @@ private slots:
     void onPlaylistChanged();
     void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
+    void onUpdated();
 private:
+    void createOverlay();
+
     bool m_loaded;
     Tomahawk::playlist_ptr m_playlist;
-    QIcon m_icon;
+    QIcon m_icon, m_overlaidIcon;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
 
