@@ -333,17 +333,17 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="201"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="203"/>
         <source>Tomahawk is stopped.</source>
         <translation>Tomahawk е спрян</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="371"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="375"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk изпълнява &quot;%1&quot; от %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="374"/>
+        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="378"/>
         <source>on album %1</source>
         <translation>от албум %1</translation>
     </message>
@@ -2311,27 +2311,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="401"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
         <source>Top Tracks</source>
         <translation>Най-актуални песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="404"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="402"/>
         <source>Loved Tracks</source>
         <translation>Харесвани песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="407"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="405"/>
         <source>Hyped Tracks</source>
         <translation>Песни слушани най-често</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="413"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="411"/>
         <source>Top Artists</source>
         <translation>Най-слушани артисти</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="416"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="414"/>
         <source>Hyped Artists</source>
         <translation>Артисти слушани най-често</translation>
     </message>
@@ -2389,37 +2389,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="637"/>
+        <location filename="../src/libtomahawk/query.cpp" line="639"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="645"/>
+        <location filename="../src/libtomahawk/query.cpp" line="647"/>
         <source>You</source>
         <translation>Ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="647"/>
+        <location filename="../src/libtomahawk/query.cpp" line="649"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="656"/>
+        <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/query.cpp" line="656"/>
+        <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="659"/>
+        <location filename="../src/libtomahawk/query.cpp" line="661"/>
         <source>%1 people</source>
         <translation>%1 хора</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/query.cpp" line="663"/>
         <source>loved this track</source>
         <translation>хареса тази песен</translation>
     </message>
@@ -2485,7 +2485,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="534"/>
+        <location filename="../src/tomahawkapp.cpp" line="535"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>

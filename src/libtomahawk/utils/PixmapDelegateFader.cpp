@@ -105,8 +105,6 @@ PixmapDelegateFader::init()
 {
     m_current = QPixmap( m_size );
     m_current.fill( Qt::transparent );
-
-    stlInstance().data()->setUpdateInterval( 20 );
     
     if ( m_currentReference.isNull() )
     {
@@ -135,7 +133,7 @@ PixmapDelegateFader::albumChanged()
     if ( m_album.isNull() )
         return;
 
-    setPixmap( m_album->cover( m_size ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_album->cover( m_size ) ) );
 }
 
 void
@@ -144,7 +142,7 @@ PixmapDelegateFader::artistChanged()
     if ( m_artist.isNull() )
         return;
 
-    setPixmap( m_artist->cover( m_size ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_artist->cover( m_size ) ) );
 }
 
 
@@ -154,7 +152,7 @@ PixmapDelegateFader::trackChanged()
     if ( m_track.isNull() )
         return;
 
-    setPixmap( m_track->cover( m_size ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_track->cover( m_size ) ) );
 }
 
 
@@ -179,10 +177,11 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         m_pixmapQueue.enqueue( pixmap );
         return;
     }
-
+    
     m_oldReference = m_currentReference;
     m_currentReference = pixmap;
 
+    stlInstance().data()->setUpdateInterval( 20 );
     m_startFrame = stlInstance().data()->currentFrame();
     m_connectedToStl = true;
     m_fadePct = 0;
@@ -270,12 +269,12 @@ void
 PixmapDelegateFader::onAnimationFinished()
 {
     m_oldReference = QPixmap();
-    onAnimationStep( INT_MAX );
 
+    m_connectedToStl = false;
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 
     if ( !m_pixmapQueue.isEmpty() )
-        setPixmap( m_pixmapQueue.dequeue() );
+        QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_pixmapQueue.dequeue() ) );
 }
 
 
