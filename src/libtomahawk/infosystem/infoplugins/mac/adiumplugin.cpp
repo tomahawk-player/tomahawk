@@ -136,13 +136,16 @@ AdiumPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 void
 AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair )
 {
-    if ( !pushInfoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    if ( !pushInfoPair.second.canConvert< QVariantMap >() )
         return;
 
-    Tomahawk::InfoSystem::InfoStringHash hash = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
+    QVariantMap map = pushInfoPair.second.toMap();
 
-    qDebug() << Q_FUNC_INFO;
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        return;
 
+    InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+    
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
