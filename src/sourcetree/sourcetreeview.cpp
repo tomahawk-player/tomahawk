@@ -144,11 +144,10 @@ SourceTreeView::setupMenus()
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
 
-    const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-    const playlist_ptr playlist = item->playlist();
-
     if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
+        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        const playlist_ptr playlist = item->playlist();
 
         if ( !playlist.isNull() )
         {
@@ -206,10 +205,14 @@ SourceTreeView::setupMenus()
     addToLocalAction->setEnabled( readonly );
 
     // Handle any custom actions registered for playlists
-    if ( !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
+    if ( type == SourcesModel::StaticPlaylist && !readonly &&
+        !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
     {
         m_playlistMenu.addSeparator();
 
+
+        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        const playlist_ptr playlist = item->playlist();
         foreach ( QAction* action, ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ) )
         {
             if ( QObject* notifier = ActionCollection::instance()->actionNotifier( action ) )

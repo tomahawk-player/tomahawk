@@ -172,7 +172,6 @@ SpotifyAccount::syncActionTriggered( bool checked )
         }
         else
         {
-
             stopPlaylistSync( info, true );
         }
     }
