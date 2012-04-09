@@ -140,7 +140,10 @@ public slots:
     void Stop();
 
 protected slots:
-    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+    {
+        Q_UNUSED( requestData );
+    }
     void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
 private slots:
@@ -149,9 +152,6 @@ private slots:
     void onPlaylistChanged( Tomahawk::playlistinterface_ptr );
     void onTrackCountChanged( unsigned int tracks );
     void onSeeked( qint64 ms );
-
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
 
 signals:
     void Seeked( qlonglong Position );
@@ -169,7 +169,7 @@ private:
     // DBus
     void notifyPropertyChanged( const QString& interface, const QString& propertyName );
     QString m_playbackStatus;
-    QTemporaryFile* m_coverTempFile;
+    QString m_coverTempFile;
 };
 
 };

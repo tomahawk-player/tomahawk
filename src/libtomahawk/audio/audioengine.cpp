@@ -23,6 +23,7 @@
 
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkReply>
+#include <QTemporaryFile>
 
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
@@ -353,6 +354,25 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
         QImage cover;
         cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
         playInfo["cover"] = cover;
+
+        QTemporaryFile coverTempFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
+        if ( !coverTempFile.open() )
+        {
+            tDebug() << "WARNING: could not write temporary file for cover art!";
+        }
+
+        // Finally, save the image to the new temp file
+        if ( cover.save( &coverTempFile, "PNG" ) )
+        {
+            tDebug( LOGVERBOSE ) << "Saving cover image to:" << QFileInfo( coverTempFile ).absoluteFilePath();
+            coverTempFile.close();
+            playInfo["coveruri"] = QFileInfo( coverTempFile ).absoluteFilePath();
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "failed to save cover image!";
+            coverTempFile.close();
+        }
 #endif
     }
 
