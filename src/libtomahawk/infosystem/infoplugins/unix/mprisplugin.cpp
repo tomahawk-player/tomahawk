@@ -517,9 +517,6 @@ MprisPlugin::audioStarted( const QVariant& input )
         return;
 
     QVariantMap map = input.toMap();
-
-    if ( map.contains( "private" ) && map[ "private" ].value< TomahawkSettings::PrivateListeningMode >() == TomahawkSettings::FullyPrivate )
-        return;
     
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
