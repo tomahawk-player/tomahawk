@@ -33,9 +33,8 @@
 namespace Tomahawk
 {
 /**
-  * If a playlist needs updating, implement a updater interface.
-  *
-  * Default is auto-updating and on a periodic timer.
+  * PlaylistUpdaters are attached to playlists. They usually manipulate the playlist in some way
+  * due to external input (spotify syncing) or timers (xspf updating)
   */
 
 class PlaylistUpdaterFactory;

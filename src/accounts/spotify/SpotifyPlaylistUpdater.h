@@ -51,6 +51,8 @@ public:
     bool sync() const;
     void setSync( bool sync );
 
+    QString spotifyId() const { return m_spotifyId; }
+
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );

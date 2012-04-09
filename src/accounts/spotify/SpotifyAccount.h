@@ -20,11 +20,13 @@
 #ifndef SpotifyAccount_H
 #define SpotifyAccount_H
 
+#include "accounts/ResolverAccount.h"
+#include "sourcelist.h"
 #include "playlist.h"
 #include "utils/tomahawkutils.h"
-#include "sourcelist.h"
-#include "accounts/ResolverAccount.h"
+#include "utils/SmartPointerList.h"
 
+class QAction;
 class SpotifyPlaylistUpdater;
 class QTimer;
 
@@ -91,6 +93,11 @@ public:
     void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
+
+public slots:
+    void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
+    void syncActionTriggered( bool );
+
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
@@ -102,7 +109,8 @@ private:
     void init();
     void loadPlaylists();
 
-    void stopPlaylistSync( SpotifyPlaylistInfo* playlist );
+    void startPlaylistSync( SpotifyPlaylistInfo* playlist );
+    void stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete = false );
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
@@ -116,6 +124,7 @@ private:
     QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
+    SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;
 };
 

@@ -19,13 +19,17 @@
 
 #include "SpotifyAccount.h"
 #include "playlist.h"
-#include "utils/tomahawkutils.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "sourcelist.h"
 #include "SpotifyAccountConfig.h"
 #include "SpotifyPlaylistUpdater.h"
 #include "resolvers/scriptresolver.h"
+#include "utils/tomahawkutils.h"
+#include "actioncollection.h"
+
+
 #include <QPixmap>
+#include <QAction>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -94,6 +98,83 @@ SpotifyAccount::init()
         QVariantMap msg;
         msg[ "_msgtype" ] = "getCredentials";
         m_spotifyResolver.data()->sendMessage( msg );
+    }
+
+    QAction* action = new QAction( 0 );
+    action->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( bool ) ) );
+    ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, action, this );
+    m_customActions.append( action );
+}
+
+
+void
+SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
+{
+    if ( !m_customActions.contains( action ) )
+        return;
+
+    // If it's not being synced, allow the option to sync
+    SpotifyPlaylistUpdater* updater = qobject_cast< SpotifyPlaylistUpdater* >( playlist->updater() );
+    if ( !updater || !updater->sync() )
+    {
+        action->setText( tr( "Sync with Spotify" ) );
+    }
+    else
+    {
+        action->setText( tr( "Stop syncing with Spotify" ) );
+    }
+}
+
+
+void
+SpotifyAccount::syncActionTriggered( bool checked )
+{
+    Q_UNUSED( checked );
+    QAction* action = qobject_cast< QAction* >( sender() );
+
+    if ( !action || !m_customActions.contains( action ) )
+        return;
+
+    const playlist_ptr playlist = action->property( "payload" ).value< playlist_ptr >();
+    if ( playlist.isNull() )
+    {
+        qWarning() << "Got context menu spotify sync action triggered, but invalid playlist payload!";
+        Q_ASSERT( false );
+        return;
+    }
+
+    SpotifyPlaylistUpdater* updater = qobject_cast< SpotifyPlaylistUpdater* >( playlist->updater() );
+
+    if ( !updater )
+    {
+        // TODO
+    }
+    else
+    {
+        SpotifyPlaylistInfo* info = 0;
+        foreach ( SpotifyPlaylistInfo* ifo, m_allSpotifyPlaylists )
+        {
+            if ( ifo->plid == updater->spotifyId() )
+            {
+                info = ifo;
+                break;
+            }
+        }
+
+        if ( !updater->sync() )
+        {
+            info->sync = true;
+            if ( m_configWidget.data() )
+                m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+
+            startPlaylistSync( info );
+        }
+        else
+        {
+
+            stopPlaylistSync( info, true );
+        }
     }
 }
 
@@ -303,18 +384,25 @@ SpotifyAccount::saveConfig()
             if ( pl->sync )
             {
                 // Fetch full playlist contents, then begin the sync
-                QVariantMap msg;
-                msg[ "_msgtype" ] = "getPlaylist";
-                msg[ "playlistid" ] = pl->plid;
-                msg[ "sync" ] = pl->sync;
-
-                sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
+                startPlaylistSync( pl );
             }
             else
                 stopPlaylistSync( pl );
         }
     }
     sync();
+}
+
+
+void
+SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
+{
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "getPlaylist";
+    msg[ "playlistid" ] = playlist->plid;
+    msg[ "sync" ] = playlist->sync;
+
+    sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
 }
 
 
@@ -409,7 +497,7 @@ SpotifyAccount::deleteOnUnsync() const
 }
 
 void
-SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
+SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete )
 {
     QVariantMap msg;
     msg[ "_msgtype" ] = "removeFromSyncList";
@@ -422,7 +510,7 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist )
         SpotifyPlaylistUpdater* updater = m_updaters[ playlist->plid ];
         updater->setSync( false );
 
-        if ( deleteOnUnsync() )
+        if ( deleteOnUnsync() && !forceDontDelete )
         {
             playlist_ptr tomahawkPl = updater->playlist();
 
