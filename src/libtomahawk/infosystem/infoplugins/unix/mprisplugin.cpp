@@ -257,7 +257,7 @@ MprisPlugin::metadata() const
         metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
         metadataMap.insert( "mpris:length", track->duration() );
         metadataMap.insert( "xesam:album", track->album()->name() );
-        metadataMap.insert( "xesam:artist", track->artist()->name() );
+        metadataMap.insert( "xesam:artist", QStringList( track->artist()->name() ) );
         metadataMap.insert( "xesam:title", track->track() );
 
         // Only return art if tempfile exists, and if its name contains the same "artist_album_tomahawk_cover.png"
