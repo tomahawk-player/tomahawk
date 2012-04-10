@@ -112,6 +112,9 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
      */
     InfoChart = 51,
 
+    InfoNewReleaseCapabilities = 52,
+    InfoNewRelease = 53,
+
     InfoMiscTopHotttness = 60,
     InfoMiscTopTerms = 61,
 
@@ -195,7 +198,7 @@ struct InfoPushData {
         , pushFlags( pflags )
         , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
         {}
-    
+
 };
 
 

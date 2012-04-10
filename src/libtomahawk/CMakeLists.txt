@@ -251,6 +251,7 @@ set( libSources
 
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
+    infosystem/infoplugins/generic/newreleasesplugin.cpp
     infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/hypemPlugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp

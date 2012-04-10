@@ -28,6 +28,7 @@
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/chartsplugin.h"
+#include "infoplugins/generic/newreleasesplugin.h"
 #include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "infoplugins/generic/hypemPlugin.h"
@@ -86,6 +87,7 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
@@ -274,7 +276,7 @@ void
 InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
-    
+
     if ( pushData.pushFlags != PushNoFlag )
     {
         if ( pushData.pushFlags & PushShortUrlFlag )
@@ -334,7 +336,7 @@ InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callback
     m_shortLinksWaiting--;
     if ( !m_shortLinksWaiting )
         disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
-    
+
     if ( !callbackObj.isValid() )
     {
         tDebug() << Q_FUNC_INFO << "callback object was not valid, cannot continue";
