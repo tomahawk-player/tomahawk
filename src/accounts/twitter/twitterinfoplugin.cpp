@@ -68,18 +68,19 @@ TwitterInfoPlugin::init()
 
 TwitterInfoPlugin::~TwitterInfoPlugin()
 {
+    tDebug() << Q_FUNC_INFO;
 }
 
 
 bool
 TwitterInfoPlugin::refreshTwitterAuth()
 {
-    tDebug() << Q_FUNC_INFO << " begin";
+    tDebug() << Q_FUNC_INFO << " begin" << this;
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
-    tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
+    tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam() << this;
     m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if( m_twitterAuth.isNull() )
@@ -97,13 +98,13 @@ TwitterInfoPlugin::connectAuthVerifyReply( const QTweetUser &user )
 {
     if ( user.id() == 0 )
     {
-        tDebug() << "TwitterInfoPlugin could not authenticate to Twitter";
+        tDebug() << "TwitterInfoPlugin could not authenticate to Twitter" << this;
         deleteLater();
         return;
     }
     else
     {
-        tDebug() << "TwitterInfoPlugin successfully authenticated to Twitter";
+        tDebug() << "TwitterInfoPlugin successfully authenticated to Twitter" << this;
         return;
     }
 }

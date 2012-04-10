@@ -107,6 +107,13 @@ void
 InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
 {
     tDebug() << Q_FUNC_INFO << plugin;
+    foreach ( InfoPluginPtr ptr, m_plugins )
+    {
+        if ( ptr.data() == plugin )
+            tDebug() << Q_FUNC_INFO << "This plugin is already added to the infosystem.";
+        return;
+    }
+    
     InfoPluginPtr weakptr( plugin );
     m_plugins.append( weakptr );
     registerInfoTypes( weakptr, weakptr.data()->supportedGetTypes(), weakptr.data()->supportedPushTypes() );

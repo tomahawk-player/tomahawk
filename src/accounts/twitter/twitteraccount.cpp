@@ -50,7 +50,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     , m_isAuthenticated( false )
 {
     setAccountServiceName( "Twitter" );
-    setTypes( AccountTypes( InfoType | SipType ) );
+    setTypes( AccountTypes( StatusPushType | SipType ) );
 
     qDebug() << "Got cached peers:" << configuration() << configuration()[ "cachedpeers" ];
 
@@ -120,12 +120,13 @@ TwitterAccount::authenticate()
 
     if ( credentials()[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
     {
-        qDebug() << "TwitterSipPlugin has empty Twitter credentials; not connecting";
+        tDebug() << Q_FUNC_INFO << "TwitterSipPlugin has empty Twitter credentials; not connecting";
         return;
     }
 
     if ( refreshTwitterAuth() )
     {
+        tDebug() << Q_FUNC_INFO << "Verifying credentials";
         QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
         connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( connectAuthVerifyReply( const QTweetUser & ) ) );
         credVerifier->verify();
@@ -136,6 +137,8 @@ TwitterAccount::authenticate()
 void
 TwitterAccount::deauthenticate()
 {
+    tDebug() << Q_FUNC_INFO;
+    
     if ( m_twitterSipPlugin )
         sipPlugin()->disconnectPlugin();
 
