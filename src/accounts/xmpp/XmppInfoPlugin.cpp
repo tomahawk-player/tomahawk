@@ -33,7 +33,7 @@
 // remove now playing status after PAUSE_TIMEOUT seconds
 static const int PAUSE_TIMEOUT = 60;
 
-Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin(XmppSipPlugin* sipPlugin)
+Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin( XmppSipPlugin* sipPlugin )
     : m_sipPlugin( sipPlugin )
     , m_pubSubManager( 0 )
     , m_pauseTimer( this )
@@ -67,11 +67,11 @@ Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
+    tDebug() << Q_FUNC_INFO << m_sipPlugin.data()->m_client->jid().full();
 
-    if( m_sipPlugin->m_account->configuration().value("publishtracks").toBool() == false )
+    if( m_sipPlugin.data()->m_account->configuration().value("publishtracks").toBool() == false )
     {
-        tDebug() << Q_FUNC_INFO <<  m_sipPlugin->m_client->jid().full() << "Not publishing now playing info (disabled in account config)";
+        tDebug() << Q_FUNC_INFO <<  m_sipPlugin.data()->m_client->jid().full() << "Not publishing now playing info (disabled in account config)";
         return;
     }
 
@@ -121,7 +121,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
     }
     
     Tomahawk::InfoSystem::InfoStringHash info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full() << info;
+    tDebug() << Q_FUNC_INFO << m_sipPlugin.data()->m_client->jid().full() << info;
     
     Jreen::Tune::Ptr tune( new Jreen::Tune() );
 
@@ -147,13 +147,13 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioPaused()
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
+    tDebug() << Q_FUNC_INFO << m_sipPlugin.data()->m_client->jid().full();
 }
 
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioStopped()
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
+    tDebug() << Q_FUNC_INFO << m_sipPlugin.data()->m_client->jid().full();
 
     Jreen::Tune::Ptr tune( new Jreen::Tune() );
     m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
