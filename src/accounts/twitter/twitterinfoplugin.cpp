@@ -131,10 +131,9 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 
     Tomahawk::InfoSystem::InfoStringHash info = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
 
-    QString msg = tr( "Listening to \"%1\" by %2%3 and loving it! %4" )
+    QString msg = tr( "Listening to \"%1\" by %2 and loving it! %3" )
                         .arg( info[ "title" ] )
                         .arg( info[ "artist" ] )
-                        .arg( info[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( info[ "album" ] ) ) )
                         .arg( pushInfoPair.first.contains( "shorturl" ) ?
                                 pushInfoPair.first[ "shorturl" ].toUrl().toString() :
                                 GlobalActionManager::instance()->openLink( info[ "title" ], info[ "artist" ], info[ "album" ] ).toString() );
