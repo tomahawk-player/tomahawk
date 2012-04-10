@@ -105,11 +105,8 @@ Tomahawk::InfoSystem::InfoPluginPtr
 TwitterAccount::infoPlugin()
 {
     if ( m_twitterInfoPlugin.isNull() )
-    {
         m_twitterInfoPlugin = QWeakPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
 
-        return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
-    }
     return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
 }
 

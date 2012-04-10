@@ -176,6 +176,9 @@ XmppSipPlugin::~XmppSipPlugin()
 InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()
 {
+    if ( m_infoPlugin.isNull() )
+        m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+    
     return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }
 
@@ -270,11 +273,8 @@ XmppSipPlugin::onConnect()
     m_roster->load();
 
     // load XmppInfoPlugin
-    if( !m_infoPlugin )
-    {
-        m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+    if( infoPlugin() )
         InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
-    }
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
     // join MUC with bare jid as nickname
@@ -338,6 +338,9 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     {
         handlePeerStatus(peer, Jreen::Presence::Unavailable);
     }
+
+    if ( !m_infoPlugin.isNull() )
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
 }
 
 

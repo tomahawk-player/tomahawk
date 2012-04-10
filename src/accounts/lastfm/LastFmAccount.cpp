@@ -54,8 +54,6 @@ LastFmAccountFactory::icon() const
 LastFmAccount::LastFmAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
 {
-    m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
-
     setAccountFriendlyName( "Last.Fm" );
     m_icon.load( RESPATH "images/lastfm-icon.png" );
 
@@ -84,7 +82,8 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 LastFmAccount::~LastFmAccount()
 {
     if ( m_infoPlugin )
-        m_infoPlugin.data()->deleteLater();
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+    
     delete m_resolver.data();
 }
 
@@ -167,9 +166,10 @@ LastFmAccount::icon() const
 InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
-    if ( m_infoPlugin )
-        return InfoPluginPtr( m_infoPlugin.data() );
-    return InfoPluginPtr();
+    if ( m_infoPlugin.isNull() )
+        m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
+    
+    return InfoPluginPtr( m_infoPlugin.data() );
 }
 
 bool
