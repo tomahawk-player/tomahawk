@@ -87,7 +87,7 @@ public:
     virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
     virtual SipPlugin* sipPlugin() { return 0; }
 
-    void sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
+    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
     void unregisterUpdater( const QString& plid );
@@ -104,6 +104,7 @@ private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
   //  void <here>( const QString& msgType, const QVariantMap& msg );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
+    void playlistCreated( const QString& msgType, const QVariantMap& msg );
 
 private:
     void init();
@@ -123,6 +124,8 @@ private:
     // List of synced spotify playlists in config UI
     QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
+
+    QHash< QString, playlist_ptr > m_waitingForCreateReply;
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;

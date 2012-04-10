@@ -155,7 +155,17 @@ SpotifyAccount::syncActionTriggered( bool checked )
 
     if ( !updater )
     {
-        // TODO
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "createPlaylist";
+        msg[ "sync" ] = true;
+
+        QList< query_ptr > queries;
+        foreach ( const plentry_ptr& ple, playlist->entries() )
+            queries << ple->query();
+        QVariantList tracks = SpotifyPlaylistUpdater::queriesToVariant( queries );
+
+        const QString qid = sendMessage( msg, this, "playlistCreated" );
+        m_waitingForCreateReply[ qid ] = playlist;
     }
     else
     {
@@ -415,6 +425,7 @@ SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
 void
 SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg )
 {
+    Q_UNUSED( msgType );
     qDebug() << Q_FUNC_INFO <<  "Got full spotify playlist body, creating a tomahawk playlist and enabling sync!!";
     const QString id = msg.value( "id" ).toString();
     const QString name = msg.value( "name" ).toString();
@@ -459,19 +470,54 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
 
 
 void
+SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg )
+{
+    Q_UNUSED( msgType );
+
+    qDebug() << Q_FUNC_INFO << "Got response from our createPlaylist command, now creating updater and attaching";
+    const bool success = msg.value( "success" ).toBool();
+
+    if ( !success )
+    {
+        qWarning() << "Got FAILED return code from spotify resolver createPlaylist command, aborting sync";
+        return;
+    }
+
+    const QString id = msg.value( "playlistid" ).toString();
+    const QString revid = msg.value( "playlistid" ).toString();
+    const QString qid = msg.value( "qid" ).toString();
+
+    if ( !m_waitingForCreateReply.contains( qid ) )
+    {
+        qWarning() << "Got a createPlaylist reply for a playlist/qid we were not waiting for :-/ " << qid << m_waitingForCreateReply;
+        return;
+    }
+
+    playlist_ptr playlist = m_waitingForCreateReply.take( qid );
+    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( this, revid, id, playlist );
+    updater->setSync( true );
+    m_updaters[ id ] = updater;
+}
+
+
+QString
 SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& slot )
 {
     QVariantMap msg = m;
+    QString qid;
 
     if ( obj )
     {
-        const QString qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
+        qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
 
         m_qidToSlotMap[ qid ] = qMakePair( obj, slot );
         msg[ "qid" ] = qid;
+
     }
 
     m_spotifyResolver.data()->sendMessage( msg );
+
+    return qid;
 }
 
 
