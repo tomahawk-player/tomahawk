@@ -1154,7 +1154,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="77"/>
         <source>Recently Played</source>
-        <translation>Kürzlich gehörte Lieder</translation>
+        <translation>Kürzlich gehörte Lieder FOO</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="81"/>
@@ -1255,7 +1255,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="290"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="295"/>
