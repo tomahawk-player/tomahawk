@@ -70,12 +70,20 @@ LastFmAccount::LastFmAccount( const QString& accountId )
     {
         hookupResolver();
     }
+
+
+    if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+    {
+        infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+    }
 }
 
 
 LastFmAccount::~LastFmAccount()
 {
-    delete m_infoPlugin.data();
+    if ( m_infoPlugin )
+        m_infoPlugin.data()->deleteLater();
     delete m_resolver.data();
 }
 
@@ -158,7 +166,9 @@ LastFmAccount::icon() const
 InfoPlugin*
 LastFmAccount::infoPlugin()
 {
-    return m_infoPlugin.data();
+    if ( m_infoPlugin )
+        return m_infoPlugin.data();
+    return 0;
 }
 
 bool
@@ -178,7 +188,8 @@ LastFmAccount::saveConfig()
         setScrobble( m_configWidget.data()->scrobble() );
     }
 
-    m_infoPlugin.data()->settingsChanged();
+    if ( m_infoPlugin )
+        QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );
 }
 
 

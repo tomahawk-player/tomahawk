@@ -165,7 +165,6 @@ XmppSipPlugin::XmppSipPlugin( Account *account )
 
 XmppSipPlugin::~XmppSipPlugin()
 {
-    delete m_infoPlugin;
     delete m_avatarManager;
     delete m_roster;
 #ifndef ENABLE_HEADLESS

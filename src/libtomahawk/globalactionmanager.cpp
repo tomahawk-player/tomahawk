@@ -125,6 +125,7 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 void
 GlobalActionManager::shortenLink( const QUrl& url, const QVariant &callbackObj )
 {
+    tDebug() << Q_FUNC_INFO << "callbackObj is valid: " << ( callbackObj.isValid() ? "true" : "false" );
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
@@ -136,7 +137,7 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant &callbackObj )
     request.setUrl( url );
 
     QNetworkReply *reply = TomahawkUtils::nam()->get( request );
-    if ( !callbackObj.isValid() )
+    if ( callbackObj.isValid() )
         reply->setProperty( "callbackobj", callbackObj );
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
@@ -901,7 +902,7 @@ GlobalActionManager::shortenLinkRequestFinished()
     }
 
     QVariant callbackObj;
-    if ( reply->property( "callbackobj" ).canConvert< QVariant >() && reply->property( "callbackobj" ).isValid() )
+    if ( reply->property( "callbackobj" ).isValid() )
         callbackObj = reply->property( "callbackobj" );
     
     // Check for the redirect attribute, as this should be the shortened link

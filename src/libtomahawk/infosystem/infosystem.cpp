@@ -137,7 +137,7 @@ InfoSystem::init()
 bool
 InfoSystem::getInfo( const InfoRequestData &requestData )
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();
@@ -218,7 +218,24 @@ InfoSystem::addInfoPlugin( InfoPlugin* plugin )
         QMetaObject::invokeMethod( this, "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
         return;
     }
+
+    if ( plugin->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
+    {
+        tDebug() << Q_FUNC_INFO << "The object must be moved to the worker thread first, see InfoSystem::workerThread()";
+        return;
+    }
+    
     QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
+}
+
+
+QWeakPointer< QThread >
+InfoSystem::workerThread() const
+{
+    if ( m_infoSystemWorkerThreadController->isRunning() && m_infoSystemWorkerThreadController->worker() )
+        return QWeakPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
+
+    return QWeakPointer< QThread >();
 }
 
 

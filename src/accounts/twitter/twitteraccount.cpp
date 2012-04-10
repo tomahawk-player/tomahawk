@@ -21,6 +21,7 @@
 #include "twitteraccount.h"
 #include "twitterconfigwidget.h"
 #include "accounts/twitter/tomahawkoauthtwitter.h"
+#include "libtomahawk/infosystem/infosystem.h"
 
 #include "sip/SipPlugin.h"
 
@@ -99,6 +100,19 @@ TwitterAccount::sipPlugin()
 }
 
 
+Tomahawk::InfoSystem::InfoPlugin*
+TwitterAccount::infoPlugin()
+{
+    if ( m_twitterInfoPlugin.isNull() )
+    {
+        m_twitterInfoPlugin = QWeakPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
+
+        return m_twitterInfoPlugin.data();
+    }
+    return m_twitterInfoPlugin.data();
+}
+
+
 void
 TwitterAccount::authenticate()
 {
@@ -122,10 +136,14 @@ TwitterAccount::authenticate()
 void
 TwitterAccount::deauthenticate()
 {
-    if ( sipPlugin() )
+    if ( m_twitterSipPlugin )
         sipPlugin()->disconnectPlugin();
 
+    if ( m_twitterInfoPlugin )
+        m_twitterInfoPlugin.data()->deleteLater();
+
     m_isAuthenticated = false;
+    
     emit nowDeauthenticated();
 }
 
@@ -139,7 +157,7 @@ TwitterAccount::refreshTwitterAuth()
         delete m_twitterAuth.data();
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
-    qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
+    tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
     m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if( m_twitterAuth.isNull() )
@@ -170,10 +188,18 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
 
         sipPlugin()->connectPlugin();
 
+        if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+        {
+            infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+            Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+        }
+
         m_isAuthenticated = true;
         emit nowAuthenticated( m_twitterAuth, user );
     }
 }
+
+
 QPixmap
 TwitterAccount::icon() const {
     return QPixmap( ":/twitter-icon.png" );

@@ -8,6 +8,7 @@ add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( twitterAccountSources
     twitteraccount.cpp
+    twitterinfoplugin.cpp
     twitterconfigwidget.cpp
     tomahawkoauthtwitter.cpp
     sip/twittersip.cpp
@@ -15,6 +16,7 @@ set( twitterAccountSources
 
 set( twitterAccountHeaders
     twitteraccount.h
+    twitterinfoplugin.h
     twitterconfigwidget.h
     tomahawkoauthtwitter.h
     sip/twittersip.h

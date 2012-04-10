@@ -25,6 +25,7 @@
 #include "tomahawkoauthtwitter.h"
 
 #include "sip/twittersip.h"
+#include "twitterinfoplugin.h"
 #include "accounts/accountdllmacro.h"
 #include "accounts/Account.h"
 
@@ -49,7 +50,7 @@ public:
     QString factoryId() const { return "twitteraccount"; }
     QString description() const { return tr( "Connect to your Twitter followers." ); }
     QPixmap icon() const { return QPixmap( ":/twitter-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( SipType ); };
+    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); };
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -69,7 +70,7 @@ public:
 
     ConnectionState connectionState() const;
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
+    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
     SipPlugin* sipPlugin();
 
     QWidget* configurationWidget() { return m_configWidget.data(); }
@@ -92,6 +93,7 @@ private:
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< TwitterConfigWidget > m_configWidget;
     QWeakPointer< TwitterSipPlugin > m_twitterSipPlugin;
+    QWeakPointer< Tomahawk::InfoSystem::TwitterInfoPlugin > m_twitterInfoPlugin;
 
     // for settings access
     friend class TwitterConfigWidget;

@@ -106,6 +106,7 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 void
 InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
 {
+    tDebug() << Q_FUNC_INFO << plugin;
     InfoPluginPtr weakptr( plugin );
     m_plugins.append( weakptr );
     registerInfoTypes( weakptr, weakptr.data()->supportedGetTypes(), weakptr.data()->supportedPushTypes() );

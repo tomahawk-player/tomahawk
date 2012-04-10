@@ -282,6 +282,8 @@ public:
     bool pushInfo( InfoPushData pushData );
     bool pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags );
 
+    QWeakPointer< QThread > workerThread() const;
+
 public slots:
     // InfoSystem takes ownership of InfoPlugins
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );

@@ -297,9 +297,6 @@ AccountManager::addAccount( Account* account )
     if ( account->types() & Accounts::StatusPushType )
         m_accountsByAccountType[ Accounts::StatusPushType ].append( account );
 
-    if ( account->infoPlugin() )
-        InfoSystem::InfoSystem::instance()->addInfoPlugin( account->infoPlugin() );
-
     emit added( account );
 }
 
