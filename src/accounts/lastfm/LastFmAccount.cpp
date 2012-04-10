@@ -76,6 +76,7 @@ LastFmAccount::LastFmAccount( const QString& accountId )
     {
         infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+        QMetaObject::invokeMethod( infoPlugin(), "init", Qt::QueuedConnection );
     }
 }
 

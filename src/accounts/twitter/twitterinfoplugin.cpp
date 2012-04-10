@@ -38,7 +38,18 @@ TwitterInfoPlugin::TwitterInfoPlugin( Tomahawk::Accounts::TwitterAccount* accoun
     : m_account( account )
 {
     m_supportedPushTypes << InfoLove;
+}
 
+
+void
+TwitterInfoPlugin::init()
+{
+    if ( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() && thread() != Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() )
+    {
+        tDebug() << "Failure: move to the worker thread before running init";
+        return;
+    }
+    
     QVariantHash credentials = m_account->credentials();
     if ( credentials[ "oauthtoken" ].toString().isEmpty() || credentials[ "oauthtokensecret" ].toString().isEmpty() )
     {

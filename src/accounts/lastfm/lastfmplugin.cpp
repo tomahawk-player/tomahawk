@@ -46,7 +46,17 @@ LastFmPlugin::LastFmPlugin( LastFmAccount* account )
 {
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
+}
 
+
+void
+LastFmPlugin::init()
+{
+    if ( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() && thread() != Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() )
+    {
+        tDebug() << "Failure: move to the worker thread before running init";
+        return;
+    }
     // Flush session key cache
     // TODO WHY FLUSH
 //     m_account->setSessionKey( QByteArray() );

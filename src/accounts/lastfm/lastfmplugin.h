@@ -49,6 +49,7 @@ public:
     virtual ~LastFmPlugin();
 
 public slots:
+    void init();
     void settingsChanged();
 
     void onAuthenticated();

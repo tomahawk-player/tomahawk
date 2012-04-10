@@ -192,6 +192,7 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         {
             infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
             Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+            QMetaObject::invokeMethod( infoPlugin(), "init", Qt::QueuedConnection );
         }
 
         m_isAuthenticated = true;
