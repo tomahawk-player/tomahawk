@@ -77,7 +77,7 @@ class SpotifyAccount : public ResolverAccount
 public:
     SpotifyAccount( const QString& accountId );
     SpotifyAccount( const QString& accountId, const QString& path );
-    virtual ~SpotifyAccount() {}
+    virtual ~SpotifyAccount();
 
     virtual QPixmap icon() const;
     virtual QWidget* configurationWidget();

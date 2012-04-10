@@ -82,6 +82,13 @@ SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
 }
 
 
+SpotifyAccount::~SpotifyAccount()
+{
+    foreach( QAction* action, m_customActions )
+        ActionCollection::instance()->removeAction( action );
+}
+
+
 void
 SpotifyAccount::init()
 {
