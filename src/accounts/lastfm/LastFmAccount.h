@@ -72,7 +72,7 @@ public:
     virtual void authenticate();
 
     virtual SipPlugin* sipPlugin() { return 0; }
-    virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
     virtual bool isAuthenticated() const;
 

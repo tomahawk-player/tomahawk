@@ -69,7 +69,7 @@ public:
     void deauthenticate();
     bool isAuthenticated() const;
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
     SipPlugin* sipPlugin();
 

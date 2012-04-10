@@ -82,44 +82,51 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_shortLinksWaiting = 0;
     m_cache = cache;
 #ifndef ENABLE_HEADLESS
-    addInfoPlugin( new EchoNestPlugin() );
-    addInfoPlugin( new MusixMatchPlugin() );
-    addInfoPlugin( new MusicBrainzPlugin() );
-    addInfoPlugin( new ChartsPlugin() );
-    addInfoPlugin( new RoviPlugin() );
-    addInfoPlugin( new SpotifyPlugin() );
-    addInfoPlugin( new hypemPlugin() );
+    addInfoPlugin( InfoPluginPtr( new EchoNestPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
 #endif
 
 #ifdef Q_WS_MAC
-    addInfoPlugin( new AdiumPlugin() );
+    addInfoPlugin( InfoPluginPtr( new AdiumPlugin() ) );
 #endif
 #ifndef ENABLE_HEADLESS
 #ifdef Q_WS_X11
-    addInfoPlugin( new FdoNotifyPlugin() );
-    addInfoPlugin( new MprisPlugin() );
+    addInfoPlugin( InfoPluginPtr( new FdoNotifyPlugin() ) );
+    addInfoPlugin( InfoPluginPtr( new MprisPlugin() ) );
 #endif
 #endif
 }
 
 
 void
-InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
+InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 {
     tDebug() << Q_FUNC_INFO << plugin;
     foreach ( InfoPluginPtr ptr, m_plugins )
     {
-        if ( ptr.data() == plugin )
+        if ( ptr == plugin )
+        {
             tDebug() << Q_FUNC_INFO << "This plugin is already added to the infosystem.";
+            return;
+        }
+    }
+
+    if ( plugin.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << "passed-in plugin is null";
         return;
     }
     
-    InfoPluginPtr weakptr( plugin );
-    m_plugins.append( weakptr );
-    registerInfoTypes( weakptr, weakptr.data()->supportedGetTypes(), weakptr.data()->supportedPushTypes() );
+    m_plugins.append( plugin );
+    registerInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
 
     connect(
-        plugin,
+        plugin.data(),
             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
             this,
             SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -127,19 +134,45 @@ InfoSystemWorker::addInfoPlugin( InfoPlugin* plugin )
     );
 
     connect(
-        plugin,
+        plugin.data(),
             SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
             m_cache,
             SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
             Qt::QueuedConnection
     );
     connect(
-        plugin,
+        plugin.data(),
             SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             m_cache,
             SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             Qt::QueuedConnection
     );
+}
+
+
+void
+InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
+{
+    tDebug() << Q_FUNC_INFO << plugin;
+
+    if ( plugin.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << "passed-in plugin is null";
+        return;
+    }
+    
+    foreach ( InfoPluginPtr ptr, m_plugins )
+    {
+        if ( ptr == plugin )
+            break;
+        
+        tDebug() << Q_FUNC_INFO << "This plugin does not exist in the infosystem.";
+        return;
+    }
+
+    m_plugins.removeOne( plugin );
+    deregisterInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
+    delete plugin.data();
 }
 
 
@@ -150,6 +183,16 @@ InfoSystemWorker::registerInfoTypes( const InfoPluginPtr &plugin, const QSet< In
         m_infoGetMap[type].append( plugin );
     Q_FOREACH( InfoType type, pushTypes )
         m_infoPushMap[type].append( plugin );
+}
+
+
+void
+InfoSystemWorker::deregisterInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
+{
+    Q_FOREACH( InfoType type, getTypes )
+        m_infoGetMap[type].removeOne( plugin );
+    Q_FOREACH( InfoType type, pushTypes )
+        m_infoPushMap[type].removeOne( plugin );
 }
 
 
@@ -242,6 +285,8 @@ InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
         }
     }
 
+    tDebug() << Q_FUNC_INFO << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
+    
     Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
         if( ptr )

@@ -49,8 +49,6 @@ public:
     InfoSystemWorker();
     ~InfoSystemWorker();
 
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
-
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
@@ -64,7 +62,8 @@ public slots:
     
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-    void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
+    void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
+    void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     
     void getShortUrl( Tomahawk::InfoSystem::InfoPushData data );
     void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj );
@@ -73,6 +72,8 @@ private slots:
     void checkTimeoutsTimerFired();
 
 private:
+    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
+    void deregisterInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
 
     void checkFinished( const Tomahawk::InfoSystem::InfoRequestData &target );
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;

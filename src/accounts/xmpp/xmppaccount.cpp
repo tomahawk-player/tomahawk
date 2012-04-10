@@ -91,13 +91,13 @@ XmppAccount::saveConfig()
 }
 
 
-InfoSystem::InfoPlugin*
+InfoSystem::InfoPluginPtr
 XmppAccount::infoPlugin()
 {
     if( !m_xmppSipPlugin.isNull() )
         return m_xmppSipPlugin.data()->infoPlugin();
 
-    return 0;
+    return InfoSystem::InfoPluginPtr();
 }
 
 

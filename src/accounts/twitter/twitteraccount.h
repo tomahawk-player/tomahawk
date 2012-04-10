@@ -70,7 +70,7 @@ public:
 
     ConnectionState connectionState() const;
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
     SipPlugin* sipPlugin();
 
     QWidget* configurationWidget() { return m_configWidget.data(); }
@@ -84,12 +84,14 @@ signals:
     void nowDeauthenticated();
 
 private slots:
+    void authenticateSlot();
     void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );
 
 private:
     QIcon m_icon;
     bool m_isAuthenticated;
+    bool m_isAuthenticating;
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< TwitterConfigWidget > m_configWidget;
     QWeakPointer< TwitterSipPlugin > m_twitterSipPlugin;

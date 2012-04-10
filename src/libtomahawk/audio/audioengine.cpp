@@ -328,6 +328,7 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
     else
     {
         _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
+        Q_UNUSED( closure );
         m_currentTrack->album()->cover( QSize( 0, 0 ) );
     }
 #endif

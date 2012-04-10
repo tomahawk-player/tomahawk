@@ -210,22 +210,56 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input, const Pus
 
 
 void
-InfoSystem::addInfoPlugin( InfoPlugin* plugin )
+InfoSystem::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 {
-    // Init is not complete (waiting for worker th read to start and create worker object) so keep trying till then
+    // Init is not complete (waiting for worker thread to start and create worker object) so keep trying till then
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
-        QMetaObject::invokeMethod( this, "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
+        QMetaObject::invokeMethod( this, "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
         return;
     }
 
-    if ( plugin->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
+    if ( plugin.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << "Given plugin is null!";
+        return;
+    }
+    
+    if ( plugin.data()->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
     {
         tDebug() << Q_FUNC_INFO << "The object must be moved to the worker thread first, see InfoSystem::workerThread()";
         return;
     }
-    
-    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPlugin*, plugin ) );
+
+    tDebug() << Q_FUNC_INFO << plugin.data();
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
+}
+
+
+void
+InfoSystem::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
+{
+    // Init is not complete (waiting for worker th read to start and create worker object) so keep trying till then
+    if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
+    {
+        QMetaObject::invokeMethod( this, "removeInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
+        return;
+    }
+
+    if ( plugin.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << "Given plugin is null!";
+        return;
+    }
+
+    if ( plugin.data()->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
+    {
+        tDebug() << Q_FUNC_INFO << "The object must be moved to the worker thread first, see InfoSystem::workerThread()";
+        return;
+    }
+
+    tDebug() << Q_FUNC_INFO << plugin.data();
+    QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "removeInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
 }
 
 

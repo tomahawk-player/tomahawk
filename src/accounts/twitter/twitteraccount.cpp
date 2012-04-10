@@ -48,6 +48,7 @@ TwitterAccountFactory::createAccount( const QString& accountId )
 TwitterAccount::TwitterAccount( const QString &accountId )
     : Account( accountId )
     , m_isAuthenticated( false )
+    , m_isAuthenticating( false )
 {
     setAccountServiceName( "Twitter" );
     setTypes( AccountTypes( StatusPushType | SipType ) );
@@ -100,22 +101,48 @@ TwitterAccount::sipPlugin()
 }
 
 
-Tomahawk::InfoSystem::InfoPlugin*
+Tomahawk::InfoSystem::InfoPluginPtr
 TwitterAccount::infoPlugin()
 {
     if ( m_twitterInfoPlugin.isNull() )
     {
         m_twitterInfoPlugin = QWeakPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
 
-        return m_twitterInfoPlugin.data();
+        return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
     }
-    return m_twitterInfoPlugin.data();
+    return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
 }
 
 
 void
 TwitterAccount::authenticate()
 {
+    // Since we need to have a chance for deletion (via the infosystem) to work on the info plugin, we put this on the event loop
+    tDebug() << Q_FUNC_INFO;
+    QTimer::singleShot( 0, this, SLOT( authenticateSlot() ) );
+}
+
+
+void
+TwitterAccount::authenticateSlot()
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( m_twitterInfoPlugin.isNull() )
+    {
+        if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+        {
+            infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+            Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+            QMetaObject::invokeMethod( infoPlugin().data(), "init", Qt::QueuedConnection );
+        }
+    }
+    
+    if ( m_isAuthenticating )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Already authenticating";
+        return;
+    }
+    
     tDebug() << Q_FUNC_INFO << "credentials: " << credentials().keys();
 
     if ( credentials()[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
@@ -126,6 +153,7 @@ TwitterAccount::authenticate()
 
     if ( refreshTwitterAuth() )
     {
+        m_isAuthenticating = true;
         tDebug() << Q_FUNC_INFO << "Verifying credentials";
         QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
         connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( connectAuthVerifyReply( const QTweetUser & ) ) );
@@ -143,9 +171,10 @@ TwitterAccount::deauthenticate()
         sipPlugin()->disconnectPlugin();
 
     if ( m_twitterInfoPlugin )
-        m_twitterInfoPlugin.data()->deleteLater();
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( m_twitterInfoPlugin.data() );
 
     m_isAuthenticated = false;
+    m_isAuthenticating = false;
     
     emit nowDeauthenticated();
 }
@@ -176,6 +205,7 @@ TwitterAccount::refreshTwitterAuth()
 void
 TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
 {
+    m_isAuthenticating = false;
     if ( user.id() == 0 )
     {
         qDebug() << "TwitterAccount could not authenticate to Twitter";
@@ -190,13 +220,6 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         sync();
 
         sipPlugin()->connectPlugin();
-
-        if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
-        {
-            infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
-            Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
-            QMetaObject::invokeMethod( infoPlugin(), "init", Qt::QueuedConnection );
-        }
 
         m_isAuthenticated = true;
         emit nowAuthenticated( m_twitterAuth, user );

@@ -116,6 +116,7 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     tDebug() << Q_FUNC_INFO;
     if ( !isValid() )
     {
+        tDebug() << Q_FUNC_INFO << "Plugin not valid, deleting and returning";
         deleteLater();
         return;
     }
@@ -141,6 +142,7 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( m_twitterAuth.data(), this );
     connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postLovedStatusUpdateReply(const QTweetStatus &) ) );
     connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postLovedStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
+    tDebug() << Q_FUNC_INFO << "Posting message: " << msg;
     statUpdate->post( msg );
 }
 

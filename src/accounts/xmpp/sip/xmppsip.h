@@ -67,7 +67,7 @@ public:
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
@@ -131,7 +131,7 @@ private:
     int m_currentPort;
     QString m_currentResource;
 
-    Tomahawk::InfoSystem::InfoPlugin* m_infoPlugin;
+    QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin> m_infoPlugin;
     Tomahawk::Accounts::Account::ConnectionState m_state;
 
     // sort out

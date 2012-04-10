@@ -35,6 +35,8 @@
 #include "collection.h"
 #include "infosystem/infosystem.h"
 #include "accounts/AccountManager.h"
+#include "accounts/spotify/SpotifyAccount.h"
+#include "accounts/lastfm/LastFmAccount.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -60,8 +62,6 @@
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
-#include "accounts/lastfm/LastFmAccount.h"
-#include "accounts/spotify/SpotifyAccount.h"
 
 #include "config.h"
 
@@ -227,16 +227,8 @@ TomahawkApp::init()
 
     tDebug() << "Init AccountManager.";
     m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
-
-    Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
-    m_accountManager.data()->addAccountFactory( lastfmFactory );
-
-    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
-    m_accountManager.data()->addAccountFactory( spotifyFactory );
-    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
-
-    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
-
+    connect( m_accountManager.data(), SIGNAL( ready() ), SLOT( accountManagerReady() ) );
+    
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 #ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
@@ -447,6 +439,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoPushData >( "Tomahawk::InfoSystem::InfoPushData" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoPluginPtr >( "Tomahawk::InfoSystem::InfoPluginPtr" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoPlugin* >( "Tomahawk::InfoSystem::InfoPlugin*" );
     qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
 
@@ -595,6 +588,20 @@ TomahawkApp::spotifyApiCheckFinished()
 
     DropJob::setCanParseSpotifyPlaylists( !reply->error() );
 #endif
+}
+
+
+void
+TomahawkApp::accountManagerReady()
+{
+    Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
+    m_accountManager.data()->addAccountFactory( lastfmFactory );
+
+    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
+    m_accountManager.data()->addAccountFactory( spotifyFactory );
+    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
+
+    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 }
 
 

@@ -86,7 +86,6 @@ JreenMessageHandler(QtMsgType type, const char *msg)
 
 XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
-    , m_infoPlugin( 0 )
     , m_state( Account::Disconnected )
 #ifndef ENABLE_HEADLESS
     , m_menu( 0 )
@@ -174,10 +173,10 @@ XmppSipPlugin::~XmppSipPlugin()
 }
 
 
-InfoSystem::InfoPlugin*
+InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()
 {
-    return m_infoPlugin;
+    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }
 
 
@@ -273,8 +272,8 @@ XmppSipPlugin::onConnect()
     // load XmppInfoPlugin
     if( !m_infoPlugin )
     {
-        m_infoPlugin = new Tomahawk::InfoSystem::XmppInfoPlugin( this );
-        InfoSystem::InfoSystem::instance()->addInfoPlugin( m_infoPlugin );
+        m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+        InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
     }
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P

@@ -43,7 +43,7 @@ public:
 
     explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
-
+    
     void loadFromConfig();
     void initSIP();
 
@@ -84,6 +84,8 @@ public slots:
     void toggleAccountsConnected();
 
 signals:
+    void ready();
+    
     void added( Tomahawk::Accounts::Account* );
     void removed( Tomahawk::Accounts::Account* );
 
@@ -94,6 +96,7 @@ signals:
     void stateChanged( Account* p, Accounts::Account::ConnectionState state );
 
 private slots:
+    void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
 

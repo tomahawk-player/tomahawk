@@ -51,14 +51,7 @@ AccountManager::AccountManager( QObject *parent )
 {
     s_instance = this;
 
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
-
-    loadPluginFactories( findPluginFactories() );
-
-    // We include the resolver factory manually, not in a plugin
-    ResolverAccountFactory* f = new ResolverAccountFactory();
-    m_accountFactories[ f->factoryId() ] = f;
-    registerAccountFactoryForFilesystem( f );
+    QTimer::singleShot( 0, this, SLOT( init() ) );
 }
 
 
@@ -69,6 +62,29 @@ AccountManager::~AccountManager()
     disconnectAll();
     qDeleteAll( m_accounts );
     qDeleteAll( m_accountFactories );
+}
+
+
+void
+AccountManager::init()
+{
+    if ( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().isNull() )
+    {
+        //We need the info system worker to be alive so that we can move info plugins into its thread
+        QTimer::singleShot( 0, this, SLOT( init() ) );
+        return;
+    }
+    
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+
+    loadPluginFactories( findPluginFactories() );
+
+    // We include the resolver factory manually, not in a plugin
+    ResolverAccountFactory* f = new ResolverAccountFactory();
+    m_accountFactories[ f->factoryId() ] = f;
+    registerAccountFactoryForFilesystem( f );
+
+    emit ready();
 }
 
 
@@ -180,6 +196,7 @@ AccountManager::loadPluginFactory( const QString& path )
 void
 AccountManager::enableAccount( Account* account )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( account->enabled() )
         return;
 
@@ -195,6 +212,7 @@ AccountManager::enableAccount( Account* account )
 void
 AccountManager::disableAccount( Account* account )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !account->enabled() )
         return;
 
@@ -209,6 +227,7 @@ AccountManager::disableAccount( Account* account )
 void
 AccountManager::connectAll()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach( Account* acc, m_accounts )
     {
         acc->authenticate();
@@ -222,6 +241,7 @@ AccountManager::connectAll()
 void
 AccountManager::disconnectAll()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach( Account* acc, m_enabledAccounts )
         acc->deauthenticate();
 
@@ -234,6 +254,7 @@ AccountManager::disconnectAll()
 void
 AccountManager::toggleAccountsConnected()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_connected )
         disconnectAll();
     else
@@ -367,6 +388,7 @@ AccountManager::hookupAccount( Account* account ) const
 void
 AccountManager::hookupAndEnable( Account* account, bool startup )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     SipPlugin* p = account->sipPlugin();
     if ( p )
         SipHandler::instance()->hookUpPlugin( p );

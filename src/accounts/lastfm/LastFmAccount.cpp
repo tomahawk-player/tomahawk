@@ -74,9 +74,9 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 
     if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
     {
-        infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
-        QMetaObject::invokeMethod( infoPlugin(), "init", Qt::QueuedConnection );
+        QMetaObject::invokeMethod( infoPlugin().data(), "init", Qt::QueuedConnection );
     }
 }
 
@@ -164,12 +164,12 @@ LastFmAccount::icon() const
 }
 
 
-InfoPlugin*
+InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin )
-        return m_infoPlugin.data();
-    return 0;
+        return InfoPluginPtr( m_infoPlugin.data() );
+    return InfoPluginPtr();
 }
 
 bool
