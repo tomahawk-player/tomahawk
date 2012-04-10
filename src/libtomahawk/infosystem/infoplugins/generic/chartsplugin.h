@@ -52,10 +52,6 @@ public:
     void setChartType( ChartType type ) { m_chartType = type; }
     ChartType chartType() const { return m_chartType; }
 
-public slots:
-    void chartReturned();
-    void chartTypes();
-
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -65,9 +61,39 @@ protected slots:
         Q_UNUSED( pushData );
     }
 
+    /**
+     * Parses a QNetworkReply of a list of chart sources.
+     */
+    void chartSourcesList();
+
+    /**
+     * Parses a QNetworkReply of a list of charts for a particular source
+     */
+    void chartsList();
+
+    /**
+     * Parses a QNetworkReply for the chart data for a particular chart
+     */
+    void chartReturned();
+
 private:
-    void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
+    /**
+     * Fetch list of chart sources (e.g., itunes, billboard)
+     * Populates the m_chartResources member.
+     */
+    void fetchChartSourcesList();
+    /**
+     * Requests charts list for each chart source in m_chartResources
+     */
+    void fetchAllChartSources();
+    /**
+     * Fetches a specific chart from a particular source.
+     * Updates the cache.
+     */
+    void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, const QString& source, const QString& chart_id );
+
+    void fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QStringList m_chartResources;

@@ -45,10 +45,8 @@ ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
-    /// Add resources here
-    m_chartResources << "billboard" << "itunes" << "rdio" << "wearehunted" << "ex.fm" << "soundcloudwall";
     /// If you add resource, update version aswell
-    m_chartVersion = "2.1";
+    m_chartVersion = "2.2";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -104,11 +102,11 @@ ChartsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
                 }
 
             }
-            fetchChart( requestData );
+            fetchChartFromCache( requestData );
             break;
 
         case InfoChartCapabilities:
-            fetchChartCapabilities( requestData );
+            fetchChartCapabilitiesFromCache( requestData );
             break;
         default:
             dataError( requestData );
@@ -117,7 +115,7 @@ ChartsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
 
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
@@ -145,7 +143,7 @@ ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 }
 
 void
-ChartsPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
+ChartsPlugin::fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -168,53 +166,17 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
         case InfoChart:
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart not in cache! Fetching...";
-
-            /// Fetch the chart, we need source and id
-            QUrl url = QUrl( QString( CHART_URL "source/%1/chart/%2" ).arg( criteria["chart_source"] ).arg( criteria["chart_id"] ) );
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Getting chart url" << url;
-
-            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
-
-            connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
+            fetchChart( requestData, criteria["chart_source"], criteria["chart_id"] );
             return;
 
         }
 
         case InfoChartCapabilities:
         {
-
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
-            // we never need to re-fetch
-            //if ( !m_allChartsMap.isEmpty() )
-            //    return;
+            fetchChartSourcesList();
+            m_cachedRequests.append( requestData );
 
-            /// Then get each chart from resource
-
-            if ( !m_chartResources.isEmpty() && m_allChartsMap.isEmpty() )
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart fetching possible resources";
-                foreach ( QString resource, m_chartResources )
-                {
-                    QUrl url = QUrl( QString( CHART_URL "source/%1" ).arg( resource ) );
-                    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-                    reply->setProperty( "chart_resource", resource);
-
-                    tDebug() << "fetching:" << url;
-                    connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
-
-                    m_chartsFetchJobs++;
-                }
-            }
-
-            if ( m_chartsFetchJobs > 0 )
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities still fetching!";
-                m_cachedRequests.append( requestData );
-                return;
-            }
-
-            emit info( requestData, m_allChartsMap );
             return;
         }
 
@@ -227,21 +189,89 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
     }
 }
 
+void
+ChartsPlugin::fetchChartSourcesList()
+{
+    QUrl url = QUrl( QString( CHART_URL "charts" ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+
+    tDebug() << "fetching:" << url;
+    connect( reply, SIGNAL( finished() ), SLOT( chartSourcesList() ) );
+
+}
 
 void
-ChartsPlugin::chartTypes()
+ChartsPlugin::chartSourcesList()
 {
-    /// Get possible chart type for specificChartsPlugin: InfoChart types returned chart source
-    tDebug( LOGVERBOSE )  << "Got chart type result";
+    tDebug( LOGVERBOSE )  << "Got chart sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-
 
     if ( reply->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
         const QVariantMap res = p.parse( reply, &ok ).toMap();
-        const QVariantMap chartObjs = res.value( "charts" ).toMap();
+        const QVariantList sources = res.value( "sources" ).toList();
+
+        if ( !ok )
+        {
+            tLog() << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
+            return;
+        }
+
+        m_chartResources.clear();
+        foreach(const QVariant &source, sources) {
+            m_chartResources << source.toString();
+        }
+
+        fetchAllChartSources();
+    }
+}
+
+void ChartsPlugin::fetchAllChartSources()
+{
+    if ( !m_chartResources.isEmpty() && m_allChartsMap.isEmpty() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart fetching source data";
+        foreach ( QString source, m_chartResources )
+        {
+            QUrl url = QUrl( QString( CHART_URL "charts/%1" ).arg( source ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+            reply->setProperty( "chart_source", source);
+
+            tDebug() << "fetching:" << url;
+            connect( reply, SIGNAL( finished() ), SLOT( chartsList() ) );
+
+            m_chartsFetchJobs++;
+        }
+    }
+}
+
+void ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, const QString& source, const QString& chart_id)
+{
+    /// Fetch the chart, we need source and id
+    QUrl url = QUrl( QString( CHART_URL "charts/%1/%2" ).arg( source ).arg( chart_id ) );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
+
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+
+    connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
+}
+
+
+
+void
+ChartsPlugin::chartsList()
+{
+    tDebug( LOGVERBOSE )  << "Got chart list result";
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    if ( reply->error() == QNetworkReply::NoError )
+    {
+        QJson::Parser p;
+        bool ok;
+        const QVariantMap res = p.parse( reply, &ok ).toMap();
 
         if ( !ok )
         {
@@ -251,7 +281,7 @@ ChartsPlugin::chartTypes()
         }
 
         /// Got types, append!
-        const QString source = res.value( "source" ).toString();
+        const QString source = reply->property("chart_source").toString();
 
         // We'll populate charts with the data from the server
         QVariantMap charts;
@@ -267,7 +297,7 @@ ChartsPlugin::chartTypes()
             // WeAreHunted - Type - Artists - Chart Type
             //                    - Tracks  - Chart Type
             QHash< QString, QVariantMap > extraType;
-            foreach( const QVariant& chartObj, chartObjs.values() )
+            foreach( const QVariant& chartObj, res.values() )
             {
                 if( !chartObj.toMap().isEmpty() )
                 {
@@ -352,7 +382,7 @@ ChartsPlugin::chartTypes()
             QList< InfoStringHash > trackCharts;
             QList< InfoStringHash > artistCharts;
 
-            foreach( const QVariant& chartObj, chartObjs.values() )
+            foreach( const QVariant& chartObj, res.values() )
             {
                 if( !chartObj.toMap().isEmpty() ){
                     const QVariantMap chart = chartObj.toMap();
@@ -407,7 +437,7 @@ ChartsPlugin::chartTypes()
         }
 
         /// Add the possible charts and its types to breadcrumb
-//         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "ADDING CHART TYPE TO CHARTS:" << chartName;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "ADDING CHART TO CHARTS:" << chartName;
         QVariantMap defaultMap = m_allChartsMap.value( "defaults" ).value< QVariantMap >();
         defaultMap[ source ] = defaultChain;
         m_allChartsMap[ "defaults" ] = defaultMap;
