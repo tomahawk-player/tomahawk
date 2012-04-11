@@ -64,11 +64,7 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout_2->layout() );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
-    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
 
     m_crumbModelLeft = new QStandardItemModel( this );
     m_sortedProxy = new QSortFilterProxyModel( this );
@@ -183,12 +179,12 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
             if( !returnedData.contains(type) )
                 break;
             const QString side = requestData.customData["whatshot_side"].toString();
-            const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "nr_id" );
+            const QString releaseId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "nr_id" );
 
-            m_queuedFetches.remove( chartId );
+            m_queuedFetches.remove( releaseId );
 
             ChartDataLoader* loader = new ChartDataLoader();
-            loader->setProperty( "nrid", chartId );
+            loader->setProperty( "nrid", releaseId );
             loader->moveToThread( m_workerThread );
 
             if ( type == "albums" )
@@ -201,9 +197,9 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 
                 AlbumModel* albumModel = new AlbumModel( ui->albumsView );
 
-                m_albumModels[ chartId ] = albumModel;
+                m_albumModels[ releaseId ] = albumModel;
 
-                if ( m_queueItemToShow == chartId )
+                if ( m_queueItemToShow == releaseId )
                     setLeftViewAlbums( albumModel );
             }
             else
@@ -355,7 +351,6 @@ NewReleasesWidget::setLeftViewAlbums( AlbumModel* model )
 {
     ui->albumsView->setAlbumModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
-    ui->stackLeft->setCurrentIndex( 2 );
 }
 
 void
