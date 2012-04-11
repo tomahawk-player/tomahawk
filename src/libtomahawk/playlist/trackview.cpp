@@ -567,7 +567,7 @@ TrackView::onCustomContextMenu( const QPoint& pos )
     }
 
     m_contextMenu->setQueries( queries );
-    m_contextMenu->exec( mapToGlobal( pos ) );
+    m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }
 
 
