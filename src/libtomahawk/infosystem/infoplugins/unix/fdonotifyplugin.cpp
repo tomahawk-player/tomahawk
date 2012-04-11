@@ -149,8 +149,8 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() && !map[ "cover" ].value< QImage >().isNull() )
-        dict[ "image_data" ] = ImageConverter::variantForImage( map[ "cover" ].value< QImage >() );
+    if ( map.contains( "coveruri" ) && map[ "coveruri" ].canConvert< QString >() )
+        dict[ "image_data" ] = ImageConverter::variantForImage( QImage( map[ "coveruri" ].toString(), "PNG" ) );
     else
         dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     arguments << dict; //hints
