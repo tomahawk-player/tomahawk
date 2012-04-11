@@ -42,6 +42,7 @@
 #include <jreen/abstractroster.h>
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
+#include <jreen/pubsubmanager.h>
 
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QMessageBox>
@@ -92,6 +93,7 @@ public slots:
     void broadcastMsg( const QString &msg );
     virtual void addContact( const QString &jid, const QString& msg = QString() );
     void showAddFriendDialog();
+    void publishTune( const QUrl &url, const Tomahawk::InfoSystem::InfoStringHash &trackInfo );
 
 protected:
     virtual QString defaultSuffix() const;
@@ -147,6 +149,7 @@ private:
 #endif
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager *m_avatarManager;
+    Jreen::PubSub::Manager* m_pubSubManager;
 };
 
 #endif

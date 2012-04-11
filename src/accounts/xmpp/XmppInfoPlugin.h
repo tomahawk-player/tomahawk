@@ -24,12 +24,6 @@
 
 #include <QTimer>
 
-namespace Jreen {
-    namespace PubSub {
-        class Manager;
-    }
-}
-
 class XmppSipPlugin;
 
 namespace Tomahawk {
@@ -44,7 +38,11 @@ namespace Tomahawk {
             XmppInfoPlugin(XmppSipPlugin* parent);
             virtual ~XmppInfoPlugin();
 
+        signals:
+            void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
+
         public slots:
+            void init();
             void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
         protected slots:
@@ -58,7 +56,6 @@ namespace Tomahawk {
 
         private:
             QWeakPointer< XmppSipPlugin > m_sipPlugin;
-            Jreen::PubSub::Manager* m_pubSubManager;
             QTimer m_pauseTimer;
         };
 
