@@ -49,10 +49,9 @@
 
 using namespace Tomahawk::InfoSystem;
 
-static const int s_nowPlayingNotificationId = 1;
-
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
+    , m_nowPlayingId( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped;
@@ -143,7 +142,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
     QList<QVariant> arguments;
     arguments << QString( "Tomahawk" ); //app_name
-    arguments << quint32( s_nowPlayingNotificationId ); //notification_id
+    arguments << m_nowPlayingId; //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
     arguments << messageText; //body
@@ -157,5 +156,9 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );
-    QDBusConnection::sessionBus().send( message );
+
+    const QDBusMessage &reply = QDBusConnection::sessionBus().call( message );
+    const QVariantList &list = reply.arguments();
+    if ( list.count() > 0 )
+        m_nowPlayingId = list.at( 0 ).toInt();
 }
