@@ -67,7 +67,7 @@ public slots:
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 
 signals:
-    void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj ) const;
+    void shortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
 private slots:
     void shortenLinkRequestFinished();
@@ -83,6 +83,7 @@ private slots:
 
     void playlistCreatedToShow( const Tomahawk::playlist_ptr& pl );
     void playlistReadyToShow();
+
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );

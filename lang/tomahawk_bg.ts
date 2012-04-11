@@ -196,7 +196,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="157"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
-        <translation>След като сканирате музикалната ви колекция, ще откриете най-скоро добавените албуми тук.</translation>
+        <translation>След като бъде сканирана музикалната ти колекция, ще откриеш тук най-скоро добавените албуми.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="159"/>
@@ -243,7 +243,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="274"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>След като приключи сканирането на музикалната ти колекция, ще откриеш твоята музика тук.</translation>
+        <translation>След като приключи сканирането на музикалната ти колекция, ще откриеш музиката си тук.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="276"/>
@@ -328,24 +328,6 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/audiocontrols.ui" line="536"/>
         <source>High</source>
         <translation>100%</translation>
-    </message>
-</context>
-<context>
-    <name>AudioEngine</name>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="203"/>
-        <source>Tomahawk is stopped.</source>
-        <translation>Tomahawk е спрян</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="375"/>
-        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk изпълнява &quot;%1&quot; от %2%3.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="378"/>
-        <source>on album %1</source>
-        <translation>от албум %1</translation>
     </message>
 </context>
 <context>
@@ -734,7 +716,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="77"/>
         <source>A playlist by %1, created %2</source>
-        <translation>Списък за изпълнение от %1, създаден %2</translation>
+        <translation>A playlist by %1, created %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="78"/>
@@ -1327,7 +1309,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="186"/>
         <source>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</source>
-        <translation>Този продукт ползва ядрото на  SPOTIFY(R), но не е поддържан, сертифицират или одобрен по какъвто и да е начин от Spotify. 
+        <translation>Този продукт ползва ядрото на  SPOTIFY(R), но не е поддържан, сертифициран или одобрен по какъвто и да е начин от Spotify. 
 Spotify e TM на Spotify Group.</translation>
     </message>
 </context>
@@ -1717,16 +1699,6 @@ You may wish to try re-authenticating.</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
-        <source>&amp;Continue playback after this track</source>
-        <translation>&amp;Продължи възпроизвеждането след тази песен</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
-        <source>&amp;Stop playback after this track</source>
-        <translation>&amp;Спри възпроизвеждането след тази песен</translation>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="277"/>
         <source>&amp;Love</source>
@@ -1756,6 +1728,16 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Изтрий позициите</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
+        <source>&amp;Continue Playback after this Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
+        <source>&amp;Stop Playback after this Track</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
@@ -2309,6 +2291,19 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
+    <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="134"/>
+        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="137"/>
+        <source>on &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
@@ -2485,7 +2480,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="535"/>
+        <location filename="../src/tomahawkapp.cpp" line="537"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
@@ -2743,7 +2738,8 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="565"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Някои от песните в този списък нямат артист и заглавие. Те ще бъдат игнорирани.</translation>
+        <translation>Някои от песните в този списък нямат артист и заглавие. 
+Те ще бъдат игнорирани.</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="579"/>
@@ -3137,7 +3133,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/viewmanager.cpp" line="384"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>Комбинирани библиотеки от всичките ти приятели на линия</translation>
+        <translation>Комбинирани библиотеки от всичките ми приятели на линия</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewmanager.cpp" line="385"/>
@@ -3501,7 +3497,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="670"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation>Извинявай.. Аз съм режимът за автоматични отговори изпълзван от Tomahawk. (http://gettomahawk.com) Щом получаваш това съобщение, този с който се опитваш да се свържеш вероятно не е на линия. Моля, потай отново по-късно.</translation>
+        <translation>Извинявай.. Аз съм режимът за автоматични отговори изпълзван от Tomahawk. ( http://gettomahawk.com ) Щом получаваш това съобщение, този с който се опитваш да се свържеш вероятно не е на линия. Моля, опитай отново по-късно.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="768"/>
