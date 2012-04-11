@@ -78,6 +78,7 @@ private slots:
     void onArtistClicked();
     void onAlbumClicked();
     void onTrackClicked();
+    void onSocialButtonClicked();
     void onLoveButtonClicked( bool );
 
     void droppedTracks( QList<Tomahawk::query_ptr> );
@@ -89,7 +90,7 @@ private:
     void setCover();
     void setSocialActions();
 
-    Ui::AudioControls *ui;
+    Ui::AudioControls* ui;
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
@@ -101,6 +102,8 @@ private:
     qint64 m_lastSliderCheck;
     bool m_noTimeChange;
     qint64 m_lastTextSecondShown;
+    
+    QWidget* m_parent;
 };
 
 #endif // AUDIOCONTROLS_H

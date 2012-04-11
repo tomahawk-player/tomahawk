@@ -32,6 +32,7 @@
 #include "utils/logger.h"
 #include "album.h"
 #include "dropjob.h"
+#include "SocialWidget.h"
 #include "globalactionmanager.h"
 #include "viewmanager.h"
 
@@ -44,6 +45,7 @@ AudioControls::AudioControls( QWidget* parent )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
     , m_lastSliderCheck( 0 )
+    , m_parent( parent )
 {
     ui->setupUi( this );
     setAcceptDrops( true );
@@ -82,6 +84,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-pressed.png", QIcon::Off, QIcon::Active );
     ui->volumeLowButton->setPixmap( RESPATH "images/volume-icon-muted.png" );
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
+    ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
 
@@ -118,8 +121,9 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
     connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
-    connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
-    connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
+    connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ),  SLOT( onTrackClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
+    connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
     connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
 
     // <From AudioEngine>
@@ -247,6 +251,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
+    ui->socialButton->setEnabled( true );
+    ui->socialButton->setVisible( true );
 
     setCover();
     setSocialActions();
@@ -319,7 +325,6 @@ AudioControls::onPlaybackResumed()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
-    ui->loveButton->setVisible( true );
     m_sliderTimeLine.resume();
 }
 
@@ -354,6 +359,8 @@ AudioControls::onPlaybackStopped()
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
+    ui->socialButton->setEnabled( false );
+    ui->socialButton->setVisible( false );
 }
 
 
@@ -587,6 +594,16 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
             ViewManager::instance()->queue()->model()->append( tracks[ i ] );
         }
     }
+}
+
+
+void
+AudioControls::onSocialButtonClicked()
+{
+    SocialWidget* sw = new SocialWidget( m_parent );
+    sw->setPosition( QCursor::pos() );
+    sw->setQuery( m_currentTrack->toQuery() );
+    sw->show();
 }
 
 
