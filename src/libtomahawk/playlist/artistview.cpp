@@ -384,7 +384,7 @@ ArtistView::onCustomContextMenu( const QPoint& pos )
     m_contextMenu->setArtists( artists );
     m_contextMenu->setAlbums( albums );
 
-    m_contextMenu->exec( mapToGlobal( pos ) );
+    m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }
 
 
