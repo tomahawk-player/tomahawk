@@ -294,36 +294,41 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="302"/>
+        <source>social</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/audiocontrols.ui" line="318"/>
         <source>love</source>
         <translation>ulubione</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="346"/>
+        <location filename="../src/audiocontrols.ui" line="362"/>
         <source>Time</source>
         <translation>Czas</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="375"/>
+        <location filename="../src/audiocontrols.ui" line="391"/>
         <source>Time Left</source>
         <translation>Pozostały czas</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="453"/>
+        <location filename="../src/audiocontrols.ui" line="469"/>
         <source>Shuffle</source>
         <translation>Losowo</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="466"/>
+        <location filename="../src/audiocontrols.ui" line="482"/>
         <source>Repeat</source>
         <translation>Powtarzaj</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="504"/>
+        <location filename="../src/audiocontrols.ui" line="520"/>
         <source>Low</source>
         <translation>Nisko</translation>
     </message>
     <message>
-        <location filename="../src/audiocontrols.ui" line="536"/>
+        <location filename="../src/audiocontrols.ui" line="552"/>
         <source>High</source>
         <translation>Wysoko</translation>
     </message>
@@ -678,6 +683,14 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
 </context>
 <context>
+    <name>NewReleasesWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/newreleaseswidget.h" line="73"/>
+        <source>New Releases</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>PlaylistItemDelegate</name>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="162"/>
@@ -695,7 +708,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="163"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>odtworzone %1 przez ciebie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="165"/>
@@ -713,12 +726,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="77"/>
         <source>A playlist by %1, created %2</source>
-        <translation>Lista %1, utworzona %2</translation>
+        <translation>%1 lista, utworzona %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="78"/>
         <source>you</source>
-        <translation>ty</translation>
+        <translation>Twoja</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="132"/>
@@ -1050,6 +1063,49 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
 </context>
 <context>
+    <name>SocialWidget</name>
+    <message>
+        <location filename="../src/SocialWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.ui" line="31"/>
+        <source>Facebook</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.ui" line="41"/>
+        <source>Twitter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.ui" line="67"/>
+        <source>Cover</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.ui" line="101"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.cpp" line="196"/>
+        <source>Listening to &quot;%1&quot; by %2 and loving it! %4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.cpp" line="198"/>
+        <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot; and loving it! %4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SocialWidget.cpp" line="219"/>
+        <source>%1 characters left</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SourceDelegate</name>
     <message>
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="55"/>
@@ -1262,6 +1318,11 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="300"/>
+        <source>New Releases</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/sourcesmodel.cpp" line="305"/>
         <source>Friends</source>
         <translation type="unfinished"/>
     </message>
@@ -1475,7 +1536,7 @@ indywidualnego profilu gustu.</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation type="unfinished"/>
+        <translation>Połącz z Google Talk, aby znaleźć znajomych</translation>
     </message>
 </context>
 <context>
@@ -1529,9 +1590,9 @@ indywidualnego profilu gustu.</translation>
 <context>
     <name>Tomahawk::Accounts::TwitterAccountFactory</name>
     <message>
-        <location filename="../src/accounts/twitter/twitteraccount.h" line="50"/>
+        <location filename="../src/accounts/twitter/twitteraccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
-        <translation type="unfinished"/>
+        <translation>Łącz się z osobami śledzącymi cię na Twitterze.</translation>
     </message>
 </context>
 <context>
@@ -2261,22 +2322,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="307"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="337"/>
         <source>Top Overall</source>
         <translation>Top Wszechczasów</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="396"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="426"/>
         <source>Artists</source>
         <translation>Artyści</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="398"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="428"/>
         <source>Albums</source>
         <translation>Albumy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="400"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="430"/>
         <source>Tracks</source>
         <translation>Utwory</translation>
     </message>
@@ -2284,12 +2345,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="134"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="135"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="137"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="138"/>
         <source>on &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
@@ -2297,28 +2358,44 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="409"/>
         <source>Top Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="402"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="412"/>
         <source>Loved Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="405"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="415"/>
         <source>Hyped Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="411"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="421"/>
         <source>Top Artists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="414"/>
+        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="424"/>
         <source>Hyped Artists</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="258"/>
+        <source>Albums</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
+    <message>
+        <location filename="../src/accounts/twitter/twitterinfoplugin.cpp" line="134"/>
+        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2382,12 +2459,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="647"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Ty</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="649"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>ty</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
@@ -2471,7 +2548,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="537"/>
+        <location filename="../src/tomahawkapp.cpp" line="530"/>
         <source>My Collection</source>
         <translation>Moja Kolekcja</translation>
     </message>
@@ -3113,17 +3190,17 @@ Możesz wysłać wiadomość synchronizacyjną ponownie kiedykolwiek, po prostu 
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="383"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
         <source>SuperCollection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="384"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="387"/>
         <source>Combined libraries of all your online friends</source>
-        <translation type="unfinished"/>
+        <translation>Połączone biblioteki wszystkich twoich znajomych online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="385"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="388"/>
         <source>All available albums</source>
         <translation>Wszystkie dostępne albumy</translation>
     </message>
@@ -3394,109 +3471,109 @@ Tekst dla &quot;%1&quot; wykonawcy %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="359"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="380"/>
         <source>User Interaction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="362"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="383"/>
         <source>Host is unknown</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="365"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="386"/>
         <source>Item not found</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="368"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="389"/>
         <source>Authorization Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="371"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="392"/>
         <source>Remote Stream Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="374"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="395"/>
         <source>Remote Connection failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="377"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="398"/>
         <source>Internal Server Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="380"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="401"/>
         <source>System shutdown</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="383"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="404"/>
         <source>Conflict</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="387"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="408"/>
         <source>Unknown</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="391"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="412"/>
         <source>No Compression Support</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="395"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="416"/>
         <source>No Encryption Support</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="399"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="420"/>
         <source>No Authorization Support</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="403"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="424"/>
         <source>No Supported Feature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="500"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="521"/>
         <source>Add Friend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="501"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="522"/>
         <source>Enter Xmpp ID:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="617"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="673"/>
         <source>Add Friend...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="622"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="678"/>
         <source>XML Console...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="670"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="726"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="768"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="824"/>
         <source>Authorize User</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="769"/>
+        <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="825"/>
         <source>Do you want to grant &lt;b&gt;%1&lt;/b&gt; access to your Collection?</source>
-        <translation type="unfinished"/>
+        <translation>Czy chcesz udzielić dostępu do swojej kolekcji &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
 </context>
 <context>
