@@ -329,7 +329,7 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
     {
         _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
         Q_UNUSED( closure );
-        m_currentTrack->album()->cover( QSize( 0, 0 ) );
+        m_currentTrack->album()->cover( QSize( 0, 0 ), true );
     }
 #endif
 }
@@ -354,26 +354,29 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 #ifndef ENABLE_HEADLESS
         QImage cover;
         cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
-        playInfo["cover"] = cover;
-
-        QTemporaryFile coverTempFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
-        if ( !coverTempFile.open() )
+        if ( !cover.isNull() )
         {
-            tDebug() << "WARNING: could not write temporary file for cover art!";
-        }
+            playInfo["cover"] = cover;
 
-        // Finally, save the image to the new temp file
-        if ( cover.save( &coverTempFile, "PNG" ) )
-        {
-            tDebug( LOGVERBOSE ) << "Saving cover image to:" << QFileInfo( coverTempFile ).absoluteFilePath();
-            coverTempFile.close();
-            playInfo["coveruri"] = QFileInfo( coverTempFile ).absoluteFilePath();
+            QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
+            if ( !coverTempFile->open() )
+                tDebug() << Q_FUNC_INFO << "WARNING: could not write temporary file for cover art!";
+            else
+            {
+                // Finally, save the image to the new temp file
+                coverTempFile->setAutoRemove( false );
+                if ( cover.save( coverTempFile, "PNG" ) )
+                {
+                    tDebug( LOGVERBOSE ) <<  Q_FUNC_INFO << "Saving cover image to:" << QFileInfo( *coverTempFile ).absoluteFilePath();
+                    playInfo["coveruri"] = QFileInfo( *coverTempFile ).absoluteFilePath();
+                }
+                else
+                    tDebug() << Q_FUNC_INFO << "failed to save cover image!";
+            }
+            delete coverTempFile;
         }
         else
-        {
-            tDebug() << Q_FUNC_INFO << "failed to save cover image!";
-            coverTempFile.close();
-        }
+            tDebug() << Q_FUNC_INFO << "Cover from album is null!";
 #endif
     }
 
