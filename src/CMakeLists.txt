@@ -89,6 +89,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      LoadXSPFDialog.cpp
      AccountFactoryWrapper.cpp
      AccountFactoryWrapperDelegate.cpp
+     SocialWidget.cpp
 )
 
 IF( WITH_BREAKPAD )
@@ -105,10 +106,9 @@ SET( tomahawkUI ${tomahawkUI}
      accounts/spotify/SpotifyAccountConfig.ui
 
      audiocontrols.ui
-
      LoadXSPFDialog.ui
-
      AccountFactoryWrapper.ui
+     SocialWidget.ui
 )
 
 INCLUDE_DIRECTORIES(

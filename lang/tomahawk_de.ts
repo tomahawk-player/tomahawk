@@ -331,24 +331,6 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     </message>
 </context>
 <context>
-    <name>AudioEngine</name>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="203"/>
-        <source>Tomahawk is stopped.</source>
-        <translation>Tomahawk ist gestoppt.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="375"/>
-        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk spielt &quot;%1&quot; von %2%3.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/audio/audioengine.cpp" line="378"/>
-        <source>on album %1</source>
-        <translation>auf dem Album %1</translation>
-    </message>
-</context>
-<context>
     <name>CategoryAddItem</name>
     <message>
         <location filename="../src/sourcetree/items/categoryitems.cpp" line="61"/>
@@ -1172,7 +1154,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="77"/>
         <source>Recently Played</source>
-        <translation>Kürzlich gehörte Lieder</translation>
+        <translation>Kürzlich gehörte Lieder FOO</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="81"/>
@@ -1273,7 +1255,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="290"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="295"/>
@@ -1707,16 +1689,6 @@ You may wish to try re-authenticating.</source>
         <translation>In &amp;Warteschlange einreihen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
-        <source>&amp;Continue playback after this track</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
-        <source>&amp;Stop playback after this track</source>
-        <translation>&amp;Beende Wiedergabe nach diesem Stück</translation>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="277"/>
         <source>&amp;Love</source>
@@ -1746,6 +1718,16 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
         <source>&amp;Delete Items</source>
         <translation>Elemente &amp;entfernen</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
+        <source>&amp;Continue Playback after this Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
+        <source>&amp;Stop Playback after this Track</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
@@ -2300,6 +2282,19 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="134"/>
+        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="137"/>
+        <source>on &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="399"/>
@@ -2476,7 +2471,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="535"/>
+        <location filename="../src/tomahawkapp.cpp" line="537"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>

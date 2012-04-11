@@ -54,43 +54,100 @@ FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedPushTypes << Tomahawk::InfoSystem::InfoNotifyUser;
+    m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped;
 }
+
 
 FdoNotifyPlugin::~FdoNotifyPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
+
 void
 FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     qDebug() << Q_FUNC_INFO;
     QVariant inputData = pushData.infoPair.second;
-    if ( pushData.type != Tomahawk::InfoSystem::InfoNotifyUser || !inputData.canConvert< QVariantMap >() )
+
+    switch ( pushData.type )
     {
-        qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";
-        return;
-    }
-    QVariantMap hash = inputData.value< QVariantMap >();
-    if ( !hash.contains( "message" ) )
-    {
-        qDebug() << Q_FUNC_INFO << " hash did not contain a message";
-        return;
+        case Tomahawk::InfoSystem::InfoTrackUnresolved:
+            notifyUser( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+            return;
+
+        case Tomahawk::InfoSystem::InfoNotifyUser:
+            notifyUser( pushData.infoPair.second.toString() );
+            return;
+
+        case Tomahawk::InfoSystem::InfoNowStopped:
+            notifyUser( "Tomahawk is stopped." );
+            return;
+
+        case Tomahawk::InfoSystem::InfoNowPlaying:
+            nowPlaying( pushData.infoPair.second );
+            return;
+
+        default:
+            return;
     }
 
+}
+
+
+void
+FdoNotifyPlugin::notifyUser( const QString &messageText )
+{
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
     QList<QVariant> arguments;
     arguments << QString( "Tomahawk" ); //app_name
     arguments << quint32( 0 ); //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
-    arguments << hash[ "message" ].toString(); //body
+    arguments << messageText; //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    if ( hash.contains( "image" ) && hash[ "image" ].canConvert< QImage >() )
-        dict[ "image_data" ] = ImageConverter::variantForImage( hash[ "image" ].value< QImage >() );
+    dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    arguments << dict; //hints
+    arguments << qint32( -1 ); //expire_timeout
+    message.setArguments( arguments );
+    QDBusConnection::sessionBus().send( message );
+}
+
+
+void
+FdoNotifyPlugin::nowPlaying( const QVariant &input )
+{
+    if ( !input.canConvert< QVariantMap >() )
+        return;
+
+    QVariantMap map = input.toMap();
+
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        return;
+
+    InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
+        return;
+
+    QString messageText = tr( "Tomahawk is playing \"%1\" by %2%3." )
+                        .arg( hash[ "title" ] )
+                        .arg( hash[ "artist" ] )
+                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
+    
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
+    QList<QVariant> arguments;
+    arguments << QString( "Tomahawk" ); //app_name
+    arguments << quint32( 0 ); //notification_id
+    arguments << QString(); //app_icon
+    arguments << QString( "Tomahawk" ); //summary
+    arguments << messageText; //body
+    arguments << QStringList(); //actions
+    QVariantMap dict;
+    dict["desktop-entry"] = QString( "tomahawk" );
+    if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() )
+        dict[ "image_data" ] = ImageConverter::variantForImage( map[ "cover" ].value< QImage >() );
     else
         dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     arguments << dict; //hints

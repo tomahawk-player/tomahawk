@@ -122,6 +122,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNowPaused = 81,
     InfoNowResumed = 82,
     InfoNowStopped = 83,
+    InfoTrackUnresolved = 84,
 
     InfoLove = 90,
     InfoUnLove = 91,

@@ -23,6 +23,7 @@
 
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkReply>
+#include <QTemporaryFile>
 
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
@@ -31,6 +32,7 @@
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
 #include "utils/qnr_iodevicestream.h"
+#include "utils/closure.h"
 #include "headlesscheck.h"
 #include "infosystem/infosystem.h"
 #include "album.h"
@@ -76,8 +78,6 @@ AudioEngine::AudioEngine()
     connect( m_mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
-
-    connect( this, SIGNAL( sendWaitingNotification() ), SLOT( sendWaitingNotificationSlot() ), Qt::QueuedConnection );
 
     onVolumeChanged( m_audioOutput->volume() );
 
@@ -137,23 +137,7 @@ AudioEngine::play()
         setVolume( m_volume );
         emit resumed();
 
-        if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
-        {
-            Tomahawk::InfoSystem::InfoStringHash trackInfo;
-
-            trackInfo["title"] = m_currentTrack->track();
-            trackInfo["artist"] = m_currentTrack->artist()->name();
-            trackInfo["album"] = m_currentTrack->album()->name();
-            trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
-            trackInfo["duration"] = QString::number( m_currentTrack->duration() );
-
-            Tomahawk::InfoSystem::InfoPushData pushData (
-                s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
-                Tomahawk::InfoSystem::PushNoFlag );
-
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
-        }
+        sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
     }
     else
         next();
@@ -192,19 +176,12 @@ AudioEngine::stop()
 
     setCurrentTrack( Tomahawk::result_ptr() );
 
-    Tomahawk::InfoSystem::InfoTypeMap map;
-    map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
-
     if ( m_waitingOnNewTrack )
-        emit sendWaitingNotification();
-    else if ( TomahawkSettings::instance()->verboseNotifications() )
-    {
-        QVariantMap stopInfo;
-        stopInfo["message"] = tr( "Tomahawk is stopped." );
-        map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
-    }
+        sendWaitingNotification();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map, Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
+    
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
 
@@ -326,18 +303,16 @@ AudioEngine::mute()
 
 
 void
-AudioEngine::sendWaitingNotificationSlot() const
+AudioEngine::sendWaitingNotification() const
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
     if ( !m_playlist.isNull() && m_playlist->hasNextItem() )
         return;
 
-    QVariantMap retryInfo;
-    retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoPushData pushData (
-        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< QVariantMap >( retryInfo ),
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoTrackUnresolved,
+        QVariant(),
         Tomahawk::InfoSystem::PushNoFlag );
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
@@ -345,14 +320,14 @@ AudioEngine::sendWaitingNotificationSlot() const
 
 
 void
-AudioEngine::sendNowPlayingNotification()
+AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type )
 {
 #ifndef ENABLE_HEADLESS
     if ( m_currentTrack->album().isNull() || m_currentTrack->album()->infoLoaded() )
-        onNowPlayingInfoReady();
+        onNowPlayingInfoReady( type );
     else
     {
-        connect( m_currentTrack->album().data(), SIGNAL( updated() ), SLOT( onNowPlayingInfoReady() ), Qt::UniqueConnection );
+        _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
         m_currentTrack->album()->cover( QSize( 0, 0 ) );
     }
 #endif
@@ -360,7 +335,7 @@ AudioEngine::sendNowPlayingNotification()
 
 
 void
-AudioEngine::onNowPlayingInfoReady()
+AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_currentTrack.isNull() ||
@@ -370,26 +345,48 @@ AudioEngine::onNowPlayingInfoReady()
 
     if ( !m_currentTrack->album().isNull() && sender() && m_currentTrack->album().data() != sender() )
         return;
-
+    
     QVariantMap playInfo;
-    playInfo["message"] = tr( "Tomahawk is playing \"%1\" by %2%3." )
-                        .arg( m_currentTrack->track() )
-                        .arg( m_currentTrack->artist()->name() )
-                        .arg( m_currentTrack->album().isNull() ? QString() : QString( " %1" ).arg( tr( "on album %1" ).arg( m_currentTrack->album()->name() ) ) );
 
     if ( !m_currentTrack->album().isNull() )
     {
 #ifndef ENABLE_HEADLESS
         QImage cover;
         cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
-        playInfo["image"] = QVariant( cover );
+        playInfo["cover"] = cover;
+
+        QTemporaryFile coverTempFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
+        if ( !coverTempFile.open() )
+        {
+            tDebug() << "WARNING: could not write temporary file for cover art!";
+        }
+
+        // Finally, save the image to the new temp file
+        if ( cover.save( &coverTempFile, "PNG" ) )
+        {
+            tDebug( LOGVERBOSE ) << "Saving cover image to:" << QFileInfo( coverTempFile ).absoluteFilePath();
+            coverTempFile.close();
+            playInfo["coveruri"] = QFileInfo( coverTempFile ).absoluteFilePath();
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "failed to save cover image!";
+            coverTempFile.close();
+        }
 #endif
     }
 
-    Tomahawk::InfoSystem::InfoPushData pushData (
-        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< QVariantMap >( playInfo ),
-        Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
+    trackInfo["title"] = m_currentTrack->track();
+    trackInfo["artist"] = m_currentTrack->artist()->name();
+    trackInfo["album"] = m_currentTrack->album()->name();
+    trackInfo["duration"] = QString::number( m_currentTrack->duration() );
+    trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
+
+    playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+    playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
+    
+    Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
@@ -468,29 +465,13 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             m_mediaObject->play();
             emit started( m_currentTrack );
 
-            if ( TomahawkSettings::instance()->verboseNotifications() )
-                sendNowPlayingNotification();
-
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
                 Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-                Tomahawk::InfoSystem::InfoStringHash trackInfo;
-                trackInfo["title"] = m_currentTrack->track();
-                trackInfo["artist"] = m_currentTrack->artist()->name();
-                trackInfo["album"] = m_currentTrack->album()->name();
-                trackInfo["duration"] = QString::number( m_currentTrack->duration() );
-                trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
-
-                Tomahawk::InfoSystem::InfoPushData pushData (
-                    s_aeInfoIdentifier,
-                    Tomahawk::InfoSystem::InfoNowPlaying,
-                    QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
-                    Tomahawk::InfoSystem::PushShortUrlFlag );
-
-                Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
             }
+            
+            sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
         }
     }
 

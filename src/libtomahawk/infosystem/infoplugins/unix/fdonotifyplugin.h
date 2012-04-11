@@ -49,6 +49,11 @@ protected slots:
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
+
+private:
+    void notifyUser( const QString &messageText );
+
+    void nowPlaying( const QVariant &input );
 };
 
 }
