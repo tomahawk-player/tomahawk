@@ -134,6 +134,7 @@ set( libGuiSources
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/whatshotwidget.cpp
+    widgets/newreleaseswidget.cpp
     widgets/ChartDataLoader.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
@@ -303,6 +304,7 @@ set( libUI ${libUI}
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
     widgets/whatshotwidget.ui
+    widgets/newreleaseswidget.ui
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui

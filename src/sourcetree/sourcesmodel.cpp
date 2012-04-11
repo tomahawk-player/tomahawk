@@ -297,6 +297,11 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
     hot->setSortValue( 4 );
 
+    GenericPageItem* newReleases = new GenericPageItem( this, browse, tr( "New Releases" ), QIcon( RESPATH "images/new-releases.png" ),
+                                                boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
+    newReleases->setSortValue( 5 );
+
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 
     endInsertRows();
@@ -320,7 +325,7 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
     beginInsertRows( idx, rowCount( idx ), rowCount( idx ) );
     new SourceItem( this, parent, source );
     endInsertRows();
-    
+
     parent->checkExpandedState();
 }
 

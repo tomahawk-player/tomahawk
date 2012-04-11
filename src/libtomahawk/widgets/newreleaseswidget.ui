@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewReleasesWidget</class>
+ <widget class="QWidget" name="NewReleasesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>875</width>
+    <height>513</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="Tomahawk::Breadcrumb" name="breadCrumbLeft" native="true"/>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="stackLeft">
+     <widget class="QWidget" name="page">
+      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+     </widget>
+     <widget class="QWidget" name="page1">
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
+     </widget>
+     <widget class="QWidget" name="page2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="AlbumView" name="albumsView">
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AlbumView</class>
+   <extends>QListView</extends>
+   <header location="global">playlist/albumview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Tomahawk::Breadcrumb</class>
+   <extends>QWidget</extends>
+   <header>widgets/Breadcrumb.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
