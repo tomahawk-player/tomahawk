@@ -327,8 +327,7 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
         onNowPlayingInfoReady( type );
     else
     {
-        _detail::Closure* closure = NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
-        Q_UNUSED( closure );
+        NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
         m_currentTrack->album()->cover( QSize( 0, 0 ), true );
     }
 #endif
@@ -338,13 +337,10 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
 void
 AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << type;
     if ( m_currentTrack.isNull() ||
          m_currentTrack->track().isNull() ||
          m_currentTrack->artist().isNull() )
-        return;
-
-    if ( !m_currentTrack->album().isNull() && sender() && m_currentTrack->album().data() != sender() )
         return;
     
     QVariantMap playInfo;
@@ -392,6 +388,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
     
     Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
 
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushing data with type " << type;
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 

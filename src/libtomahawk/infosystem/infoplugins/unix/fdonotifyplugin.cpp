@@ -49,6 +49,7 @@
 
 using namespace Tomahawk::InfoSystem;
 
+static const int s_nowPlayingNotificationId = 1;
 
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
@@ -119,6 +120,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
 void
 FdoNotifyPlugin::nowPlaying( const QVariant &input )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
         return;
 
@@ -135,11 +137,13 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
                         .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
-    
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
+
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
     QList<QVariant> arguments;
     arguments << QString( "Tomahawk" ); //app_name
-    arguments << quint32( 0 ); //notification_id
+    arguments << quint32( s_nowPlayingNotificationId ); //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
     arguments << messageText; //body
