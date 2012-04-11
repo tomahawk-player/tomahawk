@@ -282,9 +282,12 @@ public:
     bool pushInfo( InfoPushData pushData );
     bool pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags );
 
+    QWeakPointer< QThread > workerThread() const;
+
 public slots:
     // InfoSystem takes ownership of InfoPlugins
-    void addInfoPlugin( Tomahawk::InfoSystem::InfoPlugin* plugin );
+    void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
+    void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
 
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
@@ -305,7 +308,6 @@ private:
 }
 
 }
-
 
 
 inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
@@ -329,6 +331,7 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
     return returnval;
 }
 
+
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPushData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
@@ -337,6 +340,7 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoType );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

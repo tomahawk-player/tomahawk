@@ -54,8 +54,6 @@ LastFmAccountFactory::icon() const
 LastFmAccount::LastFmAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
 {
-    m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
-
     setAccountFriendlyName( "Last.Fm" );
     m_icon.load( RESPATH "images/lastfm-icon.png" );
 
@@ -70,12 +68,22 @@ LastFmAccount::LastFmAccount( const QString& accountId )
     {
         hookupResolver();
     }
+
+
+    if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+    {
+        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+        QMetaObject::invokeMethod( infoPlugin().data(), "init", Qt::QueuedConnection );
+    }
 }
 
 
 LastFmAccount::~LastFmAccount()
 {
-    delete m_infoPlugin.data();
+    if ( m_infoPlugin )
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+    
     delete m_resolver.data();
 }
 
@@ -155,10 +163,13 @@ LastFmAccount::icon() const
 }
 
 
-InfoPlugin*
+InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
-    return m_infoPlugin.data();
+    if ( m_infoPlugin.isNull() )
+        m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
+    
+    return InfoPluginPtr( m_infoPlugin.data() );
 }
 
 bool
@@ -178,7 +189,8 @@ LastFmAccount::saveConfig()
         setScrobble( m_configWidget.data()->scrobble() );
     }
 
-    m_infoPlugin.data()->settingsChanged();
+    if ( m_infoPlugin )
+        QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );
 }
 
 

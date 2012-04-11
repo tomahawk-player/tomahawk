@@ -49,6 +49,7 @@ public:
     virtual ~LastFmPlugin();
 
 public slots:
+    void init();
     void settingsChanged();
 
     void onAuthenticated();
@@ -79,7 +80,7 @@ private:
 
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    Accounts::LastFmAccount* m_account;
+    QWeakPointer< Accounts::LastFmAccount > m_account;
     QList<lastfm::Track> parseTrackList( QNetworkReply * reply );
 
     lastfm::MutableTrack m_track;

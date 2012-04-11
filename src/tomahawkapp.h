@@ -111,6 +111,7 @@ private slots:
     void initHTTP();
 
     void spotifyApiCheckFinished();
+    void accountManagerReady();
 
 private:
     void registerMetaTypes();

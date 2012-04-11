@@ -51,7 +51,7 @@ public:
     QString description() const { return tr( "Log on to your Jabber/XMPP account to connect to your friends" ); }
     QString factoryId() const { return "xmppaccount"; }
     QPixmap icon() const { return QPixmap( ":/xmpp-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( SipType ); };
+    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); };
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -69,7 +69,7 @@ public:
     void deauthenticate();
     bool isAuthenticated() const;
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
     SipPlugin* sipPlugin();
 

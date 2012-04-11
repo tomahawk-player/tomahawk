@@ -42,6 +42,7 @@
 #include <jreen/abstractroster.h>
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
+#include <jreen/pubsubmanager.h>
 
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QMessageBox>
@@ -67,7 +68,7 @@ public:
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin();
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
@@ -92,6 +93,7 @@ public slots:
     void broadcastMsg( const QString &msg );
     virtual void addContact( const QString &jid, const QString& msg = QString() );
     void showAddFriendDialog();
+    void publishTune( const QUrl &url, const Tomahawk::InfoSystem::InfoStringHash &trackInfo );
 
 protected:
     virtual QString defaultSuffix() const;
@@ -131,7 +133,7 @@ private:
     int m_currentPort;
     QString m_currentResource;
 
-    Tomahawk::InfoSystem::InfoPlugin* m_infoPlugin;
+    QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin> m_infoPlugin;
     Tomahawk::Accounts::Account::ConnectionState m_state;
 
     // sort out
@@ -147,6 +149,7 @@ private:
 #endif
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager *m_avatarManager;
+    Jreen::PubSub::Manager* m_pubSubManager;
 };
 
 #endif

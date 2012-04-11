@@ -174,7 +174,6 @@ MusicScanner::scan()
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
     m_dirListerThreadController = new QThread( this );
-    m_dirListerThreadController->setPriority( QThread::IdlePriority );
 
     m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
@@ -186,7 +185,7 @@ MusicScanner::scan()
     connect( m_dirLister.data(), SIGNAL( finished() ),
                                    SLOT( listerFinished() ), Qt::QueuedConnection );
 
-    m_dirListerThreadController->start();
+    m_dirListerThreadController->start( QThread::IdlePriority );
     QMetaObject::invokeMethod( m_dirLister.data(), "go" );
 }
 

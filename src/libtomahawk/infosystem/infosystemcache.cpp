@@ -159,7 +159,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
         if ( !fileLocationHash.isEmpty() )
         {
             //We already know of some values, so no need to re-read the directory again as it's already happened
-            qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash empty";
+            //qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash empty";
             notInCache( sendingObj, criteria, requestData );
             return;
         }
@@ -169,7 +169,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
         if ( !dir.exists() )
         {
             //Dir doesn't exist so clearly not in cache
-            qDebug() << Q_FUNC_INFO << "notInCache -- dir doesn't exist";
+            //qDebug() << Q_FUNC_INFO << "notInCache -- dir doesn't exist";
             notInCache( sendingObj, criteria, requestData );
             return;
         }
@@ -186,7 +186,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
         if ( !fileLocationHash.contains( criteriaHashVal ) )
         {
             //Still didn't find it? It's really not in the cache then
-            qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash doesn't contain criteria val";
+            //qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash doesn't contain criteria val";
             notInCache( sendingObj, criteria, requestData );
             return;
         }
@@ -250,7 +250,7 @@ InfoSystemCache::notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoString
 void
 InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, type );
     const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );

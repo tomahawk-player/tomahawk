@@ -64,7 +64,7 @@ public:
     bool isAuthenticated() const;
     ConnectionState connectionState() const;
 
-    Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     SipPlugin* sipPlugin();
 
     QWidget* configurationWidget() { return 0; }

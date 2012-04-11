@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,31 +24,18 @@
 #include "sip/xmppsip.h"
 #include "utils/logger.h"
 
-#include <jreen/tune.h>
-#include <jreen/pubsubmanager.h>
-#include <jreen/jid.h>
-
-#include <jreen/client.h>
 
 // remove now playing status after PAUSE_TIMEOUT seconds
-static const int PAUSE_TIMEOUT = 60;
+static const int PAUSE_TIMEOUT = 10;
 
-Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin(XmppSipPlugin* sipPlugin)
+Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin( XmppSipPlugin* sipPlugin )
     : m_sipPlugin( sipPlugin )
-    , m_pubSubManager( 0 )
     , m_pauseTimer( this )
 {
     Q_ASSERT( sipPlugin->m_client );
 
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
-    m_pubSubManager = new Jreen::PubSub::Manager( sipPlugin->m_client );
-    m_pubSubManager->addEntityType< Jreen::Tune >();
-
-    // Clear status
-    Jreen::Tune::Ptr tune( new Jreen::Tune() );
-    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
-    
     m_pauseTimer.setSingleShot( true );
     connect( &m_pauseTimer, SIGNAL( timeout() ),
              this, SLOT( audioStopped() ) );
@@ -56,24 +44,28 @@ Tomahawk::InfoSystem::XmppInfoPlugin::XmppInfoPlugin(XmppSipPlugin* sipPlugin)
 
 Tomahawk::InfoSystem::XmppInfoPlugin::~XmppInfoPlugin()
 {
-    //Note: the next two lines don't currently work, because the deletion wipes out internally posted events, need to talk to euro about a fix
-    Jreen::Tune::Ptr tune( new Jreen::Tune() );
-    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
-    m_pubSubManager->deleteLater();
+}
+
+
+void
+Tomahawk::InfoSystem::XmppInfoPlugin::init()
+{
+    if ( QThread::currentThread() != Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() )
+    {
+        QMetaObject::invokeMethod( this, "init", Qt::QueuedConnection );
+        return;
+    }
+
+    if ( m_sipPlugin.isNull() )
+        return;
+    
+    connect( this, SIGNAL( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), m_sipPlugin.data(), SLOT( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), Qt::QueuedConnection );
 }
 
 
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
-
-    if( m_sipPlugin->m_account->configuration().value("publishtracks").toBool() == false )
-    {
-        tDebug() << Q_FUNC_INFO <<  m_sipPlugin->m_client->jid().full() << "Not publishing now playing info (disabled in account config)";
-        return;
-    }
-
     switch ( pushData.type )
     {
         case InfoNowPlaying:
@@ -108,8 +100,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
     QVariantMap map = pushInfoPair.second.toMap();
     if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
     {
-        Jreen::Tune::Ptr tune( new Jreen::Tune() );
-        m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
+        emit publishTune( QUrl(), Tomahawk::InfoSystem::InfoStringHash() );
         return;
     }
         
@@ -120,42 +111,25 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
     }
     
     Tomahawk::InfoSystem::InfoStringHash info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full() << info;
-    
-    Jreen::Tune::Ptr tune( new Jreen::Tune() );
 
-    tune->setTitle( info.value( "title" ) );
-    tune->setArtist( info.value( "artist" ) );
-    tune->setLength( info.value("duration").toInt() );
-    tune->setTrack( info.value("albumpos") );
+    QUrl url;
     if ( pushInfoPair.first.contains( "shorturl" ) )
-        tune->setUri( pushInfoPair.first[ "shorturl" ].toUrl() );
+        url = pushInfoPair.first[ "shorturl" ].toUrl();
     else
-        tune->setUri( GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) ) );
+        url = GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
 
-    tDebug() << Q_FUNC_INFO << "Setting URI of " << tune->uri().toString();
-    //TODO: provide a rating once available in Tomahawk
-    tune->setRating( 10 );
-
-    //TODO: it would be nice to set Spotify, Dilandau etc here, but not the jabber ids of friends
-    tune->setSource( "Tomahawk" );
-
-    m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
+    emit publishTune( url, info );
 }
 
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioPaused()
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
 }
 
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioStopped()
 {
-    tDebug() << Q_FUNC_INFO << m_sipPlugin->m_client->jid().full();
-
-    Jreen::Tune::Ptr tune( new Jreen::Tune() );
-    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+    emit publishTune( QUrl(), Tomahawk::InfoSystem::InfoStringHash() );
 }
 
 

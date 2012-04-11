@@ -35,6 +35,7 @@
 #include <jreen/softwareversion.h>
 #include <jreen/iqreply.h>
 #include <jreen/logger.h>
+#include <jreen/tune.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -86,11 +87,11 @@ JreenMessageHandler(QtMsgType type, const char *msg)
 
 XmppSipPlugin::XmppSipPlugin( Account *account )
     : SipPlugin( account )
-    , m_infoPlugin( 0 )
     , m_state( Account::Disconnected )
 #ifndef ENABLE_HEADLESS
     , m_menu( 0 )
     , m_xmlConsole( 0 )
+    , m_pubSubManager( 0 )
 #endif
 {
     Jreen::Logger::addHandler( JreenMessageHandler );
@@ -161,11 +162,22 @@ XmppSipPlugin::XmppSipPlugin( Account *account )
 #ifndef ENABLE_HEADLESS
     connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 #endif
+
+    m_pubSubManager = new Jreen::PubSub::Manager( m_client );
+    m_pubSubManager->addEntityType< Jreen::Tune >();
+
+    // Clear status
+    Jreen::Tune::Ptr tune( new Jreen::Tune() );
+    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+
 }
 
 XmppSipPlugin::~XmppSipPlugin()
 {
-    delete m_infoPlugin;
+    //Note: the next two lines don't currently work, because the deletion wipes out internally posted events, need to talk to euro about a fix
+    Jreen::Tune::Ptr tune( new Jreen::Tune() );
+    m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+    delete m_pubSubManager;
     delete m_avatarManager;
     delete m_roster;
 #ifndef ENABLE_HEADLESS
@@ -175,10 +187,13 @@ XmppSipPlugin::~XmppSipPlugin()
 }
 
 
-InfoSystem::InfoPlugin*
+InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()
 {
-    return m_infoPlugin;
+    if ( m_infoPlugin.isNull() )
+        m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+    
+    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }
 
 
@@ -241,6 +256,8 @@ XmppSipPlugin::disconnectPlugin()
 
     m_peers.clear();
 
+    publishTune( QUrl(), Tomahawk::InfoSystem::InfoStringHash() );
+
     m_client->disconnectFromServer( true );
     m_state = Account::Disconnecting;
     emit stateChanged( m_state );
@@ -272,10 +289,11 @@ XmppSipPlugin::onConnect()
     m_roster->load();
 
     // load XmppInfoPlugin
-    if( !m_infoPlugin )
+    if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
     {
-        m_infoPlugin = new Tomahawk::InfoSystem::XmppInfoPlugin( this );
-        InfoSystem::InfoSystem::instance()->addInfoPlugin( m_infoPlugin );
+        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+        QMetaObject::invokeMethod( infoPlugin().data(), "init", Qt::QueuedConnection );
     }
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
@@ -340,6 +358,9 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     {
         handlePeerStatus(peer, Jreen::Presence::Unavailable);
     }
+
+    if ( !m_infoPlugin.isNull() )
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
 }
 
 
@@ -506,6 +527,41 @@ XmppSipPlugin::showAddFriendDialog()
     qDebug() << "Attempting to add xmpp contact to roster:" << id;
     addContact( id );
 #endif
+}
+
+
+void
+XmppSipPlugin::publishTune( const QUrl& url, const InfoSystem::InfoStringHash& trackInfo )
+{
+    if( m_account->configuration().value("publishtracks").toBool() == false )
+    {
+        tDebug() << Q_FUNC_INFO <<  m_client->jid().full() << "Not publishing now playing info (disabled in account config)";
+        return;
+    }
+
+    if ( trackInfo.isEmpty() )
+    {
+        Jreen::Tune::Ptr tune( new Jreen::Tune() );
+        m_pubSubManager->publishItems(QList<Jreen::Payload::Ptr>() << tune, Jreen::JID());
+    }
+
+    Jreen::Tune::Ptr tune( new Jreen::Tune() );
+
+    tune->setTitle( trackInfo.value( "title" ) );
+    tune->setArtist( trackInfo.value( "artist" ) );
+    tune->setLength( trackInfo.value("duration").toInt() );
+    tune->setTrack( trackInfo.value("albumpos") );
+
+    //TODO: provide a rating once available in Tomahawk
+    tune->setRating( 10 );
+
+    //TODO: it would be nice to set Spotify, Dilandau etc here, but not the jabber ids of friends
+    tune->setSource( "Tomahawk" );
+
+    tune->setUri( url );
+    tDebug() << Q_FUNC_INFO << "Setting URI of " << tune->uri().toString();
+    
+    m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
 }
 
 

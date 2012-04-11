@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,12 +24,6 @@
 
 #include <QTimer>
 
-namespace Jreen {
-    namespace PubSub {
-        class Manager;
-    }
-}
-
 class XmppSipPlugin;
 
 namespace Tomahawk {
@@ -43,7 +38,11 @@ namespace Tomahawk {
             XmppInfoPlugin(XmppSipPlugin* parent);
             virtual ~XmppInfoPlugin();
 
+        signals:
+            void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
+
         public slots:
+            void init();
             void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
         protected slots:
@@ -56,8 +55,7 @@ namespace Tomahawk {
             void audioPaused();
 
         private:
-            XmppSipPlugin* m_sipPlugin;
-            Jreen::PubSub::Manager* m_pubSubManager;
+            QWeakPointer< XmppSipPlugin > m_sipPlugin;
             QTimer m_pauseTimer;
         };
 
