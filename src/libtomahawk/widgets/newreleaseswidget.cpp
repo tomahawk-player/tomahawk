@@ -64,6 +64,7 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
 
     m_crumbModelLeft = new QStandardItemModel( this );

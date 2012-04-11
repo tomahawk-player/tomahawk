@@ -31,21 +31,67 @@
 
 using namespace Tomahawk;
 
+class BreadcrumbArrow : public QWidget
+{
+public:
+    BreadcrumbArrow(QWidget* parent) : QWidget(parent) {}
+
+protected:
+    virtual void paintEvent( QPaintEvent* ) {
+        QPainter p( this );
+        QStyleOption opt;
+        opt.initFrom( this );
+        QRect r = rect();
+
+        const bool reverse = opt.direction == Qt::RightToLeft;
+        const int menuButtonWidth = 12;
+        const int rightSpacing = 10;
+        const int right = !reverse ? r.right() - rightSpacing : r.left() + menuButtonWidth;
+        const int height = r.height();
+
+        QLine l1( 1, 0, right, height / 2 );
+        QLine l2( 1, height, right, height / 2 );
+
+        p.setRenderHint( QPainter::Antialiasing, true );
+
+        // Draw the shadow
+        QColor shadow( 0, 0, 0, 100 );
+        p.translate( 0, 1 );
+        p.setPen( shadow );
+        p.drawLine( l1 );
+        p.drawLine( l2 );
+
+        // Draw the main arrow
+        QColor foreGround( "#747474" );
+        p.translate( 0, -1 );
+        p.setPen( foreGround );
+        p.drawLine( l1 );
+        p.drawLine( l2 );
+    }
+    virtual QSize sizeHint() const {
+        return QSize( 20, TomahawkUtils::headerHeight() );
+
+    }
+
+};
+
 BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* model )
     : QWidget( parent )
     , m_breadcrumb( parent )
     , m_model( model )
     , m_combo( new ComboBox( this ) )
+    , m_arrow( new BreadcrumbArrow( this ) )
 {
     setLayout( new QHBoxLayout );
-    layout()->setContentsMargins( 0, 0, 0, 0 );
-    layout()->setSpacing( 0 );
+
+    TomahawkUtils::unmarginLayout( layout() );
     layout()->addWidget( m_combo );
+    layout()->addWidget( m_arrow );
 
     setFixedHeight( TomahawkUtils::headerHeight() );
     m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 
-    setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Expanding );
 
     connect( m_combo, SIGNAL( activated( int ) ), SLOT( comboboxActivated( int ) ) );
 }
@@ -55,44 +101,9 @@ void
 BreadcrumbButton::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
-    QStyleOption opt;
-    opt.initFrom( this );
-    QRect r = rect();
 
-    StyleHelper::horizontalHeader( &p, r ); // draw the background
-
-    if ( !hasChildren() )
-        return;
-
-    bool reverse = opt.direction == Qt::RightToLeft;
-    int menuButtonWidth = 12;
-    int rightSpacing = 10;
-    int left = !reverse ? r.right() - rightSpacing - menuButtonWidth : r.left();
-    int right = !reverse ? r.right() - rightSpacing : r.left() + menuButtonWidth;
-    int height = r.height();
-    QRect arrowRect( ( left + right ) / 2 + ( reverse ? 6 : -6 ), 0, height, height );
-
-    QStyleOption arrowOpt = opt;
-    arrowOpt.rect = arrowRect;
-
-    QLine l1( left, 0, right, height / 2 );
-    QLine l2( left, height, right, height / 2 );
-
-    p.setRenderHint( QPainter::Antialiasing, true );
-
-    // Draw the shadow
-    QColor shadow( 0, 0, 0, 100 );
-    p.translate( 0, -1 );
-    p.setPen( shadow );
-    p.drawLine( l1 );
-    p.drawLine( l2 );
-
-    // Draw the main arrow
-    QColor foreGround( "#747474" );
-    p.translate( 0, 1 );
-    p.setPen( foreGround );
-    p.drawLine( l1 );
-    p.drawLine( l2 );
+    StyleHelper::horizontalHeader( &p, rect() ); // draw the background
+    m_arrow->setVisible( hasChildren() );
 }
 
 
