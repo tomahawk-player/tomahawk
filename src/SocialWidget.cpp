@@ -93,6 +93,14 @@ SocialWidget::setOpacity( qreal opacity )
 
 
 void
+SocialWidget::setPosition( QPoint position )
+{
+    m_position = position;
+    onGeometryUpdate();
+}
+
+
+void
 SocialWidget::show( int timeoutSecs )
 {
     if ( !isEnabled() )
@@ -135,13 +143,6 @@ void
 SocialWidget::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
-
-    QPoint position( m_position - QPoint( size().width(), size().height() ) );
-    if ( position != pos() )
-    {
-        move( position );
-        return;
-    }
 
     QPainter p( this );
     QRect r = contentsRect();
@@ -191,7 +192,10 @@ SocialWidget::paintEvent( QPaintEvent* event )
 void
 SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj )
 {
-    ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\" and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
+    if ( m_query->album().isEmpty() )
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
+    else
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\" and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
 }
 
 
@@ -200,6 +204,7 @@ SocialWidget::setQuery( const Tomahawk::query_ptr& query )
 {
     m_query = query;
     ui->coverImage->setPixmap( query->cover( ui->coverImage->size() ) );
+    onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
     
     QUrl longUrl = GlobalActionManager::instance()->openLinkFromQuery( query );

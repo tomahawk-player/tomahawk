@@ -46,7 +46,7 @@ public:
     void setOpacity( qreal opacity );
 
     QPoint position() const { return m_position; }
-    void setPosition( QPoint position ) { m_position = position; }
+    void setPosition( QPoint position );
 
     bool shown() const;
 
