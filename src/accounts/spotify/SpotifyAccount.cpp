@@ -338,6 +338,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyPlaylistRenamed( title, newRev, oldRev  );
     }
+    else if( msgType == "spotifyError" )
+    {
+        const QString error = msg.value( "msg" ).toString();
+
+        qDebug() << Q_FUNC_INFO << " === GOT ERROR " << error;
+        /// @todo: send to jobview
+    }
 }
 
 
