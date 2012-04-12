@@ -22,6 +22,7 @@
 
 #include <QDateTime>
 #include <QSettings>
+#include <QMutexLocker>
 
 using namespace TomahawkUtils;
 
@@ -53,6 +54,8 @@ Cache::~Cache()
 
 void Cache::pruneTimerFired()
 {
+    QMutexLocker mutex_locker( &m_mutex );
+
     qDebug() << Q_FUNC_INFO << "Pruning tomahawkcache";
     qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 
@@ -79,6 +82,8 @@ void Cache::pruneTimerFired()
 
 QVariant Cache::getData ( const QString& identifier, const QString& key )
 {
+    QMutexLocker mutex_locker( &m_mutex );
+
     const QString cacheDir = m_cacheBaseDir + identifier;
     QSettings cached_settings ( cacheDir, QSettings::IniFormat );
 

@@ -22,6 +22,7 @@
 #include "dllmacro.h"
 #include "utils/tomahawkutils.h"
 
+#include <QMutex>
 #include <QSettings>
 #include <QObject>
 #include <QTimer>
@@ -63,6 +64,7 @@ private:
     QString m_cacheBaseDir;
     QSettings m_cacheManifest;
     QTimer m_pruneTimer;
+    QMutex m_mutex;
 };
 
 }
