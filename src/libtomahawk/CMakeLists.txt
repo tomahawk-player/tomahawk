@@ -291,6 +291,7 @@ set( libSources
     utils/logger.cpp
     utils/qnr_iodevicestream.cpp
     utils/xspfloader.cpp
+    utils/tomahawkcache.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp

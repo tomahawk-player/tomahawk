@@ -62,6 +62,7 @@
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
+#include "utils/tomahawkcache.h"
 
 #include "config.h"
 
@@ -228,7 +229,7 @@ TomahawkApp::init()
     tDebug() << "Init AccountManager.";
     m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
     connect( m_accountManager.data(), SIGNAL( ready() ), SLOT( accountManagerReady() ) );
-    
+
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 #ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
@@ -318,6 +319,7 @@ TomahawkApp::~TomahawkApp()
         delete m_audioEngine.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
+    delete TomahawkUtils::TomahawkCache::instance();
 
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;
@@ -449,6 +451,9 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
     qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
+
+    qRegisterMetaType< TomahawkUtils::CacheData>( "TomahawkUtils::CacheData" );
+
 }
 
 
