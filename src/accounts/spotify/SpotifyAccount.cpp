@@ -27,12 +27,19 @@
 #include "utils/tomahawkutils.h"
 #include "actioncollection.h"
 
+#ifndef ENABLE_HEADLESS
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#endif
 
 #include <QPixmap>
 #include <QAction>
 
 using namespace Tomahawk;
 using namespace Accounts;
+class JobStatusView;
+class ErrorStatusMessage;
 
 static QPixmap* s_icon = 0;
 
@@ -341,9 +348,10 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     else if( msgType == "spotifyError" )
     {
         const QString error = msg.value( "msg" ).toString();
+        if( error.isEmpty() )
+            error = "Spotify: Got empty error message...Please report";
 
-        qDebug() << Q_FUNC_INFO << " === GOT ERROR " << error;
-        /// @todo: send to jobview
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
     }
 }
 
