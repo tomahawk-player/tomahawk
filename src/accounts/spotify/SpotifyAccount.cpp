@@ -38,8 +38,7 @@
 
 using namespace Tomahawk;
 using namespace Accounts;
-class JobStatusView;
-class ErrorStatusMessage;
+
 
 static QPixmap* s_icon = 0;
 
@@ -349,9 +348,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     {
         const QString error = msg.value( "msg" ).toString();
         if( error.isEmpty() )
-            error = "Spotify: Got empty error message...Please report";
+            return;
 
-        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
+        if( msg.value( "isDebugMsg" ).toBool() )
+            tDebug( LOGVERBOSE ) << "SpotifyResolverError: " << error;
+        else
+            JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
     }
 }
 
