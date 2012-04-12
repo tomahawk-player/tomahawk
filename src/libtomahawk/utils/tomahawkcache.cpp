@@ -25,17 +25,17 @@
 
 using namespace TomahawkUtils;
 
-TomahawkCache*TomahawkCache::s_instance = 0;
+Cache*Cache::s_instance = 0;
 
-TomahawkCache* TomahawkCache::instance()
+Cache* Cache::instance()
 {
     if ( !s_instance )
-        s_instance = new TomahawkCache();
+        s_instance = new Cache();
 
     return s_instance;
 }
 
-TomahawkCache::TomahawkCache()
+Cache::Cache()
     : QObject ( 0 )
     , m_cacheBaseDir ( TomahawkSettings::instance()->storageCacheLocation() + "/GenericCache/" )
     , m_cacheManifest ( m_cacheBaseDir + "cachemanifest.ini", QSettings::IniFormat )
@@ -46,12 +46,12 @@ TomahawkCache::TomahawkCache()
     m_pruneTimer.start();
 }
 
-TomahawkCache::~TomahawkCache()
+Cache::~Cache()
 {
 
 }
 
-void TomahawkCache::pruneTimerFired()
+void Cache::pruneTimerFired()
 {
     qDebug() << Q_FUNC_INFO << "Pruning tomahawkcache";
     qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
@@ -77,7 +77,7 @@ void TomahawkCache::pruneTimerFired()
 }
 
 
-QVariant TomahawkCache::getData ( const QString& identifier, const QString& key )
+QVariant Cache::getData ( const QString& identifier, const QString& key )
 {
     const QString cacheDir = m_cacheBaseDir + identifier;
     QSettings cached_settings ( cacheDir, QSettings::IniFormat );
@@ -96,15 +96,17 @@ QVariant TomahawkCache::getData ( const QString& identifier, const QString& key 
     return QVariant();
 }
 
-void TomahawkCache::putData ( const QString& identifier, qint64 maxAge, const QString& key, const QVariant& value )
+void Cache::putData ( const QString& identifier, qint64 maxAge, const QString& key, const QVariant& value )
 {
+    QMutexLocker mutex_locker( &m_mutex );
+
     const QString cacheDir = m_cacheBaseDir + identifier;
     addClient ( identifier );
     QSettings cached_settings ( cacheDir, QSettings::IniFormat );
     cached_settings.setValue ( key, QVariant::fromValue ( CacheData ( maxAge, value ) ) );
 }
 
-void TomahawkCache::addClient ( const QString& identifier )
+void Cache::addClient ( const QString& identifier )
 {
     QVariantList clients = m_cacheManifest.value ( "clients" ).toList();
     foreach ( const QVariant &client, clients ) {
@@ -118,7 +120,7 @@ void TomahawkCache::addClient ( const QString& identifier )
     m_cacheManifest.sync();
 }
 
-void TomahawkCache::removeClient ( const QString& identifier )
+void Cache::removeClient ( const QString& identifier )
 {
     QVariantList clients = m_cacheManifest.value ( "clients" ).toList();
     QVariantList::iterator it = clients.begin();

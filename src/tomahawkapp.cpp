@@ -319,7 +319,7 @@ TomahawkApp::~TomahawkApp()
         delete m_audioEngine.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
-    delete TomahawkUtils::TomahawkCache::instance();
+    delete TomahawkUtils::Cache::instance();
 
 #ifndef ENABLE_HEADLESS
     delete m_mainwindow;

@@ -39,13 +39,13 @@ struct CacheData {
     QVariant data;
 };
 
-class DLLEXPORT TomahawkCache : public QObject
+class DLLEXPORT Cache : public QObject
 {
 Q_OBJECT
 
 public:
-    static TomahawkCache* instance();
-    virtual ~TomahawkCache();
+    static Cache* instance();
+    virtual ~Cache();
 
     void putData( const QString &identifier, qint64 maxAge, const QString &key, const QVariant& value );
     QVariant getData( const QString &identifier, const QString &key );
@@ -54,8 +54,8 @@ private slots:
     void pruneTimerFired();
 
 private:
-    TomahawkCache();
-    static TomahawkCache* s_instance;
+    Cache();
+    static Cache* s_instance;
 
     void addClient( const QString &identifier );
     void removeClient( const QString &identifier );
