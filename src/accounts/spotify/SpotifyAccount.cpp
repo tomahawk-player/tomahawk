@@ -182,14 +182,14 @@ SpotifyAccount::syncActionTriggered( bool checked )
         }
 
         Q_ASSERT( info );
+        if ( info )
+            info->sync = !updater->sync();
+
+        if ( m_configWidget.data() )
+            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
 
         if ( !updater->sync() )
         {
-            if ( info )
-                info->sync = true;
-            if ( m_configWidget.data() )
-                m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
-
             startPlaylistSync( info );
         }
         else

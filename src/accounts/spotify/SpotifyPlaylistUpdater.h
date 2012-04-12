@@ -58,6 +58,7 @@ public:
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
     void spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
     void spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev  );
+
 protected:
     virtual void removeFromSettings(const QString& group) const;
     virtual void saveToSettings(const QString& group) const;
@@ -70,6 +71,7 @@ private slots:
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );
 
+    void checkDeleteDialog() const;
 private:
     void init();
 

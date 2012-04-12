@@ -22,6 +22,8 @@
 #include "SpotifyAccount.h"
 #include "utils/tomahawkutils.h"
 
+#include <QMessageBox>
+
 using namespace Tomahawk;
 using namespace Accounts;
 
@@ -114,7 +116,36 @@ SpotifyPlaylistUpdater::removeFromSettings( const QString& group ) const
     TomahawkSettings::instance()->remove( QString( "%1/latestrev" ).arg( group ) );
     TomahawkSettings::instance()->remove( QString( "%1/sync" ).arg( group ) );
     TomahawkSettings::instance()->remove( QString( "%1/spotifyId" ).arg( group ) );
+
+    if ( m_sync )
+    {
+        if ( QThread::currentThread() != QApplication::instance()->thread() )
+            QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "checkDeleteDialog", Qt::BlockingQueuedConnection );
+        else
+            checkDeleteDialog();
+    }
 }
+
+
+void
+SpotifyPlaylistUpdater::checkDeleteDialog() const
+{
+    // Ask if we should delete the playlist on the spotify side as well
+    QMessageBox askDelete( QMessageBox::Question, tr( "Delete in Spotify?" ), tr( "Would you like to delete the corresponding Spotify playlist as well?" ), QMessageBox::Yes | QMessageBox::No, 0 );
+    int ret = askDelete.exec();
+    if ( ret == QMessageBox::Yes )
+    {
+        if ( m_spotify.isNull() )
+            return;
+
+        // User wants to delete it!
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "deletePlaylist";
+        msg[ "playlistid" ] = m_spotifyId;
+        m_spotify.data()->sendMessage( msg );
+    }
+}
+
 
 
 void
