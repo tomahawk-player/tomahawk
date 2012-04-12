@@ -158,11 +158,13 @@ SpotifyAccount::syncActionTriggered( bool checked )
         QVariantMap msg;
         msg[ "_msgtype" ] = "createPlaylist";
         msg[ "sync" ] = true;
+        msg[ "title" ] = playlist->title();
 
         QList< query_ptr > queries;
         foreach ( const plentry_ptr& ple, playlist->entries() )
             queries << ple->query();
         QVariantList tracks = SpotifyPlaylistUpdater::queriesToVariant( queries );
+        msg[ "tracks" ] = tracks;
 
         const QString qid = sendMessage( msg, this, "playlistCreated" );
         m_waitingForCreateReply[ qid ] = playlist;
@@ -179,9 +181,12 @@ SpotifyAccount::syncActionTriggered( bool checked )
             }
         }
 
+        Q_ASSERT( info );
+
         if ( !updater->sync() )
         {
-            info->sync = true;
+            if ( info )
+                info->sync = true;
             if ( m_configWidget.data() )
                 m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
 
@@ -413,6 +418,9 @@ SpotifyAccount::saveConfig()
 void
 SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
 {
+    if ( !playlist )
+        return;
+
     QVariantMap msg;
     msg[ "_msgtype" ] = "getPlaylist";
     msg[ "playlistid" ] = playlist->plid;
@@ -551,6 +559,9 @@ SpotifyAccount::deleteOnUnsync() const
 void
 SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete )
 {
+    if ( !playlist )
+        return;
+
     QVariantMap msg;
     msg[ "_msgtype" ] = "removeFromSyncList";
     msg[ "playlistid" ] = playlist->plid;
