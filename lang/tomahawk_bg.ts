@@ -985,7 +985,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/resolverconfigdelegate.cpp" line="113"/>
         <source>Failed to load: %1</source>
-        <translation>Неуспех при зареждане на  %1</translation>
+        <translation>Не мога да заредя %1</translation>
     </message>
 </context>
 <context>
@@ -1095,12 +1095,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %4</source>
-        <translation>Слушам &quot;%1&quot; от %2 и я харесвам! %4</translation>
+        <translation>&lt;3 &quot;%1&quot; от %2  %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot; and loving it! %4</source>
-        <translation>Слушам &quot;%1&quot; от %2 от &quot;%3&quot; и я харесвам! %4</translation>
+        <translation>&lt;3 &quot;%1&quot; от %2 от &quot;%3&quot; %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="219"/>
@@ -1469,8 +1469,8 @@ Spotify e TM на Spotify Group.</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
-        <translation>Позволи на web браузъри да работят заедно с Tomahawk.</translation>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="409"/>
@@ -1574,7 +1574,7 @@ Spotify e TM на Spotify Group.</translation>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="113"/>
         <source>Success</source>
-        <translation>Успех!</translation>
+        <translation>Ура!</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="129"/>
@@ -1874,7 +1874,7 @@ Please change the filters or try again.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicModel.cpp" line="230"/>
         <source>Failed to generate preview with the desired filters</source>
-        <translation>Неуспех при генериране на предварителен преглед на избраните филтри.</translation>
+        <translation>Не мога да генерирам предварителен преглед на избраните филтри.</translation>
     </message>
 </context>
 <context>
@@ -2227,7 +2227,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="57"/>
         <source>Steer this station:</source>
-        <translation>Задръж тази станция:</translation>
+        <translation>Настройки:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="71"/>
@@ -2247,7 +2247,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="74"/>
         <source>Keep at current</source>
-        <translation>Задръж</translation>
+        <translation>Запази</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="75"/>
@@ -2405,7 +2405,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterinfoplugin.cpp" line="134"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>Слушам &quot;%1&quot; от %2 и я харесвам! %3</translation>
+        <translation>&lt;3 &quot;%1&quot; от %2  %3</translation>
     </message>
 </context>
 <context>
@@ -2426,7 +2426,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
         <source>Failed to save tracks</source>
-        <translation>Неуспех при запаметяване на песни</translation>
+        <translation>Не мога да запазя избраните песни</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
@@ -2810,7 +2810,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="565"/>
         <source>Failed to save tracks</source>
-        <translation>Неуспех при запазване на списък с песни</translation>
+        <translation>Не мога да запазя списъкът с песни</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="565"/>

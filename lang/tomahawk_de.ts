@@ -1464,8 +1464,8 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
-        <translation>Erlaube Webbrowsern mit Tomahawk zu interagieren</translation>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="409"/>

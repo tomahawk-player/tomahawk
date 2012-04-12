@@ -1465,7 +1465,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation type="unfinished"/>
     </message>
     <message>

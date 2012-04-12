@@ -1464,7 +1464,7 @@ other: %n年前</numerusform></translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation type="unfinished"/>
     </message>
     <message>

@@ -1468,8 +1468,8 @@ et des stations basés sur vos goûts.</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
-        <translation>Autoriser les navigateurs Web à utiliser Tomahawk</translation>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="409"/>

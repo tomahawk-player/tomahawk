@@ -195,7 +195,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="157"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
-        <translation>Po zeskanowaniu swojej kolekcji muzycznej znajdziesz ostatnio dodane albumy właśnie tutaj.</translation>
+        <translation>Po zeskanowaniu swojej kolekcji muzycznej w tym miejscu znajdziesz ostatnio dodane albumy.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/albumview.cpp" line="159"/>
@@ -242,7 +242,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="274"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Po zeskanowaniu swojej kolekcji muzycznej znajdziesz utwory właśnie tutaj.</translation>
+        <translation>Po zeskanowaniu swojej kolekcji muzycznej utwory znajdziesz w tym miejscu.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="276"/>
@@ -252,7 +252,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/artistview.cpp" line="293"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Przepraszamy, twój filtr %1&apos; nie pasuje do żadnych wyników.</translation>
+        <translation>Przepraszamy, twój filtr &apos;%1&apos; nie pasuje do żadnych wyników.</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Przepraszamy!&lt;/b&gt;&amp;nbsp;Tomahawk uległ awarii. Informacja o incydencie zostanie teraz wysłana do kwatery głównej programu, abyśmy mogli poprawić błędy.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;&lt;b&gt;Przepraszamy!&lt;/b&gt;&amp;nbsp;Tomahawk uległ awarii. Abyśmy mogli poprawić błędy, informacja o incydencie zostanie wysłana do kwatery głównej programu.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="172"/>
@@ -664,12 +664,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/widgets/newplaylistwidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
-        <translation>Tomahawk oferuje różne sposoby pomocy w tworzeniu list i poszukiwaniu muzyki, którą lubisz!</translation>
+        <translation>Tomahawk oferuje różne sposoby pomocy w tworzeniu list i poszukiwaniu twojej ulubionej muzyki!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/newplaylistwidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation>Podaj tylko tag lub gatunek, a Tomahawk zasugeruje kilka piosenek, żeby pomóc ci zacząć z nową listą:</translation>
+        <translation>Jeśli podasz chociaż jeden tag lub gatunek, Tomahawk postara się zasugerować ci kilka piosenek na dobry początek:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/newplaylistwidget.cpp" line="43"/>
@@ -754,7 +754,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Po prostu zwykła stara lista... Nazwij, upuść na nią trochę piosenek i gotowe!</translation>
+        <translation>Po prostu zwykła stara lista... Nazwij ją, upuść na nią trochę piosenek i gotowe!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="75"/>
@@ -800,7 +800,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/proxydialog.ui" line="70"/>
         <source>Hostname of proxy server</source>
-        <translation>Nazwa hosta serwera proxy</translation>
+        <translation>Host serwera proxy</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="77"/>
@@ -961,7 +961,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/queueview.cpp" line="130"/>
         <source>Hide Queue</source>
-        <translation>Schowaj Kolejkę</translation>
+        <translation>Ukryj Kolejkę</translation>
     </message>
 </context>
 <context>
@@ -977,7 +977,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/resolverconfigdelegate.cpp" line="110"/>
         <source>Not found: %1</source>
-        <translation>Nie znaleziono %1</translation>
+        <translation>Nie znaleziono: %1</translation>
     </message>
     <message>
         <location filename="../src/resolverconfigdelegate.cpp" line="113"/>
@@ -1157,7 +1157,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="291"/>
         <location filename="../src/sourcetree/sourcedelegate.cpp" line="332"/>
         <source>Hide</source>
-        <translation>Schowaj</translation>
+        <translation>Ukryj</translation>
     </message>
 </context>
 <context>
@@ -1362,7 +1362,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="116"/>
         <source>High Quality Streaming</source>
-        <translation>Strumieniowanie w wysokiej jakości</translation>
+        <translation>Muzyka w wysokiej jakości</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="186"/>
@@ -1380,7 +1380,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="158"/>
         <source>Local Music Information</source>
-        <translation>Lokalne Informacje o Muzyce</translation>
+        <translation>Informacje o Lokalnej Muzyce</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="166"/>
@@ -1407,7 +1407,7 @@ indywidualnego profilu gustu.</translation>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="199"/>
         <source>Watch for changes</source>
-        <translation>Obserwuj pod kątem zmian</translation>
+        <translation>Obserwuj zmiany</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="208"/>
@@ -1466,7 +1466,7 @@ indywidualnego profilu gustu.</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
-        <source>Allow web browsers to interact with Tomahawk</source>
+        <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1536,7 +1536,7 @@ indywidualnego profilu gustu.</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation>Połącz z Google Talk, aby znaleźć znajomych</translation>
+        <translation>Połącz z Google Talk aby znaleźć znajomych</translation>
     </message>
 </context>
 <context>
@@ -1749,7 +1749,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="142"/>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="181"/>
         <source>Add to &amp;Queue</source>
-        <translation>Dodaj do &amp;Kolejki</translation>
+        <translation>Dodaj do &amp;kolejki</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
@@ -1888,17 +1888,17 @@ Proszę zmienić filtry lub spróbować ponownie.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="144"/>
         <source>Add some filters above to seed this station!</source>
-        <translation>Dodaj trochę filtrów powyżej, aby załączyć tą stację!</translation>
+        <translation>Dodaj powyzej trochę filtrów, a Tomahawk utworzy stację z podobną muzyką!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="149"/>
         <source>Press Generate to get started!</source>
-        <translation>Naciśnij Generuj, aby zacząć!</translation>
+        <translation>Naciśnij Generuj aby zacząć!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="151"/>
         <source>Add some filters above, and press Generate to get started!</source>
-        <translation>Dodaj trochę filtrów powyżej i naciśnij Generuj, aby zacząć!</translation>
+        <translation>Dodaj powyżej trochę filtrów i naciśnij Generuj aby zacząć!</translation>
     </message>
 </context>
 <context>
@@ -2558,7 +2558,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/tomahawkoauthtwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
-        <translation>PIN Twitter</translation>
+        <translation>Twitter PIN</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/tomahawkoauthtwitter.cpp" line="39"/>
@@ -3119,12 +3119,12 @@ wprowadź pokazany numer PIN tutaj:</translation>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation>Konfiguruj to konto Twitter</translation>
+        <translation>Konfiguruj konto na Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>Wtyczka Twittera pozwala ci odkrywać i odtwarzać muzykę znajomych z Twittera, którzy używają Tomahawka i wysyłać wiadomości ze swojego konta.</translation>
+        <translation>Wtyczka Twittera pozwala ci odkrywać i odtwarzać muzykę znajomych z Twittera, którzy używają Tomahawka oraz wysyłać wiadomości ze swojego konta.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="137"/>
@@ -3152,14 +3152,14 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>
 Jeśli chcesz jedynie wysyłać tweety, wszystko gotowe.
 
-Jeśli chcesz, aby Tomahawk łączył się z twoimi znajomymi używając Twittera, wybierz rodzaj tweeta i naciśnij przycisk poniżej by wysłać wiadomość synchronizacyjną. Obie strony muszą śledzić się nawzajem, ponieważ używane są Wiadomości Prywatne. Teraz miej (dużo) cierpliwości - może to zająć kilka minut!
+Jeśli chcesz, aby Tomahawk łączył się z twoimi znajomymi używając Twittera, wybierz rodzaj tweeta i naciśnij przycisk poniżej by wysłać wiadomość synchronizacyjną. Obie strony muszą śledzić się nawzajem, ponieważ używane są Wiadomości Prywatne. Miej (dużo) cierpliwość - może to zająć kilka minut!
 
-Możesz wysłać wiadomość synchronizacyjną ponownie kiedykolwiek, po prostu wyślij kolejnego tweeta używając przycisku.</translation>
+Możesz kiedykolwiek, ponownie wysłać wiadomość synchronizacyjną - po prostu wyślij kolejnego tweeta używając przycisku.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>Wybierz rodzaj tweeta, który ci odpowiada, a następnie naciśnij przycisk, aby go wysłać:</translation>
+        <translation>Wybierz rodzaj tweeta który ci odpowiada, a następnie naciśnij przycisk aby go wysłać:</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="276"/>
