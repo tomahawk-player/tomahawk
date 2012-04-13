@@ -108,7 +108,7 @@ void Cache::putData ( const QString& identifier, qint64 maxAge, const QString& k
     const QString cacheDir = m_cacheBaseDir + identifier;
     addClient ( identifier );
     QSettings cached_settings ( cacheDir, QSettings::IniFormat );
-    cached_settings.setValue ( key, QVariant::fromValue ( CacheData ( maxAge, value ) ) );
+    cached_settings.setValue ( key, QVariant::fromValue ( CacheData ( QDateTime::currentMSecsSinceEpoch() + maxAge, value ) ) );
 }
 
 void Cache::addClient ( const QString& identifier )
