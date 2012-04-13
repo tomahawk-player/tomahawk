@@ -318,11 +318,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
-        const QVariantList tracksList = msg.value( "trackPositions" ).toList();
+        const QString newStartPos = msg.value( "newStartPosition" ).toString();
+        const QVariantList tracksList = msg.value( "tracks" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
-        updater->spotifyTracksMoved( tracksList, newRev, oldRev  );
+        updater->spotifyTracksMoved( tracksList, newStartPos, newRev, oldRev  );
     }
     else if( msgType == "playlistRenamed" )
     {

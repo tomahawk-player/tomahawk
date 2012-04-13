@@ -344,16 +344,60 @@ SpotifyPlaylistUpdater::tomahawkPlaylistRenamed(const QString &newT, const QStri
 }
 
 void
-SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev )
+SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QString& newStartPos, const QString& newRev, const QString& oldRev )
 {
-    // TODO
-//     if( playlist()->busy() )
-//     {
-//         // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
-//         // wait for any to be complete
-//         m_queuedOps << NewClosure( 0, "", this, "spotifyPlaylistRenamed", title, newRev, oldRev );
-//         return;
-//     }
+    if( playlist()->busy() )
+    {
+        // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
+        // wait for any to be complete
+        m_queuedOps << NewClosure( 0, "", this, SLOT(spotifyTracksMoved(QVariantList, QString, QString, QString)), tracks, newStartPos, newRev, oldRev );
+        return;
+    }
+
+
+    qDebug() << "Moving some tracks in a spotify-synced playlist, tracks:" << tracks << "to new startpos:" << newStartPos;
+    // Uh oh, dont' want to get out of sync!!
+    //     Q_ASSERT( m_latestRev == oldRev );
+    //     m_latestRev = newRev;
+    QList< plentry_ptr > entries = playlist()->entries();
+
+    QList< plentry_ptr > toMove;
+    for ( QList< plentry_ptr >::iterator iter = entries.begin(); iter != entries.end(); )
+    {
+        if ( (*iter)->annotation().isEmpty() )
+            continue;
+
+        if ( tracks.contains( (*iter)->annotation() ) )
+        {
+            toMove << *iter;
+            iter = entries.erase( iter );
+            continue;
+        }
+
+        ++iter;
+    }
+
+
+    // Find the position of the track to insert from
+    for ( QList< plentry_ptr >::iterator iter = entries.begin(); iter != entries.end(); ++iter )
+    {
+        if ( (*iter)->annotation() == newStartPos )
+        {
+            ++iter;
+            while ( !toMove.isEmpty() )
+            {
+                qDebug() << "Adding moved track to playlist at pos (end:" << (iter == entries.end());
+                if ( iter != entries.end() )
+                    qDebug() << (*iter)->query()->track() << (*iter)->query()->artist();
+                iter = entries.insert( iter, toMove.takeLast() );
+            }
+
+            break;
+        }
+    }
+
+    m_blockUpdatesForNextRevision = true;
+    playlist()->createNewRevision( uuid(), playlist()->currentrevision(), entries );
 }
 
 

@@ -59,7 +59,7 @@ public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
-    void spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
+    void spotifyTracksMoved( const QVariantList& tracks, const QString& newStartPos, const QString& newRev, const QString& oldRev );
     void spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev  );
 
 protected:
