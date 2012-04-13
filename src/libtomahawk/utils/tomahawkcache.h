@@ -104,6 +104,19 @@ private:
 
 }
 
+inline QDataStream& operator<< ( QDataStream& in, const TomahawkUtils::CacheData& data )
+{
+   in << data.data << data.maxAge;
+   return in;
+}
+
+inline QDataStream& operator>> ( QDataStream& out, TomahawkUtils::CacheData& data )
+{
+    out >> data.data;
+    out >> data.maxAge;
+    return out;
+}
+
 Q_DECLARE_METATYPE( TomahawkUtils::CacheData );
 
 #endif // TOMAHAWKCACHE_H

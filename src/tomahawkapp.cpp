@@ -452,8 +452,8 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
 
-    qRegisterMetaType< TomahawkUtils::CacheData>( "TomahawkUtils::CacheData" );
-
+    qRegisterMetaType< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
+    qRegisterMetaTypeStreamOperators< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
 }
 
 
