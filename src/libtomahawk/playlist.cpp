@@ -252,7 +252,7 @@ Playlist::setTitle( const QString& title )
         return;
 
     const QString oldTitle = m_title;
-//     m_title = title;
+    m_title = title;
 
     emit changed();
     emit renamed( m_title, oldTitle );
