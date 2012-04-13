@@ -2318,22 +2318,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="337"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="359"/>
         <source>Top Overall</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="426"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="448"/>
         <source>Artists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="428"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="450"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="430"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="452"/>
         <source>Tracks</source>
         <translation type="unfinished"/>
     </message>
@@ -2382,7 +2382,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="258"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="271"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
@@ -2544,7 +2544,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="530"/>
+        <location filename="../src/tomahawkapp.cpp" line="535"/>
         <source>My Collection</source>
         <translation type="unfinished"/>
     </message>

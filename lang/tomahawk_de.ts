@@ -2322,22 +2322,22 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="337"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="359"/>
         <source>Top Overall</source>
         <translation>Top Allgemein</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="426"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="448"/>
         <source>Artists</source>
         <translation>Künstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="428"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="450"/>
         <source>Albums</source>
         <translation>Alben</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="430"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="452"/>
         <source>Tracks</source>
         <translation>Stücke</translation>
     </message>
@@ -2386,7 +2386,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="258"/>
+        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="271"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
@@ -2548,7 +2548,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="530"/>
+        <location filename="../src/tomahawkapp.cpp" line="535"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
