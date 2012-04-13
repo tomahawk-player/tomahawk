@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
+ *   Copyright 2012, Casey Link <unnamedrambler@gmail.com>
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
@@ -32,6 +33,7 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "utils/tomahawkcache.h"
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"
@@ -46,7 +48,14 @@ ChartsPlugin::ChartsPlugin()
     , m_chartsFetchJobs( 0 )
 {
     /// If you add resource, update version aswell
-    m_chartVersion = "2.2";
+    m_chartVersion = "2.3";
+    QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "ChartsPlugin", "chart_sources" ).toList();
+    foreach( const QVariant & source, source_qvarlist ) {
+        m_chartResources.append( source.toString() );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetched source from cache" << source.toString();
+
+    }
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << source_qvarlist.size();
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -91,12 +100,14 @@ ChartsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
                 {
                     if( resource == hash["chart_source"] )
                     {
+                        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "get source" << resource;
                         foundSource = true;
                     }
                 }
 
                 if( !foundSource )
                 {
+                    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "no such source" << hash["chart_source"] << "(" << m_chartResources.size() << " total sources)";
                     dataError( requestData );
                     break;
                 }
@@ -120,6 +131,7 @@ ChartsPlugin::fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData request
 
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Could not convert requestData to InfoStringHash!";
         dataError( requestData );
         return;
     }
@@ -138,6 +150,8 @@ ChartsPlugin::fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData request
     /// Set the criterias for current chart
     criteria["chart_id"] = hash["chart_id"];
     criteria["chart_source"] = hash["chart_source"];
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking cache for " << hash["chart_id"] << " from " << hash["chart_source"];
+
 
     emit getCachedInfo( criteria, 86400000, requestData );
 }
@@ -155,6 +169,7 @@ ChartsPlugin::fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequest
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria[ "InfoChartCapabilities" ] = "chartsplugin";
     criteria[ "InfoChartVersion" ] = m_chartVersion;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking cache for " << "InfoChartCapabilities" << m_chartVersion;
     emit getCachedInfo( criteria, 864000000, requestData );
 }
 
@@ -222,8 +237,10 @@ ChartsPlugin::chartSourcesList()
         m_chartResources.clear();
         foreach(const QVariant &source, sources) {
             m_chartResources << source.toString();
-        }
 
+        }
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "storing sources in cache" << m_chartResources;
+        TomahawkUtils::Cache::instance()->putData( "ChartsPlugin", 172800000 /* 2 days */, "chart_sources", m_chartResources );
         fetchAllChartSources();
     }
 }
@@ -457,6 +474,7 @@ ChartsPlugin::chartsList()
         {
             emit info( request, m_allChartsMap );
             // update cache
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Updating cache with " << m_allChartsMap.size() << "charts";
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria[ "InfoChartCapabilities" ] = "chartsplugin";
             criteria[ "InfoChartVersion" ] = m_chartVersion;

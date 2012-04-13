@@ -58,7 +58,7 @@ private:
     void doUpgrade( uint oldVersion, uint newVersion );
     void performWipe( QString directory );
     const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
-    
+
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
     QTimer m_pruneTimer;
