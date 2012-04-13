@@ -81,7 +81,7 @@ private:
      * Fetch list of chart sources (e.g., itunes, billboard)
      * Populates the m_chartResources member.
      */
-    void fetchChartSourcesList();
+    void fetchChartSourcesList( bool fetchOnlySourceList );
     /**
      * Requests charts list for each chart source in m_chartResources
      */

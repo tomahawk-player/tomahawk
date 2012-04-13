@@ -56,6 +56,8 @@ ChartsPlugin::ChartsPlugin()
 
     }
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << source_qvarlist.size();
+    if( m_chartResources.size() == 0 )
+        fetchChartSourcesList( true );
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
 }
@@ -189,7 +191,7 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
         case InfoChartCapabilities:
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
-            fetchChartSourcesList();
+            fetchChartSourcesList( false );
             m_cachedRequests.append( requestData );
 
             return;
@@ -205,10 +207,12 @@ ChartsPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
 }
 
 void
-ChartsPlugin::fetchChartSourcesList()
+ChartsPlugin::fetchChartSourcesList( bool fetchOnlySourceList )
 {
     QUrl url = QUrl( QString( CHART_URL "charts" ) );
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    reply->setProperty( "only_source_list", fetchOnlySourceList );
+
 
     tDebug() << "fetching:" << url;
     connect( reply, SIGNAL( finished() ), SLOT( chartSourcesList() ) );
@@ -241,7 +245,8 @@ ChartsPlugin::chartSourcesList()
         }
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "storing sources in cache" << m_chartResources;
         TomahawkUtils::Cache::instance()->putData( "ChartsPlugin", 172800000 /* 2 days */, "chart_sources", m_chartResources );
-        fetchAllChartSources();
+        if( !reply->property("only_source_list" ).toBool() )
+            fetchAllChartSources();
     }
 }
 
