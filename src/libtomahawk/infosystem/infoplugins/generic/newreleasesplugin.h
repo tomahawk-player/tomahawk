@@ -69,7 +69,7 @@ private:
      * Fetch list of newlreeases sources (e.g., rovi)
      * Populates the m_nrSources member.
      */
-    void fetchNRSourcesList();
+    void fetchNRSourcesList( bool fetchOnlySourcesList );
     /**
      * Requests newrelease list for each source in m_chartSources
      */

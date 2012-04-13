@@ -12,6 +12,7 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "utils/tomahawkcache.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -27,6 +28,15 @@ NewReleasesPlugin::NewReleasesPlugin()
 {
     m_nrVersion = "0";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
+    QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "NewReleasesPlugin", "nr_sources" ).toList();
+    foreach( const QVariant & source, source_qvarlist ) {
+        m_nrSources.append( source.toString() );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetched source from cache" << source.toString();
+
+    }
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_nrSources.size() << source_qvarlist.size();
+    if( m_nrSources.size() == 0 )
+        fetchNRSourcesList( true );
 }
 
 NewReleasesPlugin::~NewReleasesPlugin()
@@ -129,7 +139,7 @@ void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestDat
 
     case InfoNewReleaseCapabilities: {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
-        fetchNRSourcesList();
+        fetchNRSourcesList( false );
         m_cachedRequests.append ( requestData );
 
         return;
@@ -143,10 +153,12 @@ void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestDat
     }
 }
 
-void NewReleasesPlugin::fetchNRSourcesList()
+void NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 {
     QUrl url = QUrl ( QString ( CHART_URL "newreleases" ) );
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
+    reply->setProperty( "only_source_list", fetchOnlySourcesList );
+
 
     tDebug() << "fetching:" << url;
     connect ( reply, SIGNAL ( finished() ), SLOT ( nrSourcesList() ) );
@@ -173,8 +185,9 @@ void NewReleasesPlugin::nrSourcesList()
         foreach ( const QVariant &source, sources ) {
             m_nrSources << source.toString();
         }
-
-        fetchAllNRSources();
+        TomahawkUtils::Cache::instance()->putData( "NewReleasesPlugin", 172800000 /* 2 days */, "nr_sources", m_nrSources );
+        if( !reply->property( "only_source_list" ).toBool() )
+            fetchAllNRSources();
     }
 }
 
