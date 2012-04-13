@@ -54,7 +54,17 @@ Closure::Closure(QObject* sender,
 Closure::~Closure() {
 }
 
+
+void Closure::forceInvoke()
+{
+    Invoked();
+}
+
+
 void Closure::Connect(QObject* sender, const char* signal) {
+  if (!sender)
+      return;
+
   bool success = connect(sender, signal, SLOT(Invoked()));
   Q_ASSERT(success);
   success = connect(sender, SIGNAL(destroyed()), SLOT(Cleanup()));

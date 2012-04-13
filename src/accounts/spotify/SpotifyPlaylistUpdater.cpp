@@ -86,6 +86,7 @@ SpotifyPlaylistUpdater::init()
     connect( playlist().data(), SIGNAL( tracksInserted( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksInserted( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tomahawkTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
     connect( playlist().data(), SIGNAL( renamed( QString, QString ) ), this, SLOT( tomahawkPlaylistRenamed( QString, QString ) ) );
+    connect( playlist().data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ), Qt::QueuedConnection ); // Queued so that in playlist.cpp:443 we let the playlist clear its own queue first
     // TODO reorders in a playlist
 }
 
@@ -147,6 +148,19 @@ SpotifyPlaylistUpdater::checkDeleteDialog() const
 }
 
 
+void
+SpotifyPlaylistUpdater::playlistRevisionLoaded()
+{
+    if ( m_queuedOps.isEmpty() ) // nothing queued
+        return;
+
+    if ( playlist()->busy() ) // not ready yet, we'll get another revision loaded
+        return;
+
+    _detail::Closure* next = m_queuedOps.dequeue();
+    next->forceInvoke();
+}
+
 
 void
 SpotifyPlaylistUpdater::saveToSettings( const QString& group ) const
@@ -204,6 +218,14 @@ SpotifyPlaylistUpdater::sync() const
 void
 SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev )
 {
+    if( playlist()->busy() )
+    {
+        // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
+        // wait for any to be complete
+        m_queuedOps << NewClosure( 0, "", this, SLOT(spotifyTracksAdded(QVariantList, QString, QString, QString)), tracks, startPosId, newRev, oldRev );
+        return;
+    }
+
     const QList< query_ptr > queries = variantToQueries( tracks );
 
     qDebug() << Q_FUNC_INFO << "inserting tracks in middle of tomahawk playlist, from spotify command!" << tracks << startPosId << newRev << oldRev;
@@ -227,7 +249,7 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QS
     if ( pos == -1 || pos > entries.size() )
         pos = entries.size();
 
-    qDebug() << Q_FUNC_INFO << "inserting tracks at position:" << pos;
+    qDebug() << Q_FUNC_INFO << "inserting tracks at position:" << pos << "(playlist has current size:" << entries << ")";
 
     m_blockUpdatesForNextRevision = true;
     playlist()->insertEntries( queries, pos, playlist()->currentrevision() );
@@ -237,6 +259,14 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QS
 void
 SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, const QString& newRev, const QString& oldRev )
 {
+    if( playlist()->busy() )
+    {
+        // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
+        // wait for any to be complete
+        m_queuedOps << NewClosure( 0, "", this, SLOT(spotifyTracksRemoved(QVariantList, QString, QString)), trackIds, newRev, oldRev );
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackIds << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
@@ -285,6 +315,14 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
 void
 SpotifyPlaylistUpdater::spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev )
 {
+    if( playlist()->busy() )
+    {
+        // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
+        // wait for any to be complete
+        m_queuedOps << NewClosure( 0, "", this, SLOT(spotifyPlaylistRenamed(QString, QString, QString)), title, newRev, oldRev );
+        return;
+    }
+
     Q_UNUSED( newRev );
     Q_UNUSED( oldRev );
     /// @note to self: should do some checking before trying to update
@@ -309,6 +347,13 @@ void
 SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev )
 {
     // TODO
+//     if( playlist()->busy() )
+//     {
+//         // We might still be waiting for a add/remove tracks command to finish, so the entries we get here might be stale
+//         // wait for any to be complete
+//         m_queuedOps << NewClosure( 0, "", this, "spotifyPlaylistRenamed", title, newRev, oldRev );
+//         return;
+//     }
 }
 
 

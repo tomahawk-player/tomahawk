@@ -20,7 +20,9 @@
 #define SPOTIFYPLAYLISTUPDATER_H
 
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "utils/closure.h"
 
+#include <QQueue>
 #include <QVariant>
 
 namespace Tomahawk {
@@ -53,6 +55,7 @@ public:
 
     QString spotifyId() const { return m_spotifyId; }
 
+public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
@@ -72,6 +75,8 @@ private slots:
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );
 
     void checkDeleteDialog() const;
+
+    void playlistRevisionLoaded();
 private:
     void init();
 
@@ -86,6 +91,7 @@ private:
     bool m_blockUpdatesForNextRevision;
     bool m_sync;
 
+    QQueue<_detail::Closure*> m_queuedOps;
 #ifndef ENABLE_HEADLESS
     static QPixmap* s_typePixmap;
 #endif

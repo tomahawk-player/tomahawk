@@ -18,6 +18,8 @@
 #ifndef CLOSURE_H
 #define CLOSURE_H
 
+#include "dllmacro.h"
+
 #include <tr1/functional>
 
 #include <QMetaMethod>
@@ -29,7 +31,7 @@
 
 namespace _detail {
 
-class ClosureArgumentWrapper {
+class DLLEXPORT ClosureArgumentWrapper {
  public:
   virtual ~ClosureArgumentWrapper() {}
 
@@ -49,7 +51,7 @@ class ClosureArgument : public ClosureArgumentWrapper {
   T data_;
 };
 
-class Closure : public QObject, boost::noncopyable {
+class DLLEXPORT Closure : public QObject, boost::noncopyable {
   Q_OBJECT
 
  public:
@@ -66,6 +68,15 @@ class Closure : public QObject, boost::noncopyable {
   void setAutoDelete( bool autoDelete ) { autoDelete_ = autoDelete; }
 
   virtual ~Closure();
+
+  /**
+   * If you don't this Closure to act on a signal, but just act like
+   *  a closure in that it saves some args and delivers them on demand later
+   *
+   * Only call this is you passed a null QObject* as a sender! Otherwise you
+   *  might delete your object twice :)
+   */
+  void forceInvoke();
 
  private slots:
   void Invoked();
@@ -84,7 +95,7 @@ class Closure : public QObject, boost::noncopyable {
   boost::scoped_ptr<const ClosureArgumentWrapper> val3_;
 };
 
-class SharedPointerWrapper {
+class DLLEXPORT SharedPointerWrapper {
  public:
   virtual ~SharedPointerWrapper() {}
   virtual QObject* data() const = 0;
