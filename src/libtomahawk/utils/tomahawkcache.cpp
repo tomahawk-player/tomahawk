@@ -19,6 +19,7 @@
 #include "tomahawkcache.h"
 
 #include "tomahawksettings.h"
+#include "utils/logger.h"
 
 #include <QDateTime>
 #include <QSettings>
@@ -95,9 +96,11 @@ QVariant Cache::getData ( const QString& identifier, const QString& key )
             tLog() << Q_FUNC_INFO << "Removed stale entry: " << identifier << key;
             return QVariant();
         }
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetched data for" << identifier << key;
         return data.data;
 
     }
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No such client" << identifier;
     return QVariant();
 }
 
@@ -109,6 +112,7 @@ void Cache::putData ( const QString& identifier, qint64 maxAge, const QString& k
     addClient ( identifier );
     QSettings cached_settings ( cacheDir, QSettings::IniFormat );
     cached_settings.setValue ( key, QVariant::fromValue ( CacheData ( QDateTime::currentMSecsSinceEpoch() + maxAge, value ) ) );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Storing from client " << identifier << maxAge << key << value;
 }
 
 void Cache::addClient ( const QString& identifier )
@@ -141,6 +145,7 @@ void Cache::removeClient ( const QString& identifier )
     m_cacheManifest.setValue ( "clients", clients );
     m_cacheManifest.sync();
 }
+
 
 
 
