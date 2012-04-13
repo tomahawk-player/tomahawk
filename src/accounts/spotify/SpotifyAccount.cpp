@@ -355,6 +355,17 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         else
             JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
     }
+    else if( msgType == "userChanged" )
+    {
+        const QString rmsg = msg.value( "msg" ).toString();
+        //const QString olduser = msg.value( "oldUser" ).toString();
+        //const QString newuser = msg.value( "newUser" ).toString();
+        if( rmsg.isEmpty() )
+            return;
+        /// @todo: actually remove sync states for old user....
+
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( rmsg ) ) );
+    }
 }
 
 
