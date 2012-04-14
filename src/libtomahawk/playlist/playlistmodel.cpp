@@ -94,7 +94,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     qDebug() << "playlist loading entries:";
     foreach( const plentry_ptr& p, entries )
-        qDebug() << p->guid();
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
 
     append( entries );
 

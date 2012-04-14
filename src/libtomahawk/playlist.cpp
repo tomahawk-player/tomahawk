@@ -338,12 +338,15 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     // calc list of newly added entries:
     QList<plentry_ptr> added = newEntries( entries );
     QStringList orderedguids;
+    qDebug() << "Inserting ordered GUIDs:";
     foreach( const plentry_ptr& p, entries )
+    {
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
         orderedguids << p->guid();
+    }
 
-//     qDebug() << "INSERTING ORDERED GUIDS:" << orderedguids << "and with new entries:";
-//     foreach( const plentry_ptr& p, added )
-//         qDebug() << p->guid();
+    foreach( const plentry_ptr& p, added )
+        qDebug() << p->guid();
 
     // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
@@ -463,29 +466,18 @@ Playlist::setNewRevision( const QString& rev,
     }
 
 
-    QList<plentry_ptr> entries;
+    // re-build m_entries from neworderedguids. plentries come either from the old m_entries OR addedmap.
+    m_entries.clear();
+
     foreach ( const QString& id, neworderedguids )
     {
         if ( entriesmap.contains( id ) )
         {
-            entries.append( entriesmap.value( id ) );
+            m_entries.append( entriesmap.value( id ) );
         }
         else if ( addedmap.contains( id ) )
         {
-            if( ! addedmap.value( id ).isNull() ) qDebug() << addedmap.value( id )->query()->track() << addedmap.value( id )->query()->artist();
-            entries.append( addedmap.value( id ) );
-            if ( is_newest_rev )
-            {
-                // We want to insert the new entries into the appropriate place in m_entries, not just at the end. so find the index in neworderedguids, and use that. since we go from 0,
-                // it should be valid
-                int insertIdx = neworderedguids.indexOf( id );
-                if ( insertIdx < 0 || insertIdx > m_entries.size() )
-                {
-                    qWarning() << "Trying to insert new track in a playlist, but beyond the end! Appending at end to be safe";
-                    insertIdx = m_entries.size();
-                }
-                m_entries.insert( insertIdx, addedmap.value( id ) );
-            }
+            m_entries.append( addedmap.value( id ) );
         }
         else
         {
@@ -503,35 +495,8 @@ Playlist::setNewRevision( const QString& rev,
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;
     pr.revisionguid = rev;
-
-    // entries that have been removed:
-    QSet<QString> removedguids = oldorderedguids.toSet().subtract( neworderedguids.toSet() );
-    //qDebug() << "Removedguids:" << removedguids << "oldorederedguids" << oldorderedguids << "newog" << neworderedguids;
-    foreach ( QString remid, removedguids )
-    {
-        // NB: entriesmap will contain old/removed entries only if the removal was done
-        // in the same session - after a restart, history is not in memory.
-        if ( entriesmap.contains( remid ) )
-        {
-            pr.removed << entriesmap.value( remid );
-            if ( is_newest_rev )
-            {
-                //qDebug() << "Removing from m_entries" << remid;
-                for ( int k = 0 ; k < m_entries.length(); ++k )
-                {
-                    if ( m_entries.at( k )->guid() == remid )
-                    {
-                        //qDebug() << "removed at" << k;
-                        m_entries.removeAt( k );
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     pr.added = addedmap.values();
-    pr.newlist = entries;
+    pr.newlist = m_entries;
 
     return pr;
 }
