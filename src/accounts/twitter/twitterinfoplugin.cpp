@@ -37,7 +37,7 @@ namespace InfoSystem
 TwitterInfoPlugin::TwitterInfoPlugin( Tomahawk::Accounts::TwitterAccount* account )
     : m_account( account )
 {
-    m_supportedPushTypes << InfoLove;
+    //m_supportedPushTypes << InfoLove;
 }
 
 
