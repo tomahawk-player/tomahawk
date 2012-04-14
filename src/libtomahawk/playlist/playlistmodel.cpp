@@ -428,7 +428,34 @@ PlaylistModel::endPlaylistChanges()
         m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
     }
 
-    if ( m_savedInsertPos >= 0 )
+    if ( m_savedInsertPos >= 0 && !m_savedInsertTracks.isEmpty() &&
+         !m_savedRemoveTracks.isEmpty() )
+    {
+        // If we have *both* an insert and remove, then it's a move action
+        // However, since we got the insert before the remove (Qt...), the index we have as the saved
+        // insert position is no longer valid. Find the proper one by finding the location of the first inserted
+        // track
+        for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+        {
+            const QModelIndex idx = index( i, 0, QModelIndex() );
+            if ( !idx.isValid() )
+                continue;
+            const TrackModelItem* item = itemFromIndex( idx );
+            if ( !item || item->entry().isNull() )
+                continue;
+
+            if ( item->entry() == m_savedInsertTracks.first() )
+            {
+                // Found our index
+                emit m_playlist->tracksMoved( m_savedInsertTracks, i );
+                break;
+            }
+        }
+        m_savedInsertPos = -1;
+        m_savedInsertTracks.clear();
+        m_savedRemoveTracks.clear();
+    }
+    else if ( m_savedInsertPos >= 0 )
     {
         emit m_playlist->tracksInserted( m_savedInsertTracks, m_savedInsertPos );
         m_savedInsertPos = -1;

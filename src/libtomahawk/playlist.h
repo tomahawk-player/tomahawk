@@ -220,6 +220,10 @@ signals:
     /// Notification for tracks being removed from playlist
     void tracksRemoved( const QList< Tomahawk::query_ptr >& tracks );
 
+    /// Notification for tracks being moved in a playlist. List is of new tracks, and new position of first track
+    /// Contiguous range from startPosition
+    void tracksMoved( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
+
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:

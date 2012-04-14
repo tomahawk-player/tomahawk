@@ -85,6 +85,7 @@ SpotifyPlaylistUpdater::init()
 
     connect( playlist().data(), SIGNAL( tracksInserted( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksInserted( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tomahawkTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
+    connect( playlist().data(), SIGNAL( tracksMoved( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksMoved( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( renamed( QString, QString ) ), this, SLOT( tomahawkPlaylistRenamed( QString, QString ) ) );
     connect( playlist().data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ), Qt::QueuedConnection ); // Queued so that in playlist.cpp:443 we let the playlist clear its own queue first
     // TODO reorders in a playlist
@@ -551,6 +552,17 @@ SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVa
 
     qDebug() << Q_FUNC_INFO << "GOT RETURN FOR tracksRemoved call from spotify!" << msgType << msg << "Succeeded?" << success;
     m_latestRev = msg.value( "revid" ).toString();
+}
+
+
+void
+SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks, int position )
+{
+    qDebug() << Q_FUNC_INFO << "Got tracks moved at position:" << position;
+    foreach ( const plentry_ptr ple, tracks )
+    {
+        qDebug() << ple->query()->track() << ple->query()->artist();
+    }
 }
 
 
