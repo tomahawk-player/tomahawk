@@ -21,7 +21,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/aclregistry.cpp" line="143"/>
         <source>Allow</source>
-        <translation type="unfinished"/>
+        <translation>Permitir</translation>
     </message>
 </context>
 <context>
@@ -39,7 +39,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Conta</translation>
     </message>
 </context>
 <context>
@@ -52,7 +52,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="110"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Conectando...</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="115"/>
@@ -475,7 +475,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/delegateconfigwrapper.cpp" line="61"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>Excluir Conta</translation>
     </message>
 </context>
 <context>
@@ -576,7 +576,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="60"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Senha:</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="76"/>
@@ -718,7 +718,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="172"/>
         <source>added %1</source>
-        <translation type="unfinished"/>
+        <translation>adicionou %1</translation>
     </message>
 </context>
 <context>
@@ -909,12 +909,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="254"/>
         <source>%1 minutes ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 minutos atrás</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="256"/>
         <source>%1 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 minutos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="260"/>
@@ -1072,12 +1072,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/SocialWidget.ui" line="31"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="41"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="67"/>
@@ -1284,7 +1284,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="269"/>
         <source>Search History</source>
-        <translation type="unfinished"/>
+        <translation>Histórico de Busca</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="271"/>
@@ -1352,7 +1352,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Senha:</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="86"/>
@@ -1466,7 +1466,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Permitir que navegadores web interajam com o Tomahawk (recomendado)</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="409"/>
@@ -1479,12 +1479,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountDelegate.cpp" line="200"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Conta</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="250"/>
         <source>Remove Account</source>
-        <translation type="unfinished"/>
+        <translation>Remover Conta</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="360"/>
@@ -1499,7 +1499,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/AccountDelegate.cpp" line="590"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Conectando...</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="595"/>
@@ -1543,7 +1543,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="61"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Amigo</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="62"/>
@@ -1565,12 +1565,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="108"/>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="123"/>
         <source>Failed</source>
-        <translation type="unfinished"/>
+        <translation>Falhou</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="113"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Sucesso</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="129"/>
@@ -1601,7 +1601,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="141"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="189"/>
         <source>Tweet!</source>
-        <translation type="unfinished"/>
+        <translation>Tweet!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="66"/>
@@ -1707,7 +1707,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="273"/>
         <source>Your tweet has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Seu tweet foi postado!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
@@ -1717,7 +1717,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Sua mensagem foi postada!</translation>
     </message>
 </context>
 <context>
@@ -2453,7 +2453,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="639"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation> e </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="647"/>
@@ -2468,7 +2468,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>e</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
@@ -2478,7 +2478,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="661"/>
         <source>%1 people</source>
-        <translation type="unfinished"/>
+        <translation>%1 pessoas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="663"/>
@@ -3430,7 +3430,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="160"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Senha:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="188"/>
@@ -3445,12 +3445,12 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="230"/>
         <source>Server:</source>
-        <translation type="unfinished"/>
+        <translation>Servidor:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="253"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Porta:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="299"/>
@@ -3483,7 +3483,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="386"/>
         <source>Item not found</source>
-        <translation type="unfinished"/>
+        <translation>Item não encontrado</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="389"/>
@@ -3498,7 +3498,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="395"/>
         <source>Remote Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Conexão Remota falhou</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="398"/>
@@ -3518,7 +3518,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="408"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Desconhecido</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="412"/>
@@ -3543,7 +3543,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="521"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Amigo</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="522"/>
@@ -3553,7 +3553,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="673"/>
         <source>Add Friend...</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Amigo...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="678"/>

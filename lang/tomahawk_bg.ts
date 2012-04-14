@@ -1095,12 +1095,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %4</source>
-        <translation>&lt;3 &quot;%1&quot; от %2  %4</translation>
+        <translation># fb ♥  &quot;%1&quot; от %2  %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot; and loving it! %4</source>
-        <translation>&lt;3 &quot;%1&quot; от %2 от &quot;%3&quot; %4</translation>
+        <translation>#fb ♥  &quot;%1&quot; от %2 от &quot;%3&quot; %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="219"/>
@@ -2405,7 +2405,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterinfoplugin.cpp" line="134"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>&lt;3 &quot;%1&quot; от %2  %3</translation>
+        <translation>#fb ♥  &quot;%1&quot; от %2  %3</translation>
     </message>
 </context>
 <context>
