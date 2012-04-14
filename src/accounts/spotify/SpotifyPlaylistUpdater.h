@@ -74,12 +74,16 @@ private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );
+    void onTracksMovedReturn( const QString& msgType, const QVariantMap& msg );
 
     void checkDeleteDialog() const;
 
     void playlistRevisionLoaded();
 private:
     void init();
+    /// Finds the nearest spotify id from pos to the beginning of the playlist
+    QString nearestSpotifyTrack( const QList< Tomahawk::plentry_ptr >& entries,  int pos );
+    QVariantList plentryToVariant( const QList< Tomahawk::plentry_ptr >& entries );
 
     static QVariantList queriesToVariant( const QList< Tomahawk::query_ptr >& queries );
     static QVariant queryToVariant( const Tomahawk::query_ptr& query );

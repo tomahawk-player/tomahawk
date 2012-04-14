@@ -432,22 +432,39 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
     // Find the trackid of the nearest spotify track
     QList< plentry_ptr > plTracks = playlist()->entries();
     Q_ASSERT( pos-1 < plTracks.size() );
-
-    for ( int i = pos-1; i >= 0; i-- )
-    {
-        if ( !plTracks[ i ]->annotation().isEmpty() && plTracks[ i ]->annotation().contains( "spotify:track") )
-        {
-            msg[ "startPosition" ] = plTracks[ i ]->annotation();
-            break;
-        }
-    }
+    const QString startPos = nearestSpotifyTrack( plTracks, pos - 1 );
+    msg[ "startPosition" ] = startPos;
 
     m_waitingForIds = tracks;
 
     msg[ "playlistid" ] = m_spotifyId;
 
+    msg[ "tracks" ] = plentryToVariant( tracks );
+
+    m_spotify.data()->sendMessage( msg, this, "onTracksInsertedReturn" );
+}
+
+
+QString
+SpotifyPlaylistUpdater::nearestSpotifyTrack( const QList< plentry_ptr >& entries, int pos )
+{
+    for ( int i = pos; i >= 0; i-- )
+    {
+        if ( !entries[ i ]->annotation().isEmpty() && entries[ i ]->annotation().contains( "spotify:track") )
+        {
+            return entries[ i ]->annotation();
+        }
+    }
+
+    return QString();
+}
+
+
+QVariantList
+SpotifyPlaylistUpdater::plentryToVariant( const QList< plentry_ptr >& entries )
+{
     QVariantList tracksJson;
-    foreach ( const plentry_ptr& ple, tracks )
+    foreach ( const plentry_ptr& ple, entries )
     {
         const query_ptr q = ple->query();
         if ( q.isNull() )
@@ -458,9 +475,8 @@ SpotifyPlaylistUpdater::tomahawkTracksInserted( const QList< plentry_ptr >& trac
 
         tracksJson << queryToVariant( q );
     }
-    msg[ "tracks" ] = tracksJson;
 
-    m_spotify.data()->sendMessage( msg, this, "onTracksInsertedReturn" );
+    return tracksJson;
 }
 
 
@@ -563,6 +579,33 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
     {
         qDebug() << ple->query()->track() << ple->query()->artist();
     }
+
+    qDebug() << Q_FUNC_INFO  << "updating spotify resolver with moved tracks to:" << position;
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "moveTracksInPlaylist";
+    msg[ "oldrev" ] = m_latestRev;
+
+    // Find the trackid of the nearest spotify track
+    QList< plentry_ptr > plTracks = playlist()->entries();
+    Q_ASSERT( position-1 < plTracks.size() );
+    const QString startPos = nearestSpotifyTrack( plTracks, position );
+
+    msg[ "startPosition" ] = startPos;
+    msg[ "playlistid" ] = m_spotifyId;
+
+    msg[ "tracks" ] = plentryToVariant( tracks );
+
+    m_spotify.data()->sendMessage( msg, this, "onTracksMovedReturn" );
+}
+
+
+void
+SpotifyPlaylistUpdater::onTracksMovedReturn( const QString& msgType, const QVariantMap& msg )
+{
+    const bool success = msg.value( "success" ).toBool();
+
+    qDebug() << Q_FUNC_INFO << "GOT RETURN FOR tracksMoved call from spotify!" << msgType << msg << "Succeeded?" << success;
+    m_latestRev = msg.value( "revid" ).toString();
 }
 
 
