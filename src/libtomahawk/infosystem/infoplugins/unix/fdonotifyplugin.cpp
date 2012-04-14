@@ -49,9 +49,9 @@
 
 using namespace Tomahawk::InfoSystem;
 
-
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
+    , m_nowPlayingId( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped;
@@ -119,6 +119,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
 void
 FdoNotifyPlugin::nowPlaying( const QVariant &input )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
         return;
 
@@ -135,23 +136,29 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
                         .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
-    
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
+
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
     QList<QVariant> arguments;
     arguments << QString( "Tomahawk" ); //app_name
-    arguments << quint32( 0 ); //notification_id
+    arguments << m_nowPlayingId; //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
     arguments << messageText; //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() )
-        dict[ "image_data" ] = ImageConverter::variantForImage( map[ "cover" ].value< QImage >() );
+    if ( map.contains( "coveruri" ) && map[ "coveruri" ].canConvert< QString >() )
+        dict[ "image_data" ] = ImageConverter::variantForImage( QImage( map[ "coveruri" ].toString(), "PNG" ) );
     else
         dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );
-    QDBusConnection::sessionBus().send( message );
+
+    const QDBusMessage &reply = QDBusConnection::sessionBus().call( message );
+    const QVariantList &list = reply.arguments();
+    if ( list.count() > 0 )
+        m_nowPlayingId = list.at( 0 ).toInt();
 }

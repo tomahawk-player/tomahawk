@@ -23,6 +23,7 @@
 #include <QModelIndex>
 
 class ComboBox;
+class BreadcrumbArrow;
 class QPaintEvent;
 
 namespace Tomahawk {
@@ -63,6 +64,7 @@ private:
     QPersistentModelIndex m_parentIndex;
     QPersistentModelIndex m_curIndex;
     ComboBox* m_combo;
+    BreadcrumbArrow* m_arrow;
 };
 
 }

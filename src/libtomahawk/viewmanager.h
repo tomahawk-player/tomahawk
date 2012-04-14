@@ -31,6 +31,7 @@
 #include "viewpage.h"
 #include "widgets/welcomewidget.h"
 #include "widgets/whatshotwidget.h"
+#include "widgets/newreleaseswidget.h"
 
 #include "dllmacro.h"
 
@@ -91,6 +92,7 @@ public:
 
     Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
     Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
+    Tomahawk::ViewPage* newReleasesWidget() const { return m_newReleasesWidget; }
     Tomahawk::ViewPage* topLovedWidget() const { return m_topLovedWidget; }
     Tomahawk::ViewPage* recentPlaysWidget() const { return m_recentPlaysWidget; }
     ArtistView* superCollectionView() const { return m_superCollectionView; }
@@ -139,6 +141,7 @@ public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
     Tomahawk::ViewPage* showWhatsHotPage();
+    Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showTopLovedPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     void showCurrentTrack();
@@ -202,6 +205,7 @@ private:
     QueueView* m_queue;
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
+    NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_topLovedWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;
 

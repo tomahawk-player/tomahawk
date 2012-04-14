@@ -588,9 +588,9 @@ Query::setLoved( bool loved )
         trackInfo["album"] = album();
 
         Tomahawk::InfoSystem::InfoPushData pushData ( id(),
-                                                      Tomahawk::InfoSystem::InfoLove,
+                                                      ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
                                                       QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
-                                                      Tomahawk::InfoSystem::PushNoFlag );
+                                                      Tomahawk::InfoSystem::PushShortUrlFlag );
         
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 

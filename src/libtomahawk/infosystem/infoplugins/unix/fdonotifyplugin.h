@@ -54,6 +54,8 @@ private:
     void notifyUser( const QString &messageText );
 
     void nowPlaying( const QVariant &input );
+
+    quint32 m_nowPlayingId;
 };
 
 }

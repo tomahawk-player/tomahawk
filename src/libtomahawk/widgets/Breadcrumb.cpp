@@ -21,6 +21,7 @@
 #include "BreadcrumbButton.h"
 #include "utils/stylehelper.h"
 #include "utils/logger.h"
+#include "utils/tomahawkutilsgui.h"
 
 #include <QStylePainter>
 #include <QPushButton>
@@ -35,8 +36,7 @@ Breadcrumb::Breadcrumb( QWidget* parent, Qt::WindowFlags f )
     , m_model( 0 )
     , m_buttonlayout( new QHBoxLayout( this ) )
 {
-    m_buttonlayout->setSpacing( 0 );
-    m_buttonlayout->setMargin( 0 );
+    TomahawkUtils::unmarginLayout( m_buttonlayout );
     m_buttonlayout->setAlignment( Qt::AlignLeft );
 
     setAutoFillBackground( true );

@@ -75,6 +75,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
+    , m_newReleasesWidget( new NewReleasesWidget() )
     , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_currentMode( PlaylistInterface::Tree )
@@ -118,6 +119,7 @@ ViewManager::ViewManager( QObject* parent )
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
     connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
+    connect( this, SIGNAL( tomahawkLoaded() ), m_newReleasesWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
 
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
@@ -130,6 +132,7 @@ ViewManager::~ViewManager()
 {
     saveCurrentPlaylistSettings();
     delete m_whatsHotWidget;
+    delete m_newReleasesWidget;
     delete m_welcomeWidget;
     delete m_topLovedWidget;
     delete m_recentPlaysWidget;
@@ -434,6 +437,13 @@ Tomahawk::ViewPage*
 ViewManager::showWhatsHotPage()
 {
     return show( m_whatsHotWidget );
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::showNewReleasesPage()
+{
+    return show( m_newReleasesWidget );
 }
 
 

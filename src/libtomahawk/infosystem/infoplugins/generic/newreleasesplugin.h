@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
- *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012, Casey Link <unnamedrambler@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ChartsPlugin_H
-#define ChartsPlugin_H
+#ifndef NEWRELEASESPLUGIN_H
+#define NEWRELEASESPLUGIN_H
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
@@ -33,24 +32,13 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class ChartsPlugin : public InfoPlugin
+class NewReleasesPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    ChartsPlugin();
-    virtual ~ChartsPlugin();
-
-    enum ChartType {
-        None =      0x00,
-        Track =     0x01,
-        Album =     0x02,
-        Artist =    0x04
-
-    };
-
-    void setChartType( ChartType type ) { m_chartType = type; }
-    ChartType chartType() const { return m_chartType; }
+    NewReleasesPlugin();
+    virtual ~NewReleasesPlugin();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -62,53 +50,51 @@ protected slots:
     }
 
     /**
-     * Parses a QNetworkReply of a list of chart sources.
+     * Parses a QNetworkReply of a list of newreleases sources.
      */
-    void chartSourcesList();
+    void nrSourcesList();
 
     /**
-     * Parses a QNetworkReply of a list of charts for a particular source
+     * Parses a QNetworkReply of a list of newreleases from a particular source
      */
-    void chartsList();
+    void nrList();
 
     /**
-     * Parses a QNetworkReply for the chart data for a particular chart
+     * Parses a QNetworkReply for the newreleases data for a particular newrelease
      */
-    void chartReturned();
+    void nrReturned();
 
 private:
     /**
-     * Fetch list of chart sources (e.g., itunes, billboard)
-     * Populates the m_chartResources member.
+     * Fetch list of newlreeases sources (e.g., rovi)
+     * Populates the m_nrSources member.
      */
-    void fetchChartSourcesList( bool fetchOnlySourceList );
+    void fetchNRSourcesList( bool fetchOnlySourcesList );
     /**
-     * Requests charts list for each chart source in m_chartResources
+     * Requests newrelease list for each source in m_chartSources
      */
-    void fetchAllChartSources();
+    void fetchAllNRSources();
     /**
-     * Fetches a specific chart from a particular source.
+     * Fetches a specific newrelease from a particular source.
      * Updates the cache.
      */
-    void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, const QString& source, const QString& chart_id );
-
-    void fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
-    void fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchNR( Tomahawk::InfoSystem::InfoRequestData requestData, const QString& source, const QString& nr_id );
+    void fetchNRFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchNRCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    QStringList m_chartResources;
-    QString m_chartVersion;
-    QList< InfoStringHash > m_charts;
-    ChartType m_chartType;
-    QVariantMap m_allChartsMap;
-    uint m_chartsFetchJobs;
+    QStringList m_nrSources;
+    QString m_nrVersion;
+    QList< InfoStringHash > m_newreleases;
+    //ChartType m_chartType;
+    QVariantMap m_allNRsMap;
+    uint m_nrFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
     QHash< QString, QString > m_cachedCountries;
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }
-
 }
 
-#endif // ChartsPlugin_H
+#endif // NEWRELEASESPLUGIN_H

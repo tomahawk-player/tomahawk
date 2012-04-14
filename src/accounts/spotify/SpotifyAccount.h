@@ -84,7 +84,7 @@ public:
     virtual void saveConfig();
 
     virtual QWidget* aclWidget() { return 0; }
-    virtual InfoSystem::InfoPlugin* infoPlugin() { return 0; }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     virtual SipPlugin* sipPlugin() { return 0; }
 
     QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );

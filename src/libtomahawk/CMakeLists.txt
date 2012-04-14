@@ -135,6 +135,7 @@ set( libGuiSources
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/whatshotwidget.cpp
+    widgets/newreleaseswidget.cpp
     widgets/ChartDataLoader.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
@@ -252,6 +253,7 @@ set( libSources
 
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/chartsplugin.cpp
+    infosystem/infoplugins/generic/newreleasesplugin.cpp
     infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/hypemPlugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
@@ -290,6 +292,7 @@ set( libSources
     utils/logger.cpp
     utils/qnr_iodevicestream.cpp
     utils/xspfloader.cpp
+    utils/tomahawkcache.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -303,6 +306,7 @@ set( libUI ${libUI}
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
     widgets/whatshotwidget.ui
+    widgets/newreleaseswidget.ui
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui

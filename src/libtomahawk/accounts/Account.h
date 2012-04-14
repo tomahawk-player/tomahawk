@@ -31,15 +31,12 @@
 #include "dllmacro.h"
 #include "tomahawksettings.h"
 
+#include "libtomahawk/infosystem/infosystem.h"
+
 class SipPlugin;
 
 namespace Tomahawk
 {
-
-namespace InfoSystem
-{
-    class InfoPlugin;
-}
 
 namespace Accounts
 {
@@ -100,7 +97,7 @@ public:
 
     virtual QString errorMessage() const { QMutexLocker locker( &m_mutex ); return m_cachedError; }
 
-    virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() = 0;
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
 
     AccountTypes types() const;

@@ -80,7 +80,7 @@ public:
     // Not relevant
     virtual QPixmap icon() const { return QPixmap(); }
     virtual SipPlugin* sipPlugin() { return 0; }
-    virtual Tomahawk::InfoSystem::InfoPlugin* infoPlugin() { return 0; }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     virtual QWidget* aclWidget() { return 0; }
 
 private slots:
