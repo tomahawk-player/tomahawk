@@ -17,6 +17,7 @@
  */
 
 #include "LoadXSPFDialog.h"
+#include "tomahawksettings.h"
 
 #include "ui_LoadXSPFDialog.h"
 #include <QFileDialog>
@@ -44,7 +45,10 @@ LoadXSPFDialog::~LoadXSPFDialog()
 void
 LoadXSPFDialog::getLocalFile()
 {
-    QString url = QFileDialog::getOpenFileName( this, tr( "Load XSPF File" ), QDir::homePath(), tr( "XSPF Files (*.xspf)" ) );
+    const QString path = TomahawkSettings::instance()->importXspfPath();
+    QString url = QFileDialog::getOpenFileName( this, tr( "Load XSPF File" ), path, tr( "XSPF Files (*.xspf)" ) );
+    TomahawkSettings::instance()->setImportXspfPath( QFileInfo( url ).absoluteDir().absolutePath() );
+
     m_ui->lineEdit->setText( url );
 }
 
