@@ -574,6 +574,14 @@ SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVa
 void
 SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks, int position )
 {
+    if( playlist()->busy() )
+    {
+        // the playlist has had the new revision set, but it might not be finished, if it's not finished, playlist()->entries() still
+        // contains the *old* order, so we get the wrong data
+        m_queuedOps << NewClosure( 0, "", this, SLOT(tomahawkTracksMoved(QList<Tomahawk::plentry_ptr>,int)), tracks, position );
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << "Got tracks moved at position:" << position;
     foreach ( const plentry_ptr ple, tracks )
     {
@@ -588,7 +596,10 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
     // Find the trackid of the nearest spotify track
     QList< plentry_ptr > plTracks = playlist()->entries();
     Q_ASSERT( position-1 < plTracks.size() );
-    const QString startPos = nearestSpotifyTrack( plTracks, position );
+
+    QString startPos;
+    if ( position > 0 )
+        startPos = nearestSpotifyTrack( plTracks, position );
 
     msg[ "startPosition" ] = startPos;
     msg[ "playlistid" ] = m_spotifyId;

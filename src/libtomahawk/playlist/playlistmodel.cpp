@@ -444,6 +444,7 @@ PlaylistModel::endPlaylistChanges()
             if ( !item || item->entry().isNull() )
                 continue;
 
+//             qDebug() << "Checking for equality:" << (item->entry() == m_savedInsertTracks.first()) << m_savedInsertTracks.first()->query()->track() << m_savedInsertTracks.first()->query()->artist();
             if ( item->entry() == m_savedInsertTracks.first() )
             {
                 // Found our index

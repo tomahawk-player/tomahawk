@@ -62,15 +62,15 @@ public slots:
     void spotifyTracksMoved( const QVariantList& tracks, const QString& newStartPos, const QString& newRev, const QString& oldRev );
     void spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev  );
 
+    void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>& ,int );
+    void tomahawkTracksRemoved( const QList<Tomahawk::query_ptr>& );
+    void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
+    void tomahawkPlaylistRenamed( const QString&, const QString& );
 protected:
     virtual void removeFromSettings(const QString& group) const;
     virtual void saveToSettings(const QString& group) const;
 
 private slots:
-    void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>& ,int );
-    void tomahawkTracksRemoved( const QList<Tomahawk::query_ptr>& );
-    void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
-    void tomahawkPlaylistRenamed( const QString&, const QString& );
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );

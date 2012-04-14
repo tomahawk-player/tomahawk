@@ -311,5 +311,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
+Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::PlaylistEntry > > )
 
 #endif // PLAYLIST_H
