@@ -379,20 +379,28 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
 
 
     // Find the position of the track to insert from
-    for ( QList< plentry_ptr >::iterator iter = entries.begin(); iter != entries.end(); ++iter )
+    if ( newStartPos.isEmpty() )
     {
-        if ( (*iter)->annotation() == newStartPos )
+        while ( !toMove.isEmpty() )
+            entries.prepend( toMove.takeLast() );
+    }
+    else
+    {
+        for ( QList< plentry_ptr >::iterator iter = entries.begin(); iter != entries.end(); ++iter )
         {
-            ++iter;
-            while ( !toMove.isEmpty() )
+            if ( (*iter)->annotation() == newStartPos )
             {
-                qDebug() << "Adding moved track to playlist at pos (end:" << (iter == entries.end());
-                if ( iter != entries.end() )
-                    qDebug() << (*iter)->query()->track() << (*iter)->query()->artist();
-                iter = entries.insert( iter, toMove.takeLast() );
-            }
+                ++iter;
+                while ( !toMove.isEmpty() )
+                {
+                    qDebug() << "Adding moved track to playlist at pos (end:" << (iter == entries.end());
+                    if ( iter != entries.end() )
+                        qDebug() << (*iter)->query()->track() << (*iter)->query()->artist();
+                    iter = entries.insert( iter, toMove.takeLast() );
+                }
 
-            break;
+                break;
+            }
         }
     }
 
