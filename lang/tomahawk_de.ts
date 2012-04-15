@@ -36,7 +36,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation type="unfinished"/>
+        <translation>Beschreibung hier</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
@@ -65,69 +65,69 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>ActionCollection</name>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="43"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="52"/>
         <source>&amp;Listen Along</source>
         <translation>&amp;Mithören</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="46"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
         <source>Stop &amp;Listening Along</source>
         <translation>Mithören b&amp;eenden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="50"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="59"/>
         <source>&amp;Follow in real-time</source>
         <translation>In Echtzeit &amp;folgen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Privat Modus aktivieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Privat Modus verlassen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="61"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="70"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Lade Playliste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="62"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="71"/>
         <source>&amp;Rename Playlist</source>
         <translation>Playliste &amp;umbenennen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="63"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="72"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Kopiere Link zu dieser Playliste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="73"/>
         <source>&amp;Play</source>
         <translation>&amp;Abspielen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="65"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="74"/>
         <source>&amp;Stop</source>
         <translation>&amp;Stop</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="66"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="75"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Vorheriges Lied</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="67"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="76"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Nächstes Lied</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="68"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="77"/>
         <source>&amp;Quit</source>
         <translation>&amp;Verlassen</translation>
     </message>
@@ -297,7 +297,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/audiocontrols.ui" line="302"/>
         <source>social</source>
-        <translation type="unfinished"/>
+        <translation>Sozial</translation>
     </message>
     <message>
         <location filename="../src/audiocontrols.ui" line="318"/>
@@ -530,12 +530,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
         <translation>Infoleiste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="87"/>
-        <source>Automatically update</source>
-        <translation>Automatisch aktualisieren</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="95"/>
+        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="89"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
     </message>
@@ -563,7 +558,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="41"/>
@@ -612,7 +607,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Url der Playlist</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="29"/>
@@ -633,12 +628,12 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>LoadXSPFDialog</name>
     <message>
-        <location filename="../src/LoadXSPFDialog.cpp" line="47"/>
+        <location filename="../src/LoadXSPFDialog.cpp" line="49"/>
         <source>Load XSPF File</source>
         <translation>Lade XSPF Datei</translation>
     </message>
     <message>
-        <location filename="../src/LoadXSPFDialog.cpp" line="47"/>
+        <location filename="../src/LoadXSPFDialog.cpp" line="49"/>
         <source>XSPF Files (*.xspf)</source>
         <translation>XSPF Dateien (*.xspf)</translation>
     </message>
@@ -689,7 +684,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/libtomahawk/widgets/newreleaseswidget.h" line="73"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Neuerscheinungen</translation>
     </message>
 </context>
 <context>
@@ -715,33 +710,33 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="165"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>hörte %1 von %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="172"/>
         <source>added %1</source>
-        <translation type="unfinished"/>
+        <translation>fügte %1 hinzu</translation>
     </message>
 </context>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="81"/>
         <source>A playlist by %1, created %2</source>
         <translation>Eine Playliste von %1, erstellt %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="78"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="82"/>
         <source>you</source>
         <translation>dir</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="132"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="147"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Alle Lieder von %1 auf dem Album %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="152"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="167"/>
         <source>All tracks by %1</source>
         <translation>Alle Lieder von %1</translation>
     </message>
@@ -787,7 +782,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistview.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/playlistview.cpp" line="137"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Diese Playliste ist derzeit leer. Füge einige Stücke hinzu und genieße die Musik!</translation>
     </message>
@@ -843,7 +838,8 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
         <location filename="../src/proxydialog.ui" line="142"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation type="unfinished"/>
+        <translation>Proxy Ausnahmen:
+(Hat Vorrang vor System Proxy)</translation>
     </message>
     <message>
         <location filename="../src/proxydialog.ui" line="150"/>
@@ -1033,12 +1029,12 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/settingsdialog.cpp" line="396"/>
         <source>Install resolver from file</source>
-        <translation type="unfinished"/>
+        <translation>Installiere Resolver Datei</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="423"/>
@@ -1069,42 +1065,42 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/SocialWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="31"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="41"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="67"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>Cover</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="101"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
-        <source>Listening to &quot;%1&quot; by %2 and loving it! %4</source>
+        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot; and loving it! %4</source>
-        <translation type="unfinished"/>
+        <translation>Höre &quot;%1&quot; von %2 auf &quot;%3&quot; und liebe es! %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="219"/>
         <source>%1 characters left</source>
-        <translation type="unfinished"/>
+        <translation>%1 Zeichen übrig</translation>
     </message>
 </context>
 <context>
@@ -1210,7 +1206,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="77"/>
         <source>Recently Played</source>
-        <translation>Kürzlich gehörte Lieder FOO</translation>
+        <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/sourceitem.cpp" line="81"/>
@@ -1226,27 +1222,27 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="188"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopiere Link</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="190"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Lösche %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="207"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>Playliste &amp;exportieren</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="341"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="364"/>
         <source>Save XSPF</source>
         <translation>XSPF speichern</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="342"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="365"/>
         <source>Playlists (*.xspf)</source>
         <translation>Playlisten (*.xspf)</translation>
     </message>
@@ -1306,7 +1302,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="273"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="290"/>
@@ -1321,7 +1317,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="300"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Neuerscheinungen</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/sourcesmodel.cpp" line="305"/>
@@ -1334,41 +1330,64 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="20"/>
         <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="60"/>
+        <source>Configure your Spotify account</source>
+        <translation>Konfiguriere dein Spotify Konto</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="92"/>
+        <source>Username or Facebook Email</source>
+        <translation>Nutzername oder Facebook Email</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="120"/>
+        <source>Log In</source>
+        <translation>Anmeldung</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="145"/>
+        <source>High Quality Streams</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="48"/>
-        <source>Configure your Spotify credentials</source>
-        <translation>Spotify-Konto einrichten</translation>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="170"/>
+        <source>Spotify playlists to keep in sync:</source>
+        <translation>Spotify Listen die du synchronisieren willst:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="65"/>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="180"/>
+        <source>Delete Tomahawk playlist when removing synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="82"/>
         <source>Username:</source>
         <translation>Benutzer:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="72"/>
-        <source>placeholderUsername</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="99"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="86"/>
-        <source>placeholderPw</source>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="226"/>
+        <source>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</source>
         <translation type="unfinished"/>
     </message>
+</context>
+<context>
+    <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="116"/>
-        <source>High Quality Streaming</source>
-        <translation>Hohe Audioqualität</translation>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="136"/>
+        <source>Delete in Spotify?</source>
+        <translation>Auf Spotify löschen</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="186"/>
-        <source>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</source>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="136"/>
+        <source>Would you like to delete the corresponding Spotify playlist as well?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1415,7 +1434,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="98"/>
         <source>Internet Services</source>
-        <translation type="unfinished"/>
+        <translation>Internet Dienste</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="109"/>
@@ -1425,7 +1444,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="129"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Nach Fähigkeiten filtern:</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="245"/>
@@ -1465,7 +1484,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="396"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Erlaube Web Browser mit Tomahawk zu interagieren (empfohlen)</translation>
     </message>
     <message>
         <location filename="../src/stackedsettingsdialog.ui" line="409"/>
@@ -1521,12 +1540,12 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="84"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Gib deinen Google Login an und verbinde Tomahawk mit deinen Freunden!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="85"/>
         <source>username@gmail.com</source>
-        <translation type="unfinished"/>
+        <translation>nutzer@gmail.com</translation>
     </message>
 </context>
 <context>
@@ -1534,7 +1553,7 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation type="unfinished"/>
+        <translation>Mit Google Talk verbinden um Freund zu finden</translation>
     </message>
 </context>
 <context>
@@ -1542,12 +1561,12 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="61"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Freund hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="62"/>
         <source>Enter Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Google Adresse:</translation>
     </message>
 </context>
 <context>
@@ -1578,9 +1597,45 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
     </message>
 </context>
 <context>
+    <name>Tomahawk::Accounts::SpotifyAccount</name>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="133"/>
+        <source>Sync with Spotify</source>
+        <translation>Mit Spotify synchronisieren</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="137"/>
+        <source>Stop syncing with Spotify</source>
+        <translation>Synchronisation beenden</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="131"/>
+        <source>Logging in...</source>
+        <translation>Anmelden...</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="145"/>
+        <source>Logged in!</source>
+        <translation>Angemeldet!</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="152"/>
+        <source>Failed: %1</source>
+        <translation>Fehler: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="162"/>
+        <source>Log In</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Accounts::SpotifyAccountFactory</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="44"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="60"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
         <translation>Musik abspielen und Playlisten synchronisieren mit Spotify Premium</translation>
     </message>
@@ -1600,26 +1655,26 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="141"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="189"/>
         <source>Tweet!</source>
-        <translation type="unfinished"/>
+        <translation>Tweet!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="66"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="167"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>Status: Keine Anmeldedaten</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="67"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="92"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="168"/>
         <source>Authenticate</source>
-        <translation type="unfinished"/>
+        <translation>Authentifizieren</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="74"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="136"/>
         <source>Status: Credentials saved for %1</source>
-        <translation type="unfinished"/>
+        <translation>Status: Anmeldedaten gespeichert für %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="75"/>
@@ -1636,13 +1691,14 @@ Denk dran: Erlaube das nur, wenn du dem Anderen vertraust und du die Rechte zum 
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="290"/>
         <source>Tweetin&apos; Error</source>
-        <translation type="unfinished"/>
+        <translation>Twitter Fehler</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="122"/>
         <source>The credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>Die Kontodaten konnten nicht verifiziert werden.
+Du solltest versuchen dich nochmals zu authentifizieren.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="152"/>
@@ -1667,12 +1723,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="186"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@Erwähnung</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="187"/>
         <source>Send Mention!</source>
-        <translation type="unfinished"/>
+        <translation>Sende Erwähnung!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="200"/>
@@ -1783,12 +1839,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
         <source>&amp;Continue Playback after this Track</source>
-        <translation type="unfinished"/>
+        <translation>Nach diesem Lied &amp;weiterspielen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
         <source>&amp;Stop Playback after this Track</source>
-        <translation type="unfinished"/>
+        <translation>Wiedergabe nach diesem Lied &amp;stoppen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
@@ -2190,7 +2246,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="798"/>
         <source>in %1</source>
-        <translation type="unfinished"/>
+        <translation>in %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="803"/>
@@ -2347,12 +2403,12 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="135"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk spielt &quot;%1&quot; von %2%3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="138"/>
         <source>on &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>auf &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -2375,12 +2431,12 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="421"/>
         <source>Top Artists</source>
-        <translation type="unfinished"/>
+        <translation>Top Künstler</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="424"/>
         <source>Hyped Artists</source>
-        <translation type="unfinished"/>
+        <translation>Gehypte Künstler</translation>
     </message>
 </context>
 <context>
@@ -2388,7 +2444,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="271"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Alben</translation>
     </message>
 </context>
 <context>
@@ -2396,7 +2452,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/accounts/twitter/twitterinfoplugin.cpp" line="134"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>Höre &quot;%1&quot; von %2 und liebe es! %3</translation>
     </message>
 </context>
 <context>
@@ -2454,37 +2510,37 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="639"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>und</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="647"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Du</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="649"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>du</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>und</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/query.cpp" line="658"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n anderer</numerusform><numerusform>%n andere</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="661"/>
         <source>%1 people</source>
-        <translation type="unfinished"/>
+        <translation>%1 Leute</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/query.cpp" line="663"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>liebte dieses Lied</translation>
     </message>
 </context>
 <context>
@@ -2546,9 +2602,17 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::XspfUpdater</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
+        <source>Automatically update</source>
+        <translation>Automatisch updaten</translation>
+    </message>
+</context>
+<context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="535"/>
+        <location filename="../src/tomahawkapp.cpp" line="542"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
@@ -2826,7 +2890,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="614"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../src/tomahawkwindow.cpp" line="614"/>
@@ -3094,7 +3158,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Komponist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="585"/>
@@ -3185,17 +3249,17 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="385"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperCollection</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
+        <source>Combined libraries of all your online friends</source>
+        <translation>Kombinierte Sammlung all deiner Freunde</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewmanager.cpp" line="387"/>
-        <source>Combined libraries of all your online friends</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="388"/>
         <source>All available albums</source>
         <translation>Alle verfügbaren Alben</translation>
     </message>
@@ -3233,7 +3297,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/whatshotwidget.h" line="72"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Charts</translation>
     </message>
 </context>
 <context>
@@ -3241,7 +3305,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation type="unfinished"/>
+        <translation>Wikipedia</translation>
     </message>
 </context>
 <context>
@@ -3251,12 +3315,14 @@ You can re-send a sync message at any time simply by sending another tweet using
         <source>
 Terms for %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>
+Begriffe für %1:
+</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/xmppbot.cpp" line="314"/>
         <source>No terms found, sorry.</source>
-        <translation type="unfinished"/>
+        <translation>Kein Begriff gefunden, Sorry.</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/xmppbot.cpp" line="347"/>
@@ -3287,7 +3353,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="49"/>
         <source>Failed to parse contents of XSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Fehler beim lesen der XSPF Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="51"/>
@@ -3310,38 +3376,38 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="14"/>
         <source>Xml stream console</source>
-        <translation type="unfinished"/>
+        <translation>Xml stream console</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="43"/>
         <source>Save log</source>
-        <translation type="unfinished"/>
+        <translation>Log speichern</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="62"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="65"/>
         <source>By JID</source>
-        <translation type="unfinished"/>
+        <translation>Nach JID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="68"/>
         <source>By namespace uri</source>
-        <translation type="unfinished"/>
+        <translation>Nach Namensraum URI</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="71"/>
         <source>By all attributes</source>
-        <translation type="unfinished"/>
+        <translation>Nach allen Attributen</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="76"/>
@@ -3356,27 +3422,27 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="83"/>
         <source>Message</source>
-        <translation type="unfinished"/>
+        <translation>Nachricht</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="87"/>
         <source>Presence</source>
-        <translation type="unfinished"/>
+        <translation>Anwesenheit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="91"/>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Benutzerdefiniert</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="107"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Schliessen</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="358"/>
         <source>Save XMPP log to file</source>
-        <translation type="unfinished"/>
+        <translation>XMPP Log speichern</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="359"/>
@@ -3389,22 +3455,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="14"/>
         <source>Xmpp Configuration</source>
-        <translation type="unfinished"/>
+        <translation>Xmpp Konfiguration</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="52"/>
         <source>Configure this Xmpp account</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguriere dieses Xmpp Konto</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="89"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Gib deine Xmpp Daten ein um verbinde dich mit Freunden, die Tomahawk nutzen!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="111"/>
         <source>Login Information</source>
-        <translation type="unfinished"/>
+        <translation>Login Information</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/xmppconfigwidget.ui" line="131"/>
@@ -3462,22 +3528,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="380"/>
         <source>User Interaction</source>
-        <translation type="unfinished"/>
+        <translation>Nutzer Interaktion</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="383"/>
         <source>Host is unknown</source>
-        <translation type="unfinished"/>
+        <translation>Host ist unbekannt</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="386"/>
         <source>Item not found</source>
-        <translation type="unfinished"/>
+        <translation>Eintrag nicht gefunden</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="389"/>
         <source>Authorization Error</source>
-        <translation type="unfinished"/>
+        <translation>Authentifizierungs Fehler</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="392"/>
@@ -3492,7 +3558,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="398"/>
         <source>Internal Server Error</source>
-        <translation type="unfinished"/>
+        <translation>Interner Server Fehler</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="401"/>
@@ -3502,32 +3568,32 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="404"/>
         <source>Conflict</source>
-        <translation type="unfinished"/>
+        <translation>Konflikt</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="408"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="412"/>
         <source>No Compression Support</source>
-        <translation type="unfinished"/>
+        <translation>Keine Kompressions Option</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="416"/>
         <source>No Encryption Support</source>
-        <translation type="unfinished"/>
+        <translation>Keine Verschluesselungs Option</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="420"/>
         <source>No Authorization Support</source>
-        <translation type="unfinished"/>
+        <translation>Keine Authorisierungs Option</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="424"/>
         <source>No Supported Feature</source>
-        <translation type="unfinished"/>
+        <translation>Keine unterstuetzte Faehigkeit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="521"/>
@@ -3557,7 +3623,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="824"/>
         <source>Authorize User</source>
-        <translation type="unfinished"/>
+        <translation>Authorisiere Nutzer</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/xmppsip.cpp" line="825"/>

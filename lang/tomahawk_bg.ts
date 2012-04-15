@@ -64,69 +64,69 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>ActionCollection</name>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="43"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="52"/>
         <source>&amp;Listen Along</source>
         <translation>&amp;Слушай заедно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="46"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
         <source>Stop &amp;Listening Along</source>
         <translation>Спри &amp; да слушаш заедно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="50"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="59"/>
         <source>&amp;Follow in real-time</source>
         <translation>&amp;Последвай </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Слушай самостоятелно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Слушай публично</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="61"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="70"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Зареди списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="62"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="71"/>
         <source>&amp;Rename Playlist</source>
         <translation>&amp;Преименувай списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="63"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="72"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Копирай връзка към списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="73"/>
         <source>&amp;Play</source>
         <translation>&amp;Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="65"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="74"/>
         <source>&amp;Stop</source>
         <translation>&amp;Спри</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="66"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="75"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Предходна песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="67"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="76"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Следваща песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="68"/>
+        <location filename="../src/libtomahawk/actioncollection.cpp" line="77"/>
         <source>&amp;Quit</source>
         <translation>&amp;Изключи приложението</translation>
     </message>
@@ -531,12 +531,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <translation>Информационно поле</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="87"/>
-        <source>Automatically update</source>
-        <translation>Автоматично обновление</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="95"/>
+        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="89"/>
         <source>Filter...</source>
         <translation>Филтър...</translation>
     </message>
@@ -634,12 +629,12 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>LoadXSPFDialog</name>
     <message>
-        <location filename="../src/LoadXSPFDialog.cpp" line="47"/>
+        <location filename="../src/LoadXSPFDialog.cpp" line="49"/>
         <source>Load XSPF File</source>
         <translation>Зареди XSPF файл</translation>
     </message>
     <message>
-        <location filename="../src/LoadXSPFDialog.cpp" line="47"/>
+        <location filename="../src/LoadXSPFDialog.cpp" line="49"/>
         <source>XSPF Files (*.xspf)</source>
         <translation>XSPF файлове (*.xspf)</translation>
     </message>
@@ -727,22 +722,22 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="81"/>
         <source>A playlist by %1, created %2</source>
         <translation>A playlist by %1, created %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="78"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="82"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="132"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="147"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Всички песни от %1, от албум %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="152"/>
+        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="167"/>
         <source>All tracks by %1</source>
         <translation>Всички песни от %1</translation>
     </message>
@@ -788,7 +783,7 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistview.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/playlistview.cpp" line="137"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Този списък в момента е празен. Добави няколко изпълнения и се наслади на музиката!</translation>
     </message>
@@ -1094,8 +1089,8 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
-        <source>Listening to &quot;%1&quot; by %2 and loving it! %4</source>
-        <translation># fb ♥  &quot;%1&quot; от %2  %4</translation>
+        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
@@ -1227,27 +1222,27 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="188"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Копирай адресът</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="190"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Изтрий %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="207"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Изнеси списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="341"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="364"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="342"/>
+        <location filename="../src/sourcetree/sourcetreeview.cpp" line="365"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -1338,40 +1333,63 @@ Remember: Only allow peers to connect if you trust who they are and if you have 
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="48"/>
-        <source>Configure your Spotify credentials</source>
-        <translation>Настрой данните за вход в Spotify:</translation>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="60"/>
+        <source>Configure your Spotify account</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="65"/>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="92"/>
+        <source>Username or Facebook Email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="120"/>
+        <source>Log In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="145"/>
+        <source>High Quality Streams</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="170"/>
+        <source>Spotify playlists to keep in sync:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="180"/>
+        <source>Delete Tomahawk playlist when removing synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="82"/>
         <source>Username:</source>
         <translation>Потребителско име</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="72"/>
-        <source>placeholderUsername</source>
-        <translation>потребителско име</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="99"/>
         <source>Password:</source>
         <translation>Парола:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="86"/>
-        <source>placeholderPw</source>
-        <translation>парола</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="116"/>
-        <source>High Quality Streaming</source>
-        <translation>Висококачествен поток</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="186"/>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="226"/>
         <source>This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.</source>
         <translation>Този продукт ползва ядрото на  SPOTIFY(R), но не е поддържан, сертифициран или одобрен по какъвто и да е начин от Spotify. 
 Spotify e TM на Spotify Group.</translation>
+    </message>
+</context>
+<context>
+    <name>SpotifyPlaylistUpdater</name>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="136"/>
+        <source>Delete in Spotify?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="136"/>
+        <source>Would you like to delete the corresponding Spotify playlist as well?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1583,9 +1601,45 @@ Spotify e TM на Spotify Group.</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Accounts::SpotifyAccount</name>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="133"/>
+        <source>Sync with Spotify</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="137"/>
+        <source>Stop syncing with Spotify</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="131"/>
+        <source>Logging in...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="145"/>
+        <source>Logged in!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="152"/>
+        <source>Failed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="162"/>
+        <source>Log In</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Accounts::SpotifyAccountFactory</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="44"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="60"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
         <translation>Слушай музика и синхронизирай твоите списъци със  Spotify Premium</translation>
     </message>
@@ -2555,9 +2609,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
+    <name>Tomahawk::XspfUpdater</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
+        <source>Automatically update</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawkapp.cpp" line="535"/>
+        <location filename="../src/tomahawkapp.cpp" line="542"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
@@ -3203,17 +3265,17 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="385"/>
         <source>SuperCollection</source>
         <translation>Супер колекция</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="387"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Комбинирани библиотеки от всичките ми приятели на линия</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="388"/>
+        <location filename="../src/libtomahawk/viewmanager.cpp" line="387"/>
         <source>All available albums</source>
         <translation>Всички налични албуми</translation>
     </message>
