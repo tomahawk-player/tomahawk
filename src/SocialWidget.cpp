@@ -193,7 +193,7 @@ void
 SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj )
 {
     if ( m_query->album().isEmpty() )
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
     else
         ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\" and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
 }
