@@ -1,5 +1,4 @@
 #!/usr/bin/python
-<<<<<<< HEAD
 #  This file is part of Tomahawk. 
 #  It was inspired in large part by the macdeploy script in Clementine.
 #
