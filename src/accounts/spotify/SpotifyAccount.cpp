@@ -388,7 +388,8 @@ void
 SpotifyAccount::clearUser()
 {
     foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
-        updater->deleteLater();
+        updater->remove();
+
     m_updaters.clear();
 
     qDeleteAll( m_allSpotifyPlaylists );
