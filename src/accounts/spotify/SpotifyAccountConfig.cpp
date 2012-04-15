@@ -19,6 +19,7 @@
 #include "SpotifyAccountConfig.h"
 
 #include "SpotifyAccount.h"
+#include <playlist/dynamic/widgets/LoadingSpinner.h>
 #include "ui_SpotifyAccountConfig.h"
 
 #include <QListWidget>
@@ -32,18 +33,17 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     : QWidget( 0 )
     , m_ui( new Ui::SpotifyConfig )
     , m_account( account )
+    , m_playlistsLoading( 0 )
 {
     m_ui->setupUi( this );
 
-    connect( m_ui->verifyCreds, SIGNAL( clicked( bool ) ), this, SLOT( verifyLogin() ) );
+    connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( doLogin() ) );
 
-    m_resetTimer.setSingleShot( true );
-    m_resetTimer.setInterval( 10000 );
-
-    connect( &m_resetTimer, SIGNAL( timeout() ), this, SLOT( resetVerifyButton() ) );
-    connect( m_ui->usernameEdit, SIGNAL( textChanged( QString ) ), this, SLOT( clearVerifyButton() ) );
-    connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( clearVerifyButton() ) );
+    connect( m_ui->usernameEdit, SIGNAL( textChanged( QString ) ), this, SLOT( resetLoginButton() ) );
+    connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( resetLoginButton() ) );
     loadFromConfig();
+
+    m_playlistsLoading = new LoadingSpinner( m_ui->playlistList );
 }
 
 
@@ -110,6 +110,10 @@ SpotifyAccountConfig::deleteOnUnsync() const
 void
 SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlists )
 {
+    // User always has at least 1 playlist (starred tracks)
+    if ( !playlists.isEmpty() )
+        m_playlistsLoading->fadeOut();
+
     m_ui->playlistList->clear();
     foreach ( SpotifyPlaylistInfo* pl, playlists )
     {
@@ -122,8 +126,16 @@ SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlist
 
 
 void
-SpotifyAccountConfig::verifyLogin()
+SpotifyAccountConfig::doLogin()
 {
+    m_ui->loginButton->setText( tr( "Logging in..." ) );
+    m_ui->loginButton->setEnabled( false );
+
+    m_playlistsLoading->fadeIn();
+
+    emit login( username(), password() );
+
+    /*
     QVariantMap msg;
     msg[ "_msgtype" ] = "checkLogin";
     msg[ "username" ] = username();
@@ -134,10 +146,30 @@ SpotifyAccountConfig::verifyLogin()
     m_ui->verifyCreds->setText( tr( "Verifying..." ) );
     m_ui->verifyCreds->setEnabled( false );
 
-    m_resetTimer.start();
+    m_resetTimer.start();*/
 }
 
 
+void
+SpotifyAccountConfig::loginResponse( bool success, const QString& msg )
+{
+    m_playlistsLoading->fadeOut();
+
+    if ( success )
+    {
+        m_ui->loginButton->setText( tr( "Logged in!" ) );
+        m_ui->loginButton->setEnabled( false );
+    }
+    else
+    {
+        m_ui->loginButton->setText( tr( "Failed: %1" ).arg( msg ) );
+        m_ui->loginButton->setEnabled( true );
+    }
+
+}
+
+
+/*
 void
 SpotifyAccountConfig::resetVerifyButton()
 {
@@ -145,17 +177,19 @@ SpotifyAccountConfig::resetVerifyButton()
     m_ui->verifyCreds->setEnabled( true );
     m_ui->verifyCreds->setToolTip( tr( "No response from Spotify, bad credentials likely." ) );
 }
-
+*/
 
 void
-SpotifyAccountConfig::clearVerifyButton()
+SpotifyAccountConfig::resetLoginButton()
 {
-    m_ui->verifyCreds->setText( tr( "Verify" ) );
-    m_ui->verifyCreds->setEnabled( true );
-    m_ui->verifyCreds->setToolTip( QString() );
+    if ( !m_ui->loginButton->isEnabled() )
+    {
+        m_ui->loginButton->setText( tr( "Log In" ) );
+        m_ui->loginButton->setEnabled( true );
+    }
 }
 
-
+/*
 void
 SpotifyAccountConfig::verifyResult( const QString& msgType, const QVariantMap& msg )
 {
@@ -172,4 +206,4 @@ SpotifyAccountConfig::verifyResult( const QString& msgType, const QVariantMap& m
         m_ui->verifyCreds->setEnabled( true );
         m_ui->verifyCreds->setToolTip( message );
     }
-}
+}*/

@@ -109,14 +109,14 @@
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="QPushButton" name="verifyCreds">
-       <property name="text">
-        <string>Verify</string>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QPushButton" name="loginButton">
+     <property name="text">
+      <string>Log In</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">

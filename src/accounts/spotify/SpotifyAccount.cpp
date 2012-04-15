@@ -90,8 +90,7 @@ SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
 
 SpotifyAccount::~SpotifyAccount()
 {
-    foreach( QAction* action, m_customActions )
-        ActionCollection::instance()->removeAction( action );
+    clearUser();
 }
 
 
@@ -363,10 +362,41 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         //const QString newuser = msg.value( "newUser" ).toString();
         if( rmsg.isEmpty() )
             return;
-        /// @todo: actually remove sync states for old user....
 
-        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( rmsg ) ) );
+        clearUser();
+
+        if ( m_configWidget.data() )
+            m_configWidget.data()->setPlaylists( QList< SpotifyPlaylistInfo* >() );
+
+        qDebug() << "User changed message from spotify:" << rmsg;
     }
+    else if ( msgType == "loginResponse" )
+    {
+        if ( m_configWidget.data() )
+        {
+            const bool success = msg.value( "success" ).toBool();
+            const QString message = msg.value( "message" ).toString();
+            m_configWidget.data()->loginResponse( success, message );
+        }
+    }
+}
+
+
+void
+SpotifyAccount::clearUser()
+{
+    foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
+        updater->deleteLater();
+    m_updaters.clear();
+
+    qDeleteAll( m_allSpotifyPlaylists );
+    m_allSpotifyPlaylists.clear();
+
+    m_qidToSlotMap.clear();
+    m_waitingForCreateReply.clear();
+
+    foreach( QAction* action, m_customActions )
+        ActionCollection::instance()->removeAction( action );
 }
 
 
@@ -386,6 +416,7 @@ SpotifyAccount::configurationWidget()
     if ( m_configWidget.isNull() )
     {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
+        connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
     }
 
@@ -410,14 +441,6 @@ SpotifyAccount::saveConfig()
         creds[ "highQuality" ] = m_configWidget.data()->highQuality();
         setCredentials( creds );
 
-        // Send the result to the resolver
-        QVariantMap msg;
-        msg[ "_msgtype" ] = "saveSettings";
-        msg[ "username" ] = m_configWidget.data()->username();
-        msg[ "password" ] = m_configWidget.data()->password();
-        msg[ "highQuality" ] = m_configWidget.data()->highQuality();
-
-        m_spotifyResolver.data()->sendMessage( msg );
     }
 
     QVariantHash config = configuration();
@@ -441,6 +464,21 @@ SpotifyAccount::saveConfig()
         }
     }
     sync();
+}
+
+
+void
+SpotifyAccount::login( const QString& username, const QString& password )
+{
+    // Send the result to the resolver
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "login";
+    msg[ "username" ] = username;
+    msg[ "password" ] = password;
+
+    msg[ "highQuality" ] = m_configWidget.data()->highQuality();
+
+    m_spotifyResolver.data()->sendMessage( msg );
 }
 
 

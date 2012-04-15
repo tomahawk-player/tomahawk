@@ -101,6 +101,7 @@ public slots:
 private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
+    void login( const QString& username, const QString& password );
     // SpotifyResolver message handlers, all take msgtype, msg as argument
   //  void <here>( const QString& msgType, const QVariantMap& msg );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
@@ -109,6 +110,7 @@ private slots:
 private:
     void init();
     void loadPlaylists();
+    void clearUser();
 
     void startPlaylistSync( SpotifyPlaylistInfo* playlist );
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete = false );

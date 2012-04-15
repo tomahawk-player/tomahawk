@@ -23,6 +23,7 @@
 #include <QVariantMap>
 #include <QTimer>
 
+class LoadingSpinner;
 class QShowEvent;
 
 namespace Ui
@@ -54,21 +55,24 @@ public:
     void loadFromConfig();
     void saveSettings();
 
+    void loginResponse( bool success, const QString& msg );
+signals:
+    void login( const QString& username, const QString& pw );
+
 public slots:
-    void verifyResult( const QString& msgType, const QVariantMap& msg );
+//     void verifyResult( const QString& msgType, const QVariantMap& msg );
 
 protected:
     void showEvent( QShowEvent* event );
 
 private slots:
-    void verifyLogin();
-    void resetVerifyButton();
-    void clearVerifyButton();
+    void doLogin();
+    void resetLoginButton();
 
 private:
     Ui::SpotifyConfig* m_ui;
     SpotifyAccount* m_account;
-    QTimer m_resetTimer;
+    LoadingSpinner* m_playlistsLoading;
 };
 
 }
