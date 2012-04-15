@@ -156,16 +156,6 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg )
 }
 
 
-/*
-void
-SpotifyAccountConfig::resetVerifyButton()
-{
-    m_ui->verifyCreds->setText( tr( "Failed!" ) );
-    m_ui->verifyCreds->setEnabled( true );
-    m_ui->verifyCreds->setToolTip( tr( "No response from Spotify, bad credentials likely." ) );
-}
-*/
-
 void
 SpotifyAccountConfig::resetLoginButton()
 {
@@ -173,21 +163,3 @@ SpotifyAccountConfig::resetLoginButton()
     m_ui->loginButton->setEnabled( true );
 }
 
-/*
-void
-SpotifyAccountConfig::verifyResult( const QString& msgType, const QVariantMap& msg )
-{
-    const bool success = msg.value( "success" ).toBool();
-    const QString message = msg.value( "message" ).toString();
-
-    m_resetTimer.stop();
-
-    if ( success )
-        m_ui->verifyCreds->setText( tr( "Success!" ) );
-    else
-    {
-        m_ui->verifyCreds->setText( tr( "Failed!" ) );
-        m_ui->verifyCreds->setEnabled( true );
-        m_ui->verifyCreds->setToolTip( message );
-    }
-}*/
