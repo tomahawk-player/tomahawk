@@ -44,6 +44,7 @@
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
+#include "playlist/XspfUpdater.h"
 #include "network/servent.h"
 #include "web/api_v1.h"
 #include "sourcelist.h"
@@ -62,6 +63,9 @@
 #include "utils/jspfloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutilsgui.h"
+#include "accounts/lastfm/LastFmAccount.h"
+#include "accounts/spotify/SpotifyAccount.h"
+#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "utils/tomahawkcache.h"
 
 #include "config.h"
@@ -282,6 +286,9 @@ TomahawkApp::init()
 
     // Set up echonest catalog synchronizer
     Tomahawk::EchonestCatalogSynchronizer::instance();
+
+    PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
+    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
 #ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
@@ -660,13 +667,15 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
 
-    activate();
     if ( instance.arguments.size() < 2 )
         return;
 
     QString arg1 = instance.arguments[ 1 ];
     if ( loadUrl( arg1 ) )
+    {
+        activate();
         return;
+    }
 
     if ( instance.arguments.contains( "--next" ) )
         AudioEngine::instance()->next();

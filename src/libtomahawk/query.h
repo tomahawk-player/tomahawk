@@ -221,4 +221,6 @@ private:
 
 }; //ns
 
+Q_DECLARE_METATYPE(Tomahawk::query_ptr);
+
 #endif // QUERY_H

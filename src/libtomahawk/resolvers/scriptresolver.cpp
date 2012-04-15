@@ -65,8 +65,11 @@ ScriptResolver::~ScriptResolver()
     disconnect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
     m_deleting = true;
 
-    m_proc.kill();
-    m_proc.waitForFinished(); // might call handleMsg
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "quit";
+    sendMessage( msg );
+
+    m_proc.waitForFinished( 1000 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
@@ -144,6 +147,13 @@ bool
 ScriptResolver::running() const
 {
     return !m_stopped;
+}
+
+void
+ScriptResolver::sendMessage( const QVariantMap& map )
+{
+    QByteArray data = m_serializer.serialize( map );
+    sendMsg( data );
 }
 
 
@@ -272,24 +282,10 @@ ScriptResolver::handleMsg( const QByteArray& msg )
 
         Tomahawk::Pipeline::instance()->reportResults( qid, results );
     }
-    else if ( msgtype == "playlist" )
+    else
     {
-
-        QList< Tomahawk::query_ptr > tracks;
-        const QString qid = m.value( "qid" ).toString();
-        const QString title = m.value( "identifier" ).toString();
-        const QVariantList reslist = m.value( "playlist" ).toList();
-
-        if( !reslist.isEmpty() )
-        {
-            foreach( const QVariant& rv, reslist )
-            {
-                QVariantMap m = rv.toMap();
-                qDebug() << "Found playlist result:" << m;
-                Tomahawk::query_ptr q = Tomahawk::Query::get( m.value( "artist" ).toString() , m.value( "track" ).toString() , QString(), uuid(), false );
-                tracks << q;
-            }
-        }
+        // Unknown message, give up for custom implementations
+        emit customMessage( msgtype, m );
     }
 }
 

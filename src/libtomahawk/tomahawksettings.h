@@ -198,6 +198,9 @@ public:
     PrivateListeningMode privateListeningMode() const;
     void setPrivateListeningMode( PrivateListeningMode mode );
 
+    void setImportXspfPath( const QString& path );
+    QString importXspfPath() const;
+
 signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );

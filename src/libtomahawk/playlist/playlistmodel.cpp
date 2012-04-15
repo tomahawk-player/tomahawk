@@ -41,6 +41,8 @@ PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
     , m_isTemporary( false )
     , m_changesOngoing( false )
+    , m_isLoading( false )
+    , m_savedInsertPos( -1 )
 {
     m_dropStorage.parent = QPersistentModelIndex();
     m_dropStorage.row = -10;
@@ -64,6 +66,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         disconnect( m_playlist.data(), SIGNAL( changed() ), this, SIGNAL( playlistChanged() ) );
     }
 
+    m_isLoading = true;
+
     if ( loadEntries )
         clear();
 
@@ -79,11 +83,22 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
                   .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true ) ) );
 
     m_isTemporary = false;
+
     if ( !loadEntries )
+    {
+        m_isLoading = false;
         return;
+    }
 
     QList<plentry_ptr> entries = playlist->entries();
+
+    qDebug() << "playlist loading entries:";
+    foreach( const plentry_ptr& p, entries )
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
+
     append( entries );
+
+    m_isLoading = false;
 }
 
 
@@ -178,7 +193,11 @@ PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
             entry->setDuration( 0 );
 
         entry->setLastmodified( 0 );
-        entry->setAnnotation( "" ); // FIXME
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        entry->setAnnotation( annotation );
+
         entry->setQuery( query );
         entry->setGuid( uuid() );
 
@@ -202,6 +221,12 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     QPair< int, int > crows;
     crows.first = c;
     crows.second = c + entries.count() - 1;
+
+    if ( !m_isLoading )
+    {
+        m_savedInsertPos = row;
+        m_savedInsertTracks = entries;
+    }
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
@@ -402,6 +427,46 @@ PlaylistModel::endPlaylistChanges()
     {
         m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
     }
+
+    if ( m_savedInsertPos >= 0 && !m_savedInsertTracks.isEmpty() &&
+         !m_savedRemoveTracks.isEmpty() )
+    {
+        // If we have *both* an insert and remove, then it's a move action
+        // However, since we got the insert before the remove (Qt...), the index we have as the saved
+        // insert position is no longer valid. Find the proper one by finding the location of the first inserted
+        // track
+        for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+        {
+            const QModelIndex idx = index( i, 0, QModelIndex() );
+            if ( !idx.isValid() )
+                continue;
+            const TrackModelItem* item = itemFromIndex( idx );
+            if ( !item || item->entry().isNull() )
+                continue;
+
+//             qDebug() << "Checking for equality:" << (item->entry() == m_savedInsertTracks.first()) << m_savedInsertTracks.first()->query()->track() << m_savedInsertTracks.first()->query()->artist();
+            if ( item->entry() == m_savedInsertTracks.first() )
+            {
+                // Found our index
+                emit m_playlist->tracksMoved( m_savedInsertTracks, i );
+                break;
+            }
+        }
+        m_savedInsertPos = -1;
+        m_savedInsertTracks.clear();
+        m_savedRemoveTracks.clear();
+    }
+    else if ( m_savedInsertPos >= 0 )
+    {
+        emit m_playlist->tracksInserted( m_savedInsertTracks, m_savedInsertPos );
+        m_savedInsertPos = -1;
+        m_savedInsertTracks.clear();
+    }
+    else if ( !m_savedRemoveTracks.isEmpty() )
+    {
+        emit m_playlist->tracksRemoved( m_savedRemoveTracks );
+        m_savedRemoveTracks.clear();
+    }
 }
 
 
@@ -446,6 +511,9 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 
     if ( !m_changesOngoing )
         beginPlaylistChanges();
+
+    if ( item && !m_isLoading )
+        m_savedRemoveTracks << item->query();
 
     TrackModel::remove( index, moreToCome );
 

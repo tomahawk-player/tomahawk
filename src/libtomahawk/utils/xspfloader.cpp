@@ -267,7 +267,6 @@ XSPFLoader::gotBody()
                                        m_entries );
 
         // 10 minute default---for now, no way to change it
-        connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
         new Tomahawk::XspfUpdater( m_playlist, 600000, m_autoUpdate, m_url.toString() );
         emit ok( m_playlist );
     }

@@ -54,8 +54,11 @@ public:
 
     virtual bool running() const;
 
+    void sendMessage( const QVariantMap& map );
+
 signals:
     void terminated();
+    void customMessage( const QString& msgType, const QVariantMap& msg );
 
 public slots:
     virtual void stop();

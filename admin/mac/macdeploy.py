@@ -1,6 +1,6 @@
 #!/usr/bin/python
-
-#  This file is part of Tomahawk.
+<<<<<<< HEAD
+#  This file is part of Tomahawk. 
 #  It was inspired in large part by the macdeploy script in Clementine.
 #
 #  Clementine is free software: you can redistribute it and/or modify

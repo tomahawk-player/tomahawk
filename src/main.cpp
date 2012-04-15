@@ -125,7 +125,7 @@ main( int argc, char *argv[] )
 #endif
 
 
-#ifndef ENABLE_HEADLESS
+#ifndef ENABLE_HEADLESSs
 #ifdef WITH_BREAKPAD
     new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
 #endif

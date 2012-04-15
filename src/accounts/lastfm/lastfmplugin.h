@@ -95,4 +95,3 @@ private:
 }
 
 #endif // LASTFMPLUGIN_H
-

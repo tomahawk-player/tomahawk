@@ -1097,7 +1097,10 @@ GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
         e->setDuration( 0 );
 
     e->setLastmodified( 0 );
-    e->setAnnotation( "" ); // FIXME
+    QString annotation = "";
+    if ( !q->property( "annotation" ).toString().isEmpty() )
+        annotation = q->property( "annotation" ).toString();
+    e->setAnnotation( annotation );
     e->setQuery( q );
 
     pl->createNewRevision( uuid(), pl->currentrevision(), QList< plentry_ptr >( pl->entries() ) << e );

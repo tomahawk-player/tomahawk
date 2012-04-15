@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012,      Leo Franchi   <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,6 +35,14 @@ ActionCollection::ActionCollection( QObject *parent )
 {
     s_instance = this;
     initActions();
+}
+
+
+ActionCollection::~ActionCollection()
+{
+    s_instance = 0;
+    foreach( QString key, m_actionCollection.keys() )
+        delete m_actionCollection[ key ];
 }
 
 
@@ -76,18 +85,54 @@ ActionCollection::initActions()
 }
 
 
-ActionCollection::~ActionCollection()
+void
+ActionCollection::addAction( ActionCollection::ActionDestination category, QAction* action, QObject* notify )
 {
-    s_instance = 0;
-    foreach( QString key, m_actionCollection.keys() )
-        delete m_actionCollection[ key ];
+    QList< QAction* > actions = m_categoryActions.value( category );
+    actions.append( action );
+    m_categoryActions[ category ] = actions;
+
+    if ( notify )
+        m_actionNotifiers[ action ] = notify;
 }
 
 
 QAction*
 ActionCollection::getAction( const QString& name )
 {
-    return m_actionCollection.contains( name ) ? m_actionCollection[ name ] : 0;
+    return m_actionCollection.value( name, 0 );
+}
+
+
+QObject*
+ActionCollection::actionNotifier( QAction* action )
+{
+    return m_actionNotifiers.value( action, 0 );
+}
+
+
+QList< QAction* >
+ActionCollection::getAction( ActionCollection::ActionDestination category )
+{
+    return m_categoryActions.value( category );
+}
+
+
+void
+ActionCollection::removeAction( QAction* action )
+{
+    removeAction( action, LocalPlaylists );
+}
+
+
+void
+ActionCollection::removeAction( QAction* action, ActionCollection::ActionDestination category )
+{
+    QList< QAction* > actions = m_categoryActions.value( category );
+    actions.removeAll( action );
+    m_categoryActions[ category ] = actions;
+
+    m_actionNotifiers.remove( action );
 }
 
 

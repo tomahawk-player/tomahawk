@@ -143,11 +143,12 @@ SourceTreeView::setupMenus()
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+
     if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
+        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        const playlist_ptr playlist = item->playlist();
 
-        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-        playlist_ptr playlist = item->playlist();
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
@@ -190,7 +191,7 @@ SourceTreeView::setupMenus()
 
     QString addToText = QString( "Add to my %1" );
     if ( type == SourcesModel::StaticPlaylist )
-        addToText = addToText.arg( "Playlists" );
+        addToText = addToText.arg( "playlists" );
     if ( type == SourcesModel::AutomaticPlaylist )
         addToText = addToText.arg( "Automatic Playlists" );
     else if ( type == SourcesModel::Station )
@@ -202,6 +203,28 @@ SourceTreeView::setupMenus()
     deletePlaylistAction->setEnabled( !readonly );
     renamePlaylistAction->setEnabled( !readonly );
     addToLocalAction->setEnabled( readonly );
+
+    // Handle any custom actions registered for playlists
+    if ( type == SourcesModel::StaticPlaylist && !readonly &&
+        !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
+    {
+        m_playlistMenu.addSeparator();
+
+
+        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        const playlist_ptr playlist = item->playlist();
+        foreach ( QAction* action, ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ) )
+        {
+            if ( QObject* notifier = ActionCollection::instance()->actionNotifier( action ) )
+            {
+                QMetaObject::invokeMethod( notifier, "aboutToShow", Qt::DirectConnection, Q_ARG( QAction*, action ), Q_ARG( Tomahawk::playlist_ptr, playlist ) );
+            }
+
+            action->setProperty( "payload", QVariant::fromValue< playlist_ptr >( playlist ) );
+            m_playlistMenu.addAction( action );
+        }
+    }
+
 
     if ( type == SourcesModel::StaticPlaylist )
         copyPlaylistAction->setText( tr( "&Export Playlist" ) );

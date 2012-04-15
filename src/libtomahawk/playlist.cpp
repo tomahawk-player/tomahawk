@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -95,7 +96,6 @@ PlaylistEntry::setLastSource( source_ptr s )
 Playlist::Playlist( const source_ptr& author )
     : m_source( author )
     , m_lastmodified( 0 )
-    , m_updater( 0 )
 {
 }
 
@@ -120,7 +120,6 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
-    , m_updater( 0 )
 {
     init();
 }
@@ -143,7 +142,6 @@ Playlist::Playlist( const source_ptr& author,
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
     , m_initEntries( entries )
-    , m_updater( 0 )
 {
     init();
 }
@@ -180,7 +178,10 @@ Playlist::create( const source_ptr& author,
         p->setGuid( uuid() );
         p->setDuration( query->duration() );
         p->setLastmodified( 0 );
-        p->setAnnotation( "" );
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        p->setAnnotation( annotation );
         p->setQuery( query );
 
         entries << p;
@@ -244,6 +245,18 @@ Playlist::rename( const QString& title )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
+void
+Playlist::setTitle( const QString& title )
+{
+    if ( title == m_title )
+        return;
+
+    const QString oldTitle = m_title;
+    m_title = title;
+
+    emit changed();
+    emit renamed( m_title, oldTitle );
+}
 
 void
 Playlist::reportCreated( const playlist_ptr& self )
@@ -257,13 +270,35 @@ void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
-    if ( m_updater )
-        m_updater->remove();
+    if ( !m_updater.isNull() )
+        m_updater.data()->remove();
 
     m_deleted = true;
     m_source->collection()->deletePlaylist( self );
 
     emit deleted( self );
+}
+
+void
+Playlist::setUpdater( PlaylistUpdaterInterface* pluinterface )
+{
+    if ( !m_updater.isNull() )
+        disconnect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
+
+    m_updater = QWeakPointer< PlaylistUpdaterInterface >( pluinterface );
+
+    connect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
+    connect( m_updater.data(), SIGNAL( destroyed( QObject* ) ), this, SLOT( updaterDestroyed() ), Qt::QueuedConnection );
+
+    emit changed();
+}
+
+
+void
+Playlist::updaterDestroyed()
+{
+    m_updater.clear();
+    emit changed();
 }
 
 
@@ -312,8 +347,15 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     // calc list of newly added entries:
     QList<plentry_ptr> added = newEntries( entries );
     QStringList orderedguids;
+    qDebug() << "Inserting ordered GUIDs:";
     foreach( const plentry_ptr& p, entries )
+    {
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
         orderedguids << p->guid();
+    }
+
+    foreach( const plentry_ptr& p, added )
+        qDebug() << p->guid();
 
     // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
@@ -326,6 +368,38 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      orderedguids,
                                                      added,
                                                      entries );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+Playlist::updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries )
+{
+    tDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
+    Q_ASSERT( m_source->isLocal() || newrev == oldrev );
+
+    if ( busy() )
+    {
+        m_updateQueue.enqueue( RevisionQueueItem( newrev, oldrev, entries, oldrev == currentrevision() ) );
+        return;
+    }
+
+    if ( newrev != oldrev )
+        setBusy( true );
+
+    QStringList orderedguids;
+    foreach( const plentry_ptr& p, m_entries )
+        orderedguids << p->guid();
+
+    qDebug() << "Updating playlist metadata:" << entries;
+    DatabaseCommand_SetPlaylistRevision* cmd =
+    new DatabaseCommand_SetPlaylistRevision( SourceList::instance()->getLocal(),
+                                             guid(),
+                                             newrev,
+                                             oldrev,
+                                             orderedguids,
+                                             entries );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -395,20 +469,24 @@ Playlist::setNewRevision( const QString& rev,
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
     foreach ( const plentry_ptr& p, m_entries )
+    {
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
         entriesmap.insert( p->guid(), p );
+    }
 
-    QList<plentry_ptr> entries;
+
+    // re-build m_entries from neworderedguids. plentries come either from the old m_entries OR addedmap.
+    m_entries.clear();
+
     foreach ( const QString& id, neworderedguids )
     {
         if ( entriesmap.contains( id ) )
         {
-            entries.append( entriesmap.value( id ) );
+            m_entries.append( entriesmap.value( id ) );
         }
         else if ( addedmap.contains( id ) )
         {
-            entries.append( addedmap.value( id ) );
-            if ( is_newest_rev )
-                m_entries.append( addedmap.value( id ) );
+            m_entries.append( addedmap.value( id ) );
         }
         else
         {
@@ -426,35 +504,8 @@ Playlist::setNewRevision( const QString& rev,
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;
     pr.revisionguid = rev;
-
-    // entries that have been removed:
-    QSet<QString> removedguids = oldorderedguids.toSet().subtract( neworderedguids.toSet() );
-    //qDebug() << "Removedguids:" << removedguids << "oldorederedguids" << oldorderedguids << "newog" << neworderedguids;
-    foreach ( QString remid, removedguids )
-    {
-        // NB: entriesmap will contain old/removed entries only if the removal was done
-        // in the same session - after a restart, history is not in memory.
-        if ( entriesmap.contains( remid ) )
-        {
-            pr.removed << entriesmap.value( remid );
-            if ( is_newest_rev )
-            {
-                //qDebug() << "Removing from m_entries" << remid;
-                for ( int k = 0 ; k < m_entries.length(); ++k )
-                {
-                    if ( m_entries.at( k )->guid() == remid )
-                    {
-                        //qDebug() << "removed at" << k;
-                        m_entries.removeAt( k );
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     pr.added = addedmap.values();
-    pr.newlist = entries;
+    pr.newlist = m_entries;
 
     return pr;
 }
@@ -514,8 +565,44 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
     QList<plentry_ptr> el = entriesFromQueries( queries );
 
+    const int prevSize = m_entries.size();
+
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
+
+
+    // We are appending at end, so notify listeners.
+    // PlaylistModel also emits during appends, but since we call
+    // createNewRevision, it reloads instead of appends.
+    const QList<plentry_ptr> added = el.mid( prevSize );
+    qDebug() << "Playlist got" << queries.size() << "tracks added, emitting tracksInserted with:" << added.size() << "at pos:" << prevSize - 1;
+    emit tracksInserted( added, prevSize );
+}
+
+void
+Playlist::insertEntries( const QList< query_ptr >& queries, const int position, const QString& oldrev )
+{
+    QList<plentry_ptr> toInsert = entriesFromQueries( queries, true );
+    QList<plentry_ptr> entries = m_entries;
+
+    Q_ASSERT( position <= m_entries.size() );
+    if ( position > m_entries.size() )
+    {
+        qWarning() << "ERROR trying to insert tracks past end of playlist! Appending!!";
+        addEntries( queries, oldrev );
+        return;
+    }
+
+    for ( int i = toInsert.size()-1; i >= 0; --i )
+        entries.insert( position, toInsert.at(i) );
+
+    createNewRevision( uuid(), oldrev, entries );
+
+    // We are appending at end, so notify listeners.
+    // PlaylistModel also emits during appends, but since we call
+    // createNewRevision, it reloads instead of appends.
+    qDebug() << "Playlist got" << toInsert.size() << "tracks added, emitting tracksInserted at pos:" << position;
+    emit tracksInserted( toInsert, position );
 }
 
 
@@ -537,7 +624,10 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
             e->setDuration( 0 );
 
         e->setLastmodified( 0 );
-        e->setAnnotation( "" ); // FIXME
+        QString annotation = "";
+        if ( !query->property( "annotation" ).toString().isEmpty() )
+            annotation = query->property( "annotation" ).toString();
+        e->setAnnotation( annotation ); // FIXME
         e->setQuery( query );
 
         el << e;
@@ -591,6 +681,23 @@ Playlist::checkRevisionQueue()
             item.oldRev = currentrevision();
         }
         createNewRevision( item.newRev, item.oldRev, item.entries );
+    }
+    if ( !m_updateQueue.isEmpty() )
+    {
+        RevisionQueueItem item = m_updateQueue.dequeue();
+
+        if ( item.oldRev != currentrevision() && item.applyToTip )
+        {
+            // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+            if ( item.oldRev == item.newRev )
+            {
+                checkRevisionQueue();
+                return;
+            }
+
+            item.oldRev = currentrevision();
+        }
+        updateEntries( item.newRev, item.oldRev, item.entries );
     }
 }
 

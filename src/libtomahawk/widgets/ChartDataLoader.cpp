@@ -59,7 +59,6 @@ ChartDataLoader::go()
 
         foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, m_data )
         {
-            tDebug( LOGVERBOSE) << Q_FUNC_INFO << "Getting album" << album[ "album" ] << "By" << album[ "artist" ];
             artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
             album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
             album_ptrs << albumPtr;

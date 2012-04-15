@@ -22,33 +22,42 @@
 #include "dllmacro.h"
 #include "typedefs.h"
 #include "playlist.h"
+
 #include <QTimer>
+#include <QMutex>
+
+#ifndef ENABLE_HEADLESS
+#include <QPixmap>
+#endif
 
 namespace Tomahawk
 {
 /**
-  * If a playlist needs periodic updating, implement a updater interface.
-  *
-  * Default is auto-updating.
+  * PlaylistUpdaters are attached to playlists. They usually manipulate the playlist in some way
+  * due to external input (spotify syncing) or timers (xspf updating)
   */
+
+class PlaylistUpdaterFactory;
 
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
-    PlaylistUpdaterInterface( const playlist_ptr& pl );
-    PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate );
+    explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
     virtual ~PlaylistUpdaterInterface(){}
 
     // What type you are. If you add a new updater, add the creation code as well.
     virtual QString type() const = 0;
 
-    bool autoUpdate() const { return m_autoUpdate; }
-    void setAutoUpdate( bool autoUpdate );
+#ifndef ENABLE_HEADLESS
+    // Small widget to show in playlist header that configures the updater
+    virtual QWidget* configurationWidget() const = 0;
 
-    void setInterval( int intervalMsecs ) ;
-    int intervalMsecs() const { return m_timer->interval(); }
+    // Small overlay over playlist icon in the sidebar to indicate that it has this updater type
+    // Should be around 16x16 or something
+    virtual QPixmap typeIcon() const { return QPixmap(); }
+#endif
 
     void remove();
 
@@ -58,21 +67,35 @@ public:
     /// updater if one was saved
     static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
 
+    static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
+
+signals:
+    void changed();
+
 public slots:
     virtual void updateNow() {}
 
-private slots:
-    void doSave();
+    void save();
 
 protected:
-    virtual void loadFromSettings( const QString& group ) = 0;
     virtual void saveToSettings( const QString& group ) const = 0;
     virtual void removeFromSettings( const QString& group ) const = 0;
 
 private:
-    QTimer* m_timer;
-    bool m_autoUpdate;
     playlist_ptr m_playlist;
+
+    static QMap< QString, PlaylistUpdaterFactory* > s_factories;
+};
+
+
+class DLLEXPORT PlaylistUpdaterFactory
+{
+public:
+    PlaylistUpdaterFactory() {}
+    virtual ~PlaylistUpdaterFactory() {}
+
+    virtual QString type() const = 0;
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr&, const QString& settingsKey ) = 0;
 };
 
 }

@@ -181,7 +181,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->setPen( opt.palette.text().color() );
 
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-        
+
         if ( useAvatars )
         {
             if ( !source.isNull() )

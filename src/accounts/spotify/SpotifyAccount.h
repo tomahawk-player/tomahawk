@@ -20,18 +20,34 @@
 #ifndef SpotifyAccount_H
 #define SpotifyAccount_H
 
+#include "accounts/ResolverAccount.h"
+#include "sourcelist.h"
 #include "playlist.h"
 #include "utils/tomahawkutils.h"
-#include "sourcelist.h"
-#include "accounts/ResolverAccount.h"
+#include "utils/SmartPointerList.h"
 
+class QAction;
+class SpotifyPlaylistUpdater;
 class QTimer;
 
+class ScriptResolver;
+
 namespace Tomahawk {
-
-class ExternalResolverGui;
-
 namespace Accounts {
+
+class SpotifyAccountConfig;
+
+// metadata for a playlist
+struct SpotifyPlaylistInfo {
+    QString name, plid, revid;
+    bool sync, changed;
+
+
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
+
+    SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
+};
 
 
 class SpotifyAccountFactory : public AccountFactory
@@ -61,27 +77,65 @@ class SpotifyAccount : public ResolverAccount
 public:
     SpotifyAccount( const QString& accountId );
     SpotifyAccount( const QString& accountId, const QString& path );
-    virtual ~SpotifyAccount() {}
+    virtual ~SpotifyAccount();
 
     virtual QPixmap icon() const;
+    virtual QWidget* configurationWidget();
+    virtual void saveConfig();
 
     virtual QWidget* aclWidget() { return 0; }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     virtual SipPlugin* sipPlugin() { return 0; }
 
-    void addPlaylist( const QString &qid, const QString& title, QList< Tomahawk::query_ptr > tracks );
+    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
-    struct Sync {
-         QString id_;
-         QString uuid;
-         Tomahawk::playlist_ptr playlist;
-     };
+    void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
+    void unregisterUpdater( const QString& plid );
+
+    bool deleteOnUnsync() const;
+
+public slots:
+    void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
+    void syncActionTriggered( bool );
+
+private slots:
+    void resolverMessage( const QString& msgType, const QVariantMap& msg );
+
+    void login( const QString& username, const QString& password );
+    // SpotifyResolver message handlers, all take msgtype, msg as argument
+  //  void <here>( const QString& msgType, const QVariantMap& msg );
+    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
+    void playlistCreated( const QString& msgType, const QVariantMap& msg );
 
 private:
-    QList<Sync> m_syncPlaylists;
+    void init();
+    void loadPlaylists();
+    void clearUser();
+
+    void startPlaylistSync( SpotifyPlaylistInfo* playlist );
+    void stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete = false );
+    void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
+
+    void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
+
+    QWeakPointer<SpotifyAccountConfig> m_configWidget;
+    QWeakPointer<ScriptResolver> m_spotifyResolver;
+
+    QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
+
+    // List of synced spotify playlists in config UI
+    QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
+    QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
+
+    QHash< QString, playlist_ptr > m_waitingForCreateReply;
+
+    SmartPointerList< QAction > m_customActions;
+    friend class ::SpotifyPlaylistUpdater;
 };
-}
 
 }
+}
+
+Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylistInfo* );
 
 #endif // SpotifyAccount_H

@@ -121,6 +121,7 @@ set( libGuiSources
     utils/tomahawkutilsgui.cpp
     utils/closure.cpp
     utils/PixmapDelegateFader.cpp
+    utils/SmartPointerList.h
 
     widgets/animatedcounterlabel.cpp
     widgets/checkdirtree.cpp

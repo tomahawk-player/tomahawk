@@ -18,9 +18,18 @@
 
 #include "PlaylistUpdaterInterface.h"
 #include "tomahawksettings.h"
-#include "XspfUpdater.h"
 
 using namespace Tomahawk;
+
+QMap< QString, PlaylistUpdaterFactory* > PlaylistUpdaterInterface::s_factories = QMap< QString, PlaylistUpdaterFactory* >();
+
+void
+PlaylistUpdaterInterface::registerUpdaterFactory( PlaylistUpdaterFactory* f )
+{
+    s_factories[ f->type() ] = f;
+}
+
+
 
 PlaylistUpdaterInterface*
 PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
@@ -32,19 +41,15 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
         // Ok, we have one we can try to load
         const QString type = s->value( QString( "%1/type" ).arg( key ) ).toString();
         PlaylistUpdaterInterface* updater = 0;
-        if ( type == "xspf" )
-            updater = new XspfUpdater( pl );
 
-        // You forgot to register your new updater type with the factory above. 00ps.
-        if ( !updater )
+        if ( !s_factories.contains( type ) )
         {
             Q_ASSERT( false );
+            // You forgot to register your new updater type with the factory....
             return 0;
         }
-        updater->setAutoUpdate( s->value( QString( "%1/autoupdate" ).arg( key ) ).toBool() );
-        updater->setInterval( s->value( QString( "%1/interval" ).arg( key ) ).toInt() );
-        updater->loadFromSettings( key );
 
+        updater = s_factories[ type ]->create( pl, key );
         return updater;
     }
 
@@ -54,46 +59,26 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
 
 PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
     : QObject( 0 )
-    , m_timer( new QTimer( this ) )
-    , m_autoUpdate( true )
     , m_playlist( pl )
 {
     Q_ASSERT( !m_playlist.isNull() );
 
     m_playlist->setUpdater( this );
-    connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
 
-    QTimer::singleShot( 0, this, SLOT( doSave() ) );
-}
-
-PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl, int interval, bool autoUpdate )
-    : QObject( 0 )
-    , m_timer( new QTimer( this ) )
-    , m_autoUpdate( autoUpdate )
-    , m_playlist( pl )
-{
-    Q_ASSERT( !m_playlist.isNull() );
-
-    m_playlist->setUpdater( this );
-    m_timer->setInterval( interval );
-    connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
-
-    QTimer::singleShot( 0, this, SLOT( doSave() ) );
+    QTimer::singleShot( 0, this, SLOT( save() ) );
 }
 
 
 void
-PlaylistUpdaterInterface::doSave()
+PlaylistUpdaterInterface::save()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
     if ( !s->contains( QString( "%1/type" ).arg( key ) ) )
     {
         s->setValue( QString( "%1/type" ).arg( key ), type() );
-        s->setValue( QString( "%1/autoupdate" ).arg( key ), m_autoUpdate );
-        s->setValue( QString( "%1/interval" ).arg( key ), m_timer->interval() );
-        saveToSettings( key );
     }
+    saveToSettings( key );
 }
 
 void
@@ -106,36 +91,6 @@ PlaylistUpdaterInterface::remove()
     const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
     removeFromSettings( key );
     s->remove( QString( "%1/type" ).arg( key ) );
-    s->remove( QString( "%1/autoupdate" ).arg( key ) );
-    s->remove( QString( "%1/interval" ).arg( key ) );
 
     deleteLater();
 }
-
-
-void
-PlaylistUpdaterInterface::setAutoUpdate( bool autoUpdate )
-{
-    m_autoUpdate = autoUpdate;
-    if ( m_autoUpdate )
-        m_timer->start();
-    else
-        m_timer->stop();
-
-    const QString key = QString( "playlistupdaters/%1/autoupdate" ).arg( m_playlist->guid() );
-    TomahawkSettings::instance()->setValue( key, m_autoUpdate );
-
-    // Update immediately as well
-    if ( m_autoUpdate )
-        QTimer::singleShot( 0, this, SLOT( updateNow() ) );
-}
-
-void
-PlaylistUpdaterInterface::setInterval( int intervalMsecs )
-{
-    const QString key = QString( "playlistupdaters/%1/interval" ).arg( m_playlist->guid() );
-    TomahawkSettings::instance()->setValue( key, intervalMsecs );
-
-    m_timer->setInterval( intervalMsecs );
-}
-

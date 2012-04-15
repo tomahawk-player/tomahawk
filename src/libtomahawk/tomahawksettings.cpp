@@ -1121,3 +1121,20 @@ TomahawkSettings::updateIndex()
     DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
+
+
+QString
+TomahawkSettings::importXspfPath() const
+{
+    if ( contains( "importXspfPath" ) )
+        return value( "importXspfPath" ).toString();
+    else
+        return QDir::homePath();
+}
+
+
+void
+TomahawkSettings::setImportXspfPath( const QString& path )
+{
+    setValue( "importXspfPath", path );
+}

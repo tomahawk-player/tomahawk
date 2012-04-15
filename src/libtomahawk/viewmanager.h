@@ -124,7 +124,6 @@ signals:
     void statsAvailable( bool b );
     void modesAvailable( bool b );
     void filterAvailable( bool b );
-    void autoUpdateAvailable( bool b );
     void modeChanged( Tomahawk::PlaylistInterface::ViewMode mode );
 
     void playClicked();
@@ -179,8 +178,6 @@ public slots:
 private slots:
     void setFilter( const QString& filter );
     void applyFilter();
-
-    void autoUpdateChanged( bool );
 
     void onWidgetDestroyed( QWidget* widget );
 

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011920-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,6 +39,8 @@ class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
+class PlaylistModel;
+
 namespace Tomahawk
 {
 
@@ -117,20 +120,21 @@ public:
 
 class DLLEXPORT Playlist : public QObject
 {
-Q_OBJECT
-Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
-Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevision )
-Q_PROPERTY( QString title           READ title              WRITE setTitle )
-Q_PROPERTY( QString info            READ info               WRITE setInfo )
-Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
-Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
-Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
+    Q_OBJECT
+    Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
+    Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevision )
+    Q_PROPERTY( QString title           READ title              WRITE setTitle )
+    Q_PROPERTY( QString info            READ info               WRITE setInfo )
+    Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
+    Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
+    Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
 friend class ::DatabaseCommand_LoadAllPlaylists;
 friend class ::DatabaseCommand_LoadAllSortedPlaylists;
 friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;
+friend class ::PlaylistModel;
 
 public:
     virtual ~Playlist();
@@ -166,6 +170,7 @@ public:
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
     virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
+    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position, const QString& oldrev );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
@@ -173,18 +178,18 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit Playlist( const source_ptr& author );
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
-    void setTitle( const QString& s )           { m_title = s; emit changed(); }
     void setInfo( const QString& s )            { m_info = s; }
     void setCreator( const QString& s )         { m_creator = s; }
     void setGuid( const QString& s )            { m_guid = s; }
     void setShared( bool b )                    { m_shared = b; }
     void setCreatedOn( uint createdOn )         { m_createdOn = createdOn; }
+    void setTitle( const QString& s );
     // </IGNORE>
 
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
-    void setUpdater( PlaylistUpdaterInterface* pluinterface ) { m_updater = pluinterface; }
-    PlaylistUpdaterInterface* updater() const { return m_updater; }
+    void setUpdater( PlaylistUpdaterInterface* pluinterface );
+    PlaylistUpdaterInterface* updater() const { return m_updater.data(); }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -197,6 +202,7 @@ signals:
 
     /// renamed etc.
     void changed();
+    void renamed( const QString& newTitle, const QString& oldTitle );
 
     /**
      *   delete command is scheduled but not completed. Do not call remove() again once this
@@ -207,10 +213,27 @@ signals:
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
 
+    /// Notification for tracks being inserted at a specific point
+    /// Contiguous range from startPosition
+    void tracksInserted( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
+
+    /// Notification for tracks being removed from playlist
+    void tracksRemoved( const QList< Tomahawk::query_ptr >& tracks );
+
+    /// Notification for tracks being moved in a playlist. List is of new tracks, and new position of first track
+    /// Contiguous range from startPosition
+    void tracksMoved( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
+
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     void createNewRevision( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
+
+    // Want to update some metadata of a plentry_ptr? this gets you a new revision too.
+    // entries should be <= entries(), with changed metadata.
+    void updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
+
+
     void reportCreated( const Tomahawk::playlist_ptr& self );
     void reportDeleted( const Tomahawk::playlist_ptr& self );
 
@@ -255,6 +278,7 @@ protected:
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
+    void updaterDestroyed();
 
 private:
     Playlist();
@@ -274,8 +298,9 @@ private:
     QList< plentry_ptr > m_entries;
 
     QQueue<RevisionQueueItem> m_revisionQueue;
+    QQueue<RevisionQueueItem> m_updateQueue;
 
-    PlaylistUpdaterInterface* m_updater;
+    QWeakPointer<PlaylistUpdaterInterface> m_updater;
 
     bool m_locallyChanged;
     bool m_deleted;
@@ -287,5 +312,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
+Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::PlaylistEntry > > )
 
 #endif // PLAYLIST_H
