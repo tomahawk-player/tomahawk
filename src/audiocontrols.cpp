@@ -587,12 +587,7 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
     {
         // queue and play the first no matter what
         GlobalActionManager::instance()->handlePlayTrack( tracks.first() );
-
-        // just queue the rest
-        for ( int i = 1; i < tracks.size(); i++ )
-        {
-            ViewManager::instance()->queue()->model()->append( tracks[ i ] );
-        }
+        ViewManager::instance()->queue()->model()->append( tracks );
     }
 }
 
