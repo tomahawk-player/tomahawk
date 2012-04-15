@@ -358,11 +358,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     else if( msgType == "userChanged" )
     {
         const QString rmsg = msg.value( "msg" ).toString();
-        //const QString olduser = msg.value( "oldUser" ).toString();
-        //const QString newuser = msg.value( "newUser" ).toString();
-        if( rmsg.isEmpty() )
-            return;
-
         clearUser();
 
         if ( m_configWidget.data() )
@@ -372,6 +367,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     }
     else if ( msgType == "loginResponse" )
     {
+        QVariantHash creds = credentials();
+        creds[ "username" ] = msg.value( "username" ).toString();
+        creds[ "password" ] = msg.value( "password" ).toString();
+        creds[ "highQuality" ] = msg.value( "highQuality" ).toString();
+        setCredentials( creds );
+        sync();
+
         if ( m_configWidget.data() )
         {
             const bool success = msg.value( "success" ).toBool();

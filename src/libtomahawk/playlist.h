@@ -278,6 +278,7 @@ protected:
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
+    void updaterDestroyed();
 
 private:
     Playlist();

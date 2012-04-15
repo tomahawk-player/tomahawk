@@ -182,11 +182,8 @@ SpotifyAccountConfig::resetVerifyButton()
 void
 SpotifyAccountConfig::resetLoginButton()
 {
-    if ( !m_ui->loginButton->isEnabled() )
-    {
-        m_ui->loginButton->setText( tr( "Log In" ) );
-        m_ui->loginButton->setEnabled( true );
-    }
+    m_ui->loginButton->setText( tr( "Log In" ) );
+    m_ui->loginButton->setEnabled( true );
 }
 
 /*

@@ -288,7 +288,16 @@ Playlist::setUpdater( PlaylistUpdaterInterface* pluinterface )
     m_updater = QWeakPointer< PlaylistUpdaterInterface >( pluinterface );
 
     connect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
+    connect( m_updater.data(), SIGNAL( destroyed( QObject* ) ), this, SLOT( updaterDestroyed() ), Qt::QueuedConnection );
 
+    emit changed();
+}
+
+
+void
+Playlist::updaterDestroyed()
+{
+    m_updater.clear();
     emit changed();
 }
 
