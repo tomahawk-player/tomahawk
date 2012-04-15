@@ -110,7 +110,7 @@ private slots:
 private:
     void init();
     void loadPlaylists();
-    void clearUser();
+    void clearUser( bool permanentlyDelete = false );
 
     void startPlaylistSync( SpotifyPlaylistInfo* playlist );
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete = false );

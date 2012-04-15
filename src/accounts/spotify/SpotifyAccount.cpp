@@ -358,7 +358,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     else if( msgType == "userChanged" )
     {
         const QString rmsg = msg.value( "msg" ).toString();
-        clearUser();
+        clearUser( true );
 
         if ( m_configWidget.data() )
             m_configWidget.data()->setPlaylists( QList< SpotifyPlaylistInfo* >() );
@@ -386,10 +386,15 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
 
 void
-SpotifyAccount::clearUser()
+SpotifyAccount::clearUser( bool permanentlyDelete )
 {
     foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
-        updater->remove();
+    {
+        if ( permanentlyDelete )
+            updater->remove();
+        else
+            updater->deleteLater();
+    }
 
     m_updaters.clear();
 
