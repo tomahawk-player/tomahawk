@@ -374,6 +374,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         setCredentials( creds );
         sync();
 
+        configurationWidget(); // ensure it's created so we can set the login button
         if ( m_configWidget.data() )
         {
             const bool success = msg.value( "success" ).toBool();

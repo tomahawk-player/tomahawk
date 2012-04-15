@@ -134,27 +134,12 @@ SpotifyAccountConfig::doLogin()
     m_playlistsLoading->fadeIn();
 
     emit login( username(), password() );
-
-    /*
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "checkLogin";
-    msg[ "username" ] = username();
-    msg[ "password" ] = password();
-
-    m_account->sendMessage( msg, this, "verifyResult" );
-
-    m_ui->verifyCreds->setText( tr( "Verifying..." ) );
-    m_ui->verifyCreds->setEnabled( false );
-
-    m_resetTimer.start();*/
 }
 
 
 void
 SpotifyAccountConfig::loginResponse( bool success, const QString& msg )
 {
-    m_playlistsLoading->fadeOut();
-
     if ( success )
     {
         m_ui->loginButton->setText( tr( "Logged in!" ) );
@@ -162,6 +147,8 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg )
     }
     else
     {
+        setPlaylists( QList< SpotifyPlaylistInfo* >() );
+        m_playlistsLoading->fadeOut();
         m_ui->loginButton->setText( tr( "Failed: %1" ).arg( msg ) );
         m_ui->loginButton->setEnabled( true );
     }
