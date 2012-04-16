@@ -386,7 +386,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     {
         const QString plid = msg.value( "playlistid" ).toString();
 
-        Q_ASSERT( m_updaters.contains( plid ) );
         if ( !m_updaters.contains( plid ) )
             return;
 
