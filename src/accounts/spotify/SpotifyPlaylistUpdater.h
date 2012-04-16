@@ -55,6 +55,7 @@ public:
 
     QString spotifyId() const { return m_spotifyId; }
 
+    void remove( bool askToDeletePlaylist = true );
 public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );

@@ -382,6 +382,17 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             m_configWidget.data()->loginResponse( success, message );
         }
     }
+    else if ( msgType == "playlistDeleted" )
+    {
+        const QString plid = msg.value( "playlistid" ).toString();
+
+        Q_ASSERT( m_updaters.contains( plid ) );
+        if ( !m_updaters.contains( plid ) )
+            return;
+
+        SpotifyPlaylistUpdater* updater = m_updaters.take( plid );
+        updater->remove( false );
+    }
 }
 
 

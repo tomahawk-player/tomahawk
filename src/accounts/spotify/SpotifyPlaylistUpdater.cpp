@@ -113,6 +113,15 @@ SpotifyPlaylistUpdater::~SpotifyPlaylistUpdater()
 
 
 void
+SpotifyPlaylistUpdater::remove( bool askToDeletePlaylist )
+{
+    if ( !askToDeletePlaylist )
+        m_sync = false;
+    PlaylistUpdaterInterface::remove();
+}
+
+
+void
 SpotifyPlaylistUpdater::removeFromSettings( const QString& group ) const
 {
     TomahawkSettings::instance()->remove( QString( "%1/latestrev" ).arg( group ) );
