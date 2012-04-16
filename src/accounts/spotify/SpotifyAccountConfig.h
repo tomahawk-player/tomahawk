@@ -56,6 +56,8 @@ public:
     void saveSettings();
 
     void loginResponse( bool success, const QString& msg );
+
+    bool loggedInManually() const { return m_loggedInManually; }
 signals:
     void login( const QString& username, const QString& pw );
 
@@ -73,6 +75,7 @@ private:
     Ui::SpotifyConfig* m_ui;
     SpotifyAccount* m_account;
     LoadingSpinner* m_playlistsLoading;
+    bool m_loggedInManually;
 };
 
 }

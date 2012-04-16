@@ -34,6 +34,7 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     , m_ui( new Ui::SpotifyConfig )
     , m_account( account )
     , m_playlistsLoading( 0 )
+    , m_loggedInManually( false )
 {
     m_ui->setupUi( this );
 
@@ -51,6 +52,7 @@ void
 SpotifyAccountConfig::showEvent( QShowEvent *event )
 {
     loadFromConfig();
+    m_loggedInManually = false;
 }
 
 
@@ -132,6 +134,7 @@ SpotifyAccountConfig::doLogin()
     m_ui->loginButton->setEnabled( false );
 
     m_playlistsLoading->fadeIn();
+    m_loggedInManually = true;
 
     emit login( username(), password() );
 }

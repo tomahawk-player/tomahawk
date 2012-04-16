@@ -509,6 +509,12 @@ SpotifyAccount::saveConfig()
         }
     }
     sync();
+
+    if ( !m_configWidget.data()->loggedInManually() && !m_configWidget.data()->username().isEmpty() && !m_configWidget.data()->password().isEmpty() )
+    {
+        // If the user never pressed log in, he might have just pressed ok or hit enter. So log in anyway
+        login( m_configWidget.data()->username(), m_configWidget.data()->password() );
+    }
 }
 
 
