@@ -73,7 +73,6 @@
 #include "jobview/JobStatusModel.h"
 #include "LoadXSPFDialog.h"
 #include <actioncollection.h>
-#include "AboutDialog.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -742,8 +741,21 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    AboutDialog diag( this );
-    diag.exec();
+    QString head, desc;
+
+#ifdef DEBUG_BUILD
+    head = tr( "<h2><b>Tomahawk %1<br/>(%2)</h2>" )
+         .arg( TomahawkUtils::appFriendlyVersion() )
+         .arg( qApp->applicationVersion() );
+#else
+    head = tr( "<h2><b>Tomahawk %1</h2>" )
+         .arg( TomahawkUtils::appFriendlyVersion() );
+#endif
+
+    desc = tr( "Copyright 2010 - 2012<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+               "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson" );
+
+    QMessageBox::about( this, tr( "About Tomahawk" ), head + desc );
 }
 
 

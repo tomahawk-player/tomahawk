@@ -81,6 +81,7 @@ public:
 
     virtual QPixmap icon() const;
     virtual QWidget* configurationWidget();
+    virtual QWidget* aboutWidget();
     virtual void saveConfig();
 
     virtual QWidget* aclWidget() { return 0; }
@@ -119,6 +120,7 @@ private:
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
 
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
+    QWeakPointer<QWidget> m_aboutWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
 
     QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;

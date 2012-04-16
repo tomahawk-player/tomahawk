@@ -16,11 +16,13 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "delegateconfigwrapper.h"
+#include <QMessageBox>
 
 
-DelegateConfigWrapper::DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags )
+DelegateConfigWrapper::DelegateConfigWrapper( QWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags )
     : QDialog( parent, flags )
     , m_widget( conf )
+    , m_aboutW( aboutWidget )
     , m_deleted( false )
 {
     m_widget->setWindowFlags( Qt::Sheet );
@@ -32,10 +34,24 @@ DelegateConfigWrapper::DelegateConfigWrapper( QWidget* conf, const QString& titl
     v->setContentsMargins( 0, 0, 0, 0 );
     v->addWidget( m_widget );
 
-    m_buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Ok | QDialogButtonBox::Cancel;
+    if ( m_aboutW )
+    {
+        m_aboutW->hide();
+        buttons |= QDialogButtonBox::Help;
+    }
+
+    m_buttons = new QDialogButtonBox( buttons, Qt::Horizontal, this );
     m_okButton = m_buttons->button( QDialogButtonBox::Ok );
     connect( m_buttons, SIGNAL( clicked( QAbstractButton*)  ), this, SLOT( closed( QAbstractButton* ) ) );
     connect( this, SIGNAL( rejected() ), this, SLOT( rejected() ) );
+
+    if ( m_aboutW )
+    {
+        connect( m_buttons->button( QDialogButtonBox::Help ), SIGNAL( clicked( bool ) ), this, SLOT( aboutClicked( bool ) ) );
+        m_buttons->button( QDialogButtonBox::Help )->setText( tr( "About" ) );
+    }
+
     v->addWidget( m_buttons );
 
     setLayout( v );
@@ -73,12 +89,16 @@ DelegateConfigWrapper::toggleOkButton( bool dataError )
 void
 DelegateConfigWrapper::closed( QAbstractButton* b )
 {
+    QDialogButtonBox* buttons = qobject_cast< QDialogButtonBox* >( sender() );
+
+    if ( buttons->standardButton( b ) == QDialogButtonBox::Help )
+        return;
+
     // let the config widget live to see another day
     layout()->removeWidget( m_widget );
     m_widget->setParent( 0 );
     m_widget->setVisible( false );
 
-    QDialogButtonBox* buttons = qobject_cast< QDialogButtonBox* >( sender() );
     if ( buttons->standardButton( b ) == QDialogButtonBox::Ok )
         done( QDialog::Accepted );
     else if ( b == m_deleteButton )
@@ -110,5 +130,29 @@ DelegateConfigWrapper::updateSizeHint()
     setMaximumSize( sizeHint() );
 
     show();
+}
+
+
+void
+DelegateConfigWrapper::aboutClicked( bool )
+{
+    Q_ASSERT( m_aboutW );
+    m_aboutW->show();
+
+    QDialog d( this );
+    d.setWindowTitle( tr( "About this Account" ) );
+    QVBoxLayout* v = new QVBoxLayout( &d );
+    v->addWidget( m_aboutW );
+    QDialogButtonBox* bbox = new QDialogButtonBox( QDialogButtonBox::Ok, Qt::Horizontal, &d );
+    v->addWidget( bbox );
+
+    d.setLayout( v );
+    connect( bbox, SIGNAL( clicked( QAbstractButton* ) ), &d, SLOT( accept() ) );
+    d.exec();
+    v->removeWidget( m_aboutW );
+
+    m_aboutW->setParent( 0 );
+    m_aboutW->hide();
+
 }
 

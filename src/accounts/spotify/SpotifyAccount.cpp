@@ -35,6 +35,8 @@
 
 #include <QPixmap>
 #include <QAction>
+#include <QHBoxLayout>
+#include <QLabel>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -441,6 +443,29 @@ SpotifyAccount::configurationWidget()
     }
 
     return static_cast< QWidget* >( m_configWidget.data() );
+}
+
+
+QWidget*
+SpotifyAccount::aboutWidget()
+{
+    if ( m_aboutWidget.isNull() )
+    {
+        QWidget* w = new QWidget();
+        w->hide();
+
+        QHBoxLayout* l = new QHBoxLayout( w );
+        QLabel* pm = new QLabel( w );
+        pm->setPixmap( QPixmap( RESPATH "images/spotifycore-logo" ) );
+        QLabel* text = new QLabel( "This product uses SPOTIFY(R) CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group.", w );
+        text->setWordWrap( true );
+        l->addWidget( pm );
+        l->addWidget( text );
+        w->setLayout( l );
+        m_aboutWidget = QWeakPointer< QWidget >( w );
+    }
+
+    return m_aboutWidget.data();
 }
 
 

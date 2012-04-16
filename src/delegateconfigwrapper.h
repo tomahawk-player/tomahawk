@@ -28,7 +28,7 @@ class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
+    DelegateConfigWrapper( QWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
 
     ~DelegateConfigWrapper() {}
 
@@ -37,8 +37,7 @@ public:
     bool deleted() const { return m_deleted; }
 
 public slots:
-    void toggleOkButton( bool dataError )
-    ;
+    void toggleOkButton( bool dataError );
     void closed( QAbstractButton* b );
 
     // we get a rejected() signal emitted if the user presses escape (and no clicked() signal )
@@ -49,9 +48,12 @@ public slots:
 signals:
     void closedWithDelete();
 
+private slots:
+    void aboutClicked( bool );
+
 private:
     QDialogButtonBox* m_buttons;
-    QWidget* m_widget;
+    QWidget* m_widget, *m_aboutW;
     QPushButton *m_okButton, *m_deleteButton;
     bool m_deleted;
 };
