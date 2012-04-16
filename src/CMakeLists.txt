@@ -90,6 +90,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      AccountFactoryWrapper.cpp
      AccountFactoryWrapperDelegate.cpp
      SocialWidget.cpp
+     AboutDialog.cpp
 )
 
 IF( WITH_BREAKPAD )
@@ -109,6 +110,7 @@ SET( tomahawkUI ${tomahawkUI}
      LoadXSPFDialog.ui
      AccountFactoryWrapper.ui
      SocialWidget.ui
+     AboutDialog.ui
 )
 
 INCLUDE_DIRECTORIES(
