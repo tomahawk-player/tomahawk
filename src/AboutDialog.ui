@@ -40,7 +40,7 @@
        <item>
         <widget class="QLabel" name="titleLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:x-large; font-weight:600;&quot;&gt;Tomahawk %1%2&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;h2&gt;Tomahawk %1%2&lt;br/&gt;&lt;/h2&gt;</string>
          </property>
         </widget>
        </item>
@@ -68,13 +68,13 @@ and Steve Robertson</string>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>19</height>
+       <height>12</height>
       </size>
      </property>
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="spotifyBlurb">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
