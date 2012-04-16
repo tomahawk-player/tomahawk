@@ -404,7 +404,7 @@ SpotifyAccount::clearUser( bool permanentlyDelete )
     foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
     {
         if ( permanentlyDelete )
-            updater->remove();
+            updater->remove( false );
         else
             updater->deleteLater();
     }
