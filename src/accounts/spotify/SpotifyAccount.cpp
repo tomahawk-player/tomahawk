@@ -113,12 +113,6 @@ SpotifyAccount::init()
         msg[ "_msgtype" ] = "getCredentials";
         m_spotifyResolver.data()->sendMessage( msg );
     }
-
-    QAction* action = new QAction( 0 );
-    action->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( bool ) ) );
-    ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, action, this );
-    m_customActions.append( action );
 }
 
 
@@ -376,10 +370,14 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         setCredentials( creds );
         sync();
 
+        const bool success = msg.value( "success" ).toBool();
+
+        if ( success )
+            createActions();
+
         configurationWidget(); // ensure it's created so we can set the login button
         if ( m_configWidget.data() )
         {
-            const bool success = msg.value( "success" ).toBool();
             const QString message = msg.value( "message" ).toString();
             m_configWidget.data()->loginResponse( success, message );
         }
@@ -417,8 +415,7 @@ SpotifyAccount::clearUser( bool permanentlyDelete )
     m_qidToSlotMap.clear();
     m_waitingForCreateReply.clear();
 
-    foreach( QAction* action, m_customActions )
-        ActionCollection::instance()->removeAction( action );
+    removeActions();
 }
 
 
@@ -729,5 +726,29 @@ SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync 
 
     if ( !m_configWidget.isNull() )
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+}
+
+
+void
+SpotifyAccount::createActions()
+{
+    if ( !m_customActions.isEmpty() )
+        return;
+
+    QAction* action = new QAction( 0 );
+    action->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( bool ) ) );
+    ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, action, this );
+    m_customActions.append( action );
+}
+
+
+void
+SpotifyAccount::removeActions()
+{
+    foreach( QAction* action, m_customActions )
+        ActionCollection::instance()->removeAction( action );
+
+    m_customActions.clear();
 }
 

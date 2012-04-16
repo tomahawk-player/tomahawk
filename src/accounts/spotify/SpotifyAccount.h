@@ -119,6 +119,9 @@ private:
 
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
 
+    void createActions();
+    void removeActions();
+
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<QWidget> m_aboutWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
