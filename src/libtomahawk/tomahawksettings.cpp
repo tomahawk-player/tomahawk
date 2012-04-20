@@ -408,6 +408,42 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         setValue( "allaccounts", allAccounts );
         endGroup();
     }
+    else if ( oldVersion == 8 )
+    {
+        // Some users got duplicate accounts for some reason, so make them unique if we can
+        QSet< QString > uniqueFriendlyNames;
+        beginGroup("accounts");
+        const QStringList accounts = childGroups();
+        QStringList allAccounts = value( "allaccounts" ).toStringList();
+
+//        qDebug() << "Got accounts to migrate:" << accounts;
+        foreach ( const QString& account, accounts )
+        {
+            if ( !allAccounts.contains( account ) ) // orphan
+            {
+                qDebug() << "Found account not in allaccounts list!" << account << "is a dup!";
+                remove( account );
+                continue;
+            }
+
+            const QString friendlyName = value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString();
+            if ( !uniqueFriendlyNames.contains( friendlyName ) )
+            {
+                uniqueFriendlyNames.insert( friendlyName );
+                continue;
+            }
+            else
+            {
+                // Duplicate..?
+                qDebug() << "Found duplicate account friendly name:" << account << friendlyName << "is a dup!";
+                remove( account );
+                allAccounts.removeAll( account );
+            }
+        }
+        qDebug() << "Ended up with all accounts list:" << allAccounts << "and all accounts:" << childGroups();
+        setValue( "allaccounts", allAccounts );
+        endGroup();
+    }
 }
 
 
