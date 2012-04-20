@@ -49,6 +49,9 @@ protected:
 private slots:
     void onScrollTo( const QModelIndex& idx );
 
+    void onStartInstalling( const QPersistentModelIndex& idx );
+    void onDoneInstalling( const QPersistentModelIndex& idx );
+
 private:
     Tomahawk::Accounts::AccountType m_filterType;
 };

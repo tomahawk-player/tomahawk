@@ -122,6 +122,7 @@ set( libGuiSources
     utils/closure.cpp
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
+    utils/chasewidget.cpp
 
     widgets/animatedcounterlabel.cpp
     widgets/checkdirtree.cpp

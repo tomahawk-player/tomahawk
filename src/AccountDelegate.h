@@ -22,6 +22,8 @@
 #include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
+class ChaseWidget;
+
 namespace Tomahawk
 {
 namespace Accounts
@@ -41,6 +43,8 @@ public:
 public slots:
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling ( const QPersistentModelIndex& idx );
+
+    void doUpdateIndex( const QPersistentModelIndex& idx );
 
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
@@ -68,7 +72,7 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
-    mutable QHash< QPersistentModelIndex, QMovie* > m_loadingSpinners;
+    mutable QHash< QPersistentModelIndex, ChaseWidget* > m_loadingSpinners;
     mutable int m_accountRowHeight;
 };
 

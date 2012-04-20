@@ -26,6 +26,7 @@
 #include "sourcelist.h"
 #include "viewmanager.h"
 #include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/chasewidget.h"
 #include "playlist/albummodel.h"
 #include "playlist/playlistmodel.h"
 #include "widgets/overlaywidget.h"
@@ -146,7 +147,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         q->addResults( rl );
 
         m_resultsModel->append( q );
-        
+
         artists << result->artist();
         albums << result->album();
     }

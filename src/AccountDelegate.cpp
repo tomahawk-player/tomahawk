@@ -27,6 +27,8 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "utils/chasewidget.h"
+#include "utils/closure.h"
 
 #define CHILD_ACCOUNT_HEIGHT 24
 
@@ -158,7 +160,23 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect checkRect = QRect( leftEdge, checkboxYPos, WRENCH_SIZE, WRENCH_SIZE );
     QStyleOptionViewItemV4 opt2 = opt;
     opt2.rect = checkRect;
-    drawCheckBox( opt2, painter, opt.widget );
+
+    if ( !m_loadingSpinners.contains( index ) )
+    {
+        drawCheckBox( opt2, painter, opt.widget );
+    }
+    else
+    {
+        Q_ASSERT( m_loadingSpinners[ index ] );
+        if ( m_loadingSpinners[ index ] )
+        {
+            painter->setOpacity( 1.0 );
+            const QPixmap pm = QPixmap::grabWidget( m_loadingSpinners[ index ] );
+            painter->drawPixmap( checkRect.adjusted( -2, -2, 2, 2 ), pm );
+        }
+    }
+
+
     leftEdge += WRENCH_SIZE + PADDING / 2;
 
     // Pixmap
@@ -183,6 +201,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         topt.pos = confRect.topLeft();
 
         drawConfigWrench( painter, opt, topt );
+
         m_cachedConfigRects[ index ] = confRect;
         rightEdge = confRect.left();
 
@@ -662,6 +681,13 @@ void
 AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
 {
     qDebug() << "START INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
+    ChaseWidget* anim = new ChaseWidget( QApplication::topLevelWidgets().first() );
+    _detail::Closure* closure = NewClosure( anim, SIGNAL( requestUpdate() ), this, SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), idx );
+    closure->setAutoDelete( false );
+
+    m_loadingSpinners[ idx ] = anim;
+
+    update( idx );
 }
 
 
@@ -669,5 +695,19 @@ void
 AccountDelegate::doneInstalling ( const QPersistentModelIndex& idx )
 {
     qDebug() << "STOP INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
+    Q_ASSERT( m_loadingSpinners.contains( idx ) );
+    if ( !m_loadingSpinners.contains( idx ) )
+        return;
 
+    delete m_loadingSpinners.take( idx );
+
+    update( idx );
 }
+
+
+void
+AccountDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
+{
+    emit update( idx );
+}
+
