@@ -38,6 +38,10 @@ public:
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+public slots:
+    void startInstalling( const QPersistentModelIndex& idx );
+    void doneInstalling ( const QPersistentModelIndex& idx );
+
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
@@ -64,6 +68,7 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
+    mutable QHash< QPersistentModelIndex, QMovie* > m_loadingSpinners;
     mutable int m_accountRowHeight;
 };
 

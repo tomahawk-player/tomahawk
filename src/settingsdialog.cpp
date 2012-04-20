@@ -114,6 +114,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
     m_accountProxy->setSourceModel( m_accountModel );
 
+    connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
     ui->accountsView->setModel( m_accountProxy );

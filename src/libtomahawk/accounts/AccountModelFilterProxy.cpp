@@ -36,6 +36,8 @@ void
 AccountModelFilterProxy::setSourceModel( QAbstractItemModel* sourceModel )
 {
     connect( sourceModel, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( onScrollTo( QModelIndex ) ) );
+    connect( sourceModel, SIGNAL( startInstalling( QPersistentModelIndex ) ), this, SIGNAL( startInstalling( QPersistentModelIndex ) ) );
+    connect( sourceModel, SIGNAL( doneInstalling( QPersistentModelIndex ) ), this, SIGNAL( doneInstalling( QPersistentModelIndex ) ) );
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 

@@ -451,6 +451,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 
+                    emit startInstalling( index );
                     AtticaManager::instance()->installResolver( resolver );
                     return true;
                 }
@@ -571,6 +572,10 @@ AccountModel::accountAdded( Account* account )
                 AccountManager::instance()->enableAccount( account );
 
             m_waitingForAtticaInstall.remove( attica->atticaId() );
+
+            // find index to emit doneInstalling for
+            const QModelIndex idx = index( i, 0, QModelIndex() );
+            emit doneInstalling( idx );
         }
 
         if ( thisIsTheOne )

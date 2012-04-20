@@ -134,9 +134,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont authorFont = opt.font;
     authorFont.setItalic( true );
     authorFont.setPointSize( authorFont.pointSize() - 1 );
-    #ifdef Q_OS_MAC
+#ifdef Q_OS_MAC
     authorFont.setPointSize( authorFont.pointSize() - 1 );
-    #endif
+#endif
     const QFontMetrics authorMetrics( authorFont );
 
     QFont descFont = authorFont;
@@ -658,4 +658,16 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QM
 
 }
 
+void
+AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
+{
+    qDebug() << "START INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
+}
 
+
+void
+AccountDelegate::doneInstalling ( const QPersistentModelIndex& idx )
+{
+    qDebug() << "STOP INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
+
+}

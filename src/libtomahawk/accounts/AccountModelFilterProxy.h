@@ -40,6 +40,9 @@ public:
 signals:
     void scrollTo( const QModelIndex& idx );
 
+    void startInstalling( const QPersistentModelIndex& idx );
+    void doneInstalling( const QPersistentModelIndex& idx );
+
 protected:
     virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
 
