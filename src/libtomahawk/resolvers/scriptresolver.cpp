@@ -69,9 +69,15 @@ ScriptResolver::~ScriptResolver()
     msg[ "_msgtype" ] = "quit";
     sendMessage( msg );
 
-    m_proc.waitForFinished( 1000 ); // might call handleMsg
+    m_proc.waitForFinished( 2000 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
+
+#ifdef Q_OS_WIN
+    m_proc.kill();
+#else
+    m_proc.terminate();
+#endif
 
     if ( !m_configWidget.isNull() )
         delete m_configWidget.data();
