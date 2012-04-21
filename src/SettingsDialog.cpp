@@ -42,7 +42,7 @@
 #include "ScanManager.h"
 #include "SettingsListDelegate.h"
 #include "AccountDelegate.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "network/Servent.h"
 #include "playlist/dynamic/widgets/LoadingSpinner.h"
 #include "accounts/AccountModel.h"

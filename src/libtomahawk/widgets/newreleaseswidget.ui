@@ -31,7 +31,7 @@
   <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/albumview.h</header>
+   <header location="global">playlist/AlbumView.h</header>
   </customwidget>
   <customwidget>
    <class>Tomahawk::Breadcrumb</class>

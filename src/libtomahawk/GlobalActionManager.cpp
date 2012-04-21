@@ -43,8 +43,8 @@
 
 #include "widgets/searchwidget.h"
 #include "ViewManager.h"
-#include "playlist/topbar/topbar.h"
-#include "playlist/playlistview.h"
+#include "playlist/topbar/TopBar.h"
+#include "playlist/PlaylistView.h"
 
 #include <QtGui/QApplication>
 #include <QtGui/QClipboard>

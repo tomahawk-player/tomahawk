@@ -35,7 +35,7 @@
 
 #include <utils/tomahawkutils.h>
 #include <TomahawkSettings.h>
-#include <database/database.h>
+#include <database/Database.h>
 #include <network/Servent.h>
 
 #include "utils/logger.h"

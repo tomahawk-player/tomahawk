@@ -29,8 +29,8 @@
 #include "context/pages/TopTracksContext.h"
 #include "context/pages/WikipediaContext.h"
 
-#include "playlist/artistview.h"
-#include "playlist/treemodel.h"
+#include "playlist/ArtistView.h"
+#include "playlist/TreeModel.h"
 
 #include "utils/stylehelper.h"
 #include "utils/tomahawkutilsgui.h"

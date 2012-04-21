@@ -35,10 +35,10 @@
 
 #include "audio/audioengine.h"
 #include "dynamic/GeneratorInterface.h"
-#include "playlist/playlistmodel.h"
-#include "playlist/treeproxymodel.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "Pipeline.h"

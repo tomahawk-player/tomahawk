@@ -23,9 +23,9 @@
 
 #include "audio/audioengine.h"
 #include "ViewManager.h"
-#include "database/database.h"
-#include "playlist/treemodel.h"
-#include "playlist/albummodel.h"
+#include "database/Database.h"
+#include "playlist/TreeModel.h"
+#include "playlist/AlbumModel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
@@ -34,7 +34,7 @@
 #include "utils/logger.h"
 
 #include "widgets/OverlayButton.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 
 using namespace Tomahawk;
 

@@ -21,7 +21,7 @@
 #include "DatabaseControl.h"
 #include "utils/logger.h"
 #include <database/databasecommand_genericselect.h>
-#include <database/database.h>
+#include <database/Database.h>
 
 using namespace Tomahawk;
 

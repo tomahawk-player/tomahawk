@@ -25,11 +25,11 @@
 #include <QPaintEngine>
 #include <QScrollBar>
 
-#include "playlistmodel.h"
-#include "trackproxymodel.h"
-#include "trackheader.h"
+#include "PlaylistModel.h"
+#include "TrackProxyModel.h"
+#include "TrackHeader.h"
 #include "DynamicModel.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

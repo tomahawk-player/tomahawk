@@ -40,8 +40,8 @@
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/playlistitems.h"
-#include "playlist/artistview.h"
-#include "playlist/playlistview.h"
+#include "playlist/ArtistView.h"
+#include "playlist/PlaylistView.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 
 using namespace Tomahawk;

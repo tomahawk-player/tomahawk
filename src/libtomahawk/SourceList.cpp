@@ -18,7 +18,7 @@
 
 #include "SourceList.h"
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_loadallsources.h"
 #include "network/RemoteCollection.h"
 #include "network/ControlConnection.h"

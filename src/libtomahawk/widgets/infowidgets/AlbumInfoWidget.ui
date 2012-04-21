@@ -50,12 +50,12 @@
   <customwidget>
    <class>ArtistView</class>
    <extends>QTreeView</extends>
-   <header location="global">artistview.h</header>
+   <header location="global">ArtistView.h</header>
   </customwidget>
   <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
-   <header>playlist/albumview.h</header>
+   <header>playlist/AlbumView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

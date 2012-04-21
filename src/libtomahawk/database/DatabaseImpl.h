@@ -31,8 +31,8 @@
 #include <QHash>
 #include <QThread>
 
-#include "tomahawksqlquery.h"
-#include "fuzzyindex.h"
+#include "TomahawkSqlQuery.h"
+#include "FuzzyIndex.h"
 #include "Typedefs.h"
 
 class Database;

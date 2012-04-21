@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_RESOLVE_H
 #define DATABASECOMMAND_RESOLVE_H
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "DatabaseImpl.h"
 #include "Result.h"
 #include "Artist.h"

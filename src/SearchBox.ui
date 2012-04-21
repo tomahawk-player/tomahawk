@@ -36,7 +36,7 @@
   <customwidget>
    <class>SearchLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>libtomahawk/playlist/topbar/searchlineedit.h</header>
+   <header>libtomahawk/playlist/topbar/SearchLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

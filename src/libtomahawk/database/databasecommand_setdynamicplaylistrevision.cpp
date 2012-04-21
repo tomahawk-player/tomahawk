@@ -22,7 +22,7 @@
 
 #include "Source.h"
 #include "DatabaseImpl.h"
-#include "tomahawksqlquery.h"
+#include "TomahawkSqlQuery.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 #include "network/Servent.h"

@@ -23,7 +23,7 @@
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_loadplaylistentries.h"
 #include "database/databasecommand_setplaylistrevision.h"
 #include "database/databasecommand_createplaylist.h"

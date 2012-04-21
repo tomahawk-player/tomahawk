@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_SOCIALACTION_H
 
 #include <QDateTime>
-#include "database/databasecommandloggable.h"
+#include "database/DatabaseCommandLoggable.h"
 
 #include "SourceList.h"
 #include "Typedefs.h"

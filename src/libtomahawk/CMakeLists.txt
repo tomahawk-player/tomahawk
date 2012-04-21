@@ -45,38 +45,38 @@ set( libGuiSources
 
     infobar/infobar.cpp
 
-    playlist/treemodel.cpp
-    playlist/treeproxymodel.cpp
-    playlist/treeproxymodelplaylistinterface.cpp
-    playlist/treeheader.cpp
-    playlist/treeitemdelegate.cpp
-    playlist/collectionproxymodel.cpp
-    playlist/collectionproxymodelplaylistinterface.cpp
-    playlist/collectionflatmodel.cpp
-    playlist/collectionview.cpp
-    playlist/playlistmodel.cpp
-    playlist/playlistproxymodel.cpp
-    playlist/playlistproxymodelplaylistinterface.cpp
-    playlist/playlistview.cpp
-    playlist/playlistitemdelegate.cpp
-    playlist/queueproxymodel.cpp
-    playlist/queueproxymodelplaylistinterface.cpp
-    playlist/queueview.cpp
-    playlist/trackmodel.cpp
-    playlist/trackmodelitem.cpp
-    playlist/trackproxymodel.cpp
-    playlist/trackproxymodelplaylistinterface.cpp
-    playlist/trackview.cpp
-    playlist/trackheader.cpp
-    playlist/treemodelitem.cpp
-    playlist/albumitem.cpp
-    playlist/albummodel.cpp
-    playlist/albumproxymodel.cpp
-    playlist/albumproxymodelplaylistinterface.cpp
-    playlist/albumitemdelegate.cpp
-    playlist/albumview.cpp
-    playlist/artistview.cpp
-    playlist/customplaylistview.cpp
+    playlist/TreeModel.cpp
+    playlist/TreeProxyModel.cpp
+    playlist/TreeProxyModelPlaylistInterface.cpp
+    playlist/TreeHeader.cpp
+    playlist/TreeItemDelegate.cpp
+    playlist/CollectionProxyModel.cpp
+    playlist/CollectionProxyModelPlaylistInterface.cpp
+    playlist/CollectionFlatModel.cpp
+    playlist/CollectionView.cpp
+    playlist/PlaylistModel.cpp
+    playlist/PlaylistProxyModel.cpp
+    playlist/PlaylistProxyModelPlaylistInterface.cpp
+    playlist/PlaylistView.cpp
+    playlist/PlaylistItemDelegate.cpp
+    playlist/QueueProxyModel.cpp
+    playlist/QueueProxyModelPlaylistInterface.cpp
+    playlist/QueueView.cpp
+    playlist/TrackModel.cpp
+    playlist/TrackModelItem.cpp
+    playlist/TrackProxyModel.cpp
+    playlist/TrackProxyModelPlaylistInterface.cpp
+    playlist/TrackView.cpp
+    playlist/TrackHeader.cpp
+    playlist/TreeModelItem.cpp
+    playlist/AlbumItem.cpp
+    playlist/AlbumModel.cpp
+    playlist/AlbumProxyModel.cpp
+    playlist/AlbumProxyModelPlaylistInterface.cpp
+    playlist/AlbumItemDelegate.cpp
+    playlist/AlbumView.cpp
+    playlist/ArtistView.cpp
+    playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
@@ -98,11 +98,11 @@ set( libGuiSources
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
     playlist/dynamic/widgets/LoadingSpinner.cpp
 
-    playlist/topbar/topbar.cpp
-    playlist/topbar/clearbutton.cpp
-    playlist/topbar/searchlineedit.cpp
-    playlist/topbar/lineedit.cpp
-    playlist/topbar/searchbutton.cpp
+    playlist/topbar/TopBar.cpp
+    playlist/topbar/ClearButton.cpp
+    playlist/topbar/SearchLineEdit.cpp
+    playlist/topbar/LineEdit.cpp
+    playlist/topbar/SearchButton.cpp
 
     ExternalResolverGui.cpp
     resolvers/scriptresolver.cpp
@@ -141,7 +141,7 @@ set( libGuiSources
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
     widgets/OverlayButton.cpp
-    widgets/overlaywidget.cpp
+    widgets/OverlayWidget.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
     widgets/combobox.cpp
@@ -196,15 +196,15 @@ set( libSources
     audio/audioengine.cpp
 
 
-    database/database.cpp
-    database/fuzzyindex.cpp
-    database/databasecollection.cpp
+    database/Database.cpp
+    database/FuzzyIndex.cpp
+    database/DatabaseCollection.cpp
     database/LocalCollection.cpp
-    database/databaseworker.cpp
+    database/DatabaseWorker.cpp
     database/DatabaseImpl.cpp
-    database/databaseresolver.cpp
-    database/databasecommand.cpp
-    database/databasecommandloggable.cpp
+    database/DatabaseResolver.cpp
+    database/DatabaseCommand.cpp
+    database/DatabaseCommandLoggable.cpp
     database/databasecommand_resolve.cpp
     database/databasecommand_allartists.cpp
     database/databasecommand_allalbums.cpp
@@ -246,7 +246,7 @@ set( libSources
     database/databasecommand_collectionattributes.cpp
     database/databasecommand_trackattributes.cpp
     database/databasecommand_settrackattributes.cpp
-    database/database.cpp
+    database/Database.cpp
 
     infosystem/infosystem.cpp
     infosystem/infosystemcache.cpp
@@ -312,8 +312,8 @@ set( libUI ${libUI}
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
-    playlist/topbar/topbar.ui
-    playlist/queueview.ui
+    playlist/topbar/TopBar.ui
+    playlist/QueueView.ui
     context/ContextWidget.ui
     infobar/infobar.ui
 )

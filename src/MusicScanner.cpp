@@ -24,7 +24,7 @@
 #include "utils/tomahawkutils.h"
 #include "TomahawkSettings.h"
 #include "SourceList.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_dirmtimes.h"
 #include "database/databasecommand_filemtimes.h"
 #include "database/databasecommand_collectionstats.h"

@@ -23,7 +23,7 @@
 #include "Query.h"
 #include "Result.h"
 #include "logger.h"
-#include "trackmodelitem.h"
+#include "TrackModelItem.h"
 
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>

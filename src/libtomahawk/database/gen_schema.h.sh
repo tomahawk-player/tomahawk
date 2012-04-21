@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# !!!! You need to manually generate schema.sql.h when the schema changes:
-# ./gen_schema.h.sh ./schema.sql tomahawk > schema.sql.h
+# !!!! You need to manually generate Schema.sql.h when the schema changes:
+# ./gen_schema.h.sh ./Schema.sql tomahawk > Schema.sql.h
 
 schema=$1
 name=$2
@@ -27,6 +27,6 @@ const char * get_${name}_sql()
 
 EOF
 else
-    echo "Usage: $0 <schema.sql> <name>"
+    echo "Usage: $0 <Schema.sql> <name>"
     exit 1
 fi

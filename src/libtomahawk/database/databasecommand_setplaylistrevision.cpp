@@ -22,7 +22,7 @@
 
 #include "Source.h"
 #include "DatabaseImpl.h"
-#include "tomahawksqlquery.h"
+#include "TomahawkSqlQuery.h"
 #include "network/Servent.h"
 #include "utils/logger.h"
 

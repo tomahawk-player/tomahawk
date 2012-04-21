@@ -23,7 +23,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Collection.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/DbSyncConnection.h"
 #include "network/Servent.h"

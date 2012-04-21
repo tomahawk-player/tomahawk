@@ -21,7 +21,7 @@
 #define MUSICSCANNER_H
 
 #include "TomahawkSettings.h"
-#include "database/databasecommand.h"
+#include "database/DatabaseCommand.h"
 
 /* taglib */
 #include <taglib/fileref.h>
@@ -36,7 +36,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QWeakPointer>
-#include <database/database.h>
+#include <database/Database.h>
 
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.

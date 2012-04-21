@@ -21,7 +21,7 @@
 
 #include "ArtistPlaylistInterface.h"
 #include "Collection.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "Query.h"
 

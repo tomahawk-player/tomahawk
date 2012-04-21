@@ -23,7 +23,7 @@
 
 #include "Source.h"
 #include "SourceList.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_alltracks.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

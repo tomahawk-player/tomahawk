@@ -22,10 +22,10 @@
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/audioengine.h"
-#include "playlist/trackheader.h"
-#include "playlist/treemodel.h"
-#include "playlist/playlistmodel.h"
-#include "playlist/treeproxymodel.h"
+#include "playlist/TrackHeader.h"
+#include "playlist/TreeModel.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/TreeProxyModel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
@@ -35,7 +35,7 @@
 #include "utils/logger.h"
 
 #include "widgets/OverlayButton.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 
 #include "Pipeline.h"
 

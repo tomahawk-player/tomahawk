@@ -21,8 +21,8 @@
 #define DATABASECOMMAND_LOADOPS_H
 
 #include "Typedefs.h"
-#include "databasecommand.h"
-#include "op.h"
+#include "DatabaseCommand.h"
+#include "Op.h"
 
 #include "DllMacro.h"
 

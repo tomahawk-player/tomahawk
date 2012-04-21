@@ -25,7 +25,7 @@
 #include <QIODevice>
 
 #include "network/Connection.h"
-#include "database/op.h"
+#include "database/Op.h"
 #include "Typedefs.h"
 
 class DatabaseCommand;

@@ -24,8 +24,8 @@
 
 #include "SourceList.h"
 #include "ViewManager.h"
-#include "playlist/playlistmodel.h"
-#include "widgets/overlaywidget.h"
+#include "playlist/PlaylistModel.h"
+#include "widgets/OverlayWidget.h"
 
 #include "utils/xspfloader.h"
 #include "utils/tomahawkutils.h"

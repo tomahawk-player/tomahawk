@@ -31,8 +31,8 @@
 
 #include "DbSyncConnection.h"
 
-#include "database/database.h"
-#include "database/databasecommand.h"
+#include "database/Database.h"
+#include "database/DatabaseCommand.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_loadops.h"
 #include "RemoteCollection.h"

@@ -21,7 +21,7 @@
 #include "Album.h"
 #include "Collection.h"
 #include "Source.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"

@@ -20,7 +20,7 @@
 
 #include <QSqlQuery>
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/logger.h"

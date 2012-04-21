@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_COLLECTIONATTRIBUTES_H
 
 #include "Typedefs.h"
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "databasecommand_setcollectionattributes.h"
 #include <QByteArray>
 

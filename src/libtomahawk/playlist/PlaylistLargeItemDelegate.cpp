@@ -28,12 +28,12 @@
 #include "Source.h"
 #include "SourceList.h"
 
-#include "playlistview.h"
-#include "trackmodel.h"
-#include "trackmodelitem.h"
-#include "trackproxymodel.h"
-#include "trackview.h"
-#include "trackheader.h"
+#include "PlaylistView.h"
+#include "TrackModel.h"
+#include "TrackModelItem.h"
+#include "TrackProxyModel.h"
+#include "TrackView.h"
+#include "TrackHeader.h"
 
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"

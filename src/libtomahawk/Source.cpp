@@ -28,7 +28,7 @@
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_sourceoffline.h"
 #include "database/databasecommand_updatesearchindex.h"
-#include "database/database.h"
+#include "database/Database.h"
 
 #include <QCoreApplication>
 

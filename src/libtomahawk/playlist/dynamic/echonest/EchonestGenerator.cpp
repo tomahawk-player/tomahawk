@@ -23,7 +23,7 @@
 #include "utils/tomahawkutils.h"
 #include "TomahawkSettings.h"
 #include "database/databasecommand_collectionattributes.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "utils/logger.h"
 #include "SourceList.h"
 #include <QFile>

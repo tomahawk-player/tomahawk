@@ -23,7 +23,7 @@
 #include <QHash>
 
 #include "Typedefs.h"
-#include "playlistmodel.h"
+#include "PlaylistModel.h"
 
 #include "DllMacro.h"
 

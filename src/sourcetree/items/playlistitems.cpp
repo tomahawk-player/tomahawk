@@ -25,7 +25,7 @@
 #include "Query.h"
 #include "ViewManager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/playlistview.h"
+#include "playlist/PlaylistView.h"
 #include "categoryitems.h"
 #include "sourceitem.h"
 #include "utils/tomahawkutils.h"

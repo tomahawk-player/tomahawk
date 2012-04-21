@@ -29,7 +29,7 @@
 #include "utils/tomahawkutils.h"
 
 #include "database/databasecommand_updatesearchindex.h"
-#include "database/database.h"
+#include "database/Database.h"
 
 using namespace Tomahawk;
 

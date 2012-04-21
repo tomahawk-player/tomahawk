@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_DELETEPLAYLIST_H
 
 #include "DatabaseImpl.h"
-#include "databasecommandloggable.h"
+#include "DatabaseCommandLoggable.h"
 #include "Source.h"
 #include "Typedefs.h"
 

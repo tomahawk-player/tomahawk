@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <QMap>
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "Result.h"
 #include "DllMacro.h"
 

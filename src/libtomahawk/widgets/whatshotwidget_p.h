@@ -23,8 +23,8 @@
 #include "whatshotwidget.h"
 #include "PlaylistInterface.h"
 #include "ui_whatshotwidget.h"
-#include "treeproxymodel.h"
-#include "playlistview.h"
+#include "TreeProxyModel.h"
+#include "PlaylistView.h"
 #include "Result.h"
 
 #include <QObject>

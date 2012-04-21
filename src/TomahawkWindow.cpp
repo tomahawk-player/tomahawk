@@ -49,9 +49,9 @@
 #include "widgets/playlisttypeselectordlg.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/playlistmodel.h"
-#include "playlist/playlistview.h"
-#include "playlist/queueview.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/PlaylistView.h"
+#include "playlist/QueueView.h"
 
 #include "AudioControls.h"
 #include "SettingsDialog.h"

@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "Playlist.h"
 
 #include "DllMacro.h"

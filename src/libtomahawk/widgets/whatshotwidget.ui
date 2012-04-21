@@ -66,17 +66,17 @@
   <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/albumview.h</header>
+   <header location="global">playlist/AlbumView.h</header>
   </customwidget>
   <customwidget>
    <class>ArtistView</class>
    <extends>QTreeView</extends>
-   <header>artistview.h</header>
+   <header>ArtistView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
-   <header>playlist/playlistview.h</header>
+   <header>playlist/PlaylistView.h</header>
   </customwidget>
   <customwidget>
    <class>Tomahawk::Breadcrumb</class>

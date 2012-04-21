@@ -23,7 +23,7 @@
 
 #include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
-#include "database/database.h"
+#include "database/Database.h"
 
 #include "TomahawkOAuthTwitter.h"
 #include <QTweetLib/qtweetaccountverifycredentials.h>

@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_ADDCLIENTAUTH_H
 #define DATABASECOMMAND_ADDCLIENTAUTH_H
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "DllMacro.h"
 
 #include <QObject>

@@ -29,7 +29,7 @@
 
 #include "DynamicControlList.h"
 #include "dynamic/DynamicModel.h"
-#include "trackproxymodel.h"
+#include "TrackProxyModel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
 #include "Pipeline.h"

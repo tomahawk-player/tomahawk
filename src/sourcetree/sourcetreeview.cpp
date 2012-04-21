@@ -46,7 +46,7 @@
 #include "items/genericpageitems.h"
 #include "items/temporarypageitem.h"
 #include "database/databasecommand_socialaction.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "LatchManager.h"
 
 using namespace Tomahawk;

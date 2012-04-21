@@ -23,7 +23,7 @@
 #include <QVariantMap>
 
 #include "Typedefs.h"
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 
 #include "DllMacro.h"
 

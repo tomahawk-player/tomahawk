@@ -28,7 +28,7 @@
 #include "PlaylistInterface.h"
 #include "SourcePlaylistInterface.h"
 #include "TomahawkSettings.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/Servent.h"
 #include "utils/qnr_iodevicestream.h"

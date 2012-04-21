@@ -22,7 +22,7 @@
 #include "Typedefs.h"
 
 #include "network/ControlConnection.h"
-#include "database/databasecollection.h"
+#include "database/DatabaseCollection.h"
 
 class RemoteCollection : public DatabaseCollection
 {

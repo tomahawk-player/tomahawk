@@ -19,7 +19,7 @@
 #include "databasecommand_updatesearchindex.h"
 
 #include "DatabaseImpl.h"
-#include "tomahawksqlquery.h"
+#include "TomahawkSqlQuery.h"
 #include "utils/logger.h"
 #include "jobview/IndexingJobItem.h"
 #include "jobview/JobStatusView.h"

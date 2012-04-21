@@ -21,7 +21,7 @@
 
 #include "ActionCollection.h"
 #include "audio/audioengine.h"
-#include "database/database.h"
+#include "database/Database.h"
 
 #include <QtGui/QAction>
 #include "SourceList.h"

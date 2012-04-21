@@ -27,7 +27,7 @@
 #include "Artist.h"
 #include "Collection.h"
 #include "PlaylistInterface.h"
-#include "playlist/queueview.h"
+#include "playlist/QueueView.h"
 #include "ViewPage.h"
 #include "widgets/welcomewidget.h"
 #include "widgets/whatshotwidget.h"

@@ -96,12 +96,12 @@
   <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
-   <header>playlist/albumview.h</header>
+   <header>playlist/AlbumView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
-   <header>playlist/playlistview.h</header>
+   <header>playlist/PlaylistView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistWidget</class>

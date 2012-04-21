@@ -94,7 +94,7 @@
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
-   <header>playlist/playlistview.h</header>
+   <header>playlist/PlaylistView.h</header>
   </customwidget>
   <customwidget>
    <class>HeaderLabel</class>
@@ -114,7 +114,7 @@
   <customwidget>
    <class>ArtistView</class>
    <extends>QTreeView</extends>
-   <header location="global">artistview.h</header>
+   <header location="global">ArtistView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

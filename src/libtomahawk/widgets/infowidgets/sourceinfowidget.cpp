@@ -22,18 +22,18 @@
 #include "Source.h"
 #include "ViewManager.h"
 
-#include "playlist/albummodel.h"
-#include "playlist/collectionflatmodel.h"
+#include "playlist/AlbumModel.h"
+#include "playlist/CollectionFlatModel.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_allalbums.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 
 
 SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent )

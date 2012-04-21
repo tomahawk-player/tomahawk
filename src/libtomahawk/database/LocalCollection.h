@@ -20,7 +20,7 @@
 #ifndef LOCALCOLLECTION_H
 #define LOCALCOLLECTION_H
 
-#include "databasecollection.h"
+#include "DatabaseCollection.h"
 #include "DllMacro.h"
 #include "Playlist.h"
 

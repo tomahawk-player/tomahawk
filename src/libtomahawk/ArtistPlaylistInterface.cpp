@@ -22,7 +22,7 @@
 #include "Artist.h"
 #include "Collection.h"
 #include "Query.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_alltracks.h"
 
 #include "utils/logger.h"

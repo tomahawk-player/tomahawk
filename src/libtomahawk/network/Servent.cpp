@@ -33,7 +33,7 @@
 #include "BufferIoDevice.h"
 #include "Connection.h"
 #include "ControlConnection.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "StreamConnection.h"
 #include "SourceList.h"
 

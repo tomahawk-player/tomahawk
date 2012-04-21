@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_LOADALLSORTEDPLAYLISTS_H
 #define DATABASECOMMAND_LOADALLSORTEDPLAYLISTS_H
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "databasecommand_loadallplaylists.h"
 
 /**

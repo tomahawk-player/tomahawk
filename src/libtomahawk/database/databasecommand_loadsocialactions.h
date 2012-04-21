@@ -21,7 +21,7 @@
 
 #include <QDateTime>
 #include <QList>
-#include "database/databasecommand.h"
+#include "database/DatabaseCommand.h"
 
 #include "SourceList.h"
 #include "Typedefs.h"

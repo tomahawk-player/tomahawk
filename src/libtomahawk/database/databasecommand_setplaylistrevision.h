@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_SETPLAYLISTREVISION_H
 #define DATABASECOMMAND_SETPLAYLISTREVISION_H
 
-#include "databasecommandloggable.h"
+#include "DatabaseCommandLoggable.h"
 #include "Playlist.h"
 #include "qjson/qobjecthelper.h"
 

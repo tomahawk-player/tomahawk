@@ -20,7 +20,7 @@
 #ifndef DYNAMIC_VIEW_H
 #define DYNAMIC_VIEW_H
 
-#include "playlist/playlistview.h"
+#include "playlist/PlaylistView.h"
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QTimeLine>

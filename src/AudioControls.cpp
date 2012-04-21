@@ -25,8 +25,8 @@
 #include <QtGui/QMouseEvent>
 
 #include "audio/audioengine.h"
-#include "playlist/playlistview.h"
-#include "database/database.h"
+#include "playlist/PlaylistView.h"
+#include "database/Database.h"
 #include "widgets/imagebutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

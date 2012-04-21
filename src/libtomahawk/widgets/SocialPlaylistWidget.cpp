@@ -21,13 +21,13 @@
 #include "ui_SocialPlaylistWidget.h"
 
 #include "database/databasecommand_loaddynamicplaylist.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "SourceList.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/database/DatabaseGenerator.h"
 #include "utils/logger.h"
 #include "database/databasecommand_genericselect.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 
 using namespace Tomahawk;
 

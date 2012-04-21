@@ -24,7 +24,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QVariantMap>
 
-#include "database/databasecommandloggable.h"
+#include "database/DatabaseCommandLoggable.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"

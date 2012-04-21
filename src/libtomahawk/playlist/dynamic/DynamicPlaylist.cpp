@@ -21,8 +21,8 @@
 
 #include "SourceList.h"
 #include "GeneratorFactory.h"
-#include "database/database.h"
-#include "database/databasecommand.h"
+#include "database/Database.h"
+#include "database/DatabaseCommand.h"
 #include "database/databasecommand_createdynamicplaylist.h"
 #include "database/databasecommand_setdynamicplaylistrevision.h"
 #include "database/databasecommand_loaddynamicplaylistentries.h"

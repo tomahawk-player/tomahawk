@@ -23,7 +23,7 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 #include "PlaylistInterface.h"
-#include "treeproxymodel.h"
+#include "TreeProxyModel.h"
 #include "Result.h"
 
 #include <QObject>

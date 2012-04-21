@@ -24,7 +24,7 @@
 #include "SourceList.h"
 #include "utils/logger.h"
 #include "dynamic/DynamicPlaylist.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_loadallsortedplaylists.h"
 #include "RecentlyPlayedPlaylistsModel.h"
 #include <network/Servent.h>

@@ -20,7 +20,7 @@
 #include "ControlConnection.h"
 
 #include "StreamConnection.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_collectionstats.h"
 #include "DbSyncConnection.h"
 #include "SourceList.h"

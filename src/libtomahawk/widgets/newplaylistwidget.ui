@@ -77,7 +77,7 @@
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
-   <header>playlist/playlistview.h</header>
+   <header>playlist/PlaylistView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

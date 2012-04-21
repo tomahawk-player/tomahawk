@@ -28,7 +28,7 @@
 #include <QUdpSocket>
 #include <QTimer>
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "network/Servent.h"
 #include "accounts/AccountDllMacro.h"
 

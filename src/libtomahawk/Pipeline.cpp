@@ -21,7 +21,7 @@
 #include <QMutexLocker>
 
 #include "FuncTimeout.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "ExternalResolver.h"
 #include "resolvers/scriptresolver.h"
 #include "resolvers/qtscriptresolver.h"

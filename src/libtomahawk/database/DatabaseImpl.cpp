@@ -26,7 +26,7 @@
 #include <QtAlgorithms>
 #include <QFile>
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "databasecommand_updatesearchindex.h"
 #include "SourceList.h"
 #include "Result.h"
@@ -35,11 +35,11 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-/* !!!! You need to manually generate schema.sql.h when the schema changes:
+/* !!!! You need to manually generate Schema.sql.h when the schema changes:
     cd src/libtomahawk/database
-   ./gen_schema.h.sh ./schema.sql tomahawk > schema.sql.h
+   ./gen_schema.h.sh ./Schema.sql tomahawk > Schema.sql.h
 */
-#include "schema.sql.h"
+#include "Schema.sql.h"
 
 #define CURRENT_SCHEMA_VERSION 28
 

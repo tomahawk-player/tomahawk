@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "DatabaseImpl.h"
-#include "tomahawksqlquery.h"
+#include "TomahawkSqlQuery.h"
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"

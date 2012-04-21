@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "Typedefs.h"
 
 namespace Tomahawk

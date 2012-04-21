@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
 
 #include "Typedefs.h"
-#include "databasecommandloggable.h"
+#include "DatabaseCommandLoggable.h"
 #include <QByteArray>
 
 class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable

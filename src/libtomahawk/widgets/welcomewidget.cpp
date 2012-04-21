@@ -29,9 +29,9 @@
 #include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"
-#include "playlist/albummodel.h"
+#include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dynamic/GeneratorInterface.h"

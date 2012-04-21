@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QDir>
 
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 
 #include "DllMacro.h"
 

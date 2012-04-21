@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_RENAMEPLAYLIST_H
 
 #include "Typedefs.h"
-#include "databasecommandloggable.h"
+#include "DatabaseCommandLoggable.h"
 
 #include "DllMacro.h"
 

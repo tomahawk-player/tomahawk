@@ -19,7 +19,7 @@
 #include "EchonestCatalogSynchronizer.h"
 
 #include "Collection.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_genericselect.h"
 #include "database/databasecommand_setcollectionattributes.h"
 #include "database/databasecommand_loadfiles.h"

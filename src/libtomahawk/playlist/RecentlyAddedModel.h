@@ -23,7 +23,7 @@
 #include <QHash>
 
 #include "Typedefs.h"
-#include "trackmodel.h"
+#include "TrackModel.h"
 
 #include "DllMacro.h"
 

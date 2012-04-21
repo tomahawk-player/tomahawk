@@ -26,9 +26,9 @@
 #include "SourceList.h"
 #include "ViewManager.h"
 #include "dynamic/widgets/LoadingSpinner.h"
-#include "playlist/albummodel.h"
-#include "playlist/playlistmodel.h"
-#include "widgets/overlaywidget.h"
+#include "playlist/AlbumModel.h"
+#include "playlist/PlaylistModel.h"
+#include "widgets/OverlayWidget.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

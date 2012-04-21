@@ -21,7 +21,7 @@
 
 #include <QtAlgorithms>
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"

@@ -25,7 +25,7 @@
 #include "Album.h"
 #include "Collection.h"
 #include "Source.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/logger.h"

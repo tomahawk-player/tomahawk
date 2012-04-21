@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_TRACKATTRIBUTES_H
 
 #include "Typedefs.h"
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 #include "databasecommand_collectionattributes.h"
 #include "databasecommand_settrackattributes.h"
 #include <QByteArray>

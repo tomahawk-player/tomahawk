@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "database/databasecommandloggable.h"
+#include "database/DatabaseCommandLoggable.h"
 #include "Typedefs.h"
 #include "Query.h"
 

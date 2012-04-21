@@ -17,7 +17,7 @@
  */
 
 #include "databasecommand_settrackattributes.h"
-#include "tomahawksqlquery.h"
+#include "TomahawkSqlQuery.h"
 #include "DatabaseImpl.h"
 
 using namespace Tomahawk;

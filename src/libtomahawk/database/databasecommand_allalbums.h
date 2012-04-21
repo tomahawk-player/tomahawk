@@ -26,7 +26,7 @@
 #include "Artist.h"
 #include "Collection.h"
 #include "Typedefs.h"
-#include "databasecommand.h"
+#include "DatabaseCommand.h"
 
 #include "DllMacro.h"
 

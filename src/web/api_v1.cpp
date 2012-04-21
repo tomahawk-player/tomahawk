@@ -25,7 +25,7 @@
 #include "utils/logger.h"
 
 #include "utils/tomahawkutils.h"
-#include "database/database.h"
+#include "database/Database.h"
 #include "database/databasecommand_addclientauth.h"
 #include "database/databasecommand_clientauthvalid.h"
 #include "network/Servent.h"

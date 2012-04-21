@@ -31,7 +31,7 @@
 
 #include "FuncTimeout.h"
 
-#include "database/database.h"
+#include "database/Database.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
 #include "SourceList.h"

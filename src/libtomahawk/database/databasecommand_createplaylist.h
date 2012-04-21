@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_CREATEPLAYLIST_H
 
 #include "Typedefs.h"
-#include "databasecommandloggable.h"
+#include "DatabaseCommandLoggable.h"
 #include "qjson/qobjecthelper.h"
 
 #include "DllMacro.h"
