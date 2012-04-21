@@ -55,6 +55,7 @@ signals:
 public slots:
     void resolved( QHostInfo i )
     {
+        qDebug() << Q_FUNC_INFO << "zeroconf-derived IP has resolved to name " << i.hostName();
         if ( i.hostName().length() )
             emit tomahawkHostFound( ip, port, i.hostName(), nid );
         else
@@ -64,6 +65,7 @@ public slots:
     
     void resolve()
     {
+        qDebug() << Q_FUNC_INFO << "Resolving zeroconf-derived IP " << ip;
         QHostInfo::lookupHost( ip, this, SLOT( resolved( QHostInfo ) ) );
     }
 
@@ -96,10 +98,17 @@ public:
 public slots:
     void advertise()
     {
-        qDebug() << "Advertising us on the LAN";
+        qDebug() << "Advertising us on the LAN (both versions)";
         QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2" )
                             .arg( m_port )
                             .arg( Database::instance()->dbid() )
+                            .toAscii();
+        m_sock.writeDatagram( advert.data(), advert.size(),
+                              QHostAddress::Broadcast, ZCONF_PORT );
+        advert = QString( "TOMAHAWKADVERT:%1:%2:%3" )
+                            .arg( m_port )
+                            .arg( Database::instance()->dbid() )
+                            .arg( QHostInfo::localHostName() )
                             .toAscii();
         m_sock.writeDatagram( advert.data(), advert.size(),
                               QHostAddress::Broadcast, ZCONF_PORT );
@@ -127,11 +136,20 @@ private slots:
             Servent::isIPWhitelisted( sender ) )
         {
             QStringList parts = QString::fromAscii( datagram ).split( ':' );
-            if ( parts.length() == 3 )
+            if ( parts.length() == 4 )
             {
                 bool ok;
                 int port = parts.at(1).toInt( &ok );
-                if(ok && Database::instance()->dbid() != parts.at( 2 ) )
+                if ( ok && Database::instance()->dbid() != parts.at( 2 ) )
+                {
+                    emit tomahawkHostFound( sender.toString(), port, parts.at( 3 ), parts.at( 2 ) );
+                }
+            }
+            else if ( parts.length() == 3 )
+            {
+                bool ok;
+                int port = parts.at(1).toInt( &ok );
+                if ( ok && Database::instance()->dbid() != parts.at( 2 ) )
                 {
                     qDebug() << "ADVERT received:" << sender << port;
                     Node *n = new Node( sender.toString(), parts.at( 2 ), port );
