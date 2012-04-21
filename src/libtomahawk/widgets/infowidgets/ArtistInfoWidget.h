@@ -32,12 +32,12 @@
 
 #include <QWidget>
 
-#include "typedefs.h"
-#include "playlistinterface.h"
-#include "viewpage.h"
+#include "Typedefs.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
 #include "infosystem/infosystem.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class PlaylistModel;
 class TreeModel;

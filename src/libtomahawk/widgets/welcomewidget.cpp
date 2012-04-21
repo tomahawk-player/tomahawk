@@ -23,9 +23,9 @@
 
 #include <QtGui/QPainter>
 
-#include "viewmanager.h"
-#include "sourcelist.h"
-#include "tomahawksettings.h"
+#include "ViewManager.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"

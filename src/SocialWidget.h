@@ -23,7 +23,7 @@
 #include <QAbstractItemView>
 #include <QTimer>
 
-#include "query.h"
+#include "Query.h"
 
 namespace Ui
 {

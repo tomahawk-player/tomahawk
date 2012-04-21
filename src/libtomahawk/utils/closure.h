@@ -18,7 +18,7 @@
 #ifndef CLOSURE_H
 #define CLOSURE_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <tr1/functional>
 

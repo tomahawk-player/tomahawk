@@ -12,8 +12,8 @@ set( xmppAccountSources
     sip/XmppSip.cpp
     sip/TomahawkXmppMessage.cpp
     sip/TomahawkXmppMessageFactory.cpp
-    sip/avatarmanager.cpp
-    sip/xmlconsole.cpp
+    sip/AvatarManager.cpp
+    sip/XmlConsole.cpp
     XmppInfoPlugin.cpp
 )
 
@@ -21,14 +21,14 @@ set( xmppAccountHeaders
     XmppAccount.h
     XmppConfigWidget.h
     sip/XmppSip.h
-    sip/avatarmanager.h
-    sip/xmlconsole.h
+    sip/AvatarManager.h
+    sip/XmlConsole.h
     XmppInfoPlugin.h
 )
 
 set( xmppAccountUI
     XmppConfigWidget.ui
-    sip/xmlconsole.ui
+    sip/XmlConsole.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..

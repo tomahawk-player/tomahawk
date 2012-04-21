@@ -22,10 +22,10 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_ModifyPlaylist : public DatabaseCommand
 {

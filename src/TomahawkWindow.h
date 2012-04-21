@@ -27,7 +27,7 @@
 #include <QString>
 #include <QStackedWidget>
 
-#include "result.h"
+#include "Result.h"
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 

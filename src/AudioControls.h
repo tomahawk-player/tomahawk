@@ -24,9 +24,9 @@
 #include <QtCore/QTimer>
 #include <QtCore/QTimeLine>
 
-#include "result.h"
-#include "playlistinterface.h"
-#include "query.h"
+#include "Result.h"
+#include "PlaylistInterface.h"
+#include "Query.h"
 
 class QDropEvent;
 class QDragEnterEvent;

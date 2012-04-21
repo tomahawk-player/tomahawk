@@ -20,12 +20,12 @@
 
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
-#include "network/streamconnection.h"
-#include "network/servent.h"
+#include "network/StreamConnection.h"
+#include "network/Servent.h"
 #include "utils/tomahawkutils.h"
-#include "result.h"
+#include "Result.h"
 #include "Source.h"
-#include "artist.h"
+#include "Artist.h"
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )

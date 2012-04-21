@@ -22,10 +22,10 @@
 #include <QList>
 #include <QHash>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "trackmodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT RecentlyAddedModel : public TrackModel
 {

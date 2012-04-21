@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawkxmppmessagefactory.h"
+#include "TomahawkXmppMessageFactory.h"
 
 #include <QStringList>
 #include <QXmlStreamWriter>

@@ -22,7 +22,7 @@
 #ifndef SIPPLUGIN_H
 #define SIPPLUGIN_H
 
-#include "sipinfo.h"
+#include "SipInfo.h"
 
 #include <QObject>
 #include <QString>
@@ -33,7 +33,7 @@
     #include <QMenu>
 #endif
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class SipPlugin;
 

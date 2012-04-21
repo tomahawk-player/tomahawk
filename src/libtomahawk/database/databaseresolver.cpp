@@ -18,8 +18,8 @@
 
 #include "databaseresolver.h"
 
-#include "pipeline.h"
-#include "network/servent.h"
+#include "Pipeline.h"
+#include "network/Servent.h"
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
 

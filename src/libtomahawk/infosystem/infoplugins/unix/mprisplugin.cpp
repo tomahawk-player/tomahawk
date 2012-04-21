@@ -23,11 +23,11 @@
 
 #include "audio/audioengine.h"
 #include "infosystem/infosystemworker.h"
-#include "album.h"
-#include "artist.h"
-#include "result.h"
-#include "tomahawksettings.h"
-#include "globalactionmanager.h"
+#include "Album.h"
+#include "Artist.h"
+#include "Result.h"
+#include "TomahawkSettings.h"
+#include "GlobalActionManager.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 

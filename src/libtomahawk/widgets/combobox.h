@@ -22,7 +22,7 @@
 #include <QComboBox>
 #include <QPaintEvent>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class ComboBox

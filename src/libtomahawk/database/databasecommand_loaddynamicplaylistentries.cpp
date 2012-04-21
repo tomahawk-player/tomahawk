@@ -21,7 +21,7 @@
 #include <QSqlQuery>
 #include <QString>
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"

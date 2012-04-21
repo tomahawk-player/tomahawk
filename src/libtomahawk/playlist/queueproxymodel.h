@@ -22,7 +22,7 @@
 
 #include "playlistproxymodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMetaData;
 class TrackView;

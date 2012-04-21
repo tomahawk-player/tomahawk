@@ -19,7 +19,7 @@
 #ifndef TAG_H
 #define TAG_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QtCore/QString>
 

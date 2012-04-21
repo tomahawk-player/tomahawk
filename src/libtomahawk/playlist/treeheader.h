@@ -20,7 +20,7 @@
 #define TREEHEADER_H
 
 #include "ViewHeader.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class ArtistView;
 

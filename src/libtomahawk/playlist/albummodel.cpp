@@ -23,10 +23,10 @@
 #include <QMimeData>
 #include <QNetworkReply>
 
-#include "artist.h"
+#include "Artist.h"
 #include "albumitem.h"
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

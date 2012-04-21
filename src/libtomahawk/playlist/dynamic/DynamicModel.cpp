@@ -20,8 +20,8 @@
 #include "playlist/dynamic/DynamicModel.h"
 
 #include "GeneratorInterface.h"
-#include "pipeline.h"
-#include "query.h"
+#include "Pipeline.h"
+#include "Query.h"
 #include "Source.h"
 #include "audio/audioengine.h"
 

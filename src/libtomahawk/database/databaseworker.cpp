@@ -25,7 +25,7 @@
 
 #include "Source.h"
 #include "database.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "databasecommandloggable.h"
 #include "tomahawksqlquery.h"
 #include "utils/logger.h"

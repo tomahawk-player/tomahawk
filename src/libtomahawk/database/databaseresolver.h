@@ -20,11 +20,11 @@
 #define DATABASERESOLVER_H
 
 #include "Resolver.h"
-#include "result.h"
-#include "artist.h"
-#include "album.h"
+#include "Result.h"
+#include "Artist.h"
+#include "Album.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseResolver : public Tomahawk::Resolver
 {

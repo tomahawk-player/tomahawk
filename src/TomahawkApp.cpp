@@ -30,9 +30,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 
-#include "artist.h"
-#include "album.h"
-#include "collection.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Collection.h"
 #include "infosystem/infosystem.h"
 #include "accounts/AccountManager.h"
 #include "accounts/spotify/SpotifyAccount.h"
@@ -45,17 +45,17 @@
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "playlist/XspfUpdater.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "web/api_v1.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "ShortcutHandler.h"
 #include "ScanManager.h"
-#include "tomahawksettings.h"
-#include "globalactionmanager.h"
-#include "database/localcollection.h"
+#include "TomahawkSettings.h"
+#include "GlobalActionManager.h"
+#include "database/LocalCollection.h"
 #include "MusicScanner.h"
-#include "pipeline.h"
-#include "dropjob.h"
+#include "Pipeline.h"
+#include "DropJob.h"
 #include "EchonestCatalogSynchronizer.h"
 
 #include "audio/audioengine.h"
@@ -77,7 +77,7 @@
     #include "AtticaManager.h"
     #include "TomahawkWindow.h"
     #include "SettingsDialog.h"
-    #include "actioncollection.h"
+    #include "ActionCollection.h"
     #include <QtGui/QMessageBox>
     #include "widgets/HeaderLabel.h"
     #include <TomahawkSettingsGui.h>

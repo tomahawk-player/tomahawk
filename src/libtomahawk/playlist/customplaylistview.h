@@ -22,7 +22,7 @@
 
 #include "playlistview.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

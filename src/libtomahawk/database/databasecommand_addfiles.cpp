@@ -20,14 +20,14 @@
 
 #include <QSqlQuery>
 
-#include "artist.h"
-#include "album.h"
-#include "collection.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Collection.h"
 #include "database/database.h"
-#include "databaseimpl.h"
-#include "network/dbsyncconnection.h"
-#include "network/servent.h"
-#include "sourcelist.h"
+#include "DatabaseImpl.h"
+#include "network/DbSyncConnection.h"
+#include "network/Servent.h"
+#include "SourceList.h"
 
 #include "utils/logger.h"
 

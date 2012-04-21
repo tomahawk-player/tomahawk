@@ -21,7 +21,7 @@
 #define QTSCRIPTRESOLVER_H
 
 #include "ExternalResolverGui.h"
-#include "query.h"
+#include "Query.h"
 #include "utils/tomahawkutils.h"
 #include "config.h"
 
@@ -35,7 +35,7 @@
 #include <QtCrypto>
 #endif
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QtScriptResolver;
 

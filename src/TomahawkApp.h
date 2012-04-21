@@ -36,7 +36,7 @@
 #include "QxtHttpSessionManager"
 
 #include "mac/tomahawkapp_mac.h" // for PlatforInterface
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "utils/tomahawkutils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 

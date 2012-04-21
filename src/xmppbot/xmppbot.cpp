@@ -20,9 +20,9 @@
 #include "xmppbot.h"
 
 #include "infosystem/infosystem.h"
-#include "album.h"
-#include "typedefs.h"
-#include "tomahawksettings.h"
+#include "Album.h"
+#include "Typedefs.h"
+#include "TomahawkSettings.h"
 
 #include "audio/audioengine.h"
 

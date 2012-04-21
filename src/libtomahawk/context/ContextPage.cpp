@@ -20,7 +20,7 @@
 
 #include <QGraphicsLinearLayout>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "utils/stylehelper.h"
 
 using namespace Tomahawk;

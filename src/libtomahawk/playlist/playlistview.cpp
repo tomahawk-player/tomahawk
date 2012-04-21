@@ -24,7 +24,7 @@
 
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "utils/logger.h"
 #include "PlaylistUpdaterInterface.h"
 

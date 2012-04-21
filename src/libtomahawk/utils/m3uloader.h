@@ -22,10 +22,10 @@
 
 
 #include <QtCore/QFileInfo>
-#include "dllmacro.h"
-#include "typedefs.h"
-#include "query.h"
-#include "playlist.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
+#include "Query.h"
+#include "Playlist.h"
 #include <QObject>
 #include <QSet>
 #include <QtCore/QStringList>

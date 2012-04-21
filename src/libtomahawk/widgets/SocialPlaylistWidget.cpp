@@ -22,7 +22,7 @@
 
 #include "database/databasecommand_loaddynamicplaylist.h"
 #include "database/database.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/database/DatabaseGenerator.h"
 #include "utils/logger.h"

@@ -20,7 +20,7 @@
 #define EXTERNALRESOLVERGUI_H
 
 #include "ExternalResolver.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QWidget;
 

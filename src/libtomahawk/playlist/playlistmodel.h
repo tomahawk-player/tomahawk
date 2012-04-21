@@ -22,13 +22,13 @@
 #include <QList>
 #include <QHash>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "trackmodel.h"
-#include "playlist.h"
-#include "query.h"
-#include "playlistinterface.h"
+#include "Playlist.h"
+#include "Query.h"
+#include "PlaylistInterface.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMimeData;
 class QMetaData;

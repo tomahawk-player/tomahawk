@@ -23,11 +23,11 @@
 #include <QSharedPointer>
 #include <QVariant>
 
-#include "artist.h"
-#include "album.h"
+#include "Artist.h"
+#include "Album.h"
 #include "databasecommand.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DatabaseImpl;
 class DatabaseWorker;

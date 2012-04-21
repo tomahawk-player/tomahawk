@@ -21,11 +21,11 @@
 
 #include <QDir>
 
-#include "collection.h"
+#include "Collection.h"
 #include "Source.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCollection : public Tomahawk::Collection
 {

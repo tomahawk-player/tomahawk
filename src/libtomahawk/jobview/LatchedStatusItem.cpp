@@ -19,7 +19,7 @@
 #include "LatchedStatusItem.h"
 
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
 #include "utils/tomahawkutils.h"

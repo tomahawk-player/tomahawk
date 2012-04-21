@@ -20,7 +20,7 @@
 #ifndef LATCHMANAGER_H
 #define LATCHMANAGER_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 #include "Source.h"
 
 #include <QtCore/QObject>

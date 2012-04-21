@@ -20,10 +20,10 @@
 #ifndef ALBUMPROXYMODELPLAYLISTINTERFACE_H
 #define ALBUMPROXYMODELPLAYLISTINTERFACE_H
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "playlist/albummodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AlbumProxyModel;
 

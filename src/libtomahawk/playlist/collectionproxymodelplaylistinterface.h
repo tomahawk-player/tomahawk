@@ -23,7 +23,7 @@
 #include "trackproxymodel.h"
 #include "trackproxymodelplaylistinterface.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class CollectionProxyModel;
 

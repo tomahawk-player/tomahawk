@@ -20,7 +20,7 @@
 #define DATABASECOMMANDLOGGABLE_H
 
 #include "database/databasecommand.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /// A Database Command that will be added to the oplog and sent over the network
 /// so peers can sync up and changes to our collection in their cached copy.

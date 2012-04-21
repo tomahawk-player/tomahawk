@@ -19,11 +19,11 @@
 #ifndef DATABASECOMMAND_CREATEPLAYLIST_H
 #define DATABASECOMMAND_CREATEPLAYLIST_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommandloggable.h"
 #include "qjson/qobjecthelper.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_CreatePlaylist : public DatabaseCommandLoggable
 {

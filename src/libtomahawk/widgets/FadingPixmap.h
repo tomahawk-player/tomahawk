@@ -27,7 +27,7 @@
 #include <QTimeLine>
 #include <QWeakPointer>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class FadingPixmap

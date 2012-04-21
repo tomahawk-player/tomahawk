@@ -24,10 +24,10 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
-#include "artist.h"
-#include "album.h"
+#include "Artist.h"
+#include "Album.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT AlbumItem : public QObject
 {

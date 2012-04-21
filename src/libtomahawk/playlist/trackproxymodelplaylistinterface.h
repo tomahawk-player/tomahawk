@@ -22,10 +22,10 @@
 
 #include <QtGui/QSortFilterProxyModel>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "playlist/trackmodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class TrackProxyModel;
 

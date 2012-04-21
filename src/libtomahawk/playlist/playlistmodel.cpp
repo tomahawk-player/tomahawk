@@ -22,15 +22,15 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "artist.h"
-#include "album.h"
-#include "pipeline.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
-#include "dropjob.h"
+#include "DropJob.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

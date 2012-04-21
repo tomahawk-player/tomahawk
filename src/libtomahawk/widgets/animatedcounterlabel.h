@@ -25,7 +25,7 @@
 #include <QEasingCurve>
 #include <cmath>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT AnimatedCounterLabel : public QLabel
 {

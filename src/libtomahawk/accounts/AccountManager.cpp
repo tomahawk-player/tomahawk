@@ -19,7 +19,7 @@
 
 #include "AccountManager.h"
 #include "config.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "ResolverAccount.h"
 
 #include <QtCore/QLibrary>

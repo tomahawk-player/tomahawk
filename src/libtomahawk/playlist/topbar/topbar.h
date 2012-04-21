@@ -23,9 +23,9 @@
 #include <QLabel>
 #include <QList>
 
-#include "viewmanager.h"
-#include "sourcelist.h"
-#include "dllmacro.h"
+#include "ViewManager.h"
+#include "SourceList.h"
+#include "DllMacro.h"
 
 namespace Ui
 {

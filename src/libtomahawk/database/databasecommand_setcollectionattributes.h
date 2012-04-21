@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
 #define DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommandloggable.h"
 #include <QByteArray>
 

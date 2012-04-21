@@ -20,9 +20,9 @@
 
 #include <QSqlQuery>
 
-#include "tomahawk/query.h"
-#include "tomahawk/playlist.h"
-#include "databaseimpl.h"
+#include "tomahawk/Query.h"
+#include "tomahawk/Playlist.h"
+#include "DatabaseImpl.h"
 #include "utils/logger.h"
 
 

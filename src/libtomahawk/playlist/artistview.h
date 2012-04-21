@@ -25,11 +25,11 @@
 #include <QtCore/QTimer>
 
 #include "treeproxymodel.h"
-#include "viewpage.h"
+#include "ViewPage.h"
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

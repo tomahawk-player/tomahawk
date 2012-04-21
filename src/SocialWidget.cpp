@@ -23,7 +23,7 @@
 #include <QDialog>
 #include <QPropertyAnimation>
 
-#include "globalactionmanager.h"
+#include "GlobalActionManager.h"
 #include "utils/logger.h"
 
 #define CORNER_ROUNDNESS 8.0

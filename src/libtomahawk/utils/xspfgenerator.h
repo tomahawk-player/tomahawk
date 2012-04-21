@@ -20,7 +20,7 @@
 #ifndef XSPFGENERATOR_H
 #define XSPFGENERATOR_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 
 #include <QtCore/qobject.h>
 

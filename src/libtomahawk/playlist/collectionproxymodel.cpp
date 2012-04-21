@@ -23,8 +23,8 @@
 
 #include <QTreeView>
 
-#include "album.h"
-#include "query.h"
+#include "Album.h"
+#include "Query.h"
 #include "utils/logger.h"
 
 

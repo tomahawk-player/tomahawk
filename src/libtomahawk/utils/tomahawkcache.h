@@ -19,7 +19,7 @@
 #ifndef TOMAHAWKCACHE_H
 #define TOMAHAWKCACHE_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 #include "utils/tomahawkutils.h"
 
 #include <QMutex>

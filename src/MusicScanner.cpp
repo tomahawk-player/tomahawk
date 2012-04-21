@@ -22,8 +22,8 @@
 #include <QtCore/QCoreApplication>
 
 #include "utils/tomahawkutils.h"
-#include "tomahawksettings.h"
-#include "sourcelist.h"
+#include "TomahawkSettings.h"
+#include "SourceList.h"
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
 #include "database/databasecommand_filemtimes.h"

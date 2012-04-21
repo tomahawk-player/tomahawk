@@ -20,9 +20,9 @@
 #ifndef PIXMAPDELEGATEFADER_H
 #define PIXMAPDELEGATEFADER_H
 
-#include "artist.h"
-#include "album.h"
-#include "query.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
 
 #include <QObject>
 #include <QTimeLine>

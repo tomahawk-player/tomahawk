@@ -24,8 +24,8 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
-#include "typedefs.h"
-#include "dllmacro.h"
+#include "Typedefs.h"
+#include "DllMacro.h"
 
 class DLLEXPORT TreeModelItem : public QObject
 {

@@ -21,10 +21,10 @@
 
 #include <QSqlQuery>
 
-#include "collection.h"
+#include "Collection.h"
 #include "database/database.h"
-#include "databaseimpl.h"
-#include "network/servent.h"
+#include "DatabaseImpl.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 
 #define STARTED_THRESHOLD 600   // Don't advertise tracks older than X seconds as currently playing

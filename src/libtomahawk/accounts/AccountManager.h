@@ -22,8 +22,8 @@
 
 #include <QtCore/QObject>
 
-#include "typedefs.h"
-#include "dllmacro.h"
+#include "Typedefs.h"
+#include "DllMacro.h"
 #include "infosystem/infosystem.h"
 #include "sip/SipPlugin.h"
 #include "Account.h"

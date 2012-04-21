@@ -35,13 +35,13 @@
 #include <QTimer>
 #include <QToolBar>
 
-#include "playlist.h"
-#include "query.h"
-#include "artist.h"
-#include "viewmanager.h"
+#include "Playlist.h"
+#include "Query.h"
+#include "Artist.h"
+#include "ViewManager.h"
 #include "accounts/AccountManager.h"
 #include "sourcetree/sourcetreeview.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/proxystyle.h"
 #include "widgets/animatedsplitter.h"
 #include "widgets/newplaylistwidget.h"
@@ -56,8 +56,8 @@
 #include "AudioControls.h"
 #include "SettingsDialog.h"
 #include "DiagnosticsDialog.h"
-#include "tomahawksettings.h"
-#include "sourcelist.h"
+#include "TomahawkSettings.h"
+#include "SourceList.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
@@ -72,7 +72,7 @@
 #include "utils/logger.h"
 #include "jobview/JobStatusModel.h"
 #include "LoadXSPFDialog.h"
-#include <actioncollection.h>
+#include <ActionCollection.h>
 
 using namespace Tomahawk;
 using namespace Accounts;

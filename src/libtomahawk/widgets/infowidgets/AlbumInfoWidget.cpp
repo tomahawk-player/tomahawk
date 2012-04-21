@@ -22,7 +22,7 @@
 #include "ui_AlbumInfoWidget.h"
 
 #include "audio/audioengine.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "database/database.h"
 #include "playlist/treemodel.h"
 #include "playlist/albummodel.h"

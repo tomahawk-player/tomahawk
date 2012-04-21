@@ -17,10 +17,10 @@
  */
 
 #include "databasecommand_loadallsortedplaylists.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 
-#include "playlist.h"
-#include <libtomahawk/sourcelist.h>
+#include "Playlist.h"
+#include <libtomahawk/SourceList.h>
 
 using namespace Tomahawk;
 

@@ -23,13 +23,13 @@
 #include "config.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "dropjob.h"
+#include "DropJob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "dropjobnotifier.h"
-#include "viewmanager.h"
-#include "sourcelist.h"
+#include "ViewManager.h"
+#include "SourceList.h"
 
 #include <qjson/parser.h>
 #include <QDateTime>

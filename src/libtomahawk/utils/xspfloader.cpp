@@ -33,10 +33,10 @@
 #include "jobview/ErrorStatusMessage.h"
 #endif
 
-#include "sourcelist.h"
-#include "playlist.h"
+#include "SourceList.h"
+#include "Playlist.h"
 #include <XspfUpdater.h>
-#include <pipeline.h>
+#include <Pipeline.h>
 
 using namespace Tomahawk;
 

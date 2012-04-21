@@ -21,9 +21,9 @@
 #include <QSqlQuery>
 
 #include "database/database.h"
-#include "databaseimpl.h"
-#include "network/servent.h"
-#include "result.h"
+#include "DatabaseImpl.h"
+#include "network/Servent.h"
+#include "Result.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

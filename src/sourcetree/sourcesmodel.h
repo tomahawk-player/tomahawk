@@ -25,7 +25,7 @@
 #include <QModelIndex>
 #include <QStringList>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "Source.h"
 
 class QMimeData;

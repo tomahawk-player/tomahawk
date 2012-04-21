@@ -20,14 +20,14 @@
 #define DATABASECOMMAND_RESOLVE_H
 
 #include "databasecommand.h"
-#include "databaseimpl.h"
-#include "result.h"
-#include "artist.h"
-#include "album.h"
+#include "DatabaseImpl.h"
+#include "Result.h"
+#include "Artist.h"
+#include "Album.h"
 
 #include <QVariant>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 {

@@ -22,11 +22,11 @@
 
 #include <QGraphicsProxyWidget>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
-#include "artist.h"
-#include "album.h"
-#include "query.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
 #include "WebContext.h"
 
 class DLLEXPORT WikipediaContext : public WebContext

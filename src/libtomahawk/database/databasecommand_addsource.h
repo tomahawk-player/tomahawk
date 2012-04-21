@@ -24,7 +24,7 @@
 
 #include "databasecommand.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_addSource : public DatabaseCommand
 {

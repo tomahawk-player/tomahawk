@@ -20,7 +20,7 @@
 #include "databasecommand_modifyplaylist.h"
 
 #include "utils/logger.h"
-#include "playlist.h"
+#include "Playlist.h"
 
 using namespace Tomahawk;
 

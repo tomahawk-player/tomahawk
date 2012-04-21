@@ -23,11 +23,11 @@
 #include <QList>
 #include "database/databasecommand.h"
 
-#include "sourcelist.h"
-#include "typedefs.h"
-#include "artist.h"
+#include "SourceList.h"
+#include "Typedefs.h"
+#include "Artist.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class DatabaseCommand_LoadSocialActions

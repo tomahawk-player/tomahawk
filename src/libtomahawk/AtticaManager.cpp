@@ -20,7 +20,7 @@
 
 #include "utils/tomahawkutils.h"
 #include "TomahawkSettingsGui.h"
-#include "pipeline.h"
+#include "Pipeline.h"
 
 #include <attica/downloaditem.h>
 #include <quazip.h>

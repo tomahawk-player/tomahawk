@@ -22,7 +22,7 @@
 
 #include "trackproxymodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT PlaylistProxyModel : public TrackProxyModel
 {

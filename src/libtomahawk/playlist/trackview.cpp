@@ -24,7 +24,7 @@
 #include <QScrollBar>
 
 #include "trackheader.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 #include "audio/audioengine.h"
@@ -34,9 +34,9 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "utils/closure.h"
-#include "dropjob.h"
-#include "artist.h"
-#include "album.h"
+#include "DropJob.h"
+#include "Artist.h"
+#include "Album.h"
 
 #define SCROLL_TIMEOUT 280
 

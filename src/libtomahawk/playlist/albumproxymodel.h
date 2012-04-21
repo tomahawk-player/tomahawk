@@ -22,10 +22,10 @@
 
 #include <QSortFilterProxyModel>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "playlist/albummodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT AlbumProxyModel : public QSortFilterProxyModel
 {

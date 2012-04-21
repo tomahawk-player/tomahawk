@@ -24,9 +24,9 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "playlist.h"
+#include "Playlist.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_LoadPlaylistEntries : public DatabaseCommand
 {

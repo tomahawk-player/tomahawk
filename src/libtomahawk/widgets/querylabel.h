@@ -23,10 +23,10 @@
 #include <QTime>
 #include <QPen>
 
-#include "result.h"
-#include "query.h"
-#include "typedefs.h"
-#include "dllmacro.h"
+#include "Result.h"
+#include "Query.h"
+#include "Typedefs.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

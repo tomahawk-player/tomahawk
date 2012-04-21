@@ -23,9 +23,9 @@
 
 #include "treeproxymodelplaylistinterface.h"
 #include "Source.h"
-#include "query.h"
+#include "Query.h"
 #include "database/database.h"
-#include "database/databaseimpl.h"
+#include "database/DatabaseImpl.h"
 #include "database/databasecommand_allalbums.h"
 #include "utils/logger.h"
 

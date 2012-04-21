@@ -21,13 +21,13 @@
 
 #include <QtSql/QSqlQuery>
 
-#include "artist.h"
-#include "album.h"
-#include "collection.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Collection.h"
 #include "Source.h"
 #include "database/database.h"
-#include "database/databaseimpl.h"
-#include "network/servent.h"
+#include "database/DatabaseImpl.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 

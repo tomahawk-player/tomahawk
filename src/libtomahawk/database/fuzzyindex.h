@@ -25,7 +25,7 @@
 #include <QString>
 #include <QMutex>
 
-#include "query.h"
+#include "Query.h"
 
 namespace lucene
 {

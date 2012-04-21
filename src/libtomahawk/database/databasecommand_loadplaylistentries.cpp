@@ -20,8 +20,8 @@
 
 #include <QSqlQuery>
 
-#include "databaseimpl.h"
-#include "query.h"
+#include "DatabaseImpl.h"
+#include "Query.h"
 #include "qjson/parser.h"
 #include "utils/logger.h"
 

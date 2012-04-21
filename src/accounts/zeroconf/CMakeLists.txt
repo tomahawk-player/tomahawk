@@ -7,21 +7,21 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( zeroconfSources
-        zeroconf.cpp
-        zeroconfaccount.cpp
+        Zeroconf.cpp
+        ZeroconfAccount.cpp
 )
 
 set( zeroconfHeaders
-	zeroconf.h
-	tomahawkzeroconf.h
-	zeroconfaccount.h
+	Zeroconf.h
+	TomahawkZeroconf.h
+	ZeroconfAccount.h
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
 )
 
-qt4_wrap_ui( UI_SRCS configwidget.ui )
+qt4_wrap_ui( UI_SRCS ConfigWidget.ui )
 qt4_add_resources( RC_SRCS "resources.qrc" )
 qt4_wrap_cpp( zeroconfMoc ${zeroconfHeaders} )
 add_library( tomahawk_account_zeroconf SHARED ${zeroconfSources} ${zeroconfMoc} ${RC_SRCS} ${UI_SRCS} )

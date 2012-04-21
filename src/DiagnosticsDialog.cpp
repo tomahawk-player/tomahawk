@@ -23,8 +23,8 @@
 #include "config.h"
 
 #include <sip/SipHandler.h>
-#include <network/servent.h>
-#include <sourcelist.h>
+#include <network/Servent.h>
+#include <SourceList.h>
 
 #include <QTextEdit>
 #include <QDialogButtonBox>

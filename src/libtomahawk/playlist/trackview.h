@@ -24,10 +24,10 @@
 #include <QtGui/QSortFilterProxyModel>
 #include <QtCore/QTimer>
 
-#include "contextmenu.h"
+#include "ContextMenu.h"
 #include "playlistitemdelegate.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QAction;
 class LoadingSpinner;

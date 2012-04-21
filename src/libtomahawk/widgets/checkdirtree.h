@@ -20,7 +20,7 @@
 #ifndef CHECKDIRTREE_H
 #define CHECKDIRTREE_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QFileSystemModel>
 #include <QTreeView>

@@ -27,12 +27,12 @@
 
 #include "audio/audioengine.h"
 #include "context/ContextWidget.h"
-#include "tomahawksettings.h"
-#include "artist.h"
+#include "TomahawkSettings.h"
+#include "Artist.h"
 #include "albumitem.h"
 #include "albumitemdelegate.h"
 #include "albummodel.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "utils/logger.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 

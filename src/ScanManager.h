@@ -20,7 +20,7 @@
 #ifndef SCANMANAGER_H
 #define SCANMANAGER_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QMap>

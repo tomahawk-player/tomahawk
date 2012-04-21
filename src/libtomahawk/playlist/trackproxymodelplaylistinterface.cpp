@@ -20,9 +20,9 @@
 #include "trackproxymodelplaylistinterface.h"
 
 #include "trackproxymodel.h"
-#include "artist.h"
-#include "album.h"
-#include "query.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

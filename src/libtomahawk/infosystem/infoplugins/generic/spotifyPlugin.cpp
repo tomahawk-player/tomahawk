@@ -25,10 +25,10 @@
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
 
-#include "album.h"
-#include "typedefs.h"
+#include "Album.h"
+#include "Typedefs.h"
 #include "audio/audioengine.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "chartsplugin_data_p.h"

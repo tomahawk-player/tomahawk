@@ -5,10 +5,10 @@ set( googleHeaders
     ../XmppAccount.h
     ../XmppConfigWidget.h
     ../sip/XmppSip.h
-    ../sip/avatarmanager.h
-    ../sip/xmlconsole.h
+    ../sip/AvatarManager.h
+    ../sip/XmlConsole.h
     ../XmppInfoPlugin.h
-    googlewrapper.h )
+    GoogleWrapper.h )
 
 set( googleSources
     ../XmppAccount.cpp
@@ -16,11 +16,11 @@ set( googleSources
     ../sip/XmppSip.cpp
     ../sip/TomahawkXmppMessage.cpp
     ../sip/TomahawkXmppMessageFactory.cpp
-    ../sip/avatarmanager.cpp
-    ../sip/xmlconsole.cpp
+    ../sip/AvatarManager.cpp
+    ../sip/XmlConsole.cpp
     ../XmppInfoPlugin.cpp
 
-    googlewrapper.cpp )
+    GoogleWrapper.cpp )
 
 add_definitions(-DGOOGLE_WRAPPER)
 

@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawkxmppmessage.h"
+#include "TomahawkXmppMessage.h"
 
 #include "utils/logger.h"
 

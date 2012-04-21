@@ -23,9 +23,9 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_LoadAllSources : public DatabaseCommand
 {

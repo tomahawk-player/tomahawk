@@ -21,7 +21,7 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "audio/audioengine.h"
 
 using namespace Tomahawk;

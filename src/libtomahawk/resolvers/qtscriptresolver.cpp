@@ -19,13 +19,13 @@
 
 #include "qtscriptresolver.h"
 
-#include "artist.h"
-#include "album.h"
+#include "Artist.h"
+#include "Album.h"
 #include "config.h"
-#include "pipeline.h"
-#include "sourcelist.h"
+#include "Pipeline.h"
+#include "SourceList.h"
 
-#include "network/servent.h"
+#include "network/Servent.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

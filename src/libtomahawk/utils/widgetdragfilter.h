@@ -23,7 +23,7 @@
 #include <QPoint>
 #include <QWidget>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMouseEvent;
 class QEvent;

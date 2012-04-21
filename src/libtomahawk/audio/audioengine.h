@@ -29,11 +29,11 @@
 
 #include "libtomahawk/infosystem/infosystem.h"
 
-#include "result.h"
-#include "typedefs.h"
-#include "playlistinterface.h"
+#include "Result.h"
+#include "Typedefs.h"
+#include "PlaylistInterface.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #define AUDIO_VOLUME_STEP 5
 

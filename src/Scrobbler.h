@@ -21,7 +21,7 @@
 #define TOMAHAWK_SCROBBLER_H
 
 #include "lastfm/ScrobblePoint"
-#include "result.h"
+#include "Result.h"
 #include "infosystem/infosystem.h"
 
 #include <QObject>

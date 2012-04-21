@@ -21,7 +21,7 @@
 #include "ExternalResolver.h"
 #include "ExternalResolverGui.h"
 #include "AccountManager.h"
-#include <pipeline.h>
+#include <Pipeline.h>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>

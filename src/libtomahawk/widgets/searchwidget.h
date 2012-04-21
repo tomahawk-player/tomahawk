@@ -24,11 +24,11 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "result.h"
-#include "playlistinterface.h"
-#include "viewpage.h"
+#include "Result.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QPushButton;
 class AlbumModel;

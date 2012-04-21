@@ -22,11 +22,11 @@
 #include <QApplication>
 #include <QPainter>
 
-#include "query.h"
-#include "result.h"
-#include "artist.h"
+#include "Query.h"
+#include "Result.h"
+#include "Artist.h"
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 
 #include "trackmodel.h"
 #include "trackmodelitem.h"

@@ -19,8 +19,8 @@
 
 #include "trackmodelitem.h"
 
-#include "playlist.h"
-#include "query.h"
+#include "Playlist.h"
+#include "Query.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

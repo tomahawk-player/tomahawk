@@ -20,7 +20,7 @@
 #include "checkdirtree.h"
 
 #include "utils/logger.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 
 #include <QCoreApplication>
 #include <QProcess>

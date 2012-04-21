@@ -21,8 +21,8 @@
 
 #include "categoryitems.h"
 #include "playlistitems.h"
-#include "viewmanager.h"
-#include "playlist.h"
+#include "ViewManager.h"
+#include "Playlist.h"
 #include "genericpageitems.h"
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
@@ -34,7 +34,7 @@
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 
 /// SourceItem
 

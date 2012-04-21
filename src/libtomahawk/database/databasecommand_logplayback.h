@@ -23,12 +23,12 @@
 #include <QVariantMap>
 
 #include "database/databasecommandloggable.h"
-#include "sourcelist.h"
-#include "typedefs.h"
-#include "artist.h"
-#include "query.h"
+#include "SourceList.h"
+#include "Typedefs.h"
+#include "Artist.h"
+#include "Query.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_LogPlayback : public DatabaseCommandLoggable
 {

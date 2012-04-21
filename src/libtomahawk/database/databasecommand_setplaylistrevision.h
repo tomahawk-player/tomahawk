@@ -20,10 +20,10 @@
 #define DATABASECOMMAND_SETPLAYLISTREVISION_H
 
 #include "databasecommandloggable.h"
-#include "playlist.h"
+#include "Playlist.h"
 #include "qjson/qobjecthelper.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 using namespace Tomahawk;
 

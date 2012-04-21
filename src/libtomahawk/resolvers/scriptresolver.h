@@ -26,9 +26,9 @@
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "query.h"
+#include "Query.h"
 #include "ExternalResolverGui.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QWidget;
 

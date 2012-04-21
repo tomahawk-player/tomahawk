@@ -21,13 +21,13 @@
 #ifndef TOMAHAWKUTILS_H
 #define TOMAHAWKUTILS_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
 #include <QTimeLine>
-#include <typedefs.h>
+#include <Typedefs.h>
 
 #define RESPATH ":/data/"
 
@@ -65,7 +65,7 @@ namespace TomahawkUtils
     class DLLEXPORT SharedTimeLine : public QObject
     {
         Q_OBJECT
-        
+
     public:
         SharedTimeLine();
 
@@ -87,7 +87,7 @@ namespace TomahawkUtils
         int m_refcount;
         QTimeLine m_timeline;
     };
-    
+
 
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {

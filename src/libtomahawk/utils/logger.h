@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QStringList>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Logger
 {

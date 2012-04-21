@@ -24,7 +24,7 @@
 #include <QModelIndex>
 
 #include "tomahawkutils.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class TrackModelItem;
 class QStyleOptionViewItemV4;

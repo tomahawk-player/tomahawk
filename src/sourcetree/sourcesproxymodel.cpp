@@ -22,7 +22,7 @@
 
 #include <QtGui/QTreeView>
 
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "sourcesmodel.h"
 #include "sourcetree/items/sourceitem.h"
 

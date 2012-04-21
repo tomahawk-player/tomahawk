@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_SOURCEOFFLINE_H
 
 #include "databasecommand.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_SourceOffline : public DatabaseCommand
 {

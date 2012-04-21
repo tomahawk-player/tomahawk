@@ -22,7 +22,7 @@
 
 #include <qabstractbutton.h>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QCompleter;
 class DLLEXPORT SearchButton : public QAbstractButton

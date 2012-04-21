@@ -37,7 +37,7 @@
 #include "widgets/OverlayButton.h"
 #include "widgets/overlaywidget.h"
 
-#include "pipeline.h"
+#include "Pipeline.h"
 
 using namespace Tomahawk;
 

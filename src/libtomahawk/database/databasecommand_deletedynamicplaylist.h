@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H
 
 #include "databasecommand_deleteplaylist.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
 class DatabaseCommand_DeleteDynamicPlaylist : public DatabaseCommand_DeletePlaylist
 {

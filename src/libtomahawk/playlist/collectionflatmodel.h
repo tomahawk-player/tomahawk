@@ -24,15 +24,15 @@
 #include <QList>
 #include <QHash>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "trackmodel.h"
-#include "query.h"
+#include "Query.h"
 #include "Source.h"
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 
 #include "database/databasecommand_alltracks.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMetaData;
 

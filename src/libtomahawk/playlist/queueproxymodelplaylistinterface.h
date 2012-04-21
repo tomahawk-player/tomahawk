@@ -22,8 +22,8 @@
 
 #include "playlistproxymodelplaylistinterface.h"
 
-#include "result.h"
-#include "dllmacro.h"
+#include "Result.h"
+#include "DllMacro.h"
 
 class QueueProxyModel;
 

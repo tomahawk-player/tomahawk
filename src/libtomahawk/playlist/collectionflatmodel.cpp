@@ -19,7 +19,7 @@
 #include "collectionflatmodel.h"
 
 #include "database/database.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

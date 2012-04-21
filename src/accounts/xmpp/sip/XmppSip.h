@@ -24,10 +24,10 @@
 
 #include "sip/SipPlugin.h"
 
-#include "avatarmanager.h"
+#include "AvatarManager.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "xmlconsole.h"
+    #include "XmlConsole.h"
 #endif
 
 #include <jreen/client.h>

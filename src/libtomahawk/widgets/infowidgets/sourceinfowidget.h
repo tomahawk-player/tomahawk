@@ -22,10 +22,10 @@
 
 #include <QWidget>
 
-#include "playlistinterface.h"
-#include "viewpage.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AlbumModel;
 class CollectionFlatModel;

@@ -15,13 +15,13 @@ add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 
 
 set( libGuiSources
-    actioncollection.cpp
+    ActionCollection.cpp
 
-    contextmenu.cpp
-    dropjob.cpp
-    globalactionmanager.cpp
-    viewpage.cpp
-    viewmanager.cpp
+    ContextMenu.cpp
+    DropJob.cpp
+    GlobalActionManager.cpp
+    ViewPage.cpp
+    ViewManager.cpp
     LatchManager.cpp
     TomahawkSettingsGui.cpp
 
@@ -161,26 +161,26 @@ IF(QCA2_FOUND)
 ENDIF(QCA2_FOUND)
 
 set( libSources
-    tomahawksettings.cpp
-    sourcelist.cpp
-    pipeline.cpp
+    TomahawkSettings.cpp
+    SourceList.cpp
+    Pipeline.cpp
 
-    aclregistry.cpp
-    artist.cpp
-    artistplaylistinterface.cpp
-    album.cpp
-    albumplaylistinterface.cpp
-    collection.cpp
-    functimeout.cpp
-    playlist.cpp
-    playlistplaylistinterface.cpp
+    AclRegistry.cpp
+    Artist.cpp
+    ArtistPlaylistInterface.cpp
+    Album.cpp
+    AlbumPlaylistInterface.cpp
+    Collection.cpp
+    FuncTimeout.cpp
+    Playlist.cpp
+    PlaylistPlaylistInterface.cpp
     Resolver.cpp
     ExternalResolver.cpp
-    query.cpp
-    result.cpp
+    Query.cpp
+    Result.cpp
     Source.cpp
-    sourceplaylistinterface.cpp
-    playlistinterface.cpp
+    SourcePlaylistInterface.cpp
+    PlaylistInterface.cpp
 
     EchonestCatalogSynchronizer.cpp
 
@@ -191,7 +191,7 @@ set( libSources
     accounts/ResolverAccount.cpp
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
-    sip/sipinfo.cpp
+    sip/SipInfo.cpp
 
     audio/audioengine.cpp
 
@@ -199,9 +199,9 @@ set( libSources
     database/database.cpp
     database/fuzzyindex.cpp
     database/databasecollection.cpp
-    database/localcollection.cpp
+    database/LocalCollection.cpp
     database/databaseworker.cpp
-    database/databaseimpl.cpp
+    database/DatabaseImpl.cpp
     database/databaseresolver.cpp
     database/databasecommand.cpp
     database/databasecommandloggable.cpp
@@ -261,15 +261,15 @@ set( libSources
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
     infosystem/infoplugins/generic/RoviPlugin.cpp
 
-    network/bufferiodevice.cpp
-    network/msgprocessor.cpp
-    network/streamconnection.cpp
-    network/dbsyncconnection.cpp
-    network/remotecollection.cpp
-    network/portfwdthread.cpp
-    network/servent.cpp
-    network/connection.cpp
-    network/controlconnection.cpp
+    network/BufferIoDevice.cpp
+    network/MsgProcessor.cpp
+    network/StreamConnection.cpp
+    network/DbSyncConnection.cpp
+    network/RemoteCollection.cpp
+    network/PortFwdThread.cpp
+    network/Servent.cpp
+    network/Connection.cpp
+    network/ControlConnection.cpp
 
     playlist/PlaylistUpdaterInterface.cpp
     playlist/dynamic/DynamicPlaylist.cpp

@@ -27,7 +27,7 @@
 #include "playlist/dynamic/DynamicControl.h"
 #include "database/databasecommand_collectionattributes.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

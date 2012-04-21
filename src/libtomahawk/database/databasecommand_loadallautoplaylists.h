@@ -23,7 +23,7 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand_loadallplaylists.h"
 
 class DatabaseCommand_LoadAllAutoPlaylists : public DatabaseCommand

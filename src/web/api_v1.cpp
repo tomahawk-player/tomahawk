@@ -28,8 +28,8 @@
 #include "database/database.h"
 #include "database/databasecommand_addclientauth.h"
 #include "database/databasecommand_clientauthvalid.h"
-#include "network/servent.h"
-#include "pipeline.h"
+#include "network/Servent.h"
+#include "Pipeline.h"
 
 using namespace Tomahawk;
 

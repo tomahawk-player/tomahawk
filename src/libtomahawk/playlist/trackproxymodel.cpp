@@ -22,9 +22,9 @@
 #include <QTreeView>
 
 #include "trackproxymodelplaylistinterface.h"
-#include "artist.h"
-#include "album.h"
-#include "query.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
 #include "utils/logger.h"
 
 

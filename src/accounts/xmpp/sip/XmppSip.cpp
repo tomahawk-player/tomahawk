@@ -23,8 +23,8 @@
 
 #include "config.h"
 
-#include "tomahawkxmppmessage.h"
-#include "tomahawkxmppmessagefactory.h"
+#include "TomahawkXmppMessage.h"
+#include "TomahawkXmppMessageFactory.h"
 
 #include <jreen/jid.h>
 #include <jreen/capabilities.h>

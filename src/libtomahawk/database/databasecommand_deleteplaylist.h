@@ -19,12 +19,12 @@
 #ifndef DATABASECOMMAND_DELETEPLAYLIST_H
 #define DATABASECOMMAND_DELETEPLAYLIST_H
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "databasecommandloggable.h"
 #include "Source.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_DeletePlaylist : public DatabaseCommandLoggable
 {

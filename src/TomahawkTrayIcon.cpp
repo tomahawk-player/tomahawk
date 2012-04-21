@@ -21,14 +21,14 @@
 
 #include <QtGui/QWheelEvent>
 
-#include "artist.h"
+#include "Artist.h"
 
 #include "audio/audioengine.h"
 #include "TomahawkApp.h"
 #include "TomahawkWindow.h"
 
 #include "utils/logger.h"
-#include <actioncollection.h>
+#include <ActionCollection.h>
 
 
 TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )

@@ -20,9 +20,9 @@
 #ifndef SPOTIFY_PARSER_H
 #define SPOTIFY_PARSER_H
 
-#include "dllmacro.h"
-#include "typedefs.h"
-#include "query.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
+#include "Query.h"
 #include "jobview/JobStatusItem.h"
 
 #include <QObject>

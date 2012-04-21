@@ -24,9 +24,9 @@
 #include <QtCore/QTimer>
 
 #include "MusicScanner.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
-#include "libtomahawk/sourcelist.h"
+#include "libtomahawk/SourceList.h"
 
 #include "database/database.h"
 #include "database/databasecommand_filemtimes.h"

@@ -20,11 +20,11 @@
 #include "LastFmConfig.h"
 
 #include "infosystem/infosystem.h"
-#include "lastfmplugin.h"
+#include "LastFmPlugin.h"
 #include "utils/tomahawkutils.h"
 #include "resolvers/qtscriptresolver.h"
 #include "AtticaManager.h"
-#include "pipeline.h"
+#include "Pipeline.h"
 #include "accounts/AccountManager.h"
 
 using namespace Tomahawk;

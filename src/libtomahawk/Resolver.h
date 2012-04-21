@@ -21,9 +21,9 @@
 
 #include <QObject>
 
-#include "query.h"
+#include "Query.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 // implement this if you can resolve queries to content
 

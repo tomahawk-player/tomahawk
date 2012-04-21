@@ -17,10 +17,10 @@
  */
 #include "databasecommand_setcollectionattributes.h"
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "Source.h"
-#include "network/servent.h"
-#include "sourcelist.h"
+#include "network/Servent.h"
+#include "SourceList.h"
 #include "EchonestCatalogSynchronizer.h"
 
 DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id )

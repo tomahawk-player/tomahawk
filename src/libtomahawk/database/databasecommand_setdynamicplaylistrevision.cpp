@@ -21,11 +21,11 @@
 #include <QSqlQuery>
 
 #include "Source.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 
 

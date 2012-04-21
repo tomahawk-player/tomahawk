@@ -18,7 +18,7 @@
 
 #include "databasecommand_addclientauth.h"
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "tomahawksqlquery.h"
 #include "utils/logger.h"
 

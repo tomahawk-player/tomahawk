@@ -21,9 +21,9 @@
 #ifndef ITUNES_PARSER_H
 #define ITUNES_PARSER_H
 
-#include "dllmacro.h"
-#include "typedefs.h"
-#include "query.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
+#include "Query.h"
 #include "dropjobnotifier.h"
 
 #include <QObject>

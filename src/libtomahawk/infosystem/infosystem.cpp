@@ -21,7 +21,7 @@
 #include <QCoreApplication>
 
 #include "infosystem.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "infosystemcache.h"
 #include "infosystemworker.h"
 #include "utils/tomahawkutils.h"

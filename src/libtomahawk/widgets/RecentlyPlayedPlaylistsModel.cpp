@@ -20,9 +20,9 @@
 
 #include "RecentlyPlayedPlaylistsModel.h"
 
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "audio/audioengine.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "utils/logger.h"
 #include "dynamic/DynamicPlaylist.h"
 

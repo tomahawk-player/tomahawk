@@ -29,13 +29,13 @@
     #include <QMessageBox>
 #endif
 
-#include "functimeout.h"
+#include "FuncTimeout.h"
 
 #include "database/database.h"
-#include "network/controlconnection.h"
-#include "network/servent.h"
-#include "sourcelist.h"
-#include "tomahawksettings.h"
+#include "network/ControlConnection.h"
+#include "network/Servent.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "utils/logger.h"
 #include "accounts/AccountManager.h"
 

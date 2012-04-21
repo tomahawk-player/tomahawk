@@ -26,10 +26,10 @@
 #include <QSqlQuery>
 #include <QVariant>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "database/op.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DatabaseImpl;
 

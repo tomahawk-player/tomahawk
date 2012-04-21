@@ -24,10 +24,10 @@
 #include <QSortFilterProxyModel>
 #include <QTimer>
 
-#include "viewpage.h"
+#include "ViewPage.h"
 #include "albumproxymodel.h"
 #include "widgets/overlaywidget.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AlbumModel;
 class LoadingSpinner;

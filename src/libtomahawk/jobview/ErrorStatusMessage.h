@@ -20,7 +20,7 @@
 #define ERRORSTATUSMESSAGE_H
 
 #include "JobStatusItem.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QPixmap>
 

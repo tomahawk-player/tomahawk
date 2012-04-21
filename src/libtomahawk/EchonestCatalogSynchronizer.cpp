@@ -18,14 +18,14 @@
 
 #include "EchonestCatalogSynchronizer.h"
 
-#include "collection.h"
+#include "Collection.h"
 #include "database/database.h"
 #include "database/databasecommand_genericselect.h"
 #include "database/databasecommand_setcollectionattributes.h"
 #include "database/databasecommand_loadfiles.h"
-#include "tomahawksettings.h"
-#include "sourcelist.h"
-#include "query.h"
+#include "TomahawkSettings.h"
+#include "SourceList.h"
+#include "Query.h"
 
 #include <echonest/CatalogUpdateEntry.h>
 #include <echonest/Config.h>

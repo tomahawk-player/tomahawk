@@ -26,9 +26,9 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 
-#include "viewmanager.h"
-#include "sourcelist.h"
-#include "tomahawksettings.h"
+#include "ViewManager.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "RecentPlaylistsModel.h"
 #include "ChartDataLoader.h"
 
@@ -40,7 +40,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "pipeline.h"
+#include "Pipeline.h"
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10

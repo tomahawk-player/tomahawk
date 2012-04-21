@@ -20,11 +20,11 @@
 #ifndef DATABASECOMMAND_LOADOPS_H
 #define DATABASECOMMAND_LOADOPS_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand.h"
 #include "op.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_loadOps : public DatabaseCommand
 {

@@ -19,13 +19,13 @@
 #include "dynamic/echonest/EchonestGenerator.h"
 #include "dynamic/echonest/EchonestControl.h"
 #include "dynamic/echonest/EchonestSteerer.h"
-#include "query.h"
+#include "Query.h"
 #include "utils/tomahawkutils.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "database/databasecommand_collectionattributes.h"
 #include "database/database.h"
 #include "utils/logger.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include <QFile>
 #include <QDir>
 #include <EchonestCatalogSynchronizer.h>

@@ -24,8 +24,8 @@
 #include <QAbstractItemView>
 #include <QHeaderView>
 
-#include "query.h"
-#include "result.h"
+#include "Query.h"
+#include "Result.h"
 
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"

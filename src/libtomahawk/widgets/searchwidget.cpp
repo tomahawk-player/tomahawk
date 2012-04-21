@@ -23,8 +23,8 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include "sourcelist.h"
-#include "viewmanager.h"
+#include "SourceList.h"
+#include "ViewManager.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "playlist/albummodel.h"
 #include "playlist/playlistmodel.h"

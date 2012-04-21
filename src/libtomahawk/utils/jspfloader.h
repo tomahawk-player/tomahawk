@@ -25,10 +25,10 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-#include "playlist.h"
-#include "typedefs.h"
+#include "Playlist.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

@@ -20,7 +20,7 @@
 #include "database.h"
 
 #include "databasecommand.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "databaseworker.h"
 #include "utils/logger.h"
 

@@ -24,12 +24,12 @@
 #include <QList>
 #include <QSharedPointer>
 
-#include "typedefs.h"
-#include "playlist.h"
+#include "Typedefs.h"
+#include "Playlist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;

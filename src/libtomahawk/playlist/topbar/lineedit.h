@@ -31,7 +31,7 @@
 
 #include <QLineEdit>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 class QHBoxLayout;
 
 /*

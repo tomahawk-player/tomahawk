@@ -21,8 +21,8 @@
 
 #include <QStyledItemDelegate>
 
-#include "dllmacro.h"
-#include "typedefs.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 namespace Tomahawk {
 class PixmapDelegateFader;

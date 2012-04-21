@@ -20,7 +20,7 @@
 #define ACCOUNTMODELFILTERPROXY_H
 
 #include "Account.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QSortFilterProxyModel>
 

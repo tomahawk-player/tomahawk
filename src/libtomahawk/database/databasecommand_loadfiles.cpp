@@ -18,8 +18,8 @@
 
 #include "databasecommand_loadfiles.h"
 
-#include "databaseimpl.h"
-#include "collection.h"
+#include "DatabaseImpl.h"
+#include "Collection.h"
 #include "utils/logger.h"
 
 

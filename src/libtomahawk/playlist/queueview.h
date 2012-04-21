@@ -23,7 +23,7 @@
 
 #include "widgets/animatedsplitter.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QTimer;
 class PlaylistView;

@@ -22,11 +22,11 @@
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
 
-#include "query.h"
-#include "result.h"
-#include "artist.h"
+#include "Query.h"
+#include "Result.h"
+#include "Artist.h"
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 
 #include "playlistview.h"
 #include "trackmodel.h"

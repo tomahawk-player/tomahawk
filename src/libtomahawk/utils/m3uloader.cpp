@@ -20,11 +20,11 @@
 #include "m3uloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
-#include "query.h"
-#include "sourcelist.h"
+#include "Query.h"
+#include "SourceList.h"
 
-#include "playlist.h"
-#include "dropjob.h"
+#include "Playlist.h"
+#include "DropJob.h"
 
 #include <QFileInfo>
 #include <QFile>

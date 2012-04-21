@@ -23,11 +23,11 @@
 #include <QSettings>
 #include <QCryptographicHash>
 
-#include "artist.h"
-#include "album.h"
-#include "typedefs.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Typedefs.h"
 #include "audio/audioengine.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "infosystem/infosystem.h"
 
 #include "utils/logger.h"

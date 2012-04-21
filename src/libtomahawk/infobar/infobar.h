@@ -21,8 +21,8 @@
 
 #include <QWidget>
 
-#include "dllmacro.h"
-#include "artist.h"
+#include "DllMacro.h"
+#include "Artist.h"
 
 class QueryLabel;
 class QCheckBox;

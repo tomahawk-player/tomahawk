@@ -23,13 +23,13 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "collection.h"
-#include "typedefs.h"
-#include "query.h"
-#include "artist.h"
-#include "album.h"
+#include "Collection.h"
+#include "Typedefs.h"
+#include "Query.h"
+#include "Artist.h"
+#include "Album.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand
 {

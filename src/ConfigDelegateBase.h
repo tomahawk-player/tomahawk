@@ -19,7 +19,7 @@
 #ifndef CONFIGDELEGATEBASE_H
 #define CONFIGDELEGATEBASE_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QStyledItemDelegate>
 

@@ -23,7 +23,7 @@
 #include <QModelIndex>
 #include <QTimer>
 
-#include "playlist.h"
+#include "Playlist.h"
 #include "Source.h"
 #include "database/databasecommand_loadallsortedplaylists.h"
 

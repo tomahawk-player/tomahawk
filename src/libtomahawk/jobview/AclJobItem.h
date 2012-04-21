@@ -21,7 +21,7 @@
 #define ACLJOBITEM_H
 
 #include <jobview/JobStatusItem.h>
-#include "aclregistry.h"
+#include "AclRegistry.h"
 
 #include <QStyledItemDelegate>
 

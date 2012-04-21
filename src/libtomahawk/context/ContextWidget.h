@@ -21,9 +21,9 @@
 
 #include <QGraphicsView>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
-#include "query.h"
+#include "Query.h"
 
 class QGraphicsScene;
 class QGraphicsWebView;

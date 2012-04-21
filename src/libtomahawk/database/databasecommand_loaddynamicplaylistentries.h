@@ -22,10 +22,10 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand.h"
 #include "databasecommand_loadplaylistentries.h"
-#include "playlist.h"
+#include "Playlist.h"
 
 class DatabaseCommand_LoadDynamicPlaylistEntries : public DatabaseCommand_LoadPlaylistEntries
 {

@@ -32,12 +32,12 @@
 
 #include <QtGui/QWidget>
 
-#include "playlistinterface.h"
-#include "viewpage.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
 #include "infosystem/infosystem.h"
 
-#include "dllmacro.h"
-#include "typedefs.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 class AlbumModel;
 class TreeModel;

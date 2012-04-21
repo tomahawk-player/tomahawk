@@ -20,7 +20,7 @@
 
 #include <QSqlQuery>
 
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

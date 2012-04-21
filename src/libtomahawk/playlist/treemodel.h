@@ -23,18 +23,18 @@
 #include <QAbstractItemModel>
 #include <QPixmap>
 
-#include "artist.h"
-#include "album.h"
-#include "query.h"
-#include "result.h"
-#include "playlistinterface.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
+#include "Result.h"
+#include "PlaylistInterface.h"
 #include "database/databasecommand_allartists.h"
 
 #include "treemodelitem.h"
 #include "infosystem/infosystem.h"
 
-#include "dllmacro.h"
-#include "typedefs.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 class QMetaData;
 

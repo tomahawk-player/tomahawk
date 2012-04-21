@@ -20,7 +20,7 @@
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "database/databasecommand.h"
 
 /* taglib */

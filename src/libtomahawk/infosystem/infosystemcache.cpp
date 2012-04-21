@@ -28,7 +28,7 @@
 #endif
 
 #include "infosystemcache.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "utils/logger.h"
 
 

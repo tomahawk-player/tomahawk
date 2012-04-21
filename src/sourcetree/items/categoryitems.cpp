@@ -22,16 +22,16 @@
 #include <QMimeData>
 
 #include "TomahawkApp.h"
-#include "viewmanager.h"
-#include "viewpage.h"
-#include "sourcelist.h"
+#include "ViewManager.h"
+#include "ViewPage.h"
+#include "SourceList.h"
 #include "sourcetreeview.h"
 #include "utils/tomahawkutils.h"
 #include "widgets/newplaylistwidget.h"
 #include "widgets/playlisttypeselectordlg.h"
 #include <playlist/dynamic/GeneratorInterface.h>
 #include "utils/logger.h"
-#include "dropjob.h"
+#include "DropJob.h"
 
 #include <echonest/Playlist.h>
 

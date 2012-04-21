@@ -21,11 +21,11 @@
 #define RDIOPARSER_H
 
 #include "jobview/JobStatusItem.h"
-#include "query.h"
+#include "Query.h"
 #include "config.h"
-#include "dropjob.h"
-#include "typedefs.h"
-#include "playlist.h"
+#include "DropJob.h"
+#include "Typedefs.h"
+#include "Playlist.h"
 
 #include <QtCore/QObject>
 #include <QStringList>

@@ -20,7 +20,7 @@
 #define DATABASECOMMAND_UPDATESEARCHINDEX_H
 
 #include "databasecommand.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class IndexingJobItem;
 

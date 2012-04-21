@@ -17,7 +17,7 @@
  */
 
 #include "temporarypageitem.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/searchwidget.h"

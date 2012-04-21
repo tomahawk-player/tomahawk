@@ -23,10 +23,10 @@
 #include <QVariantMap>
 
 #include "database/databasecommandloggable.h"
-#include "typedefs.h"
-#include "query.h"
+#include "Typedefs.h"
+#include "Query.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_AddFiles : public DatabaseCommandLoggable
 {

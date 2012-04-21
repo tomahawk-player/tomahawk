@@ -17,7 +17,7 @@
  */
 
 #include "databasecommand_trackattributes.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 
 using namespace Tomahawk;
 DatabaseCommand_TrackAttributes::DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::AttributeType type, const QList< Tomahawk::QID > ids )

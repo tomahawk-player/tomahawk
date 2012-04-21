@@ -19,8 +19,8 @@
 #ifndef ECHONESTCATALOGSYNCHRONIZER_H
 #define ECHONESTCATALOGSYNCHRONIZER_H
 
-#include "dllmacro.h"
-#include "query.h"
+#include "DllMacro.h"
+#include "Query.h"
 #include "database/databasecommand_trackattributes.h"
 
 #include <echonest/Catalog.h>

@@ -24,7 +24,7 @@
 #include <QtCore/QSharedPointer>
 #include <QStringList>
 #include <QtGui/QWidget>
-#include "typedefs.h"
+#include "Typedefs.h"
 
 namespace Tomahawk
 {

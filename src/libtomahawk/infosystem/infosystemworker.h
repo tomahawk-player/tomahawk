@@ -32,7 +32,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk {
 

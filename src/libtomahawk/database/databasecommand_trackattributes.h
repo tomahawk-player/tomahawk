@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_TRACKATTRIBUTES_H
 #define DATABASECOMMAND_TRACKATTRIBUTES_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand.h"
 #include "databasecommand_collectionattributes.h"
 #include "databasecommand_settrackattributes.h"

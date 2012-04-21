@@ -19,10 +19,10 @@
 #ifndef DROPJOBNOTIFIER_H
 #define DROPJOBNOTIFIER_H
 
-#include "dllmacro.h"
-#include "dropjob.h"
-#include "typedefs.h"
-#include "query.h"
+#include "DllMacro.h"
+#include "DropJob.h"
+#include "Typedefs.h"
+#include "Query.h"
 #include "jobview/JobStatusItem.h"
 
 #include <QObject>

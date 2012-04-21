@@ -27,9 +27,9 @@
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
 
-#include "artist.h"
-#include "album.h"
-#include "pipeline.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

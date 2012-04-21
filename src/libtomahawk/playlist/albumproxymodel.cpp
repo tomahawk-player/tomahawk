@@ -22,9 +22,9 @@
 #include <QListView>
 
 #include "albumproxymodelplaylistinterface.h"
-#include "artist.h"
+#include "Artist.h"
 #include "albumitem.h"
-#include "query.h"
+#include "Query.h"
 #include "utils/logger.h"
 
 

@@ -18,7 +18,7 @@
 
 #include "databasecommand_collectionstats.h"
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "Source.h"
 #include "utils/logger.h"
 

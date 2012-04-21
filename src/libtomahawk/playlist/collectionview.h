@@ -22,9 +22,9 @@
 
 #include "trackproxymodel.h"
 #include "trackview.h"
-#include "viewpage.h"
+#include "ViewPage.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class TrackModel;
 

@@ -22,13 +22,13 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "album.h"
-#include "artist.h"
-#include "collection.h"
-#include "typedefs.h"
+#include "Album.h"
+#include "Artist.h"
+#include "Collection.h"
+#include "Typedefs.h"
 #include "databasecommand.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand
 {

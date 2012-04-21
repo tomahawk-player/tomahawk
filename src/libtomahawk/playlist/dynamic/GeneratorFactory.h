@@ -24,9 +24,9 @@
 #include <QString>
 
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

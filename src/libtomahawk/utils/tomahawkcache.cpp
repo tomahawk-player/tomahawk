@@ -18,7 +18,7 @@
 
 #include "tomahawkcache.h"
 
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "utils/logger.h"
 
 #include <QDateTime>

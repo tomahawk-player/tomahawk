@@ -19,11 +19,11 @@
 
 #include "Source.h"
 
-#include "collection.h"
-#include "sourcelist.h"
-#include "sourceplaylistinterface.h"
+#include "Collection.h"
+#include "SourceList.h"
+#include "SourcePlaylistInterface.h"
 
-#include "network/controlconnection.h"
+#include "network/ControlConnection.h"
 #include "database/databasecommand_addsource.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_sourceoffline.h"

@@ -24,15 +24,15 @@
 #include <QListWidgetItem>
 #include <QStyledItemDelegate>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 
-#include "query.h"
+#include "Query.h"
 #include "Source.h"
-#include "viewpage.h"
+#include "ViewPage.h"
 
 #include "utils/tomahawkutilsgui.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AlbumModel;
 class RecentlyPlayedModel;

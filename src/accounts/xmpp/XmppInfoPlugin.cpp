@@ -20,7 +20,7 @@
 
 #include "XmppInfoPlugin.h"
 
-#include "globalactionmanager.h"
+#include "GlobalActionManager.h"
 #include "sip/XmppSip.h"
 #include "utils/logger.h"
 

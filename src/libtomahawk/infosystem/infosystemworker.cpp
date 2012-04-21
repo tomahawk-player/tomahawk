@@ -32,7 +32,7 @@
 #include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "infoplugins/generic/hypemPlugin.h"
-#include "globalactionmanager.h"
+#include "GlobalActionManager.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

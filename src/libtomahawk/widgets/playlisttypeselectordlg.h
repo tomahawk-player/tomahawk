@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Ui
 {

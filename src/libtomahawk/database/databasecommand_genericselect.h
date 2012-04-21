@@ -22,12 +22,12 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
 #include <QStringList>
 #include <QMetaType>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * This dbcmd takes a generic SELECT command that operates on the database and returns a list of query_ptrs

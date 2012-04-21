@@ -19,10 +19,10 @@
 #ifndef DATABASECOMMAND_RENAMEPLAYLIST_H
 #define DATABASECOMMAND_RENAMEPLAYLIST_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommandloggable.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DatabaseImpl;
 

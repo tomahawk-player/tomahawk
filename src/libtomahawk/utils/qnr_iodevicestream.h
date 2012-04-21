@@ -23,7 +23,7 @@
 #ifndef QNR_IODEVICESTREAM_H
 #define QNR_IODEVICESTREAM_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <phonon/abstractmediastream.h>
 

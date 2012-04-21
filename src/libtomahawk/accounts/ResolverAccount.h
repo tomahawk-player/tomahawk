@@ -20,7 +20,7 @@
 #define RESOLVERACCOUNT_H
 
 #include "accounts/Account.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk {
 

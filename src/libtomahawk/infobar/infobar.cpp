@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QPixmap>
 
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

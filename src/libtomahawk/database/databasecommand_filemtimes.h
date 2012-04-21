@@ -27,7 +27,7 @@
 
 #include "databasecommand.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 // Not loggable, mtimes only used to speed up our local scanner.
 

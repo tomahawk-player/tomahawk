@@ -25,9 +25,9 @@
 #include <QtCore/QVariantMap>
 
 #include "database/databasecommandloggable.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include "utils/logger.h"
 

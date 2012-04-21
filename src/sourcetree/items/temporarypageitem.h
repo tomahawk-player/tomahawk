@@ -20,7 +20,7 @@
 #define TEMPORARYPAGEITEM_H
 
 #include "items/sourcetreeitem.h"
-#include "viewpage.h"
+#include "ViewPage.h"
 
 class TemporaryPageItem : public SourceTreeItem
 {

@@ -5,7 +5,7 @@
 #include <QtCore/QStringList>
 
 #include "pimpl_ptr.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QCoreApplication;
 

@@ -21,13 +21,13 @@
 #include <QSqlQuery>
 
 #include "Source.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "tomahawksqlquery.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "viewmanager.h"
+    #include "ViewManager.h"
 #endif
 
 using namespace Tomahawk;

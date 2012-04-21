@@ -22,7 +22,7 @@
 #include <QFrame>
 #include <QTime>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT ElidedLabel : public QFrame
 {

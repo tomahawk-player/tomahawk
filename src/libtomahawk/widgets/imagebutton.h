@@ -24,7 +24,7 @@
 #include <QtGui/QIcon>
 #include <QtCore/QMap>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT ImageButton : public QAbstractButton
 {

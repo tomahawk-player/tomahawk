@@ -21,7 +21,7 @@
 #define DYNAMIC_MODEL_H
 
 #include "playlistmodel.h"
-#include "query.h"
+#include "Query.h"
 
 namespace Tomahawk
 {

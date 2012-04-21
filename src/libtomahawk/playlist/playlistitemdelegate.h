@@ -22,7 +22,7 @@
 #include <QStyledItemDelegate>
 #include <QTextOption>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class TrackModel;
 class TrackModelItem;

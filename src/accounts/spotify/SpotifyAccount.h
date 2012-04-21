@@ -21,8 +21,8 @@
 #define SpotifyAccount_H
 
 #include "accounts/ResolverAccount.h"
-#include "sourcelist.h"
-#include "playlist.h"
+#include "SourceList.h"
+#include "Playlist.h"
 #include "utils/tomahawkutils.h"
 #include "utils/SmartPointerList.h"
 

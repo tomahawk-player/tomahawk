@@ -25,9 +25,9 @@
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
 
-#include "album.h"
-#include "typedefs.h"
-#include "tomahawksettings.h"
+#include "Album.h"
+#include "Typedefs.h"
+#include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

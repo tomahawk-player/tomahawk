@@ -21,9 +21,9 @@
 #ifndef GROOVESHARKPARSER_H
 #define GROOVESHARKPARSER_H
 
-#include "dllmacro.h"
-#include "typedefs.h"
-#include "query.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
+#include "Query.h"
 #include "jobview/JobStatusItem.h"
 
 #include <qca_basic.h>

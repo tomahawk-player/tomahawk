@@ -21,11 +21,11 @@
 #define WHATSHOTWIDGET_P_H
 
 #include "whatshotwidget.h"
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "ui_whatshotwidget.h"
 #include "treeproxymodel.h"
 #include "playlistview.h"
-#include "result.h"
+#include "Result.h"
 
 #include <QObject>
 

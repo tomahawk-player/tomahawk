@@ -21,18 +21,18 @@
 #include <QSqlQuery>
 #include <QSqlDriver>
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
 
 #include "Source.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/logger.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "viewmanager.h"
+    #include "ViewManager.h"
 #endif
 
 using namespace Tomahawk;

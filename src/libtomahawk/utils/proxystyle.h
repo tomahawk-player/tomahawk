@@ -22,7 +22,7 @@
 #include <QtGlobal>
 #include <QProxyStyle>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT ProxyStyle : public QProxyStyle
 {

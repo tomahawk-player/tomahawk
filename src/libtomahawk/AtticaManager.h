@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QPixmap>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 #include "accounts/Account.h"
 
 #include <attica/provider.h>

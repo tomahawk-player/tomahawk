@@ -22,14 +22,14 @@
 
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
-#include "query.h"
-#include "sourcelist.h"
-#include "dropjob.h"
+#include "Query.h"
+#include "SourceList.h"
+#include "DropJob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "dropjobnotifier.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 
 #include <qjson/parser.h>
 

@@ -22,10 +22,10 @@
 #include <QTimer>
 
 #include "infosystem/infosystemworker.h"
-#include "artist.h"
-#include "result.h"
-#include "tomahawksettings.h"
-#include "globalactionmanager.h"
+#include "Artist.h"
+#include "Result.h"
+#include "TomahawkSettings.h"
+#include "GlobalActionManager.h"
 #include "utils/logger.h"
 
 #include "adiumplugin.h"

@@ -21,7 +21,7 @@
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include "UbuntuUnityHack.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "config.h"
 
 #include <QTranslator>

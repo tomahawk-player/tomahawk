@@ -18,11 +18,11 @@
 
 #include "databasecommand_genericselect.h"
 
-#include "databaseimpl.h"
-#include "sourcelist.h"
-#include "artist.h"
-#include "album.h"
-#include "pipeline.h"
+#include "DatabaseImpl.h"
+#include "SourceList.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

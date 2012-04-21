@@ -20,8 +20,8 @@
 #ifndef SNORTENED_LINK_PARSER_H
 #define SNORTENED_LINK_PARSER_H
 
-#include "dllmacro.h"
-#include "typedefs.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QObject>
 #include <QSet>

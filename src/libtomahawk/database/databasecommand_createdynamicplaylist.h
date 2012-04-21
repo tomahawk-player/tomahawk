@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_CREATEDYNAMICPLAYLIST_H
 #define DATABASECOMMAND_CREATEDYNAMICPLAYLIST_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "databasecommand_createplaylist.h"
 
 /**

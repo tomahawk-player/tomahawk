@@ -24,7 +24,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QMenu>
 
-#include "result.h"
+#include "Result.h"
 
 class TomahawkTrayIcon : public QSystemTrayIcon
 {

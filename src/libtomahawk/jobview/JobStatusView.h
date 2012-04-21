@@ -20,9 +20,9 @@
 #ifndef JOBSTATUSVIEW_H
 #define JOBSTATUSVIEW_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "widgets/animatedsplitter.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QAbstractItemModel;
 class QListView;

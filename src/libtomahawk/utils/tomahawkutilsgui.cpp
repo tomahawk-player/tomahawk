@@ -20,8 +20,8 @@
 #include "tomahawkutilsgui.h"
 
 #include "config.h"
-#include "query.h"
-#include "result.h"
+#include "Query.h"
+#include "Result.h"
 #include "logger.h"
 #include "trackmodelitem.h"
 

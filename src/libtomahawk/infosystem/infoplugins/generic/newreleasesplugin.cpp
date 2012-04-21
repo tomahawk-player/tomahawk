@@ -5,11 +5,11 @@
 #include <QtNetwork/QNetworkConfiguration>
 #include <QtNetwork/QNetworkReply>
 
-#include "album.h"
+#include "Album.h"
 #include "chartsplugin_data_p.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 #include "audio/audioengine.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "utils/tomahawkcache.h"

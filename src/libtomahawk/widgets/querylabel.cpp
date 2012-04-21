@@ -24,10 +24,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-#include "artist.h"
-#include "album.h"
-#include "query.h"
-#include "contextmenu.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
+#include "ContextMenu.h"
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 

@@ -25,17 +25,17 @@
 #include <QtNetwork/QNetworkReply>
 #include <QTemporaryFile>
 
-#include "playlistinterface.h"
-#include "sourceplaylistinterface.h"
-#include "tomahawksettings.h"
+#include "PlaylistInterface.h"
+#include "SourcePlaylistInterface.h"
+#include "TomahawkSettings.h"
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
-#include "network/servent.h"
+#include "network/Servent.h"
 #include "utils/qnr_iodevicestream.h"
 #include "utils/closure.h"
 #include "HeadlessCheck.h"
 #include "infosystem/infosystem.h"
-#include "album.h"
+#include "Album.h"
 
 #include "utils/logger.h"
 

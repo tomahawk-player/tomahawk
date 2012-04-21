@@ -20,9 +20,9 @@
 #include "ui_playlisttypeselectordlg.h"
 
 #include "widgets/newplaylistwidget.h"
-#include "viewmanager.h"
-#include "viewpage.h"
-#include "sourcelist.h"
+#include "ViewManager.h"
+#include "ViewPage.h"
+#include "SourceList.h"
 
 #include "utils/logger.h"
 

@@ -20,7 +20,7 @@
 
 #include "config.h"
 #include "HeadlessCheck.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

@@ -30,11 +30,11 @@
 #include "widgets/imagebutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "album.h"
-#include "dropjob.h"
+#include "Album.h"
+#include "DropJob.h"
 #include "SocialWidget.h"
-#include "globalactionmanager.h"
-#include "viewmanager.h"
+#include "GlobalActionManager.h"
+#include "ViewManager.h"
 
 using namespace Tomahawk;
 

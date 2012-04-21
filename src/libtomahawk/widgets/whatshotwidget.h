@@ -25,13 +25,13 @@
 #include <QtGui/QListWidgetItem>
 #include <QtGui/QStyledItemDelegate>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "infosystem/infosystem.h"
-#include "viewpage.h"
+#include "ViewPage.h"
 
 #include "utils/tomahawkutils.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QSortFilterProxyModel;
 class QStandardItemModel;

@@ -22,7 +22,7 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 #include "dropjobnotifier.h"
-#include "query.h"
+#include "Query.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"

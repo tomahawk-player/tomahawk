@@ -23,11 +23,11 @@
 
 #include <QAbstractItemModel>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "trackmodelitem.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMetaData;
 

@@ -18,10 +18,10 @@
 
 #include "databasecommand_resolve.h"
 
-#include "artist.h"
-#include "album.h"
-#include "pipeline.h"
-#include "sourcelist.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
+#include "SourceList.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

@@ -20,8 +20,8 @@
 #include "collectionproxymodelplaylistinterface.h"
 
 #include "collectionproxymodel.h"
-#include "album.h"
-#include "query.h"
+#include "Album.h"
+#include "Query.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

@@ -17,7 +17,7 @@
  */
 #include "databasecommand_collectionattributes.h"
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "Source.h"
 
 DatabaseCommand_CollectionAttributes::DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type )

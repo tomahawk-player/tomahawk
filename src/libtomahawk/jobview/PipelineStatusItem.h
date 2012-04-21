@@ -20,7 +20,7 @@
 #define PIPELINESTATUSITEM_H
 
 #include "jobview/JobStatusItem.h"
-#include "query.h"
+#include "Query.h"
 
 #include <QPixmap>
 

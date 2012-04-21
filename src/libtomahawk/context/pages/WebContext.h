@@ -21,9 +21,9 @@
 
 #include <QGraphicsWebView>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
-#include "query.h"
+#include "Query.h"
 #include "context/ContextPage.h"
 
 class DLLEXPORT WebContext : public Tomahawk::ContextPage

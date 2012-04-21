@@ -22,7 +22,7 @@
 #include <QTreeView>
 
 #include "Source.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "utils/tomahawkutils.h"

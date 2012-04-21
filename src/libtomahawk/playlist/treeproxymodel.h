@@ -22,10 +22,10 @@
 
 #include <QSortFilterProxyModel>
 
-#include "playlistinterface.h"
+#include "PlaylistInterface.h"
 #include "treemodel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DatabaseCommand_AllArtists;
 

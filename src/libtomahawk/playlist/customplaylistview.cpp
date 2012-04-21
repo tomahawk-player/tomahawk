@@ -22,7 +22,7 @@
 #include "database/databasecommand_genericselect.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "audio/audioengine.h"
 
 using namespace Tomahawk;

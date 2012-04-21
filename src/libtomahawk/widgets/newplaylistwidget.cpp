@@ -22,8 +22,8 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include "sourcelist.h"
-#include "viewmanager.h"
+#include "SourceList.h"
+#include "ViewManager.h"
 #include "playlist/playlistmodel.h"
 #include "widgets/overlaywidget.h"
 

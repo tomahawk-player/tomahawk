@@ -22,8 +22,8 @@
 
 #include <QWidget>
 
-#include "typedefs.h"
-#include "viewpage.h"
+#include "Typedefs.h"
+#include "ViewPage.h"
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 class LoadingSpinner;

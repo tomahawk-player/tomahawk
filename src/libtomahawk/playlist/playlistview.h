@@ -23,8 +23,8 @@
 #include "playlist/trackproxymodel.h"
 #include "playlist/playlistmodel.h"
 #include "trackview.h"
-#include "viewpage.h"
-#include "dllmacro.h"
+#include "ViewPage.h"
+#include "DllMacro.h"
 
 class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
 {

@@ -19,13 +19,13 @@
 
 #include "historyitem.h"
 
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "genericpageitems.h"
 #include "utils/tomahawkutilsgui.h"
 #include "utils/logger.h"
 #include "playlist/customplaylistview.h"
 #include "temporarypageitem.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 
 using namespace Tomahawk;
 

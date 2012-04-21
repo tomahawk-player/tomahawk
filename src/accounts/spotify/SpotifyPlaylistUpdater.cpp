@@ -87,7 +87,7 @@ SpotifyPlaylistUpdater::init()
     connect( playlist().data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ), this, SLOT( tomahawkTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
     connect( playlist().data(), SIGNAL( tracksMoved( QList<Tomahawk::plentry_ptr>, int ) ), this, SLOT( tomahawkTracksMoved( QList<Tomahawk::plentry_ptr>, int ) ) );
     connect( playlist().data(), SIGNAL( renamed( QString, QString ) ), this, SLOT( tomahawkPlaylistRenamed( QString, QString ) ) );
-    connect( playlist().data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ), Qt::QueuedConnection ); // Queued so that in playlist.cpp:443 we let the playlist clear its own queue first
+    connect( playlist().data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ), Qt::QueuedConnection ); // Queued so that in Playlist.cpp:443 we let the playlist clear its own queue first
     // TODO reorders in a playlist
 }
 

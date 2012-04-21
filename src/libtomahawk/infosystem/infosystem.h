@@ -32,7 +32,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QStringList>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 #include "utils/tomahawkutils.h"
 
 class QNetworkAccessManager;

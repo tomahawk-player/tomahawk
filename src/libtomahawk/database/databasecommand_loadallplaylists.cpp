@@ -21,9 +21,9 @@
 
 #include <QSqlQuery>
 
-#include "playlist.h"
+#include "Playlist.h"
 #include "Source.h"
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

@@ -24,12 +24,12 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QVariantMap>
 
-#include "typedefs.h"
-#include "network/dbsyncconnection.h"
-#include "collection.h"
-#include "query.h"
+#include "Typedefs.h"
+#include "network/DbSyncConnection.h"
+#include "Collection.h"
+#include "Query.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class ControlConnection;
 class DatabaseCommand_LogPlayback;

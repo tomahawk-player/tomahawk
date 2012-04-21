@@ -23,11 +23,11 @@
 #include <QAbstractItemModel>
 #include <QPixmap>
 
-#include "album.h"
-#include "playlistinterface.h"
+#include "Album.h"
+#include "PlaylistInterface.h"
 #include "database/databasecommand_allalbums.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AlbumItem;
 class QMetaData;

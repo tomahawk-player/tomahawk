@@ -23,9 +23,9 @@
 #include <QPainter>
 #include <QAbstractItemView>
 
-#include "artist.h"
-#include "query.h"
-#include "result.h"
+#include "Artist.h"
+#include "Query.h"
+#include "Result.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -36,7 +36,7 @@
 #include "playlist/albumproxymodel.h"
 #include "albumview.h"
 #include <QMouseEvent>
-#include <viewmanager.h>
+#include <ViewManager.h>
 
 
 AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )

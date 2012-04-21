@@ -24,7 +24,7 @@
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
-#include "databaseimpl.h"
+#include "DatabaseImpl.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

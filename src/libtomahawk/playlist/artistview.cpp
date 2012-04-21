@@ -29,12 +29,12 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "widgets/overlaywidget.h"
 
-#include "contextmenu.h"
-#include "tomahawksettings.h"
+#include "ContextMenu.h"
+#include "TomahawkSettings.h"
 #include "treeheader.h"
 #include "treeitemdelegate.h"
 #include "treemodel.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "utils/logger.h"
 
 #define SCROLL_TIMEOUT 280

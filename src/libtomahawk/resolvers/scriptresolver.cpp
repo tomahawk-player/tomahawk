@@ -23,10 +23,10 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
 
-#include "artist.h"
-#include "album.h"
-#include "pipeline.h"
-#include "sourcelist.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
+#include "SourceList.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

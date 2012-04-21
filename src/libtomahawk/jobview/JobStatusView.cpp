@@ -19,7 +19,7 @@
 
 #include "JobStatusView.h"
 
-#include "pipeline.h"
+#include "Pipeline.h"
 #include "JobStatusModel.h"
 #include "JobStatusItem.h"
 #include "JobStatusDelegate.h"

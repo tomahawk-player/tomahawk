@@ -21,7 +21,7 @@
 
 #include "queueproxymodelplaylistinterface.h"
 #include "playlist/trackview.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

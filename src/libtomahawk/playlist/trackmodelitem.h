@@ -24,9 +24,9 @@
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT TrackModelItem : public QObject
 {

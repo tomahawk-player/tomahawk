@@ -22,15 +22,15 @@
 #include <QMimeData>
 #include <QPainter>
 
-#include "query.h"
-#include "viewmanager.h"
+#include "Query.h"
+#include "ViewManager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/playlistview.h"
 #include "categoryitems.h"
 #include "sourceitem.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "dropjob.h"
+#include "DropJob.h"
 #include "Source.h"
 #include "audio/audioengine.h"
 

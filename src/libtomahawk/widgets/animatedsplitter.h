@@ -22,7 +22,7 @@
 #include <QSplitter>
 #include <QTimeLine>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class AnimatedWidget;
 

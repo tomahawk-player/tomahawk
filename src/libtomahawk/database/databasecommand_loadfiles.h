@@ -25,8 +25,8 @@
 #include <QMap>
 
 #include "databasecommand.h"
-#include "result.h"
-#include "dllmacro.h"
+#include "Result.h"
+#include "DllMacro.h"
 
 /**
   Loads a result_ptr from the database from a track dbid.

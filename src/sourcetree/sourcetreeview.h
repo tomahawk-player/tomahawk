@@ -20,8 +20,8 @@
 #ifndef SOURCETREEVIEW_H
 #define SOURCETREEVIEW_H
 
-#include "typedefs.h"
-#include "sourceplaylistinterface.h"
+#include "Typedefs.h"
+#include "SourcePlaylistInterface.h"
 
 #include <QtGui/QTreeView>
 #include <QtGui/QMenu>
