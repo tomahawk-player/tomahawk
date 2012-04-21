@@ -20,6 +20,7 @@
 #define JOB_STATUS_ITEM
 
 #include <QObject>
+#include <QMetaType>
 
 class QStyledItemDelegate;
 class QPixmap;
@@ -66,5 +67,7 @@ signals:
     /// Job is finished, will be deleted by the model
     void finished();
 };
+
+Q_DECLARE_METATYPE( JobStatusItem* );
 
 #endif

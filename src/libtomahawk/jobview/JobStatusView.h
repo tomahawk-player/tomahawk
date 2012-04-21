@@ -53,6 +53,7 @@ public:
 private slots:
     void checkCount();
     void customDelegateJobInserted( int row, QStyledItemDelegate* delegate );
+    void customDelegateJobRemoved( int row, QStyledItemDelegate* delegate );
 
 private:
     QListView* m_view;

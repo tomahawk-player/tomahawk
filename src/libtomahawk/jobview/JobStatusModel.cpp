@@ -26,6 +26,7 @@
 
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
+    , m_aclJobCount( 0 )
 {
 
 }
@@ -41,6 +42,12 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
+    if ( item->type() == "acljob" && m_aclJobCount >= 3 )
+    {
+        m_aclJobQueue.enqueue( item );
+        return;
+    }
+    
     connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
     connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
 
@@ -174,7 +181,19 @@ JobStatusModel::itemFinished()
     m_items.removeAll( item );
     endRemoveRows();
 
+    if ( item->customDelegate() )
+        emit customDelegateJobRemoved( idx, item->customDelegate() );
+
+    if ( item->type() == "acljob" )
+        m_aclJobCount--;
+    
     item->deleteLater();
+
+    if ( !m_aclJobQueue.empty() )
+    {
+        JobStatusItem* item = m_aclJobQueue.dequeue();
+        QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, item ) );
+    }
 }
 
 

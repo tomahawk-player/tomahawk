@@ -87,6 +87,7 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, QStyledItemDelegate* ) ), this, SLOT( customDelegateJobInserted( int, QStyledItemDelegate* ) ) );
+    connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int, QStyledItemDelegate* ) ), this, SLOT( customDelegateJobRemoved( int, QStyledItemDelegate* ) ) );
 }
 
 
@@ -97,6 +98,16 @@ JobStatusView::customDelegateJobInserted( int row, QStyledItemDelegate* delegate
         return;
 
     m_view->setItemDelegateForRow( row, delegate );
+}
+
+
+void
+JobStatusView::customDelegateJobRemoved( int row, QStyledItemDelegate* delegate )
+{
+    if ( !delegate )
+        return;
+
+    m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
 }
 
 
