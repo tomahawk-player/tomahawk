@@ -101,25 +101,32 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
 
     switch ( role )
     {
-    case Qt::DecorationRole:
-        return item->icon();
-    case Qt::ToolTipRole:
-    case Qt::DisplayRole:
-    {
-        if ( m_collapseCount.contains( item->type() ) )
-            return m_collapseCount[ item->type() ].last()->mainText();
-        else
-            return item->mainText();
-    }
-    case RightColumnRole:
-    {
-        if ( m_collapseCount.contains( item->type() ) )
-            return m_collapseCount[ item->type() ].count();
-        else
-            return item->rightColumnText();
-    }
-    case AllowMultiLineRole:
-        return item->allowMultiLine();
+        case Qt::DecorationRole:
+            return item->icon();
+            
+        case Qt::ToolTipRole:
+            
+        case Qt::DisplayRole:
+        {
+            if ( m_collapseCount.contains( item->type() ) )
+                return m_collapseCount[ item->type() ].last()->mainText();
+            else
+                return item->mainText();
+        }
+        
+        case RightColumnRole:
+        {
+            if ( m_collapseCount.contains( item->type() ) )
+                return m_collapseCount[ item->type() ].count();
+            else
+                return item->rightColumnText();
+        }
+        
+        case AllowMultiLineRole:
+            return item->allowMultiLine();
+
+        case JobDataRole:
+            return QVariant::fromValue< JobStatusItem* >( item );
     }
 
     return QVariant();
