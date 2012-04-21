@@ -40,3 +40,8 @@ bool JobStatusItem::collapseItem() const
 {
     return false;
 }
+
+QStyledItemDelegate* JobStatusItem::customDelegate() const
+{
+    return 0;
+}

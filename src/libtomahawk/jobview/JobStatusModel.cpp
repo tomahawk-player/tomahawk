@@ -60,9 +60,12 @@ JobStatusModel::addJob( JobStatusItem* item )
     }
     qDebug() << "Adding item:" << item;
 
-    beginInsertRows( QModelIndex(), m_items.count(), m_items.count() );
+    int currentEndRow = m_items.count();
+    beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
     m_items.append( item );
     endInsertRows();
+    if ( item->customDelegate() )
+        emit customDelegateJobInserted( currentEndRow, item->customDelegate() );
 }
 
 

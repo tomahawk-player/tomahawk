@@ -23,7 +23,9 @@
 
 #include <QModelIndex>
 
+class QStyledItemDelegate;
 class JobStatusItem;
+
 class DLLEXPORT JobStatusModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -45,6 +47,9 @@ public:
     /// Takes ownership of job
     void addJob( JobStatusItem* item );
 
+signals:
+    void customDelegateJobInserted( int row, QStyledItemDelegate* delegate );
+    
 private slots:
     void itemUpdated();
     void itemFinished();

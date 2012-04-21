@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class QStyledItemDelegate;
 class QPixmap;
 
 /**
@@ -55,6 +56,8 @@ public:
      */
     virtual bool collapseItem() const;
     virtual bool allowMultiLine() const;
+
+    virtual QStyledItemDelegate* customDelegate() const;
 
 signals:
     /// Ask for an update
