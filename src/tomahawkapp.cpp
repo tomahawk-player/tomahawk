@@ -409,6 +409,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
     qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
     qRegisterMetaType< PairList >("PairList");
+    qRegisterMetaType< JobStatusItem* >("JobStatusItem*");
 
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");

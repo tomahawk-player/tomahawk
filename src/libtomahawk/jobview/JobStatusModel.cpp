@@ -41,6 +41,19 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
+    if ( item->concurrentJobLimit() > 0 )
+    {
+        if ( m_jobTypeCount[ item->type() ] >= item->concurrentJobLimit() )
+        {
+            m_jobQueue[ item->type() ].enqueue( item );
+            return;
+        }
+        int currentJobCount = m_jobTypeCount[ item->type() ];
+        currentJobCount++;
+        m_jobTypeCount[ item->type() ] = currentJobCount;
+    }
+    
+    
     connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
     connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
 
@@ -60,9 +73,12 @@ JobStatusModel::addJob( JobStatusItem* item )
     }
     qDebug() << "Adding item:" << item;
 
-    beginInsertRows( QModelIndex(), m_items.count(), m_items.count() );
+    int currentEndRow = m_items.count();
+    beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
     m_items.append( item );
     endInsertRows();
+    if ( item->hasCustomDelegate() )
+        emit customDelegateJobInserted( currentEndRow, item );
 }
 
 
@@ -85,25 +101,32 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
 
     switch ( role )
     {
-    case Qt::DecorationRole:
-        return item->icon();
-    case Qt::ToolTipRole:
-    case Qt::DisplayRole:
-    {
-        if ( m_collapseCount.contains( item->type() ) )
-            return m_collapseCount[ item->type() ].last()->mainText();
-        else
-            return item->mainText();
-    }
-    case RightColumnRole:
-    {
-        if ( m_collapseCount.contains( item->type() ) )
-            return m_collapseCount[ item->type() ].count();
-        else
-            return item->rightColumnText();
-    }
-    case AllowMultiLineRole:
-        return item->allowMultiLine();
+        case Qt::DecorationRole:
+            return item->icon();
+            
+        case Qt::ToolTipRole:
+            
+        case Qt::DisplayRole:
+        {
+            if ( m_collapseCount.contains( item->type() ) )
+                return m_collapseCount[ item->type() ].last()->mainText();
+            else
+                return item->mainText();
+        }
+        
+        case RightColumnRole:
+        {
+            if ( m_collapseCount.contains( item->type() ) )
+                return m_collapseCount[ item->type() ].count();
+            else
+                return item->rightColumnText();
+        }
+        
+        case AllowMultiLineRole:
+            return item->allowMultiLine();
+
+        case JobDataRole:
+            return QVariant::fromValue< JobStatusItem* >( item );
     }
 
     return QVariant();
@@ -170,6 +193,22 @@ JobStatusModel::itemFinished()
     beginRemoveRows( QModelIndex(), idx, idx );
     m_items.removeAll( item );
     endRemoveRows();
+
+    if ( item->customDelegate() )
+        emit customDelegateJobRemoved( idx );
+
+    if ( item->concurrentJobLimit() > 0 )
+    {
+        int currentJobs = m_jobTypeCount[ item->type() ];
+        currentJobs--;
+        m_jobTypeCount[ item->type() ] = currentJobs;
+
+        if ( !m_jobQueue[ item->type() ].isEmpty() )
+        {
+            JobStatusItem* item = m_jobQueue[ item->type() ].dequeue();
+            QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, item ) );
+        }
+    }
 
     item->deleteLater();
 }

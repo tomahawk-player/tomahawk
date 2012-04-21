@@ -20,7 +20,9 @@
 #define JOB_STATUS_ITEM
 
 #include <QObject>
+#include <QMetaType>
 
+class QStyledItemDelegate;
 class QPixmap;
 
 /**
@@ -56,6 +58,12 @@ public:
     virtual bool collapseItem() const;
     virtual bool allowMultiLine() const;
 
+    virtual int concurrentJobLimit() const;
+
+    virtual bool hasCustomDelegate() const;
+    virtual void createDelegate( QObject* parent );
+    virtual QStyledItemDelegate* customDelegate() const;
+
 signals:
     /// Ask for an update
     void statusChanged();
@@ -63,5 +71,7 @@ signals:
     /// Job is finished, will be deleted by the model
     void finished();
 };
+
+Q_DECLARE_METATYPE( JobStatusItem* );
 
 #endif

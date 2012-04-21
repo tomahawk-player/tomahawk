@@ -53,6 +53,7 @@ public:
 
         User()
             : uuid( QUuid::createUuid().toString() )
+            , acl( ACLRegistry::NotFound )
             {}
 
         User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACL p_acl )
@@ -80,10 +81,12 @@ public slots:
      **/
     void isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound );
 
-    
-#ifndef ENABLE_HEADLESS
-    ACLRegistry::ACL getUserDecision( const QString &username );
-#endif
+    #ifndef ENABLE_HEADLESS
+    void getUserDecision( User user );
+    #endif
+
+private slots:
+    void userDecision( ACLRegistry::User user );
     
 private:
     /**

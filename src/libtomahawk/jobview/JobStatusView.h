@@ -27,7 +27,9 @@
 class QAbstractItemModel;
 class QListView;
 class JobStatusModel;
+class JobStatusItem;
 class StreamConnection;
+class QStyledItemDelegate;
 
 class DLLEXPORT JobStatusView : public AnimatedWidget
 {
@@ -51,6 +53,8 @@ public:
 
 private slots:
     void checkCount();
+    void customDelegateJobInserted( int row, JobStatusItem* item );
+    void customDelegateJobRemoved( int row );
 
 private:
     QListView* m_view;

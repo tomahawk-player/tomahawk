@@ -31,12 +31,44 @@ JobStatusItem::~JobStatusItem()
 }
 
 
-bool JobStatusItem::allowMultiLine() const
+bool
+JobStatusItem::allowMultiLine() const
 {
     return false;
 }
 
-bool JobStatusItem::collapseItem() const
+
+bool
+JobStatusItem::collapseItem() const
 {
     return false;
+}
+
+
+int
+JobStatusItem::concurrentJobLimit() const
+{
+    return 0;
+}
+
+
+bool
+JobStatusItem::hasCustomDelegate() const
+{
+    return false;
+}
+
+
+void
+JobStatusItem::createDelegate( QObject* parent )
+{
+    Q_UNUSED( parent );
+    return;
+}
+
+
+QStyledItemDelegate*
+JobStatusItem::customDelegate() const
+{
+    return 0;
 }

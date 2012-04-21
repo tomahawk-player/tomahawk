@@ -22,8 +22,11 @@
 #include "dllmacro.h"
 
 #include <QModelIndex>
+#include <QQueue>
 
+class QStyledItemDelegate;
 class JobStatusItem;
+
 class DLLEXPORT JobStatusModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -32,7 +35,8 @@ public:
         // DecorationRole is icon
         // DisplayRole is main col
         RightColumnRole = Qt::UserRole + 1,
-        AllowMultiLineRole = Qt::UserRole + 2
+        AllowMultiLineRole = Qt::UserRole + 2,
+        JobDataRole = Qt::UserRole + 3
     };
 
     explicit JobStatusModel( QObject* parent = 0 );
@@ -42,9 +46,14 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
+signals:
+    void customDelegateJobInserted( int row, JobStatusItem* item );
+    void customDelegateJobRemoved( int row );
+
+public slots:
     /// Takes ownership of job
     void addJob( JobStatusItem* item );
-
+    
 private slots:
     void itemUpdated();
     void itemFinished();
@@ -52,6 +61,8 @@ private slots:
 private:
     QList< JobStatusItem* > m_items;
     QHash< QString, QList< JobStatusItem* > > m_collapseCount;
+    QHash< QString, QQueue< JobStatusItem* > > m_jobQueue;
+    QHash< QString, int > m_jobTypeCount;
 };
 
 #endif // JOBSTATUSMODEL_H
