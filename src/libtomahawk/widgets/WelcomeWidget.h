@@ -30,7 +30,7 @@
 #include "Source.h"
 #include "ViewPage.h"
 
-#include "utils/tomahawkutilsgui.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include "DllMacro.h"
 

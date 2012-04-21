@@ -20,7 +20,7 @@
 #ifndef FADINGPIXMAP_H
 #define FADINGPIXMAP_H
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QLabel>
 #include <QPaintEvent>

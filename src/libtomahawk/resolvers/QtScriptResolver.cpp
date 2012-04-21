@@ -27,7 +27,7 @@
 
 #include "network/Servent.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 

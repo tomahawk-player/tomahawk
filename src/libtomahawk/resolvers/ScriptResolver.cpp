@@ -28,7 +28,7 @@
 #include "Pipeline.h"
 #include "SourceList.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #ifdef Q_OS_WIN

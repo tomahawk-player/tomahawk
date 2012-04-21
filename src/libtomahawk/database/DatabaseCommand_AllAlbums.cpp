@@ -23,7 +23,7 @@
 #include "Artist.h"
 #include "DatabaseImpl.h"
 #include "Source.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 

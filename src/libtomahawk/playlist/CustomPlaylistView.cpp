@@ -21,7 +21,7 @@
 
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "database/Database.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
 

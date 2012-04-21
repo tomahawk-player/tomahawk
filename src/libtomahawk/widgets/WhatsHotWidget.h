@@ -29,7 +29,7 @@
 #include "infosystem/InfoSystem.h"
 #include "ViewPage.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "DllMacro.h"
 

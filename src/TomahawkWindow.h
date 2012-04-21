@@ -29,7 +29,7 @@
 
 #include "Result.h"
 #include "audio/AudioEngine.h"
-#include "utils/xspfloader.h"
+#include "utils/XspfLoader.h"
 
 namespace Tomahawk {
 namespace Accounts {

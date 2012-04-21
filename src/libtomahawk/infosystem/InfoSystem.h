@@ -33,7 +33,7 @@
 #include <QtCore/QStringList>
 
 #include "DllMacro.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 class QNetworkAccessManager;
 

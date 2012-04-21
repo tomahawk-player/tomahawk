@@ -27,8 +27,8 @@
 #include "playlist/PlaylistModel.h"
 #include "widgets/OverlayWidget.h"
 
-#include "utils/xspfloader.h"
-#include "utils/tomahawkutils.h"
+#include "utils/XspfLoader.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #define FILTER_TIMEOUT 280

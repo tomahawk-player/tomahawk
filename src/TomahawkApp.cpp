@@ -46,7 +46,7 @@
 #include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "playlist/XspfUpdater.h"
 #include "network/Servent.h"
-#include "web/api_v1.h"
+#include "web/Api_v1.h"
 #include "SourceList.h"
 #include "ShortcutHandler.h"
 #include "ScanManager.h"
@@ -59,14 +59,14 @@
 #include "EchonestCatalogSynchronizer.h"
 
 #include "audio/AudioEngine.h"
-#include "utils/xspfloader.h"
+#include "utils/XspfLoader.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkutilsgui.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "accounts/lastfm/LastFmAccount.h"
 #include "accounts/spotify/SpotifyAccount.h"
 #include "accounts/spotify/SpotifyPlaylistUpdater.h"
-#include "utils/tomahawkcache.h"
+#include "utils/TomahawkCache.h"
 
 #include "config.h"
 
@@ -85,11 +85,11 @@
 
 // should go to a plugin actually
 #ifdef GLOOX_FOUND
-    #include "xmppbot/xmppbot.h"
+    #include "xmppbot/XmppBot.h"
 #endif
 
 #ifdef Q_WS_MAC
-#include "mac/macshortcuthandler.h"
+#include "mac/MacShortcutHandler.h"
 
 #include <sys/resource.h>
 #include <sys/sysctl.h>

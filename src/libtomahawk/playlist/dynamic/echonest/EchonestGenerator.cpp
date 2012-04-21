@@ -20,7 +20,7 @@
 #include "dynamic/echonest/EchonestControl.h"
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "Query.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "TomahawkSettings.h"
 #include "database/DatabaseCommand_CollectionAttributes.h"
 #include "database/Database.h"

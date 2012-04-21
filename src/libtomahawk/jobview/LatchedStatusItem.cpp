@@ -22,7 +22,7 @@
 #include "SourceList.h"
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* parent )
     : JobStatusItem()

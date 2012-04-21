@@ -45,7 +45,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 
-#include <utils/tomahawkutils.h>
+#include <utils/TomahawkUtils.h>
 #include <utils/Logger.h>
 #include <accounts/AccountManager.h>
 
@@ -55,7 +55,7 @@
     #include <QtGui/QMessageBox>
 #endif
 
-#include <utils/tomahawkutilsgui.h>
+#include <utils/TomahawkUtilsGui.h>
 #include "utils/Logger.h"
 #include "XmppInfoPlugin.h"
 

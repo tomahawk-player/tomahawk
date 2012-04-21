@@ -22,7 +22,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtCore/QTimeLine>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 

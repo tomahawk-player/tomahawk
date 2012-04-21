@@ -40,7 +40,7 @@
 #include "Artist.h"
 #include "ViewManager.h"
 #include "accounts/AccountManager.h"
-#include "sourcetree/sourcetreeview.h"
+#include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
 #include "utils/ProxyStyle.h"
 #include "widgets/AnimatedSplitter.h"

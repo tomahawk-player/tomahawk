@@ -23,7 +23,7 @@
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/DynamicControl.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "widgets/ElidedLabel.h"
 
 #include <QtGui/QLabel>

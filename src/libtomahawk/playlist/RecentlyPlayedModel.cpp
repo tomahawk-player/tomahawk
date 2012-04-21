@@ -25,7 +25,7 @@
 #include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_PlaybackHistory.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #define HISTORY_TRACK_ITEMS 25

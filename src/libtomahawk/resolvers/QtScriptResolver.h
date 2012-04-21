@@ -22,7 +22,7 @@
 
 #include "ExternalResolverGui.h"
 #include "Query.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "config.h"
 
 #include <QtCore/QDir>

@@ -31,10 +31,10 @@
 
 #include "echonest/Playlist.h"
 
-#include "utils/xspfloader.h"
-#include "utils/xspfgenerator.h"
+#include "utils/XspfLoader.h"
+#include "utils/XspfGenerator.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "utils/JspfLoader.h"
 #include "utils/SpotifyParser.h"

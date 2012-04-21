@@ -20,7 +20,7 @@
 #include "ShortenedLinkParser.h"
 
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "DropJobNotifier.h"
 #include "Query.h"
 #include "jobview/ErrorStatusMessage.h"

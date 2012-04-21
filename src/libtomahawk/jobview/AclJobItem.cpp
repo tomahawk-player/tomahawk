@@ -19,7 +19,7 @@
 
 #include "AclJobItem.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QPixmap>
 #include <QListView>

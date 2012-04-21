@@ -26,7 +26,7 @@
 #include "PlaylistInterface.h"
 
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"

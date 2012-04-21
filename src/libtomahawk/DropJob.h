@@ -23,7 +23,7 @@
 #include "Query.h"
 
 #include "infosystem/InfoSystem.h"
-#include "utils/xspfloader.h"
+#include "utils/XspfLoader.h"
 
 #include <QObject>
 #include <QStringList>

@@ -18,7 +18,7 @@
 
 #include "ErrorStatusMessage.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QTimer>
 

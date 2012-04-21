@@ -29,7 +29,7 @@
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "MprisPlugin.h"
 #include "MprisPluginRootAdaptor.h"

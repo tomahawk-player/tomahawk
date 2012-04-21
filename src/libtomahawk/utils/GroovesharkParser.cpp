@@ -21,7 +21,7 @@
 #include "GroovesharkParser.h"
 
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"

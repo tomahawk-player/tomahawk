@@ -24,7 +24,7 @@
 
 #include "ViewManager.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include <QCheckBox>
 #include <QPaintEvent>

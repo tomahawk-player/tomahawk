@@ -33,7 +33,7 @@
 #include <QTweetLib/qtweetstatus.h>
 #include <QTweetLib/qtweetusershow.h>
 
-#include <utils/tomahawkutils.h>
+#include <utils/TomahawkUtils.h>
 #include <TomahawkSettings.h>
 #include <database/Database.h>
 #include <network/Servent.h>

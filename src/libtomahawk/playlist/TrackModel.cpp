@@ -25,7 +25,7 @@
 #include <QTreeView>
 
 #include "audio/AudioEngine.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "Artist.h"
 #include "Album.h"

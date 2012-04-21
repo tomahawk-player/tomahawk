@@ -28,7 +28,7 @@
 #include "Source.h"
 #include "SourceList.h"
 #include "database/Database.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

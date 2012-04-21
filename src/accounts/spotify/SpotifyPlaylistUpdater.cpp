@@ -20,7 +20,7 @@
 
 #include "accounts/AccountManager.h"
 #include "SpotifyAccount.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QMessageBox>
 

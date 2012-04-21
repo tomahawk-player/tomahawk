@@ -32,7 +32,7 @@
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "dynamic/GeneratorInterface.h"
 #include "RecentlyPlayedPlaylistsModel.h"

@@ -28,7 +28,7 @@
 #include "Album.h"
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #define HYPEM_URL "http://hypem.com/playlist/"

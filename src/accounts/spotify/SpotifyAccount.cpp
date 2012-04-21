@@ -24,7 +24,7 @@
 #include "SpotifyAccountConfig.h"
 #include "SpotifyPlaylistUpdater.h"
 #include "resolvers/ScriptResolver.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "ActionCollection.h"
 
 #ifndef ENABLE_HEADLESS

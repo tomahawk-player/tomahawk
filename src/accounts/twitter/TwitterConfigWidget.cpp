@@ -22,7 +22,7 @@
 #include "ui_TwitterConfigWidget.h"
 
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "database/Database.h"
 
 #include "TomahawkOAuthTwitter.h"

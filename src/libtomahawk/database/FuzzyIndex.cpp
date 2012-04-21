@@ -25,7 +25,7 @@
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
 #include "DatabaseImpl.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace lucene::analysis;

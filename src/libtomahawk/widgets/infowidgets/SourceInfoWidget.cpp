@@ -30,7 +30,7 @@
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include "widgets/OverlayWidget.h"

@@ -35,9 +35,9 @@
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
 
-#include "mac/tomahawkapp_mac.h" // for PlatforInterface
+#include "mac/TomahawkApp_Mac.h" // for PlatforInterface
 #include "Typedefs.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
 class AudioEngine;

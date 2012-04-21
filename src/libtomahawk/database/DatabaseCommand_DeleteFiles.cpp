@@ -29,7 +29,7 @@
 #include "database/DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 using namespace Tomahawk;
 

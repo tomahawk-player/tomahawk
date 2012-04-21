@@ -38,7 +38,7 @@
 #include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "Pipeline.h"
 

@@ -39,7 +39,7 @@
 
 #include "PortFwdThread.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

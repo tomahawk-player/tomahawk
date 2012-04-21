@@ -29,7 +29,7 @@
 
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

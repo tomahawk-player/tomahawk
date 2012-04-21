@@ -10,9 +10,9 @@
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkcache.h"
+#include "utils/TomahawkCache.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

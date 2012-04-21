@@ -30,7 +30,7 @@
 #include "echonest/Playlist.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

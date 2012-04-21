@@ -24,7 +24,7 @@
 #include "PlaylistInterface.h"
 #include "Artist.h"
 #include "Album.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QtGui/QPixmap>
 

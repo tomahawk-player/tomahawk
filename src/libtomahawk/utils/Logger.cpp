@@ -28,7 +28,7 @@
 #include <QTime>
 #include <QVariant>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 256

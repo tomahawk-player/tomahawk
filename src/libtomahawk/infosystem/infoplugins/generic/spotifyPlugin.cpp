@@ -29,7 +29,7 @@
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "ChartsPlugin_Data_p.h"
 

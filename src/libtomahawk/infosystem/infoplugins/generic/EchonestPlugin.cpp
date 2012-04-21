@@ -21,7 +21,7 @@
 #include <echonest/Artist.h>
 #include <echonest/ArtistTypes.h>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include <QNetworkConfiguration>

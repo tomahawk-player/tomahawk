@@ -33,7 +33,7 @@
 #include "playlist/TreeModel.h"
 
 #include "utils/StyleHelper.h"
-#include "utils/tomahawkutilsgui.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #define ANIMATION_TIME 450
 #define SLIDE_TIME 350

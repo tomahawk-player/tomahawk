@@ -33,7 +33,7 @@
 #include "infoplugins/generic/musicbrainzPlugin.h"
 #include "infoplugins/generic/hypemPlugin.h"
 #include "GlobalActionManager.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #ifdef Q_WS_MAC

@@ -27,7 +27,7 @@
 #include "Query.h"
 #include "Result.h"
 
-#include "utils/tomahawkutilsgui.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "utils/PixmapDelegateFader.h"

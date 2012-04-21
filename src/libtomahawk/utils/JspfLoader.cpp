@@ -26,7 +26,7 @@
 
 #include <qjson/parser.h>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include "SourceList.h"

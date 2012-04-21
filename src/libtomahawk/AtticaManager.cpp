@@ -18,7 +18,7 @@
 
 #include "AtticaManager.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "TomahawkSettingsGui.h"
 #include "Pipeline.h"
 

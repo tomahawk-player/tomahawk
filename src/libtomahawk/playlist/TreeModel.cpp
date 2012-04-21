@@ -29,7 +29,7 @@
 #include "database/DatabaseCommand_AllAlbums.h"
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/Database.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

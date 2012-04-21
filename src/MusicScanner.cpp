@@ -21,7 +21,7 @@
 
 #include <QtCore/QCoreApplication>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "TomahawkSettings.h"
 #include "SourceList.h"
 #include "database/Database.h"

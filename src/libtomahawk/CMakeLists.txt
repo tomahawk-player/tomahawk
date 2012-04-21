@@ -108,8 +108,8 @@ set( libGuiSources
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
 
-    utils/widgetdragfilter.cpp
-    utils/xspfgenerator.cpp
+    utils/WidgetDragFilter.cpp
+    utils/XspfGenerator.cpp
     utils/JspfLoader.cpp
     utils/SpotifyParser.cpp
     utils/M3uLoader.cpp
@@ -119,7 +119,7 @@ set( libGuiSources
     utils/StyleHelper.cpp
     utils/DropJobNotifier.cpp
     utils/ProxyStyle.cpp
-    utils/tomahawkutilsgui.cpp
+    utils/TomahawkUtilsGui.cpp
     utils/Closure.cpp
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
@@ -289,11 +289,11 @@ set( libSources
     taghandlers/mp4tag.cpp
     taghandlers/oggtag.cpp
 
-    utils/tomahawkutils.cpp
+    utils/TomahawkUtils.cpp
     utils/Logger.cpp
     utils/Qnr_IoDeviceStream.cpp
-    utils/xspfloader.cpp
-    utils/tomahawkcache.cpp
+    utils/XspfLoader.cpp
+    utils/TomahawkCache.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -390,10 +390,10 @@ IF( APPLE )
     SET( libSources ${libSources}
       infosystem/infoplugins/mac/Adium.mm
       infosystem/infoplugins/mac/AdiumPlugin.cpp
-      utils/tomahawkutils_mac.mm
+      utils/TomahawkUtils_Mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
-    SET_SOURCE_FILES_PROPERTIES(utils/tomahawkutils_mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
+    SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}

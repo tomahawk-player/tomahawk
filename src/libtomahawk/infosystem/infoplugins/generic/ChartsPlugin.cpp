@@ -31,9 +31,9 @@
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/tomahawkcache.h"
+#include "utils/TomahawkCache.h"
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"

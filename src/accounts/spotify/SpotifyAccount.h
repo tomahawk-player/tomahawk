@@ -23,7 +23,7 @@
 #include "accounts/ResolverAccount.h"
 #include "SourceList.h"
 #include "Playlist.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/SmartPointerList.h"
 
 class QAction;

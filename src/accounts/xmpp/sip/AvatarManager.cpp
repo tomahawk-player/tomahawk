@@ -19,7 +19,7 @@
 
 #include "AvatarManager.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <jreen/vcard.h>
 #include <jreen/vcardupdate.h>

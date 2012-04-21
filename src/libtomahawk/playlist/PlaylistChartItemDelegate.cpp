@@ -34,7 +34,7 @@
 #include "TrackView.h"
 #include "TrackHeader.h"
 
-#include "utils/tomahawkutilsgui.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include <utils/PixmapDelegateFader.h>
 #include <utils/Closure.h>

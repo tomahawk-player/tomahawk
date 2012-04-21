@@ -21,7 +21,7 @@
 
 #include "ShortenedLinkParser.h"
 #include "config.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "DropJob.h"
 #include "jobview/JobStatusView.h"

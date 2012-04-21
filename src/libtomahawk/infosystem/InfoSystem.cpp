@@ -24,7 +24,7 @@
 #include "TomahawkSettings.h"
 #include "InfoSystemCache.h"
 #include "InfoSystemWorker.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 namespace Tomahawk

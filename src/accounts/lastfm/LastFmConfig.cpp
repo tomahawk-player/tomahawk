@@ -19,7 +19,7 @@
 #include "LastFmConfig.h"
 
 #include "LastFmAccount.h"
-#include <utils/tomahawkutils.h>
+#include <utils/TomahawkUtils.h>
 #include "ui_LastFmConfig.h"
 #include "lastfm/ws.h"
 #include "lastfm/XmlQuery"

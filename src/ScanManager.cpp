@@ -25,7 +25,7 @@
 
 #include "MusicScanner.h"
 #include "TomahawkSettings.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "libtomahawk/SourceList.h"
 
 #include "database/Database.h"

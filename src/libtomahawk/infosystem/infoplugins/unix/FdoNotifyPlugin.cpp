@@ -38,7 +38,7 @@
  */
 
 #include "FdoNotifyPlugin.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "ImageConverter.h"
 
 #include <QtDBus/QDBusConnection>

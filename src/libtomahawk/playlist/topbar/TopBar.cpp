@@ -26,7 +26,7 @@
 #include <QRadioButton>
 #include <QFile>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #define MAXDUDES 3

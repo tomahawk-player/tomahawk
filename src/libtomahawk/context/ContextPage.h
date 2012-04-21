@@ -25,7 +25,7 @@
 #include <QStyleOptionGraphicsItem>
 
 #include "Typedefs.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include "DllMacro.h"
 #include <signal.h>

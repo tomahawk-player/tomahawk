@@ -30,7 +30,7 @@
 #include "playlist/PlaylistModel.h"
 #include "widgets/OverlayWidget.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 

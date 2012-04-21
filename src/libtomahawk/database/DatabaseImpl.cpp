@@ -32,7 +32,7 @@
 #include "Result.h"
 #include "Artist.h"
 #include "Album.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 /* !!!! You need to manually generate Schema.sql.h when the schema changes:

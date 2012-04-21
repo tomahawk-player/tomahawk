@@ -31,7 +31,7 @@
 #include "database/DatabaseCommand_PlaybackHistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "DropJob.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
