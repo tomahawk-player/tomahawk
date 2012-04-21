@@ -1,4 +1,5 @@
 Version 0.4.2:
+    * Fix ZeroConf protocol showing IP addresses instead of host names.
     * Updated translations for various languages.
     * Resuming playback restores correct volume settings.
     * Reduced CPU usage during playback.
