@@ -26,6 +26,9 @@
 #include "tomahawkapp.h"
 
 #include "utils/logger.h"
+#include "jobview/AclJobItem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 
 
 ACLRegistry* ACLRegistry::s_instance = 0;
@@ -64,6 +67,10 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
         return;
     }
 
+    //FIXME: Remove when things are working
+    emit aclResult( dbid, username, ACLRegistry::Stream );
+    return;
+    
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
     while ( i.hasNext() )
@@ -103,24 +110,13 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     user.knownAccountIds.append( username );
     if ( globalType != ACLRegistry::NotFound )
         user.acl = globalType;
+#ifndef ENABLE_HEADLESS
     else
-    {    
-        ACLRegistry::ACL acl = globalType;
-        tDebug( LOGVERBOSE ) << "ACL is intially" << acl;
-        #ifndef ENABLE_HEADLESS
-            acl = getUserDecision( username );
-            tDebug( LOGVERBOSE ) << "after getUserDecision acl is" << acl;
-        #endif
-
-        if ( acl == ACLRegistry::NotFound )
-        {
-            emit aclResult( dbid, username, acl );
-            return;
-        }
-
-        user.acl = acl;
+    {
+        getUserDecision( user );
+        return;
     }
-
+#endif
     m_cache.append( user );
     emit aclResult( dbid, username, user.acl );
     return;
@@ -128,37 +124,22 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 
 
 #ifndef ENABLE_HEADLESS
-
-#include <QMessageBox>
-
-ACLRegistry::ACL
-ACLRegistry::getUserDecision( const QString &username )
+void
+ACLRegistry::getUserDecision( User user )
 {
-    return ACLRegistry::Stream;
-    QMessageBox msgBox;
-    msgBox.setIcon( QMessageBox::Question );
-    msgBox.setText( tr( "Connect to Peer?" ) );
-    msgBox.setInformativeText( tr( "Another Tomahawk instance that claims to be owned by %1 is attempting to connect to you. Select whether to allow or deny this connection.\n\nRemember: Only allow peers to connect if you trust who they are and if you have the legal right for them to stream music from you.").arg( username ) );
-    QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::YesRole );
-    QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::ActionRole );
-
-    msgBox.setDefaultButton( allowButton );
-    msgBox.setEscapeButton( denyButton );
-
-    msgBox.exec();
-
-    if( msgBox.clickedButton() == denyButton )
-        return ACLRegistry::Deny;
-    else if( msgBox.clickedButton() == allowButton )
-        return ACLRegistry::Stream;
-
-    //How could we get here?
-    tDebug( LOGVERBOSE ) << "ERROR: returning NotFound";
-    Q_ASSERT( false );
-    return ACLRegistry::NotFound;
+    AclJobItem* job = new AclJobItem( user );
+    connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );
+    JobStatusView::instance()->model()->addJob( job );
 }
-
 #endif
+
+
+void
+ACLRegistry::userDecision( ACLRegistry::User user )
+{
+    m_cache.append( user );
+    emit aclResult( user.knownDbids.first(), user.knownAccountIds.first(), user.acl );
+}
 
 
 void

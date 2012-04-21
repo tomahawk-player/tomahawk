@@ -36,6 +36,7 @@ set( libGuiSources
     jobview/JobStatusModel.cpp
     jobview/JobStatusDelegate.cpp
     jobview/JobStatusItem.cpp
+    jobview/AclJobItem.cpp
     jobview/PipelineStatusItem.cpp
     jobview/TransferStatusItem.cpp
     jobview/LatchedStatusItem.cpp

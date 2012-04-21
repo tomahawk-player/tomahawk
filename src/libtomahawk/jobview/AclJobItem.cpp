@@ -25,10 +25,8 @@
 #include <QListView>
 #include <QApplication>
 
-static QPixmap* s_indexIcon = 0;
 
-
-#define ROW_HEIGHT 20
+#define ROW_HEIGHT 40
 #define ICON_PADDING 1
 #define PADDING 2
 AclJobDelegate::AclJobDelegate( QObject* parent )
@@ -42,6 +40,7 @@ AclJobDelegate::AclJobDelegate( QObject* parent )
 void
 AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    /*
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
@@ -80,46 +79,32 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
         to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
     painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), mainText, to );
+    */
 }
 
 QSize
 AclJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
-
-    if ( !allowMultiLine )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
-    else if ( m_cachedMultiLineHeights.contains( index ) )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), m_cachedMultiLineHeights[ index ] );
-
-    // Don't elide, but stretch across as many rows as required
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
-
-    const QString text = index.data( Qt::DisplayRole ).toString();
-    const int leftEdge =  ICON_PADDING + ROW_HEIGHT + 2*PADDING;
-    const QRect rect = opt.fontMetrics.boundingRect( leftEdge, opt.rect.top(), m_parentView->width() - leftEdge, 200, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text );
-
-    m_cachedMultiLineHeights.insert( index, rect.height() + 4*PADDING );
-
-    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), rect.height() + 4*PADDING );
+    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
 }
 
 
 
-AclJobItem::AclJobItem()
+AclJobItem::AclJobItem( ACLRegistry::User user )
     : m_delegate( 0 )
+    , m_user( user )
 {
 }
 
 
 AclJobItem::~AclJobItem()
 {
-    if ( m_delegate );
+    if ( m_delegate )
         delete m_delegate;
 }
 
 
+void
 AclJobItem::createDelegate( QObject* parent )
 {
     if ( m_delegate )

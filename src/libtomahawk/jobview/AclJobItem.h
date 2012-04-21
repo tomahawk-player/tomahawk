@@ -20,9 +20,10 @@
 #ifndef ACLJOBITEM_H
 #define ACLJOBITEM_H
 
-#include <QStyledItemDelegate>
-
 #include <jobview/JobStatusItem.h>
+#include "aclregistry.h"
+
+#include <QStyledItemDelegate>
 
 class QListView;
 
@@ -32,12 +33,10 @@ class AclJobDelegate : public QStyledItemDelegate
 
 public:
     explicit AclJobDelegate ( QObject* parent = 0 );
-    virtual ~AclJobDelegate();
+    virtual ~AclJobDelegate() {}
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-    virtual void setParent( QObject* parent );
 
 private:
     mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
@@ -49,8 +48,8 @@ class AclJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit AclJobItem();
-    ~AclJobItem();
+    explicit AclJobItem( ACLRegistry::User user );
+    virtual ~AclJobItem();
     
     void done();
 
@@ -61,12 +60,18 @@ public:
 
     virtual int concurrentJobLimit() const { return 3; }
     
-    virtual bool hasCustomDelegate() { return true; }
+    virtual bool hasCustomDelegate() const { return true; }
     virtual void createDelegate( QObject* parent );
-    virtual QStyledItemDelegate* customDelegate() { return m_delegate; }
+    virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
+    virtual ACLRegistry::User user() const { return m_user; }
+
+signals:
+    void userDecision( ACLRegistry::User user );
+    
 private:
     QStyledItemDelegate* m_delegate;
+    ACLRegistry::User m_user;
 };
 
-#endif // ACLJOBITEMJOBITEM_H
+#endif // ACLJOBITEM_H
