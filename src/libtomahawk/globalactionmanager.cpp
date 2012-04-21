@@ -144,6 +144,40 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
 }
 
 
+void
+GlobalActionManager::getShortLink( const playlist_ptr& pl )
+{
+    QVariantMap m;
+    m[ "title" ] = playlist->title();
+    QVariantList tracks;
+    foreach( const plentry_ptr& pl, playlist->entries() )
+    {
+        if ( pl->query().isNull() )
+            continue;
+
+        QVariantMap track;
+        track[ "title" ] = pl->query()->track();
+        track[ "artist" ] = pl->query()->artist();
+        track[ "album" ] = pl->query()->album();
+
+        tracks << track;
+    }
+    m[ "tracks" ] = tracks;
+
+    QJson::Parser p;
+    QByteArray msg = p.parse( m );
+    qDebug() << "POSTING DATA:" << msg;
+
+    const QUrl url( QString( "%1/playlist").arg( hostname() ) );
+    QNetworkRequest req( url );
+    req.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );
+    QNetworkReply *reply = TomahawkUtils::nam()->get( request );
+    if ( callbackObj.isValid() )
+        reply->setProperty( "callbackobj", callbackObj );
+    connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
+}
+
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
 {
@@ -1157,7 +1191,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 QString
 GlobalActionManager::hostname() const
 {
-    return QString( "http://toma.hk" );
+    return QString( "http://stage.toma.hk" );
 }
 
 
