@@ -24,7 +24,7 @@
 
 #define TOMAHAWK_SIP_MESSAGE_NS QLatin1String("http://www.tomhawk-player.org/sip/transports")
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class TomahawkXmppMessagePrivate;
 class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload

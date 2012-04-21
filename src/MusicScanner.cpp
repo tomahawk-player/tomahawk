@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "musicscanner.h"
+#include "MusicScanner.h"
 
 #include <QtCore/QCoreApplication>
 

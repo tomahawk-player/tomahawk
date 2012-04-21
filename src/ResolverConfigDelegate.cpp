@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "resolverconfigdelegate.h"
+#include "ResolverConfigDelegate.h"
 
 // #include "resolversmodel.h"
 #include "ExternalResolverGui.h"
@@ -68,7 +68,7 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     int rightSplit = itemRect.width();
     QRect confRect = QRect( rightSplit - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
 
-    // if the resolver has a config widget, paint it first (right-aligned)
+    // if the Resolver.has a config widget, paint it first (right-aligned)
     if( index.data( ResolversModel::HasConfig ).toBool() ) {
         QStyleOptionToolButton topt;
         topt.rect = confRect;

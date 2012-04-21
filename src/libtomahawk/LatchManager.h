@@ -21,7 +21,7 @@
 #define LATCHMANAGER_H
 
 #include "dllmacro.h"
-#include "source.h"
+#include "Source.h"
 
 #include <QtCore/QObject>
 

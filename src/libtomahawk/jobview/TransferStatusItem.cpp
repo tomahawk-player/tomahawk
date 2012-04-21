@@ -24,7 +24,7 @@
 #include "network/servent.h"
 #include "utils/tomahawkutils.h"
 #include "result.h"
-#include "source.h"
+#include "Source.h"
 #include "artist.h"
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )

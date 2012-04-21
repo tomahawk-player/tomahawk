@@ -23,7 +23,7 @@
 
 #define APP TomahawkApp::instance()
 
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 #include "config.h"
 
 #include <QtCore/QRegExp>
@@ -64,7 +64,7 @@ namespace Tomahawk
 
 #ifdef LIBLASTFM_FOUND
 #include <lastfm/NetworkAccessManager>
-#include "scrobbler.h"
+#include "Scrobbler.h"
 #endif
 
 #ifndef TOMAHAWK_HEADLESS

@@ -20,7 +20,7 @@
 
 #include "album.h"
 #include "collection.h"
-#include "source.h"
+#include "Source.h"
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"

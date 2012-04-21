@@ -29,7 +29,7 @@
 #include <QtNetwork/QNetworkReply>
 
 #include "result.h"
-#include "source.h"
+#include "Source.h"
 #include "bufferiodevice.h"
 #include "connection.h"
 #include "controlconnection.h"

@@ -27,7 +27,7 @@
 #include "typedefs.h"
 #include "trackmodel.h"
 #include "query.h"
-#include "source.h"
+#include "Source.h"
 #include "playlistinterface.h"
 
 #include "database/databasecommand_alltracks.h"

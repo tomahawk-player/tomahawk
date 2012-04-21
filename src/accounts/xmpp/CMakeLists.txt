@@ -7,27 +7,27 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( xmppAccountSources
-    xmppaccount.cpp
-    xmppconfigwidget.cpp
-    sip/xmppsip.cpp
-    sip/tomahawkxmppmessage.cpp
-    sip/tomahawkxmppmessagefactory.cpp
+    XmppAccount.cpp
+    XmppConfigWidget.cpp
+    sip/XmppSip.cpp
+    sip/TomahawkXmppMessage.cpp
+    sip/TomahawkXmppMessageFactory.cpp
     sip/avatarmanager.cpp
     sip/xmlconsole.cpp
     XmppInfoPlugin.cpp
 )
 
 set( xmppAccountHeaders
-    xmppaccount.h
-    xmppconfigwidget.h
-    sip/xmppsip.h
+    XmppAccount.h
+    XmppConfigWidget.h
+    sip/XmppSip.h
     sip/avatarmanager.h
     sip/xmlconsole.h
     XmppInfoPlugin.h
 )
 
 set( xmppAccountUI
-    xmppconfigwidget.ui
+    XmppConfigWidget.ui
     sip/xmlconsole.ui
 )
 

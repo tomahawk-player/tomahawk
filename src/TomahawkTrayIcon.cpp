@@ -17,15 +17,15 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawktrayicon.h"
+#include "TomahawkTrayIcon.h"
 
 #include <QtGui/QWheelEvent>
 
 #include "artist.h"
 
 #include "audio/audioengine.h"
-#include "tomahawkapp.h"
-#include "tomahawkwindow.h"
+#include "TomahawkApp.h"
+#include "TomahawkWindow.h"
 
 #include "utils/logger.h"
 #include <actioncollection.h>

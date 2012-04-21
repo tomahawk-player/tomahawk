@@ -20,7 +20,7 @@
 #define ZEROCONF_ACCOUNTS_H
 
 #include "accounts/Account.h"
-#include "../accountdllmacro.h"
+#include "../AccountDllMacro.h"
 
 class SipPlugin;
 

@@ -33,7 +33,7 @@
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 
 /// SourceItem

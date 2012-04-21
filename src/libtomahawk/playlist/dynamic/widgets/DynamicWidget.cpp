@@ -33,7 +33,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
 #include "pipeline.h"
-#include "source.h"
+#include "Source.h"
 #include "audio/audioengine.h"
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
@@ -41,7 +41,7 @@
 #include "viewmanager.h"
 #include "dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
-#include "audiocontrols.h"
+#include "AudioControls.h"
 #include "LoadingSpinner.h"
 #include "utils/logger.h"
 

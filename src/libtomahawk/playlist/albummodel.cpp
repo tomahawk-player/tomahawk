@@ -25,7 +25,7 @@
 
 #include "artist.h"
 #include "albumitem.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"

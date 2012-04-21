@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 
 #include <iostream>
 
@@ -48,12 +48,12 @@
 #include "network/servent.h"
 #include "web/api_v1.h"
 #include "sourcelist.h"
-#include "shortcuthandler.h"
-#include "scanmanager.h"
+#include "ShortcutHandler.h"
+#include "ScanManager.h"
 #include "tomahawksettings.h"
 #include "globalactionmanager.h"
 #include "database/localcollection.h"
-#include "musicscanner.h"
+#include "MusicScanner.h"
 #include "pipeline.h"
 #include "dropjob.h"
 #include "EchonestCatalogSynchronizer.h"
@@ -75,8 +75,8 @@
     #include "resolvers/scriptresolver.h"
     #include "utils/spotifyparser.h"
     #include "AtticaManager.h"
-    #include "tomahawkwindow.h"
-    #include "settingsdialog.h"
+    #include "TomahawkWindow.h"
+    #include "SettingsDialog.h"
     #include "actioncollection.h"
     #include <QtGui/QMessageBox>
     #include "widgets/HeaderLabel.h"

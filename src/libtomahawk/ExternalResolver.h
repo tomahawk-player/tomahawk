@@ -23,7 +23,7 @@
 
 #include "query.h"
 #include "dllmacro.h"
-#include "resolver.h"
+#include "Resolver.h"
 
 #include <boost/function.hpp>
 

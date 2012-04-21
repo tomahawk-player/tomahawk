@@ -25,7 +25,7 @@
 #include "artist.h"
 #include "album.h"
 #include "pipeline.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"

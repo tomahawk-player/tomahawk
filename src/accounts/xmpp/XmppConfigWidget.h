@@ -20,7 +20,7 @@
 #ifndef JABBERACCOUNTCONFIGWIDGET_H
 #define JABBERACCOUNTCONFIGWIDGET_H
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 #include <QWidget>
 

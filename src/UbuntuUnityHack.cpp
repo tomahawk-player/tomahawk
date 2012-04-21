@@ -15,7 +15,7 @@
    along with Clementine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ubuntuunityhack.h"
+#include "UbuntuUnityHack.h"
 #include "utils/logger.h"
 
 #include <QProcess>

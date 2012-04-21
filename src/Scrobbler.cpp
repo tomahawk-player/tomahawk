@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "scrobbler.h"
+#include "Scrobbler.h"
 
 #include <QDir>
 #include <QSettings>

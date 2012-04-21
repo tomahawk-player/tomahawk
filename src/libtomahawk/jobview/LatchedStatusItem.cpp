@@ -18,7 +18,7 @@
 
 #include "LatchedStatusItem.h"
 
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "JobStatusView.h"
 #include "JobStatusModel.h"

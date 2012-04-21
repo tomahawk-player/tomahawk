@@ -33,7 +33,7 @@
 #include "sourcelist.h"
 #include "playlist.h"
 #include "collection.h"
-#include "source.h"
+#include "Source.h"
 #include "viewmanager.h"
 
 #include "utils/logger.h"

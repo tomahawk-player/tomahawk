@@ -25,7 +25,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QDir>
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class ACCOUNTDLLEXPORT AvatarManager : public QObject
 {

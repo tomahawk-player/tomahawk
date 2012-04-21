@@ -31,7 +31,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dropjob.h"
-#include "source.h"
+#include "Source.h"
 #include "audio/audioengine.h"
 
 using namespace Tomahawk;
@@ -256,8 +256,7 @@ PlaylistItem::onUpdated()
     {
         createOverlay();
     }
-    else if ( !m_playlist->updater() || m_playlist->updater()->typeIcon().isNull() &&
-              !m_overlaidIcon.isNull() )
+    else if ( !m_playlist->updater() || ( m_playlist->updater()->typeIcon().isNull() && !m_overlaidIcon.isNull() ) )
     {
         // No longer an updater with an icon
         m_overlaidIcon = QIcon();

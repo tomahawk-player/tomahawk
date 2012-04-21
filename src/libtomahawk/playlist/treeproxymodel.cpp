@@ -22,7 +22,7 @@
 #include <QtGui/QListView>
 
 #include "treeproxymodelplaylistinterface.h"
-#include "source.h"
+#include "Source.h"
 #include "query.h"
 #include "database/database.h"
 #include "database/databaseimpl.h"

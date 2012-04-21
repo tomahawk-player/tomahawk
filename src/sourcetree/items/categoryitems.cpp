@@ -21,7 +21,7 @@
 
 #include <QMimeData>
 
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"

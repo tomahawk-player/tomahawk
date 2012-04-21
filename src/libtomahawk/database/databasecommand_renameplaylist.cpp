@@ -22,7 +22,7 @@
 
 #include "databaseimpl.h"
 #include "collection.h"
-#include "source.h"
+#include "Source.h"
 #include "network/servent.h"
 #include "utils/logger.h"
 

@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "delegateconfigwrapper.h"
+#include "DelegateConfigWrapper.h"
 #include <QMessageBox>
 
 

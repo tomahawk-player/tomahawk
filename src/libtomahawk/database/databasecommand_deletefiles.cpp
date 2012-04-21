@@ -24,7 +24,7 @@
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
-#include "source.h"
+#include "Source.h"
 #include "database/database.h"
 #include "database/databaseimpl.h"
 #include "network/servent.h"

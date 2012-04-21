@@ -33,7 +33,7 @@ namespace Ui {
 class XmlConsole;
 }
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class ACCOUNTDLLEXPORT XmlConsole : public QWidget, public Jreen::XmlStreamHandler
 {

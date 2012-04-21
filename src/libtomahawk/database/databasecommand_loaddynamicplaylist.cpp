@@ -21,7 +21,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
-#include "source.h"
+#include "Source.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "utils/logger.h"
 

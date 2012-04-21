@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 #include "tomahawksettings.h"
 
 #include "utils/tomahawkutils.h"

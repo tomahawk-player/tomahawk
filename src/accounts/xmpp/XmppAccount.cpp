@@ -18,10 +18,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "xmppaccount.h"
-#include "xmppconfigwidget.h"
+#include "XmppAccount.h"
+#include "XmppConfigWidget.h"
 #include "sip/SipPlugin.h"
-#include "ui_xmppconfigwidget.h"
 #include "XmppInfoPlugin.h"
 
 #include <QtCore/QtPlugin>

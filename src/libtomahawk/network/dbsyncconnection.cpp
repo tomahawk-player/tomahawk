@@ -36,7 +36,7 @@
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_loadops.h"
 #include "remotecollection.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "utils/logger.h"
 

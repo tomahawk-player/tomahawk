@@ -22,7 +22,7 @@
 #include <QMetaObject>
 #include <QGenericArgument>
 
-#include "source.h"
+#include "Source.h"
 
 #include "utils/logger.h"
 #include <PlaylistUpdaterInterface.h>

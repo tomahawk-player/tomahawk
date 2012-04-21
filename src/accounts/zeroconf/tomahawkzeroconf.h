@@ -30,7 +30,7 @@
 
 #include "database/database.h"
 #include "network/servent.h"
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class Node : public QObject
 {

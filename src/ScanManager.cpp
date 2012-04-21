@@ -17,13 +17,13 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "scanmanager.h"
+#include "ScanManager.h"
 
 #include <QtCore/QThread>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTimer>
 
-#include "musicscanner.h"
+#include "MusicScanner.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "libtomahawk/sourcelist.h"

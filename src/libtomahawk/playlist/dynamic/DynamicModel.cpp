@@ -22,7 +22,7 @@
 #include "GeneratorInterface.h"
 #include "pipeline.h"
 #include "query.h"
-#include "source.h"
+#include "Source.h"
 #include "audio/audioengine.h"
 
 #include "utils/logger.h"

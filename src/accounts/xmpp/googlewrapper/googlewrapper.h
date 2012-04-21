@@ -20,7 +20,7 @@
 #ifndef GOOGLEWRAPPER_H
 #define GOOGLEWRAPPER_H
 
-#include "xmppaccount.h"
+#include "XmppAccount.h"
 
 namespace Tomahawk
 {

@@ -24,7 +24,7 @@
 
 #include <jreen/stanzaextension.h>
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class ACCOUNTDLLEXPORT TomahawkXmppMessageFactory : public Jreen::PayloadFactory<TomahawkXmppMessage>
 {

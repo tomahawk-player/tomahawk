@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "audiocontrols.h"
-#include "ui_audiocontrols.h"
+#include "AudioControls.h"
+#include "ui_AudioControls.h"
 
 #include <QtNetwork/QNetworkReply>
 #include <QtGui/QDropEvent>

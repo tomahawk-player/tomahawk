@@ -27,7 +27,7 @@
 #include <QMutex>
 #include <QVariant>
 
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 #include "dllmacro.h"
 
 class DLLEXPORT ACLRegistry : public QObject

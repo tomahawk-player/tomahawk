@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "diagnosticsdialog.h"
-#include "ui_diagnosticsdialog.h"
+#include "DiagnosticsDialog.h"
+#include "ui_DiagnosticsDialog.h"
 
 #include "config.h"
 
@@ -124,7 +124,7 @@ void DiagnosticsDialog::updateLogView()
 
 //         Q_FOREACH( const QString &peerId, sip->peersOnline() )
 //         {
-//             /* enable this again, when we check the source has this peerId
+//             /* enable this again, when we check the Source.has this peerId
 //             bool connected = false;
 //             Q_FOREACH( const Tomahawk::source_ptr &source, sources )
 //             {

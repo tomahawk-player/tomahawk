@@ -19,7 +19,7 @@
 #include "sourceinfowidget.h"
 #include "ui_sourceinfowidget.h"
 
-#include "source.h"
+#include "Source.h"
 #include "viewmanager.h"
 
 #include "playlist/albummodel.h"

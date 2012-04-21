@@ -18,8 +18,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawkwindow.h"
-#include "ui_tomahawkwindow.h"
+#include "TomahawkWindow.h"
+#include "ui_TomahawkWindow.h"
 
 #include <QAction>
 #include <QCloseEvent>
@@ -53,17 +53,17 @@
 #include "playlist/playlistview.h"
 #include "playlist/queueview.h"
 
-#include "audiocontrols.h"
-#include "settingsdialog.h"
-#include "diagnosticsdialog.h"
+#include "AudioControls.h"
+#include "SettingsDialog.h"
+#include "DiagnosticsDialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
-#include "tomahawktrayicon.h"
-#include "scanmanager.h"
-#include "tomahawkapp.h"
+#include "TomahawkTrayIcon.h"
+#include "ScanManager.h"
+#include "TomahawkApp.h"
 
 #ifdef Q_WS_WIN
 #include <qtsparkle/Updater>

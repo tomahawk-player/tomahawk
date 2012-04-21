@@ -17,10 +17,10 @@
  */
 
 
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
-#include "ubuntuunityhack.h"
+#include "UbuntuUnityHack.h"
 #include "tomahawksettings.h"
 #include "config.h"
 

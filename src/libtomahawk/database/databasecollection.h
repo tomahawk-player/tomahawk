@@ -22,7 +22,7 @@
 #include <QDir>
 
 #include "collection.h"
-#include "source.h"
+#include "Source.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"

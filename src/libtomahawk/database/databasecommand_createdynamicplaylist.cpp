@@ -27,7 +27,7 @@
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
 
-#include "source.h"
+#include "Source.h"
 #include "network/servent.h"
 #include "utils/logger.h"
 

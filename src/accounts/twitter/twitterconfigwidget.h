@@ -20,7 +20,7 @@
 #ifndef TWITTERACCOUNTCONFIGWIDGET_H
 #define TWITTERACCOUNTCONFIGWIDGET_H
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 #include <QTweetLib/qtweetstatus.h>
 #include <QTweetLib/qtweetdmstatus.h>

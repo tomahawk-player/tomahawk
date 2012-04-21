@@ -22,7 +22,7 @@
 
 #include "artist.h"
 #include "album.h"
-#include "source.h"
+#include "Source.h"
 
 #include "utils/spotifyparser.h"
 #include "utils/itunesparser.h"

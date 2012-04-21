@@ -174,11 +174,11 @@ set( libSources
     functimeout.cpp
     playlist.cpp
     playlistplaylistinterface.cpp
-    resolver.cpp
+    Resolver.cpp
     ExternalResolver.cpp
     query.cpp
     result.cpp
-    source.cpp
+    Source.cpp
     sourceplaylistinterface.cpp
     playlistinterface.cpp
 

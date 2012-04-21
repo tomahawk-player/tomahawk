@@ -20,7 +20,7 @@
 #ifndef RESOLVERCONFIGDELEGATE_H
 #define RESOLVERCONFIGDELEGATE_H
 
-#include "configdelegatebase.h"
+#include "ConfigDelegateBase.h"
 
 class ResolverConfigDelegate : public ConfigDelegateBase
 {

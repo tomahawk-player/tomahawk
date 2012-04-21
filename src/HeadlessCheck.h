@@ -29,7 +29,7 @@
 
 #define TOMAHAWK_APPLICATION QApplication
 #include <QApplication>
-#include "tomahawkwindow.h"
+#include "TomahawkWindow.h"
 
 #endif
 

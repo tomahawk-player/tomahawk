@@ -18,7 +18,7 @@
 
 #include "portfwdthread.h"
 
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 
 #include <QNetworkInterface>
 #include <QStringList>

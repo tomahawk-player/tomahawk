@@ -21,7 +21,7 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"

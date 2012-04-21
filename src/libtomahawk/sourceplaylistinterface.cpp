@@ -19,7 +19,7 @@
 
 #include "sourceplaylistinterface.h"
 
-#include "source.h"
+#include "Source.h"
 #include "pipeline.h"
 #include "audio/audioengine.h"
 

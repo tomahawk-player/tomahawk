@@ -34,7 +34,7 @@
 #include <QTweetLib/qtweetmentions.h>
 #include <QTweetLib/qtweetdmstatus.h>
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 #include "sip/SipPlugin.h"
 #include "accounts/Account.h"
 #include "accounts/twitter/tomahawkoauthtwitter.h"

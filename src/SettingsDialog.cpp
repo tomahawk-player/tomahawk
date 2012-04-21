@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "settingsdialog.h"
+#include "SettingsDialog.h"
 #include "config.h"
 
 #include <QtGui/QDesktopServices>
@@ -30,17 +30,17 @@
 #include <QtGui/QSizeGrip>
 
 #include "AtticaManager.h"
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 #include "tomahawksettings.h"
-#include "delegateconfigwrapper.h"
-#include "musicscanner.h"
+#include "DelegateConfigWrapper.h"
+#include "MusicScanner.h"
 #include "pipeline.h"
-#include "resolver.h"
+#include "Resolver.h"
 #include "ExternalResolverGui.h"
 #include "utils/tomahawkutilsgui.h"
 #include "guihelpers.h"
-#include "scanmanager.h"
-#include "settingslistdelegate.h"
+#include "ScanManager.h"
+#include "SettingsListDelegate.h"
 #include "AccountDelegate.h"
 #include "database/database.h"
 #include "network/servent.h"
@@ -53,8 +53,8 @@
 #include "utils/logger.h"
 #include "AccountFactoryWrapper.h"
 
-#include "ui_proxydialog.h"
-#include "ui_stackedsettingsdialog.h"
+#include "ui_ProxyDialog.h"
+#include "ui_StackedSettingsDialog.h"
 
 using namespace Tomahawk;
 using namespace Accounts;

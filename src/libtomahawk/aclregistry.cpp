@@ -23,7 +23,7 @@
 #include <QVariant>
 
 #include "tomahawksettings.h"
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 
 #include "utils/logger.h"
 #include "jobview/AclJobItem.h"

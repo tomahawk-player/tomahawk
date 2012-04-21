@@ -19,7 +19,7 @@
 #include "databasecommand_collectionstats.h"
 
 #include "databaseimpl.h"
-#include "source.h"
+#include "Source.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

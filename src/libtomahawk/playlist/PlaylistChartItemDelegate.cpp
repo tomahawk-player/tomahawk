@@ -24,7 +24,7 @@
 #include "query.h"
 #include "result.h"
 #include "artist.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 
 #include "playlistview.h"

@@ -39,17 +39,17 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      web/api_v1.cpp
 
-     musicscanner.cpp
-     shortcuthandler.cpp
-     scanmanager.cpp
-     ubuntuunityhack.cpp
-     tomahawkapp.cpp
+     MusicScanner.cpp
+     ShortcutHandler.cpp
+     ScanManager.cpp
+     UbuntuUnityHack.cpp
+     TomahawkApp.cpp
      main.cpp
 )
 
 IF(LIBLASTFM_FOUND)
     SET(tomahawkSources ${tomahawkSources}
-        scrobbler.cpp
+        Scrobbler.cpp
     )
 ENDIF(LIBLASTFM_FOUND)
 
@@ -78,14 +78,14 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      accounts/spotify/SpotifyAccountConfig.cpp
      accounts/spotify/SpotifyPlaylistUpdater.cpp
 
-     tomahawktrayicon.cpp
-     audiocontrols.cpp
-     settingsdialog.cpp
-     diagnosticsdialog.cpp
+     TomahawkTrayIcon.cpp
+     AudioControls.cpp
+     SettingsDialog.cpp
+     DiagnosticsDialog.cpp
      AccountDelegate.cpp
-     settingslistdelegate.cpp
-     delegateconfigwrapper.cpp
-     tomahawkwindow.cpp
+     SettingsListDelegate.cpp
+     DelegateConfigWrapper.cpp
+     TomahawkWindow.cpp
      LoadXSPFDialog.cpp
      AccountFactoryWrapper.cpp
      AccountFactoryWrapperDelegate.cpp
@@ -97,15 +97,15 @@ IF( WITH_BREAKPAD )
 ENDIF()
 
 SET( tomahawkUI ${tomahawkUI}
-     tomahawkwindow.ui
-     diagnosticsdialog.ui
-     stackedsettingsdialog.ui
-     proxydialog.ui
+     TomahawkWindow.ui
+     DiagnosticsDialog.ui
+     StackedSettingsDialog.ui
+     ProxyDialog.ui
 
      accounts/lastfm/LastFmConfig.ui
      accounts/spotify/SpotifyAccountConfig.ui
 
-     audiocontrols.ui
+     AudioControls.ui
      LoadXSPFDialog.ui
      AccountFactoryWrapper.ui
      SocialWidget.ui
@@ -166,7 +166,7 @@ IF(QCA2_FOUND)
 ENDIF(QCA2_FOUND)
 
 INCLUDE(GNUInstallDirs)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )

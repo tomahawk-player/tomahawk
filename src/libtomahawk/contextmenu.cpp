@@ -23,7 +23,7 @@
 #include "playlistview.h"
 #include "viewmanager.h"
 #include "query.h"
-#include "source.h"
+#include "Source.h"
 #include "artist.h"
 #include "album.h"
 #include "utils/logger.h"

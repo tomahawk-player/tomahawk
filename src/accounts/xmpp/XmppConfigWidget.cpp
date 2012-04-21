@@ -17,9 +17,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "xmppaccount.h"
-#include "xmppconfigwidget.h"
-#include "ui_xmppconfigwidget.h"
+#include "XmppAccount.h"
+#include "XmppConfigWidget.h"
+#include "ui_XmppConfigWidget.h"
 
 #include <QMessageBox>
 

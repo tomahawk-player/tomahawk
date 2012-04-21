@@ -23,7 +23,7 @@
 #include <QMimeData>
 
 #include "pipeline.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "audio/audioengine.h"
 #include "database/databasecommand_allalbums.h"

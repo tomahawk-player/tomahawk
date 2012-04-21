@@ -32,7 +32,7 @@
 
 #include "tomahawksettings.h"
 #include "pipeline.h"
-#include "source.h"
+#include "Source.h"
 #include "sourcelist.h"
 #include "playlistplaylistinterface.h"
 
@@ -194,7 +194,7 @@ Playlist::create( const source_ptr& author,
     //
     // When a playlist is created it will reportCreated(), adding it to the
     // collection it belongs to and emitting the appropriate signal.
-    // When we create a new playlist for the local source here we call reportCreated()
+    // When we create a new playlist for the local Source.here we call reportCreated()
     // immediately, so the GUI can reflect the new playlist without waiting for the DB sync
     //
     // When createplaylist DBOPs come from peers, the postCommitHook will call

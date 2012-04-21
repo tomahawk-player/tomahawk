@@ -20,7 +20,7 @@
 #ifndef TOMAHAWKOAUTHTWITTERACCOUNT
 #define TOMAHAWKOAUTHTWITTERACCOUNT
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 #include <utils/tomahawkutils.h>
 
 #include <QTweetLib/qtweetlib_global.h>

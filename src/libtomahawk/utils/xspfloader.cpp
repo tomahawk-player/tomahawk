@@ -20,7 +20,7 @@
 
 #include "xspfloader.h"
 
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 
 #include <QDomDocument>
 

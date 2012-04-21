@@ -26,7 +26,7 @@
 #include <QStringList>
 
 #include "typedefs.h"
-#include "source.h"
+#include "Source.h"
 
 class QMimeData;
 

@@ -18,7 +18,7 @@
 #include "databasecommand_setcollectionattributes.h"
 
 #include "databaseimpl.h"
-#include "source.h"
+#include "Source.h"
 #include "network/servent.h"
 #include "sourcelist.h"
 #include "EchonestCatalogSynchronizer.h"

@@ -19,7 +19,7 @@
 #ifndef MACSHORTCUTHANDLER_H
 #define MACSHORTCUTHANDLER_H
 
-#include "shortcuthandler.h"
+#include "ShortcutHandler.h"
 
 #include <QObject>
 

@@ -20,7 +20,7 @@
 
 #include <QSqlQuery>
 
-#include "source.h"
+#include "Source.h"
 #include "databaseimpl.h"
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicPlaylist.h"

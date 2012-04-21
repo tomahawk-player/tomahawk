@@ -19,7 +19,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "xmppsip.h"
+#include "XmppSip.h"
 
 #include "config.h"
 

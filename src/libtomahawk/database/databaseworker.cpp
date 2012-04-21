@@ -23,7 +23,7 @@
 #include <QTime>
 #include <QSqlQuery>
 
-#include "source.h"
+#include "Source.h"
 #include "database.h"
 #include "databaseimpl.h"
 #include "databasecommandloggable.h"

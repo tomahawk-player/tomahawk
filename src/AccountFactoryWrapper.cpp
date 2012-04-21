@@ -22,7 +22,7 @@
 #include "accounts/AccountManager.h"
 #include "guihelpers.h"
 #include "AccountFactoryWrapperDelegate.h"
-#include "delegateconfigwrapper.h"
+#include "DelegateConfigWrapper.h"
 #include "ui_AccountFactoryWrapper.h"
 
 using namespace Tomahawk::Accounts;

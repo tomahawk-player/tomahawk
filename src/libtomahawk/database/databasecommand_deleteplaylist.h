@@ -21,7 +21,7 @@
 
 #include "databaseimpl.h"
 #include "databasecommandloggable.h"
-#include "source.h"
+#include "Source.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"

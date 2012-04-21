@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include "typedefs.h"
-#include "source.h"
+#include "Source.h"
 
 #include "dllmacro.h"
 

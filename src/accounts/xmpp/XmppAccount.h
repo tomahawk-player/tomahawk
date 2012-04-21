@@ -22,8 +22,8 @@
 #ifndef XMPPACCOUNT_H
 #define XMPPACCOUNT_H
 
-#include "sip/xmppsip.h"
-#include "accounts/accountdllmacro.h"
+#include "sip/XmppSip.h"
+#include "accounts/AccountDllMacro.h"
 #include "accounts/Account.h"
 
 #define MYNAME "ACCOUNTJABBER"

@@ -2,20 +2,20 @@
 # fake google plugin
 
 set( googleHeaders
-    ../xmppaccount.h
-    ../xmppconfigwidget.h
-    ../sip/xmppsip.h
+    ../XmppAccount.h
+    ../XmppConfigWidget.h
+    ../sip/XmppSip.h
     ../sip/avatarmanager.h
     ../sip/xmlconsole.h
     ../XmppInfoPlugin.h
     googlewrapper.h )
 
 set( googleSources
-    ../xmppaccount.cpp
-    ../xmppconfigwidget.cpp
-    ../sip/xmppsip.cpp
-    ../sip/tomahawkxmppmessage.cpp
-    ../sip/tomahawkxmppmessagefactory.cpp
+    ../XmppAccount.cpp
+    ../XmppConfigWidget.cpp
+    ../sip/XmppSip.cpp
+    ../sip/TomahawkXmppMessage.cpp
+    ../sip/TomahawkXmppMessageFactory.cpp
     ../sip/avatarmanager.cpp
     ../sip/xmlconsole.cpp
     ../XmppInfoPlugin.cpp

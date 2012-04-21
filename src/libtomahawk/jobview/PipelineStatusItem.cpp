@@ -22,7 +22,7 @@
 
 #include "utils/tomahawkutils.h"
 #include "pipeline.h"
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 #include "JobStatusModel.h"
 #include "JobStatusView.h"
 

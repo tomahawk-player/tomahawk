@@ -51,7 +51,7 @@
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 
 #include "XmppInfoPlugin.h"
 

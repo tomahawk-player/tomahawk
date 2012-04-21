@@ -29,7 +29,7 @@
 
 #include "utils/tomahawkutilsgui.h"
 #include "animationhelper.h"
-#include "source.h"
+#include "Source.h"
 #include "tomahawksettings.h"
 
 #include <QtGui/QApplication>

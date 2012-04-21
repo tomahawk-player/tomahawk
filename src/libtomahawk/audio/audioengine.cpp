@@ -33,7 +33,7 @@
 #include "network/servent.h"
 #include "utils/qnr_iodevicestream.h"
 #include "utils/closure.h"
-#include "headlesscheck.h"
+#include "HeadlessCheck.h"
 #include "infosystem/infosystem.h"
 #include "album.h"
 

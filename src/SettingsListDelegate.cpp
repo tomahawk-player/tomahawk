@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "settingslistdelegate.h"
+#include "SettingsListDelegate.h"
 #include "utils/logger.h"
 
 #include <QPainter>

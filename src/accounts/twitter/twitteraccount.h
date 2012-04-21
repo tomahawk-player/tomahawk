@@ -26,7 +26,7 @@
 
 #include "sip/twittersip.h"
 #include "twitterinfoplugin.h"
-#include "accounts/accountdllmacro.h"
+#include "accounts/AccountDllMacro.h"
 #include "accounts/Account.h"
 
 #define MYNAME "ACCOUNTTWITTER"
