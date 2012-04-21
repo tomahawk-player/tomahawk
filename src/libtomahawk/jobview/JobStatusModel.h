@@ -46,8 +46,8 @@ public:
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
 signals:
-    void customDelegateJobInserted( int row, QStyledItemDelegate* delegate );
-    void customDelegateJobRemoved( int row, QStyledItemDelegate* delegate );
+    void customDelegateJobInserted( int row, JobStatusItem* item );
+    void customDelegateJobRemoved( int row );
 
 public slots:
     /// Takes ownership of job

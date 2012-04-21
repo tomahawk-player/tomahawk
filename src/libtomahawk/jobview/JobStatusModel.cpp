@@ -71,8 +71,8 @@ JobStatusModel::addJob( JobStatusItem* item )
     beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
     m_items.append( item );
     endInsertRows();
-    if ( item->customDelegate() )
-        emit customDelegateJobInserted( currentEndRow, item->customDelegate() );
+    if ( item->hasCustomDelegate() )
+        emit customDelegateJobInserted( currentEndRow, item );
 }
 
 
@@ -182,7 +182,7 @@ JobStatusModel::itemFinished()
     endRemoveRows();
 
     if ( item->customDelegate() )
-        emit customDelegateJobRemoved( idx, item->customDelegate() );
+        emit customDelegateJobRemoved( idx );
 
     if ( item->type() == "acljob" )
         m_aclJobCount--;

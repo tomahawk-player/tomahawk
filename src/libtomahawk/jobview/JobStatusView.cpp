@@ -21,6 +21,7 @@
 
 #include "pipeline.h"
 #include "JobStatusModel.h"
+#include "JobStatusItem.h"
 #include "JobStatusDelegate.h"
 #include "PipelineStatusItem.h"
 #include "TransferStatusItem.h"
@@ -92,21 +93,19 @@ JobStatusView::setModel( JobStatusModel* m )
 
 
 void
-JobStatusView::customDelegateJobInserted( int row, QStyledItemDelegate* delegate )
+JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
-    if ( !delegate )
+    if ( !item )
         return;
 
-    m_view->setItemDelegateForRow( row, delegate );
+    item->createDelegate( m_view );
+    m_view->setItemDelegateForRow( row, item->customDelegate() );
 }
 
 
 void
-JobStatusView::customDelegateJobRemoved( int row, QStyledItemDelegate* delegate )
+JobStatusView::customDelegateJobRemoved( int row )
 {
-    if ( !delegate )
-        return;
-
     m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
 }
 

@@ -27,6 +27,7 @@
 class QAbstractItemModel;
 class QListView;
 class JobStatusModel;
+class JobStatusItem;
 class StreamConnection;
 class QStyledItemDelegate;
 
@@ -52,8 +53,8 @@ public:
 
 private slots:
     void checkCount();
-    void customDelegateJobInserted( int row, QStyledItemDelegate* delegate );
-    void customDelegateJobRemoved( int row, QStyledItemDelegate* delegate );
+    void customDelegateJobInserted( int row, JobStatusItem* item );
+    void customDelegateJobRemoved( int row );
 
 private:
     QListView* m_view;
