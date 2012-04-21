@@ -99,16 +99,17 @@ public slots:
     void advertise()
     {
         qDebug() << "Advertising us on the LAN (both versions)";
-        QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2" )
-                            .arg( m_port )
-                            .arg( Database::instance()->dbid() )
-                            .toAscii();
-        m_sock.writeDatagram( advert.data(), advert.size(),
-                              QHostAddress::Broadcast, ZCONF_PORT );
-        advert = QString( "TOMAHAWKADVERT:%1:%2:%3" )
+        // Keep newer versions first
+        QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2:%3" )
                             .arg( m_port )
                             .arg( Database::instance()->dbid() )
                             .arg( QHostInfo::localHostName() )
+                            .toAscii();
+        m_sock.writeDatagram( advert.data(), advert.size(),
+                              QHostAddress::Broadcast, ZCONF_PORT );
+        advert = QString( "TOMAHAWKADVERT:%1:%2" )
+                            .arg( m_port )
+                            .arg( Database::instance()->dbid() )
                             .toAscii();
         m_sock.writeDatagram( advert.data(), advert.size(),
                               QHostAddress::Broadcast, ZCONF_PORT );
