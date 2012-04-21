@@ -19,7 +19,7 @@
 #include "BreakPad.h"
 
 #include "config.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QCoreApplication>
 #include <QString>

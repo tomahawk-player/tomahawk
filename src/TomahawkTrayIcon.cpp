@@ -23,11 +23,11 @@
 
 #include "Artist.h"
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "TomahawkApp.h"
 #include "TomahawkWindow.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include <ActionCollection.h>
 
 

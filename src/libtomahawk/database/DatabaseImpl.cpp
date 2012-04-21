@@ -27,13 +27,13 @@
 #include <QFile>
 
 #include "database/Database.h"
-#include "databasecommand_updatesearchindex.h"
+#include "DatabaseCommand_UpdateSearchIndex.h"
 #include "SourceList.h"
 #include "Result.h"
 #include "Artist.h"
 #include "Album.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 /* !!!! You need to manually generate Schema.sql.h when the schema changes:
     cd src/libtomahawk/database

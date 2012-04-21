@@ -24,12 +24,12 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QMouseEvent>
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "playlist/PlaylistView.h"
 #include "database/Database.h"
-#include "widgets/imagebutton.h"
+#include "widgets/ImageButton.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "Album.h"
 #include "DropJob.h"
 #include "SocialWidget.h"

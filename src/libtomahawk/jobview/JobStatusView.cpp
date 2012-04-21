@@ -26,7 +26,7 @@
 #include "PipelineStatusItem.h"
 #include "TransferStatusItem.h"
 #include "LatchedStatusItem.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>

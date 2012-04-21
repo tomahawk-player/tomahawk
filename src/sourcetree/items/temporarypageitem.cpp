@@ -20,7 +20,7 @@
 #include "ViewManager.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
-#include "widgets/searchwidget.h"
+#include "widgets/SearchWidget.h"
 
 using namespace Tomahawk;
 

@@ -19,7 +19,7 @@
 #include "TreeModelItem.h"
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"

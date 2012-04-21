@@ -32,7 +32,7 @@
 #include "playlist/ArtistView.h"
 #include "playlist/TreeModel.h"
 
-#include "utils/stylehelper.h"
+#include "utils/StyleHelper.h"
 #include "utils/tomahawkutilsgui.h"
 
 #define ANIMATION_TIME 450

@@ -19,11 +19,11 @@
 
 #include "CustomPlaylistView.h"
 
-#include "database/databasecommand_genericselect.h"
+#include "database/DatabaseCommand_GenericSelect.h"
 #include "database/Database.h"
 #include "utils/tomahawkutils.h"
 #include "SourceList.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
 using namespace Tomahawk;
 

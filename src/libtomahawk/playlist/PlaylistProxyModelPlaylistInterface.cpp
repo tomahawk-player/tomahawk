@@ -20,7 +20,7 @@
 #include "PlaylistProxyModelPlaylistInterface.h"
 
 #include "PlaylistProxyModel.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

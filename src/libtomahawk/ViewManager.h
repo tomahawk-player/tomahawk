@@ -29,9 +29,9 @@
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
-#include "widgets/welcomewidget.h"
-#include "widgets/whatshotwidget.h"
-#include "widgets/newreleaseswidget.h"
+#include "widgets/WelcomeWidget.h"
+#include "widgets/WhatsHotWidget.h"
+#include "widgets/NewReleasesWidget.h"
 
 #include "DllMacro.h"
 

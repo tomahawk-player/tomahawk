@@ -36,7 +36,7 @@
 #include "network/Servent.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "accounts/AccountManager.h"
 
 #include "config.h"

@@ -23,7 +23,7 @@
 #include "SourceList.h"
 #include "SpotifyAccountConfig.h"
 #include "SpotifyPlaylistUpdater.h"
-#include "resolvers/scriptresolver.h"
+#include "resolvers/ScriptResolver.h"
 #include "utils/tomahawkutils.h"
 #include "ActionCollection.h"
 

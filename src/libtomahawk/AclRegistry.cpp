@@ -25,7 +25,7 @@
 #include "TomahawkSettings.h"
 #include "TomahawkApp.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "jobview/AclJobItem.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"

@@ -21,8 +21,8 @@
 #include <QApplication>
 #include <QPainter>
 
-#include "utils/logger.h"
-#include "utils/stylehelper.h"
+#include "utils/Logger.h"
+#include "utils/StyleHelper.h"
 #include "utils/tomahawkutilsgui.h"
 
 

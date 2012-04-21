@@ -28,11 +28,11 @@
 #include "Source.h"
 #include "SourceList.h"
 #include "database/Database.h"
-#include "database/databasecommand_playbackhistory.h"
+#include "database/DatabaseCommand_PlaybackHistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "DropJob.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

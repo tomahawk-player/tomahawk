@@ -21,17 +21,17 @@
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "ViewManager.h"
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
 #include "playlist/AlbumModel.h"
 
-#include "database/databasecommand_alltracks.h"
-#include "database/databasecommand_allalbums.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "database/DatabaseCommand_AllAlbums.h"
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include "widgets/OverlayButton.h"
 #include "widgets/OverlayWidget.h"

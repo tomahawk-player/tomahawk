@@ -20,7 +20,7 @@
 
 #include "ActionCollection.h"
 #include "TomahawkSettings.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "utils/tomahawkutils.h"
 
 ActionCollection* ActionCollection::s_instance = 0;

@@ -28,7 +28,7 @@
 #include <QStackedWidget>
 
 #include "Result.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "utils/xspfloader.h"
 
 namespace Tomahawk {

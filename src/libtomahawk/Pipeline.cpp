@@ -23,10 +23,10 @@
 #include "FuncTimeout.h"
 #include "database/Database.h"
 #include "ExternalResolver.h"
-#include "resolvers/scriptresolver.h"
-#include "resolvers/qtscriptresolver.h"
+#include "resolvers/ScriptResolver.h"
+#include "resolvers/QtScriptResolver.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include "boost/bind.hpp"
 

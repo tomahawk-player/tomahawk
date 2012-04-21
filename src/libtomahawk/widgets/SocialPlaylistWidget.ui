@@ -99,7 +99,7 @@
   <customwidget>
    <class>PlaylistWidget</class>
    <extends>QListWidget</extends>
-   <header>widgets/welcomewidget.h</header>
+   <header>widgets/WelcomeWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

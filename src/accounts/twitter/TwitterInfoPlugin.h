@@ -20,7 +20,7 @@
 #ifndef TWITTERINFOPLUGIN_H
 #define TWITTERINFOPLUGIN_H
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "accounts/twitter/TomahawkOAuthTwitter.h"
 
 #include <QTweetLib/qtweetuser.h>

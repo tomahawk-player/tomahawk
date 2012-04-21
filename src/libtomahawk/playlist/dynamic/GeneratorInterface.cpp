@@ -19,7 +19,7 @@
 
 #include "dynamic/GeneratorInterface.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 Tomahawk::GeneratorInterface::GeneratorInterface( QObject* parent )

@@ -16,7 +16,7 @@
 */
 
 #include "UbuntuUnityHack.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QProcess>
 

@@ -20,7 +20,7 @@
 #include "TrackHeader.h"
 
 #include "playlist/TrackView.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 TrackHeader::TrackHeader( TrackView* parent )

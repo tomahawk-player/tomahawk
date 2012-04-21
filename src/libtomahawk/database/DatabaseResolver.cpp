@@ -21,9 +21,9 @@
 #include "Pipeline.h"
 #include "network/Servent.h"
 #include "database/Database.h"
-#include "database/databasecommand_resolve.h"
+#include "database/DatabaseCommand_Resolve.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 DatabaseResolver::DatabaseResolver( int weight )

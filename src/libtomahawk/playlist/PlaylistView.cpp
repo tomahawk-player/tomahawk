@@ -25,7 +25,7 @@
 #include "playlist/PlaylistProxyModel.h"
 #include "widgets/OverlayWidget.h"
 #include "ViewManager.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;

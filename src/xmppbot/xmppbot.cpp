@@ -19,12 +19,12 @@
 
 #include "xmppbot.h"
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "Album.h"
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
 #include <gloox/client.h>
 #include <gloox/rostermanager.h>
@@ -33,7 +33,7 @@
 
 #include <QtCore/QStringList>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace gloox;
 using namespace Tomahawk::InfoSystem;

@@ -20,8 +20,8 @@
 #ifndef SpotifyPlugin_H
 #define SpotifyPlugin_H
 
-#include "infosystem/infosystem.h"
-#include "infosystem/infosystemworker.h"
+#include "infosystem/InfoSystem.h"
+#include "infosystem/InfoSystemWorker.h"
 #include <QNetworkReply>
 #include <QObject>
 

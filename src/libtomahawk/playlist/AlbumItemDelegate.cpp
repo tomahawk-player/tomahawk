@@ -28,9 +28,9 @@
 #include "Result.h"
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "utils/PixmapDelegateFader.h"
-#include <utils/closure.h>
+#include <utils/Closure.h>
 
 #include "playlist/AlbumItem.h"
 #include "playlist/AlbumProxyModel.h"

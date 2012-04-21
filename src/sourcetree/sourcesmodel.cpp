@@ -36,7 +36,7 @@
 #include "Source.h"
 #include "ViewManager.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/playlistitems.h"

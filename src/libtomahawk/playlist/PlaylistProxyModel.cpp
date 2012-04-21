@@ -20,7 +20,7 @@
 #include "PlaylistProxyModel.h"
 
 #include "PlaylistProxyModelPlaylistInterface.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 PlaylistProxyModel::PlaylistProxyModel( QObject* parent )

@@ -21,7 +21,7 @@
 #include <QLabel>
 #include <QStackedLayout>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QWidget* parent)

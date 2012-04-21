@@ -19,7 +19,7 @@
 #include "JobStatusDelegate.h"
 
 #include "JobStatusModel.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QPainter>
 #include <QApplication>

@@ -30,7 +30,7 @@
 #include "Source.h"
 #include "PlaylistInterface.h"
 
-#include "database/databasecommand_alltracks.h"
+#include "database/DatabaseCommand_AllTracks.h"
 
 #include "DllMacro.h"
 

@@ -42,11 +42,11 @@
 #include "accounts/AccountManager.h"
 #include "sourcetree/sourcetreeview.h"
 #include "network/Servent.h"
-#include "utils/proxystyle.h"
-#include "widgets/animatedsplitter.h"
-#include "widgets/newplaylistwidget.h"
-#include "widgets/searchwidget.h"
-#include "widgets/playlisttypeselectordlg.h"
+#include "utils/ProxyStyle.h"
+#include "widgets/AnimatedSplitter.h"
+#include "widgets/NewPlaylistWidget.h"
+#include "widgets/SearchWidget.h"
+#include "widgets/PlaylistTypeSelectorDialog.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlaylistModel.h"
@@ -69,7 +69,7 @@
 #include <qtsparkle/Updater>
 #endif
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "jobview/JobStatusModel.h"
 #include "LoadXSPFDialog.h"
 #include <ActionCollection.h>

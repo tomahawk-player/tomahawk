@@ -19,7 +19,7 @@
 
 #include "TomahawkXmppMessage.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 class TomahawkXmppMessagePrivate

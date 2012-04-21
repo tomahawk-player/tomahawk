@@ -26,7 +26,7 @@
 #include <QTweetLib/qtweetstatusupdate.h>
 
 #include "GlobalActionManager.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 namespace Tomahawk
 {

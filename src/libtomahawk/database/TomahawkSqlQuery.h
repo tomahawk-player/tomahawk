@@ -24,7 +24,7 @@
 #include <QSqlError>
 #include <QTime>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define TOMAHAWK_QUERY_THRESHOLD 60
 

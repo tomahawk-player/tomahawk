@@ -24,17 +24,17 @@
 #include "SourcePlaylistInterface.h"
 
 #include "network/ControlConnection.h"
-#include "database/databasecommand_addsource.h"
-#include "database/databasecommand_collectionstats.h"
-#include "database/databasecommand_sourceoffline.h"
-#include "database/databasecommand_updatesearchindex.h"
+#include "database/DatabaseCommand_AddSource.h"
+#include "database/DatabaseCommand_CollectionStats.h"
+#include "database/DatabaseCommand_SourceOffline.h"
+#include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
 
 #include <QCoreApplication>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "utils/tomahawkutilsgui.h"
-#include "database/databasecommand_socialaction.h"
+#include "database/DatabaseCommand_SocialAction.h"
 
 using namespace Tomahawk;
 

@@ -19,9 +19,9 @@
 #include "genericpageitems.h"
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "ViewManager.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
 using namespace Tomahawk;
 

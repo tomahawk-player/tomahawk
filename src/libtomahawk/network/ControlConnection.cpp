@@ -21,13 +21,13 @@
 
 #include "StreamConnection.h"
 #include "database/Database.h"
-#include "database/databasecommand_collectionstats.h"
+#include "database/DatabaseCommand_CollectionStats.h"
 #include "DbSyncConnection.h"
 #include "SourceList.h"
 #include "network/DbSyncConnection.h"
 #include "network/Servent.h"
 #include "sip/SipHandler.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define TCP_TIMEOUT 600
 

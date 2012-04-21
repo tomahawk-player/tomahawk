@@ -23,7 +23,7 @@
 #include <QtCore/QTimeLine>
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 SeekSlider::SeekSlider( QWidget* parent )

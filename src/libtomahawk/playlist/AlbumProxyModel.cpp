@@ -25,7 +25,7 @@
 #include "Artist.h"
 #include "AlbumItem.h"
 #include "Query.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )

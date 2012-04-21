@@ -19,7 +19,7 @@
 #include "tomahawkcache.h"
 
 #include "TomahawkSettings.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QDateTime>
 #include <QSettings>

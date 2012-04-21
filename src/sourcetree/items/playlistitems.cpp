@@ -29,10 +29,10 @@
 #include "categoryitems.h"
 #include "sourceitem.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "DropJob.h"
 #include "Source.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
 using namespace Tomahawk;
 

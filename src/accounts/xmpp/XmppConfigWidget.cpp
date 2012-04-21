@@ -24,7 +24,7 @@
 #include <QMessageBox>
 
 #include <accounts/AccountManager.h>
-#include <utils/logger.h>
+#include <utils/Logger.h>
 
 namespace Tomahawk
 {

@@ -21,7 +21,7 @@
 #define JOBSTATUSVIEW_H
 
 #include "Typedefs.h"
-#include "widgets/animatedsplitter.h"
+#include "widgets/AnimatedSplitter.h"
 #include "DllMacro.h"
 
 class QAbstractItemModel;

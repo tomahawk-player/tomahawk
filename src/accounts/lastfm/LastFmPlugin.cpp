@@ -25,9 +25,9 @@
 
 #include "Album.h"
 #include "Typedefs.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "accounts/lastfm/LastFmAccount.h"
 
 #include <lastfm/ws.h>

@@ -28,10 +28,10 @@
 #include "Query.h"
 #include "Result.h"
 #include "PlaylistInterface.h"
-#include "database/databasecommand_allartists.h"
+#include "database/DatabaseCommand_AllArtists.h"
 
 #include "TreeModelItem.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 #include "Typedefs.h"

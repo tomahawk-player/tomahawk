@@ -34,7 +34,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

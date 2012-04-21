@@ -22,7 +22,7 @@
 
 #include "lastfm/ScrobblePoint"
 #include "Result.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 #include <QObject>
 

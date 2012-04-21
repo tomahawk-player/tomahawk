@@ -34,7 +34,7 @@
 
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 #include "Typedefs.h"

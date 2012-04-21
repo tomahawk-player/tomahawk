@@ -19,7 +19,7 @@
 #include "MsgProcessor.h"
 
 #include "network/Servent.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 MsgProcessor::MsgProcessor( quint32 mode, quint32 t ) :

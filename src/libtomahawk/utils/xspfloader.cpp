@@ -25,7 +25,7 @@
 #include <QDomDocument>
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"

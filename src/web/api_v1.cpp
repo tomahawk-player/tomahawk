@@ -22,12 +22,12 @@
 
 #include <QHash>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include "utils/tomahawkutils.h"
 #include "database/Database.h"
-#include "database/databasecommand_addclientauth.h"
-#include "database/databasecommand_clientauthvalid.h"
+#include "database/DatabaseCommand_AddClientAuth.h"
+#include "database/DatabaseCommand_ClientAuthValid.h"
 #include "network/Servent.h"
 #include "Pipeline.h"
 

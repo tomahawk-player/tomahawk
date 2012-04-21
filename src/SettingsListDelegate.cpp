@@ -18,7 +18,7 @@
  */
 
 #include "SettingsListDelegate.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QPainter>
 #include <QIcon>

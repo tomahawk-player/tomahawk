@@ -24,7 +24,7 @@
 #include <QPropertyAnimation>
 
 #include "GlobalActionManager.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500

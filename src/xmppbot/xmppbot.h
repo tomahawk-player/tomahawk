@@ -21,7 +21,7 @@
 #define XMPPBOT_H
 
 #include <result.h>
-#include <infosystem/infosystem.h>
+#include <infosystem/InfoSystem.h>
 
 #include <QtCore/QObject>
 #include <QtCore/qsharedpointer.h>

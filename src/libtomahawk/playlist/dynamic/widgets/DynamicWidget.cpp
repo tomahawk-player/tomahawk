@@ -34,7 +34,7 @@
 #include "dynamic/GeneratorFactory.h"
 #include "Pipeline.h"
 #include "Source.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
@@ -43,7 +43,7 @@
 #include "DynamicSetupWidget.h"
 #include "AudioControls.h"
 #include "LoadingSpinner.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

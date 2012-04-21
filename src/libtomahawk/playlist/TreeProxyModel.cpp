@@ -26,8 +26,8 @@
 #include "Query.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
-#include "database/databasecommand_allalbums.h"
-#include "utils/logger.h"
+#include "database/DatabaseCommand_AllAlbums.h"
+#include "utils/Logger.h"
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )

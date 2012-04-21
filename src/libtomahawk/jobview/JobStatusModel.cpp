@@ -20,7 +20,7 @@
 #include "JobStatusModel.h"
 
 #include "JobStatusItem.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QPixmap>
 

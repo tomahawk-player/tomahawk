@@ -21,7 +21,7 @@
 
 #include <QPushButton>
 
-#include "widgets/animatedsplitter.h"
+#include "widgets/AnimatedSplitter.h"
 
 #include "DllMacro.h"
 

@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "widgets/OverlayWidget.h"
@@ -35,7 +35,7 @@
 #include "TreeItemDelegate.h"
 #include "TreeModel.h"
 #include "ViewManager.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define SCROLL_TIMEOUT 280
 

@@ -43,7 +43,7 @@ set( libGuiSources
     jobview/ErrorStatusMessage.cpp
     jobview/IndexingJobItem.cpp
 
-    infobar/infobar.cpp
+    infobar/InfoBar.cpp
 
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
@@ -105,38 +105,38 @@ set( libGuiSources
     playlist/topbar/SearchButton.cpp
 
     ExternalResolverGui.cpp
-    resolvers/scriptresolver.cpp
-    resolvers/qtscriptresolver.cpp
+    resolvers/ScriptResolver.cpp
+    resolvers/QtScriptResolver.cpp
 
     utils/widgetdragfilter.cpp
     utils/xspfgenerator.cpp
-    utils/jspfloader.cpp
-    utils/spotifyparser.cpp
-    utils/m3uloader.cpp
-    utils/itunesparser.cpp
-    utils/rdioparser.cpp
-    utils/shortenedlinkparser.cpp
-    utils/stylehelper.cpp
-    utils/dropjobnotifier.cpp
-    utils/proxystyle.cpp
+    utils/JspfLoader.cpp
+    utils/SpotifyParser.cpp
+    utils/M3uLoader.cpp
+    utils/ItunesParser.cpp
+    utils/RdioParser.cpp
+    utils/ShortenedLinkParser.cpp
+    utils/StyleHelper.cpp
+    utils/DropJobNotifier.cpp
+    utils/ProxyStyle.cpp
     utils/tomahawkutilsgui.cpp
-    utils/closure.cpp
+    utils/Closure.cpp
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
 
-    widgets/animatedcounterlabel.cpp
-    widgets/checkdirtree.cpp
-    widgets/querylabel.cpp
-    widgets/imagebutton.cpp
-    widgets/animatedsplitter.cpp
-    widgets/elidedlabel.cpp
-    widgets/newplaylistwidget.cpp
-    widgets/searchwidget.cpp
+    widgets/AnimatedCounterLabel.cpp
+    widgets/CheckDirTree.cpp
+    widgets/QueryLabel.cpp
+    widgets/ImageButton.cpp
+    widgets/AnimatedSplitter.cpp
+    widgets/ElidedLabel.cpp
+    widgets/NewPlaylistWidget.cpp
+    widgets/SearchWidget.cpp
     widgets/SeekSlider.cpp
-    widgets/playlisttypeselectordlg.cpp
-    widgets/welcomewidget.cpp
-    widgets/whatshotwidget.cpp
-    widgets/newreleaseswidget.cpp
+    widgets/PlaylistTypeSelectorDialog.cpp
+    widgets/WelcomeWidget.cpp
+    widgets/WhatsHotWidget.cpp
+    widgets/NewReleasesWidget.cpp
     widgets/ChartDataLoader.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
@@ -144,11 +144,11 @@ set( libGuiSources
     widgets/OverlayWidget.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
-    widgets/combobox.cpp
+    widgets/ComboBox.cpp
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
     widgets/SocialPlaylistWidget.cpp
-    widgets/infowidgets/sourceinfowidget.cpp
+    widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
     widgets/Breadcrumb.cpp
@@ -156,8 +156,8 @@ set( libGuiSources
 )
 
 IF(QCA2_FOUND)
-    set( libGuiSources ${libGuiSources} utils/groovesharkparser.cpp )
-    set( libGuiHeaders ${libGuiHeaders} utils/groovesharkparser.h )
+    set( libGuiSources ${libGuiSources} utils/GroovesharkParser.cpp )
+    set( libGuiHeaders ${libGuiHeaders} utils/GroovesharkParser.h )
 ENDIF(QCA2_FOUND)
 
 set( libSources
@@ -193,7 +193,7 @@ set( libSources
     sip/SipHandler.cpp
     sip/SipInfo.cpp
 
-    audio/audioengine.cpp
+    audio/AudioEngine.cpp
 
 
     database/Database.cpp
@@ -205,59 +205,59 @@ set( libSources
     database/DatabaseResolver.cpp
     database/DatabaseCommand.cpp
     database/DatabaseCommandLoggable.cpp
-    database/databasecommand_resolve.cpp
-    database/databasecommand_allartists.cpp
-    database/databasecommand_allalbums.cpp
-    database/databasecommand_alltracks.cpp
-    database/databasecommand_addfiles.cpp
-    database/databasecommand_deletefiles.cpp
-    database/databasecommand_dirmtimes.cpp
-    database/databasecommand_filemtimes.cpp
-    database/databasecommand_loadfiles.cpp
-    database/databasecommand_logplayback.cpp
-    database/databasecommand_addsource.cpp
-    database/databasecommand_sourceoffline.cpp
-    database/databasecommand_collectionstats.cpp
-    database/databasecommand_loadplaylistentries.cpp
-    database/databasecommand_modifyplaylist.cpp
-    database/databasecommand_playbackhistory.cpp
-    database/databasecommand_setplaylistrevision.cpp
-    database/databasecommand_loadallplaylists.cpp
-    database/databasecommand_loadallsortedplaylists.cpp
-    database/databasecommand_loadallsources.cpp
-    database/databasecommand_createplaylist.cpp
-    database/databasecommand_deleteplaylist.cpp
-    database/databasecommand_renameplaylist.cpp
-    database/databasecommand_loadops.cpp
-    database/databasecommand_updatesearchindex.cpp
-    database/databasecommand_setdynamicplaylistrevision.cpp
-    database/databasecommand_createdynamicplaylist.cpp
-    database/databasecommand_loaddynamicplaylist.cpp
-    database/databasecommand_loaddynamicplaylistentries.cpp
-    database/databasecommand_loadallautoplaylists.cpp
-    database/databasecommand_loadallstations.cpp
-    database/databasecommand_deletedynamicplaylist.cpp
-    database/databasecommand_addclientauth.cpp
-    database/databasecommand_clientauthvalid.cpp
-    database/databasecommand_socialaction.cpp
-    database/databasecommand_loadsocialactions.cpp
-    database/databasecommand_genericselect.cpp
-    database/databasecommand_setcollectionattributes.cpp
-    database/databasecommand_collectionattributes.cpp
-    database/databasecommand_trackattributes.cpp
-    database/databasecommand_settrackattributes.cpp
+    database/DatabaseCommand_Resolve.cpp
+    database/DatabaseCommand_AllArtists.cpp
+    database/DatabaseCommand_AllAlbums.cpp
+    database/DatabaseCommand_AllTracks.cpp
+    database/DatabaseCommand_AddFiles.cpp
+    database/DatabaseCommand_DeleteFiles.cpp
+    database/DatabaseCommand_DirMtimes.cpp
+    database/DatabaseCommand_FileMTimes.cpp
+    database/DatabaseCommand_LoadFiles.cpp
+    database/DatabaseCommand_LogPlayback.cpp
+    database/DatabaseCommand_AddSource.cpp
+    database/DatabaseCommand_SourceOffline.cpp
+    database/DatabaseCommand_CollectionStats.cpp
+    database/DatabaseCommand_LoadPlaylistEntries.cpp
+    database/DatabaseCommand_ModifyPlaylist.cpp
+    database/DatabaseCommand_PlaybackHistory.cpp
+    database/DatabaseCommand_SetPlaylistRevision.cpp
+    database/DatabaseCommand_LoadAllPlaylists.cpp
+    database/DatabaseCommand_LoadAllSortedPlaylists.cpp
+    database/DatabaseCommand_LoadAllSources.cpp
+    database/DatabaseCommand_CreatePlaylist.cpp
+    database/DatabaseCommand_DeletePlaylist.cpp
+    database/DatabaseCommand_RenamePlaylist.cpp
+    database/DatabaseCommand_LoadOps.cpp
+    database/DatabaseCommand_UpdateSearchIndex.cpp
+    database/DatabaseCommand_SetDynamicPlaylistRevision.cpp
+    database/DatabaseCommand_CreateDynamicPlaylist.cpp
+    database/DatabaseCommand_LoadDynamicPlaylist.cpp
+    database/DatabaseCommand_LoadDynamicPlaylistEntries.cpp
+    database/DatabaseCommand_LoadAllAutoPlaylists.cpp
+    database/DatabaseCommand_LoadAllStations.cpp
+    database/DatabaseCommand_DeleteDynamicPlaylist.cpp
+    database/DatabaseCommand_AddClientAuth.cpp
+    database/DatabaseCommand_ClientAuthValid.cpp
+    database/DatabaseCommand_SocialAction.cpp
+    database/DatabaseCommand_LoadSocialActions.cpp
+    database/DatabaseCommand_GenericSelect.cpp
+    database/DatabaseCommand_SetCollectionAttributes.cpp
+    database/DatabaseCommand_CollectionAttributes.cpp
+    database/DatabaseCommand_TrackAttributes.cpp
+    database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
 
-    infosystem/infosystem.cpp
-    infosystem/infosystemcache.cpp
-    infosystem/infosystemworker.cpp
+    infosystem/InfoSystem.cpp
+    infosystem/InfoSystemCache.cpp
+    infosystem/InfoSystemWorker.cpp
 
-    infosystem/infoplugins/generic/echonestplugin.cpp
-    infosystem/infoplugins/generic/chartsplugin.cpp
-    infosystem/infoplugins/generic/newreleasesplugin.cpp
+    infosystem/infoplugins/generic/EchonestPlugin.cpp
+    infosystem/infoplugins/generic/ChartsPlugin.cpp
+    infosystem/infoplugins/generic/NewReleasesPlugin.cpp
     infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/hypemPlugin.cpp
-    infosystem/infoplugins/generic/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/MusixMatchPlugin.cpp
     infosystem/infoplugins/generic/musicbrainzPlugin.cpp
     infosystem/infoplugins/generic/RoviPlugin.cpp
 
@@ -290,8 +290,8 @@ set( libSources
     taghandlers/oggtag.cpp
 
     utils/tomahawkutils.cpp
-    utils/logger.cpp
-    utils/qnr_iodevicestream.cpp
+    utils/Logger.cpp
+    utils/Qnr_IoDeviceStream.cpp
     utils/xspfloader.cpp
     utils/tomahawkcache.cpp
 
@@ -302,20 +302,20 @@ set( libSources
 )
 
 set( libUI ${libUI}
-    widgets/playlisttypeselectordlg.ui
-    widgets/newplaylistwidget.ui
-    widgets/searchwidget.ui
-    widgets/welcomewidget.ui
-    widgets/whatshotwidget.ui
-    widgets/newreleaseswidget.ui
+    widgets/PlaylistTypeSelectorDialog.ui
+    widgets/NewPlaylistWidget.ui
+    widgets/SearchWidget.ui
+    widgets/WelcomeWidget.ui
+    widgets/WhatsHotWidget.ui
+    widgets/NewReleasesWidget.ui
     widgets/SocialPlaylistWidget.ui
-    widgets/infowidgets/sourceinfowidget.ui
+    widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/TopBar.ui
     playlist/QueueView.ui
     context/ContextWidget.ui
-    infobar/infobar.ui
+    infobar/InfoBar.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
@@ -347,17 +347,17 @@ ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
     LIST(APPEND libGuiSources
-      infosystem/infoplugins/unix/mprispluginrootadaptor.cpp
-      infosystem/infoplugins/unix/mprispluginplayeradaptor.cpp
-      infosystem/infoplugins/unix/mprisplugin.cpp
-      infosystem/infoplugins/unix/fdonotifyplugin.cpp
-      infosystem/infoplugins/unix/imageconverter.cpp )
+      infosystem/infoplugins/unix/MprisPluginRootAdaptor.cpp
+      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.cpp
+      infosystem/infoplugins/unix/MprisPlugin.cpp
+      infosystem/infoplugins/unix/FdoNotifyPlugin.cpp
+      infosystem/infoplugins/unix/ImageConverter.cpp )
 
     LIST(APPEND libGuiHeaders
-      infosystem/infoplugins/unix/mprispluginrootadaptor.h
-      infosystem/infoplugins/unix/mprispluginplayeradaptor.h
-      infosystem/infoplugins/unix/mprisplugin.h
-      infosystem/infoplugins/unix/fdonotifyplugin.h )
+      infosystem/infoplugins/unix/MprisPluginRootAdaptor.h
+      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.h
+      infosystem/infoplugins/unix/MprisPlugin.h
+      infosystem/infoplugins/unix/FdoNotifyPlugin.h )
 
     IF( BUILD_GUI AND X11_FOUND )
         INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
@@ -388,8 +388,8 @@ IF( APPLE )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
     SET( libSources ${libSources}
-      infosystem/infoplugins/mac/adium.mm
-      infosystem/infoplugins/mac/adiumplugin.cpp
+      infosystem/infoplugins/mac/Adium.mm
+      infosystem/infoplugins/mac/AdiumPlugin.cpp
       utils/tomahawkutils_mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 

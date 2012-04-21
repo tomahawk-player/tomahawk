@@ -26,7 +26,7 @@
 #include "sourcesmodel.h"
 #include "sourcetree/items/sourceitem.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )

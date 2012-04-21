@@ -24,7 +24,7 @@
 
 #include "Typedefs.h"
 #include "DllMacro.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 namespace Tomahawk
 {

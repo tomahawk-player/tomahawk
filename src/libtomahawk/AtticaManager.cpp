@@ -31,7 +31,7 @@
 #include <QDir>
 #include <QTimer>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
 

@@ -23,7 +23,7 @@
 #include <QTreeWidget>
 
 #include "Typedefs.h"
-#include "widgets/animatedsplitter.h"
+#include "widgets/AnimatedSplitter.h"
 #include "Query.h"
 
 class StreamConnection;

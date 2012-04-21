@@ -438,7 +438,7 @@
   <customwidget>
    <class>CheckDirTree</class>
    <extends>QTreeView</extends>
-   <header location="global">widgets/checkdirtree.h</header>
+   <header location="global">widgets/CheckDirTree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

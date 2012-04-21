@@ -25,7 +25,7 @@
 #include "Playlist.h"
 #include "genericpageitems.h"
 #include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/CustomPlaylistView.h"
 #include "playlist/CollectionView.h"

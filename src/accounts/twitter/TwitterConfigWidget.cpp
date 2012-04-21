@@ -32,7 +32,7 @@
 
 #include <QMessageBox>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 namespace Tomahawk
 {

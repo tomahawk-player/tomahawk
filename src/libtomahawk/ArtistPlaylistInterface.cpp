@@ -23,9 +23,9 @@
 #include "Collection.h"
 #include "Query.h"
 #include "database/Database.h"
-#include "database/databasecommand_alltracks.h"
+#include "database/DatabaseCommand_AllTracks.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

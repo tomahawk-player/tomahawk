@@ -26,7 +26,7 @@
 #include <QTimer>
 
 #include "portfwd/portfwd.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 PortFwdThread::PortFwdThread( unsigned int port )

@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QMenuBar>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 WidgetDragFilter::WidgetDragFilter( QObject* parent )

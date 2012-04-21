@@ -23,7 +23,7 @@
 #include <QtCore/QThread>
 
 #include "network/Servent.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define PROTOVER "4" // must match remote peer, or we can't talk.
 

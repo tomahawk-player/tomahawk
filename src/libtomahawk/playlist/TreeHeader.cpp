@@ -19,7 +19,7 @@
 #include "TreeHeader.h"
 
 #include "playlist/ArtistView.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 TreeHeader::TreeHeader( ArtistView* parent )

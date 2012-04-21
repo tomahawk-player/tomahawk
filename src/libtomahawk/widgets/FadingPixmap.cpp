@@ -19,7 +19,7 @@
 
 #include "FadingPixmap.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QTimer>
 #include <QBuffer>

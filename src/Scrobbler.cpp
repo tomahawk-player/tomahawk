@@ -26,11 +26,11 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Typedefs.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 static QString s_scInfoIdentifier = QString( "SCROBBLER" );
 

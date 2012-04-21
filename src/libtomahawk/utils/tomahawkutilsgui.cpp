@@ -22,7 +22,7 @@
 #include "config.h"
 #include "Query.h"
 #include "Result.h"
-#include "logger.h"
+#include "Logger.h"
 #include "TrackModelItem.h"
 
 #include <QtGui/QLayout>

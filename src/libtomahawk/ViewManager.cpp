@@ -22,9 +22,9 @@
 #include <QVBoxLayout>
 #include <QMetaMethod>
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
-#include "infobar/infobar.h"
+#include "infobar/InfoBar.h"
 #include "topbar/TopBar.h"
 
 #include "TreeModel.h"
@@ -46,15 +46,15 @@
 #include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
-#include "widgets/welcomewidget.h"
-#include "widgets/whatshotwidget.h"
-#include "widgets/infowidgets/sourceinfowidget.h"
+#include "widgets/WelcomeWidget.h"
+#include "widgets/WhatsHotWidget.h"
+#include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
-#include "widgets/newplaylistwidget.h"
-#include "widgets/animatedsplitter.h"
+#include "widgets/NewPlaylistWidget.h"
+#include "widgets/AnimatedSplitter.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define FILTER_TIMEOUT 280
 

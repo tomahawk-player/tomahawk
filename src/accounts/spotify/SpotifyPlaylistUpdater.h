@@ -20,7 +20,7 @@
 #define SPOTIFYPLAYLISTUPDATER_H
 
 #include "playlist/PlaylistUpdaterInterface.h"
-#include "utils/closure.h"
+#include "utils/Closure.h"
 
 #include <QQueue>
 #include <QVariant>

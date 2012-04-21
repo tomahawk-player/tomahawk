@@ -28,7 +28,7 @@
 #include "DatabaseImpl.h"
 #include "DatabaseCommandLoggable.h"
 #include "TomahawkSqlQuery.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #ifndef QT_NO_DEBUG
     //#define DEBUG_TIMING TRUE

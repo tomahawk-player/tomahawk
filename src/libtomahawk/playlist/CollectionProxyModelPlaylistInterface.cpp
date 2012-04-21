@@ -22,7 +22,7 @@
 #include "CollectionProxyModel.h"
 #include "Album.h"
 #include "Query.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

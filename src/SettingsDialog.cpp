@@ -50,7 +50,7 @@
 #include "accounts/AccountManager.h"
 #include <accounts/AccountModelFilterProxy.h>
 #include <accounts/ResolverAccount.h>
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "AccountFactoryWrapper.h"
 
 #include "ui_ProxyDialog.h"

@@ -18,7 +18,7 @@
 #ifndef CHARTDATALOADER_H
 #define CHARTDATALOADER_H
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "Query.h"
 #include "Artist.h"
 #include "Album.h"

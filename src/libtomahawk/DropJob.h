@@ -22,7 +22,7 @@
 
 #include "Query.h"
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "utils/xspfloader.h"
 
 #include <QObject>

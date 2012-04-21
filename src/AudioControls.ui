@@ -570,12 +570,12 @@
   <customwidget>
    <class>ImageButton</class>
    <extends>QPushButton</extends>
-   <header>widgets/imagebutton.h</header>
+   <header>widgets/ImageButton.h</header>
   </customwidget>
   <customwidget>
    <class>QueryLabel</class>
    <extends>QLabel</extends>
-   <header>widgets/querylabel.h</header>
+   <header>widgets/QueryLabel.h</header>
   </customwidget>
   <customwidget>
    <class>FadingPixmap</class>

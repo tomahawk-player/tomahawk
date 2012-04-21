@@ -46,7 +46,7 @@
 #include <QtCore/QTimer>
 
 #include <utils/tomahawkutils.h>
-#include <utils/logger.h>
+#include <utils/Logger.h>
 #include <accounts/AccountManager.h>
 
 #ifndef ENABLE_HEADLESS
@@ -56,14 +56,14 @@
 #endif
 
 #include <utils/tomahawkutilsgui.h>
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "XmppInfoPlugin.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
 
 // instead of simply copying this function for another thirdparty lib
-// please make it a meta-function or a macro and put it in logger.h. kthxbbq
+// please make it a meta-function or a macro and put it in Logger.h. kthxbbq
 #define JREEN_LOG_INFIX "Jreen"
 void
 JreenMessageHandler(QtMsgType type, const char *msg)

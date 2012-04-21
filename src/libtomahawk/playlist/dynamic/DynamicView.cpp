@@ -30,7 +30,7 @@
 #include "TrackHeader.h"
 #include "DynamicModel.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

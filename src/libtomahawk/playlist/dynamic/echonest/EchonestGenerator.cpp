@@ -22,9 +22,9 @@
 #include "Query.h"
 #include "utils/tomahawkutils.h"
 #include "TomahawkSettings.h"
-#include "database/databasecommand_collectionattributes.h"
+#include "database/DatabaseCommand_CollectionAttributes.h"
 #include "database/Database.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "SourceList.h"
 #include <QFile>
 #include <QDir>

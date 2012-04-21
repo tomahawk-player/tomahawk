@@ -24,15 +24,15 @@
 #include "Album.h"
 #include "Source.h"
 
-#include "utils/spotifyparser.h"
-#include "utils/itunesparser.h"
-#include "utils/rdioparser.h"
-#include "utils/m3uloader.h"
-#include "utils/shortenedlinkparser.h"
-#include "utils/logger.h"
+#include "utils/SpotifyParser.h"
+#include "utils/ItunesParser.h"
+#include "utils/RdioParser.h"
+#include "utils/M3uLoader.h"
+#include "utils/ShortenedLinkParser.h"
+#include "utils/Logger.h"
 #include "utils/tomahawkutils.h"
 #include "GlobalActionManager.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "utils/xspfloader.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
@@ -40,7 +40,7 @@
 #include "Pipeline.h"
 
 #ifdef QCA2_FOUND
-#include "utils/groovesharkparser.h"
+#include "utils/GroovesharkParser.h"
 #endif //QCA2_FOUND
 
 

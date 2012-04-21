@@ -23,7 +23,7 @@
 #include "TomahawkSettings.h"
 
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #ifdef LIBLASTFM_FOUND
     #include <lastfm/ws.h>

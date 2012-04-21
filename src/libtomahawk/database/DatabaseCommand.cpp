@@ -18,21 +18,21 @@
 
 #include "DatabaseCommand.h"
 
-#include "databasecommand_addfiles.h"
-#include "databasecommand_createplaylist.h"
-#include "databasecommand_deletefiles.h"
-#include "databasecommand_deleteplaylist.h"
-#include "databasecommand_logplayback.h"
-#include "databasecommand_renameplaylist.h"
-#include "databasecommand_setplaylistrevision.h"
-#include "databasecommand_createdynamicplaylist.h"
-#include "databasecommand_deletedynamicplaylist.h"
-#include "databasecommand_setdynamicplaylistrevision.h"
-#include "databasecommand_socialaction.h"
+#include "DatabaseCommand_AddFiles.h"
+#include "DatabaseCommand_CreatePlaylist.h"
+#include "DatabaseCommand_DeleteFiles.h"
+#include "DatabaseCommand_DeletePlaylist.h"
+#include "DatabaseCommand_LogPlayback.h"
+#include "DatabaseCommand_RenamePlaylist.h"
+#include "DatabaseCommand_SetPlaylistRevision.h"
+#include "DatabaseCommand_CreateDynamicPlaylist.h"
+#include "DatabaseCommand_DeleteDynamicPlaylist.h"
+#include "DatabaseCommand_SetDynamicPlaylistRevision.h"
+#include "DatabaseCommand_SocialAction.h"
 
-#include "utils/logger.h"
-#include "databasecommand_setcollectionattributes.h"
-#include "databasecommand_settrackattributes.h"
+#include "utils/Logger.h"
+#include "DatabaseCommand_SetCollectionAttributes.h"
+#include "DatabaseCommand_SetTrackAttributes.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )

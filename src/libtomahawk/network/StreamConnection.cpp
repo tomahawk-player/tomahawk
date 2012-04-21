@@ -26,10 +26,10 @@
 #include "BufferIoDevice.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
-#include "database/databasecommand_loadfiles.h"
+#include "database/DatabaseCommand_LoadFiles.h"
 #include "database/Database.h"
 #include "SourceList.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

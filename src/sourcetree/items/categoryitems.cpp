@@ -27,10 +27,10 @@
 #include "SourceList.h"
 #include "sourcetreeview.h"
 #include "utils/tomahawkutils.h"
-#include "widgets/newplaylistwidget.h"
-#include "widgets/playlisttypeselectordlg.h"
+#include "widgets/NewPlaylistWidget.h"
+#include "widgets/PlaylistTypeSelectorDialog.h"
 #include <playlist/dynamic/GeneratorInterface.h>
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "DropJob.h"
 
 #include <echonest/Playlist.h>

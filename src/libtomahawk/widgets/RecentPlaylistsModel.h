@@ -25,7 +25,7 @@
 
 #include "Playlist.h"
 #include "Source.h"
-#include "database/databasecommand_loadallsortedplaylists.h"
+#include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
 
 class RecentPlaylistsModel : public QAbstractListModel
 {

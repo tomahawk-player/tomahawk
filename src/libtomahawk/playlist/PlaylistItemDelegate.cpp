@@ -35,7 +35,7 @@
 #include "TrackHeader.h"
 
 #include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -20,7 +20,7 @@
 #include "ToggleButton.h"
 
 #include "widgets/HeaderLabel.h"
-#include "utils/stylehelper.h"
+#include "utils/StyleHelper.h"
 
 #include <QStylePainter>
 #include <QStyleOptionButton>

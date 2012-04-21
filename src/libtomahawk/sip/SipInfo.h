@@ -22,7 +22,7 @@
 #include <QSharedPointer>
 #include <QHostInfo>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "DllMacro.h"
 
 class SipInfoPrivate;

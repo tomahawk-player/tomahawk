@@ -25,10 +25,10 @@
 #include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "utils/tomahawkutils.h"
 
-#include "database/databasecommand_updatesearchindex.h"
+#include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
 
 using namespace Tomahawk;

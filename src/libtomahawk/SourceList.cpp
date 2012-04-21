@@ -19,11 +19,11 @@
 #include "SourceList.h"
 
 #include "database/Database.h"
-#include "database/databasecommand_loadallsources.h"
+#include "database/DatabaseCommand_LoadAllSources.h"
 #include "network/RemoteCollection.h"
 #include "network/ControlConnection.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -23,19 +23,19 @@
 
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
-#include "database/databasecommand_logplayback.h"
-#include "database/databasecommand_playbackhistory.h"
-#include "database/databasecommand_loadplaylistentries.h"
-#include "database/databasecommand_loadsocialactions.h"
-#include "database/databasecommand_socialaction.h"
+#include "database/DatabaseCommand_LogPlayback.h"
+#include "database/DatabaseCommand_PlaybackHistory.h"
+#include "database/DatabaseCommand_LoadPlaylistEntries.h"
+#include "database/DatabaseCommand_LoadSocialActions.h"
+#include "database/DatabaseCommand_SocialAction.h"
 #include "Album.h"
 #include "Collection.h"
 #include "Pipeline.h"
 #include "Resolver.h"
 #include "SourceList.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

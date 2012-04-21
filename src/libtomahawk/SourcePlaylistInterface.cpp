@@ -21,9 +21,9 @@
 
 #include "Source.h"
 #include "Pipeline.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -27,11 +27,11 @@
 
 #include "Album.h"
 #include "Typedefs.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
-#include "chartsplugin_data_p.h"
+#include "utils/Logger.h"
+#include "ChartsPlugin_Data_p.h"
 
 #define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org/"
 #include <qjson/parser.h>

@@ -22,7 +22,7 @@
 #include "macshortcuthandler.h"
 #include "config.h"
 #include "TomahawkWindow.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
@@ -264,7 +264,7 @@ void Tomahawk::enableFullscreen()
          QSysInfo::MacintoshVersion != QSysInfo::MV_LEOPARD   )
     {
         qDebug() << "Enabling Lion Full-screeen";
-        // Can't include TomahawkApp.h in a .mm file, pulls in infosystem.h which uses
+        // Can't include TomahawkApp.h in a .mm file, pulls in InfoSystem.h which uses
         // the objc keyword 'id'
         foreach( QWidget* w, QApplication::topLevelWidgets() )
         {

@@ -23,7 +23,7 @@
 #include <QXmlStreamWriter>
 #include <QVariant>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Jreen;
 

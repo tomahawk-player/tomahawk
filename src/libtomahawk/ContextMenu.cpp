@@ -26,7 +26,7 @@
 #include "Source.h"
 #include "Artist.h"
 #include "Album.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

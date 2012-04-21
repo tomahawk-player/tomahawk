@@ -32,7 +32,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )

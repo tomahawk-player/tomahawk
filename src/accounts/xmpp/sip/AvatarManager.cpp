@@ -30,7 +30,7 @@
 #include <QCryptographicHash>
 #include <QPixmap>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 AvatarManager::AvatarManager(Jreen::Client *client) :

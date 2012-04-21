@@ -24,7 +24,7 @@
 #include "widgets/HeaderLabel.h"
 #include "playlist/QueueProxyModel.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "PlaylistView.h"
 #include "utils/tomahawkutilsgui.h"
 

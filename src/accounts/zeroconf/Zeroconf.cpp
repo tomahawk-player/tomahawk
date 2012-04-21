@@ -24,7 +24,7 @@
 #include <QtCore/QTimer>
 
 #include "TomahawkSettings.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "ZeroconfAccount.h"
 
 using namespace Tomahawk;

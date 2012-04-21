@@ -22,11 +22,11 @@
 #include "Collection.h"
 #include "Source.h"
 #include "database/Database.h"
-#include "database/databasecommand_resolve.h"
-#include "database/databasecommand_alltracks.h"
-#include "database/databasecommand_addfiles.h"
+#include "database/DatabaseCommand_Resolve.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "database/DatabaseCommand_AddFiles.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

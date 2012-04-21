@@ -25,14 +25,14 @@
 #include "TomahawkSettings.h"
 #include "SourceList.h"
 #include "database/Database.h"
-#include "database/databasecommand_dirmtimes.h"
-#include "database/databasecommand_filemtimes.h"
-#include "database/databasecommand_collectionstats.h"
-#include "database/databasecommand_addfiles.h"
-#include "database/databasecommand_deletefiles.h"
+#include "database/DatabaseCommand_DirMtimes.h"
+#include "database/DatabaseCommand_FileMTimes.h"
+#include "database/DatabaseCommand_CollectionStats.h"
+#include "database/DatabaseCommand_AddFiles.h"
+#include "database/DatabaseCommand_DeleteFiles.h"
 #include "taghandlers/tag.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

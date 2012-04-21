@@ -29,7 +29,7 @@
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define HYPEM_URL "http://hypem.com/playlist/"
 #define HYPEM_END_URL "json/1/data.js"

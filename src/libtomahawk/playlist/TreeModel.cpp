@@ -25,12 +25,12 @@
 #include "Pipeline.h"
 #include "Source.h"
 #include "SourceList.h"
-#include "audio/audioengine.h"
-#include "database/databasecommand_allalbums.h"
-#include "database/databasecommand_alltracks.h"
+#include "audio/AudioEngine.h"
+#include "database/DatabaseCommand_AllAlbums.h"
+#include "database/DatabaseCommand_AllTracks.h"
 #include "database/Database.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define PADDING 4
 #define ICONSIZE 24

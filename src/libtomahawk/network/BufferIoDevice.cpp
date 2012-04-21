@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <QThread>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 // Msgs are framed, this is the size each msg we send containing audio data:
 #define BLOCKSIZE 4096

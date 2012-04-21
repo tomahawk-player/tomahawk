@@ -22,7 +22,7 @@
 #include "DatabaseCommand.h"
 #include "DatabaseImpl.h"
 #include "DatabaseWorker.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16

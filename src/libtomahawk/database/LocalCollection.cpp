@@ -22,7 +22,7 @@
 
 #include "SourceList.h"
 #include <TomahawkSettings.h>
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"

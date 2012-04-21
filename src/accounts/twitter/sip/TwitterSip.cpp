@@ -38,7 +38,7 @@
 #include <database/Database.h>
 #include <network/Servent.h>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "accounts/twitter/TomahawkOAuthTwitter.h"
 #include <accounts/twitter/TwitterAccount.h>
 

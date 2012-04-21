@@ -35,7 +35,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
-#include <audio/audioengine.h>
+#include <audio/AudioEngine.h>
 #include <ActionCollection.h>
 
 #define TREEVIEW_INDENT_ADD 12

@@ -22,7 +22,7 @@
 #include <QMenu>
 
 #include "TomahawkSettings.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 ViewHeader::ViewHeader( QAbstractItemView* parent )

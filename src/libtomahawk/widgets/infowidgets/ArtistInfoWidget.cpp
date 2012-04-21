@@ -21,18 +21,18 @@
 #include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "playlist/TrackHeader.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
 
-#include "database/databasecommand_alltracks.h"
-#include "database/databasecommand_allalbums.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/stylehelper.h"
+#include "utils/StyleHelper.h"
 #include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include "widgets/OverlayButton.h"
 #include "widgets/OverlayWidget.h"

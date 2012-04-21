@@ -24,13 +24,13 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "utils/tomahawkutils.h"
 
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

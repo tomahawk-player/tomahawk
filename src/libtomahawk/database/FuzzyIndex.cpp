@@ -26,7 +26,7 @@
 
 #include "DatabaseImpl.h"
 #include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace lucene::analysis;
 using namespace lucene::analysis::standard;

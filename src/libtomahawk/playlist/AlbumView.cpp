@@ -25,7 +25,7 @@
 #include <QScrollBar>
 #include <qmath.h>
 
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "TomahawkSettings.h"
 #include "Artist.h"
@@ -33,7 +33,7 @@
 #include "AlbumItemDelegate.h"
 #include "AlbumModel.h"
 #include "ViewManager.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 
 #define SCROLL_TIMEOUT 280

@@ -29,10 +29,10 @@
 #include "libtomahawk/SourceList.h"
 
 #include "database/Database.h"
-#include "database/databasecommand_filemtimes.h"
-#include "database/databasecommand_deletefiles.h"
+#include "database/DatabaseCommand_FileMTimes.h"
+#include "database/DatabaseCommand_DeleteFiles.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 ScanManager* ScanManager::s_instance = 0;
 

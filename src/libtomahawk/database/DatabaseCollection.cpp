@@ -19,14 +19,14 @@
 #include "DatabaseCollection.h"
 
 #include "database/Database.h"
-#include "databasecommand_alltracks.h"
-#include "databasecommand_addfiles.h"
-#include "databasecommand_deletefiles.h"
-#include "databasecommand_loadallplaylists.h"
-#include "databasecommand_loadallautoplaylists.h"
-#include "databasecommand_loadallstations.h"
+#include "DatabaseCommand_AllTracks.h"
+#include "DatabaseCommand_AddFiles.h"
+#include "DatabaseCommand_DeleteFiles.h"
+#include "DatabaseCommand_LoadAllPlaylists.h"
+#include "DatabaseCommand_LoadAllAutoPlaylists.h"
+#include "DatabaseCommand_LoadAllStations.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

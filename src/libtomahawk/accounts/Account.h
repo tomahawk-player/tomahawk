@@ -31,7 +31,7 @@
 #include "DllMacro.h"
 #include "TomahawkSettings.h"
 
-#include "libtomahawk/infosystem/infosystem.h"
+#include "libtomahawk/infosystem/InfoSystem.h"
 
 class SipPlugin;
 

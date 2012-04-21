@@ -22,10 +22,10 @@
 #include "Artist.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
-#include "database/databasecommand_alltracks.h"
+#include "database/DatabaseCommand_AllTracks.h"
 #include "Query.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

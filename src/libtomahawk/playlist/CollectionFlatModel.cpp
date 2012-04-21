@@ -20,7 +20,7 @@
 
 #include "database/Database.h"
 #include "SourceList.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

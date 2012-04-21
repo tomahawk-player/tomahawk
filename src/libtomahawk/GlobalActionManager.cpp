@@ -25,7 +25,7 @@
 #include "SourceList.h"
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
-#include "audio/audioengine.h"
+#include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 
@@ -33,15 +33,15 @@
 
 #include "utils/xspfloader.h"
 #include "utils/xspfgenerator.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "utils/tomahawkutils.h"
 
-#include "utils/jspfloader.h"
-#include "utils/spotifyparser.h"
-#include "utils/shortenedlinkparser.h"
-#include "utils/rdioparser.h"
+#include "utils/JspfLoader.h"
+#include "utils/SpotifyParser.h"
+#include "utils/ShortenedLinkParser.h"
+#include "utils/RdioParser.h"
 
-#include "widgets/searchwidget.h"
+#include "widgets/SearchWidget.h"
 #include "ViewManager.h"
 #include "playlist/topbar/TopBar.h"
 #include "playlist/PlaylistView.h"

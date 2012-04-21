@@ -18,7 +18,7 @@
  */
 
 #include "PlaylistInterface.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "Result.h"
 
 using namespace Tomahawk;

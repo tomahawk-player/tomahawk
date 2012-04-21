@@ -19,10 +19,10 @@
 #include "LastFmAccount.h"
 #include "LastFmConfig.h"
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 #include "LastFmPlugin.h"
 #include "utils/tomahawkutils.h"
-#include "resolvers/qtscriptresolver.h"
+#include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"

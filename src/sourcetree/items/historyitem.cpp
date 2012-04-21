@@ -22,7 +22,7 @@
 #include "ViewManager.h"
 #include "genericpageitems.h"
 #include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "playlist/CustomPlaylistView.h"
 #include "temporarypageitem.h"
 #include "SourceList.h"

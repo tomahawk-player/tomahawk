@@ -22,7 +22,7 @@
 
 #include "GlobalActionManager.h"
 #include "sip/XmppSip.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 // remove now playing status after PAUSE_TIMEOUT seconds

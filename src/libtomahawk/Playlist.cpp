@@ -24,11 +24,11 @@
 #include <QtXml/QDomElement>
 
 #include "database/Database.h"
-#include "database/databasecommand_loadplaylistentries.h"
-#include "database/databasecommand_setplaylistrevision.h"
-#include "database/databasecommand_createplaylist.h"
-#include "database/databasecommand_deleteplaylist.h"
-#include "database/databasecommand_renameplaylist.h"
+#include "database/DatabaseCommand_LoadPlaylistEntries.h"
+#include "database/DatabaseCommand_SetPlaylistRevision.h"
+#include "database/DatabaseCommand_CreatePlaylist.h"
+#include "database/DatabaseCommand_DeletePlaylist.h"
+#include "database/DatabaseCommand_RenamePlaylist.h"
 
 #include "TomahawkSettings.h"
 #include "Pipeline.h"
@@ -36,7 +36,7 @@
 #include "SourceList.h"
 #include "PlaylistPlaylistInterface.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;

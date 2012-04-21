@@ -19,7 +19,7 @@
 
 #include "RemoteCollection.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

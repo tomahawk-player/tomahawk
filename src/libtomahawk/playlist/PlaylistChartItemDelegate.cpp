@@ -35,9 +35,9 @@
 #include "TrackHeader.h"
 
 #include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include <utils/PixmapDelegateFader.h>
-#include <utils/closure.h>
+#include <utils/Closure.h>
 
 using namespace Tomahawk;
 

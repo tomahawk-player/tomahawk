@@ -28,7 +28,7 @@
 #include "Album.h"
 #include "Query.h"
 #include "context/ContextPage.h"
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 class PlaylistModel;
 class PlaylistView;

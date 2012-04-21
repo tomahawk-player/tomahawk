@@ -20,7 +20,7 @@
 #ifndef XMPPINFOPLUGIN_H
 #define XMPPINFOPLUGIN_H
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 #include <QTimer>
 
