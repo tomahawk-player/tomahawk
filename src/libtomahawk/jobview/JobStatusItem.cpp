@@ -45,6 +45,13 @@ JobStatusItem::collapseItem() const
 }
 
 
+int
+JobStatusItem::concurrentJobLimit() const
+{
+    return 0;
+}
+
+
 bool
 JobStatusItem::hasCustomDelegate() const
 {

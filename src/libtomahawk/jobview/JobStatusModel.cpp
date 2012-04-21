@@ -26,7 +26,6 @@
 
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
-    , m_aclJobCount( 0 )
 {
 
 }
@@ -42,11 +41,18 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
-    if ( item->type() == "acljob" && m_aclJobCount >= 3 )
+    if ( item->concurrentJobLimit() > 0 )
     {
-        m_aclJobQueue.enqueue( item );
-        return;
+        if ( m_jobTypeCount[ item->type() ] >= item->concurrentJobLimit() )
+        {
+            m_jobQueue[ item->type() ].enqueue( item );
+            return;
+        }
+        int currentJobCount = m_jobTypeCount[ item->type() ];
+        currentJobCount++;
+        m_jobTypeCount[ item->type() ] = currentJobCount;
     }
+    
     
     connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
     connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
@@ -184,16 +190,20 @@ JobStatusModel::itemFinished()
     if ( item->customDelegate() )
         emit customDelegateJobRemoved( idx );
 
-    if ( item->type() == "acljob" )
-        m_aclJobCount--;
-    
-    item->deleteLater();
-
-    if ( !m_aclJobQueue.empty() )
+    if ( item->concurrentJobLimit() > 0 )
     {
-        JobStatusItem* item = m_aclJobQueue.dequeue();
-        QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, item ) );
+        int currentJobs = m_jobTypeCount[ item->type() ];
+        currentJobs--;
+        m_jobTypeCount[ item->type() ] = currentJobs;
+
+        if ( !m_jobQueue[ item->type() ].isEmpty() )
+        {
+            JobStatusItem* item = m_jobQueue[ item->type() ].dequeue();
+            QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, item ) );
+        }
     }
+
+    item->deleteLater();
 }
 
 

@@ -60,8 +60,8 @@ private slots:
 private:
     QList< JobStatusItem* > m_items;
     QHash< QString, QList< JobStatusItem* > > m_collapseCount;
-    QQueue< JobStatusItem* > m_aclJobQueue;
-    int m_aclJobCount;
+    QHash< QString, QQueue< JobStatusItem* > > m_jobQueue;
+    QHash< QString, int > m_jobTypeCount;
 };
 
 #endif // JOBSTATUSMODEL_H

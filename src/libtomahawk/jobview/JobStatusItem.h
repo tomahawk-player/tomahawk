@@ -58,6 +58,8 @@ public:
     virtual bool collapseItem() const;
     virtual bool allowMultiLine() const;
 
+    virtual int concurrentJobLimit() const;
+
     virtual bool hasCustomDelegate() const;
     virtual void createDelegate( QObject* parent );
     virtual QStyledItemDelegate* customDelegate() const;
