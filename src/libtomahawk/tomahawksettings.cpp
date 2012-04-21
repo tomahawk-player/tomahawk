@@ -49,7 +49,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 
     #ifdef Q_OS_LINUX
         QFile file( fileName() );
-        file.setPermissions( file.permissions() & ~(QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
+        file.setPermissions( file.permissions() & ~( QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
     #endif
 
     if ( !contains( "configversion" ) )
