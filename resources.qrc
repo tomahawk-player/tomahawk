@@ -143,6 +143,5 @@
         <file>data/images/process-stop.png</file>
         <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
         <file>data/images/collection.png</file>
-	<file>data/images/loading-animation-dark.gif</file>
     </qresource>
 </RCC>

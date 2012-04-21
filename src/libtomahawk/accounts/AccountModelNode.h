@@ -26,7 +26,7 @@
 
 #include <attica/content.h>
 
-#define ACCOUNTMODELNODE_DEBUG 0
+#define ACCOUNTMODELNODE_DEBUG 1
 
 namespace Tomahawk {
 

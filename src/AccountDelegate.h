@@ -22,7 +22,7 @@
 #include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
-class ChaseWidget;
+class AnimatedSpinner;
 
 namespace Tomahawk
 {
@@ -72,7 +72,7 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
-    mutable QHash< QPersistentModelIndex, ChaseWidget* > m_loadingSpinners;
+    mutable QHash< QPersistentModelIndex, AnimatedSpinner* > m_loadingSpinners;
     mutable int m_accountRowHeight;
 };
 

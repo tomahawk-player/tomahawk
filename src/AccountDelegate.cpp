@@ -27,7 +27,7 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "utils/chasewidget.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/closure.h"
 
 #define CHILD_ACCOUNT_HEIGHT 24
@@ -681,7 +681,7 @@ void
 AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
 {
     qDebug() << "START INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
-    ChaseWidget* anim = new ChaseWidget( QApplication::topLevelWidgets().first() );
+    AnimatedSpinner* anim = new AnimatedSpinner( 0 );
     _detail::Closure* closure = NewClosure( anim, SIGNAL( requestUpdate() ), this, SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), idx );
     closure->setAutoDelete( false );
 

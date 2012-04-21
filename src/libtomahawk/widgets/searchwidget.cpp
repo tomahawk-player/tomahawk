@@ -26,7 +26,7 @@
 #include "sourcelist.h"
 #include "viewmanager.h"
 #include "dynamic/widgets/LoadingSpinner.h"
-#include "utils/chasewidget.h"
+#include "utils/AnimatedSpinner.h"
 #include "playlist/albummodel.h"
 #include "playlist/playlistmodel.h"
 #include "widgets/overlaywidget.h"

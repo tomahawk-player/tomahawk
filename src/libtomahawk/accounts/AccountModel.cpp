@@ -29,7 +29,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-#define ACCOUNTMODEL_DEBUG 0
+#define ACCOUNTMODEL_DEBUG 1
 
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )

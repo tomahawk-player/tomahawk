@@ -31,7 +31,7 @@
 #include "context/ContextWidget.h"
 #include "widgets/overlaywidget.h"
 #include "dynamic/widgets/LoadingSpinner.h"
-#include "utils/chasewidget.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "utils/closure.h"
@@ -51,7 +51,7 @@ TrackView::TrackView( QWidget* parent )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
-    , m_loadingSpinner( new ChaseWidget( this ) )
+    , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
