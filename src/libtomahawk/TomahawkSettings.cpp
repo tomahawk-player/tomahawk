@@ -642,7 +642,10 @@ TomahawkSettings::aclEntries() const
 void
 TomahawkSettings::setAclEntries( const QVariantList &entries )
 {
+    tDebug() << "Setting entries";
     setValue( "acl/entries", entries );
+    sync();
+    tDebug() << "Done setting entries";
 }
 
 

@@ -107,6 +107,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
     item->createDelegate( m_view );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
+    m_customDelegateRefCounter[ row ] = m_customDelegateRefCounter[ row ] + 1;
     AclJobDelegate* delegate = qobject_cast< AclJobDelegate* >( item->customDelegate() );
     if ( delegate )
     {
@@ -120,7 +121,9 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
-    m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
+    if ( m_customDelegateRefCounter[ row ] == 1 )
+        m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
+    m_customDelegateRefCounter[ row ] = m_customDelegateRefCounter[ row ] - 1;
 }
 
 

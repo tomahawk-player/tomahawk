@@ -55,14 +55,26 @@ public:
 
         User()
             : uuid( QUuid::createUuid().toString() )
+            , knownDbids()
+            , knownAccountIds()
             , acl( ACLRegistry::NotFound )
             {}
 
-        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACL p_acl )
+        ~User()
+            {}
+
+        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
             : uuid( p_uuid )
             , knownDbids( p_knownDbids )
             , knownAccountIds( p_knownAccountIds )
             , acl( p_acl )
+            {}
+
+        User( const User &other )
+            : uuid( other.uuid )
+            , knownDbids( other.knownDbids )
+            , knownAccountIds( other.knownAccountIds )
+            , acl( other.acl )
             {}
     };
 

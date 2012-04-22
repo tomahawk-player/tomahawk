@@ -49,7 +49,6 @@ ACLRegistry::ACLRegistry( QObject* parent )
     s_instance = this;
     qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
     qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
-
     load();
 }
 
@@ -62,13 +61,14 @@ ACLRegistry::~ACLRegistry()
 ACLRegistry::ACL
 ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType, bool skipEmission )
 {
+    tDebug() << Q_FUNC_INFO;
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         if ( !skipEmission )
             QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( ACLRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
         return ACLRegistry::NotFound;
     }
-
+    tDebug() << Q_FUNC_INFO << "in right thread";
     //FIXME: Remove when things are working
 //     emit aclResult( dbid, username, ACLRegistry::Stream );
 //     return ACLRegistry::NotFound;
@@ -133,6 +133,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 void
 ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 {
+    tDebug() << Q_FUNC_INFO;
     AclJobItem* job = new AclJobItem( user, username );
     m_jobQueue.enqueue( job );
     queueNextJob();
@@ -143,6 +144,7 @@ ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 void
 ACLRegistry::userDecision( ACLRegistry::User user )
 {
+    tDebug() << Q_FUNC_INFO;
     m_cache.append( user );
     save();
     emit aclResult( user.knownDbids.first(), user.knownAccountIds.first(), user.acl );
@@ -197,11 +199,13 @@ ACLRegistry::queueNextJob()
 void
 ACLRegistry::load()
 {
+    tDebug() << Q_FUNC_INFO;
     QVariantList entryList = TomahawkSettings::instance()->aclEntries();
     foreach ( QVariant entry, entryList )
     {
         if ( !entry.isValid() || !entry.canConvert< ACLRegistry::User >() )
             continue;
+        tDebug() << Q_FUNC_INFO << "loading entry";
         ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
         m_cache.append( entryUser );
     }
@@ -211,8 +215,12 @@ ACLRegistry::load()
 void
 ACLRegistry::save()
 {
+    tDebug() << Q_FUNC_INFO;
     QVariantList entryList;
     foreach ( ACLRegistry::User user, m_cache )
+    {
+        tDebug() << Q_FUNC_INFO << "user is " << user.uuid << " with known name " << user.knownAccountIds.first();
         entryList.append( QVariant::fromValue< ACLRegistry::User >( user ) );
+    }
     TomahawkSettings::instance()->setAclEntries( entryList );
 }

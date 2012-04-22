@@ -112,7 +112,7 @@ AclJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool
 bool
 AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( event->type() != QEvent::MouseButtonPress &&
          event->type() != QEvent::MouseButtonRelease &&
          event->type() != QEvent::MouseButtonDblClick &&
@@ -123,7 +123,7 @@ AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         m_savedHoverPos = me->pos();
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Setting position to " << m_savedHoverPos;
+        //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Setting position to " << m_savedHoverPos;
         emit update( index );
         return true;
     }
