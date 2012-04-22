@@ -30,6 +30,8 @@
 #include "HeadlessCheck.h"
 #include "DllMacro.h"
 
+#define ACLUSERVERSION 1
+
 class AclJobItem;
 
 class DLLEXPORT ACLRegistry : public QObject
@@ -51,7 +53,7 @@ public:
         QString uuid;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        ACL acl;
+        ACLRegistry::ACL acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )

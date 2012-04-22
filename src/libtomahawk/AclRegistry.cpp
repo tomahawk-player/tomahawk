@@ -31,6 +31,43 @@
 #include "jobview/JobStatusModel.h"
 
 
+QDataStream& operator<<( QDataStream &out, const ACLRegistry::User &user )
+{
+    out << ACLUSERVERSION;
+    out << user.uuid;
+    out << user.knownDbids.length();
+    foreach( QString knownDbid, user.knownDbids )
+        out << knownDbid;
+    out << user.knownAccountIds.length();
+    foreach( QString knownAccount, user.knownAccountIds )
+        out << user.knownAccountIds;
+    out << (int)( user.acl );
+    return out;
+}
+
+QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
+{
+    int ver;
+    in >> ver;
+    if ( ver == ACLUSERVERSION )
+    {
+        in >> user.uuid;
+        int dbidsLength;
+        in >> dbidsLength;
+        for ( int i = 0; i < dbidsLength; i++ )
+            in >> user.knownDbids;
+        int accountsLength;
+        in >> accountsLength;
+        for ( int i = 0; i < accountsLength; i++ )
+            in >> user.knownAccountIds;
+        int aclIn;
+        in >> aclIn;
+        user.acl = (ACLRegistry::ACL)( aclIn );
+    }
+    return in;
+}
+
+
 ACLRegistry* ACLRegistry::s_instance = 0;
 
 ACLRegistry*
@@ -49,6 +86,7 @@ ACLRegistry::ACLRegistry( QObject* parent )
     s_instance = this;
     qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
     qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
+    qRegisterMetaTypeStreamOperators< ACLRegistry::User >( "ACLRegistry::User" );
     load();
 }
 
