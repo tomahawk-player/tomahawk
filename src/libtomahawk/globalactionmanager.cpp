@@ -148,32 +148,35 @@ void
 GlobalActionManager::getShortLink( const playlist_ptr& pl )
 {
     QVariantMap m;
-    m[ "title" ] = playlist->title();
+    m[ "title" ] = pl->title();
+    m[ "creator" ] = pl->author().isNull() ? "" : pl->author()->friendlyName();
     QVariantList tracks;
-    foreach( const plentry_ptr& pl, playlist->entries() )
+    foreach( const plentry_ptr& pl, pl->entries() )
     {
         if ( pl->query().isNull() )
             continue;
 
         QVariantMap track;
         track[ "title" ] = pl->query()->track();
-        track[ "artist" ] = pl->query()->artist();
+        track[ "creator" ] = pl->query()->artist();
         track[ "album" ] = pl->query()->album();
 
         tracks << track;
     }
-    m[ "tracks" ] = tracks;
+    m[ "track" ] = tracks;
 
-    QJson::Parser p;
-    QByteArray msg = p.parse( m );
+    QVariantMap jspf;
+    jspf["playlist"] = m;
+
+    QJson::Serializer s;
+    QByteArray msg = s.serialize( jspf );
     qDebug() << "POSTING DATA:" << msg;
 
-    const QUrl url( QString( "%1/playlist").arg( hostname() ) );
+    const QUrl url( QString( "%1/playlist/").arg( hostname() ) );
     QNetworkRequest req( url );
     req.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );
-    QNetworkReply *reply = TomahawkUtils::nam()->get( request );
-    if ( callbackObj.isValid() )
-        reply->setProperty( "callbackobj", callbackObj );
+    QNetworkReply *reply = TomahawkUtils::nam()->post( req, msg );
+
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
@@ -375,18 +378,29 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 
     if ( parts[ 0 ] == "import" )
     {
-        if ( !url.hasQueryItem( "xspf" ) )
+        if ( !url.hasQueryItem( "xspf" ) && !url.hasQueryItem( "jspf") )
         {
-            tDebug() << "No xspf to load...";
+            tDebug() << "No xspf or jspf to load...";
             return false;
         }
-        QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
-        QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-        XSPFLoader* l= new XSPFLoader( true, this );
-        l->setOverrideTitle( title );
-        l->load( xspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
-
+        if ( url.hasQueryItem( "xspf") )
+        {
+            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            XSPFLoader* l= new XSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( xspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        }
+        else if ( url.hasQueryItem( "jspf" ) )
+        {
+            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            JSPFLoader* l= new JSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( jspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        }
     }
     else if ( parts [ 0 ] == "new" )
     {

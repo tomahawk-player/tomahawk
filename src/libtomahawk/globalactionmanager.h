@@ -57,7 +57,7 @@ public:
 
 public slots:
     void shortenLink( const QUrl& url, const QVariant &callbackObj = QVariant() );
-    void getShortLink( const playlist_ptr& playlist );
+    void getShortLink( const Tomahawk::playlist_ptr& playlist );
 
     bool parseTomahawkLink( const QString& link );
     void waitingForResolved( bool );
