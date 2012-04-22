@@ -168,4 +168,4 @@ openAccountConfig( Tomahawk::Accounts::Account* account, QWidget* parent, bool s
 
 } // namespace TomahawkUtils
 
-#include "guihelpers.moc"
+#include "GuiHelpers.moc"
