@@ -38,9 +38,21 @@ public:
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+    virtual void emitSizeHintChanged( const QModelIndex &index );
+    
+signals:
+    void update( const QModelIndex& idx );
+    void aclResult( ACLRegistry::ACL result );
+    
+protected:
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    
 private:
-    mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
-    QListView* m_parentView;
+    void drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red = false ) const;
+    
+    QPoint m_savedHoverPos;
+    mutable QRect m_savedAcceptRect;
+    mutable QRect m_savedDenyRect;
 };
 
 
@@ -69,6 +81,9 @@ public:
     
 signals:
     void userDecision( ACLRegistry::User user );
+
+public slots:
+    void aclResult( ACLRegistry::ACL result );
     
 private:
     QStyledItemDelegate* m_delegate;

@@ -414,4 +414,54 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Tr
     }
 }
 
+
+void
+drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom, const QColor& gradient2top, const QColor& gradient2bottom )
+{
+    QPainterPath btnPath;
+    const int radius = 3;
+    // draw top half gradient
+    const int btnCenter = btnRect.bottom() - ( btnRect.height() / 2 );
+    btnPath.moveTo( btnRect.left(), btnCenter );
+    btnPath.lineTo( btnRect.left(), btnRect.top() + radius );
+    btnPath.quadTo( QPoint( btnRect.topLeft() ), QPoint( btnRect.left() + radius, btnRect.top() ) );
+    btnPath.lineTo( btnRect.right() - radius, btnRect.top() );
+    btnPath.quadTo( QPoint( btnRect.topRight() ), QPoint( btnRect.right(), btnRect.top() + radius ) );
+    btnPath.lineTo( btnRect.right(),btnCenter );
+    btnPath.lineTo( btnRect.left(), btnCenter );
+
+    QLinearGradient g;
+    if ( gradient1bottom.isValid() )
+    {
+        g.setColorAt( 0, color );
+        g.setColorAt( 0.5, gradient1bottom );
+        painter->fillPath( btnPath, g );
+    }
+    else
+        painter->fillPath( btnPath, color );
+    //painter->setPen( bg.darker() );
+    
+    //painter->drawPath( btnPath );
+
+    btnPath = QPainterPath();
+    btnPath.moveTo( btnRect.left(), btnCenter );
+    btnPath.lineTo( btnRect.left(), btnRect.bottom() - radius );
+    btnPath.quadTo( QPoint( btnRect.bottomLeft() ), QPoint( btnRect.left() + radius, btnRect.bottom() ) );
+    btnPath.lineTo( btnRect.right() - radius, btnRect.bottom() );
+    btnPath.quadTo( QPoint( btnRect.bottomRight() ), QPoint( btnRect.right(), btnRect.bottom() - radius ) );
+    btnPath.lineTo( btnRect.right(), btnCenter );
+    btnPath.lineTo( btnRect.left(), btnCenter );
+
+    if ( gradient2top.isValid() && gradient2bottom.isValid() )
+    {
+        g.setColorAt( 0, gradient2top );
+        g.setColorAt( 0.5, gradient2bottom );
+        painter->fillPath( btnPath, g );
+    }
+    else
+        painter->fillPath( btnPath, color );
+
+}
+
+
 } // ns

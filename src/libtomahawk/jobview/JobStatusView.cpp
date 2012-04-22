@@ -20,6 +20,7 @@
 #include "JobStatusView.h"
 
 #include "Pipeline.h"
+#include "AclJobItem.h"
 #include "JobStatusModel.h"
 #include "JobStatusItem.h"
 #include "JobStatusDelegate.h"
@@ -74,6 +75,9 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
+
+    setMouseTracking( true );
+    m_view->setMouseTracking( true );
 }
 
 
@@ -103,6 +107,13 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
     item->createDelegate( m_view );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
+    AclJobDelegate* delegate = qobject_cast< AclJobDelegate* >( item->customDelegate() );
+    if ( delegate )
+    {
+        connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
+        connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
+        delegate->emitSizeHintChanged( m_model->index( row ) );
+    }
 }
 
 

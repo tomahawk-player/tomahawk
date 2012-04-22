@@ -70,8 +70,8 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     }
 
     //FIXME: Remove when things are working
-    emit aclResult( dbid, username, ACLRegistry::Stream );
-    return ACLRegistry::NotFound;
+//     emit aclResult( dbid, username, ACLRegistry::Stream );
+//     return ACLRegistry::NotFound;
     
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
@@ -156,9 +156,11 @@ ACLRegistry::userDecision( ACLRegistry::User user )
 void
 ACLRegistry::queueNextJob()
 {
+    tDebug() << Q_FUNC_INFO << "jobCount = " << m_jobCount;
     if ( m_jobCount != 0 )
         return;
-    
+
+    tDebug() << Q_FUNC_INFO << "jobQueue size = " << m_jobQueue.length();
     if ( !m_jobQueue.isEmpty() )
     {
         AclJobItem* job = m_jobQueue.dequeue();
@@ -169,18 +171,21 @@ ACLRegistry::queueNextJob()
             ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
             if ( acl != ACLRegistry::NotFound )
             {
+                tDebug() << Q_FUNC_INFO << "Found existing acl entry for = " << user.knownAccountIds.first();
                 found = true;
                 break;
             }
         }
         if ( found )
         {
+            tDebug() << Q_FUNC_INFO << "deleting job, already have ACL for " << user.knownAccountIds.first();
             delete job;
             QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
             return;
         }
         else
         {
+            tDebug() << Q_FUNC_INFO << "activating job for user" << user.knownAccountIds.first();
             m_jobCount++;
             JobStatusView::instance()->model()->addJob( job );
             connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );

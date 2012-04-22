@@ -22,6 +22,8 @@
 
 #include <QSize>
 #include <QModelIndex>
+#include <QColor>
+#include <QRect>
 
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
@@ -29,11 +31,9 @@
 class TrackModelItem;
 class QStyleOptionViewItemV4;
 class QPainter;
-class QColor;
 class QPixmap;
 class QLayout;
 class QPalette;
-class QRect;
 
 namespace TomahawkUtils
 {
@@ -57,6 +57,7 @@ namespace TomahawkUtils
 
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item );
 
+    DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
 }
 
 #endif // TOMAHAWKUTILSGUI_H
