@@ -70,8 +70,8 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     }
 
     //FIXME: Remove when things are working
-     emit aclResult( dbid, username, ACLRegistry::Stream );
-     return ACLRegistry::NotFound;
+    emit aclResult( dbid, username, ACLRegistry::Stream );
+    return ACLRegistry::NotFound;
     
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );

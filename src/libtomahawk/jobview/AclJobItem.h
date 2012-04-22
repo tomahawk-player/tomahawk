@@ -76,6 +76,4 @@ private:
     const QString m_username;
 };
 
-Q_DECLARE_METATYPE( AclJobItem* );
-
 #endif // ACLJOBITEM_H

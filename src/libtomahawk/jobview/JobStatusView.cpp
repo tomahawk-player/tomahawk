@@ -87,18 +87,21 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
-    connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, QStyledItemDelegate* ) ), this, SLOT( customDelegateJobInserted( int, QStyledItemDelegate* ) ) );
-    connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int, QStyledItemDelegate* ) ), this, SLOT( customDelegateJobRemoved( int, QStyledItemDelegate* ) ) );
+    connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
+    connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
 }
 
 
 void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !item )
         return;
 
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "telling item to create delegate";
     item->createDelegate( m_view );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
 }
 
