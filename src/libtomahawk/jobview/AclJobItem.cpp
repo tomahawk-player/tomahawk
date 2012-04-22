@@ -19,9 +19,11 @@
 
 #include "AclJobItem.h"
 
+#include "JobStatusModel.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QPixmap>
+#include <QPainter>
 #include <QListView>
 #include <QApplication>
 
@@ -40,11 +42,9 @@ AclJobDelegate::AclJobDelegate( QObject* parent )
 void
 AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    /*
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
-    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
     opt.state &= ~QStyle::State_MouseOver;
     QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
@@ -52,24 +52,20 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 //     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
 
     painter->setRenderHint( QPainter::Antialiasing );
-    QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
-    if ( allowMultiLine )
-        iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
-    QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
-    painter->drawPixmap( iconRect, p );
+    //QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
+    //QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
+    //p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
+    //painter->drawPixmap( iconRect, p );
 
     // draw right column if there is one
-    const QString rCol = index.data( JobStatusModel::RightColumnRole ).toString();
-    int rightEdge = opt.rect.right();
-    if ( !rCol.isEmpty() )
-    {
-        const int w = fm.width( rCol );
-        const QRect rRect( opt.rect.right() - PADDING - w, PADDING + opt.rect.y(), w, opt.rect.height() - 2*PADDING );
-        painter->drawText( rRect, Qt::AlignCenter, rCol );
+    AclJobItem* item = index.data( JobStatusModel::JobDataRole ).value< AclJobItem* >();
+    const QString text = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
+    const int w = fm.width( text );
+    const QRect rRect( opt.rect.left() + PADDING, opt.rect.y() - PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
+    painter->drawText( rRect, Qt::AlignCenter, text );
 
-        rightEdge = rRect.left();
-    }
+    /*
+    rightEdge = rRect.left();
 
     const int mainW = rightEdge - 3*PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
@@ -90,9 +86,10 @@ AclJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
 
 
-AclJobItem::AclJobItem( ACLRegistry::User user )
+AclJobItem::AclJobItem( ACLRegistry::User user, const QString &username )
     : m_delegate( 0 )
     , m_user( user )
+    , m_username( username )
 {
 }
 

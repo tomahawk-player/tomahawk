@@ -30,6 +30,8 @@
 #include "HeadlessCheck.h"
 #include "DllMacro.h"
 
+class AclJobItem;
+
 class DLLEXPORT ACLRegistry : public QObject
 {
     Q_OBJECT
@@ -79,14 +81,15 @@ public slots:
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return ACLRegistry::ACL
      **/
-    void isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound );
+    ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
 
     #ifndef ENABLE_HEADLESS
-    void getUserDecision( User user );
+    void getUserDecision( ACLRegistry::User user, const QString &username );
     #endif
 
 private slots:
     void userDecision( ACLRegistry::User user );
+    void queueNextJob();
     
 private:
     /**
@@ -101,6 +104,9 @@ private:
     QList< ACLRegistry::User > m_cache;
 
     static ACLRegistry* s_instance;
+
+    QQueue< AclJobItem* > m_jobQueue;
+    int m_jobCount;
 };
 
 Q_DECLARE_METATYPE( ACLRegistry::ACL );

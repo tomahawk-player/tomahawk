@@ -44,6 +44,7 @@ ACLRegistry::instance()
 
 ACLRegistry::ACLRegistry( QObject* parent )
     : QObject( parent )
+    , m_jobCount( 0 )
 {
     s_instance = this;
     qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
@@ -58,18 +59,19 @@ ACLRegistry::~ACLRegistry()
 }
 
 
-void
-ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType )
+ACLRegistry::ACL
+ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType, bool skipEmission )
 {
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
-        emit aclResult( dbid, username, globalType );
-        return;
+        if ( !skipEmission )
+            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( ACLRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
+        return ACLRegistry::NotFound;
     }
 
     //FIXME: Remove when things are working
-    emit aclResult( dbid, username, ACLRegistry::Stream );
-    return;
+     emit aclResult( dbid, username, ACLRegistry::Stream );
+     return ACLRegistry::NotFound;
     
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
@@ -98,12 +100,16 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 
         if ( found )
         {
-            emit aclResult( dbid, username, user.acl );
+            if ( !skipEmission )
+                emit aclResult( dbid, username, user.acl );
             i.setValue( user );
-            return;
+            return user.acl;
         }
     }
 
+    if ( skipEmission )
+        return ACLRegistry::NotFound;
+    
     // User was not found, create a new user entry
     ACLRegistry::User user;
     user.knownDbids.append( dbid );
@@ -113,23 +119,23 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 #ifndef ENABLE_HEADLESS
     else
     {
-        getUserDecision( user );
-        return;
+        getUserDecision( user, username );
+        return ACLRegistry::NotFound;
     }
 #endif
     m_cache.append( user );
     emit aclResult( dbid, username, user.acl );
-    return;
+    return user.acl;
 }
 
 
 #ifndef ENABLE_HEADLESS
 void
-ACLRegistry::getUserDecision( User user )
+ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 {
-    AclJobItem* job = new AclJobItem( user );
-    connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );
-    JobStatusView::instance()->model()->addJob( job );
+    AclJobItem* job = new AclJobItem( user, username );
+    m_jobQueue.enqueue( job );
+    queueNextJob();
 }
 #endif
 
@@ -138,7 +144,48 @@ void
 ACLRegistry::userDecision( ACLRegistry::User user )
 {
     m_cache.append( user );
+    save();
     emit aclResult( user.knownDbids.first(), user.knownAccountIds.first(), user.acl );
+
+    m_jobCount--;
+    if ( !m_jobQueue.isEmpty() )
+        queueNextJob();
+}
+
+
+void
+ACLRegistry::queueNextJob()
+{
+    if ( m_jobCount != 0 )
+        return;
+    
+    if ( !m_jobQueue.isEmpty() )
+    {
+        AclJobItem* job = m_jobQueue.dequeue();
+        ACLRegistry::User user = job->user();
+        bool found = false;
+        foreach( QString dbid, user.knownDbids )
+        {
+            ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
+            if ( acl != ACLRegistry::NotFound )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( found )
+        {
+            delete job;
+            QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
+            return;
+        }
+        else
+        {
+            m_jobCount++;
+            JobStatusView::instance()->model()->addJob( job );
+            connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );
+        }
+    }
 }
 
 

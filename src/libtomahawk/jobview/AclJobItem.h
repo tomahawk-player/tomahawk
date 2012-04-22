@@ -48,7 +48,7 @@ class AclJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit AclJobItem( ACLRegistry::User user );
+    explicit AclJobItem( ACLRegistry::User user, const QString &username );
     virtual ~AclJobItem();
     
     void done();
@@ -65,13 +65,17 @@ public:
     virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
     virtual ACLRegistry::User user() const { return m_user; }
-
+    virtual const QString& username() const { return m_username; }
+    
 signals:
     void userDecision( ACLRegistry::User user );
     
 private:
     QStyledItemDelegate* m_delegate;
     ACLRegistry::User m_user;
+    const QString m_username;
 };
+
+Q_DECLARE_METATYPE( AclJobItem* );
 
 #endif // ACLJOBITEM_H

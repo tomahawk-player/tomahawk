@@ -410,6 +410,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
     qRegisterMetaType< PairList >("PairList");
     qRegisterMetaType< JobStatusItem* >("JobStatusItem*");
+    qRegisterMetaType< AclJobItem* >("AclJobItem*");
 
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");

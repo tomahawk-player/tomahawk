@@ -668,6 +668,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             return NULL;
         }
 
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "nodeid is: " << nodeid;
         if( !nodeid.isEmpty() )
         {
             // Used by the connection for the ACL check
