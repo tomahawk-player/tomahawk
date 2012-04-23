@@ -345,7 +345,7 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             break;
 
         default:
-            qDebug() << "Not all Client::DisconnectReasons checked";
+            qDebug() << "Not all Client::DisconnectReasons checked" << ( int ) reason;
             Q_ASSERT(false);
             break;
     }
