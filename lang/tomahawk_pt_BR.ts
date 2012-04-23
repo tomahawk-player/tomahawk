@@ -142,13 +142,13 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="118"/>
         <source>Click to show SuperCollection Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Clique para mostrar as faixas da SuperColeção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="79"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="136"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>Clique para mostrar os albums da SuperColeção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="138"/>
@@ -219,7 +219,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>Clique para mostrar os albums da SuperColeção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
@@ -501,7 +501,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/DropJob.cpp" line="832"/>
         <source>No tracks found for given %1</source>
-        <translation type="unfinished"/>
+        <translation>Nenhuma faixa encontrada para %1</translation>
     </message>
 </context>
 <context>
@@ -517,7 +517,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="31"/>
         <source>Indexing database</source>
-        <translation type="unfinished"/>
+        <translation>Indexando banco de dados</translation>
     </message>
 </context>
 <context>
@@ -605,7 +605,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>URL da Playlist</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="29"/>
@@ -703,12 +703,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="163"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>tocada %1 por você</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="165"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>tocada %1 por %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="172"/>
@@ -914,7 +914,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="260"/>
         <source>just now</source>
-        <translation type="unfinished"/>
+        <translation>agora</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="34"/>
@@ -1347,7 +1347,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Clique com o botão direito em qualquer playlist do Tomahawk para sincronizá-la com o Spotify.</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
@@ -1530,7 +1530,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="82"/>
         <source>Configure this Google Account</source>
-        <translation type="unfinished"/>
+        <translation>Configurar esta Google Account</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="83"/>
@@ -1540,7 +1540,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="84"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Digite seu login do Google para se conectar com seus amigos usando o Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="85"/>
@@ -1553,7 +1553,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation type="unfinished"/>
+        <translation>Conecte-se ao Google Talk para encontrar seus amigos</translation>
     </message>
 </context>
 <context>
@@ -1645,7 +1645,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
-        <translation type="unfinished"/>
+        <translation>Conecte-se aos seus seguidores do Twitter.</translation>
     </message>
 </context>
 <context>
@@ -2400,7 +2400,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/unix/FdoNotifyPlugin.cpp" line="135"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk está tocando &quot;%1&quot; de %2%3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/unix/FdoNotifyPlugin.cpp" line="138"/>
@@ -2934,12 +2934,12 @@ colocar o número PIN mostrado aqui:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="747"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="751"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="755"/>
@@ -2949,7 +2949,7 @@ colocar o número PIN mostrado aqui:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="758"/>
         <source>About Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Sobre o Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -3630,7 +3630,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
         <source>Authorize User</source>
-        <translation type="unfinished"/>
+        <translation>Autorizar Usuário</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="825"/>

@@ -465,7 +465,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>關於</translation>
     </message>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
@@ -475,7 +475,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="143"/>
         <source>About this Account</source>
-        <translation type="unfinished"/>
+        <translation>關於此帳戶</translation>
     </message>
 </context>
 <context>
@@ -682,7 +682,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="73"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>新版本</translation>
     </message>
 </context>
 <context>
@@ -1067,22 +1067,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.ui" line="31"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="41"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="67"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>封面</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="101"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>文字標籤</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
@@ -1314,7 +1314,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>新版本</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
@@ -1342,7 +1342,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>登錄</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
@@ -1352,7 +1352,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>高品質的串流</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
@@ -1362,7 +1362,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>刪除同步時，刪除 Tomahawk 播放清單</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
@@ -1611,22 +1611,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="133"/>
         <source>Logging in...</source>
-        <translation type="unfinished"/>
+        <translation>登錄中...</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="148"/>
         <source>Logged in!</source>
-        <translation type="unfinished"/>
+        <translation>登錄了！</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="155"/>
         <source>Failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>失敗：%1</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="165"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>登錄</translation>
     </message>
 </context>
 <context>
@@ -1974,7 +1974,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="207"/>
         <source>from user</source>
-        <translation type="unfinished"/>
+        <translation>從用戶</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="216"/>
@@ -2012,32 +2012,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>0 BPM</source>
-        <translation type="unfinished"/>
+        <translation>0 BPM</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>500 BPM</source>
-        <translation type="unfinished"/>
+        <translation>500 BPM</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>0 secs</source>
-        <translation type="unfinished"/>
+        <translation>0秒</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>3600 secs</source>
-        <translation type="unfinished"/>
+        <translation>3600秒</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>-100 dB</source>
-        <translation type="unfinished"/>
+        <translation>-100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>100 dB</source>
-        <translation type="unfinished"/>
+        <translation>100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="343"/>
@@ -2052,42 +2052,42 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="363"/>
         <source>C Sharp</source>
-        <translation type="unfinished"/>
+        <translation>升C</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="365"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>降E大調</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="366"/>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="368"/>
         <source>F Sharp</source>
-        <translation type="unfinished"/>
+        <translation>升F</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="370"/>
@@ -2097,7 +2097,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="372"/>
@@ -2107,22 +2107,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="373"/>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="390"/>
         <source>Ascending</source>
-        <translation type="unfinished"/>
+        <translation>遞增</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="391"/>
         <source>Descending</source>
-        <translation type="unfinished"/>
+        <translation>遞減</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="394"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>拍子</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="395"/>
@@ -2132,12 +2132,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="396"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>音量</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="397"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>藝術家熟悉程度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="398"/>
@@ -2152,7 +2152,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="400"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>緯度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="401"/>
@@ -2162,7 +2162,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="402"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>模式</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
@@ -2172,7 +2172,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>能量</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="405"/>
@@ -2346,7 +2346,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Enter a description</source>
-        <translation type="unfinished"/>
+        <translation>輸入一個描述</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="102"/>
@@ -2413,7 +2413,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="412"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>喜愛曲目</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="415"/>
@@ -2436,7 +2436,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/generic/NewReleasesPlugin.cpp" line="271"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>專輯</translation>
     </message>
 </context>
 <context>
@@ -2465,7 +2465,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>無法保存曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
@@ -2475,7 +2475,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>XSPF </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
@@ -2928,12 +2928,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="747"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="751"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="755"/>
@@ -3014,7 +3014,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="48"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>流行精選</translation>
     </message>
 </context>
 <context>
@@ -3022,42 +3022,42 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>演出者</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Title</source>
-        <translation type="unfinished"/>
+        <translation>標題</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>專輯</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>長度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>比特率</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>年代</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>年</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
@@ -3119,7 +3119,8 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="369"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>長度
+</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="369"/>
@@ -3129,12 +3130,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="369"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>年代</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="369"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>年</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="369"/>
@@ -3234,7 +3235,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
-        <translation type="unfinished"/>
+        <translation>發送訊息</translation>
     </message>
 </context>
 <context>
@@ -3252,7 +3253,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="387"/>
         <source>All available albums</source>
-        <translation type="unfinished"/>
+        <translation>所有現有專輯</translation>
     </message>
 </context>
 <context>
@@ -3260,7 +3261,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="34"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>最近新增</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
@@ -3270,17 +3271,17 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>最近播放的曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="152"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>沒有最近建立的播放清單在您的網路。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="90"/>
         <source>Welcome to Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>歡迎到 Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -3357,7 +3358,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="188"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>新播放清單</translation>
     </message>
 </context>
 <context>
@@ -3426,7 +3427,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>關閉</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
@@ -3459,27 +3460,27 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="111"/>
         <source>Login Information</source>
-        <translation type="unfinished"/>
+        <translation>登入資訊</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
         <source>Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>XMPP 識別碼：</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
         <source>e.g. user@example.com</source>
-        <translation type="unfinished"/>
+        <translation>例如 user@example.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="160"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>密碼：</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="188"/>
         <source>An account with this name already exists!</source>
-        <translation type="unfinished"/>
+        <translation>這個名字的帳戶已經存在！</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="210"/>
@@ -3489,7 +3490,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
         <source>Server:</source>
-        <translation type="unfinished"/>
+        <translation>服務器：</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
@@ -3517,12 +3518,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="380"/>
         <source>User Interaction</source>
-        <translation type="unfinished"/>
+        <translation>使用者互動</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
         <source>Host is unknown</source>
-        <translation type="unfinished"/>
+        <translation>主機是未知</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
@@ -3532,77 +3533,77 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
         <source>Authorization Error</source>
-        <translation type="unfinished"/>
+        <translation>授權錯誤</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
         <source>Remote Stream Error</source>
-        <translation type="unfinished"/>
+        <translation>遠端串流錯誤</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
         <source>Remote Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>遠端連線失敗</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
         <source>Internal Server Error</source>
-        <translation type="unfinished"/>
+        <translation>內部服務器錯誤</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
         <source>System shutdown</source>
-        <translation type="unfinished"/>
+        <translation>系統關閉</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
         <source>Conflict</source>
-        <translation type="unfinished"/>
+        <translation>衝突</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
         <source>No Compression Support</source>
-        <translation type="unfinished"/>
+        <translation>沒有壓縮支持</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
         <source>No Encryption Support</source>
-        <translation type="unfinished"/>
+        <translation>沒有加密支持</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
         <source>No Authorization Support</source>
-        <translation type="unfinished"/>
+        <translation>沒有授權支持</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="424"/>
         <source>No Supported Feature</source>
-        <translation type="unfinished"/>
+        <translation>沒有支持的功能</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>加為好友</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="522"/>
         <source>Enter Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>輸入XMPP識別碼：</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="673"/>
         <source>Add Friend...</source>
-        <translation type="unfinished"/>
+        <translation>加為好友...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="678"/>
         <source>XML Console...</source>
-        <translation type="unfinished"/>
+        <translation>XML的控制台...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="726"/>
@@ -3612,7 +3613,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
         <source>Authorize User</source>
-        <translation type="unfinished"/>
+        <translation>授權用戶</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="825"/>
