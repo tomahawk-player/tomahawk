@@ -74,6 +74,7 @@ ArtistPlaylistInterface::hasNextItem()
     return true;
 }
 
+
 result_ptr
 ArtistPlaylistInterface::currentItem() const
 {
