@@ -47,6 +47,8 @@ public:
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "allalbums"; }
 
+    Tomahawk::collection_ptr collection() const { return m_collection; }
+
     void execForCollection( DatabaseImpl* );
     void execForArtist( DatabaseImpl* );
 

@@ -96,6 +96,8 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
 
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
+
     void onModeToggle();
     void onLoadingStarted();
     void onLoadingFinished();

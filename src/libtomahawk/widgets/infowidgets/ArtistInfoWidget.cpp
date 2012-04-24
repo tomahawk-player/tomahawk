@@ -132,7 +132,7 @@ void
 ArtistInfoWidget::onModeToggle()
 {
     m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->addAlbums( m_artist, QModelIndex() );
+    m_albumsModel->addAlbums( QModelIndex(), m_artist->albums( m_albumsModel->mode() ) );
 }
 
 
@@ -192,7 +192,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
-    m_albumsModel->addAlbums( artist, QModelIndex(), true );
+    
+    m_albumsModel->fetchAlbums( artist );
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();
@@ -217,6 +218,12 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
     onArtistImageUpdated();
+}
+
+
+void
+ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mode )
+{
 }
 
 

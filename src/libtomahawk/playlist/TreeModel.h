@@ -96,8 +96,8 @@ public:
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
     void addArtists( const Tomahawk::artist_ptr& artist );
-    void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent, bool autoRefetch = false );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
+    void fetchAlbums( const Tomahawk::artist_ptr& artist );
 
     void getCover( const QModelIndex& index );
 
@@ -130,6 +130,8 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
+    void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
+
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -146,8 +148,7 @@ protected:
 
 private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
-    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModelIndex& index );
-    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& variant );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
     void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant );
 

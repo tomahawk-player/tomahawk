@@ -49,20 +49,29 @@ public:
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
+
+    bool infoLoaded() const { return m_infoLoaded; }
+    
+    QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
-    bool infoLoaded() const { return m_infoLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
+    QWeakPointer< Tomahawk::Artist > weakRef() { return m_ownRef; }
+    void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
+
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
+
     void updated();
     void coverChanged();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
@@ -73,17 +82,25 @@ private:
     unsigned int m_id;
     QString m_name;
     QString m_sortname;
-    QByteArray m_coverBuffer;
+
     bool m_infoLoaded;
     mutable bool m_infoLoading;
+    QHash<Tomahawk::ModelMode, bool> m_albumsLoaded;
     mutable QString m_uuid;
+    mutable int m_infoJobs;
 
+    QList<Tomahawk::album_ptr> m_databaseAlbums;
+    QList<Tomahawk::album_ptr> m_officialAlbums;
+
+    mutable QByteArray m_coverBuffer;
 #ifndef ENABLE_HEADLESS
     mutable QPixmap* m_cover;
     mutable QHash< int, QPixmap > m_coverCache;
 #endif
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
+    
+    QWeakPointer< Tomahawk::Artist > m_ownRef;
 };
 
 } // ns

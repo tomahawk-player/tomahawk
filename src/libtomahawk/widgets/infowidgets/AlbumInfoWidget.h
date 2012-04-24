@@ -98,8 +98,6 @@ private slots:
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
     void onAlbumCoverUpdated();
 
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-
     void onModeToggle();
     void onAlbumsModeToggle();
 

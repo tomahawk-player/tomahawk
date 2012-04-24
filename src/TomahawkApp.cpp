@@ -410,8 +410,10 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
     qRegisterMetaType< PairList >("PairList");
 
-    qRegisterMetaType< GeneratorMode>("GeneratorMode");
+    qRegisterMetaType<GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
+    qRegisterMetaType<ModelMode>("Tomahawk::ModelMode");
+    qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
 
     // Extra definition for namespaced-versions of signals/slots required
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");

@@ -61,15 +61,17 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
-    enum GeneratorMode {
+    enum GeneratorMode
+    {
         OnDemand = 0,
         Static
     };
 
     enum ModelMode
     {
-        DatabaseMode = 0,
-        InfoSystemMode
+        Mixed = 0,
+        DatabaseMode,
+        InfoSystemMode,
     };
 
     class ExternalResolver;
