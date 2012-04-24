@@ -350,8 +350,12 @@ void
 NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 {
     m_proxy = proxy;
-    if ( !TomahawkSettings::instance()->proxyDns() )
-        m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
+    QFlags< QNetworkProxy::Capability > proxyCaps;
+    proxyCaps |= QNetworkProxy::TunnelingCapability;
+    proxyCaps |= QNetworkProxy::ListeningCapability;
+    if ( TomahawkSettings::instance()->proxyDns() )
+        proxyCaps |= QNetworkProxy::HostNameLookupCapability;
+    m_proxy.setCapabilities( proxyCaps );
     tDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
     tDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
