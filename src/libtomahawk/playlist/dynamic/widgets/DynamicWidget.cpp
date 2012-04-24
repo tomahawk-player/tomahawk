@@ -41,7 +41,6 @@
 #include "ViewManager.h"
 #include "dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
-#include "AudioControls.h"
 #include "LoadingSpinner.h"
 #include "utils/Logger.h"
 
