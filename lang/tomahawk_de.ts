@@ -134,29 +134,29 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="74"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="120"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="116"/>
         <source>Click to show Official Tracks</source>
         <translation>Hier klicken um die offizielle Trackliste zu sehen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="118"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="114"/>
         <source>Click to show SuperCollection Tracks</source>
         <translation>Lieder in der Supersammlung anzeigen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="79"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="136"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="132"/>
         <source>Click to show SuperCollection Albums</source>
         <translation>Alben in der Supersammlung anzeigen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="138"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="134"/>
         <source>Click to show Official Albums</source>
         <translation>Hier klicken um die offiziellen Alben zu sehen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="205"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="201"/>
         <source>Other Albums by %1</source>
         <translation>Andere Alben von %1</translation>
     </message>
@@ -1956,7 +1956,7 @@ Bitte ändere den Filter oder versuche es erneut.</translation>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="472"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="471"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -2610,7 +2610,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="542"/>
+        <location filename="../src/TomahawkApp.cpp" line="544"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
@@ -3164,14 +3164,14 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
         <translation>Alle Künstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="699"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="724"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="749"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="701"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="726"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="751"/>
         <source>Collection of %1</source>
         <translation>Sammlung von %1</translation>
     </message>
