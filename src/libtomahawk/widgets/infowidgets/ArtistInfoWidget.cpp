@@ -132,7 +132,7 @@ void
 ArtistInfoWidget::onModeToggle()
 {
     m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->addAlbums( QModelIndex(), m_artist->albums( m_albumsModel->mode() ) );
+    m_albumsModel->fetchAlbums( m_artist );
 }
 
 

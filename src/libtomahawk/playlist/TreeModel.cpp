@@ -606,7 +606,7 @@ TreeModel::fetchAlbums( const artist_ptr& artist )
     emit loadingStarted();
 
     connect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
-                              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+                              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ), Qt::UniqueConnection );
         
     const QModelIndex parent = indexFromArtist( artist );
     addAlbums( parent, artist->albums( m_mode, m_collection ) );
@@ -620,6 +620,9 @@ TreeModel::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mo
         return;
 
     const artist_ptr artist = qobject_cast< Artist* >( sender() )->weakRef().toStrongRef();
+    disconnect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                this,            SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+
     const QModelIndex parent = indexFromArtist( artist );
     addAlbums( parent, albums );
 }
