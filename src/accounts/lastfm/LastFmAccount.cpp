@@ -189,6 +189,8 @@ LastFmAccount::saveConfig()
         setScrobble( m_configWidget.data()->scrobble() );
     }
 
+    sync();
+
     if ( m_infoPlugin )
         QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );
 }
