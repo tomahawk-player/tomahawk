@@ -46,6 +46,10 @@ private slots:
 
     void enablePlay();
     void enablePause();
+    
+    void stopContinueAfterTrackStatusChanged();
+    
+    void stopContinueAfterTrackActionTriggered();
 
     void menuAboutToShow();
 private:
@@ -61,6 +65,7 @@ private:
     QMenu* m_contextMenu;
 
     QAction* m_showWindowAction;
+    QAction* m_stopContinueAfterTrackAction;
 };
 
 #endif // TOMAHAWK_TRAYICON_H
