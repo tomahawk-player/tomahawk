@@ -46,7 +46,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
     
-    m_stopContinueAfterTrackAction = new QAction( tr( "&Stop Playback after this Track" ), this );
+    m_stopContinueAfterTrackAction = new QAction( tr( "&Stop Playback after current Track" ), this );
 
     ActionCollection *ac = ActionCollection::instance();
     m_contextMenu->addAction( ac->getAction( "playPause" ) );
@@ -75,6 +75,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( enablePause() ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( stopContinueAfterTrackStatusChanged()) );
     connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( enablePause() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( enablePlay() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( enablePlay() ) );
@@ -238,19 +239,25 @@ TomahawkTrayIcon::enablePause()
 void
 TomahawkTrayIcon::stopContinueAfterTrackStatusChanged()
 {
-    if ( AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
-        m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after this Track" ) );
-    else
-        m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after this Track" ) );
+    if ( !AudioEngine::instance()->currentTrack().isNull() )
+    {
+        if ( AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+            m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after current Track" ) );
+        else
+            m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
+    }
 }
 
 
 void TomahawkTrayIcon::stopContinueAfterTrackActionTriggered()
 {
-     if ( !AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
-         AudioEngine::instance()->setStopAfterTrack( AudioEngine::instance()->currentTrack()->toQuery() );
-     else
-         AudioEngine::instance()->setStopAfterTrack( Tomahawk::query_ptr() );
+    if ( !AudioEngine::instance()->currentTrack().isNull() )
+    {
+        if ( !AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+            AudioEngine::instance()->setStopAfterTrack( AudioEngine::instance()->currentTrack()->toQuery() );
+        else
+            AudioEngine::instance()->setStopAfterTrack( Tomahawk::query_ptr() );
+    }
 }
 
 
