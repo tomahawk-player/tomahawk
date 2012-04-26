@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"/>
+        <translation>对话框</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
@@ -55,12 +55,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="52"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>独自收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="55"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>停止独自收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="59"/>
@@ -82,42 +82,42 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="70"/>
         <source>&amp;Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>载入播放列表</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
         <source>&amp;Rename Playlist</source>
-        <translation type="unfinished"/>
+        <translation>重命名播放列表</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation type="unfinished"/>
+        <translation>复制播放列表链接</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished"/>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
         <source>&amp;Previous Track</source>
-        <translation type="unfinished"/>
+        <translation>上一首</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
         <source>&amp;Next Track</source>
-        <translation type="unfinished"/>
+        <translation>下一首</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"/>
+        <translation>退出</translation>
     </message>
 </context>
 <context>
@@ -125,18 +125,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>来自</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="31"/>
         <source>Other Albums by Artist</source>
-        <translation type="unfinished"/>
+        <translation>艺人的其他专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="74"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="116"/>
         <source>Click to show Official Tracks</source>
-        <translation type="unfinished"/>
+        <translation>点击以显示官方发行曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
@@ -153,12 +153,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="134"/>
         <source>Click to show Official Albums</source>
-        <translation type="unfinished"/>
+        <translation>点击以显示官方发行专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="201"/>
         <source>Other Albums by %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 的其他专辑</translation>
     </message>
 </context>
 <context>
@@ -166,18 +166,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="145"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="260"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="302"/>
         <source>All albums from %1</source>
-        <translation type="unfinished"/>
+        <translation>来自 %1 的所有专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="304"/>
         <source>All albums</source>
-        <translation type="unfinished"/>
+        <translation>所有专辑</translation>
     </message>
 </context>
 <context>
@@ -203,17 +203,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="37"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>最热曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="55"/>
         <source>Related Artists</source>
-        <translation type="unfinished"/>
+        <translation>相关艺人</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="77"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
@@ -250,32 +250,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="75"/>
         <source>Prev</source>
-        <translation type="unfinished"/>
+        <translation>上一首</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="87"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="94"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>暂停</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="103"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>下一首</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="214"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>艺人</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="236"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>专辑</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="265"/>
@@ -305,22 +305,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="469"/>
         <source>Shuffle</source>
-        <translation type="unfinished"/>
+        <translation>无序播放</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="482"/>
         <source>Repeat</source>
-        <translation type="unfinished"/>
+        <translation>重复播放</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="520"/>
         <source>Low</source>
-        <translation type="unfinished"/>
+        <translation>低</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="552"/>
         <source>High</source>
-        <translation type="unfinished"/>
+        <translation>高</translation>
     </message>
 </context>
 <context>
@@ -329,7 +329,7 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="61"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="100"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>新播放列表</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="63"/>
@@ -337,14 +337,14 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="316"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="318"/>
         <source>New Station</source>
-        <translation type="unfinished"/>
+        <translation>新电台</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="207"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="316"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="318"/>
         <source>%1 Station</source>
-        <translation type="unfinished"/>
+        <translation>%1 电台</translation>
     </message>
 </context>
 <context>
@@ -352,12 +352,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="63"/>
         <source>Playlists</source>
-        <translation type="unfinished"/>
+        <translation>播放列表</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="65"/>
         <source>Stations</source>
-        <translation type="unfinished"/>
+        <translation>电台</translation>
     </message>
 </context>
 <context>
@@ -400,7 +400,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
         <source>Show Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>显示脚注</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
