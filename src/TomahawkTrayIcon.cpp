@@ -74,12 +74,11 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addAction( ac->getAction( "quit" ) );
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( enablePause() ) );
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( stopContinueAfterTrackStatusChanged()) );
-    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( enablePause() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( enablePlay() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( enablePlay() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopContinueAfterTrack() ) , this, SLOT( stopContinueAfterTrackStatusChanged() ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlay() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( onResume() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( onStop() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( onPause() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopAfterTrack_changed() ) , this, SLOT( stopContinueAfterTrack_StatusChanged() ) );
 
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
@@ -223,21 +222,38 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 
 
 void
-TomahawkTrayIcon::enablePlay()
+TomahawkTrayIcon::onPause()
 {
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Play" ) );
 }
 
 
 void
-TomahawkTrayIcon::enablePause()
+TomahawkTrayIcon::onPlay()
+{
+    m_stopContinueAfterTrackAction->setEnabled( true );
+    onResume();
+    stopContinueAfterTrack_StatusChanged();
+}
+
+
+void
+TomahawkTrayIcon::onStop()
+{
+    m_stopContinueAfterTrackAction->setEnabled( false );
+    onPause();
+}
+
+
+void
+TomahawkTrayIcon::onResume()
 {
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
 }
 
 
 void
-TomahawkTrayIcon::stopContinueAfterTrackStatusChanged()
+TomahawkTrayIcon::stopContinueAfterTrack_StatusChanged()
 {
     if ( !AudioEngine::instance()->currentTrack().isNull() )
     {

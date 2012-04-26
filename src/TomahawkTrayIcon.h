@@ -44,10 +44,12 @@ private slots:
     void onActivated( QSystemTrayIcon::ActivationReason reason );
     void showWindow();
 
-    void enablePlay();
-    void enablePause();
+    void onPause();
+    void onPlay();
+    void onStop();
+    void onResume();
     
-    void stopContinueAfterTrackStatusChanged();
+    void stopContinueAfterTrack_StatusChanged();
     
     void stopContinueAfterTrackActionTriggered();
 
