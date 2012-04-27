@@ -96,7 +96,7 @@ public slots:
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
     
-    void setStopAfterTrack( const Tomahawk::query_ptr& query ) { if ( m_stopAfterTrack != query ) { m_stopAfterTrack = query; emit stopAfterTrack_changed(); } }
+    void setStopAfterTrack( const Tomahawk::query_ptr& query );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );

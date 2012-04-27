@@ -715,6 +715,16 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
 
 void
+AudioEngine::setStopAfterTrack(const query_ptr& query)
+{
+    if ( m_stopAfterTrack != query )
+    {
+        m_stopAfterTrack = query; emit stopAfterTrack_changed();
+    } 
+}
+
+
+void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
     Tomahawk::result_ptr lastTrack = m_currentTrack;
