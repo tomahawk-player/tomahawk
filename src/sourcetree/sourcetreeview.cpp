@@ -361,7 +361,7 @@ SourceTreeView::copyPlaylistLink()
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
 
-//        GlobalActionManager::instance()->getShortLink( playlist );
+        GlobalActionManager::instance()->getShortLink( playlist );
 
 //        QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
 //        QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),

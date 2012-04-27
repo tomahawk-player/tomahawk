@@ -72,6 +72,7 @@ signals:
 
 private slots:
     void shortenLinkRequestFinished();
+    void postShortenFinished();
     void shortenLinkRequestError( QNetworkReply::NetworkError );
 
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );

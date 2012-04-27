@@ -172,12 +172,21 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
     QByteArray msg = s.serialize( jspf );
     qDebug() << "POSTING DATA:" << msg;
 
+    const QByteArray boundary = "----------------------------2434992cccab";
+    QByteArray data(QByteArray("--" + boundary + "\r\n"));
+    data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
+    data += "Content-Type: application/octet-stream\r\n\r\n";
+    data += msg;
+    data += "\r\n\r\n";
+    data += "--" + boundary + "--\r\n\r\n";
+
     const QUrl url( QString( "%1/playlist/").arg( hostname() ) );
     QNetworkRequest req( url );
-    req.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );
-    QNetworkReply *reply = TomahawkUtils::nam()->post( req, msg );
+    qDebug() << "POSTING TO:" << url.toString();
+    req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
+    QNetworkReply *reply = TomahawkUtils::nam()->post( req, data );
 
-    connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
+    connect( reply, SIGNAL( finished() ), SLOT( postShortenFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
 
@@ -1101,6 +1110,25 @@ GlobalActionManager::shortenLinkRequestFinished()
     reply->deleteLater();
 }
 
+
+void
+GlobalActionManager::postShortenFinished()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    Q_ASSERT( reply );
+    const QByteArray raw = reply->readAll();
+    qDebug() << "GOT REPLYL" << raw;
+
+    const QUrl url = QUrl::fromUserInput( raw );
+    qDebug() << "GOT POSTED SHORT URL:" << url.toString();
+    QClipboard* cb = QApplication::clipboard();
+
+    QByteArray data = url.toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
+
+    reply->deleteLater();
+}
 
 void
 GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
