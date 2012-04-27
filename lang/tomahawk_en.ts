@@ -2639,30 +2639,41 @@ enter the displayed PIN number here:</translation>
 <context>
     <name>TomahawkTrayIcon</name>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="59"/>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="93"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="49"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="263"/>
+        <source>&amp;Stop Playback after current Track</source>
+        <translation>&amp;Stop Playback after current Track</translation>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="66"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="101"/>
         <source>Hide Tomahawk Window</source>
         <translation>Hide Tomahawk Window</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="98"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="106"/>
         <source>Show Tomahawk Window</source>
         <translation>Show Tomahawk Window</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="158"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="166"/>
         <source>Currently not playing.</source>
         <translation>Currently not playing.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="219"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="227"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="226"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="251"/>
         <source>Pause</source>
         <translation>Pause</translation>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="261"/>
+        <source>&amp;Continue Playback after current Track</source>
+        <translation>&amp;Continue Playback after current Track</translation>
     </message>
 </context>
 <context>

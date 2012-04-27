@@ -2640,30 +2640,41 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TomahawkTrayIcon</name>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="59"/>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="93"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="49"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="263"/>
+        <source>&amp;Stop Playback after current Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="66"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="101"/>
         <source>Hide Tomahawk Window</source>
         <translation>Скрий главният прозорец</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="98"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="106"/>
         <source>Show Tomahawk Window</source>
         <translation>Покажи главният прозорец</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="158"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="166"/>
         <source>Currently not playing.</source>
         <translation>В момента не се изпълнява нищо</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="219"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="227"/>
         <source>Play</source>
         <translation>Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="226"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="251"/>
         <source>Pause</source>
         <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="261"/>
+        <source>&amp;Continue Playback after current Track</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
