@@ -28,7 +28,7 @@
 
 #include "DllMacro.h"
 
-#define TOMAHAWK_SETTINGS_VERSION 8
+#define TOMAHAWK_SETTINGS_VERSION 9
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config

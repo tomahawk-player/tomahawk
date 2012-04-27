@@ -23,7 +23,7 @@
 #include <QVariantMap>
 #include <QTimer>
 
-class LoadingSpinner;
+class AnimatedSpinner;
 class QShowEvent;
 
 namespace Ui
@@ -74,7 +74,7 @@ private slots:
 private:
     Ui::SpotifyConfig* m_ui;
     SpotifyAccount* m_account;
-    LoadingSpinner* m_playlistsLoading;
+    AnimatedSpinner* m_playlistsLoading;
     bool m_loggedInManually;
 };
 

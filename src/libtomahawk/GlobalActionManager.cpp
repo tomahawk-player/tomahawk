@@ -2,7 +2,7 @@
     Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
     Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
     Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -143,6 +143,51 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
 
+
+void
+GlobalActionManager::getShortLink( const playlist_ptr& pl )
+{
+    QVariantMap m;
+    m[ "title" ] = pl->title();
+    m[ "creator" ] = pl->author().isNull() ? "" : pl->author()->friendlyName();
+    QVariantList tracks;
+    foreach( const plentry_ptr& pl, pl->entries() )
+    {
+        if ( pl->query().isNull() )
+            continue;
+
+        QVariantMap track;
+        track[ "title" ] = pl->query()->track();
+        track[ "creator" ] = pl->query()->artist();
+        track[ "album" ] = pl->query()->album();
+
+        tracks << track;
+    }
+    m[ "track" ] = tracks;
+
+    QVariantMap jspf;
+    jspf["playlist"] = m;
+
+    QJson::Serializer s;
+    QByteArray msg = s.serialize( jspf );
+
+    // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
+    const QByteArray boundary = "----------------------------2434992cccab";
+    QByteArray data(QByteArray("--" + boundary + "\r\n"));
+    data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
+    data += "Content-Type: application/octet-stream\r\n\r\n";
+    data += msg;
+    data += "\r\n\r\n";
+    data += "--" + boundary + "--\r\n\r\n";
+
+    const QUrl url( QString( "%1/p/").arg( hostname() ) );
+    QNetworkRequest req( url );
+    req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
+    QNetworkReply *reply = TomahawkUtils::nam()->post( req, data );
+
+    connect( reply, SIGNAL( finished() ), SLOT( postShortenFinished() ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
+}
 
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
@@ -341,18 +386,29 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 
     if ( parts[ 0 ] == "import" )
     {
-        if ( !url.hasQueryItem( "xspf" ) )
+        if ( !url.hasQueryItem( "xspf" ) && !url.hasQueryItem( "jspf") )
         {
-            tDebug() << "No xspf to load...";
+            tDebug() << "No xspf or jspf to load...";
             return false;
         }
-        QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
-        QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-        XSPFLoader* l= new XSPFLoader( true, this );
-        l->setOverrideTitle( title );
-        l->load( xspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
-
+        if ( url.hasQueryItem( "xspf") )
+        {
+            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            XSPFLoader* l= new XSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( xspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        }
+        else if ( url.hasQueryItem( "jspf" ) )
+        {
+            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            JSPFLoader* l= new JSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( jspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        }
     }
     else if ( parts [ 0 ] == "new" )
     {
@@ -1016,7 +1072,7 @@ GlobalActionManager::shortenLinkRequestFinished()
     QVariant callbackObj;
     if ( reply->property( "callbackobj" ).isValid() )
         callbackObj = reply->property( "callbackobj" );
-    
+
     // Check for the redirect attribute, as this should be the shortened link
     QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
 
@@ -1053,6 +1109,25 @@ GlobalActionManager::shortenLinkRequestFinished()
     reply->deleteLater();
 }
 
+
+void
+GlobalActionManager::postShortenFinished()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    Q_ASSERT( reply );
+    const QByteArray raw = reply->readAll();
+    qDebug() << "GOT REPLYL" << raw;
+
+    const QUrl url = QUrl::fromUserInput( raw );
+    qDebug() << "GOT POSTED SHORT URL:" << url.toString();
+    QClipboard* cb = QApplication::clipboard();
+
+    QByteArray data = url.toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
+
+    reply->deleteLater();
+}
 
 void
 GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )

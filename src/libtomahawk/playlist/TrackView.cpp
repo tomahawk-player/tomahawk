@@ -30,13 +30,13 @@
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "DropJob.h"
 #include "Artist.h"
 #include "Album.h"
+#include "utils/AnimatedSpinner.h"
 
 #define SCROLL_TIMEOUT 280
 
@@ -50,7 +50,7 @@ TrackView::TrackView( QWidget* parent )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
-    , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
@@ -157,7 +157,7 @@ TrackView::setTrackModel( TrackModel* model )
             setHeaderHidden( true );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         break;
-            
+
         default:
             setHeaderHidden( false );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );

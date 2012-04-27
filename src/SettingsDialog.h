@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-class LoadingSpinner;
+class AnimatedSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
 class SipPlugin;
@@ -112,7 +112,7 @@ private:
     bool m_rejected;
     Tomahawk::Accounts::AccountModel* m_accountModel;
     Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
-    LoadingSpinner* m_sipSpinner;
+    AnimatedSpinner* m_sipSpinner;
 };
 
 #endif // SETTINGSDIALOG_H

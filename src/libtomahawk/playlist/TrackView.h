@@ -30,7 +30,7 @@
 #include "DllMacro.h"
 
 class QAction;
-class LoadingSpinner;
+class AnimatedSpinner;
 class TrackHeader;
 class TrackModel;
 class TrackProxyModel;
@@ -57,7 +57,7 @@ public:
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
-    LoadingSpinner* loadingSpinner() const { return m_loadingSpinner; }
+    AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
@@ -119,7 +119,7 @@ private:
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
     OverlayWidget* m_overlay;
-    LoadingSpinner* m_loadingSpinner;
+    AnimatedSpinner* m_loadingSpinner;
 
     bool m_resizing;
     bool m_dragging;
@@ -133,7 +133,7 @@ private:
     Tomahawk::query_ptr m_autoPlaying;
 
     Tomahawk::ContextMenu* m_contextMenu;
-    
+
     QTimer m_timer;
 };
 

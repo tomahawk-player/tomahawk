@@ -96,7 +96,6 @@ set( libGuiSources
     playlist/dynamic/widgets/MiscControlWidgets.cpp
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
-    playlist/dynamic/widgets/LoadingSpinner.cpp
 
     playlist/topbar/TopBar.cpp
     playlist/topbar/ClearButton.cpp
@@ -123,6 +122,7 @@ set( libGuiSources
     utils/Closure.cpp
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
+    utils/AnimatedSpinner.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp

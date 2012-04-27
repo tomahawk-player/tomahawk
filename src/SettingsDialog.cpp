@@ -44,7 +44,7 @@
 #include "AccountDelegate.h"
 #include "database/Database.h"
 #include "network/Servent.h"
-#include "playlist/dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
@@ -114,6 +114,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
     m_accountProxy->setSourceModel( m_accountModel );
 
+    connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
     ui->accountsView->setModel( m_accountProxy );
@@ -130,7 +132,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     if ( !Servent::instance()->isReady() )
     {
-        m_sipSpinner = new LoadingSpinner( ui->accountsView );
+        m_sipSpinner = new AnimatedSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );

@@ -94,6 +94,8 @@ signals:
     void createAccount( Tomahawk::Accounts::AccountFactory* factory );
     void scrollTo( const QModelIndex& idx );
 
+    void startInstalling( const QPersistentModelIndex& idx );
+    void doneInstalling( const QPersistentModelIndex& idx );
 private slots:
     void loadData();
 

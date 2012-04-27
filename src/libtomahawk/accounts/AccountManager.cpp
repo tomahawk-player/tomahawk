@@ -266,7 +266,7 @@ void
 AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
-
+    qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
     foreach( const QString& accountId, accountIds )
     {
         QString pluginFactory = factoryFromId( accountId );

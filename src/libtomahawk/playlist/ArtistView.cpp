@@ -26,7 +26,7 @@
 
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "widgets/OverlayWidget.h"
 
 #include "ContextMenu.h"
@@ -49,7 +49,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
-    , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
