@@ -2,7 +2,7 @@
     Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
     Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
     Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -170,8 +170,8 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
 
     QJson::Serializer s;
     QByteArray msg = s.serialize( jspf );
-    qDebug() << "POSTING DATA:" << msg;
 
+    // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
     const QByteArray boundary = "----------------------------2434992cccab";
     QByteArray data(QByteArray("--" + boundary + "\r\n"));
     data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
@@ -180,9 +180,8 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
     data += "\r\n\r\n";
     data += "--" + boundary + "--\r\n\r\n";
 
-    const QUrl url( QString( "%1/playlist/").arg( hostname() ) );
+    const QUrl url( QString( "%1/p/").arg( hostname() ) );
     QNetworkRequest req( url );
-    qDebug() << "POSTING TO:" << url.toString();
     req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
     QNetworkReply *reply = TomahawkUtils::nam()->post( req, data );
 
@@ -1073,7 +1072,7 @@ GlobalActionManager::shortenLinkRequestFinished()
     QVariant callbackObj;
     if ( reply->property( "callbackobj" ).isValid() )
         callbackObj = reply->property( "callbackobj" );
-    
+
     // Check for the redirect attribute, as this should be the shortened link
     QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
 
@@ -1233,7 +1232,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 QString
 GlobalActionManager::hostname() const
 {
-    return QString( "http://stage.toma.hk" );
+    return QString( "http://toma.hk" );
 }
 
 

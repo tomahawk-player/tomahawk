@@ -226,8 +226,8 @@ SourceTreeView::setupMenus()
     }
 
 
-   // if ( type == SourcesModel::StaticPlaylist )
-   //     copyPlaylistAction->setText( tr( "&Export Playlist" ) );
+   if ( type == SourcesModel::StaticPlaylist )
+       copyPlaylistAction->setText( tr( "&Export Playlist" ) );
 
     connect( loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
@@ -358,20 +358,21 @@ SourceTreeView::copyPlaylistLink()
     else if ( type == SourcesModel::StaticPlaylist )
     {
 
-        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-        playlist_ptr playlist = item->playlist();
+        // Disable toma.hk playlist mode until ready
+        // GlobalActionManager::instance()->getShortLink( playlist );
 
-        GlobalActionManager::instance()->getShortLink( playlist );
+       PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+       playlist_ptr playlist = item->playlist();
 
-//        QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
-//        QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
-//                                                         suggestedFilename, tr( "Playlists (*.xspf)" ) );
-//        if ( !filename.isEmpty() )
-//        {
-//            QFileInfo playlistAbsoluteFilePath = filename;
-//            TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
-//            GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
-//        }
+       QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
+       QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
+                                                        suggestedFilename, tr( "Playlists (*.xspf)" ) );
+       if ( !filename.isEmpty() )
+       {
+           QFileInfo playlistAbsoluteFilePath = filename;
+           TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
+           GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+       }
     }
 }
 
