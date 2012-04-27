@@ -25,6 +25,7 @@
 #include <QtCore/QSize>
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
+#include <QPainter>
 
 class QTimeLine;
 class QHideEvent;
@@ -32,18 +33,21 @@ class QShowEvent;
 class QPaintEvent;
 class QTimerEvent;
 
+/**
+ If you don't pass a parent QWidget, this spinner will
+   draw into the pixmap instead. If you do, the pixmap will
+   be invalid.
+
+ */
 class DLLEXPORT AnimatedSpinner : public QWidget
 {
     Q_OBJECT
 public:
-    AnimatedSpinner( QWidget *parent = 0 );
+    explicit AnimatedSpinner( QWidget *parent = 0 ); // widget mode
+    AnimatedSpinner( const QSize size, bool autoStart ); // pixmap mode
 
     QSize sizeHint() const;
 
-    /**
-      If you don't pass a parent QWidget, this spinner will
-        draw into the pixmap instead. If you do, this will be invalid.
-      */
     QPixmap pixmap() const { return m_pixmap; }
 
 public slots:
@@ -57,16 +61,23 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private slots:
+    void updatePixmap();
     void hideFinished();
 
     void frameChanged( int );
 
 private:
+    void init();
+    void drawFrame( QPainter* p, const QRect& rect );
     int segmentCount() const;
     QColor colorForSegment( int segment ) const;
 
     QTimeLine* m_showHide;
     QTimeLine* m_animation;
+
+    // to tweak
+    int m_radius, m_armLength, m_armWidth, m_border;
+    QRect m_armRect;
 
     int m_currentIndex;
     QVector<qreal> m_colors;

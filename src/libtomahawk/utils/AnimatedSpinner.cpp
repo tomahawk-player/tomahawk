@@ -28,17 +28,67 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QShowEvent>
 
-AnimatedSpinner::AnimatedSpinner(QWidget *parent)
-    : QWidget(parent)
+AnimatedSpinner::AnimatedSpinner( QWidget *parent )
+    : QWidget( parent )
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
     , m_currentIndex( -1 )
 {
+    init();
+    m_radius = 10;
+    m_armLength = sizeHint().width()/2 - m_radius;
+    m_armWidth = 5;
+    m_border = 3;
+    m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
+}
+
+
+AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
+    : QWidget()
+    , m_showHide( new QTimeLine )
+    , m_animation( new QTimeLine )
+    , m_currentIndex( -1 )
+{
+    m_pixmap = QPixmap( size );
+    m_pixmap.fill( Qt::transparent );
+
+    init();
+
+    if ( size.width() < 30 )
+    {
+        m_radius = 4;
+        m_armLength = size.width()/2 - m_radius;
+        m_armWidth = 2;
+        m_border = 2;
+        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
+    }
+    else
+    {
+        m_radius = 10;
+        m_armLength = size.width()/2 - m_radius;
+        m_armWidth = 5;
+        m_border = 3;
+        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
+    }
+
+    if ( autoStart )
+        fadeIn();
+}
+
+
+void
+AnimatedSpinner::init()
+{
+
     m_showHide->setDuration( 300 );
     m_showHide->setStartFrame( 0 );
     m_showHide->setEndFrame( 100 );
     m_showHide->setUpdateInterval( 20 );
-    connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
+    if( parentWidget() )
+        connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
+    else
+        connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( updatePixmap() ) );
+
     connect( m_showHide, SIGNAL( finished() ), this, SLOT( hideFinished() ) );
 
     m_animation->setDuration( 1000 );
@@ -53,12 +103,6 @@ AnimatedSpinner::AnimatedSpinner(QWidget *parent)
     m_colors.resize( segmentCount() );
 
     hide();
-
-    if ( !parentWidget() )
-    {
-        m_pixmap = QPixmap( sizeHint() );
-    }
-
 }
 
 
@@ -66,7 +110,6 @@ void
 AnimatedSpinner::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-
     if ( parentWidget() )
     {
         QPoint center( ( parentWidget()->width() / 2 ) - ( width() / 2 ), ( parentWidget()->height() / 2 ) - ( height() / 2 ) );
@@ -77,43 +120,47 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
         }
     }
 
-    QPainter p;
-    if ( parentWidget() )
-    {
-        p.begin(this);
-    }
-    else
-    {
-        m_pixmap.fill( Qt::transparent );
+    QPainter p(this);
+    drawFrame( &p, rect() );
+}
 
-        p.begin(&m_pixmap);
-    }
 
+void
+AnimatedSpinner::updatePixmap()
+{
+    Q_ASSERT( !m_pixmap.isNull() );
+
+    QPainter p( &m_pixmap );
+    m_pixmap.fill( Qt::transparent );
+    drawFrame( &p, m_pixmap.rect() );
+    p.end();
+
+    emit requestUpdate();
+}
+
+
+void
+AnimatedSpinner::drawFrame( QPainter* p, const QRect& rect )
+{
     if ( m_showHide->state() == QTimeLine::Running )
     {
         // showing or hiding
-        p.setOpacity( (qreal)m_showHide->currentValue() );
+        p->setOpacity( (qreal)m_showHide->currentValue() );
     }
 
-    const int radius = 10;
-    const int armLength = width()/2 - radius;
-    const int armWidth = 5;
-    const int border = 3;
-    const QRectF armRect( radius, 0, armLength, armWidth );
+    p->setRenderHint(QPainter::Antialiasing, true);
 
-    p.setRenderHint(QPainter::Antialiasing, true);
+    p->translate( rect.center() ); // center
 
-    p.translate(width() / 2, height() / 2); // center
-
-    const qreal stepRadius = (360 + 2*armWidth) / segmentCount();
-    p.rotate( stepRadius );
+    const qreal stepRadius = (360 + 2*m_armWidth) / segmentCount();
+    p->rotate( stepRadius );
 
     for (int segment = 0; segment < segmentCount(); ++segment) {
-        p.rotate(stepRadius);
+        p->rotate(stepRadius);
         QPainterPath arm;
-        arm.addRoundedRect( armRect.adjusted( 0, -armWidth/2., 0, -armWidth/2 ), border, border );
+        arm.addRoundedRect( m_armRect.adjusted( 0, -m_armWidth/2., 0, -m_armWidth/2 ), m_border, m_border );
 
-        p.fillPath( arm, colorForSegment( segment ) );
+        p->fillPath( arm, colorForSegment( segment ) );
     }
 }
 
@@ -121,10 +168,8 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
 void
 AnimatedSpinner::fadeIn()
 {
-    if ( isVisible() )
+    if ( parentWidget() && isVisible() )
         return;
-
-    show();
 
     m_animation->start();
 
@@ -132,6 +177,11 @@ AnimatedSpinner::fadeIn()
 
     if ( m_showHide->state() != QTimeLine::Running )
         m_showHide->start();
+
+    if ( parentWidget() )
+        show();
+    else
+        updatePixmap();
 }
 
 
@@ -150,8 +200,11 @@ AnimatedSpinner::hideFinished()
 {
     if ( m_showHide->direction() == QTimeLine::Backward )
     {
-        hide();
         m_animation->stop();
+        if ( parentWidget() )
+            hide();
+        else
+            updatePixmap();
     }
 }
 
@@ -188,7 +241,11 @@ AnimatedSpinner::frameChanged( int frame )
         ++running;
         cur = --cur < 0 ? m_colors.size() - 1 : cur;
     }
-    update();
+
+    if ( parentWidget() )
+        update();
+    else
+        updatePixmap();
 }
 
 

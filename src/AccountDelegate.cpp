@@ -170,9 +170,8 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         Q_ASSERT( m_loadingSpinners[ index ] );
         if ( m_loadingSpinners[ index ] )
         {
-            painter->setOpacity( 1.0 );
             const QPixmap pm = m_loadingSpinners[index]->pixmap();
-            painter->drawPixmap( checkRect.adjusted( -2, -2, 2, 2 ), pm );
+            painter->drawPixmap( checkRect, pm );
         }
     }
 
@@ -681,7 +680,10 @@ void
 AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
 {
     qDebug() << "START INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
-    AnimatedSpinner* anim = new AnimatedSpinner( 0 );
+    QStyleOptionViewItemV4 opt;
+    initStyleOption( &opt, idx );
+
+    AnimatedSpinner* anim = new AnimatedSpinner( checkRectForIndex( opt, idx ).size(), true );
     _detail::Closure* closure = NewClosure( anim, SIGNAL( requestUpdate() ), this, SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), idx );
     closure->setAutoDelete( false );
 
