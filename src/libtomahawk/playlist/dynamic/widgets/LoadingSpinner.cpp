@@ -25,8 +25,8 @@
 #include <QMovie>
 #include <QLabel>
 
-#include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #define ANIM_LENGTH 300
 

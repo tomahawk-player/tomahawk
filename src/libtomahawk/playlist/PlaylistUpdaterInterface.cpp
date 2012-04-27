@@ -17,7 +17,7 @@
  */
 
 #include "PlaylistUpdaterInterface.h"
-#include "tomahawksettings.h"
+#include "TomahawkSettings.h"
 
 using namespace Tomahawk;
 

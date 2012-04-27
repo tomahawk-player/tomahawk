@@ -27,11 +27,11 @@
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 
-#include "typedefs.h"
-#include "dllmacro.h"
-#include "tomahawksettings.h"
+#include "Typedefs.h"
+#include "DllMacro.h"
+#include "TomahawkSettings.h"
 
-#include "libtomahawk/infosystem/infosystem.h"
+#include "libtomahawk/infosystem/InfoSystem.h"
 
 class SipPlugin;
 

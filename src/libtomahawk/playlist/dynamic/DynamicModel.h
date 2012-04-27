@@ -20,8 +20,8 @@
 #ifndef DYNAMIC_MODEL_H
 #define DYNAMIC_MODEL_H
 
-#include "playlistmodel.h"
-#include "query.h"
+#include "PlaylistModel.h"
+#include "Query.h"
 
 namespace Tomahawk
 {

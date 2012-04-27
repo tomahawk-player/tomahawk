@@ -23,8 +23,8 @@
 #include <QDialog>
 #include <QPropertyAnimation>
 
-#include "globalactionmanager.h"
-#include "utils/logger.h"
+#include "GlobalActionManager.h"
+#include "utils/Logger.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500

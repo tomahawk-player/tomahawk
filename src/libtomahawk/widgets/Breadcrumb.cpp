@@ -19,9 +19,9 @@
 #include "Breadcrumb.h"
 
 #include "BreadcrumbButton.h"
-#include "utils/stylehelper.h"
-#include "utils/logger.h"
-#include "utils/tomahawkutilsgui.h"
+#include "utils/StyleHelper.h"
+#include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QStylePainter>
 #include <QPushButton>

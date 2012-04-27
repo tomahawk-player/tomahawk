@@ -19,15 +19,15 @@
 
 #include "RecentPlaylistsModel.h"
 
-#include "tomahawksettings.h"
-#include "audio/audioengine.h"
-#include "sourcelist.h"
-#include "utils/logger.h"
+#include "TomahawkSettings.h"
+#include "audio/AudioEngine.h"
+#include "SourceList.h"
+#include "utils/Logger.h"
 #include "dynamic/DynamicPlaylist.h"
-#include "database/database.h"
-#include "database/databasecommand_loadallsortedplaylists.h"
+#include "database/Database.h"
+#include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
 #include "RecentlyPlayedPlaylistsModel.h"
-#include <network/servent.h>
+#include <network/Servent.h>
 
 #define REFRESH_TIMEOUT 1000
 

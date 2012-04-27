@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QPaintEvent>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class ToggleButton

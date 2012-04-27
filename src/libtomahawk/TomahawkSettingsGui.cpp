@@ -19,7 +19,7 @@
 #include "TomahawkSettingsGui.h"
 
 #include <QDesktopServices>
-#include "settingsdialog.h"
+#include "SettingsDialog.h"
 
 using namespace Tomahawk;
 

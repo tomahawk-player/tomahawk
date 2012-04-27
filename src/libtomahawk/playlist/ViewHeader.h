@@ -22,7 +22,7 @@
 #include <QHeaderView>
 #include <QSignalMapper>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT ViewHeader : public QHeaderView
 {

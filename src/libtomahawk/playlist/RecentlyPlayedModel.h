@@ -22,10 +22,10 @@
 #include <QList>
 #include <QHash>
 
-#include "typedefs.h"
-#include "playlistmodel.h"
+#include "Typedefs.h"
+#include "PlaylistModel.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT RecentlyPlayedModel : public PlaylistModel
 {

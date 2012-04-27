@@ -21,8 +21,8 @@
 
 #include <QHeaderView>
 
-#include "playlist/artistview.h"
-#include "playlist/treemodel.h"
+#include "playlist/ArtistView.h"
+#include "playlist/TreeModel.h"
 
 using namespace Tomahawk;
 

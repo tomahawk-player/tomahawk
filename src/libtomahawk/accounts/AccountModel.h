@@ -19,7 +19,7 @@
 #ifndef TOMAHAWK_ACCOUNTS_ACCOUNTMODEL_H
 #define TOMAHAWK_ACCOUNTS_ACCOUNTMODEL_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include "Account.h"
 

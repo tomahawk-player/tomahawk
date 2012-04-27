@@ -18,7 +18,7 @@
 
 #include "DynamicControl.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 
 Tomahawk::DynamicControl::DynamicControl( const QStringList& typeSelectors )

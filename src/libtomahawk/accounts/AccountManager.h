@@ -22,9 +22,9 @@
 
 #include <QtCore/QObject>
 
-#include "typedefs.h"
-#include "dllmacro.h"
-#include "infosystem/infosystem.h"
+#include "Typedefs.h"
+#include "DllMacro.h"
+#include "infosystem/InfoSystem.h"
 #include "sip/SipPlugin.h"
 #include "Account.h"
 

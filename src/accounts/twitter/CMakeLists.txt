@@ -7,23 +7,23 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( twitterAccountSources
-    twitteraccount.cpp
-    twitterinfoplugin.cpp
-    twitterconfigwidget.cpp
-    tomahawkoauthtwitter.cpp
-    sip/twittersip.cpp
+    TwitterAccount.cpp
+    TwitterInfoPlugin.cpp
+    TwitterConfigWidget.cpp
+    TomahawkOAuthTwitter.cpp
+    sip/TwitterSip.cpp
 )
 
 set( twitterAccountHeaders
-    twitteraccount.h
-    twitterinfoplugin.h
-    twitterconfigwidget.h
-    tomahawkoauthtwitter.h
-    sip/twittersip.h
+    TwitterAccount.h
+    TwitterInfoPlugin.h
+    TwitterConfigWidget.h
+    TomahawkOAuthTwitter.h
+    sip/TwitterSip.h
 )
 
 set( twitterAccountUI
-    twitterconfigwidget.ui
+    TwitterConfigWidget.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..

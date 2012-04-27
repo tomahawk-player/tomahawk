@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QSearchFieldPrivate;
 class DLLEXPORT QSearchField : public QWidget

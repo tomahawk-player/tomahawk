@@ -23,7 +23,7 @@
 #include <QAbstractItemView>
 #include <QTimer>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT OverlayButton : public QPushButton
 {

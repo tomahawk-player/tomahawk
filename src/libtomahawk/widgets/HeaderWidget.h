@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class HeaderWidget

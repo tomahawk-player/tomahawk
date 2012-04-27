@@ -18,10 +18,10 @@
 #ifndef CHARTDATALOADER_H
 #define CHARTDATALOADER_H
 
-#include "infosystem/infosystem.h"
-#include "query.h"
-#include "artist.h"
-#include "album.h"
+#include "infosystem/InfoSystem.h"
+#include "Query.h"
+#include "Artist.h"
+#include "Album.h"
 
 #include <QObject>
 

@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QMovie;
 class QTimeLine;

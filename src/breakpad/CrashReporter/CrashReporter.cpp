@@ -25,7 +25,7 @@
 #include <QDateTime>
 #include <QHttp>
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define RESPATH ":/data/"

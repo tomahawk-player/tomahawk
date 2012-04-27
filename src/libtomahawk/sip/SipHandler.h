@@ -22,7 +22,7 @@
 #define SIPHANDLER_H
 
 #include "sip/SipPlugin.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QObject>
 #include <QHash>

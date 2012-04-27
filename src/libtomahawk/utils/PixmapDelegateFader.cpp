@@ -18,7 +18,7 @@
  */
 
 #include "PixmapDelegateFader.h"
-#include "tomahawkutilsgui.h"
+#include "TomahawkUtilsGui.h"
 
 #include <QPainter>
 #include <QBuffer>

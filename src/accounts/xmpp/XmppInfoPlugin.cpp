@@ -20,9 +20,9 @@
 
 #include "XmppInfoPlugin.h"
 
-#include "globalactionmanager.h"
-#include "sip/xmppsip.h"
-#include "utils/logger.h"
+#include "GlobalActionManager.h"
+#include "sip/XmppSip.h"
+#include "utils/Logger.h"
 
 
 // remove now playing status after PAUSE_TIMEOUT seconds

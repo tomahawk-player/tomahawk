@@ -29,21 +29,20 @@
 
 #include "DynamicControlList.h"
 #include "dynamic/DynamicModel.h"
-#include "trackproxymodel.h"
+#include "TrackProxyModel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
-#include "pipeline.h"
-#include "source.h"
-#include "audio/audioengine.h"
+#include "Pipeline.h"
+#include "Source.h"
+#include "audio/AudioEngine.h"
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
-#include "viewmanager.h"
+#include "ViewManager.h"
 #include "dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
-#include "audiocontrols.h"
 #include "LoadingSpinner.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -19,7 +19,7 @@
 #include "AccountFactoryWrapperDelegate.h"
 #include "accounts/Account.h"
 #include "AccountFactoryWrapper.h"
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QApplication>
 #include <QPainter>

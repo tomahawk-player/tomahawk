@@ -20,7 +20,7 @@
 #define LATCHEDSTATUSITEM_H
 
 #include "JobStatusItem.h"
-#include "typedefs.h"
+#include "Typedefs.h"
 
 #include <QHash>
 #include <QPixmap>

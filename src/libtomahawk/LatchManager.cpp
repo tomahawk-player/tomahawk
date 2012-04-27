@@ -19,14 +19,14 @@
 
 #include "LatchManager.h"
 
-#include "actioncollection.h"
-#include "audio/audioengine.h"
-#include "database/database.h"
+#include "ActionCollection.h"
+#include "audio/AudioEngine.h"
+#include "database/Database.h"
 
 #include <QtGui/QAction>
-#include "sourcelist.h"
-#include "database/databasecommand_socialaction.h"
-#include "sourceplaylistinterface.h"
+#include "SourceList.h"
+#include "database/DatabaseCommand_SocialAction.h"
+#include "SourcePlaylistInterface.h"
 
 using namespace Tomahawk;
 

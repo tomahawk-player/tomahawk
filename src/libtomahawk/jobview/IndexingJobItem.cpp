@@ -18,7 +18,7 @@
 
 #include "IndexingJobItem.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QPixmap>
 

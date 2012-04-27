@@ -24,11 +24,11 @@
 #include <QtCore/QSharedPointer>
 #include <QStringList>
 
-#include "typedefs.h"
-#include "query.h"
+#include "Typedefs.h"
+#include "Query.h"
 #include "playlist/dynamic/DynamicControl.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

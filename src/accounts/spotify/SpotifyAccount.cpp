@@ -18,14 +18,14 @@
  */
 
 #include "SpotifyAccount.h"
-#include "playlist.h"
+#include "Playlist.h"
 #include "playlist/PlaylistUpdaterInterface.h"
-#include "sourcelist.h"
+#include "SourceList.h"
 #include "SpotifyAccountConfig.h"
 #include "SpotifyPlaylistUpdater.h"
-#include "resolvers/scriptresolver.h"
-#include "utils/tomahawkutils.h"
-#include "actioncollection.h"
+#include "resolvers/ScriptResolver.h"
+#include "utils/TomahawkUtils.h"
+#include "ActionCollection.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"

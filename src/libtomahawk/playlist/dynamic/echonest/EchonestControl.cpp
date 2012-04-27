@@ -28,8 +28,8 @@
 #include <echonest/Playlist.h>
 #include "EchonestGenerator.h"
 
-#include "utils/logger.h"
-#include <sourcelist.h>
+#include "utils/Logger.h"
+#include <SourceList.h>
 
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();

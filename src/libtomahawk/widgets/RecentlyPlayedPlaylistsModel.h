@@ -23,8 +23,8 @@
 
 #include <QModelIndex>
 
-#include "playlist.h"
-#include "source.h"
+#include "Playlist.h"
+#include "Source.h"
 
 class RecentlyPlayedPlaylistsModel : public QAbstractListModel
 {

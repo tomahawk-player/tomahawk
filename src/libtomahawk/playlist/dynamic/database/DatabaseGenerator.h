@@ -24,8 +24,8 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/DynamicControl.h"
-#include "database/databasecommand_genericselect.h"
-#include "dllmacro.h"
+#include "database/DatabaseCommand_GenericSelect.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

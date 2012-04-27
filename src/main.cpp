@@ -17,17 +17,17 @@
  */
 
 
-#include "tomahawkapp.h"
+#include "TomahawkApp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
-#include "ubuntuunityhack.h"
-#include "tomahawksettings.h"
+#include "UbuntuUnityHack.h"
+#include "TomahawkSettings.h"
 #include "config.h"
 
 #include <QTranslator>
 
 #ifdef Q_WS_MAC
-    #include "tomahawkapp_mac.h"
+    #include "TomahawkApp_Mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif

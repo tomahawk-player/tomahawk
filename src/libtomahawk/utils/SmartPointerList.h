@@ -22,7 +22,7 @@
 #include <QList>   //baseclass
 #include <QObject> //baseclass
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class DLLEXPORT SmartPointerListDaddy : public QObject
 {

@@ -19,8 +19,8 @@
 #ifndef DYNAMIC_PLAYLIST_REVISION_H
 #define DYNAMIC_PLAYLIST_REVISION_H
 
-#include "playlist.h"
-#include "dllmacro.h"
+#include "Playlist.h"
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

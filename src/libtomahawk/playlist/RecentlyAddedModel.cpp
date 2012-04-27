@@ -21,12 +21,12 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "source.h"
-#include "sourcelist.h"
-#include "database/database.h"
-#include "database/databasecommand_alltracks.h"
-#include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "Source.h"
+#include "SourceList.h"
+#include "database/Database.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #define LATEST_TRACK_ITEMS 250
 

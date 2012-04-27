@@ -32,12 +32,12 @@
 
 #include <QtGui/QWidget>
 
-#include "playlistinterface.h"
-#include "viewpage.h"
-#include "infosystem/infosystem.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
+#include "infosystem/InfoSystem.h"
 
-#include "dllmacro.h"
-#include "typedefs.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 class AlbumModel;
 class TreeModel;
@@ -97,8 +97,6 @@ private slots:
     void loadAlbums( bool autoRefetch = false );
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
     void onAlbumCoverUpdated();
-
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void onModeToggle();
     void onAlbumsModeToggle();

@@ -25,10 +25,10 @@
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 
-#include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
-#include "utils/closure.h"
+#include "utils/Closure.h"
 
 #define CHILD_ACCOUNT_HEIGHT 24
 

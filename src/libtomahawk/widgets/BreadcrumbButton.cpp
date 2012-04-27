@@ -20,10 +20,10 @@
 #include "BreadcrumbButton.h"
 
 #include "Breadcrumb.h"
-#include "combobox.h"
-#include "utils/stylehelper.h"
-#include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "ComboBox.h"
+#include "utils/StyleHelper.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QPaintEvent>
 #include <QPainter>

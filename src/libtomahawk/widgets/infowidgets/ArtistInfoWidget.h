@@ -32,12 +32,12 @@
 
 #include <QWidget>
 
-#include "typedefs.h"
-#include "playlistinterface.h"
-#include "viewpage.h"
-#include "infosystem/infosystem.h"
+#include "Typedefs.h"
+#include "PlaylistInterface.h"
+#include "ViewPage.h"
+#include "infosystem/InfoSystem.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class PlaylistModel;
 class TreeModel;
@@ -95,6 +95,8 @@ private slots:
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
+
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
 
     void onModeToggle();
     void onLoadingStarted();

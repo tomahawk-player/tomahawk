@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "typedefs.h"
+#include "Typedefs.h"
 
 class QGridLayout;
 class QStackedLayout;

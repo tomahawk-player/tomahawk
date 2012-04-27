@@ -21,8 +21,8 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 
-#include "tomahawksettings.h"
-#include "utils/logger.h"
+#include "TomahawkSettings.h"
+#include "utils/Logger.h"
 
 
 ViewHeader::ViewHeader( QAbstractItemView* parent )

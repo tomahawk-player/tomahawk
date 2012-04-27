@@ -19,7 +19,7 @@
 
 #include "RoviPlugin.h"
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QDateTime>
 #include <QNetworkReply>

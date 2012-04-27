@@ -22,7 +22,7 @@
 
 #include <QtGui/QSlider>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QTimeLine;
 

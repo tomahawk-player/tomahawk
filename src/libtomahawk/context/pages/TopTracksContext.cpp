@@ -19,9 +19,9 @@
 
 #include "TopTracksContext.h"
 
-#include "playlist/playlistmodel.h"
-#include "playlist/playlistview.h"
-#include "playlist/trackheader.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/PlaylistView.h"
+#include "playlist/TrackHeader.h"
 
 using namespace Tomahawk;
 

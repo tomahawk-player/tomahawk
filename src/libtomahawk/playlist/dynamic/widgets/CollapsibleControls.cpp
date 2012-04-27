@@ -23,8 +23,8 @@
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/DynamicControl.h"
-#include "utils/tomahawkutils.h"
-#include "widgets/elidedlabel.h"
+#include "utils/TomahawkUtils.h"
+#include "widgets/ElidedLabel.h"
 
 #include <QtGui/QLabel>
 #include <QtGui/QStackedLayout>
@@ -34,7 +34,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

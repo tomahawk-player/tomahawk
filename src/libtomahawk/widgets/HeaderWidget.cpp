@@ -18,7 +18,7 @@
 
 #include "HeaderWidget.h"
 
-#include "utils/stylehelper.h"
+#include "utils/StyleHelper.h"
 
 #include <QStyle>
 #include <QStylePainter>

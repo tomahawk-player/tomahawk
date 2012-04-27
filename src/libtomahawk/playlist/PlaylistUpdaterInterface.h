@@ -19,9 +19,9 @@
 #ifndef PLAYLISTUPDATERINTERFACE_H
 #define PLAYLISTUPDATERINTERFACE_H
 
-#include "dllmacro.h"
-#include "typedefs.h"
-#include "playlist.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
+#include "Playlist.h"
 
 #include <QTimer>
 #include <QMutex>

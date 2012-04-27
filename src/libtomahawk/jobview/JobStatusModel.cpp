@@ -20,7 +20,7 @@
 #include "JobStatusModel.h"
 
 #include "JobStatusItem.h"
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 #include <QPixmap>
 
@@ -78,7 +78,10 @@ JobStatusModel::addJob( JobStatusItem* item )
     m_items.append( item );
     endInsertRows();
     if ( item->hasCustomDelegate() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "job has custom delegate";
         emit customDelegateJobInserted( currentEndRow, item );
+    }
 }
 
 

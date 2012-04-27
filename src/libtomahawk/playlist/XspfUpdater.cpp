@@ -18,11 +18,11 @@
 
 #include "XspfUpdater.h"
 
-#include "playlist.h"
-#include "utils/xspfloader.h"
-#include "tomahawksettings.h"
-#include "pipeline.h"
-#include "utils/tomahawkutils.h"
+#include "Playlist.h"
+#include "utils/XspfLoader.h"
+#include "TomahawkSettings.h"
+#include "Pipeline.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QTimer>
 

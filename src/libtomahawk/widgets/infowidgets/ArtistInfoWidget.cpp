@@ -21,23 +21,23 @@
 #include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
-#include "audio/audioengine.h"
-#include "playlist/trackheader.h"
-#include "playlist/treemodel.h"
-#include "playlist/playlistmodel.h"
-#include "playlist/treeproxymodel.h"
+#include "audio/AudioEngine.h"
+#include "playlist/TrackHeader.h"
+#include "playlist/TreeModel.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/TreeProxyModel.h"
 
-#include "database/databasecommand_alltracks.h"
-#include "database/databasecommand_allalbums.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/stylehelper.h"
-#include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/StyleHelper.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include "widgets/OverlayButton.h"
-#include "widgets/overlaywidget.h"
+#include "widgets/OverlayWidget.h"
 
-#include "pipeline.h"
+#include "Pipeline.h"
 
 using namespace Tomahawk;
 
@@ -132,7 +132,7 @@ void
 ArtistInfoWidget::onModeToggle()
 {
     m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->addAlbums( m_artist, QModelIndex() );
+    m_albumsModel->fetchAlbums( m_artist );
 }
 
 
@@ -192,7 +192,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
-    m_albumsModel->addAlbums( artist, QModelIndex(), true );
+    
+    m_albumsModel->fetchAlbums( artist );
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();
@@ -217,6 +218,12 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
     onArtistImageUpdated();
+}
+
+
+void
+ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mode )
+{
 }
 
 

@@ -24,10 +24,10 @@
 #include <QGraphicsWebView>
 #include <QStyleOptionGraphicsItem>
 
-#include "typedefs.h"
-#include "utils/tomahawkutils.h"
+#include "Typedefs.h"
+#include "utils/TomahawkUtils.h"
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 #include <signal.h>
 
 class PlaylistInterface;

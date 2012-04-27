@@ -20,7 +20,7 @@
 #define DYNAMIC_SETUP_WIDGET_H
 
 #include <QWidget>
-#include <typedefs.h>
+#include <Typedefs.h>
 
 class QPropertyAnimation;
 class QPaintEvent;

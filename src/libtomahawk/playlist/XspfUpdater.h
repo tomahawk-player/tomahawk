@@ -20,7 +20,7 @@
 #define XSPFUPDATER_H
 
 #include "PlaylistUpdaterInterface.h"
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 class QTimer;
 class QCheckBox;

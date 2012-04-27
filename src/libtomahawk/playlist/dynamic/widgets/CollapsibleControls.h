@@ -20,7 +20,7 @@
 #ifndef COLLAPSIBLE_CONTROLS_H
 #define COLLAPSIBLE_CONTROLS_H
 
-#include "typedefs.h"
+#include "Typedefs.h"
 
 #include <QtGui/QWidget>
 

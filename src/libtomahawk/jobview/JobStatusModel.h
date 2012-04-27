@@ -19,7 +19,7 @@
 #ifndef JOBSTATUSMODEL_H
 #define JOBSTATUSMODEL_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QModelIndex>
 #include <QQueue>

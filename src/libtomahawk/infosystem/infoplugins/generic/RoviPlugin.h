@@ -20,7 +20,7 @@
 #ifndef ROVIPLUGIN_H
 #define ROVIPLUGIN_H
 
-#include "infosystem/infosystem.h"
+#include "infosystem/InfoSystem.h"
 
 #include <QNetworkReply>
 

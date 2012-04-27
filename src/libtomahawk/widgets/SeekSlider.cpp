@@ -22,8 +22,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtCore/QTimeLine>
 
-#include "utils/tomahawkutils.h"
-#include "utils/logger.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 
 SeekSlider::SeekSlider( QWidget* parent )

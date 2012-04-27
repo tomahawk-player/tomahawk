@@ -2,25 +2,25 @@
 # fake google plugin
 
 set( googleHeaders
-    ../xmppaccount.h
-    ../xmppconfigwidget.h
-    ../sip/xmppsip.h
-    ../sip/avatarmanager.h
-    ../sip/xmlconsole.h
+    ../XmppAccount.h
+    ../XmppConfigWidget.h
+    ../sip/XmppSip.h
+    ../sip/AvatarManager.h
+    ../sip/XmlConsole.h
     ../XmppInfoPlugin.h
-    googlewrapper.h )
+    GoogleWrapper.h )
 
 set( googleSources
-    ../xmppaccount.cpp
-    ../xmppconfigwidget.cpp
-    ../sip/xmppsip.cpp
-    ../sip/tomahawkxmppmessage.cpp
-    ../sip/tomahawkxmppmessagefactory.cpp
-    ../sip/avatarmanager.cpp
-    ../sip/xmlconsole.cpp
+    ../XmppAccount.cpp
+    ../XmppConfigWidget.cpp
+    ../sip/XmppSip.cpp
+    ../sip/TomahawkXmppMessage.cpp
+    ../sip/TomahawkXmppMessageFactory.cpp
+    ../sip/AvatarManager.cpp
+    ../sip/XmlConsole.cpp
     ../XmppInfoPlugin.cpp
 
-    googlewrapper.cpp )
+    GoogleWrapper.cpp )
 
 add_definitions(-DGOOGLE_WRAPPER)
 

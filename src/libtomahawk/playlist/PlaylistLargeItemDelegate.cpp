@@ -22,23 +22,23 @@
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
 
-#include "query.h"
-#include "result.h"
-#include "artist.h"
-#include "source.h"
-#include "sourcelist.h"
+#include "Query.h"
+#include "Result.h"
+#include "Artist.h"
+#include "Source.h"
+#include "SourceList.h"
 
-#include "playlistview.h"
-#include "trackmodel.h"
-#include "trackmodelitem.h"
-#include "trackproxymodel.h"
-#include "trackview.h"
-#include "trackheader.h"
+#include "PlaylistView.h"
+#include "TrackModel.h"
+#include "TrackModelItem.h"
+#include "TrackProxyModel.h"
+#include "TrackView.h"
+#include "TrackHeader.h"
 
-#include "utils/tomahawkutilsgui.h"
-#include "utils/logger.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 #include <utils/PixmapDelegateFader.h>
-#include <utils/closure.h>
+#include <utils/Closure.h>
 
 using namespace Tomahawk;
 

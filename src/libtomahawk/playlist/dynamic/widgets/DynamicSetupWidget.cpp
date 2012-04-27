@@ -23,7 +23,7 @@
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "DynamicWidget.h"
-#include "source.h"
+#include "Source.h"
 
 #include <QHBoxLayout>
 #include <QComboBox>
@@ -34,7 +34,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

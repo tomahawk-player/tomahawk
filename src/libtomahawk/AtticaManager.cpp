@@ -18,9 +18,9 @@
 
 #include "AtticaManager.h"
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 #include "TomahawkSettingsGui.h"
-#include "pipeline.h"
+#include "Pipeline.h"
 
 #include <attica/downloaditem.h>
 #include <quazip.h>
@@ -31,7 +31,7 @@
 #include <QDir>
 #include <QTimer>
 
-#include "utils/logger.h"
+#include "utils/Logger.h"
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
 

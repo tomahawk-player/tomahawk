@@ -7,28 +7,28 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DACCOUNTDLLEXPORT_PRO )
 
 set( xmppAccountSources
-    xmppaccount.cpp
-    xmppconfigwidget.cpp
-    sip/xmppsip.cpp
-    sip/tomahawkxmppmessage.cpp
-    sip/tomahawkxmppmessagefactory.cpp
-    sip/avatarmanager.cpp
-    sip/xmlconsole.cpp
+    XmppAccount.cpp
+    XmppConfigWidget.cpp
+    sip/XmppSip.cpp
+    sip/TomahawkXmppMessage.cpp
+    sip/TomahawkXmppMessageFactory.cpp
+    sip/AvatarManager.cpp
+    sip/XmlConsole.cpp
     XmppInfoPlugin.cpp
 )
 
 set( xmppAccountHeaders
-    xmppaccount.h
-    xmppconfigwidget.h
-    sip/xmppsip.h
-    sip/avatarmanager.h
-    sip/xmlconsole.h
+    XmppAccount.h
+    XmppConfigWidget.h
+    sip/XmppSip.h
+    sip/AvatarManager.h
+    sip/XmlConsole.h
     XmppInfoPlugin.h
 )
 
 set( xmppAccountUI
-    xmppconfigwidget.ui
-    sip/xmlconsole.ui
+    XmppConfigWidget.ui
+    sip/XmlConsole.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..

@@ -20,8 +20,8 @@
 #ifndef MUSICBRAINZPLUGIN_H
 #define MUSICBRAINZPLUGIN_H
 
-#include "infosystem/infosystem.h"
-#include "infosystem/infosystemworker.h"
+#include "infosystem/InfoSystem.h"
+#include "infosystem/InfoSystemWorker.h"
 
 class QNetworkReply;
 

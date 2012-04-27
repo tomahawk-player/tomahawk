@@ -20,14 +20,14 @@
 #ifndef FADINGPIXMAP_H
 #define FADINGPIXMAP_H
 
-#include "utils/tomahawkutils.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QLabel>
 #include <QPaintEvent>
 #include <QTimeLine>
 #include <QWeakPointer>
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 /**
  * \class FadingPixmap

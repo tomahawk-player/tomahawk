@@ -19,12 +19,12 @@
 #include "LastFmAccount.h"
 #include "LastFmConfig.h"
 
-#include "infosystem/infosystem.h"
-#include "lastfmplugin.h"
-#include "utils/tomahawkutils.h"
-#include "resolvers/qtscriptresolver.h"
+#include "infosystem/InfoSystem.h"
+#include "LastFmPlugin.h"
+#include "utils/TomahawkUtils.h"
+#include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
-#include "pipeline.h"
+#include "Pipeline.h"
 #include "accounts/AccountManager.h"
 
 using namespace Tomahawk;
@@ -188,6 +188,8 @@ LastFmAccount::saveConfig()
         setPassword( m_configWidget.data()->password() );
         setScrobble( m_configWidget.data()->scrobble() );
     }
+
+    sync();
 
     if ( m_infoPlugin )
         QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );
