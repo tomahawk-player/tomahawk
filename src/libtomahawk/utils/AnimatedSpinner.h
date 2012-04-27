@@ -18,7 +18,7 @@
 #ifndef ANIMATED_SPINNER_H
 #define ANIMATED_SPINNER_H
 
-#include "dllmacro.h"
+#include "DllMacro.h"
 
 #include <QtGui/QWidget>
 
@@ -69,6 +69,7 @@ private:
     QTimeLine* m_animation;
 
     int m_currentIndex;
+    QVector<qreal> m_colors;
     QPixmap m_pixmap;
 };
 

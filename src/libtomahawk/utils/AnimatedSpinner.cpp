@@ -20,6 +20,7 @@
 #include <QtCore/QPoint>
 #include <QTimeLine>
 #include <QDebug>
+#include <QDateTime>
 
 #include <QtGui/QApplication>
 #include <QtGui/QHideEvent>
@@ -31,7 +32,7 @@ AnimatedSpinner::AnimatedSpinner(QWidget *parent)
     : QWidget(parent)
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
-    , m_currentIndex( 0 )
+    , m_currentIndex( -1 )
 {
     m_showHide->setDuration( 300 );
     m_showHide->setStartFrame( 0 );
@@ -42,11 +43,14 @@ AnimatedSpinner::AnimatedSpinner(QWidget *parent)
 
     m_animation->setDuration( 1000 );
     m_animation->setStartFrame( 0 );
-    m_animation->setEndFrame( segmentCount() - 1 );
+    m_animation->setEndFrame( segmentCount() );
     m_animation->setUpdateInterval( 20 );
     m_animation->setLoopCount( 0 );
     m_animation->setDirection( QTimeLine::Forward );
+    m_animation->setCurveShape( QTimeLine::LinearCurve );
     connect( m_animation, SIGNAL( frameChanged( int ) ), this, SLOT( frameChanged( int ) ) );
+
+    m_colors.resize( segmentCount() );
 
     hide();
 
@@ -78,21 +82,21 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
 
     const int radius = 10;
     const int armLength = width()/2 - radius;
-    const int armWidth = 4;
+    const int armWidth = 5;
     const int border = 3;
-    const QRect armRect( radius, 0, armLength, armWidth );
+    const QRectF armRect( radius, 0, armLength, armWidth );
 
     p.setRenderHint(QPainter::Antialiasing, true);
 
     p.translate(width() / 2, height() / 2); // center
 
-    const qreal stepRadius = 360 / segmentCount();
-    p.rotate( stepRadius / 2 );
+    const qreal stepRadius = (360 + 2*armWidth) / segmentCount();
+    p.rotate( stepRadius );
+
     for (int segment = 0; segment < segmentCount(); ++segment) {
         p.rotate(stepRadius);
-//        p.setPen( colorForSegment( segment ) );
         QPainterPath arm;
-        arm.addRoundedRect( armRect, border, border );
+        arm.addRoundedRect( armRect.adjusted( 0, -armWidth/2., 0, -armWidth/2 ), border, border );
 
         p.fillPath( arm, colorForSegment( segment ) );
     }
@@ -147,10 +151,28 @@ AnimatedSpinner::sizeHint() const
 void
 AnimatedSpinner::frameChanged( int frame )
 {
-    if ( m_currentIndex == frame )
+
+    if ( m_currentIndex == frame || frame > segmentCount()-1 )
         return;
 
     m_currentIndex = frame;
+
+    Q_ASSERT( frame >= 0 && frame < m_colors.size() );
+
+    // calculate colors, save a factor from 1 to 0 behind the current item
+    m_colors.fill( -1 );
+    int cur = m_currentIndex, running = 0, tailLength = 5;
+
+    while ( m_colors[cur] == -1 )
+    {
+        if ( running > tailLength )
+            m_colors[cur] = 0.; // beyond the tail, draw at base color
+        else
+            m_colors[cur] = 1. - ((qreal)running/tailLength); // scale from 1 to 0 along tail
+
+        ++running;
+        cur = --cur < 0 ? m_colors.size() - 1 : cur;
+    }
     update();
 }
 
@@ -158,19 +180,10 @@ AnimatedSpinner::frameChanged( int frame )
 QColor
 AnimatedSpinner::colorForSegment( int seg ) const
 {
-    qreal factor = qAbs( m_currentIndex - seg  ) / (qreal)segmentCount();
-
-    // Fading trail for only half
-//    if ( factor < 0.5 )
-//        factor = 0.5;
-    if ( factor == 0 )
-        factor = 1;
-
     // Highlight color is 227, 227, 227
     // Base color is      101, 101, 101
-    const int comp = 101 + factor * ( 126 );
-
-//    qDebug() << "COLOR FOR SEGMENT:" << seg << "current is:" << m_currentIndex << "factor is" << factor << "color is:" << comp;
+    Q_ASSERT( seg < m_colors.size() );
+    const int comp = 101 + m_colors[seg] * ( 126 );
     return QColor(comp, comp, comp, 255);
 }
 
@@ -178,5 +191,5 @@ AnimatedSpinner::colorForSegment( int seg ) const
 int
 AnimatedSpinner::segmentCount() const
 {
-    return 13;
+    return 11;
 }
