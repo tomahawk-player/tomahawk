@@ -120,7 +120,7 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
-    
+
 private:
     // private constructor
     explicit Result( const QString& url );
