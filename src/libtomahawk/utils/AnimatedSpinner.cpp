@@ -54,6 +54,11 @@ AnimatedSpinner::AnimatedSpinner(QWidget *parent)
 
     hide();
 
+    if ( !parentWidget() )
+    {
+        m_pixmap = QPixmap( sizeHint() );
+    }
+
 }
 
 
@@ -72,7 +77,17 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
         }
     }
 
-    QPainter p(this);
+    QPainter p;
+    if ( parentWidget() )
+    {
+        p.begin(this);
+    }
+    else
+    {
+        m_pixmap.fill( Qt::transparent );
+
+        p.begin(&m_pixmap);
+    }
 
     if ( m_showHide->state() == QTimeLine::Running )
     {

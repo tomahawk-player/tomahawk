@@ -171,7 +171,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         if ( m_loadingSpinners[ index ] )
         {
             painter->setOpacity( 1.0 );
-            const QPixmap pm = QPixmap::grabWidget( m_loadingSpinners[ index ] );
+            const QPixmap pm = m_loadingSpinners[index]->pixmap();
             painter->drawPixmap( checkRect.adjusted( -2, -2, 2, 2 ), pm );
         }
     }

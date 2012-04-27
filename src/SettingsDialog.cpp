@@ -44,7 +44,7 @@
 #include "AccountDelegate.h"
 #include "database/Database.h"
 #include "network/Servent.h"
-#include "playlist/dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
@@ -132,7 +132,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     if ( !Servent::instance()->isReady() )
     {
-        m_sipSpinner = new LoadingSpinner( ui->accountsView );
+        m_sipSpinner = new AnimatedSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );

@@ -30,7 +30,6 @@
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"

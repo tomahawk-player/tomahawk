@@ -96,7 +96,6 @@ set( libGuiSources
     playlist/dynamic/widgets/MiscControlWidgets.cpp
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
-    playlist/dynamic/widgets/LoadingSpinner.cpp
 
     playlist/topbar/TopBar.cpp
     playlist/topbar/ClearButton.cpp

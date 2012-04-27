@@ -30,7 +30,6 @@
 #include "DllMacro.h"
 
 class QAction;
-class LoadingSpinner;
 class AnimatedSpinner;
 class TrackHeader;
 class TrackModel;

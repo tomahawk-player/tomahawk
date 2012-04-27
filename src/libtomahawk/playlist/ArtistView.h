@@ -37,7 +37,7 @@ namespace Tomahawk
 };
 
 class TreeHeader;
-class LoadingSpinner;
+class AnimatedSpinner;
 class OverlayWidget;
 class TreeModel;
 
@@ -108,7 +108,7 @@ private:
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
-    LoadingSpinner* m_loadingSpinner;
+    AnimatedSpinner* m_loadingSpinner;
 
     bool m_updateContextView;
 

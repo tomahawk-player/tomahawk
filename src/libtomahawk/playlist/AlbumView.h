@@ -30,7 +30,7 @@
 #include "DllMacro.h"
 
 class AlbumModel;
-class LoadingSpinner;
+class AnimatedSpinner;
 class AlbumItemDelegate;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
@@ -87,7 +87,7 @@ private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
-    LoadingSpinner* m_loadingSpinner;
+    AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
 
     bool m_inited;

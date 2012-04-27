@@ -34,7 +34,7 @@
 #include "AlbumModel.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
-#include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 
 #define SCROLL_TIMEOUT 280
 
@@ -46,7 +46,7 @@ AlbumView::AlbumView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
-    , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_overlay( new OverlayWidget( this ) )
     , m_inited( false )
 {

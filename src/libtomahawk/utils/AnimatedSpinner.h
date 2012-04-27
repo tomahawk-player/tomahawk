@@ -42,9 +42,9 @@ public:
 
     /**
       If you don't pass a parent QWidget, this spinner will
-      draw into the pixmap instead
+        draw into the pixmap instead. If you do, this will be invalid.
       */
-    QPixmap pixmap() const;
+    QPixmap pixmap() const { return m_pixmap; }
 
 public slots:
     void fadeIn();

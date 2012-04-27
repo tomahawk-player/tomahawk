@@ -26,7 +26,7 @@
 #include "ViewPage.h"
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 
-class LoadingSpinner;
+class AnimatedSpinner;
 class QShowEvent;
 class QHideEvent;
 class QSpinBox;
@@ -119,7 +119,7 @@ private:
     bool m_activePlaylist;
 
     // loading animation
-    LoadingSpinner* m_loading;
+    AnimatedSpinner* m_loading;
 
     // setup controls
     DynamicSetupWidget* m_setup;
