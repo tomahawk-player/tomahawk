@@ -43,7 +43,7 @@ public:
 
     explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
-    
+
     void loadFromConfig();
     void initSIP();
 
@@ -60,6 +60,8 @@ public:
 
     QList< Account* > accounts() const { return m_accounts; };
     QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
+
+    QList< Account* > accountsFromFactory( Tomahawk::Accounts::AccountFactory* factory ) const;
 
     /**
      * Returns a new Account for a certain path on disk. This will go through all on-disk resolver account providers
@@ -85,7 +87,7 @@ public slots:
 
 signals:
     void ready();
-    
+
     void added( Tomahawk::Accounts::Account* );
     void removed( Tomahawk::Accounts::Account* );
 

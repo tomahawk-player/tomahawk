@@ -74,7 +74,7 @@ AccountManager::init()
         QTimer::singleShot( 0, this, SLOT( init() ) );
         return;
     }
-    
+
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
     loadPluginFactories( findPluginFactories() );
@@ -344,6 +344,19 @@ AccountManager::removeAccount( Account* account )
 
     account->removeFromConfig();
     account->deleteLater();
+}
+
+
+QList< Account* >
+AccountManager::accountsFromFactory( AccountFactory* factory ) const
+{
+    QList< Account* > accts;
+    foreach ( Account* acct, m_accounts )
+    {
+        if ( factoryForAccount( acct ) == factory )
+            accts << acct;
+    }
+    return accts;
 }
 
 

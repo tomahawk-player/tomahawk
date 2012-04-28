@@ -188,6 +188,7 @@ public:
 
 Q_DECLARE_INTERFACE( Tomahawk::Accounts::AccountFactory, "tomahawk.AccountFactory/1.0" )
 
+Q_DECLARE_METATYPE( Tomahawk::Accounts::Account* )
 Q_DECLARE_METATYPE( QList< Tomahawk::Accounts::Account* > )
 Q_DECLARE_METATYPE( Tomahawk::Accounts::AccountTypes )
 #endif

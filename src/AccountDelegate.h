@@ -54,6 +54,9 @@ signals:
     void openConfig( Tomahawk::Accounts::Account* );
     void openConfig( Tomahawk::Accounts::AccountFactory* );
 
+private slots:
+    void doUpdateIndexWithAccount( Tomahawk::Accounts::Account* account );
+
 private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect, bool red = false ) const;
     // Returns new left edge
@@ -73,7 +76,10 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
     mutable QHash< QPersistentModelIndex, AnimatedSpinner* > m_loadingSpinners;
+    mutable QHash< Account*, AnimatedSpinner* > m_connectingSpinners;
     mutable int m_accountRowHeight;
+
+    mutable QAbstractItemModel* m_model;
 };
 
 }

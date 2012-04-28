@@ -24,6 +24,7 @@
 
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
+#include "accounts/AccountManager.h"
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -55,6 +56,7 @@ using namespace Accounts;
 AccountDelegate::AccountDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
     , m_accountRowHeight( -1 )
+    , m_model( 0 )
 {
 
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
@@ -127,6 +129,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
     painter->setRenderHint( QPainter::Antialiasing );
+
+    if ( m_model == 0 || m_model != index.model() )
+        m_model = const_cast<QAbstractItemModel*>( index.model() );
 
     QFont titleFont = opt.font;
     titleFont.setBold( true );
@@ -596,7 +601,7 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
 {
     QPixmap p;
     QString statusText;
-    Account::ConnectionState state = acct->connectionState();
+    const Account::ConnectionState state = acct->connectionState();
     if ( state == Account::Connected )
     {
         p = m_onlineIcon;
@@ -615,7 +620,29 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
 
     const int yPos = rightTopEdge.y();
     const QRect connectIconRect( rightTopEdge.x() - STATUS_ICON_SIZE, yPos, STATUS_ICON_SIZE, STATUS_ICON_SIZE );
-    painter->drawPixmap( connectIconRect, p );
+
+    if ( state == Account::Connecting )
+    {
+        if ( !m_connectingSpinners.contains( acct ) )
+        {
+            AnimatedSpinner* anim = new AnimatedSpinner( connectIconRect.size(), true );
+            _detail::Closure* closure = new _detail::Closure( anim, SIGNAL( requestUpdate() ), const_cast<AccountDelegate*>(this), SLOT( doUpdateIndexWithAccount( Tomahawk::Accounts::Account* ) ), C_ARG( Tomahawk::Accounts::Account*, acct ) );
+            closure->setAutoDelete( false );
+
+            m_connectingSpinners[ acct ] = anim;
+        }
+
+        const QPixmap pm = m_connectingSpinners[acct]->pixmap();
+        painter->drawPixmap( connectIconRect, pm );
+    }
+    else
+    {
+        if ( m_connectingSpinners.contains( acct ) )
+            delete m_connectingSpinners.take( acct );
+
+        painter->drawPixmap( connectIconRect, p );
+    }
+
 
     int leftEdge = connectIconRect.x();
     if ( drawText )
@@ -711,5 +738,37 @@ void
 AccountDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
     emit update( idx );
+}
+
+
+void
+AccountDelegate::doUpdateIndexWithAccount( Account* account )
+{
+    // Urgh, have to go through the list and check based on the type
+    for ( int i = 0; i < m_model->rowCount(); i++ )
+    {
+        const QModelIndex index = m_model->index( i, 0, QModelIndex() );
+        const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
+        if ( rowType == AccountModel::TopLevelAccount ||
+            rowType == AccountModel::CustomAccount )
+        {
+            Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
+
+            if ( account == acct )
+            {
+                emit update( index );
+                return;
+            }
+        }
+        else if ( rowType == AccountModel::TopLevelFactory || rowType == AccountModel::UniqueFactory )
+        {
+            const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
+            if ( accts.contains( account ) )
+            {
+                emit update( index );
+                return;
+            }
+        }
+    }
 }
 
