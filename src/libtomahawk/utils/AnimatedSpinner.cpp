@@ -85,22 +85,16 @@ AnimatedSpinner::init()
         size = sizeHint();
     else
         size = m_pixmap.size();
-    if ( size.width() < 30 )
-    {
-        m_radius = 4;
-        m_armLength = size.width()/2 - m_radius;
-        m_armWidth = 2;
-        m_border = 2;
-        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
-    }
-    else
-    {
-        m_radius = 10;
-        m_armLength = size.width()/2 - m_radius;
-        m_armWidth = 5;
-        m_border = 3;
-        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
-    }
+
+
+    /// Radius is best-fit line with points (13x13, 2), (28x28, 5), (48x48, 10)
+    m_radius = qRound( ( 23. * ( size.width() - 5.) ) / 100. );
+    m_armLength = size.width()/2 - m_radius;
+
+    /// Arm width is best-fit line with points (13x13, 1), (28x28, 2), (48x48, 5)
+    m_armWidth = qRound( (116.*size.width() - 781.)/1000. );
+    m_border = 2;
+    m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
 
     hide();
 }
