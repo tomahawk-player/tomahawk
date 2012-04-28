@@ -22,9 +22,9 @@
 
 #include "config.h"
 
-#include <sip/SipHandler.h>
-#include <network/Servent.h>
-#include <SourceList.h>
+#include "accounts/AccountManager.h"
+#include "network/Servent.h"
+#include "SourceList.h"
 
 #include <QTextEdit>
 #include <QDialogButtonBox>
@@ -33,6 +33,7 @@
 #include <QClipboard>
 
 #include "utils/Logger.h"
+#include "sip/SipHandler.h"
 
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
@@ -93,80 +94,82 @@ void DiagnosticsDialog::updateLogView()
 
     // Peers / Accounts, TODO
     log.append("ACCOUNTS:\n");
-//     QList< Tomahawk::source_ptr > sources = SourceList::instance()->sources( true );
-//     Q_FOREACH(SipPlugin *sip, SipHandler::instance()->allPlugins())
-//     {
-//         Q_ASSERT(sip);
-//         QString stateString;
-//         switch( sip->connectionState() )
-//         {
-//             case SipPlugin::Connecting:
-//                 stateString = "Connecting";
-//                 break;
-//
-//             case SipPlugin::Connected:
-//                 stateString = "Connected";
-//                 break;
-//
-//             case SipPlugin::Disconnected:
-//                 stateString = "Disconnected";
-//                 break;
-//             case SipPlugin::Disconnecting:
-//                 stateString = "Disconnecting";
-//         }
-//         log.append(
-//             QString("  %2 (%1): %3 (%4)\n")
-//                 .arg(sip->account()->accountServiceName())
-//                 .arg(sip->friendlyName())
-//                 .arg(sip->account()->accountFriendlyName())
-//                 .arg(stateString)
-//         );
+    const QList< Tomahawk::source_ptr > sources = SourceList::instance()->sources( true );
+    const QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
+    foreach ( Tomahawk::Accounts::Account* account, accounts )
+    {
+        Q_ASSERT( account && account->sipPlugin() );
+        if ( !account || !account->sipPlugin() )
+            continue;
 
-//         Q_FOREACH( const QString &peerId, sip->peersOnline() )
-//         {
-//             /* enable this again, when we check the Source.has this peerId
-//             bool connected = false;
-//             Q_FOREACH( const Tomahawk::source_ptr &source, sources )
-//             {
-//                 if( source->controlConnection() )
-//                 {
-//                     connected = true;
-//                     break;
-//                 }
-//             }*/
-//
-//             QString versionString = SipHandler::instance()->versionString( peerId );
-//             SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
-//             if( !sipInfo.isValid() )
-//                log.append(
-//                     QString("       %1: %2 %3" /*"(%4)"*/ "\n")
-//                         .arg( peerId )
-//                         .arg( "sipinfo invalid" )
-//                         .arg( versionString )
-//                         // .arg( connected ? "connected" : "not connected")
-//                 );
-//             else if( sipInfo.isVisible() )
-//                 log.append(
-//                     QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
-//                         .arg( peerId )
-//                         .arg( sipInfo.host().hostName() )
-//                         .arg( sipInfo.port() )
-//                         .arg( versionString )
-//                         // .arg( connected ? "connected" : "not connected")
-//
-//                 );
-//             else
-//                 log.append(
-//                     QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
-//                         .arg( peerId )
-//                         .arg( versionString )
-//                         // .arg( connected ? "connected" : "not connected")
-//
-//                 );
-//         }
-//         log.append("\n");
-//     }
+        QString stateString;
+        switch( account->connectionState() )
+        {
+            case Tomahawk::Accounts::Account::Connecting:
+                stateString = "Connecting";
+                break;
+            case Tomahawk::Accounts::Account::Connected:
+                stateString = "Connected";
+                break;
 
+            case Tomahawk::Accounts::Account::Disconnected:
+                stateString = "Disconnected";
+                break;
+            case Tomahawk::Accounts::Account::Disconnecting:
+                stateString = "Disconnecting";
+        }
+        log.append(
+            QString( "  %2 (%1): %3 (%4)\n" )
+                .arg( account->accountServiceName() )
+                .arg( account->sipPlugin()->friendlyName() )
+                .arg( account->accountFriendlyName())
+                .arg( stateString )
+        );
+
+        foreach( const QString &peerId, account->sipPlugin()->peersOnline() )
+        {
+            /* enable this again, when we check the Source.has this peerId
+            bool connected = false;
+            Q_FOREACH( const Tomahawk::source_ptr &source, sources )
+            {
+                if( source->controlConnection() )
+                {
+                    connected = true;
+                    break;
+                }
+            }*/
+
+            QString versionString = SipHandler::instance()->versionString( peerId );
+            SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
+            if( !sipInfo.isValid() )
+               log.append(
+                    QString("       %1: %2 %3" /*"(%4)"*/ "\n")
+                        .arg( peerId )
+                        .arg( "sipinfo invalid" )
+                        .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
+                );
+            else if( sipInfo.isVisible() )
+                log.append(
+                    QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
+                        .arg( peerId )
+                        .arg( sipInfo.host().hostName() )
+                        .arg( sipInfo.port() )
+                        .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
+
+                );
+            else
+                log.append(
+                    QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
+                        .arg( peerId )
+                        .arg( versionString )
+                        // .arg( connected ? "connected" : "not connected")
+
+                );
+        }
+        log.append("\n");
+    }
     ui->logView->setPlainText(log);
 }
 
