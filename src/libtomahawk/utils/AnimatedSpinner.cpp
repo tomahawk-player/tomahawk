@@ -35,11 +35,6 @@ AnimatedSpinner::AnimatedSpinner( QWidget *parent )
     , m_currentIndex( -1 )
 {
     init();
-    m_radius = 10;
-    m_armLength = sizeHint().width()/2 - m_radius;
-    m_armWidth = 5;
-    m_border = 3;
-    m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
 }
 
 
@@ -53,23 +48,6 @@ AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
     m_pixmap.fill( Qt::transparent );
 
     init();
-
-    if ( size.width() < 30 )
-    {
-        m_radius = 4;
-        m_armLength = size.width()/2 - m_radius;
-        m_armWidth = 2;
-        m_border = 2;
-        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
-    }
-    else
-    {
-        m_radius = 10;
-        m_armLength = size.width()/2 - m_radius;
-        m_armWidth = 5;
-        m_border = 3;
-        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
-    }
 
     if ( autoStart )
         fadeIn();
@@ -101,6 +79,28 @@ AnimatedSpinner::init()
     connect( m_animation, SIGNAL( frameChanged( int ) ), this, SLOT( frameChanged( int ) ) );
 
     m_colors.resize( segmentCount() );
+
+    QSize size;
+    if ( parentWidget() )
+        size = sizeHint();
+    else
+        size = m_pixmap.size();
+    if ( size.width() < 30 )
+    {
+        m_radius = 4;
+        m_armLength = size.width()/2 - m_radius;
+        m_armWidth = 2;
+        m_border = 2;
+        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
+    }
+    else
+    {
+        m_radius = 10;
+        m_armLength = size.width()/2 - m_radius;
+        m_armWidth = 5;
+        m_border = 3;
+        m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
+    }
 
     hide();
 }
@@ -150,7 +150,7 @@ AnimatedSpinner::drawFrame( QPainter* p, const QRect& rect )
 
     p->setRenderHint(QPainter::Antialiasing, true);
 
-    p->translate( rect.center() ); // center
+    p->translate( rect.center() + QPoint( 0, 1 ) ); // center
 
     const qreal stepRadius = (360 + 2*m_armWidth) / segmentCount();
     p->rotate( stepRadius );
