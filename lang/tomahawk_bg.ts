@@ -467,7 +467,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
@@ -477,7 +477,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="143"/>
         <source>About this Account</source>
-        <translation type="unfinished"/>
+        <translation>Относно тази регистрация</translation>
     </message>
 </context>
 <context>
@@ -684,7 +684,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="73"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Нови албуми</translation>
     </message>
 </context>
 <context>
@@ -1006,37 +1006,37 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="245"/>
+        <location filename="../src/SettingsDialog.cpp" line="247"/>
         <source>Collection</source>
         <translation>Колекция</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Advanced</source>
         <translation>Разширени</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="124"/>
+        <location filename="../src/SettingsDialog.cpp" line="126"/>
         <source>All</source>
         <translation>Всички</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/SettingsDialog.cpp" line="240"/>
         <source>Services</source>
         <translation>Услуги</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="396"/>
+        <location filename="../src/SettingsDialog.cpp" line="398"/>
         <source>Install resolver from file</source>
         <translation>Инсталирай услиги за търсене от файл</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
+        <location filename="../src/SettingsDialog.cpp" line="425"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
+        <location filename="../src/SettingsDialog.cpp" line="425"/>
         <source>Changing this setting requires a restart of Tomahawk!</source>
         <translation>Промяната на тази настройка(и) изисква рестартиране на програмата!</translation>
     </message>
@@ -1089,7 +1089,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>♥ &quot;%1&quot; от %2  %3</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
@@ -1236,12 +1236,12 @@ connect and stream from you?</source>
         <translation>&amp;Изнеси списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="364"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="365"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -1316,7 +1316,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Нови албуми</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
@@ -1334,37 +1334,37 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation type="unfinished"/>
+        <translation>Настрой своята регистрация в Spotify</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
         <source>Username or Facebook Email</source>
-        <translation type="unfinished"/>
+        <translation>Потребителско име или електронна поща във Facebook</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Влез</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Щракни с десен бутон върху, който и да е списък в Tomahawk, за да го добавиш и в Spotify</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>Високо качество</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation type="unfinished"/>
+        <translation>Spotify списъци, които да бъдат поддържани обновени:</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Изтрий запазените списъци, когато бъде премахната синхронизацията</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
@@ -1382,12 +1382,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="145"/>
         <source>Delete in Spotify?</source>
-        <translation type="unfinished"/>
+        <translation>Изтривам и в Spotify?</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="145"/>
         <source>Would you like to delete the corresponding Spotify playlist as well?</source>
-        <translation type="unfinished"/>
+        <translation>Желаеш ли да изтриеш и съответните Spotify списъци?</translation>
     </message>
 </context>
 <context>
@@ -1486,7 +1486,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="396"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Позволи на браузърите да работят съвместно с Tomahawk (препоръчително)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="409"/>
@@ -1497,32 +1497,32 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="200"/>
+        <location filename="../src/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
         <translation>Добави регистрация</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="250"/>
+        <location filename="../src/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
         <translation>Премахни регистрация</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="360"/>
+        <location filename="../src/AccountDelegate.cpp" line="383"/>
         <source>%1 downloads</source>
         <translation>%1 сваляния</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="585"/>
+        <location filename="../src/AccountDelegate.cpp" line="608"/>
         <source>Online</source>
         <translation>На линия</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="590"/>
+        <location filename="../src/AccountDelegate.cpp" line="613"/>
         <source>Connecting...</source>
         <translation>Свързване...</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="595"/>
+        <location filename="../src/AccountDelegate.cpp" line="618"/>
         <source>Offline</source>
         <translation>Извън линия</translation>
     </message>
@@ -1603,12 +1603,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="129"/>
         <source>Sync with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Синхронизирай със Spotify</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="133"/>
         <source>Stop syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Спри синхронизацията със Spotify</translation>
     </message>
 </context>
 <context>
@@ -1616,22 +1616,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="133"/>
         <source>Logging in...</source>
-        <translation type="unfinished"/>
+        <translation>Влизам...</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="148"/>
         <source>Logged in!</source>
-        <translation type="unfinished"/>
+        <translation>Готово!</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="155"/>
         <source>Failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Неуспех: %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="165"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Влез</translation>
     </message>
 </context>
 <context>
@@ -2449,7 +2449,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/infosystem/infoplugins/generic/NewReleasesPlugin.cpp" line="271"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Албуми</translation>
     </message>
 </context>
 <context>
@@ -2611,7 +2611,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
         <source>Automatically update</source>
-        <translation type="unfinished"/>
+        <translation>Автоматично обновяване</translation>
     </message>
 </context>
 <context>
@@ -2956,12 +2956,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="747"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="751"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="755"/>

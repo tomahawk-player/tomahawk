@@ -1004,37 +1004,37 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="245"/>
+        <location filename="../src/SettingsDialog.cpp" line="247"/>
         <source>Collection</source>
         <translation>收藏</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Advanced</source>
         <translation>進階</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="124"/>
+        <location filename="../src/SettingsDialog.cpp" line="126"/>
         <source>All</source>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/SettingsDialog.cpp" line="240"/>
         <source>Services</source>
         <translation>服務</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="396"/>
+        <location filename="../src/SettingsDialog.cpp" line="398"/>
         <source>Install resolver from file</source>
         <translation>從檔案安裝解析器</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
+        <location filename="../src/SettingsDialog.cpp" line="425"/>
         <source>Information</source>
         <translation>資訊</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
+        <location filename="../src/SettingsDialog.cpp" line="425"/>
         <source>Changing this setting requires a restart of Tomahawk!</source>
         <translation>更改這個設定需要重新啟動 Tomahawk ！</translation>
     </message>
@@ -1234,12 +1234,12 @@ connect and stream from you?</source>
         <translation>匯出播放清單</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="364"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>儲存 XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="365"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>播放清單(*.xspf)</translation>
     </message>
@@ -1492,32 +1492,32 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="200"/>
+        <location filename="../src/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
         <translation>新增帳戶</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="250"/>
+        <location filename="../src/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
         <translation>刪除帳戶</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="360"/>
+        <location filename="../src/AccountDelegate.cpp" line="383"/>
         <source>%1 downloads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="585"/>
+        <location filename="../src/AccountDelegate.cpp" line="608"/>
         <source>Online</source>
         <translation>線上</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="590"/>
+        <location filename="../src/AccountDelegate.cpp" line="613"/>
         <source>Connecting...</source>
         <translation>連接中...</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="595"/>
+        <location filename="../src/AccountDelegate.cpp" line="618"/>
         <source>Offline</source>
         <translation>離線</translation>
     </message>
