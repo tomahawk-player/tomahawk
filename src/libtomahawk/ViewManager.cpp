@@ -745,7 +745,7 @@ ViewManager::updateView()
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
 
-    m_infobar->setAutoUpdateInterface( currentPage()->autoUpdateInterface() );
+    m_infobar->setUpdaters( currentPage()->updaters() );
 
     switch( currentPage()->descriptionType() )
     {

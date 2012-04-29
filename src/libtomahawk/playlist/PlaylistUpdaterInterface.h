@@ -43,6 +43,17 @@ class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
+    // used when loading/saving from settings
+    struct SerializedUpdater {
+        QString type;
+        bool sync;
+        QVariantHash customData;
+
+        SerializedUpdater( const QString& t, bool s, const QVariantHash cd ) : type( t ), sync( s ), customData( cd ) {}
+    };
+
+    typedef QHash< QString, SerializedUpdater > SerializedUpdaters;
+
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
     virtual ~PlaylistUpdaterInterface(){}

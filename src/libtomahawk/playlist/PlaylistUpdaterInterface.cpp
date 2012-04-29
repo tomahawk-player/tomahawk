@@ -63,7 +63,7 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
 {
     Q_ASSERT( !m_playlist.isNull() );
 
-    m_playlist->setUpdater( this );
+    m_playlist->addUpdater( this );
 
     QTimer::singleShot( 0, this, SLOT( save() ) );
 }

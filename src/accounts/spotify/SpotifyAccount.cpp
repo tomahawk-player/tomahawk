@@ -123,8 +123,18 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
         return;
 
     // If it's not being synced, allow the option to sync
-    SpotifyPlaylistUpdater* updater = qobject_cast< SpotifyPlaylistUpdater* >( playlist->updater() );
-    if ( !updater || !updater->sync() )
+    bool found = false;
+    SmartPointerList<PlaylistUpdaterInterface> updaters = playlist->updaters();
+    foreach ( PlaylistUpdaterInterface* updater, updaters )
+    {
+        if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( updater ) )
+        {
+            if ( spotifyUpdater->sync() )
+                found = true;
+        }
+    }
+
+    if ( !found )
     {
         action->setText( tr( "Sync with Spotify" ) );
     }
@@ -152,7 +162,15 @@ SpotifyAccount::syncActionTriggered( bool checked )
         return;
     }
 
-    SpotifyPlaylistUpdater* updater = qobject_cast< SpotifyPlaylistUpdater* >( playlist->updater() );
+    SpotifyPlaylistUpdater* updater = 0;
+    SmartPointerList<PlaylistUpdaterInterface> updaters = playlist->updaters();
+    foreach ( PlaylistUpdaterInterface* u, updaters )
+    {
+        if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( u ) )
+        {
+            updater = spotifyUpdater;
+        }
+    }
 
     if ( !updater )
     {

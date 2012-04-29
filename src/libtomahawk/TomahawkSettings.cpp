@@ -30,10 +30,50 @@
 
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
+#include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
+
+
+inline QDataStream&
+operator<<(QDataStream& out, const PlaylistUpdaterInterface::SerializedUpdaters& updaters)
+{
+    out <<  TOMAHAWK_SETTINGS_VERSION;
+    out << (quint32)updaters.count();
+    foreach( const QString& key, updaters.keys() )
+    {
+        PlaylistUpdaterInterface::SerializedUpdater updater = updaters[ key ];
+        out << key << updater.type << updater.sync << updater.customData;
+    }
+    return out;
+}
+
+
+inline QDataStream&
+operator>>(QDataStream& in, PlaylistUpdaterInterface::SerializedUpdaters& updaters)
+{
+    quint32 count = 0, version = 0;
+    in >> version;
+    in >> count;
+
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key, type;
+        bool sync;
+        QVariantHash customData;
+        qint32 state, userRating;
+        in >> key;
+        in >> type;
+        in >> sync;
+        in >> customData;
+        updaters[ key ] = PlaylistUpdaterInterface::SerializedUpdater( type, sync, customData );
+    }
+
+    return in;
+}
+
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -443,6 +483,11 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         qDebug() << "Ended up with all accounts list:" << allAccounts << "and all accounts:" << childGroups();
         setValue( "allaccounts", allAccounts );
         endGroup();
+    }
+    else if ( oldVersion == 9 )
+    {
+        // Upgrade single-updater-per-playlist to list-per-playlist
+
     }
 }
 

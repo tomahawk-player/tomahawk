@@ -57,7 +57,7 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
 
 #ifndef ENABLE_HEADLESS
     m_toggleCheckbox = new QCheckBox( );
-    m_toggleCheckbox->setText( tr( "Automatically update" ) );
+    m_toggleCheckbox->setText( tr( "Automatically update from XSPF" ) );
     m_toggleCheckbox->setLayoutDirection( Qt::RightToLeft );
     m_toggleCheckbox->setChecked( m_autoUpdate );
     m_toggleCheckbox->hide();

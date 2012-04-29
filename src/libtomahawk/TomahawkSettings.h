@@ -28,7 +28,7 @@
 
 #include "DllMacro.h"
 
-#define TOMAHAWK_SETTINGS_VERSION 9
+#define TOMAHAWK_SETTINGS_VERSION 10
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
@@ -200,6 +200,8 @@ public:
 
     void setImportXspfPath( const QString& path );
     QString importXspfPath() const;
+
+    static void registerCustomSettingsHandlers();
 
 signals:
     void changed();

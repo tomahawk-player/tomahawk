@@ -52,7 +52,7 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
     if( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
 
-    if ( m_playlist->updater() && !m_playlist->updater()->typeIcon().isNull() )
+    if ( !m_playlist->updaters().isEmpty() )
         createOverlay();
 }
 
@@ -251,40 +251,66 @@ PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 void
 PlaylistItem::onUpdated()
 {
-    if ( m_playlist->updater() && !m_playlist->updater()->typeIcon().isNull() &&
-         m_overlaidIcon.isNull() ) // create overlay
+    // No work todo
+    if ( !m_overlaidIcon.isNull() && m_overlaidUpdaters.operator==( m_playlist->updaters() ) )
     {
-        createOverlay();
+        emit updated();
+        return;
     }
-    else if ( !m_playlist->updater() || ( m_playlist->updater()->typeIcon().isNull() && !m_overlaidIcon.isNull() ) )
-    {
-        // No longer an updater with an icon
+
+    const bool newOverlay = createOverlay();
+    if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
-    }
+
 
     emit updated();
 }
 
 
-void
+bool
 PlaylistItem::createOverlay()
 {
     Q_ASSERT( !m_playlist.isNull() );
-    Q_ASSERT( m_playlist->updater() );
-    Q_ASSERT( !m_playlist->updater()->typeIcon().isNull() );
+
+    if ( m_playlist->updaters().isEmpty() )
+        return false;
+
+    QList< QPixmap > icons;
+    foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
+    {
+        if ( !updater->typeIcon().isNull() )
+            icons << updater->typeIcon();
+    }
+
+    if ( icons.isEmpty() )
+        return false;
+
+    // For now we only support up to 2 overlaid updater icons,
+    // we need to add smarter scaling etc to manage more at once
+    if ( icons.size() > 2 )
+        icons = icons.mid( 0, 2 );
 
     m_overlaidIcon = QIcon();
+    m_overlaidUpdaters = m_playlist->updaters();
 
     QPixmap base = m_icon.pixmap( 48, 48 );
-    const QPixmap overlay = m_playlist->updater()->typeIcon();
-
     QPainter p( &base );
     const int w = base.width() / 2;
-    const QRect overlayRect( base.rect().right() - w, base.rect().height() - w, w, w );
-    p.drawPixmap( overlayRect, overlay );
+    QRect overlayRect( base.rect().right() - w, base.rect().height() - w, w, w );
+
+    foreach ( const QPixmap& overlay, icons )
+    {
+        p.drawPixmap( overlayRect, overlay );
+
+        // NOTE only works if icons.size == 2 as ensured above
+        overlayRect.moveLeft( 0 );
+    }
+
     p.end();
 
     m_overlaidIcon.addPixmap( base );
+
+    return true;
 }
 
 

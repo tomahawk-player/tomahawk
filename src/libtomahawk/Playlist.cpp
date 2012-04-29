@@ -270,8 +270,11 @@ void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
-    if ( !m_updater.isNull() )
-        m_updater.data()->remove();
+    if ( !m_updaters.isEmpty() )
+    {
+        foreach( PlaylistUpdaterInterface* updater, m_updaters )
+            updater->remove();
+    }
 
     m_deleted = true;
     m_source->collection()->deletePlaylist( self );
@@ -280,25 +283,24 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 }
 
 void
-Playlist::setUpdater( PlaylistUpdaterInterface* pluinterface )
+Playlist::addUpdater( PlaylistUpdaterInterface* updater )
 {
-    if ( !m_updater.isNull() )
-        disconnect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
+    m_updaters << updater;
 
-    m_updater = QWeakPointer< PlaylistUpdaterInterface >( pluinterface );
-
-    connect( m_updater.data(), SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
-    connect( m_updater.data(), SIGNAL( destroyed( QObject* ) ), this, SLOT( updaterDestroyed() ), Qt::QueuedConnection );
+    connect( updater, SIGNAL( changed() ), this, SIGNAL( changed() ), Qt::UniqueConnection );
+    connect( updater, SIGNAL( destroyed( QObject* ) ), this, SIGNAL( changed() ), Qt::QueuedConnection );
 
     emit changed();
 }
 
 
 void
-Playlist::updaterDestroyed()
+Playlist::removeUpdater( PlaylistUpdaterInterface* updater )
 {
-    m_updater.clear();
-    emit changed();
+    m_updaters.removeAll( updater );
+
+    disconnect( updater, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+    disconnect( updater, SIGNAL( destroyed( QObject* ) ), this, SIGNAL( changed() ) );
 }
 
 

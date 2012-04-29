@@ -136,6 +136,11 @@ public:
         return *this;
     }
 
+    bool operator==( const SmartPointerList& that )
+    {
+        return QList<T*>::operator==( that );
+    }
+
     void push_back( T* o )
     {
         append( o );
@@ -180,7 +185,7 @@ public:
     using QList<T*>::swap;
     using QList<T*>::value;
     using QList<T*>::operator!=;
-    using QList<T*>::operator==;
+//     using QList<T*>::operator==;
 
     // can't use using directive here since we only want the const versions
     typename QList<T*>::const_iterator begin() const { return QList<T*>::constBegin(); }

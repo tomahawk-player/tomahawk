@@ -34,6 +34,7 @@
 #include "Query.h"
 
 #include "DllMacro.h"
+#include "utils/SmartPointerList.h"
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
@@ -188,8 +189,10 @@ public:
 
 
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
-    void setUpdater( PlaylistUpdaterInterface* pluinterface );
-    PlaylistUpdaterInterface* updater() const { return m_updater.data(); }
+
+    void addUpdater( PlaylistUpdaterInterface* updater );
+    void removeUpdater( PlaylistUpdaterInterface* updater );
+    SmartPointerList<PlaylistUpdaterInterface> updaters() const { return m_updaters; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -278,7 +281,6 @@ protected:
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
-    void updaterDestroyed();
 
 private:
     Playlist();
@@ -300,7 +302,7 @@ private:
     QQueue<RevisionQueueItem> m_revisionQueue;
     QQueue<RevisionQueueItem> m_updateQueue;
 
-    QWeakPointer<PlaylistUpdaterInterface> m_updater;
+    SmartPointerList<PlaylistUpdaterInterface> m_updaters;
 
     bool m_locallyChanged;
     bool m_deleted;

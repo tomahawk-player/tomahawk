@@ -109,23 +109,13 @@ PlaylistView::deleteItems()
 }
 
 
-bool
-PlaylistView::canAutoUpdate() const
+SmartPointerList<PlaylistUpdaterInterface>
+PlaylistView::updaters() const
 {
-    if ( !m_model->playlist().isNull() && m_model->playlist()->updater() )
-        return true;
+    if ( !m_model->playlist().isNull() )
+        return m_model->playlist()->updaters();
 
-    return false;
-}
-
-
-PlaylistUpdaterInterface*
-PlaylistView::autoUpdateInterface() const
-{
-    if ( !m_model->playlist().isNull() && m_model->playlist()->updater() )
-        return m_model->playlist()->updater();
-
-    return 0;
+    return SmartPointerList<PlaylistUpdaterInterface>();
 }
 
 
