@@ -23,6 +23,8 @@
 
 #include "Playlist.h"
 
+#include "playlist/PlaylistUpdaterInterface.h"
+
 #include <QSettings>
 #include <QtNetwork/QNetworkProxy>
 
@@ -200,6 +202,9 @@ public:
 
     void setImportXspfPath( const QString& path );
     QString importXspfPath() const;
+
+    Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters playlistUpdaters() const;
+    void setPlaylistUpdaters( const Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters& updaters );
 
     static void registerCustomSettingsHandlers();
 

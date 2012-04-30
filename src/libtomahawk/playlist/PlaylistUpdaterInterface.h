@@ -46,10 +46,10 @@ public:
     // used when loading/saving from settings
     struct SerializedUpdater {
         QString type;
-        bool sync;
         QVariantHash customData;
 
-        SerializedUpdater( const QString& t, bool s, const QVariantHash cd ) : type( t ), sync( s ), customData( cd ) {}
+        SerializedUpdater( const QString& t, const QVariantHash cd ) : type( t ), customData( cd ) {}
+        SerializedUpdater() {}
     };
 
     typedef QHash< QString, SerializedUpdater > SerializedUpdaters;
@@ -89,11 +89,14 @@ public slots:
     void save();
 
 protected:
-    virtual void saveToSettings( const QString& group ) const = 0;
-    virtual void removeFromSettings( const QString& group ) const = 0;
+    virtual void aboutToDelete() {}
+
+    QVariantHash settings() const;
+    void saveSettings( const QVariantHash& settings );
 
 private:
     playlist_ptr m_playlist;
+    QVariantHash m_extraData;
 
     static QMap< QString, PlaylistUpdaterFactory* > s_factories;
 };
@@ -106,9 +109,12 @@ public:
     virtual ~PlaylistUpdaterFactory() {}
 
     virtual QString type() const = 0;
-    virtual PlaylistUpdaterInterface* create( const playlist_ptr&, const QString& settingsKey ) = 0;
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr&, const QVariantHash& settings ) = 0;
 };
 
 }
+
+Q_DECLARE_METATYPE( Tomahawk::PlaylistUpdaterInterface::SerializedUpdater );
+Q_DECLARE_METATYPE( Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters );
 
 #endif // PLAYLISTUPDATERINTERFACE_H

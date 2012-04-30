@@ -32,7 +32,7 @@ QPixmap* SpotifyPlaylistUpdater::s_typePixmap = 0;
 #endif
 
 Tomahawk::PlaylistUpdaterInterface*
-SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QString &key )
+SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantHash &settings )
 {
     if ( !m_account )
     {
@@ -54,9 +54,9 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QString &
     }
 
     // Register the updater with the account
-    const QString spotifyId = TomahawkSettings::instance()->value( QString( "%1/spotifyId" ).arg( key ) ).toString();
-    const QString latestRev = TomahawkSettings::instance()->value( QString( "%1/latestrev" ).arg( key ) ).toString();
-    const bool sync         = TomahawkSettings::instance()->value( QString( "%1/sync" ).arg( key ) ).toBool();
+    const QString spotifyId = settings.value( "spotifyId" ).toString();
+    const QString latestRev = settings.value( "%1/latestrev" ).toString();
+    const bool sync         = settings.value( "%1/sync" ).toBool();
 
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
@@ -89,6 +89,8 @@ SpotifyPlaylistUpdater::init()
     connect( playlist().data(), SIGNAL( renamed( QString, QString ) ), this, SLOT( tomahawkPlaylistRenamed( QString, QString ) ) );
     connect( playlist().data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ), Qt::QueuedConnection ); // Queued so that in Playlist.cpp:443 we let the playlist clear its own queue first
     // TODO reorders in a playlist
+
+    saveToSettings();
 }
 
 
@@ -122,12 +124,8 @@ SpotifyPlaylistUpdater::remove( bool askToDeletePlaylist )
 
 
 void
-SpotifyPlaylistUpdater::removeFromSettings( const QString& group ) const
+SpotifyPlaylistUpdater::aboutToDelete()
 {
-    TomahawkSettings::instance()->remove( QString( "%1/latestrev" ).arg( group ) );
-    TomahawkSettings::instance()->remove( QString( "%1/sync" ).arg( group ) );
-    TomahawkSettings::instance()->remove( QString( "%1/spotifyId" ).arg( group ) );
-
     if ( m_sync )
     {
         if ( QThread::currentThread() != QApplication::instance()->thread() )
@@ -173,11 +171,15 @@ SpotifyPlaylistUpdater::playlistRevisionLoaded()
 
 
 void
-SpotifyPlaylistUpdater::saveToSettings( const QString& group ) const
+SpotifyPlaylistUpdater::saveToSettings()
 {
-    TomahawkSettings::instance()->setValue( QString( "%1/latestrev" ).arg( group ), m_latestRev );
-    TomahawkSettings::instance()->setValue( QString( "%1/sync" ).arg( group ), m_sync );
-    TomahawkSettings::instance()->setValue( QString( "%1/spotifyId" ).arg( group ), m_spotifyId );
+    QVariantHash s = settings();
+
+    s[ "latestrev" ] = m_latestRev;
+    s[ "sync" ] = m_sync;
+    s[ "spotifyId" ] = m_spotifyId;
+
+    saveSettings( s );
 }
 
 
@@ -214,6 +216,7 @@ SpotifyPlaylistUpdater::setSync( bool sync )
 
     m_sync = sync;
 
+    saveToSettings();
     emit changed();
 }
 
@@ -542,6 +545,9 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
     // Save our changes if we added some IDs
     if ( changed.size() > 0 )
         playlist()->updateEntries( uuid(), playlist()->currentrevision(), changed );
+
+    // Update with latest rev when/if we use it
+//    saveToSettings();
 
 }
 

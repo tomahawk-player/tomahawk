@@ -45,7 +45,7 @@ operator<<(QDataStream& out, const PlaylistUpdaterInterface::SerializedUpdaters&
     foreach( const QString& key, updaters.keys() )
     {
         PlaylistUpdaterInterface::SerializedUpdater updater = updaters[ key ];
-        out << key << updater.type << updater.sync << updater.customData;
+        out << key << updater.type << updater.customData;
     }
     return out;
 }
@@ -66,9 +66,8 @@ operator>>(QDataStream& in, PlaylistUpdaterInterface::SerializedUpdaters& update
         qint32 state, userRating;
         in >> key;
         in >> type;
-        in >> sync;
         in >> customData;
-        updaters[ key ] = PlaylistUpdaterInterface::SerializedUpdater( type, sync, customData );
+        updaters[ key ] = PlaylistUpdaterInterface::SerializedUpdater( type, customData );
     }
 
     return in;
@@ -1218,4 +1217,27 @@ void
 TomahawkSettings::setImportXspfPath( const QString& path )
 {
     setValue( "importXspfPath", path );
+}
+
+
+PlaylistUpdaterInterface::SerializedUpdaters
+TomahawkSettings::playlistUpdaters() const
+{
+    return value( "playlistupdaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
+}
+
+
+void
+TomahawkSettings::setPlaylistUpdaters( const PlaylistUpdaterInterface::SerializedUpdaters& updaters )
+{
+    setValue( "playlistupdaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
+}
+
+
+void
+TomahawkSettings::registerCustomSettingsHandlers()
+{
+    qRegisterMetaType< Tomahawk::PlaylistUpdaterInterface::SerializedUpdater >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdater" );
+    qRegisterMetaType< Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters" );
+    qRegisterMetaTypeStreamOperators< Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters" );
 }
