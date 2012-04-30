@@ -486,7 +486,32 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     else if ( oldVersion == 9 )
     {
         // Upgrade single-updater-per-playlist to list-per-playlist
+        beginGroup( "playlistupdaters" );
+        const QStringList playlists = childGroups();
 
+        PlaylistUpdaterInterface::SerializedUpdaters updaters;
+        foreach ( const QString& playlist, playlists )
+        {
+            beginGroup( playlist );
+            const QString type = value( "type" ).toString();
+
+            QVariantHash extraData;
+            foreach ( const QString& key, childKeys() )
+            {
+                if ( key == "type" )
+                    continue;
+
+                extraData[ key ] = value( key );
+            }
+
+            updaters[ playlist ] = PlaylistUpdaterInterface::SerializedUpdater( type, extraData );
+
+            endGroup();
+        }
+
+        endGroup();
+
+        setPlaylistUpdaters( updaters );
     }
 }
 
@@ -1223,14 +1248,14 @@ TomahawkSettings::setImportXspfPath( const QString& path )
 PlaylistUpdaterInterface::SerializedUpdaters
 TomahawkSettings::playlistUpdaters() const
 {
-    return value( "playlistupdaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
+    return value( "playlist/updaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
 }
 
 
 void
 TomahawkSettings::setPlaylistUpdaters( const PlaylistUpdaterInterface::SerializedUpdaters& updaters )
 {
-    setValue( "playlistupdaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
+    setValue( "playlist/updaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
 }
 
 

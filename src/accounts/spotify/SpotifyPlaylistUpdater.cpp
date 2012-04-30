@@ -55,8 +55,8 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
 
     // Register the updater with the account
     const QString spotifyId = settings.value( "spotifyId" ).toString();
-    const QString latestRev = settings.value( "%1/latestrev" ).toString();
-    const bool sync         = settings.value( "%1/sync" ).toBool();
+    const QString latestRev = settings.value( "latestrev" ).toString();
+    const bool sync         = settings.value( "sync" ).toBool();
 
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
