@@ -67,9 +67,9 @@ public slots:
     void tomahawkTracksRemoved( const QList<Tomahawk::query_ptr>& );
     void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
     void tomahawkPlaylistRenamed( const QString&, const QString& );
+
 protected:
-    virtual void removeFromSettings(const QString& group) const;
-    virtual void saveToSettings(const QString& group) const;
+    void aboutToDelete();
 
 private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
@@ -82,6 +82,8 @@ private slots:
     void playlistRevisionLoaded();
 private:
     void init();
+    void saveToSettings();
+
     /// Finds the nearest spotify id from pos to the beginning of the playlist
     QString nearestSpotifyTrack( const QList< Tomahawk::plentry_ptr >& entries,  int pos );
     QVariantList plentryToVariant( const QList< Tomahawk::plentry_ptr >& entries );
@@ -109,7 +111,7 @@ class SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 public:
     SpotifyUpdaterFactory()  {}
 
-    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl, const QString& key );
+    virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl, const QVariantHash& settings );
     virtual QString type() const { return "spotify"; }
 
 private:

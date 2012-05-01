@@ -37,38 +37,6 @@
     #include "breakpad/BreakPad.h"
 #endif
 
-inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
-{
-    out <<  TOMAHAWK_SETTINGS_VERSION;
-    out << (quint32)states.count();
-    foreach( const QString& key, states.keys() )
-    {
-        AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
-    }
-    return out;
-}
-
-
-inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
-{
-    quint32 count = 0, version = 0;
-    in >> version;
-    in >> count;
-    for ( uint i = 0; i < count; i++ )
-    {
-        QString key, version, scriptPath;
-        qint32 state, userRating;
-        in >> key;
-        in >> version;
-        in >> scriptPath;
-        in >> state;
-        in >> userRating;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
-    }
-    return in;
-}
-
 #ifdef Q_OS_WIN
 #include <io.h>
 #define argc __argc
@@ -115,8 +83,8 @@ main( int argc, char *argv[] )
     TomahawkApp a( argc, argv );
 
     // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type
-    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
-    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
+    TomahawkSettings::registerCustomSettingsHandlers();
+    TomahawkSettingsGui::registerCustomSettingsHandlers();
 
 #ifdef ENABLE_HEADLESS
     new TomahawkSettings( &a );

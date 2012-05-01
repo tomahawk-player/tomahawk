@@ -25,13 +25,13 @@
 #include "Artist.h"
 #include "Album.h"
 #include "utils/TomahawkUtils.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 
 #include <QtGui/QPixmap>
 
 namespace Tomahawk
 {
 
-class PlaylistUpdaterInterface;
 
 class DLLEXPORT ViewPage
 {
@@ -69,8 +69,7 @@ public:
     virtual bool isTemporaryPage() const { return false; }
     virtual bool isBeingPlayed() const { return false; }
 
-    virtual bool canAutoUpdate() const { return false; }
-    virtual PlaylistUpdaterInterface* autoUpdateInterface() const { return 0; }
+    virtual QList<PlaylistUpdaterInterface*> updaters() const { return QList<PlaylistUpdaterInterface*>(); }
 
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )

@@ -56,11 +56,12 @@ private slots:
 
     void onUpdated();
 private:
-    void createOverlay();
+    bool createOverlay();
 
     bool m_loaded;
     Tomahawk::playlist_ptr m_playlist;
     QIcon m_icon, m_overlaidIcon;
+    QList<Tomahawk::PlaylistUpdaterInterface*> m_overlaidUpdaters;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
 

@@ -47,6 +47,8 @@ public:
 
     void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
     void removeAtticaResolverState( const QString& resolver );
+
+    static void registerCustomSettingsHandlers();
 };
 
 Q_DECLARE_METATYPE(AtticaManager::StateHash);

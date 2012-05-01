@@ -52,10 +52,6 @@ public slots:
     void updateNow();
     void setAutoUpdate( bool autoUpdate );
 
-protected:
-    void saveToSettings( const QString& group ) const;
-    void removeFromSettings(const QString& group) const;
-
 private slots:
     void playlistLoaded( const QList<Tomahawk::query_ptr> & );
 
@@ -75,7 +71,7 @@ public:
     XspfUpdaterFactory() {}
 
     virtual QString type() const { return "xspf"; }
-    virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl, const QString& settingsKey );
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl, const QVariantHash& settings );
 };
 
 }

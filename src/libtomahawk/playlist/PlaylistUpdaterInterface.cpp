@@ -35,21 +35,22 @@ PlaylistUpdaterInterface*
 PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
 {
     TomahawkSettings* s = TomahawkSettings::instance();
-    const QString key = QString( "playlistupdaters/%1" ).arg( pl->guid() );
-    if ( s->contains( QString( "%1/type" ).arg( key ) ) )
+
+    const SerializedUpdaters updaters = s->playlistUpdaters();
+    if ( updaters.contains( pl->guid() ) )
     {
         // Ok, we have one we can try to load
-        const QString type = s->value( QString( "%1/type" ).arg( key ) ).toString();
         PlaylistUpdaterInterface* updater = 0;
+        const SerializedUpdater info = updaters[ pl->guid() ];
 
-        if ( !s_factories.contains( type ) )
+        if ( !s_factories.contains( info.type ) )
         {
             Q_ASSERT( false );
             // You forgot to register your new updater type with the factory....
             return 0;
         }
 
-        updater = s_factories[ type ]->create( pl, key );
+        updater = s_factories[ info.type ]->create( pl, info.customData );
         return updater;
     }
 
@@ -63,22 +64,35 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
 {
     Q_ASSERT( !m_playlist.isNull() );
 
-    m_playlist->setUpdater( this );
+    m_playlist->addUpdater( this );
 
     QTimer::singleShot( 0, this, SLOT( save() ) );
+}
+
+
+PlaylistUpdaterInterface::~PlaylistUpdaterInterface()
+{
+    if ( !m_playlist.isNull() )
+        m_playlist->removeUpdater( this );
 }
 
 
 void
 PlaylistUpdaterInterface::save()
 {
+    if ( m_playlist.isNull() )
+        return;
+
     TomahawkSettings* s = TomahawkSettings::instance();
-    const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
-    if ( !s->contains( QString( "%1/type" ).arg( key ) ) )
-    {
-        s->setValue( QString( "%1/type" ).arg( key ), type() );
-    }
-    saveToSettings( key );
+
+    SerializedUpdaters updaters = s->playlistUpdaters();
+
+    SerializedUpdater updater = updaters.value( m_playlist ->guid() );
+    updater.type = type();
+    updater.customData = m_extraData;
+    updaters[ m_playlist->guid() ] = updater;
+
+    s->setPlaylistUpdaters( updaters );
 }
 
 void
@@ -88,9 +102,27 @@ PlaylistUpdaterInterface::remove()
         return;
 
     TomahawkSettings* s = TomahawkSettings::instance();
-    const QString key = QString( "playlistupdaters/%1" ).arg( m_playlist->guid() );
-    removeFromSettings( key );
-    s->remove( QString( "%1/type" ).arg( key ) );
+
+    SerializedUpdaters updaters = s->playlistUpdaters();
+    if ( updaters.remove( m_playlist->guid() ) )
+        s->setPlaylistUpdaters( updaters );
+
+    aboutToDelete();
 
     deleteLater();
+}
+
+
+QVariantHash
+PlaylistUpdaterInterface::settings() const
+{
+    return m_extraData;
+}
+
+
+void
+PlaylistUpdaterInterface::saveSettings( const QVariantHash& settings )
+{
+    m_extraData = settings;
+    save();
 }

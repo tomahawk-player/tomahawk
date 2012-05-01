@@ -23,6 +23,38 @@
 
 using namespace Tomahawk;
 
+inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
+{
+    out <<  TOMAHAWK_SETTINGS_VERSION;
+    out << (quint32)states.count();
+    foreach( const QString& key, states.keys() )
+    {
+        AtticaManager::Resolver resolver = states[ key ];
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
+    }
+    return out;
+}
+
+
+inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
+{
+    quint32 count = 0, version = 0;
+    in >> version;
+    in >> count;
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key, version, scriptPath;
+        qint32 state, userRating;
+        in >> key;
+        in >> version;
+        in >> scriptPath;
+        in >> state;
+        in >> userRating;
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
+    }
+    return in;
+}
+
 TomahawkSettingsGui*
 TomahawkSettingsGui::instanceGui()
 {
@@ -90,4 +122,12 @@ TomahawkSettingsGui::removeAtticaResolverState ( const QString& resolver )
     AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
     resolvers.remove( resolver );
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
+}
+
+
+void
+TomahawkSettingsGui::registerCustomSettingsHandlers()
+{
+    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
+    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
 }
