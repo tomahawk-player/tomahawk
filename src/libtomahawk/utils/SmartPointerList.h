@@ -55,6 +55,11 @@ private slots:
   * Exposed clear. This class doesn't have a QPtrList autodelete functionality
   * ever, so if people think that, they're really confused! -- Ian Monroe
   *
+  * NOTE:
+  *       This class is NOT implicitly shared like QList. Passing it around
+  *       ***will*** cause it to iterate and copy all the elements in the copy
+  *       constructor!
+  *
   */
 template <class T> class SmartPointerList : private QList<T*>
 {

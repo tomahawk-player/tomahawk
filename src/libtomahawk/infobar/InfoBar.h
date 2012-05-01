@@ -24,7 +24,6 @@
 
 #include "DllMacro.h"
 #include "Artist.h"
-#include <utils/SmartPointerList.h>
 
 class QueryLabel;
 class QCheckBox;
@@ -64,7 +63,7 @@ public slots:
     void setFilter( const QString& filter );
     void setFilterAvailable( bool b );
 
-    void setUpdaters( const SmartPointerList<Tomahawk::PlaylistUpdaterInterface>& updaters );
+    void setUpdaters( const QList<Tomahawk::PlaylistUpdaterInterface*>& updaters );
 signals:
     void filterTextChanged( const QString& filter );
 
@@ -84,7 +83,7 @@ private:
     QPixmap m_bgTile;
     QPalette m_whitePal;
 
-    SmartPointerList<Tomahawk::PlaylistUpdaterInterface> m_updaters;;
+    QList<Tomahawk::PlaylistUpdaterInterface*> m_updaters;;
     QList<QWidget*> m_updaterConfigurations;
 
     QSearchField* m_searchWidget;

@@ -25,7 +25,6 @@
 #include "Artist.h"
 #include "Album.h"
 #include "utils/TomahawkUtils.h"
-#include "utils/SmartPointerList.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 
 #include <QtGui/QPixmap>
@@ -70,7 +69,7 @@ public:
     virtual bool isTemporaryPage() const { return false; }
     virtual bool isBeingPlayed() const { return false; }
 
-    virtual SmartPointerList<PlaylistUpdaterInterface> updaters() const { return SmartPointerList<PlaylistUpdaterInterface>(); }
+    virtual QList<PlaylistUpdaterInterface*> updaters() const { return QList<PlaylistUpdaterInterface*>(); }
 
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )

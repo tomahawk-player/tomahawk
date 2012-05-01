@@ -34,7 +34,6 @@
 #include "Query.h"
 
 #include "DllMacro.h"
-#include "utils/SmartPointerList.h"
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
@@ -192,7 +191,7 @@ public:
 
     void addUpdater( PlaylistUpdaterInterface* updater );
     void removeUpdater( PlaylistUpdaterInterface* updater );
-    SmartPointerList<PlaylistUpdaterInterface> updaters() const { return m_updaters; }
+    QList<PlaylistUpdaterInterface*> updaters() const { return m_updaters; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -302,7 +301,7 @@ private:
     QQueue<RevisionQueueItem> m_revisionQueue;
     QQueue<RevisionQueueItem> m_updateQueue;
 
-    SmartPointerList<PlaylistUpdaterInterface> m_updaters;
+    QList<PlaylistUpdaterInterface*> m_updaters;
 
     bool m_locallyChanged;
     bool m_deleted;

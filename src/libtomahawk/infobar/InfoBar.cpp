@@ -201,7 +201,7 @@ InfoBar::setFilterAvailable( bool b )
 
 
 void
-InfoBar::setUpdaters( const SmartPointerList<PlaylistUpdaterInterface>& updaters )
+InfoBar::setUpdaters( const QList<PlaylistUpdaterInterface*>& updaters )
 {
     QList< QWidget* > newUpdaterWidgets;
     foreach ( PlaylistUpdaterInterface* updater, updaters )

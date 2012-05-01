@@ -124,7 +124,7 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 
     // If it's not being synced, allow the option to sync
     bool found = false;
-    SmartPointerList<PlaylistUpdaterInterface> updaters = playlist->updaters();
+    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
     foreach ( PlaylistUpdaterInterface* updater, updaters )
     {
         if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( updater ) )
@@ -163,7 +163,7 @@ SpotifyAccount::syncActionTriggered( bool checked )
     }
 
     SpotifyPlaylistUpdater* updater = 0;
-    SmartPointerList<PlaylistUpdaterInterface> updaters = playlist->updaters();
+    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
     foreach ( PlaylistUpdaterInterface* u, updaters )
     {
         if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( u ) )

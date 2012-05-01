@@ -109,13 +109,13 @@ PlaylistView::deleteItems()
 }
 
 
-SmartPointerList<PlaylistUpdaterInterface>
+QList<PlaylistUpdaterInterface*>
 PlaylistView::updaters() const
 {
     if ( !m_model->playlist().isNull() )
         return m_model->playlist()->updaters();
 
-    return SmartPointerList<PlaylistUpdaterInterface>();
+    return QList<PlaylistUpdaterInterface*>();
 }
 
 

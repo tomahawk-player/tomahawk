@@ -43,7 +43,7 @@ public:
 
     virtual bool showFilter() const { return true; }
 
-    virtual SmartPointerList<Tomahawk::PlaylistUpdaterInterface> updaters() const;
+    virtual QList<Tomahawk::PlaylistUpdaterInterface*> updaters() const;
 
     virtual QString title() const { return playlistModel()->title(); }
     virtual QString description() const { return m_model->description(); }
