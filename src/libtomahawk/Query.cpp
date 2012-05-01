@@ -582,14 +582,17 @@ Query::setLoved( bool loved )
     {
         m_currentSocialActions[ "Love" ] = loved;
 
+        QVariantMap loveInfo;
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["title"] = track();
         trackInfo["artist"] = artist();
         trackInfo["album"] = album();
 
+        loveInfo[ "trackinfo" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        
         Tomahawk::InfoSystem::InfoPushData pushData ( id(),
                                                       ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
-                                                      QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+                                                      loveInfo,
                                                       Tomahawk::InfoSystem::PushShortUrlFlag );
         
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );

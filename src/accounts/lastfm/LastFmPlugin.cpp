@@ -206,13 +206,13 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    if ( !input.toMap().contains( "trackinfo" ) || !input.toMap()[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         tLog() << "LastFmPlugin::nowPlaying cannot convert input!";
         return;
     }
 
-    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    InfoStringHash hash = input.toMap()[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 

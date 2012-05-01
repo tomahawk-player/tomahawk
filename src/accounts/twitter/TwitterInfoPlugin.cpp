@@ -37,7 +37,7 @@ namespace InfoSystem
 TwitterInfoPlugin::TwitterInfoPlugin( Tomahawk::Accounts::TwitterAccount* account )
     : m_account( account )
 {
-    //m_supportedPushTypes << InfoLove;
+    m_supportedPushTypes << InfoShareTrack << InfoLove;
 }
 
 
@@ -122,21 +122,47 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     }
 
     Tomahawk::InfoSystem::PushInfoPair pushInfoPair = pushData.infoPair;
-    
-    if ( !pushInfoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+
+    if ( !pushInfoPair.second.canConvert< QVariantMap >() )
     {
-        tDebug() << Q_FUNC_INFO << "Cannot convert input into an info string hash";
+        tLog() << Q_FUNC_INFO << "Failed to find QVariantMap!";
+        return;
+    }
+    
+    QVariantMap map = pushInfoPair.second.toMap();
+
+    if ( !map.contains( "accountlist" ) || !map[ "accountlist" ].canConvert< QStringList >() )
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Cowardly failing to send out a message without an account list present";
         return;
     }
 
-    Tomahawk::InfoSystem::InfoStringHash info = pushInfoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-    QString msg = tr( "Listening to \"%1\" by %2 and loving it! %3" )
-                        .arg( info[ "title" ] )
-                        .arg( info[ "artist" ] )
-                        .arg( pushInfoPair.first.contains( "shorturl" ) ?
-                                pushInfoPair.first[ "shorturl" ].toUrl().toString() :
-                                GlobalActionManager::instance()->openLink( info[ "title" ], info[ "artist" ], info[ "album" ] ).toString() );
+    if ( !map[ "accountlist" ].toStringList().contains( m_account->accountId() ) )
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Our account not in the list, not tweeting out";
+        return;
+    }
+    
+    if ( !map.contains( "message" ) && ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() ) )
+    {
+        tLog() << Q_FUNC_INFO << "Failed to find message or trackinfo";
+        return;
+    }
+    
+    Tomahawk::InfoSystem::InfoStringHash info;
+    QString msg;
+    if ( !map.contains( "message" ) )
+    {
+        info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+        msg = tr( "Listening to \"%1\" by %2 and loving it! %3" )
+                .arg( info[ "title" ] )
+                .arg( info[ "artist" ] )
+                .arg( pushInfoPair.first.contains( "shorturl" ) ?
+                        pushInfoPair.first[ "shorturl" ].toUrl().toString() :
+                        GlobalActionManager::instance()->openLink( info[ "title" ], info[ "artist" ], info[ "album" ] ).toString() );
+    }
+    else
+        msg = map[ "message" ].toString();
 
     QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( m_twitterAuth.data(), this );
     connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postLovedStatusUpdateReply(const QTweetStatus &) ) );
