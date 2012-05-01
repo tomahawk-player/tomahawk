@@ -301,6 +301,8 @@ Playlist::removeUpdater( PlaylistUpdaterInterface* updater )
 
     disconnect( updater, SIGNAL( changed() ), this, SIGNAL( changed() ) );
     disconnect( updater, SIGNAL( destroyed( QObject* ) ), this, SIGNAL( changed() ) );
+
+    emit changed();
 }
 
 
