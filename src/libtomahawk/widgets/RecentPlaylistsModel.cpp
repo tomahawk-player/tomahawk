@@ -191,6 +191,9 @@ RecentPlaylistsModel::updatePlaylist()
 
     for ( int i = 0; i < m_playlists.size(); i++ )
     {
+        if ( m_playlists[ i ].isNull() )
+            continue;
+
         if ( m_playlists[ i ]->guid() == p->guid() )
         {
             QModelIndex idx = index( i, 0, QModelIndex() );

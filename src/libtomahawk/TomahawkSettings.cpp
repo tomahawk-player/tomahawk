@@ -512,6 +512,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         endGroup();
 
         setPlaylistUpdaters( updaters );
+
+        remove( "playlistupdaters" );
     }
 }
 

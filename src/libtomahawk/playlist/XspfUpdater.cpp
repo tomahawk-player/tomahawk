@@ -63,6 +63,12 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
 
     connect( m_toggleCheckbox, SIGNAL( toggled( bool ) ), this, SLOT( setAutoUpdate( bool ) ) );
 #endif
+
+    QVariantHash s = settings();
+    s[ "autoupdate" ] = m_autoUpdate;
+    s[ "interval" ] = interval;
+    s[ "xspfurl" ] = xspfUrl;
+    saveSettings( s );
 }
 
 
