@@ -70,6 +70,13 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
 }
 
 
+PlaylistUpdaterInterface::~PlaylistUpdaterInterface()
+{
+    if ( !m_playlist.isNull() )
+        m_playlist->removeUpdater( this );
+}
+
+
 void
 PlaylistUpdaterInterface::save()
 {

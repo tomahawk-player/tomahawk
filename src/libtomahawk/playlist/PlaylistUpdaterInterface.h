@@ -56,7 +56,7 @@ public:
 
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
-    virtual ~PlaylistUpdaterInterface(){}
+    virtual ~PlaylistUpdaterInterface();
 
     // What type you are. If you add a new updater, add the creation code as well.
     virtual QString type() const = 0;
