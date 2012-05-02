@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Диалогов</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation type="unfinished"/>
+        <translation>Описанието идва тук</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
@@ -125,7 +125,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="31"/>
@@ -198,7 +198,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="37"/>
@@ -511,7 +511,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SearchBox.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
 </context>
 <context>
@@ -558,7 +558,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="41"/>
@@ -1329,7 +1329,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
@@ -1582,18 +1582,23 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="108"/>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="123"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="98"/>
+        <source>Test Login</source>
+        <translation>Тествай връзката</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="119"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="134"/>
         <source>Failed</source>
         <translation>Неуспешно</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="113"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="124"/>
         <source>Success</source>
         <translation>Ура!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="129"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="140"/>
         <source>Could not contact server</source>
         <translation>Не мога да се свържа със сървъра</translation>
     </message>
@@ -2180,7 +2185,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Бутон</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
@@ -2419,27 +2424,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::LastFmPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="409"/>
+        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="407"/>
         <source>Top Tracks</source>
         <translation>Най-актуални песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="412"/>
+        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="410"/>
         <source>Loved Tracks</source>
         <translation>Харесвани песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="415"/>
+        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="413"/>
         <source>Hyped Tracks</source>
         <translation>Песни слушани най-често</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="421"/>
+        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="419"/>
         <source>Top Artists</source>
         <translation>Най-слушани артисти</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="424"/>
+        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="422"/>
         <source>Hyped Artists</source>
         <translation>Артисти слушани най-често</translation>
     </message>
@@ -2455,7 +2460,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="134"/>
+        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="157"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
         <translation>#fb ♥  &quot;%1&quot; от %2  %3</translation>
     </message>
@@ -2513,37 +2518,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="639"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="642"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="647"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="650"/>
         <source>You</source>
         <translation>Ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="649"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="652"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="658"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="661"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="658"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="661"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="664"/>
         <source>%1 people</source>
         <translation>%1 хора</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="663"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="666"/>
         <source>loved this track</source>
         <translation>хареса тази песен</translation>
     </message>
@@ -2611,7 +2616,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="59"/>
         <source>Automatically update from XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Автоматично обнови от XSPF</translation>
     </message>
 </context>
 <context>
@@ -2979,7 +2984,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="26"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="66"/>
@@ -3134,7 +3139,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="135"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -3439,7 +3444,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation type="unfinished"/>
+        <translation>Видими строфи</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
@@ -3474,7 +3479,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
-        <translation type="unfinished"/>
+        <translation>OpenDocument формат (*.odf);;HTML файл (*.html);;Чист текст (*.txt)</translation>
     </message>
 </context>
 <context>
@@ -3537,7 +3542,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
-        <translation type="unfinished"/>
+        <translation>Много сървъри не го поддържат (като: Gtalk, jabber.org)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
@@ -3600,7 +3605,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
@@ -3663,7 +3668,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
