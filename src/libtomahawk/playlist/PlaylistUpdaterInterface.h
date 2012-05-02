@@ -48,11 +48,12 @@ public:
         QString type;
         QVariantHash customData;
 
-        SerializedUpdater( const QString& t, const QVariantHash cd ) : type( t ), customData( cd ) {}
+        SerializedUpdater( const QString& t, const QVariantHash cd = QVariantHash() ) : type( t ), customData( cd ) {}
         SerializedUpdater() {}
     };
 
-    typedef QHash< QString, SerializedUpdater > SerializedUpdaters;
+    typedef QMultiHash< QString, SerializedUpdater > SerializedUpdaters;
+    typedef QList< SerializedUpdater > SerializedUpdaterList;
 
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
@@ -74,9 +75,8 @@ public:
 
     playlist_ptr playlist() const { return m_playlist; }
 
-    /// If you want to try to load a updater from the settings. Returns a valid
-    /// updater if one was saved
-    static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
+    /// If you want to try to load updaters for a playlist
+    static void loadForPlaylist( const playlist_ptr& pl );
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 

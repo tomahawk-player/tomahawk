@@ -23,6 +23,14 @@ using namespace Tomahawk;
 
 QMap< QString, PlaylistUpdaterFactory* > PlaylistUpdaterInterface::s_factories = QMap< QString, PlaylistUpdaterFactory* >();
 
+
+bool
+operator==( const Tomahawk::PlaylistUpdaterInterface::SerializedUpdater& one, const Tomahawk::PlaylistUpdaterInterface::SerializedUpdater& two )
+{
+    return one.type == two.type;
+}
+
+
 void
 PlaylistUpdaterInterface::registerUpdaterFactory( PlaylistUpdaterFactory* f )
 {
@@ -31,30 +39,29 @@ PlaylistUpdaterInterface::registerUpdaterFactory( PlaylistUpdaterFactory* f )
 
 
 
-PlaylistUpdaterInterface*
+void
 PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
 {
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    const SerializedUpdaters updaters = s->playlistUpdaters();
-    if ( updaters.contains( pl->guid() ) )
+    const SerializedUpdaters allUpdaters = s->playlistUpdaters();
+    if ( allUpdaters.contains( pl->guid() ) )
     {
-        // Ok, we have one we can try to load
-        PlaylistUpdaterInterface* updater = 0;
-        const SerializedUpdater info = updaters[ pl->guid() ];
-
-        if ( !s_factories.contains( info.type ) )
+        // Ok, we have some we can try to load
+        const SerializedUpdaterList updaters = allUpdaters.values( pl->guid() );
+        foreach ( const SerializedUpdater& info, updaters )
         {
-            Q_ASSERT( false );
-            // You forgot to register your new updater type with the factory....
-            return 0;
+            if ( !s_factories.contains( info.type ) )
+            {
+                Q_ASSERT( false );
+                // You forgot to register your new updater type with the factory....
+                continue;
+            }
+
+            // Updaters register themselves in their constructor
+            s_factories[ info.type ]->create( pl, info.customData );
         }
-
-        updater = s_factories[ info.type ]->create( pl, info.customData );
-        return updater;
     }
-
-    return 0;
 }
 
 
@@ -85,14 +92,15 @@ PlaylistUpdaterInterface::save()
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    SerializedUpdaters updaters = s->playlistUpdaters();
+    SerializedUpdaters allUpdaters = s->playlistUpdaters();
+    if ( allUpdaters.contains( m_playlist->guid(), SerializedUpdater( type() ) ) )
+        allUpdaters.remove( m_playlist->guid(), SerializedUpdater( type() ) );
 
-    SerializedUpdater updater = updaters.value( m_playlist ->guid() );
+    SerializedUpdater updater;
     updater.type = type();
     updater.customData = m_extraData;
-    updaters[ m_playlist->guid() ] = updater;
-
-    s->setPlaylistUpdaters( updaters );
+    allUpdaters.insert( m_playlist->guid(), updater );
+    s->setPlaylistUpdaters( allUpdaters );
 }
 
 void
@@ -102,13 +110,12 @@ PlaylistUpdaterInterface::remove()
         return;
 
     TomahawkSettings* s = TomahawkSettings::instance();
+    SerializedUpdaters allUpdaters = s->playlistUpdaters();
 
-    SerializedUpdaters updaters = s->playlistUpdaters();
-    if ( updaters.remove( m_playlist->guid() ) )
-        s->setPlaylistUpdaters( updaters );
+    if ( allUpdaters.remove( m_playlist->guid(), SerializedUpdater( type() ) ) )
+        s->setPlaylistUpdaters( allUpdaters );
 
     aboutToDelete();
-
     deleteLater();
 }
 

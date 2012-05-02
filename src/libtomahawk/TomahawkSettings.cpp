@@ -42,11 +42,14 @@ operator<<(QDataStream& out, const PlaylistUpdaterInterface::SerializedUpdaters&
 {
     out <<  TOMAHAWK_SETTINGS_VERSION;
     out << (quint32)updaters.count();
-    foreach( const QString& key, updaters.keys() )
+    PlaylistUpdaterInterface::SerializedUpdaters::const_iterator iter = updaters.begin();
+    int count = 0;
+    for ( ; iter != updaters.end(); ++iter )
     {
-        PlaylistUpdaterInterface::SerializedUpdater updater = updaters[ key ];
-        out << key << updater.type << updater.customData;
+        out << iter.key() << iter->type << iter->customData;
+        count++;
     }
+    Q_ASSERT( count == updaters.count() );
     return out;
 }
 
@@ -61,13 +64,11 @@ operator>>(QDataStream& in, PlaylistUpdaterInterface::SerializedUpdaters& update
     for ( uint i = 0; i < count; i++ )
     {
         QString key, type;
-        bool sync;
         QVariantHash customData;
-        qint32 state, userRating;
         in >> key;
         in >> type;
         in >> customData;
-        updaters[ key ] = PlaylistUpdaterInterface::SerializedUpdater( type, customData );
+        updaters.insert( key, PlaylistUpdaterInterface::SerializedUpdater( type, customData ) );
     }
 
     return in;
@@ -504,7 +505,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 extraData[ key ] = value( key );
             }
 
-            updaters[ playlist ] = PlaylistUpdaterInterface::SerializedUpdater( type, extraData );
+            updaters.insert( playlist, PlaylistUpdaterInterface::SerializedUpdater( type, extraData ) );
 
             endGroup();
         }
@@ -1250,14 +1251,14 @@ TomahawkSettings::setImportXspfPath( const QString& path )
 PlaylistUpdaterInterface::SerializedUpdaters
 TomahawkSettings::playlistUpdaters() const
 {
-    return value( "playlist/updaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
+    return value( "playlists/updaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
 }
 
 
 void
 TomahawkSettings::setPlaylistUpdaters( const PlaylistUpdaterInterface::SerializedUpdaters& updaters )
 {
-    setValue( "playlist/updaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
+    setValue( "playlists/updaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
 }
 
 
