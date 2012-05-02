@@ -69,6 +69,9 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
     s[ "interval" ] = interval;
     s[ "xspfurl" ] = xspfUrl;
     saveSettings( s );
+
+    // Force start
+    setAutoUpdate( m_autoUpdate );
 }
 
 
