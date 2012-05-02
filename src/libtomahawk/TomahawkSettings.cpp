@@ -1063,7 +1063,7 @@ TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMod
 
 bool TomahawkSettings::preferStaticHostPort() const
 {
-    return value( "network/prefer-static-host-and-port" ).toBool();
+    return value( "network/prefer-static-host-and-port", false ).toBool();
 }
 
 
