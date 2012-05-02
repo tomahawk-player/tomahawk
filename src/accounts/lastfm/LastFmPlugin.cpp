@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -57,9 +58,6 @@ LastFmPlugin::init()
         tDebug() << "Failure: move to the worker thread before running init";
         return;
     }
-    // Flush session key cache
-    // TODO WHY FLUSH
-//     m_account->setSessionKey( QByteArray() );
 
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
@@ -719,7 +717,7 @@ LastFmPlugin::settingsChanged()
 {
     if ( m_account.isNull() )
         return;
-    
+
     if ( !m_scrobbler && m_account.data()->scrobble() )
     { // can simply create the scrobbler
         lastfm::ws::Username = m_account.data()->username();
@@ -735,6 +733,7 @@ LastFmPlugin::settingsChanged()
     else if ( m_account.data()->username() != lastfm::ws::Username ||
         m_account.data()->password() != m_pw )
     {
+        qDebug() << "Last.fm credentials changed, re-creating scrobbler";
         lastfm::ws::Username = m_account.data()->username();
         m_pw = m_account.data()->password();
         // credentials have changed, have to re-create scrobbler for them to take effect
@@ -744,6 +743,7 @@ LastFmPlugin::settingsChanged()
             m_scrobbler = 0;
         }
 
+        m_account.data()->setSessionKey( QString() );
         createScrobbler();
     }
 }
@@ -758,7 +758,7 @@ LastFmPlugin::onAuthenticated()
         tLog() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
         return;
     }
-    
+
     if ( authJob->error() == QNetworkReply::NoError )
     {
         lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
