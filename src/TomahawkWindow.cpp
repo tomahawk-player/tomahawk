@@ -416,12 +416,11 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
     bool accept = true;
 #if ! defined ( Q_WS_MAC )
 #define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed: "
-
     switch( e->key() )
     {
         case Qt::Key_MediaPlay:
             tLog() << KEY_PRESSED << "Play";
-            AudioEngine::instance()->play();
+            AudioEngine::instance()->playPause();
             break;
         case Qt::Key_MediaStop:
             tLog() << KEY_PRESSED << "Stop";
