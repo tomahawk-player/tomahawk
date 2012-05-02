@@ -791,9 +791,9 @@ LastFmPlugin::onAuthenticated()
 void
 LastFmPlugin::createScrobbler()
 {
-    if ( m_account.isNull() )
+    if ( m_account.isNull() || lastfm::ws::Username.isEmpty() )
         return;
-    
+
     if ( m_account.data()->sessionKey().isEmpty() ) // no session key, so get one
     {
         qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
