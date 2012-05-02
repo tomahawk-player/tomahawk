@@ -411,6 +411,54 @@ TomahawkWindow::hideEvent( QHideEvent* e )
 
 
 void
+TomahawkWindow::keyPressEvent( QKeyEvent* e )
+{
+    bool accept = true;
+#if ! defined ( Q_WS_MAC )
+#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed: "
+
+    switch( e->key() )
+    {
+        case Qt::Key_MediaPlay:
+            tLog() << KEY_PRESSED << "Play";
+            AudioEngine::instance()->play();
+            break;
+        case Qt::Key_MediaStop:
+            tLog() << KEY_PRESSED << "Stop";
+            AudioEngine::instance()->stop();
+            break;
+        case Qt::Key_MediaPrevious:
+            tLog() << KEY_PRESSED << "Previous";
+            AudioEngine::instance()->previous();
+            break;
+        case Qt::Key_MediaNext:
+            tLog() << KEY_PRESSED << "Next";
+            AudioEngine::instance()->next();
+            break;
+        case Qt::Key_MediaPause:
+            tLog() << KEY_PRESSED << "Pause";
+            AudioEngine::instance()->pause();
+            break;
+        case Qt::Key_MediaTogglePlayPause:
+            tLog() << KEY_PRESSED << "PlayPause";
+            AudioEngine::instance()->playPause();
+            break;
+        case Qt::Key_MediaRecord:
+        default:
+            accept = false;
+    }
+#else
+    accept = false;
+#endif
+
+    if(accept)
+        e->accept();
+
+    QMainWindow::keyPressEvent( e );
+}
+
+
+void
 TomahawkWindow::showSettingsDialog()
 {
     SettingsDialog win;

@@ -73,6 +73,7 @@ protected:
     void closeEvent( QCloseEvent* e );
     void showEvent( QShowEvent* e );
     void hideEvent( QHideEvent* e );
+    void keyPressEvent( QKeyEvent* e );
 
 public slots:
     void createAutomaticPlaylist( QString );
