@@ -42,6 +42,9 @@ public slots:
     void testLogin( bool );
     void onLastFmFinished();
 
+private slots:
+    void enableButton();
+
 private:
     LastFmAccount* m_account;
     Ui_LastFmConfig* m_ui;

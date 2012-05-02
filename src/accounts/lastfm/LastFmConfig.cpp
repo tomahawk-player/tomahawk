@@ -39,6 +39,9 @@ LastFmConfig::LastFmConfig( LastFmAccount* account )
 
     connect( m_ui->testLogin, SIGNAL( clicked( bool ) ), this, SLOT( testLogin( bool ) ) );
 
+    connect( m_ui->username, SIGNAL( textChanged( QString ) ), this, SLOT( enableButton() ) );
+    connect( m_ui->password, SIGNAL( textChanged( QString ) ), this, SLOT( enableButton() ) );
+
 // #ifdef Q_WS_MAC // FIXME
 //     m_ui->testLogin->setVisible( false );
 // #endif
@@ -86,6 +89,14 @@ LastFmConfig::testLogin(bool )
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
+}
+
+
+void
+LastFmConfig::enableButton()
+{
+    m_ui->testLogin->setText( tr( "Test Login" ) );
+    m_ui->testLogin->setEnabled( true );
 }
 
 
