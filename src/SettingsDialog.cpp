@@ -116,6 +116,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
+
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_2 );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_4 );
+    delete ui->verticalSpacer;
+    delete ui->verticalSpacer_2;
+    delete ui->verticalSpacer_4;
 #endif
 
     // Accounts
