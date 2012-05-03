@@ -38,11 +38,11 @@ TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 
 inline QDataStream&
-operator<<(QDataStream& out, const PlaylistUpdaterInterface::SerializedUpdaters& updaters)
+operator<<(QDataStream& out, const SerializedUpdaters& updaters)
 {
     out <<  TOMAHAWK_SETTINGS_VERSION;
     out << (quint32)updaters.count();
-    PlaylistUpdaterInterface::SerializedUpdaters::const_iterator iter = updaters.begin();
+    SerializedUpdaters::const_iterator iter = updaters.begin();
     int count = 0;
     for ( ; iter != updaters.end(); ++iter )
     {
@@ -55,7 +55,7 @@ operator<<(QDataStream& out, const PlaylistUpdaterInterface::SerializedUpdaters&
 
 
 inline QDataStream&
-operator>>(QDataStream& in, PlaylistUpdaterInterface::SerializedUpdaters& updaters)
+operator>>(QDataStream& in, SerializedUpdaters& updaters)
 {
     quint32 count = 0, version = 0;
     in >> version;
@@ -68,7 +68,7 @@ operator>>(QDataStream& in, PlaylistUpdaterInterface::SerializedUpdaters& update
         in >> key;
         in >> type;
         in >> customData;
-        updaters.insert( key, PlaylistUpdaterInterface::SerializedUpdater( type, customData ) );
+        updaters.insert( key, SerializedUpdater( type, customData ) );
     }
 
     return in;
@@ -490,7 +490,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         beginGroup( "playlistupdaters" );
         const QStringList playlists = childGroups();
 
-        PlaylistUpdaterInterface::SerializedUpdaters updaters;
+        SerializedUpdaters updaters;
         foreach ( const QString& playlist, playlists )
         {
             beginGroup( playlist );
@@ -505,7 +505,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 extraData[ key ] = value( key );
             }
 
-            updaters.insert( playlist, PlaylistUpdaterInterface::SerializedUpdater( type, extraData ) );
+            updaters.insert( playlist, SerializedUpdater( type, extraData ) );
 
             endGroup();
         }
@@ -1248,24 +1248,24 @@ TomahawkSettings::setImportXspfPath( const QString& path )
 }
 
 
-PlaylistUpdaterInterface::SerializedUpdaters
+SerializedUpdaters
 TomahawkSettings::playlistUpdaters() const
 {
-    return value( "playlists/updaters" ).value< PlaylistUpdaterInterface::SerializedUpdaters >();
+    return value( "playlists/updaters" ).value< SerializedUpdaters >();
 }
 
 
 void
-TomahawkSettings::setPlaylistUpdaters( const PlaylistUpdaterInterface::SerializedUpdaters& updaters )
+TomahawkSettings::setPlaylistUpdaters( const SerializedUpdaters& updaters )
 {
-    setValue( "playlists/updaters", QVariant::fromValue< PlaylistUpdaterInterface::SerializedUpdaters >( updaters ) );
+    setValue( "playlists/updaters", QVariant::fromValue< SerializedUpdaters >( updaters ) );
 }
 
 
 void
 TomahawkSettings::registerCustomSettingsHandlers()
 {
-    qRegisterMetaType< Tomahawk::PlaylistUpdaterInterface::SerializedUpdater >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdater" );
-    qRegisterMetaType< Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters" );
-    qRegisterMetaTypeStreamOperators< Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters >( "Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters" );
+    qRegisterMetaType< Tomahawk::SerializedUpdater >( "Tomahawk::SerializedUpdater" );
+    qRegisterMetaType< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
+    qRegisterMetaTypeStreamOperators< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
 }

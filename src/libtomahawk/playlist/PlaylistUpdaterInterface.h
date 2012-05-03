@@ -39,22 +39,22 @@ namespace Tomahawk
 
 class PlaylistUpdaterFactory;
 
+// used when loading/saving from settings
+struct SerializedUpdater {
+    QString type;
+    QVariantHash customData;
+
+    SerializedUpdater( const QString& t, const QVariantHash cd = QVariantHash() ) : type( t ), customData( cd ) {}
+    SerializedUpdater() {}
+};
+
+typedef QMultiHash< QString, SerializedUpdater > SerializedUpdaters;
+typedef QList< SerializedUpdater > SerializedUpdaterList;
+
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
-    // used when loading/saving from settings
-    struct SerializedUpdater {
-        QString type;
-        QVariantHash customData;
-
-        SerializedUpdater( const QString& t, const QVariantHash cd = QVariantHash() ) : type( t ), customData( cd ) {}
-        SerializedUpdater() {}
-    };
-
-    typedef QMultiHash< QString, SerializedUpdater > SerializedUpdaters;
-    typedef QList< SerializedUpdater > SerializedUpdaterList;
-
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
     virtual ~PlaylistUpdaterInterface();
@@ -114,7 +114,7 @@ public:
 
 }
 
-Q_DECLARE_METATYPE( Tomahawk::PlaylistUpdaterInterface::SerializedUpdater );
-Q_DECLARE_METATYPE( Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters );
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdater );
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdaters );
 
 #endif // PLAYLISTUPDATERINTERFACE_H

@@ -19,17 +19,19 @@
 #include "PlaylistUpdaterInterface.h"
 #include "TomahawkSettings.h"
 
-using namespace Tomahawk;
-
-QMap< QString, PlaylistUpdaterFactory* > PlaylistUpdaterInterface::s_factories = QMap< QString, PlaylistUpdaterFactory* >();
-
+namespace Tomahawk {
 
 bool
-operator==( const Tomahawk::PlaylistUpdaterInterface::SerializedUpdater& one, const Tomahawk::PlaylistUpdaterInterface::SerializedUpdater& two )
+operator==( const SerializedUpdater& one, const SerializedUpdater& two )
 {
     return one.type == two.type;
 }
 
+}
+
+using namespace Tomahawk;
+
+QMap< QString, PlaylistUpdaterFactory* > PlaylistUpdaterInterface::s_factories = QMap< QString, PlaylistUpdaterFactory* >();
 
 void
 PlaylistUpdaterInterface::registerUpdaterFactory( PlaylistUpdaterFactory* f )

@@ -203,8 +203,8 @@ public:
     void setImportXspfPath( const QString& path );
     QString importXspfPath() const;
 
-    Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters playlistUpdaters() const;
-    void setPlaylistUpdaters( const Tomahawk::PlaylistUpdaterInterface::SerializedUpdaters& updaters );
+    Tomahawk::SerializedUpdaters playlistUpdaters() const;
+    void setPlaylistUpdaters( const Tomahawk::SerializedUpdaters& updaters );
 
     static void registerCustomSettingsHandlers();
 
