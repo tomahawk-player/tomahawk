@@ -793,59 +793,54 @@ connect and stream from you?</source>
         <translation>Proxy-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="70"/>
+        <location filename="../src/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
         <translation>Rechnername des Proxy Servers</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="77"/>
+        <location filename="../src/ProxyDialog.ui" line="44"/>
         <source>Host</source>
         <translation>Rechnername</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="84"/>
+        <location filename="../src/ProxyDialog.ui" line="51"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="104"/>
+        <location filename="../src/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
         <translation>Proxy Nutzername</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="111"/>
+        <location filename="../src/ProxyDialog.ui" line="78"/>
         <source>User</source>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="118"/>
+        <location filename="../src/ProxyDialog.ui" line="85"/>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="128"/>
+        <location filename="../src/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
         <translation>Proxy Passwort</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="135"/>
-        <source>Type</source>
-        <translation>Typ</translation>
-    </message>
-    <message>
-        <location filename="../src/ProxyDialog.ui" line="142"/>
+        <location filename="../src/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
         <translation>Proxy Ausnahmen:
 (Hat Vorrang vor System Proxy)</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="150"/>
+        <location filename="../src/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
         <translation>localhost *.beispiel.de (Getrennt durch Leerzeichen)</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="167"/>
+        <location filename="../src/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
         <translation>Proxy für DNS Anfragen verwenden?</translation>
     </message>
@@ -1005,39 +1000,39 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="247"/>
+        <location filename="../src/SettingsDialog.cpp" line="290"/>
         <source>Collection</source>
         <translation>Sammlung</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="297"/>
         <source>Advanced</source>
         <translation>Erweitert</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="126"/>
+        <location filename="../src/SettingsDialog.cpp" line="145"/>
         <source>All</source>
         <translation>Alle</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="240"/>
+        <location filename="../src/SettingsDialog.cpp" line="236"/>
+        <source>Some changed settings will not take effect until Tomahawk is restarted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="283"/>
         <source>Services</source>
         <translation>Dienste</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="398"/>
+        <location filename="../src/SettingsDialog.cpp" line="449"/>
         <source>Install resolver from file</source>
         <translation>Installiere Resolver Datei</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="425"/>
+        <location filename="../src/SettingsDialog.cpp" line="236"/>
         <source>Information</source>
         <translation>Information</translation>
-    </message>
-    <message>
-        <location filename="../src/SettingsDialog.cpp" line="425"/>
-        <source>Changing this setting requires a restart of Tomahawk!</source>
-        <translation>Diese Einstellung benötigt einen Neustart von Tomahawk um aktiv zu werden!</translation>
     </message>
 </context>
 <context>
@@ -1430,6 +1425,46 @@ connect and stream from you?</source>
         <translation>Zeitinterval (in Sekunden) zwischen zwei Scans:</translation>
     </message>
     <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="245"/>
+        <source>Advanced Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="254"/>
+        <source>Remote Peer Connection Method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="260"/>
+        <source>None (outgoing connections only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="267"/>
+        <source>Use UPnP to establish port forward (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="274"/>
+        <source>Use static external IP address/host name and port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="287"/>
+        <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="356"/>
+        <source>SOCKS Proxy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="362"/>
+        <source>Use SOCKS Proxy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
         <source>Internet Services</source>
         <translation>Internet Dienste</translation>
@@ -1445,49 +1480,34 @@ connect and stream from you?</source>
         <translation>Nach Fähigkeiten filtern:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="245"/>
-        <source>Advanced Network Settings</source>
-        <translation>Erweiterte Netzwerkeinstellungen</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="265"/>
-        <source>If you&apos;re having difficulty connecting to peers, try setting this to your external IP address/host name and a port number (default 50210). Make sure to forward that port to this machine!</source>
-        <translation>Wenn du Schwierigkeiten hast, dich mit anderen Leuten zu verbinden, versuche deine externe IP-Adresse/Rechnernamen und eine Portnummer (Standard 50210) hier einzutragen. Stelle sicher, den Port entsprechend an diesen Rechner weiterzuleiten!</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="283"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="305"/>
         <source>Static Host Name:</source>
         <translation>Statischer Rechnername:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="299"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="321"/>
         <source>Static Port:</source>
         <translation>Statischer Port:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="321"/>
-        <source>Always use static host name/port? (Overrides UPnP discovery/port forwarding)</source>
-        <translation>Statischen Rechnernamen/Port immer benutzen? (Überschreibt UPnP-discovery/Portweiterleitung)</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="345"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="369"/>
         <source>Proxy Settings...</source>
         <translation>Proxy-Einstellungen…</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="383"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="392"/>
+        <source>Other Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="414"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Übermittlung von Fehlerberichten nach Tomahawk Absturz</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="396"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="401"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>Erlaube Web Browser mit Tomahawk zu interagieren (empfohlen)</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="409"/>
-        <source>Use UPnP to establish port forward</source>
-        <translation>Benutze UPnP um die Portweiterleitung einzurichten</translation>
     </message>
 </context>
 <context>
@@ -2814,7 +2834,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="238"/>
-        <location filename="../src/TomahawkWindow.cpp" line="676"/>
+        <location filename="../src/TomahawkWindow.cpp" line="723"/>
         <source>Play</source>
         <translation>Abspielen</translation>
     </message>
@@ -2845,126 +2865,126 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
         <translation>Nach Updates suchen...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="449"/>
-        <location filename="../src/TomahawkWindow.cpp" line="456"/>
-        <location filename="../src/TomahawkWindow.cpp" line="464"/>
+        <location filename="../src/TomahawkWindow.cpp" line="496"/>
+        <location filename="../src/TomahawkWindow.cpp" line="503"/>
+        <location filename="../src/TomahawkWindow.cpp" line="511"/>
         <source>Connect To Peer</source>
         <translation>Mit anderem Tomahawk verbinden</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="450"/>
+        <location filename="../src/TomahawkWindow.cpp" line="497"/>
         <source>Enter peer address:</source>
         <translation>Gib die Adresse der Gegenstelle ein:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="457"/>
+        <location filename="../src/TomahawkWindow.cpp" line="504"/>
         <source>Enter peer port:</source>
         <translation>Gib den Port der Gegenstelle ein:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="465"/>
+        <location filename="../src/TomahawkWindow.cpp" line="512"/>
         <source>Enter peer key:</source>
         <translation>Gib den Schlüssel der Gegenstelle ein:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="561"/>
+        <location filename="../src/TomahawkWindow.cpp" line="608"/>
         <source>XSPF Error</source>
         <translation>XSPF-Fehler</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="561"/>
+        <location filename="../src/TomahawkWindow.cpp" line="608"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Dies ist keine gültige XSPF-Playliste.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="565"/>
+        <location filename="../src/TomahawkWindow.cpp" line="612"/>
         <source>Failed to save tracks</source>
         <translation>Konnte Stücke nicht abspeichern</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="565"/>
+        <location filename="../src/TomahawkWindow.cpp" line="612"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Einige Stücke in der Playliste enthalten weder Künstler noch Titel. Diese werden ignoriert.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="579"/>
+        <location filename="../src/TomahawkWindow.cpp" line="626"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Es tut uns leid, Tomahawk kann auf dein Audio-Gerät oder das gewünschte Stück nicht zugreifen und überspringt es deshalb. Vergewisser dich, dass ein geignetes Phonon-Backend mitsamt benötigten Plugins installiert ist.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="581"/>
+        <location filename="../src/TomahawkWindow.cpp" line="628"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Es tut uns leid, Tomahawk kann auf dein Audio-Gerät oder das gewünschte Stück nicht zugreifen und überspringt es deshalb.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>Create New Station</source>
         <translation>Neue Station erstellen</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>New Station</source>
         <translation>Neue Station</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="650"/>
+        <location filename="../src/TomahawkWindow.cpp" line="697"/>
         <source>New Playlist</source>
         <translation>Neue Playliste</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="668"/>
+        <location filename="../src/TomahawkWindow.cpp" line="715"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="691"/>
+        <location filename="../src/TomahawkWindow.cpp" line="738"/>
         <source>Go &amp;offline</source>
         <translation>Verbindung &amp;trennen</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="698"/>
+        <location filename="../src/TomahawkWindow.cpp" line="745"/>
         <source>Go &amp;online</source>
         <translation>&amp;Verbindung herstellen</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="720"/>
+        <location filename="../src/TomahawkWindow.cpp" line="767"/>
         <source>Authentication Error</source>
         <translation>Authentifizierungsfehler</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="735"/>
+        <location filename="../src/TomahawkWindow.cpp" line="782"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 von %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="736"/>
+        <location filename="../src/TomahawkWindow.cpp" line="783"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="747"/>
+        <location filename="../src/TomahawkWindow.cpp" line="794"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="751"/>
+        <location filename="../src/TomahawkWindow.cpp" line="798"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="755"/>
+        <location filename="../src/TomahawkWindow.cpp" line="802"/>
         <source>Copyright 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</source>
         <translation>Copyright 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Danke an: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter und Steve Robertson</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="758"/>
+        <location filename="../src/TomahawkWindow.cpp" line="805"/>
         <source>About Tomahawk</source>
         <translation>Über Tomahawk</translation>
     </message>
