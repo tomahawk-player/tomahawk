@@ -118,30 +118,31 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         }
     }
 
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    
     tLog() << "Servent listening on port" << m_port << "- servent thread:" << thread()
-           << "- address mode:" << (int)( TomahawkSettings::instance()->externalAddressMode() );
+           << "- address mode:" << (int)( mode );
 
     // --lanhack means to advertise your LAN IP as if it were externally visible
-    if ( TomahawkSettings::instance()->preferStaticHostPort() )
-    {
-        m_externalHostname = TomahawkSettings::instance()->externalHostname();
-        m_externalPort = TomahawkSettings::instance()->externalPort();
-        m_ready = true;
-        emit ready();
-        return true;
-    }
-
-    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
-    if ( mode == TomahawkSettings::Upnp && !upnp )
-        mode = TomahawkSettings::Lan;
-
     switch ( mode )
     {
+        case TomahawkSettings::Static:
+            m_externalHostname = TomahawkSettings::instance()->externalHostname();
+            m_externalPort = TomahawkSettings::instance()->externalPort();
+            m_ready = true;
+            emit ready();
+            break;
+
         case TomahawkSettings::Lan:
             setInternalAddress();
             break;
 
         case TomahawkSettings::Upnp:
+            if ( !upnp )
+            {
+                setInternalAddress();
+                break;
+            }
             // TODO check if we have a public/internet IP on this machine directly
             tLog() << "External address mode set to upnp...";
             m_portfwd = new PortFwdThread( m_port );
@@ -221,19 +222,9 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 
     if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
     {
-        if ( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
-             !TomahawkSettings::instance()->externalPort() == 0 )
-        {
-            m_externalHostname = TomahawkSettings::instance()->externalHostname();
-            m_externalPort = TomahawkSettings::instance()->externalPort();
-            tDebug() << "UPnP failed, have external address/port - falling back" << m_externalHostname << m_externalPort << m_externalAddress;
-        }
-        else
-        {
-            tLog() << "No external access, LAN and outbound connections only!";
-            setInternalAddress();
-            return;
-        }
+        tLog() << "UPnP failed, LAN and outbound connections only!";
+        setInternalAddress();
+        return;
     }
 
     m_ready = true;

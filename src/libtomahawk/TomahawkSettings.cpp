@@ -1048,8 +1048,13 @@ TomahawkSettings::removeAccount( const QString& accountId )
 
 
 TomahawkSettings::ExternalAddressMode
-TomahawkSettings::externalAddressMode() const
+TomahawkSettings::externalAddressMode()
 {
+    if ( value( "network/prefer-static-host-and-port", false ).toBool() )
+    {
+        remove( "network/prefer-static-host-and-port" );
+        setValue( "network/external-address-mode", TomahawkSettings::Static );
+    }
     return (TomahawkSettings::ExternalAddressMode) value( "network/external-address-mode", TomahawkSettings::Upnp ).toInt();
 }
 
@@ -1058,18 +1063,6 @@ void
 TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMode )
 {
     setValue( "network/external-address-mode", externalAddressMode );
-}
-
-
-bool TomahawkSettings::preferStaticHostPort() const
-{
-    return value( "network/prefer-static-host-and-port", false ).toBool();
-}
-
-
-void TomahawkSettings::setPreferStaticHostPort( bool prefer )
-{
-    setValue( "network/prefer-static-host-and-port", prefer );
 }
 
 

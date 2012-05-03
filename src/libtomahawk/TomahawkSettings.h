@@ -123,12 +123,9 @@ public:
     QString bookmarkPlaylist() const;
 
     /// Network settings
-    enum ExternalAddressMode { Lan, Upnp };
-    ExternalAddressMode externalAddressMode() const;
+    enum ExternalAddressMode { Lan, Upnp, Static };
+    ExternalAddressMode externalAddressMode();
     void setExternalAddressMode( ExternalAddressMode externalAddressMode );
-
-    bool preferStaticHostPort() const;
-    void setPreferStaticHostPort( bool prefer );
 
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );
