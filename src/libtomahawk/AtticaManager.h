@@ -51,13 +51,14 @@ public:
         int userRating; // 0-100
         ResolverState state;
         QPixmap* pixmap;
+        bool binary;
 
         // internal
         bool pixmapDirty;
 
-        Resolver( const QString& v, const QString& path, int userR, ResolverState s )
-            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), pixmapDirty( false ) {}
-        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), pixmapDirty( false ) {}
+        Resolver( const QString& v, const QString& path, int userR, ResolverState s, bool resolver )
+            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
+        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
     };
 
     typedef QHash< QString, AtticaManager::Resolver > StateHash;
@@ -111,7 +112,9 @@ signals:
 
 private slots:
     void providerAdded( const Attica::Provider& );
+    void categoriesReturned( Attica::BaseJob* );
     void resolversList( Attica::BaseJob* );
+    void binaryResolversList( Attica::BaseJob* );
     void resolverDownloadFinished( Attica::BaseJob* );
     void payloadFetched();
 
@@ -131,6 +134,7 @@ private:
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
 
+    int m_resolverJobsLoaded;
     QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;

@@ -42,11 +42,13 @@ AtticaManager* AtticaManager::s_instance = 0;
 
 AtticaManager::AtticaManager( QObject* parent )
     : QObject( parent )
+    , m_resolverJobsLoaded( 0 )
 {
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+    m_manager.addProviderFile( QUrl( "http://localhost/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }
@@ -250,9 +252,32 @@ AtticaManager::providerAdded( const Provider& provider )
     if ( provider.name() == "Tomahawk Resolvers" )
     {
         m_resolverProvider = provider;
+        m_resolvers.clear();
 
-        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads, 0, 30 );
-        connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
+        m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
+
+        ListJob<Category>* job = m_resolverProvider.requestCategories();
+        connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( categoriesReturned( Attica::BaseJob* ) ) );
+        job->start();
+    }
+}
+
+
+void
+AtticaManager::categoriesReturned( BaseJob* j )
+{
+    ListJob< Category >* job = static_cast< ListJob< Category >* >( j );
+
+    Category::List categories = job->itemList();
+    foreach ( const Category& category, categories )
+    {
+        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List() << category, QString(), Provider::Downloads, 0, 50 );
+
+        if ( category.name() == "Resolver" )
+            connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
+        else if ( category.name() == "BinaryResolver" )
+            connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( binaryResolversList( Attica::BaseJob* ) ) );
+
         job->start();
     }
 }
@@ -263,8 +288,7 @@ AtticaManager::resolversList( BaseJob* j )
 {
     ListJob< Content >* job = static_cast< ListJob< Content >* >( j );
 
-    m_resolvers = job->itemList();
-    m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
+    m_resolvers.append( job->itemList() );
 
     // Sanity check. if any resolvers are installed that don't exist on the hd, remove them.
     foreach ( const QString& rId, m_resolverStates.keys() )
@@ -272,6 +296,9 @@ AtticaManager::resolversList( BaseJob* j )
         if ( m_resolverStates[ rId ].state == Installed ||
              m_resolverStates[ rId ].state == NeedsUpgrade )
         {
+            if ( m_resolverStates[ rId ].binary )
+                continue;
+
             // Guess location on disk
             QDir dir( QString( "%1/atticaresolvers/%2" ).arg( TomahawkUtils::appDataDir().absolutePath() ).arg( rId ) );
             if ( !dir.exists() )
@@ -303,7 +330,49 @@ AtticaManager::resolversList( BaseJob* j )
 
     syncServerData();
 
-    emit resolversLoaded( m_resolvers );
+    if ( ++m_resolverJobsLoaded == 2 )
+        emit resolversLoaded( m_resolvers );
+}
+
+
+void
+AtticaManager::binaryResolversList( BaseJob* j )
+{
+    ListJob< Content >* job = static_cast< ListJob< Content >* >( j );
+
+    Content::List binaryResolvers = job->itemList();
+
+    // NOTE: No binary support for linux distros
+    QString platform;
+#ifdef Q_OS_MAC
+    platform = "osx";
+#elif Q_OS_WIN
+    platform = "win";
+#endif
+
+    // NOTE HACK
+    // At the moment we are going to assume that all binary resolvers also have an associated full-fledged Tomahawk Account
+    //  like SpotifyAccount.
+
+    foreach ( const Content& c, binaryResolvers )
+    {
+        if ( !c.attribute( "typeid" ).isEmpty() && c.attribute( "typeid" ) == platform )
+        {
+            // We have a binary resolver for this platform
+            m_resolvers.append( c );
+            if ( !m_resolverStates.contains( c.id() ) )
+            {
+                Resolver r;
+                r.binary = true;
+                m_resolverStates.insert( c.id(), r );
+            }
+
+
+        }
+    }
+
+    if ( ++m_resolverJobsLoaded == 2 )
+        emit resolversLoaded( m_resolvers );
 }
 
 
