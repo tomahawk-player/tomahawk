@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Диалогов</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation>Описанието идва тук</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
@@ -125,7 +125,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="31"/>
@@ -198,7 +198,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="37"/>
@@ -219,12 +219,14 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation>Покажи албумите от супер колекцията</translation>
+        <translation>Покажи албумите от супер колекцията 
+/Сборен излед от локалните и наличните в колекциите на приятелите ти/</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
         <source>Click to show Official Albums</source>
-        <translation>Покажи само официалните албуми</translation>
+        <translation>Покажи само официалните албуми
+/Албумите означени като &quot;Официални&quot; в БД на Misicbrainz, Rovi, и др.п./</translation>
     </message>
 </context>
 <context>
@@ -445,7 +447,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="176"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Изпращането приключи. &lt;b&gt;Благодарим ви за отзивчивостта!&lt;/b&gt; :-).</translation>
+        <translation>Изпращането приключи. &lt;b&gt;Благодарим ви за отзивчивостта!&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
@@ -510,7 +512,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SearchBox.ui" line="14"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -557,7 +559,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="14"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="41"/>
@@ -1017,7 +1019,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="236"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation type="unfinished"/>
+        <translation>Някои промени няма да имат ефект, докато програмата не бъде рестартирана.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="283"/>
@@ -1323,7 +1325,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="20"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
@@ -1430,42 +1432,42 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="245"/>
         <source>Advanced Settings</source>
-        <translation type="unfinished"/>
+        <translation>Разширени настройки</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="254"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Начин за свързване</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="260"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>Без. (само изходящи връзки)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="267"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Ползвай UPnP (препоръчително)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="274"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Ползвай статичен IP адрес/име и порт</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="287"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Настрой тук, своят външен IP адрес или име. Моля увери се, че си настроил прехвърляне на избраният порт, към адресът ти от локалната мрежа.</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="356"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="362"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Ползвай SOCKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
@@ -1500,7 +1502,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="392"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Други настройки</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="414"/>
@@ -1614,7 +1616,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="124"/>
         <source>Success</source>
-        <translation>Успешно!</translation>
+        <translation>Ура!</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="140"/>
@@ -1681,7 +1683,7 @@ connect and stream from you?</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="141"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
         <source>Tweet!</source>
-        <translation>Tweet!</translation>
+        <translation>Чурулик!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="66"/>
@@ -3003,7 +3005,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="26"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="66"/>
@@ -3687,7 +3689,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>

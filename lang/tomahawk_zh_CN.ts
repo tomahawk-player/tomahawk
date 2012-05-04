@@ -9,7 +9,7 @@
     <message>
         <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation type="unfinished"/>
+        <translation>注释于此处</translation>
     </message>
     <message>
         <location filename="../src/AccountFactoryWrapper.cpp" line="41"/>
@@ -71,13 +71,13 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="64"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Listen Privately</source>
-        <translation type="unfinished"/>
+        <translation>私下收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="64"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Listen Publicly</source>
-        <translation type="unfinished"/>
+        <translation>公开收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="70"/>
@@ -142,13 +142,13 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="114"/>
         <source>Click to show SuperCollection Tracks</source>
-        <translation type="unfinished"/>
+        <translation>点击显示超级收藏中的曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="79"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="132"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>点击显示超级收藏中的专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="134"/>
@@ -219,12 +219,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
         <source>Click to show SuperCollection Albums</source>
-        <translation type="unfinished"/>
+        <translation>点击显示超级收藏中的专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
         <source>Click to show Official Albums</source>
-        <translation type="unfinished"/>
+        <translation>点击显示官方发行专辑</translation>
     </message>
 </context>
 <context>
@@ -237,12 +237,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="276"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>此收藏目前为空</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="293"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，你的过滤条件 &apos;%1&apos; 未匹配任何结果</translation>
     </message>
 </context>
 <context>
@@ -405,7 +405,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
         <source>Hide Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>隐藏脚注</translation>
     </message>
 </context>
 <context>
@@ -413,43 +413,43 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="23"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk 崩溃报告</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;p&gt;&lt;b&gt;抱歉！&lt;/b&gt;&amp;nbsp;Tomahawk 出错了。相关信息正被上传到 Tomahawk HQ 以便我们修复此错误。&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="172"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>中止</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="192"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>你可以在设置中禁用发送崩溃报告</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="153"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>已发送 %L2 KB 中的 %L1</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="167"/>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="183"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="176"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>已发送！&lt;b&gt;非常感谢&lt;/b&gt;。</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>发送崩溃信息失败。</translation>
     </message>
 </context>
 <context>
@@ -457,7 +457,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="109"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>未知</translation>
     </message>
 </context>
 <context>
@@ -470,7 +470,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>删除账户</translation>
     </message>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="143"/>
@@ -483,17 +483,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk 诊断信息</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="38"/>
         <source>Update</source>
-        <translation type="unfinished"/>
+        <translation>更新</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="45"/>
         <source>Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>复制到剪贴板</translation>
     </message>
 </context>
 <context>
@@ -517,7 +517,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="31"/>
         <source>Indexing database</source>
-        <translation type="unfinished"/>
+        <translation>正在索引数据库</translation>
     </message>
 </context>
 <context>
@@ -566,17 +566,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="50"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>用户名</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="60"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>密码</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="76"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>测试登录</translation>
     </message>
 </context>
 <context>
