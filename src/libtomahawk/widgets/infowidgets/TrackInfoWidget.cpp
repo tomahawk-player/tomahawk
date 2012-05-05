@@ -111,6 +111,7 @@ TrackInfoWidget::load( const query_ptr& query )
 {
     m_query = query;
     m_artist = Artist::get( m_query->artist() );
+    m_title = QString( "%1 - %2" ).arg( query->artist() ).arg( query->track() );
 
     if ( !m_query.isNull() )
     {

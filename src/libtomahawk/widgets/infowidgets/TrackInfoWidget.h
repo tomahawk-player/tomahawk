@@ -57,7 +57,7 @@ public:
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return QString(); }
+    virtual QString title() const { return m_title; }
     virtual QString description() const { return QString(); }
     virtual QString longDescription() const { return QString(); }
     virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
@@ -88,6 +88,7 @@ private:
     Tomahawk::artist_ptr m_artist;
 
     AlbumModel* m_albumsModel;
+    QString m_title;
     QPixmap m_pixmap;
     QString m_infoId;
 };
