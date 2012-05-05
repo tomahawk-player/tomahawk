@@ -494,6 +494,8 @@ ViewManager::showRecentPlaysPage()
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
+        raModel->setTitle( tr( "Recently Played Tracks" ) );
+        raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
         raModel->setStyle( TrackModel::Large );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
