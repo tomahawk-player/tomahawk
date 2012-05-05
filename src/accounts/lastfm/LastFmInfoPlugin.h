@@ -60,6 +60,7 @@ public slots:
     void similarArtistsReturned();
     void topTracksReturned();
     void chartReturned();
+    void similarTracksReturned();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -74,6 +75,7 @@ private:
     void fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );

@@ -45,7 +45,7 @@ LastFmInfoPlugin::LastFmInfoPlugin( LastFmAccount* account )
     , m_account( account )
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities << InfoTrackSimilars;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 }
 
@@ -128,6 +128,11 @@ LastFmInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         case InfoChartCapabilities:
             fetchChartCapabilities( requestData );
             break;
+            
+        case InfoTrackSimilars:
+            fetchSimilarTracks( requestData );
+            break;
+
         default:
             dataError( requestData );
     }
@@ -269,7 +274,30 @@ LastFmInfoPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData req
 
 
 void
-LastFmInfoPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+{
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
+        dataError( requestData );
+        return;
+    }
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "artist" ) || !hash.contains( "track" ) )
+    {
+        dataError( requestData );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria["artist"] = hash["artist"];
+    criteria["track"] = hash["track"];
+
+    emit getCachedInfo( criteria, 2419200000, requestData );
+}
+
+
+void
+LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -310,6 +338,7 @@ LastFmInfoPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData 
     emit getCachedInfo( criteria, 0, requestData );
 }
 
+
 void
 LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -323,6 +352,7 @@ LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData 
 
     emit getCachedInfo( criteria, 0, requestData );
 }
+
 
 void
 LastFmInfoPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -454,6 +484,19 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
             return;
         }
 
+        case InfoTrackSimilars:
+        {
+            lastfm::MutableTrack t;
+            t.setArtist( criteria["artist"] );
+            t.setTitle( criteria["track"] );
+
+            QNetworkReply* reply = t.getSimilar();
+            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( similarTracksReturned() ) );
+            return;
+        }
+
         case InfoArtistSongs:
         {
             lastfm::Artist a( criteria["artist"] );
@@ -553,7 +596,58 @@ LastFmInfoPlugin::similarArtistsReturned()
 
 
 void
+<<<<<<< HEAD:src/accounts/lastfm/LastFmInfoPlugin.cpp
 LastFmInfoPlugin::chartReturned()
+=======
+LastFmPlugin::similarTracksReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    QMap< int, QPair< QString, QString > > similarTracks = lastfm::Track::getSimilar( reply );
+
+    QStringList sortedArtists;
+    QStringList sortedTracks;
+    QStringList sortedScores;
+    QStringList al;
+    QStringList tl;
+    QStringList sl;
+
+    QPair< QString, QString > track;
+    foreach ( track, similarTracks.values() )
+    {
+        tl << track.first;
+        al << track.second;
+    }
+    foreach ( int score, similarTracks.keys() )
+        sl << QString::number( score );
+
+    for ( int i = tl.count() - 1; i >= 0; i-- )
+    {
+        sortedTracks << tl.at( i );
+        sortedArtists << al.at( i );
+        sortedScores << sl.at( i );
+    }
+
+    QVariantMap returnedData;
+    returnedData["tracks"] = sortedTracks;
+    returnedData["artists"] = sortedArtists;
+    returnedData["score"] = sortedScores;
+
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+
+    emit info( requestData, returnedData );
+
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria["artist"] = origData["artist"];
+    criteria["track"] = origData["track"];
+    emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+}
+
+
+void
+LastFmPlugin::chartReturned()
+>>>>>>> * Added similar tracks infosystem call.:src/accounts/lastfm/LastFmPlugin.cpp
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -566,7 +660,8 @@ LastFmInfoPlugin::chartReturned()
     {
         QList<lastfm::Track> tracks = parseTrackList( reply );
         QList<InfoStringHash> top_tracks;
-        foreach( const lastfm::Track &t, tracks ) {
+        foreach( const lastfm::Track& t, tracks )
+        {
             InfoStringHash pair;
             pair[ "artist" ] = t.artist().toString();
             pair[ "track" ] = t.title();
