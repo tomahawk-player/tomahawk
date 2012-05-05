@@ -274,7 +274,7 @@ LastFmInfoPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData req
 
 
 void
-LastFmPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -297,7 +297,7 @@ LastFmPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestD
 
 
 void
-LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -316,6 +316,7 @@ LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData 
 
     emit getCachedInfo( criteria, 2419200000, requestData );
 }
+
 
 void
 LastFmInfoPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -596,10 +597,7 @@ LastFmInfoPlugin::similarArtistsReturned()
 
 
 void
-<<<<<<< HEAD:src/accounts/lastfm/LastFmInfoPlugin.cpp
-LastFmInfoPlugin::chartReturned()
-=======
-LastFmPlugin::similarTracksReturned()
+LastFmInfoPlugin::similarTracksReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -646,8 +644,7 @@ LastFmPlugin::similarTracksReturned()
 
 
 void
-LastFmPlugin::chartReturned()
->>>>>>> * Added similar tracks infosystem call.:src/accounts/lastfm/LastFmPlugin.cpp
+LastFmInfoPlugin::chartReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
