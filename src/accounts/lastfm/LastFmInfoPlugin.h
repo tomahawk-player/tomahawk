@@ -42,13 +42,13 @@ namespace Accounts
 namespace InfoSystem
 {
 
-class LastFmPlugin : public InfoPlugin
+class LastFmInfoPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    LastFmPlugin( Accounts::LastFmAccount* account );
-    virtual ~LastFmPlugin();
+    LastFmInfoPlugin( Accounts::LastFmAccount* account );
+    virtual ~LastFmInfoPlugin();
 
 public slots:
     void init();

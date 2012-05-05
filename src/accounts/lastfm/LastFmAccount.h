@@ -30,7 +30,7 @@ namespace Tomahawk {
 class ExternalResolverGui;
 
 namespace InfoSystem {
-    class LastFmPlugin;
+    class LastFmInfoPlugin;
 }
 
 namespace Accounts {
@@ -103,7 +103,7 @@ private:
     void hookupResolver();
 
     QWeakPointer<Tomahawk::ExternalResolverGui> m_resolver;
-    QWeakPointer<Tomahawk::InfoSystem::LastFmPlugin> m_infoPlugin;
+    QWeakPointer<Tomahawk::InfoSystem::LastFmInfoPlugin> m_infoPlugin;
     QWeakPointer<LastFmConfig> m_configWidget;
     QPixmap m_icon;
 };

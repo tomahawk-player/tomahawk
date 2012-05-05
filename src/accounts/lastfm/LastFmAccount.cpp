@@ -20,7 +20,7 @@
 #include "LastFmConfig.h"
 
 #include "infosystem/InfoSystem.h"
-#include "LastFmPlugin.h"
+#include "LastFmInfoPlugin.h"
 #include "utils/TomahawkUtils.h"
 #include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
@@ -167,7 +167,7 @@ InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
+        m_infoPlugin = QWeakPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
     
     return InfoPluginPtr( m_infoPlugin.data() );
 }
