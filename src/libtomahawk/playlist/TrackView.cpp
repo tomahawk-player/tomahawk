@@ -600,7 +600,7 @@ TrackView::updateHoverIndex( const QPoint& pos )
     if ( !m_model || m_model->style() != TrackModel::Detailed )
         return;
 
-    if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
+    if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album || idx.column() == TrackModel::Track )
     {
         if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
              pos.x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
@@ -683,6 +683,12 @@ TrackView::mousePressEvent( QMouseEvent* event )
                     artist_ptr artist = Artist::get( item->query()->artist() );
                     ViewManager::instance()->show( Album::get( artist, item->query()->album() ) );
                 }
+                break;
+            }
+
+            case TrackModel::Track:
+            {
+                ViewManager::instance()->show( item->query() );
                 break;
             }
 
