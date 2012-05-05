@@ -400,6 +400,35 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
 
 
 void
+AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
+{
+    emit loadingFinished();
+
+    if ( m_overwriteOnAdd )
+        clear();
+
+    int c = rowCount( QModelIndex() );
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + queries.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    AlbumItem* albumitem;
+    foreach ( const query_ptr& query, queries )
+    {
+        albumitem = new AlbumItem( query, m_rootItem );
+        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+
+        connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
+}
+
+
+void
 AlbumModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );

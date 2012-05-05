@@ -91,6 +91,7 @@ public slots:
 
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
     void addArtists( const QList<Tomahawk::artist_ptr>& artists );
+    void addQueries( const QList<Tomahawk::query_ptr>& queries );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );

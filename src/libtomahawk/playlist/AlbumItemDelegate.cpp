@@ -96,10 +96,40 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QRect r = option.rect.adjusted( 6, 5, -6, -41 );
 
+    QString top, bottom;
+    if ( !item->album().isNull() )
+    {
+        top = item->album()->name();
+        
+        if ( !item->album()->artist().isNull() )
+            bottom = item->album()->artist()->name();
+    }
+    else if ( !item->artist().isNull() )
+    {
+        top = item->artist()->name();
+    }
+    else
+    {
+        top = item->query()->track();
+        bottom = item->query()->artist();
+    }
+
     if ( !m_covers.contains( index ) )
     {
-        m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::CoverInCase ) ) );
-        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+        if ( !item->album().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::CoverInCase ) ) );
+        }
+        else if ( !item->artist().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::CoverInCase ) ) );
+        }
+        else
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), r.size(), TomahawkUtils::CoverInCase ) ) );
+        }
+
+        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
         closure->setAutoDelete( false );
     }
 
@@ -138,30 +168,24 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
 
-    QString name;
-    if ( !item->album().isNull() )
-        name = item->album()->name();
-    else if ( !item->artist().isNull() )
-        name = item->artist()->name();
-
     painter->setFont( boldFont );
     bool oneLiner = false;
-    if ( item->album().isNull() || item->album()->artist().isNull() )
+    if ( bottom.isEmpty() )
         oneLiner = true;
     else
-        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
-                     textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
+        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( top ).height() ||
+                     textRect.height() / 2 < painter->fontMetrics().boundingRect( bottom ).height() );
 
     if ( oneLiner )
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
     }
     else
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
         // If the user is hovering over an artist rect, draw a background so she knows it's clickable
@@ -184,7 +208,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 10 );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 10 );
         painter->drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
 
         // Calculate rect of artist on-hover button click area
