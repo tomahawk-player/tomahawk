@@ -30,6 +30,7 @@
 
 #include "Typedefs.h"
 #include "DllMacro.h"
+#include "Query.h"
 #include "infosystem/InfoSystem.h"
 
 namespace Tomahawk
@@ -53,6 +54,13 @@ public:
     bool infoLoaded() const { return m_infoLoaded; }
     
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
+    QList<Tomahawk::artist_ptr> similarArtists() const;
+
+    void loadStats();
+    QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
+    void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
+    unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
+
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
@@ -68,6 +76,8 @@ signals:
 
     void updated();
     void coverChanged();
+    void similarArtistsLoaded();
+    void statsLoaded();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
@@ -86,11 +96,17 @@ private:
     bool m_infoLoaded;
     mutable bool m_infoLoading;
     QHash<Tomahawk::ModelMode, bool> m_albumsLoaded;
+    bool m_simArtistsLoaded;
+
     mutable QString m_uuid;
     mutable int m_infoJobs;
 
     QList<Tomahawk::album_ptr> m_databaseAlbums;
     QList<Tomahawk::album_ptr> m_officialAlbums;
+    QList<Tomahawk::artist_ptr> m_similarArtists;
+    
+    bool m_playbackHistoryLoaded;
+    QList< PlaybackLog > m_playbackHistory;
 
     mutable QByteArray m_coverBuffer;
 #ifndef ENABLE_HEADLESS
