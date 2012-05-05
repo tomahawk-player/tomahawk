@@ -51,6 +51,7 @@
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
+#include "widgets/infowidgets/TrackInfoWidget.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/AnimatedSplitter.h"
 
@@ -249,6 +250,25 @@ ViewManager::show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode initial
     else
     {
         swidget = m_albumViews.value( album ).data();
+    }
+
+    setPage( swidget );
+    return swidget;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::query_ptr& query )
+{
+    TrackInfoWidget* swidget;
+    if ( !m_trackViews.contains( query ) || m_trackViews.value( query ).isNull() )
+    {
+        swidget = new TrackInfoWidget( query );
+        m_trackViews.insert( query, swidget );
+    }
+    else
+    {
+        swidget = m_trackViews.value( query ).data();
     }
 
     setPage( swidget );
