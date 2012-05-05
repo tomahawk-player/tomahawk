@@ -75,7 +75,12 @@ SourcePlaylistInterface::nextItem()
     }
 
     m_gotNextItem = false;
-    m_currentItem = m_source.data()->currentTrack()->results().first();
+    
+    if ( m_source.data()->currentTrack()->numResults() )
+        m_currentItem = m_source.data()->currentTrack()->results().first();
+    else
+        m_currentItem = result_ptr();
+
     return m_currentItem;
 }
 
