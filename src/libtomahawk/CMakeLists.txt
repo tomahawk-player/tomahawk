@@ -151,6 +151,7 @@ set( libGuiSources
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
+    widgets/infowidgets/TrackInfoWidget.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
 )
@@ -218,6 +219,7 @@ set( libSources
     database/DatabaseCommand_AddSource.cpp
     database/DatabaseCommand_SourceOffline.cpp
     database/DatabaseCommand_CollectionStats.cpp
+    database/DatabaseCommand_TrackStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_PlaybackHistory.cpp
@@ -312,6 +314,7 @@ set( libUI ${libUI}
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
+    widgets/infowidgets/TrackInfoWidget.ui
     playlist/topbar/TopBar.ui
     playlist/QueueView.ui
     context/ContextWidget.ui
