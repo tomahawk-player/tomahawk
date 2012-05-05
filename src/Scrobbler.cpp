@@ -79,16 +79,21 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
         scrobble();
     }
 
+    QVariantMap playInfo;
+    
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
-
     trackInfo["title"] = track->track();
     trackInfo["artist"] = track->artist()->name();
     trackInfo["album"] = track->album()->name();
     trackInfo["duration"] = QString::number( track->duration() );
+    trackInfo["albumpos"] = QString::number( track->albumpos() );
+
+    playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+    playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
 
     Tomahawk::InfoSystem::InfoPushData pushData (
         s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitNowPlaying,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+        playInfo,
         Tomahawk::InfoSystem::PushNoFlag );
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );

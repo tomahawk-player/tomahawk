@@ -161,19 +161,30 @@ LastFmInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 void
 LastFmInfoPlugin::nowPlaying( const QVariant &input )
 {
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
+    m_track = lastfm::MutableTrack();
+    if ( !input.canConvert< QVariantMap >() )
     {
-        tLog() << "LastFmInfoPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
-        if ( !m_scrobbler )
-            tLog() << "No scrobbler!";
+        tDebug() << Q_FUNC_INFO << "Failed to convert data to a QVariantMap";
         return;
     }
 
-    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    QVariantMap map = input.toMap();
+    if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+        return;
+
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
+    {
+        tLog() << Q_FUNC_INFO << "LastFmInfoPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
+        if ( !m_scrobbler )
+            tLog() << Q_FUNC_INFO << "No scrobbler!";
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
         return;
 
-    m_track = lastfm::MutableTrack();
     m_track.stamp();
 
     m_track.setTitle( hash["title"] );
