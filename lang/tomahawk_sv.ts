@@ -183,12 +183,12 @@ connect and stream from you?</source>
 <context>
     <name>AlbumView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="157"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="159"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
         <translation>Efter att du har scannat din musiksamling kommer du finna dina senaste tillagda album här.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="159"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="161"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
         <translation>Den här samlingen inga nya album.</translation>
     </message>
@@ -1193,6 +1193,7 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="73"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="537"/>
         <source>Latest Additions</source>
         <translation>Senast tillagda</translation>
     </message>
@@ -1210,6 +1211,31 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="146"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="540"/>
+        <source>Latest additions to your collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="542"/>
+        <source>Latest additions to %1&apos;s collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
+        <source>Recently Played Tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="580"/>
+        <source>Your recently played tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="582"/>
+        <source>%1&apos;s recently played tracks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2430,29 +2456,29 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>Tomahawk::InfoSystem::LastFmPlugin</name>
+    <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="407"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="449"/>
         <source>Top Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="410"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="452"/>
         <source>Loved Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="413"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="455"/>
         <source>Hyped Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="419"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Top Artists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmPlugin.cpp" line="422"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
         <source>Hyped Artists</source>
         <translation type="unfinished"/>
     </message>
@@ -2526,37 +2552,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="642"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="686"/>
         <source> and </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="650"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="694"/>
         <source>You</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="652"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="696"/>
         <source>you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="705"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="705"/>
         <source>%n other(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="664"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="708"/>
         <source>%1 people</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="666"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="710"/>
         <source>loved this track</source>
         <translation type="unfinished"/>
     </message>
@@ -3055,6 +3081,79 @@ enter the displayed PIN number here:</source>
     </message>
 </context>
 <context>
+    <name>TrackInfoWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="41"/>
+        <source>Cover</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="66"/>
+        <source>Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="81"/>
+        <source>by </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="88"/>
+        <source>Artist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="105"/>
+        <source>from </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="112"/>
+        <source>Album</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="155"/>
+        <source>Statistics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="171"/>
+        <source>Similar Tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="166"/>
+        <source>You&apos;ve listened to this track %n time(s).</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="168"/>
+        <source>You&apos;ve never listened to this track before.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="172"/>
+        <source>You first listened to it on %1.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="176"/>
+        <source>You&apos;ve listened to %1 %n time(s).</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="178"/>
+        <source>You&apos;ve never listened to %1 before.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>TrackModel</name>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
@@ -3277,19 +3376,29 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="385"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
         <source>SuperCollection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="386"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="406"/>
         <source>Combined libraries of all your online friends</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="387"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
         <source>All available albums</source>
         <translation>Alla tillgängliga album</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="497"/>
+        <source>Recently Played Tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="498"/>
+        <source>Recently played tracks from all your friends</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
