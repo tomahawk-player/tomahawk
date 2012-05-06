@@ -27,6 +27,8 @@
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 
+#include <qtkeychain/keychain.h>
+
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "TomahawkSettings.h"
@@ -132,6 +134,8 @@ signals:
 
     void configurationChanged();
 
+    void credentialsChanged();
+
 protected:
     virtual void loadFromConfig( const QString &accountId );
     virtual void syncConfig();
@@ -140,7 +144,12 @@ private slots:
     void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );
     void onError( int, const QString& );
 
+    void keychainJobFinished( QKeychain::Job* );
+
 private:
+    void serializeCredentials( const QVariantHash& credentials, QByteArray& data );
+    void deserializeCredentials( QVariantHash& credentials, const QByteArray& data );
+
     QString m_accountServiceName;
     QString m_accountFriendlyName;
     QString m_cachedError;

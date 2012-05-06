@@ -114,6 +114,42 @@ Account::onError( int errorCode, const QString& error )
 
 
 void
+Account::keychainJobFinished(QKeychain::Job* j )
+{
+    QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j );
+    if ( readJob != 0 )
+    {
+        QVariantHash var;
+        tLog() << Q_FUNC_INFO << "readJob finished";
+        tLog() << Q_FUNC_INFO << readJob->key();
+        deserializeCredentials( var, readJob->binaryData() );
+        tLog() << Q_FUNC_INFO << var;
+    }
+    else
+    {
+        QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j );
+        tLog() << Q_FUNC_INFO << "writeJob finished";
+    }
+}
+
+
+void
+Account::serializeCredentials(const QVariantHash& credentials, QByteArray& data)
+{
+    QDataStream ds(&data, QIODevice::WriteOnly);
+    ds << credentials;
+}
+
+
+void
+Account::deserializeCredentials(QVariantHash& credentials, const QByteArray& data)
+{
+    QDataStream ds2(data);
+    ds2 >> credentials;
+}
+
+
+void
 Account::onConnectionStateChanged( Account::ConnectionState )
 {
     m_cachedError.clear();
@@ -132,6 +168,13 @@ Account::syncConfig()
     s->setValue( "acl", m_acl );
     s->setValue( "types", m_types );
     s->endGroup();
+    QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    j->setKey( m_accountId );
+    QByteArray bData;
+    serializeCredentials( m_credentials, bData );
+    j->setBinaryData( bData );
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+    j->start();
     s->sync();
 }
 
@@ -148,6 +191,10 @@ Account::loadFromConfig( const QString& accountId )
     m_configuration = s->value( "configuration", QVariantHash() ).toHash();
     m_acl = s->value( "acl", QVariantMap() ).toMap();
     m_types = s->value( "types", QStringList() ).toStringList();
+    QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    j->setKey( m_accountId );
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+    j->start();
     s->endGroup();
 }
 
