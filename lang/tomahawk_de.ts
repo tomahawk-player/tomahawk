@@ -47,7 +47,7 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="65"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Willst du %1 erlauben sich mit dir zu verbinden und deine Sammlung anzuhören?</translation>
     </message>
 </context>
 <context>
@@ -1017,7 +1017,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="236"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation type="unfinished"/>
+        <translation>Einige geänderte Einstellungen haben keinen Effekt bis zum nächsten Neustart</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="283"/>
@@ -1453,7 +1453,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="245"/>
         <source>Advanced Settings</source>
-        <translation type="unfinished"/>
+        <translation>Erweiterte Einstellungen</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="254"/>
@@ -1468,27 +1468,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="267"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnP für Port-Weiterleitung verwenden (empfohlen)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="274"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Statische externe IP Adresse / Hostnamen und Port verwenden</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="287"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Stelle hier deine externe IP Adresse oder Hostnamen ein. Du musst den Port selbst an diesen Rechner weiterleiten!</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="356"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="362"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKS Proxy verwenden</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
@@ -1523,7 +1523,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="392"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Andere Einstellungen</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="414"/>
@@ -1626,7 +1626,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="98"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Login testen</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="119"/>
@@ -2687,7 +2687,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
         <location filename="../src/TomahawkTrayIcon.cpp" line="49"/>
         <location filename="../src/TomahawkTrayIcon.cpp" line="263"/>
         <source>&amp;Stop Playback after current Track</source>
-        <translation type="unfinished"/>
+        <translation>Wiedergabe nach diesem Lied &amp;stoppen</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="66"/>
@@ -2718,7 +2718,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="261"/>
         <source>&amp;Continue Playback after current Track</source>
-        <translation type="unfinished"/>
+        <translation>Wiedergabe nach diesem Lied &amp;fortsetzen</translation>
     </message>
 </context>
 <context>
@@ -2997,7 +2997,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="794"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="798"/>
@@ -3091,52 +3091,52 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="41"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>Cover</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="66"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>Lied</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="81"/>
         <source>by </source>
-        <translation type="unfinished"/>
+        <translation>von</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="88"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Künstler</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="105"/>
         <source>from </source>
-        <translation type="unfinished"/>
+        <translation>auf</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="112"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="155"/>
         <source>Statistics</source>
-        <translation type="unfinished"/>
+        <translation>Statistiken</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="171"/>
         <source>Similar Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Ähnliche Lieder</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="166"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Du hast dieses Lied einmal gehört.</numerusform><numerusform>Du hast dieses Lied %n mal gehört.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="168"/>
@@ -3488,7 +3488,10 @@ Lyrics for &quot;%1&quot; by %2:
 
 %3
 </source>
-        <translation type="unfinished"/>
+        <translation>Liedtext für &quot;%1&quot; von %2:
+
+%3
+</translation>
     </message>
 </context>
 <context>
