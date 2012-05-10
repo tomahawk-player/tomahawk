@@ -2690,39 +2690,39 @@ saisissez le numéro PIN ici :</translation>
 <context>
     <name>TomahawkTrayIcon</name>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="49"/>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="263"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="50"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="264"/>
         <source>&amp;Stop Playback after current Track</source>
         <translation>&amp;Stopper la lecture après cette piste</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="66"/>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="101"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="67"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="102"/>
         <source>Hide Tomahawk Window</source>
         <translation>Masquer la fenêtre Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="106"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="107"/>
         <source>Show Tomahawk Window</source>
         <translation>Afficher la fenêtre Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="166"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="167"/>
         <source>Currently not playing.</source>
         <translation>Pas de lecture en cours</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="227"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="228"/>
         <source>Play</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="251"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="252"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="261"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="262"/>
         <source>&amp;Continue Playback after current Track</source>
         <translation>&amp;Continuer la lecture après cette piste</translation>
     </message>
