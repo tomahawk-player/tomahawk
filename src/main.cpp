@@ -121,7 +121,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 int
 main( int argc, char *argv[] )
 {
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();

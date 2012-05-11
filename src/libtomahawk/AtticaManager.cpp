@@ -23,8 +23,6 @@
 #include "Pipeline.h"
 
 #include <attica/downloaditem.h>
-#include <quazip.h>
-#include <quazipfile.h>
 
 #include <QNetworkReply>
 #include <QTemporaryFile>
@@ -451,6 +449,7 @@ AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount 
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
     job->setProperty( "createAccount", autoCreateAccount );
+    job->setProperty( "binarySignature", resolver.attribute("signature"));
 
     job->start();
 }
@@ -487,6 +486,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
         reply->setProperty( "createAccount", job->property( "createAccount" ) );
+        reply->setProperty( "binarySignature", job->property( "binarySignature" ) );
     }
     else
     {
@@ -513,23 +513,50 @@ AtticaManager::payloadFetched()
         f.write( reply->readAll() );
         f.close();
 
-        QString resolverId = reply->property( "resolverId" ).toString();
-        QDir dir( extractPayload( f.fileName(), resolverId ) );
-        QString resolverPath = dir.absoluteFilePath( m_resolverStates[ resolverId ].scriptPath );
-
-        if ( !resolverPath.isEmpty() )
+        bool installedSuccessfully = false;
+        const QString resolverId = reply->property( "resolverId" ).toString();
+        if ( m_resolverStates[ resolverId ].binary )
         {
-            // update with absolute, not relative, path
-            m_resolverStates[ resolverId ].scriptPath = resolverPath;
-
-            if ( reply->property( "createAccount" ).toBool() )
+            // First ensure the signature matches. If we can't verify it, abort!
+            const QString signature = reply->property( "binarySignature" ).toString();
+            // Must have a signature for binary resolvers...
+            Q_ASSERT( !signature.isEmpty() );
+            if ( signature.isEmpty() )
+                return;
+            if ( !TomahawkUtils::verifyFile( f.fileName(), signature ) )
             {
-                // Do the install / add to tomahawk
-                Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, "resolveraccount", true );
-                Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
-                TomahawkSettings::instance()->addAccount( resolver->accountId() );
+                qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f.fileName() << signature;
+                return;
             }
+#ifdef Q_OS_MAC
 
+#elif  Q_OS_WIN
+#endif
+        }
+        else
+        {
+            QDir dir( TomahawkUtils::extractScriptPayload( f.fileName(), resolverId ) );
+            QString resolverPath = dir.absoluteFilePath( m_resolverStates[ resolverId ].scriptPath );
+
+            if ( !resolverPath.isEmpty() )
+            {
+                // update with absolute, not relative, path
+                m_resolverStates[ resolverId ].scriptPath = resolverPath;
+
+                if ( reply->property( "createAccount" ).toBool() )
+                {
+                    // Do the install / add to tomahawk
+                    Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, "resolveraccount", true );
+                    Tomahawk::Accounts::AccountManager::instance()->addAccount( resolver );
+                    TomahawkSettings::instance()->addAccount( resolver->accountId() );
+                }
+
+                installedSuccessfully = true;
+            }
+        }
+
+        if ( installedSuccessfully )
+        {
             m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
@@ -540,75 +567,6 @@ AtticaManager::payloadFetched()
     {
         tLog() << "Failed to download attica payload...:" << reply->errorString();
     }
-}
-
-
-QString
-AtticaManager::extractPayload( const QString& filename, const QString& resolverId ) const
-{
-    // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
-    QuaZip zipFile( filename );
-    if ( !zipFile.open( QuaZip::mdUnzip ) )
-    {
-        tLog() << "Failed to QuaZip open:" << zipFile.getZipError();
-        return QString();
-    }
-
-    if ( !zipFile.goToFirstFile() )
-    {
-        tLog() << "Failed to go to first file in zip archive: " << zipFile.getZipError();
-        return QString();
-    }
-
-    QDir resolverDir = TomahawkUtils::appDataDir();
-    if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
-    {
-        tLog() << "Failed to mkdir resolver save dir: " << TomahawkUtils::appDataDir().absoluteFilePath( QString( "atticaresolvers/%1" ).arg( resolverId ) );
-        return QString();
-    }
-    resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolverId ) );
-    tDebug() << "Installing resolver to:" << resolverDir.absolutePath();
-
-    QuaZipFile fileInZip( &zipFile );
-    do
-    {
-        QuaZipFileInfo info;
-        zipFile.getCurrentFileInfo( &info );
-
-        if ( !fileInZip.open( QIODevice::ReadOnly ) )
-        {
-            tLog() << "Failed to open file inside zip archive:" << info.name << zipFile.getZipName() << "with error:" << zipFile.getZipError();
-            continue;
-        }
-
-        QFile out( resolverDir.absoluteFilePath( fileInZip.getActualFileName() ) );
-
-        QStringList parts = fileInZip.getActualFileName().split( "/" );
-        if ( parts.size() > 1 )
-        {
-            QStringList dirs = parts.mid( 0, parts.size() - 1 );
-            QString dirPath = dirs.join( "/" ); // QDir translates / to \ internally if necessary
-            resolverDir.mkpath( dirPath );
-        }
-
-        // make dir if there is one needed
-        QDir d( fileInZip.getActualFileName() );
-
-        tDebug() << "Writing to output file..." << out.fileName();
-        if ( !out.open( QIODevice::WriteOnly ) )
-        {
-            tLog() << "Failed to open resolver extract file:" << out.errorString() << info.name;
-            continue;
-        }
-
-
-        out.write( fileInZip.readAll() );
-        out.close();
-        fileInZip.close();
-
-    } while ( zipFile.goToNextFile() );
-
-    return resolverDir.absolutePath();
 }
 
 
