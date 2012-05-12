@@ -9,6 +9,8 @@
         <file>data/images/not-loved.png</file>
         <file>data/images/no-album-art-placeholder.png</file>
         <file>data/images/no-artist-image-placeholder.png</file>
+        <file>data/images/artist-placeholder-grid.png</file>
+        <file>data/images/album-placeholder-grid.png</file>
         <file>data/images/track-placeholder.png</file>
         <file>data/images/now-playing-panel.png</file>
         <file>data/images/now-playing-speaker.png</file>

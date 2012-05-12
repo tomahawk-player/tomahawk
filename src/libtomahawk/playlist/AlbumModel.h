@@ -72,6 +72,9 @@ public:
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
 
+    QSize itemSize() const { return m_itemSize; }
+    void setItemSize( const QSize& size ) { m_itemSize = size; }
+
     AlbumItem* findItem( const Tomahawk::artist_ptr& artist ) const;
     AlbumItem* findItem( const Tomahawk::album_ptr& album ) const;
 
@@ -115,6 +118,8 @@ private:
     QString m_title;
     QString m_description;
     bool m_overwriteOnAdd;
+
+    QSize m_itemSize;
 
     Tomahawk::collection_ptr m_collection;
 };

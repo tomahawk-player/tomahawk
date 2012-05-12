@@ -338,11 +338,16 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
                 pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+            else if ( mode == Grid )
+                pixmap = QPixmap( RESPATH "images/album-placeholder-grid.png" );
             else
                 pixmap = QPixmap( RESPATH "images/no-album-no-case.png" );
             break;
 
         case DefaultArtistImage:
+            if ( mode == Grid )
+                pixmap = QPixmap( RESPATH "images/artist-placeholder-grid.png" );
+            else
                 pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
             break;
 

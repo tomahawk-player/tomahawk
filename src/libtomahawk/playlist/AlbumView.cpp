@@ -54,9 +54,10 @@ AlbumView::AlbumView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 16 );
+    setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
+    setStyleSheet( "QListView { background-color: #323435; }" );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
@@ -181,21 +182,22 @@ AlbumView::resizeEvent( QResizeEvent* event )
     if ( autoFitItems() )
     {
 #ifdef Q_WS_X11
-        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0;
+        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
 #else
         int scrollbar = verticalScrollBar()->rect().width();
 #endif
-        int rectWidth = contentsRect().width() - scrollbar - 16 - 3;
+        int rectWidth = contentsRect().width() - scrollbar - 3;
+        int itemWidth = 160;
         QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-        int itemsPerRow = qFloor( rectWidth / ( itemSize.width() + 16 ) );
-        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
-        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+        int itemsPerRow = qFloor( rectWidth / itemWidth );
+//        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
+//        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
 
-        if ( itemsPerRow < 1 )
-            setSpacing( 16 );
-        else
-            setSpacing( newSpacing );
+        int remSpace = rectWidth - ( itemsPerRow * itemWidth );
+        int extraSpace = remSpace / itemsPerRow;
+        int newItemWidth = itemWidth + extraSpace;
+        m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
 
         if ( !m_inited )
         {

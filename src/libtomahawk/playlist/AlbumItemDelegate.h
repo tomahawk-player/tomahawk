@@ -61,6 +61,7 @@ private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
     QPersistentModelIndex m_hoveringOver;
+    QPersistentModelIndex m_hoverIndex;
 
     QPixmap m_shadowPixmap;
 };

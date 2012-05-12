@@ -53,12 +53,14 @@ namespace TomahawkUtils
         NowPlayingSpeaker,
         InfoIcon
     };
+
     enum ImageMode
     {
         Original,
         CoverInCase,
         AvatarInFrame,
-        ScaledCover
+        ScaledCover,
+        Grid
     };
 
 

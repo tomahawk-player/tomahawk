@@ -110,7 +110,7 @@ AlbumModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == Qt::SizeHintRole )
     {
-        return QSize( 116, 150 );
+        return m_itemSize;
     }
 
     AlbumItem* entry = itemFromIndex( index );
