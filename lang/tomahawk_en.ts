@@ -184,12 +184,12 @@ connect and stream from you?</translation>
 <context>
     <name>AlbumView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="159"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="160"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
         <translation>After you have scanned your music collection you will find your latest album additions right here.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="161"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="162"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
         <translation>This collection doesn&apos;t have any recent albums.</translation>
     </message>
