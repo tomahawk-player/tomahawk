@@ -44,6 +44,20 @@
 {
     if ( receiver )
         QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
+
+    // HACK since I can't figure out how to get QuaZip to maintain executable permissions after unzip (nor find the info)
+    // we set the binary to executable here
+
+    NSFileManager *manager = [[[NSFileManager alloc] init] autorelease];
+    NSError* error;
+    NSDictionary* attrs = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:0755], NSFilePosixPermissions, nil];
+
+    NSString* target = [[NSString alloc] initWithBytes:path.toUtf8() length:path.length() encoding: NSUTF8StringEncoding];
+    NSLog(@"Changing permissions to executable for: %@", target);
+    BOOL success = [manager setAttributes:attrs ofItemAtPath:target error:&error];
+    if (!success) {
+        NSLog( @"Failed to do chmod +x of moved resolver! %@", [[error userInfo] objectForKey: NSLocalizedDescriptionKey] );
+    }
 }
 
 - (void)moveFailedWithError:(NSError *)error
@@ -73,7 +87,11 @@ copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiv
 
     MoveDelegate* del = [[MoveDelegate alloc] init];
     [del setReceiver: receiver];
-    [del setMoveTo: dest.absolutePath()];
+
+    // Get the filename + path to save for later
+    QFileInfo srcInfo( srcFile );
+    const QString resultingPath = dest.absoluteFilePath( srcInfo.fileName() );
+    [del setMoveTo: resultingPath];
 
     const QFileInfo info( srcFile );
     const QString destPath = dest.absoluteFilePath( info.fileName() );
