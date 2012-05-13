@@ -452,7 +452,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
-    -L/home/t95012/kde/lib/
+    -L/home/t95012/kde/lib/i386-linux-gnu/
     qtkeychain
 )
 

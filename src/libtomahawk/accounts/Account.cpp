@@ -116,20 +116,31 @@ Account::onError( int errorCode, const QString& error )
 void
 Account::keychainJobFinished(QKeychain::Job* j )
 {
-    QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j );
-    if ( readJob != 0 )
+    if ( j->error() != QKeychain::NoError )
     {
-        QVariantHash var;
-        tLog() << Q_FUNC_INFO << "readJob finished";
-        tLog() << Q_FUNC_INFO << readJob->key();
-        deserializeCredentials( var, readJob->binaryData() );
-        tLog() << Q_FUNC_INFO << var;
+        QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j );
+        if ( readJob != 0 )
+        {
+            tLog() << Q_FUNC_INFO << "readJob finished without errors";
+            deserializeCredentials( m_credentials, readJob->binaryData() );
+            tLog() << Q_FUNC_INFO << readJob->key();
+            tLog() << Q_FUNC_INFO << m_credentials;
+        }
+        else
+        {
+            QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j );
+            if ( writeJob != 0 )
+                tLog() << Q_FUNC_INFO << "writeJob finished";
+            else
+            {
+                QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j );
+                tLog() << Q_FUNC_INFO << "deleteJob finished";
+            }
+        }
     }
     else
-    {
-        QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j );
-        tLog() << Q_FUNC_INFO << "writeJob finished";
-    }
+        tLog() << Q_FUNC_INFO << "Job finished with error: " << j->errorString();
+    j->deleteLater();
 }
 
 
@@ -163,19 +174,20 @@ Account::syncConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->setValue( "accountfriendlyname", m_accountFriendlyName );
     s->setValue( "enabled", m_enabled );
-    s->setValue( "credentials", m_credentials );
+    //s->setValue( "credentials", m_credentials );
     s->setValue( "configuration", m_configuration );
     s->setValue( "acl", m_acl );
     s->setValue( "types", m_types );
     s->endGroup();
+    s->sync();
     QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
     j->setKey( m_accountId );
+    j->setAutoDelete( false );
     QByteArray bData;
     serializeCredentials( m_credentials, bData );
     j->setBinaryData( bData );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
-    s->sync();
 }
 
 
@@ -187,15 +199,16 @@ Account::loadFromConfig( const QString& accountId )
     s->beginGroup( "accounts/" + m_accountId );
     m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
     m_enabled = s->value( "enabled", false ).toBool();
-    m_credentials = s->value( "credentials", QVariantHash() ).toHash();
+    //m_credentials = s->value( "credentials", QVariantHash() ).toHash();
     m_configuration = s->value( "configuration", QVariantHash() ).toHash();
     m_acl = s->value( "acl", QVariantMap() ).toMap();
     m_types = s->value( "types", QStringList() ).toStringList();
+    s->endGroup();
     QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), this );
     j->setKey( m_accountId );
+    j->setAutoDelete( false );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
-    s->endGroup();
 }
 
 
@@ -206,12 +219,17 @@ Account::removeFromConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->remove( "accountfriendlyname" );
     s->remove( "enabled" );
-    s->remove( "credentials" );
+    //s->remove( "credentials" );
     s->remove( "configuration" );
     s->remove( "acl" );
     s->remove( "types" );
     s->endGroup();
     s->remove( "accounts/" + m_accountId );
+    QKeychain::DeletePasswordJob* j = new QKeychain::DeletePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    j->setKey( m_accountId );
+    j->setAutoDelete( false );
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+    j->start();
 }
 
 
