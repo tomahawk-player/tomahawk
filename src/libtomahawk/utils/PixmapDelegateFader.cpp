@@ -51,12 +51,14 @@ PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize&
 {
     if ( !m_artist.isNull() )
     {
-        connect( m_artist.data(), SIGNAL( coverChanged() ), this, SLOT( artistChanged() ) );
+        connect( m_artist.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_artist.data(), SIGNAL( coverChanged() ), SLOT( artistChanged() ) );
         m_currentReference = m_artist->cover( size, forceLoad );
     }
 
     init();
 }
+
 
 PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& size, TomahawkUtils::ImageMode mode, bool forceLoad )
     : m_album( album )
@@ -68,7 +70,8 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
 {
     if ( !m_album.isNull() )
     {
-        connect( m_album.data(), SIGNAL( coverChanged() ), this, SLOT( albumChanged() ) );
+        connect( m_album.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_album.data(), SIGNAL( coverChanged() ), SLOT( albumChanged() ) );
         m_currentReference = m_album->cover( size, forceLoad );
     }
 
@@ -86,7 +89,8 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
 {
     if ( !m_track.isNull() )
     {
-        connect( m_track.data(), SIGNAL( coverChanged() ), this, SLOT( trackChanged() ) );
+        connect( m_track.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_track.data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
         m_currentReference = m_track->cover( size, forceLoad );
     }
 
@@ -96,7 +100,6 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
 
 PixmapDelegateFader::~PixmapDelegateFader()
 {
-
 }
 
 
@@ -114,7 +117,7 @@ PixmapDelegateFader::init()
         else if ( !m_artist.isNull() )
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
         else if ( !m_track.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
 
         return;
     }
@@ -135,6 +138,7 @@ PixmapDelegateFader::albumChanged()
 
     QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_album->cover( m_size ) ) );
 }
+
 
 void
 PixmapDelegateFader::artistChanged()

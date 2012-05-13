@@ -97,7 +97,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->enableProxyCheckBox->setChecked( useProxy );
     ui->proxyButton->setEnabled( useProxy );
 
-    
+
     createIcons();
 #ifdef Q_WS_X11
     ui->listWidget->setFrameShape( QFrame::StyledPanel );
@@ -142,6 +142,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
     ui->accountsView->setModel( m_accountProxy );
@@ -262,7 +263,7 @@ SettingsDialog::~SettingsDialog()
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
-    
+
     delete ui;
 }
 

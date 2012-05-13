@@ -141,6 +141,9 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
 
     QVariantMap map = pushInfoPair.second.toMap();
 
+    if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+        return;
+
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 

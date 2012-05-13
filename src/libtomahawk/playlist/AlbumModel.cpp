@@ -110,7 +110,7 @@ AlbumModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == Qt::SizeHintRole )
     {
-        return QSize( 116, 150 );
+        return m_itemSize;
     }
 
     AlbumItem* entry = itemFromIndex( index );
@@ -389,6 +389,35 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     foreach ( const artist_ptr& artist, trimmedArtists )
     {
         albumitem = new AlbumItem( artist, m_rootItem );
+        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+
+        connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    emit endInsertRows();
+    emit itemCountChanged( rowCount( QModelIndex() ) );
+}
+
+
+void
+AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
+{
+    emit loadingFinished();
+
+    if ( m_overwriteOnAdd )
+        clear();
+
+    int c = rowCount( QModelIndex() );
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + queries.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    AlbumItem* albumitem;
+    foreach ( const query_ptr& query, queries )
+    {
+        albumitem = new AlbumItem( query, m_rootItem );
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );

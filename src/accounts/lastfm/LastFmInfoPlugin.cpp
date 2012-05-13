@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LastFmPlugin.h"
+#include "LastFmInfoPlugin.h"
 
 #include <QDir>
 #include <QSettings>
@@ -40,18 +40,18 @@ using namespace Tomahawk::Accounts;
 using namespace Tomahawk::InfoSystem;
 
 
-LastFmPlugin::LastFmPlugin( LastFmAccount* account )
+LastFmInfoPlugin::LastFmInfoPlugin( LastFmAccount* account )
     : InfoPlugin()
     , m_account( account )
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities << InfoTrackSimilars;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 }
 
 
 void
-LastFmPlugin::init()
+LastFmInfoPlugin::init()
 {
     if ( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() && thread() != Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() )
     {
@@ -84,7 +84,7 @@ LastFmPlugin::init()
 }
 
 
-LastFmPlugin::~LastFmPlugin()
+LastFmInfoPlugin::~LastFmInfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     delete m_scrobbler;
@@ -93,7 +93,7 @@ LastFmPlugin::~LastFmPlugin()
 
 
 void
-LastFmPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     emit info( requestData, QVariant() );
     return;
@@ -101,7 +101,7 @@ LastFmPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-LastFmPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
@@ -128,6 +128,11 @@ LastFmPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         case InfoChartCapabilities:
             fetchChartCapabilities( requestData );
             break;
+            
+        case InfoTrackSimilars:
+            fetchSimilarTracks( requestData );
+            break;
+
         default:
             dataError( requestData );
     }
@@ -135,7 +140,7 @@ LastFmPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-LastFmPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
+LastFmInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     switch ( pushData.type )
     {
@@ -159,21 +164,32 @@ LastFmPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 
 
 void
-LastFmPlugin::nowPlaying( const QVariant &input )
+LastFmInfoPlugin::nowPlaying( const QVariant &input )
 {
-    if ( !input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
+    m_track = lastfm::MutableTrack();
+    if ( !input.canConvert< QVariantMap >() )
     {
-        tLog() << "LastFmPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
-        if ( !m_scrobbler )
-            tLog() << "No scrobbler!";
+        tDebug() << Q_FUNC_INFO << "Failed to convert data to a QVariantMap";
         return;
     }
 
-    InfoStringHash hash = input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    QVariantMap map = input.toMap();
+    if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+        return;
+
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
+    {
+        tLog() << Q_FUNC_INFO << "LastFmInfoPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
+        if ( !m_scrobbler )
+            tLog() << Q_FUNC_INFO << "No scrobbler!";
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
         return;
 
-    m_track = lastfm::MutableTrack();
     m_track.stamp();
 
     m_track.setTitle( hash["title"] );
@@ -188,7 +204,7 @@ LastFmPlugin::nowPlaying( const QVariant &input )
 
 
 void
-LastFmPlugin::scrobble()
+LastFmInfoPlugin::scrobble()
 {
     if ( !m_scrobbler || m_track.isNull() )
         return;
@@ -200,13 +216,13 @@ LastFmPlugin::scrobble()
 
 
 void
-LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
+LastFmInfoPlugin::sendLoveSong( const InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 
     if ( !input.toMap().contains( "trackinfo" ) || !input.toMap()[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
-        tLog() << "LastFmPlugin::nowPlaying cannot convert input!";
+        tLog() << "LastFmInfoPlugin::nowPlaying cannot convert input!";
         return;
     }
 
@@ -236,7 +252,7 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 
 
 void
-LastFmPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -258,7 +274,30 @@ LastFmPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData request
 
 
 void
-LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
+{
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
+        dataError( requestData );
+        return;
+    }
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "artist" ) || !hash.contains( "track" ) )
+    {
+        dataError( requestData );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria["artist"] = hash["artist"];
+    criteria["track"] = hash["track"];
+
+    emit getCachedInfo( criteria, 2419200000, requestData );
+}
+
+
+void
+LastFmInfoPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -278,8 +317,9 @@ LastFmPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData 
     emit getCachedInfo( criteria, 2419200000, requestData );
 }
 
+
 void
-LastFmPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -299,8 +339,9 @@ LastFmPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     emit getCachedInfo( criteria, 0, requestData );
 }
 
+
 void
-LastFmPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -313,8 +354,9 @@ LastFmPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requ
     emit getCachedInfo( criteria, 0, requestData );
 }
 
+
 void
-LastFmPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -337,7 +379,7 @@ LastFmPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-LastFmPlugin::fetchArtistImages( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchArtistImages( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -359,7 +401,7 @@ LastFmPlugin::fetchArtistImages( Tomahawk::InfoSystem::InfoRequestData requestDa
 
 
 void
-LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !TomahawkUtils::nam() )
     {
@@ -443,6 +485,19 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
             return;
         }
 
+        case InfoTrackSimilars:
+        {
+            lastfm::MutableTrack t;
+            t.setArtist( criteria["artist"] );
+            t.setTitle( criteria["track"] );
+
+            QNetworkReply* reply = t.getSimilar();
+            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( similarTracksReturned() ) );
+            return;
+        }
+
         case InfoArtistSongs:
         {
             lastfm::Artist a( criteria["artist"] );
@@ -504,7 +559,7 @@ LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSy
 
 
 void
-LastFmPlugin::similarArtistsReturned()
+LastFmInfoPlugin::similarArtistsReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -542,7 +597,54 @@ LastFmPlugin::similarArtistsReturned()
 
 
 void
-LastFmPlugin::chartReturned()
+LastFmInfoPlugin::similarTracksReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    QMap< int, QPair< QString, QString > > similarTracks = lastfm::Track::getSimilar( reply );
+
+    QStringList sortedArtists;
+    QStringList sortedTracks;
+    QStringList sortedScores;
+    QStringList al;
+    QStringList tl;
+    QStringList sl;
+
+    QPair< QString, QString > track;
+    foreach ( track, similarTracks.values() )
+    {
+        tl << track.first;
+        al << track.second;
+    }
+    foreach ( int score, similarTracks.keys() )
+        sl << QString::number( score );
+
+    for ( int i = tl.count() - 1; i >= 0; i-- )
+    {
+        sortedTracks << tl.at( i );
+        sortedArtists << al.at( i );
+        sortedScores << sl.at( i );
+    }
+
+    QVariantMap returnedData;
+    returnedData["tracks"] = sortedTracks;
+    returnedData["artists"] = sortedArtists;
+    returnedData["score"] = sortedScores;
+
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+
+    emit info( requestData, returnedData );
+
+    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+    Tomahawk::InfoSystem::InfoStringHash criteria;
+    criteria["artist"] = origData["artist"];
+    criteria["track"] = origData["track"];
+    emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+}
+
+
+void
+LastFmInfoPlugin::chartReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -555,7 +657,8 @@ LastFmPlugin::chartReturned()
     {
         QList<lastfm::Track> tracks = parseTrackList( reply );
         QList<InfoStringHash> top_tracks;
-        foreach( const lastfm::Track &t, tracks ) {
+        foreach( const lastfm::Track& t, tracks )
+        {
             InfoStringHash pair;
             pair[ "artist" ] = t.artist().toString();
             pair[ "track" ] = t.title();
@@ -587,7 +690,7 @@ LastFmPlugin::chartReturned()
 
 
 void
-LastFmPlugin::topTracksReturned()
+LastFmInfoPlugin::topTracksReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -609,7 +712,7 @@ LastFmPlugin::topTracksReturned()
 
 
 void
-LastFmPlugin::coverArtReturned()
+LastFmInfoPlugin::coverArtReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
@@ -662,7 +765,7 @@ LastFmPlugin::coverArtReturned()
 
 
 void
-LastFmPlugin::artistImagesReturned()
+LastFmInfoPlugin::artistImagesReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
@@ -713,7 +816,7 @@ LastFmPlugin::artistImagesReturned()
 
 
 void
-LastFmPlugin::settingsChanged()
+LastFmInfoPlugin::settingsChanged()
 {
     if ( m_account.isNull() )
         return;
@@ -750,7 +853,7 @@ LastFmPlugin::settingsChanged()
 
 
 void
-LastFmPlugin::onAuthenticated()
+LastFmInfoPlugin::onAuthenticated()
 {
     QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
     if ( !authJob || m_account.isNull() )
@@ -789,14 +892,14 @@ LastFmPlugin::onAuthenticated()
 
 
 void
-LastFmPlugin::createScrobbler()
+LastFmInfoPlugin::createScrobbler()
 {
     if ( m_account.isNull() || lastfm::ws::Username.isEmpty() )
         return;
 
     if ( m_account.data()->sessionKey().isEmpty() ) // no session key, so get one
     {
-        qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
+        qDebug() << "LastFmInfoPlugin::createScrobbler Session key is empty";
         QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
 
         QMap<QString, QString> query;
@@ -809,7 +912,7 @@ LastFmPlugin::createScrobbler()
     }
     else
     {
-        qDebug() << "LastFmPlugin::createScrobbler Already have session key";
+        qDebug() << "LastFmInfoPlugin::createScrobbler Already have session key";
         lastfm::ws::SessionKey = m_account.data()->sessionKey();
 
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
@@ -818,7 +921,7 @@ LastFmPlugin::createScrobbler()
 
 
 QList<lastfm::Track>
-LastFmPlugin::parseTrackList( QNetworkReply* reply )
+LastFmInfoPlugin::parseTrackList( QNetworkReply* reply )
 {
     QList<lastfm::Track> tracks;
     try

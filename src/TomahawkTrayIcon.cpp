@@ -29,6 +29,7 @@
 #include "Query.h"
 
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 #include <ActionCollection.h>
 
 
@@ -198,13 +199,13 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
         case QSystemTrayIcon::Trigger:
         {
             TomahawkWindow* mainwindow = APP->mainWindow();
-            if ( mainwindow->isVisible() )
+            if (mainwindow->isActiveWindow())
             {
                 mainwindow->hide();
             }
             else
             {
-                mainwindow->show();
+                TomahawkUtils::bringToFront();
             }
         }
         break;

@@ -73,6 +73,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoTrackDanceability = 20,
     InfoTrackTempo = 21,
     InfoTrackLoudness = 22,
+    InfoTrackSimilars = 23, // cached -- do not change
 
     InfoArtistID = 25,
     InfoArtistName = 26,

@@ -534,6 +534,12 @@ SourceItem::latestAdditionsClicked()
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
         raModel->setStyle( TrackModel::Large );
+        raModel->setTitle( tr( "Latest Additions" ) );
+        
+        if ( m_source->isLocal() )
+            raModel->setDescription( tr( "Latest additions to your collection" ) );
+        else
+            raModel->setDescription( tr( "Latest additions to %1's collection" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
@@ -568,6 +574,12 @@ SourceItem::recentPlaysClicked()
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
         raModel->setStyle( TrackModel::Large );
+        raModel->setTitle( tr( "Recently Played Tracks" ) );
+
+        if ( m_source->isLocal() )
+            raModel->setDescription( tr( "Your recently played tracks" ) );
+        else
+            raModel->setDescription( tr( "%1's recently played tracks" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );

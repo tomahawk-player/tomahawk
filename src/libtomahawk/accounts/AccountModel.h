@@ -96,6 +96,8 @@ signals:
 
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling( const QPersistentModelIndex& idx );
+    void errorInstalling( const QPersistentModelIndex& idx );
+
 private slots:
     void loadData();
 
@@ -103,6 +105,7 @@ private slots:
     void accountRemoved( Tomahawk::Accounts::Account* );
     void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
+    void resolverInstallFailed( const QString& resolverId );
 private:
     QList< AccountModelNode* > m_accounts;
     QSet< QString > m_waitingForAtticaInstall;

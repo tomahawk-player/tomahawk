@@ -409,15 +409,15 @@ proxyFactory( bool makeClone, bool noMutexLocker )
     {
         if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
             return s_threadProxyFactoryHash[ QThread::currentThread() ];
-
-        if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-            return 0;
     }
 
     // create a new proxy factory for this thread
-    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    *newProxyFactory = *mainProxyFactory;
+    if ( s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    {
+        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+        *newProxyFactory = *mainProxyFactory;
+    }
 
     if ( !makeClone )
         s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
@@ -783,7 +783,7 @@ extractScriptPayload( const QString& filename, const QString& resolverId )
 
 
 bool
-TomahawkUtils::unzipFileInFolder( const QString &zipFileName, const QDir &folder )
+unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 {
     Q_ASSERT( !zipFileName.isEmpty() );
     Q_ASSERT( folder.exists() );
@@ -878,7 +878,7 @@ extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QO
     qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
 
     copyWithAuthentication( src, dest, 0 );
-#elif  Q_OS_WIN
+#elif  defined(Q_OS_WIN)
 #endif
 
     // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..

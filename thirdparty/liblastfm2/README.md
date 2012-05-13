@@ -4,19 +4,17 @@ liblastfm is a collection of libraries to help you integrate Last.fm services
 into your rich desktop software. It is officially supported software developed
 by Last.fm staff.
 
-Max Howell   http://twitter.com/mxcl
-Jono Cole    http://twitter.com/jonocole
-Doug Mansell http://twitter.com/dougma
+Michael Coffey  http://twitter.com/eartle
 
-Fork it: http://github.com/mxcl/liblastfm
+Fork it: http://github.com/eartle/liblastfm
 
 
 Dependencies
 ============
 liblastfm dynamically links to:
 
-* Qt 4.4
-  http://www.qtsoftware.com
+* Qt 4.8
+  http://qt.nokia.com/
 * FFTW 3.2
   Compiled with single precision
   http://www.fftw.org
@@ -31,14 +29,6 @@ Mac OS X
     sudo port upgrade installed
     sudo port install libsamplerate fftw-3 qt4-mac-devel
 
-qt4-mac-devel will take a long time to build. So you may want to install the
-Trolltech binary package instead.
-
-MacPorts carries liblastfm now, so you may have downloaded this package simply
-to perform this next line:
-
-    sudo port install liblastfm
-
 Linux/*NIX
 ----------
 Do something like this:
@@ -49,11 +39,11 @@ Additionally on Linux the configure process requires lsb_release. This is
 usually already installed (correct me if I'm wrong).
 
 Please note, we have only tested on Linux, but we think it'll work on all
-varieties of UNIX. If it doesn't, report the bug to mxcl on GitHub.
+varieties of UNIX. If it doesn't, report the bug to eartle on GitHub.
 
 Windows
 -------
-Install Ruby. Install Visual Studio 2005 or higher. Install Qt. Install the
+Install Ruby. Install Visual Studio 2008 or higher. Install Qt. Install the
 Windows Server 2003 Platform SDK r2:
 
 http://www.microsoft.com/Downloads/details.aspx?FamilyID=484269e2-3b89-47e3-8eb7-1f2be6d7123a
@@ -69,12 +59,10 @@ see the next section.
 
 Installing liblastfm
 ====================
-    ruby configure --release --prefix /usr/local && make && sudo make install
+    qmake && make && sudo make install
 
 Packaging liblastfm
 -------------------
-DESTDIR is supported.
-
 liblastfm builds to two dynamic libraries (liblastfm.so and
 liblastfm_fingerprint.so). liblastfm.so links only to Qt, but the
 fingerprinting part has additional dependencies. So ideally, you would

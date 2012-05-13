@@ -72,6 +72,9 @@ public:
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
 
+    QSize itemSize() const { return m_itemSize; }
+    void setItemSize( const QSize& size ) { m_itemSize = size; }
+
     AlbumItem* findItem( const Tomahawk::artist_ptr& artist ) const;
     AlbumItem* findItem( const Tomahawk::album_ptr& album ) const;
 
@@ -91,6 +94,7 @@ public slots:
 
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
     void addArtists( const QList<Tomahawk::artist_ptr>& artists );
+    void addQueries( const QList<Tomahawk::query_ptr>& queries );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
@@ -114,6 +118,8 @@ private:
     QString m_title;
     QString m_description;
     bool m_overwriteOnAdd;
+
+    QSize m_itemSize;
 
     Tomahawk::collection_ptr m_collection;
 };
