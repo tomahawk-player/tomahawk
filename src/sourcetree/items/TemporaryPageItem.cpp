@@ -20,6 +20,7 @@
 #include "ViewManager.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
+#include "widgets/infowidgets/TrackInfoWidget.h"
 #include "widgets/SearchWidget.h"
 
 using namespace Tomahawk;
@@ -34,6 +35,8 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
         m_icon = QIcon( RESPATH "images/artist-icon.png" );
     else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/album-icon.png" );
+    else if ( dynamic_cast< TrackInfoWidget* >( page ) )
+        m_icon = QIcon( RESPATH "images/track-icon.png" );
     else if ( dynamic_cast< SearchWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/search-icon.png" );
 
