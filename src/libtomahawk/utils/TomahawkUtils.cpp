@@ -42,7 +42,7 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     #include <windows.h>
     #include <shlobj.h>
 #endif
@@ -732,9 +732,6 @@ verifyFile( const QString &filePath, const QString &signature )
         return false;
     }
 
-    QCA::Hash fileHash = QCA::Hash( "sha1 ");
-    //QCA::SecureArray fileData( toVerify.readAll() );
-    //fileHash.update( fileData );
     const QByteArray fileHashData = QCA::Hash( "sha1" ).hash( toVerify.readAll() ).toByteArray();
     toVerify.close();
 
@@ -765,18 +762,6 @@ QString
 extractScriptPayload( const QString& filename, const QString& resolverId )
 {
     // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
-    QuaZip zipFile( filename );
-    if ( !zipFile.open( QuaZip::mdUnzip ) )
-    {
-        tLog() << "Failed to QuaZip open:" << zipFile.getZipError();
-        return QString();
-    }
-
-    if ( !zipFile.goToFirstFile() )
-    {
-        tLog() << "Failed to go to first file in zip archive: " << zipFile.getZipError();
-        return QString();
-    }
 
     QDir resolverDir = appDataDir();
     if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
@@ -785,7 +770,38 @@ extractScriptPayload( const QString& filename, const QString& resolverId )
         return QString();
     }
     resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolverId ) );
-    tDebug() << "Installing resolver to:" << resolverDir.absolutePath();
+
+
+    if ( !unzipFileInFolder( filename, resolverDir ) )
+    {
+        qWarning() << "Failed to unzip resolver. Ooops.";
+        return QString();
+    }
+
+    return resolverDir.absolutePath();
+}
+
+
+bool
+TomahawkUtils::unzipFileInFolder( const QString &zipFileName, const QDir &folder )
+{
+    Q_ASSERT( !zipFileName.isEmpty() );
+    Q_ASSERT( folder.exists() );
+
+    QuaZip zipFile( zipFileName );
+    if ( !zipFile.open( QuaZip::mdUnzip ) )
+    {
+        qWarning() << "Failed to QuaZip open:" << zipFile.getZipError();
+        return false;
+    }
+
+    if ( !zipFile.goToFirstFile() )
+    {
+        tLog() << "Failed to go to first file in zip archive: " << zipFile.getZipError();
+        return false;
+    }
+
+    tDebug() << "Unzipping files to:" << folder.absolutePath();
 
     QuaZipFile fileInZip( &zipFile );
     do
@@ -799,23 +815,21 @@ extractScriptPayload( const QString& filename, const QString& resolverId )
             continue;
         }
 
-        QFile out( resolverDir.absoluteFilePath( fileInZip.getActualFileName() ) );
+        QFile out( folder.absoluteFilePath( fileInZip.getActualFileName() ) );
 
+        // make dir if there is one needed
         QStringList parts = fileInZip.getActualFileName().split( "/" );
         if ( parts.size() > 1 )
         {
             QStringList dirs = parts.mid( 0, parts.size() - 1 );
             QString dirPath = dirs.join( "/" ); // QDir translates / to \ internally if necessary
-            resolverDir.mkpath( dirPath );
+            folder.mkpath( dirPath );
         }
-
-        // make dir if there is one needed
-        QDir d( fileInZip.getActualFileName() );
 
         tDebug() << "Writing to output file..." << out.fileName();
         if ( !out.open( QIODevice::WriteOnly ) )
         {
-            tLog() << "Failed to open resolver extract file:" << out.errorString() << info.name;
+            tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;
             continue;
         }
 
@@ -826,17 +840,50 @@ extractScriptPayload( const QString& filename, const QString& resolverId )
 
     } while ( zipFile.goToNextFile() );
 
-    return resolverDir.absolutePath();
+    return true;
 }
 
 
-#if !defined(Q_OS_MAC) // && !defined(Q_OS_WIN)
 void
 extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QObject* )
 {
+#if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
+    Q_ASSERT( false );
+    qWarning() << "NO SUPPORT YET FOR LINUX BINARY RESOLVERS!";
+    return;
+#endif
+
+    // Unzip the file.
+    QFileInfo info( zipFilename );
+    QDir tmpDir = QDir::tempPath();
+    if  ( !tmpDir.mkdir( info.baseName() ) )
+    {
+        qWarning() << "Failed to create temporary directory to unzip in:" << tmpDir.absolutePath();
+        return;
+    }
+    tmpDir.cd( info.baseName() );
+    TomahawkUtils::unzipFileInFolder( info.absoluteFilePath(), tmpDir );
+
+    // Platform-specific handling of resolver payload now. We know it's good and we unzipped it
+#ifdef Q_OS_MAC
+    // On OSX it just contains 1 file, the resolver executable itself. For now. We just copy it to
+    // the Tomahawk.app/Contents/MacOS/ folder alongside the Tomahawk executable.
+    const QString dest = QCoreApplication::applicationDirPath();
+    // Find the filename
+    const QDir toList( tmpDir.absolutePath() );
+    const QStringList files = toList.entryList( QStringList(), QDir::Files );
+    Q_ASSERT( files.size() == 1 );
+
+    const QString src = toList.absoluteFilePath( files.first() );
+    qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
+
+    copyWithAuthentication( src, dest, 0 );
+#elif  Q_OS_WIN
+#endif
+
     // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..
     Q_ASSERT( false );
 }
-#endif
+
 
 } // ns

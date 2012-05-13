@@ -24,6 +24,7 @@
 
 #include <attica/downloaditem.h>
 
+#include <QCoreApplication>
 #include <QNetworkReply>
 #include <QTemporaryFile>
 #include <QDir>
@@ -357,6 +358,7 @@ AtticaManager::binaryResolversList( BaseJob* j )
         if ( !c.attribute( "typeid" ).isEmpty() && c.attribute( "typeid" ) == platform )
         {
             // We have a binary resolver for this platform
+            qDebug() << "WE GOT A BINARY RESOLVER:" << c.id() << c.name() << c.attribute( "signature" );
             m_resolvers.append( c );
             if ( !m_resolverStates.contains( c.id() ) )
             {
@@ -528,10 +530,8 @@ AtticaManager::payloadFetched()
                 qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f.fileName() << signature;
                 return;
             }
-#ifdef Q_OS_MAC
 
-#elif  Q_OS_WIN
-#endif
+            TomahawkUtils::extractBinaryResolver( f.fileName(), resolverId, 0 );
         }
         else
         {

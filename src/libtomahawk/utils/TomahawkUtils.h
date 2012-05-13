@@ -139,10 +139,15 @@ namespace TomahawkUtils
     
     DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
     DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
+    DLLEXPORT bool unzipFileInFolder( const QString& zipFileName, const QDir& folder );
+
 
     // Extracting may be asynchronous, pass in a receiver object with the following slots:
     //  extractSucceeded( const QString& path ) and extractFailed() to be notified/
     DLLEXPORT void extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QObject* receiver );
+
+    // Used by the above, not exported
+    void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
 
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.

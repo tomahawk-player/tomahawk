@@ -21,6 +21,7 @@
 #include "TomahawkUtils_Mac.h"
 #include "mac/FileHelpers.h"
 
+#include <QDir>
 #include <QTemporaryFile>
 
 #import <AppKit/NSApplication.h>
@@ -41,12 +42,14 @@
 
 - (void)moveFinished
 {
-    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
+    if ( receiver )
+        QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
 }
 
 - (void)moveFailedWithError:(NSError *)error
 {
-    QMetaObject::invokeMethod(receiver, "installFailed", Qt::DirectConnection);
+    if ( receiver )
+        QMetaObject::invokeMethod(receiver, "installFailed", Qt::DirectConnection);
 }
 @end
 
@@ -58,35 +61,27 @@ bringToFront() {
     [NSApp activateIgnoringOtherApps:YES];
 }
 
-
 void
-extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QObject* receiver )
+copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver )
 {
-    /**
-      On OS X, we have to do the following:
-      2) Extract file in temporary location
-      3) Authenticate to be able to have write access to the /Applications folder
-      4) Copy the contents of the zipfile to the Tomahawk.app/Contents/MacOS/ folder
-      5) Call result slots on receiver object
-    */
+  /**
+    On OS X, we have to do the following:
+    1) Authenticate to be able to have write access to the /Applications folder
+    2) Copy file to dest
+    5) Call result slots on receiver object
+  */
 
     MoveDelegate* del = [[MoveDelegate alloc] init];
     [del setReceiver: receiver];
+    [del setMoveTo: dest.absolutePath()];
 
-    // Unzip in temporary folder and copy the contents to MacOS/
-    NSError* err = NULL;
-    NSFileManager *manager = [[[NSFileManager alloc] init] autorelease];
-    NSURL* tempDir = [manager URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:NULL create:YES error:&err];
-    if ( err )
-    {
-        qDebug() << "GOT ERROR trying to create temp dir to unzip in...:" << err;
-        return;
-    }
+    const QFileInfo info( srcFile );
+    const QString destPath = dest.absoluteFilePath( info.fileName() );
 
-    qDebug() << "Using temporary directory:" << [tempDir absoluteString];
-
-
-//    [del setMoveTo: to];
+    NSString* src = [[NSString alloc] initWithBytes: srcFile.toUtf8() length: srcFile.length() encoding: NSUTF8StringEncoding];
+    NSString* destStr = [[NSString alloc] initWithBytes: destPath.toUtf8() length: destPath.length() encoding: NSUTF8StringEncoding];
+    [FileHelpers moveFile:src to:destStr withDelegate:del];
 }
+
 
 }
