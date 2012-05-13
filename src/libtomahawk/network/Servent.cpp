@@ -452,6 +452,14 @@ Servent::socketConnected()
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket: " << sock << ", hostaddr: " << sock->peerAddress() << ", hostname: " << sock->peerName();
 
+    if ( sock->_conn.isNull() )
+    {
+        sock->close();
+        sock->deleteLater();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Socket's connection was null, could have timed out or been given an invalid address";
+        return;
+    }
+    
     Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
 }
