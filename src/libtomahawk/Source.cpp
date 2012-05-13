@@ -31,9 +31,11 @@
 #include "database/Database.h"
 
 #include <QCoreApplication>
+#include <QBuffer>
 
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
 
 using namespace Tomahawk;
@@ -125,12 +127,35 @@ Source::setAvatar( const QPixmap& avatar )
 {
     delete m_avatar;
     m_avatar = new QPixmap( avatar );
+    m_fancyAvatar = 0;
+
+    QByteArray ba;
+    QBuffer buffer( &ba );
+    buffer.open( QIODevice::WriteOnly );
+    avatar.save( &buffer, "PNG" );
+
+    tDebug() << Q_FUNC_INFO << friendlyName() << m_username << ba.count();
+    TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
 }
 
 
 QPixmap
 Source::avatar( AvatarStyle style, const QSize& size ) const
 {
+    if ( !m_avatar )
+    {
+        m_avatar = new QPixmap();
+        QByteArray ba = TomahawkUtils::Cache::instance()->getData( "Sources", m_username ).toByteArray();
+
+        if ( ba.count() )
+            m_avatar->loadFromData( ba );
+        if ( m_avatar->isNull() )
+        {
+            delete m_avatar;
+            m_avatar = 0;
+        }
+    }
+
     if ( style == FancyStyle && m_avatar && !m_fancyAvatar )
         m_fancyAvatar = new QPixmap( TomahawkUtils::createAvatarFrame( QPixmap( *m_avatar ) ) );
 

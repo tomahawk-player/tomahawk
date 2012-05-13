@@ -157,7 +157,7 @@ private:
     QList< QSharedPointer<DatabaseCommand> > m_cmds;
     int m_commandCount;
 
-    QPixmap* m_avatar;
+    mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
     mutable QHash< int, QPixmap > m_coverCache;
 
