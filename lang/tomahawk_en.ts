@@ -2617,33 +2617,33 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="242"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="293"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="267"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanning (%L1 tracks)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="244"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="269"/>
         <source>Scanning</source>
         <translation>Scanning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="278"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="303"/>
         <source>Checking</source>
         <translation>Checking</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
         <source>Fetching</source>
         <translation>Fetching</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
         <source>Parsing</source>
         <translation>Parsing</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Saving (%1%)</source>
         <translation>Saving (%1%)</translation>
     </message>
