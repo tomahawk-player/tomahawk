@@ -40,7 +40,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     layout()->setSpacing( 0 );
     ui->headerWidget->setStyleSheet( "QWidget#headerWidget { background-image: url(" RESPATH "images/playlist-header-tiled.png); }" );
-    ui->tracksWidget->setStyleSheet( "background-color: #bababa;" );
+    ui->tracksWidget->setStyleSheet( "background-color: #323435;" );
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
 
     QFont f = font();
