@@ -88,7 +88,6 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     loadInfoPlugins( findInfoPlugins() );
     
 #ifndef ENABLE_HEADLESS
-    //addInfoPlugin( InfoPluginPtr( new EchoNestPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
