@@ -72,7 +72,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      accounts/lastfm/LastFmAccount.cpp
      accounts/lastfm/LastFmConfig.cpp
-     accounts/lastfm/LastFmPlugin.cpp
+     accounts/lastfm/LastFmInfoPlugin.cpp
 
      accounts/spotify/SpotifyAccount.cpp
      accounts/spotify/SpotifyAccountConfig.cpp

@@ -42,13 +42,13 @@ namespace Accounts
 namespace InfoSystem
 {
 
-class LastFmPlugin : public InfoPlugin
+class LastFmInfoPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    LastFmPlugin( Accounts::LastFmAccount* account );
-    virtual ~LastFmPlugin();
+    LastFmInfoPlugin( Accounts::LastFmAccount* account );
+    virtual ~LastFmInfoPlugin();
 
 public slots:
     void init();
@@ -60,6 +60,7 @@ public slots:
     void similarArtistsReturned();
     void topTracksReturned();
     void chartReturned();
+    void similarTracksReturned();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -74,6 +75,7 @@ private:
     void fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );

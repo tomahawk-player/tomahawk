@@ -409,15 +409,15 @@ proxyFactory( bool makeClone, bool noMutexLocker )
     {
         if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
             return s_threadProxyFactoryHash[ QThread::currentThread() ];
-
-        if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-            return 0;
     }
 
     // create a new proxy factory for this thread
-    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    *newProxyFactory = *mainProxyFactory;
+    if ( s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    {
+        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+        *newProxyFactory = *mainProxyFactory;
+    }
 
     if ( !makeClone )
         s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;

@@ -454,6 +454,46 @@ lastfm::Track::params( const QString& method, bool use_mbid ) const
 }
 
 
+QNetworkReply* 
+lastfm::Track::getSimilar( int limit ) const
+{
+    QMap<QString, QString> map = params("getSimilar");
+    if ( limit != -1 ) map["limit"] = QString::number( limit );
+    map["autocorrect"] = "1";
+    return ws::get( map );
+}
+
+
+QMap<int, QPair< QString, QString > > /* static */
+lastfm::Track::getSimilar( QNetworkReply* r )
+{
+    QMap<int, QPair< QString, QString > > tracks;
+    try
+    {
+        QByteArray b = r->readAll();
+        XmlQuery lfm = b;
+        foreach (XmlQuery e, lfm.children( "track" ))
+        {
+            QPair< QString, QString > track;
+            track.first = e["name"].text();
+
+            XmlQuery artist = e.children( "artist" ).first();
+            track.second = artist["name"].text();
+
+            // convert floating percentage to int in range 0 to 10,000
+            int const match = e["match"].text().toFloat() * 100;
+            tracks.insertMulti( match, track );
+        }
+    }
+    catch (ws::ParseError& e)
+    {
+        qWarning() << e.what();
+    }
+    
+    return tracks;
+}
+
+
 QNetworkReply*
 lastfm::Track::getTopTags() const
 {

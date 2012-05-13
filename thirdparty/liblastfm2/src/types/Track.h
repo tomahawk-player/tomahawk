@@ -244,6 +244,14 @@ public:
     /** See last.fm/api Track section */
     QNetworkReply* share( const QStringList& recipients, const QString& message = "", bool isPublic = true ) const;
 
+    QNetworkReply* getSimilar( int limit = -1 ) const;
+    /** The match percentage is returned from last.fm as a 4 significant
+      * figure floating point value. So we multply it by 100 to make an
+      * integer in the range of 0 to 10,000. This is possible confusing
+      * for you, but I felt it best not to lose any precision, and floats
+      * aren't much fun. */
+    static QMap<int, QPair< QString, QString > > getSimilar( QNetworkReply* );
+
     /** you can get any QNetworkReply TagList using Tag::list( QNetworkReply* ) */
     QNetworkReply* getTags() const; // for the logged in user
     QNetworkReply* getTopTags() const;

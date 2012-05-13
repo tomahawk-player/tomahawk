@@ -55,6 +55,7 @@ class TrackView;
 class SourceInfoWidget;
 class InfoBar;
 class TopBar;
+class TrackInfoWidget;
 class WelcomeWidget;
 class WhatsHotWidget;
 class QPushButton;
@@ -151,6 +152,7 @@ public slots:
     Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
     Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
     Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode withInitialMode = Tomahawk::InfoSystemMode );
+    Tomahawk::ViewPage* show( const Tomahawk::query_ptr& query );
     Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
     Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
@@ -217,6 +219,7 @@ private:
     QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumView> > m_collectionAlbumViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
+    QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;
     QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
 

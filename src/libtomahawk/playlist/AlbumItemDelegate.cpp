@@ -71,7 +71,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->save();
     painter->setRenderHint( QPainter::Antialiasing );
 
-    if ( !( option.state & QStyle::State_Selected ) )
+/*    if ( !( option.state & QStyle::State_Selected ) )
     {
         QRect shadowRect = option.rect.adjusted( 5, 4, -5, -40 );
         painter->setPen( QColor( 90, 90, 90 ) );
@@ -92,24 +92,54 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawLine( shadowRect.topLeft() + QPoint( -2, 3 ), shadowRect.bottomLeft() + QPoint( -2, 1 ) );
         painter->drawLine( shadowRect.topRight() + QPoint( 3, 3 ), shadowRect.bottomRight() + QPoint( 3, 1 ) );
         painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
-    }
+    }*/
 
-    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
+//    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
+    QRect r = option.rect;
+
+    QString top, bottom;
+    if ( !item->album().isNull() )
+    {
+        top = item->album()->name();
+        
+        if ( !item->album()->artist().isNull() )
+            bottom = item->album()->artist()->name();
+    }
+    else if ( !item->artist().isNull() )
+    {
+        top = item->artist()->name();
+    }
+    else
+    {
+        top = item->query()->track();
+        bottom = item->query()->artist();
+    }
 
     if ( !m_covers.contains( index ) )
     {
-        m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::CoverInCase ) ) );
-        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+        if ( !item->album().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+        else if ( !item->artist().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+        else
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+
+        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
         closure->setAutoDelete( false );
     }
 
     const QPixmap cover = m_covers[ index ]->currentPixmap();
 
-    if ( option.state & QStyle::State_Selected )
+    if ( false && option.state & QStyle::State_Selected )
     {
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
         painter->save();
-        painter->setRenderHint( QPainter::Antialiasing );
 
         QPainterPath border;
         border.addRoundedRect( r.adjusted( -2, -2, 2, 2 ), 3, 3 );
@@ -124,46 +154,63 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 #endif
     }
 
-    painter->drawPixmap( r, cover );
+    painter->drawPixmap( r, cover.scaled( r.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
 
-    painter->setPen( opt.palette.color( QPalette::Text ) );
+    if ( m_hoverIndex == index )
+    {
+        painter->save();
+
+        painter->setPen( QColor( 33, 33, 33 ) );
+        painter->setBrush( QColor( 33, 33, 33 ) );
+        painter->setOpacity( 0.5 );
+        painter->drawRect( r );
+
+        painter->restore();
+    }
+
+    painter->save();
+
+    painter->setPen( QColor( 33, 33, 33 ) );
+    painter->setBrush( QColor( 33, 33, 33 ) );
+    painter->setOpacity( 0.5 );
+    painter->drawRoundedRect( r.adjusted( 4, +r.height() - 36, -4, -4 ), 3, 3 );
+
+    painter->restore();
+
+    painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
 
     QString text;
     QFont font = opt.font;
-    font.setPixelSize( 11 );
+    font.setPixelSize( 10 );
     QFont boldFont = font;
     boldFont.setBold( true );
+    boldFont.setPixelSize( 14 );
 
-    QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
-
-    QString name;
-    if ( !item->album().isNull() )
-        name = item->album()->name();
-    else if ( !item->artist().isNull() )
-        name = item->artist()->name();
+    QRect textRect = option.rect.adjusted( 6, option.rect.height() - 36, -4, -6 );
 
     painter->setFont( boldFont );
     bool oneLiner = false;
-    if ( item->album().isNull() || item->album()->artist().isNull() )
+    if ( bottom.isEmpty() )
         oneLiner = true;
     else
-        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
-                     textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
+        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( top ).height() ||
+                     textRect.height() / 2 < painter->fontMetrics().boundingRect( bottom ).height() );
 
     if ( oneLiner )
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
     }
     else
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
+        painter->setFont( font );
         // If the user is hovering over an artist rect, draw a background so she knows it's clickable
         QRect r = textRect;
         r.setTop( r.bottom() - painter->fontMetrics().height() );
@@ -175,16 +222,16 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         }
         else
         {
-            if ( !( option.state & QStyle::State_Selected ) )
+/*            if ( !( option.state & QStyle::State_Selected ) )
 #ifdef Q_WS_MAC
                 painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
 #else
                 painter->setPen( opt.palette.color( QPalette::Dark ) );
-#endif
+#endif*/
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 10 );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 10 );
         painter->drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
 
         // Calculate rect of artist on-hover button click area
@@ -206,6 +253,9 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
          event->type() != QEvent::MouseButtonPress &&
          event->type() != QEvent::Leave )
         return false;
+
+    if ( event->type() == QEvent::MouseMove )
+        m_hoverIndex = index;
 
     if ( m_artistNameRects.contains( index ) )
     {
