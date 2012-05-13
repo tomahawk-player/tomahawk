@@ -43,6 +43,8 @@ public:
 public slots:
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling ( const QPersistentModelIndex& idx );
+    void errorInstalling ( const QPersistentModelIndex& idx );
+
 
     void doUpdateIndex( const QPersistentModelIndex& idx );
 

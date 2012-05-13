@@ -503,6 +503,9 @@ AtticaManager::payloadFetched()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
+    bool installedSuccessfully = false;
+    const QString resolverId = reply->property( "resolverId" ).toString();
+
     // we got a zip file, save it to a temporary file, then unzip it to our destination data dir
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -515,8 +518,6 @@ AtticaManager::payloadFetched()
         f.write( reply->readAll() );
         f.close();
 
-        bool installedSuccessfully = false;
-        const QString resolverId = reply->property( "resolverId" ).toString();
         if ( m_resolverStates[ resolverId ].binary )
         {
             // First ensure the signature matches. If we can't verify it, abort!
@@ -554,18 +555,23 @@ AtticaManager::payloadFetched()
                 installedSuccessfully = true;
             }
         }
-
-        if ( installedSuccessfully )
-        {
-            m_resolverStates[ resolverId ].state = Installed;
-            TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
-            emit resolverInstalled( resolverId );
-            emit resolverStateChanged( resolverId );
-        }
     }
     else
     {
         tLog() << "Failed to download attica payload...:" << reply->errorString();
+    }
+
+
+    if ( installedSuccessfully )
+    {
+        m_resolverStates[ resolverId ].state = Installed;
+        TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
+        emit resolverInstalled( resolverId );
+        emit resolverStateChanged( resolverId );
+    }
+    else
+    {
+        emit resolverInstallationFailed( resolverId );
     }
 }
 

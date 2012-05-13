@@ -783,7 +783,7 @@ extractScriptPayload( const QString& filename, const QString& resolverId )
 
 
 bool
-TomahawkUtils::unzipFileInFolder( const QString &zipFileName, const QDir &folder )
+unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 {
     Q_ASSERT( !zipFileName.isEmpty() );
     Q_ASSERT( folder.exists() );
@@ -878,7 +878,7 @@ extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QO
     qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
 
     copyWithAuthentication( src, dest, 0 );
-#elif  Q_OS_WIN
+#elif  defined(Q_OS_WIN)
 #endif
 
     // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..

@@ -35,6 +35,7 @@ AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverInstallationFailed( QString ) ), this, SLOT( resolverInstallFailed( QString ) ) );
 
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
     connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
@@ -682,6 +683,22 @@ AccountModel::accountRemoved( Account* account )
             beginRemoveRows( QModelIndex(), i, i );
             m_accounts.removeAt( i );
             endRemoveRows();
+
+            return;
+        }
+    }
+}
+
+
+void
+AccountModel::resolverInstallFailed( const QString& resolverId )
+{
+    for ( int i = 0; i < m_accounts.size(); i++ )
+    {
+        if ( m_accounts[ i ]->type == AccountModelNode::AtticaType && m_accounts[ i ]->atticaContent.id() == resolverId )
+        {
+            qDebug() << "Got failed attica install in account mode, emitting signal!";
+            emit errorInstalling( index( i, 0, QModelIndex() ) );
 
             return;
         }

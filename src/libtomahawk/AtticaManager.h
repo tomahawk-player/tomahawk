@@ -109,6 +109,7 @@ signals:
     void resolverStateChanged( const QString& resolverId );
     void resolverInstalled( const QString& resolverId );
     void resolverUninstalled( const QString& resolverId );
+    void resolverInstallationFailed( const QString& resolverId );
 
 private slots:
     void providerAdded( const Attica::Provider& );
