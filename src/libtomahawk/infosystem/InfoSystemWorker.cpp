@@ -22,6 +22,8 @@
 #include <QNetworkConfiguration>
 #include <QNetworkProxy>
 #include <QDir>
+#include <QLibrary>
+#include <QPluginLoader>
 
 #include "config.h"
 #include "HeadlessCheck.h"
