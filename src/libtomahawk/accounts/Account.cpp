@@ -125,6 +125,7 @@ Account::keychainJobFinished(QKeychain::Job* j )
             deserializeCredentials( readJob->binaryData() );
             tLog() << Q_FUNC_INFO << readJob->key();
             tLog() << Q_FUNC_INFO << m_credentials;
+            emit credentialsChanged();
         }
         else
         {
@@ -192,6 +193,17 @@ Account::syncConfig()
 
 
 void
+Account::syncType()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( "accounts/" + m_accountId );
+    s->setValue( "types", m_types );
+    s->endGroup();
+    s->sync();
+}
+
+
+void
 Account::loadFromConfig( const QString& accountId )
 {
     m_accountId = accountId;
@@ -246,7 +258,8 @@ Account::setTypes( AccountTypes types )
         m_types << "ResolverType";
     if ( types & StatusPushType )
         m_types << "StatusPushType";
-    syncConfig();
+    //syncConfig();
+    syncType();
 }
 
 

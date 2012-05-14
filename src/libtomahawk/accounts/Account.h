@@ -139,6 +139,7 @@ signals:
 protected:
     virtual void loadFromConfig( const QString &accountId );
     virtual void syncConfig();
+    virtual void syncType();
 
 private slots:
     void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );
