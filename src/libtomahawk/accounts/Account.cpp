@@ -116,13 +116,13 @@ Account::onError( int errorCode, const QString& error )
 void
 Account::keychainJobFinished(QKeychain::Job* j )
 {
-    if ( j->error() != QKeychain::NoError )
+    if ( j->error() == QKeychain::NoError )
     {
         QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j );
         if ( readJob != 0 )
         {
             tLog() << Q_FUNC_INFO << "readJob finished without errors";
-            deserializeCredentials( m_credentials, readJob->binaryData() );
+            deserializeCredentials( readJob->binaryData() );
             tLog() << Q_FUNC_INFO << readJob->key();
             tLog() << Q_FUNC_INFO << m_credentials;
         }
@@ -139,24 +139,24 @@ Account::keychainJobFinished(QKeychain::Job* j )
         }
     }
     else
-        tLog() << Q_FUNC_INFO << "Job finished with error: " << j->errorString();
+        tLog() << Q_FUNC_INFO << "Job finished with error: " << j->error() << " " << j->errorString();
     j->deleteLater();
 }
 
 
 void
-Account::serializeCredentials(const QVariantHash& credentials, QByteArray& data)
+Account::serializeCredentials( QByteArray& data )
 {
     QDataStream ds(&data, QIODevice::WriteOnly);
-    ds << credentials;
+    ds << m_credentials;
 }
 
 
 void
-Account::deserializeCredentials(QVariantHash& credentials, const QByteArray& data)
+Account::deserializeCredentials( const QByteArray& data )
 {
     QDataStream ds2(data);
-    ds2 >> credentials;
+    ds2 >> m_credentials;
 }
 
 
@@ -184,7 +184,7 @@ Account::syncConfig()
     j->setKey( m_accountId );
     j->setAutoDelete( false );
     QByteArray bData;
-    serializeCredentials( m_credentials, bData );
+    serializeCredentials( bData );
     j->setBinaryData( bData );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();

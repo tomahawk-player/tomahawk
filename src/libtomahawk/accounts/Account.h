@@ -147,8 +147,8 @@ private slots:
     void keychainJobFinished( QKeychain::Job* );
 
 private:
-    void serializeCredentials( const QVariantHash& credentials, QByteArray& data );
-    void deserializeCredentials( QVariantHash& credentials, const QByteArray& data );
+    void serializeCredentials( QByteArray& data );
+    void deserializeCredentials( const QByteArray& data );
 
     QString m_accountServiceName;
     QString m_accountFriendlyName;
