@@ -340,19 +340,6 @@ IF(LIBATTICA_FOUND)
 ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
-    LIST(APPEND libGuiSources
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPlugin.cpp
-      infosystem/infoplugins/unix/FdoNotifyPlugin.cpp
-      infosystem/infoplugins/unix/ImageConverter.cpp )
-
-    LIST(APPEND libGuiHeaders
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.h
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.h
-      infosystem/infoplugins/unix/MprisPlugin.h
-      infosystem/infoplugins/unix/FdoNotifyPlugin.h )
-
     IF( BUILD_GUI AND X11_FOUND )
         INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
         SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )

@@ -42,8 +42,8 @@
 #include "infoplugins/mac/AdiumPlugin.h"
 #endif
 #ifdef Q_WS_X11
-#include "infoplugins/unix/FdoNotifyPlugin.h"
-#include "infoplugins/unix/MprisPlugin.h"
+#include "infoplugins/linux/FdoNotifyPlugin.h"
+#include "infoplugins/linux/MprisPlugin.h"
 #endif
 
 #include "infoplugins/generic/RoviPlugin.h"
@@ -87,24 +87,8 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 
     loadInfoPlugins( findInfoPlugins() );
 
-#ifndef ENABLE_HEADLESS
-//     addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
-//     addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
-#endif
-
 #ifdef Q_WS_MAC
     addInfoPlugin( InfoPluginPtr( new AdiumPlugin() ) );
-#endif
-#ifndef ENABLE_HEADLESS
-#ifdef Q_WS_X11
-    addInfoPlugin( InfoPluginPtr( new FdoNotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MprisPlugin() ) );
-#endif
 #endif
 }
 
