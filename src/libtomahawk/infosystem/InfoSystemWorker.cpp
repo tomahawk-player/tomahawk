@@ -86,15 +86,15 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_cache = cache;
 
     loadInfoPlugins( findInfoPlugins() );
-    
+
 #ifndef ENABLE_HEADLESS
-    addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
+//     addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
 #endif
 
 #ifdef Q_WS_MAC

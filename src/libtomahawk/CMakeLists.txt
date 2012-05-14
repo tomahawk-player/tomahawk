@@ -254,14 +254,6 @@ set( libSources
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
 
-    infosystem/infoplugins/generic/ChartsPlugin.cpp
-    infosystem/infoplugins/generic/NewReleasesPlugin.cpp
-    infosystem/infoplugins/generic/spotifyPlugin.cpp
-    infosystem/infoplugins/generic/hypemPlugin.cpp
-    infosystem/infoplugins/generic/MusixMatchPlugin.cpp
-    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
-    infosystem/infoplugins/generic/RoviPlugin.cpp
-
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
     network/StreamConnection.cpp
