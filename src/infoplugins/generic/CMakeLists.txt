@@ -1,1 +1,2 @@
 ADD_SUBDIRECTORY( echonest )
+ADD_SUBDIRECTORY( hypem )

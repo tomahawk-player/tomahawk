@@ -35,7 +35,6 @@
 #include "infoplugins/generic/NewReleasesPlugin.h"
 #include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
-#include "infoplugins/generic/hypemPlugin.h"
 #include "GlobalActionManager.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -96,7 +95,6 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
 #endif
 
 #ifdef Q_WS_MAC

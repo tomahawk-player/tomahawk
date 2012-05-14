@@ -17,9 +17,10 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef hypemPlugin_H
-#define hypemPlugin_H
+#ifndef HYPEMPLUGIN_H
+#define HYPEMPLUGIN_H
 
+#include "infoplugins/InfoPluginDllMacro.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
 #include <QNetworkReply>
@@ -33,13 +34,14 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class hypemPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT HypemPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
-    hypemPlugin();
-    virtual ~hypemPlugin();
+    HypemPlugin();
+    virtual ~HypemPlugin();
 
     enum ChartType {
         None =      0x00,
@@ -48,8 +50,8 @@ public:
         Artist =    0x04
 
     };
- void setChartType( ChartType type ) { m_chartType = type; }
- ChartType chartType() const { return m_chartType; }
+    void setChartType( ChartType type ) { m_chartType = type; }
+    ChartType chartType() const { return m_chartType; }
 
 public slots:
     void chartReturned();
@@ -91,4 +93,4 @@ private:
 
 }
 
-#endif // hypemPlugin_H
+#endif // HYPEMPLUGIN_H
