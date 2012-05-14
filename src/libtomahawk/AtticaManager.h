@@ -32,6 +32,7 @@
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
+class BinaryInstallerHelper;
 
 class DLLEXPORT AtticaManager : public QObject
 {
@@ -139,6 +140,8 @@ private:
     QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;
+
+    friend class ::BinaryInstallerHelper;
 };
 
 class DLLEXPORT CustomAtticaAccount : public Tomahawk::Accounts::Account
