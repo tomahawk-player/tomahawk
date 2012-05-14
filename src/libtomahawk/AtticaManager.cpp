@@ -60,6 +60,11 @@ public slots:
         if ( m_manager.isNull() )
             return;
 
+        Tomahawk::Accounts::Account* acct = Tomahawk::Accounts::AccountManager::instance()->accountFromPath( path );
+
+        Tomahawk::Accounts::AccountManager::instance()->addAccount( acct );
+        TomahawkSettings::instance()->addAccount( acct->accountId() );
+        Tomahawk::Accounts::AccountManager::instance()->enableAccount( acct );
 
 
         m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
