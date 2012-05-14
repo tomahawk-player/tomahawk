@@ -20,10 +20,11 @@
 #ifndef ChartsPlugin_H
 #define ChartsPlugin_H
 
+#include "infoplugins/InfoPluginDllMacro.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/QObject>
+#include <QNetworkReply>
+#include <QObject>
 
 class QNetworkReply;
 
@@ -33,9 +34,10 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class ChartsPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT ChartsPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
     ChartsPlugin();

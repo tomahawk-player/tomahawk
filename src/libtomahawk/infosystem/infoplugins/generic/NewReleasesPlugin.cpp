@@ -6,7 +6,7 @@
 #include <QtNetwork/QNetworkReply>
 
 #include "Album.h"
-#include "ChartsPlugin_Data_p.h"
+#include "CountryUtils.h"
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"

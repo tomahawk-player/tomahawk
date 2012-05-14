@@ -31,7 +31,6 @@
 #include "InfoSystemCache.h"
 #include "infoplugins/generic/echonest/EchonestPlugin.h"
 #include "infoplugins/generic/MusixMatchPlugin.h"
-#include "infoplugins/generic/ChartsPlugin.h"
 #include "infoplugins/generic/NewReleasesPlugin.h"
 #include "infoplugins/generic/spotifyPlugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
@@ -91,7 +90,6 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 #ifndef ENABLE_HEADLESS
     addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
     addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );

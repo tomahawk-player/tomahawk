@@ -254,7 +254,6 @@ set( libSources
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
 
-    infosystem/infoplugins/generic/ChartsPlugin.cpp
     infosystem/infoplugins/generic/NewReleasesPlugin.cpp
     infosystem/infoplugins/generic/spotifyPlugin.cpp
     infosystem/infoplugins/generic/MusixMatchPlugin.cpp
