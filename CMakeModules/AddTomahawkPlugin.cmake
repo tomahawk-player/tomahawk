@@ -58,13 +58,16 @@ macro(add_tomahawk_plugin)
 
     # qt stuff
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
-    if(PLUGIN_UI_SOURCES)
+    if(PLUGIN_UI)
         qt4_wrap_ui(PLUGIN_UI_SOURCES ${PLUGIN_UI})
         list(APPEND PLUGIN_SOURCES ${PLUGIN_UI_SOURCES})
     endif()
 
-    # we should do this more granular to reduce binary sizes
-    qt4_add_resources(PLUGIN_SOURCES "resources.qrc")
+    if(EXISTS "resources.qrc")
+        qt4_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
+        list(APPEND PLUGIN_SOURCES ${PLUGIN_RC_SOURCES})
+        unset(PLUGIN_RC_SOURCES)
+    endif()
 
     # add target
     add_library(${target} MODULE ${PLUGIN_SOURCES})
@@ -77,6 +80,7 @@ macro(add_tomahawk_plugin)
     endif()
 
     # add link targets
+    target_link_libraries(${TOMAHAWK_LIBRARIES})
     if(PLUGIN_LINK_LIBRARIES)
         target_link_libraries(${target} ${PLUGIN_LINK_LIBRARIES})
     endif()
