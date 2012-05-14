@@ -845,7 +845,7 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 
 
 void
-extractBinaryResolver( const QString& zipFilename, const QString& resolverId, QObject* )
+extractBinaryResolver( const QString& zipFilename, QObject* )
 {
 #if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
     Q_ASSERT( false );

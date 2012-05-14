@@ -39,6 +39,52 @@ using namespace Attica;
 AtticaManager* AtticaManager::s_instance = 0;
 
 
+class BinaryInstallerHelper : public QObject
+{
+    Q_OBJECT
+public:
+    explicit BinaryInstallerHelper( const QString& resolverId, AtticaManager* manager)
+        : QObject( manager )
+        , m_manager( QWeakPointer< AtticaManager >( manager ) )
+        , m_resolverId( resolverId )
+    {
+        Q_ASSERT( !m_resolverId.isEmpty() );
+        Q_ASSERT( !m_manager.isNull() );
+    }
+
+    virtual ~BinaryInstallerHelper() {}
+
+public slots:
+    void extractSucceeded( const QString& path )
+    {
+        if ( m_manager.isNull() )
+            return;
+
+
+
+        m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
+        TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
+        emit m_manager.data()->resolverInstalled( m_resolverId );
+        emit m_manager.data()->resolverStateChanged( m_resolverId );
+
+        deleteLater();
+    }
+    void extractFailed()
+    {
+        if ( m_manager.isNull() )
+            return;
+
+        m_manager.data()->resolverInstallationFailed( m_resolverId );
+
+        deleteLater();
+    }
+
+private:
+    QString m_resolverId;
+    QWeakPointer<AtticaManager> m_manager;
+};
+
+
 AtticaManager::AtticaManager( QObject* parent )
     : QObject( parent )
     , m_resolverJobsLoaded( 0 )
@@ -532,7 +578,7 @@ AtticaManager::payloadFetched()
                 return;
             }
 
-            TomahawkUtils::extractBinaryResolver( f.fileName(), resolverId, 0 );
+            TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, this ) );
         }
         else
         {
@@ -650,3 +696,5 @@ AtticaManager::doResolverRemove( const QString& id ) const
 
     TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
 }
+
+#include "AtticaManager.moc"
