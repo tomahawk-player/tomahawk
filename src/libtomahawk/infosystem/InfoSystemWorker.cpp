@@ -27,7 +27,7 @@
 #include "HeadlessCheck.h"
 #include "InfoSystemWorker.h"
 #include "InfoSystemCache.h"
-#include "infoplugins/generic/echonest/EchonestPlugin.h"
+#include "infoplugins/generic/EchonestPlugin.h"
 #include "infoplugins/generic/MusixMatchPlugin.h"
 #include "infoplugins/generic/ChartsPlugin.h"
 #include "infoplugins/generic/NewReleasesPlugin.h"
