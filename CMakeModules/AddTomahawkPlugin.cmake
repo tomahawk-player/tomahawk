@@ -40,7 +40,7 @@ ENDMACRO(CDR)
 
 macro(add_tomahawk_plugin)
     parse_arguments(PLUGIN
-        "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO"
+        "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
         "NO_INSTALL"
         ${ARGN}
         )
@@ -64,18 +64,17 @@ macro(add_tomahawk_plugin)
     endif()
 
     # we should do this more granular to reduce binary sizes
-    qt4_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
-    list(APPEND PLUGIN_SOURCES ${PLUGIN_RC_SOURCES})
+    qt4_add_resources(PLUGIN_SOURCES "resources.qrc")
 
     # add target
     add_library(${target} MODULE ${PLUGIN_SOURCES})
 
     # definitions - can this be moved into set_target_properties below?
     add_definitions(${QT_DEFINITIONS})
-    set_target_properties(${target} PROPERTIES
-        AUTOMOC TRUE
-        COMPILE_DEFINITIONS ${PLUGIN_EXPORT_MACRO}
-    )
+    set_target_properties(${target} PROPERTIES AUTOMOC TRUE COMPILE_DEFINITIONS ${PLUGIN_EXPORT_MACRO})
+    if(PLUGIN_COMPILE_DEFINITIONS)
+        set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS ${PLUGIN_COMPILE_DEFINITIONS})
+    endif()
 
     # add link targets
     if(PLUGIN_LINK_LIBRARIES)

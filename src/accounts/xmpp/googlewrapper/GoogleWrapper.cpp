@@ -19,7 +19,7 @@
 
 
 #include "GoogleWrapper.h"
-#include "XmppConfigWidget.h"
+#include "../XmppConfigWidget.h"
 #include "ui_XmppConfigWidget.h"
 
 #include "utils/TomahawkUtilsGui.h"

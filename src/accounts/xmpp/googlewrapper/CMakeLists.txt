@@ -1,41 +1,21 @@
-
-# fake google plugin
-
-set( googleHeaders
-    ../XmppAccount.h
-    ../XmppConfigWidget.h
-    ../sip/XmppSip.h
-    ../sip/AvatarManager.h
-    ../sip/XmlConsole.h
-    ../XmppInfoPlugin.h
-    GoogleWrapper.h )
-
-set( googleSources
-    ../XmppAccount.cpp
-    ../XmppConfigWidget.cpp
-    ../sip/XmppSip.cpp
-    ../sip/TomahawkXmppMessage.cpp
-    ../sip/TomahawkXmppMessageFactory.cpp
-    ../sip/AvatarManager.cpp
-    ../sip/XmlConsole.cpp
-    ../XmppInfoPlugin.cpp
-
-    GoogleWrapper.cpp )
-
-add_definitions(-DGOOGLE_WRAPPER)
-
-qt4_add_resources( RCX_SRCS "resources.qrc" )
-
-qt4_wrap_cpp( googleMoc ${googleHeaders} )
-add_library( tomahawk_account_google SHARED ${googleSources} ${googleMoc} ${googleMoc} ${RCX_SRCS} )
-
 include_directories( ${JREEN_INCLUDE_DIR} )
 
-target_link_libraries( tomahawk_account_google
-    ${QT_LIBRARIES}
-    ${JREEN_LIBRARIES}
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    tomahawklib
+add_tomahawk_plugin(google
+    TYPE account
+    EXPORT_MACRO ACCOUNTDLLEXPORT_PRO
+    SOURCES
+        ../XmppAccount.cpp
+        ../XmppConfigWidget.cpp
+        ../sip/XmppSip.cpp
+        ../sip/TomahawkXmppMessage.cpp
+        ../sip/TomahawkXmppMessageFactory.cpp
+        ../sip/AvatarManager.cpp
+        ../sip/XmlConsole.cpp
+        ../XmppInfoPlugin.cpp
+        GoogleWrapper.cpp
+    LINK_LIBRARIES
+        ${TOMAHAWK_LIBRARIES}
+        ${JREEN_LIBRARIES}
+    COMPILE_DEFINITIONS
+        GOOGLE_WRAPPER
 )
-
-install( TARGETS tomahawk_account_google DESTINATION ${CMAKE_INSTALL_LIBDIR} )
