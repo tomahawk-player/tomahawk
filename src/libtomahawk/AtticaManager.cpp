@@ -66,6 +66,8 @@ public slots:
         TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
         emit m_manager.data()->resolverInstalled( m_resolverId );
         emit m_manager.data()->resolverStateChanged( m_resolverId );
+
+        deleteLater();
     }
     void extractFailed()
     {
@@ -73,6 +75,8 @@ public slots:
             return;
 
         m_manager.data()->resolverInstallationFailed( m_resolverId );
+
+        deleteLater();
     }
 
 private:
@@ -574,7 +578,7 @@ AtticaManager::payloadFetched()
                 return;
             }
 
-            TomahawkUtils::extractBinaryResolver( f.fileName(), resolverId, 0 );
+            TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, this ) );
         }
         else
         {
