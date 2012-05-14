@@ -38,14 +38,9 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent ) :
     m_account( account )
 {
     m_ui->setupUi( this );
-
-    m_ui->xmppUsername->setText( account->credentials().contains( "username" ) ? account->credentials()[ "username" ].toString() : QString() );
-    m_ui->xmppPassword->setText( account->credentials().contains( "password" ) ? account->credentials()[ "password" ].toString() : QString() );
-    m_ui->xmppServer->setText( account->configuration().contains( "server" ) ? account->configuration()[ "server" ].toString() : QString() );
-    m_ui->xmppPort->setValue( account->configuration().contains( "port" ) ? account->configuration()[ "port" ].toInt() : 5222 );
-    m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true);
-    m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false);
     m_ui->jidExistsLabel->hide();
+    
+    loadFromConfig();
 
     connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
 }
@@ -76,6 +71,26 @@ XmppConfigWidget::saveConfig()
 
     static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
 }
+
+
+void
+XmppConfigWidget::showEvent(QShowEvent* event)
+{
+    loadFromConfig();
+}
+
+
+void
+XmppConfigWidget::loadFromConfig()
+{
+    m_ui->xmppUsername->setText( m_account->credentials().contains( "username" ) ? m_account->credentials()[ "username" ].toString() : QString() );
+    m_ui->xmppPassword->setText( m_account->credentials().contains( "password" ) ? m_account->credentials()[ "password" ].toString() : QString() );
+    m_ui->xmppServer->setText( m_account->configuration().contains( "server" ) ? m_account->configuration()[ "server" ].toString() : QString() );
+    m_ui->xmppPort->setValue( m_account->configuration().contains( "port" ) ? m_account->configuration()[ "port" ].toInt() : 5222 );
+    m_ui->xmppPublishTracksCheckbox->setChecked( m_account->configuration().contains( "publishtracks" ) ? m_account->configuration()[ "publishtracks" ].toBool() : true);
+    m_ui->xmppEnforceSecureCheckbox->setChecked( m_account->configuration().contains( "enforcesecure" ) ? m_account->configuration()[ "enforcesecure" ].toBool() : false);
+}
+
 
 
 void

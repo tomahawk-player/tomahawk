@@ -19,6 +19,8 @@
 
 #include "Account.h"
 
+#include <qtkeychain/keychain.h>
+
 namespace Tomahawk
 {
 
@@ -216,7 +218,7 @@ Account::loadFromConfig( const QString& accountId )
     m_acl = s->value( "acl", QVariantMap() ).toMap();
     m_types = s->value( "types", QStringList() ).toStringList();
     s->endGroup();
-    QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawk" ), this );
     j->setKey( m_accountId );
     j->setAutoDelete( false );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
@@ -237,7 +239,7 @@ Account::removeFromConfig()
     s->remove( "types" );
     s->endGroup();
     s->remove( "accounts/" + m_accountId );
-    QKeychain::DeletePasswordJob* j = new QKeychain::DeletePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    QKeychain::DeletePasswordJob* j = new QKeychain::DeletePasswordJob( QLatin1String( "tomahawk" ), this );
     j->setKey( m_accountId );
     j->setAutoDelete( false );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );

@@ -22,6 +22,8 @@
 
 #include <QDir>
 
+#include <qtkeychain/keychain.h>
+
 #include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
@@ -515,6 +517,16 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         setPlaylistUpdaters( updaters );
 
         remove( "playlistupdaters" );
+    }
+    else if ( oldVersion == 10 )
+    {
+        const QStringList accounts = childGroups();
+        //Move storage of Credentials from QSettings to QtKeychain
+        foreach ( const QString& account, accounts )
+        {
+            //TODO: migration code to be written
+            
+        }
     }
 }
 

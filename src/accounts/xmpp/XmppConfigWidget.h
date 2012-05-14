@@ -48,10 +48,15 @@ public:
     virtual ~XmppConfigWidget();
 
     void saveConfig();
+    
+    void loadFromConfig();
 
 signals:
     void dataError( bool exists );
 
+protected:
+    void showEvent( QShowEvent* event );
+    
 private slots:
     void onCheckJidExists( QString jid );
 

@@ -27,8 +27,6 @@
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 
-#include <qtkeychain/keychain.h>
-
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "TomahawkSettings.h"
@@ -36,6 +34,11 @@
 #include "libtomahawk/infosystem/InfoSystem.h"
 
 class SipPlugin;
+
+namespace QKeychain
+{
+    class Job;
+}
 
 namespace Tomahawk
 {
