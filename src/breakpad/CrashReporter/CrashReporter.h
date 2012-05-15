@@ -31,6 +31,7 @@ class CrashReporter : public QDialog
 
 public:
     CrashReporter( const QStringList& argv );
+    ~CrashReporter( );
 
 private:
     Ui::CrashReporter ui;
@@ -47,6 +48,7 @@ private slots:
     void onDone();
     void onProgress( int done, int total );
     void onFail( int error, const QString& errorString );
+    void onSendButton();
 };
 
 #endif // CRASHREPORTER_H
