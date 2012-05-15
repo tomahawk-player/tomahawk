@@ -22,6 +22,7 @@
 
 #include "accounts/ResolverAccount.h"
 #include "SourceList.h"
+#include "AtticaManager.h"
 #include "Playlist.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/SmartPointerList.h"
@@ -61,9 +62,6 @@ public:
     virtual QString factoryId() const { return "spotifyaccount"; }
     virtual QString prettyName() const { return "Spotify"; }
 
-    virtual bool acceptsPath( const QString& path ) const;
-    virtual Account* createFromPath( const QString& path );
-
     virtual AccountTypes types() const { return AccountTypes( ResolverType ); }
     virtual bool allowUserCreation() const { return false; }
     virtual QPixmap icon() const;
@@ -71,7 +69,7 @@ public:
 
 };
 
-class SpotifyAccount : public ResolverAccount
+class SpotifyAccount : public CustomAtticaAccount
 {
     Q_OBJECT
 public:
@@ -83,6 +81,11 @@ public:
     virtual QWidget* configurationWidget();
     virtual QWidget* aboutWidget();
     virtual void saveConfig();
+    virtual Attica::Content atticaContent() const;
+    virtual void authenticate();
+    virtual ConnectionState connectionState() const;
+    virtual bool isAuthenticated() const;
+    virtual void deauthenticate();
 
     virtual QWidget* aclWidget() { return 0; }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
@@ -98,8 +101,12 @@ public:
 public slots:
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
     void syncActionTriggered( bool );
+    void atticaLoaded(Attica::Content::List);
 
 private slots:
+    void resolverChanged();
+    void resolverInstalled( const QString& resolverId );
+
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
     void login( const QString& username, const QString& password );
@@ -110,6 +117,7 @@ private slots:
 
 private:
     void init();
+    void hookupResolver();
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
 

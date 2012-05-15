@@ -99,7 +99,7 @@ protected:
  * Extends ResolverAccount with what attica additionally provides---e.g. icon
  * Assumes certain file layout on disk.
  */
-class AtticaResolverAccount : public ResolverAccount
+class DLLEXPORT AtticaResolverAccount : public ResolverAccount
 {
     Q_OBJECT
 public:

@@ -26,6 +26,7 @@
 #include "resolvers/ScriptResolver.h"
 #include "utils/TomahawkUtils.h"
 #include "ActionCollection.h"
+#include "Pipeline.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -51,21 +52,6 @@ SpotifyAccountFactory::createAccount( const QString& accountId )
 }
 
 
-bool
-SpotifyAccountFactory::acceptsPath( const QString& path ) const
-{
-    QFileInfo info( path );
-    return info.baseName().startsWith( "spotify_" );
-}
-
-
-Account*
-SpotifyAccountFactory::createFromPath( const QString& path )
-{
-    return new SpotifyAccount( generateId( factoryId() ), path );
-}
-
-
 QPixmap
 SpotifyAccountFactory::icon() const
 {
@@ -77,14 +63,7 @@ SpotifyAccountFactory::icon() const
 
 
 SpotifyAccount::SpotifyAccount( const QString& accountId )
-    : ResolverAccount( accountId )
-{
-    init();
-}
-
-
-SpotifyAccount::SpotifyAccount( const QString& accountId, const QString& path )
-    : ResolverAccount( accountId, path )
+: CustomAtticaAccount( accountId )
 {
     init();
 }
@@ -101,8 +80,36 @@ SpotifyAccount::init()
 {
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
-    m_spotifyResolver = dynamic_cast< ScriptResolver* >( m_resolver.data() );
+    AtticaManager::instance()->registerCustomAccount( "spotify", this );
 
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( resolverInstalled( QString ) ) );
+
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+
+    if ( state == AtticaManager::Installed )
+    {
+        hookupResolver();
+    }
+}
+
+
+void
+SpotifyAccount::hookupResolver()
+{
+    // initialize the resolver itself. this is called if the account actually has an installed spotify resolver,
+    // as it might not.
+    // If there is a last.fm resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+    Q_ASSERT( state == AtticaManager::Installed );
+    Q_UNUSED( state );
+
+    const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
+
+    m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
+
+    connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
 
     const bool hasMigrated = configuration().value( "hasMigrated" ).toBool();
@@ -113,6 +120,94 @@ SpotifyAccount::init()
         msg[ "_msgtype" ] = "getCredentials";
         m_spotifyResolver.data()->sendMessage( msg );
     }
+
+}
+
+
+void
+SpotifyAccount::resolverChanged()
+{
+    setAccountFriendlyName( m_spotifyResolver.data()->name() );
+    emit connectionStateChanged( connectionState() );
+}
+
+
+Attica::Content
+SpotifyAccount::atticaContent() const
+{
+    return AtticaManager::instance()->resolverForId( "spotify" );
+}
+
+
+void
+SpotifyAccount::authenticate()
+{
+    if ( !AtticaManager::instance()->resolversLoaded() )
+    {
+        // If we're still waiting to load, wait for the attica resolvers to come down the pipe
+        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded( Attica::Content::List ) ), Qt::UniqueConnection );
+        return;
+    }
+
+    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+
+    qDebug() << "Spotify account authenticating...";
+    if ( m_spotifyResolver.isNull() && state == AtticaManager::Installed )
+    {
+        // We don;t have the resolver but it has been installed via attica already, so lets just turn it on
+        hookupResolver();
+    }
+    else if ( m_spotifyResolver.isNull() )
+    {
+        qDebug() << "Got null resolver but asked to authenticate, so installing if we have one from attica:" << res.isValid() << res.id();
+        if ( res.isValid() && !res.id().isEmpty() )
+            AtticaManager::instance()->installResolver( res, false );
+    }
+    else
+    {
+        m_spotifyResolver.data()->start();
+    }
+
+    emit connectionStateChanged( connectionState() );
+}
+
+
+void
+SpotifyAccount::deauthenticate()
+{
+    if ( !m_spotifyResolver.isNull() && m_spotifyResolver.data()->running() )
+        m_spotifyResolver.data()->stop();
+
+    emit connectionStateChanged( connectionState() );
+}
+
+
+bool
+SpotifyAccount::isAuthenticated() const
+{
+    return !m_spotifyResolver.isNull() && m_spotifyResolver.data()->running();
+}
+
+
+Account::ConnectionState
+SpotifyAccount::connectionState() const
+{
+    return (!m_spotifyResolver.isNull() && m_spotifyResolver.data()->running()) ? Account::Connected : Account::Disconnected;
+}
+
+
+void
+SpotifyAccount::resolverInstalled(const QString& resolverId)
+{
+
+}
+
+
+void
+SpotifyAccount::atticaLoaded( Attica::Content::List )
+{
+
 }
 
 

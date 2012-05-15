@@ -98,7 +98,7 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
-    m_manager.addProviderFile( QUrl( "http://localhost/resolvers/providers.xml" ) );
+    m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }
