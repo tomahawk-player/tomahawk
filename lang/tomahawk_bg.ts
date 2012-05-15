@@ -1539,7 +1539,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="414"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation>Изпрати сервизна информация след счупването на програмата.</translation>
+        <translation>Изпрати сервизна информация след забиване.</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="401"/>
