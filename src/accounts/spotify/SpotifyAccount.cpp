@@ -45,6 +45,14 @@ using namespace Accounts;
 
 static QPixmap* s_icon = 0;
 
+#ifdef Q_OS_MAC
+static QString s_resolverId = "spotify-osx";
+#elif defined(Q_OS_WIN)
+static QString s_resolverId = "spotify-win";
+#else
+static QString s_resolverId = "spotify-linux"
+#endif
+
 Account*
 SpotifyAccountFactory::createAccount( const QString& accountId )
 {
@@ -80,14 +88,21 @@ SpotifyAccount::init()
 {
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
-    AtticaManager::instance()->registerCustomAccount( "spotify", this );
+    setAccountFriendlyName( "Spotify" );
+
+    AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
 
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( resolverInstalled( QString ) ) );
 
-    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
-    if ( state == AtticaManager::Installed )
+    if ( !checkForResolver() && state != AtticaManager::Uninstalled )
+    {
+        // If the user manually deleted the resolver, mark it as uninstalled, so we re-fetch for the user
+        AtticaManager::instance()->uninstallResolver( res );
+    }
+    else if ( state == AtticaManager::Installed )
     {
         hookupResolver();
     }
@@ -100,7 +115,7 @@ SpotifyAccount::hookupResolver()
     // initialize the resolver itself. this is called if the account actually has an installed spotify resolver,
     // as it might not.
     // If there is a last.fm resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
-    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
     Q_ASSERT( state == AtticaManager::Installed );
     Q_UNUSED( state );
@@ -124,6 +139,17 @@ SpotifyAccount::hookupResolver()
 }
 
 
+bool SpotifyAccount::checkForResolver()
+{
+#ifdef Q_OS_MAC
+    const QDir path = QCoreApplication::applicationDirPath();
+    QFile file( path.absoluteFilePath( "spotify_tomahawkresolver" ) );
+    return file.exists();
+#endif
+
+    return false;
+}
+
 void
 SpotifyAccount::resolverChanged()
 {
@@ -135,7 +161,7 @@ SpotifyAccount::resolverChanged()
 Attica::Content
 SpotifyAccount::atticaContent() const
 {
-    return AtticaManager::instance()->resolverForId( "spotify" );
+    return AtticaManager::instance()->resolverForId( s_resolverId );
 }
 
 
@@ -149,7 +175,7 @@ SpotifyAccount::authenticate()
         return;
     }
 
-    const Attica::Content res = AtticaManager::instance()->resolverForId( "spotify" );
+    const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
     qDebug() << "Spotify account authenticating...";

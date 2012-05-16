@@ -118,6 +118,8 @@ private slots:
 private:
     void init();
     void hookupResolver();
+    bool checkForResolver();
+
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
 

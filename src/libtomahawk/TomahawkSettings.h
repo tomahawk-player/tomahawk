@@ -30,7 +30,7 @@
 
 #include "DllMacro.h"
 
-#define TOMAHAWK_SETTINGS_VERSION 11
+#define TOMAHAWK_SETTINGS_VERSION 12
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config

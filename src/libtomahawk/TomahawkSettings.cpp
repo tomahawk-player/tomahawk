@@ -516,6 +516,35 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         remove( "playlistupdaters" );
     }
+    else if ( oldVersion == 11 )
+    {
+        // If the user doesn't have a spotify account, create one, since now it
+        // is like the last.fm account and always exists
+        QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+        bool found = false;
+        foreach ( const QString& account, allAccounts )
+        {
+            if ( account.startsWith( "spotifyaccount_" ) )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if ( !found )
+        {
+            const QString accountKey = QString( "spotifyaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+            beginGroup( "accounts/" + accountKey );
+            setValue( "enabled", false );
+            setValue( "types", QStringList() << "ResolverType" );
+            setValue( "credentials", QVariantHash() );
+            setValue( "configuration", QVariantHash() );
+            endGroup();
+
+            allAccounts << accountKey;
+            setValue( "accounts/allaccounts", allAccounts );
+        }
+    }
 }
 
 

@@ -42,11 +42,10 @@
 
 - (void)moveFinished
 {
-    if ( receiver )
-        QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
-
     // HACK since I can't figure out how to get QuaZip to maintain executable permissions after unzip (nor find the info)
     // we set the binary to executable here
+
+    NSLog(@"Move succeeded!, handling result");
 
     NSFileManager *manager = [[[NSFileManager alloc] init] autorelease];
     NSError* error;
@@ -58,10 +57,15 @@
     if (!success) {
         NSLog( @"Failed to do chmod +x of moved resolver! %@", [[error userInfo] objectForKey: NSLocalizedDescriptionKey] );
     }
+
+    if ( receiver )
+        QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
+
 }
 
 - (void)moveFailedWithError:(NSError *)error
 {
+    NSLog(@"Move failed, handling result");
     if ( receiver )
         QMetaObject::invokeMethod(receiver, "installFailed", Qt::DirectConnection);
 }

@@ -43,10 +43,11 @@ class BinaryInstallerHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit BinaryInstallerHelper( const QString& resolverId, AtticaManager* manager)
+    explicit BinaryInstallerHelper( const QString& resolverId, bool createAccount, AtticaManager* manager)
         : QObject( manager )
         , m_manager( QWeakPointer< AtticaManager >( manager ) )
         , m_resolverId( resolverId )
+        , m_createAccount( createAccount )
     {
         Q_ASSERT( !m_resolverId.isEmpty() );
         Q_ASSERT( !m_manager.isNull() );
@@ -55,17 +56,21 @@ public:
     virtual ~BinaryInstallerHelper() {}
 
 public slots:
-    void extractSucceeded( const QString& path )
+    void installSucceeded( const QString& path )
     {
+        qDebug() << Q_FUNC_INFO << "install of binary resolver succeeded, enabling";
+
         if ( m_manager.isNull() )
             return;
 
-        Tomahawk::Accounts::Account* acct = Tomahawk::Accounts::AccountManager::instance()->accountFromPath( path );
+        if ( m_createAccount )
+        {
+            Tomahawk::Accounts::Account* acct = Tomahawk::Accounts::AccountManager::instance()->accountFromPath( path );
 
-        Tomahawk::Accounts::AccountManager::instance()->addAccount( acct );
-        TomahawkSettings::instance()->addAccount( acct->accountId() );
-        Tomahawk::Accounts::AccountManager::instance()->enableAccount( acct );
-
+            Tomahawk::Accounts::AccountManager::instance()->addAccount( acct );
+            TomahawkSettings::instance()->addAccount( acct->accountId() );
+            Tomahawk::Accounts::AccountManager::instance()->enableAccount( acct );
+        }
 
         m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
         TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
@@ -74,8 +79,10 @@ public slots:
 
         deleteLater();
     }
-    void extractFailed()
+    void installFailed()
     {
+        qDebug() << Q_FUNC_INFO << "install failed";
+
         if ( m_manager.isNull() )
             return;
 
@@ -86,6 +93,7 @@ public slots:
 
 private:
     QString m_resolverId;
+    bool m_createAccount;
     QWeakPointer<AtticaManager> m_manager;
 };
 
@@ -267,11 +275,8 @@ AtticaManager::userHasRated( const Content& c ) const
 bool
 AtticaManager::hasCustomAccountForAttica( const QString &id ) const
 {
-    // Only last.fm at the moment contains a custom account
-    if ( id == "lastfm" )
-        return true;
-
-    return false;
+    qDebug() << "Got custom account for?" << id << m_customAccounts.keys();
+    return m_customAccounts.keys().contains( id );
 }
 
 
@@ -416,6 +421,10 @@ AtticaManager::binaryResolversList( BaseJob* j )
                 Resolver r;
                 r.binary = true;
                 m_resolverStates.insert( c.id(), r );
+            }
+            else if ( m_resolverStates[ c.id() ].binary != true )
+            { // HACK workaround... why is this not set in the first place sometimes? Migration issue?
+                m_resolverStates[ c.id() ].binary = true;
             }
 
 
@@ -580,10 +589,13 @@ AtticaManager::payloadFetched()
             if ( !TomahawkUtils::verifyFile( f.fileName(), signature ) )
             {
                 qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f.fileName() << signature;
-                return;
             }
-
-            TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, this ) );
+            else
+            {
+                TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, reply->property( "createAccount" ).toBool(), this ) );
+                // Don't emit failed yet
+                installedSuccessfully = true;
+            }
         }
         else
         {

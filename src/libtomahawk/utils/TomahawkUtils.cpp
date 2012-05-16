@@ -845,7 +845,7 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 
 
 void
-extractBinaryResolver( const QString& zipFilename, QObject* )
+extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 {
 #if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
     Q_ASSERT( false );
@@ -877,7 +877,7 @@ extractBinaryResolver( const QString& zipFilename, QObject* )
     const QString src = toList.absoluteFilePath( files.first() );
     qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
 
-    copyWithAuthentication( src, dest, 0 );
+    copyWithAuthentication( src, dest, receiver );
 #elif  defined(Q_OS_WIN)
 #endif
 
