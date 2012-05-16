@@ -57,6 +57,17 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
     m_ui->twitterTweetComboBox->setCurrentIndex( 0 );
     m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
+}
+
+TwitterConfigWidget::~TwitterConfigWidget()
+{
+    delete m_ui;
+}
+
+
+void
+TwitterConfigWidget::loadConfig()
+{
     QVariantHash credentials = m_account->credentials();
 
     if ( credentials[ "oauthtoken" ].toString().isEmpty() ||
@@ -78,13 +89,8 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
 
         emit twitterAuthed( true );
     }
-
 }
 
-TwitterConfigWidget::~TwitterConfigWidget()
-{
-    delete m_ui;
-}
 
 void
 TwitterConfigWidget::authDeauthTwitter()
@@ -289,6 +295,14 @@ TwitterConfigWidget::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode 
     qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
     QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
 }
+
+
+void
+TwitterConfigWidget::showEvent(QShowEvent* event)
+{
+    loadConfig();
+}
+
 
 }
 

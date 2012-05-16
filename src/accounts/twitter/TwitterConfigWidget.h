@@ -50,11 +50,17 @@ class ACCOUNTDLLEXPORT TwitterConfigWidget : public QWidget
 public:
     explicit TwitterConfigWidget( TwitterAccount* account = 0, QWidget *parent = 0 );
     virtual ~TwitterConfigWidget();
+    
+    void loadConfig();
 
 signals:
     void twitterAuthed( bool authed );
 
     void sizeHintChanged();
+    
+protected:
+    void showEvent( QShowEvent* event );
+
 
 private slots:
     void authDeauthTwitter();

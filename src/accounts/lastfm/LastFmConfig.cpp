@@ -33,10 +33,6 @@ LastFmConfig::LastFmConfig( LastFmAccount* account )
     m_ui = new Ui_LastFmConfig;
     m_ui->setupUi( this );
 
-    m_ui->username->setText( m_account->username() );
-    m_ui->password->setText( m_account->password() );
-    m_ui->enable->setChecked( m_account->scrobble() );
-
     connect( m_ui->testLogin, SIGNAL( clicked( bool ) ), this, SLOT( testLogin( bool ) ) );
 
     connect( m_ui->username, SIGNAL( textChanged( QString ) ), this, SLOT( enableButton() ) );
@@ -59,6 +55,15 @@ bool
 LastFmConfig::scrobble() const
 {
     return m_ui->enable->isChecked();
+}
+
+
+void
+LastFmConfig::loadFromConfig()
+{
+    m_ui->username->setText( m_account->username() );
+    m_ui->password->setText( m_account->password() );
+    m_ui->enable->setChecked( m_account->scrobble() );
 }
 
 
@@ -142,4 +147,11 @@ LastFmConfig::onLastFmFinished()
                 return;
         }
     }
+}
+
+
+void
+LastFmConfig::showEvent(QShowEvent* event)
+{
+    loadFromConfig();
 }
