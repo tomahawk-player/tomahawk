@@ -92,7 +92,7 @@ public:
 
     /**
       If the resolver coming from libattica has a native custom c++ account
-      as well. For example the last.fm account.
+      as well. For example the last.fm & spotify accounts.
       */
     bool hasCustomAccountForAttica( const QString& id ) const;
     Tomahawk::Accounts::Account* customAccountForAttica( const QString& id ) const;

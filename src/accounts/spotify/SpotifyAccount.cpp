@@ -28,6 +28,7 @@
 #include "ActionCollection.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
+#include "utils/Closure.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -105,12 +106,13 @@ SpotifyAccount::init()
     const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
+    const QString path = configuration().value( "resolverPath" ).toString(); // Manual path override
     if ( !checkForResolver() && state != AtticaManager::Uninstalled )
     {
         // If the user manually deleted the resolver, mark it as uninstalled, so we re-fetch for the user
         AtticaManager::instance()->uninstallResolver( res );
     }
-    else if ( state == AtticaManager::Installed )
+    else if ( state == AtticaManager::Installed || !path.isEmpty() )
     {
         hookupResolver();
     }
@@ -122,16 +124,21 @@ SpotifyAccount::hookupResolver()
 {
     // initialize the resolver itself. this is called if the account actually has an installed spotify resolver,
     // as it might not.
-    // If there is a last.fm resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
-    const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
-    const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
-    Q_ASSERT( state == AtticaManager::Installed );
-    Q_UNUSED( state );
+    // If there is a spotify resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
+    QString path = configuration().value( "resolverPath" ).toString();
+    if ( path.isEmpty() )
+    {
+        const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
+        const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
+        Q_ASSERT( state == AtticaManager::Installed );
+        Q_UNUSED( state );
 
-    const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
+        const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
+        path = data.scriptPath;
+    }
 
-    qDebug() << "Starting spotify resolver with path:" << data.scriptPath;
-    m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
+    qDebug() << "Starting spotify resolver with path:" << path;
+    m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path, enabled() ) ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
@@ -162,7 +169,6 @@ bool SpotifyAccount::checkForResolver()
 void
 SpotifyAccount::resolverChanged()
 {
-    setAccountFriendlyName( m_spotifyResolver.data()->name() );
     emit connectionStateChanged( connectionState() );
 }
 
@@ -199,7 +205,7 @@ SpotifyAccount::authenticate()
         if ( res.isValid() && !res.id().isEmpty() )
             AtticaManager::instance()->installResolver( res, false );
     }
-    else
+    else if ( !m_spotifyResolver.data()->running() )
     {
         m_spotifyResolver.data()->start();
     }
@@ -249,6 +255,40 @@ SpotifyAccount::atticaLoaded( Attica::Content::List )
 {
     disconnect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded( Attica::Content::List ) ) );
     authenticate();
+}
+
+
+void
+SpotifyAccount::setManualResolverPath( const QString &resolverPath )
+{
+    Q_ASSERT( !resolverPath.isEmpty() );
+
+    QVariantHash configuration;
+    configuration[ "resolverPath" ] = resolverPath;
+    setConfiguration( configuration );
+    sync();
+
+    if ( !m_spotifyResolver.isNull() )
+    {
+        // replace
+        //connect( m_spotifyResolver.data(), SIGNAL( destroyed( QObject* ) ), this, SLOT( hookupResolver() ) );
+        NewClosure( m_spotifyResolver.data(), SIGNAL( destroyed() ), this, SLOT( hookupAfterDeletion( bool ) ), true );
+        m_spotifyResolver.data()->deleteLater();
+    }
+    else
+    {
+        hookupResolver();
+        authenticate();
+    }
+}
+
+
+void
+SpotifyAccount::hookupAfterDeletion( bool autostart )
+{
+    hookupResolver();
+    if ( autostart )
+        authenticate();
 }
 
 

@@ -98,6 +98,8 @@ public:
 
     bool deleteOnUnsync() const;
 
+    void setManualResolverPath( const QString& resolverPath );
+
 public slots:
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
     void syncActionTriggered( bool );
@@ -116,9 +118,11 @@ private slots:
     void playlistCreated( const QString& msgType, const QVariantMap& msg );
 
     void init();
+    void hookupAfterDeletion( bool autostart );
+
 private:
-    void hookupResolver();
     bool checkForResolver();
+    void hookupResolver();
 
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
