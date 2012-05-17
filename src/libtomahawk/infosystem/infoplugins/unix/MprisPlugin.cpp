@@ -254,7 +254,7 @@ MprisPlugin::metadata() const
     Tomahawk::result_ptr track = AudioEngine::instance()->currentTrack();
     if ( track )
     {
-        metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
+        metadataMap.insert( "mpris:trackid", QVariant::fromValue(QDBusObjectPath(QString( "/track/" ) + track->id().replace( "-", "" ))) );
         metadataMap.insert( "mpris:length", track->duration() );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", QStringList( track->artist()->name() ) );
