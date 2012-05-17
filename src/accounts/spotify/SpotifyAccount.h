@@ -115,8 +115,8 @@ private slots:
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
     void playlistCreated( const QString& msgType, const QVariantMap& msg );
 
-private:
     void init();
+private:
     void hookupResolver();
     bool checkForResolver();
 

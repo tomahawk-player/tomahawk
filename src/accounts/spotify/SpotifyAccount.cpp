@@ -27,6 +27,7 @@
 #include "utils/TomahawkUtils.h"
 #include "ActionCollection.h"
 #include "Pipeline.h"
+#include "accounts/AccountManager.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -86,6 +87,13 @@ SpotifyAccount::~SpotifyAccount()
 void
 SpotifyAccount::init()
 {
+    if ( !AtticaManager::instance()->resolversLoaded() )
+    {
+        // If we're still waiting to load, wait for the attica resolvers to come down the pipe
+        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( init() ), Qt::UniqueConnection );
+        return;
+    }
+
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
     setAccountFriendlyName( "Spotify" );
@@ -122,6 +130,7 @@ SpotifyAccount::hookupResolver()
 
     const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
 
+    qDebug() << "Starting spotify resolver with path:" << data.scriptPath;
     m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
@@ -226,14 +235,20 @@ SpotifyAccount::connectionState() const
 void
 SpotifyAccount::resolverInstalled(const QString& resolverId)
 {
-
+    if ( resolverId == s_resolverId )
+    {
+        // We requested this install, so we want to launch it
+        hookupResolver();
+        AccountManager::instance()->enableAccount( this );
+    }
 }
 
 
 void
 SpotifyAccount::atticaLoaded( Attica::Content::List )
 {
-
+    disconnect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded( Attica::Content::List ) ) );
+    authenticate();
 }
 
 

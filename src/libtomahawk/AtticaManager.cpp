@@ -58,7 +58,7 @@ public:
 public slots:
     void installSucceeded( const QString& path )
     {
-        qDebug() << Q_FUNC_INFO << "install of binary resolver succeeded, enabling";
+        qDebug() << Q_FUNC_INFO << "install of binary resolver succeeded, enabling: " << path;
 
         if ( m_manager.isNull() )
             return;
@@ -72,7 +72,9 @@ public slots:
             Tomahawk::Accounts::AccountManager::instance()->enableAccount( acct );
         }
 
+        m_manager.data()->m_resolverStates[ m_resolverId ].scriptPath = path;
         m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
+
         TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
         emit m_manager.data()->resolverInstalled( m_resolverId );
         emit m_manager.data()->resolverStateChanged( m_resolverId );
@@ -106,7 +108,7 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
-    m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
+    m_manager.addProviderFile( QUrl( "http://localhost/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }

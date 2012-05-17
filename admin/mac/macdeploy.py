@@ -496,11 +496,6 @@ for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
 
 try:
-  FixPlugin('spotify_tomahawkresolver', '../MacOS')
-except:
-  print 'Failed to find spotify resolver'
-  
-try:
   FixPlugin('tomahawk_crash_reporter', '../MacOS')
 except:
   print 'Failed to find tomahawk_crash_reporter'
