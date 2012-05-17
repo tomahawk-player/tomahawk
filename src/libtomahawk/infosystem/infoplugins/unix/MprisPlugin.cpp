@@ -255,7 +255,7 @@ MprisPlugin::metadata() const
     if ( track )
     {
         metadataMap.insert( "mpris:trackid", QVariant::fromValue(QDBusObjectPath(QString( "/track/" ) + track->id().replace( "-", "" ))) );
-        metadataMap.insert( "mpris:length", track->duration() );
+        metadataMap.insert( "mpris:length", static_cast<qlonglong>(track->duration()) * 1000000 );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", QStringList( track->artist()->name() ) );
         metadataMap.insert( "xesam:title", track->track() );
