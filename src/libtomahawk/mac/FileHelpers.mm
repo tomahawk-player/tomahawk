@@ -76,6 +76,8 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
 
 + (void) moveFile:(NSString *)source to:(NSString*)dest withDelegate:delegate
 {
+    NSLog(@"FileHelpers moving file from %@ to %@", source, dest);
+
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:source, TKCopySourceKey, dest, TKCopyDestinationKey, delegate, TKInstallerDelegateKey, nil];
     [NSThread detachNewThreadSelector:@selector(performMoveWithInfo:) toTarget:self withObject:info];
 }

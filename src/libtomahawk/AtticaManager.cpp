@@ -200,14 +200,12 @@ AtticaManager::resolvers() const
 Content
 AtticaManager::resolverForId( const QString& id ) const
 {
-    qDebug() << "Asked for resolver for id:" << id;
     foreach ( const Attica::Content& c, m_resolvers )
     {
         if ( c.id() == id )
             return c;
     }
 
-    qDebug() << "Not found!";
     return Content();
 }
 
@@ -216,10 +214,6 @@ AtticaManager::resolverForId( const QString& id ) const
 AtticaManager::ResolverState
 AtticaManager::resolverState ( const Content& resolver ) const
 {
-    qDebug() << Q_FUNC_INFO << "Returning resolver state for resolver:" << resolver .id() << "known?" << m_resolverStates.contains( resolver.id() );
-    if ( m_resolverStates.contains( resolver.id() ) )
-        qDebug() << "KNOWN and stateL" << m_resolverStates[ resolver.id() ].state;
-
     if ( !m_resolverStates.contains( resolver.id() ) )
     {
         return AtticaManager::Uninstalled;

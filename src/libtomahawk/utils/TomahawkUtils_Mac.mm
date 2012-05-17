@@ -58,8 +58,6 @@
         NSLog( @"Failed to do chmod +x of moved resolver! %@", [[error userInfo] objectForKey: NSLocalizedDescriptionKey] );
     }
 
-    qDebug() << "Successfully install tomahawk resolver with path:" << path;
-
     if ( receiver )
         QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
 
