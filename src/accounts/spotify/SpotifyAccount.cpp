@@ -585,6 +585,9 @@ SpotifyAccount::icon() const
 QWidget*
 SpotifyAccount::configurationWidget()
 {
+    if ( m_spotifyResolver.isNull() )
+        return 0;
+
     if ( m_configWidget.isNull() )
     {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
