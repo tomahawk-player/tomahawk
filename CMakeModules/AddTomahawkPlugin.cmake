@@ -76,6 +76,12 @@ macro(add_tomahawk_plugin)
     add_definitions(${QT_DEFINITIONS})
     set_target_properties(${target} PROPERTIES AUTOMOC TRUE COMPILE_DEFINITIONS ${PLUGIN_EXPORT_MACRO})
     if(PLUGIN_COMPILE_DEFINITIONS)
+        # Dear CMake, i hate you! Sincerely, domme
+        # At least in CMake 2.8.8, you CANNOT set more than one COMPILE_DEFINITIONS value
+        # only takes the first one if called multiple times or bails out with wrong number of arguments
+        # when passing in a list, thus i redefine the export macro here in hope it won't mess up other targets
+        add_definitions( "-D${PLUGIN_EXPORT_MACRO}" )
+
         set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS ${PLUGIN_COMPILE_DEFINITIONS})
     endif()
 
