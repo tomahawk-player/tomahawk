@@ -190,7 +190,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
         int itemWidth = 160;
         QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-        int itemsPerRow = qFloor( rectWidth / itemWidth );
+        int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 //        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
 //        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
 

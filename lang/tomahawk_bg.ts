@@ -422,39 +422,49 @@ connect and stream from you?</source>
         <source>Tomahawk Crash Reporter</source>
         <translation>Автоматично докладване на грешки на Tomahawk</translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
-        <source>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Извинявай&lt;/b&gt;&amp;nbsp;Tomahawk спря да работи. Информация относно проблемът се изпраща към нашата централа, за да можем да го отстраним.&lt;/p&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send the this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="172"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
+        <source>Send this report</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="136"/>
+        <source>Don&apos;t send</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="192"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="210"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
         <translation>Можете да спрете изпращането на информация относно проблеми в панелът с настройки.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="153"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
         <translation>Качени %L1 от %В2 КБ.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="167"/>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="183"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="168"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="176"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="177"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
         <translation>Изпращането приключи. &lt;b&gt;Благодарим ви за отзивчивостта!&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="185"/>
         <source>Failed to send crash info.</source>
         <translation>Изпращането на краш-данни е неуспешно.</translation>
     </message>
@@ -1539,7 +1549,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="414"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation>Изпрати сервизна информация след счупването на програмата.</translation>
+        <translation>Изпрати сервизна информация след забиване.</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="401"/>
@@ -2441,22 +2451,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/ChartsPlugin.cpp" line="359"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="363"/>
         <source>Top Overall</source>
         <translation>Най-известни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/ChartsPlugin.cpp" line="448"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="452"/>
         <source>Artists</source>
         <translation>Артисти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/ChartsPlugin.cpp" line="450"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="454"/>
         <source>Albums</source>
         <translation>Албуми</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/ChartsPlugin.cpp" line="452"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="456"/>
         <source>Tracks</source>
         <translation>Песни</translation>
     </message>
@@ -2625,33 +2635,33 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="242"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="293"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="267"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Сканиране (%L1 песни)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="244"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="269"/>
         <source>Scanning</source>
         <translation>Сканирам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="278"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="303"/>
         <source>Checking</source>
         <translation>Проверявам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
         <source>Fetching</source>
         <translation>Извличам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
         <source>Parsing</source>
         <translation>Сортирам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Saving (%1%)</source>
         <translation>Запазвам (%1%)</translation>
     </message>
@@ -3695,107 +3705,107 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="380"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="379"/>
         <source>User Interaction</source>
         <translation>Действие от потребителя</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
         <source>Host is unknown</source>
         <translation>Непознат адрес</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="385"/>
         <source>Item not found</source>
         <translation>Обектът не е открит</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
         <source>Authorization Error</source>
         <translation>Грешка при даване на достъп</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
         <source>Remote Stream Error</source>
         <translation>Грешка в стриймът от отдалечената машина</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
         <source>Remote Connection failed</source>
         <translation>Отдалечената връзка е неуспешна</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
         <source>Internal Server Error</source>
         <translation>Вътрешна грешка на сървъра</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
         <source>System shutdown</source>
         <translation>Изключване на системата</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
         <source>Conflict</source>
         <translation>Конфликт</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>No Compression Support</source>
         <translation>Няма поддръжка на компресия</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
         <source>No Encryption Support</source>
         <translation>Няма поддръжка на криптиране</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>No Authorization Support</source>
         <translation>Няма поддръжка на удостоверяване</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="424"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="423"/>
         <source>No Supported Feature</source>
         <translation>Неподдържана функция</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="520"/>
         <source>Add Friend</source>
         <translation>Добави приятел</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="522"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
         <source>Enter Xmpp ID:</source>
         <translation>Въведи  Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="673"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="672"/>
         <source>Add Friend...</source>
         <translation>Добави приятел...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="678"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="677"/>
         <source>XML Console...</source>
         <translation>XML Конзола...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="726"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="725"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Извинявай.. Аз съм режимът за автоматични отговори изпълзван от Tomahawk. ( http://gettomahawk.com ) Щом получаваш това съобщение, този с който се опитваш да се свържеш вероятно не е на линия. Моля, опитай отново по-късно.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="823"/>
         <source>Authorize User</source>
         <translation>Оправомощяване на потребител</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="825"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
         <source>Do you want to grant &lt;b&gt;%1&lt;/b&gt; access to your Collection?</source>
         <translation>Искате ли да позволите на &lt;b&gt;%1&lt;/b&gt; достъп до вашата колекция?</translation>
     </message>

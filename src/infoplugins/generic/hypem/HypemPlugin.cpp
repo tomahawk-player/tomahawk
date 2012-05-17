@@ -17,13 +17,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hypemPlugin.h"
+#include "HypemPlugin.h"
 
 #include <QDir>
 #include <QSettings>
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
+#include <QtPlugin>
 
 #include "Album.h"
 #include "Typedefs.h"
@@ -36,10 +37,14 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+    
+namespace InfoSystem
+{
 
 
-hypemPlugin::hypemPlugin()
+HypemPlugin::HypemPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
@@ -95,14 +100,14 @@ hypemPlugin::hypemPlugin()
 
 
 
-hypemPlugin::~hypemPlugin()
+HypemPlugin::~HypemPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-hypemPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
+HypemPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     emit info( requestData, QVariant() );
     return;
@@ -110,7 +115,7 @@ hypemPlugin::dataError( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-hypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+HypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO << requestData.caller;
     qDebug() << Q_FUNC_INFO << requestData.customData;
@@ -140,7 +145,7 @@ hypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 }
 
 void
-hypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
+HypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
 
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
@@ -168,7 +173,7 @@ hypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 }
 
 void
-hypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
+HypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -181,7 +186,7 @@ hypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData reque
 }
 
 void
-hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
@@ -225,9 +230,9 @@ hypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
 
 
 void
-hypemPlugin::chartTypes()
+HypemPlugin::chartTypes()
 {
-    /// Get possible chart type for specifichypemPlugin: InfoChart types returned chart source
+    /// Get possible chart type for specificHypemPlugin: InfoChart types returned chart source
     tDebug() << Q_FUNC_INFO << "Got hypem types";
 
     QVariantMap charts;
@@ -295,13 +300,13 @@ hypemPlugin::chartTypes()
 
 
     m_allChartsMap.insert( "Hype Machine", QVariant::fromValue<QVariantMap>( charts ) );
-    qDebug() << "hypemPlugin:Chartstype: " << m_allChartsMap;
+    qDebug() << "HypemPlugin:Chartstype: " << m_allChartsMap;
 
 
 }
 
 void
-hypemPlugin::chartReturned()
+HypemPlugin::chartReturned()
 {
 
     /// Chart request returned something! Woho
@@ -387,3 +392,9 @@ hypemPlugin::chartReturned()
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
 
 }
+
+}
+
+}
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::HypemPlugin )

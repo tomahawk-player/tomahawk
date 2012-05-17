@@ -18,20 +18,23 @@
  */
 
 #include "EchonestPlugin.h"
-#include <echonest/Artist.h>
 #include <echonest/ArtistTypes.h>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include <QNetworkConfiguration>
+#include <QtPlugin>
 
-using namespace Tomahawk::InfoSystem;
-using namespace Echonest;
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
 
 // for internal neatness
 
-EchoNestPlugin::EchoNestPlugin()
+EchonestPlugin::EchonestPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
@@ -40,14 +43,14 @@ EchoNestPlugin::EchoNestPlugin()
 }
 
 
-EchoNestPlugin::~EchoNestPlugin()
+EchonestPlugin::~EchonestPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-EchoNestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+EchonestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
@@ -73,7 +76,7 @@ EchoNestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-EchoNestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
+EchonestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
@@ -91,7 +94,7 @@ EchoNestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &req
 
 
 void
-EchoNestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if( !isValidArtistData( requestData ) )
         return;
@@ -105,7 +108,7 @@ EchoNestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData 
 
 
 void
-EchoNestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if( !isValidArtistData( requestData ) )
         return;
@@ -120,7 +123,7 @@ EchoNestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestDat
 
 
 void
-EchoNestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if( !isValidArtistData( requestData ) )
         return;
@@ -134,7 +137,7 @@ EchoNestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData
 
 
 void
-EchoNestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if( !isValidArtistData( requestData ) )
         return;
@@ -148,7 +151,7 @@ EchoNestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &req
 
 
 void
-EchoNestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -157,13 +160,13 @@ EchoNestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &re
 
 
 void
-EchoNestPlugin::getArtistBiographySlot()
+EchonestPlugin::getArtistBiographySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
-    BiographyList biographies = artist.biographies();
+    Echonest::BiographyList biographies = artist.biographies();
     QVariantMap biographyMap;
-    Q_FOREACH( const Biography& biography, biographies )
+    Q_FOREACH( const Echonest::Biography& biography, biographies )
     {
         QVariantHash siteData;
         siteData[ "site" ] = biography.site();
@@ -181,7 +184,7 @@ EchoNestPlugin::getArtistBiographySlot()
 
 
 void
-EchoNestPlugin::getArtistFamiliaritySlot()
+EchonestPlugin::getArtistFamiliaritySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
@@ -193,7 +196,7 @@ EchoNestPlugin::getArtistFamiliaritySlot()
 
 
 void
-EchoNestPlugin::getArtistHotttnesssSlot()
+EchonestPlugin::getArtistHotttnesssSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
@@ -205,11 +208,11 @@ EchoNestPlugin::getArtistHotttnesssSlot()
 
 
 void
-EchoNestPlugin::getArtistTermsSlot()
+EchonestPlugin::getArtistTermsSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
-    TermList terms = artist.terms();
+    Echonest::TermList terms = artist.terms();
     QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
         QVariantHash termHash;
@@ -224,10 +227,10 @@ EchoNestPlugin::getArtistTermsSlot()
 
 
 void
-EchoNestPlugin::getMiscTopSlot()
+EchonestPlugin::getMiscTopSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    TermList terms = Echonest::Artist::parseTopTerms( reply );
+    Echonest::TermList terms = Echonest::Artist::parseTopTerms( reply );
     QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
         QVariantHash termHash;
@@ -242,7 +245,7 @@ EchoNestPlugin::getMiscTopSlot()
 
 
 bool
-EchoNestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
@@ -260,7 +263,7 @@ EchoNestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &
 
 
 bool
-EchoNestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
@@ -282,8 +285,8 @@ EchoNestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &r
 }
 
 
-Artist
-EchoNestPlugin::artistFromReply( QNetworkReply* reply )
+Echonest::Artist
+EchonestPlugin::artistFromReply( QNetworkReply* reply )
 {
     Echonest::Artist artist = reply->property("artist").value<Echonest::Artist>();
     try {
@@ -293,4 +296,9 @@ EchoNestPlugin::artistFromReply( QNetworkReply* reply )
     }
     return artist;
 }
-//
+
+} //ns InfoSystem
+
+} //ns Tomahawk
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::EchonestPlugin )

@@ -17,16 +17,16 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCOUNTDLLMACRO_H
-#define ACCOUNTDLLMACRO_H
+#ifndef INFOPLUGINDLLMACRO_H
+#define INFOPLUGINDLLMACRO_H
 
 #include <QtCore/qglobal.h>
 
-#ifndef ACCOUNTDLLEXPORT
-# if defined (ACCOUNTDLLEXPORT_PRO)
-#  define ACCOUNTDLLEXPORT Q_DECL_EXPORT
+#ifndef INFOPLUGINDLLEXPORT
+# if defined (INFOPLUGINDLLEXPORT_PRO)
+#  define INFOPLUGINDLLEXPORT Q_DECL_EXPORT
 # else
-#  define ACCOUNTDLLEXPORT Q_DECL_IMPORT
+#  define INFOPLUGINDLLEXPORT Q_DECL_IMPORT
 # endif
 #endif
 

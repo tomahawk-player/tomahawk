@@ -57,7 +57,6 @@
 
 #include <utils/TomahawkUtilsGui.h>
 #include "utils/Logger.h"
-#include "XmppInfoPlugin.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -192,7 +191,7 @@ XmppSipPlugin::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
         m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
-    
+
     return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }
 
@@ -560,7 +559,7 @@ XmppSipPlugin::publishTune( const QUrl& url, const InfoSystem::InfoStringHash& t
 
     tune->setUri( url );
     tDebug() << Q_FUNC_INFO << "Setting URI of " << tune->uri().toString();
-    
+
     m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
 }
 

@@ -20,17 +20,14 @@
 #ifndef ECHONESTPLUGIN_H
 #define ECHONESTPLUGIN_H
 
+#include "infoplugins/InfoPluginDllMacro.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "echonest/Artist.h"
 
 #include <QObject>
 
 class QNetworkReply;
-
-namespace Echonest
-{
-    class Artist;
-}
 
 namespace Tomahawk
 {
@@ -38,13 +35,14 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class EchoNestPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT EchonestPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
-    EchoNestPlugin();
-    virtual ~EchoNestPlugin();
+    EchonestPlugin();
+    virtual ~EchonestPlugin();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
