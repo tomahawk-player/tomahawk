@@ -332,14 +332,14 @@ MprisPlugin::setShuffle( bool value )
 double
 MprisPlugin::volume() const
 {
-    return AudioEngine::instance()->volume();
+    return static_cast<double>(AudioEngine::instance()->volume()) / 100.0;
 }
 
 
 void
 MprisPlugin::setVolume( double value )
 {
-    AudioEngine::instance()->setVolume( value );
+    AudioEngine::instance()->setVolume( value * 100 );
 }
 
 
