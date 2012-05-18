@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QImage>
 #include <QtDBus/QtDBus>
+#include <QtPlugin>
 
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystemWorker.h"
@@ -35,7 +36,11 @@
 #include "MprisPluginRootAdaptor.h"
 #include "MprisPluginPlayerAdaptor.h"
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
 
 static QString s_mpInfoIdentifier = QString( "MPRISPLUGIN" );
 
@@ -583,3 +588,8 @@ MprisPlugin::notifyPropertyChanged( const QString& interface, const QString& pro
     QDBusConnection::sessionBus().send(signal);
 }
 
+} //ns InfoSystem
+
+} //ns Tomahawk
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::MprisPlugin )

@@ -22,6 +22,7 @@
 
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystem.h"
+#include "infoplugins/InfoPluginDllMacro.h"
 
 #include <QObject>
 #include <QVariant>
@@ -33,9 +34,10 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class MprisPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT MprisPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
     MprisPlugin();

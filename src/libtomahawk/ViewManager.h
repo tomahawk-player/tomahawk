@@ -151,7 +151,7 @@ public slots:
     Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
     Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
     Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
-    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode withInitialMode = Tomahawk::InfoSystemMode );
+    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
     Tomahawk::ViewPage* show( const Tomahawk::query_ptr& query );
     Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
     Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );

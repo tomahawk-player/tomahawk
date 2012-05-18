@@ -544,7 +544,8 @@ AudioControls::onAlbumClicked()
 void
 AudioControls::onTrackClicked()
 {
-    ViewManager::instance()->showCurrentTrack();
+    ViewManager::instance()->show( m_currentTrack->toQuery() );
+//    ViewManager::instance()->showCurrentTrack();
 }
 
 

@@ -29,24 +29,9 @@
 #include "HeadlessCheck.h"
 #include "InfoSystemWorker.h"
 #include "InfoSystemCache.h"
-#include "infoplugins/generic/echonest/EchonestPlugin.h"
-#include "infoplugins/generic/MusixMatchPlugin.h"
-#include "infoplugins/generic/NewReleasesPlugin.h"
-#include "infoplugins/generic/spotifyPlugin.h"
-#include "infoplugins/generic/musicbrainzPlugin.h"
 #include "GlobalActionManager.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-
-#ifdef Q_WS_MAC
-#include "infoplugins/mac/AdiumPlugin.h"
-#endif
-#ifdef Q_WS_X11
-#include "infoplugins/unix/FdoNotifyPlugin.h"
-#include "infoplugins/unix/MprisPlugin.h"
-#endif
-
-#include "infoplugins/generic/RoviPlugin.h"
 
 namespace Tomahawk
 {
@@ -86,24 +71,6 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_cache = cache;
 
     loadInfoPlugins( findInfoPlugins() );
-    
-#ifndef ENABLE_HEADLESS
-    addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
-#endif
-
-#ifdef Q_WS_MAC
-    addInfoPlugin( InfoPluginPtr( new AdiumPlugin() ) );
-#endif
-#ifndef ENABLE_HEADLESS
-#ifdef Q_WS_X11
-    addInfoPlugin( InfoPluginPtr( new FdoNotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MprisPlugin() ) );
-#endif
-#endif
 }
 
 

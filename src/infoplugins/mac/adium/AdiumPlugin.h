@@ -17,24 +17,31 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FDONOTIFYPLUGIN_H
-#define FDONOTIFYPLUGIN_H
+#ifndef ADIUMPLUGIN_H
+#define ADIUMPLUGIN_H
 
+#include "infoplugins/InfoPluginDllMacro.h"
 #include "infosystem/InfoSystem.h"
 
-namespace Tomahawk
-{
+#include <QNetworkAccessManager>
+#include <QObject>
+#include <QVariant>
+#include <QWeakPointer>
 
-namespace InfoSystem
-{
+class QTimer;
 
-class FdoNotifyPlugin : public InfoPlugin
+namespace Tomahawk {
+
+namespace InfoSystem {
+
+class INFOPLUGINDLLEXPORT AdiumPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
-    FdoNotifyPlugin();
-    virtual ~FdoNotifyPlugin();
+    AdiumPlugin();
+    virtual ~AdiumPlugin();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -44,22 +51,40 @@ protected slots:
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
-    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+public slots:
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
 
+private slots:
+    void clearStatus();
+    void settingsChanged();
+
 private:
-    void notifyUser( const QString &messageText );
+    void audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
+    void audioFinished( const QVariant &input );
+    void audioStopped();
+    void audioPaused();
+    void audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
 
-    void nowPlaying( const QVariant &input );
+    bool m_active;
+    QString m_beforeStatus;
+    QString m_afterStatus;
 
-    quint32 m_nowPlayingId;
+    QString m_currentTitle;
+    QString m_currentArtist;
+    QUrl m_currentLongUrl;
+
+    QTimer* m_pauseTimer;
+    QWeakPointer<QNetworkAccessManager> m_nam;
+
 };
 
-}
 
 }
 
-#endif // FDONOTIFYPLUGIN_H
+}
+
+#endif // ADIUMPLUGIN_H

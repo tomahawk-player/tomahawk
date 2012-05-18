@@ -94,7 +94,7 @@ ArtistView::ArtistView( QWidget* parent )
 
 ArtistView::~ArtistView()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -224,7 +224,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
         if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->album().isNull() )
-            ViewManager::instance()->show( item->album(), m_model->mode() );
+            ViewManager::instance()->show( item->album() );
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );

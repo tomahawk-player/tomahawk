@@ -430,6 +430,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
+    qRegisterMetaType< Tomahawk::album_ptr >("Tomahawk::album_ptr");
+    qRegisterMetaType< Tomahawk::artist_ptr >("Tomahawk::artist_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
     qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");

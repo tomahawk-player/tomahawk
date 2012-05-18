@@ -44,10 +44,15 @@
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtGui/QImage>
+#include <QtPlugin>
 
 #include "utils/Logger.h"
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
 
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
@@ -162,3 +167,9 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     if ( list.count() > 0 )
         m_nowPlayingId = list.at( 0 ).toInt();
 }
+
+} //ns InfoSystem
+
+} //ns Tomahawk
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::FdoNotifyPlugin )

@@ -37,17 +37,24 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     , m_infoId( uuid() )
 {
     ui->setupUi( this );
+    QPalette pal = palette();
+    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+
+    setPalette( pal );
+    setAutoFillBackground( true );
 
     layout()->setSpacing( 0 );
-    ui->headerWidget->setStyleSheet( "QWidget#headerWidget { background-image: url(" RESPATH "images/playlist-header-tiled.png); }" );
     ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget{background-color: #323435;}" );
+//    ui->headerWidget->setStyleSheet( "QWidget#headerWidget { background-image: url(" RESPATH "images/playlist-header-tiled.png); }" );
+//    ui->headerWidget->setStyleSheet( "background-color: #323435;" );
+//    ui->tracksWidget->setStyleSheet( "background-color: #323435;" );
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
 
     QFont f = font();
     f.setBold( true );
     f.setPixelSize( 18 );
     ui->trackLabel->setFont( f );
-    ui->similarTracksLabel->setFont( f );
+//    ui->similarTracksLabel->setFont( f );
 
     f.setPixelSize( 14 );
     ui->artistLabel->setFont( f );
@@ -60,7 +67,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     ui->similarTracksView->setFrameShape( QFrame::NoFrame );
     ui->similarTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
+//    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
 
     QPalette p = ui->trackLabel->palette();
     p.setColor( QPalette::Foreground, Qt::white );
@@ -69,6 +76,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->albumLabel->setPalette( p );
     ui->byLabel->setPalette( p );
     ui->fromLabel->setPalette( p );
+//    ui->similarTracksLabel->setPalette( p );
 
     m_albumsModel = new AlbumModel( ui->similarTracksView );
     ui->similarTracksView->setAlbumModel( m_albumsModel );

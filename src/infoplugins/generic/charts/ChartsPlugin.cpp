@@ -36,13 +36,15 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
 
-#define CHART_URL "http://charts.tomahawk-player.org/"
-//#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
 namespace Tomahawk
 {
+#define CHART_URL "http://charts.tomahawk-player.org/"
+//#define CHART_URL "http://localhost:8080/"
+
+using namespace Tomahawk::InfoSystem;
 
 namespace InfoSystem
 {

@@ -57,11 +57,13 @@ AlbumView::AlbumView( QWidget* parent )
     setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
+
     setStyleSheet( "QListView { background-color: #323435; }" );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
     setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
@@ -179,10 +181,13 @@ AlbumView::paintEvent( QPaintEvent* event )
 void
 AlbumView::resizeEvent( QResizeEvent* event )
 {
+    QListView::resizeEvent( event );
+
     if ( autoFitItems() )
     {
 #ifdef Q_WS_X11
-        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
+//        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
+        int scrollbar = 0; verticalScrollBar()->rect().width();
 #else
         int scrollbar = verticalScrollBar()->rect().width();
 #endif
@@ -205,8 +210,6 @@ AlbumView::resizeEvent( QResizeEvent* event )
             repaint();
         }
     }
-
-    QListView::resizeEvent( event );
 }
 
 

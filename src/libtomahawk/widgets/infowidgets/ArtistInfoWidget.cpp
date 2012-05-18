@@ -65,14 +65,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
-    m_albumsModel = new TreeModel( ui->albums );
-    m_albumsModel->setMode( InfoSystemMode );
-    ui->albums->setTreeModel( m_albumsModel );
+    m_albumsModel = new AlbumModel( ui->albums );
+    ui->albums->setAlbumModel( m_albumsModel );
 
-    m_relatedModel = new TreeModel( ui->relatedArtists );
-    m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
-    ui->relatedArtists->setTreeModel( m_relatedModel );
-    ui->relatedArtists->setSortingEnabled( false );
+    m_relatedModel = new AlbumModel( ui->relatedArtists );
+//    m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
+    ui->relatedArtists->setAlbumModel( m_relatedModel );
+//    ui->relatedArtists->setSortingEnabled( false );
     ui->relatedArtists->proxyModel()->sort( -1 );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
@@ -82,13 +81,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
-    m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show SuperCollection Albums" ) );
-    m_button->setCheckable( true );
-    m_button->setChecked( true );
-
-    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
-    connect( m_albumsModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
@@ -114,41 +106,14 @@ ArtistInfoWidget::playlistInterface() const
 
 
 void
-ArtistInfoWidget::setMode( ModelMode mode )
-{
-    m_button->setChecked( mode == InfoSystemMode );
-
-    if ( m_albumsModel->mode() != mode )
-        onModeToggle();
-
-    if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show SuperCollection Albums" ) );
-    else
-        m_button->setText( tr( "Click to show Official Albums" ) );
-}
-
-
-void
-ArtistInfoWidget::onModeToggle()
-{
-    m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->fetchAlbums( m_artist );
-}
-
-
-void
 ArtistInfoWidget::onLoadingStarted()
 {
-    m_button->setEnabled( false );
-    m_button->hide();
 }
 
 
 void
 ArtistInfoWidget::onLoadingFinished()
 {
-    m_button->setEnabled( true );
-    m_button->show();
 }
 
 
@@ -192,8 +157,11 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
-    
-    m_albumsModel->fetchAlbums( artist );
+
+    connect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+
+    onAlbumsFound( artist->albums( Mixed ), Mixed );
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();
@@ -224,6 +192,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 void
 ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mode )
 {
+    m_albumsModel->addAlbums( albums );
 }
 
 
@@ -284,10 +253,12 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
         case InfoSystem::InfoArtistSimilars:
         {
             const QStringList artists = returnedData["artists"].toStringList();
+            QList<artist_ptr> al;
             foreach ( const QString& artist, artists )
             {
-                m_relatedModel->addArtists( Artist::get( artist ) );
+                al << Artist::get( artist );
             }
+            m_relatedModel->addArtists( al );
             break;
         }
 

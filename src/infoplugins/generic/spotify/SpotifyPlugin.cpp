@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "spotifyPlugin.h"
+#include "SpotifyPlugin.h"
 
 #include <QDir>
 #include <QSettings>

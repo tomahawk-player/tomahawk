@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "musicbrainzPlugin.h"
+#include "MusicBrainzPlugin.h"
 
 #include <QNetworkReply>
 #include <QDomDocument>

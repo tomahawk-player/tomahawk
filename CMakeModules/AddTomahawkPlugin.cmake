@@ -86,7 +86,7 @@ macro(add_tomahawk_plugin)
     endif()
 
     # add link targets
-    target_link_libraries(${TOMAHAWK_LIBRARIES})
+    target_link_libraries(${target} tomahawklib)
     if(PLUGIN_LINK_LIBRARIES)
         target_link_libraries(${target} ${PLUGIN_LINK_LIBRARIES})
     endif()

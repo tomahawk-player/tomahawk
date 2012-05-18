@@ -39,8 +39,8 @@
 
 #include "DllMacro.h"
 
+class AlbumModel;
 class PlaylistModel;
-class TreeModel;
 class OverlayButton;
 
 namespace Ui
@@ -91,14 +91,11 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void setMode( Tomahawk::ModelMode mode );
-
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
 
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
 
-    void onModeToggle();
     void onLoadingStarted();
     void onLoadingFinished();
 
@@ -107,12 +104,10 @@ private:
 
     Tomahawk::artist_ptr m_artist;
 
-    TreeModel* m_relatedModel;
-    TreeModel* m_albumsModel;
+    AlbumModel* m_relatedModel;
+    AlbumModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
-
-    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;
