@@ -112,6 +112,7 @@ public:
     virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
+    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -150,7 +151,7 @@ private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
-    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, Tomahawk::collection_ptr collection );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
