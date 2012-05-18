@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#import "mac/FileHelpers.h"
+#import <Foundation/Foundation.h>
 
 @interface MoveDelegate : NSObject
 {
