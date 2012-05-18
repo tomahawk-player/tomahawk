@@ -17,72 +17,51 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ADIUMPLUGIN_H
-#define ADIUMPLUGIN_H
+#ifndef FDONOTIFYPLUGIN_H
+#define FDONOTIFYPLUGIN_H
 
+#include "infoplugins/InfoPluginDllMacro.h"
 #include "infosystem/InfoSystem.h"
 
-#include <QNetworkAccessManager>
-#include <QObject>
-#include <QVariant>
-#include <QWeakPointer>
+namespace Tomahawk
+{
 
-class QTimer;
+namespace InfoSystem
+{
 
-namespace Tomahawk {
-
-namespace InfoSystem {
-
-class AdiumPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT FdoNotifyPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
-    AdiumPlugin();
-    virtual ~AdiumPlugin();
+    FdoNotifyPlugin();
+    virtual ~FdoNotifyPlugin();
 
 protected slots:
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestData );
     }
-    
+
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
-public slots:
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
 
-private slots:
-    void clearStatus();
-    void settingsChanged();
-
 private:
-    void audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
-    void audioFinished( const QVariant &input );
-    void audioStopped();
-    void audioPaused();
-    void audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
+    void notifyUser( const QString &messageText );
 
-    bool m_active;
-    QString m_beforeStatus;
-    QString m_afterStatus;
+    void nowPlaying( const QVariant &input );
 
-    QString m_currentTitle;
-    QString m_currentArtist;
-    QUrl m_currentLongUrl;
-
-    QTimer* m_pauseTimer;
-    QWeakPointer<QNetworkAccessManager> m_nam;
-
+    quint32 m_nowPlayingId;
 };
 
-
 }
 
 }
 
-#endif // ADIUMPLUGIN_H
+#endif // FDONOTIFYPLUGIN_H

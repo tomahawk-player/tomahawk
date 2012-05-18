@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QImage>
 #include <QtDBus/QtDBus>
+#include <QtPlugin>
 
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystemWorker.h"
@@ -35,7 +36,11 @@
 #include "MprisPluginRootAdaptor.h"
 #include "MprisPluginPlayerAdaptor.h"
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
 
 static QString s_mpInfoIdentifier = QString( "MPRISPLUGIN" );
 
@@ -254,8 +259,8 @@ MprisPlugin::metadata() const
     Tomahawk::result_ptr track = AudioEngine::instance()->currentTrack();
     if ( track )
     {
-        metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
-        metadataMap.insert( "mpris:length", track->duration() );
+        metadataMap.insert( "mpris:trackid", QVariant::fromValue(QDBusObjectPath(QString( "/track/" ) + track->id().replace( "-", "" ))) );
+        metadataMap.insert( "mpris:length", static_cast<qlonglong>(track->duration()) * 1000000 );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", QStringList( track->artist()->name() ) );
         metadataMap.insert( "xesam:title", track->track() );
@@ -332,14 +337,14 @@ MprisPlugin::setShuffle( bool value )
 double
 MprisPlugin::volume() const
 {
-    return AudioEngine::instance()->volume();
+    return static_cast<double>(AudioEngine::instance()->volume()) / 100.0;
 }
 
 
 void
 MprisPlugin::setVolume( double value )
 {
-    AudioEngine::instance()->setVolume( value );
+    AudioEngine::instance()->setVolume( value * 100 );
 }
 
 
@@ -583,3 +588,8 @@ MprisPlugin::notifyPropertyChanged( const QString& interface, const QString& pro
     QDBusConnection::sessionBus().send(signal);
 }
 
+} //ns InfoSystem
+
+} //ns Tomahawk
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::MprisPlugin )

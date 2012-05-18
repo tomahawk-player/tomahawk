@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "spotifyPlugin.h"
+#include "SpotifyPlugin.h"
 
 #include <QDir>
 #include <QSettings>
@@ -31,7 +31,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "ChartsPlugin_Data_p.h"
+#include "CountryUtils.h"
 
 #define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org/"
 #include <qjson/parser.h>

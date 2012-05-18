@@ -21,13 +21,14 @@
 
 #include "ChartsPlugin.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QSettings>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkReply>
+#include <QDir>
+#include <QSettings>
+#include <QNetworkConfiguration>
+#include <QNetworkReply>
+#include <QtPlugin>
 
 #include "Album.h"
-#include "ChartsPlugin_Data_p.h"
+#include "CountryUtils.h"
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
@@ -40,8 +41,11 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
 
+namespace InfoSystem
+{
 
 ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
@@ -631,3 +635,9 @@ ChartsPlugin::chartReturned()
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Network error in fetching chart:" << reply->url().toString();
 
 }
+
+}
+
+}
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::ChartsPlugin )

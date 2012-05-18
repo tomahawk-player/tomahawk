@@ -139,7 +139,7 @@ TomahawkWindow::loadSettings()
     // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
     // for the 'fix'
 #ifdef QT_MAC_USE_COCOA
-     bool workaround = !isVisible();
+     bool workaround = isVisible();
      if ( workaround )
      {
        // make "invisible"

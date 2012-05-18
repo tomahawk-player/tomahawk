@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <QtPlugin>
 #include <QTimer>
 
 #include "infosystem/InfoSystemWorker.h"
@@ -46,7 +47,11 @@ static void setStatus(const QString &status)
     script( scriptstr );
 }
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
 
 AdiumPlugin::AdiumPlugin()
     : InfoPlugin()
@@ -148,7 +153,7 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
         return;
 
     InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
-    
+
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
@@ -161,7 +166,7 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
     QUrl shortUrl = m_currentLongUrl;
     if ( pushInfoPair.first.contains( "shortUrl" ) )
         shortUrl = pushInfoPair.first[ "shortUrl" ].toUrl();
-        
+
     QString nowPlaying = "";
     nowPlaying.append( m_currentArtist );
     nowPlaying.append(" - ");
@@ -208,3 +213,8 @@ AdiumPlugin::audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
     audioStarted( pushInfoPair );
 }
 
+} //ns InfoSystem
+
+} //ns Tomahawk
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::AdiumPlugin )

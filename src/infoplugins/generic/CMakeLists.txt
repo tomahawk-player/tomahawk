@@ -1,25 +1,21 @@
+include_directories(${LIBECHONEST_INCLUDE_DIR})
 
 list(APPEND simple_plugins
+    Echonest
     Charts
     NewReleases
-    spotify
-    hypem
+    Spotify
+    Hypem
     MusixMatch
-    musicbrainz
+    MusicBrainz
     Rovi
 )
 
 foreach(simple_plugin ${simple_plugins})
-    add_tomahawk_plugin(${simple_plugin}
+    STRING(TOLOWER "${simple_plugin}" dir)
+    add_tomahawk_plugin(${dir}
         TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
-        SOURCES "${simple_plugin}Plugin.cpp"
+        SOURCES "${dir}/${simple_plugin}Plugin.cpp"
     )
 endforeach()
-
-
-include_directories(${LIBECHONEST_INCLUDE_DIR})
-add_tomahawk_plugin(echonest
-    TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
-    SOURCES EchonestPlugin.cpp
-)
 

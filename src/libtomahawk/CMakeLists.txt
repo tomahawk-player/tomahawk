@@ -369,8 +369,6 @@ IF( APPLE )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
     SET( libSources ${libSources}
-      infosystem/infoplugins/mac/Adium.mm
-      infosystem/infoplugins/mac/AdiumPlugin.cpp
       utils/TomahawkUtils_Mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 

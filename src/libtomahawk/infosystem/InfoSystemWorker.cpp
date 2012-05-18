@@ -22,31 +22,16 @@
 #include <QNetworkConfiguration>
 #include <QNetworkProxy>
 #include <QDir>
+#include <QLibrary>
+#include <QPluginLoader>
 
 #include "config.h"
 #include "HeadlessCheck.h"
 #include "InfoSystemWorker.h"
 #include "InfoSystemCache.h"
-#include "infoplugins/generic/EchonestPlugin.h"
-#include "infoplugins/generic/MusixMatchPlugin.h"
-#include "infoplugins/generic/ChartsPlugin.h"
-#include "infoplugins/generic/NewReleasesPlugin.h"
-#include "infoplugins/generic/spotifyPlugin.h"
-#include "infoplugins/generic/musicbrainzPlugin.h"
-#include "infoplugins/generic/hypemPlugin.h"
 #include "GlobalActionManager.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-
-#ifdef Q_WS_MAC
-#include "infoplugins/mac/AdiumPlugin.h"
-#endif
-#ifdef Q_WS_X11
-#include "infoplugins/linux/FdoNotifyPlugin.h"
-#include "infoplugins/linux/MprisPlugin.h"
-#endif
-
-#include "infoplugins/generic/RoviPlugin.h"
 
 namespace Tomahawk
 {
@@ -86,10 +71,6 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_cache = cache;
 
     loadInfoPlugins( findInfoPlugins() );
-
-#ifdef Q_WS_MAC
-    addInfoPlugin( InfoPluginPtr( new AdiumPlugin() ) );
-#endif
 }
 
 
