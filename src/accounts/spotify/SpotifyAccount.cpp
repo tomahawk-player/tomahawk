@@ -100,6 +100,7 @@ SpotifyAccount::init()
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
     setAccountFriendlyName( "Spotify" );
+    setAccountServiceName( "spotify" );
 
     AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
 
@@ -108,7 +109,7 @@ SpotifyAccount::init()
     const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
-    const QString path = configuration().value( "resolverPath" ).toString(); // Manual path override
+    const QString path = configuration().value( "path" ).toString(); // Manual path override
     if ( !checkForResolver() && state != AtticaManager::Uninstalled )
     {
         // If the user manually deleted the resolver, mark it as uninstalled, so we re-fetch for the user
@@ -127,7 +128,7 @@ SpotifyAccount::hookupResolver()
     // initialize the resolver itself. this is called if the account actually has an installed spotify resolver,
     // as it might not.
     // If there is a spotify resolver from attica installed, create the corresponding ExternalResolver* and hook up to it
-    QString path = configuration().value( "resolverPath" ).toString();
+    QString path = configuration().value( "path" ).toString();
     if ( path.isEmpty() )
     {
         const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
@@ -209,18 +210,8 @@ SpotifyAccount::authenticate()
         else
         {
 #ifdef Q_OS_LINUX
-            // Can't install from attica yet on linux, so show a warning if the user tries to turn it on.
-            // TODO make a prettier display
-            QMessageBox box;
-            box.setWindowTitle( tr( "Manual Install Required" ) );
-            box.setTextFormat( Qt::RichText );
-            box.setIcon( QMessageBox::Information );
-            box.setText( tr( "Unfortunately, automatic installation of the Spotify resolver is not yet available on Linux.<br /><br />"
-            "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/spotify" ) );
-            box.setStandardButtons( QMessageBox::Ok );
-            box.exec();
-#endif
             m_preventEnabling = true;
+#endif
         }
     }
     else if ( !m_spotifyResolver.data()->running() )
@@ -282,7 +273,7 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     Q_ASSERT( !resolverPath.isEmpty() );
 
     QVariantHash conf = configuration();
-    conf[ "resolverPath" ] = resolverPath;
+    conf[ "path" ] = resolverPath;
     setConfiguration( conf );
     sync();
 
@@ -291,7 +282,6 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     if ( !m_spotifyResolver.isNull() )
     {
         // replace
-        //connect( m_spotifyResolver.data(), SIGNAL( destroyed( QObject* ) ), this, SLOT( hookupResolver() ) );
         NewClosure( m_spotifyResolver.data(), SIGNAL( destroyed() ), this, SLOT( hookupAfterDeletion( bool ) ), true );
         m_spotifyResolver.data()->deleteLater();
     }
@@ -421,6 +411,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     if ( msgType == "credentials" )
     {
         QVariantHash creds = credentials();
+
         creds[ "username" ] = msg.value( "username" );
         creds[ "password" ] = msg.value( "password" );
         creds[ "highQuality" ] = msg.value( "highQuality" );

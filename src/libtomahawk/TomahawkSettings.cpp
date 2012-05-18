@@ -521,17 +521,25 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         // If the user doesn't have a spotify account, create one, since now it
         // is like the last.fm account and always exists
         QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
-        bool found = false;
+        QString acct;
         foreach ( const QString& account, allAccounts )
         {
             if ( account.startsWith( "spotifyaccount_" ) )
             {
-                found = true;
+                acct = account;
                 break;
             }
         }
 
-        if ( !found )
+        if ( !acct.isEmpty() )
+        {
+            beginGroup( "accounts/" + acct );
+            QVariantHash conf = value( "configuration" ).toHash();
+            foreach ( const QString& key, conf.keys() )
+                qDebug() << key << conf[ key ].toString();
+            endGroup();
+        }
+        else
         {
             const QString accountKey = QString( "spotifyaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
             beginGroup( "accounts/" + accountKey );
