@@ -20,7 +20,6 @@
 #define MAC_FILE_HELPERS_H
 
 #import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
 
 // Implement this delegate protocol to get notified about the result of your copy attempt
 @interface NSObject (SUInstallerDelegateInformalProtocol)
