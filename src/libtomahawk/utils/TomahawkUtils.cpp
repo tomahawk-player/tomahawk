@@ -889,7 +889,7 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
     if ( resolverId.isEmpty() )
         return;
 
-    const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) )
+    const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) );
     const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
     qDebug() << "Found executables in unzipped binary resolver dir:" << files;
     Q_ASSERT( files.size() == 1 );
