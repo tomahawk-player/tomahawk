@@ -121,4 +121,6 @@ private:
 
 } // ns
 
+Q_DECLARE_METATYPE( Tomahawk::artist_ptr )
+
 #endif
