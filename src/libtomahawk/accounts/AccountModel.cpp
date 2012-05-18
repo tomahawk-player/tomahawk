@@ -616,7 +616,8 @@ AccountModel::accountStateChanged( Account* account , Account::ConnectionState )
             // For each type that this node could be, check the corresponding data
             if ( ( n->type == AccountModelNode::UniqueFactoryType && n->accounts.size() && n->accounts.first() == account ) ||
                  ( n->type == AccountModelNode::AtticaType && n->atticaAccount && n->atticaAccount == account ) ||
-                 ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account ) )
+                 ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account ) ||
+                 ( n->type == AccountModelNode::CustomAccountType && n->customAccount && n->customAccount == account ) )
             {
                 const QModelIndex idx = index( i, 0, QModelIndex() );
                 emit dataChanged( idx, idx );

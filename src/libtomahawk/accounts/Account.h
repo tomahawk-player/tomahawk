@@ -102,6 +102,10 @@ public:
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
 
+    // Some accounts cannot be enabled if authentication fails. Return true after failing to authenticate
+    // if this is the case, and the account will not be enabled
+    virtual bool preventEnabling() const { return false; }
+
     AccountTypes types() const;
 
     void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }

@@ -40,6 +40,7 @@
 #include <QAction>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -52,7 +53,7 @@ static QString s_resolverId = "spotify-osx";
 #elif defined(Q_OS_WIN)
 static QString s_resolverId = "spotify-win";
 #else
-static QString s_resolverId = "spotify-linux"
+static QString s_resolverId = "spotify-linux";
 #endif
 
 Account*
@@ -73,7 +74,8 @@ SpotifyAccountFactory::icon() const
 
 
 SpotifyAccount::SpotifyAccount( const QString& accountId )
-: CustomAtticaAccount( accountId )
+    : CustomAtticaAccount( accountId )
+    , m_preventEnabling( false )
 {
     init();
 }
@@ -204,6 +206,22 @@ SpotifyAccount::authenticate()
         qDebug() << "Got null resolver but asked to authenticate, so installing if we have one from attica:" << res.isValid() << res.id();
         if ( res.isValid() && !res.id().isEmpty() )
             AtticaManager::instance()->installResolver( res, false );
+        else
+        {
+#ifdef Q_OS_LINUX
+            // Can't install from attica yet on linux, so show a warning if the user tries to turn it on.
+            // TODO make a prettier display
+            QMessageBox box;
+            box.setWindowTitle( tr( "Manual Install Required" ) );
+            box.setTextFormat( Qt::RichText );
+            box.setIcon( QMessageBox::Information );
+            box.setText( tr( "Unfortunately, automatic installation of the Spotify resolver is not yet available on Linux.<br /><br />"
+            "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/spotify" ) );
+            box.setStandardButtons( QMessageBox::Ok );
+            box.exec();
+#endif
+            m_preventEnabling = true;
+        }
     }
     else if ( !m_spotifyResolver.data()->running() )
     {
@@ -263,10 +281,12 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
 {
     Q_ASSERT( !resolverPath.isEmpty() );
 
-    QVariantHash configuration;
-    configuration[ "resolverPath" ] = resolverPath;
-    setConfiguration( configuration );
+    QVariantHash conf = configuration();
+    conf[ "resolverPath" ] = resolverPath;
+    setConfiguration( conf );
     sync();
+
+    m_preventEnabling = false;
 
     if ( !m_spotifyResolver.isNull() )
     {
@@ -278,17 +298,17 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     else
     {
         hookupResolver();
-        authenticate();
+        AccountManager::instance()->enableAccount( this );
     }
 }
 
 
 void
-SpotifyAccount::hookupAfterDeletion( bool autostart )
+SpotifyAccount::hookupAfterDeletion( bool autoEnable )
 {
     hookupResolver();
-    if ( autostart )
-        authenticate();
+    if ( autoEnable )
+        AccountManager::instance()->enableAccount( this );
 }
 
 

@@ -90,6 +90,7 @@ public:
     virtual QWidget* aclWidget() { return 0; }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     virtual SipPlugin* sipPlugin() { return 0; }
+    virtual bool preventEnabling() const { return m_preventEnabling; }
 
     QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
@@ -118,7 +119,7 @@ private slots:
     void playlistCreated( const QString& msgType, const QVariantMap& msg );
 
     void init();
-    void hookupAfterDeletion( bool autostart );
+    void hookupAfterDeletion( bool autoEnable );
 
 private:
     bool checkForResolver();
@@ -147,6 +148,8 @@ private:
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
+
+    bool m_preventEnabling;
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;
