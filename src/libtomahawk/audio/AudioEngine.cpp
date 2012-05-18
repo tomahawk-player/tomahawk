@@ -579,7 +579,6 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 void
 AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query )
 {
-    tDebug() << query->toString();
     if ( !query.isNull() && query->numResults() )
         playItem( playlist, query->results().first() );
 }

@@ -57,12 +57,14 @@ AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
 void
 AnimatedSpinner::init()
 {
+    m_autoCenter = true;
 
     m_showHide->setDuration( 300 );
     m_showHide->setStartFrame( 0 );
     m_showHide->setEndFrame( 100 );
     m_showHide->setUpdateInterval( 20 );
-    if( parentWidget() )
+
+    if ( parentWidget() )
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
     else
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( updatePixmap() ) );
@@ -86,7 +88,6 @@ AnimatedSpinner::init()
     else
         size = m_pixmap.size();
 
-
     /// Radius is best-fit line with points (13x13, 2), (28x28, 5), (48x48, 10)
     m_radius = qRound( ( 23. * ( size.width() - 5.) ) / 100. );
     m_armLength = size.width()/2 - m_radius;
@@ -101,12 +102,12 @@ AnimatedSpinner::init()
 
 
 void
-AnimatedSpinner::paintEvent(QPaintEvent *event)
+AnimatedSpinner::paintEvent( QPaintEvent* event )
 {
-    Q_UNUSED(event);
-    if ( parentWidget() )
+    Q_UNUSED( event );
+    if ( m_autoCenter && parentWidget() )
     {
-        QPoint center( ( parentWidget()->width() / 2 ) - ( width() / 2 ), ( parentWidget()->height() / 2 ) - ( height() / 2 ) );
+        QPoint center = parentWidget()->contentsRect().center();
         if ( center != pos() )
         {
             move( center );
@@ -114,7 +115,7 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
         }
     }
 
-    QPainter p(this);
+    QPainter p( this );
     drawFrame( &p, rect() );
 }
 

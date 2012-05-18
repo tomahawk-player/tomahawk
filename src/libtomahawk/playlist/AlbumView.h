@@ -68,9 +68,11 @@ public slots:
 
 signals:
     void modelChanged();
+    void scrolledContents( int dx, int dy );
 
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
+    virtual void scrollContentsBy( int dx, int dy );
 
     void paintEvent( QPaintEvent* event );
     void resizeEvent( QResizeEvent* event );

@@ -49,6 +49,8 @@ public:
     QSize sizeHint() const;
 
     QPixmap pixmap() const { return m_pixmap; }
+    
+    void setAutoCenter( bool enabled ) { m_autoCenter = enabled; }
 
 public slots:
     void fadeIn();
@@ -82,6 +84,7 @@ private:
     int m_currentIndex;
     QVector<qreal> m_colors;
     QPixmap m_pixmap;
+    bool m_autoCenter;
 };
 
 #endif

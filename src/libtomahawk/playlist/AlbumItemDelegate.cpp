@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QAbstractItemView>
+#include <QMouseEvent>
 
 #include "Artist.h"
 #include "Query.h"
@@ -35,8 +36,9 @@
 #include "playlist/AlbumItem.h"
 #include "playlist/AlbumProxyModel.h"
 #include "AlbumView.h"
-#include <QMouseEvent>
-#include <ViewManager.h>
+#include "ViewManager.h"
+#include "utils/AnimatedSpinner.h"
+#include "widgets/ImageButton.h"
 
 
 AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )
@@ -46,6 +48,8 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
 {
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    
+    connect( m_view, SIGNAL( scrolledContents( int, int ) ), SLOT( onScrolled( int, int ) ) );
 }
 
 
@@ -156,7 +160,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     painter->drawPixmap( r, cover.scaled( r.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
 
-    if ( m_hoverIndex == index )
+/*    if ( m_hoverIndex == index )
     {
         painter->save();
 
@@ -172,7 +176,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawPixmap( m_playButtonRect, playButton );
 
         painter->restore();
-    }
+    }*/
 
     painter->save();
 
@@ -250,6 +254,37 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 }
 
 
+void
+AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
+{
+    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item )
+    {
+        if ( !item->query().isNull() )
+            AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
+        else if ( !item->album().isNull() )
+            AudioEngine::instance()->playItem( item->album() );
+        else if ( !item->artist().isNull() )
+            AudioEngine::instance()->playItem( item->artist() );
+    }
+
+    QPoint pos = m_button[ index ]->pos();
+    foreach ( ImageButton* button, m_button )
+        button->deleteLater();
+    m_button.clear();
+
+    _detail::Closure* closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
+                                            const_cast<AlbumItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+
+    AnimatedSpinner* spinner = new AnimatedSpinner( m_view );
+    spinner->setAutoCenter( false );
+    spinner->fadeIn();
+    spinner->move( pos );
+
+    m_subWidgets[ index ] = spinner;
+}
+
+
 bool
 AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
@@ -263,27 +298,31 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
         return false;
 
     if ( event->type() == QEvent::MouseMove )
-        m_hoverIndex = index;
-
-    QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-    if ( event->type() == QEvent::MouseButtonRelease )
     {
-        if ( m_playButtonRect.contains( ev->pos() ) )
+        if ( !m_button.contains( index ) && !m_subWidgets.contains( index ) )
         {
-            AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            foreach ( ImageButton* button, m_button )
+                button->deleteLater();
+            m_button.clear();
 
-            if ( !item->query().isNull() )
-                AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
-            else if ( !item->album().isNull() )
-                AudioEngine::instance()->playItem( item->album() );
-            else if ( !item->artist().isNull() )
-                AudioEngine::instance()->playItem( item->artist() );
+            ImageButton* button = new ImageButton( m_view );
+            button->setPixmap( RESPATH "images/play-rest.png" );
+            button->setPixmap( RESPATH "images/play-pressed.png", QIcon::Off, QIcon::Active );
+            button->setFixedSize( 48, 48 );
+            button->move( option.rect.center() - QPoint( 23, 23 ) );
+            button->setContentsMargins( 0, 0, 0, 0 );
+            button->show();
+            
+            _detail::Closure* closure = NewClosure( button, SIGNAL( clicked( bool ) ),
+                                                    const_cast<AlbumItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
-            event->accept();
-            return true;
+            m_button[ index ] = button;
         }
+
+        m_hoverIndex = index;
     }
 
+    QMouseEvent* ev = static_cast< QMouseEvent* >( event );
     if ( m_artistNameRects.contains( index ) )
     {
         QRect artistNameRect = m_artistNameRects[ index ];
@@ -359,3 +398,27 @@ AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
     emit updateIndex( idx );
 }
 
+
+void
+AlbumItemDelegate::onScrolled( int dx, int dy )
+{
+    foreach ( QWidget* widget, m_subWidgets.values() )
+    {
+        widget->move( widget->pos() + QPoint( dx, dy ) );
+    }
+    foreach ( ImageButton* button, m_button.values() )
+    {
+        button->move( button->pos() + QPoint( dx, dy ) );
+    }
+}
+
+
+void
+AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
+{
+    foreach ( QWidget* widget, m_subWidgets.values() )
+    {
+        delete widget;
+    }
+    m_subWidgets.clear();
+}

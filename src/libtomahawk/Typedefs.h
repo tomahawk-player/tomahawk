@@ -93,6 +93,7 @@ inline static QString uuid()
     return q;
 }
 
+Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
 
 #endif // TYPEDEFS_H

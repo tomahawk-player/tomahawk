@@ -171,6 +171,14 @@ AlbumView::onItemCountChanged( unsigned int items )
 
 
 void
+AlbumView::scrollContentsBy( int dx, int dy )
+{
+    QListView::scrollContentsBy( dx, dy );
+    emit scrolledContents( dx, dy );
+}
+
+
+void
 AlbumView::paintEvent( QPaintEvent* event )
 {
     if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )

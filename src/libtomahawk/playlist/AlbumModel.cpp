@@ -158,7 +158,7 @@ AlbumModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
     if ( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        return Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
     else
         return defaultFlags;
 }
