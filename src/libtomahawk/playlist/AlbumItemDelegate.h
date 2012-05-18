@@ -62,6 +62,7 @@ private:
 
     QPersistentModelIndex m_hoveringOver;
     QPersistentModelIndex m_hoverIndex;
+    mutable QRect m_playButtonRect;
 
     QPixmap m_shadowPixmap;
 };

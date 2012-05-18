@@ -165,6 +165,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->setOpacity( 0.5 );
         painter->drawRect( r );
 
+        painter->setOpacity( 1.0 );
+        QPixmap playButton = QPixmap( RESPATH "images/play-rest.png" );
+        int delta = ( r.width() - playButton.width() ) / 2;
+        m_playButtonRect = r.adjusted( delta, delta, -delta, -delta );
+        painter->drawPixmap( m_playButtonRect, playButton );
+
         painter->restore();
     }
 
@@ -189,14 +195,16 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     boldFont.setPixelSize( 14 );
 
     QRect textRect = option.rect.adjusted( 6, option.rect.height() - 36, -4, -6 );
-
+    painter->setFont( font );
+    int bottomHeight = painter->fontMetrics().boundingRect( bottom ).height();
     painter->setFont( boldFont );
+    int topHeight = painter->fontMetrics().boundingRect( top ).height();
+
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
     else
-        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( top ).height() ||
-                     textRect.height() / 2 < painter->fontMetrics().boundingRect( bottom ).height() );
+        oneLiner = ( textRect.height() < topHeight + bottomHeight );
 
     if ( oneLiner )
     {
@@ -257,9 +265,27 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
     if ( event->type() == QEvent::MouseMove )
         m_hoverIndex = index;
 
+    QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+    if ( event->type() == QEvent::MouseButtonRelease )
+    {
+        if ( m_playButtonRect.contains( ev->pos() ) )
+        {
+            AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+
+            if ( !item->query().isNull() )
+                AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
+            else if ( !item->album().isNull() )
+                AudioEngine::instance()->playItem( item->album() );
+            else if ( !item->artist().isNull() )
+                AudioEngine::instance()->playItem( item->artist() );
+
+            event->accept();
+            return true;
+        }
+    }
+
     if ( m_artistNameRects.contains( index ) )
     {
-        QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         QRect artistNameRect = m_artistNameRects[ index ];
         if ( artistNameRect.contains( ev->pos() ) )
         {
