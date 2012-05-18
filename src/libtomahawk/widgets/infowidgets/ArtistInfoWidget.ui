@@ -57,10 +57,7 @@
          </widget>
         </item>
         <item>
-         <widget class="ArtistView" name="relatedArtists">
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
+         <widget class="AlbumView" name="relatedArtists">
          </widget>
         </item>
        </layout>
@@ -82,7 +79,7 @@
         </widget>
        </item>
        <item>
-        <widget class="ArtistView" name="albums"/>
+        <widget class="AlbumView" name="albums"/>
        </item>
       </layout>
      </widget>
@@ -115,6 +112,11 @@
    <class>ArtistView</class>
    <extends>QTreeView</extends>
    <header location="global">ArtistView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AlbumView</class>
+   <extends>QListView</extends>
+   <header location="global">AlbumView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
