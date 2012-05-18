@@ -46,6 +46,13 @@ struct SocialAction
     QVariant value;
     QVariant timestamp;
     Tomahawk::source_ptr source;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    SocialAction();
+    ~SocialAction();
+    SocialAction& operator=( const SocialAction& other );
+    SocialAction( const SocialAction& other );
 };
 
 struct PlaybackLog
@@ -53,6 +60,13 @@ struct PlaybackLog
     Tomahawk::source_ptr source;
     unsigned int timestamp;
     unsigned int secsPlayed;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    PlaybackLog();
+    ~PlaybackLog();
+    PlaybackLog& operator=( const PlaybackLog& other );
+    PlaybackLog( const PlaybackLog& other );
 };
 
 

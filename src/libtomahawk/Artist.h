@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QPixmap>
 #endif
@@ -87,7 +86,7 @@ private slots:
     void infoSystemFinished( QString target );
 
 private:
-    Q_DISABLE_COPY( Artist )
+    Artist();
 
     unsigned int m_id;
     QString m_name;

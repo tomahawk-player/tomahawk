@@ -31,6 +31,7 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
+#include "Collection.h"
 #include "infosystem/InfoSystem.h"
 
 namespace Tomahawk

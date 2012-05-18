@@ -39,6 +39,41 @@
 
 using namespace Tomahawk;
 
+SocialAction::SocialAction() {}
+SocialAction::~SocialAction() {}
+
+SocialAction& SocialAction::operator=( const SocialAction& other )
+{
+    action = other.action;
+    value = other.value;
+    timestamp = other.timestamp;
+    source = other.source;
+
+    return *this;
+}
+
+SocialAction::SocialAction( const SocialAction& other )
+{
+    *this = other;
+}
+
+PlaybackLog::PlaybackLog() {}
+PlaybackLog::~PlaybackLog() {}
+
+PlaybackLog& PlaybackLog::operator=( const PlaybackLog& other )
+{
+    source = other.source;
+    timestamp = other.timestamp;
+    secsPlayed = other.secsPlayed;
+
+    return *this;
+}
+
+PlaybackLog::PlaybackLog( const PlaybackLog& other )
+{
+    *this = other;
+}
+
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
