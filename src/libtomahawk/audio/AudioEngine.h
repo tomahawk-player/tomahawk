@@ -93,6 +93,9 @@ public slots:
     void mute();
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
+    void playItem( const Tomahawk::artist_ptr& artist );
+    void playItem( const Tomahawk::album_ptr& album );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
     

@@ -577,6 +577,54 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
 
 void
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query )
+{
+    tDebug() << query->toString();
+    if ( !query.isNull() && query->numResults() )
+        playItem( playlist, query->results().first() );
+}
+
+
+void
+AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
+{
+    if ( artist->playlistInterface()->trackCount() )
+    {
+        playItem( artist->playlistInterface(), artist->playlistInterface()->tracks().first() );
+    }
+    else
+    {
+        _detail::Closure* closure = NewClosure( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ), const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::artist_ptr ) ), artist );
+    }
+}
+
+
+void
+AudioEngine::playItem( const Tomahawk::album_ptr& album )
+{
+    playlistinterface_ptr pli = album->playlistInterface( Mixed );
+    if ( pli->trackCount() )
+    {
+        if ( pli->tracks().first()->resolvingFinished() )
+        {
+            playItem( pli, pli->tracks().first() );
+        }
+        else
+        {
+            _detail::Closure* closure = NewClosure( pli->tracks().first().data(), SIGNAL( resolvingFinished( bool ) ),
+                                                    const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
+        }
+    }
+    else if ( !pli->tracksLoaded() )
+    {
+        _detail::Closure* closure = NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
+        pli->tracks();
+    }
+}
+
+
+void
 AudioEngine::onPlaylistNextTrackReady()
 {
     // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
