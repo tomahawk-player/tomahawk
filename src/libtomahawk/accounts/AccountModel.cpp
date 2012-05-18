@@ -505,7 +505,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
             box.setWindowTitle( tr( "Manual Install Required" ) );
             box.setTextFormat( Qt::RichText );
             box.setIcon( QMessageBox::Information );
-            box.setText( tr( "Unfortunately, automatic installation of the this resolver is not yet available on Linux.<br /><br />"
+            box.setText( tr( "Unfortunately, automatic installation of this resolver is not yet available on Linux.<br /><br />"
             "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/%1" ).arg( acct->accountServiceName() ) );
             box.setStandardButtons( QMessageBox::Ok );
             box.exec();

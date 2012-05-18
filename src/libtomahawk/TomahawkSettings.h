@@ -214,6 +214,8 @@ private slots:
 
 private:
     void doInitialSetup();
+    void createLastFmAccount();
+    void createSpotifyAccount();
     void doUpgrade( int oldVersion, int newVersion );
 
     static TomahawkSettings* s_instance;

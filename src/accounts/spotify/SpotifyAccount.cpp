@@ -90,6 +90,9 @@ SpotifyAccount::~SpotifyAccount()
 void
 SpotifyAccount::init()
 {
+    setAccountFriendlyName( "Spotify" );
+    setAccountServiceName( "spotify" );
+
     if ( !AtticaManager::instance()->resolversLoaded() )
     {
         // If we're still waiting to load, wait for the attica resolvers to come down the pipe
@@ -98,9 +101,6 @@ SpotifyAccount::init()
     }
 
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
-
-    setAccountFriendlyName( "Spotify" );
-    setAccountServiceName( "spotify" );
 
     AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
 
