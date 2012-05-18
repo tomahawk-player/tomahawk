@@ -30,7 +30,7 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
     foreach( const QString& key, states.keys() )
     {
         AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating << resolver.binary;
     }
     return out;
 }
@@ -38,19 +38,25 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
 
 inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
 {
-    quint32 count = 0, version = 0;
-    in >> version;
+    quint32 count = 0, configVersion = 0;
+    in >> configVersion;
     in >> count;
     for ( uint i = 0; i < count; i++ )
     {
         QString key, version, scriptPath;
         qint32 state, userRating;
+        bool binary = false;
         in >> key;
         in >> version;
         in >> scriptPath;
         in >> state;
         in >> userRating;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
+        if ( configVersion > 10 )
+        {
+            // V11 includes 'bool binary' flag
+            in >> binary;
+        }
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state, binary );
     }
     return in;
 }

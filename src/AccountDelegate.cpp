@@ -735,6 +735,15 @@ AccountDelegate::doneInstalling ( const QPersistentModelIndex& idx )
 
 
 void
+AccountDelegate::errorInstalling( const QPersistentModelIndex& idx )
+{
+    // Just hide the loading spinner as we do after a successful install
+    qDebug() << "ERROR INSTALLING index:" << idx;
+    doneInstalling( idx );
+}
+
+
+void
 AccountDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
     emit update( idx );

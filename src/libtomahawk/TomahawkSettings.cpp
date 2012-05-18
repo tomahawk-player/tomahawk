@@ -127,6 +127,21 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
     }
+
+    // Ensure last.fm and spotify accounts always exist
+    QString spotifyAcct, lastfmAcct;
+    foreach ( const QString& acct, value( "accounts/allaccounts" ).toStringList() )
+    {
+        if ( acct.startsWith( "lastfmaccount_" ) )
+            lastfmAcct = acct;
+        else if ( acct.startsWith( "spotifyaccount_" ) )
+            spotifyAcct = acct;
+    }
+
+    if ( spotifyAcct.isEmpty() )
+        createSpotifyAccount();
+    if ( lastfmAcct.isEmpty() )
+        createLastFmAccount();
 }
 
 
@@ -142,6 +157,15 @@ TomahawkSettings::doInitialSetup()
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
 
+
+    createLastFmAccount();
+    createSpotifyAccount();
+}
+
+
+void
+TomahawkSettings::createLastFmAccount()
+{
     // Add a last.fm account for scrobbling and infosystem
     const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
     addAccount( accountKey );
@@ -151,6 +175,27 @@ TomahawkSettings::doInitialSetup()
     setValue( "autoconnect", true );
     setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
     endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
+}
+
+
+void
+TomahawkSettings::createSpotifyAccount()
+{
+    const QString accountKey = QString( "spotifyaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+    beginGroup( "accounts/" + accountKey );
+    setValue( "enabled", false );
+    setValue( "types", QStringList() << "ResolverType" );
+    setValue( "credentials", QVariantHash() );
+    setValue( "configuration", QVariantHash() );
+    endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
 }
 
 
@@ -515,6 +560,34 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         setPlaylistUpdaters( updaters );
 
         remove( "playlistupdaters" );
+    }
+    else if ( oldVersion == 11 )
+    {
+        // If the user doesn't have a spotify account, create one, since now it
+        // is like the last.fm account and always exists
+        QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+        QString acct;
+        foreach ( const QString& account, allAccounts )
+        {
+            if ( account.startsWith( "spotifyaccount_" ) )
+            {
+                acct = account;
+                break;
+            }
+        }
+
+        if ( !acct.isEmpty() )
+        {
+            beginGroup( "accounts/" + acct );
+            QVariantHash conf = value( "configuration" ).toHash();
+            foreach ( const QString& key, conf.keys() )
+                qDebug() << key << conf[ key ].toString();
+            endGroup();
+        }
+        else
+        {
+            createSpotifyAccount();
+        }
     }
 }
 

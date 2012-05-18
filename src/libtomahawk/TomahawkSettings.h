@@ -30,7 +30,7 @@
 
 #include "DllMacro.h"
 
-#define TOMAHAWK_SETTINGS_VERSION 10
+#define TOMAHAWK_SETTINGS_VERSION 12
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
@@ -214,6 +214,8 @@ private slots:
 
 private:
     void doInitialSetup();
+    void createLastFmAccount();
+    void createSpotifyAccount();
     void doUpgrade( int oldVersion, int newVersion );
 
     static TomahawkSettings* s_instance;

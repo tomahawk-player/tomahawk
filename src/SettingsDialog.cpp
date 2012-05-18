@@ -52,6 +52,7 @@
 #include <accounts/ResolverAccount.h>
 #include "utils/Logger.h"
 #include "AccountFactoryWrapper.h"
+#include "accounts/spotify/SpotifyAccount.h"
 
 #include "ui_ProxyDialog.h"
 #include "ui_StackedSettingsDialog.h"
@@ -97,7 +98,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->enableProxyCheckBox->setChecked( useProxy );
     ui->proxyButton->setEnabled( useProxy );
 
-    
+
     createIcons();
 #ifdef Q_WS_X11
     ui->listWidget->setFrameShape( QFrame::StyledPanel );
@@ -116,6 +117,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
+
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_2 );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_4 );
+    delete ui->verticalSpacer;
+    delete ui->verticalSpacer_2;
+    delete ui->verticalSpacer_4;
 #endif
 
     // Accounts
@@ -135,6 +143,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
     ui->accountsView->setModel( m_accountProxy );
@@ -255,7 +264,7 @@ SettingsDialog::~SettingsDialog()
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
-    
+
     delete ui;
 }
 
@@ -450,15 +459,40 @@ SettingsDialog::installFromFile()
 
     if( !resolver.isEmpty() )
     {
+        const QFileInfo resolverAbsoluteFilePath( resolver );
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
+
+        if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
+        {
+            // HACK if this is a spotify resolver, we treat is specially.
+            // usually we expect the user to just download the spotify resolver from attica,
+            // however developers, those who build their own tomahawk, can't do that, or linux
+            // users can't do that. However, we have an already-existing SpotifyAccount that we
+            // know exists that we need to use this resolver path.
+            //
+            // Hence, we special-case the spotify resolver and directly set the path on it here.
+            SpotifyAccount* acct = 0;
+            foreach ( Account* account, AccountManager::instance()->accounts() )
+            {
+                if ( SpotifyAccount* spotify = qobject_cast< SpotifyAccount* >( account ) )
+                {
+                    acct = spotify;
+                    break;
+                }
+            }
+
+            if ( acct )
+            {
+                acct->setManualResolverPath( resolver );
+                return;
+            }
+        }
+
         Account* acct = AccountManager::instance()->accountFromPath( resolver );
 
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );
-
-
-        QFileInfo resolverAbsoluteFilePath( resolver );
-        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
 }
 

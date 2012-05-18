@@ -290,6 +290,16 @@ TomahawkApp::init()
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
     PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
+    // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
+    // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
+    // with the default value of 3 in QApplicationPrivate::initialize.
+    {
+        QSettings qt_settings(QSettings::UserScope, "Trolltech");
+        qt_settings.beginGroup("Qt");
+        QApplication::setWheelScrollLines(
+            qt_settings.value("wheelScrollLines", QApplication::wheelScrollLines()).toInt());
+    }
+
 #ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();

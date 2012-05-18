@@ -202,6 +202,9 @@ AccountManager::enableAccount( Account* account )
 
     account->authenticate();
 
+    if ( account->preventEnabling() )
+        return;
+
     account->setEnabled( true );
     m_enabledAccounts << account;
 

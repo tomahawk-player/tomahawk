@@ -24,6 +24,10 @@
 #include "AtticaManager.h"
 #include "ResolverAccount.h"
 
+#ifndef ENABLE_HEADLESS
+#include <QMessageBox>
+#endif
+
 #include <attica/content.h>
 
 using namespace Tomahawk;
@@ -35,6 +39,7 @@ AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverInstallationFailed( QString ) ), this, SLOT( resolverInstallFailed( QString ) ) );
 
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
     connect( AccountManager::instance(), SIGNAL( removed( Tomahawk::Accounts::Account* ) ), this, SLOT( accountRemoved( Tomahawk::Accounts::Account* ) ) );
@@ -491,6 +496,21 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         else if( state == Qt::Unchecked )
             AccountManager::instance()->disableAccount( acct );
 
+#if defined(Q_OS_LINUX) && !defined(ENABLE_HEADLESS)
+        if ( acct->preventEnabling() )
+        {
+            // Can't install from attica yet on linux, so show a warning if the user tries to turn it on.
+            // TODO make a prettier display
+            QMessageBox box;
+            box.setWindowTitle( tr( "Manual Install Required" ) );
+            box.setTextFormat( Qt::RichText );
+            box.setIcon( QMessageBox::Information );
+            box.setText( tr( "Unfortunately, automatic installation of this resolver is not yet available on Linux.<br /><br />"
+            "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/%1" ).arg( acct->accountServiceName() ) );
+            box.setStandardButtons( QMessageBox::Ok );
+            box.exec();
+        }
+#endif
         emit dataChanged( index, index );
 
         return true;
@@ -615,7 +635,8 @@ AccountModel::accountStateChanged( Account* account , Account::ConnectionState )
             // For each type that this node could be, check the corresponding data
             if ( ( n->type == AccountModelNode::UniqueFactoryType && n->accounts.size() && n->accounts.first() == account ) ||
                  ( n->type == AccountModelNode::AtticaType && n->atticaAccount && n->atticaAccount == account ) ||
-                 ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account ) )
+                 ( n->type == AccountModelNode::ManualResolverType && n->resolverAccount && n->resolverAccount == account ) ||
+                 ( n->type == AccountModelNode::CustomAccountType && n->customAccount && n->customAccount == account ) )
             {
                 const QModelIndex idx = index( i, 0, QModelIndex() );
                 emit dataChanged( idx, idx );
@@ -682,6 +703,22 @@ AccountModel::accountRemoved( Account* account )
             beginRemoveRows( QModelIndex(), i, i );
             m_accounts.removeAt( i );
             endRemoveRows();
+
+            return;
+        }
+    }
+}
+
+
+void
+AccountModel::resolverInstallFailed( const QString& resolverId )
+{
+    for ( int i = 0; i < m_accounts.size(); i++ )
+    {
+        if ( m_accounts[ i ]->type == AccountModelNode::AtticaType && m_accounts[ i ]->atticaContent.id() == resolverId )
+        {
+            qDebug() << "Got failed attica install in account mode, emitting signal!";
+            emit errorInstalling( index( i, 0, QModelIndex() ) );
 
             return;
         }

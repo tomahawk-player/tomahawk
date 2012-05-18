@@ -370,6 +370,7 @@ IF( APPLE )
 
     SET( libSources ${libSources}
       utils/TomahawkUtils_Mac.mm
+      mac/FileHelpers.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
@@ -379,10 +380,11 @@ IF( APPLE )
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
-	${FOUNDATION_LIBRARY}
+        ${FOUNDATION_LIBRARY}
 	${SCRIPTINGBRIDGE_LIBRARY}
 
         /System/Library/Frameworks/AppKit.framework
+        /System/Library/Frameworks/Security.framework
     )
 ELSE( APPLE )
     SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp )

@@ -115,7 +115,7 @@ namespace TomahawkUtils
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
     };
-    
+
 
     DLLEXPORT QString appFriendlyVersion();
 
@@ -138,7 +138,19 @@ namespace TomahawkUtils
 
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
-    
+
+    DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
+    DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
+    DLLEXPORT bool unzipFileInFolder( const QString& zipFileName, const QDir& folder );
+
+
+    // Extracting may be asynchronous, pass in a receiver object with the following slots:
+    //  extractSucceeded( const QString& path ) and extractFailed() to be notified/
+    DLLEXPORT void extractBinaryResolver( const QString& zipFilename, QObject* receiver );
+
+    // Used by the above, not exported
+    void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
+
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
      * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,
