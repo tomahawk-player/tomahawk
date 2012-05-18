@@ -84,6 +84,8 @@ private slots:
     void onFilterChanged( const QString& filter );
 
 private:
+    void adjustItemSize( const QRect& rect );
+
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
@@ -92,6 +94,8 @@ private:
 
     bool m_inited;
     bool m_autoFitItems;
+    
+    QRect m_paintRect;
 };
 
 #endif // ALBUMVIEW_H
