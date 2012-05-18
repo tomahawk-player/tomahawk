@@ -165,8 +165,23 @@
    <item>
     <widget class="QWidget" name="tracksWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
-       <widget class="QLabel" name="similarTracksLabel">
+       <widget class="HeaderLabel" name="similarTracksLabel">
         <property name="text">
          <string>Similar Tracks</string>
         </property>
@@ -195,6 +210,11 @@
    <class>AlbumView</class>
    <extends>QListView</extends>
    <header>playlist/AlbumView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/HeaderLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
