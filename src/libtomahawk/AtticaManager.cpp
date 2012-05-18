@@ -403,9 +403,9 @@ AtticaManager::binaryResolversList( BaseJob* j )
 
     // NOTE: No binary support for linux distros
     QString platform;
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
     platform = "osx";
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
     platform = "win";
 #endif
 
