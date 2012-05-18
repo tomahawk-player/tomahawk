@@ -595,6 +595,7 @@ AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
     else
     {
         _detail::Closure* closure = NewClosure( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ), const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::artist_ptr ) ), artist );
+        artist->playlistInterface()->tracks();
     }
 }
 
@@ -615,7 +616,7 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
                                                     const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
         }
     }
-    else if ( !pli->tracksLoaded() )
+    else
     {
         _detail::Closure* closure = NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                                 const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
