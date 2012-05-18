@@ -43,8 +43,8 @@ class DLLEXPORT AudioEngine : public QObject
 Q_OBJECT
 
 public:
-    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError };
-    enum AudioState { Stopped, Playing, Paused };
+    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
+    enum AudioState { Stopped, Playing, Paused, Error };
 
     static AudioEngine* instance();
 
@@ -76,7 +76,7 @@ public slots:
     void playPause();
     void play();
     void pause();
-    void stop();
+    void stop(AudioErrorCode errorCode = NoError);
 
     void previous();
     void next();

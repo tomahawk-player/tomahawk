@@ -158,14 +158,18 @@ AudioEngine::pause()
 
 
 void
-AudioEngine::stop()
+AudioEngine::stop(AudioErrorCode errorCode)
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( isStopped() )
         return;
 
-    setState( Stopped );
+    if(errorCode == NoError)
+        setState( Stopped );
+    else
+        setState( Error );
+
     m_mediaObject->stop();
     emit stopped();
 
@@ -467,6 +471,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             m_input = io;
             m_mediaObject->play();
+
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
@@ -661,14 +666,19 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
     if ( newState == Phonon::ErrorState )
     {
-        stop();
+        stop( UnknownError );
 
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+
         emit error( UnknownError );
+        setState(Error);
+
         return;
     }
     if ( newState == Phonon::PlayingState )
+    {
         setState( Playing );
+    }
 
     if ( oldState == Phonon::PlayingState )
     {
@@ -782,10 +792,13 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     Tomahawk::result_ptr lastTrack = m_currentTrack;
     if ( !lastTrack.isNull() )
     {
-        if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
-        {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+       if(m_state != Error)
+       {
+            if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+            {
+                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+            }
         }
 
         emit finished( lastTrack );
