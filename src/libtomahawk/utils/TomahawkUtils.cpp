@@ -762,7 +762,6 @@ QString
 extractScriptPayload( const QString& filename, const QString& resolverId )
 {
     // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
-
     QDir resolverDir = appDataDir();
     if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
     {
@@ -853,6 +852,8 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
     return;
 #endif
 
+#ifdef Q_OS_MAC
+    // Platform-specific handling of resolver payload now. We know it's good
     // Unzip the file.
     QFileInfo info( zipFilename );
     QDir tmpDir = QDir::tempPath();
@@ -864,8 +865,6 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
     tmpDir.cd( info.baseName() );
     TomahawkUtils::unzipFileInFolder( info.absoluteFilePath(), tmpDir );
 
-    // Platform-specific handling of resolver payload now. We know it's good and we unzipped it
-#ifdef Q_OS_MAC
     // On OSX it just contains 1 file, the resolver executable itself. For now. We just copy it to
     // the Tomahawk.app/Contents/MacOS/ folder alongside the Tomahawk executable.
     const QString dest = QCoreApplication::applicationDirPath();
@@ -879,6 +878,20 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 
     copyWithAuthentication( src, dest, receiver );
 #elif  defined(Q_OS_WIN)
+    // We unzip directly to the target location, just like normal attica resolvers
+    Q_ASSERT( receiver );
+    if ( !receiver )
+        return;
+
+    const QString resolverId = receiver->property( "resolverid" ).toString();
+
+    Q_ASSERT( !resolverId.isEmpty() );
+    if ( resolverId.isEmpty() )
+        return;
+
+    const QString resolverDir = extractScriptPayload( zipFilename, resolverId );
+    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, path ) );
+
 #endif
 
     // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..

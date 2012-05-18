@@ -51,6 +51,8 @@ public:
     {
         Q_ASSERT( !m_resolverId.isEmpty() );
         Q_ASSERT( !m_manager.isNull() );
+
+        setProperty( "resolverid", m_resolverId );
     }
 
     virtual ~BinaryInstallerHelper() {}
@@ -406,10 +408,6 @@ AtticaManager::binaryResolversList( BaseJob* j )
 #elif Q_OS_WIN
     platform = "win";
 #endif
-
-    // NOTE HACK
-    // At the moment we are going to assume that all binary resolvers also have an associated full-fledged Tomahawk Account
-    //  like SpotifyAccount.
 
     foreach ( const Content& c, binaryResolvers )
     {
