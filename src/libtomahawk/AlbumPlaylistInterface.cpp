@@ -239,16 +239,13 @@ AlbumPlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries 
 
         if ( picked )
         {
-            query_ptr q = Query::get( q1->artist(), q1->track(), q1->album(), uuid(), true );
+            query_ptr q = Query::get( q1->artist(), q1->track(), q1->album(), uuid(), false );
             q->setAlbumPos( q1->results().first()->albumpos() );
             q->setDiscNumber( q1->discnumber() );
             result << q;
         }
     }
-    
-    foreach ( const query_ptr& q, result )
-    {
-        tDebug() << q->albumpos() << q->track();
-    }
+
+    Pipeline::instance()->resolve( result );
     return result;
 }
