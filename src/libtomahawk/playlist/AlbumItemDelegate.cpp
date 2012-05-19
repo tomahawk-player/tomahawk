@@ -160,7 +160,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     painter->drawPixmap( r, cover.scaled( r.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
 
-/*    if ( m_hoverIndex == index )
+    if ( m_hoverIndex == index )
     {
         painter->save();
 
@@ -168,15 +168,9 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->setBrush( QColor( 33, 33, 33 ) );
         painter->setOpacity( 0.5 );
         painter->drawRect( r );
-
         painter->setOpacity( 1.0 );
-        QPixmap playButton = QPixmap( RESPATH "images/play-rest.png" );
-        int delta = ( r.width() - playButton.width() ) / 2;
-        m_playButtonRect = r.adjusted( delta, delta, -delta, -delta );
-        painter->drawPixmap( m_playButtonRect, playButton );
-
         painter->restore();
-    }*/
+    }
 
     painter->save();
 
@@ -257,24 +251,10 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 void
 AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 {
-    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-    if ( item )
-    {
-        if ( !item->query().isNull() )
-            AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
-        else if ( !item->album().isNull() )
-            AudioEngine::instance()->playItem( item->album() );
-        else if ( !item->artist().isNull() )
-            AudioEngine::instance()->playItem( item->artist() );
-    }
-
     QPoint pos = m_button[ index ]->pos();
     foreach ( ImageButton* button, m_button )
         button->deleteLater();
     m_button.clear();
-
-    _detail::Closure* closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
-                                            const_cast<AlbumItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
     AnimatedSpinner* spinner = new AnimatedSpinner( m_view );
     spinner->setAutoCenter( false );
@@ -282,6 +262,20 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     spinner->move( pos );
 
     m_subWidgets[ index ] = spinner;
+    
+    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item )
+    {
+        _detail::Closure* closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
+                                                const_cast<AlbumItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+
+        if ( !item->query().isNull() )
+            AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
+        else if ( !item->album().isNull() )
+            AudioEngine::instance()->playItem( item->album() );
+        else if ( !item->artist().isNull() )
+            AudioEngine::instance()->playItem( item->artist() );
+    }
 }
 
 

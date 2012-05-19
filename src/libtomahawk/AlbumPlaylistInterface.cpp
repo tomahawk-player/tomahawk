@@ -65,6 +65,9 @@ AlbumPlaylistInterface::siblingItem( int itemsAway )
     if ( p >= m_queries.count() )
         return Tomahawk::result_ptr();
 
+    if ( !m_queries.at( p )->numResults() )
+        return siblingItem( itemsAway + 1 );
+
     m_currentTrack = p;
     m_currentItem = m_queries.at( p )->results().first();
     return m_currentItem;
