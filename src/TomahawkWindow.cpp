@@ -364,7 +364,7 @@ TomahawkWindow::setupSignals()
 
     // Menus for accounts that support them
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
-    foreach( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
+    foreach ( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
     {
         if ( !account || !account->sipPlugin() )
             continue;
@@ -442,7 +442,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 {
     bool accept = true;
 #if ! defined ( Q_WS_MAC )
-#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed: "
+#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
     switch( e->key() )
     {
         case Qt::Key_MediaPlay:
@@ -477,7 +477,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
     accept = false;
 #endif
 
-    if(accept)
+    if ( accept )
         e->accept();
 
     QMainWindow::keyPressEvent( e );
@@ -570,9 +570,9 @@ TomahawkWindow::pluginMenuAdded( QMenu* menu )
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach( QAction* action, ui->menuNetwork->actions() )
+    foreach ( QAction* action, ui->menuNetwork->actions() )
     {
-        if( action->menu() == menu )
+        if ( action->menu() == menu )
         {
             ui->menuNetwork->removeAction( action );
             return;
@@ -760,8 +760,14 @@ TomahawkWindow::audioStarted()
 void
 TomahawkWindow::audioStopped()
 {
-
     ui->actionPlay->setText( tr( "Play" ) );
+    
+    tDebug() << Q_FUNC_INFO << AudioEngine::instance()->isStopped();
+    if ( AudioEngine::instance()->isStopped() )
+    {
+        m_currentTrack = result_ptr();
+        setWindowTitle( m_windowTitle );
+    }
 }
 
 
@@ -797,6 +803,7 @@ TomahawkWindow::onAccountAdded( Account* acc )
     connect( acc->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
+
 void
 TomahawkWindow::onAccountError()
 {
@@ -806,7 +813,7 @@ TomahawkWindow::onAccountError()
     // TODO real error message from plugin kthxbbq
     QMessageBox::warning( this,
                           tr( "Authentication Error" ),
-                          QString( "Error connecting to SIP: Authentication failed!" ),
+                          tr( "Error connecting to SIP: Authentication failed!" ),
                           QMessageBox::Ok );
 }
 
