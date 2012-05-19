@@ -94,6 +94,9 @@ private slots:
     void onAccountDisconnected();
     void onAccountError();
 
+    void onHistoryBackAvailable( bool avail );
+    void onHistoryForwardAvailable( bool avail );
+
     void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );

@@ -137,6 +137,9 @@ signals:
     void hideQueueRequested();
 
     void tomahawkLoaded();
+    
+    void historyBackAvailable( bool avail );
+    void historyForwardAvailable( bool avail );
 
 public slots:
     Tomahawk::ViewPage* showSuperCollection();

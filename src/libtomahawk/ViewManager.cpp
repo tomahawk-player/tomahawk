@@ -633,6 +633,9 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         m_pageHistory.insert( 0, page );
     }
 
+    emit historyBackAvailable( m_pageHistory.count() > 1 );
+    emit historyForwardAvailable( false );
+
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 

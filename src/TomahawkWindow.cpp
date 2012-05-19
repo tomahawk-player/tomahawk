@@ -372,6 +372,9 @@ TomahawkWindow::setupSignals()
         connect( account->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( account->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
+    
+    connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
 
@@ -478,6 +481,20 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
         e->accept();
 
     QMainWindow::keyPressEvent( e );
+}
+
+
+void
+TomahawkWindow::onHistoryBackAvailable( bool avail )
+{
+    m_backAction->setEnabled( avail );
+}
+
+
+void
+TomahawkWindow::onHistoryForwardAvailable( bool avail )
+{
+    m_forwardAction->setEnabled( avail );
 }
 
 
