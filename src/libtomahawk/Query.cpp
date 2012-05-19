@@ -887,9 +887,6 @@ Query::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
 void
 Query::infoSystemFinished( QString target )
 {
-    tDebug() << Q_FUNC_INFO;
-    Q_UNUSED( target );
-
     if ( target != id() )
         return;
 

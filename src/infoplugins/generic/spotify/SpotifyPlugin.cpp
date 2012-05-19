@@ -24,6 +24,7 @@
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
+#include <QtPlugin>
 
 #include "Album.h"
 #include "Typedefs.h"
@@ -383,3 +384,6 @@ SpotifyPlugin::chartReturned()
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
 }
+
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::SpotifyPlugin )

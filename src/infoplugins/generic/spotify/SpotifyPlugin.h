@@ -22,6 +22,8 @@
 
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "infoplugins/InfoPluginDllMacro.h"
+
 #include <QNetworkReply>
 #include <QObject>
 
@@ -33,9 +35,10 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class SpotifyPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT SpotifyPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
     SpotifyPlugin();
