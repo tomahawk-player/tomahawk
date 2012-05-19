@@ -556,18 +556,22 @@ ViewManager::setAlbumMode()
 void
 ViewManager::historyBack()
 {
-    ViewPage* oldPage = m_pageHistory.takeFirst();
+    if ( m_pageHistory.count() < 2 )
+        return;
 
+    ViewPage* oldPage = m_pageHistory.takeFirst();
     ViewPage* newPage = m_pageHistory.first();
-    qDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
+
+    tDebug() << "Deleting page in history:" << oldPage->widget()->metaObject()->className();
+    tDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
     setPage( newPage, false );
 
-    delete oldPage;
+//    delete oldPage;
 }
 
 
 void
-ViewManager::removeFromHistory ( ViewPage* p )
+ViewManager::removeFromHistory( ViewPage* p )
 {
     if ( currentPage() == p )
     {

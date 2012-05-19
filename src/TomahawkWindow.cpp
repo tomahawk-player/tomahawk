@@ -102,6 +102,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
+    setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -202,6 +203,35 @@ TomahawkWindow::applyPlatformTweaks()
 
 
 void
+TomahawkWindow::setupToolBar()
+{
+    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    toolbar->setObjectName( "TomahawkToolbar" );
+    toolbar->setMovable( false );
+    toolbar->setFloatable( false );
+    toolbar->setIconSize( QSize( 22, 22 ) );
+    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    
+    m_backAction = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAction->setToolTip( tr( "Go back one page" ) );
+    m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAction->setToolTip( tr( "Go forward one page" ) );
+
+    QWidget* spacer = new QWidget( this );
+    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( spacer );
+
+    m_searchWidget = new QSearchField( this );
+    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
+    m_searchWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_searchWidget->setMaximumWidth( 340 );
+    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
+    
+    toolbar->addWidget( m_searchWidget );
+}
+
+
+void
 TomahawkWindow::setupSideBar()
 {
     // Delete fake designer widgets
@@ -215,10 +245,6 @@ TomahawkWindow::setupSideBar()
     m_sidebar->setOrientation( Qt::Vertical );
     m_sidebar->setChildrenCollapsible( false );
 
-    m_searchWidget = new QSearchField( m_sidebar );
-    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
-    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
-
     m_sourcetree = new SourceTreeView();
     JobStatusView* jobsView = new JobStatusView( m_sidebar );
     m_jobsModel = new JobStatusModel( jobsView );
@@ -231,16 +257,14 @@ TomahawkWindow::setupSideBar()
     m_queueView->queue()->playlistModel()->setReadOnly( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->playlistInterface() );
 
-    m_sidebar->addWidget( m_searchWidget );
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( jobsView );
     m_sidebar->addWidget( m_queueView );
 
-    m_sidebar->setGreedyWidget( 1 );
+//    m_sidebar->setGreedyWidget( 1 );
     m_sidebar->hide( 1, false );
     m_sidebar->hide( 2, false );
     m_sidebar->hide( 3, false );
-    m_sidebar->hide( 4, false );
 
     sidebarWidget->layout()->addWidget( m_sidebar );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );

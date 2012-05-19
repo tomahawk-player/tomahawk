@@ -130,6 +130,7 @@ private:
 
     void applyPlatformTweaks();
     void setupSignals();
+    void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
 
@@ -144,6 +145,9 @@ private:
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusModel* m_jobsModel;
+
+    QAction* m_backAction;
+    QAction* m_forwardAction;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
