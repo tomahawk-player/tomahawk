@@ -869,8 +869,9 @@ Query::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
 
             for ( int i = 0; i < tracks.count() && i < 50; i++ )
             {
-                m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), true );
+                m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), false );
             }
+            Pipeline::instance()->resolve( m_similarTracks );
             
             m_simTracksLoaded = true;
             emit similarTracksLoaded();
