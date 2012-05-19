@@ -313,7 +313,12 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             m_button[ index ] = button;
         }
 
-        m_hoverIndex = index;
+        if ( m_hoverIndex != index )
+        {
+            emit updateIndex( m_hoverIndex );
+            m_hoverIndex = index;
+            emit updateIndex( index );
+        }
     }
 
     QMouseEvent* ev = static_cast< QMouseEvent* >( event );
@@ -378,6 +383,14 @@ AlbumItemDelegate::modelChanged()
 {
     m_artistNameRects.clear();
     m_hoveringOver = QPersistentModelIndex();
+    m_hoverIndex = QPersistentModelIndex();
+
+    foreach ( ImageButton* button, m_button )
+        button->deleteLater();
+    m_button.clear();
+    foreach ( QWidget* widget, m_subWidgets )
+        widget->deleteLater();
+    m_subWidgets.clear();
 
     if ( AlbumView* view = qobject_cast< AlbumView* >( m_view ) )
         m_model = view->proxyModel();
