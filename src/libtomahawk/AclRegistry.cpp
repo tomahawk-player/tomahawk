@@ -200,10 +200,7 @@ ACLRegistry::queueNextJob()
     if ( m_jobCount != 0 )
         return;
 
-<<<<<<< HEAD
     tDebug() << Q_FUNC_INFO << "jobQueue size = " << m_jobQueue.length();
-=======
->>>>>>> master
     if ( !m_jobQueue.isEmpty() )
     {
         AclJobItem* job = m_jobQueue.dequeue();
