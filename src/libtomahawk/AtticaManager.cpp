@@ -34,73 +34,11 @@
 #include "utils/Logger.h"
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
+#include "utils/BinaryInstallerHelper.h"
 
 using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
-
-
-class BinaryInstallerHelper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit BinaryInstallerHelper( const QString& resolverId, bool createAccount, AtticaManager* manager)
-        : QObject( manager )
-        , m_manager( QWeakPointer< AtticaManager >( manager ) )
-        , m_resolverId( resolverId )
-        , m_createAccount( createAccount )
-    {
-        Q_ASSERT( !m_resolverId.isEmpty() );
-        Q_ASSERT( !m_manager.isNull() );
-
-        setProperty( "resolverid", m_resolverId );
-    }
-
-    virtual ~BinaryInstallerHelper() {}
-
-public slots:
-    void installSucceeded( const QString& path )
-    {
-        qDebug() << Q_FUNC_INFO << "install of binary resolver succeeded, enabling: " << path;
-
-        if ( m_manager.isNull() )
-            return;
-
-        if ( m_createAccount )
-        {
-            Tomahawk::Accounts::Account* acct = Tomahawk::Accounts::AccountManager::instance()->accountFromPath( path );
-
-            Tomahawk::Accounts::AccountManager::instance()->addAccount( acct );
-            TomahawkSettings::instance()->addAccount( acct->accountId() );
-            Tomahawk::Accounts::AccountManager::instance()->enableAccount( acct );
-        }
-
-        m_manager.data()->m_resolverStates[ m_resolverId ].scriptPath = path;
-        m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
-
-        TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
-        emit m_manager.data()->resolverInstalled( m_resolverId );
-        emit m_manager.data()->resolverStateChanged( m_resolverId );
-
-        deleteLater();
-    }
-    void installFailed()
-    {
-        qDebug() << Q_FUNC_INFO << "install failed";
-
-        if ( m_manager.isNull() )
-            return;
-
-        m_manager.data()->resolverInstallationFailed( m_resolverId );
-
-        deleteLater();
-    }
-
-private:
-    QString m_resolverId;
-    bool m_createAccount;
-    QWeakPointer<AtticaManager> m_manager;
-};
 
 
 AtticaManager::AtticaManager( QObject* parent )
@@ -714,5 +652,3 @@ AtticaManager::doResolverRemove( const QString& id ) const
 
     TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
 }
-
-#include "AtticaManager.moc"
