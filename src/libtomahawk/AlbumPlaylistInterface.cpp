@@ -42,6 +42,7 @@ AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk
     , m_databaseLoaded( false )
     , m_mode( mode )
     , m_collection( collection )
+    , m_uuid( uuid() )
     , m_album( QWeakPointer< Tomahawk::Album >( album ) )
 {
 }
@@ -105,7 +106,7 @@ AlbumPlaylistInterface::tracks()
             artistInfo["album"] = m_album.data()->name();
 
             Tomahawk::InfoSystem::InfoRequestData requestData;
-            requestData.caller = uuid();
+            requestData.caller = m_uuid;
             requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
             requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
             requestData.timeoutMillis = 0;
@@ -136,6 +137,9 @@ AlbumPlaylistInterface::tracks()
 void
 AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
+    if ( requestData.caller != m_uuid )
+        return;
+
     switch ( requestData.type )
     {
         case Tomahawk::InfoSystem::InfoAlbumSongs:

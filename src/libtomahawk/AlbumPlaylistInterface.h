@@ -87,6 +87,7 @@ private:
 
     Tomahawk::ModelMode m_mode;
     Tomahawk::collection_ptr m_collection;
+    QString m_uuid;
 
     QWeakPointer< Tomahawk::Album > m_album;
 };
