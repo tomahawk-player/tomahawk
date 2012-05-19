@@ -116,6 +116,8 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
         connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
         delegate->emitSizeHintChanged( m_model->index( row ) );
     }
+
+    checkCount();
 }
 
 
@@ -125,6 +127,8 @@ JobStatusView::customDelegateJobRemoved( int row )
     if ( m_customDelegateRefCounter[ row ] == 1 )
         m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
     m_customDelegateRefCounter[ row ] = m_customDelegateRefCounter[ row ] - 1;
+
+    checkCount();
 }
 
 
