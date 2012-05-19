@@ -161,6 +161,7 @@ public:
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
 
     QList<Tomahawk::query_ptr> similarTracks() const;
+    QStringList lyrics() const;
 
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
@@ -182,6 +183,8 @@ signals:
     void socialActionsLoaded();
     void statsLoaded();
     void similarTracksLoaded();
+    void lyricsLoaded();
+
     void updated();
 
 public slots:
@@ -264,11 +267,14 @@ private:
     bool m_simTracksLoaded;
     QList<Tomahawk::query_ptr> m_similarTracks;
     
+    bool m_lyricsLoaded;
+    QStringList m_lyrics;
+    
     mutable int m_infoJobs;
 };
 
 }; //ns
 
-Q_DECLARE_METATYPE(Tomahawk::query_ptr);
+Q_DECLARE_METATYPE( Tomahawk::query_ptr );
 
 #endif // QUERY_H

@@ -110,6 +110,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_track( track )
     , m_socialActionsLoaded( false )
     , m_simTracksLoaded( false )
+    , m_lyricsLoaded( false )
     , m_infoJobs( 0 )
 {
     init();
@@ -810,6 +811,39 @@ Query::similarTracks() const
 }
 
 
+QStringList
+Query::lyrics() const
+{
+    if ( !m_lyricsLoaded )
+    {
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = artist();
+        trackInfo["track"] = track();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = id();
+        requestData.customData = QVariantMap();
+
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.type = Tomahawk::InfoSystem::InfoTrackLyrics;
+        requestData.requestId = TomahawkUtils::infosystemRequestId();
+        
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( finished( QString ) ),
+                 SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
+
+        m_infoJobs++;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+    
+    return m_lyrics;
+}
+
+
 void
 Query::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
@@ -819,6 +853,15 @@ Query::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVaria
     QVariantMap returnedData = output.value< QVariantMap >();
     switch ( requestData.type )
     {
+        case InfoSystem::InfoTrackLyrics:
+        {
+            m_lyrics = output.value< QVariant >().toString().split( "\n" );
+            
+            m_lyricsLoaded = true;
+            emit lyricsLoaded();
+            break;
+        }
+
         case InfoSystem::InfoTrackSimilars:
         {
             const QStringList artists = returnedData["artists"].toStringList();
