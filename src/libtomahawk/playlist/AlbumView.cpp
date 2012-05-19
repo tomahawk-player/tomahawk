@@ -32,6 +32,7 @@
 #include "AlbumItem.h"
 #include "AlbumItemDelegate.h"
 #include "AlbumModel.h"
+#include "ContextMenu.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
@@ -48,6 +49,7 @@ AlbumView::AlbumView( QWidget* parent )
     , m_delegate( 0 )
     , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_overlay( new OverlayWidget( this ) )
+    , m_contextMenu( new ContextMenu( this ) )
     , m_inited( false )
 {
     setDragEnabled( true );
@@ -57,18 +59,20 @@ AlbumView::AlbumView( QWidget* parent )
     setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
-
-    setStyleSheet( "QListView { background-color: #323435; }" );
-
+    setContextMenuPolicy( Qt::CustomContextMenu );
     setResizeMode( Adjust );
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
+    setStyleSheet( "QListView { background-color: #323435; }" );
+
     setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+//    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -258,4 +262,43 @@ AlbumView::startDrag( Qt::DropActions supportedActions )
     drag->setHotSpot( QPoint( -20, -20 ) );
 
     /* Qt::DropAction action = */ drag->exec( supportedActions, Qt::CopyAction );
+}
+
+
+void
+AlbumView::onCustomContextMenu( const QPoint& pos )
+{
+    m_contextMenu->clear();
+
+    QModelIndex idx = indexAt( pos );
+    idx = idx.sibling( idx.row(), 0 );
+    m_contextMenuIndex = idx;
+
+    if ( !idx.isValid() )
+        return;
+
+    QList<query_ptr> queries;
+    QList<artist_ptr> artists;
+    QList<album_ptr> albums;
+
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() || selectedIndexes().contains( index.parent() ) )
+            continue;
+
+        AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+
+        if ( item && !item->query().isNull() )
+            queries << item->query();
+        else if ( item && !item->artist().isNull() )
+            artists << item->artist();
+        else if ( item && !item->album().isNull() )
+            albums << item->album();
+    }
+
+    m_contextMenu->setQueries( queries );
+    m_contextMenu->setArtists( artists );
+    m_contextMenu->setAlbums( albums );
+
+    m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }

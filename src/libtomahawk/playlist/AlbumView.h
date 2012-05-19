@@ -29,6 +29,11 @@
 #include "widgets/OverlayWidget.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+    class ContextMenu;
+};
+
 class AlbumModel;
 class AnimatedSpinner;
 class AlbumItemDelegate;
@@ -82,8 +87,8 @@ protected slots:
 
 private slots:
     void onItemCountChanged( unsigned int items );
-
     void onFilterChanged( const QString& filter );
+    void onCustomContextMenu( const QPoint& pos );
 
 private:
     void adjustItemSize( const QRect& rect );
@@ -93,6 +98,9 @@ private:
     AlbumItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
+
+    QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_inited;
     bool m_autoFitItems;
