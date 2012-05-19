@@ -579,8 +579,16 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 void
 AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query )
 {
-    if ( !query.isNull() && query->numResults() )
-        playItem( playlist, query->results().first() );
+    if ( query->resolvingFinished() )
+    {
+        if ( query->numResults() )
+            playItem( playlist, query->results().first() );
+    }
+    else
+    {
+        _detail::Closure* closure = NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
+                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
+    }
 }
 
 
@@ -605,15 +613,7 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
     playlistinterface_ptr pli = album->playlistInterface( Mixed );
     if ( pli->trackCount() )
     {
-        if ( pli->tracks().first()->resolvingFinished() )
-        {
-            playItem( pli, pli->tracks().first() );
-        }
-        else
-        {
-            _detail::Closure* closure = NewClosure( pli->tracks().first().data(), SIGNAL( resolvingFinished( bool ) ),
-                                                    const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
-        }
+        playItem( pli, pli->tracks().first() );
     }
     else
     {

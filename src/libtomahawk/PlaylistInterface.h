@@ -105,6 +105,8 @@ private:
     QString m_filter;
 };
 
-};
+}
+
+Q_DECLARE_METATYPE( Tomahawk::playlistinterface_ptr )
 
 #endif // PLAYLISTINTERFACE_H
