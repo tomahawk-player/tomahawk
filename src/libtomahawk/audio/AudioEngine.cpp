@@ -158,14 +158,14 @@ AudioEngine::pause()
 
 
 void
-AudioEngine::stop(AudioErrorCode errorCode)
+AudioEngine::stop( AudioErrorCode errorCode )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( isStopped() )
         return;
 
-    if(errorCode == NoError)
+    if( errorCode == NoError )
         setState( Stopped );
     else
         setState( Error );
@@ -671,7 +671,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
 
         emit error( UnknownError );
-        setState(Error);
+        setState( Error );
 
         return;
     }
@@ -792,13 +792,10 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     Tomahawk::result_ptr lastTrack = m_currentTrack;
     if ( !lastTrack.isNull() )
     {
-       if(m_state != Error)
-       {
-            if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
-            {
-                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-            }
+        if ( m_state != Error && TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        {
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
 
         emit finished( lastTrack );

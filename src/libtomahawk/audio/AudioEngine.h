@@ -76,7 +76,7 @@ public slots:
     void playPause();
     void play();
     void pause();
-    void stop(AudioErrorCode errorCode = NoError);
+    void stop( AudioErrorCode errorCode = NoError );
 
     void previous();
     void next();
