@@ -162,12 +162,12 @@ AudioEngine::stop()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    emit stopped();
     if ( isStopped() )
         return;
 
     setState( Stopped );
     m_mediaObject->stop();
+    emit stopped();
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
@@ -180,7 +180,6 @@ AudioEngine::stop()
         sendWaitingNotification();
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
-    
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -255,6 +254,10 @@ AudioEngine::canSeek()
     if ( m_mediaObject && m_mediaObject->isValid() )
         phononCanSeek = m_mediaObject->isSeekable();
     */
+
+    if ( m_playlist.isNull() )
+        return phononCanSeek;
+
     return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
 }
 
