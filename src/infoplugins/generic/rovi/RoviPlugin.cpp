@@ -19,11 +19,12 @@
 
 #include "RoviPlugin.h"
 
-#include "utils/Logger.h"
-
 #include <QDateTime>
 #include <QNetworkReply>
+#include <QtPlugin>
+
 #include <parser.h>
+#include "utils/Logger.h"
 
 using namespace Tomahawk::InfoSystem;
 
@@ -41,9 +42,9 @@ RoviPlugin::RoviPlugin()
     m_secret = "XUnYutaAW6";
 }
 
+
 RoviPlugin::~RoviPlugin()
 {
-
 }
 
 
@@ -68,6 +69,7 @@ RoviPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
     emit getCachedInfo( criteria, 0, requestData );
 }
+
 
 void
 RoviPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -96,6 +98,7 @@ RoviPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomah
     }
 }
 
+
 void
 RoviPlugin::albumLookupError( QNetworkReply::NetworkError error )
 {
@@ -110,6 +113,7 @@ RoviPlugin::albumLookupError( QNetworkReply::NetworkError error )
     emit info( requestData, QVariant() );
 
 }
+
 
 void
 RoviPlugin::albumLookupFinished()
@@ -187,5 +191,7 @@ RoviPlugin::generateSig() const
 {
     QByteArray raw = m_apiKey + m_secret + QString::number( QDateTime::currentMSecsSinceEpoch() / 1000 ).toLatin1();
     return TomahawkUtils::md5( raw ).toLatin1();
-
 }
+
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::RoviPlugin )
