@@ -343,10 +343,13 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             else if ( event->type() == QEvent::MouseButtonRelease )
             {
                 AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-                if ( !item || item->album().isNull() || item->album()->artist().isNull() )
+                if ( !item )
                     return false;
 
-                ViewManager::instance()->show( item->album()->artist() );
+                if ( !item->query().isNull() )
+                    ViewManager::instance()->show( Tomahawk::Artist::get( item->query()->artist() ) );
+                else if ( !item->album().isNull() && !item->album()->artist().isNull() )
+                    ViewManager::instance()->show( item->album()->artist() );
 
                 event->accept();
                 return true;
