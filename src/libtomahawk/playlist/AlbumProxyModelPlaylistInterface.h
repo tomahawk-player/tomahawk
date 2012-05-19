@@ -50,12 +50,12 @@ public:
     virtual QString filter() const;
     virtual void setFilter( const QString& pattern );
 
-    virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
+    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
-    virtual Tomahawk::PlaylistInterface::ViewMode viewMode() const { return Tomahawk::PlaylistInterface::Album; }
+    virtual Tomahawk::PlaylistModes::ViewMode viewMode() const { return Tomahawk::PlaylistModes::Album; }
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -64,12 +64,12 @@ signals:
     void nextTrackReady();
 
 public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 private:
     QWeakPointer< AlbumProxyModel > m_proxyModel;
-    RepeatMode m_repeatMode;
+    PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 

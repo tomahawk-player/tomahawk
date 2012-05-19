@@ -50,9 +50,9 @@ signals:
     void pausePressed();
 
 public slots:
-    void onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
-    
+
 protected:
     void changeEvent( QEvent* e );
     void dragEnterEvent ( QDragEnterEvent* );
@@ -61,7 +61,7 @@ protected:
 
 private slots:
     void phononTickCheckTimeout();
-    
+
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
     void onPlaybackPaused();
@@ -93,7 +93,7 @@ private:
     Ui::AudioControls* ui;
 
     Tomahawk::result_ptr m_currentTrack;
-    Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
+    Tomahawk::PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
 
     QTimer m_phononTickCheckTimer;
@@ -102,7 +102,7 @@ private:
     qint64 m_lastSliderCheck;
     bool m_noTimeChange;
     qint64 m_lastTextSecondShown;
-    
+
     QWidget* m_parent;
 };
 

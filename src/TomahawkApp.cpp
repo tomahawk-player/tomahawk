@@ -471,7 +471,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
-    qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::LatchMode >( "Tomahawk::PlaylistModes::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::RepeatMode >( "Tomahawk::PlaylistModes::RepeatMode" );
 
     qRegisterMetaType< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
     qRegisterMetaTypeStreamOperators< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );

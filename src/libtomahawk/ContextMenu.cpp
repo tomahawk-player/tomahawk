@@ -27,6 +27,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "utils/Logger.h"
+#include "audio/AudioEngine.h"
 
 using namespace Tomahawk;
 

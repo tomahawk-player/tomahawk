@@ -30,6 +30,7 @@
 #include "database/DatabaseCommand_ClientAuthValid.h"
 #include "network/Servent.h"
 #include "Pipeline.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

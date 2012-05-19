@@ -34,6 +34,7 @@
 
 #include "DllMacro.h"
 #include "utils/TomahawkUtils.h"
+#include "Typedefs.h"
 
 class QNetworkAccessManager;
 
@@ -48,100 +49,6 @@ enum PushInfoFlags { // must be powers of 2
     PushNoFlag = 1,
     PushShortUrlFlag = 2
 };
-
-enum InfoType { // as items are saved in cache, mark them here to not change them
-    InfoNoInfo = 0, //WARNING: *ALWAYS* keep this first!
-    InfoTrackID = 1,
-    InfoTrackArtist = 2,
-    InfoTrackAlbum = 3,
-    InfoTrackGenre = 4,
-    InfoTrackComposer = 5,
-    InfoTrackDate = 6,
-    InfoTrackNumber = 7,
-    InfoTrackDiscNumber = 8,
-    InfoTrackBitRate = 9,
-    InfoTrackLength = 10,
-    InfoTrackSampleRate = 11,
-    InfoTrackFileSize = 12,
-    InfoTrackBPM = 13,
-    InfoTrackReplayGain = 14,
-    InfoTrackReplayPeakGain = 15,
-    InfoTrackLyrics = 16,
-    InfoTrackLocation = 17,
-    InfoTrackProfile = 18,
-    InfoTrackEnergy = 19,
-    InfoTrackDanceability = 20,
-    InfoTrackTempo = 21,
-    InfoTrackLoudness = 22,
-    InfoTrackSimilars = 23, // cached -- do not change
-
-    InfoArtistID = 25,
-    InfoArtistName = 26,
-    InfoArtistBiography = 27,
-    InfoArtistImages = 28, //cached -- do not change
-    InfoArtistBlog = 29,
-    InfoArtistFamiliarity = 30,
-    InfoArtistHotttness = 31,
-    InfoArtistSongs = 32, //cached -- do not change
-    InfoArtistSimilars = 33, //cached -- do not change
-    InfoArtistNews = 34,
-    InfoArtistProfile = 35,
-    InfoArtistReviews = 36,
-    InfoArtistTerms = 37,
-    InfoArtistLinks = 38,
-    InfoArtistVideos = 39,
-    InfoArtistReleases = 40,
-
-    InfoAlbumID = 42,
-    InfoAlbumCoverArt = 43, //cached -- do not change
-    InfoAlbumName = 44,
-    InfoAlbumArtist = 45,
-    InfoAlbumDate = 46,
-    InfoAlbumGenre = 47,
-    InfoAlbumComposer = 48,
-    InfoAlbumSongs = 49,
-
-/** \var Tomahawk::InfoSystem::InfoType Tomahawk::InfoSystem::InfoType::InfoChartCapabilities
- * Documentation for InfoChartCapabilities
- *
- * Clients of this InfoType expect a QVariant
- *
- */
-    InfoChartCapabilities = 50,
-    /**
-     * Documentation for InfoChartArtists
-     */
-    InfoChart = 51,
-
-    InfoNewReleaseCapabilities = 52,
-    InfoNewRelease = 53,
-
-    InfoMiscTopHotttness = 60,
-    InfoMiscTopTerms = 61,
-
-    InfoSubmitNowPlaying = 70,
-    InfoSubmitScrobble = 71,
-
-    InfoNowPlaying = 80,
-    InfoNowPaused = 81,
-    InfoNowResumed = 82,
-    InfoNowStopped = 83,
-    InfoTrackUnresolved = 84,
-
-    InfoLove = 90,
-    InfoUnLove = 91,
-    InfoShareTrack = 92,
-
-    InfoNotifyUser = 100,
-
-    InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
-};
-
-
-typedef QMap< InfoType, QVariant > InfoTypeMap;
-typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QHash< QString, QString > InfoStringHash;
-typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
 
 struct InfoRequestData {
@@ -236,8 +143,6 @@ private:
     friend class InfoSystem;
 };
 
-
-typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
 class InfoSystemCacheThread : public QThread
 {

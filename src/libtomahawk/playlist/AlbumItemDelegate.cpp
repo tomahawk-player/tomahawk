@@ -27,6 +27,8 @@
 #include "Artist.h"
 #include "Query.h"
 #include "Result.h"
+#include "Source.h"
+#include "audio/AudioEngine.h"
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -105,7 +107,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     if ( !item->album().isNull() )
     {
         top = item->album()->name();
-        
+
         if ( !item->album()->artist().isNull() )
             bottom = item->album()->artist()->name();
     }

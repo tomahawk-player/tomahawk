@@ -24,6 +24,7 @@
 #include "Result.h"
 #include "Logger.h"
 #include "TrackModelItem.h"
+#include "Source.h"
 
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>

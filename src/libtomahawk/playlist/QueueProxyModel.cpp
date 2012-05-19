@@ -23,6 +23,7 @@
 #include "playlist/TrackView.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

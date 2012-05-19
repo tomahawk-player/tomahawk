@@ -66,7 +66,7 @@ public:
     Tomahawk::playlistinterface_ptr playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-    
+
     Tomahawk::query_ptr stopAfterTrack() const  { return m_stopAfterTrack; }
 
     qint64 currentTime() const { return m_mediaObject->currentTime(); }
@@ -98,7 +98,7 @@ public slots:
     void playItem( const Tomahawk::album_ptr& album );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
-    
+
     void setStopAfterTrack( const Tomahawk::query_ptr& query );
 
 signals:
@@ -108,7 +108,7 @@ signals:
     void stopped();
     void paused();
     void resumed();
-    
+
     void stopAfterTrack_changed();
 
     void seeked( qint64 ms );

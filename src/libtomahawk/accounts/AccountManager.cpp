@@ -20,6 +20,7 @@
 #include "AccountManager.h"
 #include "config.h"
 #include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "ResolverAccount.h"
 
 #include <QtCore/QLibrary>

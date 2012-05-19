@@ -50,16 +50,16 @@ public:
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -75,13 +75,13 @@ private slots:
 
 private:
     AlbumPlaylistInterface();
-    
+
     QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     QList< Tomahawk::query_ptr > m_queries;
     result_ptr m_currentItem;
     unsigned int m_currentTrack;
-    
+
     bool m_infoSystemLoaded;
     bool m_databaseLoaded;
 

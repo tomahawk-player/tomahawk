@@ -47,6 +47,7 @@ class Servent;
 class SipHandler;
 class TomahawkSettings;
 class XMPPBot;
+class AudioControls;
 
 namespace Tomahawk
 {

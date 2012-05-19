@@ -26,6 +26,7 @@
 
 #include "audio/AudioEngine.h"
 #include "utils/TomahawkUtils.h"
+#include "Source.h"
 
 #include "Artist.h"
 #include "Album.h"
@@ -265,7 +266,7 @@ TrackModel::updateDetailedInfo( const QModelIndex& index )
 {
     if ( style() != TrackModel::Short && style() != TrackModel::Large )
         return;
-    
+
     TrackModelItem* item = itemFromIndex( index );
     if ( item->query().isNull() )
         return;
@@ -274,7 +275,7 @@ TrackModel::updateDetailedInfo( const QModelIndex& index )
     {
         item->query()->cover( QSize( 0, 0 ) );
     }
-    
+
     if ( style() == TrackModel::Large )
     {
         item->query()->loadSocialActions();

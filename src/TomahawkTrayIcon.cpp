@@ -27,6 +27,8 @@
 #include "TomahawkApp.h"
 #include "TomahawkWindow.h"
 #include "Query.h"
+#include "Source.h"
+#include "Collection.h"
 
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -46,7 +48,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
-    
+
     m_stopContinueAfterTrackAction = new QAction( tr( "&Stop Playback after current Track" ), this );
 
     ActionCollection *ac = ActionCollection::instance();
@@ -58,7 +60,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addAction( ac->getAction( "nextTrack" ) );
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
-    
+
     connect( m_stopContinueAfterTrackAction, SIGNAL( triggered(bool) ), this, SLOT( stopContinueAfterTrackActionTriggered() ) );
 
 #ifdef Q_WS_MAC

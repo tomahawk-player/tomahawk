@@ -14,6 +14,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
+#include "Source.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

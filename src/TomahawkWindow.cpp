@@ -318,8 +318,8 @@ void
 TomahawkWindow::setupSignals()
 {
     // <From PlaylistManager>
-    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
     connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 

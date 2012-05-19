@@ -26,12 +26,12 @@
 #include <QtGui/QIcon>
 #include <QtCore/QString>
 #include <QtCore/QUuid>
+#include <QMutex>
 
 #include "Typedefs.h"
 #include "DllMacro.h"
-#include "TomahawkSettings.h"
 
-#include "libtomahawk/infosystem/InfoSystem.h"
+// #include "libtomahawk/infosystem/InfoSystem.h"
 
 class SipPlugin;
 

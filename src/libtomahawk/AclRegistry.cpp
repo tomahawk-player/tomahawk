@@ -24,6 +24,7 @@
 
 #include "TomahawkSettings.h"
 #include "TomahawkApp.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 #include "jobview/AclJobItem.h"
@@ -72,7 +73,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     //FIXME: Remove when things are working
     emit aclResult( dbid, username, ACLRegistry::Stream );
     return ACLRegistry::NotFound;
-    
+
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
     while ( i.hasNext() )
@@ -87,7 +88,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
                 found = true;
             }
         }
-        
+
         foreach ( QString knownaccountid, user.knownAccountIds )
         {
             if ( username == knownaccountid )
@@ -109,7 +110,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 
     if ( skipEmission )
         return ACLRegistry::NotFound;
-    
+
     // User was not found, create a new user entry
     ACLRegistry::User user;
     user.knownDbids.append( dbid );
@@ -158,7 +159,7 @@ ACLRegistry::queueNextJob()
 {
     if ( m_jobCount != 0 )
         return;
-    
+
     if ( !m_jobQueue.isEmpty() )
     {
         AclJobItem* job = m_jobQueue.dequeue();

@@ -90,7 +90,7 @@ public:
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
     virtual Tomahawk::QID currentItemUuid() { return m_currentUuid; }
 
-    virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return Tomahawk::PlaylistInterface::NoRepeat; }
+    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return Tomahawk::PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
     virtual void ensureResolved();
@@ -102,7 +102,7 @@ public:
     void updateDetailedInfo( const QModelIndex& index );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -128,7 +128,7 @@ public slots:
     virtual void remove( const QList<QModelIndex>& indexes );
     virtual void remove( const QList<QPersistentModelIndex>& indexes );
 
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:

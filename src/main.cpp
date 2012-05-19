@@ -23,6 +23,7 @@
 #include "UbuntuUnityHack.h"
 #include "TomahawkSettings.h"
 #include "config.h"
+#include "utils/Logger.h"
 
 #include <QTranslator>
 

@@ -20,6 +20,7 @@
 
 #include "sip/SipPlugin.h"
 #include "Zeroconf.h"
+#include "Source.h"
 
 #include <QtCore/QtPlugin>
 

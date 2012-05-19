@@ -24,6 +24,7 @@
 #include "Account.h"
 
 #include <QAbstractListModel>
+#include <QSet>
 
 
 namespace Tomahawk {

@@ -21,6 +21,7 @@
 #include "DatabaseImpl.h"
 #include "Collection.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 DatabaseCommand_LoadFiles::DatabaseCommand_LoadFiles( unsigned int id, QObject* parent )

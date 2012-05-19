@@ -40,10 +40,10 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->tracksViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                 SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-        connect( m_w->ui->artistsViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                 SLOT( anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+        connect( m_w->ui->tracksViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+                 SLOT( anyRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+        connect( m_w->ui->artistsViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+                 SLOT( anyRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         connect( m_w->ui->tracksViewLeft->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
@@ -53,7 +53,7 @@ public:
     virtual ~ChartsPlaylistInterface() {}
 
     // Any one is fine, we keep them all synched
-    virtual RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->repeatMode(); }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->repeatMode(); }
 
     virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->shuffled(); }
 
@@ -72,7 +72,7 @@ public:
     }
 
 public slots:
-    virtual void setRepeatMode( RepeatMode mode )
+    virtual void setRepeatMode( PlaylistModes::RepeatMode mode )
     {
         m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->setRepeatMode( mode );
         m_w->ui->artistsViewLeft->proxyModel()->playlistInterface()->setRepeatMode( mode );
@@ -85,7 +85,7 @@ public slots:
     }
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -93,7 +93,7 @@ signals:
     void nextTrackReady();
 
 private slots:
-    void anyRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode )
+    void anyRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode )
     {
         emit repeatModeChanged( mode );
     }

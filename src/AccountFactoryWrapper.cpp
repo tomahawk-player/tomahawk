@@ -24,6 +24,7 @@
 #include "AccountFactoryWrapperDelegate.h"
 #include "DelegateConfigWrapper.h"
 #include "ui_AccountFactoryWrapper.h"
+#include "Source.h"
 
 using namespace Tomahawk::Accounts;
 AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* parent )

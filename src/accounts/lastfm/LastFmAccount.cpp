@@ -26,6 +26,7 @@
 #include "AtticaManager.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 using namespace InfoSystem;
@@ -83,7 +84,7 @@ LastFmAccount::~LastFmAccount()
 {
     if ( m_infoPlugin )
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
-    
+
     delete m_resolver.data();
 }
 
@@ -168,7 +169,7 @@ LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
         m_infoPlugin = QWeakPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
-    
+
     return InfoPluginPtr( m_infoPlugin.data() );
 }
 

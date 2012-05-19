@@ -35,6 +35,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
+#include "Source.h"
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"

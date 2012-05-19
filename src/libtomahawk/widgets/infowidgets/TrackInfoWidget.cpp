@@ -24,6 +24,7 @@
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "playlist/AlbumModel.h"
+#include "audio/AudioEngine.h"
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -62,7 +63,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->albumLabel->setFont( f );
     ui->byLabel->setFont( f );
     ui->fromLabel->setFont( f );
-    
+
     f.setPixelSize( 12 );
     ui->statsLabel->setFont( f );
 
@@ -187,12 +188,12 @@ TrackInfoWidget::onStatsLoaded()
     {
         stats += "\n" + tr( "You first listened to it on %1." ).arg( QDateTime::fromTime_t( history.first().timestamp ).toString( "dd MMM yyyy" ) );
     }
-    
+
     if ( artistCounter )
         stats += "\n" + tr( "You've listened to %1 %n time(s).", "", artistCounter ).arg( m_artist->name() );
     else
         stats += "\n" + tr( "You've never listened to %1 before." ).arg( m_artist->name() );
-    
+
     ui->statsLabel->setText( stats );
 }
 

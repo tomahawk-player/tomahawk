@@ -33,6 +33,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "CountryUtils.h"
+#include "Source.h"
 
 #define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org/"
 #include <qjson/parser.h>

@@ -25,10 +25,9 @@ using namespace Tomahawk;
 
 PlaylistInterface::PlaylistInterface ()
     : QObject()
-    , m_latchMode( StayOnSong )
+    , m_latchMode( PlaylistModes::StayOnSong )
 {
     m_id = uuid();
-    qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
 }
 
 PlaylistInterface::~PlaylistInterface()

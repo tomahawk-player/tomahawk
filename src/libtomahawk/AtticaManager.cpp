@@ -21,6 +21,7 @@
 #include "utils/TomahawkUtils.h"
 #include "TomahawkSettingsGui.h"
 #include "Pipeline.h"
+#include "Source.h"
 
 #include <attica/downloaditem.h>
 

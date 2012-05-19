@@ -25,6 +25,7 @@
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 #include "database/DatabaseCommand_TrackStats.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 
@@ -137,7 +138,7 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
         requestData.caller = m_uuid;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
-        
+
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                  SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                  SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
@@ -180,7 +181,7 @@ Artist::similarArtists() const
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
         requestData.requestId = TomahawkUtils::infosystemRequestId();
-        
+
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
@@ -192,7 +193,7 @@ Artist::similarArtists() const
         m_infoJobs++;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
-    
+
     return m_similarArtists;
 }
 
@@ -219,7 +220,7 @@ Artist::playbackHistory( const Tomahawk::source_ptr& source ) const
             history << log;
         }
     }
-    
+
     return history;
 }
 
@@ -241,7 +242,7 @@ Artist::playbackCount( const source_ptr& source )
         if ( source.isNull() || log.source == source )
             count++;
     }
-    
+
     return count;
 }
 
@@ -254,7 +255,7 @@ Artist::onAlbumsFound( const QList< album_ptr >& albums, const QVariant& data )
         m_databaseAlbums << albums;
         m_albumsLoaded.insert( DatabaseMode, true );
     }
-    
+
     emit albumsAdded( albums, DatabaseMode );
 }
 
@@ -289,7 +290,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
 
             break;
         }
-        
+
         case Tomahawk::InfoSystem::InfoArtistImages:
         {
             if ( !output.isNull() && output.isValid() )
@@ -302,7 +303,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                     emit coverChanged();
                 }
             }
-            
+
             break;
         }
 
@@ -313,7 +314,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             {
                 m_similarArtists << Artist::get( artist );
             }
-            
+
             m_simArtistsLoaded = true;
             emit similarArtistsLoaded();
 

@@ -22,6 +22,7 @@
 
 #include <QDir>
 
+#include "Source.h"
 #include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
@@ -557,7 +558,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         endGroup();
 
-        setPlaylistUpdaters( updaters );
+//         setPlaylistUpdaters( updaters );
 
         remove( "playlistupdaters" );
     }
@@ -948,33 +949,16 @@ TomahawkSettings::removePlaylistSettings( const QString& playlistid )
 
 
 void
-TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode )
+TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode )
 {
     setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
 }
 
 
-Tomahawk::PlaylistInterface::RepeatMode
+Tomahawk::PlaylistModes::RepeatMode
 TomahawkSettings::repeatMode( const QString& playlistid )
 {
-    return (PlaylistInterface::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
-}
-
-
-QList<Tomahawk::playlist_ptr>
-TomahawkSettings::recentlyPlayedPlaylists() const
-{
-    QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
-
-    QList<playlist_ptr> playlists;
-    foreach( const QString& guid, playlist_guids )
-    {
-        playlist_ptr pl = Playlist::load( guid );
-        if ( !pl.isNull() )
-            playlists << pl;
-    }
-
-    return playlists;
+    return (PlaylistModes::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
 }
 
 
@@ -991,16 +975,16 @@ TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 
 
 void
-TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
+TomahawkSettings::appendRecentlyPlayedPlaylist( const QString& playlistguid, int sourceId )
 {
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
-    playlist_guids.removeAll( playlist->guid() );
-    playlist_guids.append( playlist->guid() );
+    playlist_guids.removeAll( playlistguid );
+    playlist_guids.append( playlistguid );
 
     setValue( "playlists/recentlyPlayed", playlist_guids );
 
-    emit recentlyPlayedPlaylistAdded( playlist );
+    emit recentlyPlayedPlaylistAdded( playlistguid, sourceId );
 }
 
 

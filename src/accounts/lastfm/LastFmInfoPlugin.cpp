@@ -30,6 +30,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "accounts/lastfm/LastFmAccount.h"
+#include "Source.h"
+#include "TomahawkSettings.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
@@ -128,7 +130,7 @@ LastFmInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         case InfoChartCapabilities:
             fetchChartCapabilities( requestData );
             break;
-            
+
         case InfoTrackSimilars:
             fetchSimilarTracks( requestData );
             break;

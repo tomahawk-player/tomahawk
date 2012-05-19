@@ -38,7 +38,7 @@ public:
     explicit CollectionProxyModelPlaylistInterface( CollectionProxyModel* proxyModel );
     virtual ~CollectionProxyModelPlaylistInterface();
 
-    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Flat; }
+    virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Flat; }
 };
 
 } //ns

@@ -89,7 +89,7 @@ public:
     }
 
 public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
@@ -97,7 +97,7 @@ public slots:
     void addQueries( const QList<Tomahawk::query_ptr>& queries );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void itemCountChanged( unsigned int items );

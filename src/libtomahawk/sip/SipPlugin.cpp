@@ -22,6 +22,7 @@
 #include "sip/SipPlugin.h"
 
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 SipPlugin::SipPlugin() : QObject() {}

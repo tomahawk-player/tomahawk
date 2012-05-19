@@ -19,6 +19,8 @@
 
 #include "Account.h"
 
+#include "TomahawkSettings.h"
+
 namespace Tomahawk
 {
 

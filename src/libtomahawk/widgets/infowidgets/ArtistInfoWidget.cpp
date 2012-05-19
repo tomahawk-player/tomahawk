@@ -26,6 +26,7 @@
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
+#include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"

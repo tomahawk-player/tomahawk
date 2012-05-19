@@ -48,6 +48,7 @@
 #include <utils/TomahawkUtils.h>
 #include <utils/Logger.h>
 #include <accounts/AccountManager.h>
+#include <TomahawkSettings.h>
 
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QInputDialog>

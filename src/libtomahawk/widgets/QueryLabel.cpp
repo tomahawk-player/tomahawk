@@ -30,6 +30,7 @@
 #include "ContextMenu.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #define BOXMARGIN 2
 #define DASH "  -  "

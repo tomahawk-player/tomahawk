@@ -23,6 +23,7 @@
 #include "AccountManager.h"
 #include "AtticaManager.h"
 #include "ResolverAccount.h"
+#include "TomahawkSettings.h"
 
 #ifndef ENABLE_HEADLESS
 #include <QMessageBox>

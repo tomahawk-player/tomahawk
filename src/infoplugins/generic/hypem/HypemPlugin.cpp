@@ -31,6 +31,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #define HYPEM_URL "http://hypem.com/playlist/"
 #define HYPEM_END_URL "json/1/data.js"
@@ -39,7 +40,7 @@
 
 namespace Tomahawk
 {
-    
+
 namespace InfoSystem
 {
 

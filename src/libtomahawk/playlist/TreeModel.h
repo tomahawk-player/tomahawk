@@ -128,13 +128,13 @@ public:
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void modeChanged( Tomahawk::ModelMode mode );

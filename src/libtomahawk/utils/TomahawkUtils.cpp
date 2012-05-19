@@ -24,6 +24,7 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #ifdef LIBLASTFM_FOUND
     #include <lastfm/ws.h>

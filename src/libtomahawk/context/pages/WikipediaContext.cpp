@@ -17,6 +17,7 @@
  */
 
 #include "WikipediaContext.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

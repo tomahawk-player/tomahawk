@@ -22,6 +22,8 @@
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "Source.h"
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
@@ -77,11 +79,11 @@ ActionCollection::initActions()
     m_actionCollection[ "quit" ] = new QAction( tr( "&Quit" ), this );
 
     // connect actions to AudioEngine
-    AudioEngine *ae = AudioEngine::instance();
-    connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ), Qt::UniqueConnection );
-    connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),      Qt::UniqueConnection );
-    connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),  Qt::UniqueConnection );
-    connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
+//     AudioEngine *ae = AudioEngine::instance();
+//     connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ), Qt::UniqueConnection );
+//     connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),      Qt::UniqueConnection );
+//     connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),  Qt::UniqueConnection );
+//     connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
 }
 
 

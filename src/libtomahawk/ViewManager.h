@@ -119,13 +119,13 @@ signals:
     void numArtistsChanged( unsigned int artists );
     void numShownChanged( unsigned int shown );
 
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void statsAvailable( bool b );
     void modesAvailable( bool b );
     void filterAvailable( bool b );
-    void modeChanged( Tomahawk::PlaylistInterface::ViewMode mode );
+    void modeChanged( Tomahawk::PlaylistModes::ViewMode mode );
 
     void playClicked();
     void pauseClicked();
@@ -169,7 +169,7 @@ public slots:
     void setTableMode();
     void setAlbumMode();
 
-    void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
     void setShuffled( bool enabled );
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );

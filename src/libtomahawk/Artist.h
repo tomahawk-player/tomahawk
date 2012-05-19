@@ -30,7 +30,6 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "Query.h"
-#include "infosystem/InfoSystem.h"
 
 namespace Tomahawk
 {
@@ -51,7 +50,7 @@ public:
     QString sortname() const { return m_sortname; }
 
     bool infoLoaded() const { return m_infoLoaded; }
-    
+
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<Tomahawk::artist_ptr> similarArtists() const;
 
@@ -103,7 +102,7 @@ private:
     QList<Tomahawk::album_ptr> m_databaseAlbums;
     QList<Tomahawk::album_ptr> m_officialAlbums;
     QList<Tomahawk::artist_ptr> m_similarArtists;
-    
+
     bool m_playbackHistoryLoaded;
     QList< PlaybackLog > m_playbackHistory;
 
@@ -114,7 +113,7 @@ private:
 #endif
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
-    
+
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 };
 

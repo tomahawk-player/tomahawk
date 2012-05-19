@@ -20,6 +20,7 @@
 #include "accounts/Account.h"
 #include "AccountFactoryWrapper.h"
 #include "utils/TomahawkUtils.h"
+#include "Source.h"
 
 #include <QApplication>
 #include <QPainter>

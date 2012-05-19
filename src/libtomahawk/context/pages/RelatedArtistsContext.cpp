@@ -23,6 +23,7 @@
 
 #include "playlist/ArtistView.h"
 #include "playlist/TreeModel.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

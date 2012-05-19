@@ -21,6 +21,7 @@
 
 #include "utils/Logger.h"
 #include "Playlist.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

@@ -30,6 +30,7 @@
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Closure.h"
+#include "Source.h"
 
 #define CHILD_ACCOUNT_HEIGHT 24
 

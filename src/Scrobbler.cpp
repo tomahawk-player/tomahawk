@@ -29,6 +29,7 @@
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
 #include "infosystem/InfoSystem.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 
@@ -80,7 +81,7 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     }
 
     QVariantMap playInfo;
-    
+
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["title"] = track->track();
     trackInfo["artist"] = track->artist()->name();

@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
- * 
+ *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -19,6 +19,7 @@
 
 #include "PixmapDelegateFader.h"
 #include "TomahawkUtilsGui.h"
+#include "Source.h"
 
 #include <QPainter>
 #include <QBuffer>
@@ -108,7 +109,7 @@ PixmapDelegateFader::init()
 {
     m_current = QPixmap( m_size );
     m_current.fill( Qt::transparent );
-    
+
     if ( m_currentReference.isNull() )
     {
         // No cover loaded yet, use default and don't fade in
@@ -175,13 +176,13 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         return;
 
     m_oldImageMd5 = newImageMd5;
-    
+
     if ( m_connectedToStl )
     {
         m_pixmapQueue.enqueue( pixmap );
         return;
     }
-    
+
     m_oldReference = m_currentReference;
     m_currentReference = pixmap;
 
@@ -202,7 +203,7 @@ PixmapDelegateFader::onAnimationStep( int step )
 
     if ( m_fadePct == 100.0 )
         QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
-    
+
     const qreal opacity = m_fadePct / 100.0;
     const qreal oldOpacity =  ( 100.0 - m_fadePct ) / 100.0;
     m_current.fill( Qt::transparent );

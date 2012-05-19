@@ -21,6 +21,7 @@
 
 #include "JobStatusModel.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #include <QPixmap>
 #include <QPainter>
@@ -61,13 +62,13 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
         mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
- 
+
     const QString text = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     const int w = fm.width( text );
     const QRect rRect( opt.rect.left() + PADDING, ROW_HEIGHT + PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
     painter->drawText( rRect, Qt::AlignCenter, text );
 
- 
+
 /*
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );

@@ -28,6 +28,7 @@
 #include <QPropertyAnimation>
 
 #include "echonest/Playlist.h"
+#include "Source.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "utils/TomahawkUtils.h"

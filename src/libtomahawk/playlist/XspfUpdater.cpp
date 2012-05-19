@@ -22,6 +22,7 @@
 #include "utils/XspfLoader.h"
 #include "Pipeline.h"
 #include "utils/TomahawkUtils.h"
+#include "Source.h"
 
 #include <QTimer>
 
