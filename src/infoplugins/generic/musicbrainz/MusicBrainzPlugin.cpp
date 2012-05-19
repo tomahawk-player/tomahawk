@@ -21,6 +21,7 @@
 
 #include <QNetworkReply>
 #include <QDomDocument>
+#include <QtPlugin>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -88,6 +89,7 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         }
     }
 }
+
 
 void
 MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData )
@@ -327,3 +329,6 @@ MusicBrainzPlugin::tracksFoundSlot()
     criteria["album"] = origData["album"];
     emit updateCache( criteria, 0, requestData.type, returnedData );
 }
+
+
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::MusicBrainzPlugin )

@@ -22,6 +22,7 @@
 
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "infoplugins/InfoPluginDllMacro.h"
 
 class QNetworkReply;
 
@@ -31,9 +32,10 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class MusicBrainzPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT MusicBrainzPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
     MusicBrainzPlugin();
