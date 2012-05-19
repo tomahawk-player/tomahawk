@@ -4,6 +4,7 @@
 #include <QtCore/QSettings>
 #include <QtNetwork/QNetworkConfiguration>
 #include <QtNetwork/QNetworkReply>
+#include <QtPlugin>
 
 #include "Album.h"
 #include "CountryUtils.h"
@@ -348,9 +349,4 @@ void NewReleasesPlugin::nrReturned()
 }
 
 
-
-
-
-
-
-
+Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::NewReleasesPlugin )

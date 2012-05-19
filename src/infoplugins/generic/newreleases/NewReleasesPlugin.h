@@ -21,6 +21,8 @@
 
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "infoplugins/InfoPluginDllMacro.h"
+
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QObject>
 
@@ -32,9 +34,10 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class NewReleasesPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT NewReleasesPlugin : public InfoPlugin
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
     NewReleasesPlugin();
