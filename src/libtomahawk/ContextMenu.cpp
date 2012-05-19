@@ -38,7 +38,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage;
 }
 
 
@@ -104,6 +104,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
 
+    if ( m_supportedActions & ActionPage && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "&Show Track Page" ) ), ActionPage );
+
     addSeparator();
 
     if ( m_supportedActions & ActionDelete )
@@ -135,11 +138,14 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
     m_albums.clear();
     m_albums << albums;
 
-    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Show &Album page" ) ), ActionPlay );
+/*    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "Show &Album Page" ) ), ActionPlay );*/
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
+
+    if ( m_supportedActions & ActionPage && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "&Show Album Page" ) ), ActionPage );
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
 
@@ -174,11 +180,14 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
     m_artists.clear();
     m_artists << artists;
 
-    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Show &Artist page" ) ), ActionPlay );
+/*    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "Show &Artist Page" ) ), ActionPlay );*/
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
+
+    if ( m_supportedActions & ActionPage && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "&Show Artist Page" ) ), ActionPage );
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
 
@@ -214,6 +223,10 @@ ContextMenu::onTriggered( int action )
 
         case ActionCopyLink:
             copyLink();
+            break;
+            
+        case ActionPage:
+            openPage();
             break;
 
         case ActionLove:
@@ -260,6 +273,24 @@ ContextMenu::copyLink()
     if ( m_queries.count() )
     {
         GlobalActionManager::instance()->copyToClipboard( m_queries.first() );
+    }
+}
+
+
+void
+ContextMenu::openPage()
+{
+    if ( m_queries.count() )
+    {
+        ViewManager::instance()->show( m_queries.first() );
+    }
+    else if ( m_artists.count() )
+    {
+        ViewManager::instance()->show( m_artists.first() );
+    }
+    else if ( m_albums.count() )
+    {
+        ViewManager::instance()->show( m_albums.first() );
     }
 }
 
