@@ -102,6 +102,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
+    setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -139,7 +140,7 @@ TomahawkWindow::loadSettings()
     // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
     // for the 'fix'
 #ifdef QT_MAC_USE_COCOA
-     bool workaround = !isVisible();
+     bool workaround = isVisible();
      if ( workaround )
      {
        // make "invisible"
@@ -202,6 +203,35 @@ TomahawkWindow::applyPlatformTweaks()
 
 
 void
+TomahawkWindow::setupToolBar()
+{
+    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    toolbar->setObjectName( "TomahawkToolbar" );
+    toolbar->setMovable( false );
+    toolbar->setFloatable( false );
+    toolbar->setIconSize( QSize( 22, 22 ) );
+    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    
+    m_backAction = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAction->setToolTip( tr( "Go back one page" ) );
+    m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAction->setToolTip( tr( "Go forward one page" ) );
+
+    QWidget* spacer = new QWidget( this );
+    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( spacer );
+
+    m_searchWidget = new QSearchField( this );
+    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
+    m_searchWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_searchWidget->setMaximumWidth( 340 );
+    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
+    
+    toolbar->addWidget( m_searchWidget );
+}
+
+
+void
 TomahawkWindow::setupSideBar()
 {
     // Delete fake designer widgets
@@ -215,10 +245,6 @@ TomahawkWindow::setupSideBar()
     m_sidebar->setOrientation( Qt::Vertical );
     m_sidebar->setChildrenCollapsible( false );
 
-    m_searchWidget = new QSearchField( m_sidebar );
-    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
-    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
-
     m_sourcetree = new SourceTreeView();
     JobStatusView* jobsView = new JobStatusView( m_sidebar );
     m_jobsModel = new JobStatusModel( jobsView );
@@ -231,16 +257,14 @@ TomahawkWindow::setupSideBar()
     m_queueView->queue()->playlistModel()->setReadOnly( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->playlistInterface() );
 
-    m_sidebar->addWidget( m_searchWidget );
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( jobsView );
     m_sidebar->addWidget( m_queueView );
 
-    m_sidebar->setGreedyWidget( 1 );
+//    m_sidebar->setGreedyWidget( 1 );
     m_sidebar->hide( 1, false );
     m_sidebar->hide( 2, false );
     m_sidebar->hide( 3, false );
-    m_sidebar->hide( 4, false );
 
     sidebarWidget->layout()->addWidget( m_sidebar );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
@@ -294,8 +318,8 @@ void
 TomahawkWindow::setupSignals()
 {
     // <From PlaylistManager>
-    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
     connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
@@ -340,7 +364,7 @@ TomahawkWindow::setupSignals()
 
     // Menus for accounts that support them
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
-    foreach( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
+    foreach ( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
     {
         if ( !account || !account->sipPlugin() )
             continue;
@@ -348,6 +372,9 @@ TomahawkWindow::setupSignals()
         connect( account->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( account->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
+    
+    connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
 
@@ -407,6 +434,67 @@ TomahawkWindow::hideEvent( QHideEvent* e )
     ui->actionMinimize->setDisabled( true );
     ui->actionZoom->setDisabled( true );
 #endif
+}
+
+
+void
+TomahawkWindow::keyPressEvent( QKeyEvent* e )
+{
+    bool accept = true;
+#if ! defined ( Q_WS_MAC )
+#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
+    switch( e->key() )
+    {
+        case Qt::Key_MediaPlay:
+            tLog() << KEY_PRESSED << "Play";
+            AudioEngine::instance()->playPause();
+            break;
+        case Qt::Key_MediaStop:
+            tLog() << KEY_PRESSED << "Stop";
+            AudioEngine::instance()->stop();
+            break;
+        case Qt::Key_MediaPrevious:
+            tLog() << KEY_PRESSED << "Previous";
+            AudioEngine::instance()->previous();
+            break;
+        case Qt::Key_MediaNext:
+            tLog() << KEY_PRESSED << "Next";
+            AudioEngine::instance()->next();
+            break;
+        case Qt::Key_MediaPause:
+            tLog() << KEY_PRESSED << "Pause";
+            AudioEngine::instance()->pause();
+            break;
+        case Qt::Key_MediaTogglePlayPause:
+            tLog() << KEY_PRESSED << "PlayPause";
+            AudioEngine::instance()->playPause();
+            break;
+        case Qt::Key_MediaRecord:
+        default:
+            accept = false;
+    }
+#else
+    accept = false;
+#endif
+
+    if ( accept )
+        e->accept();
+
+    QMainWindow::keyPressEvent( e );
+}
+
+
+void
+TomahawkWindow::onHistoryBackAvailable( bool avail )
+{
+    m_backAction->setEnabled( avail );
+}
+
+
+void
+TomahawkWindow::onHistoryForwardAvailable( bool avail )
+{
+    m_forwardAction->setEnabled( avail );
 }
 
 
@@ -482,9 +570,9 @@ TomahawkWindow::pluginMenuAdded( QMenu* menu )
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach( QAction* action, ui->menuNetwork->actions() )
+    foreach ( QAction* action, ui->menuNetwork->actions() )
     {
-        if( action->menu() == menu )
+        if ( action->menu() == menu )
         {
             ui->menuNetwork->removeAction( action );
             return;
@@ -672,8 +760,14 @@ TomahawkWindow::audioStarted()
 void
 TomahawkWindow::audioStopped()
 {
-
     ui->actionPlay->setText( tr( "Play" ) );
+    
+    tDebug() << Q_FUNC_INFO << AudioEngine::instance()->isStopped();
+    if ( AudioEngine::instance()->isStopped() )
+    {
+        m_currentTrack = result_ptr();
+        setWindowTitle( m_windowTitle );
+    }
 }
 
 
@@ -709,6 +803,7 @@ TomahawkWindow::onAccountAdded( Account* acc )
     connect( acc->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
+
 void
 TomahawkWindow::onAccountError()
 {
@@ -718,7 +813,7 @@ TomahawkWindow::onAccountError()
     // TODO real error message from plugin kthxbbq
     QMessageBox::warning( this,
                           tr( "Authentication Error" ),
-                          QString( "Error connecting to SIP: Authentication failed!" ),
+                          tr( "Error connecting to SIP: Authentication failed!" ),
                           QMessageBox::Ok );
 }
 

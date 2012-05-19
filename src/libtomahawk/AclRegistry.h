@@ -26,6 +26,9 @@
 #include <QTimer>
 #include <QMutex>
 #include <QVariant>
+#include <QQueue>
+#include <QStringList>
+#include <QUuid>
 
 #include "HeadlessCheck.h"
 #include "DllMacro.h"
@@ -85,7 +88,7 @@ public:
 
 signals:
     void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
-    
+
 public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
@@ -104,7 +107,7 @@ public slots:
 private slots:
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
-    
+
 private:
     /**
      * @brief Saves the cache.

@@ -23,6 +23,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

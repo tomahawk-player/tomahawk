@@ -23,6 +23,7 @@
 #include "UbuntuUnityHack.h"
 #include "TomahawkSettings.h"
 #include "config.h"
+#include "utils/Logger.h"
 
 #include <QTranslator>
 
@@ -37,39 +38,52 @@
     #include "breakpad/BreakPad.h"
 #endif
 
-inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
-{
-    out <<  TOMAHAWK_SETTINGS_VERSION;
-    out << (quint32)states.count();
-    foreach( const QString& key, states.keys() )
-    {
-        AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating;
-    }
-    return out;
-}
-
-
-inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
-{
-    quint32 count = 0, version = 0;
-    in >> version;
-    in >> count;
-    for ( uint i = 0; i < count; i++ )
-    {
-        QString key, version, scriptPath;
-        qint32 state, userRating;
-        in >> key;
-        in >> version;
-        in >> scriptPath;
-        in >> state;
-        in >> userRating;
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state );
-    }
-    return in;
-}
-
 #ifdef Q_OS_WIN
+// code from patch attached to QTBUG-19064 by Honglei Zhang
+LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam);
+HHOOK hKeyboardHook;
+HINSTANCE hGuiLibInstance;
+
+LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    LPKBDLLHOOKSTRUCT kbHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>(lParam);
+
+    switch(kbHookStruct->vkCode){
+    case VK_VOLUME_MUTE:
+    case VK_VOLUME_DOWN:
+    case VK_VOLUME_UP:
+    case VK_MEDIA_NEXT_TRACK:
+    case VK_MEDIA_PREV_TRACK:
+    case VK_MEDIA_STOP:
+    case VK_MEDIA_PLAY_PAUSE:
+    case VK_LAUNCH_MEDIA_SELECT:
+        // send message
+        {
+            HWND hWnd = NULL;
+            foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+                // relay message to each top level widgets(window)
+                // if the window has focus, we don't send a duplicate message
+                if(QApplication::activeWindow() == widget){
+                    continue;
+                }
+
+                hWnd = widget->winId();
+
+                // generate message and post it to the message queue
+                LPKBDLLHOOKSTRUCT pKeyboardHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>(lParam);
+                WPARAM _wParam = pKeyboardHookStruct->vkCode;
+                LPARAM _lParam = MAKELPARAM(pKeyboardHookStruct->scanCode, pKeyboardHookStruct->flags);
+                PostMessage(hWnd, wParam, _wParam, _lParam);
+            }
+        }
+        break;
+    default:
+        break;
+    }
+
+    return CallNextHookEx(0, nCode, wParam, lParam);
+}
+
 #include <io.h>
 #define argc __argc
 #define argv __argv
@@ -78,6 +92,13 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PSTR szCmdLine, int iCmdShow)
 {
+    hKeyboardHook = NULL;
+    hGuiLibInstance = hInstance;
+
+
+    // setup keyboard hook to receive multimedia key events when application is at background
+    hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL,(HOOKPROC) qt_LowLevelKeyboardHookProc, hGuiLibInstance, 0);
+
     if (fileno (stdout) != -1 && _get_osfhandle (fileno (stdout)) != -1)
     {
         /* stdout is fine, presumably redirected to a file or pipe */
@@ -101,7 +122,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 int
 main( int argc, char *argv[] )
 {
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
@@ -115,8 +136,8 @@ main( int argc, char *argv[] )
     TomahawkApp a( argc, argv );
 
     // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type
-    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
-    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
+    TomahawkSettings::registerCustomSettingsHandlers();
+    TomahawkSettingsGui::registerCustomSettingsHandlers();
 
 #ifdef ENABLE_HEADLESS
     new TomahawkSettings( &a );
@@ -158,7 +179,16 @@ main( int argc, char *argv[] )
         a.loadUrl( arg );
     }
 
-    return a.exec();
+    int returnCode = a.exec();
+#ifdef Q_OS_WIN
+    // clean up keyboard hook
+    if( hKeyboardHook )
+    {
+        UnhookWindowsHookEx(hKeyboardHook);
+        hKeyboardHook = NULL;
+    }
+#endif
+    return returnCode;
 }
 
 

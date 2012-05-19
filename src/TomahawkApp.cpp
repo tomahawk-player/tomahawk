@@ -290,6 +290,16 @@ TomahawkApp::init()
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
     PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
+    // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
+    // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
+    // with the default value of 3 in QApplicationPrivate::initialize.
+    {
+        QSettings qt_settings(QSettings::UserScope, "Trolltech");
+        qt_settings.beginGroup("Qt");
+        QApplication::setWheelScrollLines(
+            qt_settings.value("wheelScrollLines", QApplication::wheelScrollLines()).toInt());
+    }
+
 #ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
@@ -410,14 +420,18 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
     qRegisterMetaType< PairList >("PairList");
 
-    qRegisterMetaType< GeneratorMode>("GeneratorMode");
+    qRegisterMetaType<GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
+    qRegisterMetaType<ModelMode>("Tomahawk::ModelMode");
+    qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
 
     // Extra definition for namespaced-versions of signals/slots required
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
+    qRegisterMetaType< Tomahawk::album_ptr >("Tomahawk::album_ptr");
+    qRegisterMetaType< Tomahawk::artist_ptr >("Tomahawk::artist_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
     qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
@@ -457,7 +471,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
-    qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::LatchMode >( "Tomahawk::PlaylistModes::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::RepeatMode >( "Tomahawk::PlaylistModes::RepeatMode" );
 
     qRegisterMetaType< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
     qRegisterMetaTypeStreamOperators< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
@@ -560,7 +575,7 @@ TomahawkApp::initServent()
 {
     tDebug() << "Init Servent.";
 
-    bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool() && !TomahawkSettings::instance()->preferStaticHostPort();
+    bool upnp = !arguments().contains( "--noupnp" );
     int port = TomahawkSettings::instance()->externalPort();
     if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
     {

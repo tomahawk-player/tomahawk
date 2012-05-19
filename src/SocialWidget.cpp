@@ -25,6 +25,7 @@
 
 #include "GlobalActionManager.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
@@ -63,7 +64,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     connect( ui->facebookButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( ui->twitterButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), SLOT( onShortLinkReady( QUrl, QUrl, QVariant ) ) );
-    
+
     onChanged();
 }
 
@@ -206,7 +207,7 @@ SocialWidget::setQuery( const Tomahawk::query_ptr& query )
     ui->coverImage->setPixmap( query->cover( ui->coverImage->size() ) );
     onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
-    
+
     QUrl longUrl = GlobalActionManager::instance()->openLinkFromQuery( query );
     GlobalActionManager::instance()->shortenLink( longUrl );
 }
@@ -235,7 +236,7 @@ SocialWidget::charsAvailable() const
 {
     if ( ui->twitterButton->isChecked() )
         return 140;
-    
+
     return 420; // facebook max length
 }
 
@@ -262,6 +263,6 @@ SocialWidget::eventFilter( QObject* object, QEvent* event )
     {
         onGeometryUpdate();
     }
-    
+
     return QObject::eventFilter( object, event );
 }

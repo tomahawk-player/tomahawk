@@ -28,6 +28,7 @@
 #include "TransferStatusItem.h"
 #include "LatchedStatusItem.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>

@@ -19,6 +19,7 @@
 #include "ViewPage.h"
 
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

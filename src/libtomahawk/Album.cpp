@@ -24,6 +24,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "Query.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 
@@ -32,6 +33,8 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
+    m_ownRef.clear();
+
 #ifndef ENABLE_HEADLESS
     delete m_cover;
 #endif
@@ -65,6 +68,8 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
+    a->setWeakRef( a.toWeakRef() );
+
     if ( id > 0 )
         s_albums.insert( id, a );
 
@@ -87,13 +92,9 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
 
 
 void
-Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
+Album::onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
-    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( playlistInterface().data() );
-    if ( api )
-        api->addQueries( tracks );
-
-    emit tracksAdded( tracks );
+    emit tracksAdded( playlistInterface( mode, collection )->tracks(), mode, collection );
 }
 
 
@@ -206,12 +207,25 @@ Album::infoSystemFinished( const QString& target )
 
 
 Tomahawk::playlistinterface_ptr
-Album::playlistInterface()
+Album::playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
-    if ( m_playlistInterface.isNull() )
+    playlistinterface_ptr pli = m_playlistInterface[ mode ][ collection ];
+
+    if ( pli.isNull() )
     {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this ) );
+        pli = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this, mode, collection ) );
+        connect( pli.data(), SIGNAL( tracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                               SLOT( onTracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+
+        m_playlistInterface[ mode ][ collection ] = pli;
     }
 
-    return m_playlistInterface;
+    return pli;
+}
+
+
+QList<Tomahawk::query_ptr>
+Album::tracks( ModelMode mode, const Tomahawk::collection_ptr& collection )
+{
+    return playlistInterface( mode, collection )->tracks();
 }

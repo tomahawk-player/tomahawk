@@ -1,5 +1,6 @@
-/* This file is part of Clementine.
+/* This file is part of Tomabawk.
    Copyright 2011, David Sansome <me@davidsansome.com>
+   Copyright 2012, Leo Franchi <lfranchi@kde.org>
 
    Clementine is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

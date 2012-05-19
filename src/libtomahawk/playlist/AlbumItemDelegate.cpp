@@ -22,10 +22,13 @@
 #include <QApplication>
 #include <QPainter>
 #include <QAbstractItemView>
+#include <QMouseEvent>
 
 #include "Artist.h"
 #include "Query.h"
 #include "Result.h"
+#include "Source.h"
+#include "audio/AudioEngine.h"
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -35,8 +38,9 @@
 #include "playlist/AlbumItem.h"
 #include "playlist/AlbumProxyModel.h"
 #include "AlbumView.h"
-#include <QMouseEvent>
-#include <ViewManager.h>
+#include "ViewManager.h"
+#include "utils/AnimatedSpinner.h"
+#include "widgets/ImageButton.h"
 
 
 AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )
@@ -46,6 +50,8 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
 {
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    
+    connect( m_view, SIGNAL( scrolledContents( int, int ) ), SLOT( onScrolled( int, int ) ) );
 }
 
 
@@ -71,7 +77,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->save();
     painter->setRenderHint( QPainter::Antialiasing );
 
-    if ( !( option.state & QStyle::State_Selected ) )
+/*    if ( !( option.state & QStyle::State_Selected ) )
     {
         QRect shadowRect = option.rect.adjusted( 5, 4, -5, -40 );
         painter->setPen( QColor( 90, 90, 90 ) );
@@ -92,24 +98,54 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawLine( shadowRect.topLeft() + QPoint( -2, 3 ), shadowRect.bottomLeft() + QPoint( -2, 1 ) );
         painter->drawLine( shadowRect.topRight() + QPoint( 3, 3 ), shadowRect.bottomRight() + QPoint( 3, 1 ) );
         painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
-    }
+    }*/
 
-    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
+//    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
+    QRect r = option.rect;
+
+    QString top, bottom;
+    if ( !item->album().isNull() )
+    {
+        top = item->album()->name();
+
+        if ( !item->album()->artist().isNull() )
+            bottom = item->album()->artist()->name();
+    }
+    else if ( !item->artist().isNull() )
+    {
+        top = item->artist()->name();
+    }
+    else
+    {
+        top = item->query()->track();
+        bottom = item->query()->artist();
+    }
 
     if ( !m_covers.contains( index ) )
     {
-        m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::CoverInCase ) ) );
-        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+        if ( !item->album().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+        else if ( !item->artist().isNull() )
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+        else
+        {
+            m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), r.size(), TomahawkUtils::Grid ) ) );
+        }
+
+        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
         closure->setAutoDelete( false );
     }
 
     const QPixmap cover = m_covers[ index ]->currentPixmap();
 
-    if ( option.state & QStyle::State_Selected )
+    if ( false && option.state & QStyle::State_Selected )
     {
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
         painter->save();
-        painter->setRenderHint( QPainter::Antialiasing );
 
         QPainterPath border;
         border.addRoundedRect( r.adjusted( -2, -2, 2, 2 ), 3, 3 );
@@ -124,46 +160,65 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 #endif
     }
 
-    painter->drawPixmap( r, cover );
+    painter->drawPixmap( r, cover.scaled( r.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
 
-    painter->setPen( opt.palette.color( QPalette::Text ) );
+    if ( m_hoverIndex == index )
+    {
+        painter->save();
+
+        painter->setPen( QColor( 33, 33, 33 ) );
+        painter->setBrush( QColor( 33, 33, 33 ) );
+        painter->setOpacity( 0.5 );
+        painter->drawRect( r );
+
+        painter->restore();
+    }
+
+    painter->save();
+
+    painter->setPen( Qt::black );
+    painter->setBrush( Qt::black );
+    painter->setOpacity( 0.5 );
+    painter->drawRoundedRect( r.adjusted( 4, +r.height() - 36, -4, -4 ), 3, 3 );
+
+    painter->restore();
+
+    painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
 
     QString text;
     QFont font = opt.font;
-    font.setPixelSize( 11 );
+    font.setPixelSize( 10 );
     QFont boldFont = font;
     boldFont.setBold( true );
+    boldFont.setPixelSize( 14 );
 
-    QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
-
-    QString name;
-    if ( !item->album().isNull() )
-        name = item->album()->name();
-    else if ( !item->artist().isNull() )
-        name = item->artist()->name();
-
+    QRect textRect = option.rect.adjusted( 6, option.rect.height() - 36, -4, -6 );
+    painter->setFont( font );
+    int bottomHeight = painter->fontMetrics().boundingRect( bottom ).height();
     painter->setFont( boldFont );
+    int topHeight = painter->fontMetrics().boundingRect( top ).height();
+
     bool oneLiner = false;
-    if ( item->album().isNull() || item->album()->artist().isNull() )
+    if ( bottom.isEmpty() )
         oneLiner = true;
     else
-        oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
-                     textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
+        oneLiner = ( textRect.height() < topHeight + bottomHeight );
 
     if ( oneLiner )
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
     }
     else
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
+        painter->setFont( font );
         // If the user is hovering over an artist rect, draw a background so she knows it's clickable
         QRect r = textRect;
         r.setTop( r.bottom() - painter->fontMetrics().height() );
@@ -175,16 +230,16 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         }
         else
         {
-            if ( !( option.state & QStyle::State_Selected ) )
+/*            if ( !( option.state & QStyle::State_Selected ) )
 #ifdef Q_WS_MAC
                 painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
 #else
                 painter->setPen( opt.palette.color( QPalette::Dark ) );
-#endif
+#endif*/
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 10 );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 10 );
         painter->drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
 
         // Calculate rect of artist on-hover button click area
@@ -192,6 +247,45 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     painter->restore();
+}
+
+
+void
+AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
+{
+    QPoint pos = m_playButton[ index ]->pos();
+    foreach ( ImageButton* button, m_playButton )
+        button->deleteLater();
+    m_playButton.clear();
+
+    AnimatedSpinner* spinner = new AnimatedSpinner( m_view );
+    spinner->setAutoCenter( false );
+    spinner->fadeIn();
+    spinner->move( pos );
+
+    m_subWidgets[ index ] = spinner;
+    
+    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item )
+    {
+        _detail::Closure* closure;
+        
+        closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
+                              const_cast<AlbumItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+
+        closure = NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
+                              const_cast<AlbumItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+        closure->setAutoDelete( false );
+
+        connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackFinished() ) );
+
+        if ( !item->query().isNull() )
+            AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), item->query() );
+        else if ( !item->album().isNull() )
+            AudioEngine::instance()->playItem( item->album() );
+        else if ( !item->artist().isNull() )
+            AudioEngine::instance()->playItem( item->artist() );
+    }
 }
 
 
@@ -207,9 +301,39 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
          event->type() != QEvent::Leave )
         return false;
 
+    if ( event->type() == QEvent::MouseMove )
+    {
+        if ( !m_playButton.contains( index ) && !m_subWidgets.contains( index ) && !m_pauseButton.contains( index ) )
+        {
+            foreach ( ImageButton* button, m_playButton )
+                button->deleteLater();
+            m_playButton.clear();
+
+            ImageButton* button = new ImageButton( m_view );
+            button->setPixmap( RESPATH "images/play-rest.png" );
+            button->setPixmap( RESPATH "images/play-pressed.png", QIcon::Off, QIcon::Active );
+            button->setFixedSize( 48, 48 );
+            button->move( option.rect.center() - QPoint( 23, 23 ) );
+            button->setContentsMargins( 0, 0, 0, 0 );
+            button->show();
+            
+            _detail::Closure* closure = NewClosure( button, SIGNAL( clicked( bool ) ),
+                                                    const_cast<AlbumItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+
+            m_playButton[ index ] = button;
+        }
+
+        if ( m_hoverIndex != index )
+        {
+            emit updateIndex( m_hoverIndex );
+            m_hoverIndex = index;
+            emit updateIndex( index );
+        }
+    }
+
+    QMouseEvent* ev = static_cast< QMouseEvent* >( event );
     if ( m_artistNameRects.contains( index ) )
     {
-        QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         QRect artistNameRect = m_artistNameRects[ index ];
         if ( artistNameRect.contains( ev->pos() ) )
         {
@@ -229,10 +353,13 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             else if ( event->type() == QEvent::MouseButtonRelease )
             {
                 AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-                if ( !item || item->album().isNull() || item->album()->artist().isNull() )
+                if ( !item )
                     return false;
 
-                ViewManager::instance()->show( item->album()->artist() );
+                if ( !item->query().isNull() )
+                    ViewManager::instance()->show( Tomahawk::Artist::get( item->query()->artist() ) );
+                else if ( !item->album().isNull() && !item->album()->artist().isNull() )
+                    ViewManager::instance()->show( item->album()->artist() );
 
                 event->accept();
                 return true;
@@ -269,6 +396,17 @@ AlbumItemDelegate::modelChanged()
 {
     m_artistNameRects.clear();
     m_hoveringOver = QPersistentModelIndex();
+    m_hoverIndex = QPersistentModelIndex();
+
+    foreach ( ImageButton* button, m_playButton )
+        button->deleteLater();
+    m_playButton.clear();
+    foreach ( ImageButton* button, m_pauseButton )
+        button->deleteLater();
+    m_pauseButton.clear();
+    foreach ( QWidget* widget, m_subWidgets )
+        widget->deleteLater();
+    m_subWidgets.clear();
 
     if ( AlbumView* view = qobject_cast< AlbumView* >( m_view ) )
         m_model = view->proxyModel();
@@ -283,3 +421,92 @@ AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
     emit updateIndex( idx );
 }
 
+
+void
+AlbumItemDelegate::onScrolled( int dx, int dy )
+{
+    foreach ( QWidget* widget, m_subWidgets.values() )
+    {
+        widget->move( widget->pos() + QPoint( dx, dy ) );
+    }
+    foreach ( ImageButton* button, m_playButton.values() )
+    {
+        button->move( button->pos() + QPoint( dx, dy ) );
+    }
+    foreach ( ImageButton* button, m_pauseButton.values() )
+    {
+        button->move( button->pos() + QPoint( dx, dy ) );
+    }
+}
+
+
+void
+AlbumItemDelegate::onPlaybackFinished()
+{
+    foreach ( ImageButton* button, m_pauseButton )
+        button->deleteLater();
+    m_pauseButton.clear();
+}
+
+
+void
+AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
+{
+    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item )
+    {
+        bool finished = false;
+
+        if ( !item->query().isNull() )
+        {
+            if ( !item->query()->numResults() || AudioEngine::instance()->currentTrack() != item->query()->results().first() )
+                finished = true;
+        }
+        else if ( !item->album().isNull() )
+        {
+            if ( AudioEngine::instance()->currentTrackPlaylist() != item->album()->playlistInterface( Tomahawk::Mixed ) )
+                finished = true;
+        }
+        else if ( !item->artist().isNull() )
+        {
+            if ( AudioEngine::instance()->currentTrackPlaylist() != item->artist()->playlistInterface() )
+                finished = true;
+        }
+        
+        if ( finished )
+        {
+            if ( m_pauseButton.contains( index ) )
+            {
+                m_pauseButton[ index ]->deleteLater();
+                m_pauseButton.remove( index );
+            }
+        }
+    }
+}
+
+
+void
+AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
+{
+    if ( !m_subWidgets.contains( index ) )
+        return;
+
+    QPoint pos = m_subWidgets[ index ]->pos();
+    foreach ( QWidget* widget, m_subWidgets.values() )
+    {
+        delete widget;
+    }
+    m_subWidgets.clear();
+    
+    ImageButton* button = new ImageButton( m_view );
+    button->setPixmap( RESPATH "images/pause-rest.png" );
+    button->setPixmap( RESPATH "images/pause-pressed.png", QIcon::Off, QIcon::Active );
+    button->setFixedSize( 48, 48 );
+    button->move( pos );
+    button->setContentsMargins( 0, 0, 0, 0 );
+    button->show();
+            
+    connect( button, SIGNAL( clicked( bool ) ), AudioEngine::instance(), SLOT( playPause() ) );
+
+    m_pauseButton[ index ] = button;
+}

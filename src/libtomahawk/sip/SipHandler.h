@@ -37,7 +37,7 @@
  * through AccountManager, this is an internal class.
  */
 
-class SipHandler : public QObject
+class DLLEXPORT SipHandler : public QObject
 {
     Q_OBJECT
 

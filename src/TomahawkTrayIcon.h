@@ -44,8 +44,14 @@ private slots:
     void onActivated( QSystemTrayIcon::ActivationReason reason );
     void showWindow();
 
-    void enablePlay();
-    void enablePause();
+    void onPause();
+    void onPlay();
+    void onStop();
+    void onResume();
+    
+    void stopContinueAfterTrack_StatusChanged();
+    
+    void stopContinueAfterTrackActionTriggered();
 
     void menuAboutToShow();
 private:
@@ -61,6 +67,7 @@ private:
     QMenu* m_contextMenu;
 
     QAction* m_showWindowAction;
+    QAction* m_stopContinueAfterTrackAction;
 };
 
 #endif // TOMAHAWK_TRAYICON_H

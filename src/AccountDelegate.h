@@ -22,6 +22,8 @@
 #include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
+class AnimatedSpinner;
+
 namespace Tomahawk
 {
 namespace Accounts
@@ -38,6 +40,14 @@ public:
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+public slots:
+    void startInstalling( const QPersistentModelIndex& idx );
+    void doneInstalling ( const QPersistentModelIndex& idx );
+    void errorInstalling ( const QPersistentModelIndex& idx );
+
+
+    void doUpdateIndex( const QPersistentModelIndex& idx );
+
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
@@ -45,6 +55,9 @@ signals:
     void update( const QModelIndex& idx );
     void openConfig( Tomahawk::Accounts::Account* );
     void openConfig( Tomahawk::Accounts::AccountFactory* );
+
+private slots:
+    void doUpdateIndexWithAccount( Tomahawk::Accounts::Account* account );
 
 private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect, bool red = false ) const;
@@ -64,7 +77,11 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
+    mutable QHash< QPersistentModelIndex, AnimatedSpinner* > m_loadingSpinners;
+    mutable QHash< Account*, AnimatedSpinner* > m_connectingSpinners;
     mutable int m_accountRowHeight;
+
+    mutable QAbstractItemModel* m_model;
 };
 
 }

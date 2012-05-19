@@ -26,6 +26,7 @@
 #include "InfoSystemWorker.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 namespace Tomahawk
 {
@@ -224,7 +225,7 @@ InfoSystem::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         tDebug() << Q_FUNC_INFO << "Given plugin is null!";
         return;
     }
-    
+
     if ( plugin.data()->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
     {
         Q_ASSERT( false );

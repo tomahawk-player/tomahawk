@@ -34,6 +34,7 @@
 
 #include "TreeModelItem.h"
 #include "TreeProxyModel.h"
+#include "Source.h"
 #include "ArtistView.h"
 
 

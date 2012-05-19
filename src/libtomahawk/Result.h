@@ -36,16 +36,6 @@ class DatabaseCommand_LoadFile;
 namespace Tomahawk
 {
 
-
-struct SocialAction
-{
-    QVariant action;
-    QVariant value;
-    QVariant timestamp;
-    Tomahawk::source_ptr source;
-};
-
-
 class DLLEXPORT Result : public QObject
 {
 Q_OBJECT
@@ -120,7 +110,7 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
-    
+
 private:
     // private constructor
     explicit Result( const QString& url );

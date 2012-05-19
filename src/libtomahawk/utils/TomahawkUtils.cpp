@@ -24,6 +24,7 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #ifdef LIBLASTFM_FOUND
     #include <lastfm/ws.h>
@@ -39,7 +40,10 @@
 #include <QMutex>
 #include <QCryptographicHash>
 
-#ifdef Q_WS_WIN
+#include <quazip.h>
+#include <quazipfile.h>
+
+#ifdef Q_OS_WIN
     #include <windows.h>
     #include <shlobj.h>
 #endif
@@ -47,6 +51,10 @@
 #ifdef Q_WS_MAC
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
+#endif
+
+#ifdef QCA2_FOUND
+#include <QtCrypto>
 #endif
 
 namespace TomahawkUtils
@@ -353,8 +361,12 @@ void
 NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 {
     m_proxy = proxy;
-    if ( !TomahawkSettings::instance()->proxyDns() )
-        m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
+    QFlags< QNetworkProxy::Capability > proxyCaps;
+    proxyCaps |= QNetworkProxy::TunnelingCapability;
+    proxyCaps |= QNetworkProxy::ListeningCapability;
+    if ( TomahawkSettings::instance()->proxyDns() )
+        proxyCaps |= QNetworkProxy::HostNameLookupCapability;
+    m_proxy.setCapabilities( proxyCaps );
     tDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
     tDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
@@ -398,15 +410,15 @@ proxyFactory( bool makeClone, bool noMutexLocker )
     {
         if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
             return s_threadProxyFactoryHash[ QThread::currentThread() ];
-
-        if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-            return 0;
     }
 
     // create a new proxy factory for this thread
-    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    *newProxyFactory = *mainProxyFactory;
+    if ( s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    {
+        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+        *newProxyFactory = *mainProxyFactory;
+    }
 
     if ( !makeClone )
         s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
@@ -669,6 +681,229 @@ SharedTimeLine::disconnectNotify( const char* signal )
             deleteLater();
         }
     }
+}
+
+
+bool
+verifyFile( const QString &filePath, const QString &signature )
+{
+    QCA::Initializer init;
+
+    if( !QCA::isSupported( "sha1" ) )
+    {
+        qWarning() << "SHA1 not supported by QCA, aborting.";
+        return false;
+    }
+
+    // The signature for the resolver.zip was created like so:
+    // openssl dgst -sha1 -binary < "#{tarball}" | openssl dgst -dss1 -sign "#{ARGV[2]}" | openssl enc -base64
+    // which means we need to decode it with QCA's DSA public key signature verification tools
+    // The input data is:
+    // file -> SHA1 binary format -> DSS1/DSA signed -> base64 encoded.
+
+    // Step 1: Load the public key
+    // Public key is in :/data/misc/tomahawk_pubkey.pem
+    QFile f( ":/data/misc/tomahawk_pubkey.pem" );
+    if ( !f.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Unable to read public key from resources!";
+        return false;
+    }
+
+    const QString pubkeyData = QString::fromUtf8( f.readAll() );
+    QCA::ConvertResult conversionResult;
+    QCA::PublicKey publicKey = QCA::PublicKey::fromPEM( pubkeyData, &conversionResult );
+    if ( QCA::ConvertGood != conversionResult)
+    {
+        qWarning() << "Public key reading/loading failed! Tried to load public key:" << pubkeyData;
+        return false;
+    }
+
+    if ( !publicKey.canVerify() )
+    {
+        qWarning() << "Loaded Tomahawk public key but cannot use it to verify! What is up....";
+        return false;
+    }
+
+    // Step 2: Get the SHA1 of the file contents
+    QFile toVerify( filePath );
+    if ( !toVerify.exists() || !toVerify.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Failed to open file we are trying to verify!" << filePath;
+        return false;
+    }
+
+    const QByteArray fileHashData = QCA::Hash( "sha1" ).hash( toVerify.readAll() ).toByteArray();
+    toVerify.close();
+
+    // Step 3: Base64 decode the signature
+    QCA::Base64 decoder( QCA::Decode );
+    const QByteArray decodedSignature = decoder.decode( QCA::SecureArray( signature.trimmed().toUtf8() ) ).toByteArray();
+    if ( decodedSignature.isEmpty() )
+    {
+        qWarning() << "Got empty signature after we tried to decode it from Base64:" << signature.trimmed().toUtf8() << decodedSignature.toBase64();
+        return false;
+    }
+
+    // Step 4: Do the actual verifying!
+    const bool result = publicKey.verifyMessage( fileHashData, decodedSignature, QCA::EMSA1_SHA1, QCA::DERSequence );
+    if ( !result )
+    {
+        qWarning() << "File" << filePath << "FAILED VERIFICATION against our input signature!";
+        return false;
+    }
+
+    qDebug() << "Successfully verified signature of downloaded file:" << filePath;
+
+    return true;
+}
+
+
+QString
+extractScriptPayload( const QString& filename, const QString& resolverId )
+{
+    // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
+    QDir resolverDir = appDataDir();
+    if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
+    {
+        tLog() << "Failed to mkdir resolver save dir: " << TomahawkUtils::appDataDir().absoluteFilePath( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+        return QString();
+    }
+    resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+
+
+    if ( !unzipFileInFolder( filename, resolverDir ) )
+    {
+        qWarning() << "Failed to unzip resolver. Ooops.";
+        return QString();
+    }
+
+    return resolverDir.absolutePath();
+}
+
+
+bool
+unzipFileInFolder( const QString &zipFileName, const QDir &folder )
+{
+    Q_ASSERT( !zipFileName.isEmpty() );
+    Q_ASSERT( folder.exists() );
+
+    QuaZip zipFile( zipFileName );
+    if ( !zipFile.open( QuaZip::mdUnzip ) )
+    {
+        qWarning() << "Failed to QuaZip open:" << zipFile.getZipError();
+        return false;
+    }
+
+    if ( !zipFile.goToFirstFile() )
+    {
+        tLog() << "Failed to go to first file in zip archive: " << zipFile.getZipError();
+        return false;
+    }
+
+    tDebug() << "Unzipping files to:" << folder.absolutePath();
+
+    QuaZipFile fileInZip( &zipFile );
+    do
+    {
+        QuaZipFileInfo info;
+        zipFile.getCurrentFileInfo( &info );
+
+        if ( !fileInZip.open( QIODevice::ReadOnly ) )
+        {
+            tLog() << "Failed to open file inside zip archive:" << info.name << zipFile.getZipName() << "with error:" << zipFile.getZipError();
+            continue;
+        }
+
+        QFile out( folder.absoluteFilePath( fileInZip.getActualFileName() ) );
+
+        // make dir if there is one needed
+        QStringList parts = fileInZip.getActualFileName().split( "/" );
+        if ( parts.size() > 1 )
+        {
+            QStringList dirs = parts.mid( 0, parts.size() - 1 );
+            QString dirPath = dirs.join( "/" ); // QDir translates / to \ internally if necessary
+            folder.mkpath( dirPath );
+        }
+
+        tDebug() << "Writing to output file..." << out.fileName();
+        if ( !out.open( QIODevice::WriteOnly ) )
+        {
+            tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;
+            continue;
+        }
+
+
+        out.write( fileInZip.readAll() );
+        out.close();
+        fileInZip.close();
+
+    } while ( zipFile.goToNextFile() );
+
+    return true;
+}
+
+
+void
+extractBinaryResolver( const QString& zipFilename, QObject* receiver )
+{
+#if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
+    Q_ASSERT( false );
+    qWarning() << "NO SUPPORT YET FOR LINUX BINARY RESOLVERS!";
+    return;
+#endif
+
+#ifdef Q_OS_MAC
+    // Platform-specific handling of resolver payload now. We know it's good
+    // Unzip the file.
+    QFileInfo info( zipFilename );
+    QDir tmpDir = QDir::tempPath();
+    if  ( !tmpDir.mkdir( info.baseName() ) )
+    {
+        qWarning() << "Failed to create temporary directory to unzip in:" << tmpDir.absolutePath();
+        return;
+    }
+    tmpDir.cd( info.baseName() );
+    TomahawkUtils::unzipFileInFolder( info.absoluteFilePath(), tmpDir );
+
+    // On OSX it just contains 1 file, the resolver executable itself. For now. We just copy it to
+    // the Tomahawk.app/Contents/MacOS/ folder alongside the Tomahawk executable.
+    const QString dest = QCoreApplication::applicationDirPath();
+    // Find the filename
+    const QDir toList( tmpDir.absolutePath() );
+    const QStringList files = toList.entryList( QStringList(), QDir::Files );
+    Q_ASSERT( files.size() == 1 );
+
+    const QString src = toList.absoluteFilePath( files.first() );
+    qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
+
+    copyWithAuthentication( src, dest, receiver );
+#elif  defined(Q_OS_WIN)
+    // We unzip directly to the target location, just like normal attica resolvers
+    Q_ASSERT( receiver );
+    if ( !receiver )
+        return;
+
+    const QString resolverId = receiver->property( "resolverid" ).toString();
+
+    Q_ASSERT( !resolverId.isEmpty() );
+    if ( resolverId.isEmpty() )
+        return;
+
+    const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) );
+    const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
+    qDebug() << "Found executables in unzipped binary resolver dir:" << files;
+    Q_ASSERT( files.size() == 1 );
+    if ( files.size() < 1 )
+        return;
+
+    const QString resolverToUse = resolverPath.absoluteFilePath( files.first() );
+    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, resolverToUse ) );
+
+#endif
+
+    // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..
+    Q_ASSERT( false );
 }
 
 

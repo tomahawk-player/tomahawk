@@ -36,71 +36,86 @@
     </message>
 </context>
 <context>
+    <name>AclJobDelegate</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="60"/>
+        <source>Error displaying ACL info</source>
+        <translation>Грешка при изобразяване на ACL информация</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="62"/>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="65"/>
+        <source>Allow %1 to
+connect and stream from you?</source>
+        <translation>Ще позволиш ли на %1 да се свърже и слуша музика от твоята колекция?</translation>
+    </message>
+</context>
+<context>
     <name>ActionCollection</name>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="52"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="52"/>
         <source>&amp;Listen Along</source>
-        <translation>&amp;Слушай заедно</translation>
+        <translation>&amp;Слушай заедно с</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="55"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="55"/>
         <source>Stop &amp;Listening Along</source>
-        <translation>Спри &amp; да слушаш заедно</translation>
+        <translation>Спри &amp;да слушаш заедно с</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="59"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="59"/>
         <source>&amp;Follow in real-time</source>
-        <translation>&amp;Последвай </translation>
+        <translation>&amp;Следвай в реално време </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Слушай самостоятелно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="64"/>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="150"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Слушай публично</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="70"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="70"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Зареди списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="71"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
         <source>&amp;Rename Playlist</source>
         <translation>&amp;Преименувай списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="72"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Копирай връзка към списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="73"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>&amp;Play</source>
         <translation>&amp;Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="74"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
         <source>&amp;Stop</source>
         <translation>&amp;Спри</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="75"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Предходна песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="76"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Следваща песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/actioncollection.cpp" line="77"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Quit</source>
         <translation>&amp;Изключи приложението</translation>
     </message>
@@ -118,30 +133,7 @@
         <translation>Други албуми на този артист</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="74"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="120"/>
-        <source>Click to show Official Tracks</source>
-        <translation>Покажи само официалните песни</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="72"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="118"/>
-        <source>Click to show SuperCollection Tracks</source>
-        <translation>Покажи песните от супер колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="79"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="136"/>
-        <source>Click to show SuperCollection Albums</source>
-        <translation>Покажи албумите от супер колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="138"/>
-        <source>Click to show Official Albums</source>
-        <translation>Покажи само официалните албуми</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="205"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="145"/>
         <source>Other Albums by %1</source>
         <translation>Други албуми от %1</translation>
     </message>
@@ -149,18 +141,18 @@
 <context>
     <name>AlbumModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="145"/>
+        <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="145"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="260"/>
-        <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="302"/>
+        <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="260"/>
+        <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="302"/>
         <source>All albums from %1</source>
         <translation>Всички албуми на %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/albummodel.cpp" line="304"/>
+        <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="304"/>
         <source>All albums</source>
         <translation>Всички албуми</translation>
     </message>
@@ -168,14 +160,14 @@
 <context>
     <name>AlbumView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/albumview.cpp" line="157"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="162"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
         <translation>След като бъде сканирана музикалната ти колекция, ще откриеш тук най-скоро добавените албуми.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/albumview.cpp" line="159"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="164"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
-        <translation>В тази колекция все още няма добавени наскоро албуми</translation>
+        <translation>В тази колекция все още няма добавени наскоро албуми.</translation>
     </message>
 </context>
 <context>
@@ -196,36 +188,25 @@
         <translation>Свързани артисти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="77"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="74"/>
         <source>Albums</source>
         <translation>Албуми</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="86"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="125"/>
-        <source>Click to show SuperCollection Albums</source>
-        <translation>Покажи албумите от супер колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="127"/>
-        <source>Click to show Official Albums</source>
-        <translation>Покажи само официалните албуми</translation>
     </message>
 </context>
 <context>
     <name>ArtistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/artistview.cpp" line="274"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="274"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>След като приключи сканирането на музикалната ти колекция, ще откриеш музиката си тук.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/artistview.cpp" line="276"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="276"/>
         <source>This collection is currently empty.</source>
         <translation>Базата данни с песни е празна.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/artistview.cpp" line="293"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="293"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Съжалявам.
 Твоят филтър &apos;%1&apos; не върна никакъв резултат.</translation>
@@ -312,23 +293,23 @@
 <context>
     <name>CategoryAddItem</name>
     <message>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="61"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="100"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="61"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="100"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="63"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="207"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="316"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="318"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="63"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="207"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="316"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="318"/>
         <source>New Station</source>
         <translation>Нова станция</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="207"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="316"/>
-        <location filename="../src/sourcetree/items/categoryitems.cpp" line="318"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="207"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="316"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="318"/>
         <source>%1 Station</source>
         <translation>%1 Станция</translation>
     </message>
@@ -336,12 +317,12 @@
 <context>
     <name>CategoryItem</name>
     <message>
-        <location filename="../src/sourcetree/items/categoryitems.h" line="63"/>
+        <location filename="../src/sourcetree/items/CategoryItems.h" line="63"/>
         <source>Playlists</source>
         <translation>Списъци</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/categoryitems.h" line="65"/>
+        <location filename="../src/sourcetree/items/CategoryItems.h" line="65"/>
         <source>Stations</source>
         <translation>Станции</translation>
     </message>
@@ -349,7 +330,7 @@
 <context>
     <name>ClearButton</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/clearbutton.cpp" line="38"/>
+        <location filename="../src/libtomahawk/playlist/topbar/ClearButton.cpp" line="38"/>
         <source>Clear</source>
         <translation>Изчисти</translation>
     </message>
@@ -357,12 +338,12 @@
 <context>
     <name>CollectionFlatModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/collectionflatmodel.cpp" line="72"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="72"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/collectionflatmodel.cpp" line="74"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="74"/>
         <source>Collection of %1</source>
         <translation>Колекцията на %1</translation>
     </message>
@@ -370,7 +351,7 @@
 <context>
     <name>CollectionView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/collectionview.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/CollectionView.cpp" line="85"/>
         <source>This collection is empty.</source>
         <translation>Тази колекция е празна.</translation>
     </message>
@@ -401,40 +382,52 @@
         <source>Tomahawk Crash Reporter</source>
         <translation>Автоматично докладване на грешки на Tomahawk</translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
-        <source>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Извинявай&lt;/b&gt;!
- Tomahawk спря да работи. Информация относно проблемът се изпраща към нашата централа, за да можем да го отстраним.</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send the this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Извинявай!&lt;/span&gt; Tomahawk заби. 
+Моля уведоми ни  за този слуай! 
+Tomahaw създаде доклад относно това и изпращайки го, ще помогнеш за по-добрата работа на приложението за в бъдеще.
+Изпрати директно до разработчиците на Tomahawk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="172"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
+        <source>Send this report</source>
+        <translation>Изпрати докладът</translation>
+    </message>
+    <message>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="136"/>
+        <source>Don&apos;t send</source>
+        <translation>Не изпращай</translation>
+    </message>
+    <message>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="192"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="210"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
         <translation>Можете да спрете изпращането на информация относно проблеми в панелът с настройки.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="153"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>Качени %L1 от %В2 КБ</translation>
+        <translation>Качени %L1 от %В2 КБ.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="167"/>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="183"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="168"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="176"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="177"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Изпращането приключи. Благодарим ви за отзивчивостта! :)</translation>
+        <translation>Изпращането приключи. &lt;b&gt;Благодарим ви за отзивчивостта!&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
+        <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="185"/>
         <source>Failed to send crash info.</source>
         <translation>Изпращането на краш-данни е неуспешно.</translation>
     </message>
@@ -442,7 +435,7 @@
 <context>
     <name>DatabaseCommand_AllAlbums</name>
     <message>
-        <location filename="../src/libtomahawk/database/databasecommand_allalbums.cpp" line="109"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="109"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -452,7 +445,7 @@
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>Относно</translation>
     </message>
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
@@ -462,7 +455,7 @@
     <message>
         <location filename="../src/DelegateConfigWrapper.cpp" line="143"/>
         <source>About this Account</source>
-        <translation type="unfinished"/>
+        <translation>Относно тази регистрация</translation>
     </message>
 </context>
 <context>
@@ -486,7 +479,7 @@
 <context>
     <name>DropJob</name>
     <message>
-        <location filename="../src/libtomahawk/dropjob.cpp" line="832"/>
+        <location filename="../src/libtomahawk/DropJob.cpp" line="832"/>
         <source>No tracks found for given %1</source>
         <translation>Няма открити изпълнения на %1</translation>
     </message>
@@ -510,12 +503,12 @@
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/infobar.ui" line="26"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.ui" line="26"/>
         <source>InfoBar</source>
         <translation>Информационно поле</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/infobar.cpp" line="89"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="89"/>
         <source>Filter...</source>
         <translation>Филтър...</translation>
     </message>
@@ -626,12 +619,12 @@
 <context>
     <name>LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/localcollection.cpp" line="54"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
         <source>Bookmarks</source>
         <translation>Отметки</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/localcollection.cpp" line="54"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
         <source>Saved tracks</source>
         <translation>Запаметени изпълнения</translation>
     </message>
@@ -639,27 +632,27 @@
 <context>
     <name>NewPlaylistWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/newplaylistwidget.ui" line="20"/>
+        <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation>Въведи име за новият списък</translation>
+        <translation>Въведи име за новият списък:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/newplaylistwidget.ui" line="37"/>
+        <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
         <translation>Tomahawk предлага множесто начини за създаване на списъци за изпълнение и откриване на любимата ти музика!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/newplaylistwidget.ui" line="47"/>
+        <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
         <translation>Просто въведи стил или име и Tomahawk ще ти предложи няколко песни с които да стартира новият ти списък:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/newplaylistwidget.cpp" line="43"/>
+        <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>Създай списък</translation>
+        <translation>&amp;Създай списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/newplaylistwidget.h" line="50"/>
+        <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
         <translation>Създай нов списък</translation>
     </message>
@@ -667,20 +660,20 @@
 <context>
     <name>NewReleasesWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/newreleaseswidget.h" line="73"/>
+        <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="73"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Нови албуми</translation>
     </message>
 </context>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="162"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="162"/>
         <source>played %1 by you</source>
         <translation>изпълнена %1 от мен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistitemdelegate.cpp" line="164"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="164"/>
         <source>played %1 by %2</source>
         <translation>изпълнена %1 от %2</translation>
     </message>
@@ -706,22 +699,22 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="81"/>
         <source>A playlist by %1, created %2</source>
-        <translation>A playlist by %1, created %2</translation>
+        <translation>Списък  - създател %1, от %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Всички песни от %1, от албум %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistmodel.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="167"/>
         <source>All tracks by %1</source>
         <translation>Всички песни от %1</translation>
     </message>
@@ -729,37 +722,37 @@
 <context>
     <name>PlaylistTypeSelectorDlg</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="32"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="49"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Обикновен списък. Име, няколко песни и си ти на ход! ;)</translation>
+        <translation>Обикновен списък. Име, няколко песни и си ти на ход! ;-)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="75"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
         <source>Don&apos;t know exactly what you want? Give Tomahawk a few pointers and let it build a playlist for you!</source>
         <translation>Не знаеш точно какво искаш? Дай на Tomahawk няколко начални идеи и му позволи да създаде списък с песни за теб!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="92"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
         <source>Name:</source>
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="102"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation>Нов списък</translation>
+        <translation>Нов списък...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="113"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
         <translation>Създай ръчно създаден списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/playlisttypeselectordlg.ui" line="123"/>
+        <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
         <translation>Създай автоматично генериран списък</translation>
     </message>
@@ -767,7 +760,7 @@
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/playlistview.cpp" line="137"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="127"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Този списък в момента е празен. Добави няколко изпълнения и се наслади на музиката!</translation>
     </message>
@@ -780,58 +773,53 @@
         <translation>Proxy настройки</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="70"/>
+        <location filename="../src/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
         <translation>Адрес на proxy сървър</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="77"/>
+        <location filename="../src/ProxyDialog.ui" line="44"/>
         <source>Host</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="84"/>
+        <location filename="../src/ProxyDialog.ui" line="51"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="104"/>
+        <location filename="../src/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
         <translation>Настройка на влизане</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="111"/>
+        <location filename="../src/ProxyDialog.ui" line="78"/>
         <source>User</source>
         <translation>Потребител</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="118"/>
+        <location filename="../src/ProxyDialog.ui" line="85"/>
         <source>Password</source>
         <translation>Парола</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="128"/>
+        <location filename="../src/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
         <translation>Парола за proxy</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="135"/>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <location filename="../src/ProxyDialog.ui" line="142"/>
+        <location filename="../src/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
         <translation>Без адреси за Proxy  (Отменя системните настройки)</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="150"/>
+        <location filename="../src/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
         <translation>localhost *.example.com (отделени с интервал)</translation>
     </message>
     <message>
-        <location filename="../src/ProxyDialog.ui" line="167"/>
+        <location filename="../src/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
         <translation>Използване на Proxy за DNS заявки?</translation>
     </message>
@@ -839,67 +827,67 @@
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="214"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="221"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>преди %n година</numerusform><numerusform>преди %n години</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="216"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="223"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n година</numerusform><numerusform>%n години</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="229"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>преди %n месец</numerusform><numerusform>преди %n месеца</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="224"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="231"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n месец</numerusform><numerusform>%n месеца</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="230"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="237"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>преди %n седмица</numerusform><numerusform>преди %n седмици</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="232"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="239"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n седмица</numerusform><numerusform>%n седмици</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="238"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="245"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>преди %n ден</numerusform><numerusform>преди %n дена</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="240"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="247"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n ден</numerusform><numerusform>%n дена</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="246"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="253"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>преди  %n час</numerusform><numerusform>преди  %n часа</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="248"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="255"/>
         <source>%n hour(s)</source>
         <translation><numerusform> %n час</numerusform><numerusform> %n часа</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="254"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="261"/>
         <source>%1 minutes ago</source>
         <translation>преди %1 минути</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="256"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="263"/>
         <source>%1 minutes</source>
         <translation>%1 минути</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/tomahawkutils.cpp" line="260"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
         <source>just now</source>
         <translation>току-що</translation>
     </message>
@@ -930,18 +918,18 @@
 <context>
     <name>QueueView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/queueview.ui" line="26"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.ui" line="26"/>
         <source>InfoBar</source>
         <translation>Информационно поле</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/queueview.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/queueview.cpp" line="120"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="120"/>
         <source>Show Queue</source>
         <translation>Покажи опашката</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/queueview.cpp" line="130"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="130"/>
         <source>Hide Queue</source>
         <translation>Скрий опашката</translation>
     </message>
@@ -970,7 +958,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/searchlineedit.cpp" line="58"/>
+        <location filename="../src/libtomahawk/playlist/topbar/SearchLineEdit.cpp" line="58"/>
         <source>Search</source>
         <translation>Търси</translation>
     </message>
@@ -978,12 +966,12 @@
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/searchwidget.h" line="54"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="54"/>
         <source>Search: %1</source>
         <translation>Търси %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/searchwidget.h" line="55"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="55"/>
         <source>Results for &apos;%1&apos;</source>
         <translation>Резултати за &apos;%1&apos;</translation>
     </message>
@@ -991,39 +979,39 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="245"/>
+        <location filename="../src/SettingsDialog.cpp" line="299"/>
         <source>Collection</source>
         <translation>Колекция</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/SettingsDialog.cpp" line="306"/>
         <source>Advanced</source>
         <translation>Разширени</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="124"/>
+        <location filename="../src/SettingsDialog.cpp" line="154"/>
         <source>All</source>
         <translation>Всички</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/SettingsDialog.cpp" line="245"/>
+        <source>Some changed settings will not take effect until Tomahawk is restarted</source>
+        <translation>Някои промени няма да имат ефект, докато програмата не бъде рестартирана.</translation>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Services</source>
         <translation>Услуги</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="396"/>
+        <location filename="../src/SettingsDialog.cpp" line="458"/>
         <source>Install resolver from file</source>
         <translation>Инсталирай услиги за търсене от файл</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
+        <location filename="../src/SettingsDialog.cpp" line="245"/>
         <source>Information</source>
         <translation>Информация</translation>
-    </message>
-    <message>
-        <location filename="../src/SettingsDialog.cpp" line="423"/>
-        <source>Changing this setting requires a restart of Tomahawk!</source>
-        <translation>Промяната на тази настройка(и) изисква рестартиране на програмата!</translation>
     </message>
 </context>
 <context>
@@ -1074,7 +1062,7 @@
     <message>
         <location filename="../src/SocialWidget.cpp" line="196"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>♥ &quot;%1&quot; от %2  %3</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="198"/>
@@ -1090,54 +1078,54 @@
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="55"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="55"/>
         <source>Track</source>
         <translation>Песен</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="56"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="56"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="57"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="57"/>
         <source>Artist</source>
         <translation>Артист</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="58"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="58"/>
         <source>Local</source>
         <translation>Локално</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="59"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="59"/>
         <source>Top 10</source>
         <translation>Първите 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="187"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="187"/>
         <source>Offline</source>
         <translation>Извън линия</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="189"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="189"/>
         <source>All available tracks</source>
         <translation>Всички налични изпълнения</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="196"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="196"/>
         <source>Online</source>
         <translation>На линия</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="289"/>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="330"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="289"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="330"/>
         <source>Show</source>
         <translation>Покажи</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="291"/>
-        <location filename="../src/sourcetree/sourcedelegate.cpp" line="332"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="291"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="332"/>
         <source>Hide</source>
         <translation>Скрий</translation>
     </message>
@@ -1145,32 +1133,32 @@
 <context>
     <name>SourceInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.ui" line="30"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="30"/>
         <source>Recent Albums</source>
         <translation>Скорошни албуми</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.ui" line="74"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="74"/>
         <source>Latest Additions</source>
         <translation>Последно добавени</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.ui" line="88"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
         <translation>Наскоро изпълнени песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.cpp" line="80"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="80"/>
         <source>New Additions</source>
         <translation>Нови попълнения</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="83"/>
         <source>My recent activity</source>
         <translation>Скорошна активност</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/sourceinfowidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="87"/>
         <source>Recent activity from %1</source>
         <translation>Скорошна активност на %1</translation>
     </message>
@@ -1178,55 +1166,82 @@
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/sourceitem.cpp" line="65"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="65"/>
         <source>Collection</source>
         <translation>Колекция</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/sourceitem.cpp" line="73"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="73"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="537"/>
         <source>Latest Additions</source>
         <translation>Последно добавени</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/sourceitem.cpp" line="77"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="77"/>
         <source>Recently Played</source>
         <translation>Наскоро изпълнени песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/sourceitem.cpp" line="81"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="81"/>
         <source>Loved Tracks</source>
         <translation>Харесани песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/sourceitem.cpp" line="146"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="146"/>
         <source>SuperCollection</source>
-        <translation>Супер колекция</translation>
+        <translation>Супер колекция
+/Сборен излед от локалните и наличните в колекциите на приятелите ти/</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="540"/>
+        <source>Latest additions to your collection</source>
+        <translation>Последно добавени към колекцията</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="542"/>
+        <source>Latest additions to %1&apos;s collection</source>
+        <translation>Последно добавени в колекцията на %1</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
+        <source>Recently Played Tracks</source>
+        <translation>Наскоро изпълнени песни</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="580"/>
+        <source>Your recently played tracks</source>
+        <translation>Наскоро изпълнени песни от теб</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="582"/>
+        <source>%1&apos;s recently played tracks</source>
+        <translation>Наскоро изпълнените песни от %1</translation>
     </message>
 </context>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="189"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="189"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Копирай адресът</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="190"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="190"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Изтрий %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="230"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Изнеси списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="364"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcetreeview.cpp" line="365"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -1234,77 +1249,78 @@
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="78"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="78"/>
         <source>Group</source>
         <translation>Гпупирай</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="81"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="81"/>
         <source>Collection</source>
         <translation>Колекция</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="84"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="84"/>
         <source>Playlist</source>
         <translation>Списък за изпълнение</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="87"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="87"/>
         <source>Automatic Playlist</source>
         <translation>Автоматичен списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="90"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="90"/>
         <source>Station</source>
         <translation>Станция</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="268"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="268"/>
         <source>Browse</source>
         <translation>Разгледай</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="269"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="269"/>
         <source>Search History</source>
         <translation>Търси в историята</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="271"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="271"/>
         <source>My Music</source>
         <translation>Моята музика</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="279"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="279"/>
         <source>SuperCollection</source>
-        <translation>Супер колекция</translation>
+        <translation>Супер колекция
+/Сборен излед от локалните и наличните в колекциите на приятелите ти/</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="285"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
         <source>Top Loved Tracks</source>
         <translation>Най-харесвани песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="273"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="273"/>
         <source>Dashboard</source>
         <translation>Табло</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="290"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="290"/>
         <source>Recently Played</source>
         <translation>Наскоро изпълнени песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="295"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="295"/>
         <source>Charts</source>
         <translation>Класации</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Нови албуми</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/sourcesmodel.cpp" line="305"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Friends</source>
         <translation>Приятели</translation>
     </message>
@@ -1319,42 +1335,42 @@
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation type="unfinished"/>
+        <translation>Настрой своята регистрация в Spotify</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
         <source>Username or Facebook Email</source>
-        <translation type="unfinished"/>
+        <translation>Потребителско име или електронна поща във Facebook</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Влез</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Щракни с десен бутон върху, който и да е списък в Tomahawk, за да го добавиш и в Spotify.</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>Високо качество</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation type="unfinished"/>
+        <translation>Spotify списъци, които да бъдат поддържани обновени:</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Изтрий запазените списъци, когато бъде премахната синхронизацията</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
         <source>Username:</source>
-        <translation>Потребителско име</translation>
+        <translation>Потребителско име:</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="96"/>
@@ -1365,14 +1381,14 @@
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="145"/>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="143"/>
         <source>Delete in Spotify?</source>
-        <translation type="unfinished"/>
+        <translation>Изтривам и в Spotify?</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="145"/>
+        <location filename="../src/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="143"/>
         <source>Would you like to delete the corresponding Spotify playlist as well?</source>
-        <translation type="unfinished"/>
+        <translation>Желаеш ли да изтриеш и съответните Spotify списъци?</translation>
     </message>
 </context>
 <context>
@@ -1419,6 +1435,46 @@
         <translation>Време между две сканирания, в секунди</translation>
     </message>
     <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="245"/>
+        <source>Advanced Settings</source>
+        <translation>Разширени настройки</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="254"/>
+        <source>Remote Peer Connection Method</source>
+        <translation>Начин за свързване</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="260"/>
+        <source>None (outgoing connections only)</source>
+        <translation>Без. (само изходящи връзки)</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="267"/>
+        <source>Use UPnP to establish port forward (recommended)</source>
+        <translation>Ползвай UPnP (препоръчително)</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="274"/>
+        <source>Use static external IP address/host name and port</source>
+        <translation>Ползвай статичен IP адрес/име и порт</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="287"/>
+        <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
+        <translation>Настрой тук, своят външен IP адрес или име. Моля увери се, че си настроил прехвърляне на избраният порт, към адресът ти от локалната мрежа.</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="356"/>
+        <source>SOCKS Proxy</source>
+        <translation>SOCKS Proxy</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="362"/>
+        <source>Use SOCKS Proxy</source>
+        <translation>Ползвай SOCKS Proxy</translation>
+    </message>
+    <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
         <source>Internet Services</source>
         <translation>Интернет услуги</translation>
@@ -1434,103 +1490,101 @@
         <translation>Филтрирай по възможности:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="245"/>
-        <source>Advanced Network Settings</source>
-        <translation>Разширени мрежови настройки</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="265"/>
-        <source>If you&apos;re having difficulty connecting to peers, try setting this to your external IP address/host name and a port number (default 50210). Make sure to forward that port to this machine!</source>
-        <translation>Ако изпитваш затруднения при свързването, пробвай да настроиш тук твоят външен IP адрес или име на хост.</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="283"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="305"/>
         <source>Static Host Name:</source>
         <translation>Статичен адрес:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="299"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="321"/>
         <source>Static Port:</source>
         <translation>Статичен порт:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="321"/>
-        <source>Always use static host name/port? (Overrides UPnP discovery/port forwarding)</source>
-        <translation>Винаги ползвай статичен порт. (Това ще премахне настройките зададени от UPnP)</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="345"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="369"/>
         <source>Proxy Settings...</source>
         <translation>Настройка на Proxy:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="383"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="392"/>
+        <source>Other Settings</source>
+        <translation>Други настройки</translation>
+    </message>
+    <message>
+        <location filename="../src/StackedSettingsDialog.ui" line="414"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Изпрати сервизна информация след забиване.</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="396"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="401"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="409"/>
-        <source>Use UPnP to establish port forward</source>
-        <translation>Ползвай UPnP за настройка на прехвърляне на портове.</translation>
+        <translation>Позволи на браузърите да работят съвместно с Tomahawk (препоръчително)</translation>
     </message>
 </context>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="200"/>
+        <location filename="../src/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
         <translation>Добави регистрация</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="250"/>
+        <location filename="../src/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
         <translation>Премахни регистрация</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="360"/>
+        <location filename="../src/AccountDelegate.cpp" line="383"/>
         <source>%1 downloads</source>
         <translation>%1 сваляния</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="585"/>
+        <location filename="../src/AccountDelegate.cpp" line="608"/>
         <source>Online</source>
         <translation>На линия</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="590"/>
+        <location filename="../src/AccountDelegate.cpp" line="613"/>
         <source>Connecting...</source>
         <translation>Свързване...</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="595"/>
+        <location filename="../src/AccountDelegate.cpp" line="618"/>
         <source>Offline</source>
         <translation>Извън линия</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Accounts::AccountModel</name>
+    <message>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="505"/>
+        <source>Manual Install Required</source>
+        <translation>Изисква се ръчно инсталиране</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="508"/>
+        <source>Unfortunately, automatic installation of this resolver is not yet available on Linux.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Accounts::GoogleWrapper</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="82"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="82"/>
         <source>Configure this Google Account</source>
         <translation>Настрой регистрацията в Google</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="83"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="83"/>
         <source>Google Address</source>
         <translation>Google адрес</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="84"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="84"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation>Въведи твоята Google регистрация за да можеш да се свържеш с твоите приятели, ползващи Tomahawk</translation>
+        <translation>Въведи твоята Google регистрация за да можеш да се свържеш с твоите приятели, ползващи Tomahawk!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="85"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="85"/>
         <source>username@gmail.com</source>
         <translation>потребителско_име@gmail.com</translation>
     </message>
@@ -1538,7 +1592,7 @@
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperFactory</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.h" line="42"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
         <translation>Свържи се с Google Talk да можеш да търсиш твоите приятели</translation>
     </message>
@@ -1546,12 +1600,12 @@
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperSip</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="61"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="61"/>
         <source>Add Friend</source>
         <translation>Добави приятел</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/googlewrapper.cpp" line="62"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="62"/>
         <source>Enter Google Address:</source>
         <translation>Въведи Google регистрация:</translation>
     </message>
@@ -1567,18 +1621,23 @@
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="108"/>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="123"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="98"/>
+        <source>Test Login</source>
+        <translation>Тествай връзката</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="119"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="134"/>
         <source>Failed</source>
         <translation>Неуспешно</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="113"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="124"/>
         <source>Success</source>
         <translation>Ура!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="129"/>
+        <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="140"/>
         <source>Could not contact server</source>
         <translation>Не мога да се свържа със сървъра</translation>
     </message>
@@ -1586,14 +1645,14 @@
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="129"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="325"/>
         <source>Sync with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Синхронизирай със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="133"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="329"/>
         <source>Stop syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Спри синхронизацията със Spotify</translation>
     </message>
 </context>
 <context>
@@ -1601,28 +1660,28 @@
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="133"/>
         <source>Logging in...</source>
-        <translation type="unfinished"/>
+        <translation>Влизам...</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="148"/>
         <source>Logged in!</source>
-        <translation type="unfinished"/>
+        <translation>Готово!</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="155"/>
         <source>Failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Неуспех: %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.cpp" line="165"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Влез</translation>
     </message>
 </context>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountFactory</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="60"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.h" line="61"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
         <translation>Слушай музика и синхронизирай твоите списъци със  Spotify Premium</translation>
     </message>
@@ -1630,7 +1689,7 @@
 <context>
     <name>Tomahawk::Accounts::TwitterAccountFactory</name>
     <message>
-        <location filename="../src/accounts/twitter/twitteraccount.h" line="51"/>
+        <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
         <translation>Свържи се с твоите приятели в Twitter</translation>
     </message>
@@ -1638,131 +1697,131 @@
 <context>
     <name>Tomahawk::Accounts::TwitterConfigWidget</name>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="58"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="141"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="189"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="58"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="141"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
         <source>Tweet!</source>
         <translation>Чурулик!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="66"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="167"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="66"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="167"/>
         <source>Status: No saved credentials</source>
         <translation>Няма запазени данни за вход</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="67"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="92"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="168"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="67"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="92"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="168"/>
         <source>Authenticate</source>
         <translation>Удостовери</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="74"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="136"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="74"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="136"/>
         <source>Status: Credentials saved for %1</source>
-        <translation>Няма запазени данни за вход</translation>
+        <translation>Статус: данните са запаметени за %1</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="75"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="137"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="75"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="137"/>
         <source>De-authenticate</source>
         <translation>Премахни удостоверяване</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="122"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="200"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="211"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="229"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="271"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="290"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="122"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="200"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="211"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="229"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="271"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="280"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="290"/>
         <source>Tweetin&apos; Error</source>
         <translation>Грешка при изпращане на съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="122"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="122"/>
         <source>The credentials could not be verified.
 You may wish to try re-authenticating.</source>
         <translation>Данните за вход не могат да бъдат потвърдени.
 Моля, опитай отново.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="152"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="152"/>
         <source>Status: Error validating credentials</source>
         <translation>Грешка при валидиране на данни за вход</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="179"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="179"/>
         <source>Global Tweet</source>
         <translation>Общо съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="184"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="184"/>
         <source>Direct Message</source>
         <translation>Лично съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="185"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="185"/>
         <source>Send Message!</source>
-        <translation>Чурулик!</translation>
+        <translation>Изпрати съобщението!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="186"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="186"/>
         <source>@Mention</source>
         <translation>@Споменаване</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="187"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
         <source>Send Mention!</source>
-        <translation>Чурулик!</translation>
+        <translation>Изпрати споменаването!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="200"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="200"/>
         <source>You must enter a user name for this type of tweet.</source>
         <translation>Въведи име на потребител, за този вид съобщение.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="211"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="211"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
         <translation>Данните ти за вход не могат да бъдат заредени.
 Моля, оторизирай програмата отново.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="229"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="229"/>
         <source>Your saved credentials could not be verified.
 You may wish to try re-authenticating.</source>
         <translation>Запаметените данни за вход не могат да бъдат потвърдени.
 Моля, оторизирай програмата отново.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="271"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="290"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="271"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="290"/>
         <source>There was an error posting your status -- sorry!</source>
         <translation>Грешка при побликуване. Опитай отново.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="273"/>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="273"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="282"/>
         <source>Tweeted!</source>
         <translation>Изчуруликано!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="273"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="273"/>
         <source>Your tweet has been posted!</source>
         <translation>Съобщението ти беше побликувано.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="280"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="280"/>
         <source>There was an error posting your direct message -- sorry!</source>
         <translation>Грешка при изпращане на лично съобщение.
 Опитай отново.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.cpp" line="282"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="282"/>
         <source>Your message has been posted!</source>
-        <translation>Съобщението беще побликувано.</translation>
+        <translation>Съобщението беще побликувано!</translation>
     </message>
 </context>
 <context>
@@ -1776,7 +1835,7 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::ZeroconfFactory</name>
     <message>
-        <location filename="../src/accounts/zeroconf/zeroconfaccount.h" line="42"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>Автоматично свързва Tomahawk с останалите копия на програмата,
  работещи в локалната мрежа.</translation>
@@ -1785,60 +1844,60 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::ContextMenu</name>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="79"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="79"/>
         <source>&amp;Play</source>
         <translation>&amp;Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="82"/>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="142"/>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="181"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="82"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="142"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
         <source>Add to &amp;Queue</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="96"/>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="277"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="96"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="277"/>
         <source>&amp;Love</source>
         <translation>&amp;Харесай</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="105"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="105"/>
         <source>&amp;Copy Track Link</source>
         <translation>&amp;Копирай адресът на изпълнението</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="139"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="139"/>
         <source>Show &amp;Album page</source>
         <translation>Покажи &amp;страницата на албума</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="178"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="178"/>
         <source>Show &amp;Artist page</source>
         <translation>Покажи страницата на &amp;артиста</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="272"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
         <source>Un-&amp;Love</source>
         <translation>Не-&amp;харесай</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="110"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Изтрий позициите</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="87"/>
         <source>&amp;Continue Playback after this Track</source>
         <translation>&amp;Продължи след тази песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="89"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="89"/>
         <source>&amp;Stop Playback after this Track</source>
         <translation>&amp;Спри след тази песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/contextmenu.cpp" line="110"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="110"/>
         <source>&amp;Delete Item</source>
         <translation>&amp;Изтрий позицията</translation>
     </message>
@@ -1846,32 +1905,32 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::CustomPlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="123"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="123"/>
         <source>Top Loved Tracks</source>
         <translation>Най-харесвани песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="127"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="127"/>
         <source>Your loved tracks</source>
         <translation>Песните, които харесам.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="129"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="129"/>
         <source>%1&apos;s loved tracks</source>
         <translation>Песните, каресвани от %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="138"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="138"/>
         <source>The most loved tracks from all your friends</source>
         <translation>Най-харесваните песни от всички твои приятели.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="142"/>
         <source>All of your loved tracks</source>
         <translation>Всички песни, които харесвам.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/customplaylistview.cpp" line="144"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="144"/>
         <source>All of %1&apos;s loved tracks</source>
         <translation>Всички песни, харесвани от %1</translation>
     </message>
@@ -1879,12 +1938,12 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::DropJobNotifier</name>
     <message>
-        <location filename="../src/libtomahawk/utils/dropjobnotifier.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="102"/>
         <source>Fetching %1 from database</source>
         <translation>Извличане на %1 от БД</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/dropjobnotifier.cpp" line="106"/>
+        <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="106"/>
         <source>Parsing %1 %2</source>
         <translation>Обединяване на %1 %2</translation>
     </message>
@@ -1948,7 +2007,7 @@ Please change the filters or try again.</source>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="472"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="471"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -2040,72 +2099,72 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="343"/>
         <source>Major</source>
-        <translation>Major</translation>
+        <translation>Мажор</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="344"/>
         <source>Minor</source>
-        <translation>Minor</translation>
+        <translation>Минор</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation>до</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="363"/>
         <source>C Sharp</source>
-        <translation>C#</translation>
+        <translation>до#</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>ре</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="365"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>ре \flat </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="366"/>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>ми</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>фа</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="368"/>
         <source>F Sharp</source>
-        <translation type="unfinished"/>
+        <translation>фа#</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>сол</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="370"/>
         <source>A Flat</source>
-        <translation type="unfinished"/>
+        <translation>ла \flat </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>ла</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="372"/>
         <source>B Flat</source>
-        <translation type="unfinished"/>
+        <translation>си \flat </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="373"/>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>си</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="390"/>
@@ -2165,7 +2224,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Ключ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
@@ -2360,7 +2419,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/groovesharkparser.cpp" line="255"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="255"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>Грешка при извличане на информацията от Grooveshark</translation>
     </message>
@@ -2368,22 +2427,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="359"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="363"/>
         <source>Top Overall</source>
         <translation>Най-известни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="448"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="452"/>
         <source>Artists</source>
         <translation>Артисти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="450"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="454"/>
         <source>Albums</source>
         <translation>Албуми</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/chartsplugin.cpp" line="452"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="456"/>
         <source>Tracks</source>
         <translation>Песни</translation>
     </message>
@@ -2391,56 +2450,56 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="135"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="140"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk възпроизвежда &quot;%1&quot; от %2%3</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/unix/fdonotifyplugin.cpp" line="138"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="143"/>
         <source>on &quot;%1&quot;</source>
         <translation>от &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
-    <name>Tomahawk::InfoSystem::LastFmPlugin</name>
+    <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="409"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="449"/>
         <source>Top Tracks</source>
-        <translation>Най-актуални песни</translation>
+        <translation>Най-слушани песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="412"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="452"/>
         <source>Loved Tracks</source>
-        <translation>Харесвани песни</translation>
+        <translation>Харесани песни</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="415"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="455"/>
         <source>Hyped Tracks</source>
-        <translation>Песни слушани най-често</translation>
+        <translation>Песни, изпъкващи сред останалите</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="421"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Top Artists</source>
         <translation>Най-слушани артисти</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/lastfmplugin.cpp" line="424"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
         <source>Hyped Artists</source>
-        <translation>Артисти слушани най-често</translation>
+        <translation>Изпълнители, изпъкващи сред останалите</translation>
     </message>
 </context>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/infosystem/infoplugins/generic/newreleasesplugin.cpp" line="271"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="271"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Албуми</translation>
     </message>
 </context>
 <context>
     <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/twitter/twitterinfoplugin.cpp" line="134"/>
+        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="157"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
         <translation>#fb ♥  &quot;%1&quot; от %2  %3</translation>
     </message>
@@ -2448,7 +2507,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/itunesparser.cpp" line="170"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="170"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>Грешка при извличане на информация от iTunes</translation>
     </message>
@@ -2456,27 +2515,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="137"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="137"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
         <source>Failed to save tracks</source>
         <translation>Не мога да запазя избраните песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="163"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Някои песни в списъкът за изпълнение нямат артист и заглавие. Те ще бъдат игнорирани.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
         <source>XSPF Error</source>
         <translation>XSPF грешка</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/jspfloader.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Това не е валиден XSPF списък</translation>
     </message>
@@ -2498,37 +2557,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="639"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="721"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="647"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="729"/>
         <source>You</source>
         <translation>Ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="649"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="731"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="658"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="740"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/query.cpp" line="658"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="740"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="661"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="743"/>
         <source>%1 people</source>
         <translation>%1 хора</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/query.cpp" line="663"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="745"/>
         <source>loved this track</source>
         <translation>хареса тази песен</translation>
     </message>
@@ -2536,7 +2595,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::RdioParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/rdioparser.cpp" line="193"/>
+        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="193"/>
         <source>Error fetching Rdio information from the network!</source>
         <translation>Грешка при извличане на информация от Rdio</translation>
     </message>
@@ -2544,7 +2603,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/shortenedlinkparser.cpp" line="96"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="96"/>
         <source>Network error parsing shortened link!</source>
         <translation>Мрежова грешка при извличане на съкратеният адрес.</translation>
     </message>
@@ -2552,33 +2611,33 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="242"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="293"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="267"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Сканиране (%L1 песни)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="244"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="269"/>
         <source>Scanning</source>
         <translation>Сканирам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="278"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="303"/>
         <source>Checking</source>
         <translation>Проверявам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
         <source>Fetching</source>
         <translation>Извличам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
         <source>Parsing</source>
         <translation>Сортирам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Saving (%1%)</source>
         <translation>Запазвам (%1%)</translation>
     </message>
@@ -2586,7 +2645,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/spotifyparser.cpp" line="224"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="224"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Грешка при извличане на информация от Spotify</translation>
     </message>
@@ -2594,15 +2653,15 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
-        <source>Automatically update</source>
-        <translation type="unfinished"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="59"/>
+        <source>Automatically update from XSPF</source>
+        <translation>Автоматично обнови от XSPF</translation>
     </message>
 </context>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="543"/>
+        <location filename="../src/TomahawkApp.cpp" line="556"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
@@ -2610,12 +2669,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkOAuthTwitter</name>
     <message>
-        <location filename="../src/accounts/twitter/tomahawkoauthtwitter.cpp" line="39"/>
+        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
         <translation>Twitter код</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/tomahawkoauthtwitter.cpp" line="39"/>
+        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>After authenticating on Twitter's web site,
 enter the displayed PIN number here:</source>
         <translation>След удостоверяване в Twitter,
@@ -2625,30 +2684,41 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TomahawkTrayIcon</name>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="59"/>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="93"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="50"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="264"/>
+        <source>&amp;Stop Playback after current Track</source>
+        <translation>&amp;Спри възпроизвеждането след текущата песен</translation>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="67"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="102"/>
         <source>Hide Tomahawk Window</source>
         <translation>Скрий главният прозорец</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="98"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="107"/>
         <source>Show Tomahawk Window</source>
         <translation>Покажи главният прозорец</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="158"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="167"/>
         <source>Currently not playing.</source>
         <translation>В момента не се изпълнява нищо</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="219"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="228"/>
         <source>Play</source>
         <translation>Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkTrayIcon.cpp" line="226"/>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="252"/>
         <source>Pause</source>
         <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../src/TomahawkTrayIcon.cpp" line="262"/>
+        <source>&amp;Continue Playback after current Track</source>
+        <translation>&amp;Продължи възпроизвеждането след текущата песен</translation>
     </message>
 </context>
 <context>
@@ -2741,7 +2811,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="188"/>
         <source>Create New &amp;Station</source>
-        <translation>Създай нова станция</translation>
+        <translation>Създай нова &amp;Станция</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="196"/>
@@ -2790,7 +2860,7 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="238"/>
-        <location filename="../src/TomahawkWindow.cpp" line="676"/>
+        <location filename="../src/TomahawkWindow.cpp" line="723"/>
         <source>Play</source>
         <translation>Изпълни</translation>
     </message>
@@ -2821,192 +2891,192 @@ enter the displayed PIN number here:</source>
         <translation>Провери за обновления...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="449"/>
-        <location filename="../src/TomahawkWindow.cpp" line="456"/>
-        <location filename="../src/TomahawkWindow.cpp" line="464"/>
+        <location filename="../src/TomahawkWindow.cpp" line="496"/>
+        <location filename="../src/TomahawkWindow.cpp" line="503"/>
+        <location filename="../src/TomahawkWindow.cpp" line="511"/>
         <source>Connect To Peer</source>
         <translation>Свържи се с друг потребител</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="450"/>
+        <location filename="../src/TomahawkWindow.cpp" line="497"/>
         <source>Enter peer address:</source>
-        <translation>Въведи адресът на отдалеченият потребител</translation>
+        <translation>Въведи адресът на отдалеченият потребител:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="457"/>
+        <location filename="../src/TomahawkWindow.cpp" line="504"/>
         <source>Enter peer port:</source>
         <translation>Въведи порт:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="465"/>
+        <location filename="../src/TomahawkWindow.cpp" line="512"/>
         <source>Enter peer key:</source>
         <translation>Въведи ключът за удостоверяване:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="561"/>
+        <location filename="../src/TomahawkWindow.cpp" line="608"/>
         <source>XSPF Error</source>
         <translation>XSPF Грешка</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="561"/>
+        <location filename="../src/TomahawkWindow.cpp" line="608"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Това не е валиден XSPF списък</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="565"/>
+        <location filename="../src/TomahawkWindow.cpp" line="612"/>
         <source>Failed to save tracks</source>
         <translation>Не мога да запазя списъкът с песни</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="565"/>
+        <location filename="../src/TomahawkWindow.cpp" line="612"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Някои от песните в този списък нямат артист и заглавие. 
 Те ще бъдат игнорирани.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="579"/>
+        <location filename="../src/TomahawkWindow.cpp" line="626"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Съжалявам. Има проблем с достъпа до твоето аудио-устройство или до избраната песен - тя ще бъде прескочена.
 Моля, увери се, че са инсталирани подходящ Phonon и приставки.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="581"/>
+        <location filename="../src/TomahawkWindow.cpp" line="628"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Съжалявам. 
 Има проблем с достъпа до твоето аудио устройство или избраната песен. Тя ще бъде пропусната.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>Create New Station</source>
         <translation>Създай нова станция</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>Name:</source>
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="614"/>
+        <location filename="../src/TomahawkWindow.cpp" line="661"/>
         <source>New Station</source>
         <translation>Нова станция</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="650"/>
+        <location filename="../src/TomahawkWindow.cpp" line="697"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="668"/>
+        <location filename="../src/TomahawkWindow.cpp" line="715"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="691"/>
+        <location filename="../src/TomahawkWindow.cpp" line="738"/>
         <source>Go &amp;offline</source>
         <translation>Излез &amp;извън линия</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="698"/>
+        <location filename="../src/TomahawkWindow.cpp" line="745"/>
         <source>Go &amp;online</source>
         <translation>Свържи &amp;се</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="720"/>
+        <location filename="../src/TomahawkWindow.cpp" line="767"/>
         <source>Authentication Error</source>
         <translation>Грешка при удостоверяване</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="735"/>
+        <location filename="../src/TomahawkWindow.cpp" line="782"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 от %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="736"/>
+        <location filename="../src/TomahawkWindow.cpp" line="783"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="747"/>
+        <location filename="../src/TomahawkWindow.cpp" line="794"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="751"/>
+        <location filename="../src/TomahawkWindow.cpp" line="798"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="755"/>
+        <location filename="../src/TomahawkWindow.cpp" line="802"/>
         <source>Copyright 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</source>
-        <translation type="unfinished"/>
+        <translation>Всички права запазени 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt; Благодарности на: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="758"/>
+        <location filename="../src/TomahawkWindow.cpp" line="805"/>
         <source>About Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Относно Tomahawk</translation>
     </message>
 </context>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.ui" line="26"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="26"/>
         <source>Form</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.ui" line="66"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="66"/>
         <source>0 Sources</source>
         <translation>0 източника</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.ui" line="89"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="89"/>
         <source>0 Tracks</source>
         <translation>0 песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.ui" line="112"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="112"/>
         <source>0 Artists</source>
         <translation>0 артиста</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.ui" line="135"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="135"/>
         <source>0 Shown</source>
         <translation>0 показани</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="49"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="49"/>
         <source>Tracks</source>
         <translation>Песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="50"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="50"/>
         <source>Artists</source>
         <translation>Артисти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="54"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="54"/>
         <source>Filter</source>
         <translation>Филтър</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="84"/>
         <source>Artist View</source>
         <translation>Преглед на артист</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="85"/>
         <source>Flat View</source>
         <translation>Плосък изглед</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="195"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="195"/>
         <source>Sources</source>
         <translation>Източници</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/topbar/topbar.cpp" line="247"/>
+        <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="247"/>
         <source>Shown</source>
         <translation>Показани</translation>
     </message>
@@ -3020,64 +3090,137 @@ enter the displayed PIN number here:</source>
     </message>
 </context>
 <context>
-    <name>TrackModel</name>
+    <name>TrackInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="41"/>
+        <source>Cover</source>
+        <translation>Обложка</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="66"/>
+        <source>Track</source>
+        <translation>Песен</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="81"/>
+        <source>by </source>
+        <translation>от</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="88"/>
         <source>Artist</source>
-        <translation>Артист</translation>
+        <translation>Изпълнител</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
-        <source>Title</source>
-        <translation>Заглавие</translation>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="105"/>
+        <source>from </source>
+        <translation>от</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="112"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="155"/>
+        <source>Statistics</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="186"/>
+        <source>Similar Tracks</source>
+        <translation>Подобни песни</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="174"/>
+        <source>You&apos;ve listened to this track %n time(s).</source>
+        <translation><numerusform>Ти си слушал тази песен %n път(и)</numerusform><numerusform>Ти си слушал тази песен %n път(и)</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="176"/>
+        <source>You&apos;ve never listened to this track before.</source>
+        <translation>Никога не си слушал тази песен преди</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="180"/>
+        <source>You first listened to it on %1.</source>
+        <translation>Първоначално си я слушал на %1</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="184"/>
+        <source>You&apos;ve listened to %1 %n time(s).</source>
+        <translation><numerusform>Слушал си %1 път(и)</numerusform><numerusform>Слушал си %1 %n път(и)</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="186"/>
+        <source>You&apos;ve never listened to %1 before.</source>
+        <translation>Никога не си слушал %1 преди</translation>
+    </message>
+</context>
+<context>
+    <name>TrackModel</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
+        <source>Artist</source>
+        <translation>Артист</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
+        <source>Title</source>
+        <translation>Заглавие</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
+        <source>Album</source>
+        <translation>Албум</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Track</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Duration</source>
         <translation>Продължителност</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Bitrate</source>
         <translation>Качество</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Age</source>
         <translation>Възраст</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Year</source>
         <translation>Година</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Origin</source>
         <translation>Произход</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Score</source>
         <translation>Популярност</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackmodel.cpp" line="248"/>
+        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="248"/>
         <source>Composer</source>
         <translation>Композитор</translation>
     </message>
@@ -3085,7 +3228,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/trackview.cpp" line="493"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="493"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Съжалявам, твоят филтър %1 не върна никакъв резултат.</translation>
     </message>
@@ -3106,67 +3249,67 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/treeitemdelegate.cpp" line="135"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="135"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Name</source>
         <translation>Име</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Duration</source>
         <translation>Продължителност</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Bitrate</source>
         <translation>Качество</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Age</source>
         <translation>Възраст</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Year</source>
         <translation>Година</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Origin</source>
         <translation>Произход</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="369"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
         <source>Composer</source>
         <translation>Композитор</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="585"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="589"/>
         <source>All Artists</source>
         <translation>Всички артисти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="699"/>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="724"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="702"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="727"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="701"/>
-        <location filename="../src/libtomahawk/playlist/treemodel.cpp" line="726"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="704"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="729"/>
         <source>Collection of %1</source>
         <translation>Колекцията на %1</translation>
     </message>
@@ -3174,32 +3317,32 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TwitterConfigWidget</name>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="73"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
         <translation>Настрой Twitter профил</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="119"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
         <translation>Приставката за Twitter ще ти позволи да откриваш и изпълняваш музика, от твоите приятели ползващи Tomahawk и побликуващи съобщения в твоят профил.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="137"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
         <source>Status: No saved credentials</source>
         <translation>Статус: Няма запазени данни за вход</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="166"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
         <source>Authenticate with Twitter</source>
         <translation>Удостовери към Twitter</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="196"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
         <source>Twitter Connections</source>
         <translation>Twitter връзки</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="202"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
         <source>
 If you only want to post tweets, you're done.
 
@@ -3215,32 +3358,32 @@ You can re-send a sync message at any time simply by sending another tweet using
 Можеш да изпращаш съобщения за повторно свързване по всяко време, само като натиснеш бутонът по-долу.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="244"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
         <translation>Избери тип на съобщението и след това натисни бутонът, за да го побликуваш.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="276"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
         <translation>Общо съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="281"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
         <translation>@Споменаване</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="286"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
         <translation>Лично съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="322"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
         <source>e.g. @tomahawk</source>
         <translation>напр. @tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/accounts/twitter/twitterconfigwidget.ui" line="351"/>
+        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
         <translation>Изпрати съобщение</translation>
     </message>
@@ -3248,45 +3391,56 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="385"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
         <source>SuperCollection</source>
-        <translation>Супер колекция</translation>
+        <translation>Супер колекция
+/Сборен излед от локалните и наличните в колекциите на приятелите ти/</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="386"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="406"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>Комбинирани библиотеки от всичките ми приятели на линия</translation>
+        <translation>Обща колекция с всичките ми приятели на линия</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewmanager.cpp" line="387"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
         <source>All available albums</source>
         <translation>Всички налични албуми</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="497"/>
+        <source>Recently Played Tracks</source>
+        <translation>Наскоро изпълени песни</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="498"/>
+        <source>Recently played tracks from all your friends</source>
+        <translation>Наскоро изпълнени песни от всичките ти приятели</translation>
     </message>
 </context>
 <context>
     <name>WelcomeWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/welcomewidget.ui" line="34"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="34"/>
         <source>Recent Additions</source>
         <translation>Нови попълнения</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/welcomewidget.ui" line="55"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
         <translation>Най-нови станции и списъци</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/welcomewidget.ui" line="70"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
         <source>Recently Played Tracks</source>
         <translation>Наскоро изпълнени</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/welcomewidget.cpp" line="152"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="152"/>
         <source>No recently created playlists in your network.</source>
         <translation>Не откривам наскоро създадени списъци в твоята мрежа</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/welcomewidget.h" line="90"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="90"/>
         <source>Welcome to Tomahawk</source>
         <translation>Здравей!</translation>
     </message>
@@ -3294,7 +3448,7 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>WhatsHotWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/whatshotwidget.h" line="72"/>
+        <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="72"/>
         <source>Charts</source>
         <translation>Класации</translation>
     </message>
@@ -3310,33 +3464,33 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>XMPPBot</name>
     <message>
-        <location filename="../src/xmppbot/xmppbot.cpp" line="312"/>
+        <location filename="../src/xmppbot/XmppBot.cpp" line="312"/>
         <source>
 Terms for %1:
 </source>
-        <translation>Условия за %1</translation>
+        <translation>Условия за %1:</translation>
     </message>
     <message>
-        <location filename="../src/xmppbot/xmppbot.cpp" line="314"/>
+        <location filename="../src/xmppbot/XmppBot.cpp" line="314"/>
         <source>No terms found, sorry.</source>
         <translation>Няма открити условия, съжалявам.</translation>
     </message>
     <message>
-        <location filename="../src/xmppbot/xmppbot.cpp" line="347"/>
+        <location filename="../src/xmppbot/XmppBot.cpp" line="347"/>
         <source>
 Hotttness for %1: %2
 </source>
         <translation>Популарност на %1:%2</translation>
     </message>
     <message>
-        <location filename="../src/xmppbot/xmppbot.cpp" line="363"/>
+        <location filename="../src/xmppbot/XmppBot.cpp" line="363"/>
         <source>
 Familiarity for %1: %2
 </source>
         <translation>Еднаквост за %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/xmppbot/xmppbot.cpp" line="381"/>
+        <location filename="../src/xmppbot/XmppBot.cpp" line="381"/>
         <source>
 Lyrics for &quot;%1&quot; by %2:
 
@@ -3351,23 +3505,23 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="49"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="49"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>Неуспешно извличане на данни от XSPF списък</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="51"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>За някои от позициите не открих артист или име на песента.
 Те ще бъдат пропуснати.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="53"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>Неуспех при извличане на избраният списък през мрежата или избраният файл не съществува.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/xspfloader.cpp" line="188"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="188"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>
@@ -3375,80 +3529,80 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmlConsole</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="14"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="14"/>
         <source>Xml stream console</source>
         <translation>Конзола за Xml поток </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="33"/>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="60"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
         <translation>Филтър</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.ui" line="43"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
         <source>Save log</source>
         <translation>Запази диагностичните съобщения</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="62"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="62"/>
         <source>Disabled</source>
         <translation>Деактивиран</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="65"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="65"/>
         <source>By JID</source>
         <translation>По Jabber ID</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="68"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
         <source>By namespace uri</source>
         <translation>По namespace uri</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="71"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
         <source>By all attributes</source>
         <translation>По всички атрибути</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="76"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation type="unfinished"/>
+        <translation>Видими строфи</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="79"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
         <source>Information query</source>
         <translation>Извличане на информация</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="83"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
         <translation>Съобщение</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="87"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
         <source>Presence</source>
         <translation>Наличие</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="91"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
         <source>Custom</source>
         <translation>Специфично създаден</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="107"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="358"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>Save XMPP log to file</source>
         <translation>Запази XMPP диагностичните съобщения във файл.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/xmlconsole.cpp" line="359"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
-        <translation type="unfinished"/>
+        <translation>OpenDocument формат (*.odf);;HTML файл (*.html);;Чист текст (*.txt)</translation>
     </message>
 </context>
 <context>
@@ -3511,7 +3665,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
-        <translation type="unfinished"/>
+        <translation>Много сървъри не го поддържат (като: Gtalk, jabber.org)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
@@ -3527,107 +3681,107 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="380"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="379"/>
         <source>User Interaction</source>
         <translation>Действие от потребителя</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
         <source>Host is unknown</source>
         <translation>Непознат адрес</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="385"/>
         <source>Item not found</source>
         <translation>Обектът не е открит</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
         <source>Authorization Error</source>
         <translation>Грешка при даване на достъп</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
         <source>Remote Stream Error</source>
         <translation>Грешка в стриймът от отдалечената машина</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
         <source>Remote Connection failed</source>
         <translation>Отдалечената връзка е неуспешна</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
         <source>Internal Server Error</source>
         <translation>Вътрешна грешка на сървъра</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
         <source>System shutdown</source>
         <translation>Изключване на системата</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
         <source>Conflict</source>
         <translation>Конфликт</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>No Compression Support</source>
         <translation>Няма поддръжка на компресия</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
         <source>No Encryption Support</source>
         <translation>Няма поддръжка на криптиране</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>No Authorization Support</source>
         <translation>Няма поддръжка на удостоверяване</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="424"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="423"/>
         <source>No Supported Feature</source>
         <translation>Неподдържана функция</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="520"/>
         <source>Add Friend</source>
         <translation>Добави приятел</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="522"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
         <source>Enter Xmpp ID:</source>
         <translation>Въведи  Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="673"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="672"/>
         <source>Add Friend...</source>
         <translation>Добави приятел...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="678"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="677"/>
         <source>XML Console...</source>
         <translation>XML Конзола...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="726"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="725"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Извинявай.. Аз съм режимът за автоматични отговори изпълзван от Tomahawk. ( http://gettomahawk.com ) Щом получаваш това съобщение, този с който се опитваш да се свържеш вероятно не е на линия. Моля, опитай отново по-късно.</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="823"/>
         <source>Authorize User</source>
         <translation>Оправомощяване на потребител</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="825"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="824"/>
         <source>Do you want to grant &lt;b&gt;%1&lt;/b&gt; access to your Collection?</source>
         <translation>Искате ли да позволите на &lt;b&gt;%1&lt;/b&gt; достъп до вашата колекция?</translation>
     </message>
@@ -3635,23 +3789,23 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>ZeroconfConfig</name>
     <message>
-        <location filename="../src/accounts/zeroconf/configwidget.ui" line="14"/>
+        <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/zeroconf/configwidget.ui" line="55"/>
+        <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
         <source>Local Network configuration</source>
         <translation>Настройка на локалната мрежа</translation>
     </message>
     <message>
-        <location filename="../src/accounts/zeroconf/configwidget.ui" line="77"/>
+        <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running Tomahawk on your local network</source>
         <translation>Тази приставка, автоматично ще открие другите потребители 
 ползващи Tomahawk в локалната мрежа</translation>
     </message>
     <message>
-        <location filename="../src/accounts/zeroconf/configwidget.ui" line="84"/>
+        <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when Tomahawk starts</source>
         <translation>Свържи се автоматично при стартиране</translation>
     </message>

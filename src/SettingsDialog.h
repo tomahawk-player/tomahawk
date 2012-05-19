@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-class LoadingSpinner;
+class AnimatedSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
 class SipPlugin;
@@ -61,13 +61,8 @@ public:
 
     void saveSettings();
 
-private slots:
-    void proxyTypeChangedSlot( int index );
-
 private:
     Ui::ProxyDialog* ui;
-    QHash<int,int> m_forwardMap;
-    QHash<int,int> m_backwardMap;
 };
 
 class SettingsDialog : public QDialog
@@ -84,7 +79,8 @@ protected:
 private slots:
     void onRejected();
 
-    void toggleUpnp( bool preferStaticEnabled );
+    void toggleRemoteMode();
+    void toggleProxyEnabled();
     void showProxySettings();
 
     void accountsFilterChanged( int );
@@ -110,9 +106,10 @@ private:
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
+    bool m_restartRequired;
     Tomahawk::Accounts::AccountModel* m_accountModel;
     Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
-    LoadingSpinner* m_sipSpinner;
+    AnimatedSpinner* m_sipSpinner;
 };
 
 #endif // SETTINGSDIALOG_H

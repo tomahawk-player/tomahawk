@@ -28,14 +28,14 @@
 using namespace Tomahawk;
 
 
-SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode )
+SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistModes::LatchMode latchMode )
     : PlaylistInterface()
     , m_source( source )
     , m_currentItem( 0 )
     , m_gotNextItem( false )
 {
     setLatchMode( latchMode );
-    
+
     if ( !m_source.isNull() )
         connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 
@@ -75,7 +75,12 @@ SourcePlaylistInterface::nextItem()
     }
 
     m_gotNextItem = false;
-    m_currentItem = m_source.data()->currentTrack()->results().first();
+
+    if ( m_source.data()->currentTrack()->numResults() )
+        m_currentItem = m_source.data()->currentTrack()->results().first();
+    else
+        m_currentItem = result_ptr();
+
     return m_currentItem;
 }
 
@@ -103,7 +108,7 @@ SourcePlaylistInterface::hasNextItem()
 {
     if ( !sourceValid() )
         return false;
-    
+
     return m_gotNextItem;
 }
 

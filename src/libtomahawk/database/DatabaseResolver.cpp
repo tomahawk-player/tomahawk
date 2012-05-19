@@ -22,6 +22,7 @@
 #include "network/Servent.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_Resolve.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 

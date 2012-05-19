@@ -51,7 +51,7 @@ public:
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void loadingStarted();

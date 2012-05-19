@@ -72,7 +72,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      accounts/lastfm/LastFmAccount.cpp
      accounts/lastfm/LastFmConfig.cpp
-     accounts/lastfm/LastFmPlugin.cpp
+     accounts/lastfm/LastFmInfoPlugin.cpp
 
      accounts/spotify/SpotifyAccount.cpp
      accounts/spotify/SpotifyAccountConfig.cpp
@@ -160,6 +160,7 @@ IF(GLOOX_FOUND)
 ENDIF(GLOOX_FOUND)
 
 ADD_SUBDIRECTORY( accounts )
+ADD_SUBDIRECTORY( infoplugins )
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )

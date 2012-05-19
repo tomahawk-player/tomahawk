@@ -36,7 +36,6 @@ CrashReporter::CrashReporter( const QStringList& args )
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
     ui.setupUi( this );
-
     ui.logoLabel->setPixmap( QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ).scaled( QSize( 55, 55 ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
     ui.progressBar->setRange( 0, 100 );
     ui.progressBar->setValue( 0 );
@@ -51,20 +50,11 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressLabel->setIndent( 3 );
   #else
     ui.vboxLayout->setSpacing( 16 );
+    ui.hboxLayout1->setSpacing( 16 );
     ui.progressBar->setTextVisible( false );
     ui.progressLabel->setIndent( 1 );
     ui.bottomLabel->setDisabled( true );
     ui.bottomLabel->setIndent( 1 );
-
-    // adjust the spacer since we adjusted the spacing above
-    for ( int x = 0; x < ui.vboxLayout->count(); ++x )
-    {
-        if ( QSpacerItem* spacer = ui.vboxLayout->itemAt( x )->spacerItem() )
-        {
-            spacer->changeSize( 6, 2, QSizePolicy::Minimum, QSizePolicy::Fixed );
-            break;
-        }
-    }
   #endif //Q_WS_MAC
 
     m_http = new QHttp( "oops.tomahawk-player.org", 80, this );
@@ -78,7 +68,18 @@ CrashReporter::CrashReporter( const QStringList& args )
 
     setFixedSize( sizeHint() );
 
-    QTimer::singleShot( 0, this, SLOT( send() ) );
+    //hide until "send report" has been clicked
+    ui.progressBar->setVisible( false );
+    ui.button->setVisible( false );
+    ui.progressLabel->setVisible( false );
+    connect( ui.sendButton, SIGNAL( clicked() ), SLOT( onSendButton() ));
+
+
+}
+
+CrashReporter::~CrashReporter()
+{
+    delete m_http;
 }
 
 
@@ -183,4 +184,15 @@ CrashReporter::onFail( int error, const QString& errorString )
     ui.button->setText( tr( "Close" ) );
     ui.progressLabel->setText( tr( "Failed to send crash info." ) );
     qDebug() << "Error:" << error << errorString;
+}
+
+void
+CrashReporter::onSendButton()
+{
+    ui.progressBar->setVisible( true );
+    ui.button->setVisible( true );
+    ui.progressLabel->setVisible( true );
+    ui.sendButton->setEnabled( false );
+    ui.dontSendButton->setEnabled( false );
+    QTimer::singleShot( 0, this, SLOT( send() ) );
 }

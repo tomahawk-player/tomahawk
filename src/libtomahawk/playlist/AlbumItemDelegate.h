@@ -30,6 +30,7 @@ namespace Tomahawk {
 
 class QEvent;
 class AlbumProxyModel;
+class ImageButton;
 
 class DLLEXPORT AlbumItemDelegate : public QStyledItemDelegate
 {
@@ -52,6 +53,13 @@ signals:
 private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
+    
+    void onScrolled( int dx, int dy );
+    void onPlaybackStarted( const QPersistentModelIndex& index );
+    void onPlaybackFinished();
+    
+    void onPlayClicked( const QPersistentModelIndex& index );
+    void onPlaylistChanged( const QPersistentModelIndex& index );
 
 private:
     QAbstractItemView* m_view;
@@ -61,8 +69,13 @@ private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
     QPersistentModelIndex m_hoveringOver;
+    QPersistentModelIndex m_hoverIndex;
+    mutable QRect m_playButtonRect;
 
     QPixmap m_shadowPixmap;
+    mutable QHash< QPersistentModelIndex, QWidget* > m_subWidgets;
+    mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
+    mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
 };
 
 #endif // ALBUMITEMDELEGATE_H

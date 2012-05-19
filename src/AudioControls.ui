@@ -151,14 +151,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>58</width>
-          <height>58</height>
+          <width>64</width>
+          <height>64</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>58</width>
-          <height>58</height>
+          <width>64</width>
+          <height>64</height>
          </size>
         </property>
         <property name="alignment">

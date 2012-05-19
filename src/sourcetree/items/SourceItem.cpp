@@ -212,13 +212,13 @@ SourceItem::localLatchedOn() const
 }
 
 
-Tomahawk::PlaylistInterface::LatchMode
+Tomahawk::PlaylistModes::LatchMode
 SourceItem::localLatchMode() const
 {
     if ( !m_source.isNull() && !m_source->isLocal() )
         return m_source->playlistInterface()->latchMode();
 
-    return Tomahawk::PlaylistInterface::StayOnSong;
+    return Tomahawk::PlaylistModes::StayOnSong;
 }
 
 
@@ -228,7 +228,7 @@ SourceItem::latchedOff( const source_ptr& from, const source_ptr& to )
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = false;
-        disconnect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
+        disconnect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ) );
         m_latchedOnTo.clear();
         emit updated();
     }
@@ -242,14 +242,14 @@ SourceItem::latchedOn( const source_ptr& from, const source_ptr& to )
     {
         m_latchedOn = true;
         m_latchedOnTo = to;
-        connect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ), SLOT( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
+        connect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ), SLOT( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ) );
         emit updated();
     }
 }
 
 
 void
-SourceItem::latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode )
+SourceItem::latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode )
 {
     Q_UNUSED( mode );
     emit updated();
@@ -534,6 +534,12 @@ SourceItem::latestAdditionsClicked()
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
         raModel->setStyle( TrackModel::Large );
+        raModel->setTitle( tr( "Latest Additions" ) );
+
+        if ( m_source->isLocal() )
+            raModel->setDescription( tr( "Latest additions to your collection" ) );
+        else
+            raModel->setDescription( tr( "Latest additions to %1's collection" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
@@ -568,6 +574,12 @@ SourceItem::recentPlaysClicked()
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
         raModel->setStyle( TrackModel::Large );
+        raModel->setTitle( tr( "Recently Played Tracks" ) );
+
+        if ( m_source->isLocal() )
+            raModel->setDescription( tr( "Your recently played tracks" ) );
+        else
+            raModel->setDescription( tr( "%1's recently played tracks" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );

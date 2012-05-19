@@ -158,16 +158,20 @@ AudioEngine::pause()
 
 
 void
-AudioEngine::stop()
+AudioEngine::stop( AudioErrorCode errorCode )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    emit stopped();
     if ( isStopped() )
         return;
 
-    setState( Stopped );
+    if( errorCode == NoError )
+        setState( Stopped );
+    else
+        setState( Error );
+
     m_mediaObject->stop();
+    emit stopped();
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
@@ -180,7 +184,7 @@ AudioEngine::stop()
         sendWaitingNotification();
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
-    
+
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -216,8 +220,8 @@ AudioEngine::canGoNext()
     if ( m_playlist.isNull() )
         return false;
 
-    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
-         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipForwards )
+    if ( m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkip ||
+        m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
         return false;
 
     if ( !m_currentTrack.isNull() && !m_playlist->hasNextItem() &&
@@ -239,8 +243,8 @@ AudioEngine::canGoPrevious()
     if ( m_playlist.isNull() )
         return false;
 
-    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
-         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
+    if ( m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkip ||
+        m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipBackwards )
         return false;
 
     return true;
@@ -255,7 +259,10 @@ AudioEngine::canSeek()
     if ( m_mediaObject && m_mediaObject->isValid() )
         phononCanSeek = m_mediaObject->isSeekable();
     */
-    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
+    if ( m_playlist.isNull() )
+        return phononCanSeek;
+
+    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistModes::NoSeek ) && phononCanSeek;
 }
 
 
@@ -342,7 +349,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
          m_currentTrack->track().isNull() ||
          m_currentTrack->artist().isNull() )
         return;
-    
+
     QVariantMap playInfo;
 
     if ( !m_currentTrack->album().isNull() )
@@ -385,7 +392,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 
     playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
-    
+
     Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushing data with type " << type;
@@ -464,6 +471,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             m_input = io;
             m_mediaObject->play();
+
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
@@ -471,7 +479,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
                 Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
             }
-            
+
             sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
         }
     }
@@ -542,7 +550,7 @@ AudioEngine::loadNextTrack()
     }
     else
     {
-        if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
+        if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistModes::Retry )
             m_waitingOnNewTrack = true;
 
         stop();
@@ -565,7 +573,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     {
         loadTrack( result );
     }
-    else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+    else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistModes::Retry )
     {
         m_waitingOnNewTrack = true;
         if ( isStopped() )
@@ -577,10 +585,58 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
 
 void
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query )
+{
+    if ( query->resolvingFinished() )
+    {
+        if ( query->numResults() )
+            playItem( playlist, query->results().first() );
+    }
+    else
+    {
+        _detail::Closure* closure = NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
+                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
+    }
+}
+
+
+void
+AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
+{
+    if ( artist->playlistInterface()->trackCount() )
+    {
+        playItem( artist->playlistInterface(), artist->playlistInterface()->tracks().first() );
+    }
+    else
+    {
+        _detail::Closure* closure = NewClosure( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ), const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::artist_ptr ) ), artist );
+        artist->playlistInterface()->tracks();
+    }
+}
+
+
+void
+AudioEngine::playItem( const Tomahawk::album_ptr& album )
+{
+    playlistinterface_ptr pli = album->playlistInterface( Mixed );
+    if ( pli->trackCount() )
+    {
+        playItem( pli, pli->tracks().first() );
+    }
+    else
+    {
+        _detail::Closure* closure = NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
+        pli->tracks();
+    }
+}
+
+
+void
 AudioEngine::onPlaylistNextTrackReady()
 {
     // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
-    if ( m_playlist && m_playlist->latchMode() == PlaylistInterface::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
+    if ( m_playlist && m_playlist->latchMode() == PlaylistModes::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
     {
         m_waitingOnNewTrack = false;
         loadNextTrack();
@@ -610,14 +666,19 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
     if ( newState == Phonon::ErrorState )
     {
-        stop();
+        stop( UnknownError );
 
         tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+
         emit error( UnknownError );
+        setState( Error );
+
         return;
     }
     if ( newState == Phonon::PlayingState )
+    {
         setState( Playing );
+    }
 
     if ( oldState == Phonon::PlayingState )
     {
@@ -650,7 +711,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
                 loadNextTrack();
             else
             {
-                if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
+                if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistModes::Retry )
                     m_waitingOnNewTrack = true;
                 stop();
             }
@@ -692,7 +753,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
     if ( !m_playlist.isNull() )
     {
-        if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+        if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistModes::Retry )
             disconnect( m_playlist.data(), SIGNAL( nextTrackReady() ) );
         m_playlist.data()->reset();
     }
@@ -703,14 +764,25 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         emit playlistChanged( playlist );
         return;
     }
-    
+
     m_playlist = playlist;
     m_stopAfterTrack.clear();
 
-    if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+    if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistModes::Retry )
         connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( onPlaylistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
+}
+
+
+void
+AudioEngine::setStopAfterTrack( const query_ptr& query )
+{
+    if ( m_stopAfterTrack != query )
+    {
+        m_stopAfterTrack = query;
+        emit stopAfterTrack_changed();
+    }
 }
 
 
@@ -720,7 +792,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     Tomahawk::result_ptr lastTrack = m_currentTrack;
     if ( !lastTrack.isNull() )
     {
-        if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+        if ( m_state != Error && TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

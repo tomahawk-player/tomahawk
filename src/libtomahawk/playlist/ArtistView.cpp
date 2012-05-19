@@ -26,7 +26,7 @@
 
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "widgets/OverlayWidget.h"
 
 #include "ContextMenu.h"
@@ -49,7 +49,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
-    , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_loadingSpinner( new AnimatedSpinner( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
@@ -87,14 +87,14 @@ ArtistView::ArtistView( QWidget* parent )
     connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
     connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
 ArtistView::~ArtistView()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -224,7 +224,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
         if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->album().isNull() )
-            ViewManager::instance()->show( item->album(), m_model->mode() );
+            ViewManager::instance()->show( item->album() );
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );

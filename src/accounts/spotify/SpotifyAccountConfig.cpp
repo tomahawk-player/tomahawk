@@ -19,7 +19,7 @@
 #include "SpotifyAccountConfig.h"
 
 #include "SpotifyAccount.h"
-#include <playlist/dynamic/widgets/LoadingSpinner.h>
+#include "utils/AnimatedSpinner.h"
 #include "ui_SpotifyAccountConfig.h"
 
 #include <QListWidget>
@@ -44,7 +44,7 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( resetLoginButton() ) );
     loadFromConfig();
 
-    m_playlistsLoading = new LoadingSpinner( m_ui->playlistList );
+    m_playlistsLoading = new AnimatedSpinner( m_ui->playlistList );
 }
 
 

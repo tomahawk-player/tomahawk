@@ -20,12 +20,13 @@
 #include "LastFmConfig.h"
 
 #include "infosystem/InfoSystem.h"
-#include "LastFmPlugin.h"
+#include "LastFmInfoPlugin.h"
 #include "utils/TomahawkUtils.h"
 #include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 using namespace InfoSystem;
@@ -83,7 +84,7 @@ LastFmAccount::~LastFmAccount()
 {
     if ( m_infoPlugin )
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
-    
+
     delete m_resolver.data();
 }
 
@@ -167,8 +168,8 @@ InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QWeakPointer< LastFmPlugin >( new LastFmPlugin( this ) );
-    
+        m_infoPlugin = QWeakPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
+
     return InfoPluginPtr( m_infoPlugin.data() );
 }
 
@@ -188,6 +189,8 @@ LastFmAccount::saveConfig()
         setPassword( m_configWidget.data()->password() );
         setScrobble( m_configWidget.data()->scrobble() );
     }
+
+    sync();
 
     if ( m_infoPlugin )
         QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );

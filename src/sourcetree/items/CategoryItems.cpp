@@ -28,6 +28,7 @@
 #include "SourceTreeView.h"
 #include "utils/TomahawkUtils.h"
 #include "widgets/NewPlaylistWidget.h"
+#include "TomahawkWindow.h"
 #include "widgets/PlaylistTypeSelectorDialog.h"
 #include <playlist/dynamic/GeneratorInterface.h>
 #include "utils/Logger.h"

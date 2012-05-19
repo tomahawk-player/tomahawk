@@ -26,8 +26,12 @@
 #include "audio/AudioEngine.h"
 #include "TomahawkApp.h"
 #include "TomahawkWindow.h"
+#include "Query.h"
+#include "Source.h"
+#include "Collection.h"
 
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 #include <ActionCollection.h>
 
 
@@ -35,6 +39,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     : QSystemTrayIcon( parent )
     , m_currentAnimationFrame( 0 )
     , m_showWindowAction( 0 )
+    , m_stopContinueAfterTrackAction( 0 )
 {
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128-grayscale.png" );
     setIcon( icon );
@@ -44,14 +49,19 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
 
+    m_stopContinueAfterTrackAction = new QAction( tr( "&Stop Playback after current Track" ), this );
+
     ActionCollection *ac = ActionCollection::instance();
     m_contextMenu->addAction( ac->getAction( "playPause" ) );
     m_contextMenu->addAction( ac->getAction( "stop" ) );
+    m_contextMenu->addAction( m_stopContinueAfterTrackAction );
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ac->getAction( "previousTrack" ) );
     m_contextMenu->addAction( ac->getAction( "nextTrack" ) );
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
+
+    connect( m_stopContinueAfterTrackAction, SIGNAL( triggered(bool) ), this, SLOT( stopContinueAfterTrackActionTriggered() ) );
 
 #ifdef Q_WS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
@@ -67,10 +77,11 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addAction( ac->getAction( "quit" ) );
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( enablePause() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( enablePause() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( enablePlay() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( enablePlay() ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlay() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( onResume() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( onStop() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( onPause() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopAfterTrack_changed() ) , this, SLOT( stopContinueAfterTrack_StatusChanged() ) );
 
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
@@ -190,13 +201,13 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
         case QSystemTrayIcon::Trigger:
         {
             TomahawkWindow* mainwindow = APP->mainWindow();
-            if ( mainwindow->isVisible() )
+            if (mainwindow->isActiveWindow())
             {
                 mainwindow->hide();
             }
             else
             {
-                mainwindow->show();
+                TomahawkUtils::bringToFront();
             }
         }
         break;
@@ -214,16 +225,58 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 
 
 void
-TomahawkTrayIcon::enablePlay()
+TomahawkTrayIcon::onPause()
 {
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Play" ) );
 }
 
 
 void
-TomahawkTrayIcon::enablePause()
+TomahawkTrayIcon::onPlay()
+{
+    m_stopContinueAfterTrackAction->setEnabled( true );
+    onResume();
+    stopContinueAfterTrack_StatusChanged();
+}
+
+
+void
+TomahawkTrayIcon::onStop()
+{
+    m_stopContinueAfterTrackAction->setEnabled( false );
+    onPause();
+}
+
+
+void
+TomahawkTrayIcon::onResume()
 {
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
+}
+
+
+void
+TomahawkTrayIcon::stopContinueAfterTrack_StatusChanged()
+{
+    if ( !AudioEngine::instance()->currentTrack().isNull() )
+    {
+        if ( AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+            m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after current Track" ) );
+        else
+            m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
+    }
+}
+
+
+void TomahawkTrayIcon::stopContinueAfterTrackActionTriggered()
+{
+    if ( !AudioEngine::instance()->currentTrack().isNull() )
+    {
+        if ( !AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+            AudioEngine::instance()->setStopAfterTrack( AudioEngine::instance()->currentTrack()->toQuery() );
+        else
+            AudioEngine::instance()->setStopAfterTrack( Tomahawk::query_ptr() );
+    }
 }
 
 

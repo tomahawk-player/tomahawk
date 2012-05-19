@@ -25,6 +25,7 @@
 #include "ExternalResolver.h"
 #include "resolvers/ScriptResolver.h"
 #include "resolvers/QtScriptResolver.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 

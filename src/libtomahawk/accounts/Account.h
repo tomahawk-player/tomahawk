@@ -26,12 +26,12 @@
 #include <QtGui/QIcon>
 #include <QtCore/QString>
 #include <QtCore/QUuid>
+#include <QMutex>
 
 #include "Typedefs.h"
 #include "DllMacro.h"
-#include "TomahawkSettings.h"
 
-#include "libtomahawk/infosystem/InfoSystem.h"
+// #include "libtomahawk/infosystem/InfoSystem.h"
 
 class SipPlugin;
 
@@ -101,6 +101,10 @@ public:
 
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() = 0;
     virtual SipPlugin* sipPlugin() = 0;
+
+    // Some accounts cannot be enabled if authentication fails. Return true after failing to authenticate
+    // if this is the case, and the account will not be enabled
+    virtual bool preventEnabling() const { return false; }
 
     AccountTypes types() const;
 
@@ -188,6 +192,7 @@ public:
 
 Q_DECLARE_INTERFACE( Tomahawk::Accounts::AccountFactory, "tomahawk.AccountFactory/1.0" )
 
+Q_DECLARE_METATYPE( Tomahawk::Accounts::Account* )
 Q_DECLARE_METATYPE( QList< Tomahawk::Accounts::Account* > )
 Q_DECLARE_METATYPE( Tomahawk::Accounts::AccountTypes )
 #endif

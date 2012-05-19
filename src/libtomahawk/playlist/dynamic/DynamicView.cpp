@@ -31,6 +31,7 @@
 #include "DynamicModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

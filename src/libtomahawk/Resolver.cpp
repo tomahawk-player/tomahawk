@@ -17,3 +17,5 @@
  */
 
 #include "Resolver.h"
+
+#include "Source.h"

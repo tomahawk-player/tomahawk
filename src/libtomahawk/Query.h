@@ -27,6 +27,7 @@
 
 #include "Typedefs.h"
 #include "Result.h"
+#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 
@@ -38,6 +39,36 @@ namespace Tomahawk
 {
 
 class Resolver;
+
+struct SocialAction
+{
+    QVariant action;
+    QVariant value;
+    QVariant timestamp;
+    Tomahawk::source_ptr source;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    SocialAction();
+    ~SocialAction();
+    SocialAction& operator=( const SocialAction& other );
+    SocialAction( const SocialAction& other );
+};
+
+struct PlaybackLog
+{
+    Tomahawk::source_ptr source;
+    unsigned int timestamp;
+    unsigned int secsPlayed;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    PlaybackLog();
+    ~PlaybackLog();
+    PlaybackLog& operator=( const PlaybackLog& other );
+    PlaybackLog( const PlaybackLog& other );
+};
+
 
 class DLLEXPORT Query : public QObject
 {
@@ -119,10 +150,18 @@ public:
     void setLoved( bool loved );
     bool loved();
 
+    void loadStats();
+    QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
+    void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
+    unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
+
     void loadSocialActions();
     QList< Tomahawk::SocialAction > allSocialActions() const;
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
+
+    QList<Tomahawk::query_ptr> similarTracks() const;
+    QStringList lyrics() const;
 
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
@@ -141,8 +180,11 @@ signals:
 
     void coverChanged();
 
-    // emitted when social actions are loaded
     void socialActionsLoaded();
+    void statsLoaded();
+    void similarTracksLoaded();
+    void lyricsLoaded();
+
     void updated();
 
 public slots:
@@ -160,9 +202,11 @@ public slots:
     void onResolverRemoved();
 
 private slots:
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( QString target );
+
     void onResultStatusChanged();
     void refreshResults();
-    void onSocialActionsLoaded();
 
 private:
     Query();
@@ -211,16 +255,26 @@ private:
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
 
     mutable QMutex m_mutex;
-
     QWeakPointer< Tomahawk::Query > m_ownRef;
+
+    bool m_playbackHistoryLoaded;
+    QList< PlaybackLog > m_playbackHistory;
 
     bool m_socialActionsLoaded;
     QHash< QString, QVariant > m_currentSocialActions;
     QList< SocialAction > m_allSocialActions;
+
+    bool m_simTracksLoaded;
+    QList<Tomahawk::query_ptr> m_similarTracks;
+    
+    bool m_lyricsLoaded;
+    QStringList m_lyrics;
+    
+    mutable int m_infoJobs;
 };
 
 }; //ns
 
-Q_DECLARE_METATYPE(Tomahawk::query_ptr);
+Q_DECLARE_METATYPE( Tomahawk::query_ptr );
 
 #endif // QUERY_H

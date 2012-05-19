@@ -69,15 +69,19 @@ ScriptResolver::~ScriptResolver()
     msg[ "_msgtype" ] = "quit";
     sendMessage( msg );
 
-    m_proc.waitForFinished( 2000 ); // might call handleMsg
+    bool finished = m_proc.waitForFinished( 2500 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
+    if ( !finished || m_proc.state() == QProcess::Running )
+    {
+        qDebug() << "External resolver didn't exit after waiting 2s for it to die, killing forcefully";
 #ifdef Q_OS_WIN
-    m_proc.kill();
+        m_proc.kill();
 #else
-    m_proc.terminate();
+        m_proc.terminate();
 #endif
+    }
 
     if ( !m_configWidget.isNull() )
         delete m_configWidget.data();

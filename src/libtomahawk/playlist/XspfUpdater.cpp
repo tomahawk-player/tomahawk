@@ -20,9 +20,9 @@
 
 #include "Playlist.h"
 #include "utils/XspfLoader.h"
-#include "TomahawkSettings.h"
 #include "Pipeline.h"
 #include "utils/TomahawkUtils.h"
+#include "Source.h"
 
 #include <QTimer>
 
@@ -33,11 +33,11 @@
 using namespace Tomahawk;
 
 PlaylistUpdaterInterface*
-XspfUpdaterFactory::create( const playlist_ptr &pl, const QString& settingsKey )
+XspfUpdaterFactory::create( const playlist_ptr &pl, const QVariantHash& settings )
 {
-    const bool autoUpdate = TomahawkSettings::instance()->value( QString( "%1/autoupdate" ).arg( settingsKey ) ).toBool();
-    const int interval = TomahawkSettings::instance()->value( QString( "%1/interval" ).arg( settingsKey ) ).toInt();
-    const QString url = TomahawkSettings::instance()->value( QString( "%1/xspfurl" ).arg( settingsKey ) ).toString();
+    const bool autoUpdate = settings.value( "autoupdate" ).toBool();
+    const int interval = settings.value( "interval" ).toInt();
+    const QString url = settings.value( "xspfurl" ).toString();
 
     XspfUpdater* updater = new XspfUpdater( pl, interval, autoUpdate, url );
 
@@ -57,13 +57,22 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
 
 #ifndef ENABLE_HEADLESS
     m_toggleCheckbox = new QCheckBox( );
-    m_toggleCheckbox->setText( tr( "Automatically update" ) );
+    m_toggleCheckbox->setText( tr( "Automatically update from XSPF" ) );
     m_toggleCheckbox->setLayoutDirection( Qt::RightToLeft );
     m_toggleCheckbox->setChecked( m_autoUpdate );
     m_toggleCheckbox->hide();
 
     connect( m_toggleCheckbox, SIGNAL( toggled( bool ) ), this, SLOT( setAutoUpdate( bool ) ) );
 #endif
+
+    QVariantHash s = settings();
+    s[ "autoupdate" ] = m_autoUpdate;
+    s[ "interval" ] = interval;
+    s[ "xspfurl" ] = xspfUrl;
+    saveSettings( s );
+
+    // Force start
+    setAutoUpdate( m_autoUpdate );
 }
 
 
@@ -114,24 +123,6 @@ XspfUpdater::playlistLoaded( const QList<Tomahawk::query_ptr>& newEntries )
 
 
 void
-XspfUpdater::saveToSettings( const QString& group ) const
-{
-    TomahawkSettings::instance()->setValue( QString( "%1/autoupdate" ).arg( group ), m_autoUpdate );
-    TomahawkSettings::instance()->setValue( QString( "%1/interval" ).arg( group ),  m_timer->interval() );
-    TomahawkSettings::instance()->setValue( QString( "%1/xspfurl" ).arg( group ), m_url );
-}
-
-
-void
-XspfUpdater::removeFromSettings( const QString& group ) const
-{
-    TomahawkSettings::instance()->remove( QString( "%1/autoupdate" ).arg( group ) );
-    TomahawkSettings::instance()->remove( QString( "%1/interval" ).arg( group ) );
-    TomahawkSettings::instance()->remove( QString( "%1/xspfurl" ).arg( group ) );
-}
-
-
-void
 XspfUpdater::setAutoUpdate( bool autoUpdate )
 {
     m_autoUpdate = autoUpdate;
@@ -141,8 +132,9 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
     else
         m_timer->stop();
 
-    const QString key = QString( "playlistupdaters/%1/autoupdate" ).arg( playlist()->guid() );
-    TomahawkSettings::instance()->setValue( key, m_autoUpdate );
+    QVariantHash s = settings();
+    s[ "autoupdate" ] = m_autoUpdate;
+    saveSettings( s );
 
     // Update immediately as well
     if ( m_autoUpdate )
@@ -152,8 +144,9 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
 void
 XspfUpdater::setInterval( int intervalMsecs )
 {
-    const QString key = QString( "playlistupdaters/%1/interval" ).arg( playlist()->guid() );
-    TomahawkSettings::instance()->setValue( key, intervalMsecs );
+    QVariantHash s = settings();
+    s[ "interval" ] = intervalMsecs;
+    saveSettings( s );
 
     if ( !m_timer )
         m_timer = new QTimer( this );

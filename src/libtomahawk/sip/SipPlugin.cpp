@@ -22,6 +22,7 @@
 #include "sip/SipPlugin.h"
 
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 SipPlugin::SipPlugin() : QObject() {}
@@ -31,6 +32,8 @@ SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
     : QObject( parent )
     , m_account( account )
 {
+    connect( this, SIGNAL( peerOnline( QString ) ), this, SLOT( onPeerOnline( QString ) ) );
+    connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
 }
 
 

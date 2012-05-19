@@ -24,6 +24,7 @@
 #include "Account.h"
 
 #include <QAbstractListModel>
+#include <QSet>
 
 
 namespace Tomahawk {
@@ -94,6 +95,10 @@ signals:
     void createAccount( Tomahawk::Accounts::AccountFactory* factory );
     void scrollTo( const QModelIndex& idx );
 
+    void startInstalling( const QPersistentModelIndex& idx );
+    void doneInstalling( const QPersistentModelIndex& idx );
+    void errorInstalling( const QPersistentModelIndex& idx );
+
 private slots:
     void loadData();
 
@@ -101,6 +106,7 @@ private slots:
     void accountRemoved( Tomahawk::Accounts::Account* );
     void accountStateChanged( Account*, Accounts::Account::ConnectionState );
 
+    void resolverInstallFailed( const QString& resolverId );
 private:
     QList< AccountModelNode* > m_accounts;
     QSet< QString > m_waitingForAtticaInstall;

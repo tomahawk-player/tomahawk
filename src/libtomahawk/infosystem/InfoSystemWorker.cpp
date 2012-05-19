@@ -18,33 +18,23 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QCoreApplication>
-#include <QNetworkConfiguration>
-#include <QNetworkProxy>
+#include "InfoSystemWorker.h"
 
 #include "config.h"
-#include "InfoSystemWorker.h"
+#include "HeadlessCheck.h"
 #include "InfoSystemCache.h"
-#include "infoplugins/generic/EchonestPlugin.h"
-#include "infoplugins/generic/MusixMatchPlugin.h"
-#include "infoplugins/generic/ChartsPlugin.h"
-#include "infoplugins/generic/NewReleasesPlugin.h"
-#include "infoplugins/generic/spotifyPlugin.h"
-#include "infoplugins/generic/musicbrainzPlugin.h"
-#include "infoplugins/generic/hypemPlugin.h"
 #include "GlobalActionManager.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
-#ifdef Q_WS_MAC
-#include "infoplugins/mac/AdiumPlugin.h"
-#endif
-#ifdef Q_WS_X11
-#include "infoplugins/unix/FdoNotifyPlugin.h"
-#include "infoplugins/unix/MprisPlugin.h"
-#endif
 
-#include "infoplugins/generic/RoviPlugin.h"
+#include <QCoreApplication>
+#include <QNetworkConfiguration>
+#include <QNetworkProxy>
+#include <QDir>
+#include <QLibrary>
+#include <QPluginLoader>
 
 namespace Tomahawk
 {
@@ -82,26 +72,8 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     tDebug() << Q_FUNC_INFO;
     m_shortLinksWaiting = 0;
     m_cache = cache;
-#ifndef ENABLE_HEADLESS
-    addInfoPlugin( InfoPluginPtr( new EchoNestPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MusixMatchPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MusicBrainzPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new ChartsPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new NewReleasesPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new RoviPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new SpotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new hypemPlugin() ) );
-#endif
 
-#ifdef Q_WS_MAC
-    addInfoPlugin( InfoPluginPtr( new AdiumPlugin() ) );
-#endif
-#ifndef ENABLE_HEADLESS
-#ifdef Q_WS_X11
-    addInfoPlugin( InfoPluginPtr( new FdoNotifyPlugin() ) );
-    addInfoPlugin( InfoPluginPtr( new MprisPlugin() ) );
-#endif
-#endif
+    loadInfoPlugins( findInfoPlugins() );
 }
 
 
@@ -123,7 +95,7 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         tDebug() << Q_FUNC_INFO << "passed-in plugin is null";
         return;
     }
-    
+
     m_plugins.append( plugin );
     registerInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
 
@@ -162,12 +134,12 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         tDebug() << Q_FUNC_INFO << "passed-in plugin is null";
         return;
     }
-    
+
     foreach ( InfoPluginPtr ptr, m_plugins )
     {
         if ( ptr == plugin )
             break;
-        
+
         tDebug() << Q_FUNC_INFO << "This plugin does not exist in the infosystem.";
         return;
     }
@@ -175,6 +147,83 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
     m_plugins.removeOne( plugin );
     deregisterInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
     delete plugin.data();
+}
+
+
+QStringList
+InfoSystemWorker::findInfoPlugins()
+{
+    QStringList paths;
+    QList< QDir > pluginDirs;
+
+    QDir appDir( qApp->applicationDirPath() );
+#ifdef Q_WS_MAC
+    if ( appDir.dirName() == "MacOS" )
+    {
+        // Development convenience-hack
+        appDir.cdUp();
+        appDir.cdUp();
+        appDir.cdUp();
+    }
+#endif
+
+    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+
+    QDir lib64Dir( appDir );
+    lib64Dir.cdUp();
+    lib64Dir.cd( "lib64" );
+
+    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    foreach ( const QDir& pluginDir, pluginDirs )
+    {
+        tDebug() << Q_FUNC_INFO << "Checking directory for plugins:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_infoplugin_*.so" << "*tomahawk_infoplugin_*.dylib" << "*tomahawk_infoplugin_*.dll", QDir::Files ) )
+        {
+            if ( fileName.startsWith( "libtomahawk_infoplugin" ) )
+            {
+                const QString path = pluginDir.absoluteFilePath( fileName );
+                if ( !paths.contains( path ) )
+                    paths << path;
+            }
+        }
+    }
+
+    return paths;
+}
+
+
+void
+InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
+{
+    tDebug() << Q_FUNC_INFO << "Attempting to load the following plugin paths:" << pluginPaths;
+
+    if ( pluginPaths.isEmpty() )
+        return;
+
+    foreach ( const QString fileName, pluginPaths )
+    {
+        if ( !QLibrary::isLibrary( fileName ) )
+            continue;
+
+        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << fileName;
+
+        QPluginLoader loader( fileName );
+        QObject* plugin = loader.instance();
+        if ( !plugin )
+        {
+            tDebug() << Q_FUNC_INFO << "Error loading plugin:" << loader.errorString();
+            continue;
+        }
+
+        InfoPlugin* infoPlugin = qobject_cast< InfoPlugin* >( plugin );
+        if ( infoPlugin )
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded info plugin:" << loader.fileName();
+            addInfoPlugin( InfoPluginPtr( infoPlugin ) );
+        }
+        else
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << loader.fileName();
+    }
 }
 
 
@@ -288,7 +337,7 @@ InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     }
 
     tDebug() << Q_FUNC_INFO << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
-    
+
     Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
         if( ptr )

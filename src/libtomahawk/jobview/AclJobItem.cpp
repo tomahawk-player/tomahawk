@@ -23,6 +23,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "libtomahawk/infosystem/InfoSystem.h"
+#include "utils/Logger.h"
 
 #include <QPixmap>
 #include <QPainter>

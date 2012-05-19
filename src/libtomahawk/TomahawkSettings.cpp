@@ -22,6 +22,7 @@
 
 #include <QDir>
 
+#include "Source.h"
 #include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
@@ -30,10 +31,50 @@
 
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
+#include "PlaylistUpdaterInterface.h"
 
 using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
+
+
+inline QDataStream&
+operator<<(QDataStream& out, const SerializedUpdaters& updaters)
+{
+    out <<  TOMAHAWK_SETTINGS_VERSION;
+    out << (quint32)updaters.count();
+    SerializedUpdaters::const_iterator iter = updaters.begin();
+    int count = 0;
+    for ( ; iter != updaters.end(); ++iter )
+    {
+        out << iter.key() << iter->type << iter->customData;
+        count++;
+    }
+    Q_ASSERT( count == updaters.count() );
+    return out;
+}
+
+
+inline QDataStream&
+operator>>(QDataStream& in, SerializedUpdaters& updaters)
+{
+    quint32 count = 0, version = 0;
+    in >> version;
+    in >> count;
+
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key, type;
+        QVariantHash customData;
+        in >> key;
+        in >> type;
+        in >> customData;
+        updaters.insert( key, SerializedUpdater( type, customData ) );
+    }
+
+    return in;
+}
+
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -87,6 +128,21 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
     }
+
+    // Ensure last.fm and spotify accounts always exist
+    QString spotifyAcct, lastfmAcct;
+    foreach ( const QString& acct, value( "accounts/allaccounts" ).toStringList() )
+    {
+        if ( acct.startsWith( "lastfmaccount_" ) )
+            lastfmAcct = acct;
+        else if ( acct.startsWith( "spotifyaccount_" ) )
+            spotifyAcct = acct;
+    }
+
+    if ( spotifyAcct.isEmpty() )
+        createSpotifyAccount();
+    if ( lastfmAcct.isEmpty() )
+        createLastFmAccount();
 }
 
 
@@ -102,6 +158,15 @@ TomahawkSettings::doInitialSetup()
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
 
+
+    createLastFmAccount();
+    createSpotifyAccount();
+}
+
+
+void
+TomahawkSettings::createLastFmAccount()
+{
     // Add a last.fm account for scrobbling and infosystem
     const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
     addAccount( accountKey );
@@ -111,6 +176,27 @@ TomahawkSettings::doInitialSetup()
     setValue( "autoconnect", true );
     setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
     endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
+}
+
+
+void
+TomahawkSettings::createSpotifyAccount()
+{
+    const QString accountKey = QString( "spotifyaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+    beginGroup( "accounts/" + accountKey );
+    setValue( "enabled", false );
+    setValue( "types", QStringList() << "ResolverType" );
+    setValue( "credentials", QVariantHash() );
+    setValue( "configuration", QVariantHash() );
+    endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
 }
 
 
@@ -407,6 +493,102 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         setValue( "allaccounts", allAccounts );
         endGroup();
+    }
+    else if ( oldVersion == 8 )
+    {
+        // Some users got duplicate accounts for some reason, so make them unique if we can
+        QSet< QString > uniqueFriendlyNames;
+        beginGroup("accounts");
+        const QStringList accounts = childGroups();
+        QStringList allAccounts = value( "allaccounts" ).toStringList();
+
+//        qDebug() << "Got accounts to migrate:" << accounts;
+        foreach ( const QString& account, accounts )
+        {
+            if ( !allAccounts.contains( account ) ) // orphan
+            {
+                qDebug() << "Found account not in allaccounts list!" << account << "is a dup!";
+                remove( account );
+                continue;
+            }
+
+            const QString friendlyName = value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString();
+            if ( !uniqueFriendlyNames.contains( friendlyName ) )
+            {
+                uniqueFriendlyNames.insert( friendlyName );
+                continue;
+            }
+            else
+            {
+                // Duplicate..?
+                qDebug() << "Found duplicate account friendly name:" << account << friendlyName << "is a dup!";
+                remove( account );
+                allAccounts.removeAll( account );
+            }
+        }
+        qDebug() << "Ended up with all accounts list:" << allAccounts << "and all accounts:" << childGroups();
+        setValue( "allaccounts", allAccounts );
+        endGroup();
+    }
+    else if ( oldVersion == 9 )
+    {
+        // Upgrade single-updater-per-playlist to list-per-playlist
+        beginGroup( "playlistupdaters" );
+        const QStringList playlists = childGroups();
+
+        SerializedUpdaters updaters;
+        foreach ( const QString& playlist, playlists )
+        {
+            beginGroup( playlist );
+            const QString type = value( "type" ).toString();
+
+            QVariantHash extraData;
+            foreach ( const QString& key, childKeys() )
+            {
+                if ( key == "type" )
+                    continue;
+
+                extraData[ key ] = value( key );
+            }
+
+            updaters.insert( playlist, SerializedUpdater( type, extraData ) );
+
+            endGroup();
+        }
+
+        endGroup();
+
+//         setPlaylistUpdaters( updaters );
+
+        remove( "playlistupdaters" );
+    }
+    else if ( oldVersion == 11 )
+    {
+        // If the user doesn't have a spotify account, create one, since now it
+        // is like the last.fm account and always exists
+        QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+        QString acct;
+        foreach ( const QString& account, allAccounts )
+        {
+            if ( account.startsWith( "spotifyaccount_" ) )
+            {
+                acct = account;
+                break;
+            }
+        }
+
+        if ( !acct.isEmpty() )
+        {
+            beginGroup( "accounts/" + acct );
+            QVariantHash conf = value( "configuration" ).toHash();
+            foreach ( const QString& key, conf.keys() )
+                qDebug() << key << conf[ key ].toString();
+            endGroup();
+        }
+        else
+        {
+            createSpotifyAccount();
+        }
     }
 }
 
@@ -770,33 +952,16 @@ TomahawkSettings::removePlaylistSettings( const QString& playlistid )
 
 
 void
-TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode )
+TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode )
 {
     setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
 }
 
 
-Tomahawk::PlaylistInterface::RepeatMode
+Tomahawk::PlaylistModes::RepeatMode
 TomahawkSettings::repeatMode( const QString& playlistid )
 {
-    return (PlaylistInterface::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
-}
-
-
-QList<Tomahawk::playlist_ptr>
-TomahawkSettings::recentlyPlayedPlaylists() const
-{
-    QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
-
-    QList<playlist_ptr> playlists;
-    foreach( const QString& guid, playlist_guids )
-    {
-        playlist_ptr pl = Playlist::load( guid );
-        if ( !pl.isNull() )
-            playlists << pl;
-    }
-
-    return playlists;
+    return (PlaylistModes::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
 }
 
 
@@ -813,16 +978,16 @@ TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 
 
 void
-TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
+TomahawkSettings::appendRecentlyPlayedPlaylist( const QString& playlistguid, int sourceId )
 {
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
-    playlist_guids.removeAll( playlist->guid() );
-    playlist_guids.append( playlist->guid() );
+    playlist_guids.removeAll( playlistguid );
+    playlist_guids.append( playlistguid );
 
     setValue( "playlists/recentlyPlayed", playlist_guids );
 
-    emit recentlyPlayedPlaylistAdded( playlist );
+    emit recentlyPlayedPlaylistAdded( playlistguid, sourceId );
 }
 
 
@@ -943,8 +1108,13 @@ TomahawkSettings::removeAccount( const QString& accountId )
 
 
 TomahawkSettings::ExternalAddressMode
-TomahawkSettings::externalAddressMode() const
+TomahawkSettings::externalAddressMode()
 {
+    if ( value( "network/prefer-static-host-and-port", false ).toBool() )
+    {
+        remove( "network/prefer-static-host-and-port" );
+        setValue( "network/external-address-mode", TomahawkSettings::Static );
+    }
     return (TomahawkSettings::ExternalAddressMode) value( "network/external-address-mode", TomahawkSettings::Upnp ).toInt();
 }
 
@@ -953,18 +1123,6 @@ void
 TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMode )
 {
     setValue( "network/external-address-mode", externalAddressMode );
-}
-
-
-bool TomahawkSettings::preferStaticHostPort() const
-{
-    return value( "network/prefer-static-host-and-port" ).toBool();
-}
-
-
-void TomahawkSettings::setPreferStaticHostPort( bool prefer )
-{
-    setValue( "network/prefer-static-host-and-port", prefer );
 }
 
 
@@ -1140,4 +1298,27 @@ void
 TomahawkSettings::setImportXspfPath( const QString& path )
 {
     setValue( "importXspfPath", path );
+}
+
+
+SerializedUpdaters
+TomahawkSettings::playlistUpdaters() const
+{
+    return value( "playlists/updaters" ).value< SerializedUpdaters >();
+}
+
+
+void
+TomahawkSettings::setPlaylistUpdaters( const SerializedUpdaters& updaters )
+{
+    setValue( "playlists/updaters", QVariant::fromValue< SerializedUpdaters >( updaters ) );
+}
+
+
+void
+TomahawkSettings::registerCustomSettingsHandlers()
+{
+    qRegisterMetaType< Tomahawk::SerializedUpdater >( "Tomahawk::SerializedUpdater" );
+    qRegisterMetaType< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
+    qRegisterMetaTypeStreamOperators< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
 }

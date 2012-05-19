@@ -24,13 +24,14 @@
 #include "Album.h"
 #include "Query.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
 TrackProxyModelPlaylistInterface::TrackProxyModelPlaylistInterface( TrackProxyModel* proxyModel )
     : PlaylistInterface()
     , m_proxyModel( proxyModel )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
 {
 }
@@ -134,7 +135,7 @@ TrackProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
             idx = proxyModel->currentIndex();
 
             // random mode is disabled
-            if ( m_repeatMode != PlaylistInterface::RepeatOne )
+            if ( m_repeatMode != PlaylistModes::RepeatOne )
             {
                 // keep progressing through the playlist normally
                 idx = proxyModel->index( idx.row() + itemsAway, 0 );
@@ -142,7 +143,7 @@ TrackProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
         }
     }
 
-    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
+    if ( !idx.isValid() && m_repeatMode == PlaylistModes::RepeatAll )
     {
         // repeat all tracks
         if ( itemsAway > 0 )

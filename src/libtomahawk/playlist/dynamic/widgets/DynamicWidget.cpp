@@ -41,8 +41,7 @@
 #include "ViewManager.h"
 #include "dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
-#include "AudioControls.h"
-#include "LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -75,7 +74,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ) );
     connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), this, SLOT( stationFailed( QString ) ) );
 
-    m_loading = new LoadingSpinner( m_view );
+    m_loading = new AnimatedSpinner( m_view );
     connect( m_model, SIGNAL( tracksAdded() ), m_loading, SLOT( fadeOut() ) );
 
     m_setup = new DynamicSetupWidget( playlist, this );

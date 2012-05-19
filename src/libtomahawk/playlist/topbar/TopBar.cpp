@@ -116,8 +116,8 @@ TopBar::TopBar( QWidget* parent )
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ),
                                         SLOT( setFilterVisible( bool ) ) );
 
-    connect( ViewManager::instance(), SIGNAL( modeChanged( Tomahawk::PlaylistInterface::ViewMode ) ),
-                                        SLOT( onModeChanged( Tomahawk::PlaylistInterface::ViewMode ) ) );
+    connect( ViewManager::instance(), SIGNAL( modeChanged( Tomahawk::PlaylistModes::ViewMode ) ),
+                                        SLOT( onModeChanged( Tomahawk::PlaylistModes::ViewMode ) ) );
 }
 
 
@@ -300,20 +300,20 @@ TopBar::setFilter( const QString& filter )
 
 
 void
-TopBar::onModeChanged( Tomahawk::PlaylistInterface::ViewMode mode )
+TopBar::onModeChanged( Tomahawk::PlaylistModes::ViewMode mode )
 {
     qDebug() << Q_FUNC_INFO << mode;
     switch ( mode )
     {
-        case Tomahawk::PlaylistInterface::Flat:
+        case Tomahawk::PlaylistModes::Flat:
             onFlatMode();
             break;
 
-        case Tomahawk::PlaylistInterface::Tree:
+        case Tomahawk::PlaylistModes::Tree:
             onArtistMode();
             break;
 
-        case Tomahawk::PlaylistInterface::Album:
+        case Tomahawk::PlaylistModes::Album:
             onAlbumMode();
             break;
 

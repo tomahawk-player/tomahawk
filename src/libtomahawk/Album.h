@@ -31,6 +31,7 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
+#include "Collection.h"
 #include "infosystem/InfoSystem.h"
 
 namespace Tomahawk
@@ -55,15 +56,19 @@ public:
 #endif
     bool infoLoaded() const { return m_infoLoaded; }
 
-    Tomahawk::playlistinterface_ptr playlistInterface();
+    QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+    Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+
+    QWeakPointer< Tomahawk::Album > weakRef() { return m_ownRef; }
+    void setWeakRef( QWeakPointer< Tomahawk::Album > weakRef ) { m_ownRef = weakRef; }
 
 signals:
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void updated();
     void coverChanged();
 
 private slots:
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onTracksLoaded(Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
     void infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output );
     void infoSystemFinished( const QString& target );
@@ -75,6 +80,7 @@ private:
     QString m_name;
     artist_ptr m_artist;
     QByteArray m_coverBuffer;
+
     bool m_infoLoaded;
     mutable bool m_infoLoading;
     mutable QString m_uuid;
@@ -84,9 +90,13 @@ private:
     mutable QHash< int, QPixmap > m_coverCache;
 #endif
 
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
+    QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
+
+    QWeakPointer< Tomahawk::Album > m_ownRef;
 };
 
 } // ns
+
+Q_DECLARE_METATYPE( Tomahawk::album_ptr )
 
 #endif

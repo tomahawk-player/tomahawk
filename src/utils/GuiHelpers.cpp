@@ -23,6 +23,7 @@
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
 #include "DelegateConfigWrapper.h"
+#include "TomahawkSettings.h"
 
 namespace TomahawkUtils
 {

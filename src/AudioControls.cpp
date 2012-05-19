@@ -42,7 +42,7 @@ using namespace Tomahawk;
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AudioControls )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
     , m_lastSliderCheck( 0 )
     , m_parent( parent )
@@ -212,7 +212,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seekMsecs = -1;
-    
+
     ui->seekSlider->setVisible( true );
 
     int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
@@ -374,7 +374,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
         ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
         m_lastTextSecondShown = seconds;
     }
-    
+
     //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
     if ( msElapsed > 0 && msElapsed != m_lastSliderCheck && m_seekMsecs == -1 && msElapsed - 500 < m_lastSliderCheck )
         return;
@@ -390,7 +390,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
     if ( sender() != &m_phononTickCheckTimer )
         m_phononTickCheckTimer.start( 1000 );
-    
+
     int currentTime = m_sliderTimeLine.currentTime();
     if ( m_noTimeChange )
     {
@@ -430,13 +430,13 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
 
 void
-AudioControls::onRepeatModeChanged( PlaylistInterface::RepeatMode mode )
+AudioControls::onRepeatModeChanged( PlaylistModes::RepeatMode mode )
 {
     m_repeatMode = mode;
 
     switch ( m_repeatMode )
     {
-        case PlaylistInterface::NoRepeat:
+        case PlaylistModes::NoRepeat:
         {
             // switch to RepeatOne
             ui->repeatButton->setPixmap( RESPATH "images/repeat-off-rest.png" );
@@ -444,7 +444,7 @@ AudioControls::onRepeatModeChanged( PlaylistInterface::RepeatMode mode )
         }
         break;
 
-        case PlaylistInterface::RepeatOne:
+        case PlaylistModes::RepeatOne:
         {
             // switch to RepeatAll
             ui->repeatButton->setPixmap( RESPATH "images/repeat-1-on-rest.png" );
@@ -452,7 +452,7 @@ AudioControls::onRepeatModeChanged( PlaylistInterface::RepeatMode mode )
         }
         break;
 
-        case PlaylistInterface::RepeatAll:
+        case PlaylistModes::RepeatAll:
         {
             // switch to NoRepeat
             ui->repeatButton->setPixmap( RESPATH "images/repeat-all-on-rest.png" );
@@ -471,24 +471,24 @@ AudioControls::onRepeatClicked()
 {
     switch ( m_repeatMode )
     {
-        case PlaylistInterface::NoRepeat:
+        case PlaylistModes::NoRepeat:
         {
             // switch to RepeatOne
-            ViewManager::instance()->setRepeatMode( PlaylistInterface::RepeatOne );
+            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatOne );
         }
         break;
 
-        case PlaylistInterface::RepeatOne:
+        case PlaylistModes::RepeatOne:
         {
             // switch to RepeatAll
-            ViewManager::instance()->setRepeatMode( PlaylistInterface::RepeatAll );
+            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatAll );
         }
         break;
 
-        case PlaylistInterface::RepeatAll:
+        case PlaylistModes::RepeatAll:
         {
             // switch to NoRepeat
-            ViewManager::instance()->setRepeatMode( PlaylistInterface::NoRepeat );
+            ViewManager::instance()->setRepeatMode( PlaylistModes::NoRepeat );
         }
         break;
 
@@ -544,7 +544,8 @@ AudioControls::onAlbumClicked()
 void
 AudioControls::onTrackClicked()
 {
-    ViewManager::instance()->showCurrentTrack();
+    ViewManager::instance()->show( m_currentTrack->toQuery() );
+//    ViewManager::instance()->showCurrentTrack();
 }
 
 

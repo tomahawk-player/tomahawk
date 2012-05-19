@@ -218,7 +218,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             if ( !colItem->source()->isLocal() )
             {
                 realtimeListeningAlongPixmap =
-                    colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistInterface::RealTime ?
+                    colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistModes::RealTime ?
                         m_realtimeLocked : m_realtimeUnlocked;
             }
         }

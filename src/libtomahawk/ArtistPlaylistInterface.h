@@ -49,10 +49,10 @@ public:
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
     virtual void setFilter( const QString& /*pattern*/ ) {}

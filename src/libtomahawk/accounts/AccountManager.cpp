@@ -20,6 +20,7 @@
 #include "AccountManager.h"
 #include "config.h"
 #include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "ResolverAccount.h"
 
 #include <QtCore/QLibrary>
@@ -74,7 +75,7 @@ AccountManager::init()
         QTimer::singleShot( 0, this, SLOT( init() ) );
         return;
     }
-    
+
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
     loadPluginFactories( findPluginFactories() );
@@ -202,6 +203,9 @@ AccountManager::enableAccount( Account* account )
 
     account->authenticate();
 
+    if ( account->preventEnabling() )
+        return;
+
     account->setEnabled( true );
     m_enabledAccounts << account;
 
@@ -266,7 +270,7 @@ void
 AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
-
+    qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
     foreach( const QString& accountId, accountIds )
     {
         QString pluginFactory = factoryFromId( accountId );
@@ -344,6 +348,19 @@ AccountManager::removeAccount( Account* account )
 
     account->removeFromConfig();
     account->deleteLater();
+}
+
+
+QList< Account* >
+AccountManager::accountsFromFactory( AccountFactory* factory ) const
+{
+    QList< Account* > accts;
+    foreach ( Account* acct, m_accounts )
+    {
+        if ( factoryForAccount( acct ) == factory )
+            accts << acct;
+    }
+    return accts;
 }
 
 

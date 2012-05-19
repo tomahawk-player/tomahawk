@@ -96,8 +96,8 @@ public:
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
     void addArtists( const Tomahawk::artist_ptr& artist );
-    void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent, bool autoRefetch = false );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
+    void fetchAlbums( const Tomahawk::artist_ptr& artist );
 
     void getCover( const QModelIndex& index );
 
@@ -112,6 +112,7 @@ public:
     virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
+    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -127,11 +128,13 @@ public:
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
+    void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
+
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void modeChanged( Tomahawk::ModelMode mode );
@@ -146,10 +149,9 @@ protected:
 
 private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
-    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QModelIndex& index );
-    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& variant );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
-    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, const QVariant& variant );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, Tomahawk::collection_ptr collection );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 

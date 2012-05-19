@@ -34,19 +34,11 @@ class DLLEXPORT PlaylistInterface : public QObject
 Q_OBJECT
 
 public:
-    enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
-    Q_ENUMS( RepeatMode )
-    enum ViewMode { Unknown, Tree, Flat, Album };
-    enum SeekRestrictions { NoSeekRestrictions, NoSeek };
-    enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
-    enum RetryMode { NoRetry, Retry };
-    enum LatchMode { StayOnSong, RealTime };
-
     explicit PlaylistInterface();
     virtual ~PlaylistInterface();
 
     const QString id() { return m_id; }
-    
+
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
 
     virtual int unfilteredTrackCount() const = 0;
@@ -58,21 +50,21 @@ public:
     virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
+    virtual PlaylistModes::RepeatMode repeatMode() const = 0;
 
     virtual bool shuffled() const = 0;
 
-    virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
-    
-    virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return NoSeekRestrictions; }
-    virtual PlaylistInterface::SkipRestrictions skipRestrictions() const { return NoSkipRestrictions; }
+    virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Unknown; }
 
-    virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
+    virtual PlaylistModes::SeekRestrictions seekRestrictions() const { return PlaylistModes::NoSeekRestrictions; }
+    virtual PlaylistModes::SkipRestrictions skipRestrictions() const { return PlaylistModes::NoSkipRestrictions; }
+
+    virtual PlaylistModes::RetryMode retryMode() const { return PlaylistModes::NoRetry; }
     virtual quint32 retryInterval() const { return 30000; }
 
-    virtual PlaylistInterface::LatchMode latchMode() const { return m_latchMode; }
-    virtual void setLatchMode( PlaylistInterface::LatchMode latchMode ) { m_latchMode = latchMode; }
-    
+    virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
+    virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
+
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
@@ -84,27 +76,27 @@ public:
     virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr ) { return false; }
 
 public slots:
-    virtual void setRepeatMode( RepeatMode mode ) = 0;
+    virtual void setRepeatMode( PlaylistModes::RepeatMode mode ) = 0;
     virtual void setShuffled( bool enabled ) = 0;
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
-    void latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode );
+    void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
     void nextTrackReady();
 
 protected:
-    LatchMode m_latchMode;
-    
-private:
-    Q_DISABLE_COPY( PlaylistInterface )
+    PlaylistModes::LatchMode m_latchMode;
 
+private:
     QString m_id;
     QString m_filter;
 };
 
-};
+}
+
+Q_DECLARE_METATYPE( Tomahawk::playlistinterface_ptr )
 
 #endif // PLAYLISTINTERFACE_H

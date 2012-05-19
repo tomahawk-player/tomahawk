@@ -249,7 +249,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
-        QColor figColor( 153, 153, 153 );
+        QColor figColor( "#464b55" );
         painter->setPen( figColor );
         painter->setBrush( figColor );
 

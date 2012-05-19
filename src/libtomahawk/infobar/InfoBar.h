@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012,      Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -62,7 +63,7 @@ public slots:
     void setFilter( const QString& filter );
     void setFilterAvailable( bool b );
 
-    void setAutoUpdateInterface( Tomahawk::PlaylistUpdaterInterface* interface );
+    void setUpdaters( const QList<Tomahawk::PlaylistUpdaterInterface*>& updaters );
 signals:
     void filterTextChanged( const QString& filter );
 
@@ -82,8 +83,8 @@ private:
     QPixmap m_bgTile;
     QPalette m_whitePal;
 
-    Tomahawk::PlaylistUpdaterInterface* m_updaterInterface;
-    QWidget* m_updaterConfiguration;
+    QList<Tomahawk::PlaylistUpdaterInterface*> m_updaters;;
+    QList<QWidget*> m_updaterConfigurations;
 
     QSearchField* m_searchWidget;
     QueryLabel* m_queryLabel;

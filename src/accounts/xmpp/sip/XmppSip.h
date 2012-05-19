@@ -53,7 +53,7 @@
 
 #include "accounts/AccountDllMacro.h"
 
-#include "XmppInfoPlugin.h"
+#include "../XmppInfoPlugin.h"
 
 class ACCOUNTDLLEXPORT XmppSipPlugin : public SipPlugin
 {

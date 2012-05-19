@@ -24,6 +24,7 @@
 #include "Query.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllTracks.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 
@@ -73,6 +74,7 @@ ArtistPlaylistInterface::hasNextItem()
 
     return true;
 }
+
 
 result_ptr
 ArtistPlaylistInterface::currentItem() const

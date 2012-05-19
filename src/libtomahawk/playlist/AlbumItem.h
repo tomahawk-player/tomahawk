@@ -26,6 +26,7 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "Query.h"
 
 #include "DllMacro.h"
 
@@ -39,9 +40,11 @@ public:
     explicit AlbumItem( AlbumItem* parent = 0, QAbstractItemModel* model = 0 );
     explicit AlbumItem( const Tomahawk::artist_ptr& artist, AlbumItem* parent = 0, int row = -1 );
     explicit AlbumItem( const Tomahawk::album_ptr& album, AlbumItem* parent = 0, int row = -1 );
+    explicit AlbumItem( const Tomahawk::query_ptr& query, AlbumItem* parent = 0, int row = -1 );
 
     const Tomahawk::artist_ptr& artist() const { return m_artist; }
     const Tomahawk::album_ptr& album() const { return m_album; }
+    const Tomahawk::query_ptr& query() const { return m_query; }
 
     AlbumItem* parent;
     QList<AlbumItem*> children;
@@ -57,6 +60,7 @@ signals:
 private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
+    Tomahawk::query_ptr m_query;
 };
 
 #endif // ALBUMITEM_H

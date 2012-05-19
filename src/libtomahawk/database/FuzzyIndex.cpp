@@ -27,6 +27,7 @@
 #include "DatabaseImpl.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace lucene::analysis;
 using namespace lucene::analysis::standard;
@@ -198,7 +199,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         if ( query->isFullTextQuery() )
         {
             QString escapedQuery = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
-            
+
             Term* term = _CLNEW Term( _T( "track" ), escapedQuery.toStdWString().c_str() );
             Query* fqry = _CLNEW FuzzyQuery( term );
             qry->add( fqry, true, BooleanClause::SHOULD );

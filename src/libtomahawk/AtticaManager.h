@@ -32,6 +32,7 @@
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
+class BinaryInstallerHelper;
 
 class DLLEXPORT AtticaManager : public QObject
 {
@@ -51,13 +52,14 @@ public:
         int userRating; // 0-100
         ResolverState state;
         QPixmap* pixmap;
+        bool binary;
 
         // internal
         bool pixmapDirty;
 
-        Resolver( const QString& v, const QString& path, int userR, ResolverState s )
-            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), pixmapDirty( false ) {}
-        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), pixmapDirty( false ) {}
+        Resolver( const QString& v, const QString& path, int userR, ResolverState s, bool resolver )
+            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
+        Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
     };
 
     typedef QHash< QString, AtticaManager::Resolver > StateHash;
@@ -90,7 +92,7 @@ public:
 
     /**
       If the resolver coming from libattica has a native custom c++ account
-      as well. For example the last.fm account.
+      as well. For example the last.fm & spotify accounts.
       */
     bool hasCustomAccountForAttica( const QString& id ) const;
     Tomahawk::Accounts::Account* customAccountForAttica( const QString& id ) const;
@@ -108,10 +110,13 @@ signals:
     void resolverStateChanged( const QString& resolverId );
     void resolverInstalled( const QString& resolverId );
     void resolverUninstalled( const QString& resolverId );
+    void resolverInstallationFailed( const QString& resolverId );
 
 private slots:
     void providerAdded( const Attica::Provider& );
+    void categoriesReturned( Attica::BaseJob* );
     void resolversList( Attica::BaseJob* );
+    void binaryResolversList( Attica::BaseJob* );
     void resolverDownloadFinished( Attica::BaseJob* );
     void payloadFetched();
 
@@ -131,9 +136,12 @@ private:
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
 
+    int m_resolverJobsLoaded;
     QMap< QString, Tomahawk::Accounts::Account* > m_customAccounts;
 
     static AtticaManager* s_instance;
+
+    friend class ::BinaryInstallerHelper;
 };
 
 class DLLEXPORT CustomAtticaAccount : public Tomahawk::Accounts::Account

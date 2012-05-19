@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>438</width>
-    <height>196</height>
+    <height>246</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,7 +33,7 @@
     <number>9</number>
    </property>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="hboxLayout">
      <property name="spacing">
       <number>12</number>
      </property>
@@ -77,7 +77,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;p&gt;&lt;b&gt;Sorry!&lt;/b&gt;&amp;nbsp;Tomahawk crashed. Information about the crash is now being sent to Tomahawk HQ so that we can fix the bug.&lt;/p&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send the this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textFormat">
         <enum>Qt::RichText</enum>
@@ -106,23 +106,41 @@
     </layout>
    </item>
    <item>
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <layout class="QHBoxLayout" name="hboxLayout1">
+     <property name="spacing">
+      <number>-1</number>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sendButton">
+       <property name="text">
+        <string>Send this report</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="dontSendButton">
+       <property name="text">
+        <string>Don't send</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout">
+    <layout class="QVBoxLayout" name="vboxLayout1">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -210,12 +228,28 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>424</x>
-     <y>154</y>
+     <x>426</x>
+     <y>203</y>
     </hint>
     <hint type="destinationlabel">
      <x>247</x>
      <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dontSendButton</sender>
+   <signal>clicked()</signal>
+   <receiver>CrashReporter</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>380</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>218</x>
+     <y>122</y>
     </hint>
    </hints>
   </connection>

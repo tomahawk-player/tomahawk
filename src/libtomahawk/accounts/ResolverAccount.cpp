@@ -21,6 +21,9 @@
 #include "ExternalResolver.h"
 #include "ExternalResolverGui.h"
 #include "AccountManager.h"
+#include "TomahawkSettings.h"
+#include "Source.h"
+
 #include <Pipeline.h>
 #include <QFile>
 #include <QFileInfo>

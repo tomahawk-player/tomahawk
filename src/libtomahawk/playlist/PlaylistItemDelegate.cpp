@@ -232,7 +232,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() &&
-       ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album ) )
+       ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album || index.column() == TrackModel::Track ) )
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
         QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );

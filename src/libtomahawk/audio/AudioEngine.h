@@ -43,8 +43,8 @@ class DLLEXPORT AudioEngine : public QObject
 Q_OBJECT
 
 public:
-    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError };
-    enum AudioState { Stopped, Playing, Paused };
+    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
+    enum AudioState { Stopped, Playing, Paused, Error };
 
     static AudioEngine* instance();
 
@@ -66,7 +66,7 @@ public:
     Tomahawk::playlistinterface_ptr playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-    
+
     Tomahawk::query_ptr stopAfterTrack() const  { return m_stopAfterTrack; }
 
     qint64 currentTime() const { return m_mediaObject->currentTime(); }
@@ -76,7 +76,7 @@ public slots:
     void playPause();
     void play();
     void pause();
-    void stop();
+    void stop( AudioErrorCode errorCode = NoError );
 
     void previous();
     void next();
@@ -93,10 +93,13 @@ public slots:
     void mute();
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
+    void playItem( const Tomahawk::artist_ptr& artist );
+    void playItem( const Tomahawk::album_ptr& album );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
-    
-    void setStopAfterTrack( const Tomahawk::query_ptr& query ) { m_stopAfterTrack = query; }
+
+    void setStopAfterTrack( const Tomahawk::query_ptr& query );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -105,6 +108,8 @@ signals:
     void stopped();
     void paused();
     void resumed();
+
+    void stopAfterTrack_changed();
 
     void seeked( qint64 ms );
 

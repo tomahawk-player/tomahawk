@@ -132,7 +132,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
             if ( itemFromIndex( index )->type() == Collection )
             {
                 SourceItem* cItem = qobject_cast< SourceItem* >( itemFromIndex( index ) );
-                return cItem->localLatchMode() == Tomahawk::PlaylistInterface::RealTime;
+                return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
             }
             return false;
         }

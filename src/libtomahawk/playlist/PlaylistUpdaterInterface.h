@@ -39,13 +39,16 @@ namespace Tomahawk
 
 class PlaylistUpdaterFactory;
 
+// used when loading/saving from settings
+
+
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
 public:
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
-    virtual ~PlaylistUpdaterInterface(){}
+    virtual ~PlaylistUpdaterInterface();
 
     // What type you are. If you add a new updater, add the creation code as well.
     virtual QString type() const = 0;
@@ -63,9 +66,8 @@ public:
 
     playlist_ptr playlist() const { return m_playlist; }
 
-    /// If you want to try to load a updater from the settings. Returns a valid
-    /// updater if one was saved
-    static PlaylistUpdaterInterface* loadForPlaylist( const playlist_ptr& pl );
+    /// If you want to try to load updaters for a playlist
+    static void loadForPlaylist( const playlist_ptr& pl );
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 
@@ -78,11 +80,14 @@ public slots:
     void save();
 
 protected:
-    virtual void saveToSettings( const QString& group ) const = 0;
-    virtual void removeFromSettings( const QString& group ) const = 0;
+    virtual void aboutToDelete() {}
+
+    QVariantHash settings() const;
+    void saveSettings( const QVariantHash& settings );
 
 private:
     playlist_ptr m_playlist;
+    QVariantHash m_extraData;
 
     static QMap< QString, PlaylistUpdaterFactory* > s_factories;
 };
@@ -95,9 +100,12 @@ public:
     virtual ~PlaylistUpdaterFactory() {}
 
     virtual QString type() const = 0;
-    virtual PlaylistUpdaterInterface* create( const playlist_ptr&, const QString& settingsKey ) = 0;
+    virtual PlaylistUpdaterInterface* create( const playlist_ptr&, const QVariantHash& settings ) = 0;
 };
 
 }
+
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdater );
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdaters );
 
 #endif // PLAYLISTUPDATERINTERFACE_H

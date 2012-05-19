@@ -33,7 +33,7 @@ using namespace Tomahawk;
 TreeProxyModelPlaylistInterface::TreeProxyModelPlaylistInterface( TreeProxyModel *proxyModel )
     : PlaylistInterface()
     , m_proxyModel( proxyModel )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
 {
 }
@@ -115,11 +115,11 @@ TreeProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     }
     else
     {
-        if ( m_repeatMode != PlaylistInterface::RepeatOne )
+        if ( m_repeatMode != PlaylistModes::RepeatOne )
             idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
     }
 
-    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
+    if ( !idx.isValid() && m_repeatMode == PlaylistModes::RepeatAll )
     {
         if ( itemsAway > 0 )
         {

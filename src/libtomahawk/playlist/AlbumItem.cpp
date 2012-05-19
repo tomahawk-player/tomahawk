@@ -20,6 +20,7 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
@@ -102,4 +103,30 @@ AlbumItem::AlbumItem( const Tomahawk::artist_ptr& artist, AlbumItem* parent, int
     toberemoved = false;
 
     connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
+}
+
+
+AlbumItem::AlbumItem( const Tomahawk::query_ptr& query, AlbumItem* parent, int row )
+    : QObject( parent )
+    , m_query( query )
+{
+    this->parent = parent;
+    if ( parent )
+    {
+        if ( row < 0 )
+        {
+            parent->children.append( this );
+            row = parent->children.count() - 1;
+        }
+        else
+        {
+            parent->children.insert( row, this );
+        }
+
+        this->model = parent->model;
+    }
+
+    toberemoved = false;
+
+    connect( query.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }

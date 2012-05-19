@@ -24,10 +24,10 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
-#include "database/DatabaseCommand_PlaybackHistory.h"
 #include "database/DatabaseCommand_LoadPlaylistEntries.h"
 #include "database/DatabaseCommand_LoadSocialActions.h"
 #include "database/DatabaseCommand_SocialAction.h"
+#include "database/DatabaseCommand_TrackStats.h"
 #include "Album.h"
 #include "Collection.h"
 #include "Pipeline.h"
@@ -38,6 +38,41 @@
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
+
+SocialAction::SocialAction() {}
+SocialAction::~SocialAction() {}
+
+SocialAction& SocialAction::operator=( const SocialAction& other )
+{
+    action = other.action;
+    value = other.value;
+    timestamp = other.timestamp;
+    source = other.source;
+
+    return *this;
+}
+
+SocialAction::SocialAction( const SocialAction& other )
+{
+    *this = other;
+}
+
+PlaybackLog::PlaybackLog() {}
+PlaybackLog::~PlaybackLog() {}
+
+PlaybackLog& PlaybackLog::operator=( const PlaybackLog& other )
+{
+    source = other.source;
+    timestamp = other.timestamp;
+    secsPlayed = other.secsPlayed;
+
+    return *this;
+}
+
+PlaybackLog::PlaybackLog( const PlaybackLog& other )
+{
+    *this = other;
+}
 
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
@@ -74,6 +109,9 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_album( album )
     , m_track( track )
     , m_socialActionsLoaded( false )
+    , m_simTracksLoaded( false )
+    , m_lyricsLoaded( false )
+    , m_infoJobs( 0 )
 {
     init();
 
@@ -506,23 +544,62 @@ Query::playedBy() const
 
 
 void
+Query::loadStats()
+{
+    query_ptr q = m_ownRef.toStrongRef();
+
+    DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( q );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
+
+QList< Tomahawk::PlaybackLog >
+Query::playbackHistory( const Tomahawk::source_ptr& source ) const
+{
+    QList< Tomahawk::PlaybackLog > history;
+
+    foreach ( const PlaybackLog& log, m_playbackHistory )
+    {
+        if ( source.isNull() || log.source == source )
+        {
+            history << log;
+        }
+    }
+    
+    return history;
+}
+
+
+void
+Query::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData )
+{
+    m_playbackHistory = playbackData;
+    emit statsLoaded();
+}
+
+
+unsigned int
+Query::playbackCount( const source_ptr& source )
+{
+    unsigned int count = 0;
+    foreach ( const PlaybackLog& log, m_playbackHistory )
+    {
+        if ( source.isNull() || log.source == source )
+            count++;
+    }
+    
+    return count;
+}
+
+
+void
 Query::loadSocialActions()
 {
     m_socialActionsLoaded = true;
     query_ptr q = m_ownRef.toStrongRef();
 
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( q );
-    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-}
-
-
-void
-Query::onSocialActionsLoaded()
-{
-    parseSocialActions();
-
-    emit socialActionsLoaded();
 }
 
 
@@ -530,6 +607,9 @@ void
 Query::setAllSocialActions( const QList< SocialAction >& socialActions )
 {
     m_allSocialActions = socialActions;
+    parseSocialActions();
+
+    emit socialActionsLoaded();
 }
 
 
@@ -582,14 +662,17 @@ Query::setLoved( bool loved )
     {
         m_currentSocialActions[ "Love" ] = loved;
 
+        QVariantMap loveInfo;
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["title"] = track();
         trackInfo["artist"] = artist();
         trackInfo["album"] = album();
 
+        loveInfo[ "trackinfo" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        
         Tomahawk::InfoSystem::InfoPushData pushData ( id(),
                                                       ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
-                                                      QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo ),
+                                                      loveInfo,
                                                       Tomahawk::InfoSystem::PushShortUrlFlag );
         
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
@@ -687,12 +770,138 @@ Query::cover( const QSize& size, bool forceLoad ) const
         if ( !m_albumPtr->cover( size ).isNull() )
             return m_albumPtr->cover( size );
 
-        return m_artistPtr->cover( size );
+        return m_artistPtr->cover( size, forceLoad );
     }
 
     return QPixmap();
 }
 #endif
+
+
+QList<Tomahawk::query_ptr>
+Query::similarTracks() const
+{
+    if ( !m_simTracksLoaded )
+    {
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = artist();
+        trackInfo["track"] = track();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = id();
+        requestData.customData = QVariantMap();
+
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.type = Tomahawk::InfoSystem::InfoTrackSimilars;
+        requestData.requestId = TomahawkUtils::infosystemRequestId();
+        
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( finished( QString ) ),
+                 SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
+
+        m_infoJobs++;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+    
+    return m_similarTracks;
+}
+
+
+QStringList
+Query::lyrics() const
+{
+    if ( !m_lyricsLoaded )
+    {
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = artist();
+        trackInfo["track"] = track();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = id();
+        requestData.customData = QVariantMap();
+
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.type = Tomahawk::InfoSystem::InfoTrackLyrics;
+        requestData.requestId = TomahawkUtils::infosystemRequestId();
+        
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                 SIGNAL( finished( QString ) ),
+                 SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
+
+        m_infoJobs++;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+    
+    return m_lyrics;
+}
+
+
+void
+Query::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != id() )
+        return;
+
+    QVariantMap returnedData = output.value< QVariantMap >();
+    switch ( requestData.type )
+    {
+        case InfoSystem::InfoTrackLyrics:
+        {
+            m_lyrics = output.value< QVariant >().toString().split( "\n" );
+            
+            m_lyricsLoaded = true;
+            emit lyricsLoaded();
+            break;
+        }
+
+        case InfoSystem::InfoTrackSimilars:
+        {
+            const QStringList artists = returnedData["artists"].toStringList();
+            const QStringList tracks = returnedData["tracks"].toStringList();
+
+            for ( int i = 0; i < tracks.count() && i < 50; i++ )
+            {
+                m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), false );
+            }
+            Pipeline::instance()->resolve( m_similarTracks );
+            
+            m_simTracksLoaded = true;
+            emit similarTracksLoaded();
+
+            break;
+        }
+
+        default:
+            Q_ASSERT( false );
+    }
+}
+
+
+void
+Query::infoSystemFinished( QString target )
+{
+    if ( target != id() )
+        return;
+
+    if ( --m_infoJobs == 0 )
+    {
+        disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                    this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+        disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
+                    this, SLOT( infoSystemFinished( QString ) ) );
+    }
+
+    emit updated();
+}
 
 
 int

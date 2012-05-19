@@ -855,7 +855,7 @@ DropJob::getArtist( const QString &artist )
 
 
 QList< query_ptr >
-DropJob::getAlbum(const QString &artist, const QString &album)
+DropJob::getAlbum( const QString& artist, const QString& album )
 {
     artist_ptr artistPtr = Artist::get( artist );
     album_ptr albumPtr = Album::get( artistPtr, album );
@@ -863,7 +863,8 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     if ( albumPtr.isNull() )
         return QList< query_ptr >();
 
-    if ( albumPtr->playlistInterface()->tracks().isEmpty() )
+    //FIXME: should check tracksLoaded()
+    if ( albumPtr->playlistInterface( Mixed )->tracks().isEmpty() )
     {
         // For albums that don't exist until this moment, we are the main shared pointer holding on.
         // fetching the tracks is asynchronous, so the resulting signal is queued. when we go out of scope we delete
@@ -871,7 +872,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
         m_albumsToKeep.insert( albumPtr );
 
         m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
-        connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+        connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                     SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
         JobStatusView::instance()->model()->addJob( m_dropJob );
 
@@ -879,7 +880,7 @@ DropJob::getAlbum(const QString &artist, const QString &album)
         return QList< query_ptr >();
     }
     else
-        return albumPtr->playlistInterface()->tracks();
+        return albumPtr->playlistInterface( Mixed )->tracks();
 }
 
 

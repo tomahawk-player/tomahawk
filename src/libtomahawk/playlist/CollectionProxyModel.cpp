@@ -26,6 +26,7 @@
 #include "Album.h"
 #include "Query.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 CollectionProxyModel::CollectionProxyModel( QObject* parent )

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012,      Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -40,8 +41,6 @@ using namespace Tomahawk;
 InfoBar::InfoBar( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::InfoBar )
-    , m_updaterInterface( 0 )
-    , m_updaterConfiguration( 0 )
     , m_queryLabel( 0 )
 {
     ui->setupUi( this );
@@ -55,6 +54,7 @@ InfoBar::InfoBar( QWidget* parent )
     ui->captionLabel->setElideMode( Qt::ElideRight );
 
     boldFont.setPixelSize( 12 );
+    boldFont.setBold( false );
     ui->descriptionLabel->setFont( boldFont );
 
     QFont regFont = ui->longDescriptionLabel->font();
@@ -202,21 +202,31 @@ InfoBar::setFilterAvailable( bool b )
 
 
 void
-InfoBar::setAutoUpdateInterface( PlaylistUpdaterInterface *interface )
+InfoBar::setUpdaters( const QList<PlaylistUpdaterInterface*>& updaters )
 {
-    if ( m_updaterConfiguration )
-        m_updaterConfiguration->hide();
+    QList< QWidget* > newUpdaterWidgets;
+    foreach ( PlaylistUpdaterInterface* updater, updaters )
+    {
+        if ( updater->configurationWidget() )
+            newUpdaterWidgets << updater->configurationWidget();
+    }
 
-    if ( m_updaterConfiguration && ( interface ? (m_updaterConfiguration != interface->configurationWidget()) : true ) )
-        ui->horizontalLayout->removeWidget( m_updaterConfiguration );
 
-    m_updaterInterface = interface;
-    m_updaterConfiguration = interface ? interface->configurationWidget() : 0;
+    foreach ( QWidget* updaterWidget, m_updaterConfigurations )
+    {
+        updaterWidget->hide();
 
-    if ( !m_updaterInterface || !m_updaterConfiguration )
-        return;
+        if ( !newUpdaterWidgets.contains( updaterWidget ) )
+        {
+            // Old config widget no longer present, remove it
+            ui->horizontalLayout->removeWidget( updaterWidget );
+        }
+    }
 
-    m_updaterConfiguration->setPalette( m_whitePal );
+    m_updaters = updaters;
+    m_updaterConfigurations = newUpdaterWidgets;
+
+    // Display each new widget in the proper place
     int insertIdx = -1; // Ugh, no indexOf for QSpacerItem*
     for ( int i = 0; i < ui->horizontalLayout->count(); i++ )
     {
@@ -227,9 +237,40 @@ InfoBar::setAutoUpdateInterface( PlaylistUpdaterInterface *interface )
         }
     }
     insertIdx++;
-    ui->horizontalLayout->insertWidget( insertIdx, m_updaterConfiguration );
 
-    m_updaterConfiguration->show();
+    foreach ( QWidget* updaterWidget, m_updaterConfigurations )
+    {
+        updaterWidget->setPalette( m_whitePal );
+        ui->horizontalLayout->insertWidget( insertIdx, updaterWidget );
+        updaterWidget->show();
+    }
+
+//     if ( m_updaterConfiguration )
+//         m_updaterConfiguration->hide();
+//
+//     if ( m_updaterConfiguration && ( interface ? (m_updaterConfiguration != interface->configurationWidget()) : true ) )
+//         ui->horizontalLayout->removeWidget( m_updaterConfiguration );
+//
+//     m_updaterInterface = interface;
+//     m_updaterConfiguration = interface ? interface->configurationWidget() : 0;
+//
+//     if ( !m_updaterInterface || !m_updaterConfiguration )
+//         return;
+//
+//     m_updaterConfiguration->setPalette( m_whitePal );
+//     int insertIdx = -1; // Ugh, no indexOf for QSpacerItem*
+//     for ( int i = 0; i < ui->horizontalLayout->count(); i++ )
+//     {
+//         if ( ui->horizontalLayout->itemAt( i )->spacerItem() == ui->horizontalSpacer_4 )
+//         {
+//             insertIdx = i;
+//             break;
+//         }
+//     }
+//     insertIdx++;
+//     ui->horizontalLayout->insertWidget( insertIdx, m_updaterConfiguration );
+//
+//     m_updaterConfiguration->show();
 }
 
 

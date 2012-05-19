@@ -73,6 +73,7 @@ protected:
     void closeEvent( QCloseEvent* e );
     void showEvent( QShowEvent* e );
     void hideEvent( QHideEvent* e );
+    void keyPressEvent( QKeyEvent* e );
 
 public slots:
     void createAutomaticPlaylist( QString );
@@ -92,6 +93,9 @@ private slots:
     void onAccountConnected();
     void onAccountDisconnected();
     void onAccountError();
+
+    void onHistoryBackAvailable( bool avail );
+    void onHistoryForwardAvailable( bool avail );
 
     void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
@@ -129,6 +133,7 @@ private:
 
     void applyPlatformTweaks();
     void setupSignals();
+    void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
 
@@ -143,6 +148,9 @@ private:
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusModel* m_jobsModel;
+
+    QAction* m_backAction;
+    QAction* m_forwardAction;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

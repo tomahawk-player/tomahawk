@@ -57,12 +57,12 @@ public:
 
     virtual void sendTrackCount() { emit trackCountChanged( trackCount() ); }
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
-    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Tree; }
+    virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Tree; }
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -75,13 +75,13 @@ signals:
     void nextTrackReady();
 
 public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 private:
     QWeakPointer< TreeProxyModel > m_proxyModel;
 
-    RepeatMode m_repeatMode;
+    PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 

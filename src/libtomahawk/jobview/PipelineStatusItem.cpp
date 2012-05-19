@@ -25,6 +25,7 @@
 #include "TomahawkApp.h"
 #include "JobStatusModel.h"
 #include "JobStatusView.h"
+#include "Source.h"
 
 
 PipelineStatusItem::PipelineStatusItem()

@@ -44,7 +44,7 @@
 #include "AccountDelegate.h"
 #include "database/Database.h"
 #include "network/Servent.h"
-#include "playlist/dynamic/widgets/LoadingSpinner.h"
+#include "utils/AnimatedSpinner.h"
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
@@ -52,6 +52,7 @@
 #include <accounts/ResolverAccount.h>
 #include "utils/Logger.h"
 #include "AccountFactoryWrapper.h"
+#include "accounts/spotify/SpotifyAccount.h"
 
 #include "ui_ProxyDialog.h"
 #include "ui_StackedSettingsDialog.h"
@@ -64,6 +65,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
+    , m_restartRequired( false )
     , m_accountModel( 0 )
     , m_sipSpinner( 0 )
 {
@@ -75,9 +77,27 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
-    ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
-    ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
-    ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
+
+
+    //Network settings
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( mode == TomahawkSettings::Lan )
+        ui->lanOnlyRadioButton->setChecked( true );
+    else if ( mode == TomahawkSettings::Static )
+        ui->staticIpRadioButton->setChecked( true );
+    else
+        ui->upnpRadioButton->setChecked( true );
+
+    ui->staticHostNamePortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticHostName->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticPort->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticHostNameLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticPortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+
+    bool useProxy = TomahawkSettings::instance()->proxyType() == QNetworkProxy::Socks5Proxy;
+    ui->enableProxyCheckBox->setChecked( useProxy );
+    ui->proxyButton->setEnabled( useProxy );
+
 
     createIcons();
 #ifdef Q_WS_X11
@@ -97,6 +117,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
+
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_2 );
+    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_4 );
+    delete ui->verticalSpacer;
+    delete ui->verticalSpacer_2;
+    delete ui->verticalSpacer_4;
 #endif
 
     // Accounts
@@ -114,6 +141,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
     m_accountProxy->setSourceModel( m_accountModel );
 
+    connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
     ui->accountsView->setModel( m_accountProxy );
@@ -130,7 +160,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     if ( !Servent::instance()->isReady() )
     {
-        m_sipSpinner = new LoadingSpinner( ui->accountsView );
+        m_sipSpinner = new AnimatedSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
 
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
@@ -171,10 +201,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 // #endif
 
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
-    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
-    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( ui->checkBoxUpnp, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( ui->checkBoxReporter, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( ui->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( ui->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( ui->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( ui->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
     connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
 
     ui->listWidget->setCurrentRow( 0 );
@@ -192,8 +225,8 @@ SettingsDialog::~SettingsDialog()
 
         s->setCrashReporterEnabled( ui->checkBoxReporter->checkState() == Qt::Checked );
         s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
-        s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
+        s->setProxyType( ui->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
+        s->setExternalAddressMode( ui->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( ui->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
 
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
@@ -207,6 +240,27 @@ SettingsDialog::~SettingsDialog()
 
         s->applyChanges();
         s->sync();
+
+        if ( m_restartRequired )
+            QMessageBox::information( this, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+
+        TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
+        if ( !ui->enableProxyCheckBox->isChecked() )
+        {
+            tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
+            proxyFactory->setProxy( QNetworkProxy::NoProxy );
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
+            proxyFactory->setProxy( QNetworkProxy( QNetworkProxy::Socks5Proxy, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
+            if ( !s->proxyNoProxyHosts().isEmpty() )
+            {
+                tDebug() << Q_FUNC_INFO << "noproxy hosts:" << s->proxyNoProxyHosts();
+                tDebug() << Q_FUNC_INFO << "split noproxy line edit is " << s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts );
+                proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts ) );
+            }
+        }
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
@@ -311,12 +365,20 @@ SettingsDialog::showProxySettings()
 
 
 void
-SettingsDialog::toggleUpnp( bool preferStaticEnabled )
+SettingsDialog::toggleRemoteMode()
 {
-    if ( preferStaticEnabled )
-        ui->checkBoxUpnp->setEnabled( false );
-    else
-        ui->checkBoxUpnp->setEnabled( true );
+    ui->staticHostNamePortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticHostName->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticPort->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticHostNameLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    ui->staticPortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+}
+
+
+void
+SettingsDialog::toggleProxyEnabled()
+{
+    ui->proxyButton->setEnabled( ui->enableProxyCheckBox->isChecked() );
 }
 
 
@@ -397,15 +459,40 @@ SettingsDialog::installFromFile()
 
     if( !resolver.isEmpty() )
     {
+        const QFileInfo resolverAbsoluteFilePath( resolver );
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
+
+        if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
+        {
+            // HACK if this is a spotify resolver, we treat is specially.
+            // usually we expect the user to just download the spotify resolver from attica,
+            // however developers, those who build their own tomahawk, can't do that, or linux
+            // users can't do that. However, we have an already-existing SpotifyAccount that we
+            // know exists that we need to use this resolver path.
+            //
+            // Hence, we special-case the spotify resolver and directly set the path on it here.
+            SpotifyAccount* acct = 0;
+            foreach ( Account* account, AccountManager::instance()->accounts() )
+            {
+                if ( SpotifyAccount* spotify = qobject_cast< SpotifyAccount* >( account ) )
+                {
+                    acct = spotify;
+                    break;
+                }
+            }
+
+            if ( acct )
+            {
+                acct->setManualResolverPath( resolver );
+                return;
+            }
+        }
+
         Account* acct = AccountManager::instance()->accountFromPath( resolver );
 
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );
-
-
-        QFileInfo resolverAbsoluteFilePath( resolver );
-        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
 }
 
@@ -420,7 +507,7 @@ SettingsDialog::scrollTo( const QModelIndex& idx )
 void
 SettingsDialog::requiresRestart()
 {
-    QMessageBox::information( this, tr( "Information" ), tr( "Changing this setting requires a restart of Tomahawk!" ) );
+    m_restartRequired = true;
 }
 
 
@@ -432,58 +519,14 @@ ProxyDialog::ProxyDialog( QWidget *parent )
 
     // ugly, I know, but...
 
-    int i = 0;
-    ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
-    m_forwardMap[ QNetworkProxy::NoProxy ] = i;
-    m_backwardMap[ i ] = QNetworkProxy::NoProxy;
-    i++;
-    ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
-    m_forwardMap[ QNetworkProxy::Socks5Proxy ] = i;
-    m_backwardMap[ i ] = QNetworkProxy::Socks5Proxy;
-    i++;
-
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    ui->typeBox->setCurrentIndex( m_forwardMap[s->proxyType()] );
     ui->hostLineEdit->setText( s->proxyHost() );
     ui->portSpinBox->setValue( s->proxyPort() );
     ui->userLineEdit->setText( s->proxyUsername() );
     ui->passwordLineEdit->setText( s->proxyPassword() );
     ui->checkBoxUseProxyForDns->setChecked( s->proxyDns() );
     ui->noHostLineEdit->setText( s->proxyNoProxyHosts() );
-
-    if ( s->proxyType() == QNetworkProxy::NoProxy )
-    {
-        ui->hostLineEdit->setEnabled( false );
-        ui->portSpinBox->setEnabled( false );
-        ui->userLineEdit->setEnabled( false );
-        ui->passwordLineEdit->setEnabled( false );
-        ui->checkBoxUseProxyForDns->setEnabled( false );
-    }
-
-    connect( ui->typeBox, SIGNAL( currentIndexChanged( int ) ), SLOT( proxyTypeChangedSlot( int ) ) );
-}
-
-
-void
-ProxyDialog::proxyTypeChangedSlot( int index )
-{
-    if ( m_backwardMap[ index ] == QNetworkProxy::NoProxy )
-    {
-        ui->hostLineEdit->setEnabled( false );
-        ui->portSpinBox->setEnabled( false );
-        ui->userLineEdit->setEnabled( false );
-        ui->passwordLineEdit->setEnabled( false );
-        ui->checkBoxUseProxyForDns->setEnabled( false );
-    }
-    else
-    {
-        ui->hostLineEdit->setEnabled( true );
-        ui->portSpinBox->setEnabled( true );
-        ui->userLineEdit->setEnabled( true );
-        ui->passwordLineEdit->setEnabled( true );
-        ui->checkBoxUseProxyForDns->setEnabled( true );
-    }
 }
 
 
@@ -491,8 +534,6 @@ void
 ProxyDialog::saveSettings()
 {
     qDebug() << Q_FUNC_INFO;
-
-    QNetworkProxy::ProxyType type = static_cast< QNetworkProxy::ProxyType>( m_backwardMap[ ui->typeBox->currentIndex() ] );
 
     //First set settings
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -503,26 +544,6 @@ ProxyDialog::saveSettings()
     s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
     s->setProxyUsername( ui->userLineEdit->text() );
     s->setProxyPassword( ui->passwordLineEdit->text() );
-    s->setProxyType( type );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
     s->sync();
-
-    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
-    tDebug() << Q_FUNC_INFO << "Got proxyFactory: " << proxyFactory;
-    if ( type == QNetworkProxy::NoProxy )
-    {
-        tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
-        proxyFactory->setProxy( QNetworkProxy::NoProxy );
-    }
-    else
-    {
-        tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
-        proxyFactory->setProxy( QNetworkProxy( type, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
-        if ( !ui->noHostLineEdit->text().isEmpty() )
-        {
-            tDebug() << Q_FUNC_INFO << "noproxy line edit is " << ui->noHostLineEdit->text();
-            tDebug() << Q_FUNC_INFO << "split noproxy line edit is " << ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts );
-            proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ' ', QString::SkipEmptyParts ) );
-        }
-    }
 }

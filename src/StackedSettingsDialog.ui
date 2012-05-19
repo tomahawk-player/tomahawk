@@ -85,7 +85,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -242,127 +242,103 @@
             </sizepolicy>
            </property>
            <property name="title">
-            <string>Advanced Network Settings</string>
+            <string>Advanced Settings</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
             <property name="margin">
              <number>2</number>
             </property>
             <item>
-             <layout class="QVBoxLayout" name="staticSettingsLayout">
-              <item>
-               <layout class="QHBoxLayout" name="staticPreferredLayout"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="staticHostNamePortLabel">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>If you're having difficulty connecting to peers, try setting this to your external IP address/host name and a port number (default 50210). Make sure to forward that port to this machine!</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="staticHostNamePortLayout">
-                <item>
-                 <widget class="QLabel" name="staticHostNameLabel">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Static Host Name:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="staticHostName"/>
-                </item>
-                <item>
-                 <widget class="QLabel" name="staticPortLabel">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Static Port:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="staticPort">
-                  <property name="maximum">
-                   <number>65535</number>
-                  </property>
-                  <property name="value">
-                   <number>50210</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBoxStaticPreferred">
-                <property name="layoutDirection">
-                 <enum>Qt::RightToLeft</enum>
-                </property>
-                <property name="text">
-                 <string>Always use static host name/port? (Overrides UPnP discovery/port forwarding)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QGroupBox" name="remoteConnectionsGroupBox">
+              <property name="title">
+               <string>Remote Peer Connection Method</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QRadioButton" name="lanOnlyRadioButton">
+                 <property name="text">
+                  <string>None (outgoing connections only)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="upnpRadioButton">
+                 <property name="text">
+                  <string>Use UPnP to establish port forward (recommended)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="staticIpRadioButton">
+                 <property name="text">
+                  <string>Use static external IP address/host name and port</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="staticHostNamePortLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Set this to your external IP address or host name. Make sure to forward the port to this host!</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="staticHostNamePortLayout">
+                 <item>
+                  <widget class="QLabel" name="staticHostNameLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Static Host Name:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="staticHostName"/>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="staticPortLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Static Port:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="staticPort">
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                   <property name="value">
+                    <number>50210</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="proxySettingsHLayout">
-              <item>
-               <spacer name="proxySettingsLeftSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="proxyButton">
-                <property name="text">
-                 <string>Proxy Settings...</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="proxySettingsRightSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_5">
+             <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -375,43 +351,88 @@
              </spacer>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBoxReporter">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+             <widget class="QGroupBox" name="proxyGroupBox">
+              <property name="title">
+               <string>SOCKS Proxy</string>
               </property>
-              <property name="text">
-               <string>Send reports after Tomahawk crashed</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QCheckBox" name="enableProxyCheckBox">
+                 <property name="text">
+                  <string>Use SOCKS Proxy</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="proxyButton">
+                 <property name="text">
+                  <string>Proxy Settings...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBoxHttp">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
               </property>
-              <property name="text">
-               <string>Allow web browsers to interact with Tomahawk (recommended)</string>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="otherSettingsGroupBox">
+              <property name="title">
+               <string>Other Settings</string>
               </property>
+              <layout class="QVBoxLayout" name="verticalLayout_2">
+               <item>
+                <widget class="QCheckBox" name="checkBoxHttp">
+                 <property name="layoutDirection">
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text">
+                  <string>Allow web browsers to interact with Tomahawk (recommended)</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBoxReporter">
+                 <property name="layoutDirection">
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text">
+                  <string>Send reports after Tomahawk crashed</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBoxUpnp">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
               </property>
-              <property name="text">
-               <string>Use UPnP to establish port forward</string>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
               </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
+             </spacer>
             </item>
            </layout>
           </widget>

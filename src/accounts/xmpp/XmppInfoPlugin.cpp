@@ -23,6 +23,7 @@
 #include "GlobalActionManager.h"
 #include "sip/XmppSip.h"
 #include "utils/Logger.h"
+#include "TomahawkSettings.h"
 
 
 // remove now playing status after PAUSE_TIMEOUT seconds
@@ -58,7 +59,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::init()
 
     if ( m_sipPlugin.isNull() )
         return;
-    
+
     connect( this, SIGNAL( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), m_sipPlugin.data(), SLOT( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), Qt::QueuedConnection );
 }
 
@@ -96,20 +97,20 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
         tDebug() << Q_FUNC_INFO << "Failed to convert data to a QVariantMap";
         return;
     }
-    
+
     QVariantMap map = pushInfoPair.second.toMap();
     if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
     {
         emit publishTune( QUrl(), Tomahawk::InfoSystem::InfoStringHash() );
         return;
     }
-        
+
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         tDebug() << Q_FUNC_INFO << "did not find an infostringhash";
         return;
     }
-    
+
     Tomahawk::InfoSystem::InfoStringHash info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
 
     QUrl url;

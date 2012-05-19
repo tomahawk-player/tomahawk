@@ -96,7 +96,6 @@ set( libGuiSources
     playlist/dynamic/widgets/MiscControlWidgets.cpp
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
-    playlist/dynamic/widgets/LoadingSpinner.cpp
 
     playlist/topbar/TopBar.cpp
     playlist/topbar/ClearButton.cpp
@@ -123,6 +122,7 @@ set( libGuiSources
     utils/Closure.cpp
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
+    utils/AnimatedSpinner.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp
@@ -151,6 +151,7 @@ set( libGuiSources
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
+    widgets/infowidgets/TrackInfoWidget.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
 )
@@ -218,6 +219,7 @@ set( libSources
     database/DatabaseCommand_AddSource.cpp
     database/DatabaseCommand_SourceOffline.cpp
     database/DatabaseCommand_CollectionStats.cpp
+    database/DatabaseCommand_TrackStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_PlaybackHistory.cpp
@@ -251,15 +253,6 @@ set( libSources
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
-
-    infosystem/infoplugins/generic/EchonestPlugin.cpp
-    infosystem/infoplugins/generic/ChartsPlugin.cpp
-    infosystem/infoplugins/generic/NewReleasesPlugin.cpp
-    infosystem/infoplugins/generic/spotifyPlugin.cpp
-    infosystem/infoplugins/generic/hypemPlugin.cpp
-    infosystem/infoplugins/generic/MusixMatchPlugin.cpp
-    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
-    infosystem/infoplugins/generic/RoviPlugin.cpp
 
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
@@ -312,6 +305,7 @@ set( libUI ${libUI}
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
+    widgets/infowidgets/TrackInfoWidget.ui
     playlist/topbar/TopBar.ui
     playlist/QueueView.ui
     context/ContextWidget.ui
@@ -346,19 +340,6 @@ IF(LIBATTICA_FOUND)
 ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
-    LIST(APPEND libGuiSources
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPlugin.cpp
-      infosystem/infoplugins/unix/FdoNotifyPlugin.cpp
-      infosystem/infoplugins/unix/ImageConverter.cpp )
-
-    LIST(APPEND libGuiHeaders
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.h
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.h
-      infosystem/infoplugins/unix/MprisPlugin.h
-      infosystem/infoplugins/unix/FdoNotifyPlugin.h )
-
     IF( BUILD_GUI AND X11_FOUND )
         INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
         SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
@@ -388,9 +369,8 @@ IF( APPLE )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
     SET( libSources ${libSources}
-      infosystem/infoplugins/mac/Adium.mm
-      infosystem/infoplugins/mac/AdiumPlugin.cpp
       utils/TomahawkUtils_Mac.mm
+      mac/FileHelpers.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
@@ -400,10 +380,11 @@ IF( APPLE )
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
-	${FOUNDATION_LIBRARY}
+        ${FOUNDATION_LIBRARY}
 	${SCRIPTINGBRIDGE_LIBRARY}
 
         /System/Library/Frameworks/AppKit.framework
+        /System/Library/Frameworks/Security.framework
     )
 ELSE( APPLE )
     SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp )

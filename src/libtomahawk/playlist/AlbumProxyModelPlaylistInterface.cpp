@@ -23,6 +23,7 @@
 #include "Artist.h"
 #include "AlbumItem.h"
 #include "Query.h"
+#include "Source.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -30,7 +31,7 @@ using namespace Tomahawk;
 AlbumProxyModelPlaylistInterface::AlbumProxyModelPlaylistInterface( AlbumProxyModel *proxyModel )
     : Tomahawk::PlaylistInterface()
     , m_proxyModel( proxyModel )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
 {
 }

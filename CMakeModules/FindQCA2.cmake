@@ -38,7 +38,9 @@ else (QCA2_INCLUDE_DIR AND QCA2_LIBRARIES)
 
   find_path(QCA2_INCLUDE_DIR qca.h
             HINTS ${PC_QCA2_INCLUDEDIR} ${PC_QCA2_INCLUDE_DIRS}
-            PATH_SUFFIXES QtCrypto)
+            PATH_SUFFIXES QtCrypto
+            PATHS /usr/local/lib/qca.framework/Headers/
+)
 
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(QCA2  DEFAULT_MSG  QCA2_LIBRARIES QCA2_INCLUDE_DIR)

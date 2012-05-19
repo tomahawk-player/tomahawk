@@ -29,8 +29,13 @@
 #include "widgets/OverlayWidget.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+    class ContextMenu;
+};
+
 class AlbumModel;
-class LoadingSpinner;
+class AnimatedSpinner;
 class AlbumItemDelegate;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
@@ -68,9 +73,11 @@ public slots:
 
 signals:
     void modelChanged();
+    void scrolledContents( int dx, int dy );
 
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
+    virtual void scrollContentsBy( int dx, int dy );
 
     void paintEvent( QPaintEvent* event );
     void resizeEvent( QResizeEvent* event );
@@ -80,18 +87,25 @@ protected slots:
 
 private slots:
     void onItemCountChanged( unsigned int items );
-
     void onFilterChanged( const QString& filter );
+    void onCustomContextMenu( const QPoint& pos );
 
 private:
+    void adjustItemSize( const QRect& rect );
+
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
-    LoadingSpinner* m_loadingSpinner;
+    AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
+
+    QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_inited;
     bool m_autoFitItems;
+    
+    QRect m_paintRect;
 };
 
 #endif // ALBUMVIEW_H

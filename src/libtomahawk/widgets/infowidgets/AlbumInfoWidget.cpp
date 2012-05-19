@@ -39,7 +39,7 @@
 using namespace Tomahawk;
 
 
-AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode startingMode, QWidget* parent )
+AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
     , m_infoId( uuid() )
@@ -59,35 +59,14 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode st
     ui->albumsView->setAlbumModel( m_albumsModel );
 
     m_tracksModel = new TreeModel( ui->tracksView );
-    m_tracksModel->setMode( startingMode );
+    m_tracksModel->setMode( Mixed );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
-    m_button = new OverlayButton( ui->tracksView );
-    m_button->setCheckable( true );
-    m_button->setChecked( m_tracksModel->mode() == InfoSystemMode );
-    if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
-    else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
-
-    m_buttonAlbums = new OverlayButton( ui->albumsView );
-    m_buttonAlbums->setCheckable( true );
-    m_buttonAlbums->setChecked( true );
-    m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
-    m_buttonAlbums->show();
-
-    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
-    connect( m_buttonAlbums, SIGNAL( clicked() ), SLOT( onAlbumsModeToggle() ) );
-    connect( m_tracksModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     load( album );
 }
@@ -107,53 +86,14 @@ AlbumInfoWidget::playlistInterface() const
 
 
 void
-AlbumInfoWidget::setMode( ModelMode mode )
-{
-    m_button->setChecked( mode == InfoSystemMode );
-
-    if ( m_tracksModel->mode() != mode )
-        onModeToggle();
-
-    if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
-    else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
-}
-
-
-void
-AlbumInfoWidget::onModeToggle()
-{
-    m_tracksModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_tracksModel->addTracks( m_album, QModelIndex() );
-}
-
-
-void
-AlbumInfoWidget::onAlbumsModeToggle()
-{
-    if ( m_buttonAlbums->isChecked() )
-        m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
-    else
-        m_buttonAlbums->setText( tr( "Click to show Official Albums" ) );
-
-    loadAlbums();
-}
-
-
-void
 AlbumInfoWidget::onLoadingStarted()
 {
-    m_button->setEnabled( false );
-    m_button->hide();
 }
 
 
 void
 AlbumInfoWidget::onLoadingFinished()
 {
-    m_button->setEnabled( true );
-    m_button->show();
 }
 
 
@@ -217,28 +157,14 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
 {
     m_albumsModel->clear();
 
-    if ( !m_buttonAlbums->isChecked() )
-    {
-        DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums();
-        cmd->setArtist( m_album->artist() );
+    connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                                         SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-        connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                        SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
-
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-    }
-    else
-    {
-        Tomahawk::InfoSystem::InfoStringHash artistInfo;
-        artistInfo["artist"] = m_album->artist()->name();
-
-        Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.customData["refetch"] = autoRefetch;
-        requestData.caller = m_infoId;
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-        requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    }
+    gotAlbums( m_album->artist()->albums( Mixed ) );
+    
+/*                tDebug() << "Auto refetching";
+                m_buttonAlbums->setChecked( false );
+                onAlbumsModeToggle();*/
 }
 
 
@@ -261,68 +187,6 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
         al.removeAll( m_album );
 
     m_albumsModel->addAlbums( al );
-}
-
-
-void
-AlbumInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-    if ( requestData.caller != m_infoId )
-    {
-        return;
-    }
-
-    InfoSystem::InfoStringHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
-
-    if ( output.canConvert< QVariantMap >() )
-    {
-        if ( requestData.type == InfoSystem::InfoArtistReleases && trackInfo["artist"] != m_album->artist()->name() )
-        {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_album->artist()->name();
-            return;
-        }
-    }
-
-    QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( requestData.type )
-    {
-        case Tomahawk::InfoSystem::InfoArtistReleases:
-        {
-            QStringList albums = returnedData[ "albums" ].toStringList();
-            QList<album_ptr> al;
-
-            Tomahawk::InfoSystem::InfoStringHash inputInfo;
-            inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
-            artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
-
-            if ( artist.isNull() )
-                return;
-
-            foreach ( const QString& albumName, albums )
-            {
-                Tomahawk::album_ptr album = Tomahawk::Album::get( artist, albumName, false );
-                al << album;
-            }
-
-            if ( al.count() )
-            {
-                tDebug() << "Adding" << al.count() << "albums";
-                gotAlbums( al );
-            }
-            else if ( requestData.customData[ "refetch" ].toBool() )
-            {
-                tDebug() << "Auto refetching";
-                m_buttonAlbums->setChecked( false );
-                onAlbumsModeToggle();
-            }
-
-            break;
-        }
-
-        default:
-            return;
-    }
 }
 
 

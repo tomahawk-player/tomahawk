@@ -36,7 +36,7 @@ class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistInterface::LatchMode latchMode = PlaylistInterface::StayOnSong );
+    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistModes::LatchMode latchMode = PlaylistModes::StayOnSong );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
@@ -50,14 +50,14 @@ public:
     virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
-    virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return PlaylistInterface::NoSeek; }
-    virtual PlaylistInterface::SkipRestrictions skipRestrictions() const { return PlaylistInterface::NoSkipBackwards; }
-    virtual PlaylistInterface::RetryMode retryMode() const { return Retry; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
+    virtual PlaylistModes::SeekRestrictions seekRestrictions() const { return PlaylistModes::NoSeek; }
+    virtual PlaylistModes::SkipRestrictions skipRestrictions() const { return PlaylistModes::NoSkipBackwards; }
+    virtual PlaylistModes::RetryMode retryMode() const { return PlaylistModes::Retry; }
     virtual quint32 retryInterval() const { return 5000; }
 
-    virtual void setLatchMode( PlaylistInterface::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
-    
+    virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
+
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
@@ -66,9 +66,9 @@ public:
     virtual void reset();
 
 public slots:
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
-    virtual void audioPaused() { setLatchMode( PlaylistInterface::StayOnSong ); }
+    virtual void audioPaused() { setLatchMode( PlaylistModes::StayOnSong ); }
 
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );

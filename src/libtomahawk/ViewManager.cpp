@@ -51,6 +51,7 @@
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
+#include "widgets/infowidgets/TrackInfoWidget.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/AnimatedSplitter.h"
 
@@ -78,7 +79,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_newReleasesWidget( new NewReleasesWidget() )
     , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
-    , m_currentMode( PlaylistInterface::Tree )
+    , m_currentMode( PlaylistModes::Tree )
     , m_loaded( false )
 {
     s_instance = this;
@@ -238,12 +239,12 @@ ViewManager::show( const Tomahawk::artist_ptr& artist )
 
 
 Tomahawk::ViewPage*
-ViewManager::show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode initialMode )
+ViewManager::show( const Tomahawk::album_ptr& album )
 {
     AlbumInfoWidget* swidget;
     if ( !m_albumViews.contains( album ) || m_albumViews.value( album ).isNull() )
     {
-        swidget = new AlbumInfoWidget( album, initialMode );
+        swidget = new AlbumInfoWidget( album );
         m_albumViews.insert( album, swidget );
     }
     else
@@ -257,12 +258,31 @@ ViewManager::show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode initial
 
 
 Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::query_ptr& query )
+{
+    TrackInfoWidget* swidget;
+    if ( !m_trackViews.contains( query ) || m_trackViews.value( query ).isNull() )
+    {
+        swidget = new TrackInfoWidget( query );
+        m_trackViews.insert( query, swidget );
+    }
+    else
+    {
+        swidget = m_trackViews.value( query ).data();
+    }
+
+    setPage( swidget );
+    return swidget;
+}
+
+
+Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
     ViewPage* shown = 0;
-    if ( m_currentMode == PlaylistInterface::Flat )
+    if ( m_currentMode == PlaylistModes::Flat )
     {
         CollectionView* view;
         if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
@@ -286,7 +306,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
     }
 
-    if ( m_currentMode == PlaylistInterface::Tree )
+    if ( m_currentMode == PlaylistModes::Tree )
     {
         ArtistView* view;
         if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
@@ -310,7 +330,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
     }
 
-    if ( m_currentMode == PlaylistInterface::Album )
+    if ( m_currentMode == PlaylistModes::Album )
     {
         AlbumView* aview;
         if ( !m_collectionAlbumViews.contains( collection ) || m_collectionAlbumViews.value( collection ).isNull() )
@@ -387,17 +407,17 @@ ViewManager::showSuperCollection()
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
     ViewPage* shown = 0;
-    if ( m_currentMode == PlaylistInterface::Tree )
+    if ( m_currentMode == PlaylistModes::Tree )
     {
         shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
-    else if ( m_currentMode == PlaylistInterface::Flat )
+    else if ( m_currentMode == PlaylistModes::Flat )
     {
         shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
-    else if ( m_currentMode == PlaylistInterface::Album )
+    else if ( m_currentMode == PlaylistModes::Album )
     {
         shown = m_superAlbumView;
         setPage( m_superAlbumView );
@@ -415,13 +435,13 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
     playlist_ptr pl = playlistForInterface( interface );
     if ( !pl.isNull() )
     {
-        TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl );
+        TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl->guid(), pl->author()->id() );
     }
     else
     {
         pl = dynamicPlaylistForInterface( interface );
         if ( !pl.isNull() )
-            TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl );
+            TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl->guid(), pl->author()->id() );
     }
 }
 
@@ -474,6 +494,8 @@ ViewManager::showRecentPlaysPage()
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
+        raModel->setTitle( tr( "Recently Played Tracks" ) );
+        raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
         raModel->setStyle( TrackModel::Large );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
@@ -494,7 +516,7 @@ ViewManager::setTableMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = PlaylistInterface::Flat;
+    m_currentMode = PlaylistModes::Flat;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -508,7 +530,7 @@ ViewManager::setTreeMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = PlaylistInterface::Tree;
+    m_currentMode = PlaylistModes::Tree;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -522,7 +544,7 @@ ViewManager::setAlbumMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = PlaylistInterface::Album;
+    m_currentMode = PlaylistModes::Album;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -534,18 +556,22 @@ ViewManager::setAlbumMode()
 void
 ViewManager::historyBack()
 {
-    ViewPage* oldPage = m_pageHistory.takeFirst();
+    if ( m_pageHistory.count() < 2 )
+        return;
 
+    ViewPage* oldPage = m_pageHistory.takeFirst();
     ViewPage* newPage = m_pageHistory.first();
-    qDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
+
+    tDebug() << "Deleting page in history:" << oldPage->widget()->metaObject()->className();
+    tDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
     setPage( newPage, false );
 
-    delete oldPage;
+//    delete oldPage;
 }
 
 
 void
-ViewManager::removeFromHistory ( ViewPage* p )
+ViewManager::removeFromHistory( ViewPage* p )
 {
     if ( currentPage() == p )
     {
@@ -607,6 +633,9 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         m_pageHistory.insert( 0, page );
     }
 
+    emit historyBackAvailable( m_pageHistory.count() > 1 );
+    emit historyForwardAvailable( false );
+
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 
@@ -666,8 +695,8 @@ ViewManager::unlinkPlaylist()
         disconnect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                     this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
 
-        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                    this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+                    this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                     this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
@@ -705,8 +734,8 @@ ViewManager::updateView()
         connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
                                                     SIGNAL( numShownChanged( unsigned int ) ) );
 
-        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-                                                    SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+                                                    SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                     SIGNAL( shuffleModeChanged( bool ) ) );
@@ -745,7 +774,7 @@ ViewManager::updateView()
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
 
-    m_infobar->setAutoUpdateInterface( currentPage()->autoUpdateInterface() );
+    m_infobar->setUpdaters( currentPage()->updaters() );
 
     switch( currentPage()->descriptionType() )
     {
@@ -828,7 +857,7 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
 
 void
-ViewManager::setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode )
+ViewManager::setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
 {
     if ( currentPlaylistInterface() )
         currentPlaylistInterface()->setRepeatMode( mode );
@@ -998,15 +1027,15 @@ ViewManager::showCurrentTrack()
         // reset the correct mode, if the user has changed it since
 
         if ( dynamic_cast< CollectionView* >( page ) )
-            m_currentMode = PlaylistInterface::Flat;
+            m_currentMode = PlaylistModes::Flat;
         else if ( dynamic_cast< AlbumView* >( page ) )
-            m_currentMode = PlaylistInterface::Album;
+            m_currentMode = PlaylistModes::Album;
         else if ( dynamic_cast< ArtistView* >( page ) )
-            m_currentMode = PlaylistInterface::Tree;
+            m_currentMode = PlaylistModes::Tree;
         else
             return;
 
-        emit modeChanged( (PlaylistInterface::ViewMode)m_currentMode );
+        emit modeChanged( (PlaylistModes::ViewMode)m_currentMode );
     }
 }
 

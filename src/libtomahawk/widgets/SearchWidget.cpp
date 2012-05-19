@@ -25,10 +25,10 @@
 
 #include "SourceList.h"
 #include "ViewManager.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/PlaylistModel.h"
 #include "widgets/OverlayWidget.h"
+#include "utils/AnimatedSpinner.h"
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
@@ -146,7 +146,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         q->addResults( rl );
 
         m_resultsModel->append( q );
-        
+
         artists << result->artist();
         albums << result->album();
     }
