@@ -192,7 +192,7 @@ InfoSystemWorker::findInfoPlugins()
 void
 InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
 {
-    tDebug() << Q_FUNC_INFO << "Attempting to load the following plugin paths: " << pluginPaths;
+    tDebug() << Q_FUNC_INFO << "Attempting to load the following plugin paths:" << pluginPaths;
 
     if ( pluginPaths.isEmpty() )
         return;
@@ -219,7 +219,7 @@ InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
             addInfoPlugin( InfoPluginPtr( infoPlugin ) );
         }
         else
-            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin: " << loader.fileName();
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << loader.fileName();
     }
 }
 
