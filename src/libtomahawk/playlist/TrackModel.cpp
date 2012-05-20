@@ -152,49 +152,46 @@ TrackModel::data( const QModelIndex& index, int role ) const
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    const query_ptr& query = entry->query();
-    if ( !query->numResults() )
+    const query_ptr& query = entry->query()->displayQuery();
+    switch( index.column() )
     {
-        switch( index.column() )
-        {
-            case Artist:
-                return query->artist();
-                break;
+        case Artist:
+            return query->artist();
+            break;
 
-            case Track:
-                return query->track();
-                break;
+        case Track:
+            return query->track();
+            break;
 
-            case Album:
-                return query->album();
-                break;
-        }
+        case Album:
+            return query->album();
+            break;
+            
+        case Composer:
+            return query->composer();
+            break;
+            
+        case Duration:
+            return TomahawkUtils::timeToString( query->duration() );
+            break;
+
+        case AlbumPos:
+            QString tPos;
+            if ( query->albumpos() != 0 )
+            {
+                tPos = QString::number( query->albumpos() );
+                if( query->discnumber() == 0 )
+                    return tPos;
+                else
+                    return QString( "%1.%2" ).arg( QString::number( query->discnumber() ) )
+                                             .arg( tPos );
+            }
+            break;
     }
-    else
+    if ( query->numResults() )
     {
         switch( index.column() )
         {
-            case Artist:
-                return query->results().first()->artist()->name();
-                break;
-
-            case Track:
-                return query->results().first()->track();
-                break;
-
-            case Album:
-                return query->results().first()->album()->name();
-                break;
-
-            case Composer:
-                if ( !query->results().first()->composer().isNull() )
-                    return query->results().first()->composer()->name();
-                break;
-
-            case Duration:
-                return TomahawkUtils::timeToString( query->results().first()->duration() );
-                break;
-
             case Bitrate:
                 if ( query->results().first()->bitrate() > 0 )
                     return query->results().first()->bitrate();
@@ -219,19 +216,6 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
             case Score:
                 return query->results().first()->score();
-                break;
-
-            case AlbumPos:
-                QString tPos;
-                if ( query->results().first()->albumpos() != 0 )
-                {
-                    tPos = QString::number( query->results().first()->albumpos() );
-                    if( query->results().first()->discnumber() == 0 )
-                        return tPos;
-                    else
-                        return QString( "%1.%2" ).arg( QString::number( query->results().first()->discnumber() ) )
-                                                 .arg( tPos );
-                }
                 break;
         }
     }

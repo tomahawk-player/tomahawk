@@ -187,11 +187,7 @@ PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
     {
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
-        if ( query->results().count() )
-            entry->setDuration( query->results().at( 0 )->duration() );
-        else
-            entry->setDuration( 0 );
-
+        entry->setDuration( query->displayQuery()->duration() );
         entry->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )

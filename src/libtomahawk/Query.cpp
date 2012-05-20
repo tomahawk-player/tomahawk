@@ -182,6 +182,16 @@ Query::updateSortNames()
 }
 
 
+query_ptr
+Query::displayQuery() const
+{
+    if ( !results().isEmpty() )
+        return results().first()->toQuery();
+    
+    return m_ownRef.toStrongRef();
+}
+
+
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {

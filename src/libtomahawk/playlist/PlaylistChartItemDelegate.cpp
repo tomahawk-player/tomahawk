@@ -135,21 +135,12 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
+    const query_ptr q = item->query()->displayQuery();
+    unsigned int duration = q->duration();
+    QString artist = q->artist();
+    QString track = q->track();
     QPixmap avatar;
-    QString artist, track, upperText, lowerText;
-    unsigned int duration = 0;
-
-    if ( item->query()->results().count() )
-    {
-        artist = item->query()->results().first()->artist()->name();
-        track = item->query()->results().first()->track();
-        duration = item->query()->results().first()->duration();
-    }
-    else
-    {
-        artist = item->query()->artist();
-        track = item->query()->track();
-    }
+    QString upperText, lowerText;
 
     painter->save();
     {

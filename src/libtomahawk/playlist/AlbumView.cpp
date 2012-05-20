@@ -151,8 +151,8 @@ AlbumView::onItemActivated( const QModelIndex& index )
             ViewManager::instance()->show( item->album() );
         else if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
-        else if ( item->query()->numResults() )
-            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query()->results().first() );
+        else if ( !item->query().isNull() )
+            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query() );
     }
 }
 

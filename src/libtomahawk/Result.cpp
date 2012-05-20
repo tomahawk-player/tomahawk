@@ -163,12 +163,7 @@ Result::toVariant() const
     m.insert( "artist", artist()->name() );
     m.insert( "album", album()->name() );
     m.insert( "track", track() );
-
-    if ( !collection().isNull() )
-        m.insert( "source", collection()->source()->friendlyName() );
-    else
-        m.insert( "source", friendlySource() );
-
+    m.insert( "source", friendlySource() );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
@@ -176,6 +171,7 @@ Result::toVariant() const
     m.insert( "score", score() );
     m.insert( "sid", id() );
     m.insert( "discnumber", discnumber() );
+    m.insert( "albumpos", albumpos() );
 
     if ( !composer().isNull() )
         m.insert( "composer", composer()->name() );
@@ -197,6 +193,12 @@ Result::toQuery()
     if ( m_query.isNull() )
     {
         m_query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
+        m_query->setAlbumPos( albumpos() );
+        m_query->setDiscNumber( discnumber() );
+        m_query->setDuration( duration() );
+        if ( !composer().isNull() )
+            m_query->setComposer( composer()->name() );
+
         QList<Tomahawk::result_ptr> rl;
         rl << Result::get( m_url );
 

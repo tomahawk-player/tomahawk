@@ -168,6 +168,7 @@ TreeModelItem::TreeModelItem( const Tomahawk::query_ptr& query, TreeModelItem* p
     }
 
     toberemoved = false;
+    onResultsChanged();
 
     connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsChanged() ) );
@@ -254,7 +255,7 @@ TreeModelItem::result() const
 {
     if ( m_result.isNull() && !m_query.isNull() )
     {
-        if ( m_query->results().count() )
+        if ( m_query->numResults() )
             return m_query->results().first();
     }
 

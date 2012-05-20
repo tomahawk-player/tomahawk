@@ -133,20 +133,12 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
+    const query_ptr q = item->query()->displayQuery();
+    QString artist = q->artist();
+    QString track = q->track();
     QPixmap pixmap;
-    QString artist, track, upperText, lowerText;
+    QString upperText, lowerText;
     source_ptr source = item->query()->playedBy().first;
-
-    if ( item->query()->results().count() )
-    {
-        artist = item->query()->results().first()->artist()->name();
-        track = item->query()->results().first()->track();
-    }
-    else
-    {
-        artist = item->query()->artist();
-        track = item->query()->track();
-    }
 
     if ( source.isNull() )
     {

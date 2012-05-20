@@ -622,11 +622,7 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
 
-        if ( query->results().count() )
-            e->setDuration( query->results().at( 0 )->duration() );
-        else
-            e->setDuration( 0 );
-
+        e->setDuration( query->displayQuery()->duration() );
         e->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )

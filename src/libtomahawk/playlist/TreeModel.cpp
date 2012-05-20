@@ -798,11 +798,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
     TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
     {
-        if ( query->numResults() )
-            item = new TreeModelItem( query->results().first(), parentItem );
-        else
-            item = new TreeModelItem( query, parentItem );
-
+        item = new TreeModelItem( query, parentItem );
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );

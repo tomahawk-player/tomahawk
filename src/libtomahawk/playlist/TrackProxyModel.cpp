@@ -70,7 +70,7 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     if ( !pi )
         return false;
 
-    const Tomahawk::query_ptr& q = pi->query();
+    const Tomahawk::query_ptr& q = pi->query()->displayQuery();
     if ( q.isNull() ) // uh oh? filter out invalid queries i guess
         return false;
 
@@ -88,23 +88,11 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     foreach( QString s, sl )
     {
         s = s.toLower();
-        if ( !r.isNull() )
+        if ( !q->artist().toLower().contains( s ) &&
+             !q->album().toLower().contains( s ) &&
+             !q->track().toLower().contains( s ) )
         {
-            if ( !r->artist()->name().toLower().contains( s ) &&
-                 !r->album()->name().toLower().contains( s ) &&
-                 !r->track().toLower().contains( s ) )
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if ( !q->artist().toLower().contains( s ) &&
-                 !q->album().toLower().contains( s ) &&
-                 !q->track().toLower().contains( s ) )
-            {
-                return false;
-            }
+            return false;
         }
     }
 
@@ -169,17 +157,19 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( !p2 )
         return false;
 
-    const Tomahawk::query_ptr& q1 = p1->query();
-    const Tomahawk::query_ptr& q2 = p2->query();
+    const Tomahawk::query_ptr& q1 = p1->query()->displayQuery();
+    const Tomahawk::query_ptr& q2 = p2->query()->displayQuery();
 
     QString artist1 = q1->artistSortname();
     QString artist2 = q2->artistSortname();
-    QString album1 = q1->album();
-    QString album2 = q2->album();
-    QString track1 = q1->track();
-    QString track2 = q2->track();
-    unsigned int albumpos1 = 0, albumpos2 = 0;
-    unsigned int discnumber1 = 0, discnumber2 = 0;
+    QString album1 = q1->albumSortname();
+    QString album2 = q2->albumSortname();
+    QString track1 = q1->trackSortname();
+    QString track2 = q2->trackSortname();
+    unsigned int albumpos1 = q1->albumpos();
+    unsigned int albumpos2 = q2->albumpos();
+    unsigned int discnumber1 = q1->discnumber();
+    unsigned int discnumber2 = q2->discnumber();
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
@@ -188,11 +178,6 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( q1->numResults() )
     {
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
-        artist1 = r->artist()->sortname();
-        album1 = r->album()->name();
-        track1 = r->track();
-        albumpos1 = r->albumpos();
-        discnumber1 = qMax( 1, (int)r->discnumber() );
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
         id1 = r->trackId();
@@ -201,11 +186,6 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( q2->numResults() )
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
-        artist2 = r->artist()->sortname();
-        album2 = r->album()->name();
-        track2 = r->track();
-        albumpos2 = r->albumpos();
-        discnumber2 = qMax( 1, (int)r->discnumber() );
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
         id2 = r->trackId();
