@@ -39,6 +39,7 @@
 
 using namespace Tomahawk;
 
+
 SocialAction::SocialAction() {}
 SocialAction::~SocialAction() {}
 
@@ -52,10 +53,12 @@ SocialAction& SocialAction::operator=( const SocialAction& other )
     return *this;
 }
 
+
 SocialAction::SocialAction( const SocialAction& other )
 {
     *this = other;
 }
+
 
 PlaybackLog::PlaybackLog() {}
 PlaybackLog::~PlaybackLog() {}
@@ -69,10 +72,12 @@ PlaybackLog& PlaybackLog::operator=( const PlaybackLog& other )
     return *this;
 }
 
+
 PlaybackLog::PlaybackLog( const PlaybackLog& other )
 {
     *this = other;
 }
+
 
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
