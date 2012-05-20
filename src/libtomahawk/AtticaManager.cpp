@@ -532,8 +532,8 @@ AtticaManager::payloadFetched()
             else
             {
                 TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, reply->property( "createAccount" ).toBool(), this ) );
-                // Don't emit failed yet
-                installedSuccessfully = true;
+                // Don't emit success or failed yet, helpre will do that.
+                return;
             }
         }
         else
