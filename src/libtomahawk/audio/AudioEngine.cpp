@@ -594,8 +594,8 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     }
     else
     {
-        _detail::Closure* closure = NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
-                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
+        NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
+                    const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
     }
 }
 
@@ -603,14 +603,16 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 void
 AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
 {
-    if ( artist->playlistInterface()->trackCount() )
+    playlistinterface_ptr pli = artist->playlistInterface( Mixed );
+    if ( pli->trackCount() )
     {
-        playItem( artist->playlistInterface(), artist->playlistInterface()->tracks().first() );
+        playItem( pli, pli->tracks().first() );
     }
     else
     {
-        _detail::Closure* closure = NewClosure( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ), const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::artist_ptr ) ), artist );
-        artist->playlistInterface()->tracks();
+        NewClosure( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                    const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::artist_ptr ) ), artist );
+        pli->tracks();
     }
 }
 
@@ -625,8 +627,8 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
     }
     else
     {
-        _detail::Closure* closure = NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                                                const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
+        NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                    const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
         pli->tracks();
     }
 }

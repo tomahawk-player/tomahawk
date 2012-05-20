@@ -78,9 +78,9 @@ lastfm::TrackData::TrackData()
                rating( 0 ),
                fpid( -1 ),
                loved( false ),
-               null( false ),
                scrobbleStatus( Track::Null ),
-               scrobbleError( Track::None )
+               scrobbleError( Track::None ),
+               null( false )
 {}
 
 lastfm::Track::Track()

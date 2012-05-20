@@ -54,6 +54,9 @@ public:
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<Tomahawk::artist_ptr> similarArtists() const;
 
+    QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+    Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+
     void loadStats();
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
@@ -69,7 +72,7 @@ public:
     void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
 
 signals:
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
 
     void updated();
@@ -78,7 +81,7 @@ signals:
     void statsLoaded();
 
 private slots:
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onTracksLoaded(Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
@@ -112,8 +115,8 @@ private:
     mutable QHash< int, QPixmap > m_coverCache;
 #endif
 
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
-
+    QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
+    
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 };
 

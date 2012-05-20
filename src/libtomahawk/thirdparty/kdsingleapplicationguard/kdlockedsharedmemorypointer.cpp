@@ -31,9 +31,9 @@ void * KDLockedSharedMemoryPointerBase::get() {
 const void * KDLockedSharedMemoryPointerBase::get() const {
     return mem ? mem->data() : 0 ;
 }
-    
+
 size_t KDLockedSharedMemoryPointerBase::byteSize() const {
-    return mem->size();
+    return mem ? mem->size() : 0;
 }
 
 /*!
@@ -137,7 +137,7 @@ size_t KDLockedSharedMemoryPointerBase::byteSize() const {
 
   (The exception safety of this class has not been evaluated yet.)
 
-  KDLockedSharedMemoryArray is a smart immutable pointer, which gives convenient and safe access to array data stored in a QSharedMemory 
+  KDLockedSharedMemoryArray is a smart immutable pointer, which gives convenient and safe access to array data stored in a QSharedMemory
   data segment.
   The content of a KDLockedSharedMemoryArray cannot be changed during it's lifetime.
 
@@ -248,7 +248,7 @@ size_t KDLockedSharedMemoryPointerBase::byteSize() const {
 
 /*!
   \fn KDLockedSharedMemoryArray::size_type KDLockedSharedMemoryArray::size() const
-  Returns the size of this array. The size is calculated from the storage size of T and 
+  Returns the size of this array. The size is calculated from the storage size of T and
   the size of the shared memory segment.
   \since_f 2.2
 */
@@ -461,7 +461,7 @@ KDAB_UNITTEST_SIMPLE( KDLockedSharedMemoryPointer, "kdcoretools" ) {
             assertEqual( a[ i ].n, i );
         assertEqual( a.front().n, 0u );
         assertEqual( a.back().n, a.size() - 1 );
-        
+
         std::copy( v.begin(), v.end(), a.rbegin() );
         for( uint i = 0; i < a.size(); ++i )
             assertEqual( a[ i ].n, a.size() - 1 - i );

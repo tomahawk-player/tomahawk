@@ -59,14 +59,6 @@ public:
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
-
     void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
 private slots:
@@ -74,10 +66,6 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 private:
-    AlbumPlaylistInterface();
-
-    QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
-
     QList< Tomahawk::query_ptr > m_queries;
     result_ptr m_currentItem;
     unsigned int m_currentTrack;
@@ -87,7 +75,6 @@ private:
 
     Tomahawk::ModelMode m_mode;
     Tomahawk::collection_ptr m_collection;
-    QString m_uuid;
 
     QWeakPointer< Tomahawk::Album > m_album;
 };

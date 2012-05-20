@@ -131,14 +131,16 @@ public:
     QString artistSortname() const { return m_artistSortname; }
     QString albumSortname() const { return m_albumSortname; }
     QString trackSortname() const { return m_trackSortname; }
+
     QString artist() const { return m_artist; }
     QString composer() const { return m_composer; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
-
     int duration() const { return m_duration; }
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int discnumber() const { return m_discnumber; }
+    
+    query_ptr displayQuery() const;
 
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;

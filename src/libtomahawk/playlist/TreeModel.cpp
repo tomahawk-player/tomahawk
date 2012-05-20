@@ -669,6 +669,8 @@ TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr
 void
 TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool autoRefetch )
 {
+    Q_UNUSED( autoRefetch );
+
     emit loadingStarted();
 
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
@@ -798,11 +800,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
     TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
     {
-        if ( query->numResults() )
-            item = new TreeModelItem( query->results().first(), parentItem );
-        else
-            item = new TreeModelItem( query, parentItem );
-
+        item = new TreeModelItem( query, parentItem );
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );

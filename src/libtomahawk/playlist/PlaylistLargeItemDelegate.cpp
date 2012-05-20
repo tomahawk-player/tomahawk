@@ -136,21 +136,12 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
+    const query_ptr q = item->query()->displayQuery();
+    QString artist = q->artist();
+    QString track = q->track();
+    unsigned int duration = q->duration();
     QPixmap avatar;
-    QString artist, track, lowerText;
-    unsigned int duration = 0;
-
-    if ( item->query()->results().count() )
-    {
-        artist = item->query()->results().first()->artist()->name();
-        track = item->query()->results().first()->track();
-        duration = item->query()->results().first()->duration();
-    }
-    else
-    {
-        artist = item->query()->artist();
-        track = item->query()->track();
-    }
+    QString lowerText;
 
     QSize avatarSize( 32, 32 );
     source_ptr source = item->query()->playedBy().first;

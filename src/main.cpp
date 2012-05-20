@@ -152,7 +152,7 @@ main( int argc, char *argv[] )
 #endif
 #endif
 
-    KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
+    KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
 
     if ( guard.isPrimaryInstance() )

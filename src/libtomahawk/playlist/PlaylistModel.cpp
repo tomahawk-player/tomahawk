@@ -158,7 +158,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
     if ( artist.isNull() )
         return;
 
-    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                               SLOT( append( QList<Tomahawk::query_ptr> ) ) );
 
     if ( rowCount( QModelIndex() ) == 0 )
@@ -168,7 +168,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
         m_isTemporary = true;
     }
 
-    append( artist->playlistInterface()->tracks() );
+    append( artist->playlistInterface( Mixed )->tracks() );
 }
 
 
@@ -187,11 +187,7 @@ PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
     {
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
-        if ( query->results().count() )
-            entry->setDuration( query->results().at( 0 )->duration() );
-        else
-            entry->setDuration( 0 );
-
+        entry->setDuration( query->displayQuery()->duration() );
         entry->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )

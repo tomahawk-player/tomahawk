@@ -32,7 +32,6 @@
 
 using namespace Tomahawk;
 
-AlbumPlaylistInterface::AlbumPlaylistInterface() {}
 
 AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
     : Tomahawk::PlaylistInterface()
@@ -42,7 +41,6 @@ AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk
     , m_databaseLoaded( false )
     , m_mode( mode )
     , m_collection( collection )
-    , m_uuid( uuid() )
     , m_album( QWeakPointer< Tomahawk::Album >( album ) )
 {
 }
@@ -106,7 +104,7 @@ AlbumPlaylistInterface::tracks()
             artistInfo["album"] = m_album.data()->name();
 
             Tomahawk::InfoSystem::InfoRequestData requestData;
-            requestData.caller = m_uuid;
+            requestData.caller = id();
             requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
             requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
             requestData.timeoutMillis = 0;
@@ -137,7 +135,7 @@ AlbumPlaylistInterface::tracks()
 void
 AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    if ( requestData.caller != m_uuid )
+    if ( requestData.caller != id() )
         return;
 
     switch ( requestData.type )
@@ -164,7 +162,6 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
                     query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ] );
                     query->setAlbumPos( trackNo++ );
                     ql << query;
-                    tDebug() << Q_FUNC_INFO << query->toString();
                 }
                 Pipeline::instance()->resolve( ql );
 
@@ -215,41 +212,4 @@ AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
         m_queries << tracks;
 
     emit tracksLoaded( m_mode, m_collection );
-}
-
-
-QList<Tomahawk::query_ptr>
-AlbumPlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
-{
-    QList<Tomahawk::query_ptr> result;
-
-    for ( int i = 0; i < queries.count(); i++ )
-    {
-        bool picked = true;
-        const query_ptr q1 = queries.at( i );
-
-        for ( int j = 0; j < result.count(); j++ )
-        {
-            if ( !picked )
-                break;
-
-            const query_ptr& q2 = result.at( j );
-            
-            if ( q1->track() == q2->track() )
-            {
-                picked = false;
-            }
-        }
-
-        if ( picked )
-        {
-            query_ptr q = Query::get( q1->artist(), q1->track(), q1->album(), uuid(), false );
-            q->setAlbumPos( q1->results().first()->albumpos() );
-            q->setDiscNumber( q1->discnumber() );
-            result << q;
-        }
-    }
-
-    Pipeline::instance()->resolve( result );
-    return result;
 }

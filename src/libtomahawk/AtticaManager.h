@@ -58,7 +58,10 @@ public:
         bool pixmapDirty;
 
         Resolver( const QString& v, const QString& path, int userR, ResolverState s, bool resolver )
-            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
+            : version( v ), scriptPath( path ), userRating( userR ), state( s ), pixmap( 0 ), binary( false ), pixmapDirty( false )
+        {
+            Q_UNUSED( resolver );
+        }
         Resolver() : userRating( -1 ), state( Uninstalled ), pixmap( 0 ), binary( false ), pixmapDirty( false ) {}
     };
 

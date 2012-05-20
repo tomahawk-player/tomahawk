@@ -50,6 +50,8 @@ public:
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
+    QString sortname() const { return m_sortname; }
+
     artist_ptr artist() const;
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
@@ -78,6 +80,8 @@ private:
 
     unsigned int m_id;
     QString m_name;
+    QString m_sortname;
+
     artist_ptr m_artist;
     QByteArray m_coverBuffer;
 

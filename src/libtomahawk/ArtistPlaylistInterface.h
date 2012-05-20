@@ -36,12 +36,12 @@ class DLLEXPORT ArtistPlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    ArtistPlaylistInterface( Tomahawk::Artist *artist );
+    ArtistPlaylistInterface( Tomahawk::Artist* artist, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     virtual ~ArtistPlaylistInterface();
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
-    virtual int trackCount() const { return 0; }
+    virtual int trackCount() const { return m_queries.count(); }
     virtual int unfilteredTrackCount() const { return m_queries.count(); }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
@@ -57,7 +57,12 @@ public:
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    virtual void addQueries( const QList<Tomahawk::query_ptr>& tracks );
+signals:
+    void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
+
+private slots:
+    void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 private:
     Q_DISABLE_COPY( ArtistPlaylistInterface )
@@ -65,6 +70,12 @@ private:
     QList< Tomahawk::query_ptr > m_queries;
     result_ptr m_currentItem;
     unsigned int m_currentTrack;
+
+    bool m_infoSystemLoaded;
+    bool m_databaseLoaded;
+
+    Tomahawk::ModelMode m_mode;
+    Tomahawk::collection_ptr m_collection;
 
     QWeakPointer< Tomahawk::Artist > m_artist;
 };

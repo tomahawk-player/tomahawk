@@ -109,9 +109,7 @@ QVariant
 AlbumModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == Qt::SizeHintRole )
-    {
         return m_itemSize;
-    }
 
     AlbumItem* entry = itemFromIndex( index );
     if ( !entry )
@@ -131,7 +129,6 @@ AlbumModel::data( const QModelIndex& index, int role ) const
         case 0:
             return name;
             break;
-
     }
 
     return QVariant();

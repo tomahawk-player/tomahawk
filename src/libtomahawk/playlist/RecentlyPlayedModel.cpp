@@ -40,9 +40,11 @@ RecentlyPlayedModel::RecentlyPlayedModel( const source_ptr& source, QObject* par
 {
     if ( source.isNull() )
     {
-        onSourcesReady();
+        if ( SourceList::instance()->isReady() )
+            onSourcesReady();
+        else
+            connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
 
-        connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     }
     else

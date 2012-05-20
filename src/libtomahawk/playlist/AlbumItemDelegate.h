@@ -39,8 +39,6 @@ Q_OBJECT
 public:
     AlbumItemDelegate( QAbstractItemView* parent = 0, AlbumProxyModel* proxy = 0 );
 
-    void whitespaceMouseEvent();
-
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -68,12 +66,12 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
-    QPersistentModelIndex m_hoveringOver;
     QPersistentModelIndex m_hoverIndex;
+    QPersistentModelIndex m_hoveringOver;
     mutable QRect m_playButtonRect;
 
     QPixmap m_shadowPixmap;
-    mutable QHash< QPersistentModelIndex, QWidget* > m_subWidgets;
+    mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
 };

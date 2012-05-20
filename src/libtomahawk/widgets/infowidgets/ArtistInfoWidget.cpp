@@ -193,6 +193,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 void
 ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mode )
 {
+    Q_UNUSED( mode );
+
     m_albumsModel->addAlbums( albums );
 }
 

@@ -394,6 +394,8 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 void
 prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item )
 {
+    Q_UNUSED( index );
+
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
@@ -410,7 +412,7 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Tr
     else
     {
         float opacity = 0.0;
-        if ( item->query()->results().count() )
+        if ( !item->query()->results().isEmpty() )
             opacity = item->query()->results().first()->score();
 
         opacity = qMax( (float)0.3, opacity );

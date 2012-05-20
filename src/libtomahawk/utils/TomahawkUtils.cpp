@@ -830,6 +830,7 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
         if ( !out.open( QIODevice::WriteOnly ) )
         {
             tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;
+            fileInZip.close();
             continue;
         }
 
@@ -847,6 +848,11 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 void
 extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 {
+#ifndef Q_OS_MAC
+    Q_UNUSED( zipFilename );
+    Q_UNUSED( receiver );
+#endif
+
 #if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
     Q_ASSERT( false );
     qWarning() << "NO SUPPORT YET FOR LINUX BINARY RESOLVERS!";

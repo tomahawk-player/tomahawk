@@ -324,6 +324,8 @@ InfoBar::createTile( int w )
 void
 InfoBar::paintEvent( QPaintEvent* e )
 {
+    Q_UNUSED( e );
+
     if ( m_bgTile.isNull() || width() > m_bgTile.width() )
         createTile( width() );
 

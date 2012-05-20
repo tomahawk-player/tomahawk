@@ -88,6 +88,7 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_cover( 0 )
 #endif
 {
+    m_sortname = DatabaseImpl::sortname( name );
 }
 
 

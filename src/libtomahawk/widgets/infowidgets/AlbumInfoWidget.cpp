@@ -155,13 +155,15 @@ AlbumInfoWidget::load( const album_ptr& album )
 void
 AlbumInfoWidget::loadAlbums( bool autoRefetch )
 {
+    Q_UNUSED( autoRefetch );
+
     m_albumsModel->clear();
 
     connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                                          SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     gotAlbums( m_album->artist()->albums( Mixed ) );
-    
+
 /*                tDebug() << "Auto refetching";
                 m_buttonAlbums->setChecked( false );
                 onAlbumsModeToggle();*/

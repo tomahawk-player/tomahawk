@@ -469,6 +469,9 @@ Playlist::setNewRevision( const QString& rev,
                           bool is_newest_rev,
                           const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
+    Q_UNUSED( oldorderedguids );
+    Q_UNUSED( is_newest_rev );
+
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
@@ -622,11 +625,7 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
 
-        if ( query->results().count() )
-            e->setDuration( query->results().at( 0 )->duration() );
-        else
-            e->setDuration( 0 );
-
+        e->setDuration( query->displayQuery()->duration() );
         e->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )

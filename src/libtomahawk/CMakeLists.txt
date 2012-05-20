@@ -123,6 +123,7 @@ set( libGuiSources
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
     utils/AnimatedSpinner.cpp
+    utils/BinaryInstallerHelper.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp

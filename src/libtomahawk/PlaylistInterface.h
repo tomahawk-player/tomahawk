@@ -88,7 +88,12 @@ signals:
     void nextTrackReady();
 
 protected:
+    virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
+
     PlaylistModes::LatchMode m_latchMode;
+    
+private:
+    Q_DISABLE_COPY( PlaylistInterface )
 
 private:
     QString m_id;

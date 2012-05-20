@@ -295,11 +295,10 @@ bool
 TrackView::tryToPlayItem( const QModelIndex& index )
 {
     TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
-    if ( item && !item->query().isNull() && item->query()->numResults() )
+    if ( item && !item->query().isNull() )
     {
-        tDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
-        AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query()->results().first() );
+        AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query() );
 
         return true;
     }
@@ -661,7 +660,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
         {
             case TrackModel::Artist:
             {
-                if ( item->query()->results().count() )
+                if ( item->query()->numResults() )
                 {
                     ViewManager::instance()->show( item->query()->results().first()->artist() );
                 }
@@ -674,7 +673,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
 
             case TrackModel::Album:
             {
-                if ( item->query()->results().count() )
+                if ( item->query()->numResults() )
                 {
                     ViewManager::instance()->show( item->query()->results().first()->album() );
                 }

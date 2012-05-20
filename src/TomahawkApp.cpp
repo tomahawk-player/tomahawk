@@ -680,28 +680,29 @@ TomahawkApp::loadUrl( const QString& url )
 void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
+    tDebug( LOGINFO ) << "Instance started!" << instance.pid() << instance.arguments();
+    const QStringList arguments = instance.arguments();
 
-    if ( instance.arguments.size() < 2 )
+    if ( arguments.size() < 2 )
         return;
 
-    QString arg1 = instance.arguments[ 1 ];
+    QString arg1 = arguments[ 1 ];
     if ( loadUrl( arg1 ) )
     {
         activate();
         return;
     }
 
-    if ( instance.arguments.contains( "--next" ) )
+    if ( arguments.contains( "--next" ) )
         AudioEngine::instance()->next();
-    else if ( instance.arguments.contains( "--prev" ) )
+    else if ( arguments.contains( "--prev" ) )
         AudioEngine::instance()->previous();
-    else if ( instance.arguments.contains( "--playpause" ) )
+    else if ( arguments.contains( "--playpause" ) )
         AudioEngine::instance()->playPause();
-    else if ( instance.arguments.contains( "--play" ) )
+    else if ( arguments.contains( "--play" ) )
         AudioEngine::instance()->play();
-    else if ( instance.arguments.contains( "--pause" ) )
+    else if ( arguments.contains( "--pause" ) )
         AudioEngine::instance()->pause();
-    else if ( instance.arguments.contains( "--stop" ) )
+    else if ( arguments.contains( "--stop" ) )
         AudioEngine::instance()->stop();
 }

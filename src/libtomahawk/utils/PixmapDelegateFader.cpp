@@ -1,7 +1,8 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2012, Jeff Mitchell <jeffe@tomahawk-player.org>
+ *   Copyright 2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -32,6 +33,7 @@ using namespace Tomahawk;
 
 QWeakPointer< TomahawkUtils::SharedTimeLine > PixmapDelegateFader::s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine >();
 
+
 QWeakPointer< TomahawkUtils::SharedTimeLine >
 PixmapDelegateFader::stlInstance()
 {
@@ -46,9 +48,6 @@ PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize&
     : m_artist( artist )
     , m_size( size )
     , m_mode( mode )
-    , m_startFrame( 0 )
-    , m_connectedToStl( false )
-    , m_fadePct( 100 )
 {
     if ( !m_artist.isNull() )
     {
@@ -65,9 +64,6 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
     : m_album( album )
     , m_size( size )
     , m_mode( mode )
-    , m_startFrame( 0 )
-    , m_connectedToStl( false )
-    , m_fadePct( 100 )
 {
     if ( !m_album.isNull() )
     {
@@ -84,9 +80,6 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
     : m_track( track )
     , m_size( size )
     , m_mode( mode )
-    , m_startFrame( 0 )
-    , m_connectedToStl( false )
-    , m_fadePct( 100 )
 {
     if ( !m_track.isNull() )
     {
@@ -107,27 +100,51 @@ PixmapDelegateFader::~PixmapDelegateFader()
 void
 PixmapDelegateFader::init()
 {
+    m_startFrame = 0;
+    m_fadePct = 100;
+    m_connectedToStl = false;
+
     m_current = QPixmap( m_size );
     m_current.fill( Qt::transparent );
 
+    setSize( m_size );
     if ( m_currentReference.isNull() )
-    {
-        // No cover loaded yet, use default and don't fade in
-        if ( !m_album.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
-        else if ( !m_artist.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
-        else if ( !m_track.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
-
         return;
-    }
 
     stlInstance().data()->setUpdateInterval( 20 );
     m_startFrame = stlInstance().data()->currentFrame();
     m_connectedToStl = true;
     m_fadePct = 0;
-    connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
+    connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
+}
+
+
+void
+PixmapDelegateFader::setSize( const QSize& size )
+{
+    m_size = size;
+    
+    if ( m_currentReference.isNull() )
+    {
+        // No cover loaded yet, use default and don't fade in
+        if ( !m_album.isNull() )
+            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
+        else if ( !m_artist.isNull() )
+            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+        else if ( !m_track.isNull() )
+            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+    }
+    else
+    {
+        if ( !m_album.isNull() )
+            m_currentReference = m_album->cover( m_size );
+        else if ( !m_artist.isNull() )
+            m_currentReference = m_artist->cover( m_size );
+        else if ( !m_track.isNull() )
+            m_currentReference = m_track->cover( m_size );
+    }
+
+    emit repaintRequest();
 }
 
 
@@ -281,7 +298,6 @@ PixmapDelegateFader::onAnimationFinished()
     if ( !m_pixmapQueue.isEmpty() )
         QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_pixmapQueue.dequeue() ) );
 }
-
 
 
 QPixmap

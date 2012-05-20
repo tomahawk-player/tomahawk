@@ -193,6 +193,9 @@ SocialWidget::paintEvent( QPaintEvent* event )
 void
 SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj )
 {
+    Q_UNUSED( longUrl );
+    Q_UNUSED( callbackObj );
+
     if ( m_query->album().isEmpty() )
         ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
     else

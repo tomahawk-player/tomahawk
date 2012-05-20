@@ -151,8 +151,8 @@ AlbumView::onItemActivated( const QModelIndex& index )
             ViewManager::instance()->show( item->album() );
         else if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
-        else if ( item->query()->numResults() )
-            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query()->results().first() );
+        else if ( !item->query().isNull() )
+            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query() );
     }
 }
 
@@ -206,6 +206,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
         int rectWidth = contentsRect().width() - scrollbar - 3;
         int itemWidth = 160;
         QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+        Q_UNUSED( itemSize ); // looks obsolete
 
         int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 //        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
