@@ -97,16 +97,24 @@ SpotifyAccount::init()
     setAccountFriendlyName( "Spotify" );
     setAccountServiceName( "spotify" );
 
+    AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
+    qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
+
     if ( !AtticaManager::instance()->resolversLoaded() )
     {
         // If we're still waiting to load, wait for the attica resolvers to come down the pipe
-        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( init() ), Qt::UniqueConnection );
-        return;
+        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( delayedInit() ), Qt::UniqueConnection );
     }
+    else
+    {
+        delayedInit();
+    }
+}
 
-    qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
 
-    AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
+void
+SpotifyAccount::delayedInit()
+{
 
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( resolverInstalled( QString ) ) );
 
