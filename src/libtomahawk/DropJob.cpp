@@ -840,17 +840,18 @@ QList< query_ptr >
 DropJob::getArtist( const QString &artist )
 {
     artist_ptr artistPtr = Artist::get( artist );
-    if ( artistPtr->playlistInterface()->tracks().isEmpty() )
+    if ( artistPtr->playlistInterface( Mixed )->tracks().isEmpty() )
     {
         m_artistsToKeep.insert( artistPtr );
 
-        connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+        connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                      SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
+
         m_queryCount++;
         return QList< query_ptr >();
     }
     else
-        return artistPtr->playlistInterface()->tracks();
+        return artistPtr->playlistInterface( Mixed )->tracks();
 }
 
 

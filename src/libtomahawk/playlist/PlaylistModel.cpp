@@ -158,7 +158,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
     if ( artist.isNull() )
         return;
 
-    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                               SLOT( append( QList<Tomahawk::query_ptr> ) ) );
 
     if ( rowCount( QModelIndex() ) == 0 )
@@ -168,7 +168,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
         m_isTemporary = true;
     }
 
-    append( artist->playlistInterface()->tracks() );
+    append( artist->playlistInterface( Mixed )->tracks() );
 }
 
 

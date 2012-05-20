@@ -469,7 +469,7 @@ AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
         }
         else if ( !item->artist().isNull() )
         {
-            if ( AudioEngine::instance()->currentTrackPlaylist() != item->artist()->playlistInterface() )
+            if ( AudioEngine::instance()->currentTrackPlaylist() != item->artist()->playlistInterface( Tomahawk::Mixed ) )
                 finished = true;
         }
         
