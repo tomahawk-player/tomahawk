@@ -200,6 +200,7 @@ SpotifyAccount::authenticate()
     if ( m_spotifyResolver.isNull() && state == AtticaManager::Installed )
     {
         // We don;t have the resolver but it has been installed via attica already, so lets just turn it on
+        qDebug() << "No valid spotify resolver running, but attica reports it is installed, so start it up";
         hookupResolver();
     }
     else if ( m_spotifyResolver.isNull() )
@@ -216,7 +217,12 @@ SpotifyAccount::authenticate()
     }
     else if ( !m_spotifyResolver.data()->running() )
     {
+        qDebug() << "Spotify resolver exists but stopped, starting";
         m_spotifyResolver.data()->start();
+    }
+    else
+    {
+        qDebug() << "Spotify resolver exists and is running, ignore authentication attempt";
     }
 
     emit connectionStateChanged( connectionState() );

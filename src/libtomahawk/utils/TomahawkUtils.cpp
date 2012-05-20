@@ -830,6 +830,7 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
         if ( !out.open( QIODevice::WriteOnly ) )
         {
             tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;
+            fileInZip.close();
             continue;
         }
 
