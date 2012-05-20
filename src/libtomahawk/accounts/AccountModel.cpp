@@ -127,7 +127,7 @@ AccountModel::loadData()
 #endif
    foreach ( Account* acct, allAccounts )
    {
-       qDebug() << "Resolver is left over:" << acct->accountFriendlyName();
+       qDebug() << "Resolver is left over:" << acct->accountFriendlyName() << acct->accountId();
 //        Q_ASSERT( !qobject_cast< AtticaResolverAccount* >( acct ) ); // This should be caught above in the attica list
 
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )

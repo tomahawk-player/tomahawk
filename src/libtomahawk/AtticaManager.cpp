@@ -233,6 +233,7 @@ AtticaManager::customAccountForAttica( const QString &id ) const
 void
 AtticaManager::registerCustomAccount( const QString &atticaId, Tomahawk::Accounts::Account *account )
 {
+    qDebug() << "Registering custom attica account for id:" << atticaId << account->accountId() << account->accountFriendlyName();
     m_customAccounts.insert( atticaId, account );
 }
 
