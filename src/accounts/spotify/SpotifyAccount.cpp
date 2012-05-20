@@ -117,10 +117,16 @@ SpotifyAccount::init()
     }
     else if ( state == AtticaManager::Installed || !path.isEmpty() )
     {
+        if ( !path.isEmpty() )
+        {
+            QFileInfo info( path );
+            // Resolver was deleted, so abort.
+            if ( !info.exists() )
+                return;
+        }
         hookupResolver();
     }
 }
-
 
 void
 SpotifyAccount::hookupResolver()
