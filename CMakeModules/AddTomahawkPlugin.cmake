@@ -63,7 +63,7 @@ macro(add_tomahawk_plugin)
         list(APPEND PLUGIN_SOURCES ${PLUGIN_UI_SOURCES})
     endif()
 
-    if(EXISTS "resources.qrc")
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/resources.qrc")
         qt4_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
         list(APPEND PLUGIN_SOURCES ${PLUGIN_RC_SOURCES})
         unset(PLUGIN_RC_SOURCES)

@@ -65,6 +65,7 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     const QString text = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     const int w = fm.width( text );
+    Q_UNUSED( w ); // looks obsolete
     const QRect rRect( opt.rect.left() + PADDING, ROW_HEIGHT + PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
     painter->drawText( rRect, Qt::AlignCenter, text );
 

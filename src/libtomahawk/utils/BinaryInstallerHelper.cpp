@@ -23,9 +23,9 @@
 
 BinaryInstallerHelper::BinaryInstallerHelper( const QString& resolverId, bool createAccount, AtticaManager* manager )
     : QObject( manager )
-    , m_manager( QWeakPointer< AtticaManager >( manager ) )
     , m_resolverId( resolverId )
     , m_createAccount( createAccount )
+    , m_manager( QWeakPointer< AtticaManager >( manager ) )
 {
     Q_ASSERT( !m_resolverId.isEmpty() );
     Q_ASSERT( !m_manager.isNull() );

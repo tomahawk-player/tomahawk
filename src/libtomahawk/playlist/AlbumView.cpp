@@ -206,6 +206,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
         int rectWidth = contentsRect().width() - scrollbar - 3;
         int itemWidth = 160;
         QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
+        Q_UNUSED( itemSize ); // looks obsolete
 
         int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 //        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );

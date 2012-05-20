@@ -874,7 +874,7 @@ SpotifyAccount::unregisterUpdater( const QString& plid )
 void
 SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 {
-
+    Q_UNUSED( playlist );
 }
 
 

@@ -51,6 +51,8 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
 void
 SpotifyAccountConfig::showEvent( QShowEvent *event )
 {
+    Q_UNUSED( event );
+
     loadFromConfig();
     m_loggedInManually = false;
 }

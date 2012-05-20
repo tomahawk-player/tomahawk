@@ -669,6 +669,8 @@ TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr
 void
 TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool autoRefetch )
 {
+    Q_UNUSED( autoRefetch );
+
     emit loadingStarted();
 
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),

@@ -405,6 +405,8 @@ AccountManager::hookupAccount( Account* account ) const
 void
 AccountManager::hookupAndEnable( Account* account, bool startup )
 {
+    Q_UNUSED( startup );
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     SipPlugin* p = account->sipPlugin();
     if ( p )

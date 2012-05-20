@@ -93,8 +93,8 @@ AccountModel::loadData()
             if ( acct )
             {
                 m_accounts << new AccountModelNode( acct );
-                const int removed = allAccounts.removeAll( acct );
 #if ACCOUNTMODEL_DEBUG
+                const int removed = allAccounts.removeAll( acct );
                 qDebug() << "Removed custom account from misc accounts list, found:" << removed;
                 qDebug() << "All accounts after remove:";
                 foreach ( Account* acct, allAccounts )

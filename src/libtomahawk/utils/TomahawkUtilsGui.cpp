@@ -394,6 +394,8 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 void
 prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item )
 {
+    Q_UNUSED( index );
+
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );

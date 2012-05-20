@@ -201,7 +201,7 @@ TrackInfoWidget::onStatsLoaded()
 void
 TrackInfoWidget::onSimilarArtistsLoaded()
 {
-    Artist* artist = qobject_cast<Artist*>( sender() );
+//    Artist* artist = qobject_cast<Artist*>( sender() );
 
 //    m_albumsModel->addArtists( artist->similarArtists() );
 }
