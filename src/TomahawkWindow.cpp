@@ -245,7 +245,7 @@ TomahawkWindow::setupSideBar()
     m_sidebar->setOrientation( Qt::Vertical );
     m_sidebar->setChildrenCollapsible( false );
 
-    m_sourcetree = new SourceTreeView();
+    m_sourcetree = new SourceTreeView( this );
     JobStatusView* jobsView = new JobStatusView( m_sidebar );
     m_jobsModel = new JobStatusModel( jobsView );
     jobsView->setModel( m_jobsModel );

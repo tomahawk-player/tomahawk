@@ -688,7 +688,13 @@ SourceTreeView::keyPressEvent( QKeyEvent *event )
                 deletePlaylist( idx );
             }
         }
+        event->accept();
     }
+    else
+    {
+        event->ignore();
+    }
+    QTreeView::keyPressEvent( event );
 }
 
 
