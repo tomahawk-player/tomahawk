@@ -140,7 +140,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         closure->setAutoDelete( false );
     }
 
-    const QPixmap cover = m_covers[ index ]->currentPixmap();
+    QSharedPointer< Tomahawk::PixmapDelegateFader > fader = m_covers[ index ];
+    if ( fader->size() != r.size() )
+        fader->setSize( r.size() );
+
+    const QPixmap cover = fader->currentPixmap();
 
     if ( false && option.state & QStyle::State_Selected )
     {
@@ -160,7 +164,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 #endif
     }
 
-    painter->drawPixmap( r, cover.scaled( r.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    painter->drawPixmap( r, cover );
 
     if ( m_hoverIndex == index )
     {
@@ -263,7 +267,7 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     spinner->fadeIn();
     spinner->move( pos );
 
-    m_subWidgets[ index ] = spinner;
+    m_spinner[ index ] = spinner;
     
     AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( item )
@@ -301,9 +305,23 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
          event->type() != QEvent::Leave )
         return false;
 
+    bool hoveringArtist = false;
+    if ( m_artistNameRects.contains( index ) )
+    {
+        QRect artistNameRect = m_artistNameRects[ index ];
+        QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringArtist = artistNameRect.contains( ev->pos() );
+    }
+
     if ( event->type() == QEvent::MouseMove )
     {
-        if ( !m_playButton.contains( index ) && !m_subWidgets.contains( index ) && !m_pauseButton.contains( index ) )
+        foreach ( const QModelIndex& idx, m_playButton.keys() )
+        {
+            if ( index != idx )
+                m_playButton.take( idx )->deleteLater();
+        }
+        
+        if ( !m_playButton.contains( index ) && !m_spinner.contains( index ) && !m_pauseButton.contains( index ) )
         {
             foreach ( ImageButton* button, m_playButton )
                 button->deleteLater();
@@ -317,10 +335,22 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             button->setContentsMargins( 0, 0, 0, 0 );
             button->show();
             
-            _detail::Closure* closure = NewClosure( button, SIGNAL( clicked( bool ) ),
-                                                    const_cast<AlbumItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+            NewClosure( button, SIGNAL( clicked( bool ) ),
+                        const_cast<AlbumItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
             m_playButton[ index ] = button;
+        }
+
+        if ( m_hoveringOver != index || ( !hoveringArtist && m_hoveringOver.isValid() ) )
+        {
+            emit updateIndex( m_hoveringOver );
+
+            if ( hoveringArtist )
+                m_hoveringOver = index;
+            else
+                m_hoveringOver = QPersistentModelIndex();
+
+            emit updateIndex( index );
         }
 
         if ( m_hoverIndex != index )
@@ -329,65 +359,36 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             m_hoverIndex = index;
             emit updateIndex( index );
         }
+        
+        event->accept();
+        return true;
     }
 
-    QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-    if ( m_artistNameRects.contains( index ) )
+    if ( hoveringArtist )
     {
-        QRect artistNameRect = m_artistNameRects[ index ];
-        if ( artistNameRect.contains( ev->pos() ) )
+        if ( event->type() == QEvent::MouseButtonRelease )
         {
-            if ( event->type() == QEvent::MouseMove )
-            {
-                if ( m_hoveringOver != index )
-                {
-                    QModelIndex old = m_hoveringOver;
-                    m_hoveringOver = index;
-                    emit updateIndex( old );
-                    emit updateIndex( index );
-                }
+            AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            if ( !item )
+                return false;
 
-                event->accept();
-                return true;
-            }
-            else if ( event->type() == QEvent::MouseButtonRelease )
-            {
-                AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-                if ( !item )
-                    return false;
+            if ( !item->query().isNull() )
+                ViewManager::instance()->show( Tomahawk::Artist::get( item->query()->artist() ) );
+            else if ( !item->album().isNull() && !item->album()->artist().isNull() )
+                ViewManager::instance()->show( item->album()->artist() );
 
-                if ( !item->query().isNull() )
-                    ViewManager::instance()->show( Tomahawk::Artist::get( item->query()->artist() ) );
-                else if ( !item->album().isNull() && !item->album()->artist().isNull() )
-                    ViewManager::instance()->show( item->album()->artist() );
-
-                event->accept();
-                return true;
-            }
-            else if ( event->type() == QEvent::MouseButtonPress )
-            {
-                // Stop the whole album from having a down click action as we just want the artist name to be clicked
-                event->accept();
-                return true;
-            }
+            event->accept();
+            return true;
+        }
+        else if ( event->type() == QEvent::MouseButtonPress )
+        {
+            // Stop the whole album from having a down click action as we just want the artist name to be clicked
+            event->accept();
+            return true;
         }
     }
 
-    whitespaceMouseEvent();
-
     return false;
-}
-
-
-void
-AlbumItemDelegate::whitespaceMouseEvent()
-{
-    if ( m_hoveringOver.isValid() )
-    {
-        QModelIndex old = m_hoveringOver;
-        m_hoveringOver = QPersistentModelIndex();
-        emit updateIndex( old );
-    }
 }
 
 
@@ -404,9 +405,9 @@ AlbumItemDelegate::modelChanged()
     foreach ( ImageButton* button, m_pauseButton )
         button->deleteLater();
     m_pauseButton.clear();
-    foreach ( QWidget* widget, m_subWidgets )
+    foreach ( QWidget* widget, m_spinner )
         widget->deleteLater();
-    m_subWidgets.clear();
+    m_spinner.clear();
 
     if ( AlbumView* view = qobject_cast< AlbumView* >( m_view ) )
         m_model = view->proxyModel();
@@ -425,7 +426,7 @@ AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 void
 AlbumItemDelegate::onScrolled( int dx, int dy )
 {
-    foreach ( QWidget* widget, m_subWidgets.values() )
+    foreach ( QWidget* widget, m_spinner.values() )
     {
         widget->move( widget->pos() + QPoint( dx, dy ) );
     }
@@ -488,15 +489,15 @@ AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
 void
 AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
 {
-    if ( !m_subWidgets.contains( index ) )
+    if ( !m_spinner.contains( index ) )
         return;
 
-    QPoint pos = m_subWidgets[ index ]->pos();
-    foreach ( QWidget* widget, m_subWidgets.values() )
+    QPoint pos = m_spinner[ index ]->pos();
+    foreach ( QWidget* widget, m_spinner.values() )
     {
         delete widget;
     }
-    m_subWidgets.clear();
+    m_spinner.clear();
     
     ImageButton* button = new ImageButton( m_view );
     button->setPixmap( RESPATH "images/pause-rest.png" );
