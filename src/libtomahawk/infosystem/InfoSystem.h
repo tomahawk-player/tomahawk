@@ -51,7 +51,7 @@ enum PushInfoFlags { // must be powers of 2
 };
 
 
-struct InfoRequestData {
+struct DLLEXPORT InfoRequestData {
     quint64 requestId;
     quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
     QString caller;
