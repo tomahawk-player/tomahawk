@@ -218,7 +218,6 @@ AtticaManager::userHasRated( const Content& c ) const
 bool
 AtticaManager::hasCustomAccountForAttica( const QString &id ) const
 {
-    qDebug() << "Got custom account for?" << id << m_customAccounts.keys();
     return m_customAccounts.keys().contains( id );
 }
 
@@ -233,7 +232,6 @@ AtticaManager::customAccountForAttica( const QString &id ) const
 void
 AtticaManager::registerCustomAccount( const QString &atticaId, Tomahawk::Accounts::Account *account )
 {
-    qDebug() << "Registering custom attica account for id:" << atticaId << account->accountId() << account->accountFriendlyName();
     m_customAccounts.insert( atticaId, account );
 }
 
