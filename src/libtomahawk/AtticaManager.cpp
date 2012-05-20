@@ -438,6 +438,8 @@ AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount 
 {
     Q_ASSERT( !resolver.id().isNull() );
 
+    emit startedInstalling( resolver.id() );
+
     if ( m_resolverStates[ resolver.id() ].state != Upgrading )
         m_resolverStates[ resolver.id() ].state = Installing;
 
