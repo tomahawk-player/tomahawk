@@ -61,27 +61,12 @@ struct InfoRequestData {
     uint timeoutMillis;
     bool allSources;
 
-    InfoRequestData()
-        : requestId( TomahawkUtils::infosystemRequestId() )
-        , internalId( TomahawkUtils::infosystemRequestId() )
-        , caller( QString() )
-        , type( Tomahawk::InfoSystem::InfoNoInfo )
-        , input( QVariant() )
-        , customData( QVariantMap() )
-        , timeoutMillis( 10000 )
-        , allSources( false )
-        {}
+    InfoRequestData();
 
-    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
-        : requestId( rId )
-        , internalId( TomahawkUtils::infosystemRequestId() )
-        , caller( callr )
-        , type( typ )
-        , input( inputvar )
-        , customData( custom )
-        , timeoutMillis( 10000 )
-        , allSources( false )
-        {}
+    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom );
+
+private:
+    init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
 };
 
 

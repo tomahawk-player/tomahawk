@@ -34,6 +34,34 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
+static const int DEFAULT_TIMEOUT_MILLIS = 10000;
+
+InfoRequestData::InfoRequestData()
+    : requestId( TomahawkUtils::infosystemRequestId() )
+{
+    init( QString() , Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariantMap() );
+}
+
+
+InfoRequestData::InfoRequestData( const quint64 rId, const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom )
+    : requestId( rId )
+{
+    init( callr, typ, inputvar, custom );
+}
+
+
+InfoRequestData::init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom )
+{
+    internalId = TomahawkUtils::infosystemRequestId();
+    caller = callr;
+    type = typ;
+    input = inputvar;
+    customData = custom;
+    timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
+    allSources = false;
+}
+
+
 InfoPlugin::InfoPlugin()
     : QObject()
 {
@@ -165,7 +193,7 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
     {
         requestData.type = type;
         requestData.input = inputMap[ type ];
-        requestData.timeoutMillis = timeoutMap.contains( type ) ? timeoutMap[ type ] : 10000;
+        requestData.timeoutMillis = timeoutMap.contains( type ) ? timeoutMap[ type ] : DEFAULT_TIMEOUT_MILLIS;
         QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
     }
     return false;
