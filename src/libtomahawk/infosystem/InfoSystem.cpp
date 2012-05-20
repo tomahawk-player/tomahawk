@@ -50,6 +50,7 @@ InfoRequestData::InfoRequestData( const quint64 rId, const QString& callr, const
 }
 
 
+void
 InfoRequestData::init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom )
 {
     internalId = TomahawkUtils::infosystemRequestId();

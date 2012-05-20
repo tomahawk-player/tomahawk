@@ -66,7 +66,7 @@ struct InfoRequestData {
     InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom );
 
 private:
-    init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
+    void init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
 };
 
 
