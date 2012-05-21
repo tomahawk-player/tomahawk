@@ -239,6 +239,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         if ( duration > 0 )
         {
+            painter->setPen( opt.palette.text().color() );
             painter->setFont( smallBoldFont );
             text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
             painter->drawText( rightRect, text, m_centerRightOption );
