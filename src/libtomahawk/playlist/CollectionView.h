@@ -20,13 +20,12 @@
 #ifndef COLLECTIONVIEW_H
 #define COLLECTIONVIEW_H
 
-#include "TrackProxyModel.h"
+#include "PlayableModel.h"
+#include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "ViewPage.h"
 
 #include "DllMacro.h"
-
-class TrackModel;
 
 class DLLEXPORT CollectionView : public TrackView, public Tomahawk::ViewPage
 {
@@ -36,7 +35,7 @@ public:
     explicit CollectionView( QWidget* parent = 0 );
     ~CollectionView();
 
-    virtual void setTrackModel( TrackModel* model );
+    virtual void setPlayableModel( PlayableModel* model );
     virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }

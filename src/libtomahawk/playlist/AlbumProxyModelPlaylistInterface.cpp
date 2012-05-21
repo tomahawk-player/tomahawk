@@ -21,7 +21,6 @@
 
 #include "AlbumProxyModel.h"
 #include "Artist.h"
-#include "AlbumItem.h"
 #include "Query.h"
 #include "Source.h"
 #include "utils/Logger.h"

@@ -30,13 +30,14 @@
 #include "PlaylistInterface.h"
 #include "database/DatabaseCommand_AllArtists.h"
 
-#include "TreeModelItem.h"
 #include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 #include "Typedefs.h"
 
 class QMetaData;
+
+class PlayableItem;
 
 class DLLEXPORT TreeModel : public QAbstractItemModel
 {
@@ -113,11 +114,11 @@ public:
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
     QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
-    TreeModelItem* itemFromIndex( const QModelIndex& index ) const
+    PlayableItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
         {
-            return static_cast<TreeModelItem*>( index.internalPointer() );
+            return static_cast<PlayableItem*>( index.internalPointer() );
         }
         else
         {
@@ -165,7 +166,7 @@ private slots:
 
 private:
     QPersistentModelIndex m_currentIndex;
-    TreeModelItem* m_rootItem;
+    PlayableItem* m_rootItem;
     QString m_infoId;
 
     QString m_title;

@@ -295,7 +295,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
-                trackModel->setStyle( TrackModel::Large );
+                trackModel->setStyle( PlayableModel::Large );
 
                 m_trackModels[ chartId ] = trackModel;
 

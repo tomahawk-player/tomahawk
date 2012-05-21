@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "TrackModel.h"
+#include "PlayableModel.h"
 
 #include <QDateTime>
 #include <QMimeData>
@@ -31,14 +31,15 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-TrackModel::TrackModel( QObject* parent )
+PlayableModel::PlayableModel( QObject* parent )
     : QAbstractItemModel( parent )
-    , m_rootItem( new TrackModelItem( 0, this ) )
+    , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
     , m_style( Detailed )
 {
@@ -47,19 +48,19 @@ TrackModel::TrackModel( QObject* parent )
 }
 
 
-TrackModel::~TrackModel()
+PlayableModel::~PlayableModel()
 {
 }
 
 
 QModelIndex
-TrackModel::index( int row, int column, const QModelIndex& parent ) const
+PlayableModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
-    TrackModelItem* childItem = parentItem->children.value( row );
+    PlayableItem* parentItem = itemFromIndex( parent );
+    PlayableItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -68,12 +69,12 @@ TrackModel::index( int row, int column, const QModelIndex& parent ) const
 
 
 int
-TrackModel::rowCount( const QModelIndex& parent ) const
+PlayableModel::rowCount( const QModelIndex& parent ) const
 {
     if ( parent.column() > 0 )
         return 0;
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -82,7 +83,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
 
 
 int
-TrackModel::columnCount( const QModelIndex& parent ) const
+PlayableModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
 
@@ -103,17 +104,17 @@ TrackModel::columnCount( const QModelIndex& parent ) const
 
 
 QModelIndex
-TrackModel::parent( const QModelIndex& child ) const
+PlayableModel::parent( const QModelIndex& child ) const
 {
-    TrackModelItem* entry = itemFromIndex( child );
+    PlayableItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    TrackModelItem* parentEntry = entry->parent;
+    PlayableItem* parentEntry = entry->parent();
     if ( !parentEntry )
         return QModelIndex();
 
-    TrackModelItem* grandparentEntry = parentEntry->parent;
+    PlayableItem* grandparentEntry = parentEntry->parent();
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -123,9 +124,9 @@ TrackModel::parent( const QModelIndex& child ) const
 
 
 QVariant
-TrackModel::data( const QModelIndex& index, int role ) const
+PlayableModel::data( const QModelIndex& index, int role ) const
 {
-    TrackModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -225,7 +226,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
 
 QVariant
-TrackModel::headerData( int section, Qt::Orientation orientation, int role ) const
+PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     Q_UNUSED( orientation );
 
@@ -246,21 +247,21 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 
 
 void
-TrackModel::updateDetailedInfo( const QModelIndex& index )
+PlayableModel::updateDetailedInfo( const QModelIndex& index )
 {
-    if ( style() != TrackModel::Short && style() != TrackModel::Large )
+    if ( style() != PlayableModel::Short && style() != PlayableModel::Large )
         return;
 
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
     if ( item->query().isNull() )
         return;
 
-    if ( style() == TrackModel::Short || style() == TrackModel::Large )
+    if ( style() == PlayableModel::Short || style() == PlayableModel::Large )
     {
         item->query()->cover( QSize( 0, 0 ) );
     }
 
-    if ( style() == TrackModel::Large )
+    if ( style() == PlayableModel::Large )
     {
         item->query()->loadSocialActions();
     }
@@ -268,15 +269,15 @@ TrackModel::updateDetailedInfo( const QModelIndex& index )
 
 
 void
-TrackModel::setCurrentItem( const QModelIndex& index )
+PlayableModel::setCurrentItem( const QModelIndex& index )
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
     }
 
-    TrackModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( index.isValid() && entry && !entry->query().isNull() )
     {
         m_currentIndex = index;
@@ -292,14 +293,14 @@ TrackModel::setCurrentItem( const QModelIndex& index )
 
 
 Qt::DropActions
-TrackModel::supportedDropActions() const
+PlayableModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
 
 
 Qt::ItemFlags
-TrackModel::flags( const QModelIndex& index ) const
+PlayableModel::flags( const QModelIndex& index ) const
 {
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
@@ -311,7 +312,7 @@ TrackModel::flags( const QModelIndex& index ) const
 
 
 QStringList
-TrackModel::mimeTypes() const
+PlayableModel::mimeTypes() const
 {
     QStringList types;
     types << "application/tomahawk.query.list";
@@ -320,7 +321,7 @@ TrackModel::mimeTypes() const
 
 
 QMimeData*
-TrackModel::mimeData( const QModelIndexList &indexes ) const
+PlayableModel::mimeData( const QModelIndexList &indexes ) const
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -333,7 +334,7 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
             continue;
 
         QModelIndex idx = index( i.row(), 0, i.parent() );
-        TrackModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item )
         {
             const query_ptr& query = item->query();
@@ -349,7 +350,7 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
 
 
 void
-TrackModel::clear()
+PlayableModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
@@ -358,19 +359,19 @@ TrackModel::clear()
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
-        m_rootItem = new TrackModelItem( 0, this );
+        m_rootItem = new PlayableItem( 0, this );
         emit endResetModel();
     }
 }
 
 
 QList< query_ptr >
-TrackModel::queries() const
+PlayableModel::queries() const
 {
     Q_ASSERT( m_rootItem );
 
     QList< query_ptr > tracks;
-    foreach ( TrackModelItem* item, m_rootItem->children )
+    foreach ( PlayableItem* item, m_rootItem->children )
     {
         tracks << item->query();
     }
@@ -380,21 +381,21 @@ TrackModel::queries() const
 
 
 void
-TrackModel::append( const Tomahawk::query_ptr& query )
+PlayableModel::append( const Tomahawk::query_ptr& query )
 {
     insert( query, rowCount( QModelIndex() ) );
 }
 
 
 void
-TrackModel::append( const QList< Tomahawk::query_ptr >& queries )
+PlayableModel::append( const QList< Tomahawk::query_ptr >& queries )
 {
     insert( queries, rowCount( QModelIndex() ) );
 }
 
 
 void
-TrackModel::insert( const Tomahawk::query_ptr& query, int row )
+PlayableModel::insert( const Tomahawk::query_ptr& query, int row )
 {
     if ( query.isNull() )
         return;
@@ -407,7 +408,7 @@ TrackModel::insert( const Tomahawk::query_ptr& query, int row )
 
 
 void
-TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
+PlayableModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
 {
     if ( !queries.count() )
     {
@@ -423,10 +424,10 @@ TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     int i = 0;
-    TrackModelItem* plitem;
+    PlayableItem* plitem;
     foreach( const query_ptr& query, queries )
     {
-        plitem = new TrackModelItem( query, m_rootItem, row + i );
+        plitem = new PlayableItem( query, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         i++;
 
@@ -442,14 +443,14 @@ TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
 
 
 void
-TrackModel::remove( int row, bool moreToCome )
+PlayableModel::remove( int row, bool moreToCome )
 {
     remove( index( row, 0, QModelIndex() ), moreToCome );
 }
 
 
 void
-TrackModel::remove( const QModelIndex& index, bool moreToCome )
+PlayableModel::remove( const QModelIndex& index, bool moreToCome )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -463,7 +464,7 @@ TrackModel::remove( const QModelIndex& index, bool moreToCome )
     if ( index.column() > 0 )
         return;
 
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
@@ -477,7 +478,7 @@ TrackModel::remove( const QModelIndex& index, bool moreToCome )
 
 
 void
-TrackModel::remove( const QList<QModelIndex>& indexes )
+PlayableModel::remove( const QList<QModelIndex>& indexes )
 {
     QList<QPersistentModelIndex> pil;
     foreach ( const QModelIndex& idx, indexes )
@@ -490,7 +491,7 @@ TrackModel::remove( const QList<QModelIndex>& indexes )
 
 
 void
-TrackModel::remove( const QList<QPersistentModelIndex>& indexes )
+PlayableModel::remove( const QList<QPersistentModelIndex>& indexes )
 {
     QList<QPersistentModelIndex> finalIndexes;
     foreach ( const QPersistentModelIndex index, indexes )
@@ -507,12 +508,12 @@ TrackModel::remove( const QList<QPersistentModelIndex>& indexes )
 }
 
 
-TrackModelItem*
-TrackModel::itemFromIndex( const QModelIndex& index ) const
+PlayableItem*
+PlayableModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
     {
-        return static_cast<TrackModelItem*>( index.internalPointer() );
+        return static_cast<PlayableItem*>( index.internalPointer() );
     }
     else
     {
@@ -522,9 +523,9 @@ TrackModel::itemFromIndex( const QModelIndex& index ) const
 
 
 void
-TrackModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
+PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry && ( oldEntry->query().isNull() || !oldEntry->query()->numResults() || oldEntry->query()->results().first().data() != result.data() ) )
     {
         oldEntry->setIsPlaying( false );
@@ -533,9 +534,9 @@ TrackModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
 
 void
-TrackModel::onPlaybackStopped()
+PlayableModel::onPlaybackStopped()
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
@@ -544,7 +545,7 @@ TrackModel::onPlaybackStopped()
 
 
 void
-TrackModel::ensureResolved()
+PlayableModel::ensureResolved()
 {
     for( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
@@ -557,14 +558,14 @@ TrackModel::ensureResolved()
 
 
 void
-TrackModel::setStyle( TrackModel::TrackItemStyle style )
+PlayableModel::setStyle( PlayableModel::PlayableItemStyle style )
 {
     m_style = style;
 }
 
 
 Qt::Alignment
-TrackModel::columnAlignment( int column ) const
+PlayableModel::columnAlignment( int column ) const
 {
     switch( column )
     {
@@ -584,9 +585,9 @@ TrackModel::columnAlignment( int column ) const
 
 
 void
-TrackModel::onDataChanged()
+PlayableModel::onDataChanged()
 {
-    TrackModelItem* p = (TrackModelItem*)sender();
+    PlayableItem* p = (PlayableItem*)sender();
     if ( p && p->index.isValid() )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
 }

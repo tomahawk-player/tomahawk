@@ -34,6 +34,7 @@
 #include "TreeHeader.h"
 #include "TreeItemDelegate.h"
 #include "TreeModel.h"
+#include "PlayableItem.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
 
@@ -200,7 +201,7 @@ ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previ
     if ( !m_updateContextView )
         return;
 
-    TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         if ( !item->result().isNull() )
@@ -218,7 +219,7 @@ ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previ
 void
 ArtistView::onItemActivated( const QModelIndex& index )
 {
-    TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
         if ( !item->artist().isNull() )
@@ -368,7 +369,7 @@ ArtistView::onCustomContextMenu( const QPoint& pos )
         if ( index.column() || selectedIndexes().contains( index.parent() ) )
             continue;
 
-        TreeModelItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
+        PlayableItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
 
         if ( item && !item->result().isNull() )
             queries << item->result()->toQuery();

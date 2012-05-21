@@ -23,7 +23,7 @@
 #include <QPainter>
 
 #include "CollectionProxyModel.h"
-#include "TrackModel.h"
+#include "PlayableModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"
 #include "Source.h"
@@ -50,22 +50,22 @@ void
 CollectionView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    qDebug() << "Explicitly use setTrackModel instead";
+    qDebug() << "Explicitly use setPlayableModel instead";
     Q_ASSERT( false );
 }
 
 
 void
-CollectionView::setTrackModel( TrackModel* model )
+CollectionView::setPlayableModel( PlayableModel* model )
 {
-    TrackView::setTrackModel( model );
+    TrackView::setPlayableModel( model );
 
-    setColumnHidden( TrackModel::Score, true ); // Hide score column per default
-    setColumnHidden( TrackModel::Origin, true ); // Hide origin column per default
-    setColumnHidden( TrackModel::Composer, true ); //Hide composer column per default
+    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
+    setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
+    setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
 
     setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
-    sortByColumn( TrackModel::Artist, Qt::AscendingOrder );
+    sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }

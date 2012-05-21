@@ -34,7 +34,7 @@ using namespace Tomahawk;
 
 
 RecentlyAddedModel::RecentlyAddedModel( const source_ptr& source, QObject* parent )
-    : TrackModel( parent )
+    : PlayableModel( parent )
     , m_source( source )
     , m_limit( LATEST_TRACK_ITEMS )
 {

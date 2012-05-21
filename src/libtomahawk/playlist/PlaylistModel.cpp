@@ -31,6 +31,7 @@
 #include "database/DatabaseCommand_PlaybackHistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "DropJob.h"
+#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -38,7 +39,7 @@ using namespace Tomahawk;
 
 
 PlaylistModel::PlaylistModel( QObject* parent )
-    : TrackModel( parent )
+    : PlayableModel( parent )
     , m_isTemporary( false )
     , m_changesOngoing( false )
     , m_isLoading( false )
@@ -105,7 +106,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 void
 PlaylistModel::clear()
 {
-    TrackModel::clear();
+    PlayableModel::clear();
 
     m_waitingForResolved.clear();
 }
@@ -175,7 +176,7 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
 void
 PlaylistModel::insert( const Tomahawk::query_ptr& query, int row )
 {
-    TrackModel::insert( query, row );
+    PlayableModel::insert( query, row );
 }
 
 
@@ -228,10 +229,10 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 
     QList< Tomahawk::query_ptr > queries;
     int i = 0;
-    TrackModelItem* plitem;
+    PlayableItem* plitem;
     foreach( const plentry_ptr& entry, entries )
     {
-        plitem = new TrackModelItem( entry, rootItem(), row + i );
+        plitem = new PlayableItem( entry, rootItem(), row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         i++;
 
@@ -296,7 +297,7 @@ QMimeData*
 PlaylistModel::mimeData( const QModelIndexList& indexes ) const
 {
     // Add the playlist id to the mime data so that we can detect dropping on ourselves
-    QMimeData* d = TrackModel::mimeData( indexes );
+    QMimeData* d = PlayableModel::mimeData( indexes );
     if ( !m_playlist.isNull() )
         d->setData( "application/tomahawk.playlist.id", m_playlist->guid().toLatin1() );
 
@@ -436,7 +437,7 @@ PlaylistModel::endPlaylistChanges()
             const QModelIndex idx = index( i, 0, QModelIndex() );
             if ( !idx.isValid() )
                 continue;
-            const TrackModelItem* item = itemFromIndex( idx );
+            const PlayableItem* item = itemFromIndex( idx );
             if ( !item || item->entry().isNull() )
                 continue;
 
@@ -476,7 +477,7 @@ PlaylistModel::playlistEntries() const
         if ( !idx.isValid() )
             continue;
 
-        TrackModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item )
             l << item->entry();
     }
@@ -488,14 +489,14 @@ PlaylistModel::playlistEntries() const
 void
 PlaylistModel::remove( int row, bool moreToCome )
 {
-    TrackModel::remove( row, moreToCome );
+    PlayableModel::remove( row, moreToCome );
 }
 
 
 void
 PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 {
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
 
     if ( item && m_waitingForResolved.contains( item->query().data() ) )
     {
@@ -511,7 +512,7 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
     if ( item && !m_isLoading )
         m_savedRemoveTracks << item->query();
 
-    TrackModel::remove( index, moreToCome );
+    PlayableModel::remove( index, moreToCome );
 
     if ( !moreToCome )
         endPlaylistChanges();
@@ -521,14 +522,14 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 void
 PlaylistModel::remove( const QList<QModelIndex>& indexes )
 {
-    TrackModel::remove( indexes );
+    PlayableModel::remove( indexes );
 }
 
 
 void
 PlaylistModel::remove( const QList<QPersistentModelIndex>& indexes )
 {
-    TrackModel::remove( indexes );
+    PlayableModel::remove( indexes );
 }
 
 

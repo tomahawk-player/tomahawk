@@ -20,13 +20,14 @@
 
 #include "database/Database.h"
 #include "SourceList.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
 CollectionFlatModel::CollectionFlatModel( QObject* parent )
-    : TrackModel( parent )
+    : PlayableModel( parent )
 {
 }
 
@@ -120,7 +121,7 @@ CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks )
     for ( int i = rowCount( QModelIndex() ); i >= 0 && t.count(); i-- )
     {
         QModelIndex idx = index( i, 0, QModelIndex() );
-        TrackModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( !item )
             continue;
 

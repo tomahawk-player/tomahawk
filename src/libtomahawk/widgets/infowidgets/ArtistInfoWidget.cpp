@@ -76,8 +76,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->relatedArtists->proxyModel()->sort( -1 );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
-    m_topHitsModel->setStyle( TrackModel::Short );
-    ui->topHits->setTrackModel( m_topHitsModel );
+    m_topHitsModel->setStyle( PlayableModel::Short );
+    ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );

@@ -25,8 +25,8 @@
 #include "DllMacro.h"
 
 class TrackModel;
-class TrackModelItem;
-class TrackProxyModel;
+class PlayableItem;
+class PlayableProxyModel;
 class TrackView;
 
 class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
@@ -34,7 +34,7 @@ class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
+    PlaylistItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
     void updateRowSize( const QModelIndex& index );
 
@@ -44,7 +44,7 @@ protected:
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
@@ -53,7 +53,7 @@ private:
     QTextOption m_bottomOption;
 
     TrackView* m_view;
-    TrackProxyModel* m_model;
+    PlayableProxyModel* m_model;
 };
 
 #endif // PLAYLISTITEMDELEGATE_H

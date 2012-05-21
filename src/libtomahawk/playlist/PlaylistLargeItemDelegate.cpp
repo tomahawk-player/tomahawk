@@ -29,9 +29,9 @@
 #include "SourceList.h"
 
 #include "PlaylistView.h"
-#include "TrackModel.h"
-#include "TrackModelItem.h"
-#include "TrackProxyModel.h"
+#include "PlayableModel.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
 
@@ -43,7 +43,7 @@
 using namespace Tomahawk;
 
 
-PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, TrackProxyModel* proxy )
+PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
@@ -58,7 +58,7 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( proxy->sourceModel(), SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
     if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
         connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 }
@@ -90,7 +90,7 @@ PlaylistLargeItemDelegate::createEditor( QWidget* parent, const QStyleOptionView
 
 
 void
-PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -124,7 +124,7 @@ PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QRect& rect, i
 void
 PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
@@ -239,6 +239,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         if ( duration > 0 )
         {
+            painter->setPen( opt.palette.text().color() );
             painter->setFont( smallBoldFont );
             text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
             painter->drawText( rightRect, text, m_centerRightOption );

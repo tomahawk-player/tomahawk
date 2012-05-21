@@ -28,9 +28,9 @@
 #include "Source.h"
 #include "SourceList.h"
 
-#include "TrackModel.h"
-#include "TrackModelItem.h"
-#include "TrackProxyModel.h"
+#include "PlayableModel.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
 
@@ -40,7 +40,7 @@
 using namespace Tomahawk;
 
 
-PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* proxy )
+PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
@@ -67,8 +67,8 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 
     if ( index.isValid() )
     {
-        int style = index.data( TrackModel::StyleRole ).toInt();
-        if ( style == TrackModel::Short || style == TrackModel::ShortWithAvatars )
+        int style = index.data( PlayableModel::StyleRole ).toInt();
+        if ( style == PlayableModel::Short || style == PlayableModel::ShortWithAvatars )
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
@@ -90,7 +90,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
-PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -101,17 +101,17 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    int style = index.data( TrackModel::StyleRole ).toInt();
+    int style = index.data( PlayableModel::StyleRole ).toInt();
     switch ( style )
     {
-        case TrackModel::Detailed:
+        case PlayableModel::Detailed:
             paintDetailed( painter, option, index );
             break;
 
-        case TrackModel::Short:
+        case PlayableModel::Short:
             paintShort( painter, option, index );
             break;
-        case TrackModel::ShortWithAvatars:
+        case PlayableModel::ShortWithAvatars:
             paintShort( painter, option, index, true );
             break;
     }
@@ -121,7 +121,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 void
 PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
@@ -212,7 +212,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 void
 PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );
@@ -224,7 +224,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() &&
-       ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album || index.column() == TrackModel::Track ) )
+       ( index.column() == PlayableModel::Artist || index.column() == PlayableModel::Album || index.column() == PlayableModel::Track ) )
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
         QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
@@ -235,7 +235,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
     painter->save();
 
-    if ( index.column() == TrackModel::Score )
+    if ( index.column() == PlayableModel::Score )
     {
         QColor barColor( 167, 183, 211 ); // This matches the sidebar (sourcetreeview.cpp:672)
         if ( opt.state & QStyle::State_Selected )

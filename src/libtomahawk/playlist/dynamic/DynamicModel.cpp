@@ -340,7 +340,7 @@ DynamicModel::remove(const QModelIndex& idx, bool moreToCome)
         { // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
         }
-        TrackModel::remove( idx );
+        PlayableModel::remove( idx );
     }
     else
         PlaylistModel::remove( idx, moreToCome );

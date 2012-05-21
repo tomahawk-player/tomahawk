@@ -115,6 +115,7 @@ signals:
     void resolverUninstalled( const QString& resolverId );
     void resolverInstallationFailed( const QString& resolverId );
 
+    void startedInstalling( const QString& resolverId );
 private slots:
     void providerAdded( const Attica::Provider& );
     void categoriesReturned( Attica::BaseJob* );

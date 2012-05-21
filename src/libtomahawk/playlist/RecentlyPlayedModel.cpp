@@ -25,6 +25,7 @@
 #include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_PlaybackHistory.h"
+#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -105,19 +106,19 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
     if ( count )
     {
-        TrackModelItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
+        PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
         if ( oldestItem->query()->playedBy().second >= playtime )
             return;
 
-        TrackModelItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
+        PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
         if ( youngestItem->query()->playedBy().second <= playtime )
             insert( query, 0 );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
             {
-                TrackModelItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
-                TrackModelItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
+                PlayableItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
+                PlayableItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
 
                 if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
                 {

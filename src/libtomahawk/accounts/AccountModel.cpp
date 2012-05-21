@@ -40,6 +40,8 @@ AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
 {
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
+    connect( AtticaManager::instance(), SIGNAL( startedInstalling( QString ) ), this, SLOT( onStartedInstalling( QString ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( onFinishedInstalling( QString ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverInstallationFailed( QString ) ), this, SLOT( resolverInstallFailed( QString ) ) );
 
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( accountAdded( Tomahawk::Accounts::Account* ) ) );
@@ -127,7 +129,7 @@ AccountModel::loadData()
 #endif
    foreach ( Account* acct, allAccounts )
    {
-       qDebug() << "Resolver is left over:" << acct->accountFriendlyName();
+       qDebug() << "Resolver is left over:" << acct->accountFriendlyName() << acct->accountId();
 //        Q_ASSERT( !qobject_cast< AtticaResolverAccount* >( acct ) ); // This should be caught above in the attica list
 
        if ( qobject_cast< ResolverAccount* >( acct ) && !qobject_cast< AtticaResolverAccount* >( acct ) )
@@ -457,7 +459,6 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 
-                    emit startInstalling( index );
                     AtticaManager::instance()->installResolver( resolver );
                     return true;
                 }
@@ -593,10 +594,6 @@ AccountModel::accountAdded( Account* account )
                 AccountManager::instance()->enableAccount( account );
 
             m_waitingForAtticaInstall.remove( attica->atticaId() );
-
-            // find index to emit doneInstalling for
-            const QModelIndex idx = index( i, 0, QModelIndex() );
-            emit doneInstalling( idx );
         }
 
         if ( thisIsTheOne )
@@ -714,15 +711,50 @@ AccountModel::accountRemoved( Account* account )
 void
 AccountModel::resolverInstallFailed( const QString& resolverId )
 {
+    const QModelIndex idx = indexForAtticaId( resolverId );
+    if ( idx.isValid() )
+    {
+        qDebug() << "Got failed attica install in account mode, emitting signal!";
+        emit errorInstalling( idx );
+    }
+}
+
+
+QModelIndex
+AccountModel::indexForAtticaId( const QString& resolverId ) const
+{
     for ( int i = 0; i < m_accounts.size(); i++ )
     {
         if ( m_accounts[ i ]->type == AccountModelNode::AtticaType && m_accounts[ i ]->atticaContent.id() == resolverId )
         {
-            qDebug() << "Got failed attica install in account mode, emitting signal!";
-            emit errorInstalling( index( i, 0, QModelIndex() ) );
-
-            return;
+            return index( i, 0, QModelIndex() );
         }
+    }
+
+    return QModelIndex();
+}
+
+
+void
+AccountModel::onStartedInstalling( const QString& resolverId )
+{
+    const QModelIndex idx = indexForAtticaId( resolverId );
+    if ( idx.isValid() )
+    {
+        qDebug() << "Got resolver that is beginning to install, emitting signal";
+        emit startInstalling( idx );
+    }
+}
+
+
+void
+AccountModel::onFinishedInstalling( const QString& resolverId )
+{
+    const QModelIndex idx = indexForAtticaId( resolverId );
+    if ( idx.isValid() )
+    {
+        qDebug() << "Got resolver that is beginning to install, emitting signal";
+        emit doneInstalling( idx );
     }
 }
 

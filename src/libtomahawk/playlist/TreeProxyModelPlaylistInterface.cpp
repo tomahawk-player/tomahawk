@@ -26,6 +26,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -136,7 +137,7 @@ TreeProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     // Try to find the next available PlaylistItem (with results)
     while ( idx.isValid() )
     {
-        TreeModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item && !item->result().isNull() && item->result()->isOnline() )
         {
             qDebug() << "Next PlaylistItem found:" << item->result()->url();
@@ -161,7 +162,7 @@ TreeProxyModelPlaylistInterface::currentItem() const
         return Tomahawk::result_ptr();
     TreeProxyModel* proxyModel = m_proxyModel.data();
 
-    TreeModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
+    PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
     if ( item && !item->result().isNull() && item->result()->isOnline() )
         return item->result();
     return Tomahawk::result_ptr();

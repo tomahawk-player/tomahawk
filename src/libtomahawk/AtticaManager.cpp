@@ -218,7 +218,6 @@ AtticaManager::userHasRated( const Content& c ) const
 bool
 AtticaManager::hasCustomAccountForAttica( const QString &id ) const
 {
-    qDebug() << "Got custom account for?" << id << m_customAccounts.keys();
     return m_customAccounts.keys().contains( id );
 }
 
@@ -438,6 +437,8 @@ void
 AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount )
 {
     Q_ASSERT( !resolver.id().isNull() );
+
+    emit startedInstalling( resolver.id() );
 
     if ( m_resolverStates[ resolver.id() ].state != Upgrading )
         m_resolverStates[ resolver.id() ].state = Installing;

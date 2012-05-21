@@ -23,20 +23,20 @@
 #include <QtGui/QSortFilterProxyModel>
 
 #include "PlaylistInterface.h"
-#include "playlist/TrackModel.h"
+#include "playlist/PlayableModel.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT TrackProxyModel : public QSortFilterProxyModel
+class DLLEXPORT PlayableProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 
 public:
-    explicit TrackProxyModel ( QObject* parent = 0 );
-    virtual ~TrackProxyModel() {}
+    explicit PlayableProxyModel ( QObject* parent = 0 );
+    virtual ~PlayableProxyModel() {}
 
-    virtual TrackModel* sourceModel() const { return m_model; }
-    virtual void setSourceTrackModel( TrackModel* sourceModel );
+    virtual PlayableModel* sourceModel() const { return m_model; }
+    virtual void setSourcePlayableModel( PlayableModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* model );
 
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
@@ -51,7 +51,7 @@ public:
 
     virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
-    virtual TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -62,7 +62,7 @@ protected:
     virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
-    TrackModel* m_model;
+    PlayableModel* m_model;
     bool m_showOfflineResults;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

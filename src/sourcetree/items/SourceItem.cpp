@@ -533,7 +533,7 @@ SourceItem::latestAdditionsClicked()
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
-        raModel->setStyle( TrackModel::Large );
+        raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Latest Additions" ) );
 
         if ( m_source->isLocal() )
@@ -545,8 +545,8 @@ SourceItem::latestAdditionsClicked()
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
         cv->setItemDelegate( del );
 
-        cv->setTrackModel( raModel );
-        cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
+        cv->setPlayableModel( raModel );
+        cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
 
         m_latestAdditionsPage = cv;
     }
@@ -573,7 +573,7 @@ SourceItem::recentPlaysClicked()
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
-        raModel->setStyle( TrackModel::Large );
+        raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
 
         if ( m_source->isLocal() )

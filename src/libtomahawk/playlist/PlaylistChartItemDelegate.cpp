@@ -28,9 +28,9 @@
 #include "SourceList.h"
 
 #include "PlaylistView.h"
-#include "TrackModel.h"
-#include "TrackModelItem.h"
-#include "TrackProxyModel.h"
+#include "PlayableModel.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
 
@@ -42,7 +42,7 @@
 using namespace Tomahawk;
 
 
-PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, TrackProxyModel* proxy )
+PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
@@ -59,7 +59,7 @@ PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, TrackPr
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( m_model->sourceModel(), SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
+    connect( m_model, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
     if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
         connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 
@@ -112,7 +112,7 @@ PlaylistChartItemDelegate::createEditor( QWidget* parent, const QStyleOptionView
 
 
 void
-PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -123,7 +123,7 @@ PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 void
 PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;

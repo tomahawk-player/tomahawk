@@ -81,6 +81,7 @@ private:
     bool m_connectedToStl;
     float m_fadePct;
     QString m_oldImageMd5;
+    bool m_defaultImage;
     
     QQueue<QPixmap> m_pixmapQueue;
     

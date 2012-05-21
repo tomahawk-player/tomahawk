@@ -28,7 +28,7 @@
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
 
-class TrackModelItem;
+class PlayableItem;
 class QStyleOptionViewItemV4;
 class QPainter;
 class QPixmap;
@@ -55,7 +55,7 @@ namespace TomahawkUtils
 
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
 
-    DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item );
+    DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
 }

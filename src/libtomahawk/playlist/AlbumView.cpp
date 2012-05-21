@@ -29,7 +29,7 @@
 #include "context/ContextWidget.h"
 #include "TomahawkSettings.h"
 #include "Artist.h"
-#include "AlbumItem.h"
+#include "PlayableItem.h"
 #include "AlbumItemDelegate.h"
 #include "AlbumModel.h"
 #include "ContextMenu.h"
@@ -129,7 +129,7 @@ AlbumView::currentChanged( const QModelIndex& current, const QModelIndex& previo
 {
     QListView::currentChanged( current, previous );
 
-    AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         if ( !item->album().isNull() )
@@ -141,7 +141,7 @@ AlbumView::currentChanged( const QModelIndex& current, const QModelIndex& previo
 void
 AlbumView::onItemActivated( const QModelIndex& index )
 {
-    AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
 //        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
@@ -287,7 +287,7 @@ AlbumView::onCustomContextMenu( const QPoint& pos )
         if ( index.column() || selectedIndexes().contains( index.parent() ) )
             continue;
 
-        AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+        PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
 
         if ( item && !item->query().isNull() )
             queries << item->query();
