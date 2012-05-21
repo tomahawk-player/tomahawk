@@ -100,6 +100,9 @@ PixmapDelegateFader::~PixmapDelegateFader()
 void
 PixmapDelegateFader::init()
 {
+    if ( m_currentReference.isNull() )
+        m_defaultImage = true;
+
     m_startFrame = 0;
     m_fadePct = 100;
     m_connectedToStl = false;
@@ -108,7 +111,7 @@ PixmapDelegateFader::init()
     m_current.fill( Qt::transparent );
 
     setSize( m_size );
-    if ( m_currentReference.isNull() )
+    if ( m_defaultImage )
         return;
 
     stlInstance().data()->setUpdateInterval( 20 );
@@ -124,15 +127,15 @@ PixmapDelegateFader::setSize( const QSize& size )
 {
     m_size = size;
     
-    if ( m_currentReference.isNull() )
+    if ( m_defaultImage )
     {
         // No cover loaded yet, use default and don't fade in
         if ( !m_album.isNull() )
-            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
         else if ( !m_artist.isNull() )
-            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
         else if ( !m_track.isNull() )
-            m_current = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
     }
     else
     {
@@ -184,6 +187,7 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
     if ( pixmap.isNull() )
         return;
 
+    m_defaultImage = false;
     QByteArray ba;
     QBuffer buffer( &ba );
     buffer.open( QIODevice::WriteOnly );
