@@ -48,6 +48,7 @@ public:
     const Tomahawk::result_ptr& result() const;
 
     PlayableItem* parent() const { return m_parent; }
+
     bool isPlaying() const { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
     bool fetchingMore() const { return m_fetchingMore; }
@@ -59,7 +60,6 @@ public:
 
     QList<PlayableItem*> children;
 
-    int childCount;
     QPersistentModelIndex index;
     QAbstractItemModel* model;
 
@@ -70,6 +70,8 @@ private slots:
     void onResultsChanged();
 
 private:
+    void init( PlayableItem* parent, int row = -1 );
+
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::result_ptr m_result;

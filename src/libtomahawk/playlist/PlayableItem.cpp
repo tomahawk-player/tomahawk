@@ -45,16 +45,7 @@ PlayableItem::~PlayableItem()
 
 PlayableItem::PlayableItem( PlayableItem* parent, QAbstractItemModel* model )
 {
-    m_parent = parent;
-    this->model = model;
-    childCount = 0;
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
-    if ( m_parent )
-    {
-        m_parent->children.append( this );
-    }
+    init( parent );
 }
 
 
@@ -62,24 +53,7 @@ PlayableItem::PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* pare
     : QObject( parent )
     , m_album( album )
 {
-    m_parent = parent;
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
-    if ( parent )
-    {
-        if ( row < 0 )
-        {
-            parent->children.append( this );
-            row = parent->children.count() - 1;
-        }
-        else
-        {
-            parent->children.insert( row, this );
-        }
-
-        this->model = parent->model;
-    }
+    init( parent, row );
 
     connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
@@ -89,24 +63,7 @@ PlayableItem::PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* pa
     : QObject( parent )
     , m_artist( artist )
 {
-    m_parent = parent;
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
-    if ( parent )
-    {
-        if ( row < 0 )
-        {
-            parent->children.append( this );
-            row = parent->children.count() - 1;
-        }
-        else
-        {
-            parent->children.insert( row, this );
-        }
-
-        this->model = parent->model;
-    }
+    init( parent, row );
 
     connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
@@ -116,24 +73,7 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
     : QObject( parent )
     , m_result( result )
 {
-    m_parent = parent;
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
-    if ( parent )
-    {
-        if ( row < 0 )
-        {
-            parent->children.append( this );
-            row = parent->children.count() - 1;
-        }
-        else
-        {
-            parent->children.insert( row, this );
-        }
-
-        this->model = parent->model;
-    }
+    init( parent, row );
 }
 
 
@@ -141,26 +81,7 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     : QObject( parent )
     , m_query( query )
 {
-    m_parent = parent;
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
-    if ( parent )
-    {
-        if ( row < 0 )
-        {
-            parent->children.append( this );
-            row = parent->children.count() - 1;
-        }
-        else
-        {
-            parent->children.insert( row, this );
-        }
-
-        this->model = parent->model;
-    }
-
-    onResultsChanged();
+    init( parent, row );
 
     connect( query.data(), SIGNAL( socialActionsLoaded() ),
                            SIGNAL( dataChanged() ) );
@@ -183,27 +104,8 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     : QObject( parent )
     , m_entry( entry )
 {
-    m_parent = parent;
-    m_fetchingMore = false;
-    m_isPlaying = false;
     m_query = entry->query();
-
-    if ( parent )
-    {
-        if ( row < 0 )
-        {
-            parent->children.append( this );
-            row = parent->children.count() - 1;
-        }
-        else
-        {
-            parent->children.insert( row, this );
-        }
-
-        this->model = parent->model;
-    }
-
-    onResultsChanged();
+    init( parent, row );
 
     connect( m_query.data(), SIGNAL( socialActionsLoaded() ),
                              SIGNAL( dataChanged() ) );
@@ -219,6 +121,35 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
 
     connect( m_query.data(), SIGNAL( resultsChanged() ),
                                SLOT( onResultsChanged() ) );
+}
+
+
+void
+PlayableItem::init( PlayableItem* parent, int row )
+{
+    m_fetchingMore = false;
+    m_isPlaying = false;
+    m_parent = parent;
+    
+    if ( parent )
+    {
+        if ( row < 0 )
+        {
+            parent->children.append( this );
+            row = parent->children.count() - 1;
+        }
+        else
+        {
+            parent->children.insert( row, this );
+        }
+
+        this->model = parent->model;
+    }
+    
+    if ( !m_query.isNull() )
+    {
+        onResultsChanged();
+    }
 }
 
 
