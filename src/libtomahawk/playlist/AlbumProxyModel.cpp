@@ -23,7 +23,7 @@
 
 #include "AlbumProxyModelPlaylistInterface.h"
 #include "Artist.h"
-#include "AlbumItem.h"
+#include "PlayableItem.h"
 #include "Query.h"
 #include "Source.h"
 #include "utils/Logger.h"
@@ -68,7 +68,7 @@ AlbumProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     if ( filterRegExp().isEmpty() )
         return true;
 
-    AlbumItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    PlayableItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
@@ -92,8 +92,8 @@ AlbumProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
 bool
 AlbumProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    AlbumItem* p1 = sourceModel()->itemFromIndex( left );
-    AlbumItem* p2 = sourceModel()->itemFromIndex( right );
+    PlayableItem* p1 = sourceModel()->itemFromIndex( left );
+    PlayableItem* p2 = sourceModel()->itemFromIndex( right );
 
     if ( !p1 )
         return true;

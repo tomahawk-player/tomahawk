@@ -27,6 +27,7 @@
 #include "ViewManager.h"
 #include "TrackModel.h"
 #include "TrackProxyModel.h"
+#include "PlayableItem.h"
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
@@ -249,7 +250,7 @@ TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previo
     if ( !m_updateContextView )
         return;
 
-    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         ViewManager::instance()->context()->setQuery( item->query() );
@@ -275,7 +276,7 @@ TrackView::startAutoPlay( const QModelIndex& index )
         return;
 
     // item isn't playable but still resolving
-    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && !item->query().isNull() && !item->query()->resolvingFinished() )
     {
         m_autoPlaying = item->query(); // So we can kill it if user starts autoplaying this playlist again
@@ -294,7 +295,7 @@ TrackView::startAutoPlay( const QModelIndex& index )
 bool
 TrackView::tryToPlayItem( const QModelIndex& index )
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && !item->query().isNull() )
     {
         m_proxyModel->setCurrentIndex( index );
@@ -555,7 +556,7 @@ TrackView::onCustomContextMenu( const QPoint& pos )
         if ( index.column() )
             continue;
 
-        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+        PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
         if ( item && !item->query().isNull() )
         {
             if ( item->query()->numResults() > 0 )
@@ -655,7 +656,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
     if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
          event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
     {
-        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
         switch ( idx.column() )
         {
             case TrackModel::Artist:

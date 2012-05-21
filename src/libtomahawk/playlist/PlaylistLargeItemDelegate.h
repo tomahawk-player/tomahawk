@@ -31,7 +31,7 @@ class PixmapDelegateFader;
 }
 
 class TrackModel;
-class TrackModelItem;
+class PlayableItem;
 class TrackProxyModel;
 class TrackView;
 
@@ -58,7 +58,7 @@ private slots:
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
     void drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const;
 
     QTextOption m_topOption;

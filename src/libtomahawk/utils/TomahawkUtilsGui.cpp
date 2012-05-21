@@ -23,7 +23,7 @@
 #include "Query.h"
 #include "Result.h"
 #include "Logger.h"
-#include "TrackModelItem.h"
+#include "PlayableItem.h"
 #include "Source.h"
 
 #include <QtGui/QLayout>
@@ -392,7 +392,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
 
 void
-prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item )
+prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item )
 {
     Q_UNUSED( index );
 

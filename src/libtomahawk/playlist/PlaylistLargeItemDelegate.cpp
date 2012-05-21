@@ -30,7 +30,7 @@
 
 #include "PlaylistView.h"
 #include "TrackModel.h"
-#include "TrackModelItem.h"
+#include "PlayableItem.h"
 #include "TrackProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
@@ -90,7 +90,7 @@ PlaylistLargeItemDelegate::createEditor( QWidget* parent, const QStyleOptionView
 
 
 void
-PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -124,7 +124,7 @@ PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QRect& rect, i
 void
 PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;

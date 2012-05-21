@@ -29,7 +29,7 @@
 
 #include "PlaylistView.h"
 #include "TrackModel.h"
-#include "TrackModelItem.h"
+#include "PlayableItem.h"
 #include "TrackProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
@@ -112,7 +112,7 @@ PlaylistChartItemDelegate::createEditor( QWidget* parent, const QStyleOptionView
 
 
 void
-PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -123,7 +123,7 @@ PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 void
 PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;

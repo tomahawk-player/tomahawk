@@ -31,6 +31,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -38,7 +39,7 @@ using namespace Tomahawk;
 
 TrackModel::TrackModel( QObject* parent )
     : QAbstractItemModel( parent )
-    , m_rootItem( new TrackModelItem( 0, this ) )
+    , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
     , m_style( Detailed )
 {
@@ -58,8 +59,8 @@ TrackModel::index( int row, int column, const QModelIndex& parent ) const
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
-    TrackModelItem* childItem = parentItem->children.value( row );
+    PlayableItem* parentItem = itemFromIndex( parent );
+    PlayableItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -73,7 +74,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
     if ( parent.column() > 0 )
         return 0;
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -105,15 +106,15 @@ TrackModel::columnCount( const QModelIndex& parent ) const
 QModelIndex
 TrackModel::parent( const QModelIndex& child ) const
 {
-    TrackModelItem* entry = itemFromIndex( child );
+    PlayableItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    TrackModelItem* parentEntry = entry->parent;
+    PlayableItem* parentEntry = entry->parent();
     if ( !parentEntry )
         return QModelIndex();
 
-    TrackModelItem* grandparentEntry = parentEntry->parent;
+    PlayableItem* grandparentEntry = parentEntry->parent();
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -125,7 +126,7 @@ TrackModel::parent( const QModelIndex& child ) const
 QVariant
 TrackModel::data( const QModelIndex& index, int role ) const
 {
-    TrackModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -251,7 +252,7 @@ TrackModel::updateDetailedInfo( const QModelIndex& index )
     if ( style() != TrackModel::Short && style() != TrackModel::Large )
         return;
 
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
     if ( item->query().isNull() )
         return;
 
@@ -270,13 +271,13 @@ TrackModel::updateDetailedInfo( const QModelIndex& index )
 void
 TrackModel::setCurrentItem( const QModelIndex& index )
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
     }
 
-    TrackModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( index.isValid() && entry && !entry->query().isNull() )
     {
         m_currentIndex = index;
@@ -333,7 +334,7 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
             continue;
 
         QModelIndex idx = index( i.row(), 0, i.parent() );
-        TrackModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item )
         {
             const query_ptr& query = item->query();
@@ -358,7 +359,7 @@ TrackModel::clear()
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
-        m_rootItem = new TrackModelItem( 0, this );
+        m_rootItem = new PlayableItem( 0, this );
         emit endResetModel();
     }
 }
@@ -370,7 +371,7 @@ TrackModel::queries() const
     Q_ASSERT( m_rootItem );
 
     QList< query_ptr > tracks;
-    foreach ( TrackModelItem* item, m_rootItem->children )
+    foreach ( PlayableItem* item, m_rootItem->children )
     {
         tracks << item->query();
     }
@@ -423,10 +424,10 @@ TrackModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     int i = 0;
-    TrackModelItem* plitem;
+    PlayableItem* plitem;
     foreach( const query_ptr& query, queries )
     {
-        plitem = new TrackModelItem( query, m_rootItem, row + i );
+        plitem = new PlayableItem( query, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         i++;
 
@@ -463,7 +464,7 @@ TrackModel::remove( const QModelIndex& index, bool moreToCome )
     if ( index.column() > 0 )
         return;
 
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
@@ -507,12 +508,12 @@ TrackModel::remove( const QList<QPersistentModelIndex>& indexes )
 }
 
 
-TrackModelItem*
+PlayableItem*
 TrackModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
     {
-        return static_cast<TrackModelItem*>( index.internalPointer() );
+        return static_cast<PlayableItem*>( index.internalPointer() );
     }
     else
     {
@@ -524,7 +525,7 @@ TrackModel::itemFromIndex( const QModelIndex& index ) const
 void
 TrackModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry && ( oldEntry->query().isNull() || !oldEntry->query()->numResults() || oldEntry->query()->results().first().data() != result.data() ) )
     {
         oldEntry->setIsPlaying( false );
@@ -535,7 +536,7 @@ TrackModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 TrackModel::onPlaybackStopped()
 {
-    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
@@ -586,7 +587,7 @@ TrackModel::columnAlignment( int column ) const
 void
 TrackModel::onDataChanged()
 {
-    TrackModelItem* p = (TrackModelItem*)sender();
+    PlayableItem* p = (PlayableItem*)sender();
     if ( p && p->index.isValid() )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
 }

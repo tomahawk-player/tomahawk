@@ -56,7 +56,7 @@ public:
 
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
-    virtual TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -79,7 +79,7 @@ private slots:
 
 private:
     void filterFinished();
-    QString textForItem( TreeModelItem* item ) const;
+    QString textForItem( PlayableItem* item ) const;
 
     mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
 

@@ -30,6 +30,7 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/Database.h"
 #include "AlbumPlaylistInterface.h"
+#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -38,7 +39,7 @@ using namespace Tomahawk;
 
 TreeModel::TreeModel( QObject* parent )
     : QAbstractItemModel( parent )
-    , m_rootItem( new TreeModelItem( 0, this ) )
+    , m_rootItem( new PlayableItem( 0, this ) )
     , m_infoId( uuid() )
     , m_columnStyle( AllColumns )
     , m_mode( DatabaseMode )
@@ -72,7 +73,7 @@ TreeModel::clear()
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
-        m_rootItem = new TreeModelItem( 0, this );
+        m_rootItem = new PlayableItem( 0, this );
         emit endResetModel();
     }
 }
@@ -97,7 +98,7 @@ TreeModel::collection() const
 void
 TreeModel::getCover( const QModelIndex& index )
 {
-    TreeModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
 
     if ( !item->artist().isNull() && !item->artist()->infoLoaded() )
         item->artist()->cover( QSize( 0, 0 ) );
@@ -111,13 +112,13 @@ TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
 
-    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
     }
 
-    TreeModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( entry )
     {
         m_currentIndex = index;
@@ -136,8 +137,8 @@ TreeModel::index( int row, int column, const QModelIndex& parent ) const
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    TreeModelItem* parentItem = itemFromIndex( parent );
-    TreeModelItem* childItem = parentItem->children.value( row );
+    PlayableItem* parentItem = itemFromIndex( parent );
+    PlayableItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -148,9 +149,9 @@ TreeModel::index( int row, int column, const QModelIndex& parent ) const
 bool
 TreeModel::canFetchMore( const QModelIndex& parent ) const
 {
-    TreeModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
 
-    if ( parentItem->fetchingMore )
+    if ( parentItem->fetchingMore() )
         return false;
 
     if ( !parentItem->artist().isNull() )
@@ -169,11 +170,11 @@ TreeModel::canFetchMore( const QModelIndex& parent ) const
 void
 TreeModel::fetchMore( const QModelIndex& parent )
 {
-    TreeModelItem* parentItem = itemFromIndex( parent );
-    if ( !parentItem || parentItem->fetchingMore )
+    PlayableItem* parentItem = itemFromIndex( parent );
+    if ( !parentItem || parentItem->fetchingMore() )
         return;
 
-    parentItem->fetchingMore = true;
+    parentItem->setFetchingMore( true );
     if ( !parentItem->artist().isNull() )
     {
         tDebug() << Q_FUNC_INFO << "Loading Artist:" << parentItem->artist()->name();
@@ -192,7 +193,7 @@ TreeModel::fetchMore( const QModelIndex& parent )
 bool
 TreeModel::hasChildren( const QModelIndex& parent ) const
 {
-    TreeModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return false;
 
@@ -209,7 +210,7 @@ TreeModel::rowCount( const QModelIndex& parent ) const
     if ( parent.column() > 0 )
         return 0;
 
-    TreeModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -235,15 +236,15 @@ TreeModel::columnCount( const QModelIndex& parent ) const
 QModelIndex
 TreeModel::parent( const QModelIndex& child ) const
 {
-    TreeModelItem* entry = itemFromIndex( child );
+    PlayableItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    TreeModelItem* parentEntry = entry->parent;
+    PlayableItem* parentEntry = entry->parent();
     if ( !parentEntry )
         return QModelIndex();
 
-    TreeModelItem* grandparentEntry = parentEntry->parent;
+    PlayableItem* grandparentEntry = parentEntry->parent();
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -255,7 +256,7 @@ TreeModel::parent( const QModelIndex& child ) const
 QVariant
 TreeModel::data( const QModelIndex& index, int role ) const
 {
-    TreeModelItem* entry = itemFromIndex( index );
+    PlayableItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -387,7 +388,7 @@ TreeModel::flags( const QModelIndex& index ) const
 
     if ( index.isValid() && index.column() == 0 )
     {
-        TreeModelItem* item = itemFromIndex( index );
+        PlayableItem* item = itemFromIndex( index );
         if ( item && !item->result().isNull() )
             return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
         if ( item && ( !item->album().isNull() || !item->artist().isNull() ) )
@@ -422,7 +423,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        TreeModelItem* item = itemFromIndex( i );
+        PlayableItem* item = itemFromIndex( i );
         if ( !item )
             continue;
 
@@ -452,7 +453,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        TreeModelItem* item = itemFromIndex( i );
+        PlayableItem* item = itemFromIndex( i );
         if ( !item )
             continue;
 
@@ -483,7 +484,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        TreeModelItem* item = itemFromIndex( i );
+        PlayableItem* item = itemFromIndex( i );
         if ( !item )
             continue;
 
@@ -512,7 +513,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        TreeModelItem* item = itemFromIndex( i );
+        PlayableItem* item = itemFromIndex( i );
         if ( !item )
             continue;
 
@@ -547,7 +548,7 @@ TreeModel::removeIndex( const QModelIndex& index )
     if ( index.column() > 0 )
         return;
 
-    TreeModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
@@ -643,7 +644,7 @@ TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr
     if ( !albums.count() )
         return;
 
-    TreeModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
 
     QPair< int, int > crows;
     const int c = rowCount( parent );
@@ -652,10 +653,10 @@ TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr
 
     emit beginInsertRows( parent, crows.first, crows.second );
 
-    TreeModelItem* albumitem = 0;
+    PlayableItem* albumitem = 0;
     foreach( const album_ptr& album, albums )
     {
-        albumitem = new TreeModelItem( album, parentItem );
+        albumitem = new PlayableItem( album, parentItem );
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
@@ -768,10 +769,10 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
-    TreeModelItem* artistitem;
+    PlayableItem* artistitem;
     foreach( const artist_ptr& artist, artists )
     {
-        artistitem = new TreeModelItem( artist, m_rootItem );
+        artistitem = new PlayableItem( artist, m_rootItem );
         artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
         connect( artistitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -788,7 +789,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
     if ( !tracks.count() )
         return;
 
-    TreeModelItem* parentItem = itemFromIndex( parent );
+    PlayableItem* parentItem = itemFromIndex( parent );
 
     QPair< int, int > crows;
     int c = rowCount( parent );
@@ -797,10 +798,10 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
 
     emit beginInsertRows( parent, crows.first, crows.second );
 
-    TreeModelItem* item = 0;
+    PlayableItem* item = 0;
     foreach( const query_ptr& query, tracks )
     {
-        item = new TreeModelItem( query, parentItem );
+        item = new PlayableItem( query, parentItem );
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -907,7 +908,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 void
 TreeModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry && ( oldEntry->result().isNull() || oldEntry->result().data() != result.data() ) )
     {
         oldEntry->setIsPlaying( false );
@@ -918,7 +919,7 @@ TreeModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 TreeModel::onPlaybackStopped()
 {
-    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
@@ -929,7 +930,7 @@ TreeModel::onPlaybackStopped()
 void
 TreeModel::onDataChanged()
 {
-    TreeModelItem* p = (TreeModelItem*)sender();
+    PlayableItem* p = (PlayableItem*)sender();
     emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
 }
 
@@ -947,7 +948,7 @@ TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
     for ( int i = 0; i < rowCount(); i++ )
     {
         QModelIndex idx = index( i, 0, QModelIndex() );
-        TreeModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item && item->artist() == artist )
         {
             return idx;
@@ -965,7 +966,7 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
     for ( int i = 0; i < rowCount( artistIdx ); i++ )
     {
         QModelIndex idx = index( i, 0, artistIdx );
-        TreeModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item && item->album() == album )
         {
             return idx;

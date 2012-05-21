@@ -31,6 +31,7 @@
 #include "database/DatabaseCommand_PlaybackHistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "DropJob.h"
+#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -228,10 +229,10 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 
     QList< Tomahawk::query_ptr > queries;
     int i = 0;
-    TrackModelItem* plitem;
+    PlayableItem* plitem;
     foreach( const plentry_ptr& entry, entries )
     {
-        plitem = new TrackModelItem( entry, rootItem(), row + i );
+        plitem = new PlayableItem( entry, rootItem(), row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         i++;
 
@@ -436,7 +437,7 @@ PlaylistModel::endPlaylistChanges()
             const QModelIndex idx = index( i, 0, QModelIndex() );
             if ( !idx.isValid() )
                 continue;
-            const TrackModelItem* item = itemFromIndex( idx );
+            const PlayableItem* item = itemFromIndex( idx );
             if ( !item || item->entry().isNull() )
                 continue;
 
@@ -476,7 +477,7 @@ PlaylistModel::playlistEntries() const
         if ( !idx.isValid() )
             continue;
 
-        TrackModelItem* item = itemFromIndex( idx );
+        PlayableItem* item = itemFromIndex( idx );
         if ( item )
             l << item->entry();
     }
@@ -495,7 +496,7 @@ PlaylistModel::remove( int row, bool moreToCome )
 void
 PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
 {
-    TrackModelItem* item = itemFromIndex( index );
+    PlayableItem* item = itemFromIndex( index );
 
     if ( item && m_waitingForResolved.contains( item->query().data() ) )
     {

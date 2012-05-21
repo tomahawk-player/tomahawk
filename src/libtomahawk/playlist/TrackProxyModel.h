@@ -51,7 +51,7 @@ public:
 
     virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
-    virtual TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 

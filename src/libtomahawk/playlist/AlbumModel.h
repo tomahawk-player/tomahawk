@@ -29,7 +29,7 @@
 
 #include "DllMacro.h"
 
-class AlbumItem;
+class PlayableItem;
 class QMetaData;
 
 class DLLEXPORT AlbumModel : public QAbstractItemModel
@@ -75,13 +75,13 @@ public:
     QSize itemSize() const { return m_itemSize; }
     void setItemSize( const QSize& size ) { m_itemSize = size; }
 
-    AlbumItem* findItem( const Tomahawk::artist_ptr& artist ) const;
-    AlbumItem* findItem( const Tomahawk::album_ptr& album ) const;
+    PlayableItem* findItem( const Tomahawk::artist_ptr& artist ) const;
+    PlayableItem* findItem( const Tomahawk::album_ptr& album ) const;
 
-    AlbumItem* itemFromIndex( const QModelIndex& index ) const
+    PlayableItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
-            return static_cast<AlbumItem*>( index.internalPointer() );
+            return static_cast<PlayableItem*>( index.internalPointer() );
         else
         {
             return m_rootItem;
@@ -113,7 +113,7 @@ private slots:
 
 private:
     QPersistentModelIndex m_currentIndex;
-    AlbumItem* m_rootItem;
+    PlayableItem* m_rootItem;
 
     QString m_title;
     QString m_description;

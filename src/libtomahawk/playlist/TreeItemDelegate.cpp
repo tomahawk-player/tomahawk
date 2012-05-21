@@ -32,7 +32,7 @@
 #include "utils/Closure.h"
 #include "utils/PixmapDelegateFader.h"
 
-#include "TreeModelItem.h"
+#include "PlayableItem.h"
 #include "TreeProxyModel.h"
 #include "Source.h"
 #include "ArtistView.h"
@@ -57,7 +57,7 @@ TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
 void
 TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TreeModelItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item )
         return;
 

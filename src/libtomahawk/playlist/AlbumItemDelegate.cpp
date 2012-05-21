@@ -34,7 +34,7 @@
 #include "utils/PixmapDelegateFader.h"
 #include <utils/Closure.h>
 
-#include "playlist/AlbumItem.h"
+#include "playlist/PlayableItem.h"
 #include "playlist/AlbumProxyModel.h"
 #include "AlbumView.h"
 #include "ViewManager.h"
@@ -66,7 +66,7 @@ AlbumItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 void
 AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item )
         return;
 
@@ -237,7 +237,7 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 
     m_spinner[ index ] = spinner;
     
-    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( item )
     {
         _detail::Closure* closure;
@@ -338,7 +338,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
     {
         if ( event->type() == QEvent::MouseButtonRelease )
         {
-            AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
             if ( !item )
                 return false;
 
@@ -423,7 +423,7 @@ AlbumItemDelegate::onPlaybackFinished()
 void
 AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
 {
-    AlbumItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( item )
     {
         bool finished = false;

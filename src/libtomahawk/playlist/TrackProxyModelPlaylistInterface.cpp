@@ -23,10 +23,12 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
-#include "utils/Logger.h"
+#include "PlayableItem.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
+
 
 TrackProxyModelPlaylistInterface::TrackProxyModelPlaylistInterface( TrackProxyModel* proxyModel )
     : PlaylistInterface()
@@ -88,7 +90,7 @@ TrackProxyModelPlaylistInterface::tracks()
 
     for ( int i = 0; i < proxyModel->rowCount( QModelIndex() ); i++ )
     {
-        TrackModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( i, 0 ) ) );
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( i, 0 ) ) );
         if ( item )
             queries << item->query();
     }
@@ -161,7 +163,7 @@ TrackProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     // Try to find the next available PlaylistItem (with results)
     while ( idx.isValid() )
     {
-        TrackModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item && item->query()->playable() )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
@@ -187,7 +189,7 @@ TrackProxyModelPlaylistInterface::currentItem() const
 
     TrackProxyModel* proxyModel = m_proxyModel.data();
 
-    TrackModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
+    PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
     if ( item && !item->query().isNull() && item->query()->playable() )
         return item->query()->results().at( 0 );
     return Tomahawk::result_ptr();

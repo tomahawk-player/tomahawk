@@ -26,6 +26,7 @@
 #include "Album.h"
 #include "Query.h"
 #include "Source.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 
@@ -66,7 +67,7 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    TrackModelItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
@@ -149,8 +150,8 @@ TrackProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 bool
 TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    TrackModelItem* p1 = itemFromIndex( left );
-    TrackModelItem* p2 = itemFromIndex( right );
+    PlayableItem* p1 = itemFromIndex( left );
+    PlayableItem* p2 = itemFromIndex( right );
 
     if ( !p1 )
         return true;

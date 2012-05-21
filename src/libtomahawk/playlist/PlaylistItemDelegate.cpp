@@ -29,7 +29,7 @@
 #include "SourceList.h"
 
 #include "TrackModel.h"
-#include "TrackModelItem.h"
+#include "PlayableItem.h"
 #include "TrackProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
@@ -90,7 +90,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
-PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -121,7 +121,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 void
 PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
@@ -212,7 +212,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 void
 PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
     QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );

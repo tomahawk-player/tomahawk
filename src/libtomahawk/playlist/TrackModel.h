@@ -24,12 +24,13 @@
 #include <QAbstractItemModel>
 
 #include "PlaylistInterface.h"
-#include "TrackModelItem.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"
 
 class QMetaData;
+
+class PlayableItem;
 
 class DLLEXPORT TrackModel : public QAbstractItemModel
 {
@@ -95,7 +96,7 @@ public:
 
     virtual void ensureResolved();
 
-    TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
+    PlayableItem* itemFromIndex( const QModelIndex& index ) const;
     /// Returns a flat list of all tracks in this model
     QList< Tomahawk::query_ptr > queries() const;
 
@@ -132,7 +133,7 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:
-    TrackModelItem* rootItem() const { return m_rootItem; }
+    PlayableItem* rootItem() const { return m_rootItem; }
 
 private slots:
     void onDataChanged();
@@ -143,7 +144,7 @@ private slots:
 private:
     Qt::Alignment columnAlignment( int column ) const;
 
-    TrackModelItem* m_rootItem;
+    PlayableItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;
 
