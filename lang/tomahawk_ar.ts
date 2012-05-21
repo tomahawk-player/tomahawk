@@ -196,17 +196,17 @@ connect and stream from you?</source>
 <context>
     <name>ArtistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="274"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="275"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>بعد إجراء مسح مجموعة أغانيك الخاصة ستجد أغانيك هنا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="276"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="277"/>
         <source>This collection is currently empty.</source>
         <translation>المجموعة فارغة حاليا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="293"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="294"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>نتأسف، نظام البحث لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
     </message>
@@ -337,12 +337,12 @@ connect and stream from you?</source>
 <context>
     <name>CollectionFlatModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="72"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="73"/>
         <source>My Collection</source>
         <translation>مجموعتي الخاصة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="74"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="75"/>
         <source>Collection of %1</source>
         <translation>مجموعة %1</translation>
     </message>
@@ -662,16 +662,79 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
+    <name>PlayableModel</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Artist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Title</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Composer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Album</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Bitrate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Age</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Year</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Score</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>PlaylistItemDelegate</name>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>سمعت %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="156"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>%2 سمع %1</translation>
     </message>
 </context>
 <context>
@@ -679,12 +742,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="154"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>سمعت %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="156"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>%2 سمع %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="163"/>
@@ -695,22 +758,22 @@ connect and stream from you?</source>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>A playlist by %1, created %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="83"/>
         <source>you</source>
         <translation>أنت</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="148"/>
         <source>All tracks by %1 on album %2</source>
         <translation>جميع أغاني %1 في البوم %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="168"/>
         <source>All tracks by %1</source>
         <translation>جميع أغاني %1</translation>
     </message>
@@ -808,7 +871,8 @@ connect and stream from you?</source>
         <location filename="../src/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation type="unfinished"/>
+        <translation>لا مضيف للوكيل:
+(تجاوز وكيل النظام)</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="110"/>
@@ -826,7 +890,7 @@ connect and stream from you?</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="222"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>منذ %n سنة</numerusform><numerusform>منذ سنة %n</numerusform><numerusform>منذ سنتين %n</numerusform><numerusform>منذ %n سنوات</numerusform><numerusform>منذ %n سنوات</numerusform><numerusform>منذ %n سنوات</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="224"/>
@@ -1419,7 +1483,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="199"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>إنتبه للتغييرات</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="208"/>
@@ -1469,32 +1533,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
         <source>Internet Services</source>
-        <translation type="unfinished"/>
+        <translation>خدمات الانترنت</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="109"/>
         <source>Install from file...</source>
-        <translation type="unfinished"/>
+        <translation>تثبيت من ملف...</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="129"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>تصفية حسب القدرة:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="305"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>اسم مضيف ثابت:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="321"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>بوابة ثابتة:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="369"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>إعدادات الوسيط...</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="392"/>
@@ -1621,17 +1685,17 @@ connect and stream from you?</source>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="119"/>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="134"/>
         <source>Failed</source>
-        <translation type="unfinished"/>
+        <translation>فشلت</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="124"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>نجاح</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="140"/>
         <source>Could not contact server</source>
-        <translation type="unfinished"/>
+        <translation>لم أستطيع الإتصال بالخادم</translation>
     </message>
 </context>
 <context>
@@ -1683,7 +1747,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
-        <translation type="unfinished"/>
+        <translation>تواصل مع أصدقائك على تويتر.</translation>
     </message>
 </context>
 <context>
@@ -1706,7 +1770,7 @@ connect and stream from you?</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="93"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="169"/>
         <source>Authenticate</source>
-        <translation type="unfinished"/>
+        <translation>وثق</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="75"/>
@@ -1755,7 +1819,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="186"/>
         <source>Send Message!</source>
-        <translation type="unfinished"/>
+        <translation>إرسل رسالة!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
@@ -1776,19 +1840,21 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="212"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>لم نستطيع تحميل بياناتك المحفوظة.
+قد ترغب بمعاودة التصديق.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="230"/>
         <source>Your saved credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>لم نستطيع التحقق من بياناتك المحفوظة.
+قد ترغب بمعاودة التصديق.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="272"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="291"/>
         <source>There was an error posting your status -- sorry!</source>
-        <translation type="unfinished"/>
+        <translation>عذراً... حصل خطأ في تسجيل رسالتك!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
@@ -1998,7 +2064,7 @@ Please change the filters or try again.</source>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="471"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="472"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -3178,72 +3244,9 @@ enter the displayed PIN number here:</source>
     </message>
 </context>
 <context>
-    <name>TrackModel</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Artist</source>
-        <translation>الفنان</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Title</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Album</source>
-        <translation>البوم</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Track</source>
-        <translation>اغنية</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Duration</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Bitrate</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Age</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Year</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Size</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Origin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Composer</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="492"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="493"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation type="unfinished"/>
     </message>
@@ -3272,59 +3275,59 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Bitrate</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Age</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Year</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Origin</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Composer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="589"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="590"/>
         <source>All Artists</source>
         <translation>جميع الفنانين</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="704"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="729"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="705"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="730"/>
         <source>My Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="706"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="731"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="707"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="732"/>
         <source>Collection of %1</source>
         <translation type="unfinished"/>
     </message>

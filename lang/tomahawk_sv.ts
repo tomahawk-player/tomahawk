@@ -196,17 +196,17 @@ connect and stream from you?</source>
 <context>
     <name>ArtistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="274"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="275"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Efter att du har scannat din musiksamling kommer du finna dina senaste tillagda låtar här.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="276"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="277"/>
         <source>This collection is currently empty.</source>
         <translation>Denna samling är tom.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="293"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="294"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr, ditt filter &quot;%1&quot; matchade inte några resultat.</translation>
     </message>
@@ -337,12 +337,12 @@ connect and stream from you?</source>
 <context>
     <name>CollectionFlatModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="72"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="73"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="74"/>
+        <location filename="../src/libtomahawk/playlist/CollectionFlatModel.cpp" line="75"/>
         <source>Collection of %1</source>
         <translation>Samling av %1</translation>
     </message>
@@ -662,6 +662,69 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
+    <name>PlayableModel</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Artist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Title</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Composer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Album</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Bitrate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Age</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Year</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
+        <source>Score</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>PlaylistItemDelegate</name>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
@@ -695,22 +758,22 @@ connect and stream from you?</source>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>A playlist by %1, created %2</source>
         <translation>En spellista av %1, skapad %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="83"/>
         <source>you</source>
         <translation>dig</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="148"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Alla spår av %1 från albumet %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="168"/>
         <source>All tracks by %1</source>
         <translation>Alla spår av %1</translation>
     </message>
@@ -1998,7 +2061,7 @@ Please change the filters or try again.</source>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="471"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="472"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -3178,72 +3241,9 @@ enter the displayed PIN number here:</source>
     </message>
 </context>
 <context>
-    <name>TrackModel</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Artist</source>
-        <translation>Artist</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Album</source>
-        <translation>Album</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Track</source>
-        <translation>Spår</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Duration</source>
-        <translation>Speltid</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Bitrate</source>
-        <translation>Bitfrekvens</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Age</source>
-        <translation>Ålder</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Year</source>
-        <translation>År</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Size</source>
-        <translation>Storlek</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Origin</source>
-        <translation>Källa</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Score</source>
-        <translation>Betyg</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TrackModel.cpp" line="233"/>
-        <source>Composer</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="492"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="493"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Entschuldige, dein Filter &apos;%1&apos; erzeugte keine Ergebnisse.</translation>
     </message>
@@ -3272,59 +3272,59 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Duration</source>
         <translation>Speltid</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Bitrate</source>
         <translation>Bitfrekvens</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Age</source>
         <translation>Ålder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Year</source>
         <translation>År</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Size</source>
         <translation>Storlek</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Origin</source>
         <translation>Källa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="373"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="374"/>
         <source>Composer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="589"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="590"/>
         <source>All Artists</source>
         <translation>Alla artister</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="704"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="729"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="705"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="730"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="706"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="731"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="707"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="732"/>
         <source>Collection of %1</source>
         <translation>Samling av %1</translation>
     </message>
