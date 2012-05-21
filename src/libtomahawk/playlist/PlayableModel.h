@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -18,8 +18,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRACKMODEL_H
-#define TRACKMODEL_H
+#ifndef PLAYABLEMODEL_H
+#define PLAYABLEMODEL_H
 
 #include <QAbstractItemModel>
 
@@ -32,15 +32,15 @@ class QMetaData;
 
 class PlayableItem;
 
-class DLLEXPORT TrackModel : public QAbstractItemModel
+class DLLEXPORT PlayableModel : public QAbstractItemModel
 {
 Q_OBJECT
 
 public:
-    enum TrackItemStyle
+    enum PlayableItemStyle
     { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3 };
 
-    enum TrackModelRole
+    enum PlayableModelRole
     { StyleRole = Qt::UserRole + 1 };
 
     enum Columns {
@@ -58,11 +58,11 @@ public:
         Score = 11
     };
 
-    explicit TrackModel( QObject* parent = 0 );
-    virtual ~TrackModel();
+    explicit PlayableModel( QObject* parent = 0 );
+    virtual ~PlayableModel();
 
-    TrackModel::TrackItemStyle style() const { return m_style; }
-    void setStyle( TrackModel::TrackItemStyle style );
+    PlayableModel::PlayableItemStyle style() const { return m_style; }
+    void setStyle( PlayableModel::PlayableItemStyle style );
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
@@ -153,7 +153,7 @@ private:
     QString m_title;
     QString m_description;
 
-    TrackItemStyle m_style;
+    PlayableItemStyle m_style;
 };
 
-#endif // TRACKMODEL_H
+#endif // PLAYABLEMODEL_H

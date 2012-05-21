@@ -27,7 +27,7 @@ using namespace Tomahawk;
 
 
 CollectionFlatModel::CollectionFlatModel( QObject* parent )
-    : TrackModel( parent )
+    : PlayableModel( parent )
 {
 }
 

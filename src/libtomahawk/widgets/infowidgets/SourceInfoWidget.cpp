@@ -62,12 +62,12 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentTracksModel = new RecentlyAddedModel( source, ui->recentCollectionView );
-    m_recentTracksModel->setStyle( TrackModel::Short );
-    ui->recentCollectionView->setTrackModel( m_recentTracksModel );
-    ui->recentCollectionView->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
+    m_recentTracksModel->setStyle( PlayableModel::Short );
+    ui->recentCollectionView->setPlayableModel( m_recentTracksModel );
+    ui->recentCollectionView->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
 
     m_historyModel = new RecentlyPlayedModel( source, ui->historyView );
-    m_historyModel->setStyle( TrackModel::Short );
+    m_historyModel->setStyle( PlayableModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );

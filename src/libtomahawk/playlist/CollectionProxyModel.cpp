@@ -30,7 +30,7 @@
 
 
 CollectionProxyModel::CollectionProxyModel( QObject* parent )
-    : TrackProxyModel( parent )
+    : PlayableProxyModel( parent )
 {
 }
 

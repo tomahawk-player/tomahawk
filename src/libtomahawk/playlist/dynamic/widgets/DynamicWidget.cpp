@@ -29,7 +29,7 @@
 
 #include "DynamicControlList.h"
 #include "dynamic/DynamicModel.h"
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
 #include "PlayableItem.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"

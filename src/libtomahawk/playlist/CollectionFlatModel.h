@@ -25,7 +25,7 @@
 #include <QHash>
 
 #include "Typedefs.h"
-#include "TrackModel.h"
+#include "PlayableModel.h"
 #include "Query.h"
 #include "Source.h"
 #include "PlaylistInterface.h"
@@ -36,7 +36,7 @@
 
 class QMetaData;
 
-class DLLEXPORT CollectionFlatModel : public TrackModel
+class DLLEXPORT CollectionFlatModel : public PlayableModel
 {
 Q_OBJECT
 

@@ -28,9 +28,9 @@
 #include "SourceList.h"
 
 #include "PlaylistView.h"
-#include "TrackModel.h"
+#include "PlayableModel.h"
 #include "PlayableItem.h"
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "TrackHeader.h"
 
@@ -42,7 +42,7 @@
 using namespace Tomahawk;
 
 
-PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, TrackProxyModel* proxy )
+PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )

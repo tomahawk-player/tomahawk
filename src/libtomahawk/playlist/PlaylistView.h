@@ -20,7 +20,7 @@
 #ifndef PLAYLISTVIEW_H
 #define PLAYLISTVIEW_H
 
-#include "playlist/TrackProxyModel.h"
+#include "playlist/PlayableProxyModel.h"
 #include "playlist/PlaylistModel.h"
 #include "TrackView.h"
 #include "ViewPage.h"

@@ -25,8 +25,8 @@
 
 #include "TrackHeader.h"
 #include "ViewManager.h"
-#include "TrackModel.h"
-#include "TrackProxyModel.h"
+#include "PlayableModel.h"
+#include "PlayableProxyModel.h"
 #include "PlayableItem.h"
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
@@ -112,7 +112,7 @@ TrackView::setGuid( const QString& guid )
 
 
 void
-TrackView::setProxyModel( TrackProxyModel* model )
+TrackView::setProxyModel( PlayableProxyModel* model )
 {
     m_proxyModel = model;
 
@@ -127,19 +127,19 @@ void
 TrackView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    tDebug() << "Explicitly use setTrackModel instead";
+    tDebug() << "Explicitly use setPlayableModel instead";
     Q_ASSERT( false );
 }
 
 
 void
-TrackView::setTrackModel( TrackModel* model )
+TrackView::setPlayableModel( PlayableModel* model )
 {
     m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceTrackModel( m_model );
+        m_proxyModel->setSourcePlayableModel( m_model );
     }
 
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
@@ -152,9 +152,9 @@ TrackView::setTrackModel( TrackModel* model )
 
     switch( model->style() )
     {
-        case TrackModel::Short:
-        case TrackModel::ShortWithAvatars:
-        case TrackModel::Large:
+        case PlayableModel::Short:
+        case PlayableModel::ShortWithAvatars:
+        case PlayableModel::Large:
             setHeaderHidden( true );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         break;
@@ -169,7 +169,7 @@ TrackView::setTrackModel( TrackModel* model )
 void
 TrackView::onViewChanged()
 {
-    if ( m_model->style() != TrackModel::Short && m_model->style() != TrackModel::Large ) // eventual FIXME?
+    if ( m_model->style() != PlayableModel::Short && m_model->style() != PlayableModel::Large ) // eventual FIXME?
         return;
 
     if ( m_timer.isActive() )
@@ -597,10 +597,10 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( !m_model || m_model->style() != TrackModel::Detailed )
+    if ( !m_model || m_model->style() != PlayableModel::Detailed )
         return;
 
-    if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album || idx.column() == TrackModel::Track )
+    if ( idx.column() == PlayableModel::Artist || idx.column() == PlayableModel::Album || idx.column() == PlayableModel::Track )
     {
         if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
              pos.x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
@@ -649,7 +649,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( !m_model || m_model->style() != TrackModel::Detailed )
+    if ( !m_model || m_model->style() != PlayableModel::Detailed )
         return;
 
     QModelIndex idx = indexAt( event->pos() );
@@ -659,7 +659,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
         PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
         switch ( idx.column() )
         {
-            case TrackModel::Artist:
+            case PlayableModel::Artist:
             {
                 if ( item->query()->numResults() )
                 {
@@ -672,7 +672,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
                 break;
             }
 
-            case TrackModel::Album:
+            case PlayableModel::Album:
             {
                 if ( item->query()->numResults() )
                 {
@@ -686,7 +686,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
                 break;
             }
 
-            case TrackModel::Track:
+            case PlayableModel::Track:
             {
                 ViewManager::instance()->show( item->query() );
                 break;

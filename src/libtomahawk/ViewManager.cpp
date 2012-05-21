@@ -32,8 +32,8 @@
 #include "CollectionView.h"
 #include "PlaylistModel.h"
 #include "PlaylistView.h"
-#include "TrackProxyModel.h"
-#include "TrackModel.h"
+#include "PlayableProxyModel.h"
+#include "PlayableModel.h"
 #include "ArtistView.h"
 #include "AlbumView.h"
 #include "AlbumProxyModel.h"
@@ -289,7 +289,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         {
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
-            view->setTrackModel( model );
+            view->setPlayableModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -496,7 +496,7 @@ ViewManager::showRecentPlaysPage()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
-        raModel->setStyle( TrackModel::Large );
+        raModel->setStyle( PlayableModel::Large );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );

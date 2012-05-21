@@ -26,7 +26,7 @@
 #include <QScrollBar>
 
 #include "PlaylistModel.h"
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
 #include "TrackHeader.h"
 #include "DynamicModel.h"
 #include "widgets/OverlayWidget.h"

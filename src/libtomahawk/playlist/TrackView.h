@@ -32,8 +32,8 @@
 class QAction;
 class AnimatedSpinner;
 class TrackHeader;
-class TrackModel;
-class TrackProxyModel;
+class PlayableModel;
+class PlayableProxyModel;
 class OverlayWidget;
 
 class DLLEXPORT TrackView : public QTreeView
@@ -47,12 +47,12 @@ public:
     virtual QString guid() const { return m_guid; }
     virtual void setGuid( const QString& guid );
 
-    virtual void setTrackModel( TrackModel* model );
+    virtual void setPlayableModel( PlayableModel* model );
     virtual void setModel( QAbstractItemModel* model );
-    void setProxyModel( TrackProxyModel* model );
+    void setProxyModel( PlayableProxyModel* model );
 
-    virtual TrackModel* model() const { return m_model; }
-    TrackProxyModel* proxyModel() const { return m_proxyModel; }
+    virtual PlayableModel* model() const { return m_model; }
+    PlayableProxyModel* proxyModel() const { return m_proxyModel; }
     PlaylistItemDelegate* delegate() const { return m_delegate; }
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
@@ -114,8 +114,8 @@ private:
     void updateHoverIndex( const QPoint& pos );
 
     QString m_guid;
-    TrackModel* m_model;
-    TrackProxyModel* m_proxyModel;
+    PlayableModel* m_model;
+    PlayableProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
     OverlayWidget* m_overlay;

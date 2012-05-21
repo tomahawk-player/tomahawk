@@ -35,7 +35,7 @@ TopTracksContext::TopTracksContext()
     m_topHitsView->setGuid( "TopTracksContext" );
     m_topHitsView->setUpdatesContextView( false );
     m_topHitsModel = new PlaylistModel( m_topHitsView );
-    m_topHitsModel->setStyle( TrackModel::Short );
+    m_topHitsModel->setStyle( PlayableModel::Short );
     m_topHitsView->setPlaylistModel( m_topHitsModel );
     m_topHitsView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 

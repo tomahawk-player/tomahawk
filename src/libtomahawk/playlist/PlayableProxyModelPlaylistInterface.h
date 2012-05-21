@@ -23,21 +23,21 @@
 #include <QtGui/QSortFilterProxyModel>
 
 #include "PlaylistInterface.h"
-#include "playlist/TrackModel.h"
+#include "playlist/PlayableModel.h"
 
 #include "DllMacro.h"
 
-class TrackProxyModel;
+class PlayableProxyModel;
 
 namespace Tomahawk {
 
-class DLLEXPORT TrackProxyModelPlaylistInterface : public Tomahawk::PlaylistInterface
+class DLLEXPORT PlayableProxyModelPlaylistInterface : public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    explicit TrackProxyModelPlaylistInterface( TrackProxyModel* proxyModel );
-    virtual ~TrackProxyModelPlaylistInterface();
+    explicit PlayableProxyModelPlaylistInterface( PlayableProxyModel* proxyModel );
+    virtual ~PlayableProxyModelPlaylistInterface();
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
@@ -60,7 +60,7 @@ public slots:
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 protected:
-    QWeakPointer< TrackProxyModel > m_proxyModel;
+    QWeakPointer< PlayableProxyModel > m_proxyModel;
     PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
 };

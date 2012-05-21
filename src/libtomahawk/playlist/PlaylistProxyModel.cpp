@@ -24,7 +24,7 @@
 
 
 PlaylistProxyModel::PlaylistProxyModel( QObject* parent )
-    : TrackProxyModel( parent )
+    : PlayableProxyModel( parent )
 {
 }
 

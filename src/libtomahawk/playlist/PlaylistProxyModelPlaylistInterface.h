@@ -20,7 +20,7 @@
 #ifndef PLAYLISTPROXYMODELPLAYLISTINTERFACE_H
 #define PLAYLISTPROXYMODELPLAYLISTINTERFACE_H
 
-#include "TrackProxyModelPlaylistInterface.h"
+#include "PlayableProxyModelPlaylistInterface.h"
 
 #include "DllMacro.h"
 
@@ -29,7 +29,7 @@ class PlaylistProxyModel;
 namespace Tomahawk
 {
 
-class DLLEXPORT PlaylistProxyModelPlaylistInterface : public TrackProxyModelPlaylistInterface
+class DLLEXPORT PlaylistProxyModelPlaylistInterface : public PlayableProxyModelPlaylistInterface
 {
 Q_OBJECT
 

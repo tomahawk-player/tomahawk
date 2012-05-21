@@ -17,11 +17,11 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
 
 #include <QTreeView>
 
-#include "TrackProxyModelPlaylistInterface.h"
+#include "PlayableProxyModelPlaylistInterface.h"
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
@@ -30,7 +30,7 @@
 #include "utils/Logger.h"
 
 
-TrackProxyModel::TrackProxyModel( QObject* parent )
+PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , m_model( 0 )
     , m_showOfflineResults( true )
@@ -39,21 +39,21 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceTrackModel( 0 );
+    setSourcePlayableModel( 0 );
 }
 
 
 void
-TrackProxyModel::setSourceModel( QAbstractItemModel* model )
+PlayableProxyModel::setSourceModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    qDebug() << "Explicitly use setSourceTrackModel instead";
+    qDebug() << "Explicitly use setSourcePlayableModel instead";
     Q_ASSERT( false );
 }
 
 
 void
-TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
+PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 {
     m_model = sourceModel;
 
@@ -65,7 +65,7 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 
 
 bool
-TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
@@ -102,7 +102,7 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
 
 
 void
-TrackProxyModel::remove( const QModelIndex& index )
+PlayableProxyModel::remove( const QModelIndex& index )
 {
     if ( !sourceModel() )
         return;
@@ -114,7 +114,7 @@ TrackProxyModel::remove( const QModelIndex& index )
 
 
 void
-TrackProxyModel::remove( const QModelIndexList& indexes )
+PlayableProxyModel::remove( const QModelIndexList& indexes )
 {
     if ( !sourceModel() )
         return;
@@ -131,7 +131,7 @@ TrackProxyModel::remove( const QModelIndexList& indexes )
 
 
 void
-TrackProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
+PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 {
     if ( !sourceModel() )
         return;
@@ -148,7 +148,7 @@ TrackProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 
 
 bool
-TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
     PlayableItem* p1 = itemFromIndex( left );
     PlayableItem* p2 = itemFromIndex( right );
@@ -200,7 +200,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         id2 = (qint64)&q2;
     }
 
-    if ( left.column() == TrackModel::Artist ) // sort by artist
+    if ( left.column() == PlayableModel::Artist ) // sort by artist
     {
         if ( artist1 == artist2 )
         {
@@ -222,7 +222,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
 
         return QString::localeAwareCompare( artist1, artist2 ) < 0;
     }
-    else if ( left.column() == TrackModel::Album ) // sort by album
+    else if ( left.column() == PlayableModel::Album ) // sort by album
     {
         if ( album1 == album2 )
         {
@@ -239,28 +239,28 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
 
         return QString::localeAwareCompare( album1, album2 ) < 0;
     }
-    else if ( left.column() == TrackModel::Bitrate ) // sort by bitrate
+    else if ( left.column() == PlayableModel::Bitrate ) // sort by bitrate
     {
         if ( bitrate1 == bitrate2 )
             return id1 < id2;
 
         return bitrate1 < bitrate2;
     }
-    else if ( left.column() == TrackModel::Age ) // sort by mtime
+    else if ( left.column() == PlayableModel::Age ) // sort by mtime
     {
         if ( mtime1 == mtime2 )
             return id1 < id2;
 
         return mtime1 < mtime2;
     }
-    else if ( left.column() == TrackModel::Filesize ) // sort by file size
+    else if ( left.column() == PlayableModel::Filesize ) // sort by file size
     {
         if ( size1 == size2 )
             return id1 < id2;
 
         return size1 < size2;
     }
-    else if ( left.column() == TrackModel::AlbumPos ) // sort by album pos
+    else if ( left.column() == PlayableModel::AlbumPos ) // sort by album pos
     {
         if ( discnumber1 != discnumber2 )
         {
@@ -283,11 +283,11 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
 
 
 Tomahawk::playlistinterface_ptr
-TrackProxyModel::playlistInterface()
+PlayableProxyModel::playlistInterface()
 {
     if ( m_playlistInterface.isNull() )
     {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::TrackProxyModelPlaylistInterface( this ) );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::PlayableProxyModelPlaylistInterface( this ) );
     }
 
     return m_playlistInterface;

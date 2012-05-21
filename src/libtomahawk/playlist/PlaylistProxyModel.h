@@ -20,11 +20,11 @@
 #ifndef PLAYLISTPROXYMODEL_H
 #define PLAYLISTPROXYMODEL_H
 
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT PlaylistProxyModel : public TrackProxyModel
+class DLLEXPORT PlaylistProxyModel : public PlayableProxyModel
 {
 Q_OBJECT
 

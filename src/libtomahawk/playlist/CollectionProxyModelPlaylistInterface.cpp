@@ -28,7 +28,7 @@
 using namespace Tomahawk;
 
 CollectionProxyModelPlaylistInterface::CollectionProxyModelPlaylistInterface( CollectionProxyModel *proxyModel )
-    : TrackProxyModelPlaylistInterface( proxyModel )
+    : PlayableProxyModelPlaylistInterface( proxyModel )
 {
 }
 

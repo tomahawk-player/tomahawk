@@ -26,7 +26,7 @@
 
 class TrackModel;
 class PlayableItem;
-class TrackProxyModel;
+class PlayableProxyModel;
 class TrackView;
 
 class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
@@ -34,7 +34,7 @@ class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
+    PlaylistItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
     void updateRowSize( const QModelIndex& index );
 
@@ -53,7 +53,7 @@ private:
     QTextOption m_bottomOption;
 
     TrackView* m_view;
-    TrackProxyModel* m_model;
+    PlayableProxyModel* m_model;
 };
 
 #endif // PLAYLISTITEMDELEGATE_H

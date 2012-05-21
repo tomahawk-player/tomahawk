@@ -62,9 +62,9 @@ set( libGuiSources
     playlist/QueueProxyModel.cpp
     playlist/QueueProxyModelPlaylistInterface.cpp
     playlist/QueueView.cpp
-    playlist/TrackModel.cpp
-    playlist/TrackProxyModel.cpp
-    playlist/TrackProxyModelPlaylistInterface.cpp
+    playlist/PlayableModel.cpp
+    playlist/PlayableProxyModel.cpp
+    playlist/PlayableProxyModelPlaylistInterface.cpp
     playlist/TrackView.cpp
     playlist/TrackHeader.cpp
     playlist/AlbumModel.cpp
