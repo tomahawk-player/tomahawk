@@ -59,7 +59,7 @@ PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, TrackPr
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( m_model->sourceModel(), SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
+    connect( m_model, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
     if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
         connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 

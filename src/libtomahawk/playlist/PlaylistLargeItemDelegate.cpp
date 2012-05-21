@@ -58,7 +58,7 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( proxy->sourceModel(), SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
     if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
         connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 }
