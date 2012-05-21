@@ -44,6 +44,7 @@ protected:
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    bool eventFilter( QObject* obj, QEvent* event );
 
 signals:
     void updateIndex( const QModelIndex& idx );

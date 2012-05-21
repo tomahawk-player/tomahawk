@@ -31,7 +31,6 @@
 #include "audio/AudioEngine.h"
 
 #include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include "utils/PixmapDelegateFader.h"
 #include <utils/Closure.h>
 
@@ -41,6 +40,7 @@
 #include "ViewManager.h"
 #include "utils/AnimatedSpinner.h"
 #include "widgets/ImageButton.h"
+#include "utils/Logger.h"
 
 
 AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )
@@ -77,32 +77,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->save();
     painter->setRenderHint( QPainter::Antialiasing );
 
-/*    if ( !( option.state & QStyle::State_Selected ) )
-    {
-        QRect shadowRect = option.rect.adjusted( 5, 4, -5, -40 );
-        painter->setPen( QColor( 90, 90, 90 ) );
-        painter->drawRoundedRect( shadowRect, 0.5, 0.5 );
-
-        QPen shadowPen( QColor( 30, 30, 30 ) );
-        shadowPen.setWidth( 0.4 );
-        painter->drawLine( shadowRect.bottomLeft() + QPoint( -1, 2 ), shadowRect.bottomRight() + QPoint( 1, 2 ) );
-
-        shadowPen.setColor( QColor( 160, 160, 160 ) );
-        painter->setPen( shadowPen );
-        painter->drawLine( shadowRect.topLeft() + QPoint( -1, 2 ), shadowRect.bottomLeft() + QPoint( -1, 2 ) );
-        painter->drawLine( shadowRect.topRight() + QPoint( 2, 2 ), shadowRect.bottomRight() + QPoint( 2, 2 ) );
-        painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 3 ), shadowRect.bottomRight() + QPoint( 0, 3 ) );
-
-        shadowPen.setColor( QColor( 180, 180, 180 ) );
-        painter->setPen( shadowPen );
-        painter->drawLine( shadowRect.topLeft() + QPoint( -2, 3 ), shadowRect.bottomLeft() + QPoint( -2, 1 ) );
-        painter->drawLine( shadowRect.topRight() + QPoint( 3, 3 ), shadowRect.bottomRight() + QPoint( 3, 1 ) );
-        painter->drawLine( shadowRect.bottomLeft() + QPoint( 0, 4 ), shadowRect.bottomRight() + QPoint( 0, 4 ) );
-    }*/
-
-//    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
     QRect r = option.rect;
-
     QString top, bottom;
     if ( !item->album().isNull() )
     {
@@ -232,15 +207,6 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
             TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.1 );
             painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
         }
-        else
-        {
-/*            if ( !( option.state & QStyle::State_Selected ) )
-#ifdef Q_WS_MAC
-                painter->setPen( opt.palette.color( QPalette::Dark ).darker( 200 ) );
-#else
-                painter->setPen( opt.palette.color( QPalette::Dark ) );
-#endif*/
-        }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 10 );
@@ -266,6 +232,8 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     spinner->setAutoCenter( false );
     spinner->fadeIn();
     spinner->move( pos );
+    spinner->setFocusPolicy( Qt::NoFocus );
+    spinner->installEventFilter( this );
 
     m_spinner[ index ] = spinner;
     
@@ -333,6 +301,8 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             button->setFixedSize( 48, 48 );
             button->move( option.rect.center() - QPoint( 23, 23 ) );
             button->setContentsMargins( 0, 0, 0, 0 );
+            button->setFocusPolicy( Qt::NoFocus );
+            button->installEventFilter( this );
             button->show();
             
             NewClosure( button, SIGNAL( clicked( bool ) ),
@@ -505,9 +475,34 @@ AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
     button->setFixedSize( 48, 48 );
     button->move( pos );
     button->setContentsMargins( 0, 0, 0, 0 );
+    button->setFocusPolicy( Qt::NoFocus );
+    button->installEventFilter( this );
     button->show();
             
     connect( button, SIGNAL( clicked( bool ) ), AudioEngine::instance(), SLOT( playPause() ) );
 
     m_pauseButton[ index ] = button;
+}
+
+
+bool
+AlbumItemDelegate::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::Wheel )
+    {
+        QWheelEvent* we = static_cast<QWheelEvent*>( event );
+        QWheelEvent* wheelEvent = new QWheelEvent(
+            we->pos(),
+            we->globalPos(),
+            we->delta(),
+            we->buttons(),
+            we->modifiers(),
+            we->orientation() );
+
+        qApp->postEvent( m_view->viewport(), wheelEvent );
+        event->accept();
+        return true;
+    }
+    else
+        return QObject::eventFilter( obj, event );
 }
