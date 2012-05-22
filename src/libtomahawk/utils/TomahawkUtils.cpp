@@ -889,7 +889,6 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
         return;
 
     const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) );
-#endif
 
 #ifdef Q_OS_WIN
     const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
@@ -911,6 +910,8 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 #endif
 
     QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, resolverToUse ) );
+
+#endif
 }
 
 
