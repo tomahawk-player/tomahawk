@@ -286,7 +286,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             m_rids.insert( r->id(), r );
         }
 
-        if ( q->playable() && !q->isFullTextQuery() )
+        if ( q->solved() && !q->isFullTextQuery() )
         {
             setQIDState( q, 0 );
             return;
