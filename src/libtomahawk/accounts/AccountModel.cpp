@@ -729,6 +729,12 @@ AccountModel::indexForAtticaId( const QString& resolverId ) const
         {
             return index( i, 0, QModelIndex() );
         }
+        else if ( m_accounts[ i ]->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( m_accounts[ i ]->customAccount ) )
+        {
+            const CustomAtticaAccount* atticaAcct = qobject_cast< CustomAtticaAccount* >( m_accounts[ i ]->customAccount );
+            if ( atticaAcct->atticaContent().id() == resolverId )
+                return index( i, 0, QModelIndex() );
+        }
     }
 
     return QModelIndex();
