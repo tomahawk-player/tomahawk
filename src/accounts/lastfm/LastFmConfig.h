@@ -46,12 +46,14 @@ public slots:
 private slots:
     void enableButton();
     
-    void loadHistory( int page = 1 );
+    void loadHistory();
     void onHistoryLoaded();
 
 private:
     LastFmAccount* m_account;
     Ui_LastFmConfig* m_ui;
+    
+    unsigned int m_page;
 };
 
 }

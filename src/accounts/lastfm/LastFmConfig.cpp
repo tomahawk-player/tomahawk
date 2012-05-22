@@ -34,6 +34,7 @@ using namespace Tomahawk::Accounts;
 LastFmConfig::LastFmConfig( LastFmAccount* account )
     : QWidget( 0 )
     , m_account( account )
+    , m_page( 1 )
 {
     m_ui = new Ui_LastFmConfig;
     m_ui->setupUi( this );
@@ -105,9 +106,9 @@ LastFmConfig::enableButton()
 
 
 void
-LastFmConfig::loadHistory( int page )
+LastFmConfig::loadHistory()
 {
-    if ( page == 1 )
+    if ( m_page == 1 )
     {
         m_ui->importHistory->setText( tr( "Importing History..." ) );
         m_ui->importHistory->setEnabled( false );
@@ -115,7 +116,7 @@ LastFmConfig::loadHistory( int page )
         m_ui->progressBar->show();
     }
 
-    QNetworkReply* reply = lastfm::User( m_ui->username->text().toLower() ).getRecentTracks( 200, page );
+    QNetworkReply* reply = lastfm::User( m_ui->username->text().toLower() ).getRecentTracks( 200, m_page );
     connect( reply, SIGNAL( finished() ), SLOT( onHistoryLoaded() ) );
 }
 
@@ -123,6 +124,7 @@ LastFmConfig::loadHistory( int page )
 void
 LastFmConfig::onHistoryLoaded()
 {
+    int total = 0;
     bool finished = false;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     
@@ -132,7 +134,7 @@ LastFmConfig::onHistoryLoaded()
 
         foreach ( lastfm::XmlQuery e, lfm.children( "track" ) )
         {
-            tDebug() << "Found:" << e["artist"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
+//            tDebug() << "Found:" << e["artist"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
             Tomahawk::query_ptr query = Query::get( e["artist"].text(), e["name"].text(), QString(), QString(), false );
             uint timeStamp = e["date"].attribute( "uts" ).toUInt();
             
@@ -145,14 +147,16 @@ LastFmConfig::onHistoryLoaded()
             lastfm::XmlQuery stats = lfm.children( "recenttracks" ).first();
             
             int page = stats.attribute( "page" ).toInt();
-            int total = stats.attribute( "totalPages" ).toInt();
-            tDebug() << "page:" << page << "total:" << total;
+            total = stats.attribute( "totalPages" ).toInt();
             
             m_ui->progressBar->setMaximum( total );
             m_ui->progressBar->setValue( page );
             
             if ( page < total )
-                loadHistory( ++page );
+            {
+                m_page = page + 1;
+                loadHistory();
+            }
             else
                 finished = true;
         }
@@ -167,12 +171,15 @@ LastFmConfig::onHistoryLoaded()
     
     if ( finished )
     {
-        if ( m_ui->progressBar->value() != m_ui->progressBar->maximum() )
+        if ( m_page != total )
+        {
             m_ui->importHistory->setText( tr( "History Incomplete. Retry" ) );
+            m_ui->importHistory->setEnabled( true );
+        }
         else
-            m_ui->importHistory->setText( tr( "Import Playback History" ) );
-
-        m_ui->importHistory->setEnabled( true );
+        {
+            m_ui->importHistory->setText( tr( "Playback History Imported" ) );
+        }
     }
 }
 
