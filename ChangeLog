@@ -1,6 +1,15 @@
+Version 0.5.0:
+    * Added "Stop playback after this track" context menu items.
+    * You can now import your entire Last.fm playback history into Tomahawk.
+    * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux.
+    * When listening privately scrobbling to Last.fm is now disabled.
+    * Added a toolbar with page back / forward buttons and the global search.
+    * New grid view with direct playback controls.
+    * Added a track page showing a song's lyrics and other similar tracks.
+    * Separate Loved Tracks and Recently Played views per source.
+
 Version 0.4.2:
     * Fix ZeroConf protocol showing IP addresses instead of host names.
-		  Sometimes. Full fix coming later.
     * Updated translations for various languages.
     * Resuming playback restores correct volume settings.
     * Reduced CPU usage during playback.
@@ -22,7 +31,7 @@ Version 0.4.0:
     * Fixed icons not appearing in resolvers list.
     * Fixed various UI glitches and stray error messages in stations.
     * Fixed bug where album page would resolve bottom-to-top.
-    * Fixed bug where Footnotes would not update when changing selected album in Album View.
+    * Fixed bug where Footnotes would not update when changing selected album.
     * Fixed dragging albums and artists from charts, album, and artist views.
     * Fixed bug where filter text would be one step behind filter value.
     * Fixed bug where resolvers would enable themselves after auto-updating.
