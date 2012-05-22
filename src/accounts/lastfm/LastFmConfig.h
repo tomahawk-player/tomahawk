@@ -54,6 +54,7 @@ private:
     Ui_LastFmConfig* m_ui;
     
     unsigned int m_page;
+    unsigned int m_lastTimeStamp;
 };
 
 }

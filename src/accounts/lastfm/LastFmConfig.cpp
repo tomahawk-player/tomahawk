@@ -35,6 +35,7 @@ LastFmConfig::LastFmConfig( LastFmAccount* account )
     : QWidget( 0 )
     , m_account( account )
     , m_page( 1 )
+    , m_lastTimeStamp( 0 )
 {
     m_ui = new Ui_LastFmConfig;
     m_ui->setupUi( this );
@@ -108,7 +109,13 @@ LastFmConfig::enableButton()
 void
 LastFmConfig::loadHistory()
 {
-    m_ui->importHistory->setText( tr( "Importing History..." ) );
+    if ( m_lastTimeStamp )
+    {
+        m_ui->importHistory->setText( tr( "Importing %1", "e.g. Importing 2012/01/01" ).arg( QDateTime::fromTime_t( m_lastTimeStamp ).toString( "MMMM d yyyy" ) ) );
+    }
+    else
+        m_ui->importHistory->setText( tr( "Importing History..." ) );
+
     m_ui->importHistory->setEnabled( false );
     m_ui->progressBar->show();
 
@@ -132,9 +139,9 @@ LastFmConfig::onHistoryLoaded()
         {
 //            tDebug() << "Found:" << e["artist"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
             Tomahawk::query_ptr query = Query::get( e["artist"].text(), e["name"].text(), QString(), QString(), false );
-            uint timeStamp = e["date"].attribute( "uts" ).toUInt();
+            m_lastTimeStamp = e["date"].attribute( "uts" ).toUInt();
             
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( query, DatabaseCommand_LogPlayback::Finished, timeStamp );
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( query, DatabaseCommand_LogPlayback::Finished, m_lastTimeStamp );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
         
