@@ -39,6 +39,7 @@
 #include <QDir>
 #include <QMutex>
 #include <QCryptographicHash>
+#include <QProcess>
 
 #include <quazip.h>
 #include <quazipfile.h>
@@ -848,17 +849,6 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 void
 extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 {
-#ifndef Q_OS_MAC
-    Q_UNUSED( zipFilename );
-    Q_UNUSED( receiver );
-#endif
-
-#if !defined(Q_OS_MAC) && !defined (Q_OS_WIN)
-    Q_ASSERT( false );
-    qWarning() << "NO SUPPORT YET FOR LINUX BINARY RESOLVERS!";
-    return;
-#endif
-
 #ifdef Q_OS_MAC
     // Platform-specific handling of resolver payload now. We know it's good
     // Unzip the file.
@@ -884,7 +874,9 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
     qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
 
     copyWithAuthentication( src, dest, receiver );
-#elif  defined(Q_OS_WIN)
+
+    return;
+#elif  defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     // We unzip directly to the target location, just like normal attica resolvers
     Q_ASSERT( receiver );
     if ( !receiver )
@@ -897,19 +889,28 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
         return;
 
     const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) );
+#endif
+
+#ifdef Q_OS_WIN
     const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
+#elif defined(Q_OS_LINUX)
+    const QStringList files = resolverPath.entryList( QStringList() << "*_tomahawkresolver", QDir::Files );
+#endif
+
     qDebug() << "Found executables in unzipped binary resolver dir:" << files;
     Q_ASSERT( files.size() == 1 );
     if ( files.size() < 1 )
         return;
 
     const QString resolverToUse = resolverPath.absoluteFilePath( files.first() );
-    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, resolverToUse ) );
 
+#ifdef Q_OS_LINUX
+    QProcess p;
+    p.start( "chmod", QStringList() << "744" << resolverToUse, QIODevice::ReadOnly );
+    p.waitForFinished( 6000 );
 #endif
 
-    // No support for binary resolvers on linux! Shouldn't even have been allowed to see/install..
-    Q_ASSERT( false );
+    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, resolverToUse ) );
 }
 
 

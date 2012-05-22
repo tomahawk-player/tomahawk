@@ -345,7 +345,11 @@ AtticaManager::binaryResolversList( BaseJob* j )
     platform = "osx";
 #elif defined(Q_OS_WIN)
     platform = "win";
-#endif
+#elif defined(Q_OS_LINUX) && defined(__GNUC__) && defined(__x86_64__)
+    platform = "linux-x64";
+#elif defined(Q_OS_LINUX) // Horrible assumption here...
+    platform = "linux-x86";
+    #endif
 
     foreach ( const Content& c, binaryResolvers )
     {
@@ -533,7 +537,7 @@ AtticaManager::payloadFetched()
             else
             {
                 TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, reply->property( "createAccount" ).toBool(), this ) );
-                // Don't emit success or failed yet, helpre will do that.
+                // Don't emit success or failed yet, helper will do that.
                 return;
             }
         }

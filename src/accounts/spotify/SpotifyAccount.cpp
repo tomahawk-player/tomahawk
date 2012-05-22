@@ -52,8 +52,12 @@ static QPixmap* s_icon = 0;
 static QString s_resolverId = "spotify-osx";
 #elif defined(Q_OS_WIN)
 static QString s_resolverId = "spotify-win";
+#elif defined(Q_OS_LINUX) && defined(__GNUC__) && defined(__x86_64__)
+static QString s_resolverId = "spotify-linux-x64";
+#elif defined(Q_OS_LINUX)
+static QString s_resolverId = "spotify-linux-x86";
 #else
-static QString s_resolverId = "spotify-linux";
+static QString s_resolverId = "spotify-unknown";
 #endif
 
 Account*
@@ -171,7 +175,7 @@ SpotifyAccount::checkForResolver()
     const QDir path = QCoreApplication::applicationDirPath();
     QFile file( path.absoluteFilePath( "spotify_tomahawkresolver" ) );
     return file.exists();
-#else if defined(Q_OS_WIN)
+#elif defined(Q_OS_WIN)
     QDir appDataDir = TomahawkUtils::appDataDir();
     return appDataDir.exists( QString( "atticaresolvers/%1/spotify_tomahawkresolver.exe" ).arg( s_resolverId ) );
 #endif
