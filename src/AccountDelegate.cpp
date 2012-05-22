@@ -725,7 +725,6 @@ void
 AccountDelegate::doneInstalling ( const QPersistentModelIndex& idx )
 {
     qDebug() << "STOP INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
-    Q_ASSERT( m_loadingSpinners.contains( idx ) );
     if ( !m_loadingSpinners.contains( idx ) )
         return;
 
