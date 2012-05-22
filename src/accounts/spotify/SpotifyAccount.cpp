@@ -186,6 +186,9 @@ SpotifyAccount::checkForResolver()
 #elif defined(Q_OS_WIN)
     QDir appDataDir = TomahawkUtils::appDataDir();
     return appDataDir.exists( QString( "atticaresolvers/%1/spotify_tomahawkresolver.exe" ).arg( s_resolverId ) );
+#elif defined(Q_OS_LINUX)
+    QDir appDataDir = TomahawkUtils::appDataDir();
+    return appDataDir.exists( QString( "atticaresolvers/%1/spotify_tomahawkresolver" ).arg( s_resolverId ) );
 #endif
 
     return false;
