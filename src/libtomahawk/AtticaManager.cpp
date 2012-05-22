@@ -513,14 +513,14 @@ AtticaManager::payloadFetched()
     // we got a zip file, save it to a temporary file, then unzip it to our destination data dir
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QTemporaryFile f( QDir::tempPath() + QDir::separator() + "tomahawkattica_XXXXXX.zip" );
-        if ( !f.open() )
+        QTemporaryFile* f = new QTemporaryFile( QDir::tempPath() + QDir::separator() + "tomahawkattica_XXXXXX.zip" );
+        if ( !f->open() )
         {
-            tLog() << "Failed to write zip file to temp file:" << f.fileName();
+            tLog() << "Failed to write zip file to temp file:" << f->fileName();
             return;
         }
-        f.write( reply->readAll() );
-        f.close();
+        f->write( reply->readAll() );
+        f->close();
 
         if ( m_resolverStates[ resolverId ].binary )
         {
@@ -530,20 +530,20 @@ AtticaManager::payloadFetched()
             Q_ASSERT( !signature.isEmpty() );
             if ( signature.isEmpty() )
                 return;
-            if ( !TomahawkUtils::verifyFile( f.fileName(), signature ) )
+            if ( !TomahawkUtils::verifyFile( f->fileName(), signature ) )
             {
-                qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f.fileName() << signature;
+                qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f->fileName() << signature;
             }
             else
             {
-                TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, reply->property( "createAccount" ).toBool(), this ) );
+                TomahawkUtils::extractBinaryResolver( f->fileName(), new BinaryInstallerHelper( f, resolverId, reply->property( "createAccount" ).toBool(), this ) );
                 // Don't emit success or failed yet, helper will do that.
                 return;
             }
         }
         else
         {
-            QDir dir( TomahawkUtils::extractScriptPayload( f.fileName(), resolverId ) );
+            QDir dir( TomahawkUtils::extractScriptPayload( f->fileName(), resolverId ) );
             QString resolverPath = dir.absoluteFilePath( m_resolverStates[ resolverId ].scriptPath );
 
             if ( !resolverPath.isEmpty() )
@@ -562,6 +562,8 @@ AtticaManager::payloadFetched()
                 installedSuccessfully = true;
             }
         }
+
+        delete f;
     }
     else
     {

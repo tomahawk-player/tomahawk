@@ -846,73 +846,107 @@ unzipFileInFolder( const QString &zipFileName, const QDir &folder )
 }
 
 
+class ScopedDeleter
+{
+public:
+    ScopedDeleter( QObject* o ) : m_o( 0 ) {}
+    ~ScopedDeleter() { m_o->deleteLater(); }
+
+private:
+    QObject* m_o;
+};
+
+
+class BinaryExtractWorker : public QThread
+{
+    Q_OBJECT
+public:
+    BinaryExtractWorker( const QString& zipFilename, QObject* receiver ) : m_zipFileName( zipFilename ), m_receiver( receiver ) {}
+    virtual ~BinaryExtractWorker() {}
+
+protected:
+    virtual void run()
+    {
+        ScopedDeleter deleter( this );
+
+#ifdef Q_OS_MAC
+        // Platform-specific handling of resolver payload now. We know it's good
+        // Unzip the file.
+        QFileInfo info( m_zipFileName );
+        QDir tmpDir = QDir::tempPath();
+        if  ( !tmpDir.mkdir( info.baseName() ) )
+        {
+            qWarning() << "Failed to create temporary directory to unzip in:" << tmpDir.absolutePath();
+            return;
+        }
+        tmpDir.cd( info.baseName() );
+        TomahawkUtils::unzipFileInFolder( info.absoluteFilePath(), tmpDir );
+
+        // On OSX it just contains 1 file, the resolver executable itself. For now. We just copy it to
+        // the Tomahawk.app/Contents/MacOS/ folder alongside the Tomahawk executable.
+        const QString dest = QCoreApplication::applicationDirPath();
+        // Find the filename
+        const QDir toList( tmpDir.absolutePath() );
+        const QStringList files = toList.entryList( QStringList(), QDir::Files );
+        Q_ASSERT( files.size() == 1 );
+
+        const QString src = toList.absoluteFilePath( files.first() );
+        qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
+
+        copyWithAuthentication( src, dest, m_receiver );
+
+        return;
+#elif  defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+        // We unzip directly to the target location, just like normal attica resolvers
+        Q_ASSERT( m_receiver );
+        if ( !m_receiver )
+            return;
+
+        const QString resolverId = m_receiver->property( "resolverid" ).toString();
+
+        Q_ASSERT( !resolverId.isEmpty() );
+        if ( resolverId.isEmpty() )
+            return;
+
+
+        const QDir resolverPath( extractScriptPayload( m_zipFileName, resolverId ) );
+
+#ifdef Q_OS_WIN
+        const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
+#elif defined(Q_OS_LINUX)
+        const QStringList files = resolverPath.entryList( QStringList() << "*_tomahawkresolver", QDir::Files );
+#endif
+
+        qDebug() << "Found executables in unzipped binary resolver dir:" << files;
+        Q_ASSERT( files.size() == 1 );
+        if ( files.size() < 1 )
+            return;
+
+        const QString resolverToUse = resolverPath.absoluteFilePath( files.first() );
+
+#ifdef Q_OS_LINUX
+        QProcess p;
+        p.start( "chmod", QStringList() << "744" << resolverToUse, QIODevice::ReadOnly );
+        p.waitForFinished();
+#endif
+
+        QMetaObject::invokeMethod( m_receiver, "installSucceeded", Qt::QueuedConnection, Q_ARG( QString, resolverToUse ) );
+
+#endif
+    }
+private:
+    QString m_zipFileName;
+    QObject* m_receiver;
+};
+
 void
 extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 {
-#ifdef Q_OS_MAC
-    // Platform-specific handling of resolver payload now. We know it's good
-    // Unzip the file.
-    QFileInfo info( zipFilename );
-    QDir tmpDir = QDir::tempPath();
-    if  ( !tmpDir.mkdir( info.baseName() ) )
-    {
-        qWarning() << "Failed to create temporary directory to unzip in:" << tmpDir.absolutePath();
-        return;
-    }
-    tmpDir.cd( info.baseName() );
-    TomahawkUtils::unzipFileInFolder( info.absoluteFilePath(), tmpDir );
-
-    // On OSX it just contains 1 file, the resolver executable itself. For now. We just copy it to
-    // the Tomahawk.app/Contents/MacOS/ folder alongside the Tomahawk executable.
-    const QString dest = QCoreApplication::applicationDirPath();
-    // Find the filename
-    const QDir toList( tmpDir.absolutePath() );
-    const QStringList files = toList.entryList( QStringList(), QDir::Files );
-    Q_ASSERT( files.size() == 1 );
-
-    const QString src = toList.absoluteFilePath( files.first() );
-    qDebug() << "OS X: Copying binary resolver from to:" << src << dest;
-
-    copyWithAuthentication( src, dest, receiver );
-
-    return;
-#elif  defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-    // We unzip directly to the target location, just like normal attica resolvers
-    Q_ASSERT( receiver );
-    if ( !receiver )
-        return;
-
-    const QString resolverId = receiver->property( "resolverid" ).toString();
-
-    Q_ASSERT( !resolverId.isEmpty() );
-    if ( resolverId.isEmpty() )
-        return;
-
-    const QDir resolverPath( extractScriptPayload( zipFilename, resolverId ) );
-
-#ifdef Q_OS_WIN
-    const QStringList files = resolverPath.entryList( QStringList() << "*.exe", QDir::Files );
-#elif defined(Q_OS_LINUX)
-    const QStringList files = resolverPath.entryList( QStringList() << "*_tomahawkresolver", QDir::Files );
-#endif
-
-    qDebug() << "Found executables in unzipped binary resolver dir:" << files;
-    Q_ASSERT( files.size() == 1 );
-    if ( files.size() < 1 )
-        return;
-
-    const QString resolverToUse = resolverPath.absoluteFilePath( files.first() );
-
-#ifdef Q_OS_LINUX
-    QProcess p;
-    p.start( "chmod", QStringList() << "744" << resolverToUse, QIODevice::ReadOnly );
-    p.waitForFinished( 6000 );
-#endif
-
-    QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG( QString, resolverToUse ) );
-
-#endif
+    BinaryExtractWorker* worker = new BinaryExtractWorker( zipFilename, receiver );
+    worker->start( QThread::LowPriority );
 }
 
 
 } // ns
+
+#include "TomahawkUtils.moc"

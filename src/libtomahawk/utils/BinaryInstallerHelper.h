@@ -22,19 +22,21 @@
 
 #include <QWeakPointer>
 
+class QTemporaryFile;
 class BinaryInstallerHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit BinaryInstallerHelper( const QString& resolverId, bool createAccount, AtticaManager* manager );
+    explicit BinaryInstallerHelper( QTemporaryFile* tempFile, const QString& resolverId, bool createAccount, AtticaManager* manager );
 
-    virtual ~BinaryInstallerHelper() {}
+    virtual ~BinaryInstallerHelper();
 
 public slots:
     void installSucceeded( const QString& path );
     void installFailed();
 
 private:
+    QTemporaryFile* m_tempFile;
     QString m_resolverId;
     bool m_createAccount;
     QWeakPointer<AtticaManager> m_manager;
