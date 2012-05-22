@@ -49,7 +49,8 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
 
-    m_stopContinueAfterTrackAction = new QAction( tr( "&Stop Playback after current Track" ), this );
+    m_stopContinueAfterTrackAction = new QAction( this );
+    onStopContinueAfterTrackChanged();
 
     ActionCollection *ac = ActionCollection::instance();
     m_contextMenu->addAction( ac->getAction( "playPause" ) );
@@ -61,7 +62,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
-    connect( m_stopContinueAfterTrackAction, SIGNAL( triggered(bool) ), this, SLOT( stopContinueAfterTrackActionTriggered() ) );
+    connect( m_stopContinueAfterTrackAction, SIGNAL( triggered() ), SLOT( stopContinueAfterTrackActionTriggered() ) );
 
 #ifdef Q_WS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
@@ -78,10 +79,10 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlay() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( onResume() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( onStop() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( onPause() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopAfterTrack_changed() ) , this, SLOT( stopContinueAfterTrack_StatusChanged() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), SLOT( onResume() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onStop() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ),  SLOT( onPause() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopAfterTrackChanged() ), SLOT( onStopContinueAfterTrackChanged() ) );
 
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
@@ -236,7 +237,7 @@ TomahawkTrayIcon::onPlay()
 {
     m_stopContinueAfterTrackAction->setEnabled( true );
     onResume();
-    stopContinueAfterTrack_StatusChanged();
+    onStopContinueAfterTrackChanged();
 }
 
 
@@ -256,7 +257,7 @@ TomahawkTrayIcon::onResume()
 
 
 void
-TomahawkTrayIcon::stopContinueAfterTrack_StatusChanged()
+TomahawkTrayIcon::onStopContinueAfterTrackChanged()
 {
     if ( !AudioEngine::instance()->currentTrack().isNull() )
     {

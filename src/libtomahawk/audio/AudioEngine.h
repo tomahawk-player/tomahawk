@@ -109,7 +109,7 @@ signals:
     void paused();
     void resumed();
 
-    void stopAfterTrack_changed();
+    void stopAfterTrackChanged();
 
     void seeked( qint64 ms );
 

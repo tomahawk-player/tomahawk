@@ -49,8 +49,7 @@ private slots:
     void onStop();
     void onResume();
     
-    void stopContinueAfterTrack_StatusChanged();
-    
+    void onStopContinueAfterTrackChanged();
     void stopContinueAfterTrackActionTriggered();
 
     void menuAboutToShow();

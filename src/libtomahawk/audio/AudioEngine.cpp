@@ -783,7 +783,7 @@ AudioEngine::setStopAfterTrack( const query_ptr& query )
     if ( m_stopAfterTrack != query )
     {
         m_stopAfterTrack = query;
-        emit stopAfterTrack_changed();
+        emit stopAfterTrackChanged();
     }
 }
 
