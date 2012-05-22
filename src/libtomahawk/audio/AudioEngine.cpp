@@ -791,16 +791,15 @@ AudioEngine::setStopAfterTrack( const query_ptr& query )
 void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
-    Tomahawk::result_ptr lastTrack = m_currentTrack;
-    if ( !lastTrack.isNull() )
+    if ( !m_currentTrack.isNull() )
     {
         if ( m_state != Error && TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
 
-        emit finished( lastTrack );
+        emit finished( m_currentTrack );
     }
 
     m_currentTrack = result;
