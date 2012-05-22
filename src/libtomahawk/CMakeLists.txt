@@ -329,6 +329,8 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBECHONEST_INCLUDE_DIR}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
+    ${QTKEYCHAIN_INCLUD_DIRS}
+    ${QTKEYCHAIN_INCLUD_DIRS}/..
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     playlist
@@ -372,14 +374,14 @@ ENDIF( UNIX AND NOT APPLE )
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-    # System
+        # System
         "iphlpapi.a"
         "ws2_32.dll"
         "dnsapi.dll"
         "dsound.dll"
         "winmm.dll"
         "advapi32.dll"
-	"shlwapi.dll"
+        "shlwapi.dll"
     )
 ENDIF( WIN32 )
 
@@ -403,8 +405,8 @@ IF( APPLE )
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
-	${FOUNDATION_LIBRARY}
-	${SCRIPTINGBRIDGE_LIBRARY}
+        ${FOUNDATION_LIBRARY}
+        ${SCRIPTINGBRIDGE_LIBRARY}
 
         /System/Library/Frameworks/AppKit.framework
     )
@@ -452,8 +454,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
-    -L/home/t95012/kde/lib/i386-linux-gnu/
-    qtkeychain
+    ${QTKEYCHAIN_LIBRARIES}
 )
 
 INSTALL( TARGETS tomahawklib

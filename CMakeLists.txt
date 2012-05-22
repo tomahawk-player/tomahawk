@@ -120,6 +120,9 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions required for Grooveshark resolver" "http://delta.affinix.com/qca/" FALSE "" "")
 
+macro_optional_find_package(QtKeychain)
+macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure password storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+
 macro_optional_find_package(LibAttica)
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" TRUE "" "")
 
