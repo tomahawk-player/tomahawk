@@ -176,7 +176,7 @@ LastFmConfig::onHistoryLoaded()
     {
         if ( m_page != total )
         {
-            m_ui->importHistory->setText( tr( "History Incomplete. Retry" ) );
+            m_ui->importHistory->setText( tr( "History Incomplete. Resume" ) );
             m_ui->importHistory->setEnabled( true );
         }
         else
