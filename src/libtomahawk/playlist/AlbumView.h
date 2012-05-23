@@ -90,9 +90,9 @@ private slots:
     void onFilterChanged( const QString& filter );
     void onCustomContextMenu( const QPoint& pos );
 
-private:
-    void adjustItemSize( const QRect& rect );
+    void layoutItems();
 
+private:
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;

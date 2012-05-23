@@ -72,6 +72,8 @@ AlbumView::AlbumView( QWidget* parent )
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
 //    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
@@ -106,6 +108,7 @@ AlbumView::setModel( QAbstractItemModel* model )
 void
 AlbumView::setAlbumModel( AlbumModel* model )
 {
+    m_inited = false;
     m_model = model;
 
     if ( m_proxyModel )
@@ -194,7 +197,13 @@ void
 AlbumView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
+    layoutItems();
+}
 
+
+void
+AlbumView::layoutItems()
+{
     if ( autoFitItems() && m_model )
     {
 #ifdef Q_WS_X11
