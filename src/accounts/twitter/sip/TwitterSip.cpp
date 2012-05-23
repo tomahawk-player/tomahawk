@@ -137,8 +137,8 @@ TwitterSipPlugin::disconnectPlugin()
     m_checkTimer.stop();
     m_connectTimer.stop();
     m_dmPollTimer.stop();
-    if( !m_friendsTimeline.isNull() )
-        delete m_friendsTimeline.data();
+    if( !m_homeTimeline.isNull() )
+        delete m_homeTimeline.data();
     if( !m_mentions.isNull() )
         delete m_mentions.data();
     if( !m_directMessages.isNull() )
@@ -167,12 +167,12 @@ TwitterSipPlugin::accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter
 
     m_cachedTwitterAuth = twitterAuth;
 
-    m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_cachedTwitterAuth.data(), this ) );
+    m_homeTimeline = QWeakPointer<QTweetHomeTimeline>( new QTweetHomeTimeline( m_cachedTwitterAuth.data(), this ) );
     m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_cachedTwitterAuth.data(), this ) );
     m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_cachedTwitterAuth.data(), this ) );
     m_directMessageNew = QWeakPointer<QTweetDirectMessageNew>( new QTweetDirectMessageNew( m_cachedTwitterAuth.data(), this ) );
     m_directMessageDestroy = QWeakPointer<QTweetDirectMessageDestroy>( new QTweetDirectMessageDestroy( m_cachedTwitterAuth.data(), this ) );
-    connect( m_friendsTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
+    connect( m_homeTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
     connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
     connect( m_directMessages.data(), SIGNAL( parsedDirectMessages(const QList<QTweetDMStatus> &)), SLOT( directMessages(const QList<QTweetDMStatus> &) ) );
     connect( m_directMessageNew.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
@@ -203,8 +203,8 @@ TwitterSipPlugin::checkTimerFired()
 
     qDebug() << "TwitterSipPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
 
-    if ( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
+    if ( !m_homeTimeline.isNull() )
+        m_homeTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
 
     if ( m_cachedMentionsSinceId == 0 )
         m_cachedMentionsSinceId = m_configuration[ "cachedmentionssinceid" ].toLongLong();

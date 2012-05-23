@@ -27,10 +27,10 @@
 
 #include <QTweetLib/qtweetuser.h>
 #include <QTweetLib/qtweetnetbase.h>
-#include <QTweetLib/qtweetfriendstimeline.h>
 #include <QTweetLib/qtweetdirectmessages.h>
 #include <QTweetLib/qtweetdirectmessagenew.h>
 #include <QTweetLib/qtweetdirectmessagedestroy.h>
+#include <QTweetLib/qtweethometimeline.h>
 #include <QTweetLib/qtweetmentions.h>
 #include <QTweetLib/qtweetdmstatus.h>
 
@@ -104,7 +104,7 @@ private:
 
     QWeakPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
 
-    QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
+    QWeakPointer< QTweetHomeTimeline > m_homeTimeline;
     QWeakPointer< QTweetMentions > m_mentions;
     QWeakPointer< QTweetDirectMessages > m_directMessages;
     QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
