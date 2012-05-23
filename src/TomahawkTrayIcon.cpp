@@ -41,7 +41,12 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     , m_showWindowAction( 0 )
     , m_stopContinueAfterTrackAction( 0 )
 {
+#ifdef Q_WS_MAC
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128-grayscale.png" );
+#else
+    QIcon icon( RESPATH "icons/tomahawk-icon-128x128.png" );
+#endif
+
     setIcon( icon );
 
     refreshToolTip();
