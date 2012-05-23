@@ -66,7 +66,7 @@ public:
 
 #ifndef ENABLE_HEADLESS
     void setAvatar( const QPixmap& avatar );
-    QPixmap avatar( AvatarStyle style = Original, const QSize& size = QSize() ) const;
+    QPixmap avatar( AvatarStyle style = Original, const QSize& size = QSize() );
 #endif
 
     collection_ptr collection() const;
@@ -147,6 +147,7 @@ private:
     int m_id;
     bool m_scrubFriendlyName;
     bool m_updateIndexWhenSynced;
+    bool m_avatarUpdated;
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;

@@ -48,6 +48,7 @@ Source::Source( int id, const QString& username )
     , m_username( username )
     , m_id( id )
     , m_updateIndexWhenSynced( false )
+    , m_avatarUpdated( true )
     , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
     , m_commandCount( 0 )
@@ -136,13 +137,14 @@ Source::setAvatar( const QPixmap& avatar )
 
     tDebug() << Q_FUNC_INFO << friendlyName() << m_username << ba.count();
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
+    m_avatarUpdated = true;
 }
 
 
 QPixmap
-Source::avatar( AvatarStyle style, const QSize& size ) const
+Source::avatar( AvatarStyle style, const QSize& size )
 {
-    if ( !m_avatar )
+    if ( !m_avatar && m_avatarUpdated )
     {
         m_avatar = new QPixmap();
         QByteArray ba = TomahawkUtils::Cache::instance()->getData( "Sources", m_username ).toByteArray();
@@ -154,6 +156,7 @@ Source::avatar( AvatarStyle style, const QSize& size ) const
             delete m_avatar;
             m_avatar = 0;
         }
+        m_avatarUpdated = false;
     }
 
     if ( style == FancyStyle && m_avatar && !m_fancyAvatar )
