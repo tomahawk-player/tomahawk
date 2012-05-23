@@ -22,9 +22,9 @@
 
 #include <QSqlError>
 #include <QTime>
+#include <QVariant>
 
 #define QUERY_THRESHOLD 60
-#define QUERY_ANALYZE 1
 
 
 TomahawkSqlQuery::TomahawkSqlQuery()
@@ -59,7 +59,7 @@ TomahawkSqlQuery::exec()
 
     int e = t.elapsed();
     bool log = ( e >= QUERY_THRESHOLD );
-#ifdef QUERY_ANALYZE
+#ifdef TOMAHAWK_QUERY_ANALYZE
     log = true;
 #endif
     
@@ -76,7 +76,7 @@ TomahawkSqlQuery::showError()
     tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
            << this->lastQuery() << "\n"
            << "boundValues:" << this->boundValues() << "\n"
-           << this->lastError().text() << "\n"
-                ;
+           << this->lastError().text() << "\n";
+
     Q_ASSERT( false );
 }

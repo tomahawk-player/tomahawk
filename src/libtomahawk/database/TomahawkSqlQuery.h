@@ -23,6 +23,8 @@
 
 #include <QSqlQuery>
 
+#define TOMAHAWK_QUERY_ANALYZE 1
+
 class TomahawkSqlQuery : public QSqlQuery
 {
 
