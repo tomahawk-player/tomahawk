@@ -101,6 +101,8 @@ AccountModel::loadData()
                 qDebug() << "All accounts after remove:";
                 foreach ( Account* acct, allAccounts )
                     qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#else
+                Q_UNUSED( removed );
 #endif
             }
         } else
