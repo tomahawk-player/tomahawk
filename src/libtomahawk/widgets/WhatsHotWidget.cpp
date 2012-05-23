@@ -179,9 +179,15 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     if ( requestData.caller != s_whatsHotIdentifier )
         return;
 
+    if ( output.isNull() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Info came back empty";
+        return;
+    }
+
     if ( !output.canConvert< QVariantMap >() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output into a map";
         return;
     }
 
