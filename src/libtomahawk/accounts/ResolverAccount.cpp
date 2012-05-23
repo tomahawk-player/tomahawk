@@ -74,18 +74,12 @@ ResolverAccount::ResolverAccount( const QString& accountId )
 {
 
     const QString path = configuration()[ "path" ].toString();
+    setTypes( AccountType( ResolverType ) );
 
     // We should have a valid saved path
     Q_ASSERT( !path.isEmpty() );
 
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, enabled() ) ) );
-    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
-
-    // What resolver do we have here? Should only be types that are 'real' resolvers
-    Q_ASSERT ( !m_resolver.isNull() );
-
-    setAccountFriendlyName( m_resolver.data()->name() );
-    setTypes( AccountType( ResolverType ) );
+    init( path );
 }
 
 
@@ -95,16 +89,8 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path 
     QVariantHash configuration;
     configuration[ "path" ] = path;
     setConfiguration( configuration );
-    setEnabled( true );
 
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( path, true ) ) );
-    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
-
-    // What resolver do we have here? Should only be types that are 'real' resolvers
-    Q_ASSERT ( m_resolver.data() );
-
-    setAccountFriendlyName( m_resolver.data()->name() );
-    setTypes( AccountType( ResolverType ) );
+    init( path );
 
     sync();
 }
@@ -120,11 +106,41 @@ ResolverAccount::~ResolverAccount()
 }
 
 
+void
+ResolverAccount::init( const QString& path )
+{
+    setTypes( AccountType( ResolverType ) );
+
+    if ( !QFile::exists( path ) )
+    {
+        AccountManager::instance()->disableAccount( this );
+    }
+    else
+    {
+        hookupResolver();
+    }
+}
+
+
+void
+ResolverAccount::hookupResolver()
+{
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString(), true ) ) );
+    connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+
+    // What resolver do we have here? Should only be types that are 'real' resolvers
+    Q_ASSERT ( m_resolver.data() );
+
+    setAccountFriendlyName( m_resolver.data()->name() );
+}
+
 
 void
 ResolverAccount::authenticate()
 {
-    Q_ASSERT( !m_resolver.isNull() );
+    if ( m_resolver.isNull() )
+        return;
+
     qDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver;
 
     if ( !m_resolver.data()->running() )
@@ -137,14 +153,14 @@ ResolverAccount::authenticate()
 bool
 ResolverAccount::isAuthenticated() const
 {
-    return m_resolver.data()->running();
+    return !m_resolver.isNull() && m_resolver.data()->running();
 }
 
 
 void
 ResolverAccount::deauthenticate()
 {
-    if ( m_resolver.data()->running() )
+    if ( !m_resolver.isNull() && m_resolver.data()->running() )
         m_resolver.data()->stop();
 
     emit connectionStateChanged( connectionState() );
@@ -155,7 +171,7 @@ ResolverAccount::deauthenticate()
 Account::ConnectionState
 ResolverAccount::connectionState() const
 {
-    if ( m_resolver.data()->running() )
+    if ( !m_resolver.isNull() && m_resolver.data()->running() )
         return Connected;
     else
         return Disconnected;
@@ -165,6 +181,9 @@ ResolverAccount::connectionState() const
 QWidget*
 ResolverAccount::configurationWidget()
 {
+    if ( m_resolver.isNull() )
+        return 0;
+
     return m_resolver.data()->configUI();
 }
 
@@ -189,13 +208,17 @@ ResolverAccount::removeFromConfig()
 void ResolverAccount::saveConfig()
 {
     Account::saveConfig();
-    m_resolver.data()->saveConfig();
+    if ( !m_resolver.isNull() )
+        m_resolver.data()->saveConfig();
 }
 
 
 QString
 ResolverAccount::path() const
 {
+    if ( m_resolver.isNull() )
+        return QString();
+
     return m_resolver.data()->filePath();
 }
 
@@ -242,6 +265,9 @@ AtticaResolverAccount::~AtticaResolverAccount()
 void
 AtticaResolverAccount::loadIcon()
 {
+    if ( m_resolver.isNull() )
+        return;
+
     const QFileInfo fi( m_resolver.data()->filePath() );
     QDir codeDir = fi.absoluteDir();
     codeDir.cd( "../images" );
@@ -249,6 +275,19 @@ AtticaResolverAccount::loadIcon()
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
         m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
 
+}
+
+
+void
+AtticaResolverAccount::setPath( const QString& path )
+{
+    QVariantHash config = configuration();
+    config[ "path" ] = path;
+    setConfiguration( config );
+
+    hookupResolver();
+
+    sync();
 }
 
 

@@ -438,7 +438,20 @@ AtticaManager::syncServerData()
 
 
 void
-AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount )
+AtticaManager::installResolver( const Content& resolver, bool autoCreate )
+{
+    doInstallResolver( resolver, autoCreate, 0 );
+}
+
+
+void
+AtticaManager::installResolverWithHandler( const Content& resolver, Tomahawk::Accounts::AtticaResolverAccount* handler )
+{
+    doInstallResolver( resolver, false, handler );
+}
+
+
+void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
@@ -454,7 +467,8 @@ AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount 
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
-    job->setProperty( "createAccount", autoCreateAccount );
+    job->setProperty( "createAccount", autoCreate );
+    job->setProperty( "handler", QVariant::fromValue< QObject* >( handler ) );
     job->setProperty( "binarySignature", resolver.attribute("signature"));
 
     job->start();
@@ -492,6 +506,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
         reply->setProperty( "createAccount", job->property( "createAccount" ) );
+        reply->setProperty( "handler", job->property( "handler" ) );
         reply->setProperty( "binarySignature", job->property( "binarySignature" ) );
     }
     else
@@ -551,7 +566,14 @@ AtticaManager::payloadFetched()
                 // update with absolute, not relative, path
                 m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
-                if ( reply->property( "createAccount" ).toBool() )
+                Tomahawk::Accounts::AtticaResolverAccount* handlerAccount = qobject_cast< Tomahawk::Accounts::AtticaResolverAccount* >( reply->property( "handler" ).value< QObject* >() );
+                const bool createAccount = reply->property( "createAccount" ).toBool();
+                if ( handlerAccount )
+                {
+                    handlerAccount->setPath( resolverPath );
+                    Tomahawk::Accounts::AccountManager::instance()->enableAccount( handlerAccount );
+                }
+                else if ( createAccount )
                 {
                     // Do the install / add to tomahawk
                     Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, "resolveraccount", true );

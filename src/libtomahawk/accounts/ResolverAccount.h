@@ -89,7 +89,13 @@ private slots:
 protected:
     // Created by factory, when user installs a new resolver
     ResolverAccount( const QString& accountId, const QString& path );
+
+    void hookupResolver();
+
     QWeakPointer<ExternalResolverGui> m_resolver;
+
+private:
+    void init( const QString& path );
 
     friend class ResolverAccountFactory;
 };
@@ -110,6 +116,8 @@ public:
     virtual QPixmap icon() const;
 
     QString atticaId() const { return m_atticaId; }
+
+    void setPath( const QString& path );
 private:
     // Created by factory, when user installs a new resolver
     AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );

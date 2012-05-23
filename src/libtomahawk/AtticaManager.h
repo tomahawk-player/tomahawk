@@ -32,6 +32,12 @@
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
+namespace Tomahawk {
+namespace Accounts {
+class AtticaResolverAccount;
+}
+}
+
 class BinaryInstallerHelper;
 
 class DLLEXPORT AtticaManager : public QObject
@@ -105,6 +111,8 @@ public:
 
 public slots:
     void installResolver( const Attica::Content& resolver, bool autoCreateAccount = true );
+    void installResolverWithHandler( const Attica::Content& resolver, Tomahawk::Accounts::AtticaResolverAccount* handler );
+
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
@@ -133,6 +141,7 @@ private slots:
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
+    void doInstallResolver(  const Attica::Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler );
 
     Attica::ProviderManager m_manager;
 
