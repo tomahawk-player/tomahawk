@@ -20,6 +20,7 @@
 #ifndef FADINGPIXMAP_H
 #define FADINGPIXMAP_H
 
+#include "utils/SharedTimeLine.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QLabel>

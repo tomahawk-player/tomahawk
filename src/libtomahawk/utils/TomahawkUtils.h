@@ -26,11 +26,9 @@
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
-#include <QTimeLine>
 #include <Typedefs.h>
 
 #define RESPATH ":/data/"
-
 
 class QDir;
 class QNetworkAccessManager;
@@ -61,33 +59,6 @@ namespace TomahawkUtils
         AvatarInFrame,
         ScaledCover,
         Grid
-    };
-
-
-    class DLLEXPORT SharedTimeLine : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        SharedTimeLine();
-
-        virtual ~SharedTimeLine() {}
-
-        int currentFrame() { return m_timeline.currentFrame(); }
-
-        void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
-
-    signals:
-        void frameChanged( int );
-
-    protected slots:
-        virtual void connectNotify( const char *signal );
-
-        virtual void disconnectNotify( const char *signal );
-
-    private:
-        int m_refcount;
-        QTimeLine m_timeline;
     };
 
 
@@ -142,7 +113,6 @@ namespace TomahawkUtils
     DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
     DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
     DLLEXPORT bool unzipFileInFolder( const QString& zipFileName, const QDir& folder );
-
 
     // Extracting may be asynchronous, pass in a receiver object with the following slots:
     //  extractSucceeded( const QString& path ) and extractFailed() to be notified/

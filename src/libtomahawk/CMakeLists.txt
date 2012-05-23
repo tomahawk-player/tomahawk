@@ -122,6 +122,8 @@ set( libGuiSources
     utils/SmartPointerList.h
     utils/AnimatedSpinner.cpp
     utils/BinaryInstallerHelper.cpp
+    utils/BinaryExtractWorker.cpp
+    utils/SharedTimeLine.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp
