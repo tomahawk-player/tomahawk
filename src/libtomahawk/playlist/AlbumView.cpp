@@ -195,7 +195,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
 
-    if ( autoFitItems() )
+    if ( autoFitItems() && m_model )
     {
 #ifdef Q_WS_X11
 //        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
@@ -215,6 +215,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
         int remSpace = rectWidth - ( itemsPerRow * itemWidth );
         int extraSpace = remSpace / itemsPerRow;
         int newItemWidth = itemWidth + extraSpace;
+        
         m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
 
         if ( !m_inited )
