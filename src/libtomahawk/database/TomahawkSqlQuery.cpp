@@ -24,6 +24,7 @@
 #include <QTime>
 
 #define QUERY_THRESHOLD 60
+#define QUERY_ANALYZE 1
 
 
 TomahawkSqlQuery::TomahawkSqlQuery()
@@ -57,9 +58,14 @@ TomahawkSqlQuery::exec()
         showError();
 
     int e = t.elapsed();
-    if ( e >= QUERY_THRESHOLD )
-        tLog() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
-
+    bool log = ( e >= QUERY_THRESHOLD );
+#ifdef QUERY_ANALYZE
+    log = true;
+#endif
+    
+    if ( log )
+        tLog( LOGSQL ) << "TomahawkSqlQuery (" << t.elapsed() << "ms ):" << lastQuery();
+    
     return ret;
 }
 
