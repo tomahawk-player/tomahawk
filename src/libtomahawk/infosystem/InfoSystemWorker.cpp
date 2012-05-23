@@ -122,6 +122,8 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
             SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             Qt::QueuedConnection
     );
+    
+    QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
 }
 
 

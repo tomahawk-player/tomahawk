@@ -42,10 +42,10 @@ namespace Tomahawk {
             void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
 
         public slots:
-            void init();
             void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
         protected slots:
+            void init();
             void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
             void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 

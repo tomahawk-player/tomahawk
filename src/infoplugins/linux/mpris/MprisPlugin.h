@@ -142,6 +142,8 @@ public slots:
     void Stop();
 
 protected slots:
+    virtual void init();
+    
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestData );

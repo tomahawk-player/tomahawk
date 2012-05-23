@@ -95,8 +95,6 @@ HypemPlugin::HypemPlugin()
                     << "Techno"
                     << "Punk"
                     << "New wave";
-    chartTypes();
-
 }
 
 
@@ -105,6 +103,13 @@ HypemPlugin::HypemPlugin()
 HypemPlugin::~HypemPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+HypemPlugin::init()
+{
+    chartTypes();
 }
 
 

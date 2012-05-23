@@ -42,6 +42,7 @@ public:
     virtual ~MusicBrainzPlugin();
 
 protected slots:
+    virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
 

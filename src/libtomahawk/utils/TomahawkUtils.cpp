@@ -464,7 +464,10 @@ nam()
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
+    {
+        //tDebug() << Q_FUNC_INFO << "Found current thread in nam hash";
         return s_threadNamHash[ QThread::currentThread() ];
+    }
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
     {
@@ -476,6 +479,7 @@ nam()
         else
             return 0;
     }
+    tDebug() << Q_FUNC_INFO << "Found gui thread in nam hash";
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
@@ -487,7 +491,9 @@ nam()
 
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
-    tDebug( LOGEXTRA ) << "created new nam for thread " << QThread::currentThread();
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "created new nam for thread " << QThread::currentThread();
+    //QNetworkProxy proxy = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( newNam->proxyFactory() )->proxy();
+    //tDebug() << Q_FUNC_INFO << "reply proxy properties: " << proxy.type() << proxy.hostName() << proxy.port();
 
     return newNam;
 }
@@ -524,6 +530,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
                 s_noProxyHostsMutex.unlock();
         }
 
+        QNetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
         s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
