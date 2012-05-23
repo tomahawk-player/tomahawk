@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <QDir>
 #include <QProcess>
+#include <QCoreApplication>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
