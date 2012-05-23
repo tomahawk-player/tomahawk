@@ -96,7 +96,8 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 DatabaseImpl::~DatabaseImpl()
 {
     delete m_fuzzyIndex;
-    
+
+/*
 #ifdef TOMAHAWK_QUERY_ANALYZE
     TomahawkSqlQuery q = newquery();
     
@@ -108,6 +109,7 @@ DatabaseImpl::~DatabaseImpl()
     }
     
 #endif
+*/
 }
 
 
