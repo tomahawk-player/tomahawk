@@ -44,8 +44,8 @@ Scrobbler::Scrobbler( QObject* parent )
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-        SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
              SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
@@ -72,15 +72,12 @@ void
 Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
-//    qDebug() << Q_FUNC_INFO;
 
-    if( m_reachedScrobblePoint )
+    if ( m_reachedScrobblePoint )
     {
         m_reachedScrobblePoint = false;
         scrobble();
     }
-
-    QVariantMap playInfo;
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["title"] = track->track();
@@ -89,6 +86,7 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     trackInfo["duration"] = QString::number( track->duration() );
     trackInfo["albumpos"] = QString::number( track->albumpos() );
 
+    QVariantMap playInfo;
     playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
 
@@ -126,7 +124,7 @@ Scrobbler::trackStopped()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
-    if( m_reachedScrobblePoint )
+    if ( m_reachedScrobblePoint )
     {
         m_reachedScrobblePoint = false;
         scrobble();

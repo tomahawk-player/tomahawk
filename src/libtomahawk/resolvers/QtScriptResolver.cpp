@@ -312,6 +312,7 @@ QtScriptResolver::init()
     m_ready = true;
 }
 
+
 void
 QtScriptResolver::start()
 {
