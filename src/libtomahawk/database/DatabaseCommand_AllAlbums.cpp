@@ -139,7 +139,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
 
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
-        "FROM file, file_join, album "
+        "FROM file_join, file, album "
         "LEFT OUTER JOIN artist ON album.artist = artist.id "
         "WHERE file.id = file_join.file "
         "AND file_join.album = album.id "
