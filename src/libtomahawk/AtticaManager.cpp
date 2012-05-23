@@ -35,6 +35,7 @@
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
 #include "utils/BinaryInstallerHelper.h"
+#include "utils/Closure.h"
 
 using namespace Attica;
 
@@ -48,7 +49,11 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-   m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) ) );
+    NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
+
 //     m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
@@ -240,6 +245,25 @@ AtticaManager::Resolver
 AtticaManager::resolverData(const QString &atticaId) const
 {
     return m_resolverStates.value( atticaId );
+}
+
+
+void
+AtticaManager::providerError( QNetworkReply::NetworkError err )
+{
+    // So those who care know
+    emit resolversLoaded( Content::List() );
+}
+
+
+void
+AtticaManager::providerFetched( QNetworkReply* reply )
+{
+    Q_ASSERT( reply );
+    if ( !reply )
+        return;
+
+    m_manager.addProviderFromXml( reply->readAll() );
 }
 
 
