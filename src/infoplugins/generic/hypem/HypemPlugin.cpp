@@ -30,6 +30,7 @@
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
+#include "infosystem/InfoSystemWorker.h"
 #include "utils/Logger.h"
 #include "Source.h"
 
@@ -189,6 +190,7 @@ HypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData reque
 void
 HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
+    tDebug( LOGVERBOSE ) << "HypemPlugin thread: " << QThread::currentThread() << ", InfoSystemWorker thread: " << Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data()->currentThread();
     switch ( requestData.type )
     {
         case InfoChart:
