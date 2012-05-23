@@ -96,6 +96,18 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 DatabaseImpl::~DatabaseImpl()
 {
     delete m_fuzzyIndex;
+    
+#ifdef TOMAHAWK_QUERY_ANALYZE
+    TomahawkSqlQuery q = newquery();
+    
+    q.exec( "ANALYZE" );
+    q.exec( "SELECT * FROM sqlite_stat1" );
+    while ( q.next() )
+    {
+        tLog( LOGSQL ) << q.value( 0 ).toString() << q.value( 1 ).toString() << q.value( 2 ).toString();
+    }
+    
+#endif
 }
 
 
