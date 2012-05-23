@@ -43,6 +43,7 @@ AtticaManager* AtticaManager::s_instance = 0;
 
 AtticaManager::AtticaManager( QObject* parent )
     : QObject( parent )
+    , m_manager( Attica::ProviderManager::ProviderFlags( Attica::ProviderManager::DisablePlugins ) )
     , m_resolverJobsLoaded( 0 )
 {
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
