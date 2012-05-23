@@ -197,7 +197,6 @@ set( libSources
 
     audio/AudioEngine.cpp
 
-
     database/Database.cpp
     database/FuzzyIndex.cpp
     database/DatabaseCollection.cpp
@@ -250,6 +249,7 @@ set( libSources
     database/DatabaseCommand_TrackAttributes.cpp
     database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
+    database/TomahawkSqlQuery.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
