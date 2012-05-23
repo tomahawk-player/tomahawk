@@ -1233,6 +1233,13 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 }
 
 
+QString
+GlobalActionManager::hostname() const
+{
+    return QString( "http://stage.toma.hk" );
+}
+
+
 /// SPOTIFY URL HANDLING
 
 bool

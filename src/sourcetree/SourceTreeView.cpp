@@ -227,7 +227,7 @@ SourceTreeView::setupMenus()
     }
 
    if ( type == SourcesModel::StaticPlaylist )
-       copyPlaylistAction->setText( tr( "&Export Playlist" ) );
+       copyPlaylistAction->setText( tr( "&Copy Playlist Link" ) );
 
     connect( loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
@@ -398,8 +398,10 @@ SourceTreeView::copyPlaylistLink()
     else if ( type == SourcesModel::StaticPlaylist )
     {
         // Disable toma.hk playlist mode until ready
-        // GlobalActionManager::instance()->getShortLink( playlist );
-
+       PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+       playlist_ptr playlist = item->playlist();
+       GlobalActionManager::instance()->getShortLink( playlist );
+/*
        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
        playlist_ptr playlist = item->playlist();
 
@@ -411,7 +413,7 @@ SourceTreeView::copyPlaylistLink()
            QFileInfo playlistAbsoluteFilePath = filename;
            TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
            GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
-       }
+       } */
     }
 }
 
