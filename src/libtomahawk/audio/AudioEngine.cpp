@@ -80,6 +80,10 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
+    m_stateQueueTimer.setInterval( 5000 );
+    m_stateQueueTimer.setSingleShot( true );
+    connect( &m_stateQueueTimer, SIGNAL( timeout() ), SLOT( queueStateSafety() ) );
+
     onVolumeChanged( m_audioOutput->volume() );
 
 #ifndef Q_WS_X11
@@ -868,16 +872,28 @@ AudioEngine::checkStateQueue()
 
 
 void
+AudioEngine::queueStateSafety()
+{
+    tDebug() << Q_FUNC_INFO;
+    m_stateQueue.clear();
+}
+
+
+void
 AudioEngine::queueState( AudioState state )
 {
-    tDebug() << "Enqueuing state command:" << state << m_stateQueue.count();
+    if ( m_stateQueueTimer.isActive() )
+        m_stateQueueTimer.stop();
 
+    tDebug() << "Enqueuing state command:" << state << m_stateQueue.count();
     m_stateQueue.enqueue( state );
 
     if ( m_stateQueue.count() == 1 )
     {
         checkStateQueue();
     }
+
+    m_stateQueueTimer.start();
 }
 
 

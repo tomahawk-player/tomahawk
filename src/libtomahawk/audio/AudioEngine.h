@@ -137,6 +137,8 @@ private slots:
     void onPlaylistNextTrackReady();
 
     void sendWaitingNotification() const;
+    
+    void queueStateSafety();
 
 private:
     void checkStateQueue();
@@ -169,6 +171,7 @@ private:
 
     AudioState m_state;
     QQueue< AudioState > m_stateQueue;
+    QTimer m_stateQueueTimer;
 
     static AudioEngine* s_instance;
 };
