@@ -52,6 +52,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->lyricsView->setStyleSheet( "QTextBrowser#lyricsView { background-color: transparent; }" );
 
+    ui->lyricsView->setFrameShape( QFrame::NoFrame );
+    ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     QFont f = font();
     f.setBold( true );
     f.setPixelSize( 18 );
