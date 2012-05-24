@@ -72,7 +72,6 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 ResolverAccount::ResolverAccount( const QString& accountId )
     : Account( accountId )
 {
-
     const QString path = configuration()[ "path" ].toString();
     setTypes( AccountType( ResolverType ) );
 
@@ -141,7 +140,7 @@ ResolverAccount::authenticate()
     if ( m_resolver.isNull() )
         return;
 
-    qDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver;
+    tDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver.data()->name();
 
     if ( !m_resolver.data()->running() )
         m_resolver.data()->start();
@@ -259,8 +258,8 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
 
 AtticaResolverAccount::~AtticaResolverAccount()
 {
-
 }
+
 
 void
 AtticaResolverAccount::loadIcon()
@@ -274,7 +273,6 @@ AtticaResolverAccount::loadIcon()
 
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
         m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
-
 }
 
 
