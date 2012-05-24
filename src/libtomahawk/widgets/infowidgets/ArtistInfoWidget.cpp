@@ -235,13 +235,13 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
             int i = 0;
             foreach ( const QString& track, tracks )
             {
-                queries << Query::get( m_artist->name(), track, QString() );
-                Pipeline::instance()->resolve( queries );
+                queries << Query::get( m_artist->name(), track, QString(), QString(), false );
 
                 if ( ++i == 15 )
                     break;
             }
 
+            Pipeline::instance()->resolve( queries );
             m_topHitsModel->append( queries );
             break;
         }
