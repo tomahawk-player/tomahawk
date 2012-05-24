@@ -152,8 +152,6 @@ AudioEngine::pause()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    m_volume = volume();
-    
     queueState( Paused );
     emit paused();
 
@@ -863,6 +861,7 @@ AudioEngine::checkStateQueue()
             
             case Paused:
             {
+                m_volume = volume();
                 m_mediaObject->pause();
             }
         }
