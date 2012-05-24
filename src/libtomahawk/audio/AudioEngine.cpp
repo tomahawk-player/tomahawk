@@ -855,9 +855,10 @@ AudioEngine::checkStateQueue()
         {
             case Playing:
             {
-                setVolume( m_volume );
+                bool paused = isPaused();
                 m_mediaObject->play();
-                setVolume( m_volume );
+                if ( paused )
+                    setVolume( m_volume );
             }
             
             case Paused:
