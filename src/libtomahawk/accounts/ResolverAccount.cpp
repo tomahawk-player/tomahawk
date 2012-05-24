@@ -124,7 +124,9 @@ ResolverAccount::init( const QString& path )
 void
 ResolverAccount::hookupResolver()
 {
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString(), true ) ) );
+    tDebug() << "Hooking up resolver:" << configuration().value( "path" ).toString() << enabled();
+
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString(), enabled() ) ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
