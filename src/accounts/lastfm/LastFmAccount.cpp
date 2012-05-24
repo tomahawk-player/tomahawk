@@ -288,7 +288,7 @@ LastFmAccount::hookupResolver()
 
     const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
 
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath, enabled() ) ) );
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath ) ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 }
 

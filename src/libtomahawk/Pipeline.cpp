@@ -130,7 +130,7 @@ Pipeline::addExternalResolverFactory( ResolverFactoryFunc resolverFactory )
 
 
 Tomahawk::ExternalResolver*
-Pipeline::addScriptResolver( const QString& path, bool start )
+Pipeline::addScriptResolver( const QString& path )
 {
     ExternalResolver* res = 0;
 
@@ -141,8 +141,6 @@ Pipeline::addScriptResolver( const QString& path, bool start )
             continue;
 
         m_scriptResolvers << QWeakPointer< ExternalResolver >( res );
-        if ( start )
-            res->start();
 
         break;
     }

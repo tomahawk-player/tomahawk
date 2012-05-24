@@ -58,7 +58,7 @@ public:
     void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
     void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
-    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
+    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
     QList< QWeakPointer< ExternalResolver > > scriptResolvers() const { return m_scriptResolvers; }
