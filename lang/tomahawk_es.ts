@@ -133,7 +133,7 @@ connect and stream from you?</source>
         <translation>Otros álbumes por el artista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="145"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="140"/>
         <source>Other Albums by %1</source>
         <translation>Otros álbumes por %1</translation>
     </message>
@@ -160,12 +160,12 @@ connect and stream from you?</source>
 <context>
     <name>AlbumView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="172"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
         <translation>Tras haber escaneado su colección aquí encontrará los últimos álbumes añadidos.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="171"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="174"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
         <translation>Esta colección no tiene álbumes recientes.</translation>
     </message>
@@ -196,17 +196,17 @@ connect and stream from you?</source>
 <context>
     <name>ArtistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="279"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Tras haber escaneado su colección aquí encontrará las últimas pistas añadidas.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="281"/>
         <source>This collection is currently empty.</source>
         <translation>Esta colección está vacía.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="294"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="298"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tu filtro &apos;%1&apos; no reportó ningún resultado.</translation>
     </message>
@@ -988,12 +988,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="121"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="119"/>
         <source>Show Queue</source>
         <translation>Mostrar cola</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="131"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="129"/>
         <source>Hide Queue</source>
         <translation>Ocultar cola</translation>
     </message>
@@ -1212,17 +1212,17 @@ connect and stream from you?</source>
         <translation>Pistas reproducidas recientemente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="80"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
         <source>New Additions</source>
         <translation>Nuevas adiciones</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="76"/>
         <source>My recent activity</source>
         <translation>Mi actividad reciente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="80"/>
         <source>Recent activity from %1</source>
         <translation>Actividad reciente de %1</translation>
     </message>
@@ -1618,12 +1618,12 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="520"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="522"/>
         <source>Manual Install Required</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="523"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="525"/>
         <source>Unfortunately, automatic installation of this resolver is not yet available on Linux.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation type="unfinished"/>
     </message>
@@ -1733,12 +1733,12 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="356"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="357"/>
         <source>Sync with Spotify</source>
         <translation>Sincronizar con Spotify</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="360"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="361"/>
         <source>Stop syncing with Spotify</source>
         <translation>Dejar de sincronizar con Spotify</translation>
     </message>
@@ -1996,32 +1996,32 @@ Hay que volverse a autenticar.</translation>
 <context>
     <name>Tomahawk::CustomPlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="123"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="120"/>
         <source>Top Loved Tracks</source>
         <translation>Pistas favoritas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="127"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="124"/>
         <source>Your loved tracks</source>
         <translation>Tus pistas favoritas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="129"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="126"/>
         <source>%1&apos;s loved tracks</source>
         <translation>Pistas favoritas de %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="138"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="135"/>
         <source>The most loved tracks from all your friends</source>
         <translation>Las pistas favoritas de tus amigos</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="139"/>
         <source>All of your loved tracks</source>
         <translation>Todas tus pistas favoritas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="144"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="141"/>
         <source>All of %1&apos;s loved tracks</source>
         <translation>Todas las pistas favoritas de %1</translation>
     </message>
@@ -2081,17 +2081,17 @@ Por favor, cambie los filtros o inténtelo de nuevo.</translation>
 <context>
     <name>Tomahawk::DynamicView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="145"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="140"/>
         <source>Add some filters above to seed this station!</source>
         <translation>¡Añada algunos filtros para la estación!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="150"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="145"/>
         <source>Press Generate to get started!</source>
         <translation>¡Seleccione Generar para comenzar!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="152"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="147"/>
         <source>Add some filters above, and press Generate to get started!</source>
         <translation>¡Añada algunos filtros, y seleccione Generar para comenzar!</translation>
     </message>
@@ -2555,27 +2555,27 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="451"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="456"/>
         <source>Top Tracks</source>
         <translation>Temas más escuchados</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="454"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
         <translation>Temas Favoritos</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="457"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
         <source>Hyped Tracks</source>
         <translation>Temas a la alza</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="463"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="468"/>
         <source>Top Artists</source>
         <translation>Artistas más escuchados</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="466"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="471"/>
         <source>Hyped Artists</source>
         <translation>Artistas a la alza</translation>
     </message>
@@ -3255,27 +3255,27 @@ introduzca su número PIN aquí:</translation>
         <translation>Temas Similares</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="183"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="182"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Ha escuchado esta canción %n vez.</numerusform><numerusform>Ha escuchado esta canción %n veces.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="185"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="184"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Nunca ha escuchado este tema antes.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="189"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="188"/>
         <source>You first listened to it on %1.</source>
         <translation>Escuchó este tema pro primera vez en %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="193"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="192"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Ha escuchado %1 %n vez.</numerusform><numerusform>Ha escuchado %1 %n veces.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="195"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="194"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Nunca ha escuchado %1 antes.</translation>
     </message>
@@ -3283,7 +3283,7 @@ introduzca su número PIN aquí:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="493"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="497"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Lo siento, tu filtro &apos;%1&apos; no ha encontrado resultados.</translation>
     </message>
@@ -3445,27 +3445,27 @@ Puede reenviar el mensaje de sincronización en cualquier momento simplemente en
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="393"/>
         <source>SuperCollection</source>
         <translation>SuperColección</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="406"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="394"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Bibliotecas combinadas de todos tus amigos conectados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="395"/>
         <source>All available albums</source>
         <translation>Todos los álbumes disponibles</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="497"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="483"/>
         <source>Recently Played Tracks</source>
         <translation>Temas Escuchados Recientemente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="498"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="484"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Temas escuchados recientemente por mis amigos</translation>
     </message>
@@ -3488,7 +3488,7 @@ Puede reenviar el mensaje de sincronización en cualquier momento simplemente en
         <translation>Pistas reproducidas recientemente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="152"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="148"/>
         <source>No recently created playlists in your network.</source>
         <translation>No hay listas de reproducción recientemente creadas en su red.</translation>
     </message>

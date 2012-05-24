@@ -134,7 +134,7 @@ connect and stream from you?</source>
         <translation>ألبومات أخرى للفنان</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="145"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="140"/>
         <source>Other Albums by %1</source>
         <translation>ألبومات أخرى ل%1</translation>
     </message>
@@ -161,12 +161,12 @@ connect and stream from you?</source>
 <context>
     <name>AlbumView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="172"/>
         <source>After you have scanned your music collection you will find your latest album additions right here.</source>
         <translation>بعد إجراء مسح مجموعة أغانيك الخاصة ستجد ألبوماتك المضافة هنا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="171"/>
+        <location filename="../src/libtomahawk/playlist/AlbumView.cpp" line="174"/>
         <source>This collection doesn&apos;t have any recent albums.</source>
         <translation>هذه المجموعة لا تحتوي على ألبومات جديدة.</translation>
     </message>
@@ -197,17 +197,17 @@ connect and stream from you?</source>
 <context>
     <name>ArtistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="279"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>بعد إجراء مسح مجموعة أغانيك الخاصة ستجد أغانيك هنا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="281"/>
         <source>This collection is currently empty.</source>
         <translation>المجموعة فارغة حاليا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="294"/>
+        <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="298"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>نتأسف، نظام البحث لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
     </message>
@@ -991,12 +991,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="121"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="119"/>
         <source>Show Queue</source>
         <translation>أظهر قائمة الانتظار</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="131"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="129"/>
         <source>Hide Queue</source>
         <translation>إخفي قائمة الانتظار</translation>
     </message>
@@ -1215,17 +1215,17 @@ connect and stream from you?</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="80"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
         <source>New Additions</source>
         <translation>الإضافة الجديدة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="76"/>
         <source>My recent activity</source>
         <translation>نشاطاتي الأخيرة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="80"/>
         <source>Recent activity from %1</source>
         <translation>النشاطات المؤخرة ل %1</translation>
     </message>
@@ -1620,12 +1620,12 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="520"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="522"/>
         <source>Manual Install Required</source>
         <translation>مطلوب تثبيت يدوي</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="523"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="525"/>
         <source>Unfortunately, automatic installation of this resolver is not yet available on Linux.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>لسوء الحظ، التثبيت التلقائي لهذا المحلل لم يتوفر بعد على لنكس. &lt;br /&gt;&lt;br /&gt; الرجاء إستخدام &quot; التثبيت من الملف&quot; أعلاه، بواسطة جلبه من توزيعتك أو تجميعه بنفسك. ويمكن الاطلاع على مزيد من التعليمات هنا: &lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -1735,12 +1735,12 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="356"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="357"/>
         <source>Sync with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="360"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="361"/>
         <source>Stop syncing with Spotify</source>
         <translation>أوقف المزامنة مع سبوتيفي (Spotify)</translation>
     </message>
@@ -1998,32 +1998,32 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::CustomPlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="123"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="120"/>
         <source>Top Loved Tracks</source>
         <translation>الأغاني المحبوبة الأكثر شهرة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="127"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="124"/>
         <source>Your loved tracks</source>
         <translation>الأغاني التي أحببتها</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="129"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="126"/>
         <source>%1&apos;s loved tracks</source>
         <translation>الأغاني المحبوبة ل%1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="138"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="135"/>
         <source>The most loved tracks from all your friends</source>
         <translation>الأغاني المحبوبة كثيرا بين أصدقائك</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="139"/>
         <source>All of your loved tracks</source>
         <translation>جميع الأغاني التي أحببتها</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="144"/>
+        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="141"/>
         <source>All of %1&apos;s loved tracks</source>
         <translation>جميع الأغاني المحبوبة ل%1</translation>
     </message>
@@ -2083,17 +2083,17 @@ Please change the filters or try again.</source>
 <context>
     <name>Tomahawk::DynamicView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="145"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="140"/>
         <source>Add some filters above to seed this station!</source>
         <translation>أدخل بعض الترشيحات أعلاه لتوزيع هذه الإذاعة!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="150"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="145"/>
         <source>Press Generate to get started!</source>
         <translation>إضغط &quot;توليد&quot; لتبدأ!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="152"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="147"/>
         <source>Add some filters above, and press Generate to get started!</source>
         <translation>أدخل بعض الترشيحات أعلاه ثم  iضغط &quot;توليد&quot; لتبدأ!</translation>
     </message>
@@ -2557,27 +2557,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="451"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="456"/>
         <source>Top Tracks</source>
         <translation>أفضل الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="454"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
         <translation>الأغاني المحبوبة</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="457"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
         <source>Hyped Tracks</source>
         <translation>فقت الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="463"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="468"/>
         <source>Top Artists</source>
         <translation>أفضل الفنانين</translation>
     </message>
     <message>
-        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="466"/>
+        <location filename="../src/accounts/lastfm/LastFmInfoPlugin.cpp" line="471"/>
         <source>Hyped Artists</source>
         <translation>فقت الفنانين</translation>
     </message>
@@ -3257,27 +3257,27 @@ enter the displayed PIN number here:</source>
         <translation>أغاني قريبة</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="183"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="182"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>لقد استمعت إلى هذه الأغنية %n مرة</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرة %n</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرتين %n</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="185"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="184"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>لم تستمع لهذه الأغنية من قبل.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="189"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="188"/>
         <source>You first listened to it on %1.</source>
         <translation>استمعت إليها أولاً في %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="193"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="192"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="195"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="194"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation type="unfinished"/>
     </message>
@@ -3285,7 +3285,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="493"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="497"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>عذراً، ترشيحك &quot;%1&quot; لم يطابق أي نتائج.</translation>
     </message>
@@ -3442,27 +3442,27 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="393"/>
         <source>SuperCollection</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="406"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="394"/>
         <source>Combined libraries of all your online friends</source>
         <translation>جمع مكاتب أصدقائك الذين على الهواء</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="395"/>
         <source>All available albums</source>
         <translation>جميع الألبومات الجديدة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="497"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="483"/>
         <source>Recently Played Tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="498"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="484"/>
         <source>Recently played tracks from all your friends</source>
         <translation>جميع الأغاني التي استمع إليها أصدقائك مؤخرا</translation>
     </message>
@@ -3485,7 +3485,7 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="152"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="148"/>
         <source>No recently created playlists in your network.</source>
         <translation>لا قوائم أغاني جديدة أنشئت مؤخرا على شبكتك.</translation>
     </message>
