@@ -53,11 +53,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_artistsModel = new AlbumModel( ui->artistView );
     ui->artistView->setAlbumModel( m_artistsModel );
 
-    ui->artistView->setAutoFitItems( false );
-    ui->albumView->setAutoFitItems( false );
-    ui->artistView->setSpacing( 8 );
-    ui->albumView->setSpacing( 8 );
-
     ui->artistView->proxyModel()->sort( -1 );
     ui->albumView->proxyModel()->sort( -1 );
 
