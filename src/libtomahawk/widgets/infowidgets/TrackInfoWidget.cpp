@@ -67,10 +67,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     f.setPixelSize( 12 );
     ui->statsLabel->setFont( f );
 
-    ui->similarTracksView->setFrameShape( QFrame::NoFrame );
-    ui->similarTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->lyricsView->setFrameShape( QFrame::NoFrame );
-    ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
 
     QPalette p = ui->trackLabel->palette();

@@ -46,11 +46,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 {
     ui->setupUi( this );
 
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );

@@ -49,10 +49,6 @@ DynamicView::DynamicView( QWidget* parent )
         , m_fadebg( false )
         , m_fadeOnly( false )
 {
-    setContentsMargins( 0, 0, 0, 0 );
-    setFrameShape( QFrame::NoFrame );
-    setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );
@@ -71,7 +67,6 @@ DynamicView::DynamicView( QWidget* parent )
 
 DynamicView::~DynamicView()
 {
-
 }
 
 

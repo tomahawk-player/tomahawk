@@ -60,9 +60,6 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
@@ -75,7 +72,6 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/new-releases.png" ) );
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
-
 
     //m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
 

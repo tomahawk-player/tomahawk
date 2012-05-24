@@ -36,7 +36,7 @@ QString SocialPlaylistWidget::s_mostPlayedPlaylistsQuery = "asd";
 QString SocialPlaylistWidget::s_topForeignTracksQuery = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track not in (select track from playback_log where source is null group by track) and track.id = track and artist.id = track.artist group by track order by counter desc";
 
 SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
-    : QWidget ( parent )
+    : QWidget( parent )
     , ui( new Ui_SocialPlaylistWidget )
     , m_topForeignTracksModel( 0 )
     , m_popularNewAlbumsModel( 0 )
@@ -53,10 +53,6 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
     ui->mostPlayedPlaylists->setFrameShape( QFrame::NoFrame );
     ui->mostPlayedPlaylists->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->newTracksView->setFrameShape( QFrame::NoFrame );
-    ui->newTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->newAlbumsView->setFrameShape( QFrame::NoFrame );
-    ui->newAlbumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
@@ -94,7 +90,6 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
 SocialPlaylistWidget::~SocialPlaylistWidget()
 {
-
 }
 
 

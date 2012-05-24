@@ -52,6 +52,9 @@ AlbumView::AlbumView( QWidget* parent )
     , m_contextMenu( new ContextMenu( this ) )
     , m_inited( false )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     setDragEnabled( true );
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );

@@ -55,6 +55,10 @@ ArtistView::ArtistView( QWidget* parent )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    setContentsMargins( 0, 0, 0, 0 );
     setAlternatingRowColors( true );
     setDragEnabled( true );
     setDropIndicatorShown( false );

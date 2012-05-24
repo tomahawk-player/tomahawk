@@ -59,9 +59,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
@@ -78,8 +75,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
-    ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
-    ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->tracksViewLeft->overlay()->setEnabled( false );
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -93,8 +88,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     artistsProxy->setDynamicSortFilter( true );
 
     ui->artistsViewLeft->setProxyModel( artistsProxy );
-    ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
-    ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( true );

@@ -57,6 +57,10 @@ TrackView::TrackView( QWidget* parent )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );

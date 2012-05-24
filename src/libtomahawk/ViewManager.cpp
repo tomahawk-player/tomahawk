@@ -97,16 +97,12 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView = new ArtistView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
     m_superCollectionView->setTreeModel( m_superCollectionModel );
-    m_superCollectionView->setFrameShape( QFrame::NoFrame );
-    m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_superCollectionView->setShowModes( false );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
     m_superAlbumView->setAlbumModel( m_superAlbumModel );
-    m_superAlbumView->setFrameShape( QFrame::NoFrame );
-    m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -149,8 +145,6 @@ ViewManager::createPageForPlaylist( const playlist_ptr& pl )
     PlaylistModel* model = new PlaylistModel();
     view->setPlaylistModel( model );
     model->loadPlaylist( pl );
-    view->setFrameShape( QFrame::NoFrame );
-    view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     pl->resolve();
 
     m_playlistViews.insert( pl, view );
@@ -290,8 +284,6 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
             view->setPlayableModel( model );
-            view->setFrameShape( QFrame::NoFrame );
-            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
             model->addCollection( collection );
 
@@ -314,8 +306,6 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
             view = new ArtistView();
             TreeModel* model = new TreeModel();
             view->setTreeModel( model );
-            view->setFrameShape( QFrame::NoFrame );
-            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
             model->addCollection( collection );
 
@@ -338,8 +328,6 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setAlbumModel( amodel );
-            aview->setFrameShape( QFrame::NoFrame );
-            aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
 
             m_collectionAlbumViews.insert( collection, aview );
@@ -490,8 +478,6 @@ ViewManager::showRecentPlaysPage()
     if ( !m_recentPlaysWidget )
     {
         PlaylistView* pv = new PlaylistView( m_widget );
-        pv->setFrameShape( QFrame::NoFrame );
-        pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );

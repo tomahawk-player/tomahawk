@@ -58,18 +58,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
 
-    ui->artistView->setContentsMargins( 0, 0, 0, 0 );
-    ui->artistView->setFrameShape( QFrame::NoFrame );
-    ui->artistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    ui->albumView->setContentsMargins( 0, 0, 0, 0 );
-    ui->albumView->setFrameShape( QFrame::NoFrame );
-    ui->albumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    ui->resultsView->setContentsMargins( 0, 0, 0, 0 );
-    ui->resultsView->setFrameShape( QFrame::NoFrame );
-    ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     ui->resultsView->loadingSpinner()->fadeIn();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
