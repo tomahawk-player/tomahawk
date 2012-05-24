@@ -686,8 +686,6 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
         emit error( UnknownError );
         setState( Error );
-
-        return;
     }
     if ( newState == Phonon::PlayingState )
     {
@@ -732,7 +730,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         }
     }
     
-    if ( newState == Phonon::PausedState || newState == Phonon::PlayingState )
+    if ( newState == Phonon::PausedState || newState == Phonon::PlayingState || newState == Phonon::ErrorState )
     {
         tDebug() << "Phonon state now:" << newState;
         if ( m_stateQueue.count() )
