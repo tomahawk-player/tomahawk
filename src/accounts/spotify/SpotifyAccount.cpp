@@ -313,6 +313,7 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     if ( !m_spotifyResolver.isNull() )
     {
         // replace
+        AccountManager::instance()->disableAccount( this );
         NewClosure( m_spotifyResolver.data(), SIGNAL( destroyed() ), this, SLOT( hookupAfterDeletion( bool ) ), true );
         m_spotifyResolver.data()->deleteLater();
     }
