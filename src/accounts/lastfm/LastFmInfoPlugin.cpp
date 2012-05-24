@@ -212,6 +212,11 @@ LastFmInfoPlugin::scrobble()
         return;
 
     tLog() << Q_FUNC_INFO << "Scrobbling now:" << m_track.toString();
+    
+    // FIXME: workaround for the duration-less dilandau (and others) tracks
+    if ( m_track.duration() == 0 )
+        m_track.setDuration( 31 );
+
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
 }
