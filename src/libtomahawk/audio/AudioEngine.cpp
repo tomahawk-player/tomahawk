@@ -133,9 +133,7 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
-        setVolume( m_volume );
-        m_mediaObject->play();
-        setVolume( m_volume );
+        queueState( Playing );
         emit resumed();
 
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
@@ -151,7 +149,8 @@ AudioEngine::pause()
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_volume = volume();
-    m_mediaObject->pause();
+    
+    queueState( Paused );
     emit paused();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( Tomahawk::InfoSystem::InfoPushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant(), Tomahawk::InfoSystem::PushNoFlag ) );
@@ -185,7 +184,6 @@ AudioEngine::stop( AudioErrorCode errorCode )
         sendWaitingNotification();
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
-
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -485,8 +483,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_input.clear();
             }
             m_input = io;
-            m_mediaObject->play();
-
+            queueState( Playing );
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
@@ -734,6 +731,16 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             }
         }
     }
+    
+    if ( newState == Phonon::PausedState || newState == Phonon::PlayingState )
+    {
+        tDebug() << "Phonon state now:" << newState;
+        if ( m_stateQueue.count() )
+        {
+            AudioState qState = m_stateQueue.dequeue();
+            checkStateQueue();
+        }
+    }
 }
 
 
@@ -832,6 +839,47 @@ bool
 AudioEngine::isLocalResult( const QString& url ) const
 {
     return url.startsWith( "file://" );
+}
+
+
+void
+AudioEngine::checkStateQueue()
+{
+    if ( m_stateQueue.count() )
+    {
+        AudioState state = m_stateQueue.head();
+        tDebug() << "Applying state command:" << state;
+        switch ( state )
+        {
+            case Playing:
+            {
+                setVolume( m_volume );
+                m_mediaObject->play();
+                setVolume( m_volume );
+            }
+            
+            case Paused:
+            {
+                m_mediaObject->pause();
+            }
+        }
+    }
+    else
+        tDebug() << "Queue is empty";
+}
+
+
+void
+AudioEngine::queueState( AudioState state )
+{
+    tDebug() << "Enqueuing state command:" << state << m_stateQueue.count();
+
+    m_stateQueue.enqueue( state );
+
+    if ( m_stateQueue.count() == 1 )
+    {
+        checkStateQueue();
+    }
 }
 
 

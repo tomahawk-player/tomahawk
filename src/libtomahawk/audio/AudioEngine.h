@@ -22,6 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
+#include <QtCore/QQueue>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
@@ -29,12 +30,11 @@
 
 #include "libtomahawk/infosystem/InfoSystem.h"
 
-#include "Result.h"
 #include "Typedefs.h"
+#include "Result.h"
 #include "PlaylistInterface.h"
 
 #include "DllMacro.h"
-
 
 class DLLEXPORT AudioEngine : public QObject
 {
@@ -139,6 +139,9 @@ private slots:
     void sendWaitingNotification() const;
 
 private:
+    void checkStateQueue();
+    void queueState( AudioState state );
+
     void setState( AudioState state );
 
     bool isHttpResult( const QString& ) const;
@@ -162,8 +165,10 @@ private:
     bool m_waitingOnNewTrack;
 
     mutable QStringList m_supportedMimeTypes;
-    AudioState m_state;
     unsigned int m_volume;
+
+    AudioState m_state;
+    QQueue< AudioState > m_stateQueue;
 
     static AudioEngine* s_instance;
 };
