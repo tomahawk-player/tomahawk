@@ -232,7 +232,7 @@ void
 AccountManager::connectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach( Account* acc, m_accounts )
+    foreach( Account* acc, m_enabledAccounts )
     {
         acc->authenticate();
         m_enabledAccounts << acc;
