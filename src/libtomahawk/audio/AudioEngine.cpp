@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -39,12 +39,13 @@
 
 #include "utils/Logger.h"
 
-
 using namespace Tomahawk;
 
-AudioEngine* AudioEngine::s_instance = 0;
+#define AUDIO_VOLUME_STEP 5
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
+
+AudioEngine* AudioEngine::s_instance = 0;
 
 
 AudioEngine*
@@ -299,6 +300,20 @@ AudioEngine::setVolume( int percentage )
     percentage = qBound( 0, percentage, 100 );
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
     emit volumeChanged( percentage );
+}
+
+
+void
+AudioEngine::lowerVolume()
+{
+    setVolume( volume() - AUDIO_VOLUME_STEP );
+}
+
+
+void
+AudioEngine::raiseVolume()
+{
+    setVolume( volume() + AUDIO_VOLUME_STEP );
 }
 
 

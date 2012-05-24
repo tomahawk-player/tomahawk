@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -34,8 +34,6 @@
 #include "PlaylistInterface.h"
 
 #include "DllMacro.h"
-
-#define AUDIO_VOLUME_STEP 5
 
 
 class DLLEXPORT AudioEngine : public QObject
@@ -88,8 +86,8 @@ public slots:
     void seek( qint64 ms );
     void seek( int ms ); // for compatibility with seekbar in audiocontrols
     void setVolume( int percentage );
-    void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
-    void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
+    void lowerVolume(); 
+    void raiseVolume();
     void mute();
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
