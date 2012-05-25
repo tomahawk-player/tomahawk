@@ -66,6 +66,11 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
 //    m_steerBottom->setFont( f );
 //    m_textL->addWidget( m_steerBottom );
 
+
+    QPalette p = m_steerTop->palette();
+    p.setBrush( QPalette::WindowText, palette().highlightedText() );
+    m_steerTop->setPalette( p );
+
     m_layout->addLayout( m_textL, 1 );
 
     m_amplifier = new QComboBox( this );
