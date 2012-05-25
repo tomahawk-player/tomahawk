@@ -209,7 +209,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ArtistView.cpp" line="298"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>نتأسف، نظام البحث لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
+        <translation>نتأسف، نظام الترشيح لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@ connect and stream from you?</source>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send the this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;نتأسف!&lt;/span&gt;&amp;nbsp;توماهوك تحطم. يرجى أن تخبرنا عن ذلك! لقد أنشئ توماهوك تقرير عن الخطأ نيابة عنك لمساعدتنا في تحسين استقرار البرنامج في المستقبل. يمكنك إرسال هذا التقرير الأن مباشرة لمطوري توماهوك.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -507,7 +507,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="89"/>
         <source>Filter...</source>
-        <translation>فلتر...</translation>
+        <translation>مرشح...</translation>
     </message>
 </context>
 <context>
@@ -682,7 +682,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>مؤلف</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
@@ -707,7 +707,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>عمر</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
@@ -766,7 +766,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>A playlist by %1, created %2</source>
-        <translation type="unfinished"/>
+        <translation>قائمة أغاني من قبل %1, أنشئت %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="83"/>
@@ -1114,17 +1114,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.ui" line="41"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>تويتر (Twitter)</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="67"/>
         <source>Cover</source>
-        <translation>غطاء</translation>
+        <translation>غلاف</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="101"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="200"/>
@@ -1134,7 +1134,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.cpp" line="202"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot; and loving it! %4</source>
-        <translation type="unfinished"/>
+        <translation>يتم الاستماع إلى &quot;%1&quot; من قبل %2 على &quot;%3&quot; وقد أحبها! %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="223"/>
@@ -1420,7 +1420,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>جودة عالية في الأغاني المحملة</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
@@ -1471,7 +1471,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="166"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>ماسار لتفحص ملفات الموسيقى:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="180"/>
@@ -1516,27 +1516,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="267"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>استخدم عمل UPnP لإنشاء بوابة إعادة التوجيه (موصى به)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="274"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>استخدم عنوان/مضيف ايب (IP) و بوابة ثابتين</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="287"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>عين هذا إلى عنوان الايب الخارجي (External IP) الخاص بك أو اسم المضيف. تأكد من إحالة البوابة إلى هذا المضيف!</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="356"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>سوكس الوكيل</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="362"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>استخدم سوكس الوكيل</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
@@ -1551,7 +1551,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="129"/>
         <source>Filter by capability:</source>
-        <translation>تصفية حسب القدرة:</translation>
+        <translation>ترشيح حسب القدرة:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="305"/>
@@ -1737,7 +1737,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="357"/>
         <source>Sync with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>مزامنة مع سبوتيفي (Spotify)</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="361"/>
@@ -1781,7 +1781,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
-        <translation>تواصل مع أصدقائك على تويتر.</translation>
+        <translation>تواصل مع أصدقائك على تويتر (Twitter).</translation>
     </message>
 </context>
 <context>
@@ -1804,7 +1804,7 @@ connect and stream from you?</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="93"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="169"/>
         <source>Authenticate</source>
-        <translation>وثق</translation>
+        <translation>صادق</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="75"/>
@@ -1827,7 +1827,7 @@ connect and stream from you?</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="281"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="291"/>
         <source>Tweetin&apos; Error</source>
-        <translation type="unfinished"/>
+        <translation>خطأ توتينغ (&apos;Tweetin)</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="123"/>
@@ -1895,12 +1895,12 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <source>Tweeted!</source>
-        <translation type="unfinished"/>
+        <translation>ثبت التويت (!Tweeted)</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
         <source>Your tweet has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>رسالتك على تويتر قد نشرت!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="281"/>
@@ -1910,7 +1910,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>رسالتك قد نشرت!</translation>
     </message>
 </context>
 <context>
@@ -1947,7 +1947,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="309"/>
         <source>&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>&amp;أحب</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="106"/>
@@ -1957,7 +1957,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
         <source>Un-&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>لا &amp;أحب</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="114"/>
@@ -2120,7 +2120,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="360"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="425"/>
         <source>is</source>
-        <translation type="unfinished"/>
+        <translation>هو</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="207"/>
@@ -2163,32 +2163,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>0 BPM</source>
-        <translation type="unfinished"/>
+        <translation>٠ نبضة في الدقيقة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>500 BPM</source>
-        <translation type="unfinished"/>
+        <translation>٥٠٠ نبضة في الدقيقة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>0 secs</source>
-        <translation type="unfinished"/>
+        <translation>٠ ثانية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>3600 secs</source>
-        <translation type="unfinished"/>
+        <translation>٣٦٠٠ ثانية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>-100 dB</source>
-        <translation type="unfinished"/>
+        <translation>-١٠٠ د.ب.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>100 dB</source>
-        <translation type="unfinished"/>
+        <translation>١٠٠ د.ب.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="343"/>
@@ -2203,62 +2203,62 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="363"/>
         <source>C Sharp</source>
-        <translation type="unfinished"/>
+        <translation>C Sharp</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="365"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>E Flat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="366"/>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="368"/>
         <source>F Sharp</source>
-        <translation type="unfinished"/>
+        <translation>F Sharp</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="370"/>
         <source>A Flat</source>
-        <translation type="unfinished"/>
+        <translation>A Flat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="372"/>
         <source>B Flat</source>
-        <translation type="unfinished"/>
+        <translation>B Flat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="373"/>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="390"/>
@@ -2364,37 +2364,37 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="785"/>
         <source>with %1 %2</source>
-        <translation type="unfinished"/>
+        <translation>مع %1 %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="787"/>
         <source>about %1 BPM</source>
-        <translation type="unfinished"/>
+        <translation>حوالي %1 نبضة في الدقيقة</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="789"/>
         <source>about %n minute(s) long</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>بطول حوالي %n دقائق</numerusform><numerusform>بطول حوالي دقيقة %n</numerusform><numerusform>بطول حوالي دقيقتين %n</numerusform><numerusform>بطول حوالي %n دقائق</numerusform><numerusform>بطول حوالي %n دقائق</numerusform><numerusform>بطول حوالي %n دقائق</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="791"/>
         <source>about %1 dB</source>
-        <translation type="unfinished"/>
+        <translation>حوالي %1 د.ب.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
         <source>at around %1%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>في حوالي %1%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="798"/>
         <source>in %1</source>
-        <translation type="unfinished"/>
+        <translation>في %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="803"/>
         <source>in a %1 key</source>
-        <translation type="unfinished"/>
+        <translation>في المفتاح %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="813"/>
@@ -2404,12 +2404,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="818"/>
         <source>with a %1 mood</source>
-        <translation type="unfinished"/>
+        <translation>في مزاج %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="823"/>
         <source>in a %1 style</source>
-        <translation type="unfinished"/>
+        <translation>في أسلوب %1</translation>
     </message>
 </context>
 <context>
@@ -2417,7 +2417,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="58"/>
         <source>Steer this station:</source>
-        <translation type="unfinished"/>
+        <translation>قد هذه الإذاعة:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="72"/>
@@ -2427,7 +2427,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="73"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>أقل</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="74"/>
@@ -2502,12 +2502,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="103"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>طبق أوامر القيادة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="109"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>إعادة ضبط جميع أوامر القيادة</translation>
     </message>
 </context>
 <context>
@@ -2546,12 +2546,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="140"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation type="unfinished"/>
+        <translation>توماهوك يلعب &quot;%1&quot; من قبل %2%3</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="143"/>
         <source>on &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>على &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -2595,7 +2595,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="158"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>يتم الاستماع إلى &quot;%1&quot; من قبل %2 وقد أحبها! %3</translation>
     </message>
 </context>
 <context>
@@ -2639,7 +2639,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="86"/>
         <source>&amp;Catch Up</source>
-        <translation type="unfinished"/>
+        <translation>&amp;إلحق</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
@@ -2653,32 +2653,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="737"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation> و </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="745"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>أنت</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="747"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>أنت</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="756"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>و</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="756"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n أخرين</numerusform><numerusform>%n أخر</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="759"/>
         <source>%1 people</source>
-        <translation type="unfinished"/>
+        <translation>%1 أشخاص</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="761"/>
@@ -2699,7 +2699,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="97"/>
         <source>Network error parsing shortened link!</source>
-        <translation type="unfinished"/>
+        <translation>خطأ شبكة في تحليل تقصير الرابط!</translation>
     </message>
 </context>
 <context>
@@ -2755,7 +2755,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="557"/>
+        <location filename="../src/TomahawkApp.cpp" line="552"/>
         <source>My Collection</source>
         <translation>مجموعتي الخاصة</translation>
     </message>
@@ -2765,13 +2765,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
-        <translation type="unfinished"/>
+        <translation>رقم البن لتويتر (Twitter Pin)</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>After authenticating on Twitter's web site,
 enter the displayed PIN number here:</source>
-        <translation>بعد المصادقة على موقع تويتر (twitter)،
+        <translation>بعد المصادقة على موقع تويتر (Twitter)،
 أدخل رقم البين (PIN) الموجود أمامك على الشاشة هنا:</translation>
     </message>
 </context>
@@ -2806,7 +2806,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="260"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>تعليق</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="270"/>
@@ -2854,7 +2854,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="131"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="139"/>
@@ -2884,7 +2884,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="165"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>تحميل XSPF&amp;...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="170"/>
@@ -2934,7 +2934,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="217"/>
         <source>Meta+Ctrl+Z</source>
-        <translation type="unfinished"/>
+        <translation>Meta+Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="222"/>
@@ -3013,22 +3013,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="538"/>
         <source>Enter peer address:</source>
-        <translation>أدخل عنوان الصديق:</translation>
+        <translation>أدخل عنوان الند:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="545"/>
         <source>Enter peer port:</source>
-        <translation>أدخل بوابة الصديق:</translation>
+        <translation>أدخل بوابة الند:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="553"/>
         <source>Enter peer key:</source>
-        <translation type="unfinished"/>
+        <translation>أدخل مفتاح الند:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="649"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>خطأ XSPF</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="649"/>
@@ -3078,7 +3078,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="756"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>تعليق</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="785"/>
@@ -3104,13 +3104,13 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="830"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
-        <translation type="unfinished"/>
+        <translation>%1 من قبل %2</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="831"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
-        <translation type="unfinished"/>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="842"/>
@@ -3125,7 +3125,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="850"/>
         <source>Copyright 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</source>
-        <translation>Copyright 2010 - 2012&lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</translation>
+        <translation>حقوق الطبع والنشر ٢٠١٠ - ٢٠١٢ &lt;br/&gt;Christian Muehlhaeuser &amp;lt;muesli@tomahawk-player.org&amp;gt;&lt;br/&gt;&lt;br/&gt;شكر لكل من: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&amp;ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="853"/>
@@ -3143,7 +3143,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="66"/>
         <source>0 Sources</source>
-        <translation type="unfinished"/>
+        <translation>٠ مصادر</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.ui" line="89"/>
@@ -3173,7 +3173,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="54"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>مرشح</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="84"/>
@@ -3183,7 +3183,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="85"/>
         <source>Flat View</source>
-        <translation type="unfinished"/>
+        <translation>نظرة مسطحة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/topbar/TopBar.cpp" line="195"/>
@@ -3214,7 +3214,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="41"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>غلاف</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="66"/>
@@ -3224,7 +3224,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="81"/>
         <source>by </source>
-        <translation type="unfinished"/>
+        <translation>من قبل </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="88"/>
@@ -3234,7 +3234,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="105"/>
         <source>from </source>
-        <translation type="unfinished"/>
+        <translation>من </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="112"/>
@@ -3274,12 +3274,12 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="192"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>لقد استمعت إلى %1 %n مرة</numerusform><numerusform>لقد استمعت إلى %1 مرة %n</numerusform><numerusform>لقد استمعت إلى %1 مرتين %n</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="194"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation type="unfinished"/>
+        <translation>لم تستمع إلى %1 من قبل.</translation>
     </message>
 </context>
 <context>
@@ -3381,17 +3381,17 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>مساعد تويتر يسمح لك بإكتشاف والإستماع إلى الموسيقى من أصدقائك على تويتر المستخدمين لتوماهوك بالإضافة إلى نشر الرسائل إلى حسابك.</translation>
+        <translation>مساعد تويتر (Twitter) يسمح لك بإكتشاف والإستماع إلى الموسيقى من أصدقائك على تويتر المستخدمين لتوماهوك بالإضافة إلى نشر الرسائل إلى حسابك.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>الحالة: بيانات غير محفوظة</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
         <source>Authenticate with Twitter</source>
-        <translation type="unfinished"/>
+        <translation>صادق مع تويتر (Twitter)</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
@@ -3406,12 +3406,17 @@ If you only want to post tweets, you're done.
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation type="unfinished"/>
+        <translation>
+إن كنت تريد نشر التويت (Tweet) فقط، لقد انتهيت!
+
+إن كنت تريد لتوماهوك الاتصال بأصدقائك من خلال تويتر (Twitter)، حدد نوع التويت (Tweet) و إضغط على الزر أدناه لإرسال رسالة مزامنة. يجب أن تكونا تابعين لبعضكما البعض على حد سواء لأن الرسائل المباشرة تستخدم. ثم يجب الإنتظار بصبر (كبير) - يمكن أن تستغرق العملية عدة دقائق!
+
+يمكنك إعادة إرسال رسالة المزامنة في أي وقت عن طريق إرسال تويت (Tweet) آخر بضغط هذا الزر من جديد.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation type="unfinished"/>
+        <translation>حدد نوع التويت (Tweet) اللذي ترغب به، ثم إضغط على الزر لنشره:</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
@@ -3421,12 +3426,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@ذكر</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>رسالة مباشرة</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
@@ -3436,7 +3441,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
-        <translation type="unfinished"/>
+        <translation>إرسل رسالة</translation>
     </message>
 </context>
 <context>
@@ -3500,7 +3505,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="72"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>الرسوم البيانية</translation>
     </message>
 </context>
 <context>
@@ -3508,7 +3513,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation type="unfinished"/>
+        <translation>ويكيبيديا</translation>
     </message>
 </context>
 <context>
@@ -3518,26 +3523,30 @@ You can re-send a sync message at any time simply by sending another tweet using
         <source>
 Terms for %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>شروط %1:</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="314"/>
         <source>No terms found, sorry.</source>
-        <translation type="unfinished"/>
+        <translation>لا شروط موجودة، نتأسف</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="347"/>
         <source>
 Hotttness for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>
+شعبية %1:%2
+</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="363"/>
         <source>
 Familiarity for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>
+ألفت %1:%2
+</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="381"/>
@@ -3546,7 +3555,11 @@ Lyrics for &quot;%1&quot; by %2:
 
 %3
 </source>
-        <translation type="unfinished"/>
+        <translation>
+كلمات أغاني &quot;%1&quot; من قبل %2&quot;
+
+%3
+</translation>
     </message>
 </context>
 <context>
@@ -3577,13 +3590,13 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="14"/>
         <source>Xml stream console</source>
-        <translation type="unfinished"/>
+        <translation>Xml stream console</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>مرشح</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
@@ -3598,22 +3611,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="65"/>
         <source>By JID</source>
-        <translation type="unfinished"/>
+        <translation>By JID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
         <source>By namespace uri</source>
-        <translation type="unfinished"/>
+        <translation>By namespace uri</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
         <source>By all attributes</source>
-        <translation type="unfinished"/>
+        <translation>By all attributes</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation type="unfinished"/>
+        <translation>Visible stanzas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
@@ -3623,12 +3636,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
-        <translation type="unfinished"/>
+        <translation>رسالة</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
         <source>Presence</source>
-        <translation type="unfinished"/>
+        <translation>Presence</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
@@ -3643,7 +3656,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>Save XMPP log to file</source>
-        <translation type="unfinished"/>
+        <translation>Save XMPP log to file</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
@@ -3656,7 +3669,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="14"/>
         <source>Xmpp Configuration</source>
-        <translation type="unfinished"/>
+        <translation>تكوينات أكسمبب (XMPP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="52"/>
@@ -3676,7 +3689,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
         <source>Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>تعريف أكسمبب (XMPP ID):</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
@@ -3696,7 +3709,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="210"/>
         <source>Advanced Xmpp Settings</source>
-        <translation type="unfinished"/>
+        <translation>إعدادات أكسمبب (XMPP) المتقدمة</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
@@ -3706,7 +3719,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>بوابة:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
@@ -3749,7 +3762,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
         <source>Remote Stream Error</source>
-        <translation type="unfinished"/>
+        <translation>خطأ في التحميل (المجرى) البعيد</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
@@ -3764,7 +3777,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
         <source>System shutdown</source>
-        <translation type="unfinished"/>
+        <translation>إغلاق النظام</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
@@ -3774,7 +3787,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>مجهول</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
@@ -3804,7 +3817,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="521"/>
         <source>Enter Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>أدخل تعريف أكسمبب (XMPP ID):</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="672"/>
@@ -3814,7 +3827,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="677"/>
         <source>XML Console...</source>
-        <translation type="unfinished"/>
+        <translation>وحدة التحكم XML...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="725"/>
