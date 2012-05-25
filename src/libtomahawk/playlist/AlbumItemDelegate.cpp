@@ -44,7 +44,7 @@
 #include "utils/Logger.h"
 
 namespace {
-    static const int FADE_DURATION = 90;
+    static const int FADE_DURATION = 75;
 };
 
 
@@ -133,11 +133,11 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     if ( m_hoverFaders.contains( index ) )
     {
         const qreal pct = ( m_hoverFaders[ index ]->currentFrame() / 100. );
-        opacity = 0.15 - pct * 0.15;
+        opacity = 0.35 - pct * 0.35;
     }
-    else if ( m_hoverIndex != index )
+    else if ( m_hoverIndex == index )
     {
-        opacity = 0.15;
+        opacity = 0.35;
     }
 
 
@@ -145,8 +145,8 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     {
         painter->save();
 
-        painter->setPen( QColor( 240, 240, 240 ) );
-        painter->setBrush( QColor( 240, 240, 240 ) );
+        painter->setPen( QColor( 33, 33, 33 ) );
+        painter->setBrush( QColor( 33, 33, 33 ) );
         painter->setOpacity( opacity );
         painter->drawRect( r );
 
@@ -327,7 +327,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
         {
             if ( m_hoverIndex.isValid() )
             {
-                QTimeLine* fadeOut = createTimeline( QTimeLine::Backward );
+                QTimeLine* fadeOut = createTimeline( QTimeLine::Forward );
                 _detail::Closure* c = NewClosure( fadeOut, SIGNAL( frameChanged( int ) ), this, SLOT( fadingFrameChanged( QPersistentModelIndex ) ), QPersistentModelIndex( m_hoverIndex ) );
                 c->setAutoDelete( false );
                 c = NewClosure( fadeOut, SIGNAL( finished() ), this, SLOT( fadingFrameFinished( QPersistentModelIndex ) ), QPersistentModelIndex( m_hoverIndex ) );
@@ -339,7 +339,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             emit updateIndex( m_hoverIndex );
             m_hoverIndex = index;
 
-            QTimeLine* fadeIn = createTimeline( QTimeLine::Forward );
+            QTimeLine* fadeIn = createTimeline( QTimeLine::Backward );
             _detail::Closure* c = NewClosure( fadeIn, SIGNAL( frameChanged( int ) ), this, SLOT( fadingFrameChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
             c->setAutoDelete( false );
             c = NewClosure( fadeIn, SIGNAL( finished() ), this, SLOT( fadingFrameFinished( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
