@@ -42,6 +42,15 @@ using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
 
+// Sort binary resolvers above script resolvers, and script resolvers by download count
+bool
+resolverSort( const Attica::Content& first, const Attica::Content& second )
+{
+    if ( !first.attribute( "typeid" ).isEmpty() && second.attribute( "typeid" ).isEmpty() )
+        return true;
+
+    return first.downloads() > second.downloads();
+}
 
 AtticaManager::AtticaManager( QObject* parent )
     : QObject( parent )
@@ -353,7 +362,10 @@ AtticaManager::resolversList( BaseJob* j )
     syncServerData();
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 
@@ -404,7 +416,10 @@ AtticaManager::binaryResolversList( BaseJob* j )
     }
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 
