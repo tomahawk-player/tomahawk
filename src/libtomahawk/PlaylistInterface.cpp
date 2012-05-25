@@ -21,6 +21,7 @@
 #include "utils/Logger.h"
 #include "Result.h"
 #include "Pipeline.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
@@ -68,7 +69,7 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
                 break;
 
             const query_ptr& q2 = result.at( j );
-            
+
             if ( q1->track() == q2->track() )
             {
                 picked = false;
