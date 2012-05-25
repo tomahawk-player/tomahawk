@@ -29,8 +29,6 @@
 
 using namespace Tomahawk;
 
-#define COVER_FADEIN 1000
-
 QWeakPointer< TomahawkUtils::SharedTimeLine > PixmapDelegateFader::s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine >();
 
 
@@ -126,7 +124,7 @@ void
 PixmapDelegateFader::setSize( const QSize& size )
 {
     m_size = size;
-    
+
     if ( m_defaultImage )
     {
         // No cover loaded yet, use default and don't fade in

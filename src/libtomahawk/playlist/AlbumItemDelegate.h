@@ -21,9 +21,11 @@
 #define ALBUMITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTimeLine>
 
 #include "DllMacro.h"
 
+class QTimeLine;
 namespace Tomahawk {
     class PixmapDelegateFader;
 }
@@ -52,15 +54,19 @@ signals:
 private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
-    
+
     void onScrolled( int dx, int dy );
     void onPlaybackStarted( const QPersistentModelIndex& index );
     void onPlaybackFinished();
-    
+
     void onPlayClicked( const QPersistentModelIndex& index );
     void onPlaylistChanged( const QPersistentModelIndex& index );
 
+    void fadingFrameChanged( const QPersistentModelIndex& );
+    void fadingFrameFinished( const QPersistentModelIndex& );
 private:
+    QTimeLine* createTimeline( QTimeLine::Direction direction );
+
     QAbstractItemView* m_view;
     AlbumProxyModel* m_model;
 
@@ -75,6 +81,8 @@ private:
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
+
+    mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
 };
 
 #endif // ALBUMITEMDELEGATE_H
