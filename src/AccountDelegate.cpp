@@ -281,7 +281,10 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
 
 #ifdef Q_WS_MAC
-        btnRect.adjust( -4, 2, 4, -2 );
+        btnRect.adjust( -4, 0, 4, 0 );
+
+        if ( hasConfigWrench )
+            btnRect.moveTop( btnRect.top() + 2 );
 #endif
         leftEdge = btnRect.left();
         m_cachedButtonRects[ index ] = btnRect;
