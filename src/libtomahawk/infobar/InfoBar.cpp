@@ -22,14 +22,14 @@
 
 #include <QLabel>
 #include <QPixmap>
-
-#include "ViewManager.h"
-#include "thirdparty/Qocoa/qsearchfield.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
+
+#include "ViewManager.h"
+#include "thirdparty/Qocoa/qsearchfield.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 #include <widgets/QueryLabel.h>
 
 #define ANIMATION_TIME 400

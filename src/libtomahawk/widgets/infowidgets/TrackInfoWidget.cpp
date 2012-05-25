@@ -26,7 +26,7 @@
 #include "playlist/AlbumModel.h"
 #include "audio/AudioEngine.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

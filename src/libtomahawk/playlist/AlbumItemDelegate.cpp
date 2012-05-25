@@ -31,7 +31,7 @@
 #include "Source.h"
 #include "audio/AudioEngine.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/PixmapDelegateFader.h"
 #include <utils/Closure.h>
 

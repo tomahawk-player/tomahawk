@@ -28,7 +28,7 @@
 #include "playlist/PlaylistView.h"
 #include "database/Database.h"
 #include "widgets/ImageButton.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Album.h"
 #include "DropJob.h"

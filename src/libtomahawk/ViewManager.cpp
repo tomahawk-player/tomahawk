@@ -46,6 +46,7 @@
 #include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
 
+#include "widgets/NewReleasesWidget.h"
 #include "widgets/WelcomeWidget.h"
 #include "widgets/WhatsHotWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
@@ -1025,3 +1026,44 @@ ViewManager::showCurrentTrack()
     }
 }
 
+
+Tomahawk::ViewPage*
+ViewManager::welcomeWidget() const
+{
+    return m_welcomeWidget;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::whatsHotWidget() const
+{
+    return m_whatsHotWidget;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::newReleasesWidget() const
+{
+    return m_newReleasesWidget;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::topLovedWidget() const
+{
+    return m_topLovedWidget;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::recentPlaysWidget() const
+{
+    return m_recentPlaysWidget;
+}
+
+
+ArtistView*
+ViewManager::superCollectionView() const
+{
+    return m_superCollectionView;
+}

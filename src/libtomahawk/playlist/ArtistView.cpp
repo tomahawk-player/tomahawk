@@ -35,7 +35,9 @@
 #include "TreeItemDelegate.h"
 #include "TreeModel.h"
 #include "PlayableItem.h"
+#include "Source.h"
 #include "ViewManager.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #define SCROLL_TIMEOUT 280

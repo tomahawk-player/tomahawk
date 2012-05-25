@@ -42,12 +42,13 @@
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
-#include "utils/Logger.h"
 #include "items/GenericPageItems.h"
 #include "items/TemporaryPageItem.h"
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/Database.h"
 #include "LatchManager.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

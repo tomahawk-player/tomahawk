@@ -30,7 +30,7 @@
 #include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 

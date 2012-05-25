@@ -31,7 +31,7 @@
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "DropJob.h"

@@ -29,9 +29,6 @@
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
-#include "widgets/WelcomeWidget.h"
-#include "widgets/WhatsHotWidget.h"
-#include "widgets/NewReleasesWidget.h"
 
 #include "DllMacro.h"
 
@@ -56,6 +53,7 @@ class SourceInfoWidget;
 class InfoBar;
 class TopBar;
 class TrackInfoWidget;
+class NewReleasesWidget;
 class WelcomeWidget;
 class WhatsHotWidget;
 class QPushButton;
@@ -91,12 +89,12 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
-    Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
-    Tomahawk::ViewPage* newReleasesWidget() const { return m_newReleasesWidget; }
-    Tomahawk::ViewPage* topLovedWidget() const { return m_topLovedWidget; }
-    Tomahawk::ViewPage* recentPlaysWidget() const { return m_recentPlaysWidget; }
-    ArtistView* superCollectionView() const { return m_superCollectionView; }
+    Tomahawk::ViewPage* welcomeWidget() const;
+    Tomahawk::ViewPage* whatsHotWidget() const;
+    Tomahawk::ViewPage* newReleasesWidget() const;
+    Tomahawk::ViewPage* topLovedWidget() const;
+    Tomahawk::ViewPage* recentPlaysWidget() const;
+    ArtistView* superCollectionView() const;
 
     /// Get the view page for the given item. Not pretty...
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;

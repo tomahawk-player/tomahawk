@@ -35,13 +35,10 @@
 #include <QTimer>
 #include <QToolBar>
 
-#include "Playlist.h"
-#include "Query.h"
-#include "Artist.h"
-#include "ViewManager.h"
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
@@ -52,27 +49,31 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/QueueView.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
 
+#include "Playlist.h"
+#include "Query.h"
+#include "Artist.h"
+#include "ViewManager.h"
+#include "ActionCollection.h"
 #include "AudioControls.h"
 #include "SettingsDialog.h"
 #include "DiagnosticsDialog.h"
 #include "TomahawkSettings.h"
 #include "SourceList.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
 #include "TomahawkTrayIcon.h"
 #include "ScanManager.h"
 #include "TomahawkApp.h"
+#include "LoadXSPFDialog.h"
 
 #ifdef Q_WS_WIN
 #include <qtsparkle/Updater>
 #endif
 
 #include "utils/Logger.h"
-#include "jobview/JobStatusModel.h"
-#include "LoadXSPFDialog.h"
-#include <ActionCollection.h>
 
 using namespace Tomahawk;
 using namespace Accounts;

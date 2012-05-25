@@ -29,6 +29,7 @@
 #include "context/ContextWidget.h"
 #include "TomahawkSettings.h"
 #include "Artist.h"
+#include "Source.h"
 #include "PlayableItem.h"
 #include "AlbumItemDelegate.h"
 #include "AlbumModel.h"
@@ -36,6 +37,7 @@
 #include "ViewManager.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #define SCROLL_TIMEOUT 280
 
