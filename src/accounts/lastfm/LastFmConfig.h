@@ -49,6 +49,9 @@ private slots:
     void loadHistory();
     void onHistoryLoaded();
 
+signals:
+    void sizeHintChanged();
+
 private:
     LastFmAccount* m_account;
     Ui_LastFmConfig* m_ui;

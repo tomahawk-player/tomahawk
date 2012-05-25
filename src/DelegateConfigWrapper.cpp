@@ -124,12 +124,9 @@ DelegateConfigWrapper::rejected()
 void
 DelegateConfigWrapper::updateSizeHint()
 {
-    hide();
     setSizeGripEnabled( false );
     setMinimumSize( sizeHint() );
     setMaximumSize( sizeHint() );
-
-    show();
 }
 
 

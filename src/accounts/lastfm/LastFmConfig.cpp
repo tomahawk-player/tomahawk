@@ -119,6 +119,8 @@ LastFmConfig::loadHistory()
     m_ui->importHistory->setEnabled( false );
     m_ui->progressBar->show();
 
+    emit sizeHintChanged();
+
     QNetworkReply* reply = lastfm::User( m_ui->username->text().toLower() ).getRecentTracks( 200, m_page );
     connect( reply, SIGNAL( finished() ), SLOT( onHistoryLoaded() ) );
 }
