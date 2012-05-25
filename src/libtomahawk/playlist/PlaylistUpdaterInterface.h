@@ -71,6 +71,8 @@ public:
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 
+    virtual bool sync() const { return true; }
+
 signals:
     void changed();
 

@@ -342,19 +342,26 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 
     // If it's not being synced, allow the option to sync
     bool found = false;
+    bool manuallyDisabled = false;
     QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
     foreach ( PlaylistUpdaterInterface* updater, updaters )
     {
         if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( updater ) )
         {
-            if ( spotifyUpdater->sync() )
-                found = true;
+            found = true;
+            if ( !spotifyUpdater->sync() )
+                manuallyDisabled = true;
+
         }
     }
 
     if ( !found )
     {
         action->setText( tr( "Sync with Spotify" ) );
+    }
+    else if ( manuallyDisabled )
+    {
+        action->setText( tr( "Re-enable syncing with Spotify" ) );
     }
     else
     {

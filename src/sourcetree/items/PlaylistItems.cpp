@@ -251,13 +251,6 @@ PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 void
 PlaylistItem::onUpdated()
 {
-    // No work todo
-    if ( !m_overlaidIcon.isNull() && m_overlaidUpdaters.operator==( m_playlist->updaters() ) )
-    {
-        emit updated();
-        return;
-    }
-
     const bool newOverlay = createOverlay();
     if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
@@ -278,7 +271,7 @@ PlaylistItem::createOverlay()
     QList< QPixmap > icons;
     foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
     {
-        if ( !updater->typeIcon().isNull() )
+        if ( updater->sync() && !updater->typeIcon().isNull() )
             icons << updater->typeIcon();
     }
 
