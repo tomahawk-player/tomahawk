@@ -306,7 +306,7 @@ TomahawkApp::init()
 
 #ifdef Q_WS_MAC
     // Make sure to do this after main window is inited
-    Tomahawk::enableFullscreen();
+    Tomahawk::enableFullscreen( m_mainwindow );
 #endif
 }
 

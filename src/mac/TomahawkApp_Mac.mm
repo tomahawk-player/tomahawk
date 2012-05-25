@@ -43,6 +43,8 @@
 
 #include <QDebug>
 #include <QApplication>
+#include <QObject>
+#include <QMetaObject>
 
 @interface MacApplication :NSApplication {
     AppDelegate* delegate_;
@@ -255,7 +257,7 @@ void Tomahawk::checkForUpdates() {
 #define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
 #endif
 
-void Tomahawk::enableFullscreen()
+void Tomahawk::enableFullscreen( QObject* receiver )
 {
     // We don't support anything below leopard, so if it's not [snow] leopard it must be lion
     // Can't check for lion as Qt 4.7 doesn't have the enum val, not checking for Unknown as it will be lion
@@ -273,6 +275,26 @@ void Tomahawk::enableFullscreen()
                 NSView *nsview = (NSView *)w->winId();
                 NSWindow *nswindow = [nsview window];
                 [nswindow setCollectionBehavior:SET_LION_FULLSCREEN];
+
+#ifdef LION
+                if ( !receiver )
+                    continue;
+
+                [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillEnterFullScreenNotification
+                                                                  object:nswindow
+                                                                   queue:nil
+                                                              usingBlock:^(NSNotification * note) {
+                    NSLog(@"Became Full Screen!");
+                    QMetaObject::invokeMethod( receiver, "fullScreenEntered", Qt::DirectConnection );
+                }];
+                [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidExitFullScreenNotification
+                                                                  object:nswindow
+                                                                   queue:nil
+                                                              usingBlock:^(NSNotification * note) {
+                    NSLog(@"Left Full Screen!");
+                    QMetaObject::invokeMethod( receiver, "fullScreenExited", Qt::DirectConnection );
+                }];
+#endif
             }
         }
     }

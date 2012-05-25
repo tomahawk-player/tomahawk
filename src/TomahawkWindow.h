@@ -88,6 +88,9 @@ public slots:
     void pluginMenuRemoved(QMenu*);
     void showOfflineSources();
 
+    void fullScreenEntered();
+    void fullScreenExited();
+
 private slots:
     void onAccountAdded( Tomahawk::Accounts::Account* account );
     void onAccountConnected();
