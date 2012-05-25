@@ -83,11 +83,6 @@
     #include <TomahawkSettingsGui.h>
 #endif
 
-// should go to a plugin actually
-#ifdef GLOOX_FOUND
-    #include "xmppbot/XmppBot.h"
-#endif
-
 #ifdef Q_WS_MAC
 #include "mac/MacShortcutHandler.h"
 
@@ -593,10 +588,6 @@ TomahawkApp::initSIP()
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
-#ifdef GLOOX_FOUND
-        m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
-#endif
-
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }

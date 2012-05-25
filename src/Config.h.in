@@ -21,7 +21,6 @@
 #cmakedefine WITH_CRASHREPORTER
 
 #cmakedefine LIBLASTFM_FOUND
-#cmakedefine GLOOX_FOUND
 #cmakedefine QCA2_FOUND
 
 #endif // CONFIG_H_IN
