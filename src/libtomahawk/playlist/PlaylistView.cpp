@@ -27,6 +27,7 @@
 #include "ViewManager.h"
 #include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

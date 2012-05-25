@@ -35,6 +35,7 @@
 #include "SocialWidget.h"
 #include "GlobalActionManager.h"
 #include "ViewManager.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

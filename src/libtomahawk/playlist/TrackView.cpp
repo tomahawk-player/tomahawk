@@ -37,6 +37,7 @@
 #include "DropJob.h"
 #include "Artist.h"
 #include "Album.h"
+#include "Source.h"
 #include "utils/AnimatedSpinner.h"
 
 #define SCROLL_TIMEOUT 280

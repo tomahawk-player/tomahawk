@@ -26,6 +26,7 @@
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
 #include "playlist/AlbumModel.h"
+#include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
