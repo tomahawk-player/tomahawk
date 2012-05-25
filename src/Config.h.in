@@ -19,6 +19,8 @@
 
 #cmakedefine WITH_BREAKPAD
 #cmakedefine WITH_CRASHREPORTER
+#cmakedefine WITH_BINARY_ATTICA
+
 
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine QCA2_FOUND

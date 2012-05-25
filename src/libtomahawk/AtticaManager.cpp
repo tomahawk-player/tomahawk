@@ -22,6 +22,7 @@
 #include "TomahawkSettingsGui.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "config.h"
 
 #include <attica/downloaditem.h>
 
@@ -373,7 +374,12 @@ AtticaManager::binaryResolversList( BaseJob* j )
     platform = "linux-x64";
 #elif defined(Q_OS_LINUX) // Horrible assumption here...
     platform = "linux-x86";
-    #endif
+#endif
+
+    // Override if no binary resolvers were requested
+#ifndef WITH_BINARY_ATTICA
+    platform = QString();
+#endif
 
     foreach ( const Content& c, binaryResolvers )
     {
