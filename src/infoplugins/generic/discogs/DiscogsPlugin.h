@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,9 +16,10 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSICBRAINZPLUGIN_H
-#define MUSICBRAINZPLUGIN_H
+#ifndef DISCOGS_PLUGIN_H
+#define DISCOGS_PLUGIN_H
 
+#include "Typedefs.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
 #include "infoplugins/InfoPluginDllMacro.h"
@@ -32,37 +32,32 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class INFOPLUGINDLLEXPORT MusicBrainzPlugin : public InfoPlugin
+class INFOPLUGINDLLEXPORT DiscogsPlugin : public InfoPlugin
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
 public:
-    MusicBrainzPlugin();
-    virtual ~MusicBrainzPlugin();
+    DiscogsPlugin();
+    virtual ~DiscogsPlugin();
 
 protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
 
-    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
-    {
-        Q_UNUSED( pushData );
-    }
-
-
+    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData ) {}
 private slots:
-    void artistSearchSlot();
-    void albumSearchSlot();
-    void tracksSearchSlot();
+    void albumSearchSlot( const Tomahawk::InfoSystem::InfoRequestData& , QNetworkReply* );
+    void albumInfoSlot( const Tomahawk::InfoSystem::InfoRequestData& , QNetworkReply* );
 
-    void albumFoundSlot();
-    void tracksFoundSlot();
+private:
+    bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
 };
 
 }
 
 }
 
-#endif // MUSICBRAINZPLUGIN_H
+Q_DECLARE_METATYPE( QNetworkReply* )
+#endif
