@@ -847,8 +847,13 @@ TomahawkWindow::showAboutTomahawk()
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
-    desc = tr( "Copyright 2010 - 2012<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-               "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson" );
+    const QString copyright( tr( "Copyright 2010 - 2012" ) );
+    const QString thanksto( tr( "Thanks to:" ) );
+
+    desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+                    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Syd Lawrence, Michael Zanetti, Harald Sitter, Steve Robertson" )
+              .arg( copyright )
+              .arg( thanksto );
 
     QMessageBox::about( this, tr( "About Tomahawk" ), head + desc );
 }
