@@ -944,7 +944,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
         <source>%1 minutes ago</source>
-        <translation>vor %1 Minute</translation>
+        <translation>vor %1 Minuten</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
@@ -1295,17 +1295,37 @@ connect and stream from you?</source>
         <translation>&amp;Lösche %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="231"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
+        <source>Add to my %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
+        <source>playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
+        <source>Automatic Playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
+        <source>Stations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>Playliste &amp;exportieren</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>XSPF speichern</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>Playlisten (*.xspf)</translation>
     </message>
@@ -1731,17 +1751,17 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="360"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="366"/>
         <source>Sync with Spotify</source>
         <translation>Mit Spotify synchronisieren</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="364"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="368"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Stop syncing with Spotify</source>
         <translation>Synchronisation beenden</translation>
     </message>
@@ -2373,7 +2393,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="789"/>
         <source>about %n minute(s) long</source>
-        <translation><numerusform>ungefähr %n Minute lang</numerusform><numerusform>ungefähr %n Minuten lang</numerusform></translation>
+        <translation><numerusform>ungefähr eine Minute lang</numerusform><numerusform>ungefähr %n Minuten lang</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="791"/>
@@ -2754,7 +2774,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="552"/>
+        <location filename="../src/TomahawkApp.cpp" line="576"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>

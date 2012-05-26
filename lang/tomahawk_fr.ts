@@ -1296,17 +1296,37 @@ se connecter et streamer depuis chez vous ?</translation>
         <translation>&amp;Supprimer %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="231"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
+        <source>Add to my %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
+        <source>playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
+        <source>Automatic Playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
+        <source>Stations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Exporter la liste de lecture</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>Enregistrer XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>Listes de lecture (*.xspf)</translation>
     </message>
@@ -1735,17 +1755,17 @@ et des stations basés sur vos goûts.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="360"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="366"/>
         <source>Sync with Spotify</source>
         <translation>Synchroniser avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="364"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="368"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stopper la synchronisation avec Spotify</translation>
     </message>
@@ -2760,7 +2780,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="552"/>
+        <location filename="../src/TomahawkApp.cpp" line="576"/>
         <source>My Collection</source>
         <translation>Ma Collection</translation>
     </message>

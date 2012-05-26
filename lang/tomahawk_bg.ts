@@ -385,7 +385,10 @@ connect and stream from you?</source>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Извинявай!&lt;/span&gt; Tomahawk заби. 
+Моля уведоми ни  за този слуай! 
+Tomahaw създаде доклад относно това и изпращайки го, ще помогнеш за по-добрата работа на приложението за в бъдеще.
+Изпрати директно до разработчиците на Tomahawk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -558,7 +561,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.ui" line="83"/>
         <source>Import Playback History</source>
-        <translation type="unfinished"/>
+        <translation>Импортирай история на просвирените песни</translation>
     </message>
 </context>
 <context>
@@ -672,62 +675,62 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Артист</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Title</source>
-        <translation type="unfinished"/>
+        <translation>Име</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Композитор</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Албум</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>Песен</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Продължителност</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Качество</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Възраст</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>Година</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Големина</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Origin</source>
-        <translation type="unfinished"/>
+        <translation>Източник</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Score</source>
-        <translation type="unfinished"/>
+        <translation>Резултат</translation>
     </message>
 </context>
 <context>
@@ -1296,17 +1299,37 @@ connect and stream from you?</source>
         <translation>&amp;Изтрий %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="231"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
+        <source>Add to my %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
+        <source>playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
+        <source>Automatic Playlists</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
+        <source>Stations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Изнеси списък</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="369"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -1628,7 +1651,10 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="525"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
-        <translation type="unfinished"/>
+        <translation>За съжаление, автоматичното инсталиране на този компонен е деактивирано за твоята платформа.
+&lt;br /&gt;&lt;br /&gt;
+Моля използвай опцията &apos;Инсталирай от файл&apos;, намираща се по-горе. За целта е необходимо предварително да изтеглиш необходимите файлове за твоята платформа и да ги компилираш самостоятелно. 
+Допълнителни инструкции могат да бъдат открити на &lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
 </context>
 <context>
@@ -1688,7 +1714,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="82"/>
         <source>Testing...</source>
-        <translation type="unfinished"/>
+        <translation>Тествам...</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="104"/>
@@ -1699,22 +1725,22 @@ connect and stream from you?</source>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="114"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation type="unfinished"/>
+        <translation>Импортирам %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="117"/>
         <source>Importing History...</source>
-        <translation type="unfinished"/>
+        <translation>Импортирам...</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="181"/>
         <source>History Incomplete. Resume</source>
-        <translation type="unfinished"/>
+        <translation>Непълна информация. Продължи.</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="186"/>
         <source>Playback History Imported</source>
-        <translation type="unfinished"/>
+        <translation>Историята на просвирените песни е импортирана</translation>
     </message>
     <message>
         <location filename="../src/accounts/lastfm/LastFmConfig.cpp" line="208"/>
@@ -1736,17 +1762,17 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="360"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="366"/>
         <source>Sync with Spotify</source>
         <translation>Синхронизирай със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="364"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Re-enable syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Включи отново синхронизирането със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="368"/>
+        <location filename="../src/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Stop syncing with Spotify</source>
         <translation>Спри синхронизацията със Spotify</translation>
     </message>
@@ -1985,7 +2011,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="109"/>
         <source>&amp;Show Track Page</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Покажи страницата на песента</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="114"/>
@@ -1995,12 +2021,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="149"/>
         <source>&amp;Show Album Page</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Покажи страницата на албума</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="191"/>
         <source>&amp;Show Artist Page</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Покажи страницата на артистът</translation>
     </message>
 </context>
 <context>
@@ -2762,7 +2788,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="552"/>
+        <location filename="../src/TomahawkApp.cpp" line="576"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
@@ -2987,17 +3013,17 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="217"/>
         <source>Go back one page</source>
-        <translation type="unfinished"/>
+        <translation>Една страница назад</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="218"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Напред</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="219"/>
         <source>Go forward one page</source>
-        <translation type="unfinished"/>
+        <translation>Една страница напред</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="226"/>
@@ -3108,7 +3134,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="831"/>
         <source>Error connecting to SIP: Authentication failed!</source>
-        <translation type="unfinished"/>
+        <translation>Грешка при свързване: Неуспешно удостоверяване!</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="845"/>
@@ -3135,12 +3161,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="865"/>
         <source>Copyright 2010 - 2012</source>
-        <translation type="unfinished"/>
+        <translation>Всички права - запазени. 2010 - 2012</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="866"/>
         <source>Thanks to:</source>
-        <translation type="unfinished"/>
+        <translation>Благодарности на:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="873"/>
@@ -3264,7 +3290,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="168"/>
         <source>Lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Текст</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="203"/>
