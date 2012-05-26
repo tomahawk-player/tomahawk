@@ -559,18 +559,22 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         // We only support rating Attica resolvers for the moment.
         Attica::Content content;
         if ( node->type == AccountModelNode::AtticaType )
+        {
             content = node->atticaContent;
+
+            AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( content );
+            // For now only allow rating if a resolver is installed!
+            if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+                return false;
+        } // Allow rating custom attica accounts regardless as user may have installed manually
         else if ( node->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( node->customAccount ) )
             content = qobject_cast< CustomAtticaAccount* >( node->customAccount )->atticaContent();
 
         Q_ASSERT( !content.id().isNull() );
 
-        AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( content );
-        // For now only allow rating if a resolver is installed!
-        if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
-            return false;
         if ( AtticaManager::instance()->userHasRated( content ) )
             return false;
+
         content.setRating( value.toInt() * 20 );
         AtticaManager::instance()->uploadRating( content );
 
