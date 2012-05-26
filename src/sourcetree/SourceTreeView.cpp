@@ -190,13 +190,13 @@ SourceTreeView::setupMenus()
     QAction *copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     QAction *deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
-    QString addToText = QString( "Add to my %1" );
+    QString addToText = tr( "Add to my %1" );
     if ( type == SourcesModel::StaticPlaylist )
-        addToText = addToText.arg( "playlists" );
+        addToText = addToText.arg( tr( "playlists" ) );
     if ( type == SourcesModel::AutomaticPlaylist )
-        addToText = addToText.arg( "Automatic Playlists" );
+        addToText = addToText.arg( tr( "Automatic Playlists" ) );
     else if ( type == SourcesModel::Station )
-        addToText = addToText.arg( "Stations" );
+        addToText = addToText.arg( tr( "Stations" ) );
 
     QAction *addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
 
@@ -225,7 +225,6 @@ SourceTreeView::setupMenus()
             m_playlistMenu.addAction( action );
         }
     }
-
 
    if ( type == SourcesModel::StaticPlaylist )
        copyPlaylistAction->setText( tr( "&Export Playlist" ) );
