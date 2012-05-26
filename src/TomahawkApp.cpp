@@ -29,6 +29,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QTranslator>
 
 #include "Artist.h"
 #include "Album.h"
@@ -129,6 +130,29 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
+    installTranslator();
+}
+
+
+void
+TomahawkApp::installTranslator()
+{
+    QString locale = QLocale::system().name();
+    if ( locale == "C" )
+        locale = "en";
+
+    QTranslator* translator = new QTranslator( this );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug() << "Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    TOMAHAWK_APPLICATION::installTranslator( translator );
 }
 
 
