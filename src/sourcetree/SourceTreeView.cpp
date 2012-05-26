@@ -198,7 +198,7 @@ SourceTreeView::setupMenus()
     else if ( type == SourcesModel::Station )
         addToText = tr( "Add to my Stations" );
 
-    QAction *addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
+    QAction *addToLocalAction = m_roPlaylistMenu.addAction( addToText );
 
     m_roPlaylistMenu.addAction( copyPlaylistAction );
     deletePlaylistAction->setEnabled( !readonly );
