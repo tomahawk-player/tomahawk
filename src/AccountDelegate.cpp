@@ -389,7 +389,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         const int countW = painter->fontMetrics().width( count );
         const QRect countRect( runningEdge + 50, starsTop, countW, painter->fontMetrics().height() );
         count = painter->fontMetrics().elidedText( count, Qt::ElideRight, rightEdge - PADDING - countRect.left() );
-        painter->drawText( countRect, Qt::AlignLeft | Qt::TextWordWrap, count );
+        painter->drawText( countRect, Qt::AlignLeft, count );
         //         runningEdge = authorRect.x();
     }
 
