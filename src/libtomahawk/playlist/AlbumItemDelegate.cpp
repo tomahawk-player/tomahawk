@@ -44,7 +44,7 @@
 #include "utils/Logger.h"
 
 namespace {
-    static const int FADE_DURATION = 75;
+    static const int FADE_DURATION = 250;
 };
 
 
@@ -125,9 +125,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         fader->setSize( r.size() );
 
     const QPixmap cover = fader->currentPixmap();
-
     painter->drawPixmap( r, cover );
-
 
     qreal opacity = -1.;
     if ( m_hoverFaders.contains( index ) )
@@ -139,7 +137,6 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     {
         opacity = 0.35;
     }
-
 
     if ( opacity > -1. )
     {
