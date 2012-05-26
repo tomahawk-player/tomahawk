@@ -190,13 +190,13 @@ SourceTreeView::setupMenus()
     QAction *copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     QAction *deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
-    QString addToText = tr( "Add to my %1" );
+    QString addToText;
     if ( type == SourcesModel::StaticPlaylist )
-        addToText = addToText.arg( tr( "playlists" ) );
+        addToText = tr( "Add to my Playlists" );
     if ( type == SourcesModel::AutomaticPlaylist )
-        addToText = addToText.arg( tr( "Automatic Playlists" ) );
+        addToText = tr( "Add to my Automatic Playlists" );
     else if ( type == SourcesModel::Station )
-        addToText = addToText.arg( tr( "Stations" ) );
+        addToText = tr( "Add to my Stations" );
 
     QAction *addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
 
