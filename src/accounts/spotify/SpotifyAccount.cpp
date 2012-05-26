@@ -88,6 +88,12 @@ SpotifyAccount::SpotifyAccount( const QString& accountId )
 SpotifyAccount::~SpotifyAccount()
 {
     clearUser();
+
+    if ( m_spotifyResolver.isNull() )
+        return;
+
+    Pipeline::instance()->removeScriptResolver( m_spotifyResolver.data()->filePath() );
+    delete m_spotifyResolver.data();
 }
 
 
