@@ -389,12 +389,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>Report abschicken</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="136"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>Nicht abschicken</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
@@ -671,7 +671,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Künstler</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="234"/>
@@ -1259,27 +1259,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="540"/>
         <source>Latest additions to your collection</source>
-        <translation type="unfinished"/>
+        <translation>Neueste Lieder in deiner Sammlung</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="542"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation type="unfinished"/>
+        <translation>Neueste Lieder in %1&apos;s Sammlung</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Zuletzt gehörte Lieder</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="580"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Deine zuletzt gehörten Lieder</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="582"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;s zuletzt gehörte Lieder</translation>
     </message>
 </context>
 <context>
@@ -1295,24 +1295,19 @@ connect and stream from you?</source>
         <translation>&amp;Lösche %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
-        <source>Add to my %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
-        <source>playlists</source>
-        <translation type="unfinished"/>
+        <source>Add to my Playlists</source>
+        <translation>Zu meinen Playlisten hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
-        <source>Automatic Playlists</source>
-        <translation type="unfinished"/>
+        <source>Add to my Automatic Playlists</source>
+        <translation>Zu meinen Automatischen Playlisten hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
-        <source>Stations</source>
-        <translation type="unfinished"/>
+        <source>Add to my Stations</source>
+        <translation>Zu meinen Stationen hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
@@ -1638,7 +1633,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="522"/>
         <source>Manual Install Required</source>
-        <translation type="unfinished"/>
+        <translation>Manuelle Installation benötigt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="525"/>
@@ -2994,22 +2989,22 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="216"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Zurück</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="217"/>
         <source>Go back one page</source>
-        <translation type="unfinished"/>
+        <translation>Gehe eine Seite zurück</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="218"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Vorwärts</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="219"/>
         <source>Go forward one page</source>
-        <translation type="unfinished"/>
+        <translation>Gehe eine Seite vorwärts</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="226"/>
@@ -3273,7 +3268,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="168"/>
         <source>Lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Liedtext</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="203"/>
@@ -3288,22 +3283,22 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="184"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation type="unfinished"/>
+        <translation>Du hast dieses Lied noch nie angehört.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="188"/>
         <source>You first listened to it on %1.</source>
-        <translation type="unfinished"/>
+        <translation>Du hast dieses Lied zum ersten mal am %1 gehört.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="192"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Du hast %1 einmal angehört.</numerusform><numerusform>Du hast %1 %n mal angehört.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="194"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation type="unfinished"/>
+        <translation>Du hast %1 vorher noch nie gehört.</translation>
     </message>
 </context>
 <context>
@@ -3483,12 +3478,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="484"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Zuletzt gehörte Lieder</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="485"/>
         <source>Recently played tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Zuletzt gehörte Lieder all deiner Freunde</translation>
     </message>
 </context>
 <context>

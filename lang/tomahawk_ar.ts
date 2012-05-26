@@ -410,7 +410,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>تحميل %L1 من أصل %L2 كب</translation>
+        <translation>تحميل %L1 من أصل %L2 كب.</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="168"/>
@@ -819,7 +819,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>إنشاء قائمة أغاني جديدة تلقائيا</translation>
+        <translation>إنشاء قائمة أغاني جديدة أوتوماتيكيا</translation>
     </message>
 </context>
 <context>
@@ -1297,24 +1297,19 @@ connect and stream from you?</source>
         <translation>&amp;أحذف  %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
-        <source>Add to my %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
-        <source>playlists</source>
-        <translation type="unfinished"/>
+        <source>Add to my Playlists</source>
+        <translation>أضف إلى لوائحي للأغاني</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
-        <source>Automatic Playlists</source>
-        <translation type="unfinished"/>
+        <source>Add to my Automatic Playlists</source>
+        <translation>أضف إلى لوائحي الأوتوماتيكية للأغاني</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
-        <source>Stations</source>
-        <translation type="unfinished"/>
+        <source>Add to my Stations</source>
+        <translation>أضف إلى إذاعاتي</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
@@ -1920,7 +1915,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <source>Tweeted!</source>
-        <translation>ثبت التويت (!Tweeted)</translation>
+        <translation>ثبت التويت! (!Tweeted)</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
@@ -1943,7 +1938,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="51"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
-        <translation>أدخل إلى حسابك على Jabber/XMPP للربط بأصدقائك.</translation>
+        <translation>أدخل إلى حسابك على Jabber/XMPP للربط بأصدقائك</translation>
     </message>
 </context>
 <context>
@@ -1951,7 +1946,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation>أربط نفسك بتوماهاوك على الشبكة المحلية بطريقة مباشرة</translation>
+        <translation>أربط نفسك بتوماهاوك على الشبكة المحلية بطريقة مباشرة أوتوماتيكيا</translation>
     </message>
 </context>
 <context>
@@ -2156,7 +2151,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="216"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="584"/>
         <source>No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings</source>
-        <translation>لا يوجد مستخدمين مع فهرس &quot;Echo Nest&quot; ممكن. تجربة تمكين خيار المجموعة في الإعدادات يمكن أن يساعد.</translation>
+        <translation>لا يوجد مستخدمين مع فهرس &quot;Echo Nest&quot; ممكن. تجربة تمكين خيار المجموعة في الإعدادات يمكن أن يساعد</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="235"/>
@@ -2571,7 +2566,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="140"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>توماهوك يلعب &quot;%1&quot; ل%2%3</translation>
+        <translation>توماهوك يلعب &quot;%1&quot; ل%2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="143"/>
@@ -2670,7 +2665,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="144"/>
         <source>&amp;Listen Along</source>
-        <translation>تابع الاستماع</translation>
+        <translation>&amp;تابع الاستماع</translation>
     </message>
 </context>
 <context>
@@ -2774,7 +2769,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
         <source>Automatically update from XSPF</source>
-        <translation>تحديث تلقائي من XSPF</translation>
+        <translation>تحديث تلقائي (أوتوماتيكيا) من XSPF</translation>
     </message>
 </context>
 <context>
@@ -2849,7 +2844,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="75"/>
         <source>&amp;Settings</source>
-        <translation>إعدادات</translation>
+        <translation>&amp;إعدادات</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="81"/>
@@ -2914,7 +2909,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="170"/>
         <source>Create &amp;New Playlist...</source>
-        <translation>إنشاء &amp;قائمة أغاني جديدة</translation>
+        <translation>إنشاء &amp;قائمة أغاني جديدة...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="175"/>
@@ -2924,7 +2919,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="183"/>
         <source>Create New &amp;Automatic Playlist</source>
-        <translation>إنشاء &amp;قائمة أغاني جديدة أوتوماتيكيا</translation>
+        <translation>إنشاء قائمة أغاني جديدة أ&amp;وتوماتيكيا</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="188"/>
@@ -3083,7 +3078,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="717"/>
         <source>Create New Station</source>
-        <translation>إنشاء &amp;قائمة أغاني جديدة</translation>
+        <translation>إنشاء قائمة أغاني جديدة</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="717"/>
@@ -3289,7 +3284,7 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="182"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>لقد استمعت إلى هذه الأغنية %n مرة</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرة %n</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرتين %n</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات</numerusform></translation>
+        <translation><numerusform>لقد استمعت إلى هذه الأغنية %n مرة.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرة %n.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرتين %n.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="184"/>
@@ -3299,12 +3294,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="188"/>
         <source>You first listened to it on %1.</source>
-        <translation>استمعت إليها أولاً في %1</translation>
+        <translation>استمعت إليها أولاً في %1.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="192"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation><numerusform>لقد استمعت إلى %1 %n مرة</numerusform><numerusform>لقد استمعت إلى %1 مرة %n</numerusform><numerusform>لقد استمعت إلى %1 مرتين %n</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform><numerusform>لقد استمعت إلى %1 %n مرات</numerusform></translation>
+        <translation><numerusform>لقد استمعت إلى %1 %n مرة.</numerusform><numerusform>لقد استمعت إلى %1 مرة %n.</numerusform><numerusform>لقد استمعت إلى %1 مرتين %n.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="194"/>
@@ -3558,7 +3553,7 @@ Terms for %1:
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="314"/>
         <source>No terms found, sorry.</source>
-        <translation>لا شروط موجودة، نتأسف</translation>
+        <translation>لا شروط موجودة، نتأسف.</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="347"/>
@@ -3602,7 +3597,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
-        <translation>تم العثور على مداخل في قوائم الأغاني لا تحتوي على إسم فنان أو إسم أغنية، هذه المداخل سوف تحذف.</translation>
+        <translation>تم العثور على مداخل في قوائم الأغاني لا تحتوي على إسم فنان أو إسم أغنية، هذه المداخل سوف تحذف</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
@@ -3744,7 +3739,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
         <source>Server:</source>
-        <translation>خادم&quot;</translation>
+        <translation>خادم:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
@@ -3890,7 +3885,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running Tomahawk on your local network</source>
-        <translation>هذا المساعد سيجد مستخدمين أخرين لتوماهاوك على الشبكة المحلية</translation>
+        <translation>هذا المساعد سيجد مستخدمين أخرين لتوماهاوك على الشبكة المحلية أوتوماتيكيا</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>

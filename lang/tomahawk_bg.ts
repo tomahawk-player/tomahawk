@@ -1299,23 +1299,18 @@ Tomahaw създаде доклад относно това и изпращай�
         <translation>&amp;Изтрий %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
-        <source>Add to my %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
-        <source>playlists</source>
+        <source>Add to my Playlists</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
-        <source>Automatic Playlists</source>
+        <source>Add to my Automatic Playlists</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
-        <source>Stations</source>
+        <source>Add to my Stations</source>
         <translation type="unfinished"/>
     </message>
     <message>

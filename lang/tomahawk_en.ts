@@ -1296,24 +1296,19 @@ connect and stream from you?</translation>
         <translation>&amp;Delete %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="193"/>
-        <source>Add to my %1</source>
-        <translation>Add to my %1</translation>
-    </message>
-    <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="195"/>
-        <source>playlists</source>
-        <translation>playlists</translation>
+        <source>Add to my Playlists</source>
+        <translation>Add to my Playlists</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="197"/>
-        <source>Automatic Playlists</source>
-        <translation>Automatic Playlists</translation>
+        <source>Add to my Automatic Playlists</source>
+        <translation>Add to my Automatic Playlists</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
-        <source>Stations</source>
-        <translation>Stations</translation>
+        <source>Add to my Stations</source>
+        <translation>Add to my Stations</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
