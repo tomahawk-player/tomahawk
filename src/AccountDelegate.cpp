@@ -59,7 +59,6 @@ AccountDelegate::AccountDelegate( QObject* parent )
     , m_accountRowHeight( -1 )
     , m_model( 0 )
 {
-
     m_defaultCover.load( RESPATH "images/sipplugin-online.png" );
     m_ratingStarPositive.load( RESPATH "images/starred.png" );
     m_ratingStarNegative.load( RESPATH "images/star-unstarred.png" );
