@@ -27,12 +27,11 @@
 #include "JobStatusView.h"
 #include "Source.h"
 
+QPixmap* PipelineStatusItem::s_pixmap = 0;
 
 PipelineStatusItem::PipelineStatusItem()
     : JobStatusItem()
 {
-    m_icon.load( RESPATH"images/search-icon.png" );
-
     connect( Tomahawk::Pipeline::instance(), SIGNAL( resolving( Tomahawk::query_ptr ) ), this, SLOT( resolving( Tomahawk::query_ptr ) ) );
     connect( Tomahawk::Pipeline::instance(), SIGNAL( idle() ), this, SLOT( idle() ) );
 }
@@ -62,6 +61,18 @@ PipelineStatusItem::idle()
 {
     if ( !Tomahawk::Pipeline::instance()->activeQueryCount() )
         emit finished();
+}
+
+
+QPixmap
+PipelineStatusItem::icon() const
+{
+    if ( !s_pixmap )
+    {
+        s_pixmap = new QPixmap( RESPATH"images/search-icon.png" );
+    }
+
+    return *s_pixmap;
 }
 
 
