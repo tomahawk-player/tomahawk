@@ -30,7 +30,6 @@ using namespace Tomahawk;
 
 RelatedArtistsContext::RelatedArtistsContext()
     : ContextPage()
-    , m_infoId( uuid() )
 {
     m_relatedView = new ArtistView();
     m_relatedView->setGuid( "RelatedArtistsContext" );
@@ -70,18 +69,17 @@ RelatedArtistsContext::setArtist( const Tomahawk::artist_ptr& artist )
     if ( !m_artist.isNull() && m_artist->name() == artist->name() )
         return;
 
+    if ( !m_artist.isNull() )
+    {
+        disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
+    }
+
     m_artist = artist;
 
-    Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = artist->name();
+    connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
 
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = m_infoId;
-    requestData.customData = QVariantMap();
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    m_relatedModel->clear();
+    onSimilarArtistsLoaded();
 }
 
 
@@ -106,45 +104,10 @@ RelatedArtistsContext::setAlbum( const Tomahawk::album_ptr& album )
 
 
 void
-RelatedArtistsContext::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+RelatedArtistsContext::onSimilarArtistsLoaded()
 {
-    if ( requestData.caller != m_infoId )
-        return;
-
-    InfoSystem::InfoStringHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
-
-    if ( output.canConvert< QVariantMap >() )
+    foreach ( const artist_ptr& artist, m_artist->similarArtists() )
     {
-        if ( trackInfo["artist"] != m_artist->name() )
-        {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
-            return;
-        }
+        m_relatedModel->addArtists( artist );
     }
-
-    QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( requestData.type )
-    {
-        case InfoSystem::InfoArtistSimilars:
-        {
-            m_relatedModel->clear();
-            const QStringList artists = returnedData["artists"].toStringList();
-            foreach ( const QString& artist, artists )
-            {
-                m_relatedModel->addArtists( Artist::get( artist ) );
-            }
-            break;
-        }
-
-        default:
-            return;
-    }
-}
-
-
-void
-RelatedArtistsContext::infoSystemFinished( QString target )
-{
-    Q_UNUSED( target );
 }
