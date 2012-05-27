@@ -82,8 +82,8 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
-    , m_infoLoaded( false )
-    , m_infoLoading( false )
+    , m_coverLoaded( false )
+    , m_coverLoading( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
@@ -110,7 +110,7 @@ Album::artist() const
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded && !m_infoLoading )
+    if ( !m_coverLoaded && !m_coverLoading )
     {
         if ( !forceLoad )
             return QPixmap();
@@ -137,7 +137,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-        m_infoLoading = true;
+        m_coverLoading = true;
     }
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
@@ -202,7 +202,7 @@ Album::infoSystemFinished( const QString& target )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    m_infoLoaded = true;
+    m_coverLoaded = true;
     emit updated();
 }
 
