@@ -780,7 +780,7 @@ Query::cover( const QSize& size, bool forceLoad ) const
     }
 
     m_albumPtr->cover( size, forceLoad );
-    if ( m_albumPtr->infoLoaded() )
+    if ( m_albumPtr->coverLoaded() )
     {
         if ( !m_albumPtr->cover( size ).isNull() )
             return m_albumPtr->cover( size );
@@ -791,6 +791,19 @@ Query::cover( const QSize& size, bool forceLoad ) const
     return QPixmap();
 }
 #endif
+
+
+bool
+Query::coverLoaded() const
+{
+    if ( m_albumPtr.isNull() )
+        return false;
+    
+    if ( m_albumPtr->coverLoaded() && !m_albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+        return true;
+    
+    return m_artistPtr->coverLoaded();
+}
 
 
 QList<Tomahawk::query_ptr>
