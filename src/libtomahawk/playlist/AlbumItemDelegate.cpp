@@ -44,7 +44,7 @@
 #include "utils/Logger.h"
 
 namespace {
-    static const int FADE_DURATION = 250;
+    static const int FADE_DURATION = 200;
 };
 
 
