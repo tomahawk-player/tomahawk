@@ -95,6 +95,8 @@ private slots:
     void onArtistImageUpdated();
 
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
+    void onSimilarArtistsLoaded();
 
     void onLoadingStarted();
     void onLoadingFinished();

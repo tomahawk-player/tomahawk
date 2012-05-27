@@ -147,15 +147,29 @@ void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
     if ( !m_artist.isNull() )
+    {
         disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
+        disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
+        disconnect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                    this,              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+        disconnect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                    this,              SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+    }
 
     m_artist = artist;
     m_title = artist->name();
 
-    connect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
-                              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+    connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
+    connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
+    connect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                                SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+    connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
     onAlbumsFound( artist->albums( Mixed ), Mixed );
+    onTracksFound( m_artist->tracks(), Mixed );
+    onSimilarArtistsLoaded();
+    onArtistImageUpdated();
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;
     artistInfo["artist"] = artist->name();
@@ -169,17 +183,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
-    onArtistImageUpdated();
 }
 
 
@@ -189,6 +192,22 @@ ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Model
     Q_UNUSED( mode );
 
     m_albumsModel->addAlbums( albums );
+}
+
+
+void
+ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, ModelMode mode )
+{
+    Q_UNUSED( mode );
+
+    m_topHitsModel->append( queries );
+}
+
+
+void
+ArtistInfoWidget::onSimilarArtistsLoaded()
+{
+    m_relatedModel->addArtists( m_artist->similarArtists() );
 }
 
 
@@ -224,37 +243,6 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
                     m_longDescription = bmap[ source ].toHash()[ "text" ].toString();
             }
             emit longDescriptionChanged( m_longDescription );
-            break;
-        }
-
-        case InfoSystem::InfoArtistSongs:
-        {
-            const QStringList tracks = returnedData["tracks"].toStringList();
-
-            QList< query_ptr > queries;
-            int i = 0;
-            foreach ( const QString& track, tracks )
-            {
-                queries << Query::get( m_artist->name(), track, QString(), QString(), false );
-
-                if ( ++i == 15 )
-                    break;
-            }
-
-            Pipeline::instance()->resolve( queries );
-            m_topHitsModel->append( queries );
-            break;
-        }
-
-        case InfoSystem::InfoArtistSimilars:
-        {
-            const QStringList artists = returnedData["artists"].toStringList();
-            QList<artist_ptr> al;
-            foreach ( const QString& artist, artists )
-            {
-                al << Artist::get( artist );
-            }
-            m_relatedModel->addArtists( al );
             break;
         }
 
