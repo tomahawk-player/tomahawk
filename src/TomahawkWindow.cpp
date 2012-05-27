@@ -213,7 +213,8 @@ TomahawkWindow::setupToolBar()
     toolbar->setFloatable( false );
     toolbar->setIconSize( QSize( 22, 22 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    
+    toolbar->setStyleSheet( "border-bottom: 0px" );
+
 #ifdef Q_OS_MAC
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 #endif
