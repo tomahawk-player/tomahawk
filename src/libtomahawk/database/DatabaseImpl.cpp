@@ -96,6 +96,8 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 DatabaseImpl::~DatabaseImpl()
 {
     delete m_fuzzyIndex;
+    
+    tDebug() << "Shutting down database.";
 
 /*
 #ifdef TOMAHAWK_QUERY_ANALYZE
