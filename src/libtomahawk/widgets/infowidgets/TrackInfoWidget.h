@@ -91,7 +91,6 @@ private:
     AlbumModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
-    QString m_infoId;
 };
 
 #endif // TRACKINFOWIDGET_H

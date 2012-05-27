@@ -35,7 +35,6 @@ using namespace Tomahawk;
 TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::TrackInfoWidget )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
     QPalette pal = palette();
