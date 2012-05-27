@@ -111,8 +111,6 @@ private:
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
-
-    QString m_infoId;
 };
 
 #endif // ALBUMINFOWIDGET_H

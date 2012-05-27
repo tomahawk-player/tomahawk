@@ -43,7 +43,6 @@ using namespace Tomahawk;
 AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
 
