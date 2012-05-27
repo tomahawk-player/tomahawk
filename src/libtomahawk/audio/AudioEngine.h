@@ -136,6 +136,7 @@ private slots:
     void onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type );
     void onPlaylistNextTrackReady();
 
+    void sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type );
     void sendWaitingNotification() const;
     
     void queueStateSafety();
@@ -148,8 +149,6 @@ private:
 
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
-
-    void sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type );
 
     QSharedPointer<QIODevice> m_input;
 
