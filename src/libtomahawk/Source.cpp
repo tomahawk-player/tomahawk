@@ -194,7 +194,10 @@ Source::setFriendlyName( const QString& fname )
 
     m_friendlyname = fname;
     if ( m_scrubFriendlyName )
-        m_friendlyname = m_friendlyname.split( "@" ).first();
+    {
+        if ( m_friendlyname.indexOf( "@" ) > 0 )
+            m_friendlyname = m_friendlyname.split( "@" ).first();
+    }
 }
 
 
