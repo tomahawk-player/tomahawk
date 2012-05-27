@@ -28,7 +28,6 @@
 #include "Album.h"
 #include "Query.h"
 #include "context/ContextPage.h"
-#include "infosystem/InfoSystem.h"
 
 class PlaylistModel;
 class PlaylistView;
@@ -56,8 +55,7 @@ public slots:
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
 private slots:
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
 
 private:
     PlaylistView* m_topHitsView;
@@ -65,7 +63,6 @@ private:
 
     QGraphicsProxyWidget* m_proxy;
 
-    QString m_infoId;
     Tomahawk::artist_ptr m_artist;
 };
 
