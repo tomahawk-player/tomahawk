@@ -86,19 +86,16 @@ AudioEngine::AudioEngine()
 
     onVolumeChanged( m_audioOutput->volume() );
 
-#ifndef Q_WS_X11
-    // On mac & win, phonon volume is independent from system volume, so the onVolumeChanged call above just sets our volume to 100%.
-    // Since it's indendent, we'll set it to 75% since that's nicer.
-    setVolume( 75 );
-#endif
+    setVolume( TomahawkSettings::instance()->volume() );
 }
 
 
 AudioEngine::~AudioEngine()
 {
     tDebug() << Q_FUNC_INFO;
+    
     m_mediaObject->stop();
-//    stop();
+    TomahawkSettings::instance()->setVolume( volume() );
 
     delete m_audioOutput;
     delete m_mediaObject;
