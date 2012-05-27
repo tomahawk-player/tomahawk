@@ -88,7 +88,7 @@ private:
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
 
-    AlbumModel* m_albumsModel;
+    AlbumModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
     QString m_infoId;

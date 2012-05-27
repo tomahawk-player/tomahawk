@@ -84,8 +84,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setPalette( p );
 //    ui->similarTracksLabel->setPalette( p );
 
-    m_albumsModel = new AlbumModel( ui->similarTracksView );
-    ui->similarTracksView->setAlbumModel( m_albumsModel );
+    m_relatedTracksModel = new AlbumModel( ui->similarTracksView );
+    ui->similarTracksView->setAlbumModel( m_relatedTracksModel );
     ui->similarTracksView->proxyModel()->sort( -1 );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
@@ -129,6 +129,8 @@ TrackInfoWidget::load( const query_ptr& query )
 
     if ( !m_query.isNull() )
     {
+        disconnect( m_query.data(), SIGNAL( lyricsLoaded() ), this, SLOT( onLyricsLoaded() ) );
+        disconnect( m_query.data(), SIGNAL( similarTracksLoaded() ), this, SLOT( onSimilarTracksLoaded() ) );
         disconnect( m_query.data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
         disconnect( m_query.data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_artist.data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
@@ -144,6 +146,7 @@ TrackInfoWidget::load( const query_ptr& query )
 
     m_artist->loadStats();
     m_query->loadStats();
+    m_query->lyrics();
     onCoverUpdated();
 
     ui->trackLabel->setText( query->track() );
@@ -151,10 +154,8 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->albumLabel->setText( query->album() );
     ui->fromLabel->setVisible( !query->album().isEmpty() );
 
-    m_query->lyrics();
-    m_query->similarTracks();
-    m_albumsModel->addArtists( m_artist->similarArtists() );
-    m_albumsModel->clear();
+    m_relatedTracksModel->clear();
+    onSimilarTracksLoaded();
 }
 
 
@@ -200,16 +201,16 @@ TrackInfoWidget::onStatsLoaded()
 void
 TrackInfoWidget::onSimilarArtistsLoaded()
 {
-//    Artist* artist = qobject_cast<Artist*>( sender() );
+/*    Artist* artist = qobject_cast<Artist*>( sender() );
 
-//    m_albumsModel->addArtists( artist->similarArtists() );
+    m_relatedArtistsModel->addArtists( artist->similarArtists() );*/
 }
 
 
 void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
-    m_albumsModel->addQueries( m_query->similarTracks() );
+    m_relatedTracksModel->addQueries( m_query->similarTracks() );
 }
 
 
