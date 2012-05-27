@@ -49,8 +49,6 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
-    bool infoLoaded() const { return m_infoLoaded; }
-
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<Tomahawk::artist_ptr> similarArtists() const;
 
@@ -65,6 +63,7 @@ public:
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
+    bool coverLoaded() const { return m_coverLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -94,8 +93,8 @@ private:
     QString m_name;
     QString m_sortname;
 
-    bool m_infoLoaded;
-    mutable bool m_infoLoading;
+    bool m_coverLoaded;
+    mutable bool m_coverLoading;
     QHash<Tomahawk::ModelMode, bool> m_albumsLoaded;
     bool m_simArtistsLoaded;
 

@@ -82,8 +82,8 @@ Artist::Artist( unsigned int id, const QString& name )
     : QObject()
     , m_id( id )
     , m_name( name )
-    , m_infoLoaded( false )
-    , m_infoLoading( false )
+    , m_coverLoaded( false )
+    , m_coverLoading( false )
     , m_simArtistsLoaded( false )
     , m_infoJobs( 0 )
 #ifndef ENABLE_HEADLESS
@@ -295,7 +295,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                 if ( ba.length() )
                 {
                     m_coverBuffer = ba;
-                    m_infoLoaded = true;
+                    m_coverLoaded = true;
                     emit coverChanged();
                 }
             }
@@ -348,7 +348,7 @@ Artist::infoSystemFinished( QString target )
 QPixmap
 Artist::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded && !m_infoLoading )
+    if ( !m_coverLoaded && !m_coverLoading )
     {
         if ( !forceLoad )
             return QPixmap();
@@ -374,7 +374,7 @@ Artist::cover( const QSize& size, bool forceLoad ) const
         m_infoJobs++;
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-        m_infoLoading = true;
+        m_coverLoading = true;
     }
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
