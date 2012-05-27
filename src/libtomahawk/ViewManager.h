@@ -158,7 +158,10 @@ public slots:
     Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     void historyBack();
-    void removeFromHistory( Tomahawk::ViewPage* p );
+    void historyForward();
+    
+    QList< Tomahawk::ViewPage* > historyPages() const;
+    void destroyPage( Tomahawk::ViewPage* page );
 
     void showQueue() { emit showQueueRequested(); }
     void hideQueue() { emit hideQueueRequested(); }
@@ -224,7 +227,9 @@ private:
     QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
 
-    QList<Tomahawk::ViewPage*> m_pageHistory;
+    QList<Tomahawk::ViewPage*> m_pageHistoryBack;
+    QList<Tomahawk::ViewPage*> m_pageHistoryFwd;
+    Tomahawk::ViewPage* m_currentPage;
 
     Tomahawk::collection_ptr m_currentCollection;
     int m_currentMode;

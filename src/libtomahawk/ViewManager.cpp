@@ -80,6 +80,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_newReleasesWidget( new NewReleasesWidget() )
     , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
+    , m_currentPage( 0 )
     , m_currentMode( PlaylistModes::Tree )
     , m_loaded( false )
 {
@@ -541,39 +542,6 @@ ViewManager::setAlbumMode()
 
 
 void
-ViewManager::historyBack()
-{
-    if ( m_pageHistory.count() < 2 )
-        return;
-
-    ViewPage* oldPage = m_pageHistory.takeFirst();
-    ViewPage* newPage = m_pageHistory.first();
-
-    tDebug() << "Deleting page in history:" << oldPage->widget()->metaObject()->className();
-    tDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
-    setPage( newPage, false );
-
-//    delete oldPage;
-}
-
-
-void
-ViewManager::removeFromHistory( ViewPage* p )
-{
-    if ( currentPage() == p )
-    {
-        historyBack();
-    }
-    else
-    {
-        m_pageHistory.removeAll( p );
-        delete p;
-    }
-
-}
-
-
-void
 ViewManager::setFilter( const QString& filter )
 {
     m_filter = filter;
@@ -588,10 +556,77 @@ ViewManager::setFilter( const QString& filter )
 void
 ViewManager::applyFilter()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( currentPlaylistInterface() && currentPlaylistInterface()->filter() != m_filter )
         currentPlaylistInterface()->setFilter( m_filter );
+}
+
+
+void
+ViewManager::historyBack()
+{
+    if ( !m_pageHistoryBack.count() )
+        return;
+
+    ViewPage* page = m_pageHistoryBack.takeLast();
+    
+    if ( m_currentPage )
+    {
+        m_pageHistoryFwd << m_currentPage;
+        tDebug() << "Moved to forward history:" << m_currentPage->widget()->metaObject()->className();
+    }
+
+    tDebug() << "Showing page after moving backwards in history:" << page->widget()->metaObject()->className();
+    setPage( page, false );
+}
+
+
+void
+ViewManager::historyForward()
+{
+    if ( !m_pageHistoryFwd.count() )
+        return;
+
+    ViewPage* page = m_pageHistoryFwd.takeLast();
+    
+    if ( m_currentPage )
+    {
+        m_pageHistoryBack << m_currentPage;
+        tDebug() << "Moved to backward history:" << m_currentPage->widget()->metaObject()->className();
+    }
+
+    tDebug() << "Showing page after moving forwards in history:" << page->widget()->metaObject()->className();
+    setPage( page, false );
+}
+
+
+QList<ViewPage*>
+ViewManager::historyPages() const
+{
+    return m_pageHistoryBack + m_pageHistoryFwd;
+}
+
+
+void
+ViewManager::destroyPage( ViewPage* page )
+{
+    if ( m_currentPage == page )
+    {
+        m_currentPage = 0;
+        historyBack();
+        return;
+    }
+
+    QList< Tomahawk::ViewPage* > p = historyPages();
+    if ( p.contains( page ) )
+    {
+        m_pageHistoryBack.removeAll( page );
+        m_pageHistoryFwd.removeAll( page );
+        
+        emit historyBackAvailable( m_pageHistoryBack.count() );
+        emit historyForwardAvailable( m_pageHistoryFwd.count() );
+
+        delete page;
+    }
 }
 
 
@@ -605,23 +640,20 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     saveCurrentPlaylistSettings();
     unlinkPlaylist();
 
-    if ( !m_pageHistory.contains( page ) )
+    if ( m_stack->indexOf( page->widget() ) < 0 )
     {
         m_stack->addWidget( page->widget() );
     }
-    else
-    {
-        if ( trackHistory )
-            m_pageHistory.removeAll( page );
-    }
 
-    if ( trackHistory )
+    if ( m_currentPage && trackHistory )
     {
-        m_pageHistory.insert( 0, page );
+        m_pageHistoryBack << m_currentPage;
+        m_pageHistoryFwd.clear();
     }
+    m_currentPage = page;
 
-    emit historyBackAvailable( m_pageHistory.count() > 1 );
-    emit historyForwardAvailable( false );
+    emit historyBackAvailable( m_pageHistoryBack.count() );
+    emit historyForwardAvailable( m_pageHistoryFwd.count() );
 
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
@@ -809,13 +841,14 @@ ViewManager::loadCurrentPlaylistSettings()
 void
 ViewManager::onWidgetDestroyed( QWidget* widget )
 {
-    qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
+    tDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
     bool resetWidget = ( m_stack->currentWidget() == widget );
 
-    for ( int i = 0; i < m_pageHistory.count(); i++ )
+    QList< Tomahawk::ViewPage* > p = historyPages();
+    for ( int i = 0; i < p.count(); i++ )
     {
-        ViewPage* page = m_pageHistory.at( i );
+        ViewPage* page = p.at( i );
         if ( page->widget() != widget )
             continue;
 
@@ -827,11 +860,9 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
         {
             m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
         }
-
-        if ( page->widget() == widget && !resetWidget )
-        {
-            m_pageHistory.removeAt( i );
-        }
+        
+        m_pageHistoryBack.removeAll( page );
+        m_pageHistoryFwd.removeAll( page );
     }
 
     m_stack->removeWidget( widget );
@@ -885,7 +916,6 @@ ViewManager::setTomahawkLoaded()
 }
 
 
-
 ViewPage*
 ViewManager::pageForCollection( const collection_ptr& col ) const
 {
@@ -910,14 +940,14 @@ ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 ViewPage*
 ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    for ( int i = 0; i < m_pageHistory.count(); i++ )
+/*    for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
         ViewPage* page = m_pageHistory.at( i );
         if ( page->playlistInterface() == interface )
             return page;
         if ( page->playlistInterface() && page->playlistInterface()->hasChildInterface( interface ) )
             return page;
-    }
+    }*/
 
     return 0;
 }
@@ -936,7 +966,7 @@ ViewManager::currentPlaylistInterface() const
 Tomahawk::ViewPage*
 ViewManager::currentPage() const
 {
-    return m_pageHistory.isEmpty() ? 0 : m_pageHistory.front();
+    return m_currentPage;
 }
 
 
@@ -995,7 +1025,7 @@ ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface )
 bool
 ViewManager::isSuperCollectionVisible() const
 {
-    return ( m_pageHistory.count() &&
+    return ( currentPage() != 0 &&
            ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ||
              currentPage()->playlistInterface() == m_superAlbumView->playlistInterface() ) );
 }

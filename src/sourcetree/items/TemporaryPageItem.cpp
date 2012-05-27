@@ -82,7 +82,7 @@ TemporaryPageItem::IDValue() const
 void
 TemporaryPageItem::removeFromList()
 {
-    ViewManager::instance()->removeFromHistory( m_page );
+    ViewManager::instance()->destroyPage( m_page );
 
     model()->removeSourceItemLink( this );
 
