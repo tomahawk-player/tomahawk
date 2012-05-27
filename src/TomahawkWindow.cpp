@@ -40,6 +40,7 @@
 #include "network/Servent.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
+#include "utils/WidgetDragFilter.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/SearchWidget.h"
@@ -213,6 +214,10 @@ TomahawkWindow::setupToolBar()
     toolbar->setIconSize( QSize( 22, 22 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
     
+#ifdef Q_OS_MAC
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+#endif
+
     m_backAction = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
     m_backAction->setToolTip( tr( "Go back one page" ) );
     m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
