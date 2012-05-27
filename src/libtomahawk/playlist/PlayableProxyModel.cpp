@@ -161,19 +161,20 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
     const Tomahawk::query_ptr& q1 = p1->query()->displayQuery();
     const Tomahawk::query_ptr& q2 = p2->query()->displayQuery();
 
-    QString artist1 = q1->artistSortname();
-    QString artist2 = q2->artistSortname();
-    QString album1 = q1->albumSortname();
-    QString album2 = q2->albumSortname();
-    QString track1 = q1->trackSortname();
-    QString track2 = q2->trackSortname();
-    unsigned int albumpos1 = q1->albumpos();
-    unsigned int albumpos2 = q2->albumpos();
-    unsigned int discnumber1 = q1->discnumber();
-    unsigned int discnumber2 = q2->discnumber();
+    const QString artist1 = q1->artistSortname();
+    const QString artist2 = q2->artistSortname();
+    const QString album1 = q1->albumSortname();
+    const QString album2 = q2->albumSortname();
+    const QString track1 = q1->trackSortname();
+    const QString track2 = q2->trackSortname();
+    const unsigned int albumpos1 = q1->albumpos();
+    const unsigned int albumpos2 = q2->albumpos();
+    const unsigned int discnumber1 = q1->discnumber();
+    const unsigned int discnumber2 = q2->discnumber();
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
+    float score1 = 0, score2 = 0;
     qint64 id1 = 0, id2 = 0;
 
     if ( q1->numResults() )
@@ -181,16 +182,18 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
-        id1 = r->trackId();
         size1 = r->size();
+        score1 = r->score();
+        id1 = (qint64)&r;
     }
     if ( q2->numResults() )
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
-        id2 = r->trackId();
         size2 = r->size();
+        score2 = r->score();
+        id2 = (qint64)&r;
     }
 
     // This makes it a stable sorter and prevents items from randomly jumping about.
