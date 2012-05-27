@@ -135,7 +135,6 @@ Source::setAvatar( const QPixmap& avatar )
     buffer.open( QIODevice::WriteOnly );
     avatar.save( &buffer, "PNG" );
 
-    tDebug() << Q_FUNC_INFO << friendlyName() << m_username << ba.count();
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
     m_avatarUpdated = true;
 }
