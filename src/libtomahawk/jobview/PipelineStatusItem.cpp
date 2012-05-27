@@ -84,6 +84,10 @@ PipelineStatusItem::resolving( const Tomahawk::query_ptr& query )
     else
         m_latestQuery = QString( "%1 - %2" ).arg( query->artist() ).arg( query->track() );
 
+    if ( m_latestQuery.isEmpty() )
+        qDebug() << "EMPTY STRING IN STATUS ITEM:" << query->fullTextQuery() << query->track() << query->artist() << query->album();
+    Q_ASSERT( !m_latestQuery.isEmpty() );
+
     emit statusChanged();
 }
 
