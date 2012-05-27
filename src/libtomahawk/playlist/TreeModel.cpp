@@ -100,9 +100,9 @@ TreeModel::getCover( const QModelIndex& index )
 {
     PlayableItem* item = itemFromIndex( index );
 
-    if ( !item->artist().isNull() && !item->artist()->infoLoaded() )
+    if ( !item->artist().isNull() && !item->artist()->coverLoaded() )
         item->artist()->cover( QSize( 0, 0 ) );
-    else if ( !item->album().isNull() && !item->album()->infoLoaded() )
+    else if ( !item->album().isNull() && !item->album()->coverLoaded() )
         item->album()->cover( QSize( 0, 0 ) );
 }
 
