@@ -255,7 +255,6 @@ PlaylistItem::onUpdated()
     if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
 
-
     emit updated();
 }
 
