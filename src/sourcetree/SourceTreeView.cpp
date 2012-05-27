@@ -26,8 +26,9 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QPainter>
 #include <QtGui/QStyledItemDelegate>
-#include <QtCore/QSize>
 #include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+#include <QtCore/QSize>
 
 #include "ActionCollection.h"
 #include "Playlist.h"
@@ -211,7 +212,6 @@ SourceTreeView::setupMenus()
     {
         m_playlistMenu.addSeparator();
 
-
         const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         const playlist_ptr playlist = item->playlist();
         foreach ( QAction* action, ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ) )
@@ -319,13 +319,38 @@ SourceTreeView::loadPlaylist()
 void
 SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
 {
-    qDebug() << Q_FUNC_INFO;
-
     QModelIndex idx = idxIn.isValid() ? idxIn : m_contextMenuIndex;
     if ( !idx.isValid() )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    QString typeDesc;
+    switch ( type )
+    {
+        case SourcesModel::StaticPlaylist:
+            typeDesc = tr( "playlist" );
+            break;
+
+        case SourcesModel::AutomaticPlaylist:
+            typeDesc = tr( "automatic playlist" );
+            break;
+
+        case SourcesModel::Station:
+            typeDesc = tr( "station" );
+            break;
+
+        default:
+            Q_ASSERT( false );
+    }
+
+    QMessageBox askDelete( QMessageBox::Question, tr( "Delete %1?", "playlist/station/..." ).arg( typeDesc ),
+                           tr( "Would you like to delete the %1 <b>\"%2\"</b>?" ).arg( typeDesc ).arg( idx.data().toString() ),
+                           QMessageBox::Yes | QMessageBox::No, this );
+
+    int r = askDelete.exec();
+    if ( r != QMessageBox::Yes )
+        return;
+
     if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
@@ -357,7 +382,6 @@ SourceTreeView::copyPlaylistLink()
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {
-
         // Disable toma.hk playlist mode until ready
         // GlobalActionManager::instance()->getShortLink( playlist );
 
