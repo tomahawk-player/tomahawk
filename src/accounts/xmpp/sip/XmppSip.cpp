@@ -339,7 +339,7 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 
         default:
             qDebug() << "Not all Client::DisconnectReasons checked" << ( int ) reason;
-            Q_ASSERT( false s);
+            Q_ASSERT( false );
             break;
     }
     m_state = Account::Disconnected;
