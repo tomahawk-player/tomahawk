@@ -120,6 +120,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     // set initial state
     onAccountDisconnected();
+    audioStopped();
+
     vm->setQueue( m_queueView );
     vm->showWelcomePage();
 }
@@ -335,7 +337,7 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
     // <Menu Items>
@@ -778,21 +780,27 @@ void
 TomahawkWindow::audioStarted()
 {
     m_audioRetryCounter = 0;
+
     ui->actionPlay->setText( tr( "Pause" ) );
+    ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
+}
+
+
+void
+TomahawkWindow::audioPaused()
+{
+    ui->actionPlay->setText( tr( "Play" ) );
 }
 
 
 void
 TomahawkWindow::audioStopped()
 {
-    ui->actionPlay->setText( tr( "Play" ) );
+    audioPaused();
+    ActionCollection::instance()->getAction( "stop" )->setEnabled( false );
     
-    tDebug() << Q_FUNC_INFO << AudioEngine::instance()->isStopped();
-    if ( AudioEngine::instance()->isStopped() )
-    {
-        m_currentTrack = result_ptr();
-        setWindowTitle( m_windowTitle );
-    }
+    m_currentTrack = result_ptr();
+    setWindowTitle( m_windowTitle );
 }
 
 
