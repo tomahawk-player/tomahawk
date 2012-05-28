@@ -63,6 +63,7 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
     connect( widget, SIGNAL( hideWidget() ), SLOT( onHideRequest() ) );
     connect( widget, SIGNAL( sizeHintChanged( QSize ) ), SLOT( onShowRequest() ) );
     connect( widget, SIGNAL( sizeChanged( QSize ) ), SLOT( onSizeChanged( QSize ) ) );
+    connect( widget, SIGNAL( resizeBy( QPoint ) ), SLOT( onResizeRequest( QPoint ) ) );
 
     connect( this, SIGNAL( shown( QWidget*, bool ) ), widget, SLOT( onShown( QWidget*, bool ) ) );
     connect( this, SIGNAL( hidden( QWidget*, bool ) ), widget, SLOT( onHidden( QWidget*, bool ) ) );
@@ -70,32 +71,9 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 
 
 void
-AnimatedSplitter::onShowRequest()
+AnimatedSplitter::changeSize( QWidget* child, const QSize& size )
 {
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
-    if ( indexOf( w ) > 0 )
-        show( indexOf( w ) );
-    else
-        qDebug() << "Could not find widget:" << sender();
-}
-
-
-void
-AnimatedSplitter::onHideRequest()
-{
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
-    if ( indexOf( w ) > 0 )
-        hide( indexOf( w ) );
-    else
-        qDebug() << "Could not find widget:" << sender();
-}
-
-
-void
-AnimatedSplitter::onSizeChanged( const QSize& size )
-{
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
-    int wi = indexOf( w );
+    int wi = indexOf( child );
 
     QList< int > sizes;
     for ( int i = 0; i < count(); i ++ )
@@ -124,6 +102,58 @@ AnimatedSplitter::onSizeChanged( const QSize& size )
     }
 
     setSizes( sizes );
+}
+
+
+void
+AnimatedSplitter::onResizeRequest( const QPoint& delta )
+{
+    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    if ( indexOf( w ) > 0 )
+    {
+        int newheight = w->height() + delta.y();
+        if ( newheight <= w->hiddenSize().height() )
+        {
+            w->hide();
+        }
+        else
+            changeSize( w, QSize( w->width(), newheight ) );
+    }
+    else
+        Q_ASSERT( false );
+}
+
+
+void
+AnimatedSplitter::onShowRequest()
+{
+    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    if ( indexOf( w ) > 0 )
+        show( indexOf( w ) );
+    else
+        Q_ASSERT( false );
+}
+
+
+void
+AnimatedSplitter::onHideRequest()
+{
+    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    if ( indexOf( w ) > 0 )
+        hide( indexOf( w ) );
+    else
+        Q_ASSERT( false );
+}
+
+
+void
+AnimatedSplitter::onSizeChanged( const QSize& size )
+{
+    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    if ( indexOf( w ) > 0 )
+        changeSize( w, size );
+    else
+        Q_ASSERT( false );
 }
 
 
