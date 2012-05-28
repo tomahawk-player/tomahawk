@@ -549,7 +549,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     // TODO handle removal
     m_sourceTreeLinks[ p ] = item;
 
-    if( m_viewPageDelayedCacheItem == p )
+    if ( p && m_viewPageDelayedCacheItem == p )
         emit selectRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 
     if ( QObject* obj = dynamic_cast< QObject* >( p ) )
