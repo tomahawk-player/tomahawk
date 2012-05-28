@@ -50,6 +50,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
 
     ui->toggleButton->installEventFilter( this );
+    ui->toggleButton->setCursor( Qt::PointingHandCursor );
 }
 
 
@@ -116,8 +117,11 @@ QueueView::hide()
 {
     disconnect( ui->toggleButton, SIGNAL( clicked() ), this, SLOT( hide() ) );
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
+    disconnect( ui->toggleButton, SIGNAL( resized( QPoint ) ), this, SIGNAL( resizeBy( QPoint ) ) );
+
     ui->toggleButton->setText( tr( "Show Queue" ) );
-    emit hideWidget();
+    
+    AnimatedWidget::hide();
 }
 
 
@@ -126,8 +130,10 @@ QueueView::show()
 {
     disconnect( ui->toggleButton, SIGNAL( clicked() ), this, SLOT( show() ) );
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( hide() ) );
+    connect( ui->toggleButton, SIGNAL( resized( QPoint ) ), SIGNAL( resizeBy( QPoint ) ) );
+
     ui->toggleButton->setText( tr( "Hide Queue" ) );
-    emit showWidget();
+    AnimatedWidget::show();
 }
 
 
