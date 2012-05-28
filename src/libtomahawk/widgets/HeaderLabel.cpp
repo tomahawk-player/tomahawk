@@ -20,17 +20,20 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "utils/Logger.h"
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 
-
 static const int s_defaultFontSize = 12;
+
 
 HeaderLabel::HeaderLabel( QWidget* parent )
     : QLabel( parent )
     , m_parent( parent )
+    , m_pressed( false )
+    , m_moved( false )
 {
     QFont f( font() );
     f.setBold( true );
@@ -38,6 +41,7 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 
     setFont( f );
     setFixedHeight( TomahawkUtils::headerHeight() );
+    setMouseTracking( true );
 }
 
 
@@ -52,6 +56,7 @@ HeaderLabel::sizeHint() const
     return QLabel::sizeHint();
 }
 
+
 int
 HeaderLabel::defaultFontSize()
 {
@@ -63,7 +68,14 @@ void
 HeaderLabel::mousePressEvent( QMouseEvent* event )
 {
     QFrame::mousePressEvent( event );
-    m_time.start();
+    
+    if ( !m_moved )
+    {
+        m_time.start();
+        
+        m_pressed = true;
+        m_dragPoint = event->pos();
+    }
 }
 
 
@@ -71,8 +83,27 @@ void
 HeaderLabel::mouseReleaseEvent( QMouseEvent* event )
 {
     QFrame::mouseReleaseEvent( event );
-    if ( m_time.elapsed() < qApp->doubleClickInterval() )
+
+    if ( !m_moved && m_time.elapsed() < qApp->doubleClickInterval() )
         emit clicked();
+
+    m_pressed = false;
+    m_moved = false;
+}
+
+
+void
+HeaderLabel::mouseMoveEvent( QMouseEvent* event )
+{
+    if ( m_pressed )
+    {
+        QPoint delta = m_dragPoint - event->pos();
+        if ( abs( delta.y() ) > 3 )
+        {
+            m_moved = true;
+            emit resized( delta );
+        }
+    }
 }
 
 
