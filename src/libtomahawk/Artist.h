@@ -88,6 +88,7 @@ private slots:
 
 private:
     Artist();
+    QString infoid() const;
 
     unsigned int m_id;
     QString m_name;

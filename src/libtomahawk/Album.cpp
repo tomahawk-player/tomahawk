@@ -115,14 +115,12 @@ Album::cover( const QSize& size, bool forceLoad ) const
         if ( !forceLoad )
             return QPixmap();
 
-        m_uuid = uuid();
-
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["artist"] = artist()->name();
         trackInfo["album"] = name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = m_uuid;
+        requestData.caller = infoid();
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
         requestData.customData = QVariantMap();
@@ -170,7 +168,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 void
 Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
-    if ( requestData.caller != m_uuid ||
+    if ( requestData.caller != infoid() ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         return;
@@ -193,7 +191,7 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
 void
 Album::infoSystemFinished( const QString& target )
 {
-    if ( target != m_uuid )
+    if ( target != infoid() )
         return;
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -229,4 +227,14 @@ QList<Tomahawk::query_ptr>
 Album::tracks( ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
     return playlistInterface( mode, collection )->tracks();
+}
+
+
+QString
+Album::infoid() const
+{
+    if ( m_uuid.isEmpty() )
+        m_uuid = uuid();
+    
+    return m_uuid;
 }

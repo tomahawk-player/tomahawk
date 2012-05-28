@@ -77,6 +77,7 @@ private slots:
 
 private:
     Q_DISABLE_COPY( Album )
+    QString infoid() const;
 
     unsigned int m_id;
     QString m_name;
