@@ -92,6 +92,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
 
+    onStop();
     show();
 }
 
@@ -241,6 +242,7 @@ void
 TomahawkTrayIcon::onPlay()
 {
     m_stopContinueAfterTrackAction->setEnabled( true );
+
     onResume();
     onStopContinueAfterTrackChanged();
 }
@@ -250,6 +252,7 @@ void
 TomahawkTrayIcon::onStop()
 {
     m_stopContinueAfterTrackAction->setEnabled( false );
+
     onPause();
 }
 
@@ -264,12 +267,12 @@ TomahawkTrayIcon::onResume()
 void
 TomahawkTrayIcon::onStopContinueAfterTrackChanged()
 {
+    m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
+
     if ( !AudioEngine::instance()->currentTrack().isNull() )
     {
         if ( AudioEngine::instance()->currentTrack()->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
             m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after current Track" ) );
-        else
-            m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
     }
 }
 
