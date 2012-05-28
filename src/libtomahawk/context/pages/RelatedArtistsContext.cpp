@@ -47,12 +47,6 @@ RelatedArtistsContext::RelatedArtistsContext()
 
     m_proxy = new QGraphicsProxyWidget();
     m_proxy->setWidget( m_relatedView );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
