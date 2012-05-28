@@ -111,7 +111,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
     connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
-//     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
+    connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
@@ -246,6 +246,18 @@ SourceTreeView::showOfflineSources( bool offlineSourcesShown )
 
 
 void
+SourceTreeView::onSelectionChanged()
+{
+    if ( currentIndex() != m_selectedIndex )
+    {
+        selectionModel()->blockSignals( true );
+        selectionModel()->select( m_selectedIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
+        selectionModel()->blockSignals( false );
+    }
+}
+
+
+void
 SourceTreeView::onItemActivated( const QModelIndex& index )
 {
     if ( !index.isValid() || !index.flags().testFlag( Qt::ItemIsEnabled ) )
@@ -271,7 +283,7 @@ void
 SourceTreeView::onItemExpanded( const QModelIndex& idx )
 {
     // make sure to expand children nodes for collections
-    if( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    if ( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
        for( int i = 0; i < model()->rowCount( idx ); i++ )
        {
@@ -284,6 +296,8 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
 void
 SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 {
+    m_selectedIndex = idx;
+
     if ( !selectionModel()->selectedIndexes().contains( idx ) )
     {
         scrollTo( idx, QTreeView::EnsureVisible );
@@ -357,7 +371,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
         playlist_ptr playlist = item->playlist();
         Playlist::remove( playlist );
     }
-    else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    else if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -374,7 +388,7 @@ SourceTreeView::copyPlaylistLink()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -409,7 +423,7 @@ SourceTreeView::addToLocal()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -442,7 +456,7 @@ SourceTreeView::latchOnOrCatchUp()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -461,7 +475,7 @@ SourceTreeView::latchOff()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -498,7 +512,7 @@ SourceTreeView::latchModeToggled( bool checked )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -510,7 +524,7 @@ SourceTreeView::latchModeToggled( bool checked )
 void
 SourceTreeView::renamePlaylist()
 {
-    if( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
+    if ( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
         edit( selectionModel()->selectedIndexes().first() );
     else
         edit( m_contextMenuIndex );
@@ -533,7 +547,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
          model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Station )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-        if( item->playlist()->author()->isLocal() )
+        if ( item->playlist()->author()->isLocal() )
             m_playlistMenu.exec( mapToGlobal( pos ) );
         else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
@@ -610,7 +624,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = rect;
 
             SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
-            if( item->willAcceptDrag( event->mimeData() ) )
+            if ( item->willAcceptDrag( event->mimeData() ) )
             {
 
                 accept = true;
@@ -698,7 +712,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
 void
 SourceTreeView::keyPressEvent( QKeyEvent *event )
 {
-    if( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !selectionModel()->selectedIndexes().isEmpty() )
+    if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !selectionModel()->selectedIndexes().isEmpty() )
     {
         QModelIndex idx = selectionModel()->selectedIndexes().first();
         if ( model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
@@ -708,9 +722,8 @@ SourceTreeView::keyPressEvent( QKeyEvent *event )
             PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
             Q_ASSERT( item );
 
-            if( item->playlist()->author()->isLocal() ) {
+            if ( item->playlist()->author()->isLocal() )
                 deletePlaylist( idx );
-            }
         }
         event->accept();
     }
