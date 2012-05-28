@@ -24,10 +24,10 @@
 
 #include <QPixmap>
 
+
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
 {
-
 }
 
 
@@ -52,10 +52,9 @@ JobStatusModel::addJob( JobStatusItem* item )
         currentJobCount++;
         m_jobTypeCount[ item->type() ] = currentJobCount;
     }
-    
-    
-    connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
-    connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
+
+    connect( item, SIGNAL( statusChanged() ), SLOT( itemUpdated() ) );
+    connect( item, SIGNAL( finished() ), SLOT( itemFinished() ) );
 
     if ( item->collapseItem() )
     {
@@ -77,6 +76,7 @@ JobStatusModel::addJob( JobStatusItem* item )
     beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
     m_items.append( item );
     endInsertRows();
+
     if ( item->hasCustomDelegate() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "job has custom delegate";
@@ -228,5 +228,4 @@ JobStatusModel::itemUpdated()
 
     const QModelIndex idx = index( m_items.indexOf( item ), 0, QModelIndex() );
     emit dataChanged( idx, idx );
-    return;
 }
