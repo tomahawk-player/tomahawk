@@ -720,7 +720,7 @@ void
 TomahawkWindow::createStation()
 {
     bool ok;
-    QString name = QInputDialog::getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
+    QString name = QInputDialog( this, Qt::Sheet ).getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
 
@@ -739,11 +739,12 @@ void
 TomahawkWindow::createPlaylist()
 {
     PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
+
 #ifndef Q_OS_MAC
     playlistSelectorDlg->setModal( true );
 #endif
-    connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( playlistCreateDialogFinished( int ) ) );
 
+    connect( playlistSelectorDlg, SIGNAL( finished( int ) ), SLOT( playlistCreateDialogFinished( int ) ) );
     playlistSelectorDlg->show();
 }
 
@@ -758,14 +759,17 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
     if ( playlistName.isEmpty() )
         playlistName = tr( "New Playlist" );
 
-    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
-
+    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret )
+    {
         playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
         ViewManager::instance()->show( playlist );
-    } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+    }
+    else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret )
+    {
        // create Auto Playlist
        createAutomaticPlaylist( playlistName );
     }
+
     playlistSelectorDlg->deleteLater();
 }
 
