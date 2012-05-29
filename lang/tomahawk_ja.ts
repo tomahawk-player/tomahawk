@@ -762,7 +762,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>新規プレイリスト</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
@@ -1126,17 +1126,17 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="55"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>トラック</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="56"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>アルバム</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="57"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>アーティスト</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="58"/>
@@ -1151,7 +1151,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="187"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>オフライン</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="189"/>
@@ -1161,7 +1161,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="196"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>オンライン</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="289"/>
@@ -1214,7 +1214,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="65"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>コレクション</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="73"/>
@@ -1415,7 +1415,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>フォーム</translation>
     </message>
     <message>
         <location filename="../src/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
@@ -1607,12 +1607,12 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>アカウントを追加</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
-        <translation type="unfinished"/>
+        <translation>アカウントを削除</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="386"/>
@@ -1622,7 +1622,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="611"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>オンライン</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="616"/>
@@ -1632,7 +1632,7 @@ other: %n週間</numerusform></translation>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="621"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>・オフライン</translation>
     </message>
 </context>
 <context>

@@ -361,7 +361,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="26"/>
         <source>InfoBar</source>
-        <translation>شريط المعلومات</translation>
+        <translation>InfoBar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
@@ -1619,7 +1619,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="611"/>
         <source>Online</source>
-        <translation>على الهواء</translation>
+        <translation>متصل</translation>
     </message>
     <message>
         <location filename="../src/AccountDelegate.cpp" line="616"/>
@@ -2909,7 +2909,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="139"/>
         <source>Go &amp;Online</source>
-        <translation>إذهب &amp;على الهواء</translation>
+        <translation>اصبح &amp;متصل</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="144"/>
@@ -3138,7 +3138,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="825"/>
         <source>Go &amp;online</source>
-        <translation>إذهب &amp;على الهواء</translation>
+        <translation>اصبح &amp;متصل</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="848"/>
@@ -3509,7 +3509,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>جمع مكاتب أصدقائك الذين على الهواء</translation>
+        <translation>مكتبات مجمعة لكل اصحابك المتصلين</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="397"/>
