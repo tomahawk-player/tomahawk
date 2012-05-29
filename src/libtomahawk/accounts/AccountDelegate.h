@@ -19,6 +19,7 @@
 #ifndef ACCOUNTDELEGATE_H
 #define ACCOUNTDELEGATE_H
 
+#include "DllMacro.h"
 #include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
@@ -31,7 +32,7 @@ namespace Accounts
 
 class Account;
 
-class AccountDelegate : public QStyledItemDelegate
+class DLLEXPORT AccountDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:

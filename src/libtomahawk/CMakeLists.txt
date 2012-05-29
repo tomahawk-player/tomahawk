@@ -191,6 +191,10 @@ set( libSources
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
+    accounts/AccountDelegate.cpp
+    accounts/DelegateConfigWrapper.cpp
+    accounts/AccountFactoryWrapper.cpp
+    accounts/AccountFactoryWrapperDelegate.cpp
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipInfo.cpp
@@ -288,6 +292,7 @@ set( libSources
     utils/Qnr_IoDeviceStream.cpp
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
+    utils/GuiHelpers.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -311,6 +316,7 @@ set( libUI ${libUI}
     playlist/QueueView.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
+    accounts/AccountFactoryWrapper.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

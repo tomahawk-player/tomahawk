@@ -68,8 +68,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/GroupItem.cpp
      sourcetree/items/HistoryItem.cpp
 
-     utils/GuiHelpers.cpp
-
      accounts/lastfm/LastFmAccount.cpp
      accounts/lastfm/LastFmConfig.cpp
      accounts/lastfm/LastFmInfoPlugin.cpp
@@ -82,13 +80,9 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      AudioControls.cpp
      SettingsDialog.cpp
      DiagnosticsDialog.cpp
-     AccountDelegate.cpp
      SettingsListDelegate.cpp
-     DelegateConfigWrapper.cpp
      TomahawkWindow.cpp
      LoadXSPFDialog.cpp
-     AccountFactoryWrapper.cpp
-     AccountFactoryWrapperDelegate.cpp
      SocialWidget.cpp
 )
 
@@ -107,7 +101,6 @@ SET( tomahawkUI ${tomahawkUI}
 
      AudioControls.ui
      LoadXSPFDialog.ui
-     AccountFactoryWrapper.ui
      SocialWidget.ui
 )
 
@@ -122,7 +115,6 @@ INCLUDE_DIRECTORIES(
     network
     sourcetree
     topbar
-    utils
     libtomahawk
     mac
 

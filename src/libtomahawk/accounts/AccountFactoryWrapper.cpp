@@ -20,7 +20,7 @@
 
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
-#include "GuiHelpers.h"
+#include "utils/GuiHelpers.h"
 #include "AccountFactoryWrapperDelegate.h"
 #include "DelegateConfigWrapper.h"
 #include "ui_AccountFactoryWrapper.h"

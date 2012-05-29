@@ -19,6 +19,8 @@
 #ifndef TOMAHAWK_GUI_HELPERS_H
 #define TOMAHAWK_GUI_HELPERS_H
 
+#include "DllMacro.h"
+
 class QWidget;
 namespace Tomahawk {
     namespace Accounts {
@@ -29,8 +31,8 @@ namespace Tomahawk {
 
 namespace TomahawkUtils
 {
-    void createAccountFromFactory( Tomahawk::Accounts::AccountFactory*, QWidget* parent );
-    void openAccountConfig( Tomahawk::Accounts::Account*, QWidget* parent, bool showDelete = false );
+    DLLEXPORT void createAccountFromFactory( Tomahawk::Accounts::AccountFactory*, QWidget* parent );
+    DLLEXPORT void openAccountConfig( Tomahawk::Accounts::Account*, QWidget* parent, bool showDelete = false );
 }
 
 #endif
