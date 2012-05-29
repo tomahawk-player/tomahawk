@@ -36,7 +36,7 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
     else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/album-icon.png" );
     else if ( dynamic_cast< TrackInfoWidget* >( page ) )
-        m_icon = QIcon( RESPATH "images/track-icon-22x22.png" );
+        m_icon = QIcon( RESPATH "images/track-icon-sidebar.png" );
     else if ( dynamic_cast< SearchWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/search-icon.png" );
 
