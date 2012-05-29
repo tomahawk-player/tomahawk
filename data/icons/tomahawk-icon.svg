@@ -32,20 +32,33 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="640"
-   inkscape:window-height="480"
+   inkscape:window-width="1017"
+   inkscape:window-height="940"
    id="namedview11"
    showgrid="false"
-   inkscape:zoom="0.38247276"
-   inkscape:cx="420.94501"
-   inkscape:cy="297.64001"
+   inkscape:zoom="0.79203971"
+   inkscape:cx="431.12552"
+   inkscape:cy="295.63997"
    inkscape:window-x="258"
    inkscape:window-y="62"
    inkscape:window-maximized="0"
-   inkscape:current-layer="Layer_1" />
+   inkscape:current-layer="Layer_1"
+   inkscape:snap-page="false"><sodipodi:guide
+     position="0,0"
+     orientation="0,841.89001"
+     id="guide2994" /><sodipodi:guide
+     position="841.89001,0"
+     orientation="-595.28003,0"
+     id="guide2996" /><sodipodi:guide
+     position="841.89001,595.28003"
+     orientation="0,-841.89001"
+     id="guide2998" /><sodipodi:guide
+     position="0,595.28003"
+     orientation="595.28003,0"
+     id="guide3000" /></sodipodi:namedview>
 <g
    id="g3"
-   transform="matrix(7.1143938,0,0,6.988757,-2573.8235,-1782.4936)">
+   transform="matrix(7.3080643,0,0,7.1790074,-2773.1692,-1839.2291)">
 	<g
    id="g5">
 		<path
