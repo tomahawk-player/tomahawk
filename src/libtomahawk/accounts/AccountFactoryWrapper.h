@@ -19,6 +19,8 @@
 #ifndef ACCOUNTFACTORYWRAPPER_H
 #define ACCOUNTFACTORYWRAPPER_H
 
+#include "DllMacro.h"
+
 #include <QDialog>
 #include <QModelIndex>
 
@@ -33,7 +35,7 @@ class Account;
 class Ui_AccountFactoryWrapper;
 
 // class AccountFactoryWrapper_
-class AccountFactoryWrapper : public QDialog
+class DLLEXPORT AccountFactoryWrapper : public QDialog
 {
     Q_OBJECT
 public:

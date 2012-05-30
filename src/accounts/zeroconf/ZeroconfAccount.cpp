@@ -86,7 +86,7 @@ void
 ZeroconfAccount::authenticate()
 {
     if ( !isAuthenticated() )
-        static_cast< ZeroconfPlugin* >( m_sipPlugin.data() )->connectPlugin();
+        sipPlugin()->connectPlugin();
 }
 
 
@@ -94,7 +94,7 @@ void
 ZeroconfAccount::deauthenticate()
 {
     if ( isAuthenticated() )
-        static_cast< ZeroconfPlugin* >( m_sipPlugin.data() )->disconnectPlugin();
+        sipPlugin()->disconnectPlugin();
 }
 
 
@@ -112,7 +112,7 @@ ZeroconfAccount::connectionState() const
         return Disconnected;
 
     // TODO can we get called before sipPlugin()?
-    return static_cast< ZeroconfPlugin* >( m_sipPlugin.data() )->connectionState();
+    return m_sipPlugin.data()->connectionState();
 }
 
 
@@ -120,7 +120,7 @@ SipPlugin*
 ZeroconfAccount::sipPlugin()
 {
     if ( m_sipPlugin.isNull() )
-        m_sipPlugin = QWeakPointer< SipPlugin >( new ZeroconfPlugin( this ) );
+        m_sipPlugin = QWeakPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
 
     return m_sipPlugin.data();
 }

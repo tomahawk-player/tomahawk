@@ -604,6 +604,7 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
 {
     QPixmap p;
     QString statusText;
+
     const Account::ConnectionState state = acct->connectionState();
     if ( state == Account::Connected )
     {
