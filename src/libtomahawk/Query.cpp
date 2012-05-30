@@ -164,6 +164,7 @@ Query::init()
     m_duration = -1;
     m_albumpos = 0;
     m_discnumber = 0;
+    m_saveResultHint = false;
 
     updateSortNames();
 }

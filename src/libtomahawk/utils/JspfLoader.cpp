@@ -179,7 +179,10 @@ JSPFLoader::gotBody()
 
             q->setDuration( duration.toInt() / 1000 );
             if( !url.isEmpty() )
+            {
                 q->setResultHint( url );
+                q->setSaveHTTPResultHint( true );
+            }
 
             m_entries << q;
         }

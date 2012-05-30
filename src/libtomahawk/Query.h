@@ -164,6 +164,9 @@ public:
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
 
+    void setSaveHTTPResultHint( bool saveResultHint ) { m_saveResultHint = saveResultHint; }
+    bool saveHTTPResultHint() const { return m_saveResultHint; }
+
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;
 
@@ -253,6 +256,8 @@ private:
 
     QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
+
+    bool m_saveResultHint;
 
     mutable QMutex m_mutex;
     QWeakPointer< Tomahawk::Query > m_ownRef;

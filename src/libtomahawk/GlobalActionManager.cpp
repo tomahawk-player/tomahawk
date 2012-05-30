@@ -645,8 +645,12 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 return false;
 
             if ( !urlStr.isEmpty() )
+            {
                 q->setResultHint( urlStr );
-            Pipeline::instance()->resolve( q );
+                q->setSaveHTTPResultHint( true );
+            }
+
+            Pipeline::instance()->resolve( q, true );
 
             handleOpenTrack( q );
             return true;
@@ -668,8 +672,13 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 { // give it a web result hint
                     QFileInfo info( track.path() );
                     query_ptr q = Query::get( QString(), info.baseName(), QString(), uuid(), false );
+
                     if ( q.isNull() )
                         continue;
+
+                    q->setResultHint( track.toString() );
+                    q->setSaveHTTPResultHint( true );
+
 
                     q->setResultHint( track.toString() );
                     Pipeline::instance()->resolve( q );
@@ -1075,7 +1084,10 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
             return false;
 
         if ( !urlStr.isEmpty() )
+        {
             q->setResultHint( urlStr );
+            q->setSaveHTTPResultHint( true );
+        }
 
         playNow( q );
         return true;
@@ -1166,8 +1178,11 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
             return false;
 
         if ( !urlStr.isEmpty() )
+        {
             q->setResultHint( urlStr );
-        Pipeline::instance()->resolve( q );
+            q->setSaveHTTPResultHint( true );
+        }
+        Pipeline::instance()->resolve( q, true );
 
         // now we add it to the special "bookmarks" playlist, creating it if it doesn't exist. if nothing is playing, start playing the track
         QSharedPointer< LocalCollection > col = SourceList::instance()->getLocal()->collection().dynamicCast< LocalCollection >();
