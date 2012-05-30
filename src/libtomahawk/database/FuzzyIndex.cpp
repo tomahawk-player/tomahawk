@@ -38,9 +38,8 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( DatabaseImpl& db, bool wipeIndex )
+FuzzyIndex::FuzzyIndex( bool wipeIndex )
     : QObject()
-    , m_db( db )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
 {
