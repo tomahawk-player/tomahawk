@@ -2,17 +2,17 @@
 <context>
     <name>AccountFactoryWrapper</name>
     <message>
-        <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
         <translation>Diàleg</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
         <translation>Aquí va la descripció</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapper.cpp" line="42"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
         <translation>Afegiu un compte</translation>
     </message>
@@ -20,17 +20,17 @@
 <context>
     <name>AccountFactoryWrapperDelegate</name>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="106"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="106"/>
         <source>Online</source>
         <translation>En línia</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="111"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="111"/>
         <source>Connecting...</source>
         <translation>Connectant-se...</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="116"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="116"/>
         <source>Offline</source>
         <translation>Fora de línia</translation>
     </message>
@@ -439,17 +439,17 @@ connect and stream from you?</source>
 <context>
     <name>DelegateConfigWrapper</name>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="52"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
         <translation>Quant a</translation>
     </message>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="77"/>
         <source>Delete Account</source>
         <translation>Esborra el Compte</translation>
     </message>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="140"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="140"/>
         <source>About this Account</source>
         <translation>Quant a aquest compte</translation>
     </message>
@@ -1601,32 +1601,32 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="223"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
         <translation>Afegeix un compte</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="273"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
         <translation>Esborra el compte</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="386"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="386"/>
         <source>%1 downloads</source>
         <translation>%1 descàrregues</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="611"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="612"/>
         <source>Online</source>
         <translation>En Línia</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="616"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="617"/>
         <source>Connecting...</source>
         <translation>Connectant-se...</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="621"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="622"/>
         <source>Offline</source>
         <translation>Fora de Línia</translation>
     </message>
@@ -1943,7 +1943,7 @@ Torneu a autenticar-vos.</translation>
 <context>
     <name>Tomahawk::Accounts::ZeroconfFactory</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>Connecta&apos;t automàticament a altres Tomahawks de la xarxa local</translation>
     </message>

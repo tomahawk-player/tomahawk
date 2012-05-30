@@ -2,17 +2,17 @@
 <context>
     <name>AccountFactoryWrapper</name>
     <message>
-        <location filename="../src/AccountFactoryWrapper.ui" line="14"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
         <translation>對話框</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapper.ui" line="30"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
         <translation>說明放在這裡</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapper.cpp" line="42"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
         <translation>新增帳戶</translation>
     </message>
@@ -20,17 +20,17 @@
 <context>
     <name>AccountFactoryWrapperDelegate</name>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="106"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="106"/>
         <source>Online</source>
         <translation>線上</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="111"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="111"/>
         <source>Connecting...</source>
         <translation>連接中...</translation>
     </message>
     <message>
-        <location filename="../src/AccountFactoryWrapperDelegate.cpp" line="116"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="116"/>
         <source>Offline</source>
         <translation>離線</translation>
     </message>
@@ -439,17 +439,17 @@ connect and stream from you?</source>
 <context>
     <name>DelegateConfigWrapper</name>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="52"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="77"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="77"/>
         <source>Delete Account</source>
         <translation>刪除帳戶</translation>
     </message>
     <message>
-        <location filename="../src/DelegateConfigWrapper.cpp" line="140"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="140"/>
         <source>About this Account</source>
         <translation>關於此帳戶</translation>
     </message>
@@ -1597,32 +1597,32 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="223"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="223"/>
         <source>Add Account</source>
         <translation>新增帳戶</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="273"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="273"/>
         <source>Remove Account</source>
         <translation>刪除帳戶</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="386"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="386"/>
         <source>%1 downloads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="611"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="612"/>
         <source>Online</source>
         <translation>線上</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="616"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="617"/>
         <source>Connecting...</source>
         <translation>連接中...</translation>
     </message>
     <message>
-        <location filename="../src/AccountDelegate.cpp" line="621"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="622"/>
         <source>Offline</source>
         <translation>離線</translation>
     </message>
@@ -1936,7 +1936,7 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::ZeroconfFactory</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>自動連接到區域網路上的 Tomahawks</translation>
     </message>
