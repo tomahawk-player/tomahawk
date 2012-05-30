@@ -68,7 +68,11 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
 
 
     QPalette p = m_steerTop->palette();
-    p.setBrush( QPalette::WindowText, palette().highlightedText() );
+#ifdef Q_OS_MAC
+    p.setBrush( QPalette::WindowText, Qt::white );
+#else
+    p.setBrush( QPalette::WindowText, palette().highlightedText()  );
+#endif
     m_steerTop->setPalette( p );
 
     m_layout->addLayout( m_textL, 1 );
