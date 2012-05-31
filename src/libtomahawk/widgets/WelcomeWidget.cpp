@@ -73,7 +73,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->tracksView->setPlaylistModel( m_tracksModel );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
-    ui->additionsView->setAlbumModel( m_recentAlbumsModel );
+    ui->additionsView->setPlayableModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );
 
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
