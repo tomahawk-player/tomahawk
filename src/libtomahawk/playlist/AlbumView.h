@@ -50,7 +50,6 @@ public:
 
     AlbumModel* model() const { return m_model; }
     AlbumProxyModel* proxyModel() const { return m_proxyModel; }
-//    PlaylistItemDelegate* delegate() { return m_delegate; }
 
     bool autoFitItems() const { return m_autoFitItems; }
     void setAutoFitItems( bool b ) { m_autoFitItems = b; }
@@ -86,7 +85,6 @@ protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 private slots:
-    void onItemCountChanged( unsigned int items );
     void onFilterChanged( const QString& filter );
     void onCustomContextMenu( const QPoint& pos );
 

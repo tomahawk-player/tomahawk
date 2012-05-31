@@ -49,7 +49,7 @@ AlbumView::AlbumView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
-    , m_loadingSpinner( new AnimatedSpinner( this ) )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_overlay( new OverlayWidget( this ) )
     , m_contextMenu( new ContextMenu( this ) )
     , m_inited( false )
@@ -74,6 +74,10 @@ AlbumView::AlbumView( QWidget* parent )
 
     setAutoFitItems( true );
     setProxyModel( new AlbumProxyModel( this ) );
+
+/*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
+    m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );*/
+    m_overlay->setText( tr( "Nothing found." ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
@@ -124,10 +128,6 @@ AlbumView::setAlbumModel( AlbumModel* model )
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
-    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemCountChanged( unsigned int ) ) );
-    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
-    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
-
     emit modelChanged();
 }
 
@@ -162,23 +162,6 @@ AlbumView::onItemActivated( const QModelIndex& index )
         else if ( !item->query().isNull() )
             AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query() );
     }
-}
-
-
-void
-AlbumView::onItemCountChanged( unsigned int items )
-{
-    if ( items == 0 )
-    {
-        if ( m_model->collection().isNull() || ( !m_model->collection().isNull() && m_model->collection()->source()->isLocal() ) )
-            m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
-        else
-            m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );
-
-        m_overlay->show();
-    }
-    else
-        m_overlay->hide();
 }
 
 
