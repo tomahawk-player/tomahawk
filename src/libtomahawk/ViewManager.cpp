@@ -35,7 +35,6 @@
 #include "PlayableModel.h"
 #include "ArtistView.h"
 #include "AlbumView.h"
-#include "AlbumProxyModel.h"
 #include "AlbumModel.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
