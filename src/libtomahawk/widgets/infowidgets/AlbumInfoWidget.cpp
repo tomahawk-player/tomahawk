@@ -25,7 +25,7 @@
 #include "ViewManager.h"
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
 #include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
@@ -50,8 +50,8 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
 
-    m_albumsModel = new AlbumModel( ui->albumsView );
-    ui->albumsView->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albumsView );
+    ui->albumsView->setPlayableModel( m_albumsModel );
 
     m_tracksModel = new TreeModel( ui->tracksView );
     m_tracksModel->setMode( Mixed );
@@ -183,7 +183,7 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( al.contains( m_album ) )
         al.removeAll( m_album );
 
-    m_albumsModel->addAlbums( al );
+    m_albumsModel->append( al );
 }
 
 
