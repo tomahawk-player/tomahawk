@@ -112,6 +112,8 @@ public:
     QList< Tomahawk::query_ptr > queries() const;
 
     void updateDetailedInfo( const QModelIndex& index );
+    
+    void setItemSize( const QSize& size ) { m_itemSize = size; }
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
@@ -129,12 +131,18 @@ public slots:
     virtual void clear();
 
     virtual void append( const QList< Tomahawk::query_ptr >& queries );
+    virtual void append( const QList< Tomahawk::artist_ptr >& artists );
+    virtual void append( const QList< Tomahawk::album_ptr >& albums );
     virtual void append( const Tomahawk::query_ptr& query );
-    virtual void append( const Tomahawk::artist_ptr& artist ) { Q_UNUSED( artist ); }
-    virtual void append( const Tomahawk::album_ptr& album ) { Q_UNUSED( album ); }
+    virtual void append( const Tomahawk::artist_ptr& artist );
+    virtual void append( const Tomahawk::album_ptr& album );
 
     virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insert( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
+    virtual void insert( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
     virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
+    virtual void insert( const Tomahawk::artist_ptr& artist, int row = 0 );
+    virtual void insert( const Tomahawk::album_ptr& album, int row = 0 );
 
     virtual void remove( int row, bool moreToCome = false );
     virtual void remove( const QModelIndex& index, bool moreToCome = false );
@@ -156,11 +164,17 @@ private slots:
     void onPlaybackStopped();
 
 private:
+    template <typename T>
+    void insertInternal( const QList< T >& items, int row );
+    template <typename T>
+    void insertInternal( const T& item, int row );
+
     Qt::Alignment columnAlignment( int column ) const;
 
     PlayableItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;
+    QSize m_itemSize;
 
     bool m_readOnly;
 
