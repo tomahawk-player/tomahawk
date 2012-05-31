@@ -22,7 +22,6 @@
 #include <QKeyEvent>
 #include <QPainter>
 
-#include "playlist/PlaylistProxyModel.h"
 #include "widgets/OverlayWidget.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
@@ -36,7 +35,7 @@ PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
     , m_model( 0 )
 {
-    setProxyModel( new PlaylistProxyModel( this ) );
+    setProxyModel( new PlayableProxyModel( this ) );
 
     connect( contextMenu(), SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
