@@ -23,7 +23,7 @@
 #include <QSortFilterProxyModel>
 
 #include "PlaylistInterface.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
 
 #include "DllMacro.h"
 
@@ -35,8 +35,8 @@ public:
     explicit AlbumProxyModel( QObject* parent = 0 );
     virtual ~AlbumProxyModel() {}
 
-    virtual AlbumModel* sourceModel() const { return m_model; }
-    virtual void setSourceAlbumModel( AlbumModel* sourceModel );
+    virtual PlayableModel* sourceModel() const { return m_model; }
+    virtual void setSourcePlayableModel( PlayableModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
@@ -56,7 +56,7 @@ protected:
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
 private:
-    AlbumModel* m_model;
+    PlayableModel* m_model;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

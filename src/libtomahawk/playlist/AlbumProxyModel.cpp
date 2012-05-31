@@ -37,7 +37,7 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceAlbumModel( 0 );
+    setSourcePlayableModel( 0 );
 }
 
 
@@ -51,7 +51,7 @@ AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
 
 
 void
-AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
+AlbumProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 {
     m_model = sourceModel;
 
@@ -125,7 +125,7 @@ AlbumProxyModel::removeIndex( const QModelIndex& index )
     if ( index.column() > 0 )
         return;
 
-    sourceModel()->removeIndex( mapToSource( index ) );
+    sourceModel()->remove( mapToSource( index ) );
 }
 
 
