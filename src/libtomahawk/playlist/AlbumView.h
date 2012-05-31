@@ -25,7 +25,7 @@
 #include <QTimer>
 
 #include "ViewPage.h"
-#include "AlbumProxyModel.h"
+#include "PlayableProxyModel.h"
 #include "widgets/OverlayWidget.h"
 #include "DllMacro.h"
 
@@ -46,10 +46,10 @@ public:
     explicit AlbumView( QWidget* parent = 0 );
     ~AlbumView();
 
-    void setProxyModel( AlbumProxyModel* model );
+    void setProxyModel( PlayableProxyModel* model );
 
     PlayableModel* model() const { return m_model; }
-    AlbumProxyModel* proxyModel() const { return m_proxyModel; }
+    PlayableProxyModel* proxyModel() const { return m_proxyModel; }
 
     bool autoFitItems() const { return m_autoFitItems; }
     void setAutoFitItems( bool b ) { m_autoFitItems = b; }
@@ -92,7 +92,7 @@ private slots:
 
 private:
     PlayableModel* m_model;
-    AlbumProxyModel* m_proxyModel;
+    PlayableProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;

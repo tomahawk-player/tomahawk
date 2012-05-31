@@ -74,7 +74,7 @@ AlbumView::AlbumView( QWidget* parent )
     setStyleSheet( "QListView { background-color: #323435; }" );
 
     setAutoFitItems( true );
-    setProxyModel( new AlbumProxyModel( this ) );
+    setProxyModel( new PlayableProxyModel( this ) );
 
 /*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
     m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );*/
@@ -95,7 +95,7 @@ AlbumView::~AlbumView()
 
 
 void
-AlbumView::setProxyModel( AlbumProxyModel* model )
+AlbumView::setProxyModel( PlayableProxyModel* model )
 {
     m_proxyModel = model;
     m_delegate = new AlbumItemDelegate( this, m_proxyModel );
