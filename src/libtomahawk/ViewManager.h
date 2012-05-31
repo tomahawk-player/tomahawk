@@ -39,7 +39,6 @@ class AlbumInfoWidget;
 class ArtistInfoWidget;
 class ArtistView;
 class CollectionModel;
-class CollectionFlatModel;
 class CollectionView;
 class ContextWidget;
 class PlaylistModel;

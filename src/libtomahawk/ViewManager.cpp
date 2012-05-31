@@ -28,7 +28,6 @@
 #include "topbar/TopBar.h"
 
 #include "TreeModel.h"
-#include "CollectionFlatModel.h"
 #include "CollectionView.h"
 #include "PlaylistModel.h"
 #include "PlaylistView.h"
@@ -280,7 +279,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     ViewPage* shown = 0;
     if ( m_currentMode == PlaylistModes::Flat )
     {
-        CollectionView* view;
+/*        CollectionView* view;
         if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
         {
             view = new CollectionView();
@@ -297,7 +296,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         }
 
         shown = view;
-        setPage( view );
+        setPage( view );*/
     }
 
     if ( m_currentMode == PlaylistModes::Tree )

@@ -23,7 +23,6 @@
 #include "ViewManager.h"
 
 #include "playlist/AlbumModel.h"
-#include "playlist/CollectionFlatModel.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 

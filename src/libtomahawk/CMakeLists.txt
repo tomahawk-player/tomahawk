@@ -52,7 +52,6 @@ set( libGuiSources
     playlist/TreeItemDelegate.cpp
     playlist/CollectionProxyModel.cpp
     playlist/CollectionProxyModelPlaylistInterface.cpp
-    playlist/CollectionFlatModel.cpp
     playlist/CollectionView.cpp
     playlist/PlaylistModel.cpp
     playlist/PlaylistProxyModel.cpp
