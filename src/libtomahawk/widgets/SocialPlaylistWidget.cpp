@@ -23,6 +23,7 @@
 #include "database/DatabaseCommand_LoadDynamicPlaylist.h"
 #include "database/Database.h"
 #include "SourceList.h"
+#include "PlayableModel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/database/DatabaseGenerator.h"
 #include "utils/Logger.h"
@@ -71,8 +72,8 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
     m_topForeignTracksModel->setStyle( PlayableModel::Short );
     ui->newTracksView->overlay()->setEnabled( false );
 
-    m_popularNewAlbumsModel = new AlbumModel( ui->newAlbumsView );
-    ui->newAlbumsView->setAlbumModel( m_popularNewAlbumsModel );
+    m_popularNewAlbumsModel = new PlayableModel( ui->newAlbumsView );
+    ui->newAlbumsView->setPlayableModel( m_popularNewAlbumsModel );
     // TODO run the genericselect command
 //     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 /*
@@ -139,7 +140,7 @@ SocialPlaylistWidget::popularAlbumsFetched( QList< album_ptr > albums )
 {
     m_popularNewAlbumsModel->clear();
 
-    m_popularNewAlbumsModel->addAlbums( albums );
+    m_popularNewAlbumsModel->append( albums );
 }
 
 
