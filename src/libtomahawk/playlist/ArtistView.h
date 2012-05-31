@@ -83,6 +83,9 @@ public:
 public slots:
     void onItemActivated( const QModelIndex& index );
 
+signals:
+    void modelChanged();
+
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void resizeEvent( QResizeEvent* event );
@@ -107,7 +110,6 @@ private:
     OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
-//    PlaylistItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
 
     bool m_updateContextView;

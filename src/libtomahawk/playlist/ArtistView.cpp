@@ -51,8 +51,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_overlay( new OverlayWidget( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
-//    , m_delegate( 0 )
-    , m_loadingSpinner( new AnimatedSpinner( this ) )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
@@ -137,8 +136,6 @@ ArtistView::setTreeModel( TreeModel* model )
         m_proxyModel->sort( 0 );
     }
 
-    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
-    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
     connect( m_proxyModel, SIGNAL( filteringStarted() ), SLOT( onFilteringStarted() ) );
     connect( m_proxyModel, SIGNAL( filteringFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
@@ -148,7 +145,7 @@ ArtistView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    if ( model->columnStyle() == TreeModel::TrackOnly )
+    if ( model->style() == PlayableModel::Large )
     {
         setHeaderHidden( true );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -158,6 +155,8 @@ ArtistView::setTreeModel( TreeModel* model )
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
+
+    emit modelChanged();
 }
 
 
