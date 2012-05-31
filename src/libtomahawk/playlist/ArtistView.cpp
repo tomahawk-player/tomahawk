@@ -132,7 +132,7 @@ ArtistView::setTreeModel( TreeModel* model )
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceTreeModel( model );
+        m_proxyModel->setSourcePlayableModel( model );
         m_proxyModel->sort( 0 );
     }
 
