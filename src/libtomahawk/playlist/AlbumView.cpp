@@ -33,6 +33,7 @@
 #include "PlayableItem.h"
 #include "AlbumItemDelegate.h"
 #include "AlbumModel.h"
+#include "PlayableModel.h"
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
@@ -115,14 +116,14 @@ AlbumView::setModel( QAbstractItemModel* model )
 
 
 void
-AlbumView::setAlbumModel( AlbumModel* model )
+AlbumView::setPlayableModel( PlayableModel* model )
 {
     m_inited = false;
     m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceAlbumModel( m_model );
+        m_proxyModel->setSourcePlayableModel( m_model );
         m_proxyModel->sort( 0 );
     }
 
@@ -202,8 +203,7 @@ AlbumView::layoutItems()
 #endif
         int rectWidth = contentsRect().width() - scrollbar - 3;
         int itemWidth = 160;
-        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
-        Q_UNUSED( itemSize ); // looks obsolete
+//        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
         int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 //        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );

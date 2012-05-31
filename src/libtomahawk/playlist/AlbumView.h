@@ -34,9 +34,9 @@ namespace Tomahawk
     class ContextMenu;
 };
 
-class AlbumModel;
 class AnimatedSpinner;
 class AlbumItemDelegate;
+class PlayableModel;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
 {
@@ -48,13 +48,13 @@ public:
 
     void setProxyModel( AlbumProxyModel* model );
 
-    AlbumModel* model() const { return m_model; }
+    PlayableModel* model() const { return m_model; }
     AlbumProxyModel* proxyModel() const { return m_proxyModel; }
 
     bool autoFitItems() const { return m_autoFitItems; }
     void setAutoFitItems( bool b ) { m_autoFitItems = b; }
 
-    void setAlbumModel( AlbumModel* model );
+    void setPlayableModel( PlayableModel* model );
     void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
@@ -91,7 +91,7 @@ private slots:
     void layoutItems();
 
 private:
-    AlbumModel* m_model;
+    PlayableModel* m_model;
     AlbumProxyModel* m_proxyModel;
     AlbumItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
