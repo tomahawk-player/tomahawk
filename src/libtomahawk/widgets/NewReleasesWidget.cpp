@@ -186,13 +186,12 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 
             if ( type == "albums" )
             {
-
                 loader->setType( ChartDataLoader::Album );
                 loader->setData( returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
                 connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( newReleasesLoaded( Tomahawk::ChartDataLoader*, QList<Tomahawk::album_ptr> ) ) );
 
-                AlbumModel* albumModel = new AlbumModel( ui->albumsView );
+                PlayableModel* albumModel = new PlayableModel( ui->albumsView );
 
                 m_albumModels[ releaseId ] = albumModel;
 
@@ -344,11 +343,12 @@ NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString &label, c
 
 
 void
-NewReleasesWidget::setLeftViewAlbums( AlbumModel* model )
+NewReleasesWidget::setLeftViewAlbums( PlayableModel* model )
 {
-    ui->albumsView->setAlbumModel( model );
+    ui->albumsView->setPlayableModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
 }
+
 
 void
 NewReleasesWidget::newReleasesLoaded( ChartDataLoader* loader, const QList< album_ptr >& albums )
@@ -357,7 +357,7 @@ NewReleasesWidget::newReleasesLoaded( ChartDataLoader* loader, const QList< albu
     Q_ASSERT( m_albumModels.contains( chartId ) );
 
     if ( m_albumModels.contains( chartId ) )
-        m_albumModels[ chartId ]->addAlbums( albums );
+        m_albumModels[ chartId ]->append( albums );
 
     m_workers.remove( loader );
     loader->deleteLater();
