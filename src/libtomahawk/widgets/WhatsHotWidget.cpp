@@ -34,6 +34,7 @@
 
 #include "audio/AudioEngine.h"
 #include "dynamic/GeneratorInterface.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
@@ -272,13 +273,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if ( type == "albums" )
             {
-
                 loader->setType( ChartDataLoader::Album );
                 loader->setData( returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
                 connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
 
-                AlbumModel* albumModel = new AlbumModel( ui->albumsView );
+                PlayableModel* albumModel = new PlayableModel( ui->albumsView );
 
                 m_albumModels[ chartId ] = albumModel;
 
@@ -287,7 +287,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if ( type == "tracks" )
             {
-
                 loader->setType( ChartDataLoader::Track );
                 loader->setData( returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
@@ -452,9 +451,9 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
 
 void
-WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
+WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 {
-    ui->albumsView->setAlbumModel( model );
+    ui->albumsView->setPlayableModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
 }
@@ -522,7 +521,7 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
     Q_ASSERT( m_albumModels.contains( chartId ) );
 
     if ( m_albumModels.contains( chartId ) )
-        m_albumModels[ chartId ]->addAlbums( albums );
+        m_albumModels[ chartId ]->append( albums );
 
     m_workers.remove( loader );
     loader->deleteLater();
