@@ -31,7 +31,7 @@
 #include "DllMacro.h"
 
 class QPushButton;
-class AlbumModel;
+class PlayableModel;
 class PlaylistModel;
 
 namespace Ui
@@ -77,8 +77,8 @@ private:
 
     QString m_search;
 
-    AlbumModel* m_artistsModel;
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_artistsModel;
+    PlayableModel* m_albumsModel;
     PlaylistModel* m_resultsModel;
     QList< Tomahawk::query_ptr > m_queries;
 };

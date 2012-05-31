@@ -25,7 +25,7 @@
 
 #include "SourceList.h"
 #include "ViewManager.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
@@ -47,11 +47,11 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     ui->resultsView->overlay()->setEnabled( false );
     ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
 
-    m_albumsModel = new AlbumModel( ui->albumView );
-    ui->albumView->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albumView );
+    ui->albumView->setPlayableModel( m_albumsModel );
 
-    m_artistsModel = new AlbumModel( ui->artistView );
-    ui->artistView->setAlbumModel( m_artistsModel );
+    m_artistsModel = new PlayableModel( ui->artistView );
+    ui->artistView->setPlayableModel( m_artistsModel );
 
     ui->artistView->proxyModel()->sort( -1 );
     ui->albumView->proxyModel()->sort( -1 );
@@ -134,22 +134,22 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         albums << result->album();
     }
 
-    m_artistsModel->addArtists( artists );
-    m_albumsModel->addAlbums( albums );
+    m_artistsModel->append( artists );
+    m_albumsModel->append( albums );
 }
 
 
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    m_albumsModel->addAlbums( albums );
+    m_albumsModel->append( albums );
 }
 
 
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
-    m_artistsModel->addArtists( artists );
+    m_artistsModel->append( artists );
 }
 
 
