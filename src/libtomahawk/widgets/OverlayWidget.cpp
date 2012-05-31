@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
+#include "PlayableProxyModel.h"
 #include "utils/Logger.h"
 
 #define CORNER_ROUNDNESS 8.0
@@ -98,7 +99,7 @@ OverlayWidget::show( int timeoutSecs )
     animation->setEndValue( 1.0 );
     animation->start();
 
-    if( timeoutSecs > 0 )
+    if ( timeoutSecs > 0 )
         m_timer.start( timeoutSecs * 1000 );
 }
 
@@ -129,7 +130,8 @@ OverlayWidget::shown() const
 void
 OverlayWidget::onViewChanged()
 {
-    if ( m_parent->model()->rowCount() )
+    PlayableProxyModel* model = qobject_cast<PlayableProxyModel*>( m_parent->model() );
+    if ( model && ( model->rowCount( QModelIndex() ) || model->isLoading() ) )
     {
         hide();
     }
