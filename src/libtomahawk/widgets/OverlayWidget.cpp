@@ -30,7 +30,7 @@
 #define OPACITY 0.70
 
 
-OverlayWidget::OverlayWidget( QWidget* parent )
+OverlayWidget::OverlayWidget( QAbstractItemView* parent )
     : QWidget( parent ) // this is on purpose!
     , m_opacity( 0.00 )
     , m_parent( parent )
@@ -42,6 +42,12 @@ OverlayWidget::OverlayWidget( QWidget* parent )
 
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
+    
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+    }
+    connect( m_parent, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
 
 #ifdef Q_WS_MAC
     QFont f( font() );
@@ -117,6 +123,31 @@ OverlayWidget::shown() const
         return false;
 
     return m_opacity == OPACITY;
+}
+
+
+void
+OverlayWidget::onViewChanged()
+{
+    if ( m_parent->model()->rowCount() )
+    {
+        hide();
+    }
+    else
+    {
+        show();
+    }
+}
+
+
+void
+OverlayWidget::onViewModelChanged()
+{
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        onViewChanged();
+    }
 }
 
 
