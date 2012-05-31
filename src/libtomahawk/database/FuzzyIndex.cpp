@@ -47,8 +47,17 @@ FuzzyIndex::FuzzyIndex( bool wipeIndex )
     QByteArray path = m_lucenePath.toUtf8();
     const char* cPath = path.constData();
 
-    m_luceneDir = FSDirectory::getDirectory( cPath );
-    m_analyzer = _CLNEW SimpleAnalyzer();
+    tDebug() << "Opening Lucene directory:" << path;
+    try
+    {
+        m_luceneDir = FSDirectory::getDirectory( cPath );
+        m_analyzer = _CLNEW SimpleAnalyzer();
+    }
+    catch ( CLuceneError& error )
+    {
+        tDebug() << "Caught CLucene error:" << error.what();
+        Q_ASSERT( false );
+    }
 
     if ( wipeIndex )
     {
@@ -92,7 +101,7 @@ FuzzyIndex::beginIndexing()
     }
     catch( CLuceneError& error )
     {
-        qDebug() << "Caught CLucene error:" << error.what();
+        tDebug() << "Caught CLucene error:" << error.what();
         Q_ASSERT( false );
     }
 }
@@ -160,7 +169,7 @@ FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& 
     }
     catch( CLuceneError& error )
     {
-        qDebug() << "Caught CLucene error:" << error.what();
+        tDebug() << "Caught CLucene error:" << error.what();
         Q_ASSERT( false );
     }
 }
