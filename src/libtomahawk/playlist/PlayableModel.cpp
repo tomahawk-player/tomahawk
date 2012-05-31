@@ -42,7 +42,7 @@ PlayableModel::PlayableModel( QObject* parent )
     , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
     , m_style( Detailed )
-    , m_loading( false )
+    , m_loading( true )
 {
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
