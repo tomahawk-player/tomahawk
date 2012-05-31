@@ -54,12 +54,9 @@ set( libGuiSources
     playlist/CollectionProxyModelPlaylistInterface.cpp
     playlist/CollectionView.cpp
     playlist/PlaylistModel.cpp
-    playlist/PlaylistProxyModel.cpp
-    playlist/PlaylistProxyModelPlaylistInterface.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
     playlist/QueueProxyModel.cpp
-    playlist/QueueProxyModelPlaylistInterface.cpp
     playlist/QueueView.cpp
     playlist/PlayableModel.cpp
     playlist/PlayableProxyModel.cpp
@@ -67,8 +64,6 @@ set( libGuiSources
     playlist/TrackView.cpp
     playlist/TrackHeader.cpp
     playlist/AlbumModel.cpp
-    playlist/AlbumProxyModel.cpp
-    playlist/AlbumProxyModelPlaylistInterface.cpp
     playlist/AlbumItemDelegate.cpp
     playlist/AlbumView.cpp
     playlist/ArtistView.cpp
