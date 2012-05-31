@@ -19,7 +19,6 @@
 
 #include "QueueProxyModel.h"
 
-#include "QueueProxyModelPlaylistInterface.h"
 #include "playlist/TrackView.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
@@ -29,7 +28,7 @@ using namespace Tomahawk;
 
 
 QueueProxyModel::QueueProxyModel( TrackView* parent )
-    : PlaylistProxyModel( parent )
+    : PlayableProxyModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -56,16 +55,4 @@ QueueProxyModel::onTrackCountChanged( unsigned int count )
 {
     if ( count == 0 )
         ViewManager::instance()->hideQueue();
-}
-
-
-Tomahawk::playlistinterface_ptr
-QueueProxyModel::playlistInterface()
-{
-    if ( m_playlistInterface.isNull() )
-    {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::QueueProxyModelPlaylistInterface( this ) );
-    }
-
-    return m_playlistInterface;
 }
