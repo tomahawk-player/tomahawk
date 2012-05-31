@@ -280,6 +280,11 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
     if ( event->type() == QEvent::MouseMove )
     {
+        if ( hoveringArtist )
+            m_view->setCursor( Qt::PointingHandCursor );
+        else
+            m_view->setCursor( Qt::ArrowCursor );
+
         foreach ( const QModelIndex& idx, m_playButton.keys() )
         {
             if ( index != idx )
@@ -352,8 +357,12 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
         return true;
     }
 
+    // reset mouse cursor. we switch to a pointing hand cursor when hovering an artist name
+    m_view->setCursor( Qt::ArrowCursor );
+    
     if ( hoveringArtist )
     {
+
         if ( event->type() == QEvent::MouseButtonRelease )
         {
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
