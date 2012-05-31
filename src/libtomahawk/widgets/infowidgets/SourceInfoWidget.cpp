@@ -63,7 +63,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->setPlaylistModel( m_historyModel );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
-    ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
+    ui->recentAlbumView->setPlayableModel( m_recentAlbumModel );
     ui->recentAlbumView->proxyModel()->sort( -1 );
 
     onCollectionChanged();
