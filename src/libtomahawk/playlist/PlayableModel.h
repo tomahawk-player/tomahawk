@@ -81,6 +81,7 @@ public:
     virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual int itemCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -117,6 +118,7 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
+    void itemCountChanged( unsigned int items );
 
     void loadingStarted();
     void loadingFinished();

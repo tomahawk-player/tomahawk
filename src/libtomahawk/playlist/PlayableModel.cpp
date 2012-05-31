@@ -210,6 +210,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
             break;
 
         case AlbumPos:
+        {
             QString tPos;
             if ( query->albumpos() != 0 )
             {
@@ -220,6 +221,10 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                     return QString( "%1.%2" ).arg( QString::number( query->discnumber() ) )
                                              .arg( tPos );
             }
+        }
+        break;
+        
+        default:
             break;
     }
     if ( query->numResults() )
@@ -250,6 +255,9 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Score:
                 return query->results().first()->score();
+                break;
+                
+            default:
                 break;
         }
     }
