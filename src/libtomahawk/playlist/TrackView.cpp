@@ -52,7 +52,7 @@ TrackView::TrackView( QWidget* parent )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
-    , m_loadingSpinner( new AnimatedSpinner( this ) )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
@@ -147,9 +147,6 @@ TrackView::setPlayableModel( PlayableModel* model )
         m_proxyModel->setSourcePlayableModel( m_model );
     }
 
-    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
-    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
-
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
@@ -168,6 +165,8 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHeaderHidden( false );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
+
+    emit modelChanged();
 }
 
 

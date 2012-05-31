@@ -80,6 +80,7 @@ public slots:
 
 signals:
     void itemActivated( const QModelIndex& index );
+    void modelChanged();
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
