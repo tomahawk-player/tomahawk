@@ -148,7 +148,6 @@ private:
     SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
     QPushButton* m_queueButton;
-    PlaylistModel* m_queueModel;
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusModel* m_jobsModel;
