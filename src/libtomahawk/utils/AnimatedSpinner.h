@@ -26,6 +26,7 @@
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
 #include <QPainter>
+#include <QAbstractItemView>
 
 class QTimeLine;
 class QHideEvent;
@@ -42,9 +43,10 @@ class QTimerEvent;
 class DLLEXPORT AnimatedSpinner : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit AnimatedSpinner( QWidget *parent = 0 ); // widget mode
-    AnimatedSpinner( const QSize size, bool autoStart ); // pixmap mode
+    explicit AnimatedSpinner( QWidget* parent = 0 ); // widget mode
+    AnimatedSpinner( const QSize& size, bool autoStart ); // pixmap mode
 
     QSize sizeHint() const;
 
@@ -85,6 +87,21 @@ private:
     QVector<qreal> m_colors;
     QPixmap m_pixmap;
     bool m_autoCenter;
+};
+
+
+class LoadingSpinner : public AnimatedSpinner
+{
+    Q_OBJECT
+
+public:
+    explicit LoadingSpinner( QAbstractItemView* parent = 0 ); // widget mode
+    
+private slots:
+    void onViewModelChanged();
+
+private:
+    QAbstractItemView* m_parent;
 };
 
 #endif
