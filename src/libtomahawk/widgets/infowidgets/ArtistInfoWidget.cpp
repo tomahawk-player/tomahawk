@@ -23,6 +23,7 @@
 
 #include "audio/AudioEngine.h"
 #include "playlist/TrackHeader.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
@@ -59,13 +60,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
-    m_albumsModel = new AlbumModel( ui->albums );
-    ui->albums->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albums );
+    ui->albums->setPlayableModel( m_albumsModel );
 
-    m_relatedModel = new AlbumModel( ui->relatedArtists );
-//    m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
-    ui->relatedArtists->setAlbumModel( m_relatedModel );
-//    ui->relatedArtists->setSortingEnabled( false );
+    m_relatedModel = new PlayableModel( ui->relatedArtists );
+    ui->relatedArtists->setPlayableModel( m_relatedModel );
     ui->relatedArtists->proxyModel()->sort( -1 );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
@@ -191,7 +190,7 @@ ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Model
 {
     Q_UNUSED( mode );
 
-    m_albumsModel->addAlbums( albums );
+    m_albumsModel->append( albums );
 }
 
 
@@ -207,7 +206,7 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
 void
 ArtistInfoWidget::onSimilarArtistsLoaded()
 {
-    m_relatedModel->addArtists( m_artist->similarArtists() );
+    m_relatedModel->append( m_artist->similarArtists() );
 }
 
 

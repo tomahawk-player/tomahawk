@@ -39,7 +39,7 @@
 
 #include "DllMacro.h"
 
-class AlbumModel;
+class PlayableModel;
 class PlaylistModel;
 class OverlayButton;
 
@@ -106,8 +106,8 @@ private:
 
     Tomahawk::artist_ptr m_artist;
 
-    AlbumModel* m_relatedModel;
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_relatedModel;
+    PlayableModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
 
