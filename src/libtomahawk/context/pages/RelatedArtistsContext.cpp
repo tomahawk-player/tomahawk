@@ -35,7 +35,7 @@ RelatedArtistsContext::RelatedArtistsContext()
     m_relatedView->setGuid( "RelatedArtistsContext" );
     m_relatedView->setUpdatesContextView( false );
     m_relatedModel = new TreeModel( m_relatedView );
-    m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
+    m_relatedModel->setStyle( TreeModel::Large );
     m_relatedView->setTreeModel( m_relatedModel );
     m_relatedView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_relatedView->setSortingEnabled( false );
