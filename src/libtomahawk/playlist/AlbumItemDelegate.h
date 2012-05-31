@@ -25,13 +25,13 @@
 
 #include "DllMacro.h"
 
-class QTimeLine;
 namespace Tomahawk {
     class PixmapDelegateFader;
 }
 
 class QEvent;
-class AlbumProxyModel;
+class QTimeLine;
+class PlayableProxyModel;
 class ImageButton;
 
 class DLLEXPORT AlbumItemDelegate : public QStyledItemDelegate
@@ -39,7 +39,7 @@ class DLLEXPORT AlbumItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    AlbumItemDelegate( QAbstractItemView* parent = 0, AlbumProxyModel* proxy = 0 );
+    AlbumItemDelegate( QAbstractItemView* parent = 0, PlayableProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -68,7 +68,7 @@ private:
     QTimeLine* createTimeline( QTimeLine::Direction direction );
 
     QAbstractItemView* m_view;
-    AlbumProxyModel* m_model;
+    PlayableProxyModel* m_model;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;

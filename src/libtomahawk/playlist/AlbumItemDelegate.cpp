@@ -36,7 +36,7 @@
 #include <utils/Closure.h>
 
 #include "playlist/PlayableItem.h"
-#include "playlist/AlbumProxyModel.h"
+#include "playlist/PlayableProxyModel.h"
 #include "AlbumView.h"
 #include "ViewManager.h"
 #include "utils/AnimatedSpinner.h"
@@ -48,7 +48,7 @@ namespace {
 };
 
 
-AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel* proxy )
+AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
