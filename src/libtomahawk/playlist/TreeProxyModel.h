@@ -20,10 +20,9 @@
 #ifndef TREEPROXYMODEL_H
 #define TREEPROXYMODEL_H
 
-#include <QSortFilterProxyModel>
-
 #include "PlaylistInterface.h"
 #include "TreeModel.h"
+#include "PlayableProxyModel.h"
 
 #include "DllMacro.h"
 
@@ -34,7 +33,7 @@ namespace Tomahawk
     class TreeProxyModelPlaylistInterface;
 }
 
-class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel
+class DLLEXPORT TreeProxyModel : public PlayableProxyModel
 {
 Q_OBJECT
 
@@ -42,28 +41,13 @@ public:
     explicit TreeProxyModel( QObject* parent = 0 );
     virtual ~TreeProxyModel() {}
 
-    virtual TreeModel* sourceModel() const { return m_model; }
-    virtual void setSourceTreeModel( TreeModel* sourceModel );
-    virtual void setSourceModel( QAbstractItemModel* sourceModel );
+    virtual void setSourcePlayableModel( TreeModel* model );
 
-    virtual QPersistentModelIndex currentIndex() const;
-    virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
-
-    virtual void newFilterFromPlaylistInterface( const QString &pattern );
-
-    virtual void removeIndex( const QModelIndex& index );
-    virtual void removeIndexes( const QList<QModelIndex>& indexes );
-
-    virtual int albumCount() const { return rowCount( QModelIndex() ); }
-
-    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual void newFilterFromPlaylistInterface( const QString& pattern );
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
-    void filterChanged( const QString& filter );
-    void filteringStarted();
-    void filteringFinished();
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -87,8 +71,7 @@ private:
     QList<int> m_albumsFilter;
     DatabaseCommand_AllArtists* m_artistsFilterCmd;
 
-     QString m_filter;
-
+    QString m_filter;
     TreeModel* m_model;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
