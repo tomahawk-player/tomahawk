@@ -47,6 +47,12 @@ QueueView::QueueView( AnimatedSplitter* parent )
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     ui->queue->overlay()->setEnabled( false );
 
+    PlaylistModel* queueModel = new PlaylistModel( this );
+    queueModel->setStyle( PlaylistModel::Short );
+    ui->queue->setPlaylistModel( queueModel );
+    queueModel->setReadOnly( false );
+
+    connect( queueModel, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( updateLabel() ) );
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
 
     ui->toggleButton->installEventFilter( this );
@@ -119,9 +125,8 @@ QueueView::hide()
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
     disconnect( ui->toggleButton, SIGNAL( resized( QPoint ) ), this, SIGNAL( resizeBy( QPoint ) ) );
 
-    ui->toggleButton->setText( tr( "Show Queue" ) );
-    
     AnimatedWidget::hide();
+    updateLabel();
 }
 
 
@@ -132,8 +137,8 @@ QueueView::show()
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( hide() ) );
     connect( ui->toggleButton, SIGNAL( resized( QPoint ) ), SIGNAL( resizeBy( QPoint ) ) );
 
-    ui->toggleButton->setText( tr( "Hide Queue" ) );
     AnimatedWidget::show();
+    updateLabel();
 }
 
 
@@ -154,4 +159,23 @@ QueueView::onHidden( QWidget* widget, bool animated )
         return;
 
     AnimatedWidget::onHidden( widget, animated );
+}
+
+
+void
+QueueView::updateLabel()
+{
+    if ( isHidden() )
+    {
+        const unsigned int c = queue()->model()->rowCount( QModelIndex() );
+
+        if ( c )
+            ui->toggleButton->setText( tr( "Open Queue - %n item(s)", "", c ) );
+        else
+            ui->toggleButton->setText( tr( "Open Queue" ) );
+    }
+    else
+    {
+        ui->toggleButton->setText( tr( "Close Queue" ) );
+    }
 }
