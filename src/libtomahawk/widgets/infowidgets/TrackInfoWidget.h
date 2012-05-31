@@ -39,7 +39,7 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-class AlbumModel;
+class PlayableModel;
 
 namespace Ui
 {
@@ -88,7 +88,7 @@ private:
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
 
-    AlbumModel* m_relatedTracksModel;
+    PlayableModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
 };

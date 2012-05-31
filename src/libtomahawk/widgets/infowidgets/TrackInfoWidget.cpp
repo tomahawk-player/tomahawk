@@ -23,7 +23,7 @@
 
 #include "ViewManager.h"
 #include "SourceList.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
 #include "audio/AudioEngine.h"
 
 #include "utils/TomahawkUtilsGui.h"
@@ -83,8 +83,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setPalette( p );
 //    ui->similarTracksLabel->setPalette( p );
 
-    m_relatedTracksModel = new AlbumModel( ui->similarTracksView );
-    ui->similarTracksView->setAlbumModel( m_relatedTracksModel );
+    m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
+    ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
     ui->similarTracksView->proxyModel()->sort( -1 );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
@@ -209,7 +209,7 @@ TrackInfoWidget::onSimilarArtistsLoaded()
 void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
-    m_relatedTracksModel->addQueries( m_query->similarTracks() );
+    m_relatedTracksModel->append( m_query->similarTracks() );
 }
 
 
