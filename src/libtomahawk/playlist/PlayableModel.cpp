@@ -42,9 +42,16 @@ PlayableModel::PlayableModel( QObject* parent )
     , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
     , m_style( Detailed )
+    , m_loading( false )
 {
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
+    
+    m_header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
+             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" ) << tr( "Name" );
+
+    m_headerStyle[ Detailed ]   << Artist << Track << Composer << Album << AlbumPos << Duration << Bitrate << Age << Year << Filesize << Origin << Score;
+    m_headerStyle[ Collection ] << Name << Composer << Duration << Bitrate << Age << Year << Filesize << Origin;
 }
 
 
@@ -95,11 +102,29 @@ PlayableModel::columnCount( const QModelIndex& parent ) const
             return 1;
             break;
 
+        case Collection:
+            return 8;
+            break;
+
         case Detailed:
         default:
             return 12;
             break;
     }
+}
+
+
+bool
+PlayableModel::hasChildren( const QModelIndex& parent ) const
+{
+    PlayableItem* parentItem = itemFromIndex( parent );
+    if ( !parentItem )
+        return false;
+
+    if ( parentItem == m_rootItem )
+        return true;
+
+    return ( !parentItem->artist().isNull() || !parentItem->album().isNull() );
 }
 
 
@@ -124,42 +149,50 @@ PlayableModel::parent( const QModelIndex& child ) const
 
 
 QVariant
-PlayableModel::data( const QModelIndex& index, int role ) const
+PlayableModel::artistData( const artist_ptr& artist, int role ) const
 {
-    PlayableItem* entry = itemFromIndex( index );
-    if ( !entry )
-        return QVariant();
-
-    if ( role == Qt::DecorationRole )
-    {
-        return QVariant();
-    }
-
     if ( role == Qt::SizeHintRole )
-    {
-        return QSize( 0, 18 );
-    }
-
-    if ( role == Qt::TextAlignmentRole )
-    {
-        return QVariant( columnAlignment( index.column() ) );
-    }
-
-    if ( role == StyleRole )
-    {
-        return m_style;
-    }
+        return QSize( 0, 44 );
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    const query_ptr& query = entry->query()->displayQuery();
-    switch( index.column() )
+    return artist->name();
+}
+
+
+QVariant
+PlayableModel::albumData( const album_ptr& album, int role ) const
+{
+    if ( role == Qt::SizeHintRole )
+        return QSize( 0, 32 );
+
+    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
+        return QVariant();
+
+    return album->name();
+}
+
+
+QVariant
+PlayableModel::queryData( const query_ptr& query, int column, int role ) const
+{
+    if ( role == Qt::SizeHintRole )
+        return QSize( 0, 18 );
+
+    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
+        return QVariant();
+
+    if ( !m_headerStyle.contains( m_style ) )
+        return query->track();
+
+    switch( m_headerStyle[ m_style ].at( column ) )
     {
         case Artist:
             return query->artist();
             break;
 
+        case Name:
         case Track:
             return query->track();
             break;
@@ -191,7 +224,7 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     }
     if ( query->numResults() )
     {
-        switch( index.column() )
+        switch( m_headerStyle[ m_style ].at( column ) )
         {
             case Bitrate:
                 if ( query->results().first()->bitrate() > 0 )
@@ -226,15 +259,57 @@ PlayableModel::data( const QModelIndex& index, int role ) const
 
 
 QVariant
+PlayableModel::data( const QModelIndex& index, int role ) const
+{
+    PlayableItem* entry = itemFromIndex( index );
+    if ( !entry )
+        return QVariant();
+
+    if ( role == Qt::DecorationRole )
+    {
+        return QVariant();
+    }
+
+    if ( role == Qt::TextAlignmentRole )
+    {
+        return QVariant( columnAlignment( index.column() ) );
+    }
+
+    if ( role == StyleRole )
+    {
+        return m_style;
+    }
+
+    if ( !entry->query().isNull() )
+    {
+        return queryData( entry->query()->displayQuery(), index.column(), role );
+    }
+    else if ( !entry->artist().isNull() )
+    {
+        return artistData( entry->artist(), role );
+    }
+    else if ( !entry->album().isNull() )
+    {
+        return albumData( entry->album(), role );
+    }
+    
+    return QVariant();
+}
+
+
+QVariant
 PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     Q_UNUSED( orientation );
 
-    QStringList headers;
-    headers << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
     if ( role == Qt::DisplayRole && section >= 0 )
     {
-        return headers.at( section );
+        if ( m_headerStyle.contains( m_style ) )
+        {
+            return m_header.at( m_headerStyle[ m_style ].at( section ) );
+        }
+        else
+            return tr( "Name" );
     }
 
     if ( role == Qt::TextAlignmentRole )
@@ -315,7 +390,7 @@ QStringList
 PlayableModel::mimeTypes() const
 {
     QStringList types;
-    types << "application/tomahawk.query.list";
+    types << "application/tomahawk.mixed";
     return types;
 }
 
@@ -325,26 +400,134 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
 {
     qDebug() << Q_FUNC_INFO;
 
-    QByteArray queryData;
-    QDataStream queryStream( &queryData, QIODevice::WriteOnly );
+    QByteArray resultData;
+    QDataStream resultStream( &resultData, QIODevice::WriteOnly );
 
-    foreach ( const QModelIndex& i, indexes )
+    // lets try with artist only
+    bool fail = false;
+    foreach ( const QModelIndex& i, indexes)
     {
-        if ( i.column() > 0 )
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        QModelIndex idx = index( i.row(), 0, i.parent() );
-        PlayableItem* item = itemFromIndex( idx );
-        if ( item )
+        PlayableItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            resultStream << artist->name();
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.metadata.artist", resultData );
+        return mimeData;
+    }
+
+    // lets try with album only
+    fail = false;
+    resultData.clear();
+    foreach ( const QModelIndex& i, indexes )
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        PlayableItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            resultStream << album->artist()->name();
+            resultStream << album->name();
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.metadata.album", resultData );
+        return mimeData;
+    }
+
+    // lets try with tracks only
+    fail = false;
+    resultData.clear();
+    foreach ( const QModelIndex& i, indexes )
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        PlayableItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->result().isNull() )
+        {
+            const result_ptr& result = item->result();
+            resultStream << qlonglong( &result );
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.result.list", resultData );
+        return mimeData;
+    }
+
+    // Ok... we have to use mixed
+    resultData.clear();
+    foreach ( const QModelIndex& i, indexes )
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        PlayableItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            resultStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
+        }
+        else if ( !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            resultStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
+        }
+        else if ( !item->result().isNull() )
+        {
+            const result_ptr& result = item->result();
+            resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
+        }
+        else if ( !item->result().isNull() )
         {
             const query_ptr& query = item->query();
-            queryStream << qlonglong( &query );
+            resultStream << QString( "application/tomahawk.query.list" ) << qlonglong( &query );
         }
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.query.list", queryData );
-
+    mimeData->setData( "application/tomahawk.mixed", resultData );
     return mimeData;
 }
 
@@ -354,7 +537,7 @@ PlayableModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
-        emit loadingFinished();
+        finishLoading();
 
         emit beginResetModel();
         delete m_rootItem;
@@ -508,20 +691,6 @@ PlayableModel::remove( const QList<QPersistentModelIndex>& indexes )
 }
 
 
-PlayableItem*
-PlayableModel::itemFromIndex( const QModelIndex& index ) const
-{
-    if ( index.isValid() )
-    {
-        return static_cast<PlayableItem*>( index.internalPointer() );
-    }
-    else
-    {
-        return m_rootItem;
-    }
-}
-
-
 void
 PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
@@ -590,4 +759,34 @@ PlayableModel::onDataChanged()
     PlayableItem* p = (PlayableItem*)sender();
     if ( p && p->index.isValid() )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+}
+
+
+void
+PlayableModel::startLoading()
+{
+    m_loading = true;
+    emit loadingStarted();
+}
+
+
+void
+PlayableModel::finishLoading()
+{
+    m_loading = false;
+    emit loadingFinished();
+}
+
+
+PlayableItem*
+PlayableModel::itemFromIndex( const QModelIndex& index ) const
+{
+    if ( index.isValid() )
+    {
+        return static_cast<PlayableItem*>( index.internalPointer() );
+    }
+    else
+    {
+        return m_rootItem;
+    }
 }

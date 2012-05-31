@@ -22,6 +22,7 @@
 #define PLAYABLEMODEL_H
 
 #include <QAbstractItemModel>
+#include <QPixmap>
 
 #include "PlaylistInterface.h"
 #include "Typedefs.h"
@@ -38,7 +39,7 @@ Q_OBJECT
 
 public:
     enum PlayableItemStyle
-    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3 };
+    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
 
     enum PlayableModelRole
     { StyleRole = Qt::UserRole + 1 };
@@ -55,7 +56,8 @@ public:
         Year = 8,
         Filesize = 9,
         Origin = 10,
-        Score = 11
+        Score = 11,
+        Name = 12
     };
 
     explicit PlayableModel( QObject* parent = 0 );
@@ -69,19 +71,27 @@ public:
 
     virtual bool isReadOnly() const { return m_readOnly; }
     virtual void setReadOnly( bool b ) { m_readOnly = b; }
+    virtual bool isLoading() const { return m_loading; }
 
     virtual QString title() const { return m_title; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual QString description() const { return m_description; }
     virtual void setDescription( const QString& description ) { m_description = description; }
+    virtual QPixmap icon() const { return m_icon; }
+    virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual bool hasChildren( const QModelIndex& parent ) const;
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    
+    virtual QVariant artistData( const Tomahawk::artist_ptr& artist, int role = Qt::DisplayRole ) const;
+    virtual QVariant albumData( const Tomahawk::album_ptr& album, int role = Qt::DisplayRole ) const;
+    virtual QVariant queryData( const Tomahawk::query_ptr&, int column, int role = Qt::DisplayRole ) const;
 
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual QStringList mimeTypes() const;
@@ -134,6 +144,8 @@ public slots:
 
 protected:
     PlayableItem* rootItem() const { return m_rootItem; }
+    void startLoading();
+    void finishLoading();
 
 private slots:
     void onDataChanged();
@@ -152,8 +164,13 @@ private:
 
     QString m_title;
     QString m_description;
+    QPixmap m_icon;
+
+    QHash< PlayableItemStyle, QList<Columns> > m_headerStyle;
+    QStringList m_header;
 
     PlayableItemStyle m_style;
+    bool m_loading;
 };
 
 #endif // PLAYABLEMODEL_H
