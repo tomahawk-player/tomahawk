@@ -19,10 +19,12 @@
 
 #include "QueueProxyModel.h"
 
+#include "audio/AudioEngine.h"
 #include "playlist/TrackView.h"
+#include "PlayableItem.h"
 #include "ViewManager.h"
-#include "utils/Logger.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -30,15 +32,27 @@ using namespace Tomahawk;
 QueueProxyModel::QueueProxyModel( TrackView* parent )
     : PlayableProxyModel( parent )
 {
-    qDebug() << Q_FUNC_INFO;
-
-    connect( parent, SIGNAL( itemActivated( QModelIndex ) ), this, SLOT( onIndexActivated( QModelIndex ) ) );
-    connect( playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( parent, SIGNAL( itemActivated( QModelIndex ) ), SLOT( onIndexActivated( QModelIndex ) ) );
+    connect( playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
 }
 
 
 QueueProxyModel::~QueueProxyModel()
 {
+}
+
+
+void
+QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
+{
+    for ( int i = 0; i < rowCount(); i++ )
+    {
+        QModelIndex idx = index( i, 0 );
+        PlayableItem* item = itemFromIndex( mapToSource( idx ) );
+        if ( item && item->query() && item->query()->equals( result->toQuery() ) )
+            remove( idx );
+    }
 }
 
 

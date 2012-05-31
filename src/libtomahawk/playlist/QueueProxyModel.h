@@ -38,6 +38,7 @@ public:
 private slots:
     void onIndexActivated( const QModelIndex& index );
     void onTrackCountChanged( unsigned int count );
+    void onPlaybackStarted( const Tomahawk::result_ptr& result );
 };
 
 #endif // QUEUEPROXYMODEL_H
