@@ -103,7 +103,7 @@ ViewManager::ViewManager( QObject* parent )
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
-    m_superAlbumView->setAlbumModel( m_superAlbumModel );
+    m_superAlbumView->setPlayableModel( m_superAlbumModel );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -328,7 +328,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         {
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
-            aview->setAlbumModel( amodel );
+            aview->setPlayableModel( amodel );
             amodel->addCollection( collection );
 
             m_collectionAlbumViews.insert( collection, aview );
