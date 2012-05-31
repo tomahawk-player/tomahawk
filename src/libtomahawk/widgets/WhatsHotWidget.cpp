@@ -263,7 +263,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setMode( InfoSystemMode );
-                artistsModel->setColumnStyle( TreeModel::AllColumns );
+                artistsModel->setStyle( PlayableModel::Collection );
 
                 m_artistModels[ chartId ] = artistsModel;
 
