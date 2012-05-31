@@ -44,7 +44,9 @@ FuzzyIndex::FuzzyIndex( bool wipeIndex )
     , m_luceneSearcher( 0 )
 {
     QString m_lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
-    m_luceneDir = FSDirectory::getDirectory( m_lucenePath.toLocal8Bit().data() );
+    QByteArray path = m_lucenePath.toLocal8Bit();
+
+    m_luceneDir = FSDirectory::getDirectory( path.data() );
     m_analyzer = _CLNEW SimpleAnalyzer();
 
     if ( wipeIndex )
