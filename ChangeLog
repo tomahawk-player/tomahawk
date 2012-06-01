@@ -1,4 +1,5 @@
 Version 0.5.0:
+    * Support .aiff (AIFF mimetype) files.
     * Added "Stop playback after this track" context menu items.
     * You can now import your entire Last.fm playback history into Tomahawk.
     * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux.
