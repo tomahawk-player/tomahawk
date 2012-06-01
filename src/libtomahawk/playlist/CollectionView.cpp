@@ -22,7 +22,6 @@
 #include <QDragEnterEvent>
 #include <QPainter>
 
-#include "CollectionProxyModel.h"
 #include "PlayableModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"
@@ -34,7 +33,7 @@ using namespace Tomahawk;
 CollectionView::CollectionView( QWidget* parent )
     : TrackView( parent )
 {
-    setProxyModel( new CollectionProxyModel( this ) );
+    setProxyModel( new PlayableProxyModel( this ) );
 
     setDragDropMode( QAbstractItemView::DragOnly );
 }
