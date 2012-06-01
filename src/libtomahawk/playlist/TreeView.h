@@ -97,7 +97,6 @@ protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 private slots:
-    void onItemCountChanged( unsigned int items );
     void onFilterChangeFinished();
     void onFilteringStarted();
     void onViewChanged();
