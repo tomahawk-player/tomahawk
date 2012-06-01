@@ -303,12 +303,14 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
         s_ext2mime.insert( "oga",  "application/ogg" );
-        s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
         s_ext2mime.insert( "aac",  "audio/mp4" );
         s_ext2mime.insert( "m4a",  "audio/mp4" );
         s_ext2mime.insert( "mp4",  "audio/mp4" );
+        s_ext2mime.insert( "flac", "audio/flac" );
+        s_ext2mime.insert( "aiff", "audio/aiff" );
+        s_ext2mime.insert( "aif",  "audio/aiff" );
     }
 
     return s_ext2mime.value( extension, "unknown" );
