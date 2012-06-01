@@ -29,7 +29,6 @@
 #include "utils/TomahawkUtils.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "TomahawkWindow.h"
-#include "widgets/PlaylistTypeSelectorDialog.h"
 #include <playlist/dynamic/GeneratorInterface.h>
 #include "utils/Logger.h"
 #include "DropJob.h"
@@ -57,11 +56,13 @@ CategoryAddItem::~CategoryAddItem()
 QString
 CategoryAddItem::text() const
 {
-    switch( m_categoryType ) {
+    switch( m_categoryType )
+    {
         case SourcesModel::PlaylistsCategory:
-            return tr( "New Playlist" );
+            return tr( "Create new Playlist" );
+
         case SourcesModel::StationsCategory:
-            return tr( "New Station" );
+            return tr( "Create new Station" );
     }
 
     return QString();
@@ -73,46 +74,16 @@ CategoryAddItem::activate()
 {
     switch( m_categoryType )
     {
-        case SourcesModel::PlaylistsCategory: {
-
-            PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
-#ifndef Q_WS_MAC
-            playlistSelectorDlg->setModal( true );
-#endif
-            connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( dialogClosed( int ) ) );
-
-            playlistSelectorDlg->show();
+        case SourcesModel::PlaylistsCategory:
+            APP->mainWindow()->createPlaylist();
             break;
-        }
+
         case SourcesModel::StationsCategory:
             APP->mainWindow()->createStation();
             break;
     }
 }
 
-void
-CategoryAddItem::dialogClosed( int ret )
-{
-    PlaylistTypeSelectorDlg* playlistSelectorDlg = qobject_cast< PlaylistTypeSelectorDlg* >( sender() );
-    Q_ASSERT( playlistSelectorDlg );
-
-    QString playlistName = playlistSelectorDlg->playlistName();
-    if ( playlistName.isEmpty() )
-        playlistName = tr( "New Playlist" );
-
-    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
-
-        playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
-        ViewManager::instance()->show( playlist );
-
-    } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
-       // create Auto Playlist
-       APP->mainWindow()->createAutomaticPlaylist( playlistName );
-    } else if ( !ret ) {
-        model()->viewPageActivated( ViewManager::instance()->currentPage() );
-    }
-    playlistSelectorDlg->deleteLater();
-}
 
 Qt::ItemFlags
 CategoryAddItem::flags() const
@@ -121,8 +92,10 @@ CategoryAddItem::flags() const
     {
         case SourcesModel::PlaylistsCategory:
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
+
         case SourcesModel::StationsCategory:
             return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+
         default:
             return Qt::ItemIsEnabled;
             break;
@@ -144,8 +117,10 @@ CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
     {
         return true;
     }
+
     return false;
 }
+
 
 SourceTreeItem::DropTypes
 CategoryAddItem::supportedDropTypes( const QMimeData* data ) const
@@ -283,6 +258,7 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 
     return true;
 }
+
 
 void
 CategoryAddItem::playlistToRenameLoaded()
