@@ -89,7 +89,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
 void
 PlaylistView::keyPressEvent( QKeyEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     TrackView::keyPressEvent( event );
 
     if ( !model() )
