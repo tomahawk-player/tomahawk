@@ -73,6 +73,8 @@ CustomPlaylistView::jumpToCurrentTrack()
 void
 CustomPlaylistView::generateTracks()
 {
+    m_model->startLoading();
+
     QString sql;
     switch ( m_type )
     {
@@ -105,6 +107,7 @@ CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
     bool changed = false;
     QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks, changed );
 
+    m_model->finishLoading();
     if ( !changed )
         return;
 
