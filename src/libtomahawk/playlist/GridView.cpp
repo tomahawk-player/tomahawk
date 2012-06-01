@@ -78,7 +78,6 @@ GridView::GridView( QWidget* parent )
 
 /*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
     m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );*/
-    m_overlay->setText( tr( "Nothing found." ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
@@ -130,6 +129,14 @@ GridView::setPlayableModel( PlayableModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     emit modelChanged();
+}
+
+
+void
+GridView::setEmptyTip( const QString& tip )
+{
+    m_emptyTip = tip;
+    m_overlay->setText( tip );
 }
 
 

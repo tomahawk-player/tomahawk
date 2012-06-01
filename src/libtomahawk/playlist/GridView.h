@@ -57,6 +57,8 @@ public:
     void setPlayableModel( PlayableModel* model );
     void setModel( QAbstractItemModel* model );
 
+    void setEmptyTip( const QString& tip );
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
 
@@ -100,6 +102,7 @@ private:
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
 
+    QString m_emptyTip;
     bool m_inited;
     bool m_autoFitItems;
     
