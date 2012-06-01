@@ -60,6 +60,8 @@ public:
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
     AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
 
+    void setEmptyTip( const QString& tip );
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 

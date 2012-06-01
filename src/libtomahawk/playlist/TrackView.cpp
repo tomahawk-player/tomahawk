@@ -174,6 +174,13 @@ TrackView::setPlayableModel( PlayableModel* model )
 
 
 void
+TrackView::setEmptyTip( const QString& tip )
+{
+    m_overlay->setText( tip );
+}
+
+
+void
 TrackView::onViewChanged()
 {
     if ( m_model->style() != PlayableModel::Short && m_model->style() != PlayableModel::Large ) // eventual FIXME?
