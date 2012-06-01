@@ -58,15 +58,18 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
 
     m_relatedModel = new PlayableModel( ui->relatedArtists );
     ui->relatedArtists->setPlayableModel( m_relatedModel );
     ui->relatedArtists->proxyModel()->sort( -1 );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     m_topHitsModel->setStyle( PlayableModel::Short );
     ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
@@ -161,9 +164,15 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
-    onAlbumsFound( artist->albums( Mixed ), Mixed );
-    onTracksFound( m_artist->tracks(), Mixed );
-    onSimilarArtistsLoaded();
+    if ( !m_artist->albums( Mixed ).isEmpty() )
+        onAlbumsFound( m_artist->albums( Mixed ), Mixed );
+    
+    if ( !m_artist->tracks().isEmpty() )
+        onTracksFound( m_artist->tracks(), Mixed );
+    
+    if ( !m_artist->similarArtists().isEmpty() )
+        onSimilarArtistsLoaded();
+
     onArtistImageUpdated();
 
     Tomahawk::InfoSystem::InfoStringHash artistInfo;

@@ -49,11 +49,13 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_albumsModel = new PlayableModel( ui->albumsView );
     ui->albumsView->setPlayableModel( m_albumsModel );
+    ui->albumsView->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
 
     m_tracksModel = new TreeModel( ui->tracksView );
     m_tracksModel->setMode( Mixed );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
+    ui->tracksView->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
@@ -154,7 +156,8 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
     connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                                          SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-    gotAlbums( m_album->artist()->albums( Mixed ) );
+    if ( !m_album->artist()->albums( Mixed ).isEmpty() )
+        gotAlbums( m_album->artist()->albums( Mixed ) );
 
 /*                tDebug() << "Auto refetching";
                 m_buttonAlbums->setChecked( false );

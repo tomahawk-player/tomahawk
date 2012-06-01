@@ -237,7 +237,8 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool au
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                              SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
 
-    onTracksAdded( album->tracks( m_mode, m_collection ), parent );
+    if ( !album->tracks( m_mode, m_collection ).isEmpty() )
+        onTracksAdded( album->tracks( m_mode, m_collection ), parent );
 }
 
 
