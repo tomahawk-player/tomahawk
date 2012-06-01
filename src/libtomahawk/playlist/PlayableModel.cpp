@@ -37,12 +37,12 @@
 using namespace Tomahawk;
 
 
-PlayableModel::PlayableModel( QObject* parent )
+PlayableModel::PlayableModel( QObject* parent, bool loading )
     : QAbstractItemModel( parent )
     , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
     , m_style( Detailed )
-    , m_loading( true )
+    , m_loading( loading )
 {
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );

@@ -60,7 +60,7 @@ public:
         Name = 12
     };
 
-    explicit PlayableModel( QObject* parent = 0 );
+    explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
 
     PlayableModel::PlayableItemStyle style() const { return m_style; }
@@ -117,6 +117,9 @@ public:
     
     void setItemSize( const QSize& size ) { m_itemSize = size; }
 
+    void startLoading();
+    void finishLoading();
+
 signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -156,8 +159,6 @@ public slots:
 
 protected:
     PlayableItem* rootItem() const { return m_rootItem; }
-    void startLoading();
-    void finishLoading();
 
 private slots:
     void onDataChanged();
