@@ -157,6 +157,13 @@ ArtistView::setTreeModel( TreeModel* model )
     }
 
     emit modelChanged();
+    
+/*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
+    setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
+    setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
+
+    setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
+    sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
 }
 
 
