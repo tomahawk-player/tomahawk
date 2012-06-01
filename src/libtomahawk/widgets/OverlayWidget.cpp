@@ -36,7 +36,6 @@ OverlayWidget::OverlayWidget( QAbstractItemView* parent )
     , m_opacity( 0.00 )
     , m_parent( parent )
 {
-    resize( 380, 128 );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
@@ -86,6 +85,7 @@ void
 OverlayWidget::setText( const QString& text )
 {
     m_text = text;
+    onViewChanged();
 }
 
 
@@ -150,6 +150,7 @@ OverlayWidget::onViewModelChanged()
     if ( m_parent->model() )
     {
         connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
         onViewChanged();
     }
 }
@@ -159,6 +160,17 @@ void
 OverlayWidget::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
+
+    {
+        QSize maxiSize = QSize( (double)m_parent->viewport()->width() * 0.70, (double)m_parent->viewport()->height() * 0.70 );
+        QSize prefSize = QSize( 380, 128 );
+        int width = qMin( maxiSize.width(), prefSize.width() );
+        int height = qMin( maxiSize.height(), prefSize.height() );
+        QSize newSize = QSize( width, height );
+        
+        if ( newSize != size() )
+            resize( newSize );
+    }
 
     QPoint center( ( m_parent->width() - width() ) / 2, ( m_parent->height() - height() ) / 2 );
     if ( center != pos() )
