@@ -586,7 +586,7 @@ PlayableModel::insertInternal( const T& item, int row )
     QList< T > list;
     list << item;
 
-    insertInternal( list, row );
+    insert( list, row );
 }
 
 
