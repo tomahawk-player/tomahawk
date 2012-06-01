@@ -358,7 +358,8 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     }
 
     QMessageBox askDelete( QMessageBox::Question, tr( "Delete %1?", "playlist/station/..." ).arg( typeDesc ),
-                           tr( "Would you like to delete the %1 <b>\"%2\"</b>?" ).arg( typeDesc ).arg( idx.data().toString() ),
+                           tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
+                             .arg( typeDesc ).arg( idx.data().toString() ),
                            QMessageBox::Yes | QMessageBox::No, this );
 
     int r = askDelete.exec();
