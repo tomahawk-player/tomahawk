@@ -99,6 +99,8 @@ TrackView::TrackView( QWidget* parent )
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
     connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
+    
+    setProxyModel( new PlayableProxyModel( this ) );
 }
 
 
@@ -700,4 +702,40 @@ TrackView::mousePressEvent( QMouseEvent* event )
                 break;
         }
     }
+}
+
+
+Tomahawk::playlistinterface_ptr
+TrackView::playlistInterface() const
+{
+    return proxyModel()->playlistInterface();
+}
+
+
+QString
+TrackView::title() const
+{
+    return model()->title();
+}
+
+
+QString
+TrackView::description() const
+{
+    return model()->description();
+}
+
+
+QPixmap
+TrackView::pixmap() const
+{
+    return QPixmap( RESPATH "images/music-icon.png" );
+}
+
+
+bool
+TrackView::jumpToCurrentTrack()
+{
+    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
+    return true;
 }

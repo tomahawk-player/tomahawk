@@ -26,6 +26,7 @@
 
 #include "ContextMenu.h"
 #include "PlaylistItemDelegate.h"
+#include "ViewPage.h"
 
 #include "DllMacro.h"
 
@@ -36,7 +37,7 @@ class PlayableModel;
 class PlayableProxyModel;
 class OverlayWidget;
 
-class DLLEXPORT TrackView : public QTreeView
+class DLLEXPORT TrackView : public QTreeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -58,6 +59,18 @@ public:
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
     AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
+
+    virtual QWidget* widget() { return this; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+
+    virtual QString title() const;
+    virtual QString description() const;
+    virtual QPixmap pixmap() const;
+
+    virtual bool showModes() const { return true; }
+    virtual bool showFilter() const { return true; }
+
+    virtual bool jumpToCurrentTrack();
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
