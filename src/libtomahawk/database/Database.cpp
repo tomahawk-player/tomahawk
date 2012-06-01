@@ -26,7 +26,12 @@
 #include "Source.h"
 
 #define DEFAULT_WORKER_THREADS 4
-#define MAX_WORKER_THREADS 16
+
+#if ( QT_VERSION >= QT_VERSION_CHECK(4, 8, 2) )
+    #define MAX_WORKER_THREADS 1
+#else
+    #define MAX_WORKER_THREADS 16
+#endif
 
 Database* Database::s_instance = 0;
 
@@ -46,8 +51,12 @@ Database::Database( const QString& dbname, QObject* parent )
 {
     s_instance = this;
 
-    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
-    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "threads";
+    if ( MAX_WORKER_THREADS < DEFAULT_WORKER_THREADS )
+        m_maxConcurrentThreads = MAX_WORKER_THREADS;
+    else
+        m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
+
+    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
