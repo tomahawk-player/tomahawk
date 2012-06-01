@@ -36,7 +36,7 @@ namespace Tomahawk
     class ContextMenu;
 };
 
-class TreeHeader;
+class ViewHeader;
 class AnimatedSpinner;
 class OverlayWidget;
 class TreeModel;
@@ -106,7 +106,7 @@ private slots:
     void onMenuTriggered( int action );
 
 private:
-    TreeHeader* m_header;
+    ViewHeader* m_header;
     OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;

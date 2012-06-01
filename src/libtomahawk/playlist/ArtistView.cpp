@@ -31,7 +31,7 @@
 
 #include "ContextMenu.h"
 #include "TomahawkSettings.h"
-#include "TreeHeader.h"
+#include "ViewHeader.h"
 #include "TreeItemDelegate.h"
 #include "TreeModel.h"
 #include "PlayableItem.h"
@@ -47,7 +47,7 @@ using namespace Tomahawk;
 
 ArtistView::ArtistView( QWidget* parent )
     : QTreeView( parent )
-    , m_header( new TreeHeader( this ) )
+    , m_header( new ViewHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
@@ -145,6 +145,7 @@ ArtistView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
+    m_header->setDefaultColumnWeights( model->columnWeights() );
     if ( model->style() == PlayableModel::Large )
     {
         setHeaderHidden( true );
