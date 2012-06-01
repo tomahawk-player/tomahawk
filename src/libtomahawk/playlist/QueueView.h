@@ -59,6 +59,7 @@ protected:
 
 private slots:
     void updateLabel();
+    void onAnimationFinished();
 
 private:
     Ui::QueueView* ui;

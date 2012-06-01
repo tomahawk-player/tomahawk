@@ -27,6 +27,7 @@
 #include "PlaylistView.h"
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "widgets/OverlayWidget.h"
 
 using namespace Tomahawk;
 
@@ -42,18 +43,20 @@ QueueView::QueueView( AnimatedSplitter* parent )
 
     setHiddenSize( QSize( 0, 22 ) );
 
-    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
     ui->queue->setProxyModel( new QueueProxyModel( ui->queue ) );
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 
     PlaylistModel* queueModel = new PlaylistModel( this );
     queueModel->setStyle( PlaylistModel::Short );
+    queueModel->finishLoading();
     ui->queue->setPlaylistModel( queueModel );
     queueModel->setReadOnly( false );
-    queueModel->finishLoading();
+
+    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
 
     connect( queueModel, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( updateLabel() ) );
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
+    connect( this, SIGNAL( animationFinished() ), SLOT( onAnimationFinished() ) );
 
     ui->toggleButton->installEventFilter( this );
     ui->toggleButton->setCursor( Qt::PointingHandCursor );
@@ -125,6 +128,7 @@ QueueView::hide()
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
     disconnect( ui->toggleButton, SIGNAL( resized( QPoint ) ), this, SIGNAL( resizeBy( QPoint ) ) );
 
+    ui->queue->overlay()->setVisible( false );
     AnimatedWidget::hide();
     updateLabel();
 }
@@ -137,6 +141,7 @@ QueueView::show()
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( hide() ) );
     connect( ui->toggleButton, SIGNAL( resized( QPoint ) ), SIGNAL( resizeBy( QPoint ) ) );
 
+    ui->queue->overlay()->setVisible( false );
     AnimatedWidget::show();
     updateLabel();
 }
@@ -159,6 +164,13 @@ QueueView::onHidden( QWidget* widget, bool animated )
         return;
 
     AnimatedWidget::onHidden( widget, animated );
+}
+
+
+void
+QueueView::onAnimationFinished()
+{
+    ui->queue->overlay()->setVisible( true );
 }
 
 
