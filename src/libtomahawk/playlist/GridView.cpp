@@ -31,7 +31,7 @@
 #include "Artist.h"
 #include "Source.h"
 #include "PlayableItem.h"
-#include "AlbumItemDelegate.h"
+#include "GridItemDelegate.h"
 #include "AlbumModel.h"
 #include "PlayableModel.h"
 #include "ContextMenu.h"
@@ -98,7 +98,7 @@ void
 GridView::setProxyModel( PlayableProxyModel* model )
 {
     m_proxyModel = model;
-    m_delegate = new AlbumItemDelegate( this, m_proxyModel );
+    m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
     setItemDelegate( m_delegate );
 

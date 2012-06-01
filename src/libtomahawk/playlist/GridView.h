@@ -35,7 +35,7 @@ namespace Tomahawk
 };
 
 class AnimatedSpinner;
-class AlbumItemDelegate;
+class GridItemDelegate;
 class PlayableModel;
 
 class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
@@ -93,7 +93,7 @@ private slots:
 private:
     PlayableModel* m_model;
     PlayableProxyModel* m_proxyModel;
-    AlbumItemDelegate* m_delegate;
+    GridItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
 

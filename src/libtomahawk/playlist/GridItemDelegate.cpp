@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AlbumItemDelegate.h"
+#include "GridItemDelegate.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -48,7 +48,7 @@ namespace {
 };
 
 
-AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy )
+GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
@@ -61,7 +61,7 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, PlayableProxyMo
 
 
 QSize
-AlbumItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
     return size;
@@ -69,7 +69,7 @@ AlbumItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 
 
 void
-AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item )
@@ -116,7 +116,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
             m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), r.size(), TomahawkUtils::Grid ) ) );
         }
 
-        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<AlbumItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<GridItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
         closure->setAutoDelete( false );
     }
 
@@ -218,7 +218,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
 
 void
-AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
+GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 {
     QPoint pos = m_playButton[ index ]->pos();
     foreach ( ImageButton* button, m_playButton )
@@ -240,10 +240,10 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
         _detail::Closure* closure;
 
         closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
-                              const_cast<AlbumItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+                              const_cast<GridItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
         closure = NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
-                              const_cast<AlbumItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+                              const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
         closure->setAutoDelete( false );
 
         connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackFinished() ) );
@@ -259,7 +259,7 @@ AlbumItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 
 
 bool
-AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( model );
     Q_UNUSED( option );
@@ -308,7 +308,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
             button->show();
 
             NewClosure( button, SIGNAL( clicked( bool ) ),
-                        const_cast<AlbumItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+                        const_cast<GridItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
             m_playButton[ index ] = button;
         }
@@ -390,7 +390,7 @@ AlbumItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const 
 
 
 void
-AlbumItemDelegate::modelChanged()
+GridItemDelegate::modelChanged()
 {
     m_artistNameRects.clear();
     m_hoveringOver = QPersistentModelIndex();
@@ -412,7 +412,7 @@ AlbumItemDelegate::modelChanged()
 
 
 void
-AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
+GridItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
     if ( !idx.isValid() )
         return;
@@ -421,7 +421,7 @@ AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 
 
 void
-AlbumItemDelegate::onScrolled( int dx, int dy )
+GridItemDelegate::onScrolled( int dx, int dy )
 {
     foreach ( QWidget* widget, m_spinner.values() )
     {
@@ -439,7 +439,7 @@ AlbumItemDelegate::onScrolled( int dx, int dy )
 
 
 void
-AlbumItemDelegate::onPlaybackFinished()
+GridItemDelegate::onPlaybackFinished()
 {
     foreach ( ImageButton* button, m_pauseButton )
         button->deleteLater();
@@ -448,7 +448,7 @@ AlbumItemDelegate::onPlaybackFinished()
 
 
 void
-AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
+GridItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( item )
@@ -484,7 +484,7 @@ AlbumItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
 
 
 void
-AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
+GridItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
 {
     if ( !m_spinner.contains( index ) )
         return;
@@ -513,14 +513,14 @@ AlbumItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
 
 
 void
-AlbumItemDelegate::fadingFrameChanged( const QPersistentModelIndex& idx )
+GridItemDelegate::fadingFrameChanged( const QPersistentModelIndex& idx )
 {
     emit updateIndex( idx );
 }
 
 
 void
-AlbumItemDelegate::fadingFrameFinished( const QPersistentModelIndex& idx )
+GridItemDelegate::fadingFrameFinished( const QPersistentModelIndex& idx )
 {
     if ( m_hoverFaders.contains( idx ) )
     {
@@ -531,7 +531,7 @@ AlbumItemDelegate::fadingFrameFinished( const QPersistentModelIndex& idx )
 
 
 QTimeLine*
-AlbumItemDelegate::createTimeline( QTimeLine::Direction direction )
+GridItemDelegate::createTimeline( QTimeLine::Direction direction )
 {
     QTimeLine* timeline = new QTimeLine( FADE_DURATION, this );
     timeline->setDirection( direction );
@@ -545,7 +545,7 @@ AlbumItemDelegate::createTimeline( QTimeLine::Direction direction )
 
 
 bool
-AlbumItemDelegate::eventFilter( QObject* obj, QEvent* event )
+GridItemDelegate::eventFilter( QObject* obj, QEvent* event )
 {
     if ( event->type() == QEvent::Wheel )
     {

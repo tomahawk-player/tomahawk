@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ALBUMITEMDELEGATE_H
-#define ALBUMITEMDELEGATE_H
+#ifndef GRIDITEMDELEGATE_H
+#define GRIDITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
 #include <QTimeLine>
@@ -34,12 +34,12 @@ class QTimeLine;
 class PlayableProxyModel;
 class ImageButton;
 
-class DLLEXPORT AlbumItemDelegate : public QStyledItemDelegate
+class DLLEXPORT GridItemDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
 
 public:
-    AlbumItemDelegate( QAbstractItemView* parent = 0, PlayableProxyModel* proxy = 0 );
+    GridItemDelegate( QAbstractItemView* parent = 0, PlayableProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -85,4 +85,4 @@ private:
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
 };
 
-#endif // ALBUMITEMDELEGATE_H
+#endif // GRIDITEMDELEGATE_H
