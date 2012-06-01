@@ -35,8 +35,6 @@ PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
     , m_model( 0 )
 {
-    setProxyModel( new PlayableProxyModel( this ) );
-
     connect( contextMenu(), SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
@@ -132,14 +130,6 @@ PlaylistView::onTrackCountChanged( unsigned int tracks )
 }
 
 
-bool
-PlaylistView::jumpToCurrentTrack()
-{
-    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
-    return true;
-}
-
-
 void
 PlaylistView::onDeleted()
 {
@@ -174,7 +164,6 @@ PlaylistView::onMenuTriggered( int action )
             break;
 
         default:
-            TrackView::onMenuTriggered( action );
             break;
     }
 }

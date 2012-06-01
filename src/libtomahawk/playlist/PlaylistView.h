@@ -26,7 +26,7 @@
 #include "ViewPage.h"
 #include "DllMacro.h"
 
-class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
+class DLLEXPORT PlaylistView : public TrackView
 {
 Q_OBJECT
 
@@ -38,17 +38,9 @@ public:
     virtual void setPlaylistModel( PlaylistModel* model );
     virtual void setModel( QAbstractItemModel* model );
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
-
-    virtual bool showFilter() const { return true; }
-
     virtual QList<Tomahawk::PlaylistUpdaterInterface*> updaters() const;
 
-    virtual QString title() const { return playlistModel()->title(); }
-    virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
-    virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
 
 signals:
