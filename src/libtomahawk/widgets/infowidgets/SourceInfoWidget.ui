@@ -76,7 +76,7 @@
           </widget>
          </item>
          <item>
-          <widget class="CollectionView" name="recentCollectionView"/>
+          <widget class="TrackView" name="recentCollectionView"/>
          </item>
         </layout>
        </item>
@@ -117,9 +117,9 @@
    <header>playlist/PlaylistView.h</header>
   </customwidget>
   <customwidget>
-   <class>CollectionView</class>
+   <class>TrackView</class>
    <extends>QTreeView</extends>
-   <header>playlist/CollectionView.h</header>
+   <header>playlist/TrackView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
