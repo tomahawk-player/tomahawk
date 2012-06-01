@@ -47,13 +47,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="updateButton">
-       <property name="text">
-        <string>Update</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="clipboardButton">
        <property name="text">
         <string>Copy to Clipboard</string>
