@@ -735,6 +735,33 @@ PlayableModel::setStyle( PlayableModel::PlayableItemStyle style )
 }
 
 
+QList< double >
+PlayableModel::columnWeights() const
+{
+    QList< double > w;
+
+    switch ( m_style )
+    {
+        case Short:
+        case ShortWithAvatars:
+        case Large:
+            w << 1.0;
+            break;
+
+        case Collection:
+            w << 0.42 << 0.12 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.11;
+            break;
+
+        case Detailed:
+        default:
+            w << 0.16 << 0.16 << 0.14 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
+            break;
+    }
+
+    return w;
+}
+
+
 Qt::Alignment
 PlayableModel::columnAlignment( int column ) const
 {

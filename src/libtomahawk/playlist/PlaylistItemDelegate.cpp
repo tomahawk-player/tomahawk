@@ -32,7 +32,7 @@
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"
 #include "TrackView.h"
-#include "TrackHeader.h"
+#include "ViewHeader.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"

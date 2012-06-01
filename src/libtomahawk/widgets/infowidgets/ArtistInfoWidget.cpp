@@ -22,7 +22,6 @@
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/AudioEngine.h"
-#include "playlist/TrackHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"

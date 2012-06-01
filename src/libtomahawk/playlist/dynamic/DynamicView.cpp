@@ -27,7 +27,6 @@
 
 #include "PlaylistModel.h"
 #include "PlayableProxyModel.h"
-#include "TrackHeader.h"
 #include "DynamicModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"

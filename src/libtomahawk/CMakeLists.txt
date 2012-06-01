@@ -59,7 +59,6 @@ set( libGuiSources
     playlist/PlayableProxyModel.cpp
     playlist/PlayableProxyModelPlaylistInterface.cpp
     playlist/TrackView.cpp
-    playlist/TrackHeader.cpp
     playlist/AlbumModel.cpp
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp

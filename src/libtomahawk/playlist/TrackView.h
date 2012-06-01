@@ -32,7 +32,7 @@
 
 class QAction;
 class AnimatedSpinner;
-class TrackHeader;
+class ViewHeader;
 class PlayableModel;
 class PlayableProxyModel;
 class OverlayWidget;
@@ -55,7 +55,7 @@ public:
     virtual PlayableModel* model() const { return m_model; }
     PlayableProxyModel* proxyModel() const { return m_proxyModel; }
     PlaylistItemDelegate* delegate() const { return m_delegate; }
-    TrackHeader* header() const { return m_header; }
+    ViewHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
     AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
@@ -131,7 +131,7 @@ private:
     PlayableModel* m_model;
     PlayableProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
-    TrackHeader* m_header;
+    ViewHeader* m_header;
     OverlayWidget* m_overlay;
     AnimatedSpinner* m_loadingSpinner;
 

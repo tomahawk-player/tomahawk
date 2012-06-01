@@ -87,6 +87,8 @@ public:
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual bool hasChildren( const QModelIndex& parent ) const;
 
+    QList< double > columnWeights() const;
+
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
     

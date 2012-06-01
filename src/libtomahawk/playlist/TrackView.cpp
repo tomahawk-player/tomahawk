@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include "TrackHeader.h"
+#include "ViewHeader.h"
 #include "ViewManager.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
@@ -50,7 +50,7 @@ TrackView::TrackView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
-    , m_header( new TrackHeader( this ) )
+    , m_header( new ViewHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
@@ -153,6 +153,7 @@ TrackView::setPlayableModel( PlayableModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( true );
+    m_header->setDefaultColumnWeights( model->columnWeights() );
 
     switch( model->style() )
     {
