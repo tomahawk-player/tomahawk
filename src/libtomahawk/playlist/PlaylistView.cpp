@@ -62,8 +62,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
-    onChanged();
-
     if ( guid().isEmpty() )
     {
         if ( !m_model->playlist().isNull() )
