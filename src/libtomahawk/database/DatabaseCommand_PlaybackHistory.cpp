@@ -80,6 +80,5 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
         }
     }
 
-    if ( ql.count() )
-        emit tracks( ql );
+    emit tracks( ql );
 }
