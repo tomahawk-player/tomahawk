@@ -47,6 +47,8 @@ OverlayWidget::OverlayWidget( QAbstractItemView* parent )
     {
         connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
         connect( m_parent->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
     }
     connect( m_parent, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
 
@@ -151,6 +153,9 @@ OverlayWidget::onViewModelChanged()
     {
         connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
         connect( m_parent->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+
         onViewChanged();
     }
 }
