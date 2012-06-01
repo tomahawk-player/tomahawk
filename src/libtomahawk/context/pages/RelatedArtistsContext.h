@@ -30,7 +30,7 @@
 #include "context/ContextPage.h"
 
 class TreeModel;
-class ArtistView;
+class TreeView;
 
 class DLLEXPORT RelatedArtistsContext : public Tomahawk::ContextPage
 {
@@ -58,7 +58,7 @@ private slots:
     void onSimilarArtistsLoaded();
 
 private:
-    ArtistView* m_relatedView;
+    TreeView* m_relatedView;
     TreeModel* m_relatedModel;
 
     QGraphicsProxyWidget* m_proxy;

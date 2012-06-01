@@ -22,7 +22,7 @@
      <property name="handleWidth">
       <number>1</number>
      </property>
-     <widget class="ArtistView" name="tracksView"/>
+     <widget class="TreeView" name="tracksView"/>
      <widget class="QWidget" name="">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -48,9 +48,9 @@
    <header location="global">widgets/HeaderLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>ArtistView</class>
+   <class>TreeView</class>
    <extends>QTreeView</extends>
-   <header location="global">ArtistView.h</header>
+   <header location="global">TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>GridView</class>

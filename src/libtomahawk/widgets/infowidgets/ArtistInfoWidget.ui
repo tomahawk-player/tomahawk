@@ -109,11 +109,6 @@
    <header location="global">widgets/ToggleButton.h</header>
   </customwidget>
   <customwidget>
-   <class>ArtistView</class>
-   <extends>QTreeView</extends>
-   <header location="global">ArtistView.h</header>
-  </customwidget>
-  <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
    <header location="global">GridView.h</header>

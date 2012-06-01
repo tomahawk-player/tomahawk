@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ARTISTVIEW_H
-#define ARTISTVIEW_H
+#ifndef TREEVIEW_H
+#define TREEVIEW_H
 
 #include <QtGui/QSortFilterProxyModel>
 #include <QtGui/QTreeView>
@@ -41,13 +41,13 @@ class AnimatedSpinner;
 class OverlayWidget;
 class TreeModel;
 
-class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
+class DLLEXPORT TreeView : public QTreeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    explicit ArtistView( QWidget* parent = 0 );
-    ~ArtistView();
+    explicit TreeView( QWidget* parent = 0 );
+    ~TreeView();
 
     virtual QString guid() const;
     virtual void setGuid( const QString& guid ) { m_guid = guid; }
@@ -122,4 +122,4 @@ private:
     mutable QString m_guid;
 };
 
-#endif // ARTISTVIEW_H
+#endif // TREEVIEW_H

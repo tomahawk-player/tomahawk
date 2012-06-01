@@ -32,7 +32,7 @@
 #include "PlaylistView.h"
 #include "PlayableProxyModel.h"
 #include "PlayableModel.h"
-#include "ArtistView.h"
+#include "TreeView.h"
 #include "GridView.h"
 #include "AlbumModel.h"
 #include "SourceList.h"
@@ -93,7 +93,7 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->addWidget( m_stack );
     m_widget->layout()->addWidget( m_contextWidget );
 
-    m_superCollectionView = new ArtistView();
+    m_superCollectionView = new TreeView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
     m_superCollectionView->setTreeModel( m_superCollectionModel );
     m_superCollectionView->setShowModes( false );
@@ -299,10 +299,10 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 
     if ( m_currentMode == PlaylistModes::Tree )
     {
-        ArtistView* view;
+        TreeView* view;
         if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
         {
-            view = new ArtistView();
+            view = new TreeView();
             TreeModel* model = new TreeModel();
             view->setTreeModel( model );
 
@@ -1030,7 +1030,7 @@ ViewManager::showCurrentTrack()
             m_currentMode = PlaylistModes::Flat;
         else if ( dynamic_cast< GridView* >( page ) )
             m_currentMode = PlaylistModes::Album;
-        else if ( dynamic_cast< ArtistView* >( page ) )
+        else if ( dynamic_cast< TreeView* >( page ) )
             m_currentMode = PlaylistModes::Tree;
         else
             return;
@@ -1075,7 +1075,7 @@ ViewManager::recentPlaysWidget() const
 }
 
 
-ArtistView*
+TreeView*
 ViewManager::superCollectionView() const
 {
     return m_superCollectionView;

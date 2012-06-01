@@ -61,7 +61,7 @@ set( libGuiSources
     playlist/AlbumModel.cpp
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
-    playlist/ArtistView.cpp
+    playlist/TreeView.cpp
     playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp
     playlist/RecentlyAddedModel.cpp

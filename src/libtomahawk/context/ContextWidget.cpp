@@ -29,8 +29,6 @@
 #include "context/pages/TopTracksContext.h"
 #include "context/pages/WikipediaContext.h"
 
-#include "playlist/ArtistView.h"
-#include "playlist/TreeModel.h"
 #include "Source.h"
 
 #include "utils/StyleHelper.h"

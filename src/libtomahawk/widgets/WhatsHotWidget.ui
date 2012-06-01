@@ -33,7 +33,7 @@
      <widget class="QWidget" name="page1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="ArtistView" name="artistsViewLeft">
+        <widget class="TreeView" name="artistsViewLeft">
          <property name="minimumSize">
           <size>
            <width>320</width>
@@ -69,9 +69,9 @@
    <header location="global">playlist/GridView.h</header>
   </customwidget>
   <customwidget>
-   <class>ArtistView</class>
+   <class>TreeView</class>
    <extends>QTreeView</extends>
-   <header>ArtistView.h</header>
+   <header>TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ArtistView.h"
+#include "TreeView.h"
 
 #include <QHeaderView>
 #include <QKeyEvent>
@@ -45,7 +45,7 @@
 using namespace Tomahawk;
 
 
-ArtistView::ArtistView( QWidget* parent )
+TreeView::TreeView( QWidget* parent )
     : QTreeView( parent )
     , m_header( new ViewHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
@@ -98,14 +98,14 @@ ArtistView::ArtistView( QWidget* parent )
 }
 
 
-ArtistView::~ArtistView()
+TreeView::~TreeView()
 {
     tDebug() << Q_FUNC_INFO;
 }
 
 
 void
-ArtistView::setProxyModel( TreeProxyModel* model )
+TreeView::setProxyModel( TreeProxyModel* model )
 {
     m_proxyModel = model;
     TreeItemDelegate* del = new TreeItemDelegate( this, m_proxyModel );
@@ -117,7 +117,7 @@ ArtistView::setProxyModel( TreeProxyModel* model )
 
 
 void
-ArtistView::setModel( QAbstractItemModel* model )
+TreeView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
     qDebug() << "Explicitly use setPlaylistModel instead";
@@ -126,7 +126,7 @@ ArtistView::setModel( QAbstractItemModel* model )
 
 
 void
-ArtistView::setTreeModel( TreeModel* model )
+TreeView::setTreeModel( TreeModel* model )
 {
     m_model = model;
 
@@ -169,7 +169,7 @@ ArtistView::setTreeModel( TreeModel* model )
 
 
 void
-ArtistView::onViewChanged()
+TreeView::onViewChanged()
 {
     if ( m_timer.isActive() )
         m_timer.stop();
@@ -179,7 +179,7 @@ ArtistView::onViewChanged()
 
 
 void
-ArtistView::onScrollTimeout()
+TreeView::onScrollTimeout()
 {
     if ( m_timer.isActive() )
         m_timer.stop();
@@ -207,7 +207,7 @@ ArtistView::onScrollTimeout()
 
 
 void
-ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
+TreeView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
     QTreeView::currentChanged( current, previous );
 
@@ -230,7 +230,7 @@ ArtistView::currentChanged( const QModelIndex& current, const QModelIndex& previ
 
 
 void
-ArtistView::onItemActivated( const QModelIndex& index )
+TreeView::onItemActivated( const QModelIndex& index )
 {
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
@@ -249,7 +249,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
 
 
 void
-ArtistView::keyPressEvent( QKeyEvent* event )
+TreeView::keyPressEvent( QKeyEvent* event )
 {
     QTreeView::keyPressEvent( event );
 
@@ -264,7 +264,7 @@ ArtistView::keyPressEvent( QKeyEvent* event )
 
 
 void
-ArtistView::resizeEvent( QResizeEvent* event )
+TreeView::resizeEvent( QResizeEvent* event )
 {
     QTreeView::resizeEvent( event );
     m_header->checkState();
@@ -280,7 +280,7 @@ ArtistView::resizeEvent( QResizeEvent* event )
 
 
 void
-ArtistView::onItemCountChanged( unsigned int items )
+TreeView::onItemCountChanged( unsigned int items )
 {
     if ( items == 0 )
     {
@@ -297,7 +297,7 @@ ArtistView::onItemCountChanged( unsigned int items )
 
 
 void
-ArtistView::onFilterChangeFinished()
+TreeView::onFilterChangeFinished()
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
@@ -314,7 +314,7 @@ ArtistView::onFilterChangeFinished()
 
 
 void
-ArtistView::onFilteringStarted()
+TreeView::onFilteringStarted()
 {
     m_overlay->hide();
     m_loadingSpinner->fadeIn();
@@ -322,7 +322,7 @@ ArtistView::onFilteringStarted()
 
 
 void
-ArtistView::startDrag( Qt::DropActions supportedActions )
+TreeView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
@@ -362,7 +362,7 @@ ArtistView::startDrag( Qt::DropActions supportedActions )
 
 
 void
-ArtistView::onCustomContextMenu( const QPoint& pos )
+TreeView::onCustomContextMenu( const QPoint& pos )
 {
     m_contextMenu->clear();
 
@@ -403,7 +403,7 @@ ArtistView::onCustomContextMenu( const QPoint& pos )
 
 
 void
-ArtistView::onMenuTriggered( int action )
+TreeView::onMenuTriggered( int action )
 {
     switch ( action )
     {
@@ -418,7 +418,7 @@ ArtistView::onMenuTriggered( int action )
 
 
 bool
-ArtistView::jumpToCurrentTrack()
+TreeView::jumpToCurrentTrack()
 {
     if ( !m_proxyModel )
         return false;
@@ -429,7 +429,7 @@ ArtistView::jumpToCurrentTrack()
 
 
 QString
-ArtistView::guid() const
+TreeView::guid() const
 {
     if ( m_guid.isEmpty() )
     {

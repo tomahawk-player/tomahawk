@@ -21,7 +21,7 @@
 
 #include <QHeaderView>
 
-#include "playlist/ArtistView.h"
+#include "playlist/TreeView.h"
 #include "playlist/TreeModel.h"
 #include "Source.h"
 
@@ -31,7 +31,7 @@ using namespace Tomahawk;
 RelatedArtistsContext::RelatedArtistsContext()
     : ContextPage()
 {
-    m_relatedView = new ArtistView();
+    m_relatedView = new TreeView();
     m_relatedView->setGuid( "RelatedArtistsContext" );
     m_relatedView->setUpdatesContextView( false );
     m_relatedModel = new TreeModel( m_relatedView );
