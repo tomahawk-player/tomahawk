@@ -52,7 +52,6 @@ protected:
     void keyPressEvent( QKeyEvent* event );
 
 private slots:
-    void onTrackCountChanged( unsigned int tracks );
     void onMenuTriggered( int action );
     void deleteItems();
 

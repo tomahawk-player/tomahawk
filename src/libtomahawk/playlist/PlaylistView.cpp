@@ -22,7 +22,6 @@
 #include <QKeyEvent>
 #include <QPainter>
 
-#include "widgets/OverlayWidget.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
@@ -75,7 +74,11 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
         }
     }
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    if ( model->isReadOnly() )
+        setEmptyTip( tr( "This playlist is currently empty." ) );
+    else
+        setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
 
@@ -114,19 +117,6 @@ PlaylistView::updaters() const
         return m_model->playlist()->updaters();
 
     return QList<PlaylistUpdaterInterface*>();
-}
-
-
-void
-PlaylistView::onTrackCountChanged( unsigned int tracks )
-{
-    if ( tracks == 0 )
-    {
-        overlay()->setText( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
-        overlay()->show();
-    }
-    else
-        overlay()->hide();
 }
 
 
