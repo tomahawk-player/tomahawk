@@ -169,6 +169,14 @@ TreeView::setTreeModel( TreeModel* model )
 
 
 void
+TreeView::setEmptyTip( const QString& tip )
+{
+    m_emptyTip = tip;
+    m_overlay->setText( tip );
+}
+
+
+void
 TreeView::onViewChanged()
 {
     if ( m_timer.isActive() )

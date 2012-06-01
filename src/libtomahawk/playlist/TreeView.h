@@ -57,10 +57,11 @@ public:
     TreeModel* model() const { return m_model; }
     TreeProxyModel* proxyModel() const { return m_proxyModel; }
     OverlayWidget* overlay() const { return m_overlay; }
-    //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
     void setModel( QAbstractItemModel* model );
     void setTreeModel( TreeModel* model );
+
+    void setEmptyTip( const QString& tip );
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
@@ -117,6 +118,7 @@ private:
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
 
+    QString m_emptyTip;
     bool m_showModes;
     QTimer m_timer;
     mutable QString m_guid;
