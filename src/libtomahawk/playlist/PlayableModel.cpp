@@ -598,6 +598,8 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
     {
         emit trackCountChanged( rowCount( QModelIndex() ) );
         emit itemCountChanged( rowCount( QModelIndex() ) );
+        
+        finishLoading();
         return;
     }
 
@@ -624,6 +626,7 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );
+    finishLoading();
 }
 
 
