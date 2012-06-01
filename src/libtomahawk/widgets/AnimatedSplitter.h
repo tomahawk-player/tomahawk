@@ -104,6 +104,8 @@ public slots:
 signals:
     void showWidget();
     void hideWidget();
+    
+    void animationFinished();
 
     void resizeBy( const QPoint& delta );
     void sizeChanged( const QSize& size );

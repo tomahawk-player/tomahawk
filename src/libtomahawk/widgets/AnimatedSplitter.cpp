@@ -277,6 +277,8 @@ AnimatedWidget::onAnimationFinished()
     {
         setFixedHeight( hiddenSize().height() );
     }
+    
+    emit animationFinished();
 }
 
 
