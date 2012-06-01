@@ -35,9 +35,6 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
-#include "widgets/OverlayButton.h"
-#include "widgets/OverlayWidget.h"
-
 #include "Pipeline.h"
 
 using namespace Tomahawk;

@@ -41,7 +41,6 @@
 
 class PlayableModel;
 class PlaylistModel;
-class OverlayButton;
 
 namespace Ui
 {

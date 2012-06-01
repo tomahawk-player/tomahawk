@@ -41,7 +41,6 @@
 
 class PlayableModel;
 class TreeModel;
-class OverlayButton;
 
 namespace Ui
 {

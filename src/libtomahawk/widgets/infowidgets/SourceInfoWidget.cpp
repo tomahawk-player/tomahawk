@@ -32,8 +32,6 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
-#include "widgets/OverlayWidget.h"
-
 
 SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent )
     : QWidget( parent )
@@ -50,8 +48,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 
     ui->splitter->setStretchFactor( 0, 0 );
     ui->splitter->setStretchFactor( 1, 1 );
-
-    ui->historyView->overlay()->setEnabled( false );
 
     m_recentTracksModel = new RecentlyAddedModel( source, ui->recentCollectionView );
     m_recentTracksModel->setStyle( PlayableModel::Short );
