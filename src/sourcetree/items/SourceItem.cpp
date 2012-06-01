@@ -28,7 +28,6 @@
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/CustomPlaylistView.h"
-#include "playlist/CollectionView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -105,8 +104,8 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         onStationsAdded( stations );
     }
 
-    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
-        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
+/*    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );*/
 
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 
