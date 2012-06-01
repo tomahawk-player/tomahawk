@@ -39,7 +39,6 @@ class AlbumInfoWidget;
 class ArtistInfoWidget;
 class ArtistView;
 class CollectionModel;
-class CollectionView;
 class ContextWidget;
 class PlaylistModel;
 class PlaylistView;
@@ -98,7 +97,6 @@ public:
     /// Get the view page for the given item. Not pretty...
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
-    Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
     /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is PlaylistView or DynamicWidget.
     /// Lives here but used by SourcesModel
@@ -217,7 +215,6 @@ private:
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<CollectionView> > m_collectionViews;
     QHash< Tomahawk::collection_ptr, QWeakPointer<ArtistView> > m_treeViews;
     QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumView> > m_collectionAlbumViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;

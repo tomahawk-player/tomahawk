@@ -28,7 +28,6 @@
 #include "topbar/TopBar.h"
 
 #include "TreeModel.h"
-#include "CollectionView.h"
 #include "PlaylistModel.h"
 #include "PlaylistView.h"
 #include "PlayableProxyModel.h"
@@ -915,13 +914,6 @@ ViewManager::setTomahawkLoaded()
 
 
 ViewPage*
-ViewManager::pageForCollection( const collection_ptr& col ) const
-{
-    return m_collectionViews.value( col ).data();
-}
-
-
-ViewPage*
 ViewManager::pageForDynPlaylist(const dynplaylist_ptr& pl) const
 {
     return m_dynamicWidgets.value( pl ).data();
@@ -1001,13 +993,6 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interf
 Tomahawk::collection_ptr
 ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<CollectionView> view, m_collectionViews.values() )
-    {
-        if ( view.data()->playlistInterface() == interface )
-        {
-            return m_collectionViews.key( view );
-        }
-    }
     foreach ( QWeakPointer<AlbumView> view, m_collectionAlbumViews.values() )
     {
         if ( view.data()->playlistInterface() == interface )
@@ -1041,7 +1026,7 @@ ViewManager::showCurrentTrack()
 
         // reset the correct mode, if the user has changed it since
 
-        if ( dynamic_cast< CollectionView* >( page ) )
+        if ( dynamic_cast< TrackView* >( page ) )
             m_currentMode = PlaylistModes::Flat;
         else if ( dynamic_cast< AlbumView* >( page ) )
             m_currentMode = PlaylistModes::Album;
