@@ -23,7 +23,6 @@
 
 #include "widgets/HeaderLabel.h"
 #include "playlist/QueueProxyModel.h"
-#include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"
 #include "PlaylistView.h"
 #include "Source.h"
@@ -45,7 +44,6 @@ QueueView::QueueView( AnimatedSplitter* parent )
 
     ui->queue->setProxyModel( new QueueProxyModel( ui->queue ) );
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
-    ui->queue->overlay()->setEnabled( false );
 
     PlaylistModel* queueModel = new PlaylistModel( this );
     queueModel->setStyle( PlaylistModel::Short );

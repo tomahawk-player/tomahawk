@@ -27,7 +27,6 @@
 #include "ViewManager.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
-#include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
 
 #include "utils/TomahawkUtilsGui.h"
@@ -44,7 +43,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     ui->resultsView->setGuid( "searchwidget" );
     m_resultsModel = new PlaylistModel( ui->resultsView );
     ui->resultsView->setPlaylistModel( m_resultsModel );
-    ui->resultsView->overlay()->setEnabled( false );
     ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
 
     m_albumsModel = new PlayableModel( ui->albumView );
