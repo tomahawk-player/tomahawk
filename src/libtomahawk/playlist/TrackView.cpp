@@ -176,6 +176,7 @@ TrackView::setPlayableModel( PlayableModel* model )
 void
 TrackView::setEmptyTip( const QString& tip )
 {
+    m_emptyTip = tip;
     m_overlay->setText( tip );
 }
 
@@ -508,8 +509,17 @@ TrackView::onFilterChanged( const QString& )
         m_overlay->show();
     }
     else
+    {
         if ( model()->trackCount() )
+        {
             m_overlay->hide();
+        }
+        else
+        {
+            m_overlay->setText( m_emptyTip );
+            m_overlay->show();
+        }
+    }
 }
 
 

@@ -137,6 +137,7 @@ private:
     OverlayWidget* m_overlay;
     AnimatedSpinner* m_loadingSpinner;
 
+    QString m_emptyTip;
     bool m_resizing;
     bool m_dragging;
     QRect m_dropRect;
@@ -147,7 +148,6 @@ private:
     QModelIndex m_contextMenuIndex;
 
     Tomahawk::query_ptr m_autoPlaying;
-
     Tomahawk::ContextMenu* m_contextMenu;
 
     QTimer m_timer;
