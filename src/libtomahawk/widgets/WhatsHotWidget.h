@@ -36,7 +36,6 @@ class QStandardItemModel;
 class QStandardItem;
 class TreeModel;
 class PlaylistModel;
-class OverlayWidget;
 class TreeProxyModel;
 class PlayableModel;
 
