@@ -528,7 +528,7 @@ SourceItem::latestAdditionsClicked()
 {
     if ( !m_latestAdditionsPage )
     {
-        CollectionView* cv = new CollectionView( ViewManager::instance()->widget() );
+        TrackView* cv = new TrackView( ViewManager::instance()->widget() );
         cv->setFrameShape( QFrame::NoFrame );
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
