@@ -47,6 +47,7 @@ OverlayWidget::OverlayWidget( QAbstractItemView* parent )
     if ( m_parent->model() )
     {
         connect( m_parent->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
     }
     connect( m_parent, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
 
@@ -131,6 +132,7 @@ void
 OverlayWidget::onViewChanged()
 {
     PlayableProxyModel* model = qobject_cast<PlayableProxyModel*>( m_parent->model() );
+
     if ( m_text.isEmpty() || ( model && ( model->rowCount( QModelIndex() ) || model->isLoading() ) ) )
     {
         hide();
