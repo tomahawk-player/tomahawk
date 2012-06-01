@@ -86,6 +86,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
     ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
     ui->similarTracksView->proxyModel()->sort( -1 );
+    ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
@@ -154,7 +155,9 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->fromLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
-    onSimilarTracksLoaded();
+    
+    if ( !m_query->similarTracks().isEmpty() )
+        onSimilarTracksLoaded();
 }
 
 
