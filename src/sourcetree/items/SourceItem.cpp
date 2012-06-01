@@ -506,6 +506,7 @@ SourceItem::lovedTracksClicked()
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
         view->setItemDelegate( del );
+        view->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
 
         m_lovedTracksPage = view;
     }
@@ -546,6 +547,7 @@ SourceItem::latestAdditionsClicked()
 
         cv->setPlayableModel( raModel );
         cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        cv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
 
         m_latestAdditionsPage = cv;
     }
@@ -585,6 +587,7 @@ SourceItem::recentPlaysClicked()
         pv->setItemDelegate( del );
 
         pv->setPlaylistModel( raModel );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
 
         m_recentPlaysPage = pv;
     }
