@@ -62,6 +62,8 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
+    onChanged();
+
     if ( guid().isEmpty() )
     {
         if ( !m_model->playlist().isNull() )
@@ -73,11 +75,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
             setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
         }
     }
-
-    if ( model->isReadOnly() )
-        setEmptyTip( tr( "This playlist is currently empty." ) );
-    else
-        setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
 
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
@@ -130,9 +127,17 @@ PlaylistView::onDeleted()
 void
 PlaylistView::onChanged()
 {
-    if ( m_model && !m_model->playlist().isNull() &&
-         ViewManager::instance()->currentPage() == this )
-        emit nameChanged( m_model->playlist()->title() );
+    if ( m_model )
+    {
+        if ( m_model->isReadOnly() )
+            setEmptyTip( tr( "This playlist is currently empty." ) );
+        else
+            setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+        m_model->finishLoading();
+
+        if ( !m_model->playlist().isNull() && ViewManager::instance()->currentPage() == this )
+            emit nameChanged( m_model->playlist()->title() );
+    }
 }
 
 
