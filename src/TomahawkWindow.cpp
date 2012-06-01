@@ -698,18 +698,18 @@ TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 void
 TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 {
-    QString name = playlistName;
-
-    if ( name.isEmpty() )
+    if ( playlistName.isEmpty() )
         return;
 
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, Static, false );
+
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, playlistName, info, creator, Static, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+
     ViewManager::instance()->show( playlist );
 }
 
@@ -717,18 +717,36 @@ TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 void
 TomahawkWindow::createStation()
 {
+    QString title = tr( "Station" );
     bool ok;
-    QString name = QInputDialog( this, Qt::Sheet ).getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
-    if ( !ok || name.isEmpty() )
+    QString playlistName = QInputDialog( this, Qt::Sheet ).getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, title, &ok );
+    if ( !ok )
         return;
+
+    if ( playlistName.isEmpty() || playlistName == title )
+    {
+        QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->stations();
+        QStringList titles;
+        foreach ( const playlist_ptr& pl, pls )
+            titles << pl->title();
+
+        playlistName = title;
+        int i = 2;
+        while ( titles.contains( playlistName ) )
+        {
+            playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+        }
+    }
 
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, OnDemand, false );
+
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, playlistName, info, creator, OnDemand, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+
     ViewManager::instance()->show( playlist );
 }
 
@@ -754,17 +772,47 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
     Q_ASSERT( playlistSelectorDlg );
 
     QString playlistName = playlistSelectorDlg->playlistName();
-    if ( playlistName.isEmpty() )
-        playlistName = tr( "New Playlist" );
 
     if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret )
     {
+        if ( playlistName.isEmpty() )
+        {
+            QList< playlist_ptr > pls = SourceList::instance()->getLocal()->collection()->playlists();
+            QStringList titles;
+            foreach ( const playlist_ptr& pl, pls )
+                titles << pl->title();
+
+            QString title = tr( "Playlist" );
+            playlistName = title;
+            int i = 2;
+            while ( titles.contains( playlistName ) )
+            {
+                playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+            }
+        }
+
         playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
         ViewManager::instance()->show( playlist );
     }
     else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret )
     {
        // create Auto Playlist
+        if ( playlistName.isEmpty() )
+        {
+            QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->autoPlaylists();
+            QStringList titles;
+            foreach ( const dynplaylist_ptr& pl, pls )
+                titles << pl->title();
+
+            QString title = tr( "Automatic Playlist" );
+            playlistName = title;
+            int i = 2;
+            while ( titles.contains( playlistName ) )
+            {
+                playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+            }
+        }
+
        createAutomaticPlaylist( playlistName );
     }
 
