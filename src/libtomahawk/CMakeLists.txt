@@ -50,7 +50,6 @@ set( libGuiSources
     playlist/TreeProxyModelPlaylistInterface.cpp
     playlist/TreeHeader.cpp
     playlist/TreeItemDelegate.cpp
-    playlist/CollectionView.cpp
     playlist/PlaylistModel.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
