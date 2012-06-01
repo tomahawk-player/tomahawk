@@ -34,7 +34,7 @@
 
 class AnimatedSplitter;
 class AlbumModel;
-class AlbumView;
+class GridView;
 class AlbumInfoWidget;
 class ArtistInfoWidget;
 class ArtistView;
@@ -202,7 +202,7 @@ private:
     AnimatedSplitter* m_splitter;
 
     AlbumModel* m_superAlbumModel;
-    AlbumView* m_superAlbumView;
+    GridView* m_superGridView;
     TreeModel* m_superCollectionModel;
     ArtistView* m_superCollectionView;
     QueueView* m_queue;
@@ -216,7 +216,7 @@ private:
 
     QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QWeakPointer<ArtistView> > m_treeViews;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumView> > m_collectionAlbumViews;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<GridView> > m_collectionGridViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;

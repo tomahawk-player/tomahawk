@@ -37,7 +37,7 @@
 
 #include "playlist/PlayableItem.h"
 #include "playlist/PlayableProxyModel.h"
-#include "AlbumView.h"
+#include "GridView.h"
 #include "ViewManager.h"
 #include "utils/AnimatedSpinner.h"
 #include "widgets/ImageButton.h"
@@ -406,7 +406,7 @@ AlbumItemDelegate::modelChanged()
         widget->deleteLater();
     m_spinner.clear();
 
-    if ( AlbumView* view = qobject_cast< AlbumView* >( m_view ) )
+    if ( GridView* view = qobject_cast< GridView* >( m_view ) )
         m_model = view->proxyModel();
 }
 

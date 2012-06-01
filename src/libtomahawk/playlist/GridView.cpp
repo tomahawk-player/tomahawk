@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AlbumView.h"
+#include "GridView.h"
 
 #include <QHeaderView>
 #include <QKeyEvent>
@@ -45,7 +45,7 @@
 using namespace Tomahawk;
 
 
-AlbumView::AlbumView( QWidget* parent )
+GridView::GridView( QWidget* parent )
     : QListView( parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
@@ -88,14 +88,14 @@ AlbumView::AlbumView( QWidget* parent )
 }
 
 
-AlbumView::~AlbumView()
+GridView::~GridView()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-AlbumView::setProxyModel( PlayableProxyModel* model )
+GridView::setProxyModel( PlayableProxyModel* model )
 {
     m_proxyModel = model;
     m_delegate = new AlbumItemDelegate( this, m_proxyModel );
@@ -107,7 +107,7 @@ AlbumView::setProxyModel( PlayableProxyModel* model )
 
 
 void
-AlbumView::setModel( QAbstractItemModel* model )
+GridView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
     qDebug() << "Explicitly use setAlbumModel instead";
@@ -116,7 +116,7 @@ AlbumView::setModel( QAbstractItemModel* model )
 
 
 void
-AlbumView::setPlayableModel( PlayableModel* model )
+GridView::setPlayableModel( PlayableModel* model )
 {
     m_inited = false;
     m_model = model;
@@ -134,7 +134,7 @@ AlbumView::setPlayableModel( PlayableModel* model )
 
 
 void
-AlbumView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
+GridView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
     QListView::currentChanged( current, previous );
 
@@ -148,7 +148,7 @@ AlbumView::currentChanged( const QModelIndex& current, const QModelIndex& previo
 
 
 void
-AlbumView::onItemActivated( const QModelIndex& index )
+GridView::onItemActivated( const QModelIndex& index )
 {
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
@@ -167,7 +167,7 @@ AlbumView::onItemActivated( const QModelIndex& index )
 
 
 void
-AlbumView::scrollContentsBy( int dx, int dy )
+GridView::scrollContentsBy( int dx, int dy )
 {
     QListView::scrollContentsBy( dx, dy );
     emit scrolledContents( dx, dy );
@@ -175,7 +175,7 @@ AlbumView::scrollContentsBy( int dx, int dy )
 
 
 void
-AlbumView::paintEvent( QPaintEvent* event )
+GridView::paintEvent( QPaintEvent* event )
 {
     if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )
         QListView::paintEvent( event );
@@ -183,7 +183,7 @@ AlbumView::paintEvent( QPaintEvent* event )
 
 
 void
-AlbumView::resizeEvent( QResizeEvent* event )
+GridView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
     layoutItems();
@@ -191,7 +191,7 @@ AlbumView::resizeEvent( QResizeEvent* event )
 
 
 void
-AlbumView::layoutItems()
+GridView::layoutItems()
 {
     if ( autoFitItems() && m_model )
     {
@@ -225,7 +225,7 @@ AlbumView::layoutItems()
 
 
 void
-AlbumView::onFilterChanged( const QString& )
+GridView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
@@ -233,7 +233,7 @@ AlbumView::onFilterChanged( const QString& )
 
 
 void
-AlbumView::startDrag( Qt::DropActions supportedActions )
+GridView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
@@ -265,7 +265,7 @@ AlbumView::startDrag( Qt::DropActions supportedActions )
 
 
 void
-AlbumView::onCustomContextMenu( const QPoint& pos )
+GridView::onCustomContextMenu( const QPoint& pos )
 {
     m_contextMenu->clear();
 

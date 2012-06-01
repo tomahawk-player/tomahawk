@@ -33,7 +33,7 @@
 #include "PlayableProxyModel.h"
 #include "PlayableModel.h"
 #include "ArtistView.h"
-#include "AlbumView.h"
+#include "GridView.h"
 #include "AlbumModel.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
@@ -99,9 +99,9 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView->setShowModes( false );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
-    m_superAlbumView = new AlbumView();
-    m_superAlbumModel = new AlbumModel( m_superAlbumView );
-    m_superAlbumView->setPlayableModel( m_superAlbumModel );
+    m_superGridView = new GridView();
+    m_superAlbumModel = new AlbumModel( m_superGridView );
+    m_superGridView->setPlayableModel( m_superAlbumModel );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -321,19 +321,19 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 
     if ( m_currentMode == PlaylistModes::Album )
     {
-        AlbumView* aview;
-        if ( !m_collectionAlbumViews.contains( collection ) || m_collectionAlbumViews.value( collection ).isNull() )
+        GridView* aview;
+        if ( !m_collectionGridViews.contains( collection ) || m_collectionGridViews.value( collection ).isNull() )
         {
-            aview = new AlbumView();
+            aview = new GridView();
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setPlayableModel( amodel );
             amodel->addCollection( collection );
 
-            m_collectionAlbumViews.insert( collection, aview );
+            m_collectionGridViews.insert( collection, aview );
         }
         else
         {
-            aview = m_collectionAlbumViews.value( collection ).data();
+            aview = m_collectionGridViews.value( collection ).data();
         }
 
         shown = aview;
@@ -406,8 +406,8 @@ ViewManager::showSuperCollection()
     }
     else if ( m_currentMode == PlaylistModes::Album )
     {
-        shown = m_superAlbumView;
-        setPage( m_superAlbumView );
+        shown = m_superGridView;
+        setPage( m_superGridView );
     }
 
     emit numSourcesChanged( m_superCollections.count() );
@@ -993,11 +993,11 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interf
 Tomahawk::collection_ptr
 ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<AlbumView> view, m_collectionAlbumViews.values() )
+    foreach ( QWeakPointer<GridView> view, m_collectionGridViews.values() )
     {
         if ( view.data()->playlistInterface() == interface )
         {
-            return m_collectionAlbumViews.key( view );
+            return m_collectionGridViews.key( view );
         }
     }
 
@@ -1010,7 +1010,7 @@ ViewManager::isSuperCollectionVisible() const
 {
     return ( currentPage() != 0 &&
            ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ||
-             currentPage()->playlistInterface() == m_superAlbumView->playlistInterface() ) );
+             currentPage()->playlistInterface() == m_superGridView->playlistInterface() ) );
 }
 
 
@@ -1028,7 +1028,7 @@ ViewManager::showCurrentTrack()
 
         if ( dynamic_cast< TrackView* >( page ) )
             m_currentMode = PlaylistModes::Flat;
-        else if ( dynamic_cast< AlbumView* >( page ) )
+        else if ( dynamic_cast< GridView* >( page ) )
             m_currentMode = PlaylistModes::Album;
         else if ( dynamic_cast< ArtistView* >( page ) )
             m_currentMode = PlaylistModes::Tree;

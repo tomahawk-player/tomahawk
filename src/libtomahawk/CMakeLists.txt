@@ -62,7 +62,7 @@ set( libGuiSources
     playlist/TrackHeader.cpp
     playlist/AlbumModel.cpp
     playlist/AlbumItemDelegate.cpp
-    playlist/AlbumView.cpp
+    playlist/GridView.cpp
     playlist/ArtistView.cpp
     playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp

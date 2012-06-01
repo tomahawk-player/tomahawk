@@ -208,7 +208,7 @@
        </widget>
       </item>
       <item>
-       <widget class="AlbumView" name="similarTracksView">
+       <widget class="GridView" name="similarTracksView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -224,9 +224,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header>playlist/AlbumView.h</header>
+   <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>HeaderLabel</class>

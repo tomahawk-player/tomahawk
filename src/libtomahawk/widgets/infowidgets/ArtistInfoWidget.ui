@@ -57,7 +57,7 @@
          </widget>
         </item>
         <item>
-         <widget class="AlbumView" name="relatedArtists">
+         <widget class="GridView" name="relatedArtists">
          </widget>
         </item>
        </layout>
@@ -79,7 +79,7 @@
         </widget>
        </item>
        <item>
-        <widget class="AlbumView" name="albums"/>
+        <widget class="GridView" name="albums"/>
        </item>
       </layout>
      </widget>
@@ -114,9 +114,9 @@
    <header location="global">ArtistView.h</header>
   </customwidget>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">AlbumView.h</header>
+   <header location="global">GridView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

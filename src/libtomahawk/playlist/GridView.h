@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ALBUMVIEW_H
-#define ALBUMVIEW_H
+#ifndef GRIDVIEW_H
+#define GRIDVIEW_H
 
 #include <QListView>
 #include <QSortFilterProxyModel>
@@ -38,13 +38,13 @@ class AnimatedSpinner;
 class AlbumItemDelegate;
 class PlayableModel;
 
-class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
+class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    explicit AlbumView( QWidget* parent = 0 );
-    ~AlbumView();
+    explicit GridView( QWidget* parent = 0 );
+    ~GridView();
 
     void setProxyModel( PlayableProxyModel* model );
 
@@ -106,4 +106,4 @@ private:
     QRect m_paintRect;
 };
 
-#endif // ALBUMVIEW_H
+#endif // GRIDVIEW_H
