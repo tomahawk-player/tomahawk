@@ -201,14 +201,20 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
         QMutexLocker lock( &m_mut );
 
         int i = 0;
-        foreach( const query_ptr& q, qlist )
+        foreach ( const query_ptr& q, qlist )
         {
             if ( q->resolvingFinished() )
                 continue;
-            if ( m_queries_pending.contains( q ) )
-                continue;
             if ( m_qidsState.contains( q->id() ) )
                 continue;
+            if ( m_queries_pending.contains( q ) )
+            {
+                if ( prioritized )
+                {
+                    m_queries_pending.insert( i++, m_queries_pending.takeAt( m_queries_pending.indexOf( q ) ) );
+                }
+                continue;
+            }
 
             if ( !m_qids.contains( q->id() ) )
                 m_qids.insert( q->id(), q );
@@ -266,7 +272,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     const query_ptr& q = m_qids.value( qid );
 
     QList< result_ptr > cleanResults;
-    foreach( const result_ptr& r, results )
+    foreach ( const result_ptr& r, results )
     {
         float score = q->howSimilar( r );
         r->setScore( score );
@@ -279,7 +285,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     if ( !cleanResults.isEmpty() )
     {
         q->addResults( cleanResults );
-        foreach( const result_ptr& r, cleanResults )
+        foreach ( const result_ptr& r, cleanResults )
         {
             m_rids.insert( r->id(), r );
         }
@@ -310,7 +316,7 @@ Pipeline::reportAlbums( QID qid, const QList< album_ptr >& albums )
     Q_ASSERT( q->isFullTextQuery() );
 
     QList< album_ptr > cleanAlbums;
-    foreach( const album_ptr& r, albums )
+    foreach ( const album_ptr& r, albums )
     {
 //        float score = q->howSimilar( r );
 
@@ -339,7 +345,7 @@ Pipeline::reportArtists( QID qid, const QList< artist_ptr >& artists )
     Q_ASSERT( q->isFullTextQuery() );
 
     QList< artist_ptr > cleanArtists;
-    foreach( const artist_ptr& r, artists )
+    foreach ( const artist_ptr& r, artists )
     {
 //        float score = q->howSimilar( r );
 
