@@ -46,9 +46,7 @@
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( (QObject*) parent )
-    , m_lastartid( 0 )
-    , m_lastalbid( 0 )
-    , m_lasttrkid( 0 )
+    , m_parent( parent )
 {
     QTime t;
     t.start();
@@ -67,13 +65,10 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         m_dbid = uuid();
         query.exec( QString( "INSERT INTO settings(k,v) VALUES('dbid','%1')" ).arg( m_dbid ) );
     }
-    tLog() << "Database ID:" << m_dbid;
 
-     // make sqlite behave how we want:
-    query.exec( "PRAGMA auto_vacuum = FULL" );
-    query.exec( "PRAGMA synchronous  = ON" );
-    query.exec( "PRAGMA foreign_keys = ON" );
-    //query.exec( "PRAGMA temp_store = MEMORY" );
+    tLog() << "Database ID:" << m_dbid;
+    init();
+
     tDebug( LOGVERBOSE ) << "Tweaked db pragmas:" << t.elapsed();
 
     // in case of unclean shutdown last time:
@@ -84,12 +79,35 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
 
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
-
     if ( qApp->arguments().contains( "--dumpdb" ) )
     {
         dumpDatabase();
         ::exit( 0 );
     }
+}
+
+
+DatabaseImpl::DatabaseImpl( Database* parent, const QString& dbname )
+    : QObject( (QObject*) QThread::currentThread() )
+    , m_parent( parent )
+{
+    openDatabase( dbname, false );
+    init();
+}
+
+
+void
+DatabaseImpl::init()
+{
+    m_lastartid = m_lastalbid = m_lasttrkid = 0;
+
+    TomahawkSqlQuery query = newquery();
+
+     // make sqlite behave how we want:
+    query.exec( "PRAGMA auto_vacuum = FULL" );
+    query.exec( "PRAGMA synchronous  = ON" );
+    query.exec( "PRAGMA foreign_keys = ON" );
+    //query.exec( "PRAGMA temp_store = MEMORY" );
 }
 
 
@@ -112,6 +130,16 @@ DatabaseImpl::~DatabaseImpl()
     
 #endif
 */
+}
+
+
+DatabaseImpl*
+DatabaseImpl::clone() const
+{
+    DatabaseImpl* impl = new DatabaseImpl( m_parent, m_db.databaseName() );
+    impl->setDatabaseID( m_dbid );
+    impl->setFuzzyIndex( m_fuzzyIndex );
+    return impl;
 }
 
 
@@ -681,27 +709,35 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 
 
 bool
-DatabaseImpl::openDatabase( const QString& dbname )
+DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 {
+    const QStringList conns = QSqlDatabase::connectionNames();
+    const QString connName = QString( "tomahawk%1" ).arg( conns.count() ? QString::number( conns.count() ) : "" );
+
     bool schemaUpdated = false;
     int version = -1;
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+        QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", connName );
         db.setDatabaseName( dbname );
         if ( !db.open() )
         {
             tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
-
-        QSqlQuery qry = QSqlQuery( db );
-        qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
-        if ( qry.next() )
+        
+        if ( checkSchema )
         {
-            version = qry.value( 0 ).toInt();
-            tLog() << "Database schema of" << dbname << "is" << version;
+            QSqlQuery qry = QSqlQuery( db );
+            qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
+            if ( qry.next() )
+            {
+                version = qry.value( 0 ).toInt();
+                tLog() << "Database schema of" << dbname << "is" << version;
+            }
         }
-
+        else
+            version = CURRENT_SCHEMA_VERSION;
+            
         if ( version < 0 || version == CURRENT_SCHEMA_VERSION )
             m_db = db;
     }

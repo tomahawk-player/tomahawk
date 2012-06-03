@@ -39,7 +39,7 @@ class DatabaseWorker : public QThread
 Q_OBJECT
 
 public:
-    DatabaseWorker( DatabaseImpl*, Database*, bool mutates );
+    DatabaseWorker( Database*, bool mutates );
     ~DatabaseWorker();
 
     bool busy() const { return m_outstanding > 0; }
@@ -59,6 +59,7 @@ private:
     void logOp( DatabaseCommandLoggable* command );
 
     QMutex m_mut;
+    Database* m_db;
     DatabaseImpl* m_dbimpl;
     QList< QSharedPointer<DatabaseCommand> > m_commands;
     int m_outstanding;

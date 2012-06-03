@@ -34,9 +34,9 @@
     //#define DEBUG_TIMING TRUE
 #endif
 
-DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
+DatabaseWorker::DatabaseWorker( Database* db, bool mutates )
     : QThread()
-    , m_dbimpl( lib )
+    , m_db( db )
     , m_outstanding( 0 )
 {
     Q_UNUSED( db );
@@ -68,6 +68,8 @@ DatabaseWorker::~DatabaseWorker()
 void
 DatabaseWorker::run()
 {
+    m_dbimpl = m_db->impl()->clone();
+    tDebug() << "New db connection with name:" << m_dbimpl->database().connectionName();
     exec();
     qDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
 }

@@ -26,12 +26,7 @@
 #include "Source.h"
 
 #define DEFAULT_WORKER_THREADS 4
-
-#if ( QT_VERSION >= QT_VERSION_CHECK(4, 8, 2) )
-    #define MAX_WORKER_THREADS 1
-#else
-    #define MAX_WORKER_THREADS 16
-#endif
+#define MAX_WORKER_THREADS 16
 
 Database* Database::s_instance = 0;
 
@@ -47,7 +42,7 @@ Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
     , m_ready( false )
     , m_impl( new DatabaseImpl( dbname, this ) )
-    , m_workerRW( new DatabaseWorker( m_impl, this, true ) )
+    , m_workerRW( new DatabaseWorker( this, true ) )
 {
     s_instance = this;
 
@@ -105,7 +100,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
         // create new thread if < WORKER_THREADS
         if ( m_workers.count() < m_maxConcurrentThreads )
         {
-            DatabaseWorker* worker = new DatabaseWorker( m_impl, this, false );
+            DatabaseWorker* worker = new DatabaseWorker( this, false );
             worker->start();
 
             m_workers << worker;

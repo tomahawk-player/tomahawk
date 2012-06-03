@@ -48,7 +48,7 @@ public:
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();
 
-    bool openDatabase( const QString& dbname );
+    DatabaseImpl* clone() const;
 
     TomahawkSqlQuery newquery() { return TomahawkSqlQuery( m_db ); }
     QSqlDatabase& database() { return m_db; }
@@ -85,10 +85,17 @@ private slots:
     void updateIndex();
 
 private:
-    QString cleanSql( const QString& sql );
+    DatabaseImpl( Database* parent, const QString& dbname );
+    void setFuzzyIndex( FuzzyIndex* fi ) { m_fuzzyIndex = fi; }
+    void setDatabaseID( const QString& dbid ) { m_dbid = dbid; }
+
+    void init();
+    bool openDatabase( const QString& dbname, bool checkSchema = true );
     bool updateSchema( int oldVersion );
     void dumpDatabase();
+    QString cleanSql( const QString& sql );
 
+    Database* m_parent;
     bool m_ready;
     QSqlDatabase m_db;
 
