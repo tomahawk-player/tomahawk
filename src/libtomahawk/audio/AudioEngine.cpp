@@ -36,6 +36,7 @@
 #include "HeadlessCheck.h"
 #include "infosystem/InfoSystem.h"
 #include "Album.h"
+#include "Pipeline.h"
 
 #include "utils/Logger.h"
 
@@ -605,6 +606,8 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     }
     else
     {
+        Pipeline::instance()->resolve( query );
+
         NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
                     const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
     }
