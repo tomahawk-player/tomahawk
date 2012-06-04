@@ -55,7 +55,7 @@ class FuzzyIndex : public QObject
 Q_OBJECT
 
 public:
-    explicit FuzzyIndex( bool wipeIndex = false );
+    explicit FuzzyIndex( QObject* parent, bool wipeIndex = false );
     ~FuzzyIndex();
 
     void beginIndexing();

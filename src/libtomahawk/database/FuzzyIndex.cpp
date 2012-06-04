@@ -38,8 +38,8 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( bool wipeIndex )
-    : QObject()
+FuzzyIndex::FuzzyIndex( QObject* parent, bool wipeIndex )
+    : QObject( parent )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
 {
