@@ -328,7 +328,7 @@ TomahawkApp::init()
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Make sure to do this after main window is inited
     Tomahawk::enableFullscreen( m_mainwindow );
 #endif
