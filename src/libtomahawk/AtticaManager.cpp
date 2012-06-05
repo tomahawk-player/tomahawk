@@ -73,6 +73,15 @@ AtticaManager::AtticaManager( QObject* parent )
 AtticaManager::~AtticaManager()
 {
     savePixmapsToCache();
+
+
+    foreach( const QString& id, m_resolverStates.keys() )
+    {
+        if ( !m_resolverStates[ id ].pixmap )
+            continue;
+
+        delete m_resolverStates[ id ].pixmap;
+    }
 }
 
 
