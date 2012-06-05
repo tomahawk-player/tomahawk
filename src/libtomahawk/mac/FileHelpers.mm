@@ -201,7 +201,9 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
     if (!success) {
         NSLog( @"Failed to do non-authenticated move! Help! %@", [[error userInfo] objectForKey: NSLocalizedDescriptionKey] );
     }
-    [self notifyDelegate:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:success], TKInstallerResultKey, [info objectForKey:TKInstallerDelegateKey], TKInstallerDelegateKey, error, TKInstallerErrorKey, nil]];
+
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:success], TKInstallerResultKey, [info objectForKey:TKInstallerDelegateKey], TKInstallerDelegateKey, error, TKInstallerErrorKey, nil];
+    [self notifyDelegate:dict];
 }
 
 
