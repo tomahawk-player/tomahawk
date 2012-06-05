@@ -186,11 +186,11 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         return;
 
     m_defaultImage = false;
-    QByteArray ba;
-    QBuffer buffer( &ba );
-    buffer.open( QIODevice::WriteOnly );
-    pixmap.save( &buffer, "PNG" );
-    QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
+    QCryptographicHash hash( QCryptographicHash::Md5 );
+    const QImage img = pixmap.toImage();
+    hash.addData( (const char*)img.constBits(), img.byteCount() );
+    const QString newImageMd5 = hash.result();
+
     if ( m_oldImageMd5 == newImageMd5 )
         return;
 
