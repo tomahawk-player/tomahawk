@@ -166,14 +166,14 @@
       NSAppleEventManager *em = [NSAppleEventManager sharedAppleEventManager];
       [em
         setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:kInternetEventClass
-        andEventID:kAEGetURL];
+            andSelector:@selector(getUrl:withReplyEvent:)
+          forEventClass:kInternetEventClass
+             andEventID:kAEGetURL];
       [em
         setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:'WWW!'
-        andEventID:'OURL'];
+            andSelector:@selector(getUrl:withReplyEvent:)
+          forEventClass:'WWW!'
+             andEventID:'OURL'];
       NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
       OSStatus httpResult = LSSetDefaultHandlerForURLScheme((CFStringRef)@"tomahawk", (CFStringRef)bundleID);
 
@@ -253,8 +253,10 @@ void Tomahawk::checkForUpdates() {
 
 #ifdef LION
 #define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
+#define LION_FULLSCREEN_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
 #else
 #define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
+#define LION_FULLSCREEN_NOTIFICATION_VALUE @"NSWindowWillEnterFullScreenNotification"
 #endif
 
 void Tomahawk::enableFullscreen( QObject* receiver )
@@ -276,25 +278,23 @@ void Tomahawk::enableFullscreen( QObject* receiver )
                 NSWindow *nswindow = [nsview window];
                 [nswindow setCollectionBehavior:SET_LION_FULLSCREEN];
 
-#ifdef LION
                 if ( !receiver )
                     continue;
 
-                [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillEnterFullScreenNotification
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_NOTIFICATION_VALUE
                                                                   object:nswindow
                                                                    queue:nil
                                                               usingBlock:^(NSNotification * note) {
                     NSLog(@"Became Full Screen!");
                     QMetaObject::invokeMethod( receiver, "fullScreenEntered", Qt::DirectConnection );
                 }];
-                [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidExitFullScreenNotification
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_NOTIFICATION_VALUE
                                                                   object:nswindow
                                                                    queue:nil
                                                               usingBlock:^(NSNotification * note) {
                     NSLog(@"Left Full Screen!");
                     QMetaObject::invokeMethod( receiver, "fullScreenExited", Qt::DirectConnection );
                 }];
-#endif
             }
         }
     }
