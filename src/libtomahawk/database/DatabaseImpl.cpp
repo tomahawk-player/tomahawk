@@ -717,6 +717,7 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     {
         QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", connName );
         db.setDatabaseName( dbname );
+        db.setConnectOptions( "QSQLITE_ENABLE_SHARED_CACHE=1" );
         if ( !db.open() )
         {
             tLog() << "Failed to open database" << dbname;
