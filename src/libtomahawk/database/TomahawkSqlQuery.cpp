@@ -18,10 +18,12 @@
 
 #include "database/TomahawkSqlQuery.h"
 
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include <QSqlError>
 #include <QTime>
+#include <QThread>
 #include <QVariant>
 
 #define QUERY_THRESHOLD 60
@@ -35,6 +37,7 @@ TomahawkSqlQuery::TomahawkSqlQuery()
 
 TomahawkSqlQuery::TomahawkSqlQuery( const QSqlDatabase& db )
     : QSqlQuery( db )
+    , m_db( db )
 {
 }
 
@@ -53,12 +56,20 @@ TomahawkSqlQuery::exec()
     QTime t;
     t.start();
 
-    bool ret = QSqlQuery::exec();
+    unsigned int retries = 0;
+    while ( !QSqlQuery::exec() && ++retries < 10 )
+    {
+        tDebug() << "INFO: Retrying failed query:" << this->lastQuery() << this->lastError().text();
+        TomahawkUtils::msleep( 25 );
+    }
+
+    bool ret = ( retries < 10 );
     if ( !ret )
         showError();
 
     int e = t.elapsed();
     bool log = ( e >= QUERY_THRESHOLD );
+
 #ifdef TOMAHAWK_QUERY_ANALYZE
     log = true;
 #endif
@@ -67,6 +78,20 @@ TomahawkSqlQuery::exec()
         tLog( LOGSQL ) << "TomahawkSqlQuery (" << t.elapsed() << "ms ):" << lastQuery();
     
     return ret;
+}
+
+
+bool
+TomahawkSqlQuery::commitTransaction()
+{
+    unsigned int retries = 0;
+    while ( !m_db.commit() && ++retries < 10 )
+    {
+        tDebug() << "INFO: Retrying failed commit:" << this->lastQuery() << this->lastError().text();
+        TomahawkUtils::msleep( 25 );
+    }
+    
+    return ( retries < 10 );
 }
 
 

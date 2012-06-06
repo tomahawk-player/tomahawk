@@ -34,9 +34,13 @@ public:
 
     bool exec( const QString& query );
     bool exec();
+    
+    bool commitTransaction();
 
 private:
     void showError();
+    
+    QSqlDatabase m_db;
 };
 
 #endif // TOMAHAWKSQLQUERY_H
