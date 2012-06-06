@@ -745,7 +745,7 @@ se connecter et streamer depuis chez vous ?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
         <source>Don&apos;t know exactly what you want? Give Tomahawk a few pointers and let it build a playlist for you!</source>
-        <translation>Vous ne savez pas ce que vous voulez exactement ? Donnez quelques idées à Tomahawk et laissez le créer une liste de lecture pour vous!</translation>
+        <translation>Vous ne savez pas ce que vous voulez exactement ? Donnez quelques idées à Tomahawk et laissez le créer une liste de lecture pour vous !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
@@ -760,12 +760,12 @@ se connecter et streamer depuis chez vous ?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation>Créer une liste de lecture manuellement</translation>
+        <translation>Liste de lecture manuelle</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>Créer une liste de lecture automatiquement</translation>
+        <translation>Liste de lecture automatique</translation>
     </message>
 </context>
 <context>
@@ -1130,29 +1130,29 @@ se connecter et streamer depuis chez vous ?</translation>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="187"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="190"/>
         <source>Offline</source>
         <translation>Hors ligne</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="189"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="192"/>
         <source>All available tracks</source>
         <translation>Tous les titres disponibles</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="196"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="199"/>
         <source>Online</source>
         <translation>En Ligne</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="289"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="330"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="292"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="333"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="291"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="332"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="294"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="335"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
@@ -1284,7 +1284,7 @@ se connecter et streamer depuis chez vous ?</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
         <source>Add to my Stations</source>
-        <translation>Ajoute a mes stations</translation>
+        <translation>Ajouter à mes stations</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
@@ -1497,9 +1497,9 @@ se connecter et streamer depuis chez vous ?</translation>
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
         <translation>The Echo Nest peut garder les métadonnées de votre catalogue
-et l&apos;utiliser pour créer des radios personnalisées. En activant cette option
+et les utiliser pour créer des radios personnalisées. En activant cette option
 vous (et vos amis) pourrez créer des listes de lecture automatiquement
-et des stations basés sur vos goûts.</translation>
+et des stations basées sur vos goûts.</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="186"/>
@@ -1941,7 +1941,7 @@ Essayez de vous authentifier de nouveau.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="51"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
-        <translation>Connectez vous à votre compte Jabber/XMPP pour vous connecter avec vos amis</translation>
+        <translation>Connectez vous à votre compte Jabber/XMPP pour retrouver vos amis</translation>
     </message>
 </context>
 <context>
@@ -2460,7 +2460,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="58"/>
         <source>Steer this station:</source>
-        <translation>Direction de cette station :</translation>
+        <translation>Modifier cette station :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="81"/>
@@ -2646,7 +2646,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="170"/>
         <source>Error fetching iTunes information from the network!</source>
-        <translation>Échec du chargement des informations iTunes depuis le réseau!</translation>
+        <translation>Échec du chargement des informations iTunes depuis le réseau !</translation>
     </message>
 </context>
 <context>
@@ -2726,7 +2726,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="761"/>
         <source>loved this track</source>
-        <translation>a mis cette piste en favoris</translation>
+        <translation>a enregistré cette piste dans ses favoris</translation>
     </message>
 </context>
 <context>
@@ -3528,7 +3528,7 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Dernières stations &amp; listes de lecture</translation>
+        <translation>Dernières stations et listes de lecture</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
