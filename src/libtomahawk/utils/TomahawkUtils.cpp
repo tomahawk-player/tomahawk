@@ -316,6 +316,18 @@ extensionToMimetype( const QString& extension )
     return s_ext2mime.value( extension, "unknown" );
 }
 
+
+void
+msleep( unsigned int ms )
+{
+  #ifdef WIN32
+    Sleep( ms );   
+  #else
+    ::usleep( ms * 1000 );
+  #endif
+}
+
+
 static QMutex s_noProxyHostsMutex;
 static QStringList s_noProxyHosts;
 

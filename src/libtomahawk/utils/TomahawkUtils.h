@@ -99,6 +99,8 @@ namespace TomahawkUtils
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
+    
+    DLLEXPORT void msleep( unsigned int ms );
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
