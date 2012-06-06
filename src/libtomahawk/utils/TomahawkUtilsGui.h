@@ -22,6 +22,7 @@
 
 #include <QSize>
 #include <QModelIndex>
+#include <QTextOption>
 
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
@@ -47,7 +48,9 @@ namespace TomahawkUtils
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
+    DLLEXPORT void drawShadowText( QPainter* p, const QRect& rect, const QString& text, const QTextOption& textOption );
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
+
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
     DLLEXPORT int headerHeight();

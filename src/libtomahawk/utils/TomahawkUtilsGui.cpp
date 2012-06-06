@@ -62,23 +62,24 @@ createDragPixmap( MediaType type, int itemCount )
     {
         xCount = 5;
         size = 16;
-    } else if( itemCount > 9 )
+    }
+    else if( itemCount > 9 )
     {
         xCount = 4;
         size = 22;
     }
 
-    if( itemCount < xCount )
+    if ( itemCount < xCount )
     {
         xCount = itemCount;
     }
 
     int yCount = itemCount / xCount;
-    if( itemCount % xCount != 0 )
+    if ( itemCount % xCount != 0 )
     {
         ++yCount;
     }
-    if( yCount > xCount )
+    if ( yCount > xCount )
     {
         yCount = xCount;
     }
@@ -105,7 +106,7 @@ createDragPixmap( MediaType type, int itemCount )
 
     int x = 0;
     int y = 0;
-    for( int i = 0; i < itemCount; ++i )
+    for ( int i = 0; i < itemCount; ++i )
     {
 
         painter.drawPixmap( x, y, pixmap );
@@ -127,8 +128,28 @@ createDragPixmap( MediaType type, int itemCount )
 
 
 void
+drawShadowText( QPainter* painter, const QRect& rect, const QString& text, const QTextOption& textOption )
+{
+    painter->save();
+
+    painter->drawText( rect, text, textOption );
+    
+/*    QFont font = painter->font();
+    font.setPixelSize( font.pixelSize() + 2 );
+    painter->setFont( font );
+
+    painter->setPen( Qt::black );
+    painter->drawText( rect, text, textOption );*/
+
+    painter->restore();
+}
+
+
+void
 drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& figRectIn )
 {
+    painter->save();
+
     QRect figRect = figRectIn;
     if ( text.length() == 1 )
         figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
@@ -155,15 +176,13 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     ppath.arcTo( leftArcRect, 270, 180 );
     painter->drawPath( ppath );
 
-    painter->setPen( origpen );
-
-#ifdef Q_WS_MAC
     figRect.adjust( -1, 0, 0, 0 );
-#endif
 
-    QTextOption to( Qt::AlignCenter );
+    painter->setPen( origpen );
     painter->setPen( Qt::white );
-    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
+    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
+    
+    painter->restore();
 }
 
 
@@ -277,10 +296,10 @@ QPixmap
 createAvatarFrame( const QPixmap &avatar )
 {
     QPixmap frame( ":/data/images/avatar_frame.png" );
-    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     QPainter painter( &frame );
-    painter.drawPixmap( (frame.height() - scaledAvatar.height()) / 2, (frame.width() - scaledAvatar.width()) / 2, scaledAvatar );
+    painter.drawPixmap( ( frame.height() - scaledAvatar.height() ) / 2, ( frame.width() - scaledAvatar.width() ) / 2, scaledAvatar );
 
     return frame;
 }
