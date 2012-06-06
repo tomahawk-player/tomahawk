@@ -145,10 +145,13 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 void
 SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QFont normal = painter->font();
-    QFont bold = painter->font();
+    QFont normal = option.font;
+    QFont bold = option.font;
     bold.setBold( true );
+
     QFont figFont = bold;
+    figFont.setFamily( "Arial Bold" );
+    figFont.setWeight( QFont::Black );
     figFont.setPixelSize( 10 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
@@ -254,7 +257,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     {
         painter->setRenderHint( QPainter::Antialiasing );
 
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 8, 0, -13, -option.rect.height() + 16 );
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + 16 );
         int hd = ( option.rect.height() - figRect.height() ) / 2;
         figRect.adjust( 0, hd, 0, hd );
 
