@@ -241,7 +241,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         // right edge 10px past right edge of pixmapRect
         // bottom edge flush with bottom of pixmap
         QRect rect( pixmapRect.right() - width , 0, width - 8, 0 );
-        rect.adjust( -1, 0, 0, 0 );
+        rect.adjust( -2, 0, 0, 0 );
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
