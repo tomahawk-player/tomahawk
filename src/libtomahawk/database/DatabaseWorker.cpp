@@ -193,7 +193,7 @@ DatabaseWorker::doWork()
             if ( cmd->doesMutates() )
             {
                 qDebug() << "Committing" << cmd->commandname() << cmd->guid();
-                if ( !m_dbimpl->database().commit() )
+                if ( !m_dbimpl->newquery().commitTransaction() )
                 {
                     tDebug() << "FAILED TO COMMIT TRANSACTION*";
                     throw "commit failed";
