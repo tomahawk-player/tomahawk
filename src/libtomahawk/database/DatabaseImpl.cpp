@@ -742,7 +742,7 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 
     if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
     {
-        QSqlDatabase::removeDatabase( "tomahawk" );
+        QSqlDatabase::removeDatabase( connName );
 
         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
         tLog() << endl << "****************************" << endl;
@@ -753,7 +753,7 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 
         QFile::copy( dbname, newname );
         {
-            m_db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+            m_db = QSqlDatabase::addDatabase( "QSQLITE", connName );
             m_db.setDatabaseName( dbname );
             if ( !m_db.open() )
                 throw "db moving failed";
