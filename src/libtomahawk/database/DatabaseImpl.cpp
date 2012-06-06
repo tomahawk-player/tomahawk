@@ -113,7 +113,7 @@ DatabaseImpl::init()
 
 DatabaseImpl::~DatabaseImpl()
 {
-    tDebug() << "Shutting down database.";
+    tDebug() << "Shutting down database connection.";
 
 /*
 #ifdef TOMAHAWK_QUERY_ANALYZE
