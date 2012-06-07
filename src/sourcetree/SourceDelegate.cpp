@@ -186,17 +186,10 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, text );
 
-    bool isPlaying = false;
-    QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
+    bool isPlaying = !( colItem->source()->currentTrack().isNull() );
+    QString desc = colItem->source()->textStatus();
     if ( colItem->source().isNull() )
         desc = tr( "All available tracks" );
-    if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
-    {
-        desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
-        isPlaying = true;
-    }
-    if ( desc.isEmpty() )
-        desc = tr( "Online" );
 
     painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
