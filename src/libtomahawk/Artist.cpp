@@ -85,6 +85,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_coverLoaded( false )
     , m_coverLoading( false )
     , m_simArtistsLoaded( false )
+    , m_biographyLoaded( false )
     , m_infoJobs( 0 )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
@@ -188,6 +189,35 @@ Artist::similarArtists() const
     }
 
     return m_similarArtists;
+}
+
+
+QString
+Artist::biography() const
+{
+    if ( !m_biographyLoaded )
+    {
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = infoid();
+        requestData.customData = QVariantMap();
+
+        requestData.input = name();
+        requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
+        requestData.requestId = TomahawkUtils::infosystemRequestId();
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( finished( QString ) ),
+                SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
+
+        m_infoJobs++;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+
+    return m_biography;
 }
 
 
@@ -309,6 +339,22 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
 
             m_simArtistsLoaded = true;
             emit similarArtistsLoaded();
+
+            break;
+        }
+
+        case InfoSystem::InfoArtistBiography:
+        {
+            QVariantMap bmap = output.toMap();
+
+            foreach ( const QString& source, bmap.keys() )
+            {
+                if ( source == "last.fm" )
+                    m_biography = bmap[ source ].toHash()[ "text" ].toString();
+            }
+            
+            m_biographyLoaded = true;
+            emit biographyLoaded();
 
             break;
         }

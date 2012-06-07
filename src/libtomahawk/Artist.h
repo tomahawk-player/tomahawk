@@ -59,6 +59,8 @@ public:
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
+    
+    QString biography() const;
 
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
@@ -77,6 +79,7 @@ signals:
     void updated();
     void coverChanged();
     void similarArtistsLoaded();
+    void biographyLoaded();
     void statsLoaded();
 
 private slots:
@@ -98,6 +101,7 @@ private:
     mutable bool m_coverLoading;
     QHash<Tomahawk::ModelMode, bool> m_albumsLoaded;
     bool m_simArtistsLoaded;
+    bool m_biographyLoaded;
 
     mutable QString m_uuid;
     mutable int m_infoJobs;
@@ -105,6 +109,7 @@ private:
     QList<Tomahawk::album_ptr> m_databaseAlbums;
     QList<Tomahawk::album_ptr> m_officialAlbums;
     QList<Tomahawk::artist_ptr> m_similarArtists;
+    QString m_biography;
 
     bool m_playbackHistoryLoaded;
     QList< PlaybackLog > m_playbackHistory;
