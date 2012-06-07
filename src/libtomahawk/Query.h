@@ -199,10 +199,7 @@ public slots:
     void addArtists( const QList< Tomahawk::artist_ptr >& );
 
     void onResolvingFinished();
-
-    // resolve if not solved()
     void onResolverAdded();
-    void onResolverRemoved();
 
 private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );

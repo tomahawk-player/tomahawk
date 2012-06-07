@@ -125,10 +125,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
 
-    connect( Pipeline::instance(), SIGNAL( resolverAdded( Resolver* ) ),
-             SLOT( onResolverAdded() ), Qt::QueuedConnection );
-    connect( Pipeline::instance(), SIGNAL( resolverRemoved( Resolver* ) ),
-             SLOT( onResolverRemoved() ), Qt::QueuedConnection );
+    connect( Pipeline::instance(), SIGNAL( resolverAdded( Tomahawk::Resolver* ) ), SLOT( onResolverAdded() ), Qt::QueuedConnection );
 }
 
 
@@ -216,7 +213,6 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
         m_results << newresults;
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
-        query_ptr q = m_ownRef.toStrongRef();
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -310,16 +306,6 @@ Query::onResolvingFinished()
 
 void
 Query::onResolverAdded()
-{
-    if ( !solved() )
-    {
-        refreshResults();
-    }
-}
-
-
-void
-Query::onResolverRemoved()
 {
     if ( !solved() )
     {
@@ -447,7 +433,7 @@ Query::checkResults()
         }
     }
 
-    if ( m_playable && !playable )
+    if ( m_solved && !solved )
     {
         refreshResults();
     }
