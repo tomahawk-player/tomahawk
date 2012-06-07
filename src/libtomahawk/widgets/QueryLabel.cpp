@@ -89,7 +89,7 @@ QueryLabel::init()
 
     m_useCustomPen = false;
     m_useCustomFont = false;
-    m_align = Qt::AlignLeft;
+    m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
 }
 
