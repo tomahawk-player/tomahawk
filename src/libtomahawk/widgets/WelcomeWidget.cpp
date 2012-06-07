@@ -32,6 +32,7 @@
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "widgets/OverlayWidget.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "dynamic/GeneratorInterface.h"
@@ -307,4 +308,14 @@ PlaylistWidget::PlaylistWidget( QWidget* parent )
     : QListView( parent )
 {
     m_overlay = new OverlayWidget( this );
+    LoadingSpinner* spinner = new LoadingSpinner( this );
 }
+
+
+void
+PlaylistWidget::setModel( QAbstractItemModel* model )
+{
+    QListView::setModel( model );
+    emit modelChanged();
+}
+
