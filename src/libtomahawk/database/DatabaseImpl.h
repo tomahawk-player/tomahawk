@@ -101,6 +101,7 @@ private:
 
     QString m_dbid;
     FuzzyIndex* m_fuzzyIndex;
+    mutable QMutex m_mutex;
 };
 
 #endif // DATABASEIMPL_H

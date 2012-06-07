@@ -131,6 +131,8 @@ DatabaseImpl::~DatabaseImpl()
 DatabaseImpl*
 DatabaseImpl::clone() const
 {
+    QMutexLocker lock( &m_mutex );
+
     DatabaseImpl* impl = new DatabaseImpl( m_parent, m_db.databaseName() );
     impl->setDatabaseID( m_dbid );
     impl->setFuzzyIndex( m_fuzzyIndex );
