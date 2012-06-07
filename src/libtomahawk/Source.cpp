@@ -362,7 +362,7 @@ Source::playlistInterface()
 void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
 {
-    qDebug() << Q_FUNC_INFO << query->toString();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << query->toString();
 
     m_currentTrack = query;
     m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
@@ -376,10 +376,10 @@ Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int durati
 void
 Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
-    qDebug() << Q_FUNC_INFO << query->toString();
+    tDebug() << Q_FUNC_INFO << query->toString();
     emit playbackFinished( query );
 
-    m_currentTrackTimer.start();
+    m_currentTrack.clear();
 }
 
 
