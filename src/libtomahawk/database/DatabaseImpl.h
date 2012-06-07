@@ -81,9 +81,6 @@ public:
 signals:
     void indexReady();
 
-private slots:
-    void updateIndex();
-
 private:
     DatabaseImpl( Database* parent, const QString& dbname );
     void setFuzzyIndex( FuzzyIndex* fi ) { m_fuzzyIndex = fi; }

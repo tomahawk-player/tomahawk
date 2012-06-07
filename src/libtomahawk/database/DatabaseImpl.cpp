@@ -27,7 +27,6 @@
 #include <QFile>
 
 #include "database/Database.h"
-#include "DatabaseCommand_UpdateSearchIndex.h"
 #include "SourceList.h"
 #include "Result.h"
 #include "Artist.h"
@@ -75,8 +74,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     query.exec( "UPDATE source SET isonline = 'false'" );
 
     m_fuzzyIndex = new FuzzyIndex( this, schemaUpdated );
-    if ( schemaUpdated )
-        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
 
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
     if ( qApp->arguments().contains( "--dumpdb" ) )
@@ -773,12 +770,4 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     }
 
     return schemaUpdated;
-}
-
-
-void
-DatabaseImpl::updateIndex()
-{
-    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
