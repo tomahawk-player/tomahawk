@@ -23,6 +23,7 @@
 #include "SourceList.h"
 #include "SourcePlaylistInterface.h"
 
+#include "accounts/AccountManager.h"
 #include "network/ControlConnection.h"
 #include "database/DatabaseCommand_AddSource.h"
 #include "database/DatabaseCommand_CollectionStats.h"
@@ -65,6 +66,12 @@ Source::Source( int id, const QString& username )
 
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
+    
+    if ( m_isLocal )
+    {
+        connect( Accounts::AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( setOnline() ) );
+        connect( Accounts::AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( setOffline() ) );
+    }
 }
 
 
@@ -228,12 +235,15 @@ Source::setOffline()
     m_online = false;
     emit offline();
 
-    m_currentTrack.clear();
-    emit stateChanged();
+    if ( !isLocal() )
+    {
+        m_currentTrack.clear();
+        emit stateChanged();
 
-    m_cc = 0;
-    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        m_cc = 0;
+        DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    }
 }
 
 
@@ -247,11 +257,14 @@ Source::setOnline()
     m_online = true;
     emit online();
 
-    // ensure username is in the database
-    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
-    connect( cmd, SIGNAL( done( unsigned int, QString ) ),
-                    SLOT( dbLoaded( unsigned int, const QString& ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    if ( !isLocal() )
+    {
+        // ensure username is in the database
+        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
+        connect( cmd, SIGNAL( done( unsigned int, QString ) ),
+                        SLOT( dbLoaded( unsigned int, const QString& ) ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
 }
 
 
