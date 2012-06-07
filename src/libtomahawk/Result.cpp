@@ -20,7 +20,9 @@
 
 #include "Album.h"
 #include "Collection.h"
+#include "Resolver.h"
 #include "Source.h"
+#include "Pipeline.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_Resolve.h"
 #include "database/DatabaseCommand_AllTracks.h"
@@ -72,6 +74,7 @@ Result::Result( const QString& url )
     , m_trackId( 0 )
     , m_fileId( 0 )
 {
+    connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
 }
 
 
@@ -94,11 +97,23 @@ Result::deleteLater()
 }
 
 
+void
+Result::onResolverRemoved( Tomahawk::Resolver* resolver )
+{
+    if ( m_resolvedBy.data() == resolver )
+    {
+        m_resolvedBy.clear();
+        emit statusChanged();
+    }
+}
+
+
 artist_ptr
 Result::artist() const
 {
     return m_artist;
 }
+
 
 artist_ptr
 Result::composer() const
@@ -124,18 +139,10 @@ Result::collection() const
 float
 Result::score() const
 {
-    if ( !collection().isNull() && collection()->source()->isOnline() )
-    {
+    if ( isOnline() )
         return m_score;
-    }
     else
-    {
-        // check if this a valid collection-less result (e.g. from youtube, but ignore offline sources still)
-        if ( collection().isNull() )
-            return m_score;
-        else
-            return 0.0;
-    }
+        return 0.0;
 }
 
 
@@ -152,7 +159,14 @@ Result::id() const
 bool
 Result::isOnline() const
 {
-    return ( ( !collection().isNull() && collection()->source()->isOnline() ) || collection().isNull() );
+    if ( !collection().isNull() )
+    {
+        return collection()->source()->isOnline();
+    }
+    else
+    {
+        return !m_resolvedBy.isNull();
+    }
 }
 
 
@@ -273,4 +287,21 @@ Result::friendlySource() const
     }
     else
         return collection()->source()->friendlyName();
+}
+
+
+Tomahawk::Resolver*
+Result::resolvedBy() const
+{
+    if ( m_resolvedBy.isNull() )
+        return 0;
+
+    return m_resolvedBy.data();
+}
+
+
+void
+Result::setResolvedBy( Tomahawk::Resolver* resolver )
+{
+    m_resolvedBy = QWeakPointer< Tomahawk::Resolver >( resolver );
 }
