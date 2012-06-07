@@ -445,6 +445,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
 
     // Extra definition for namespaced-versions of signals/slots required
+    qRegisterMetaType< Tomahawk::Resolver* >("Tomahawk::Resolver*");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
