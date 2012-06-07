@@ -18,6 +18,8 @@
 
 #include "database/TomahawkSqlQuery.h"
 
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -39,6 +41,13 @@ TomahawkSqlQuery::TomahawkSqlQuery( const QSqlDatabase& db )
     : QSqlQuery( db )
     , m_db( db )
 {
+}
+
+
+QString
+TomahawkSqlQuery::escape( const QString& identifier, QSqlDriver::IdentifierType type )
+{
+    return Database::instance()->impl()->database().driver()->escapeIdentifier( identifier, type );
 }
 
 
@@ -114,7 +123,7 @@ TomahawkSqlQuery::showError()
 
 
 bool
-TomahawkSqlQuery::isBusyError( const QSqlError& error )
+TomahawkSqlQuery::isBusyError( const QSqlError& error ) const
 {
     const QString text = error.text().toLower();
 

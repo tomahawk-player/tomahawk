@@ -21,6 +21,7 @@
 
 // subclass QSqlQuery so that it prints the error msg if a query fails
 
+#include <QSqlDriver>
 #include <QSqlQuery>
 
 #define TOMAHAWK_QUERY_ANALYZE 1
@@ -32,13 +33,15 @@ public:
     TomahawkSqlQuery();
     TomahawkSqlQuery( const QSqlDatabase& db );
 
+    static QString escape( const QString& identifier, QSqlDriver::IdentifierType type = QSqlDriver::FieldName );
+
     bool exec( const QString& query );
     bool exec();
     
     bool commitTransaction();
 
 private:
-    bool isBusyError( const QSqlError& error );
+    bool isBusyError( const QSqlError& error ) const;
 
     void showError();
     
