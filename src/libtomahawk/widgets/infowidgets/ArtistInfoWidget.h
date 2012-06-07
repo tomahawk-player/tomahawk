@@ -35,7 +35,6 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
-#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 
@@ -90,8 +89,8 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
+    void onBiographyLoaded();
 
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
@@ -113,7 +112,6 @@ private:
     QString m_title;
     QString m_description;
     QString m_longDescription;
-    QString m_infoId;
     QPixmap m_pixmap;
 
     friend class MetaPlaylistInterface;

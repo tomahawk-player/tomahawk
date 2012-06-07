@@ -44,7 +44,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
 
@@ -75,10 +74,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     load( artist );
 }
@@ -148,6 +143,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     {
         disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
         disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
+        disconnect( m_artist.data(), SIGNAL( biographyLoaded() ), this, SLOT( onBiographyLoaded() ) );
         disconnect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                     this,              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
         disconnect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
@@ -157,6 +153,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     m_artist = artist;
     m_title = artist->name();
 
+    connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
     connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
     connect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
@@ -172,21 +169,11 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     
     if ( !m_artist->similarArtists().isEmpty() )
         onSimilarArtistsLoaded();
+    
+    if ( !m_artist->biography().isEmpty() )
+        onBiographyLoaded();
 
     onArtistImageUpdated();
-
-    Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = artist->name();
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = m_infoId;
-    requestData.customData = QVariantMap();
-
-    requestData.input = artist->name();
-    requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
 }
 
 
@@ -216,43 +203,10 @@ ArtistInfoWidget::onSimilarArtistsLoaded()
 
 
 void
-ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+ArtistInfoWidget::onBiographyLoaded()
 {
-    if ( requestData.caller != m_infoId )
-        return;
-
-    InfoSystem::InfoStringHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
-
-    if ( output.canConvert< QVariantMap >() )
-    {
-        const QString artist = requestData.input.toString();
-        if ( trackInfo["artist"] != m_artist->name() && artist != m_artist->name() )
-        {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
-            return;
-        }
-    }
-
-    QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( requestData.type )
-    {
-        case InfoSystem::InfoArtistBiography:
-        {
-            QVariantMap bmap = output.toMap();
-
-            foreach ( const QString& source, bmap.keys() )
-            {
-                if ( m_longDescription.isEmpty() || source == "last.fm" )
-                    m_longDescription = bmap[ source ].toHash()[ "text" ].toString();
-            }
-            emit longDescriptionChanged( m_longDescription );
-            break;
-        }
-
-        default:
-            return;
-    }
+    m_longDescription = m_artist->biography();
+    emit longDescriptionChanged( m_longDescription );
 }
 
 
