@@ -153,8 +153,10 @@ OverlayWidget::onViewChanged()
         return;
 
     PlayableProxyModel* model = qobject_cast<PlayableProxyModel*>( m_itemView->model() );
+    if ( !model )
+        return;
 
-    if ( m_text.isEmpty() || ( model && ( model->rowCount( QModelIndex() ) || model->isLoading() ) ) )
+    if ( m_text.isEmpty() || model->rowCount( QModelIndex() ) || model->isLoading() )
     {
         hide();
     }
