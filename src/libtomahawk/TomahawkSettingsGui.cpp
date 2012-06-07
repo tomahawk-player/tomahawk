@@ -61,6 +61,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     return in;
 }
 
+
 TomahawkSettingsGui*
 TomahawkSettingsGui::instanceGui()
 {
@@ -109,11 +110,13 @@ TomahawkSettingsGui::setAtticaResolverState( const QString& resolver, AtticaMana
     sync();
 }
 
+
 AtticaManager::StateHash
 TomahawkSettingsGui::atticaResolverStates() const
 {
     return value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
 }
+
 
 void
 TomahawkSettingsGui::setAtticaResolverStates( const AtticaManager::StateHash states )
