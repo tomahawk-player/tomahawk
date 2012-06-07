@@ -684,7 +684,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     {
         stop( UnknownError );
 
-        tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        tDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
 
         emit error( UnknownError );
         setState( Error );
