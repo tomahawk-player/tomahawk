@@ -73,7 +73,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
         QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
         foreach( QString s, sl )
         {
-            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkUtils::sqlEscape( s ) );
+            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkSqlQuery::escape( s ) );
         }
 
         filterToken = QString( "AND artist.id = file_join.artist AND file_join.track = track.id %1" ).arg( filtersql );
