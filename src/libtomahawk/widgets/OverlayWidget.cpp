@@ -66,6 +66,9 @@ OverlayWidget::~OverlayWidget()
 void
 OverlayWidget::init()
 {
+    installEventFilter( m_parent );
+    setAcceptDrops( true );
+
     setAttribute( Qt::WA_TranslucentBackground, true );
     m_opacity = 0.00;
     setOpacity( m_opacity );
