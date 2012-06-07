@@ -38,6 +38,8 @@ public:
     bool commitTransaction();
 
 private:
+    bool isBusyError( const QSqlError& error );
+
     void showError();
     
     QSqlDatabase m_db;

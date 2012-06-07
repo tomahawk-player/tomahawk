@@ -59,8 +59,11 @@ TomahawkSqlQuery::exec()
     unsigned int retries = 0;
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
-        tDebug() << "INFO: Retrying failed query:" << this->lastQuery() << this->lastError().text();
-        TomahawkUtils::msleep( 25 );
+        if ( isBusyError( lastError() ) )
+            retries = 0;
+
+        tDebug() << "INFO: Retrying failed query:" << lastQuery() << lastError().text();
+        TomahawkUtils::msleep( 10 );
     }
 
     bool ret = ( retries < 10 );
@@ -87,8 +90,11 @@ TomahawkSqlQuery::commitTransaction()
     unsigned int retries = 0;
     while ( !m_db.commit() && ++retries < 10 )
     {
-        tDebug() << "INFO: Retrying failed commit:" << this->lastQuery() << this->lastError().text();
-        TomahawkUtils::msleep( 25 );
+        if ( isBusyError( lastError() ) )
+            retries = 0;
+
+        tDebug() << "INFO: Retrying failed commit:" << lastQuery() << lastError().text();
+        TomahawkUtils::msleep( 10 );
     }
     
     return ( retries < 10 );
@@ -98,10 +104,19 @@ TomahawkSqlQuery::commitTransaction()
 void
 TomahawkSqlQuery::showError()
 {
-    tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
-           << this->lastQuery() << "\n"
-           << "boundValues:" << this->boundValues() << "\n"
-           << this->lastError().text() << "\n";
+    tLog() << endl << "*** DATABASE ERROR ***" << endl
+           << lastQuery() << endl
+           << "boundValues:" << boundValues() << endl
+           << lastError().text() << endl;
 
     Q_ASSERT( false );
+}
+
+
+bool
+TomahawkSqlQuery::isBusyError( const QSqlError& error )
+{
+    const QString text = error.text().toLower();
+
+    return ( text.contains( "locked" ) || text.contains( "busy" ) );
 }
