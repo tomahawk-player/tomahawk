@@ -83,7 +83,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="artistLabel">
+           <widget class="QueryLabel" name="artistLabel">
             <property name="text">
              <string>Artist</string>
             </property>
@@ -107,7 +107,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="albumLabel">
+           <widget class="QueryLabel" name="albumLabel">
             <property name="text">
              <string>Album</string>
             </property>
@@ -232,6 +232,11 @@
    <class>HeaderLabel</class>
    <extends>QLabel</extends>
    <header>widgets/HeaderLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QueryLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/QueryLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

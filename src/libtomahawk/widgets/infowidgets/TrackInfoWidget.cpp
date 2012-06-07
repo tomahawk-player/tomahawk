@@ -37,6 +37,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     , ui( new Ui::TrackInfoWidget )
 {
     ui->setupUi( this );
+
     QPalette pal = palette();
     pal.setColor( QPalette::Window, QColor( "#323435" ) );
 
@@ -83,6 +84,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setPalette( p );
 //    ui->similarTracksLabel->setPalette( p );
 
+    ui->artistLabel->setType( QueryLabel::Artist );
+    ui->albumLabel->setType( QueryLabel::Album );
+
     m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
     ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
     ui->similarTracksView->proxyModel()->sort( -1 );
@@ -91,6 +95,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
     load( query );
+    
+    connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    connect( ui->albumLabel,  SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
 }
 
 
@@ -150,8 +157,8 @@ TrackInfoWidget::load( const query_ptr& query )
     onCoverUpdated();
 
     ui->trackLabel->setText( query->track() );
-    ui->artistLabel->setText( query->artist() );
-    ui->albumLabel->setText( query->album() );
+    ui->artistLabel->setQuery( query );
+    ui->albumLabel->setQuery( query );
     ui->fromLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
@@ -220,6 +227,21 @@ void
 TrackInfoWidget::onLyricsLoaded()
 {
     ui->lyricsView->setHtml( m_query->lyrics().join( "<br/>" ) );
+}
+
+
+void
+TrackInfoWidget::onArtistClicked()
+{
+    ViewManager::instance()->show( Artist::get( m_query->artist(), false ) );
+}
+
+
+void
+TrackInfoWidget::onAlbumClicked()
+{
+    artist_ptr artist = Artist::get( m_query->artist(), false );
+    ViewManager::instance()->show( Album::get( artist, m_query->album(), false ) );
 }
 
 

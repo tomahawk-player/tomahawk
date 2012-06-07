@@ -82,6 +82,9 @@ private slots:
     void onSimilarTracksLoaded();
     void onLyricsLoaded();
 
+    void onArtistClicked();
+    void onAlbumClicked();
+
 private:
     Ui::TrackInfoWidget *ui;
 
