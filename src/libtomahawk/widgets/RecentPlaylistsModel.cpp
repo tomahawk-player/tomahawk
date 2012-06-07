@@ -63,6 +63,8 @@ RecentPlaylistsModel::onRefresh()
     if ( m_timer->isActive() )
         m_timer->stop();
 
+    emit loadingStarted();
+   
     DatabaseCommand_LoadAllSortedPlaylists* cmd = new DatabaseCommand_LoadAllSortedPlaylists( source_ptr() );
     cmd->setLimit( 15 );
     cmd->setSortOrder( DatabaseCommand_LoadAllPlaylists::ModificationTime );
@@ -117,6 +119,7 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
     endResetModel();
 
     emit emptinessChanged( m_playlists.isEmpty() );
+    emit loadingFinished();
 }
 
 
