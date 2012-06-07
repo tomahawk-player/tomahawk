@@ -42,6 +42,7 @@ using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
 
+
 // Sort binary resolvers above script resolvers, and script resolvers by download count
 bool
 resolverSort( const Attica::Content& first, const Attica::Content& second )
@@ -52,6 +53,7 @@ resolverSort( const Attica::Content& first, const Attica::Content& second )
     return first.downloads() > second.downloads();
 }
 
+
 AtticaManager::AtticaManager( QObject* parent )
     : QObject( parent )
     , m_resolverJobsLoaded( 0 )
@@ -60,7 +62,9 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) ) );
+    
+    const QString url = QString( "http://bakery.tomahawk-player.org/resolvers/providers.xml?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
 
