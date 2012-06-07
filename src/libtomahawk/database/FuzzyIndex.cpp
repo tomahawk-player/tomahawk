@@ -24,7 +24,9 @@
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
+#include "DatabaseCommand_UpdateSearchIndex.h"
 #include "DatabaseImpl.h"
+#include "Database.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "Source.h"
@@ -38,7 +40,7 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( QObject* parent, bool wipeIndex )
+FuzzyIndex::FuzzyIndex( QObject* parent, bool wipe )
     : QObject( parent )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
@@ -56,15 +58,11 @@ FuzzyIndex::FuzzyIndex( QObject* parent, bool wipeIndex )
     catch ( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        wipe = true;
     }
 
-    if ( wipeIndex )
-    {
-        tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
-        beginIndexing();
-        endIndexing();
-    }
+    if ( wipe )
+        wipeIndex();
 }
 
 
@@ -74,6 +72,27 @@ FuzzyIndex::~FuzzyIndex()
     delete m_luceneReader;
     delete m_analyzer;
     delete m_luceneDir;
+}
+
+
+bool
+FuzzyIndex::wipeIndex()
+{
+    tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
+    beginIndexing();
+    endIndexing();
+
+    QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+    
+    return true; // FIXME
+}
+
+
+void
+FuzzyIndex::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -170,7 +189,8 @@ FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& 
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        
+        wipeIndex();
     }
 }
 
@@ -263,7 +283,8 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        
+        wipeIndex();
     }
 
     return resultsmap;
@@ -317,7 +338,8 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        
+        wipeIndex();
     }
 
     return resultsmap;
