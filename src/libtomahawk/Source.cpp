@@ -59,10 +59,7 @@ Source::Source( int id, const QString& username )
     m_scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
     if ( id == 0 )
-    {
         m_isLocal = true;
-        m_online = true;
-    }
 
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
@@ -523,4 +520,27 @@ void
 Source::updateIndexWhenSynced()
 {
     m_updateIndexWhenSynced = true;
+}
+
+
+QString
+Source::textStatus() const
+{
+    if ( !m_textStatus.isEmpty() )
+        return m_textStatus;
+
+    if ( !currentTrack().isNull() )
+    {
+        return currentTrack()->artist() + " - " + currentTrack()->track();
+    }
+
+    // do not use isOnline() here - it will always return true for the local source
+    if ( m_online )
+    {
+        return tr( "Online" );
+    }
+    else
+    {
+        return tr( "Offline" );
+    }
 }
