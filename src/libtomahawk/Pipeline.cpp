@@ -106,6 +106,7 @@ Pipeline::removeResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
 
+    tDebug() << "Removed resolver:" << r->name();
     m_resolvers.removeAll( r );
     emit resolverRemoved( r );
 }
