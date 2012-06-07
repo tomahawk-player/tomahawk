@@ -113,7 +113,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 
     connect( source.data(), SIGNAL( stats( QVariantMap ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( stateChanged() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( offline() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( online() ), SIGNAL( updated() ) );
