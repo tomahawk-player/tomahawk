@@ -369,7 +369,9 @@ Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int durati
 
     if ( m_playlistInterface.isNull() )
         playlistInterface();
+
     emit playbackStarted( query );
+    emit stateChanged();
 }
 
 
@@ -380,6 +382,7 @@ Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
     emit playbackFinished( query );
 
     m_currentTrack.clear();
+    emit stateChanged();
 }
 
 
@@ -387,7 +390,6 @@ void
 Source::trackTimerFired()
 {
     m_currentTrack.clear();
-
     emit stateChanged();
 }
 
