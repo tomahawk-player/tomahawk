@@ -253,10 +253,12 @@ void Tomahawk::checkForUpdates() {
 
 #ifdef LION
 #define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
-#define LION_FULLSCREEN_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
+#define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
+#define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE NSWindowDidExitFullScreenNotification
 #else
 #define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
-#define LION_FULLSCREEN_NOTIFICATION_VALUE @"NSWindowWillEnterFullScreenNotification"
+#define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE @"NSWindowWillEnterFullScreenNotification"
+#define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE @"NSWindowDidExitFullScreenNotification"
 #endif
 
 void Tomahawk::enableFullscreen( QObject* receiver )
@@ -281,14 +283,14 @@ void Tomahawk::enableFullscreen( QObject* receiver )
                 if ( !receiver )
                     continue;
 
-                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_NOTIFICATION_VALUE
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE
                                                                   object:nswindow
                                                                    queue:nil
                                                               usingBlock:^(NSNotification * note) {
                     NSLog(@"Became Full Screen!");
                     QMetaObject::invokeMethod( receiver, "fullScreenEntered", Qt::DirectConnection );
                 }];
-                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_NOTIFICATION_VALUE
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE
                                                                   object:nswindow
                                                                    queue:nil
                                                               usingBlock:^(NSNotification * note) {
