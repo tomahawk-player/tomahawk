@@ -822,7 +822,8 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
      */
     if ( m_updaters.contains( id ) )
     {
-        //Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before
+        //Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before, but might not be if the user
+        // changed spotify resolver meanwhile, so allow it for now
         m_updaters[ id ]->setSync( true );
 //         m_updaters[ id ]->
         // TODO
