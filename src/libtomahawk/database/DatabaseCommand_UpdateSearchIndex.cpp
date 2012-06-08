@@ -19,15 +19,19 @@
 
 #include "DatabaseCommand_UpdateSearchIndex.h"
 
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
-#include "utils/Logger.h"
-#include "jobview/IndexingJobItem.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "Source.h"
-
 #include <QSqlRecord>
+
+#include "DatabaseImpl.h"
+#include "Source.h"
+#include "TomahawkSqlQuery.h"
+#include "jobview/IndexingJobItem.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "jobview/JobStatusView.h"
+    #include "jobview/JobStatusModel.h"
+#endif
+
+#include "utils/Logger.h"
 
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
@@ -36,14 +40,18 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
 {
     tLog() << Q_FUNC_INFO << "Updating index.";
 
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( m_statusJob.data() );
+#endif
 }
 
 
 DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
 {
-    if (! m_statusJob.isNull() )
+#ifndef ENABLE_HEADLESS
+    if ( ! m_statusJob.isNull() )
         m_statusJob.data()->done();
+#endif
 }
 
 
