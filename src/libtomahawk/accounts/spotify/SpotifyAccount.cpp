@@ -822,7 +822,7 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
      */
     if ( m_updaters.contains( id ) )
     {
-        Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before
+        //Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before
         m_updaters[ id ]->setSync( true );
 //         m_updaters[ id ]->
         // TODO
