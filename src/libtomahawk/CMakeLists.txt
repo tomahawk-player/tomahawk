@@ -189,6 +189,10 @@ set( libSources
     accounts/spotify/SpotifyAccountConfig.cpp
     accounts/spotify/SpotifyPlaylistUpdater.cpp
 
+    accounts/lastfm/LastFmAccount.cpp
+    accounts/lastfm/LastFmConfig.cpp
+    accounts/lastfm/LastFmInfoPlugin.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipInfo.cpp
@@ -312,6 +316,7 @@ set( libUI ${libUI}
     infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui
     accounts/spotify/SpotifyAccountConfig.ui
+    accounts/lastfm/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

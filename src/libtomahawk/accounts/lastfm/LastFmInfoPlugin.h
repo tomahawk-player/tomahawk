@@ -22,6 +22,7 @@
 
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "DllMacro.h"
 
 #include <lastfm/Track>
 #include <lastfm/Audioscrobbler>
@@ -42,7 +43,7 @@ namespace Accounts
 namespace InfoSystem
 {
 
-class LastFmInfoPlugin : public InfoPlugin
+class DLLEXPORT LastFmInfoPlugin : public InfoPlugin
 {
     Q_OBJECT
 

@@ -21,6 +21,7 @@
 
 #include "accounts/Account.h"
 #include "AtticaManager.h"
+#include "DllMacro.h"
 
 #include <attica/content.h>
 
@@ -37,7 +38,7 @@ namespace Accounts {
 
 class LastFmConfig;
 
-class LastFmAccountFactory : public AccountFactory
+class DLLEXPORT LastFmAccountFactory : public AccountFactory
 {
     Q_OBJECT
 public:
@@ -57,11 +58,11 @@ private:
 };
 
 /**
- * 3.Last.Fm account is special. It is both an attica resolver *and* a InfoPlugin. We always want the infoplugin,
+ * Last.Fm account is special. It is both an attica resolver *and* a InfoPlugin. We always want the infoplugin,
  * but the user can install the attica resolver on-demand. So we take care of both there.
  *
  */
-class LastFmAccount : public CustomAtticaAccount
+class DLLEXPORT LastFmAccount : public CustomAtticaAccount
 {
     Q_OBJECT
 public:

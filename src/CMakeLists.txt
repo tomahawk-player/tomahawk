@@ -68,10 +68,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/GroupItem.cpp
      sourcetree/items/HistoryItem.cpp
 
-     accounts/lastfm/LastFmAccount.cpp
-     accounts/lastfm/LastFmConfig.cpp
-     accounts/lastfm/LastFmInfoPlugin.cpp
-
      TomahawkTrayIcon.cpp
      AudioControls.cpp
      SettingsDialog.cpp
@@ -91,8 +87,6 @@ SET( tomahawkUI ${tomahawkUI}
      DiagnosticsDialog.ui
      StackedSettingsDialog.ui
      ProxyDialog.ui
-
-     accounts/lastfm/LastFmConfig.ui
 
      AudioControls.ui
      LoadXSPFDialog.ui
