@@ -69,7 +69,7 @@ ScriptResolver::~ScriptResolver()
     msg[ "_msgtype" ] = "quit";
     sendMessage( msg );
 
-    bool finished = m_proc.waitForFinished( 2500 ); // might call handleMsg
+    bool finished = m_proc.state() != QProcess::Running || m_proc.waitForFinished( 2500 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
