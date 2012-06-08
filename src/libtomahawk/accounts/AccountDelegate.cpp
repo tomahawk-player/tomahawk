@@ -270,7 +270,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     }
     else if ( canDelete )
     {
-        const QString btnText = tr( "Remove Account" );
+        const QString btnText = tr( "Remove" );
         const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
         QRect btnRect;
 
