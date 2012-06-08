@@ -69,8 +69,9 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "rd.io" ) );
 }
 
+
 void
-ShortenedLinkParser::lookupUrl ( const QString& url )
+ShortenedLinkParser::lookupUrl( const QString& url )
 {
     tDebug() << "Looking up..." << url;
     QString cleaned = url;
@@ -86,6 +87,7 @@ ShortenedLinkParser::lookupUrl ( const QString& url )
     JobStatusView::instance()->model()->addJob( m_expandJob );
 
 }
+
 
 void
 ShortenedLinkParser::lookupFinished()
@@ -128,6 +130,8 @@ ShortenedLinkParser::checkFinished()
 }
 
 
+#ifndef ENABLE_HEADLESS
+
 QPixmap
 ShortenedLinkParser::pixmap()
 {
@@ -136,3 +140,5 @@ ShortenedLinkParser::pixmap()
 
     return *s_pixmap;
 }
+
+#endif
