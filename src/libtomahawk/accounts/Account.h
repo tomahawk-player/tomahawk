@@ -82,17 +82,18 @@ public:
     /**
      * Configuration widgets can have a "dataError( bool )" signal to enable/disable the OK button in their wrapper dialogs.
      */
+#ifndef ENABLE_HEADLESS
     virtual QWidget* configurationWidget() = 0;
     virtual QWidget* aboutWidget() { return 0; }
+    virtual QWidget* aclWidget() = 0;
+    virtual QPixmap icon() const = 0;
+#endif
 
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
     QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_credentials; }
 
     QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
-    virtual QWidget* aclWidget() = 0;
-
-    virtual QPixmap icon() const = 0;
 
     virtual ConnectionState connectionState() const = 0;
     virtual bool isAuthenticated() const = 0;
