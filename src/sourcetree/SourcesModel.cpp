@@ -101,41 +101,48 @@ SourcesModel::data( const QModelIndex& index, int role ) const
     if ( !index.isValid() )
         return QVariant();
 
+    SourceTreeItem* item = itemFromIndex( index );
+    if ( !item )
+        return QVariant();
+
     switch ( role )
     {
         case Qt::SizeHintRole:
             return QSize( 0, 18 );
         case SourceTreeItemRole:
-            return QVariant::fromValue< SourceTreeItem* >( itemFromIndex( index ) );
+            return QVariant::fromValue< SourceTreeItem* >( item );
         case SourceTreeItemTypeRole:
-            return itemFromIndex( index )->type();
+            return item->type();
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return itemFromIndex( index )->text();
+            return item->text();
         case Qt::DecorationRole:
-            return itemFromIndex( index )->icon();
+            return item->icon();
         case SourcesModel::SortRole:
-            return itemFromIndex( index )->peerSortValue();
+            return item->peerSortValue();
         case SourcesModel::IDRole:
-            return itemFromIndex( index )->IDValue();
+            return item->IDValue();
         case SourcesModel::LatchedOnRole:
         {
-            if ( itemFromIndex( index )->type() == Collection )
+            if ( item->type() == Collection )
             {
-                SourceItem* cItem = qobject_cast< SourceItem* >( itemFromIndex( index ) );
+                SourceItem* cItem = qobject_cast< SourceItem* >( item );
                 return cItem->localLatchedOn();
             }
             return false;
         }
         case SourcesModel::LatchedRealtimeRole:
         {
-            if ( itemFromIndex( index )->type() == Collection )
+            if ( item->type() == Collection )
             {
-                SourceItem* cItem = qobject_cast< SourceItem* >( itemFromIndex( index ) );
+                SourceItem* cItem = qobject_cast< SourceItem* >( item );
                 return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
             }
             return false;
         }
+    case Qt::ToolTipRole:
+        if ( !item->tooltip().isEmpty() )
+            return item->tooltip();
     }
     return QVariant();
 }

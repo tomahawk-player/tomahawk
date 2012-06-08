@@ -38,6 +38,7 @@ public:
     SourceItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
 
     virtual QString text() const;
+    virtual QString tooltip() const;
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;

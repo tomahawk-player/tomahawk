@@ -145,6 +145,16 @@ SourceItem::text() const
 }
 
 
+QString
+SourceItem::tooltip() const
+{
+    if ( !m_source.isNull() && !m_source->currentTrack().isNull() )
+        return m_source->textStatus();
+
+    return QString();
+}
+
+
 int
 SourceItem::IDValue() const
 {
