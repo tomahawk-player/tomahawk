@@ -776,7 +776,6 @@ Query::cover( const QSize& size, bool forceLoad ) const
 
     return QPixmap();
 }
-#endif
 
 
 bool
@@ -790,6 +789,8 @@ Query::coverLoaded() const
     
     return m_artistPtr->coverLoaded();
 }
+
+#endif
 
 
 QList<Tomahawk::query_ptr>
