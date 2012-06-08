@@ -34,10 +34,14 @@
 #include <QCoreApplication>
 #include <QBuffer>
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtilsGui.h"
 #include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "utils/TomahawkUtilsGui.h"
+#endif
+
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
