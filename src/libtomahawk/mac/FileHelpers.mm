@@ -85,9 +85,7 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
 
 + (void)performMoveWithInfo:(NSDictionary *)info
 {
-        // *** GETS CALLED ON NON-MAIN THREAD!
-
-    CAutoreleasePool _p;
+    // *** GETS CALLED ON NON-MAIN THREAD!
 
     NSString* fromPath = [info objectForKey: TKCopySourceKey];
     NSString* toPath = [info objectForKey: TKCopyDestinationKey];
@@ -204,6 +202,9 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
 
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:success], TKInstallerResultKey, [info objectForKey:TKInstallerDelegateKey], TKInstallerDelegateKey, error, TKInstallerErrorKey, nil];
     [self notifyDelegate:dict];
+
+    [fromPath release];
+    [toPath release];
 }
 
 

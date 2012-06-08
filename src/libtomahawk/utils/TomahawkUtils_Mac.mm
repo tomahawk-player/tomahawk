@@ -61,6 +61,8 @@
     if ( receiver )
         QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
 
+    [target release];
+
 }
 
 - (void)moveFailedWithError:(NSError *)error
