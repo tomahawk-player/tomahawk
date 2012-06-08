@@ -72,10 +72,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      accounts/lastfm/LastFmConfig.cpp
      accounts/lastfm/LastFmInfoPlugin.cpp
 
-     accounts/spotify/SpotifyAccount.cpp
-     accounts/spotify/SpotifyAccountConfig.cpp
-     accounts/spotify/SpotifyPlaylistUpdater.cpp
-
      TomahawkTrayIcon.cpp
      AudioControls.cpp
      SettingsDialog.cpp
@@ -97,7 +93,6 @@ SET( tomahawkUI ${tomahawkUI}
      ProxyDialog.ui
 
      accounts/lastfm/LastFmConfig.ui
-     accounts/spotify/SpotifyAccountConfig.ui
 
      AudioControls.ui
      LoadXSPFDialog.ui

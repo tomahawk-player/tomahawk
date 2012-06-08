@@ -21,6 +21,7 @@
 
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Closure.h"
+#include "DllMacro.h"
 
 #include <QQueue>
 #include <QVariant>
@@ -31,7 +32,7 @@ namespace Accounts {
 }
 }
 
-class SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
+class DLLEXPORT SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
 {
     Q_OBJECT
 
@@ -106,7 +107,7 @@ private:
 };
 
 
-class SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
+class DLLEXPORT SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 {
 public:
     SpotifyUpdaterFactory()  {}

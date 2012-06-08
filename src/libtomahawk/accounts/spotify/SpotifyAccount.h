@@ -26,6 +26,7 @@
 #include "Playlist.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/SmartPointerList.h"
+#include "DllMacro.h"
 
 class QAction;
 class SpotifyPlaylistUpdater;
@@ -51,7 +52,7 @@ struct SpotifyPlaylistInfo {
 };
 
 
-class SpotifyAccountFactory : public AccountFactory
+class DLLEXPORT SpotifyAccountFactory : public AccountFactory
 {
     Q_OBJECT
 public:
@@ -69,7 +70,7 @@ public:
 
 };
 
-class SpotifyAccount : public CustomAtticaAccount
+class DLLEXPORT SpotifyAccount : public CustomAtticaAccount
 {
     Q_OBJECT
 public:
@@ -159,6 +160,6 @@ private:
 }
 }
 
-Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylistInfo* );
+Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylistInfo* )
 
 #endif // SpotifyAccount_H

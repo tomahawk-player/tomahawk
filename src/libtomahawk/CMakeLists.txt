@@ -184,6 +184,11 @@ set( libSources
     accounts/DelegateConfigWrapper.cpp
     accounts/AccountFactoryWrapper.cpp
     accounts/AccountFactoryWrapperDelegate.cpp
+
+    accounts/spotify/SpotifyAccount.cpp
+    accounts/spotify/SpotifyAccountConfig.cpp
+    accounts/spotify/SpotifyPlaylistUpdater.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipInfo.cpp
@@ -306,6 +311,7 @@ set( libUI ${libUI}
     context/ContextWidget.ui
     infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui
+    accounts/spotify/SpotifyAccountConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
