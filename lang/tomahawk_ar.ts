@@ -1602,7 +1602,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="273"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>إزالة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="386"/>
