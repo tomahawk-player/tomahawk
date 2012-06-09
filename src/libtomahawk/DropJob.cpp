@@ -32,7 +32,6 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 #include "GlobalActionManager.h"
-#include "infosystem/InfoSystem.h"
 #include "utils/XspfLoader.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
@@ -57,7 +56,6 @@ DropJob::DropJob( QObject *parent )
     , m_getWholeAlbums( false )
     , m_top10( false )
     , m_dropAction( Default )
-    , m_dropJob( 0 )
 {
 }
 
@@ -294,11 +292,11 @@ DropJob::tracksFromQueryList( const QMimeData* data )
         query_ptr* query = reinterpret_cast<query_ptr*>(qptr);
         if ( query && !query->isNull() )
         {
-            tDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+            tDebug() << "Dropped query item:" << query->data()->toString();
 
             if ( m_top10 )
             {
-                getTopTen( query->data()->artist() );
+                queries << getTopTen( query->data()->artist() );
             }
             else if ( m_getWholeArtists )
             {
@@ -376,7 +374,7 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         stream >> album;
 
         if ( m_top10 )
-            getTopTen( artist );
+            queries << getTopTen( artist );
         else if ( m_getWholeArtists )
             queries << getArtist( artist );
         else
@@ -405,7 +403,7 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
         }
         else
         {
-            getTopTen( artist );
+            queries << getTopTen( artist );
         }
     }
     return queries;
@@ -569,6 +567,7 @@ DropJob::handleRdioUrls( const QString& urlsRaw )
     rdio->parse( urls );
 }
 
+
 void
 DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 {
@@ -592,7 +591,6 @@ DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
     tLog() << "Tomahawk compiled without QCA support, cannot use groovesharkparser";
 #endif
 }
-
 
 
 void
@@ -672,87 +670,32 @@ DropJob::expandedUrls( QStringList urls )
 void
 DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
-    qDebug() << Q_FUNC_INFO;
-    if ( m_dropJob )
+    tDebug() << Q_FUNC_INFO << tracksList.count();
+    
+/*    if ( results.isEmpty() )
     {
-        m_dropJob->setFinished();
-        m_dropJob = 0;
+        const QString which = album.isEmpty() ? "artist" : "album";
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "No tracks found for given %1" ).arg( which ), 5 ) );
+    }*/
+
+    if ( !m_dropJob.isEmpty() )
+    {
+        m_dropJob.takeFirst()->setFinished();
     }
 
     m_resultList.append( tracksList );
 
     if ( --m_queryCount == 0 )
     {
-        if ( m_onlyLocal )
+/*        if ( m_onlyLocal )
             removeRemoteSources();
 
         if ( !m_allowDuplicates )
-            removeDuplicates();
+            removeDuplicates();*/
 
         emit tracks( m_resultList );
         deleteLater();
     }
-}
-
-
-void
-DropJob::tracksFromDB( const QList< query_ptr >& tracks )
-{
-    // Tracks that we get from databasecommand_alltracks are resolved only against the database and explicitly marked
-    // as finished. if the source they resolve to is offline they will not resolve against any resolver.
-    // explicitly resolve them if they fall in that case first
-    foreach( const query_ptr& track, tracks )
-    {
-        if ( !track->playable() && !track->solved() && track->results().size() ) // we have offline results
-        {
-            track->setResolveFinished( false );
-            Pipeline::instance()->resolve( track );
-        }
-    }
-
-    album_ptr albumPtr;
-    artist_ptr artistPtr;
-    if ( Tomahawk::Album* album = qobject_cast< Tomahawk::Album* >( sender() ) )
-    {
-        foreach ( const album_ptr& ptr, m_albumsToKeep )
-            if ( ptr.data() == album )
-            {
-                albumPtr = ptr;
-                m_albumsToKeep.remove( ptr );
-            }
-    }
-    else if ( Tomahawk::Artist* artist = qobject_cast< Tomahawk::Artist* >( sender() ) )
-    {
-        foreach ( const artist_ptr& ptr, m_artistsToKeep )
-            if ( ptr.data() == artist )
-            {
-                artistPtr = ptr;
-                m_artistsToKeep.remove( ptr );
-            }
-    }
-
-    // If we have no tracks, this means no sources in our network have the give request (artist or album)
-    // Since we really do want to try to drop them, we ask the infosystem as well.
-    if ( tracks.isEmpty() )
-    {
-        if ( !albumPtr.isNull() && !albumPtr->artist().isNull() )
-        {
-            Q_ASSERT( artistPtr.isNull() );
-            --m_queryCount; // This query is done. New query is infosystem query
-            getAlbumFromInfoystem( albumPtr->artist()->name(), albumPtr->name() );
-        }
-        else if ( !artistPtr.isNull() )
-        {
-            Q_ASSERT( albumPtr.isNull() );
-            --m_queryCount;
-            getTopTen( artistPtr->name() );
-        }
-    }
-    else
-    {
-        onTracksAdded( tracks );
-    }
-
 }
 
 
@@ -803,59 +746,29 @@ DropJob::removeRemoteSources()
 }
 
 
-void
-DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-    if ( requestData.caller == s_dropJobInfoId )
-    {
-        const Tomahawk::InfoSystem::InfoStringHash info = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-        const QString artist = info["artist"];
-        const QString album  = info["album"];
-
-        qDebug() << "Got requestData response for artist" << artist << "and album:" << album << output;
-
-        QList< query_ptr > results;
-
-        int i = 0;
-        foreach ( const QVariant& title, output.toMap().value( "tracks" ).toList() )
-        {
-            results << Query::get( artist, title.toString(), QString(), uuid() );
-
-            if ( ++i == 10 ) // Only getting top ten for now. Would make sense to make it configurable
-                break;
-        }
-
-        if ( results.isEmpty() )
-        {
-            const QString which = album.isEmpty() ? "artist" : "album";
-            JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "No tracks found for given %1" ).arg( which ), 5 ) );
-        }
-        onTracksAdded( results );
-    }
-}
-
-
 QList< query_ptr >
-DropJob::getArtist( const QString &artist )
+DropJob::getArtist( const QString &artist, Tomahawk::ModelMode mode )
 {
     artist_ptr artistPtr = Artist::get( artist );
-    if ( artistPtr->playlistInterface()->tracks().isEmpty() )
+    if ( artistPtr->playlistInterface( Mixed )->tracks().isEmpty() )
     {
         m_artistsToKeep.insert( artistPtr );
 
-        connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                     SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
+        connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+
+        m_dropJob << new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
+        JobStatusView::instance()->model()->addJob( m_dropJob.last() );
+
         m_queryCount++;
-        return QList< query_ptr >();
     }
-    else
-        return artistPtr->playlistInterface()->tracks();
+
+    return artistPtr->playlistInterface( Mixed )->tracks();
 }
 
 
 QList< query_ptr >
-DropJob::getAlbum(const QString &artist, const QString &album)
+DropJob::getAlbum( const QString& artist, const QString& album )
 {
     artist_ptr artistPtr = Artist::get( artist );
     album_ptr albumPtr = Album::get( artistPtr, album );
@@ -863,69 +776,29 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     if ( albumPtr.isNull() )
         return QList< query_ptr >();
 
-    if ( albumPtr->playlistInterface()->tracks().isEmpty() )
+    //FIXME: should check tracksLoaded()
+    if ( albumPtr->playlistInterface( Mixed )->tracks().isEmpty() )
     {
         // For albums that don't exist until this moment, we are the main shared pointer holding on.
         // fetching the tracks is asynchronous, so the resulting signal is queued. when we go out of scope we delete
         // the artist_ptr which means we never get the signal delivered. so we hold on to the album pointer till we're done
         m_albumsToKeep.insert( albumPtr );
 
-        m_dropJob = new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
-        connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                    SLOT( tracksFromDB( QList<Tomahawk::query_ptr> ) ) );
-        JobStatusView::instance()->model()->addJob( m_dropJob );
+        connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+
+        m_dropJob << new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
+        JobStatusView::instance()->model()->addJob( m_dropJob.last() );
 
         m_queryCount++;
-        return QList< query_ptr >();
     }
-    else
-        return albumPtr->playlistInterface()->tracks();
+
+    return albumPtr->playlistInterface( Mixed )->tracks();
 }
 
 
-void
-DropJob::getTopTen( const QString &artist )
+QList< query_ptr >
+DropJob::getTopTen( const QString& artist )
 {
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = artist;
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_dropJobInfoId;
-    requestData.customData = QVariantMap();
-
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    m_queryCount++;
+    return getArtist( artist, Tomahawk::InfoSystemMode );
 }
-
-
-void
-DropJob::getAlbumFromInfoystem( const QString& artist, const QString& album )
-{
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-    Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = artist;
-    artistInfo["album"] = album;
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_dropJobInfoId;
-    requestData.customData = QVariantMap();
-
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    m_queryCount++;
-}
-

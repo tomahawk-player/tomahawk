@@ -24,7 +24,7 @@
 #include <QNetworkReply>
 
 #include "Artist.h"
-#include "AlbumItem.h"
+#include "PlayableItem.h"
 #include "Source.h"
 #include "SourceList.h"
 #include "database/Database.h"
@@ -35,8 +35,7 @@ using namespace Tomahawk;
 
 
 AlbumModel::AlbumModel( QObject* parent )
-    : QAbstractItemModel( parent )
-    , m_rootItem( new AlbumItem( 0, this ) )
+    : PlayableModel( parent )
     , m_overwriteOnAdd( false )
 {
 }
@@ -44,200 +43,6 @@ AlbumModel::AlbumModel( QObject* parent )
 
 AlbumModel::~AlbumModel()
 {
-    delete m_rootItem;
-}
-
-
-QModelIndex
-AlbumModel::index( int row, int column, const QModelIndex& parent ) const
-{
-    if ( !m_rootItem || row < 0 || column < 0 )
-        return QModelIndex();
-
-    AlbumItem* parentItem = itemFromIndex( parent );
-    AlbumItem* childItem = parentItem->children.value( row );
-    if ( !childItem )
-        return QModelIndex();
-
-    return createIndex( row, column, childItem );
-}
-
-
-int
-AlbumModel::rowCount( const QModelIndex& parent ) const
-{
-    if ( parent.column() > 0 )
-        return 0;
-
-    AlbumItem* parentItem = itemFromIndex( parent );
-    if ( !parentItem )
-        return 0;
-
-    return parentItem->children.count();
-}
-
-
-int
-AlbumModel::columnCount( const QModelIndex& parent ) const
-{
-    Q_UNUSED( parent );
-    return 1;
-}
-
-
-QModelIndex
-AlbumModel::parent( const QModelIndex& child ) const
-{
-    AlbumItem* entry = itemFromIndex( child );
-    if ( !entry )
-        return QModelIndex();
-
-    AlbumItem* parentEntry = entry->parent;
-    if ( !parentEntry )
-        return QModelIndex();
-
-    AlbumItem* grandparentEntry = parentEntry->parent;
-    if ( !grandparentEntry )
-        return QModelIndex();
-
-    int row = grandparentEntry->children.indexOf( parentEntry );
-    return createIndex( row, 0, parentEntry );
-}
-
-
-QVariant
-AlbumModel::data( const QModelIndex& index, int role ) const
-{
-    if ( role == Qt::SizeHintRole )
-    {
-        return QSize( 116, 150 );
-    }
-
-    AlbumItem* entry = itemFromIndex( index );
-    if ( !entry )
-        return QVariant();
-
-    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
-        return QVariant();
-
-    QString name;
-    if ( !entry->album().isNull() )
-        name = entry->album()->name();
-    else if ( !entry->artist().isNull() )
-        name = entry->artist()->name();
-
-    switch( index.column() )
-    {
-        case 0:
-            return name;
-            break;
-
-    }
-
-    return QVariant();
-}
-
-
-QVariant
-AlbumModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    QStringList headers;
-    headers << tr( "Album" );
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
-    {
-        return headers.at( section );
-    }
-
-    return QVariant();
-}
-
-
-Qt::ItemFlags
-AlbumModel::flags( const QModelIndex& index ) const
-{
-    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
-
-    if ( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    else
-        return defaultFlags;
-}
-
-
-QStringList
-AlbumModel::mimeTypes() const
-{
-    QStringList types;
-    types << "application/tomahawk.query.list";
-    return types;
-}
-
-
-QMimeData*
-AlbumModel::mimeData( const QModelIndexList &indexes ) const
-{
-    QByteArray queryData;
-    QDataStream queryStream( &queryData, QIODevice::WriteOnly );
-
-    bool isAlbumData = true;
-    foreach ( const QModelIndex& i, indexes )
-    {
-        if ( i.column() > 0 )
-            continue;
-
-        QModelIndex idx = index( i.row(), 0, i.parent() );
-        AlbumItem* item = itemFromIndex( idx );
-        if ( item && !item->album().isNull() )
-        {
-            const album_ptr& album = item->album();
-            queryStream << album->artist()->name();
-            queryStream << album->name();
-
-            isAlbumData = true;
-        }
-        else if ( item && !item->artist().isNull() )
-        {
-            const artist_ptr& artist = item->artist();
-            queryStream << artist->name();
-
-            isAlbumData = false;
-        }
-    }
-
-    QMimeData* mimeData = new QMimeData;
-    mimeData->setData( isAlbumData ? "application/tomahawk.metadata.album" : "application/tomahawk.metadata.artist", queryData );
-
-    return mimeData;
-}
-
-
-void
-AlbumModel::removeIndex( const QModelIndex& index )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if ( index.column() > 0 )
-        return;
-
-    AlbumItem* item = itemFromIndex( index );
-    if ( item )
-    {
-        emit beginRemoveRows( index.parent(), index.row(), index.row() );
-        delete item;
-        emit endRemoveRows();
-    }
-
-    emit itemCountChanged( rowCount( QModelIndex() ) );
-}
-
-
-void
-AlbumModel::removeIndexes( const QList<QModelIndex>& indexes )
-{
-    foreach( const QModelIndex& idx, indexes )
-    {
-        removeIndex( idx );
-    }
 }
 
 
@@ -257,7 +62,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+    setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
 
     if ( collection.isNull() )
     {
@@ -299,9 +104,9 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     if ( !collection.isNull() )
-        m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+        setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
     else
-        m_title = tr( "All albums" );
+        setTitle( tr( "All albums" ) );
 
     emit loadingStarted();
 }
@@ -339,11 +144,11 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
-    AlbumItem* albumitem;
+    PlayableItem* albumitem;
     foreach( const album_ptr& album, trimmedAlbums )
     {
-        albumitem = new AlbumItem( album, m_rootItem );
-        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+        albumitem = new PlayableItem( album, rootItem() );
+        albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -385,11 +190,11 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
-    AlbumItem* albumitem;
+    PlayableItem* albumitem;
     foreach ( const artist_ptr& artist, trimmedArtists )
     {
-        albumitem = new AlbumItem( artist, m_rootItem );
-        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+        albumitem = new PlayableItem( artist, rootItem() );
+        albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -414,11 +219,11 @@ AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
-    AlbumItem* albumitem;
+    PlayableItem* albumitem;
     foreach ( const query_ptr& query, queries )
     {
-        albumitem = new AlbumItem( query, m_rootItem );
-        albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
+        albumitem = new PlayableItem( query, rootItem() );
+        albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -442,30 +247,12 @@ AlbumModel::onCollectionChanged()
 }
 
 
-void
-AlbumModel::clear()
-{
-    beginResetModel();
-    delete m_rootItem;
-    m_rootItem = new AlbumItem( 0, this );
-    endResetModel();
-}
-
-
-void
-AlbumModel::onDataChanged()
-{
-    AlbumItem* p = (AlbumItem*)sender();
-    emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
-}
-
-
-AlbumItem*
+PlayableItem*
 AlbumModel::findItem( const artist_ptr& artist ) const
 {
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
-        AlbumItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        PlayableItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
         if ( !item->artist().isNull() && item->artist() == artist )
         {
             return item;
@@ -476,12 +263,12 @@ AlbumModel::findItem( const artist_ptr& artist ) const
 }
 
 
-AlbumItem*
+PlayableItem*
 AlbumModel::findItem( const album_ptr& album ) const
 {
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
-        AlbumItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        PlayableItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
         if ( !item->album().isNull() && item->album() == album )
         {
             return item;

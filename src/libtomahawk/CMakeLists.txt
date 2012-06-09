@@ -48,40 +48,27 @@ set( libGuiSources
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
-    playlist/TreeHeader.cpp
     playlist/TreeItemDelegate.cpp
-    playlist/CollectionProxyModel.cpp
-    playlist/CollectionProxyModelPlaylistInterface.cpp
-    playlist/CollectionFlatModel.cpp
-    playlist/CollectionView.cpp
     playlist/PlaylistModel.cpp
-    playlist/PlaylistProxyModel.cpp
-    playlist/PlaylistProxyModelPlaylistInterface.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
     playlist/QueueProxyModel.cpp
-    playlist/QueueProxyModelPlaylistInterface.cpp
     playlist/QueueView.cpp
-    playlist/TrackModel.cpp
-    playlist/TrackModelItem.cpp
-    playlist/TrackProxyModel.cpp
-    playlist/TrackProxyModelPlaylistInterface.cpp
+    playlist/PlayableModel.cpp
+    playlist/PlayableProxyModel.cpp
+    playlist/PlayableProxyModelPlaylistInterface.cpp
     playlist/TrackView.cpp
-    playlist/TrackHeader.cpp
-    playlist/TreeModelItem.cpp
-    playlist/AlbumItem.cpp
     playlist/AlbumModel.cpp
-    playlist/AlbumProxyModel.cpp
-    playlist/AlbumProxyModelPlaylistInterface.cpp
-    playlist/AlbumItemDelegate.cpp
-    playlist/AlbumView.cpp
-    playlist/ArtistView.cpp
+    playlist/GridItemDelegate.cpp
+    playlist/GridView.cpp
+    playlist/TreeView.cpp
     playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
     playlist/PlaylistLargeItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
+    playlist/PlayableItem.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
@@ -123,6 +110,9 @@ set( libGuiSources
     utils/PixmapDelegateFader.cpp
     utils/SmartPointerList.h
     utils/AnimatedSpinner.cpp
+    utils/BinaryInstallerHelper.cpp
+    utils/BinaryExtractWorker.cpp
+    utils/SharedTimeLine.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp
@@ -190,12 +180,24 @@ set( libSources
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
+    accounts/AccountDelegate.cpp
+    accounts/DelegateConfigWrapper.cpp
+    accounts/AccountFactoryWrapper.cpp
+    accounts/AccountFactoryWrapperDelegate.cpp
+
+    accounts/spotify/SpotifyAccount.cpp
+    accounts/spotify/SpotifyAccountConfig.cpp
+    accounts/spotify/SpotifyPlaylistUpdater.cpp
+
+    accounts/lastfm/LastFmAccount.cpp
+    accounts/lastfm/LastFmConfig.cpp
+    accounts/lastfm/LastFmInfoPlugin.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipInfo.cpp
 
     audio/AudioEngine.cpp
-
 
     database/Database.cpp
     database/FuzzyIndex.cpp
@@ -249,19 +251,11 @@ set( libSources
     database/DatabaseCommand_TrackAttributes.cpp
     database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
+    database/TomahawkSqlQuery.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
-
-    infosystem/infoplugins/generic/EchonestPlugin.cpp
-    infosystem/infoplugins/generic/ChartsPlugin.cpp
-    infosystem/infoplugins/generic/NewReleasesPlugin.cpp
-    infosystem/infoplugins/generic/spotifyPlugin.cpp
-    infosystem/infoplugins/generic/hypemPlugin.cpp
-    infosystem/infoplugins/generic/MusixMatchPlugin.cpp
-    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
-    infosystem/infoplugins/generic/RoviPlugin.cpp
 
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
@@ -296,6 +290,7 @@ set( libSources
     utils/Qnr_IoDeviceStream.cpp
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
+    utils/GuiHelpers.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -319,6 +314,9 @@ set( libUI ${libUI}
     playlist/QueueView.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
+    accounts/AccountFactoryWrapper.ui
+    accounts/spotify/SpotifyAccountConfig.ui
+    accounts/lastfm/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
@@ -351,19 +349,6 @@ IF(LIBATTICA_FOUND)
 ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
-    LIST(APPEND libGuiSources
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.cpp
-      infosystem/infoplugins/unix/MprisPlugin.cpp
-      infosystem/infoplugins/unix/FdoNotifyPlugin.cpp
-      infosystem/infoplugins/unix/ImageConverter.cpp )
-
-    LIST(APPEND libGuiHeaders
-      infosystem/infoplugins/unix/MprisPluginRootAdaptor.h
-      infosystem/infoplugins/unix/MprisPluginPlayerAdaptor.h
-      infosystem/infoplugins/unix/MprisPlugin.h
-      infosystem/infoplugins/unix/FdoNotifyPlugin.h )
-
     IF( BUILD_GUI AND X11_FOUND )
         INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
         SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
@@ -393,9 +378,8 @@ IF( APPLE )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
     SET( libSources ${libSources}
-      infosystem/infoplugins/mac/Adium.mm
-      infosystem/infoplugins/mac/AdiumPlugin.cpp
       utils/TomahawkUtils_Mac.mm
+      mac/FileHelpers.mm
       thirdparty/Qocoa/qsearchfield_mac.mm )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
@@ -409,6 +393,7 @@ IF( APPLE )
         ${SCRIPTINGBRIDGE_LIBRARY}
 
         /System/Library/Frameworks/AppKit.framework
+        /System/Library/Frameworks/Security.framework
     )
 ELSE( APPLE )
     SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp )

@@ -35,14 +35,12 @@
 #include <QTimer>
 #include <QToolBar>
 
-#include "Playlist.h"
-#include "Query.h"
-#include "Artist.h"
-#include "ViewManager.h"
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
+#include "utils/WidgetDragFilter.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/SearchWidget.h"
@@ -52,27 +50,31 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/QueueView.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
 
+#include "Playlist.h"
+#include "Query.h"
+#include "Artist.h"
+#include "ViewManager.h"
+#include "ActionCollection.h"
 #include "AudioControls.h"
 #include "SettingsDialog.h"
 #include "DiagnosticsDialog.h"
 #include "TomahawkSettings.h"
 #include "SourceList.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
 #include "TomahawkTrayIcon.h"
 #include "ScanManager.h"
 #include "TomahawkApp.h"
+#include "LoadXSPFDialog.h"
 
 #ifdef Q_WS_WIN
 #include <qtsparkle/Updater>
 #endif
 
 #include "utils/Logger.h"
-#include "jobview/JobStatusModel.h"
-#include "LoadXSPFDialog.h"
-#include <ActionCollection.h>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -102,6 +104,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
+    setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -117,6 +120,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     // set initial state
     onAccountDisconnected();
+    audioStopped();
+
     vm->setQueue( m_queueView );
     vm->showWelcomePage();
 }
@@ -139,7 +144,7 @@ TomahawkWindow::loadSettings()
     // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
     // for the 'fix'
 #ifdef QT_MAC_USE_COCOA
-     bool workaround = !isVisible();
+     bool workaround = isVisible();
      if ( workaround )
      {
        // make "invisible"
@@ -190,7 +195,7 @@ TomahawkWindow::applyPlatformTweaks()
     if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         qApp->setStyle( new ProxyStyle() );
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
@@ -198,6 +203,40 @@ TomahawkWindow::applyPlatformTweaks()
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
 #endif
+}
+
+
+void
+TomahawkWindow::setupToolBar()
+{
+    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    toolbar->setObjectName( "TomahawkToolbar" );
+    toolbar->setMovable( false );
+    toolbar->setFloatable( false );
+    toolbar->setIconSize( QSize( 22, 22 ) );
+    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    toolbar->setStyleSheet( "border-bottom: 0px" );
+
+#ifdef Q_OS_MAC
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+#endif
+
+    m_backAction = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAction->setToolTip( tr( "Go back one page" ) );
+    m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAction->setToolTip( tr( "Go forward one page" ) );
+
+    QWidget* spacer = new QWidget( this );
+    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( spacer );
+
+    m_searchWidget = new QSearchField( this );
+    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
+    m_searchWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_searchWidget->setMaximumWidth( 340 );
+    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
+    
+    toolbar->addWidget( m_searchWidget );
 }
 
 
@@ -215,39 +254,29 @@ TomahawkWindow::setupSideBar()
     m_sidebar->setOrientation( Qt::Vertical );
     m_sidebar->setChildrenCollapsible( false );
 
-    m_searchWidget = new QSearchField( m_sidebar );
-    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
-    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
-
-    m_sourcetree = new SourceTreeView();
+    m_sourcetree = new SourceTreeView( this );
     JobStatusView* jobsView = new JobStatusView( m_sidebar );
     m_jobsModel = new JobStatusModel( jobsView );
     jobsView->setModel( m_jobsModel );
 
     m_queueView = new QueueView( m_sidebar );
-    m_queueModel = new PlaylistModel( m_queueView );
-    m_queueModel->setStyle( PlaylistModel::Short );
-    m_queueView->queue()->setPlaylistModel( m_queueModel );
-    m_queueView->queue()->playlistModel()->setReadOnly( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->playlistInterface() );
 
-    m_sidebar->addWidget( m_searchWidget );
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( jobsView );
     m_sidebar->addWidget( m_queueView );
 
-    m_sidebar->setGreedyWidget( 1 );
+//    m_sidebar->setGreedyWidget( 1 );
     m_sidebar->hide( 1, false );
     m_sidebar->hide( 2, false );
     m_sidebar->hide( 3, false );
-    m_sidebar->hide( 4, false );
 
     sidebarWidget->layout()->addWidget( m_sidebar );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     sidebarWidget->layout()->setSpacing( 0 );
 #endif
 
@@ -262,11 +291,11 @@ TomahawkWindow::setupSideBar()
 void
 TomahawkWindow::setupUpdateCheck()
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
 #endif
 
-#if defined( Q_WS_MAC ) && defined( HAVE_SPARKLE )
+#if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect( checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
@@ -294,8 +323,8 @@ void
 TomahawkWindow::setupSignals()
 {
     // <From PlaylistManager>
-    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
+    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
     connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
@@ -304,7 +333,7 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
     // <Menu Items>
@@ -325,7 +354,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
     connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
 #else
@@ -340,7 +369,7 @@ TomahawkWindow::setupSignals()
 
     // Menus for accounts that support them
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
-    foreach( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
+    foreach ( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
     {
         if ( !account || !account->sipPlugin() )
             continue;
@@ -348,6 +377,9 @@ TomahawkWindow::setupSignals()
         connect( account->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( account->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
+    
+    connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
 
@@ -371,7 +403,7 @@ TomahawkWindow::changeEvent( QEvent* e )
 void
 TomahawkWindow::closeEvent( QCloseEvent* e )
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     if ( e->spontaneous() && QSystemTrayIcon::isSystemTrayAvailable() )
     {
         hide();
@@ -391,7 +423,7 @@ TomahawkWindow::showEvent( QShowEvent* e )
 {
     QMainWindow::showEvent( e );
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
     ui->actionMinimize->setDisabled( false );
     ui->actionZoom->setDisabled( false );
 #endif
@@ -403,7 +435,7 @@ TomahawkWindow::hideEvent( QHideEvent* e )
 {
     QMainWindow::hideEvent( e );
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
     ui->actionMinimize->setDisabled( true );
     ui->actionZoom->setDisabled( true );
 #endif
@@ -414,8 +446,8 @@ void
 TomahawkWindow::keyPressEvent( QKeyEvent* e )
 {
     bool accept = true;
-#if ! defined ( Q_WS_MAC )
-#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed: "
+#if ! defined ( Q_OS_MAC )
+#define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
     switch( e->key() )
     {
         case Qt::Key_MediaPlay:
@@ -450,10 +482,24 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
     accept = false;
 #endif
 
-    if(accept)
+    if ( accept )
         e->accept();
 
     QMainWindow::keyPressEvent( e );
+}
+
+
+void
+TomahawkWindow::onHistoryBackAvailable( bool avail )
+{
+    m_backAction->setEnabled( avail );
+}
+
+
+void
+TomahawkWindow::onHistoryForwardAvailable( bool avail )
+{
+    m_forwardAction->setEnabled( avail );
 }
 
 
@@ -529,9 +575,9 @@ TomahawkWindow::pluginMenuAdded( QMenu* menu )
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach( QAction* action, ui->menuNetwork->actions() )
+    foreach ( QAction* action, ui->menuNetwork->actions() )
     {
-        if( action->menu() == menu )
+        if ( action->menu() == menu )
         {
             ui->menuNetwork->removeAction( action );
             return;
@@ -549,10 +595,24 @@ TomahawkWindow::showOfflineSources()
 
 
 void
+TomahawkWindow::fullScreenEntered()
+{
+    statusBar()->setSizeGripEnabled( false );
+}
+
+
+void
+TomahawkWindow::fullScreenExited()
+{
+    statusBar()->setSizeGripEnabled( true );
+}
+
+
+void
 TomahawkWindow::loadSpiff()
 {
     LoadXSPFDialog* diag = new LoadXSPFDialog( this, Qt::Sheet );
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     connect( diag, SIGNAL( finished( int ) ), this, SLOT( loadXspfFinished( int ) ) );
     diag->show();
 #else
@@ -638,18 +698,18 @@ TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 void
 TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 {
-    QString name = playlistName;
-
-    if ( name.isEmpty() )
+    if ( playlistName.isEmpty() )
         return;
 
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, Static, false );
+
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, playlistName, info, creator, Static, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+
     ViewManager::instance()->show( playlist );
 }
 
@@ -657,18 +717,36 @@ TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 void
 TomahawkWindow::createStation()
 {
+    QString title = tr( "Station" );
     bool ok;
-    QString name = QInputDialog::getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
-    if ( !ok || name.isEmpty() )
+    QString playlistName = QInputDialog( this, Qt::Sheet ).getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, title, &ok );
+    if ( !ok )
         return;
+
+    if ( playlistName.isEmpty() || playlistName == title )
+    {
+        QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->stations();
+        QStringList titles;
+        foreach ( const playlist_ptr& pl, pls )
+            titles << pl->title();
+
+        playlistName = title;
+        int i = 2;
+        while ( titles.contains( playlistName ) )
+        {
+            playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+        }
+    }
 
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, OnDemand, false );
+
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, playlistName, info, creator, OnDemand, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+
     ViewManager::instance()->show( playlist );
 }
 
@@ -677,11 +755,12 @@ void
 TomahawkWindow::createPlaylist()
 {
     PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
-#ifndef Q_WS_MAC
+
+#ifndef Q_OS_MAC
     playlistSelectorDlg->setModal( true );
 #endif
-    connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( playlistCreateDialogFinished( int ) ) );
 
+    connect( playlistSelectorDlg, SIGNAL( finished( int ) ), SLOT( playlistCreateDialogFinished( int ) ) );
     playlistSelectorDlg->show();
 }
 
@@ -693,17 +772,50 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
     Q_ASSERT( playlistSelectorDlg );
 
     QString playlistName = playlistSelectorDlg->playlistName();
-    if ( playlistName.isEmpty() )
-        playlistName = tr( "New Playlist" );
 
-    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret )
+    {
+        if ( playlistName.isEmpty() )
+        {
+            QList< playlist_ptr > pls = SourceList::instance()->getLocal()->collection()->playlists();
+            QStringList titles;
+            foreach ( const playlist_ptr& pl, pls )
+                titles << pl->title();
+
+            QString title = tr( "Playlist" );
+            playlistName = title;
+            int i = 2;
+            while ( titles.contains( playlistName ) )
+            {
+                playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+            }
+        }
 
         playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
         ViewManager::instance()->show( playlist );
-    } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+    }
+    else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret )
+    {
        // create Auto Playlist
+        if ( playlistName.isEmpty() )
+        {
+            QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->autoPlaylists();
+            QStringList titles;
+            foreach ( const dynplaylist_ptr& pl, pls )
+                titles << pl->title();
+
+            QString title = tr( "Automatic Playlist" );
+            playlistName = title;
+            int i = 2;
+            while ( titles.contains( playlistName ) )
+            {
+                playlistName = QString( "%1 (%2)" ).arg( title ).arg( i++ );
+            }
+        }
+
        createAutomaticPlaylist( playlistName );
     }
+
     playlistSelectorDlg->deleteLater();
 }
 
@@ -712,15 +824,27 @@ void
 TomahawkWindow::audioStarted()
 {
     m_audioRetryCounter = 0;
+
     ui->actionPlay->setText( tr( "Pause" ) );
+    ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
+}
+
+
+void
+TomahawkWindow::audioPaused()
+{
+    ui->actionPlay->setText( tr( "Play" ) );
 }
 
 
 void
 TomahawkWindow::audioStopped()
 {
-
-    ui->actionPlay->setText( tr( "Play" ) );
+    audioPaused();
+    ActionCollection::instance()->getAction( "stop" )->setEnabled( false );
+    
+    m_currentTrack = result_ptr();
+    setWindowTitle( m_windowTitle );
 }
 
 
@@ -756,6 +880,7 @@ TomahawkWindow::onAccountAdded( Account* acc )
     connect( acc->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
+
 void
 TomahawkWindow::onAccountError()
 {
@@ -765,7 +890,7 @@ TomahawkWindow::onAccountError()
     // TODO real error message from plugin kthxbbq
     QMessageBox::warning( this,
                           tr( "Authentication Error" ),
-                          QString( "Error connecting to SIP: Authentication failed!" ),
+                          tr( "Error connecting to SIP: Authentication failed!" ),
                           QMessageBox::Ok );
 }
 
@@ -799,8 +924,13 @@ TomahawkWindow::showAboutTomahawk()
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
-    desc = tr( "Copyright 2010 - 2012<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-               "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Harald Sitter and Steve Robertson" );
+    const QString copyright( tr( "Copyright 2010 - 2012" ) );
+    const QString thanksto( tr( "Thanks to:" ) );
+
+    desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+                    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Syd Lawrence, Michael Zanetti, Harald Sitter, Steve Robertson" )
+              .arg( copyright )
+              .arg( thanksto );
 
     QMessageBox::about( this, tr( "About Tomahawk" ), head + desc );
 }
@@ -809,7 +939,7 @@ TomahawkWindow::showAboutTomahawk()
 void
 TomahawkWindow::checkForUpdates()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Tomahawk::checkForUpdates();
 #endif
 }

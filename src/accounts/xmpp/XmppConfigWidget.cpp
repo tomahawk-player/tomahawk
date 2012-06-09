@@ -65,9 +65,10 @@ XmppConfigWidget::saveConfig()
     configuration[ "enforcesecure"] = m_ui->xmppEnforceSecureCheckbox->isChecked();
 
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
-    m_account->setCredentials( credentials );
     m_account->setConfiguration( configuration);
     m_account->sync();
+
+    m_account->saveCredentials( credentials );
 
     static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
 }
@@ -96,16 +97,20 @@ XmppConfigWidget::loadFromConfig()
 void
 XmppConfigWidget::onCheckJidExists( QString jid )
 {
-    QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
+    const QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
     foreach( Tomahawk::Accounts::Account* account, accounts )
     {
         if ( account->accountId() == m_account->accountId() )
             continue;
+        XmppAccount* xmppAccount = qobject_cast< XmppAccount* >( account );
+        if ( !xmppAccount )
+            continue;
 
-        QString savedUsername = account->credentials()[ "username" ].toString();
-        QStringList savedSplitUsername = account->credentials()[ "username" ].toString().split("@");
-        QString savedServer = account->configuration()[ "server" ].toString();
-        int savedPort = account->configuration()[ "port" ].toInt();
+        // Check if any other xmpp account already uses the given name/settings
+        QString savedUsername = xmppAccount->credentials()[ "username" ].toString();
+        QStringList savedSplitUsername = xmppAccount->credentials()[ "username" ].toString().split("@");
+        QString savedServer = xmppAccount->configuration()[ "server" ].toString();
+        int savedPort = xmppAccount->configuration()[ "port" ].toInt();
 
         if ( ( savedUsername == jid || savedSplitUsername.contains( jid ) ) &&
                savedServer == m_ui->xmppServer->text() &&

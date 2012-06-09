@@ -163,8 +163,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         ql << qry;
     }
 
-    qDebug() << Q_FUNC_INFO << ql.length();
-
     emit tracks( ql, data() );
     emit done( m_collection );
 }

@@ -32,6 +32,7 @@
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "widgets/OverlayWidget.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "dynamic/GeneratorInterface.h"
@@ -54,10 +55,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 
     ui->playlistWidget->setFrameShape( QFrame::NoFrame );
     ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->additionsView->setFrameShape( QFrame::NoFrame );
-    ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
@@ -72,12 +69,12 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     updatePlaylists();
 
     m_tracksModel = new RecentlyPlayedModel( source_ptr(), ui->tracksView );
-    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
+    m_tracksModel->setStyle( PlayableModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
-    ui->additionsView->setAlbumModel( m_recentAlbumsModel );
+    ui->additionsView->setPlayableModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );
 
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
@@ -245,11 +242,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         // right edge 10px past right edge of pixmapRect
         // bottom edge flush with bottom of pixmap
         QRect rect( pixmapRect.right() - width , 0, width - 8, 0 );
-        rect.adjust( -1, 0, 0, 0 );
+        rect.adjust( -2, 0, 0, 0 );
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
-        QColor figColor( 153, 153, 153 );
+        QColor figColor( "#464b55" );
         painter->setPen( figColor );
         painter->setBrush( figColor );
 
@@ -311,4 +308,14 @@ PlaylistWidget::PlaylistWidget( QWidget* parent )
     : QListView( parent )
 {
     m_overlay = new OverlayWidget( this );
+    LoadingSpinner* spinner = new LoadingSpinner( this );
 }
+
+
+void
+PlaylistWidget::setModel( QAbstractItemModel* model )
+{
+    QListView::setModel( model );
+    emit modelChanged();
+}
+

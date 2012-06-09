@@ -31,8 +31,8 @@ class PixmapDelegateFader;
 }
 
 class TrackModel;
-class TrackModelItem;
-class TrackProxyModel;
+class PlayableItem;
+class PlayableProxyModel;
 class TrackView;
 
 class DLLEXPORT PlaylistLargeItemDelegate : public QStyledItemDelegate
@@ -43,7 +43,7 @@ public:
     enum DisplayMode
     { LovedTracks, RecentlyPlayed, LatestAdditions };
 
-    PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent = 0, TrackProxyModel* proxy = 0 );
+    PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -58,7 +58,7 @@ private slots:
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
     void drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const;
 
     QTextOption m_topOption;
@@ -68,7 +68,7 @@ private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 
     TrackView* m_view;
-    TrackProxyModel* m_model;
+    PlayableProxyModel* m_model;
     DisplayMode m_mode;
 };
 

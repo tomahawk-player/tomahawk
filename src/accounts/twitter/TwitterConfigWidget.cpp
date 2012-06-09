@@ -24,6 +24,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "database/Database.h"
+#include "Source.h"
 
 #include "TomahawkOAuthTwitter.h"
 #include <QTweetLib/qtweetaccountverifycredentials.h>
@@ -111,7 +112,7 @@ TwitterConfigWidget::authenticateTwitter()
     QVariantHash credentials = m_account->credentials();
     credentials[ "oauthtoken" ] = twitAuth->oauthToken();
     credentials[ "oauthtokensecret" ] = twitAuth->oauthTokenSecret();
-    m_account->setCredentials( credentials );
+    m_account->saveCredentials( credentials );
 
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
     connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( authenticateVerifyReply( const QTweetUser & ) ) );
@@ -132,7 +133,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
 
     QVariantHash credentials = m_account->credentials();
     credentials[ "username" ] = user.screenName();
-    m_account->setCredentials( credentials );
+    m_account->saveCredentials( credentials );
 
     QVariantHash configuration = m_account->configuration();
     configuration[ "sipcachedfriendssinceid" ] = 0;
@@ -164,11 +165,7 @@ void
 TwitterConfigWidget::deauthenticateTwitter()
 {
     qDebug() << Q_FUNC_INFO;
-    QVariantHash credentials = m_account->credentials();
-    credentials[ "oauthtoken" ] = QString();
-    credentials[ "oauthtokensecret" ] = QString();
-    credentials[ "username" ] = QString();
-    m_account->setCredentials( credentials );
+    m_account->saveCredentials( QVariantHash() );
 
     m_ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
     m_ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
@@ -237,7 +234,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         return;
     }
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
-    QVariantHash credentials = m_account->credentials();
+    const QVariantHash credentials = m_account->credentials();
     twitAuth->setOAuthToken( credentials[ "oauthtoken" ].toString().toLatin1() );
     twitAuth->setOAuthTokenSecret( credentials[ "oauthtokensecret" ].toString().toLatin1() );
     if ( m_postGTtype != "Direct Message" )

@@ -42,6 +42,7 @@ signals:
 
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling( const QPersistentModelIndex& idx );
+    void errorInstalling( const QPersistentModelIndex& idx );
 
 protected:
     virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -51,6 +52,7 @@ private slots:
 
     void onStartInstalling( const QPersistentModelIndex& idx );
     void onDoneInstalling( const QPersistentModelIndex& idx );
+    void onErrorInstalling( const QPersistentModelIndex& idx );
 
 private:
     Tomahawk::Accounts::AccountType m_filterType;

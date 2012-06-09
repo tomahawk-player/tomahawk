@@ -1,7 +1,7 @@
 /*
     Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
     Copyright (C) 2011  Jeff Mitchell <jeff@tomahawk-player.org>
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -25,6 +25,7 @@
 #include "SourceList.h"
 #include "utils/Logger.h"
 #include "dynamic/DynamicPlaylist.h"
+#include "Playlist.h"
 
 using namespace Tomahawk;
 
@@ -37,7 +38,7 @@ RecentlyPlayedPlaylistsModel::RecentlyPlayedPlaylistsModel( QObject* parent )
     loadFromSettings();
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( Tomahawk::playlist_ptr ) ), this, SLOT( plAdded( Tomahawk::playlist_ptr ) ) );
+    connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( QString, int ) ), this, SLOT( plAdded( QString, int ) ) );
     connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ), Qt::QueuedConnection );
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
@@ -217,8 +218,21 @@ RecentlyPlayedPlaylistsModel::rowCount( const QModelIndex& ) const
 
 
 void
-RecentlyPlayedPlaylistsModel::plAdded( const playlist_ptr& pl )
+RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sId )
 {
+    source_ptr source = SourceList::instance()->get( sId );
+    if ( source.isNull() )
+        return;
+
+    playlist_ptr pl = source->collection()->playlist( plguid );
+    if ( pl.isNull() )
+        pl = source->collection()->autoPlaylist( plguid );
+    if ( pl.isNull() )
+        pl = source->collection()->station( plguid );
+
+    if ( pl.isNull() )
+        return;
+
     onPlaylistsRemoved( QList< playlist_ptr >() << pl );
 
     beginInsertRows( QModelIndex(), 0, 0 );
@@ -235,7 +249,7 @@ RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr p
     // ARG
     if ( pli.isNull() )
         return;
-    
+
     if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) ) {
         // look for it, qsharedpointer fail
         playlist_ptr ptr;

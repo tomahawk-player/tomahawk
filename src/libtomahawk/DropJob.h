@@ -22,9 +22,6 @@
 
 #include "Query.h"
 
-#include "infosystem/InfoSystem.h"
-#include "utils/XspfLoader.h"
-
 #include <QObject>
 #include <QStringList>
 #include <QMimeData>
@@ -120,9 +117,7 @@ signals:
 private slots:
     void expandedUrls( QStringList );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-    void tracksFromDB( const QList< Tomahawk::query_ptr >& );
 private:
     /// handle parsing mime data
     void handleAllUrls( const QString& urls );
@@ -133,11 +128,9 @@ private:
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
-    QList< Tomahawk::query_ptr > getArtist( const QString& artist );
+    QList< Tomahawk::query_ptr > getArtist( const QString& artist, Tomahawk::ModelMode mode = Tomahawk::Mixed );
     QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
-
-    void getTopTen( const QString& artist );
-    void getAlbumFromInfoystem( const QString& artist, const QString& album );
+    QList< Tomahawk::query_ptr > getTopTen( const QString& artist );
 
     void removeDuplicates();
     void removeRemoteSources();
@@ -151,7 +144,7 @@ private:
     DropTypes m_dropTypes;
     DropAction m_dropAction;
 
-    Tomahawk::DropJobNotifier* m_dropJob;
+    QList<Tomahawk::DropJobNotifier*> m_dropJob;
 
     QList< Tomahawk::query_ptr > m_resultList;
     QSet< Tomahawk::album_ptr > m_albumsToKeep;

@@ -25,6 +25,7 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
 option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
+option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
@@ -120,8 +121,10 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions required for Grooveshark resolver" "http://delta.affinix.com/qca/" FALSE "" "")
 
+if( NOT QTKEYCHAIN_INCLUDE_DIRS OR NOT QTKEYCHAIN_LIBRARIES )
 macro_optional_find_package(QtKeychain)
 macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure password storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+endif()
 
 macro_optional_find_package(LibAttica)
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" TRUE "" "")

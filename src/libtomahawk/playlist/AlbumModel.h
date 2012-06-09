@@ -20,19 +20,19 @@
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
-#include <QAbstractItemModel>
 #include <QPixmap>
 
 #include "Album.h"
 #include "PlaylistInterface.h"
 #include "database/DatabaseCommand_AllAlbums.h"
+#include "PlayableModel.h"
 
 #include "DllMacro.h"
 
-class AlbumItem;
+class PlayableItem;
 class QMetaData;
 
-class DLLEXPORT AlbumModel : public QAbstractItemModel
+class DLLEXPORT AlbumModel : public PlayableModel
 {
 Q_OBJECT
 
@@ -40,80 +40,26 @@ public:
     explicit AlbumModel( QObject* parent = 0 );
     virtual ~AlbumModel();
 
-    virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
-    virtual QModelIndex parent( const QModelIndex& child ) const;
-
-    virtual bool isReadOnly() const { return true; }
-
-    virtual int trackCount() const { return rowCount( QModelIndex() ); }
-    virtual int albumCount() const { return rowCount( QModelIndex() ); }
-
-    virtual int rowCount( const QModelIndex& parent ) const;
-    virtual int columnCount( const QModelIndex& parent ) const;
-
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-
-    virtual void removeIndex( const QModelIndex& index );
-    virtual void removeIndexes( const QList<QModelIndex>& indexes );
-
-    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
-    virtual QStringList mimeTypes() const;
-    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-
     Tomahawk::collection_ptr collection() const { return m_collection; }
 
-    void clear();
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
-    virtual void setTitle( const QString& title ) { m_title = title; }
-    virtual void setDescription( const QString& description ) { m_description = description; }
-
-    AlbumItem* findItem( const Tomahawk::artist_ptr& artist ) const;
-    AlbumItem* findItem( const Tomahawk::album_ptr& album ) const;
-
-    AlbumItem* itemFromIndex( const QModelIndex& index ) const
-    {
-        if ( index.isValid() )
-            return static_cast<AlbumItem*>( index.internalPointer() );
-        else
-        {
-            return m_rootItem;
-        }
-    }
+    PlayableItem* findItem( const Tomahawk::artist_ptr& artist ) const;
+    PlayableItem* findItem( const Tomahawk::album_ptr& album ) const;
 
 public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
-    virtual void setShuffled( bool /*shuffled*/ ) {}
-
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
     void addArtists( const QList<Tomahawk::artist_ptr>& artists );
     void addQueries( const QList<Tomahawk::query_ptr>& queries );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
-    void itemCountChanged( unsigned int items );
-
-    void loadingStarted();
-    void loadingFinished();
 
 private slots:
-    void onDataChanged();
-
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onCollectionChanged();
 
 private:
-    QPersistentModelIndex m_currentIndex;
-    AlbumItem* m_rootItem;
-
-    QString m_title;
-    QString m_description;
     bool m_overwriteOnAdd;
 
     Tomahawk::collection_ptr m_collection;

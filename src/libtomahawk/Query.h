@@ -46,6 +46,13 @@ struct SocialAction
     QVariant value;
     QVariant timestamp;
     Tomahawk::source_ptr source;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    SocialAction();
+    ~SocialAction();
+    SocialAction& operator=( const SocialAction& other );
+    SocialAction( const SocialAction& other );
 };
 
 struct PlaybackLog
@@ -53,6 +60,13 @@ struct PlaybackLog
     Tomahawk::source_ptr source;
     unsigned int timestamp;
     unsigned int secsPlayed;
+
+    // Make explicit so compiler won't auto-generate, since destructor of
+    // source_ptr is not defined yet (only typedef included in header)
+    PlaybackLog();
+    ~PlaybackLog();
+    PlaybackLog& operator=( const PlaybackLog& other );
+    PlaybackLog( const PlaybackLog& other );
 };
 
 
@@ -117,18 +131,21 @@ public:
     QString artistSortname() const { return m_artistSortname; }
     QString albumSortname() const { return m_albumSortname; }
     QString trackSortname() const { return m_trackSortname; }
+
     QString artist() const { return m_artist; }
     QString composer() const { return m_composer; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
-
     int duration() const { return m_duration; }
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int discnumber() const { return m_discnumber; }
+    
+    query_ptr displayQuery() const;
 
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
+    bool coverLoaded() const;
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
@@ -147,6 +164,7 @@ public:
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
 
     QList<Tomahawk::query_ptr> similarTracks() const;
+    QStringList lyrics() const;
 
     QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
@@ -168,6 +186,8 @@ signals:
     void socialActionsLoaded();
     void statsLoaded();
     void similarTracksLoaded();
+    void lyricsLoaded();
+
     void updated();
 
 public slots:
@@ -179,10 +199,7 @@ public slots:
     void addArtists( const QList< Tomahawk::artist_ptr >& );
 
     void onResolvingFinished();
-
-    // resolve if not solved()
     void onResolverAdded();
-    void onResolverRemoved();
 
 private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
@@ -250,11 +267,14 @@ private:
     bool m_simTracksLoaded;
     QList<Tomahawk::query_ptr> m_similarTracks;
     
+    bool m_lyricsLoaded;
+    QStringList m_lyrics;
+    
     mutable int m_infoJobs;
 };
 
 }; //ns
 
-Q_DECLARE_METATYPE(Tomahawk::query_ptr);
+Q_DECLARE_METATYPE( Tomahawk::query_ptr );
 
 #endif // QUERY_H

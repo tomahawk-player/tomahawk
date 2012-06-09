@@ -26,6 +26,7 @@
 #include "Album.h"
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
+#include "infosystem/InfoSystem.h"
 #include "DllMacro.h"
 
 namespace Tomahawk
@@ -36,7 +37,7 @@ class DLLEXPORT AlbumPlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    AlbumPlaylistInterface( Tomahawk::Album *album );
+    AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     virtual ~AlbumPlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
@@ -49,31 +50,31 @@ public:
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    virtual void addQueries( const QList<Tomahawk::query_ptr>& tracks );
-
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
+    void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
-
-    void nextTrackReady();
+private slots:
+    void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 private:
-    AlbumPlaylistInterface();
-
     QList< Tomahawk::query_ptr > m_queries;
     result_ptr m_currentItem;
     unsigned int m_currentTrack;
+
+    bool m_infoSystemLoaded;
+    bool m_databaseLoaded;
+
+    Tomahawk::ModelMode m_mode;
+    Tomahawk::collection_ptr m_collection;
 
     QWeakPointer< Tomahawk::Album > m_album;
 };

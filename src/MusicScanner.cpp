@@ -106,15 +106,17 @@ MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
 {
-    m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
-    m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
-    m_ext2mime.insert( "oga", TomahawkUtils::extensionToMimetype( "oga" ) );
-    m_ext2mime.insert( "mpc", TomahawkUtils::extensionToMimetype( "mpc" ) );
-    m_ext2mime.insert( "wma", TomahawkUtils::extensionToMimetype( "wma" ) );
-    m_ext2mime.insert( "aac", TomahawkUtils::extensionToMimetype( "aac" ) );
-    m_ext2mime.insert( "m4a", TomahawkUtils::extensionToMimetype( "m4a" ) );
-    m_ext2mime.insert( "mp4", TomahawkUtils::extensionToMimetype( "mp4" ) );
+    m_ext2mime.insert( "mp3",  TomahawkUtils::extensionToMimetype( "mp3" ) );
+    m_ext2mime.insert( "ogg",  TomahawkUtils::extensionToMimetype( "ogg" ) );
+    m_ext2mime.insert( "oga",  TomahawkUtils::extensionToMimetype( "oga" ) );
+    m_ext2mime.insert( "mpc",  TomahawkUtils::extensionToMimetype( "mpc" ) );
+    m_ext2mime.insert( "wma",  TomahawkUtils::extensionToMimetype( "wma" ) );
+    m_ext2mime.insert( "aac",  TomahawkUtils::extensionToMimetype( "aac" ) );
+    m_ext2mime.insert( "m4a",  TomahawkUtils::extensionToMimetype( "m4a" ) );
+    m_ext2mime.insert( "mp4",  TomahawkUtils::extensionToMimetype( "mp4" ) );
     m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
+    m_ext2mime.insert( "aiff", TomahawkUtils::extensionToMimetype( "aiff" ) );
+    m_ext2mime.insert( "aif",  TomahawkUtils::extensionToMimetype( "aif" ) );
 }
 
 
@@ -199,18 +201,16 @@ MusicScanner::listerFinished()
     foreach( const QString& key, m_filemtimes.keys() )
         m_filesToDelete << m_filemtimes[ key ].keys().first();
 
-    tDebug() << "Lister finished: to delete:" << m_filesToDelete;
+    tDebug( LOGINFO ) << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
+    tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
+    foreach ( const QString& s, m_skippedFiles )
+        tDebug( LOGEXTRA ) << s;
 
     if ( m_filesToDelete.length() || m_scannedfiles.length() )
     {
         commitBatch( m_scannedfiles, m_filesToDelete );
         m_scannedfiles.clear();
         m_filesToDelete.clear();
-
-        tDebug( LOGINFO ) << "Scanning complete, saving to database. ( scanned" << m_scanned << "skipped" << m_skipped << ")";
-        tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
-        foreach ( const QString& s, m_skippedFiles )
-            tDebug( LOGEXTRA ) << s;
     }
     else
         cleanup();
@@ -335,9 +335,8 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     int bitrate = 0;
     int duration = 0;
-
+    
     Tag *tag = Tag::fromFile( f );
-
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();
@@ -345,10 +344,14 @@ MusicScanner::readFile( const QFileInfo& fi )
         bitrate = properties->bitrate();
     }
 
-    QString artist = tag->artist().trimmed();
-    QString album  = tag->album().trimmed();
-    QString track  = tag->title().trimmed();
-    if ( artist.isEmpty() || track.isEmpty() )
+    QString artist, album, track;
+    if ( tag )
+    {
+        artist = tag->artist().trimmed();
+        album  = tag->album().trimmed();
+        track  = tag->title().trimmed();
+    }
+    if ( !tag || artist.isEmpty() || track.isEmpty() )
     {
         // FIXME: do some clever filename guessing
         m_skippedFiles << fi.canonicalFilePath();

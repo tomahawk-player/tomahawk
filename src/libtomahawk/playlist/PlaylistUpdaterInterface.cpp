@@ -18,6 +18,7 @@
 
 #include "PlaylistUpdaterInterface.h"
 #include "TomahawkSettings.h"
+#include "Source.h"
 
 namespace Tomahawk {
 

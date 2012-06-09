@@ -68,27 +68,13 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/GroupItem.cpp
      sourcetree/items/HistoryItem.cpp
 
-     utils/GuiHelpers.cpp
-
-     accounts/lastfm/LastFmAccount.cpp
-     accounts/lastfm/LastFmConfig.cpp
-     accounts/lastfm/LastFmInfoPlugin.cpp
-
-     accounts/spotify/SpotifyAccount.cpp
-     accounts/spotify/SpotifyAccountConfig.cpp
-     accounts/spotify/SpotifyPlaylistUpdater.cpp
-
      TomahawkTrayIcon.cpp
      AudioControls.cpp
      SettingsDialog.cpp
      DiagnosticsDialog.cpp
-     AccountDelegate.cpp
      SettingsListDelegate.cpp
-     DelegateConfigWrapper.cpp
      TomahawkWindow.cpp
      LoadXSPFDialog.cpp
-     AccountFactoryWrapper.cpp
-     AccountFactoryWrapperDelegate.cpp
      SocialWidget.cpp
 )
 
@@ -102,12 +88,8 @@ SET( tomahawkUI ${tomahawkUI}
      StackedSettingsDialog.ui
      ProxyDialog.ui
 
-     accounts/lastfm/LastFmConfig.ui
-     accounts/spotify/SpotifyAccountConfig.ui
-
      AudioControls.ui
      LoadXSPFDialog.ui
-     AccountFactoryWrapper.ui
      SocialWidget.ui
 )
 
@@ -122,7 +104,6 @@ INCLUDE_DIRECTORIES(
     network
     sourcetree
     topbar
-    utils
     libtomahawk
     mac
 
@@ -154,12 +135,8 @@ IF( APPLE )
     SET( tomahawkSources ${tomahawkSources} mac/TomahawkApp_Mac.mm mac/MacShortcutHandler.cpp )
 ENDIF( APPLE )
 
-IF(GLOOX_FOUND)
-  INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
-  SET( tomahawkSources ${tomahawkSources} xmppbot/XmppBot.cpp )
-ENDIF(GLOOX_FOUND)
-
 ADD_SUBDIRECTORY( accounts )
+ADD_SUBDIRECTORY( infoplugins )
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
@@ -206,9 +183,6 @@ SET(LINK_LIBRARIES  "")
 IF(LIBLASTFM_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
 ENDIF(LIBLASTFM_FOUND)
-IF(GLOOX_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
-ENDIF(GLOOX_FOUND)
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)

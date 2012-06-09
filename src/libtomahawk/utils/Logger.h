@@ -24,6 +24,13 @@
 
 #include "DllMacro.h"
 
+#define LOGDEBUG 1
+#define LOGINFO 2
+#define LOGEXTRA 5
+#define LOGVERBOSE 8
+#define LOGTHIRDPARTY 9
+#define LOGSQL 10
+
 namespace Logger
 {
     class DLLEXPORT TLog : public QDebug
@@ -40,7 +47,15 @@ namespace Logger
     class DLLEXPORT TDebug : public TLog
     {
     public:
-        TDebug( unsigned int debugLevel = 1 ) : TLog( debugLevel )
+        TDebug( unsigned int debugLevel = LOGDEBUG ) : TLog( debugLevel )
+        {
+        }
+    };
+    
+    class DLLEXPORT TSqlLog : public TLog
+    {
+    public:
+        TSqlLog() : TLog( LOGSQL )
         {
         }
     };
@@ -51,11 +66,6 @@ namespace Logger
 
 #define tLog Logger::TLog
 #define tDebug Logger::TDebug
-
-#define LOGDEBUG 1
-#define LOGINFO 2
-#define LOGEXTRA 5
-#define LOGVERBOSE 8
-#define LOGTHIRDPARTY 9
+#define tSqlLog Logger::TSqlLog
 
 #endif // TOMAHAWK_LOGGER_H

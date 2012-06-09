@@ -20,6 +20,7 @@
 #include "AccountManager.h"
 #include "config.h"
 #include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "ResolverAccount.h"
 
 #include <QtCore/QLibrary>
@@ -202,6 +203,9 @@ AccountManager::enableAccount( Account* account )
 
     account->authenticate();
 
+    if ( account->preventEnabling() )
+        return;
+
     account->setEnabled( true );
     m_enabledAccounts << account;
 
@@ -230,8 +234,11 @@ AccountManager::connectAll()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach( Account* acc, m_accounts )
     {
-        acc->authenticate();
-        m_enabledAccounts << acc;
+        if ( acc->enabled() )
+        {
+            acc->authenticate();
+            m_enabledAccounts << acc;
+        }
 
     }
     m_connected = true;
@@ -401,6 +408,8 @@ AccountManager::hookupAccount( Account* account ) const
 void
 AccountManager::hookupAndEnable( Account* account, bool startup )
 {
+    Q_UNUSED( startup );
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     SipPlugin* p = account->sipPlugin();
     if ( p )

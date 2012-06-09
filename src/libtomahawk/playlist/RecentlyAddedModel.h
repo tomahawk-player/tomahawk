@@ -23,11 +23,11 @@
 #include <QHash>
 
 #include "Typedefs.h"
-#include "TrackModel.h"
+#include "PlayableModel.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT RecentlyAddedModel : public TrackModel
+class DLLEXPORT RecentlyAddedModel : public PlayableModel
 {
 Q_OBJECT
 

@@ -30,6 +30,7 @@
 #include "ContextMenu.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #define BOXMARGIN 2
 #define DASH "  -  "
@@ -80,7 +81,7 @@ void
 QueryLabel::init()
 {
     m_contextMenu = new ContextMenu( this );
-    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink | ContextMenu::ActionStopAfter | ContextMenu::ActionLove );
+    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink | ContextMenu::ActionStopAfter | ContextMenu::ActionLove | ContextMenu::ActionPage );
 
     m_hoverType = None;
     setContentsMargins( 0, 0, 0, 0 );
@@ -88,7 +89,7 @@ QueryLabel::init()
 
     m_useCustomPen = false;
     m_useCustomFont = false;
-    m_align = Qt::AlignLeft;
+    m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
 }
 

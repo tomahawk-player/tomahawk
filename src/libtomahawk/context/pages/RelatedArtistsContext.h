@@ -28,10 +28,9 @@
 #include "Album.h"
 #include "Query.h"
 #include "context/ContextPage.h"
-#include "infosystem/InfoSystem.h"
 
 class TreeModel;
-class ArtistView;
+class TreeView;
 
 class DLLEXPORT RelatedArtistsContext : public Tomahawk::ContextPage
 {
@@ -56,16 +55,14 @@ public slots:
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
 private slots:
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
-    void infoSystemFinished( QString target );
+    void onSimilarArtistsLoaded();
 
 private:
-    ArtistView* m_relatedView;
+    TreeView* m_relatedView;
     TreeModel* m_relatedModel;
 
     QGraphicsProxyWidget* m_proxy;
 
-    QString m_infoId;
     Tomahawk::artist_ptr m_artist;
 };
 

@@ -29,21 +29,16 @@
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
-#include "widgets/WelcomeWidget.h"
-#include "widgets/WhatsHotWidget.h"
-#include "widgets/NewReleasesWidget.h"
 
 #include "DllMacro.h"
 
 class AnimatedSplitter;
 class AlbumModel;
-class AlbumView;
+class GridView;
 class AlbumInfoWidget;
 class ArtistInfoWidget;
-class ArtistView;
+class TreeView;
 class CollectionModel;
-class CollectionFlatModel;
-class CollectionView;
 class ContextWidget;
 class PlaylistModel;
 class PlaylistView;
@@ -56,6 +51,7 @@ class SourceInfoWidget;
 class InfoBar;
 class TopBar;
 class TrackInfoWidget;
+class NewReleasesWidget;
 class WelcomeWidget;
 class WhatsHotWidget;
 class QPushButton;
@@ -91,17 +87,16 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
-    Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
-    Tomahawk::ViewPage* newReleasesWidget() const { return m_newReleasesWidget; }
-    Tomahawk::ViewPage* topLovedWidget() const { return m_topLovedWidget; }
-    Tomahawk::ViewPage* recentPlaysWidget() const { return m_recentPlaysWidget; }
-    ArtistView* superCollectionView() const { return m_superCollectionView; }
+    Tomahawk::ViewPage* welcomeWidget() const;
+    Tomahawk::ViewPage* whatsHotWidget() const;
+    Tomahawk::ViewPage* newReleasesWidget() const;
+    Tomahawk::ViewPage* topLovedWidget() const;
+    Tomahawk::ViewPage* recentPlaysWidget() const;
+    TreeView* superCollectionView() const;
 
     /// Get the view page for the given item. Not pretty...
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
-    Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
     /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is PlaylistView or DynamicWidget.
     /// Lives here but used by SourcesModel
@@ -119,13 +114,13 @@ signals:
     void numArtistsChanged( unsigned int artists );
     void numShownChanged( unsigned int shown );
 
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void statsAvailable( bool b );
     void modesAvailable( bool b );
     void filterAvailable( bool b );
-    void modeChanged( Tomahawk::PlaylistInterface::ViewMode mode );
+    void modeChanged( Tomahawk::PlaylistModes::ViewMode mode );
 
     void playClicked();
     void pauseClicked();
@@ -137,6 +132,9 @@ signals:
     void hideQueueRequested();
 
     void tomahawkLoaded();
+    
+    void historyBackAvailable( bool avail );
+    void historyForwardAvailable( bool avail );
 
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
@@ -151,13 +149,16 @@ public slots:
     Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
     Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
     Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
-    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album, Tomahawk::ModelMode withInitialMode = Tomahawk::InfoSystemMode );
+    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
     Tomahawk::ViewPage* show( const Tomahawk::query_ptr& query );
     Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
     Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     void historyBack();
-    void removeFromHistory( Tomahawk::ViewPage* p );
+    void historyForward();
+    
+    QList< Tomahawk::ViewPage* > historyPages() const;
+    void destroyPage( Tomahawk::ViewPage* page );
 
     void showQueue() { emit showQueueRequested(); }
     void hideQueue() { emit hideQueueRequested(); }
@@ -166,7 +167,7 @@ public slots:
     void setTableMode();
     void setAlbumMode();
 
-    void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
     void setShuffled( bool enabled );
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
@@ -201,9 +202,9 @@ private:
     AnimatedSplitter* m_splitter;
 
     AlbumModel* m_superAlbumModel;
-    AlbumView* m_superAlbumView;
+    GridView* m_superGridView;
     TreeModel* m_superCollectionModel;
-    ArtistView* m_superCollectionView;
+    TreeView* m_superCollectionView;
     QueueView* m_queue;
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
@@ -214,16 +215,17 @@ private:
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<CollectionView> > m_collectionViews;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<ArtistView> > m_treeViews;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumView> > m_collectionAlbumViews;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<TreeView> > m_treeViews;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<GridView> > m_collectionGridViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;
     QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
 
-    QList<Tomahawk::ViewPage*> m_pageHistory;
+    QList<Tomahawk::ViewPage*> m_pageHistoryBack;
+    QList<Tomahawk::ViewPage*> m_pageHistoryFwd;
+    Tomahawk::ViewPage* m_currentPage;
 
     Tomahawk::collection_ptr m_currentCollection;
     int m_currentMode;

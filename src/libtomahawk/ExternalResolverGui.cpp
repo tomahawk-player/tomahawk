@@ -28,6 +28,8 @@
 #include <QUiLoader>
 #include "utils/Logger.h"
 
+#include "Source.h"
+
 Tomahawk::ExternalResolverGui::ExternalResolverGui(const QString& filePath)
     : Tomahawk::ExternalResolver(filePath)
 {

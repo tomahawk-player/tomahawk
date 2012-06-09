@@ -22,15 +22,16 @@
 
 #include <QLabel>
 #include <QPixmap>
-
-#include "ViewManager.h"
-#include "thirdparty/Qocoa/qsearchfield.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
-#include <widgets/QueryLabel.h>
+
+#include "ViewManager.h"
+#include "thirdparty/Qocoa/qsearchfield.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
+#include "widgets/QueryLabel.h"
+#include "Source.h"
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64
@@ -54,6 +55,7 @@ InfoBar::InfoBar( QWidget* parent )
     ui->captionLabel->setElideMode( Qt::ElideRight );
 
     boldFont.setPixelSize( 12 );
+    boldFont.setBold( false );
     ui->descriptionLabel->setFont( boldFont );
 
     QFont regFont = ui->longDescriptionLabel->font();
@@ -323,6 +325,8 @@ InfoBar::createTile( int w )
 void
 InfoBar::paintEvent( QPaintEvent* e )
 {
+    Q_UNUSED( e );
+
     if ( m_bgTile.isNull() || width() > m_bgTile.width() )
         createTile( width() );
 

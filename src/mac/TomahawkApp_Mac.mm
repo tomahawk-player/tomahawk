@@ -43,6 +43,8 @@
 
 #include <QDebug>
 #include <QApplication>
+#include <QObject>
+#include <QMetaObject>
 
 @interface MacApplication :NSApplication {
     AppDelegate* delegate_;
@@ -164,14 +166,14 @@
       NSAppleEventManager *em = [NSAppleEventManager sharedAppleEventManager];
       [em
         setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:kInternetEventClass
-        andEventID:kAEGetURL];
+            andSelector:@selector(getUrl:withReplyEvent:)
+          forEventClass:kInternetEventClass
+             andEventID:kAEGetURL];
       [em
         setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:'WWW!'
-        andEventID:'OURL'];
+            andSelector:@selector(getUrl:withReplyEvent:)
+          forEventClass:'WWW!'
+             andEventID:'OURL'];
       NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
       OSStatus httpResult = LSSetDefaultHandlerForURLScheme((CFStringRef)@"tomahawk", (CFStringRef)bundleID);
 
@@ -251,11 +253,15 @@ void Tomahawk::checkForUpdates() {
 
 #ifdef LION
 #define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
+#define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
+#define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE NSWindowDidExitFullScreenNotification
 #else
 #define SET_LION_FULLSCREEN (NSUInteger)(1 << 7) // Defined as NSWindowCollectionBehaviorFullScreenPrimary in lion's NSWindow.h
+#define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE @"NSWindowWillEnterFullScreenNotification"
+#define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE @"NSWindowDidExitFullScreenNotification"
 #endif
 
-void Tomahawk::enableFullscreen()
+void Tomahawk::enableFullscreen( QObject* receiver )
 {
     // We don't support anything below leopard, so if it's not [snow] leopard it must be lion
     // Can't check for lion as Qt 4.7 doesn't have the enum val, not checking for Unknown as it will be lion
@@ -273,6 +279,24 @@ void Tomahawk::enableFullscreen()
                 NSView *nsview = (NSView *)w->winId();
                 NSWindow *nswindow = [nsview window];
                 [nswindow setCollectionBehavior:SET_LION_FULLSCREEN];
+
+                if ( !receiver )
+                    continue;
+
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE
+                                                                  object:nswindow
+                                                                   queue:nil
+                                                              usingBlock:^(NSNotification * note) {
+                    NSLog(@"Became Full Screen!");
+                    QMetaObject::invokeMethod( receiver, "fullScreenEntered", Qt::DirectConnection );
+                }];
+                [[NSNotificationCenter defaultCenter] addObserverForName:LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE
+                                                                  object:nswindow
+                                                                   queue:nil
+                                                              usingBlock:^(NSNotification * note) {
+                    NSLog(@"Left Full Screen!");
+                    QMetaObject::invokeMethod( receiver, "fullScreenExited", Qt::DirectConnection );
+                }];
             }
         }
     }

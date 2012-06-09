@@ -35,6 +35,7 @@
 
 #define RELEASE_LEVEL_THRESHOLD 0
 #define DEBUG_LEVEL_THRESHOLD LOGEXTRA
+#define LOG_SQL_QUERIES 1
 
 using namespace std;
 ofstream logfile;
@@ -65,9 +66,19 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
     if ( debugLevel > DEBUG_LEVEL_THRESHOLD )
         toDisk = false;
     #endif
+        
+    #ifdef LOG_SQL_QUERIES
+    if ( debugLevel == LOGSQL )
+        toDisk = true;
+    #endif
 
     if ( toDisk || (int)debugLevel <= s_threshold )
     {
+        #ifdef LOG_SQL_QUERIES
+        if ( debugLevel == LOGSQL )
+            logfile << "TSQLQUERY: ";
+        #endif
+
         logfile << QTime::currentTime().toString().toAscii().data() << " [" << QString::number( debugLevel ).toAscii().data() << "]: " << msg << endl;
         logfile.flush();
     }

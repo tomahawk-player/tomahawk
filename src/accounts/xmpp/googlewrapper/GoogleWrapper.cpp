@@ -19,7 +19,7 @@
 
 
 #include "GoogleWrapper.h"
-#include "XmppConfigWidget.h"
+#include "../XmppConfigWidget.h"
 #include "ui_XmppConfigWidget.h"
 
 #include "utils/TomahawkUtilsGui.h"
@@ -43,7 +43,7 @@ GoogleWrapperFactory::icon() const
     return QPixmap( ":/gmail-logo.png" );
 }
 
-GoogleWrapperSip::GoogleWrapperSip( Account* account )
+GoogleWrapperSip::GoogleWrapperSip( GoogleWrapper *account )
     : XmppSipPlugin( account )
 {
 

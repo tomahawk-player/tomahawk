@@ -26,6 +26,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -33,7 +34,7 @@ using namespace Tomahawk;
 TreeProxyModelPlaylistInterface::TreeProxyModelPlaylistInterface( TreeProxyModel *proxyModel )
     : PlaylistInterface()
     , m_proxyModel( proxyModel )
-    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
 {
 }
@@ -115,11 +116,11 @@ TreeProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     }
     else
     {
-        if ( m_repeatMode != PlaylistInterface::RepeatOne )
+        if ( m_repeatMode != PlaylistModes::RepeatOne )
             idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
     }
 
-    if ( !idx.isValid() && m_repeatMode == PlaylistInterface::RepeatAll )
+    if ( !idx.isValid() && m_repeatMode == PlaylistModes::RepeatAll )
     {
         if ( itemsAway > 0 )
         {
@@ -136,7 +137,7 @@ TreeProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     // Try to find the next available PlaylistItem (with results)
     while ( idx.isValid() )
     {
-        TreeModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item && !item->result().isNull() && item->result()->isOnline() )
         {
             qDebug() << "Next PlaylistItem found:" << item->result()->url();
@@ -161,7 +162,7 @@ TreeProxyModelPlaylistInterface::currentItem() const
         return Tomahawk::result_ptr();
     TreeProxyModel* proxyModel = m_proxyModel.data();
 
-    TreeModelItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
+    PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
     if ( item && !item->result().isNull() && item->result()->isOnline() )
         return item->result();
     return Tomahawk::result_ptr();

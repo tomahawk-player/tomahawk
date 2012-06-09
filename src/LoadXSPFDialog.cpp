@@ -18,6 +18,7 @@
 
 #include "LoadXSPFDialog.h"
 #include "TomahawkSettings.h"
+#include "Source.h"
 
 #include "ui_LoadXSPFDialog.h"
 #include <QFileDialog>

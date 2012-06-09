@@ -22,10 +22,11 @@
 #include "ui_ArtistInfoWidget.h"
 
 #include "audio/AudioEngine.h"
-#include "playlist/TrackHeader.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
+#include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
@@ -33,9 +34,6 @@
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-
-#include "widgets/OverlayButton.h"
-#include "widgets/OverlayWidget.h"
 
 #include "Pipeline.h"
 
@@ -46,18 +44,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
 
     m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
-
-    ui->albums->setFrameShape( QFrame::NoFrame );
-    ui->albums->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->relatedArtists->setFrameShape( QFrame::NoFrame );
-    ui->relatedArtists->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->topHits->setFrameShape( QFrame::NoFrame );
-    ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
@@ -65,36 +55,25 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
-    m_albumsModel = new TreeModel( ui->albums );
-    m_albumsModel->setMode( InfoSystemMode );
-    ui->albums->setTreeModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albums );
+    ui->albums->setPlayableModel( m_albumsModel );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
 
-    m_relatedModel = new TreeModel( ui->relatedArtists );
-    m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
-    ui->relatedArtists->setTreeModel( m_relatedModel );
-    ui->relatedArtists->setSortingEnabled( false );
+    m_relatedModel = new PlayableModel( ui->relatedArtists );
+    ui->relatedArtists->setPlayableModel( m_relatedModel );
     ui->relatedArtists->proxyModel()->sort( -1 );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
-    m_topHitsModel->setStyle( TrackModel::Short );
-    ui->topHits->setTrackModel( m_topHitsModel );
+    m_topHitsModel->setStyle( PlayableModel::Short );
+    ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
+    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
-    m_button = new OverlayButton( ui->albums );
-    m_button->setText( tr( "Click to show SuperCollection Albums" ) );
-    m_button->setCheckable( true );
-    m_button->setChecked( true );
-
-    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
-    connect( m_albumsModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     load( artist );
 }
@@ -114,41 +93,14 @@ ArtistInfoWidget::playlistInterface() const
 
 
 void
-ArtistInfoWidget::setMode( ModelMode mode )
-{
-    m_button->setChecked( mode == InfoSystemMode );
-
-    if ( m_albumsModel->mode() != mode )
-        onModeToggle();
-
-    if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show SuperCollection Albums" ) );
-    else
-        m_button->setText( tr( "Click to show Official Albums" ) );
-}
-
-
-void
-ArtistInfoWidget::onModeToggle()
-{
-    m_albumsModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_albumsModel->fetchAlbums( m_artist );
-}
-
-
-void
 ArtistInfoWidget::onLoadingStarted()
 {
-    m_button->setEnabled( false );
-    m_button->hide();
 }
 
 
 void
 ArtistInfoWidget::onLoadingFinished()
 {
-    m_button->setEnabled( true );
-    m_button->show();
 }
 
 
@@ -188,35 +140,39 @@ void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
     if ( !m_artist.isNull() )
+    {
         disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
+        disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
+        disconnect( m_artist.data(), SIGNAL( biographyLoaded() ), this, SLOT( onBiographyLoaded() ) );
+        disconnect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                    this,              SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+        disconnect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                    this,              SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+    }
 
     m_artist = artist;
     m_title = artist->name();
-    
-    m_albumsModel->fetchAlbums( artist );
 
-    Tomahawk::InfoSystem::InfoStringHash artistInfo;
-    artistInfo["artist"] = artist->name();
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = m_infoId;
-    requestData.customData = QVariantMap();
-
-    requestData.input = artist->name();
-    requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
-    requestData.requestId = TomahawkUtils::infosystemRequestId();
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
+    connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
+    connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
     connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
+    connect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
+                                SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+    connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+
+    if ( !m_artist->albums( Mixed ).isEmpty() )
+        onAlbumsFound( m_artist->albums( Mixed ), Mixed );
+    
+    if ( !m_artist->tracks().isEmpty() )
+        onTracksFound( m_artist->tracks(), Mixed );
+    
+    if ( !m_artist->similarArtists().isEmpty() )
+        onSimilarArtistsLoaded();
+    
+    if ( !m_artist->biography().isEmpty() )
+        onBiographyLoaded();
+
     onArtistImageUpdated();
 }
 
@@ -224,76 +180,33 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 void
 ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mode )
 {
+    Q_UNUSED( mode );
+
+    m_albumsModel->append( albums );
 }
 
 
 void
-ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, ModelMode mode )
 {
-    if ( requestData.caller != m_infoId )
-        return;
+    Q_UNUSED( mode );
 
-    InfoSystem::InfoStringHash trackInfo;
-    trackInfo = requestData.input.value< InfoSystem::InfoStringHash >();
+    m_topHitsModel->append( queries );
+}
 
-    if ( output.canConvert< QVariantMap >() )
-    {
-        const QString artist = requestData.input.toString();
-        if ( trackInfo["artist"] != m_artist->name() && artist != m_artist->name() )
-        {
-            qDebug() << "Returned info was for:" << trackInfo["artist"] << "- was looking for:" << m_artist->name();
-            return;
-        }
-    }
 
-    QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( requestData.type )
-    {
-        case InfoSystem::InfoArtistBiography:
-        {
-            QVariantMap bmap = output.toMap();
+void
+ArtistInfoWidget::onSimilarArtistsLoaded()
+{
+    m_relatedModel->append( m_artist->similarArtists() );
+}
 
-            foreach ( const QString& source, bmap.keys() )
-            {
-                if ( m_longDescription.isEmpty() || source == "last.fm" )
-                    m_longDescription = bmap[ source ].toHash()[ "text" ].toString();
-            }
-            emit longDescriptionChanged( m_longDescription );
-            break;
-        }
 
-        case InfoSystem::InfoArtistSongs:
-        {
-            const QStringList tracks = returnedData["tracks"].toStringList();
-
-            QList< query_ptr > queries;
-            int i = 0;
-            foreach ( const QString& track, tracks )
-            {
-                queries << Query::get( m_artist->name(), track, QString() );
-                Pipeline::instance()->resolve( queries );
-
-                if ( ++i == 15 )
-                    break;
-            }
-
-            m_topHitsModel->append( queries );
-            break;
-        }
-
-        case InfoSystem::InfoArtistSimilars:
-        {
-            const QStringList artists = returnedData["artists"].toStringList();
-            foreach ( const QString& artist, artists )
-            {
-                m_relatedModel->addArtists( Artist::get( artist ) );
-            }
-            break;
-        }
-
-        default:
-            return;
-    }
+void
+ArtistInfoWidget::onBiographyLoaded()
+{
+    m_longDescription = m_artist->biography();
+    emit longDescriptionChanged( m_longDescription );
 }
 
 

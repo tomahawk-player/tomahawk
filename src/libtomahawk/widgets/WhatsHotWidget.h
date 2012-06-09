@@ -29,8 +29,6 @@
 #include "infosystem/InfoSystem.h"
 #include "ViewPage.h"
 
-#include "utils/TomahawkUtils.h"
-
 #include "DllMacro.h"
 
 class QSortFilterProxyModel;
@@ -38,9 +36,8 @@ class QStandardItemModel;
 class QStandardItem;
 class TreeModel;
 class PlaylistModel;
-class OverlayWidget;
 class TreeProxyModel;
-class AlbumModel;
+class PlayableModel;
 
 namespace Ui
 {
@@ -98,7 +95,7 @@ private slots:
 
 private:
     void setLeftViewArtists( TreeModel* artistModel );
-    void setLeftViewAlbums( AlbumModel* albumModel );
+    void setLeftViewAlbums( PlayableModel* albumModel );
     void setLeftViewTracks( PlaylistModel* trackModel );
 
 
@@ -116,7 +113,7 @@ private:
     QSet< Tomahawk::ChartDataLoader* > m_workers;
 
     // Cache our model data
-    QHash< QString, AlbumModel* > m_albumModels;
+    QHash< QString, PlayableModel* > m_albumModels;
     QHash< QString, TreeModel* > m_artistModels;
     QHash< QString, PlaylistModel* > m_trackModels;
     QString m_queueItemToShow;

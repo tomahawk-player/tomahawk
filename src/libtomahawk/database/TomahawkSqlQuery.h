@@ -18,62 +18,34 @@
 
 #ifndef TOMAHAWKSQLQUERY_H
 #define TOMAHAWKSQLQUERY_H
+
 // subclass QSqlQuery so that it prints the error msg if a query fails
 
+#include <QSqlDriver>
 #include <QSqlQuery>
-#include <QSqlError>
-#include <QTime>
 
-#include "utils/Logger.h"
-
-#define TOMAHAWK_QUERY_THRESHOLD 60
+#define TOMAHAWK_QUERY_ANALYZE 1
 
 class TomahawkSqlQuery : public QSqlQuery
 {
 
 public:
+    TomahawkSqlQuery();
+    TomahawkSqlQuery( const QSqlDatabase& db );
 
-    TomahawkSqlQuery()
-        : QSqlQuery()
-    {}
+    static QString escape( const QString& identifier, QSqlDriver::IdentifierType type = QSqlDriver::FieldName );
 
-    TomahawkSqlQuery( const QSqlDatabase& db )
-        : QSqlQuery( db )
-    {}
-
-    bool exec( const QString& query )
-    {
-        prepare( query );
-
-        return exec();
-    }
-
-    bool exec()
-    {
-        QTime t;
-        t.start();
-
-        bool ret = QSqlQuery::exec();
-        if( !ret )
-            showError();
-
-        int e = t.elapsed();
-        if ( e >= TOMAHAWK_QUERY_THRESHOLD )
-            tLog( LOGVERBOSE ) << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
-
-        return ret;
-    }
+    bool exec( const QString& query );
+    bool exec();
+    
+    bool commitTransaction();
 
 private:
-    void showError()
-    {
-        tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
-                << this->lastQuery() << "\n"
-                << "boundValues:" << this->boundValues() << "\n"
-                << this->lastError().text() << "\n"
-                ;
-        Q_ASSERT( false );
-    }
+    bool isBusyError( const QSqlError& error ) const;
+
+    void showError();
+    
+    QSqlDatabase m_db;
 };
 
 #endif // TOMAHAWKSQLQUERY_H

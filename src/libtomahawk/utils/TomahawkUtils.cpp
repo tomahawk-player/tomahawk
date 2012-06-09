@@ -24,6 +24,9 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
+#include "BinaryExtractWorker.h"
+#include "SharedTimeLine.h"
 
 #ifdef LIBLASTFM_FOUND
     #include <lastfm/ws.h>
@@ -38,8 +41,12 @@
 #include <QDir>
 #include <QMutex>
 #include <QCryptographicHash>
+#include <QProcess>
 
-#ifdef Q_WS_WIN
+#include <quazip.h>
+#include <quazipfile.h>
+
+#ifdef Q_OS_WIN
     #include <windows.h>
     #include <shlobj.h>
 #endif
@@ -47,6 +54,10 @@
 #ifdef Q_WS_MAC
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
+#endif
+
+#ifdef QCA2_FOUND
+    #include <QtCrypto>
 #endif
 
 namespace TomahawkUtils
@@ -168,13 +179,6 @@ appLogDir()
 
 
 QString
-sqlEscape( QString sql )
-{
-    return sql.replace( "'", "''" );
-}
-
-
-QString
 timeToString( int seconds )
 {
     int hrs  = seconds / 60 / 60;
@@ -292,16 +296,30 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
         s_ext2mime.insert( "oga",  "application/ogg" );
-        s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
         s_ext2mime.insert( "aac",  "audio/mp4" );
         s_ext2mime.insert( "m4a",  "audio/mp4" );
         s_ext2mime.insert( "mp4",  "audio/mp4" );
+        s_ext2mime.insert( "flac", "audio/flac" );
+        s_ext2mime.insert( "aiff", "audio/aiff" );
+        s_ext2mime.insert( "aif",  "audio/aiff" );
     }
 
     return s_ext2mime.value( extension, "unknown" );
 }
+
+
+void
+msleep( unsigned int ms )
+{
+  #ifdef WIN32
+    Sleep( ms );   
+  #else
+    ::usleep( ms * 1000 );
+  #endif
+}
+
 
 static QMutex s_noProxyHostsMutex;
 static QStringList s_noProxyHosts;
@@ -402,15 +420,15 @@ proxyFactory( bool makeClone, bool noMutexLocker )
     {
         if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
             return s_threadProxyFactoryHash[ QThread::currentThread() ];
-
-        if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
-            return 0;
     }
 
     // create a new proxy factory for this thread
-    TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    *newProxyFactory = *mainProxyFactory;
+    if ( s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    {
+        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+        *newProxyFactory = *mainProxyFactory;
+    }
 
     if ( !makeClone )
         s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
@@ -453,7 +471,10 @@ nam()
 {
     QMutexLocker locker( &s_namAccessMutex );
     if ( s_threadNamHash.contains(  QThread::currentThread() ) )
+    {
+        //tDebug() << Q_FUNC_INFO << "Found current thread in nam hash";
         return s_threadNamHash[ QThread::currentThread() ];
+    }
 
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
     {
@@ -465,6 +486,7 @@ nam()
         else
             return 0;
     }
+    tDebug() << Q_FUNC_INFO << "Found gui thread in nam hash";
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
@@ -476,7 +498,9 @@ nam()
 
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
-    tDebug( LOGEXTRA ) << "created new nam for thread " << QThread::currentThread();
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "created new nam for thread " << QThread::currentThread();
+    //QNetworkProxy proxy = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( newNam->proxyFactory() )->proxy();
+    //tDebug() << Q_FUNC_INFO << "reply proxy properties: " << proxy.type() << proxy.hostName() << proxy.port();
 
     return newNam;
 }
@@ -513,6 +537,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
                 s_noProxyHostsMutex.unlock();
         }
 
+        QNetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
         s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
@@ -639,41 +664,174 @@ crash()
 }
 
 
-SharedTimeLine::SharedTimeLine()
-    : QObject( 0 )
-    , m_refcount( 0 )
+bool
+verifyFile( const QString &filePath, const QString &signature )
 {
-    m_timeline.setCurveShape( QTimeLine::LinearCurve );
-    m_timeline.setFrameRange( 0, INT_MAX );
-    m_timeline.setDuration( INT_MAX );
-    m_timeline.setUpdateInterval( 40 );
-    connect( &m_timeline, SIGNAL( frameChanged( int ) ), SIGNAL( frameChanged( int ) ) );
-}
+    QCA::Initializer init;
 
-void
-SharedTimeLine::connectNotify( const char* signal )
-{
-    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) ) {
-        m_refcount++;
-        if ( m_timeline.state() != QTimeLine::Running )
-            m_timeline.start();
-    }
-}
-
-
-void
-SharedTimeLine::disconnectNotify( const char* signal )
-{
-    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+    if( !QCA::isSupported( "sha1" ) )
     {
-        m_refcount--;
-        if ( m_timeline.state() == QTimeLine::Running && m_refcount == 0 )
-        {
-            m_timeline.stop();
-            deleteLater();
-        }
+        qWarning() << "SHA1 not supported by QCA, aborting.";
+        return false;
     }
+
+    // The signature for the resolver.zip was created like so:
+    // openssl dgst -sha1 -binary < "#{tarball}" | openssl dgst -dss1 -sign "#{ARGV[2]}" | openssl enc -base64
+    // which means we need to decode it with QCA's DSA public key signature verification tools
+    // The input data is:
+    // file -> SHA1 binary format -> DSS1/DSA signed -> base64 encoded.
+
+    // Step 1: Load the public key
+    // Public key is in :/data/misc/tomahawk_pubkey.pem
+    QFile f( ":/data/misc/tomahawk_pubkey.pem" );
+    if ( !f.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Unable to read public key from resources!";
+        return false;
+    }
+
+    const QString pubkeyData = QString::fromUtf8( f.readAll() );
+    QCA::ConvertResult conversionResult;
+    QCA::PublicKey publicKey = QCA::PublicKey::fromPEM( pubkeyData, &conversionResult );
+    if ( QCA::ConvertGood != conversionResult)
+    {
+        qWarning() << "Public key reading/loading failed! Tried to load public key:" << pubkeyData;
+        return false;
+    }
+
+    if ( !publicKey.canVerify() )
+    {
+        qWarning() << "Loaded Tomahawk public key but cannot use it to verify! What is up....";
+        return false;
+    }
+
+    // Step 2: Get the SHA1 of the file contents
+    QFile toVerify( filePath );
+    if ( !toVerify.exists() || !toVerify.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Failed to open file we are trying to verify!" << filePath;
+        return false;
+    }
+
+    const QByteArray fileHashData = QCA::Hash( "sha1" ).hash( toVerify.readAll() ).toByteArray();
+    toVerify.close();
+
+    // Step 3: Base64 decode the signature
+    QCA::Base64 decoder( QCA::Decode );
+    const QByteArray decodedSignature = decoder.decode( QCA::SecureArray( signature.trimmed().toUtf8() ) ).toByteArray();
+    if ( decodedSignature.isEmpty() )
+    {
+        qWarning() << "Got empty signature after we tried to decode it from Base64:" << signature.trimmed().toUtf8() << decodedSignature.toBase64();
+        return false;
+    }
+
+    // Step 4: Do the actual verifying!
+    const bool result = publicKey.verifyMessage( fileHashData, decodedSignature, QCA::EMSA1_SHA1, QCA::DERSequence );
+    if ( !result )
+    {
+        qWarning() << "File" << filePath << "FAILED VERIFICATION against our input signature!";
+        return false;
+    }
+
+    qDebug() << "Successfully verified signature of downloaded file:" << filePath;
+
+    return true;
+}
+
+
+QString
+extractScriptPayload( const QString& filename, const QString& resolverId )
+{
+    // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
+    QDir resolverDir = appDataDir();
+    if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
+    {
+        tLog() << "Failed to mkdir resolver save dir: " << TomahawkUtils::appDataDir().absoluteFilePath( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+        return QString();
+    }
+    resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+
+    if ( !unzipFileInFolder( filename, resolverDir ) )
+    {
+        qWarning() << "Failed to unzip resolver. Ooops.";
+        return QString();
+    }
+
+    return resolverDir.absolutePath();
+}
+
+
+bool
+unzipFileInFolder( const QString &zipFileName, const QDir &folder )
+{
+    Q_ASSERT( !zipFileName.isEmpty() );
+    Q_ASSERT( folder.exists() );
+
+    QuaZip zipFile( zipFileName );
+    if ( !zipFile.open( QuaZip::mdUnzip ) )
+    {
+        qWarning() << "Failed to QuaZip open:" << zipFile.getZipError();
+        return false;
+    }
+
+    if ( !zipFile.goToFirstFile() )
+    {
+        tLog() << "Failed to go to first file in zip archive: " << zipFile.getZipError();
+        return false;
+    }
+
+    tDebug() << "Unzipping files to:" << folder.absolutePath();
+
+    QuaZipFile fileInZip( &zipFile );
+    do
+    {
+        QuaZipFileInfo info;
+        zipFile.getCurrentFileInfo( &info );
+
+        if ( !fileInZip.open( QIODevice::ReadOnly ) )
+        {
+            tLog() << "Failed to open file inside zip archive:" << info.name << zipFile.getZipName() << "with error:" << zipFile.getZipError();
+            continue;
+        }
+
+        QFile out( folder.absoluteFilePath( fileInZip.getActualFileName() ) );
+
+        // make dir if there is one needed
+        QStringList parts = fileInZip.getActualFileName().split( "/" );
+        if ( parts.size() > 1 )
+        {
+            QStringList dirs = parts.mid( 0, parts.size() - 1 );
+            QString dirPath = dirs.join( "/" ); // QDir translates / to \ internally if necessary
+            folder.mkpath( dirPath );
+        }
+
+        tDebug() << "Writing to output file..." << out.fileName();
+        if ( !out.open( QIODevice::WriteOnly ) )
+        {
+            tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;
+            fileInZip.close();
+            continue;
+        }
+
+
+        out.write( fileInZip.readAll() );
+        out.close();
+        fileInZip.close();
+
+    } while ( zipFile.goToNextFile() );
+
+    return true;
+}
+
+
+void
+extractBinaryResolver( const QString& zipFilename, QObject* receiver )
+{
+    BinaryExtractWorker* worker = new BinaryExtractWorker( zipFilename, receiver );
+    worker->start( QThread::LowPriority );
 }
 
 
 } // ns
+
+#include "TomahawkUtils.moc"

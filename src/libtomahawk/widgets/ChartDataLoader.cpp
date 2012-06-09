@@ -17,6 +17,8 @@
  */
 #include "ChartDataLoader.h"
 
+#include "Source.h"
+
 using namespace Tomahawk;
 
 

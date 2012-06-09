@@ -85,7 +85,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
         QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
         latchOnAction->setText( tr( "&Catch Up" ) );
         latchOnAction->setIcon( QIcon() );
-        
+
         // If not, then keep waiting
         return;
     }
@@ -152,7 +152,7 @@ LatchManager::latchModeChangeRequest( const Tomahawk::source_ptr& source, bool r
     if ( !isLatched( source ) )
         return;
 
-    source->playlistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistInterface::RealTime : Tomahawk::PlaylistInterface::StayOnSong );
+    source->playlistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistModes::RealTime : Tomahawk::PlaylistModes::StayOnSong );
     if ( realtime )
         catchUpRequest();
 }

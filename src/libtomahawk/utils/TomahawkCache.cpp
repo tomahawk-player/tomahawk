@@ -19,6 +19,7 @@
 #include "TomahawkCache.h"
 
 #include "TomahawkSettings.h"
+#include "Source.h"
 #include "utils/Logger.h"
 
 #include <QDateTime>
@@ -100,7 +101,7 @@ QVariant Cache::getData ( const QString& identifier, const QString& key )
         return data.data;
 
     }
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No such client" << identifier;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No such key" << key;
     return QVariant();
 }
 

@@ -24,9 +24,12 @@
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
+#include "DatabaseCommand_UpdateSearchIndex.h"
 #include "DatabaseImpl.h"
+#include "Database.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 using namespace lucene::analysis;
 using namespace lucene::analysis::standard;
@@ -37,22 +40,29 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( DatabaseImpl& db, bool wipeIndex )
-    : QObject()
-    , m_db( db )
+FuzzyIndex::FuzzyIndex( QObject* parent, bool wipe )
+    : QObject( parent )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
 {
     QString m_lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
-    m_luceneDir = FSDirectory::getDirectory( m_lucenePath.toStdString().c_str() );
-    m_analyzer = _CLNEW SimpleAnalyzer();
+    QByteArray path = m_lucenePath.toUtf8();
+    const char* cPath = path.constData();
 
-    if ( wipeIndex )
+    tDebug() << "Opening Lucene directory:" << path;
+    try
     {
-        tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
-        beginIndexing();
-        endIndexing();
+        m_luceneDir = FSDirectory::getDirectory( cPath );
+        m_analyzer = _CLNEW SimpleAnalyzer();
     }
+    catch ( CLuceneError& error )
+    {
+        tDebug() << "Caught CLucene error:" << error.what();
+        wipe = true;
+    }
+
+    if ( wipe )
+        wipeIndex();
 }
 
 
@@ -62,6 +72,27 @@ FuzzyIndex::~FuzzyIndex()
     delete m_luceneReader;
     delete m_analyzer;
     delete m_luceneDir;
+}
+
+
+bool
+FuzzyIndex::wipeIndex()
+{
+    tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
+    beginIndexing();
+    endIndexing();
+
+    QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+    
+    return true; // FIXME
+}
+
+
+void
+FuzzyIndex::updateIndex()
+{
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -89,7 +120,7 @@ FuzzyIndex::beginIndexing()
     }
     catch( CLuceneError& error )
     {
-        qDebug() << "Caught CLucene error:" << error.what();
+        tDebug() << "Caught CLucene error:" << error.what();
         Q_ASSERT( false );
     }
 }
@@ -157,8 +188,9 @@ FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& 
     }
     catch( CLuceneError& error )
     {
-        qDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        tDebug() << "Caught CLucene error:" << error.what();
+        
+        wipeIndex();
     }
 }
 
@@ -198,7 +230,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         if ( query->isFullTextQuery() )
         {
             QString escapedQuery = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
-            
+
             Term* term = _CLNEW Term( _T( "track" ), escapedQuery.toStdWString().c_str() );
             Query* fqry = _CLNEW FuzzyQuery( term );
             qry->add( fqry, true, BooleanClause::SHOULD );
@@ -251,7 +283,8 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        
+        wipeIndex();
     }
 
     return resultsmap;
@@ -305,7 +338,8 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        Q_ASSERT( false );
+        
+        wipeIndex();
     }
 
     return resultsmap;

@@ -87,20 +87,9 @@ GlobalActionManager::~GlobalActionManager()
 QUrl
 GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
 {
-    QString title, artist, album;
-
-    if ( !query->results().isEmpty() && !query->results().first().isNull() )
-    {
-        title = query->results().first()->track();
-        artist = query->results().first()->artist().isNull() ? QString() : query->results().first()->artist()->name();
-        album = query->results().first()->album().isNull() ? QString() : query->results().first()->album()->name();
-    }
-    else
-    {
-        title = query->track();
-        artist = query->artist();
-        album = query->album();
-    }
+    QString title = query->displayQuery()->track();
+    QString artist = query->displayQuery()->artist();
+    QString album = query->displayQuery()->album();
 
     return openLink( title, artist, album );
 }
@@ -1166,11 +1155,7 @@ GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
     plentry_ptr e( new PlaylistEntry );
     e->setGuid( uuid() );
 
-    if ( q->results().count() )
-        e->setDuration( q->results().at( 0 )->duration() );
-    else
-        e->setDuration( 0 );
-
+    e->setDuration( q->displayQuery()->duration() );
     e->setLastmodified( 0 );
     QString annotation = "";
     if ( !q->property( "annotation" ).toString().isEmpty() )

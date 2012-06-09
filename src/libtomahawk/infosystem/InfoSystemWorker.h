@@ -64,6 +64,8 @@ public slots:
 
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
+    QStringList findInfoPlugins();
+    void loadInfoPlugins( const QStringList &pluginPaths );
     
     void getShortUrl( Tomahawk::InfoSystem::InfoPushData data );
     void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj );

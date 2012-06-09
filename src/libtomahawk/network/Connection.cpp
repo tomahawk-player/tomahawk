@@ -19,11 +19,12 @@
 
 #include "Connection.h"
 
-#include <QtCore/QTime>
-#include <QtCore/QThread>
-
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "Source.h"
+
+#include <QtCore/QTime>
+#include <QtCore/QThread>
 
 #define PROTOVER "4" // must match remote peer, or we can't talk.
 

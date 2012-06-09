@@ -167,7 +167,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
         foreach( const plentry_ptr& e, m_entries )
         {
-
             adde.bindValue( 0, e->query()->track() );
             adde.bindValue( 1, e->query()->artist() );
             adde.bindValue( 2, e->query()->album() );

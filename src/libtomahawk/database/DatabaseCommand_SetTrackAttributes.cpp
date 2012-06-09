@@ -19,6 +19,7 @@
 #include "DatabaseCommand_SetTrackAttributes.h"
 #include "TomahawkSqlQuery.h"
 #include "DatabaseImpl.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

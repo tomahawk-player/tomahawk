@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012  Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,16 +21,14 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
-#include "Playlist.h"
-
-#include "playlist/PlaylistUpdaterInterface.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QSettings>
 #include <QtNetwork/QNetworkProxy>
+#include <QStringList>
 
-#include "DllMacro.h"
-
-#define TOMAHAWK_SETTINGS_VERSION 10
+#define TOMAHAWK_SETTINGS_VERSION 13
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
@@ -49,11 +47,13 @@ public:
 
     /// General settings
     virtual QString storageCacheLocation() const;
+
     virtual QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
     uint scannerTime() const;
     void setScannerTime( uint time );
+
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
 
@@ -83,18 +83,21 @@ public:
     bool enableEchonestCatalogs() const;
     void setEnableEchonestCatalogs( bool enable );
 
+    /// Audio stuff
+    unsigned int volume() const;
+    void setVolume( unsigned int volume );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );
 
-    QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     QStringList recentlyPlayedPlaylistGuids( unsigned int amount = 0 ) const;
-    void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
+    void appendRecentlyPlayedPlaylist( const QString& playlistGuid, int sourceId );
 
     bool shuffleState( const QString& playlistid ) const;
     void setShuffleState( const QString& playlistid, bool state );
-    Tomahawk::PlaylistInterface::RepeatMode repeatMode( const QString& playlistid );
-    void setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode );
+    Tomahawk::PlaylistModes::RepeatMode repeatMode( const QString& playlistid );
+    void setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode );
 
     // remove shuffle state and repeat state
     void removePlaylistSettings( const QString& playlistid );
@@ -207,13 +210,15 @@ public:
 
 signals:
     void changed();
-    void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );
+    void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId  );
 
 private slots:
     void updateIndex();
 
 private:
     void doInitialSetup();
+    void createLastFmAccount();
+    void createSpotifyAccount();
     void doUpgrade( int oldVersion, int newVersion );
 
     static TomahawkSettings* s_instance;

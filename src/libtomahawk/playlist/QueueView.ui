@@ -38,7 +38,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>Show Queue</string>
+      <string>Open Queue</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

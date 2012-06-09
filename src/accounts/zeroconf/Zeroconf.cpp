@@ -26,6 +26,7 @@
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
 #include "ZeroconfAccount.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 using namespace Accounts;

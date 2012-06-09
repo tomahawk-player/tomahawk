@@ -20,8 +20,9 @@
 
 #include "DatabaseControl.h"
 #include "utils/Logger.h"
-#include <database/DatabaseCommand_GenericSelect.h>
-#include <database/Database.h>
+#include "Source.h"
+#include "database/DatabaseCommand_GenericSelect.h"
+#include "database/Database.h"
 
 using namespace Tomahawk;
 

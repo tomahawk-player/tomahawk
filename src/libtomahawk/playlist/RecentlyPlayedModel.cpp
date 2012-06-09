@@ -25,6 +25,7 @@
 #include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_PlaybackHistory.h"
+#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -40,9 +41,11 @@ RecentlyPlayedModel::RecentlyPlayedModel( const source_ptr& source, QObject* par
 {
     if ( source.isNull() )
     {
-        onSourcesReady();
+        if ( SourceList::instance()->isReady() )
+            onSourcesReady();
+        else
+            connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
 
-        connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     }
     else
@@ -65,6 +68,7 @@ RecentlyPlayedModel::loadHistory()
     {
         clear();
     }
+    loadingStarted();
 
     DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( m_source );
     cmd->setLimit( m_limit );
@@ -103,19 +107,19 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
     if ( count )
     {
-        TrackModelItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
+        PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
         if ( oldestItem->query()->playedBy().second >= playtime )
             return;
 
-        TrackModelItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
+        PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
         if ( youngestItem->query()->playedBy().second <= playtime )
             insert( query, 0 );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
             {
-                TrackModelItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
-                TrackModelItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
+                PlayableItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
+                PlayableItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
 
                 if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
                 {

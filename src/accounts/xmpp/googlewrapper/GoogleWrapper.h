@@ -20,7 +20,7 @@
 #ifndef GOOGLEWRAPPER_H
 #define GOOGLEWRAPPER_H
 
-#include "XmppAccount.h"
+#include "../XmppAccount.h"
 
 namespace Tomahawk
 {
@@ -44,11 +44,13 @@ public:
     virtual Account* createAccount( const QString& pluginId );
 };
 
+class GoogleWrapper;
+
 class ACCOUNTDLLEXPORT GoogleWrapperSip : public XmppSipPlugin
 {
     Q_OBJECT
 public:
-    GoogleWrapperSip( Tomahawk::Accounts::Account* account );
+    GoogleWrapperSip( Tomahawk::Accounts::GoogleWrapper* account );
     virtual ~GoogleWrapperSip();
 
 public slots:

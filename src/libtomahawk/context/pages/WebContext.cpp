@@ -17,6 +17,7 @@
  */
 
 #include "WebContext.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

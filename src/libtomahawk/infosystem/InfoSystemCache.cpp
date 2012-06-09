@@ -19,9 +19,6 @@
 
 #include <QtDebug>
 
-#include <QDir>
-#include <QSettings>
-#include <QCryptographicHash>
 
 #ifndef ENABLE_HEADLESS
     #include <QDesktopServices>
@@ -30,7 +27,11 @@
 #include "InfoSystemCache.h"
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
+#include <QDir>
+#include <QSettings>
+#include <QCryptographicHash>
 
 namespace Tomahawk
 {

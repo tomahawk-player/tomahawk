@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QPixmap>
 #endif
@@ -31,7 +30,6 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "Query.h"
-#include "infosystem/InfoSystem.h"
 
 namespace Tomahawk
 {
@@ -51,19 +49,23 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
-    bool infoLoaded() const { return m_infoLoaded; }
-    
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<Tomahawk::artist_ptr> similarArtists() const;
+
+    QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+    Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
 
     void loadStats();
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
+    
+    QString biography() const;
 
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
+    bool coverLoaded() const { return m_coverLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -71,32 +73,35 @@ public:
     void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
 
 signals:
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
 
     void updated();
     void coverChanged();
     void similarArtistsLoaded();
+    void biographyLoaded();
     void statsLoaded();
 
 private slots:
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onTracksLoaded(Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
 private:
-    Q_DISABLE_COPY( Artist )
+    Artist();
+    QString infoid() const;
 
     unsigned int m_id;
     QString m_name;
     QString m_sortname;
 
-    bool m_infoLoaded;
-    mutable bool m_infoLoading;
+    bool m_coverLoaded;
+    mutable bool m_coverLoading;
     QHash<Tomahawk::ModelMode, bool> m_albumsLoaded;
     bool m_simArtistsLoaded;
+    bool m_biographyLoaded;
 
     mutable QString m_uuid;
     mutable int m_infoJobs;
@@ -104,7 +109,8 @@ private:
     QList<Tomahawk::album_ptr> m_databaseAlbums;
     QList<Tomahawk::album_ptr> m_officialAlbums;
     QList<Tomahawk::artist_ptr> m_similarArtists;
-    
+    QString m_biography;
+
     bool m_playbackHistoryLoaded;
     QList< PlaybackLog > m_playbackHistory;
 
@@ -114,11 +120,13 @@ private:
     mutable QHash< int, QPixmap > m_coverCache;
 #endif
 
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
+    QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
     
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 };
 
 } // ns
+
+Q_DECLARE_METATYPE( Tomahawk::artist_ptr )
 
 #endif

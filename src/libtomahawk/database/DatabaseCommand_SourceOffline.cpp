@@ -21,6 +21,7 @@
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 DatabaseCommand_SourceOffline::DatabaseCommand_SourceOffline( int id )

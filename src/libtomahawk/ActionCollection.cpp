@@ -22,6 +22,8 @@
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "Source.h"
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
@@ -30,7 +32,7 @@ ActionCollection* ActionCollection::instance()
 }
 
 
-ActionCollection::ActionCollection( QObject *parent )
+ActionCollection::ActionCollection( QObject* parent )
     : QObject( parent )
 {
     s_instance = this;

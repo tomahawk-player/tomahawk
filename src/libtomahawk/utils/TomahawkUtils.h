@@ -26,11 +26,9 @@
 #include <QtCore/QThread>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QStringList>
-#include <QTimeLine>
 #include <Typedefs.h>
 
 #define RESPATH ":/data/"
-
 
 class QDir;
 class QNetworkAccessManager;
@@ -53,39 +51,14 @@ namespace TomahawkUtils
         NowPlayingSpeaker,
         InfoIcon
     };
+
     enum ImageMode
     {
         Original,
         CoverInCase,
         AvatarInFrame,
-        ScaledCover
-    };
-
-
-    class DLLEXPORT SharedTimeLine : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        SharedTimeLine();
-
-        virtual ~SharedTimeLine() {}
-
-        int currentFrame() { return m_timeline.currentFrame(); }
-
-        void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
-
-    signals:
-        void frameChanged( int );
-
-    protected slots:
-        virtual void connectNotify( const char *signal );
-
-        virtual void disconnectNotify( const char *signal );
-
-    private:
-        int m_refcount;
-        QTimeLine m_timeline;
+        ScaledCover,
+        Grid
     };
 
 
@@ -113,7 +86,7 @@ namespace TomahawkUtils
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
     };
-    
+
 
     DLLEXPORT QString appFriendlyVersion();
 
@@ -121,11 +94,12 @@ namespace TomahawkUtils
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
 
-    DLLEXPORT QString sqlEscape( QString sql );
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
+    
+    DLLEXPORT void msleep( unsigned int ms );
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
@@ -136,7 +110,18 @@ namespace TomahawkUtils
 
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
-    
+
+    DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
+    DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
+    DLLEXPORT bool unzipFileInFolder( const QString& zipFileName, const QDir& folder );
+
+    // Extracting may be asynchronous, pass in a receiver object with the following slots:
+    //  extractSucceeded( const QString& path ) and extractFailed() to be notified/
+    DLLEXPORT void extractBinaryResolver( const QString& zipFilename, QObject* receiver );
+
+    // Used by the above, not exported
+    void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
+
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
      * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,

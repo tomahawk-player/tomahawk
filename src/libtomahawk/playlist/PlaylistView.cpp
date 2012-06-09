@@ -22,11 +22,10 @@
 #include <QKeyEvent>
 #include <QPainter>
 
-#include "playlist/PlaylistProxyModel.h"
-#include "widgets/OverlayWidget.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
@@ -35,8 +34,6 @@ PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
     , m_model( 0 )
 {
-    setProxyModel( new PlaylistProxyModel( this ) );
-
     connect( contextMenu(), SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
@@ -61,9 +58,9 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
 {
     m_model = model;
 
-    TrackView::setTrackModel( m_model );
-    setColumnHidden( TrackModel::Age, true ); // Hide age column per default
-    setColumnHidden( TrackModel::Composer, true ); // Hide composer column per default
+    TrackView::setPlayableModel( m_model );
+    setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
+    setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
     if ( guid().isEmpty() )
     {
@@ -77,7 +74,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
         }
     }
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
 
@@ -88,7 +84,6 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
 void
 PlaylistView::keyPressEvent( QKeyEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     TrackView::keyPressEvent( event );
 
     if ( !model() )
@@ -99,6 +94,38 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
         qDebug() << "Removing selected items";
         proxyModel()->remove( selectedIndexes() );
     }
+}
+
+
+bool
+PlaylistView::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::DragEnter )
+    {
+        QDragEnterEvent* e = static_cast<QDragEnterEvent*>(event);
+        dragEnterEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::DragMove )
+    {
+        QDragMoveEvent* e = static_cast<QDragMoveEvent*>(event);
+        dragMoveEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::DragLeave )
+    {
+        QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>(event);
+        dragLeaveEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::Drop )
+    {
+        QDropEvent* e = static_cast<QDropEvent*>(event);
+        dropEvent( e );
+        return true;
+    }
+
+    return QObject::eventFilter( obj, event );
 }
 
 
@@ -120,27 +147,6 @@ PlaylistView::updaters() const
 
 
 void
-PlaylistView::onTrackCountChanged( unsigned int tracks )
-{
-    if ( tracks == 0 )
-    {
-        overlay()->setText( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
-        overlay()->show();
-    }
-    else
-        overlay()->hide();
-}
-
-
-bool
-PlaylistView::jumpToCurrentTrack()
-{
-    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
-    return true;
-}
-
-
-void
 PlaylistView::onDeleted()
 {
     qDebug() << Q_FUNC_INFO;
@@ -151,9 +157,17 @@ PlaylistView::onDeleted()
 void
 PlaylistView::onChanged()
 {
-    if ( m_model && !m_model->playlist().isNull() &&
-         ViewManager::instance()->currentPage() == this )
-        emit nameChanged( m_model->playlist()->title() );
+    if ( m_model )
+    {
+        if ( m_model->isReadOnly() )
+            setEmptyTip( tr( "This playlist is currently empty." ) );
+        else
+            setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+        m_model->finishLoading();
+
+        if ( !m_model->playlist().isNull() && ViewManager::instance()->currentPage() == this )
+            emit nameChanged( m_model->playlist()->title() );
+    }
 }
 
 
@@ -174,7 +188,6 @@ PlaylistView::onMenuTriggered( int action )
             break;
 
         default:
-            TrackView::onMenuTriggered( action );
             break;
     }
 }

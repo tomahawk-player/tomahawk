@@ -23,7 +23,8 @@
 #include "Query.h"
 #include "Result.h"
 #include "Logger.h"
-#include "TrackModelItem.h"
+#include "PlayableItem.h"
+#include "Source.h"
 
 #include <QtGui/QLayout>
 #include <QtGui/QPainter>
@@ -61,23 +62,24 @@ createDragPixmap( MediaType type, int itemCount )
     {
         xCount = 5;
         size = 16;
-    } else if( itemCount > 9 )
+    }
+    else if( itemCount > 9 )
     {
         xCount = 4;
         size = 22;
     }
 
-    if( itemCount < xCount )
+    if ( itemCount < xCount )
     {
         xCount = itemCount;
     }
 
     int yCount = itemCount / xCount;
-    if( itemCount % xCount != 0 )
+    if ( itemCount % xCount != 0 )
     {
         ++yCount;
     }
-    if( yCount > xCount )
+    if ( yCount > xCount )
     {
         yCount = xCount;
     }
@@ -104,7 +106,7 @@ createDragPixmap( MediaType type, int itemCount )
 
     int x = 0;
     int y = 0;
-    for( int i = 0; i < itemCount; ++i )
+    for ( int i = 0; i < itemCount; ++i )
     {
 
         painter.drawPixmap( x, y, pixmap );
@@ -126,8 +128,28 @@ createDragPixmap( MediaType type, int itemCount )
 
 
 void
+drawShadowText( QPainter* painter, const QRect& rect, const QString& text, const QTextOption& textOption )
+{
+    painter->save();
+
+    painter->drawText( rect, text, textOption );
+    
+/*    QFont font = painter->font();
+    font.setPixelSize( font.pixelSize() + 2 );
+    painter->setFont( font );
+
+    painter->setPen( Qt::black );
+    painter->drawText( rect, text, textOption );*/
+
+    painter->restore();
+}
+
+
+void
 drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& figRectIn )
 {
+    painter->save();
+
     QRect figRect = figRectIn;
     if ( text.length() == 1 )
         figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
@@ -154,15 +176,13 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     ppath.arcTo( leftArcRect, 270, 180 );
     painter->drawPath( ppath );
 
-    painter->setPen( origpen );
-
-#ifdef Q_WS_MAC
     figRect.adjust( -1, 0, 0, 0 );
-#endif
 
-    QTextOption to( Qt::AlignCenter );
+    painter->setPen( origpen );
     painter->setPen( Qt::white );
-    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
+    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
+    
+    painter->restore();
 }
 
 
@@ -276,10 +296,10 @@ QPixmap
 createAvatarFrame( const QPixmap &avatar )
 {
     QPixmap frame( ":/data/images/avatar_frame.png" );
-    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     QPainter painter( &frame );
-    painter.drawPixmap( (frame.height() - scaledAvatar.height()) / 2, (frame.width() - scaledAvatar.width()) / 2, scaledAvatar );
+    painter.drawPixmap( ( frame.height() - scaledAvatar.height() ) / 2, ( frame.width() - scaledAvatar.width() ) / 2, scaledAvatar );
 
     return frame;
 }
@@ -338,11 +358,16 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
                 pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+            else if ( mode == Grid )
+                pixmap = QPixmap( RESPATH "images/album-placeholder-grid.png" );
             else
                 pixmap = QPixmap( RESPATH "images/no-album-no-case.png" );
             break;
 
         case DefaultArtistImage:
+            if ( mode == Grid )
+                pixmap = QPixmap( RESPATH "images/artist-placeholder-grid.png" );
+            else
                 pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
             break;
 
@@ -386,8 +411,10 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
 
 void
-prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item )
+prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item )
 {
+    Q_UNUSED( index );
+
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
@@ -404,7 +431,7 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Tr
     else
     {
         float opacity = 0.0;
-        if ( item->query()->results().count() )
+        if ( !item->query()->results().isEmpty() )
             opacity = item->query()->results().first()->score();
 
         opacity = qMax( (float)0.3, opacity );

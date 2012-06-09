@@ -27,56 +27,35 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
+#include "PlayableItem.h"
 #include "utils/Logger.h"
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
-    : QSortFilterProxyModel( parent )
+    : PlayableProxyModel( parent )
     , m_artistsFilterCmd( 0 )
     , m_model( 0 )
 {
-    setFilterCaseSensitivity( Qt::CaseInsensitive );
-    setSortCaseSensitivity( Qt::CaseInsensitive );
-    setDynamicSortFilter( true );
-
-    setSourceTreeModel( 0 );
-}
-
-
-QPersistentModelIndex
-TreeProxyModel::currentIndex() const
-{
-    if ( !m_model )
-        return QPersistentModelIndex();
-
-    return mapFromSource( m_model->currentItem() );
 }
 
 
 void
-TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+TreeProxyModel::setSourcePlayableModel( TreeModel* model )
 {
-    Q_UNUSED( sourceModel );
-    qDebug() << "Explicitly use setSourceTreeModel instead";
-    Q_ASSERT( false );
-}
-
-
-void
-TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
-{
-    m_model = sourceModel;
-
-    if ( m_model )
+    if ( sourceModel() )
     {
-        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-            connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+        disconnect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onRowsInserted( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( modelReset() ), this, SLOT( onModelReset() ) );
+    }
 
+    PlayableProxyModel::setSourcePlayableModel( model );
+    m_model = model;
+
+    if ( sourceModel() )
+    {
         connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onRowsInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( modelReset() ), SLOT( onModelReset() ) );
     }
-
-    QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
 
@@ -88,7 +67,7 @@ TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int 
     if ( sender() != m_model )
         return;
 
-    TreeModelItem* pi = m_model->itemFromIndex( m_model->index( parent.row(), 0, parent.parent() ) );
+    PlayableItem* pi = m_model->itemFromIndex( m_model->index( parent.row(), 0, parent.parent() ) );
     if ( pi->artist().isNull() )
         return;
 
@@ -113,7 +92,7 @@ TreeProxyModel::onModelReset()
 
 
 void
-TreeProxyModel::newFilterFromPlaylistInterface( const QString &pattern )
+TreeProxyModel::newFilterFromPlaylistInterface( const QString& pattern )
 {
     emit filteringStarted();
 
@@ -208,7 +187,7 @@ TreeProxyModel::filterFinished()
 bool
 TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    TreeModelItem* item = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    PlayableItem* item = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( item );
 
     if ( m_model->mode() == Tomahawk::DatabaseMode && !item->result().isNull() )
@@ -231,7 +210,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             if ( i == sourceRow )
                 continue;
 
-            TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+            PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
             if ( ti->name() == item->name() &&
                ( ti->result()->albumpos() == item->result()->albumpos() || ti->result()->albumpos() == 0 || item->result()->albumpos() == 0 ) )
@@ -275,8 +254,8 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 bool
 TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    TreeModelItem* p1 = sourceModel()->itemFromIndex( left );
-    TreeModelItem* p2 = sourceModel()->itemFromIndex( right );
+    PlayableItem* p1 = sourceModel()->itemFromIndex( left );
+    PlayableItem* p2 = sourceModel()->itemFromIndex( right );
 
     if ( !p1 )
         return true;
@@ -338,35 +317,8 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
 }
 
 
-void
-TreeProxyModel::removeIndex( const QModelIndex& index )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !sourceModel() )
-        return;
-    if ( index.column() > 0 )
-        return;
-
-    sourceModel()->removeIndex( mapToSource( index ) );
-}
-
-
-void
-TreeProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
-{
-    if ( !sourceModel() )
-        return;
-
-    foreach( const QModelIndex& idx, indexes )
-    {
-        removeIndex( idx );
-    }
-}
-
-
 QString
-TreeProxyModel::textForItem( TreeModelItem* item ) const
+TreeProxyModel::textForItem( PlayableItem* item ) const
 {
     if ( !item )
         return QString();

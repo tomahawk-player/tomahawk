@@ -77,12 +77,19 @@ public:
     QWidget* aclWidget() { return 0; }
     void saveConfig();
 
+    QVariantHash credentials() const { return m_credentials; }
+
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
+
+private slots:
+    void onCredentialsChanged( const QVariantHash& credentials );
 
 protected:
     QWeakPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
     QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_xmppInfoPlugin;
+
+    QVariantHash m_credentials;
 };
 
 };

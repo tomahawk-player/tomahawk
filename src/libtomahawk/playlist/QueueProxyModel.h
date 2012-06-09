@@ -20,14 +20,14 @@
 #ifndef QUEUEPROXYMODEL_H
 #define QUEUEPROXYMODEL_H
 
-#include "PlaylistProxyModel.h"
+#include "PlayableProxyModel.h"
 
 #include "DllMacro.h"
 
 class QMetaData;
 class TrackView;
 
-class DLLEXPORT QueueProxyModel : public PlaylistProxyModel
+class DLLEXPORT QueueProxyModel : public PlayableProxyModel
 {
 Q_OBJECT
 
@@ -35,11 +35,10 @@ public:
     explicit QueueProxyModel( TrackView* parent = 0 );
     virtual ~QueueProxyModel();
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface();
-
 private slots:
     void onIndexActivated( const QModelIndex& index );
     void onTrackCountChanged( unsigned int count );
+    void onPlaybackStarted( const Tomahawk::result_ptr& result );
 };
 
 #endif // QUEUEPROXYMODEL_H

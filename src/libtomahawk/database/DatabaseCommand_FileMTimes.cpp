@@ -23,6 +23,7 @@
 
 #include "DatabaseImpl.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 void

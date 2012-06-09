@@ -41,7 +41,8 @@ public:
        ActionDelete =       4,
        ActionCopyLink =     8,
        ActionLove =         16,
-       ActionStopAfter =    32
+       ActionStopAfter =    32,
+       ActionPage =         64
     };
 
     explicit ContextMenu( QWidget* parent = 0 );
@@ -69,6 +70,7 @@ signals:
 private slots:
     void onTriggered( int action );
     void copyLink();
+    void openPage();
     void addToQueue();
 
     void onSocialActionsLoaded();

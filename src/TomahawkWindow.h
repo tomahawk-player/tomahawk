@@ -88,11 +88,17 @@ public slots:
     void pluginMenuRemoved(QMenu*);
     void showOfflineSources();
 
+    void fullScreenEntered();
+    void fullScreenExited();
+
 private slots:
     void onAccountAdded( Tomahawk::Accounts::Account* account );
     void onAccountConnected();
     void onAccountDisconnected();
     void onAccountError();
+
+    void onHistoryBackAvailable( bool avail );
+    void onHistoryForwardAvailable( bool avail );
 
     void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
@@ -104,6 +110,7 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
     void audioStarted();
+    void audioPaused();
     void audioStopped();
 
     void showAboutTomahawk();
@@ -130,6 +137,7 @@ private:
 
     void applyPlatformTweaks();
     void setupSignals();
+    void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
 
@@ -140,10 +148,12 @@ private:
     SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
     QPushButton* m_queueButton;
-    PlaylistModel* m_queueModel;
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusModel* m_jobsModel;
+
+    QAction* m_backAction;
+    QAction* m_forwardAction;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

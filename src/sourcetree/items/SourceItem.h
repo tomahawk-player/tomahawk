@@ -38,12 +38,13 @@ public:
     SourceItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
 
     virtual QString text() const;
+    virtual QString tooltip() const;
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 
     virtual bool localLatchedOn() const;
-    virtual Tomahawk::PlaylistInterface::LatchMode localLatchMode() const;
+    virtual Tomahawk::PlaylistModes::LatchMode localLatchMode() const;
 
     Tomahawk::source_ptr source() const;
 
@@ -65,7 +66,7 @@ private slots:
 
     void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
-    void latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode );
+    void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
 
     void requestExpanding();
 

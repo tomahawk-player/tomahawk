@@ -36,7 +36,7 @@
          </widget>
         </item>
         <item>
-         <widget class="AlbumView" name="additionsView">
+         <widget class="GridView" name="additionsView">
           <property name="dragEnabled">
            <bool>true</bool>
           </property>
@@ -94,9 +94,9 @@
    <header location="global">widgets/HeaderLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header>playlist/AlbumView.h</header>
+   <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

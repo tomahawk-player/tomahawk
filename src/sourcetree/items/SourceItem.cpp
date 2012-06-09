@@ -28,7 +28,6 @@
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/CustomPlaylistView.h"
-#include "playlist/CollectionView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -105,8 +104,8 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         onStationsAdded( stations );
     }
 
-    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
-        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
+/*    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );*/
 
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 
@@ -114,7 +113,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 
     connect( source.data(), SIGNAL( stats( QVariantMap ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( stateChanged() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( offline() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( online() ), SIGNAL( updated() ) );
@@ -144,6 +142,16 @@ QString
 SourceItem::text() const
 {
     return m_source.isNull() ? tr( "SuperCollection" ) : m_source->friendlyName();
+}
+
+
+QString
+SourceItem::tooltip() const
+{
+    if ( !m_source.isNull() && !m_source->currentTrack().isNull() )
+        return m_source->textStatus();
+
+    return QString();
 }
 
 
@@ -212,13 +220,13 @@ SourceItem::localLatchedOn() const
 }
 
 
-Tomahawk::PlaylistInterface::LatchMode
+Tomahawk::PlaylistModes::LatchMode
 SourceItem::localLatchMode() const
 {
     if ( !m_source.isNull() && !m_source->isLocal() )
         return m_source->playlistInterface()->latchMode();
 
-    return Tomahawk::PlaylistInterface::StayOnSong;
+    return Tomahawk::PlaylistModes::StayOnSong;
 }
 
 
@@ -228,7 +236,7 @@ SourceItem::latchedOff( const source_ptr& from, const source_ptr& to )
     if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = false;
-        disconnect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
+        disconnect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ) );
         m_latchedOnTo.clear();
         emit updated();
     }
@@ -242,14 +250,14 @@ SourceItem::latchedOn( const source_ptr& from, const source_ptr& to )
     {
         m_latchedOn = true;
         m_latchedOnTo = to;
-        connect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ), SLOT( latchModeChanged( Tomahawk::PlaylistInterface::LatchMode ) ) );
+        connect( m_latchedOnTo->playlistInterface().data(), SIGNAL( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ), SLOT( latchModeChanged( Tomahawk::PlaylistModes::LatchMode ) ) );
         emit updated();
     }
 }
 
 
 void
-SourceItem::latchModeChanged( Tomahawk::PlaylistInterface::LatchMode mode )
+SourceItem::latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode )
 {
     Q_UNUSED( mode );
     emit updated();
@@ -507,6 +515,7 @@ SourceItem::lovedTracksClicked()
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
         view->setItemDelegate( del );
+        view->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
 
         m_lovedTracksPage = view;
     }
@@ -528,14 +537,14 @@ SourceItem::latestAdditionsClicked()
 {
     if ( !m_latestAdditionsPage )
     {
-        CollectionView* cv = new CollectionView( ViewManager::instance()->widget() );
+        TrackView* cv = new TrackView( ViewManager::instance()->widget() );
         cv->setFrameShape( QFrame::NoFrame );
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
-        raModel->setStyle( TrackModel::Large );
+        raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Latest Additions" ) );
-        
+
         if ( m_source->isLocal() )
             raModel->setDescription( tr( "Latest additions to your collection" ) );
         else
@@ -545,8 +554,9 @@ SourceItem::latestAdditionsClicked()
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
         cv->setItemDelegate( del );
 
-        cv->setTrackModel( raModel );
-        cv->sortByColumn( TrackModel::Age, Qt::DescendingOrder );
+        cv->setPlayableModel( raModel );
+        cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        cv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
 
         m_latestAdditionsPage = cv;
     }
@@ -573,7 +583,7 @@ SourceItem::recentPlaysClicked()
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
-        raModel->setStyle( TrackModel::Large );
+        raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
 
         if ( m_source->isLocal() )
@@ -586,6 +596,7 @@ SourceItem::recentPlaysClicked()
         pv->setItemDelegate( del );
 
         pv->setPlaylistModel( raModel );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
 
         m_recentPlaysPage = pv;
     }

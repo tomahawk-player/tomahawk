@@ -47,6 +47,7 @@ class Servent;
 class SipHandler;
 class TomahawkSettings;
 class XMPPBot;
+class AudioControls;
 
 namespace Tomahawk
 {
@@ -114,6 +115,7 @@ private slots:
     void accountManagerReady();
 
 private:
+    void installTranslator();
     void registerMetaTypes();
 
     void printHelp();

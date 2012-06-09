@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
+  <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,1">
    <property name="margin">
     <number>0</number>
    </property>
@@ -83,7 +83,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="artistLabel">
+           <widget class="QueryLabel" name="artistLabel">
             <property name="text">
              <string>Artist</string>
             </property>
@@ -107,7 +107,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="albumLabel">
+           <widget class="QueryLabel" name="albumLabel">
             <property name="text">
              <string>Album</string>
             </property>
@@ -163,10 +163,42 @@
     </widget>
    </item>
    <item>
+    <widget class="HeaderLabel" name="label">
+     <property name="text">
+      <string>Lyrics</string>
+     </property>
+     <property name="indent">
+      <number>8</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="lyricsView">
+     <property name="openLinks">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="tracksWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
-       <widget class="QLabel" name="similarTracksLabel">
+       <widget class="HeaderLabel" name="similarTracksLabel">
         <property name="text">
          <string>Similar Tracks</string>
         </property>
@@ -176,7 +208,7 @@
        </widget>
       </item>
       <item>
-       <widget class="AlbumView" name="similarTracksView">
+       <widget class="GridView" name="similarTracksView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -192,9 +224,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header>playlist/AlbumView.h</header>
+   <header>playlist/GridView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/HeaderLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QueryLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/QueryLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

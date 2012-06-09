@@ -19,6 +19,7 @@
 #ifndef ZEROCONF_ACCOUNTS_H
 #define ZEROCONF_ACCOUNTS_H
 
+#include "Zeroconf.h"
 #include "accounts/Account.h"
 #include "../AccountDllMacro.h"
 
@@ -71,7 +72,7 @@ public:
     QWidget* aclWidget() { return 0; }
 
 private:
-    QWeakPointer< SipPlugin > m_sipPlugin;
+    QWeakPointer< ZeroconfPlugin > m_sipPlugin;
 };
 
 }

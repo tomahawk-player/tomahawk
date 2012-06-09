@@ -39,9 +39,8 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-class AlbumModel;
+class PlayableModel;
 class TreeModel;
-class OverlayButton;
 
 namespace Ui
 {
@@ -53,7 +52,7 @@ class DLLEXPORT AlbumInfoWidget : public QWidget, public Tomahawk::ViewPage
 Q_OBJECT
 
 public:
-    AlbumInfoWidget( const Tomahawk::album_ptr& album, Tomahawk::ModelMode startingMode = Tomahawk::InfoSystemMode, QWidget* parent = 0 );
+    AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
     ~AlbumInfoWidget();
 
     virtual QWidget* widget() { return this; }
@@ -73,8 +72,6 @@ public:
     virtual bool isBeingPlayed() const;
 
 public slots:
-    void setMode( Tomahawk::ModelMode mode );
-
     /** \brief Loads information for a given album.
      *  \param album The album that you want to load information for.
      *
@@ -98,29 +95,21 @@ private slots:
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
     void onAlbumCoverUpdated();
 
-    void onModeToggle();
-    void onAlbumsModeToggle();
-
     void onLoadingStarted();
     void onLoadingFinished();
 
 private:
-    Ui::AlbumInfoWidget *ui;
+    Ui::AlbumInfoWidget* ui;
 
     Tomahawk::album_ptr m_album;
 
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_albumsModel;
     TreeModel* m_tracksModel;
-
-    OverlayButton* m_button;
-    OverlayButton* m_buttonAlbums;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
-
-    QString m_infoId;
 };
 
 #endif // ALBUMINFOWIDGET_H

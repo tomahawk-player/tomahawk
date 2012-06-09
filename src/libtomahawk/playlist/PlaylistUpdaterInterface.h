@@ -40,16 +40,7 @@ namespace Tomahawk
 class PlaylistUpdaterFactory;
 
 // used when loading/saving from settings
-struct SerializedUpdater {
-    QString type;
-    QVariantHash customData;
 
-    SerializedUpdater( const QString& t, const QVariantHash cd = QVariantHash() ) : type( t ), customData( cd ) {}
-    SerializedUpdater() {}
-};
-
-typedef QMultiHash< QString, SerializedUpdater > SerializedUpdaters;
-typedef QList< SerializedUpdater > SerializedUpdaterList;
 
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
@@ -79,6 +70,8 @@ public:
     static void loadForPlaylist( const playlist_ptr& pl );
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
+
+    virtual bool sync() const { return true; }
 
 signals:
     void changed();

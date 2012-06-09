@@ -24,6 +24,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "Query.h"
+#include "Source.h"
 
 #include "utils/Logger.h"
 
@@ -32,6 +33,8 @@ using namespace Tomahawk;
 
 Album::~Album()
 {
+    m_ownRef.clear();
+
 #ifndef ENABLE_HEADLESS
     delete m_cover;
 #endif
@@ -65,6 +68,8 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
+    a->setWeakRef( a.toWeakRef() );
+
     if ( id > 0 )
         s_albums.insert( id, a );
 
@@ -77,23 +82,20 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
-    , m_infoLoaded( false )
-    , m_infoLoading( false )
+    , m_coverLoaded( false )
+    , m_coverLoading( false )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
 {
+    m_sortname = DatabaseImpl::sortname( name );
 }
 
 
 void
-Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
+Album::onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
-    Tomahawk::AlbumPlaylistInterface* api = dynamic_cast< Tomahawk::AlbumPlaylistInterface* >( playlistInterface().data() );
-    if ( api )
-        api->addQueries( tracks );
-
-    emit tracksAdded( tracks );
+    emit tracksAdded( playlistInterface( mode, collection )->tracks(), mode, collection );
 }
 
 
@@ -108,19 +110,17 @@ Album::artist() const
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
 {
-    if ( !m_infoLoaded && !m_infoLoading )
+    if ( !m_coverLoaded && !m_coverLoading )
     {
         if ( !forceLoad )
             return QPixmap();
-
-        m_uuid = uuid();
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["artist"] = artist()->name();
         trackInfo["album"] = name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = m_uuid;
+        requestData.caller = infoid();
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
         requestData.customData = QVariantMap();
@@ -135,7 +135,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-        m_infoLoading = true;
+        m_coverLoading = true;
     }
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
@@ -168,7 +168,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 void
 Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
-    if ( requestData.caller != m_uuid ||
+    if ( requestData.caller != infoid() ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         return;
@@ -191,7 +191,7 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
 void
 Album::infoSystemFinished( const QString& target )
 {
-    if ( target != m_uuid )
+    if ( target != infoid() )
         return;
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -200,18 +200,41 @@ Album::infoSystemFinished( const QString& target )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    m_infoLoaded = true;
+    m_coverLoaded = true;
     emit updated();
 }
 
 
 Tomahawk::playlistinterface_ptr
-Album::playlistInterface()
+Album::playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
-    if ( m_playlistInterface.isNull() )
+    playlistinterface_ptr pli = m_playlistInterface[ mode ][ collection ];
+
+    if ( pli.isNull() )
     {
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this ) );
+        pli = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this, mode, collection ) );
+        connect( pli.data(), SIGNAL( tracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                               SLOT( onTracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+
+        m_playlistInterface[ mode ][ collection ] = pli;
     }
 
-    return m_playlistInterface;
+    return pli;
+}
+
+
+QList<Tomahawk::query_ptr>
+Album::tracks( ModelMode mode, const Tomahawk::collection_ptr& collection )
+{
+    return playlistInterface( mode, collection )->tracks();
+}
+
+
+QString
+Album::infoid() const
+{
+    if ( m_uuid.isEmpty() )
+        m_uuid = uuid();
+    
+    return m_uuid;
 }

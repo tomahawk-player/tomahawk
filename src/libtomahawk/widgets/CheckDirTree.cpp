@@ -21,6 +21,7 @@
 
 #include "utils/Logger.h"
 #include "TomahawkSettings.h"
+#include "Source.h"
 
 #include <QCoreApplication>
 #include <QProcess>

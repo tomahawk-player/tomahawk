@@ -33,7 +33,7 @@
      <widget class="QWidget" name="page1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="ArtistView" name="artistsViewLeft">
+        <widget class="TreeView" name="artistsViewLeft">
          <property name="minimumSize">
           <size>
            <width>320</width>
@@ -47,7 +47,7 @@
      <widget class="QWidget" name="page2">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="AlbumView" name="albumsView">
+        <widget class="GridView" name="albumsView">
          <property name="dragEnabled">
           <bool>true</bool>
          </property>
@@ -64,14 +64,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/AlbumView.h</header>
+   <header location="global">playlist/GridView.h</header>
   </customwidget>
   <customwidget>
-   <class>ArtistView</class>
+   <class>TreeView</class>
    <extends>QTreeView</extends>
-   <header>ArtistView.h</header>
+   <header>TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

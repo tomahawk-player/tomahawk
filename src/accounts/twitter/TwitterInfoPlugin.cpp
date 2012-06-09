@@ -27,6 +27,7 @@
 
 #include "GlobalActionManager.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 namespace Tomahawk
 {
@@ -49,7 +50,7 @@ TwitterInfoPlugin::init()
         tDebug() << "Failure: move to the worker thread before running init";
         return;
     }
-    
+
     QVariantHash credentials = m_account->credentials();
     if ( credentials[ "oauthtoken" ].toString().isEmpty() || credentials[ "oauthtokensecret" ].toString().isEmpty() )
     {
@@ -128,7 +129,7 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
         tLog() << Q_FUNC_INFO << "Failed to find QVariantMap!";
         return;
     }
-    
+
     QVariantMap map = pushInfoPair.second.toMap();
 
     if ( !map.contains( "accountlist" ) || !map[ "accountlist" ].canConvert< QStringList >() )
@@ -142,13 +143,13 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Our account not in the list, not tweeting out";
         return;
     }
-    
+
     if ( !map.contains( "message" ) && ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() ) )
     {
         tLog() << Q_FUNC_INFO << "Failed to find message or trackinfo";
         return;
     }
-    
+
     Tomahawk::InfoSystem::InfoStringHash info;
     QString msg;
     if ( !map.contains( "message" ) )

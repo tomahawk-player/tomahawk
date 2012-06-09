@@ -58,6 +58,7 @@ public:
 
     // varies depending on the type of the item
     virtual QString text() const { return QString(); }
+    virtual QString tooltip() const { return QString(); }
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
     virtual QIcon icon() const { return QIcon(); }
     virtual bool willAcceptDrag( const QMimeData* ) const { return false; }

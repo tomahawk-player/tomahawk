@@ -35,13 +35,11 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
-#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 
+class PlayableModel;
 class PlaylistModel;
-class TreeModel;
-class OverlayButton;
 
 namespace Ui
 {
@@ -91,14 +89,13 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void setMode( Tomahawk::ModelMode mode );
-
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
+    void onBiographyLoaded();
 
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
+    void onSimilarArtistsLoaded();
 
-    void onModeToggle();
     void onLoadingStarted();
     void onLoadingFinished();
 
@@ -107,17 +104,14 @@ private:
 
     Tomahawk::artist_ptr m_artist;
 
-    TreeModel* m_relatedModel;
-    TreeModel* m_albumsModel;
+    PlayableModel* m_relatedModel;
+    PlayableModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
-
-    OverlayButton* m_button;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
-    QString m_infoId;
     QPixmap m_pixmap;
 
     friend class MetaPlaylistInterface;

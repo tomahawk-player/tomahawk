@@ -52,13 +52,13 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
 public slots:
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
 private:

@@ -34,11 +34,11 @@
 
 #include "audio/AudioEngine.h"
 #include "dynamic/GeneratorInterface.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
-#include "widgets/OverlayWidget.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Pipeline.h"
 
@@ -59,9 +59,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
@@ -78,9 +75,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
-    ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
-    ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksViewLeft->overlay()->setEnabled( false );
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
@@ -93,8 +87,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     artistsProxy->setDynamicSortFilter( true );
 
     ui->artistsViewLeft->setProxyModel( artistsProxy );
-    ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
-    ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( true );
@@ -179,9 +171,15 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     if ( requestData.caller != s_whatsHotIdentifier )
         return;
 
+    if ( output.isNull() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Info came back empty";
+        return;
+    }
+
     if ( !output.canConvert< QVariantMap >() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output into a map";
         return;
     }
 
@@ -264,7 +262,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setMode( InfoSystemMode );
-                artistsModel->setColumnStyle( TreeModel::AllColumns );
+                artistsModel->setStyle( PlayableModel::Collection );
 
                 m_artistModels[ chartId ] = artistsModel;
 
@@ -273,13 +271,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if ( type == "albums" )
             {
-
                 loader->setType( ChartDataLoader::Album );
                 loader->setData( returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
                 connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
 
-                AlbumModel* albumModel = new AlbumModel( ui->albumsView );
+                PlayableModel* albumModel = new PlayableModel( ui->albumsView );
 
                 m_albumModels[ chartId ] = albumModel;
 
@@ -288,14 +285,13 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             else if ( type == "tracks" )
             {
-
                 loader->setType( ChartDataLoader::Track );
                 loader->setData( returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
                 connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
-                trackModel->setStyle( TrackModel::Large );
+                trackModel->setStyle( PlayableModel::Large );
 
                 m_trackModels[ chartId ] = trackModel;
 
@@ -453,9 +449,9 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
 
 void
-WhatsHotWidget::setLeftViewAlbums( AlbumModel* model )
+WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 {
-    ui->albumsView->setAlbumModel( model );
+    ui->albumsView->setPlayableModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
 }
@@ -523,7 +519,7 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
     Q_ASSERT( m_albumModels.contains( chartId ) );
 
     if ( m_albumModels.contains( chartId ) )
-        m_albumModels[ chartId ]->addAlbums( albums );
+        m_albumModels[ chartId ]->append( albums );
 
     m_workers.remove( loader );
     loader->deleteLater();

@@ -29,7 +29,8 @@
 
 #include "DynamicControlList.h"
 #include "dynamic/DynamicModel.h"
-#include "TrackProxyModel.h"
+#include "PlayableProxyModel.h"
+#include "PlayableItem.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
 #include "Pipeline.h"
@@ -422,7 +423,7 @@ DynamicWidget::steeringChanged()
     for ( int i = 0; i < m_view->proxyModel()->rowCount( QModelIndex() ); ++i )
     {
         const QModelIndex  cur = m_view->proxyModel()->index( i, 0, QModelIndex() );
-        TrackModelItem* item = m_view->proxyModel()->itemFromIndex( m_view->proxyModel()->mapToSource( cur ) );
+        PlayableItem* item = m_view->proxyModel()->itemFromIndex( m_view->proxyModel()->mapToSource( cur ) );
         if ( item && item->isPlaying() )
         {
             playing = cur;

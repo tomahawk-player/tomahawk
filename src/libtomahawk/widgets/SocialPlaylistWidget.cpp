@@ -23,6 +23,7 @@
 #include "database/DatabaseCommand_LoadDynamicPlaylist.h"
 #include "database/Database.h"
 #include "SourceList.h"
+#include "PlayableModel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/database/DatabaseGenerator.h"
 #include "utils/Logger.h"
@@ -36,7 +37,7 @@ QString SocialPlaylistWidget::s_mostPlayedPlaylistsQuery = "asd";
 QString SocialPlaylistWidget::s_topForeignTracksQuery = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track not in (select track from playback_log where source is null group by track) and track.id = track and artist.id = track.artist group by track order by counter desc";
 
 SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
-    : QWidget ( parent )
+    : QWidget( parent )
     , ui( new Ui_SocialPlaylistWidget )
     , m_topForeignTracksModel( 0 )
     , m_popularNewAlbumsModel( 0 )
@@ -53,10 +54,6 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
     ui->mostPlayedPlaylists->setFrameShape( QFrame::NoFrame );
     ui->mostPlayedPlaylists->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->newTracksView->setFrameShape( QFrame::NoFrame );
-    ui->newTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->newAlbumsView->setFrameShape( QFrame::NoFrame );
-    ui->newAlbumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
@@ -72,11 +69,11 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
     m_topForeignTracksModel = new PlaylistModel( ui->newTracksView );
     ui->newTracksView->setPlaylistModel( m_topForeignTracksModel );
-    m_topForeignTracksModel->setStyle( TrackModel::Short );
+    m_topForeignTracksModel->setStyle( PlayableModel::Short );
     ui->newTracksView->overlay()->setEnabled( false );
 
-    m_popularNewAlbumsModel = new AlbumModel( ui->newAlbumsView );
-    ui->newAlbumsView->setAlbumModel( m_popularNewAlbumsModel );
+    m_popularNewAlbumsModel = new PlayableModel( ui->newAlbumsView );
+    ui->newAlbumsView->setPlayableModel( m_popularNewAlbumsModel );
     // TODO run the genericselect command
 //     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 /*
@@ -94,7 +91,6 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
 SocialPlaylistWidget::~SocialPlaylistWidget()
 {
-
 }
 
 
@@ -144,7 +140,7 @@ SocialPlaylistWidget::popularAlbumsFetched( QList< album_ptr > albums )
 {
     m_popularNewAlbumsModel->clear();
 
-    m_popularNewAlbumsModel->addAlbums( albums );
+    m_popularNewAlbumsModel->append( albums );
 }
 
 

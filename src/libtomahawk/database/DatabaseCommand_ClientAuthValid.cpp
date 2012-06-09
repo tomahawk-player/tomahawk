@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi   <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 
 DatabaseCommand_ClientAuthValid::DatabaseCommand_ClientAuthValid( const QString& clientToken, QObject* parent )

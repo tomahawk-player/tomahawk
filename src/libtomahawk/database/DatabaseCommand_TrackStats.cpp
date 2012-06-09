@@ -56,7 +56,7 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
 
         query.prepare( "SELECT * "
                        "FROM playback_log "
-                       "WHERE track = ?" );
+                       "WHERE track = ? ORDER BY playtime ASC" );
         query.addBindValue( trkid );
         query.exec();
     }

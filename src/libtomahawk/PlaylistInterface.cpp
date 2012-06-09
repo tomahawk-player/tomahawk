@@ -20,20 +20,24 @@
 #include "PlaylistInterface.h"
 #include "utils/Logger.h"
 #include "Result.h"
+#include "Pipeline.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
+
 PlaylistInterface::PlaylistInterface ()
     : QObject()
-    , m_latchMode( StayOnSong )
+    , m_latchMode( PlaylistModes::StayOnSong )
 {
     m_id = uuid();
-    qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
 }
+
 
 PlaylistInterface::~PlaylistInterface()
 {
 }
+
 
 result_ptr
 PlaylistInterface::previousItem()
@@ -41,8 +45,46 @@ PlaylistInterface::previousItem()
      return siblingItem( -1 );
 }
 
+
 result_ptr
 PlaylistInterface::nextItem()
 {
      return siblingItem( 1 );
+}
+
+
+QList<Tomahawk::query_ptr>
+PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
+{
+    QList<Tomahawk::query_ptr> result;
+
+    for ( int i = 0; i < queries.count(); i++ )
+    {
+        bool picked = true;
+        const query_ptr q1 = queries.at( i );
+
+        for ( int j = 0; j < result.count(); j++ )
+        {
+            if ( !picked )
+                break;
+
+            const query_ptr& q2 = result.at( j );
+
+            if ( q1->track() == q2->track() )
+            {
+                picked = false;
+            }
+        }
+
+        if ( picked )
+        {
+            query_ptr q = Query::get( q1->artist(), q1->track(), q1->album(), uuid(), false );
+            q->setAlbumPos( q1->results().first()->albumpos() );
+            q->setDiscNumber( q1->discnumber() );
+            result << q;
+        }
+    }
+
+    Pipeline::instance()->resolve( result );
+    return result;
 }

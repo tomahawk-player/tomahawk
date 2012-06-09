@@ -20,14 +20,14 @@
 #ifndef ACCOUNTDLLMACRO_H
 #define ACCOUNTDLLMACRO_H
 
-#ifdef Q_WS_WIN
-  #ifdef ACCOUNTDLLEXPORT_PRO
-      #define ACCOUNTDLLEXPORT __declspec(dllexport)
-  #else
-      #define ACCOUNTDLLEXPORT __declspec(dllimport)
-  #endif
-#else
-  #define ACCOUNTDLLEXPORT
+#include <QtCore/qglobal.h>
+
+#ifndef ACCOUNTDLLEXPORT
+# if defined (ACCOUNTDLLEXPORT_PRO)
+#  define ACCOUNTDLLEXPORT Q_DECL_EXPORT
+# else
+#  define ACCOUNTDLLEXPORT Q_DECL_IMPORT
+# endif
 #endif
 
 #endif

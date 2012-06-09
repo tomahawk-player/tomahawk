@@ -25,6 +25,7 @@
 #include "dynamic/DynamicControl.h"
 #include "utils/TomahawkUtils.h"
 #include "widgets/ElidedLabel.h"
+#include "Source.h"
 
 #include <QtGui/QLabel>
 #include <QtGui/QStackedLayout>

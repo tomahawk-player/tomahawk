@@ -89,7 +89,13 @@ private slots:
 protected:
     // Created by factory, when user installs a new resolver
     ResolverAccount( const QString& accountId, const QString& path );
+
+    void hookupResolver();
+
     QWeakPointer<ExternalResolverGui> m_resolver;
+
+private:
+    void init( const QString& path );
 
     friend class ResolverAccountFactory;
 };
@@ -99,7 +105,7 @@ protected:
  * Extends ResolverAccount with what attica additionally provides---e.g. icon
  * Assumes certain file layout on disk.
  */
-class AtticaResolverAccount : public ResolverAccount
+class DLLEXPORT AtticaResolverAccount : public ResolverAccount
 {
     Q_OBJECT
 public:
@@ -110,6 +116,8 @@ public:
     virtual QPixmap icon() const;
 
     QString atticaId() const { return m_atticaId; }
+
+    void setPath( const QString& path );
 private:
     // Created by factory, when user installs a new resolver
     AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );

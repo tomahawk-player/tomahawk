@@ -23,7 +23,7 @@
 #include <QHash>
 
 #include "Typedefs.h"
-#include "TrackModel.h"
+#include "PlayableModel.h"
 #include "Playlist.h"
 #include "Query.h"
 #include "PlaylistInterface.h"
@@ -33,7 +33,7 @@
 class QMimeData;
 class QMetaData;
 
-class DLLEXPORT PlaylistModel : public TrackModel
+class DLLEXPORT PlaylistModel : public PlayableModel
 {
 Q_OBJECT
 
@@ -74,7 +74,7 @@ public slots:
     virtual void remove( const QList<QPersistentModelIndex>& indexes );
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void playlistDeleted();
     void playlistChanged();

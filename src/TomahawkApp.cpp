@@ -29,6 +29,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QTranslator>
 
 #include "Artist.h"
 #include "Album.h"
@@ -83,11 +84,6 @@
     #include <TomahawkSettingsGui.h>
 #endif
 
-// should go to a plugin actually
-#ifdef GLOOX_FOUND
-    #include "xmppbot/XmppBot.h"
-#endif
-
 #ifdef Q_WS_MAC
 #include "mac/MacShortcutHandler.h"
 
@@ -134,6 +130,29 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
+    installTranslator();
+}
+
+
+void
+TomahawkApp::installTranslator()
+{
+    QString locale = QLocale::system().name();
+    if ( locale == "C" )
+        locale = "en";
+
+    QTranslator* translator = new QTranslator( this );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug() << "Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    TOMAHAWK_APPLICATION::installTranslator( translator );
 }
 
 
@@ -290,6 +309,16 @@ TomahawkApp::init()
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
     PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
+    // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
+    // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
+    // with the default value of 3 in QApplicationPrivate::initialize.
+    {
+        QSettings qt_settings(QSettings::UserScope, "Trolltech");
+        qt_settings.beginGroup("Qt");
+        QApplication::setWheelScrollLines(
+            qt_settings.value("wheelScrollLines", QApplication::wheelScrollLines()).toInt());
+    }
+
 #ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
@@ -299,9 +328,9 @@ TomahawkApp::init()
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Make sure to do this after main window is inited
-    Tomahawk::enableFullscreen();
+    Tomahawk::enableFullscreen( m_mainwindow );
 #endif
 }
 
@@ -416,10 +445,13 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
 
     // Extra definition for namespaced-versions of signals/slots required
+    qRegisterMetaType< Tomahawk::Resolver* >("Tomahawk::Resolver*");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
+    qRegisterMetaType< Tomahawk::album_ptr >("Tomahawk::album_ptr");
+    qRegisterMetaType< Tomahawk::artist_ptr >("Tomahawk::artist_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
     qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
@@ -459,7 +491,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
-    qRegisterMetaType< Tomahawk::PlaylistInterface::LatchMode >( "Tomahawk::PlaylistInterface::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::LatchMode >( "Tomahawk::PlaylistModes::LatchMode" );
+    qRegisterMetaType< Tomahawk::PlaylistModes::RepeatMode >( "Tomahawk::PlaylistModes::RepeatMode" );
 
     qRegisterMetaType< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
     qRegisterMetaTypeStreamOperators< TomahawkUtils::CacheData >( "TomahawkUtils::CacheData" );
@@ -580,10 +613,6 @@ TomahawkApp::initSIP()
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
-#ifdef GLOOX_FOUND
-        m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
-#endif
-
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }
@@ -667,28 +696,29 @@ TomahawkApp::loadUrl( const QString& url )
 void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
+    tDebug( LOGINFO ) << "Instance started!" << instance.pid() << instance.arguments();
+    const QStringList arguments = instance.arguments();
 
-    if ( instance.arguments.size() < 2 )
+    if ( arguments.size() < 2 )
         return;
 
-    QString arg1 = instance.arguments[ 1 ];
+    QString arg1 = arguments[ 1 ];
     if ( loadUrl( arg1 ) )
     {
         activate();
         return;
     }
 
-    if ( instance.arguments.contains( "--next" ) )
+    if ( arguments.contains( "--next" ) )
         AudioEngine::instance()->next();
-    else if ( instance.arguments.contains( "--prev" ) )
+    else if ( arguments.contains( "--prev" ) )
         AudioEngine::instance()->previous();
-    else if ( instance.arguments.contains( "--playpause" ) )
+    else if ( arguments.contains( "--playpause" ) )
         AudioEngine::instance()->playPause();
-    else if ( instance.arguments.contains( "--play" ) )
+    else if ( arguments.contains( "--play" ) )
         AudioEngine::instance()->play();
-    else if ( instance.arguments.contains( "--pause" ) )
+    else if ( arguments.contains( "--pause" ) )
         AudioEngine::instance()->pause();
-    else if ( instance.arguments.contains( "--stop" ) )
+    else if ( arguments.contains( "--stop" ) )
         AudioEngine::instance()->stop();
 }

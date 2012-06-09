@@ -37,6 +37,7 @@
 #include <TomahawkSettings.h>
 #include <database/Database.h>
 #include <network/Servent.h>
+#include "Source.h"
 
 #include "utils/Logger.h"
 #include "accounts/twitter/TomahawkOAuthTwitter.h"

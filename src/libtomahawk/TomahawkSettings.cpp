@@ -21,9 +21,9 @@
 #include "TomahawkSettings.h"
 
 #include <QDir>
-
 #include <qtkeychain/keychain.h>
 
+#include "Source.h"
 #include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
@@ -129,6 +129,21 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", TOMAHAWK_SETTINGS_VERSION );
     }
+
+    // Ensure last.fm and spotify accounts always exist
+    QString spotifyAcct, lastfmAcct;
+    foreach ( const QString& acct, value( "accounts/allaccounts" ).toStringList() )
+    {
+        if ( acct.startsWith( "lastfmaccount_" ) )
+            lastfmAcct = acct;
+        else if ( acct.startsWith( "spotifyaccount_" ) )
+            spotifyAcct = acct;
+    }
+
+    if ( spotifyAcct.isEmpty() )
+        createSpotifyAccount();
+    if ( lastfmAcct.isEmpty() )
+        createLastFmAccount();
 }
 
 
@@ -144,6 +159,14 @@ TomahawkSettings::doInitialSetup()
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
 
+    createLastFmAccount();
+    createSpotifyAccount();
+}
+
+
+void
+TomahawkSettings::createLastFmAccount()
+{
     // Add a last.fm account for scrobbling and infosystem
     const QString accountKey = QString( "lastfmaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
     addAccount( accountKey );
@@ -153,6 +176,27 @@ TomahawkSettings::doInitialSetup()
     setValue( "autoconnect", true );
     setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
     endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
+}
+
+
+void
+TomahawkSettings::createSpotifyAccount()
+{
+    const QString accountKey = QString( "spotifyaccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
+    beginGroup( "accounts/" + accountKey );
+    setValue( "enabled", false );
+    setValue( "types", QStringList() << "ResolverType" );
+    setValue( "credentials", QVariantHash() );
+    setValue( "configuration", QVariantHash() );
+    endGroup();
+
+    QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+    allAccounts << accountKey;
+    setValue( "accounts/allaccounts", allAccounts );
 }
 
 
@@ -514,18 +558,65 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
         endGroup();
 
-        setPlaylistUpdaters( updaters );
+//         setPlaylistUpdaters( updaters );
 
         remove( "playlistupdaters" );
     }
-    else if ( oldVersion == 10 )
+    else if ( oldVersion == 11 )
     {
-        const QStringList accounts = childGroups();
+        // If the user doesn't have a spotify account, create one, since now it
+        // is like the last.fm account and always exists
+        QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
+        QString acct;
+        foreach ( const QString& account, allAccounts )
+        {
+            if ( account.startsWith( "spotifyaccount_" ) )
+            {
+                acct = account;
+                break;
+            }
+        }
+
+        if ( !acct.isEmpty() )
+        {
+            beginGroup( "accounts/" + acct );
+            QVariantHash conf = value( "configuration" ).toHash();
+            foreach ( const QString& key, conf.keys() )
+                qDebug() << key << conf[ key ].toString();
+            endGroup();
+        }
+        else
+        {
+            createSpotifyAccount();
+        }
+    }
+    else if ( oldVersion == 12 )
+    {
+        const QStringList accounts = value( "accounts/allaccounts" ).toStringList();
         //Move storage of Credentials from QSettings to QtKeychain
         foreach ( const QString& account, accounts )
         {
-            //TODO: migration code to be written
-            
+            beginGroup( QString( "accounts/%1" ).arg( account ) );
+            const QVariantHash creds = value( "credentials" ).toHash();
+
+            if ( !creds.isEmpty() )
+            {
+                QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+                j->setKey( account );
+                j->setAutoDelete( false );
+
+                QByteArray data;
+                QDataStream ds( &data, QIODevice::WriteOnly );
+                ds << creds;
+
+                j->setBinaryData( data );
+//                connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+                j->start();
+
+                qDebug() << "Migrating account credentials for account:" << account;
+            }
+
+            endGroup();
         }
     }
 }
@@ -647,6 +738,20 @@ void
 TomahawkSettings::setCrashReporterEnabled( bool enable )
 {
     setValue( "ui/crashReporter", enable );
+}
+
+
+unsigned int
+TomahawkSettings::volume() const
+{
+    return value( "audio/volume", 75 ).toUInt();
+}
+
+
+void
+TomahawkSettings::setVolume( unsigned int volume )
+{
+    setValue( "audio/volume", volume );
 }
 
 
@@ -887,33 +992,16 @@ TomahawkSettings::removePlaylistSettings( const QString& playlistid )
 
 
 void
-TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode )
+TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode )
 {
     setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
 }
 
 
-Tomahawk::PlaylistInterface::RepeatMode
+Tomahawk::PlaylistModes::RepeatMode
 TomahawkSettings::repeatMode( const QString& playlistid )
 {
-    return (PlaylistInterface::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
-}
-
-
-QList<Tomahawk::playlist_ptr>
-TomahawkSettings::recentlyPlayedPlaylists() const
-{
-    QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
-
-    QList<playlist_ptr> playlists;
-    foreach( const QString& guid, playlist_guids )
-    {
-        playlist_ptr pl = Playlist::load( guid );
-        if ( !pl.isNull() )
-            playlists << pl;
-    }
-
-    return playlists;
+    return (PlaylistModes::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
 }
 
 
@@ -930,16 +1018,16 @@ TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 
 
 void
-TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
+TomahawkSettings::appendRecentlyPlayedPlaylist( const QString& playlistguid, int sourceId )
 {
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
-    playlist_guids.removeAll( playlist->guid() );
-    playlist_guids.append( playlist->guid() );
+    playlist_guids.removeAll( playlistguid );
+    playlist_guids.append( playlistguid );
 
     setValue( "playlists/recentlyPlayed", playlist_guids );
 
-    emit recentlyPlayedPlaylistAdded( playlist );
+    emit recentlyPlayedPlaylistAdded( playlistguid, sourceId );
 }
 
 

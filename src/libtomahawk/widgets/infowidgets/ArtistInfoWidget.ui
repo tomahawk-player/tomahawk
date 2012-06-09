@@ -57,10 +57,7 @@
          </widget>
         </item>
         <item>
-         <widget class="ArtistView" name="relatedArtists">
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
+         <widget class="GridView" name="relatedArtists">
          </widget>
         </item>
        </layout>
@@ -82,7 +79,7 @@
         </widget>
        </item>
        <item>
-        <widget class="ArtistView" name="albums"/>
+        <widget class="GridView" name="albums"/>
        </item>
       </layout>
      </widget>
@@ -112,9 +109,9 @@
    <header location="global">widgets/ToggleButton.h</header>
   </customwidget>
   <customwidget>
-   <class>ArtistView</class>
-   <extends>QTreeView</extends>
-   <header location="global">ArtistView.h</header>
+   <class>GridView</class>
+   <extends>QListView</extends>
+   <header location="global">GridView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -26,17 +26,18 @@
 
 #include "ContextMenu.h"
 #include "PlaylistItemDelegate.h"
+#include "ViewPage.h"
 
 #include "DllMacro.h"
 
 class QAction;
 class AnimatedSpinner;
-class TrackHeader;
-class TrackModel;
-class TrackProxyModel;
+class ViewHeader;
+class PlayableModel;
+class PlayableProxyModel;
 class OverlayWidget;
 
-class DLLEXPORT TrackView : public QTreeView
+class DLLEXPORT TrackView : public QTreeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -47,17 +48,31 @@ public:
     virtual QString guid() const { return m_guid; }
     virtual void setGuid( const QString& guid );
 
-    virtual void setTrackModel( TrackModel* model );
+    virtual void setPlayableModel( PlayableModel* model );
     virtual void setModel( QAbstractItemModel* model );
-    void setProxyModel( TrackProxyModel* model );
+    void setProxyModel( PlayableProxyModel* model );
 
-    virtual TrackModel* model() const { return m_model; }
-    TrackProxyModel* proxyModel() const { return m_proxyModel; }
+    virtual PlayableModel* model() const { return m_model; }
+    PlayableProxyModel* proxyModel() const { return m_proxyModel; }
     PlaylistItemDelegate* delegate() const { return m_delegate; }
-    TrackHeader* header() const { return m_header; }
+    ViewHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
     AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
+
+    void setEmptyTip( const QString& tip );
+
+    virtual QWidget* widget() { return this; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+
+    virtual QString title() const;
+    virtual QString description() const;
+    virtual QPixmap pixmap() const;
+
+    virtual bool showModes() const { return true; }
+    virtual bool showFilter() const { return true; }
+
+    virtual bool jumpToCurrentTrack();
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
@@ -80,6 +95,7 @@ public slots:
 
 signals:
     void itemActivated( const QModelIndex& index );
+    void modelChanged();
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
@@ -114,13 +130,14 @@ private:
     void updateHoverIndex( const QPoint& pos );
 
     QString m_guid;
-    TrackModel* m_model;
-    TrackProxyModel* m_proxyModel;
+    PlayableModel* m_model;
+    PlayableProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
-    TrackHeader* m_header;
+    ViewHeader* m_header;
     OverlayWidget* m_overlay;
     AnimatedSpinner* m_loadingSpinner;
 
+    QString m_emptyTip;
     bool m_resizing;
     bool m_dragging;
     QRect m_dropRect;
@@ -131,7 +148,6 @@ private:
     QModelIndex m_contextMenuIndex;
 
     Tomahawk::query_ptr m_autoPlaying;
-
     Tomahawk::ContextMenu* m_contextMenu;
 
     QTimer m_timer;

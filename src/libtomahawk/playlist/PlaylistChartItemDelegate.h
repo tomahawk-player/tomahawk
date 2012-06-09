@@ -31,8 +31,8 @@ class PixmapDelegateFader;
 }
 
 class TrackModel;
-class TrackModelItem;
-class TrackProxyModel;
+class PlayableItem;
+class PlayableProxyModel;
 class TrackView;
 
 class DLLEXPORT PlaylistChartItemDelegate : public QStyledItemDelegate
@@ -40,7 +40,7 @@ class DLLEXPORT PlaylistChartItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistChartItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
+    PlaylistChartItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
 signals:
     void updateRequest( const QModelIndex& idx );
@@ -55,7 +55,7 @@ private slots:
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
     QTextOption m_topOption;
     QTextOption m_centerOption;
@@ -63,7 +63,7 @@ private:
     QTextOption m_bottomOption;
 
     TrackView* m_view;
-    TrackProxyModel* m_model;
+    PlayableProxyModel* m_model;
 
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 };

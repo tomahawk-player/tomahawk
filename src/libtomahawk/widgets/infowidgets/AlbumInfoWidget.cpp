@@ -25,63 +25,40 @@
 #include "ViewManager.h"
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
+#include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-
-#include "widgets/OverlayButton.h"
-#include "widgets/OverlayWidget.h"
 
 using namespace Tomahawk;
 
 
-AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, ModelMode startingMode, QWidget* parent )
+AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
-
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
 
-    m_albumsModel = new AlbumModel( ui->albumsView );
-    ui->albumsView->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albumsView );
+    ui->albumsView->setPlayableModel( m_albumsModel );
+    ui->albumsView->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
 
     m_tracksModel = new TreeModel( ui->tracksView );
-    m_tracksModel->setMode( startingMode );
+    m_tracksModel->setMode( Mixed );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
+    ui->tracksView->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
-    m_button = new OverlayButton( ui->tracksView );
-    m_button->setCheckable( true );
-    m_button->setChecked( m_tracksModel->mode() == InfoSystemMode );
-    if ( m_button->isChecked() )
-        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
-    else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
-
-    m_buttonAlbums = new OverlayButton( ui->albumsView );
-    m_buttonAlbums->setCheckable( true );
-    m_buttonAlbums->setChecked( true );
-    m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
-    m_buttonAlbums->show();
-
-    connect( m_button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
-    connect( m_buttonAlbums, SIGNAL( clicked() ), SLOT( onAlbumsModeToggle() ) );
-    connect( m_tracksModel, SIGNAL( modeChanged( Tomahawk::ModelMode ) ), SLOT( setMode( Tomahawk::ModelMode ) ) );
     connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
@@ -103,53 +80,14 @@ AlbumInfoWidget::playlistInterface() const
 
 
 void
-AlbumInfoWidget::setMode( ModelMode mode )
-{
-    m_button->setChecked( mode == InfoSystemMode );
-
-    if ( m_tracksModel->mode() != mode )
-        onModeToggle();
-
-    if ( mode == InfoSystemMode )
-        m_button->setText( tr( "Click to show SuperCollection Tracks" ) );
-    else
-        m_button->setText( tr( "Click to show Official Tracks" ) );
-}
-
-
-void
-AlbumInfoWidget::onModeToggle()
-{
-    m_tracksModel->setMode( m_button->isChecked() ? InfoSystemMode : DatabaseMode );
-    m_tracksModel->addTracks( m_album, QModelIndex() );
-}
-
-
-void
-AlbumInfoWidget::onAlbumsModeToggle()
-{
-    if ( m_buttonAlbums->isChecked() )
-        m_buttonAlbums->setText( tr( "Click to show SuperCollection Albums" ) );
-    else
-        m_buttonAlbums->setText( tr( "Click to show Official Albums" ) );
-
-    loadAlbums();
-}
-
-
-void
 AlbumInfoWidget::onLoadingStarted()
 {
-    m_button->setEnabled( false );
-    m_button->hide();
 }
 
 
 void
 AlbumInfoWidget::onLoadingFinished()
 {
-    m_button->setEnabled( true );
-    m_button->show();
 }
 
 
@@ -211,14 +149,16 @@ AlbumInfoWidget::load( const album_ptr& album )
 void
 AlbumInfoWidget::loadAlbums( bool autoRefetch )
 {
+    Q_UNUSED( autoRefetch );
+
     m_albumsModel->clear();
 
     connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                                          SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-    ModelMode mode = m_buttonAlbums->isChecked() ? InfoSystemMode : DatabaseMode;
-    gotAlbums( m_album->artist()->albums( mode ) );
-    
+    if ( !m_album->artist()->albums( Mixed ).isEmpty() )
+        gotAlbums( m_album->artist()->albums( Mixed ) );
+
 /*                tDebug() << "Auto refetching";
                 m_buttonAlbums->setChecked( false );
                 onAlbumsModeToggle();*/
@@ -243,7 +183,7 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( al.contains( m_album ) )
         al.removeAll( m_album );
 
-    m_albumsModel->addAlbums( al );
+    m_albumsModel->append( al );
 }
 
 

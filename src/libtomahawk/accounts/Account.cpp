@@ -19,6 +19,9 @@
 
 #include "Account.h"
 
+#include "TomahawkSettings.h"
+#include "utils/Logger.h"
+
 #include <qtkeychain/keychain.h>
 
 namespace Tomahawk
@@ -116,50 +119,46 @@ Account::onError( int errorCode, const QString& error )
 
 
 void
-Account::keychainJobFinished(QKeychain::Job* j )
+Account::keychainJobFinished( QKeychain::Job* j )
 {
     if ( j->error() == QKeychain::NoError )
     {
-        QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j );
-        if ( readJob != 0 )
+        if ( QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j ) )
         {
             tLog() << Q_FUNC_INFO << "readJob finished without errors";
-            deserializeCredentials( readJob->binaryData() );
+
+            QVariantHash credentials;
+            QDataStream dataStream( readJob->binaryData() );
+            dataStream >> credentials;
+
             tLog() << Q_FUNC_INFO << readJob->key();
-            tLog() << Q_FUNC_INFO << m_credentials;
-            emit credentialsChanged();
+
+            emit credentialsChanged( credentials );
         }
-        else
+        else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
         {
-            QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j );
-            if ( writeJob != 0 )
-                tLog() << Q_FUNC_INFO << "writeJob finished";
-            else
-            {
-                QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j );
-                tLog() << Q_FUNC_INFO << "deleteJob finished";
-            }
+            tLog() << Q_FUNC_INFO << "writeJob finished";
+        }
+        else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
+        {
+            tLog() << Q_FUNC_INFO << "deleteJob finished";
         }
     }
+
     else
+    {
         tLog() << Q_FUNC_INFO << "Job finished with error: " << j->error() << " " << j->errorString();
+    }
+
     j->deleteLater();
-}
 
-
-void
-Account::serializeCredentials( QByteArray& data )
-{
-    QDataStream ds(&data, QIODevice::WriteOnly);
-    ds << m_credentials;
-}
-
-
-void
-Account::deserializeCredentials( const QByteArray& data )
-{
-    QDataStream ds2(data);
-    ds2 >> m_credentials;
+    m_workingKeychainJobs.removeAll( j );
+    if ( !m_queuedKeychainJobs.isEmpty() )
+    {
+        QKeychain::Job* j = m_queuedKeychainJobs.dequeue();
+        j->start();
+        m_workingKeychainJobs << j;
+    }
 }
 
 
@@ -177,20 +176,11 @@ Account::syncConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->setValue( "accountfriendlyname", m_accountFriendlyName );
     s->setValue( "enabled", m_enabled );
-    //s->setValue( "credentials", m_credentials );
     s->setValue( "configuration", m_configuration );
     s->setValue( "acl", m_acl );
     s->setValue( "types", m_types );
     s->endGroup();
     s->sync();
-    QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
-    j->setKey( m_accountId );
-    j->setAutoDelete( false );
-    QByteArray bData;
-    serializeCredentials( bData );
-    j->setBinaryData( bData );
-    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-    j->start();
 }
 
 
@@ -206,6 +196,46 @@ Account::syncType()
 
 
 void
+Account::saveCredentials( const QVariantHash &creds )
+{
+    QByteArray data;
+    {
+        QDataStream ds( &data, QIODevice::WriteOnly );
+        ds << creds;
+    }
+
+    QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+    j->setKey( m_accountId );
+    j->setAutoDelete( false );
+    j->setBinaryData( data );
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+    j->start();
+
+    m_workingKeychainJobs << j;
+}
+
+
+void
+Account::loadCredentials() const
+{
+    QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), const_cast<Account*>( this ) );
+    j->setKey( m_accountId );
+    j->setAutoDelete( false );
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+
+
+    if ( !m_workingKeychainJobs.isEmpty() )
+    {
+        m_queuedKeychainJobs.enqueue( j );
+    }
+    else
+    {
+        j->start();
+        m_workingKeychainJobs << j;
+    }
+}
+
+void
 Account::loadFromConfig( const QString& accountId )
 {
     m_accountId = accountId;
@@ -213,16 +243,12 @@ Account::loadFromConfig( const QString& accountId )
     s->beginGroup( "accounts/" + m_accountId );
     m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
     m_enabled = s->value( "enabled", false ).toBool();
-    //m_credentials = s->value( "credentials", QVariantHash() ).toHash();
     m_configuration = s->value( "configuration", QVariantHash() ).toHash();
     m_acl = s->value( "acl", QVariantMap() ).toMap();
     m_types = s->value( "types", QStringList() ).toStringList();
     s->endGroup();
-    QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawk" ), this );
-    j->setKey( m_accountId );
-    j->setAutoDelete( false );
-    connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-    j->start();
+
+    loadCredentials();
 }
 
 
@@ -239,11 +265,14 @@ Account::removeFromConfig()
     s->remove( "types" );
     s->endGroup();
     s->remove( "accounts/" + m_accountId );
+
     QKeychain::DeletePasswordJob* j = new QKeychain::DeletePasswordJob( QLatin1String( "tomahawk" ), this );
     j->setKey( m_accountId );
     j->setAutoDelete( false );
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
+
+    m_workingKeychainJobs << j;
 }
 
 

@@ -38,7 +38,7 @@ public:
 
     static ActionCollection* instance();
 
-    ActionCollection( QObject *parent);
+    ActionCollection( QObject *parent );
     ~ActionCollection();
 
     void initActions();

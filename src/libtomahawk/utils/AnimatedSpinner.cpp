@@ -28,7 +28,10 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QShowEvent>
 
-AnimatedSpinner::AnimatedSpinner( QWidget *parent )
+#include "utils/Logger.h"
+
+
+AnimatedSpinner::AnimatedSpinner( QWidget* parent )
     : QWidget( parent )
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
@@ -38,7 +41,7 @@ AnimatedSpinner::AnimatedSpinner( QWidget *parent )
 }
 
 
-AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
+AnimatedSpinner::AnimatedSpinner( const QSize& size, bool autoStart )
     : QWidget()
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
@@ -57,12 +60,14 @@ AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
 void
 AnimatedSpinner::init()
 {
+    m_autoCenter = true;
 
     m_showHide->setDuration( 300 );
     m_showHide->setStartFrame( 0 );
     m_showHide->setEndFrame( 100 );
     m_showHide->setUpdateInterval( 20 );
-    if( parentWidget() )
+
+    if ( parentWidget() )
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
     else
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( updatePixmap() ) );
@@ -86,13 +91,12 @@ AnimatedSpinner::init()
     else
         size = m_pixmap.size();
 
-
     /// Radius is best-fit line with points (13x13, 2), (28x28, 5), (48x48, 10)
-    m_radius = qRound( ( 23. * ( size.width() - 5.) ) / 100. );
-    m_armLength = size.width()/2 - m_radius;
+    m_radius = qRound( ( 23. * ( size.width() - 5. ) ) / 100. );
+    m_armLength = size.width() / 2 - m_radius;
 
     /// Arm width is best-fit line with points (13x13, 1), (28x28, 2), (48x48, 5)
-    m_armWidth = qRound( (116.*size.width() - 781.)/1000. );
+    m_armWidth = qRound( ( 116. * size.width() - 781. ) / 1000. );
     m_border = 2;
     m_armRect = QRect( m_radius, 0, m_armLength, m_armWidth );
 
@@ -101,12 +105,12 @@ AnimatedSpinner::init()
 
 
 void
-AnimatedSpinner::paintEvent(QPaintEvent *event)
+AnimatedSpinner::paintEvent( QPaintEvent* event )
 {
-    Q_UNUSED(event);
-    if ( parentWidget() )
+    Q_UNUSED( event );
+    if ( m_autoCenter && parentWidget() )
     {
-        QPoint center( ( parentWidget()->width() / 2 ) - ( width() / 2 ), ( parentWidget()->height() / 2 ) - ( height() / 2 ) );
+        QPoint center = parentWidget()->contentsRect().center() - QPoint( sizeHint().width() / 2, sizeHint().height() / 2 );
         if ( center != pos() )
         {
             move( center );
@@ -114,7 +118,7 @@ AnimatedSpinner::paintEvent(QPaintEvent *event)
         }
     }
 
-    QPainter p(this);
+    QPainter p( this );
     drawFrame( &p, rect() );
 }
 
@@ -142,8 +146,7 @@ AnimatedSpinner::drawFrame( QPainter* p, const QRect& rect )
         p->setOpacity( (qreal)m_showHide->currentValue() );
     }
 
-    p->setRenderHint(QPainter::Antialiasing, true);
-
+    p->setRenderHint( QPainter::Antialiasing, true );
     p->translate( rect.center() + QPoint( 0, 1 ) ); // center
 
     const qreal stepRadius = (360 + 2*m_armWidth) / segmentCount();
@@ -206,19 +209,17 @@ AnimatedSpinner::hideFinished()
 QSize
 AnimatedSpinner::sizeHint() const
 {
-    return QSize(48, 48);
+    return QSize( 48, 48 );
 }
 
 
 void
 AnimatedSpinner::frameChanged( int frame )
 {
-
-    if ( m_currentIndex == frame || frame > segmentCount()-1 )
+    if ( m_currentIndex == frame || frame > segmentCount() - 1 )
         return;
 
     m_currentIndex = frame;
-
     Q_ASSERT( frame >= 0 && frame < m_colors.size() );
 
     // calculate colors, save a factor from 1 to 0 behind the current item
@@ -250,7 +251,7 @@ AnimatedSpinner::colorForSegment( int seg ) const
     // Base color is      101, 101, 101
     Q_ASSERT( seg < m_colors.size() );
     const int comp = 101 + m_colors[seg] * ( 126 );
-    return QColor(comp, comp, comp, 255);
+    return QColor( comp, comp, comp, 255 );
 }
 
 
@@ -258,4 +259,28 @@ int
 AnimatedSpinner::segmentCount() const
 {
     return 11;
+}
+
+
+LoadingSpinner::LoadingSpinner( QAbstractItemView* parent )
+    : AnimatedSpinner( parent )
+    , m_parent( parent )
+{
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( fadeIn() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( fadeOut() ), Qt::UniqueConnection );
+    }
+    connect( m_parent, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
+}
+
+
+void
+LoadingSpinner::onViewModelChanged()
+{
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( fadeIn() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( fadeOut() ), Qt::UniqueConnection );
+    }
 }

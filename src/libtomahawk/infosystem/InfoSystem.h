@@ -34,6 +34,7 @@
 
 #include "DllMacro.h"
 #include "utils/TomahawkUtils.h"
+#include "Typedefs.h"
 
 class QNetworkAccessManager;
 
@@ -49,102 +50,8 @@ enum PushInfoFlags { // must be powers of 2
     PushShortUrlFlag = 2
 };
 
-enum InfoType { // as items are saved in cache, mark them here to not change them
-    InfoNoInfo = 0, //WARNING: *ALWAYS* keep this first!
-    InfoTrackID = 1,
-    InfoTrackArtist = 2,
-    InfoTrackAlbum = 3,
-    InfoTrackGenre = 4,
-    InfoTrackComposer = 5,
-    InfoTrackDate = 6,
-    InfoTrackNumber = 7,
-    InfoTrackDiscNumber = 8,
-    InfoTrackBitRate = 9,
-    InfoTrackLength = 10,
-    InfoTrackSampleRate = 11,
-    InfoTrackFileSize = 12,
-    InfoTrackBPM = 13,
-    InfoTrackReplayGain = 14,
-    InfoTrackReplayPeakGain = 15,
-    InfoTrackLyrics = 16,
-    InfoTrackLocation = 17,
-    InfoTrackProfile = 18,
-    InfoTrackEnergy = 19,
-    InfoTrackDanceability = 20,
-    InfoTrackTempo = 21,
-    InfoTrackLoudness = 22,
-    InfoTrackSimilars = 23, // cached -- do not change
 
-    InfoArtistID = 25,
-    InfoArtistName = 26,
-    InfoArtistBiography = 27,
-    InfoArtistImages = 28, //cached -- do not change
-    InfoArtistBlog = 29,
-    InfoArtistFamiliarity = 30,
-    InfoArtistHotttness = 31,
-    InfoArtistSongs = 32, //cached -- do not change
-    InfoArtistSimilars = 33, //cached -- do not change
-    InfoArtistNews = 34,
-    InfoArtistProfile = 35,
-    InfoArtistReviews = 36,
-    InfoArtistTerms = 37,
-    InfoArtistLinks = 38,
-    InfoArtistVideos = 39,
-    InfoArtistReleases = 40,
-
-    InfoAlbumID = 42,
-    InfoAlbumCoverArt = 43, //cached -- do not change
-    InfoAlbumName = 44,
-    InfoAlbumArtist = 45,
-    InfoAlbumDate = 46,
-    InfoAlbumGenre = 47,
-    InfoAlbumComposer = 48,
-    InfoAlbumSongs = 49,
-
-/** \var Tomahawk::InfoSystem::InfoType Tomahawk::InfoSystem::InfoType::InfoChartCapabilities
- * Documentation for InfoChartCapabilities
- *
- * Clients of this InfoType expect a QVariant
- *
- */
-    InfoChartCapabilities = 50,
-    /**
-     * Documentation for InfoChartArtists
-     */
-    InfoChart = 51,
-
-    InfoNewReleaseCapabilities = 52,
-    InfoNewRelease = 53,
-
-    InfoMiscTopHotttness = 60,
-    InfoMiscTopTerms = 61,
-
-    InfoSubmitNowPlaying = 70,
-    InfoSubmitScrobble = 71,
-
-    InfoNowPlaying = 80,
-    InfoNowPaused = 81,
-    InfoNowResumed = 82,
-    InfoNowStopped = 83,
-    InfoTrackUnresolved = 84,
-
-    InfoLove = 90,
-    InfoUnLove = 91,
-    InfoShareTrack = 92,
-
-    InfoNotifyUser = 100,
-
-    InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
-};
-
-
-typedef QMap< InfoType, QVariant > InfoTypeMap;
-typedef QMap< InfoType, uint > InfoTimeoutMap;
-typedef QHash< QString, QString > InfoStringHash;
-typedef QPair< QVariantMap, QVariant > PushInfoPair;
-
-
-struct InfoRequestData {
+struct DLLEXPORT InfoRequestData {
     quint64 requestId;
     quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
     QString caller;
@@ -154,27 +61,12 @@ struct InfoRequestData {
     uint timeoutMillis;
     bool allSources;
 
-    InfoRequestData()
-        : requestId( TomahawkUtils::infosystemRequestId() )
-        , internalId( TomahawkUtils::infosystemRequestId() )
-        , caller( QString() )
-        , type( Tomahawk::InfoSystem::InfoNoInfo )
-        , input( QVariant() )
-        , customData( QVariantMap() )
-        , timeoutMillis( 10000 )
-        , allSources( false )
-        {}
+    InfoRequestData();
 
-    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom )
-        : requestId( rId )
-        , internalId( TomahawkUtils::infosystemRequestId() )
-        , caller( callr )
-        , type( typ )
-        , input( inputvar )
-        , customData( custom )
-        , timeoutMillis( 10000 )
-        , allSources( false )
-        {}
+    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom );
+
+private:
+    void init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
 };
 
 
@@ -209,6 +101,10 @@ class DLLEXPORT InfoPlugin : public QObject
     Q_OBJECT
 
 public:
+    /**
+     * @brief Creates the plugin. Do *not* perform any network-based setup tasks here; defer that to init(), which will be called automatically.
+     *
+     **/
     InfoPlugin();
 
     virtual ~InfoPlugin();
@@ -223,6 +119,14 @@ signals:
     void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
+    
+    /**
+     * @brief Called after the plugin has been moved to the appropriate thread. Do network-based setup tasks here.
+     *
+     * @return void
+     **/
+    virtual void init() = 0;
+    
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
@@ -236,8 +140,6 @@ private:
     friend class InfoSystem;
 };
 
-
-typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
 class InfoSystemCacheThread : public QThread
 {
@@ -336,7 +238,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
     return returnval;
 }
 
-
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPushData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
@@ -347,5 +248,7 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
+
+Q_DECLARE_INTERFACE( Tomahawk::InfoSystem::InfoPlugin, "tomahawk.InfoPluginy/1.0" )
 
 #endif // TOMAHAWK_INFOSYSTEM_H

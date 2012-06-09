@@ -49,11 +49,13 @@ private slots:
     void onStop();
     void onResume();
     
-    void stopContinueAfterTrack_StatusChanged();
-    
+    void onSocialActionsLoaded();
+    void onStopContinueAfterTrackChanged();
     void stopContinueAfterTrackActionTriggered();
+    void loveTrackTriggered();
 
     void menuAboutToShow();
+
 private:
     void refreshToolTip();
     ~TomahawkTrayIcon();
@@ -68,6 +70,7 @@ private:
 
     QAction* m_showWindowAction;
     QAction* m_stopContinueAfterTrackAction;
+    QAction* m_loveTrackAction;
 };
 
 #endif // TOMAHAWK_TRAYICON_H
