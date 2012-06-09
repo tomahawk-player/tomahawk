@@ -146,7 +146,7 @@ signals:
 
     void configurationChanged();
 
-    void credentialsChanged( const QVariantHash& credentials );
+    void credentialsLoaded( const QVariantHash& credentials );
 
 protected:
     virtual void loadFromConfig( const QString &accountId );

@@ -78,11 +78,12 @@ public:
     void saveConfig();
 
     QVariantHash credentials() const { return m_credentials; }
+    void setCredentials( const QVariantHash& credentials );
 
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
 private slots:
-    void onCredentialsChanged( const QVariantHash& credentials );
+    void onCredentialsLoaded( const QVariantHash& credentials );
 
 protected:
     QWeakPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit

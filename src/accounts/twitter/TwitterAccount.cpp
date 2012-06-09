@@ -53,7 +53,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     setAccountServiceName( "Twitter" );
     setTypes( AccountTypes( StatusPushType | SipType ) );
 
-    connect( this, SIGNAL( credentialsChanged( QVariantHash ) ), this, SLOT( onCredentialsChanged( QVariantHash ) ) );
+    connect( this, SIGNAL( credentialsLoaded( QVariantHash ) ), this, SLOT( onCredentialsLoaded( QVariantHash ) ) );
 
     qDebug() << "Got cached peers:" << configuration() << configuration()[ "cachedpeers" ];
 
@@ -83,7 +83,7 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 
 
 void
-TwitterAccount::onCredentialsChanged( const QVariantHash &credentials )
+TwitterAccount::onCredentialsLoaded( const QVariantHash &credentials )
 {
     // Credentials loaded
     bool reload = false;
@@ -98,6 +98,15 @@ TwitterAccount::onCredentialsChanged( const QVariantHash &credentials )
         qDebug() << "Twitter account got async load of credentials, authenticating now!";
         authenticate();
     }
+}
+
+
+void
+TwitterAccount::setCredentials( const QVariantHash &credentials )
+{
+    m_credentials = credentials;
+
+    saveCredentials( credentials );
 }
 
 

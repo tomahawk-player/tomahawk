@@ -41,7 +41,7 @@ XmppAccountFactory::createAccount( const QString& accountId )
 XmppAccount::XmppAccount( const QString &accountId )
     : Account( accountId )
 {
-    connect( this, SIGNAL( credentialsChanged( QVariantHash ) ), this, SLOT( onCredentialsChanged( QVariantHash ) ) );
+    connect( this, SIGNAL( credentialsLoaded( QVariantHash ) ), this, SLOT( onCredentialsLoaded( QVariantHash ) ) );
 
     setAccountServiceName( "Jabber (XMPP)" );
     setTypes( SipType );
@@ -93,11 +93,20 @@ XmppAccount::saveConfig()
 
 
 void
-XmppAccount::onCredentialsChanged( const QVariantHash& credentials )
+XmppAccount::onCredentialsLoaded( const QVariantHash& credentials )
 {
     m_credentials = credentials;
     if ( !m_xmppSipPlugin.isNull() )
         m_xmppSipPlugin.data()->configurationChanged();
+}
+
+
+void
+XmppAccount::setCredentials( const QVariantHash &credentials )
+{
+    m_credentials = credentials;
+
+    saveCredentials( credentials );
 }
 
 

@@ -112,7 +112,7 @@ TwitterConfigWidget::authenticateTwitter()
     QVariantHash credentials = m_account->credentials();
     credentials[ "oauthtoken" ] = twitAuth->oauthToken();
     credentials[ "oauthtokensecret" ] = twitAuth->oauthTokenSecret();
-    m_account->saveCredentials( credentials );
+    m_account->setCredentials( credentials );
 
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
     connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( authenticateVerifyReply( const QTweetUser & ) ) );
@@ -133,7 +133,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
 
     QVariantHash credentials = m_account->credentials();
     credentials[ "username" ] = user.screenName();
-    m_account->saveCredentials( credentials );
+    m_account->setCredentials( credentials );
 
     QVariantHash configuration = m_account->configuration();
     configuration[ "sipcachedfriendssinceid" ] = 0;
@@ -165,7 +165,7 @@ void
 TwitterConfigWidget::deauthenticateTwitter()
 {
     qDebug() << Q_FUNC_INFO;
-    m_account->saveCredentials( QVariantHash() );
+    m_account->setCredentials( QVariantHash() );
 
     m_ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
     m_ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );

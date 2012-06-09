@@ -616,6 +616,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 qDebug() << "Migrating account credentials for account:" << account;
             }
 
+            remove( "credentials" );
+
             endGroup();
         }
     }

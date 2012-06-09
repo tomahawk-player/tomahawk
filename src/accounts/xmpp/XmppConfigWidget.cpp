@@ -68,7 +68,7 @@ XmppConfigWidget::saveConfig()
     m_account->setConfiguration( configuration);
     m_account->sync();
 
-    m_account->saveCredentials( credentials );
+    m_account->setCredentials( credentials );
 
     static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
 }

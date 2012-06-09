@@ -55,7 +55,7 @@ LastFmAccountFactory::icon() const
 LastFmAccount::LastFmAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
 {
-    connect( this, SIGNAL( credentialsChanged( QVariantHash ) ), this, SLOT( onCredentialsChanged( QVariantHash ) ) );
+    connect( this, SIGNAL( credentialsLoaded( QVariantHash ) ), this, SLOT( onCredentialsLoaded( QVariantHash ) ) );
 
     setAccountFriendlyName( "Last.Fm" );
     m_icon.load( RESPATH "images/lastfm-icon.png" );
@@ -196,7 +196,7 @@ LastFmAccount::saveConfig()
 
 
 void
-LastFmAccount::onCredentialsChanged(const QVariantHash &credentials)
+LastFmAccount::onCredentialsLoaded(const QVariantHash &credentials)
 {
     m_credentials = credentials;
     if ( !m_infoPlugin.isNull() )

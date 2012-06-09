@@ -80,12 +80,14 @@ public:
     TomahawkOAuthTwitter* twitterAuth() const { return m_twitterAuth.data(); }
 
     QVariantHash credentials() const { return m_credentials; }
+    void setCredentials( const QVariantHash& creds );
+
 signals:
     void nowAuthenticated( const QWeakPointer< TomahawkOAuthTwitter >&, const QTweetUser &user );
     void nowDeauthenticated();
 
 private slots:
-    void onCredentialsChanged( const QVariantHash& credentials );
+    void onCredentialsLoaded( const QVariantHash& credentials );
 
     void authenticateSlot();
     void configDialogAuthedSignalSlot( bool authed );

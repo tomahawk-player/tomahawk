@@ -100,7 +100,7 @@ SpotifyAccount::~SpotifyAccount()
 void
 SpotifyAccount::init()
 {
-    connect( this, SIGNAL( credentialsChanged( QVariantHash ) ), this, SLOT( onCredentialsChanged( QVariantHash ) ) );
+    connect( this, SIGNAL( credentialsLoaded( QVariantHash ) ), this, SLOT( onCredentialsLoaded( QVariantHash ) ) );
 
     setAccountFriendlyName( "Spotify" );
     setAccountServiceName( "spotify" );
@@ -185,11 +185,18 @@ SpotifyAccount::hookupResolver()
 
 
 void
-SpotifyAccount::onCredentialsChanged(const QVariantHash &credentials)
+SpotifyAccount::onCredentialsLoaded( const QVariantHash &credentials )
 {
     m_credentials = credentials;
+}
 
 
+void
+SpotifyAccount::setCredentials(const QVariantHash &creds)
+{
+    m_credentials = creds;
+
+    saveCredentials( creds );
 }
 
 

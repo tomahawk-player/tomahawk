@@ -611,11 +611,12 @@ XmppSipPlugin::configurationChanged()
     }
 
     if ( reconnect )
+        setupClientHelper();
+
+    if ( reconnect && m_account->enabled() )
     {
         qDebug() << Q_FUNC_INFO << "Reconnecting jreen plugin...";
         disconnectPlugin();
-
-        setupClientHelper();
 
         qDebug() << Q_FUNC_INFO << "Updated settings";
         connectPlugin();

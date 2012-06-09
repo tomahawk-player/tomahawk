@@ -133,7 +133,7 @@ Account::keychainJobFinished( QKeychain::Job* j )
 
             tLog() << Q_FUNC_INFO << readJob->key();
 
-            emit credentialsChanged( credentials );
+            emit credentialsLoaded( credentials );
         }
         else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
         {

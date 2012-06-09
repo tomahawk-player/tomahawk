@@ -101,7 +101,7 @@ private slots:
 
     void resolverChanged();
 
-    void onCredentialsChanged( const QVariantHash& credentials );
+    void onCredentialsLoaded( const QVariantHash& credentials );
 
 private:
     void hookupResolver();

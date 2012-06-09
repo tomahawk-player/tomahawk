@@ -103,6 +103,7 @@ public:
     void setManualResolverPath( const QString& resolverPath );
 
     QVariantHash credentials() const { return m_credentials; }
+    void setCredentials( const QVariantHash& creds );
 
 public slots:
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
@@ -110,7 +111,7 @@ public slots:
     void atticaLoaded(Attica::Content::List);
 
 private slots:
-    void onCredentialsChanged( const QVariantHash& credentials );
+    void onCredentialsLoaded( const QVariantHash& credentials );
 
     void resolverChanged();
     void resolverInstalled( const QString& resolverId );
