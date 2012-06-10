@@ -66,19 +66,19 @@ set_target_properties(qtkeychain PROPERTIES
     SOVERSION ${QTKEYCHAIN_SOVERSION}
 )
 
-install(FILES keychain.h qkeychain_export.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qtkeychain/
-)
+#install(FILES keychain.h qkeychain_export.h
+#        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qtkeychain/
+#)
 
-install(TARGETS qtkeychain
-  EXPORT QtKeychainLibraryDepends
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+#install(TARGETS qtkeychain
+#  EXPORT QtKeychainLibraryDepends
+#  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+#  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#)
 
-add_executable( testclient testclient.cpp )
-target_link_libraries( testclient qtkeychain)
+#add_executable( testclient testclient.cpp )
+#target_link_libraries( testclient qtkeychain)
 
 
 ###
@@ -95,11 +95,11 @@ configure_file(QtKeychainConfig.cmake.in
 configure_file(QtKeychainConfigVersion.cmake.in
   "${PROJECT_BINARY_DIR}/QtKeychainConfigVersion.cmake" @ONLY)
 
-install(EXPORT QtKeychainLibraryDepends
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/QtKeychain"
-)
+#install(EXPORT QtKeychainLibraryDepends
+#    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/QtKeychain"
+#)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtKeychainConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/QtKeychainConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QtKeychain
-)
+#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtKeychainConfig.cmake
+#              ${CMAKE_CURRENT_BINARY_DIR}/QtKeychainConfigVersion.cmake
+#        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QtKeychain
+#)
