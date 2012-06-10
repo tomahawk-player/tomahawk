@@ -91,6 +91,7 @@ protected:
     QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_xmppInfoPlugin;
 
     QVariantHash m_credentials;
+    bool m_credentialsLoading;
 };
 
 };

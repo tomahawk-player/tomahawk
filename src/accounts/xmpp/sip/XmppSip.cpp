@@ -581,6 +581,7 @@ XmppSipPlugin::configurationChanged()
     server = readServer();
     port = readPort();
 
+    qDebug() << Q_FUNC_INFO << "Configuration changed in SIP plugin:" << username << password << server << port << m_account->accountFriendlyName();
     if ( m_currentUsername != username )
     {
         m_currentUsername = username;
@@ -610,6 +611,8 @@ XmppSipPlugin::configurationChanged()
         m_xmppAccount->saveCredentials( credentials );
     }
 
+
+    qDebug() << Q_FUNC_INFO << "reconnecting?" << reconnect << "enabled?" << m_account->enabled() << m_account->accountFriendlyName();
     if ( reconnect )
         setupClientHelper();
 
