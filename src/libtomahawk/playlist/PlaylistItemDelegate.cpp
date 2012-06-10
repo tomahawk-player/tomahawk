@@ -201,7 +201,11 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
         painter->setFont( opt.font );
-        painter->setPen( Qt::gray );
+        if ( option.state & QStyle::State_Selected )
+            painter->setPen( option.palette.color( QPalette::HighlightedText ) );
+        else
+            painter->setPen( Qt::gray );
+
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }
