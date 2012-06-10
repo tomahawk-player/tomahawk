@@ -442,7 +442,11 @@ void ScriptResolver::startProcess()
 #endif // Q_OS_WIN
 
     if( interpreter.isEmpty() )
+    {
+        const QFileInfo info( runPath );
+        m_proc.setWorkingDirectory( info.absolutePath() );
         m_proc.start( runPath );
+    }
     else
         m_proc.start( interpreter, QStringList() << filePath() );
 
