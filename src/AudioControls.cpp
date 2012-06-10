@@ -598,7 +598,7 @@ void
 AudioControls::onSocialButtonClicked()
 {
     SocialWidget* sw = new SocialWidget( m_parent );
-    sw->setPosition( QCursor::pos() );
+    sw->setPosition( sw->mapFromGlobal( QCursor::pos() ) );
     sw->setQuery( m_currentTrack->toQuery() );
     sw->show();
 }
