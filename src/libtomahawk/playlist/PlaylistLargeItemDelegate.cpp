@@ -99,7 +99,7 @@ PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, c
 
 
 void
-PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const
+PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
 {
     text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
     QAbstractTextDocumentLayout* layout = text.documentLayout();
@@ -112,7 +112,11 @@ PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QRect& rect, i
         y += ( rect.height() - height ) / 2;
 
     QAbstractTextDocumentLayout::PaintContext context;
-    context.palette.setColor( QPalette::Text, painter->pen().color() );
+
+    if ( option.state & QStyle::State_Selected )
+        context.palette.setColor( QPalette::Text, option.palette.color( QPalette::HighlightedText ) );
+    else
+        context.palette.setColor( QPalette::Text, painter->pen().color() );
 
     painter->save();
     painter->translate( rect.x(), y );
@@ -235,7 +239,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( textDoc.idealWidth() > leftRect.width() )
             textDoc.setHtml( item->query()->socialActionDescription( "Love", Query::Short ) );
 
-        drawRichText( painter, leftRect, Qt::AlignBottom, textDoc );
+        drawRichText( painter, option, leftRect, Qt::AlignBottom, textDoc );
 
         if ( duration > 0 )
         {
