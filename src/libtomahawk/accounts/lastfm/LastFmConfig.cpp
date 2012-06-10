@@ -40,7 +40,7 @@ LastFmConfig::LastFmConfig( LastFmAccount* account )
     m_ui = new Ui_LastFmConfig;
     m_ui->setupUi( this );
 
-    connect( m_ui->testLogin, SIGNAL( clicked( bool ) ), this, SLOT( testLogin( bool ) ) );
+    connect( m_ui->testLogin, SIGNAL( clicked( bool ) ), this, SLOT( testLogin() ) );
 
     connect( m_ui->username, SIGNAL( textChanged( QString ) ), this, SLOT( enableButton() ) );
     connect( m_ui->password, SIGNAL( textChanged( QString ) ), this, SLOT( enableButton() ) );
