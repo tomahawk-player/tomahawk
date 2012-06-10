@@ -261,7 +261,18 @@ Api_v1::resolve( QxtWebRequestEvent* event )
     else
         qid = uuid();
 
-    query_ptr qry = Query::get( QUrl::fromPercentEncoding( event->url.queryItemValue( "artist" ).toUtf8() ), QUrl::fromPercentEncoding( event->url.queryItemValue( "track" ).toUtf8() ), QUrl::fromPercentEncoding( event->url.queryItemValue( "album" ).toUtf8() ), qid, false );
+    const QString track = event->url.queryItemValue( "track" );
+    const QString artist = event->url.queryItemValue( "artist" );
+    const QString album = event->url.queryItemValue( "album" );
+
+    if ( track.isEmpty() && artist.isEmpty() )
+    {
+        qDebug() << "HTTP API asked to resolve empty track/artist!";
+        send404( event );
+        return;
+    }
+
+    query_ptr qry = Query::get( QUrl::fromPercentEncoding( artist.toUtf8() ), QUrl::fromPercentEncoding( track.toUtf8() ), QUrl::fromPercentEncoding( album.toUtf8() ), qid, false );
     Pipeline::instance()->resolve( qry, true, true );
 
     QVariantMap r;
