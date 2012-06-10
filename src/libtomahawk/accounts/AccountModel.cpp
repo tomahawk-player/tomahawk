@@ -416,6 +416,9 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( role == CheckboxClickedRole )
     {
         Account* acct = 0;
+
+        Qt::CheckState checkState = static_cast< Qt::CheckState >( value.toInt() );
+
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
@@ -453,9 +456,11 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     state = AtticaManager::Uninstalled;
                 }
 
-                if ( state == AtticaManager::Installed )
+                // Don't install if we're unchecking. This happens if e.g. the user deletes his config file
+                // and opens tomahawk
+                if ( state == AtticaManager::Installed || checkState == Qt::Unchecked )
                 {
-                    qDebug() << "Already installed with resolver, just enabling";
+                    qDebug() << "Already installed with resolver, or unchecking, just enabling/disabling";
                     acct = node->atticaAccount;
                     break;
                 }
@@ -491,13 +496,10 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         if ( node->type == AccountModelNode::FactoryType )
         {
-            // Turn on or off all accounts for this factory
-
-            Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
-
+            // Turn on or off all accounts for this factory\
             foreach ( Account* acct, node->accounts )
             {
-                state == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
+                checkState == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
                                      : AccountManager::instance()->disableAccount( acct );
             }
 
