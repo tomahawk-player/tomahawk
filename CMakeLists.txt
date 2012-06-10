@@ -121,11 +121,6 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions required for Grooveshark resolver" "http://delta.affinix.com/qca/" FALSE "" "")
 
-if( NOT QTKEYCHAIN_INCLUDE_DIRS OR NOT QTKEYCHAIN_LIBRARIES )
-macro_optional_find_package(QtKeychain)
-macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure password storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
-endif()
-
 macro_optional_find_package(LibAttica)
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" TRUE "" "")
 
@@ -163,6 +158,17 @@ SET( LIBPORTFWD_INCLUDE_DIR ${THIRDPARTY_DIR}/libportfwd/include )
 SET( LIBPORTFWD_LIBRARY tomahawk_portfwd )
 SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
 ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
+
+### qtkeychain
+SET( QTKEYCHAIN_INCLUDE_DIRS ${THIRDPARTY_DIR}/qtkeychain )
+SET( QTKEYCHAIN_LIBRARY qtkeychain )
+SET( QTKEYCHAIN_LIBRARIES ${QTKEYCHAIN_LIBRARY} )
+ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/qtkeychain/qtkeychain )
+
+if( NOT QTKEYCHAIN_INCLUDE_DIRS OR NOT QTKEYCHAIN_LIBRARIES )
+macro_optional_find_package(QtKeychain)
+macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure password storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+endif()
 
 # we need pthreads too
 #macro_optional_find_package(Threads)

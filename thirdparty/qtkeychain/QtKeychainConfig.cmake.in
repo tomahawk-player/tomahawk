@@ -1,0 +1,20 @@
+# - Config file for the FooBar package
+# It defines the following variables
+#  FOOBAR_INCLUDE_DIRS - include directories for FooBar
+#  FOOBAR_LIBRARIES    - libraries to link against
+#  FOOBAR_EXECUTABLE   - the bar executable
+
+# Compute paths
+get_filename_component(QTKEYCHAIN_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+if(EXISTS "${QTKEYCHAIN_CMAKE_DIR}/CMakeCache.txt")
+   # In build tree
+   include("${QTKEYCHAIN_CMAKE_DIR}/QtKeychainBuildTreeSettings.cmake")
+else()
+   set(QTKEYCHAIN_INCLUDE_DIRS "${QTKEYCHAIN_CMAKE_DIR}/../../")
+endif()
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${QTKEYCHAIN_CMAKE_DIR}/QtKeychainLibraryDepends.cmake")
+
+# These are IMPORTED targets created by FooBarLibraryDepends.cmake
+set(QTKEYCHAIN_LIBRARIES qtkeychain)
