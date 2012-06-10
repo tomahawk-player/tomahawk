@@ -208,6 +208,9 @@ Account::saveCredentials( const QVariantHash &creds )
     j->setKey( m_accountId );
     j->setAutoDelete( false );
     j->setBinaryData( data );
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+    j->setInsecureFallback( true );
+#endif
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
 
@@ -221,6 +224,9 @@ Account::loadCredentials() const
     QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), const_cast<Account*>( this ) );
     j->setKey( m_accountId );
     j->setAutoDelete( false );
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+    j->setInsecureFallback( true );
+#endif
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
 
 
@@ -269,6 +275,9 @@ Account::removeFromConfig()
     QKeychain::DeletePasswordJob* j = new QKeychain::DeletePasswordJob( QLatin1String( "tomahawk" ), this );
     j->setKey( m_accountId );
     j->setAutoDelete( false );
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+    j->setInsecureFallback( true );
+#endif
     connect( j, SIGNAL( finished( QKeychain::Job* ) ), this, SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
 
