@@ -496,9 +496,14 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         if ( node->type == AccountModelNode::FactoryType )
         {
-            // Turn on or off all accounts for this factory\
+            tLog() << "Factory account with members:" << node->accounts << node->accounts.size();
+            // Turn on or off all accounts for this factory
             foreach ( Account* acct, node->accounts )
             {
+                tLog() << "Account we are toggling for factory:" << acct;
+                if ( !acct )
+                    continue;
+
                 checkState == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
                                      : AccountManager::instance()->disableAccount( acct );
             }
