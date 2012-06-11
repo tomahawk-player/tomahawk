@@ -1,8 +1,8 @@
 # - Try to find LibLastFm
 #
-#  LIBLASTFM_FOUND - system has QTweetLib
-#  LIBLASTFM_INCLUDE_DIRS - the QTweetLib include directories
-#  LIBLASTFM_LIBRARIES - link these to use QTweetLib
+#  LIBLASTFM_FOUND - system has liblastfm
+#  LIBLASTFM_INCLUDE_DIRS - the liblastfm include directories
+#  LIBLASTFM_LIBRARIES - link these to use liblastfm
 #
 # (c) Dominik Schmidt <dev@dominik-schmidt.de>
 #
