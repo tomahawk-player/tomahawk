@@ -69,7 +69,7 @@ SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 
 # make predefined install dirs available everywhere
-INCLUDE(GNUInstallDirs)
+INCLUDE( GNUInstallDirs )
 
 # installer creation
 INCLUDE( TomahawkCPack.cmake )
@@ -133,11 +133,8 @@ macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP Library" "http://qutim.org/jreen 
 macro_optional_find_package(QTweetLib)
 macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
 
-# required
-#While we distribute our own liblastfm2, don't need to look for it
-#macro_optional_find_package(LibLastFm 0.3.3)
-#macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
-set(LIBLASTFM_FOUND true)
+macro_optional_find_package(LibLastFm 1.0.0)
+macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again
