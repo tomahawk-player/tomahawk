@@ -206,7 +206,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.7.4/plugins',
+    '/usr/local/Cellar/qt/4.8.2/plugins',
 ]
 
 
@@ -249,7 +249,7 @@ frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
-plugins_dir = os.path.join(bundle_dir, 'Contents', 'PlugIns')
+plugins_dir = os.path.join(bundle_dir, 'Contents', 'qt-plugins')
 binary = os.path.join(bundle_dir, 'Contents', 'MacOS', bundle_name)
 
 fixed_libraries = []
@@ -489,7 +489,7 @@ def FindVLCPlugin(name):
 FixBinary(binary)
 
 for plugin in VLC_PLUGINS:
-  FixVLCPlugin(FindVLCPlugin(plugin), '../Frameworks/vlc/plugins')
+  FixVLCPlugin(FindVLCPlugin(plugin), '../plugins')
 
 for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
