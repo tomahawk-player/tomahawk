@@ -14,7 +14,8 @@ endif()
 
 # Include dir
 find_path(LIBLASTFM_INCLUDE_DIR
-  NAMES lastfm/global.h
+  # Track.h doesn't exist in liblastfm-0.3.1, was called Track back then
+  NAMES lastfm/Track.h
   PATHS ${KDE4_INCLUDE_DIR}
 )
 
