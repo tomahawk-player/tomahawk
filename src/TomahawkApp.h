@@ -64,7 +64,7 @@ namespace Tomahawk
 }
 
 #ifdef LIBLASTFM_FOUND
-#include <lastfm/NetworkAccessManager>
+#include <lastfm/NetworkAccessManager.h>
 #include "Scrobbler.h"
 #endif
 

@@ -34,7 +34,7 @@
 #include "TomahawkSettings.h"
 
 #include <lastfm/ws.h>
-#include <lastfm/XmlQuery>
+#include <lastfm/XmlQuery.h>
 
 #include <qjson/parser.h>
 
@@ -871,7 +871,8 @@ LastFmInfoPlugin::onAuthenticated()
 
     if ( authJob->error() == QNetworkReply::NoError )
     {
-        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
+        lastfm::XmlQuery lfm;
+        lfm.parse( authJob->readAll() );
 
         if ( lfm.children( "error" ).size() > 0 )
         {
@@ -933,7 +934,8 @@ LastFmInfoPlugin::parseTrackList( QNetworkReply* reply )
     QList<lastfm::Track> tracks;
     try
     {
-        lastfm::XmlQuery lfm = reply->readAll();
+        lastfm::XmlQuery lfm;
+        lfm.parse( reply->readAll() );
         foreach ( lastfm::XmlQuery xq, lfm.children( "track" ) )
         {
             tracks.append( lastfm::Track( xq ) );
@@ -941,7 +943,7 @@ LastFmInfoPlugin::parseTrackList( QNetworkReply* reply )
     }
     catch ( lastfm::ws::ParseError& e )
     {
-        qWarning() << e.what();
+        qWarning() << e.message();
     }
 
     return tracks;

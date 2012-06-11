@@ -20,7 +20,7 @@
 #ifndef TOMAHAWK_SCROBBLER_H
 #define TOMAHAWK_SCROBBLER_H
 
-#include "lastfm/ScrobblePoint"
+#include "lastfm/ScrobblePoint.h"
 #include "Result.h"
 #include "infosystem/InfoSystem.h"
 
@@ -51,7 +51,7 @@ private:
     void scrobble();
 
     bool m_reachedScrobblePoint;
-    ScrobblePoint m_scrobblePoint;
+    lastfm::ScrobblePoint m_scrobblePoint;
 };
 
 

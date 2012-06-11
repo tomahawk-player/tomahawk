@@ -25,8 +25,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "lastfm/ws.h"
-#include "lastfm/User"
-#include "lastfm/XmlQuery"
+#include "lastfm/User.h"
+#include "lastfm/XmlQuery.h"
 
 using namespace Tomahawk::Accounts;
 
@@ -135,7 +135,8 @@ LastFmConfig::onHistoryLoaded()
     
     try
     {
-        lastfm::XmlQuery lfm = reply->readAll();
+        lastfm::XmlQuery lfm;
+        lfm.parse( reply->readAll() );
 
         foreach ( lastfm::XmlQuery e, lfm.children( "track" ) )
         {
@@ -170,7 +171,7 @@ LastFmConfig::onHistoryLoaded()
     }
     catch( lastfm::ws::ParseError e )
     {
-        tDebug() << "XmlQuery error:" << e.what();
+        tDebug() << "XmlQuery error:" << e.message();
         finished = true;
     }
     
@@ -200,7 +201,8 @@ LastFmConfig::onLastFmFinished()
     }
     if( authJob->error() == QNetworkReply::NoError )
     {
-        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
+        lastfm::XmlQuery lfm;
+        lfm.parse( authJob->readAll() );
 
         if( lfm.children( "error" ).size() > 0 )
         {
