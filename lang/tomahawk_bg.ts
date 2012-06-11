@@ -1631,12 +1631,12 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="529"/>
         <source>Manual Install Required</source>
         <translation>Изисква се ръчно инсталиране</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="527"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="532"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>За съжаление, автоматичното инсталиране на този компонен е деактивирано за твоята платформа.
 &lt;br /&gt;&lt;br /&gt;
@@ -1720,28 +1720,28 @@ Tomahaw създаде доклад относно това и изпращай�
         <translation>Импортирам...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="181"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="182"/>
         <source>History Incomplete. Resume</source>
         <translation>Непълна информация. Продължи.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="186"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="187"/>
         <source>Playback History Imported</source>
         <translation>Историята на просвирените песни е импортирана</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="208"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="223"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="210"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="225"/>
         <source>Failed</source>
         <translation>Неуспешно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="213"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="215"/>
         <source>Success</source>
         <translation>Ура!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="229"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
         <source>Could not contact server</source>
         <translation>Не мога да се свържа със сървъра</translation>
     </message>
@@ -2805,7 +2805,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="577"/>
+        <location filename="../src/TomahawkApp.cpp" line="591"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
