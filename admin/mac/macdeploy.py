@@ -203,6 +203,16 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_account_google.so',
   'libtomahawk_account_twitter.so',
   'libtomahawk_account_zeroconf.so',
+  'libtomahawk_infoplugin_adium.so',
+  'libtomahawk_infoplugin_charts.so',
+  'libtomahawk_infoplugin_discogs.so',
+  'libtomahawk_infoplugin_echonest.so',
+  'libtomahawk_infoplugin_hypem.so',
+  'libtomahawk_infoplugin_musicbrainz.so',
+  'libtomahawk_infoplugin_musixmatch.so',
+  'libtomahawk_infoplugin_newreleases.so',
+  'libtomahawk_infoplugin_rovi.so',
+  'libtomahawk_infoplugin_spotify.so',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
