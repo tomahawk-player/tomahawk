@@ -936,14 +936,16 @@ ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 ViewPage*
 ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-/*    for ( int i = 0; i < m_pageHistory.count(); i++ )
+    QList< Tomahawk::ViewPage* > pages = historyPages();
+
+    for ( int i = 0; i < pages.count(); i++ )
     {
-        ViewPage* page = m_pageHistory.at( i );
+        ViewPage* page = pages.at( i );
         if ( page->playlistInterface() == interface )
             return page;
         if ( page->playlistInterface() && page->playlistInterface()->hasChildInterface( interface ) )
             return page;
-    }*/
+    }
 
     return 0;
 }
