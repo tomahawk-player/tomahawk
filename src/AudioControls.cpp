@@ -61,6 +61,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
     ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
+    ui->artistTrackLabel->setJumpLinkVisible( true );
 
     ui->albumLabel->setFont( font );
     ui->albumLabel->setType( QueryLabel::Album );
@@ -549,7 +550,6 @@ void
 AudioControls::onTrackClicked()
 {
     ViewManager::instance()->show( m_currentTrack->toQuery() );
-//    ViewManager::instance()->showCurrentTrack();
 }
 
 
