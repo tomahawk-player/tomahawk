@@ -258,8 +258,8 @@ SocialWidget::accept()
 void
 SocialWidget::close()
 {
-    hide();
-    connect( this, SIGNAL( hidden() ), this, SLOT( deleteLater() ) );
+    QWidget::hide();
+    deleteLater();
 }
 
 
