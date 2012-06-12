@@ -871,6 +871,7 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
     if ( resetWidget )
     {
+        m_currentPage = 0;
         historyBack();
     }
 }
