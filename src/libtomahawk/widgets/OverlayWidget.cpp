@@ -248,6 +248,7 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     }
 
     p.setFont( f );
-    p.setPen( palette().highlightedText().color() );
+//    p.setPen( palette().highlightedText().color() );
+    p.setPen( Qt::white );
     p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
 }
