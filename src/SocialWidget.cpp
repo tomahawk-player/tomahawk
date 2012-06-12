@@ -30,7 +30,7 @@
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
 #define FONT_SIZE 16
-#define OPACITY 0.70
+#define OPACITY 0.85
 
 
 SocialWidget::SocialWidget( QWidget* parent )
