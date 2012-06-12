@@ -61,7 +61,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     m_parent->installEventFilter( this );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( accept() ) );
-    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( deleteLater() ) );
+    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
     connect( ui->textEdit, SIGNAL( textChanged() ), SLOT( onChanged() ) );
     connect( ui->facebookButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( ui->twitterButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
@@ -89,6 +89,7 @@ SocialWidget::setOpacity( qreal opacity )
     if ( m_opacity == 0.00 && !isHidden() )
     {
         QWidget::hide();
+        emit hidden();
     }
     else if ( m_opacity > 0.00 && isHidden() )
     {
@@ -251,6 +252,14 @@ SocialWidget::accept()
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 
     deleteLater();
+}
+
+
+void
+SocialWidget::close()
+{
+    hide();
+    connect( this, SIGNAL( hidden() ), this, SLOT( deleteLater() ) );
 }
 
 
