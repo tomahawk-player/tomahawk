@@ -860,12 +860,15 @@ AudioEngine::checkStateQueue()
                 m_mediaObject->play();
                 if ( paused )
                     setVolume( m_volume );
+                
+                break;
             }
             
             case Paused:
             {
                 m_volume = volume();
                 m_mediaObject->pause();
+                break;
             }
         }
     }
