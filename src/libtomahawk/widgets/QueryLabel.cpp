@@ -30,6 +30,7 @@
 #include "ContextMenu.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "ViewManager.h"
 #include "Source.h"
 
 #define BOXMARGIN 2
@@ -91,6 +92,9 @@ QueryLabel::init()
     m_useCustomFont = false;
     m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
+    
+    m_jumpLinkVisible = false;
+    m_jumpPixmap = QPixmap( RESPATH "images/jump-link.png" ).scaled( QSize( fontMetrics().height(), fontMetrics().height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -237,6 +241,14 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
         emit textChanged( text() );
         emit queryChanged( m_query );
     }
+}
+
+
+void
+QueryLabel::setJumpLinkVisible( bool visible )
+{
+    m_jumpLinkVisible = visible;
+    repaint();
 }
 
 
@@ -466,6 +478,13 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.drawText( r, m_align, track() );
             r.adjust( trackX, 0, 0, 0 );
         }
+
+        if ( m_jumpLinkVisible )
+        {
+            r.adjust( 6, 0, 0, 0 );
+            r.setSize( m_jumpPixmap.size() );
+            p.drawPixmap( r, m_jumpPixmap );
+        }
     }
 
     p.restore();
@@ -527,6 +546,10 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
             case Track:
                 emit clickedTrack();
                 break;
+                
+            case Complete:
+                ViewManager::instance()->showCurrentTrack();
+                break;
 
             default:
                 emit clicked();
@@ -583,6 +606,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
 
     QRect hoverArea;
     m_hoverType = None;
+
     if ( m_type & Artist && x < artistX )
     {
         m_hoverType = Artist;
@@ -603,12 +627,22 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         hoverArea.setLeft( albumX + spacing );
         hoverArea.setRight( trackX + contentsMargins().left() - 1 );
     }
+    else if ( m_jumpLinkVisible && x < trackX + 6 + m_jumpPixmap.width() && x > trackX + 6 )
+    {
+        m_hoverType = Complete;
+    }
 
     if ( hoverArea.width() )
     {
         hoverArea.setY( 1 );
         hoverArea.setHeight( height() - 2 );
     }
+    
+    if ( m_hoverType != None )
+        setCursor( Qt::PointingHandCursor );
+    else
+        setCursor( Qt::ArrowCursor );
+
     if ( hoverArea != m_hoverArea )
     {
         m_hoverArea = hoverArea;
