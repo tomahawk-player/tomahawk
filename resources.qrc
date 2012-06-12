@@ -143,5 +143,6 @@
         <file>data/images/collection.png</file>
         <file>data/misc/tomahawk_pubkey.pem</file>
         <file>data/images/track-icon-sidebar.png</file>
+        <file>data/images/jump-link.png</file>
     </qresource>
 </RCC>
