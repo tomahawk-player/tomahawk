@@ -231,7 +231,9 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
 
 QtScriptResolver::~QtScriptResolver()
 {
-    Tomahawk::Pipeline::instance()->removeResolver( this );
+    if ( !m_stopped )
+        stop();
+
     delete m_engine;
 }
 
