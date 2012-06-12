@@ -88,6 +88,9 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
+    
+    ui->socialButton->setFixedSize( QSize( 20, 20 ) );
+    ui->loveButton->setFixedSize( QSize( 20, 20 ) );
 
 #ifdef Q_WS_MAC
     ui->ownerLabel->setForegroundRole( QPalette::Text );
