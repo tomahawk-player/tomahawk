@@ -116,6 +116,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
         type = DropJob::Track;
 
     QUrl url;
+    m_browseId = browseUri;
 
     if( type != DropJob::Artist )
          url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( browseUri ) );
@@ -302,6 +303,8 @@ SpotifyParser::checkBrowseFinished()
 
         if( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
+
+
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
@@ -309,6 +312,18 @@ SpotifyParser::checkBrowseFinished()
                                        m_creator,
                                        false,
                                        m_tracks );
+
+            if( Tomahawk::Accounts::SpotifyAccount::instance() != 0 )
+            {
+
+                qDebug() << "FOUND SPOTIFY ACCOUNT!!" << Tomahawk::Accounts::SpotifyAccount::instance()->credentials().value("username") << Tomahawk::Accounts::SpotifyAccount::instance()->isAuthenticated();
+                SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount::instance(), m_browseId, m_browseId, m_playlist );
+                updater->setSync( true );
+                updater->setSubscribe( false );
+                Tomahawk::Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseId, updater);
+
+            }
+
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
             return;
         }
