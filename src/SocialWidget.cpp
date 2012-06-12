@@ -56,7 +56,7 @@ SocialWidget::SocialWidget( QWidget* parent )
 
     ui->charsLeftLabel->setForegroundRole( QPalette::HighlightedText );
     
-    ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Share" ) );
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Tweet" ) );
     
     m_parent->installEventFilter( this );
 
@@ -203,9 +203,9 @@ SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const
     Q_UNUSED( callbackObj );
 
     if ( m_query->album().isEmpty() )
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2. %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
     else
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\" and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\". %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
 }
 
 
