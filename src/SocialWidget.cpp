@@ -229,6 +229,20 @@ void
 SocialWidget::accept()
 {
     tDebug() << "Sharing social link!";
+    
+    QVariantMap shareInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
+
+    trackInfo["title"] = m_query->track();
+    trackInfo["artist"] = m_query->artist();
+    trackInfo["album"] = m_query->album();
+
+    shareInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+    shareInfo["message"] = ui->textEdit->toPlainText();
+    shareInfo["accountlist"] = QStringList( "all" );
+
+    Tomahawk::InfoSystem::InfoPushData pushData( uuid(), Tomahawk::InfoSystem::InfoShareTrack, shareInfo, Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 
     deleteLater();
 }
