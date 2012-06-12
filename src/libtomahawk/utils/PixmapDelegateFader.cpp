@@ -100,6 +100,8 @@ PixmapDelegateFader::init()
 {
     if ( m_currentReference.isNull() )
         m_defaultImage = true;
+    else
+        m_defaultImage = false;
 
     m_startFrame = 0;
     m_fadePct = 100;
