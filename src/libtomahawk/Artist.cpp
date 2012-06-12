@@ -382,6 +382,8 @@ Artist::infoSystemFinished( QString target )
                     this, SLOT( infoSystemFinished( QString ) ) );
     }
 
+    m_coverLoading = false;
+
     emit updated();
 }
 

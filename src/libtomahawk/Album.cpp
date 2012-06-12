@@ -181,7 +181,7 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
         if ( ba.length() )
         {
             m_coverBuffer = ba;
-
+            m_coverLoaded = true;
             emit coverChanged();
         }
     }
@@ -200,7 +200,8 @@ Album::infoSystemFinished( const QString& target )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    m_coverLoaded = true;
+    m_coverLoading = false;
+
     emit updated();
 }
 
