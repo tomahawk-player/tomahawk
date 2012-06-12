@@ -181,9 +181,10 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
         if ( ba.length() )
         {
             m_coverBuffer = ba;
-            m_coverLoaded = true;
             emit coverChanged();
         }
+
+        m_coverLoaded = true;
     }
 }
 

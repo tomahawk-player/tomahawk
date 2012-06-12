@@ -321,9 +321,10 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                 if ( ba.length() )
                 {
                     m_coverBuffer = ba;
-                    m_coverLoaded = true;
                     emit coverChanged();
                 }
+
+                m_coverLoaded = true;
             }
 
             break;
