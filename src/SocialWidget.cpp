@@ -55,7 +55,9 @@ SocialWidget::SocialWidget( QWidget* parent )
 #endif
 
     ui->charsLeftLabel->setForegroundRole( QPalette::HighlightedText );
-
+    
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Share" ) );
+    
     m_parent->installEventFilter( this );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( accept() ) );
@@ -66,6 +68,10 @@ SocialWidget::SocialWidget( QWidget* parent )
     connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), SLOT( onShortLinkReady( QUrl, QUrl, QVariant ) ) );
 
     onChanged();
+
+    ui->twitterButton->setChecked( true );
+    ui->twitterButton->setVisible( false );
+    ui->facebookButton->setVisible( false );
 }
 
 
