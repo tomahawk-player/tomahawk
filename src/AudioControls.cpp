@@ -600,10 +600,13 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 void
 AudioControls::onSocialButtonClicked()
 {
-    SocialWidget* sw = new SocialWidget( m_parent );
-    sw->setPosition( sw->mapFromGlobal( QCursor::pos() ) );
-    sw->setQuery( m_currentTrack->toQuery() );
-    sw->show();
+    if ( !m_socialWidget.isNull() )
+        return;
+
+    m_socialWidget = new SocialWidget( m_parent );
+    m_socialWidget.data()->setPosition( m_socialWidget.data()->mapFromGlobal( QCursor::pos() ) );
+    m_socialWidget.data()->setQuery( m_currentTrack->toQuery() );
+    m_socialWidget.data()->show();
 }
 
 
