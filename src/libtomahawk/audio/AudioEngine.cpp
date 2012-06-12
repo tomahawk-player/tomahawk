@@ -342,6 +342,9 @@ AudioEngine::sendWaitingNotification() const
 void
 AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type )
 {
+    if ( m_currentTrack.isNull() )
+        return;
+
 #ifndef ENABLE_HEADLESS
     if ( m_currentTrack->toQuery()->coverLoaded() )
     {
