@@ -47,7 +47,6 @@ using namespace Accounts;
 
 
 static QPixmap* s_icon = 0;
-SpotifyAccount* SpotifyAccount::s_instance = 0;
 
 #ifdef Q_OS_MAC
 static QString s_resolverId = "spotify-osx";
@@ -82,9 +81,9 @@ SpotifyAccount::SpotifyAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
     , m_preventEnabling( false )
 {
-    s_instance = this;
     init();
 }
+
 
 SpotifyAccount::~SpotifyAccount()
 {
@@ -347,12 +346,9 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
     if ( !m_customActions.contains( action ) )
         return;
 
-
     // If it's not being synced, allow the option to sync
     bool found = false;
     bool manuallyDisabled = false;
-    bool canSubscribe = false;
-    bool isSubscribed = false;
     QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
     foreach ( PlaylistUpdaterInterface* updater, updaters )
     {
@@ -362,42 +358,21 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
             if ( !spotifyUpdater->sync() )
                 manuallyDisabled = true;
 
-            canSubscribe = spotifyUpdater->canSubscribe();
-            isSubscribed = spotifyUpdater->subscribed();
-            qDebug() << "canSub " << canSubscribe << " is Sub " << isSubscribed << "isSibb " << spotifyUpdater->subscribed();
         }
     }
 
     if ( !found )
     {
         action->setText( tr( "Sync with Spotify" ) );
-        action->setProperty( "type", Sync );
     }
-
-    else if ( manuallyDisabled && !canSubscribe )
+    else if ( manuallyDisabled )
     {
         action->setText( tr( "Re-enable syncing with Spotify" ) );
-        action->setProperty( "type", Sync );
-    }
-    else if ( canSubscribe && !isSubscribed )
-    {
-        action->setText( tr( "Subscribe with Spotify" ) );
-        action->setProperty( "type", Subscribe );
     }
     else
     {
-        if (  canSubscribe )
-        {
-            action->setText( tr( "Stop Subscribing with Spotify" ) );
-            action->setProperty( "type", UnSubscribe);
-        }
-        else
-        {
-            action->setText( tr( "Stop syncing with Spotify" ) );
-            action->setProperty( "type", UnSync);
-        }
+        action->setText( tr( "Stop syncing with Spotify" ) );
     }
-
 }
 
 
@@ -456,95 +431,21 @@ SpotifyAccount::syncActionTriggered( bool checked )
             }
         }
 
-        if ( info )
-        {
-            qDebug() << "Found info!";
-            info->sync = !updater->sync();
-            info->subscribe = !updater->sync();
-        }
-        else if( action->property("type").toInt() == Subscribe | UnSubscribe )
-        {
-            qDebug() << "ADDING PLAYLIST INFO!";
-            info = new SpotifyPlaylistInfo( playlist->title(), updater->spotifyId(),  updater->spotifyId(), true, false );
-        }
-
         Q_ASSERT( info );
+        if ( info )
+            info->sync = !updater->sync();
 
         if ( m_configWidget.data() )
             m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
 
-
-        switch( action->property("type").toInt() )
+        if ( !updater->sync() )
         {
-            case Sync:
-                startPlaylistSync( info );
-            break;
-            case UnSync:
-                stopPlaylistSync( info, true );
-            break;
-            case Subscribe:
-            qDebug() << "Got subscribe!";
-                startPlaylistSubscribe( info );
-            break;
-            case UnSubscribe:
-            qDebug() << "Got UNsubscribe!";
-                stopPlaylistSubscribe( info );
-            break;
-            default:
-                qDebug() << "I DONNO WHAT TO DO";
-            break;
-
+            startPlaylistSync( info );
         }
-
-
-    }
-}
-
-
-void
-SpotifyAccount::stopPlaylistSubscribe( SpotifyPlaylistInfo* playlist )
-{
-
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !playlist )
-        return;
-
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "setSubscription";
-    msg[ "playlistid" ] = playlist->plid;
-    msg[ "subscribed" ] = false;
-
-    sendMessage( msg, 0, "setSubscription" );
-
-    if ( m_updaters.contains( playlist->plid ) )
-    {
-        SpotifyPlaylistUpdater* updater = m_updaters[ playlist->plid ];
-        updater->setSubscribe( false );
-        updater->save();
-    }
-}
-
-void
-SpotifyAccount::startPlaylistSubscribe( SpotifyPlaylistInfo* playlist )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !playlist )
-        return;
-
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "setSubscription";
-    msg[ "playlistid" ] = playlist->plid;
-    msg[ "subscribed" ] = true;
-
-    sendMessage( msg, 0, "setSubscription" );
-
-    if ( m_updaters.contains( playlist->plid ) )
-    {
-        SpotifyPlaylistUpdater* updater = m_updaters[ playlist->plid ];
-        updater->setSubscribe( true );
-        updater->save();
+        else
+        {
+            stopPlaylistSync( info, true );
+        }
     }
 }
 
@@ -594,13 +495,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             const QString plid = plMap.value( "id" ).toString();
             const QString revid = plMap.value( "revid" ).toString();
             const bool sync = plMap.value( "sync" ).toBool();
-            const bool subscribe = plMap.value( "subscribe" ).toBool();
+
             if ( name.isNull() || plid.isNull() || revid.isNull() )
             {
                 qDebug() << "Did not get name and plid and revid for spotify playlist:" << name << plid << revid << plMap;
                 continue;
             }
-            m_allSpotifyPlaylists << new SpotifyPlaylistInfo( name, plid, revid, sync, subscribe );
+            m_allSpotifyPlaylists << new SpotifyPlaylistInfo( name, plid, revid, sync );
         }
 
         if ( !m_configWidget.isNull() )
@@ -894,6 +795,7 @@ SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
 
     sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
 }
+
 
 void
 SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg )

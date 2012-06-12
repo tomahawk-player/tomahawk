@@ -42,13 +42,13 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, changed, subscribe;
+    bool sync, changed;
 
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribe )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ), subscribe( ssubscribe ) {}
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
 
-    SpotifyPlaylistInfo() : sync( false ), changed( false ), subscribe( false ) {}
+    SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
 };
 
 
@@ -78,10 +78,6 @@ public:
     SpotifyAccount( const QString& accountId, const QString& path );
     virtual ~SpotifyAccount();
 
-    static SpotifyAccount* instance() {
-        return s_instance;
-    }
-
     virtual QPixmap icon() const;
     virtual QWidget* configurationWidget();
     virtual QWidget* aboutWidget();
@@ -98,9 +94,12 @@ public:
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
     QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
+
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
     void unregisterUpdater( const QString& plid );
+
     bool deleteOnUnsync() const;
+
     void setManualResolverPath( const QString& resolverPath );
 
 public slots:
@@ -134,21 +133,9 @@ private:
     void startPlaylistSync( SpotifyPlaylistInfo* playlist );
     void stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete = false );
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
+
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
 
-    void stopPlaylistSubscribe( SpotifyPlaylistInfo* playlist );
-    void startPlaylistSubscribe( SpotifyPlaylistInfo* playlist );
-
-    enum Actions{
-
-        None = 0x01,
-        Subscribe = 0x02,
-        Sync = 0x04,
-        UnSubscribe = 0x06,
-        UnSync = 0x08
-    };
-
-    Actions m_action;
     void createActions();
     void removeActions();
 
@@ -168,8 +155,6 @@ private:
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;
-
-    static SpotifyAccount* s_instance;
 };
 
 }

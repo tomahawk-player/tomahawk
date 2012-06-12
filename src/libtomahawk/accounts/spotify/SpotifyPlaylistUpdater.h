@@ -53,9 +53,6 @@ public:
 
     bool sync() const;
     void setSync( bool sync );
-    bool canSubscribe();
-    void setSubscribe( bool sub );
-    bool subscribed() { return m_subscribe; }
 
     QString spotifyId() const { return m_spotifyId; }
 
@@ -102,8 +99,6 @@ private:
 
     bool m_blockUpdatesForNextRevision;
     bool m_sync;
-    bool m_subscribe;
-    bool m_canSubscribe;
 
     QQueue<_detail::Closure*> m_queuedOps;
 #ifndef ENABLE_HEADLESS

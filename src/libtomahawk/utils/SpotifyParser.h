@@ -28,8 +28,6 @@
 #include <QObject>
 #include <QSet>
 #include <QtCore/QStringList>
-#include "accounts/spotify/SpotifyAccount.h"
-#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 
 #define SPOTIFY_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org"
 
@@ -86,7 +84,7 @@ private:
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
-    QString m_browseId;
+
     static QPixmap* s_pixmap;
 };
 

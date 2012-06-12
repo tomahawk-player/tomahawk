@@ -74,7 +74,6 @@ SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const QStr
     , m_spotifyId( spotifyId )
     , m_blockUpdatesForNextRevision( false )
     , m_sync( false )
-    , m_subscribe( false )
 {
     init();
 }
@@ -195,14 +194,13 @@ SpotifyPlaylistUpdater::type() const
 QPixmap
 SpotifyPlaylistUpdater::typeIcon() const
 {
-
     if ( !s_typePixmap )
     {
         QPixmap pm( RESPATH "images/spotify-logo.png" );
         s_typePixmap = new QPixmap( pm.scaled( 32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
     }
 
-    if( !m_sync )
+    if ( !m_sync )
         return QPixmap();
 
     return *s_typePixmap;
@@ -222,17 +220,6 @@ SpotifyPlaylistUpdater::setSync( bool sync )
     emit changed();
 }
 
-void
-SpotifyPlaylistUpdater::setSubscribe( bool sub )
-{
-    if ( m_subscribe == sub )
-        return;
-
-    m_subscribe = sub;
-
-    saveToSettings();
-    emit changed();
-}
 
 bool
 SpotifyPlaylistUpdater::sync() const
@@ -240,14 +227,6 @@ SpotifyPlaylistUpdater::sync() const
     return m_sync;
 }
 
-bool
-SpotifyPlaylistUpdater::canSubscribe()
-{
-
-    qDebug() << " canSubscribe " << m_spotify.data()->credentials().value( "username" ).toString() << m_spotifyId;
-    return !m_spotifyId.contains( m_spotify.data()->credentials().value( "username" ).toString() );
-
-}
 
 void
 SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev )
