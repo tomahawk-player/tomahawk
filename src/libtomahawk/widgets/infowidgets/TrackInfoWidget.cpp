@@ -44,8 +44,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QPalette pal = palette();
     pal.setColor( QPalette::Window, QColor( "#323435" ) );
 
-    setPalette( pal );
-    setAutoFillBackground( true );
+    widget->setPalette( pal );
+    widget->setAutoFillBackground( true );
 
 //    layout()->setSpacing( 0 );
 //    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
