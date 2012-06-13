@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>844</height>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
-           <pointsize>16</pointsize>
+           <pointsize>20</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -65,13 +65,13 @@
          <property name="font">
           <font>
            <family>Arial</family>
-           <pointsize>16</pointsize>
+           <pointsize>20</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Albums</string>
+          <string>Related Artists</string>
          </property>
          <property name="margin">
           <number>0</number>
@@ -79,7 +79,7 @@
         </widget>
        </item>
        <item>
-        <widget class="GridView" name="albums">
+        <widget class="GridView" name="relatedArtists">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -99,14 +99,14 @@
          <property name="font">
           <font>
            <family>Arial</family>
-           <pointsize>16</pointsize>
+           <pointsize>20</pointsize>
            <weight>75</weight>
            <bold>true</bold>
            <kerning>true</kerning>
           </font>
          </property>
          <property name="text">
-          <string>Related Artists</string>
+          <string>Albums</string>
          </property>
          <property name="margin">
           <number>0</number>
@@ -114,7 +114,7 @@
         </widget>
        </item>
        <item>
-        <widget class="GridView" name="relatedArtists">
+        <widget class="GridView" name="albums">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -150,11 +150,6 @@
            <height>220</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>Cover</string>
          </property>
@@ -176,11 +171,6 @@
            <width>0</width>
            <height>240</height>
           </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
          </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
