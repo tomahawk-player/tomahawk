@@ -21,6 +21,8 @@
 #include "TrackInfoWidget.h"
 #include "ui_TrackInfoWidget.h"
 
+#include <QScrollArea>
+
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "playlist/PlayableModel.h"
@@ -36,7 +38,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     : QWidget( parent )
     , ui( new Ui::TrackInfoWidget )
 {
-    ui->setupUi( this );
+    QWidget* widget = new QWidget;
+    ui->setupUi( widget );
 
     QPalette pal = palette();
     pal.setColor( QPalette::Window, QColor( "#323435" ) );
@@ -44,8 +47,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     setPalette( pal );
     setAutoFillBackground( true );
 
-    layout()->setSpacing( 0 );
-    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
+//    layout()->setSpacing( 0 );
+//    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
 //    ui->headerWidget->setStyleSheet( "QWidget#headerWidget { background-image: url(" RESPATH "images/playlist-header-tiled.png); }" );
 //    ui->headerWidget->setStyleSheet( "background-color: #323435;" );
 //    ui->tracksWidget->setStyleSheet( "background-color: #323435;" );
@@ -64,8 +67,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     f.setPixelSize( 14 );
     ui->artistLabel->setFont( f );
     ui->albumLabel->setFont( f );
-    ui->byLabel->setFont( f );
-    ui->fromLabel->setFont( f );
 
     f.setPixelSize( 12 );
     ui->statsLabel->setFont( f );
@@ -79,9 +80,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->trackLabel->setPalette( p );
     ui->artistLabel->setPalette( p );
     ui->albumLabel->setPalette( p );
-    ui->byLabel->setPalette( p );
-    ui->fromLabel->setPalette( p );
     ui->lyricsView->setPalette( p );
+    ui->label->setPalette( p );
 //    ui->similarTracksLabel->setPalette( p );
 
     ui->artistLabel->setType( QueryLabel::Artist );
@@ -93,6 +93,20 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
+
+    QScrollArea* area = new QScrollArea();
+    area->setWidgetResizable( true );
+    area->setWidget( widget );
+
+    area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
+    area->setFrameShape( QFrame::NoFrame );
+    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget( area );
+    setLayout( layout );
+    TomahawkUtils::unmarginLayout( layout );
 
     load( query );
     
@@ -159,7 +173,6 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->trackLabel->setText( query->track() );
     ui->artistLabel->setQuery( query );
     ui->albumLabel->setQuery( query );
-    ui->fromLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
     
