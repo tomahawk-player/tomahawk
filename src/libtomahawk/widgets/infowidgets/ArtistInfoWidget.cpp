@@ -49,6 +49,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
+    QPalette pal = palette();
+    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+
+    widget->setPalette( pal );
+    widget->setAutoFillBackground( true );
+
     m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
 
 /*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
