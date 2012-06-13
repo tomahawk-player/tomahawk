@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>812</height>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
      </property>
      <property name="rightMargin">
       <number>16</number>
+     </property>
+     <property name="bottomMargin">
+      <number>12</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -148,7 +151,7 @@
           </size>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Cover</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
