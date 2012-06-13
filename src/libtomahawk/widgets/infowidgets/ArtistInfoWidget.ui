@@ -6,84 +6,180 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>696</height>
+    <width>965</width>
+    <height>812</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <widget class="QSplitter" name="splitter_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="leftMargin">
+      <number>16</number>
      </property>
-     <property name="handleWidth">
-      <number>1</number>
+     <property name="topMargin">
+      <number>12</number>
      </property>
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="handleWidth">
-       <number>1</number>
-      </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="HeaderLabel" name="label">
-          <property name="text">
-           <string>Top Hits</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="PlaylistView" name="topHits">
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget1">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="HeaderLabel" name="label_2">
-          <property name="text">
-           <string>Related Artists</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="GridView" name="relatedArtists">
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="layoutWidget2">
-      <layout class="QVBoxLayout" name="verticalLayout_5">
+     <property name="rightMargin">
+      <number>16</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="HeaderWidget" name="albumHeader" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="HeaderLabel" name="label_3">
-            <property name="text">
-             <string>Albums</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Top Hits</string>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="GridView" name="albums"/>
+        <widget class="PlaylistView" name="topHits">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <family>Arial</family>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Related Artists</string>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="GridView" name="relatedArtists">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>190</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <family>Arial</family>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+           <kerning>true</kerning>
+          </font>
+         </property>
+         <property name="text">
+          <string>Albums</string>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="GridView" name="albums">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>190</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
-     </widget>
-    </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>16</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="cover">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>220</width>
+           <height>220</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="biography">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>240</height>
+          </size>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -92,21 +188,6 @@
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
    <header>playlist/PlaylistView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HeaderLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">widgets/HeaderLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HeaderWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">widgets/HeaderWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ToggleButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">widgets/ToggleButton.h</header>
   </customwidget>
   <customwidget>
    <class>GridView</class>

@@ -21,6 +21,8 @@
 #include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
+#include <QScrollArea>
+
 #include "audio/AudioEngine.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
@@ -31,11 +33,10 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
+#include "Pipeline.h"
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-
-#include "Pipeline.h"
 
 using namespace Tomahawk;
 
@@ -45,15 +46,15 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
 {
-    ui->setupUi( this );
+    QWidget* widget = new QWidget;
+    ui->setupUi( widget );
 
     m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
 
-    TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
+/*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
-    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
+    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
 
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
@@ -70,10 +71,55 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setSortingEnabled( false );
     ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
 
+    ui->relatedArtists->setAutoFitItems( false );
+    ui->relatedArtists->setWrapping( false );
+    ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    m_relatedModel->setItemSize( QSize( 170, 170 ) );
+    ui->albums->setAutoFitItems( false );
+    ui->albums->setWrapping( false );
+    ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    m_albumsModel->setItemSize( QSize( 170, 170 ) );
+
+    ui->topHits->setFrameShape( QFrame::StyledPanel );
+    ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
     connect( m_albumsModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
     connect( m_albumsModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
+
+    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
+    ui->biography->setFrameShape( QFrame::NoFrame );
+    ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    QPalette p = ui->biography->palette();
+    p.setColor( QPalette::Foreground, Qt::white );
+    p.setColor( QPalette::Text, Qt::white );
+
+    ui->biography->setPalette( p );
+    ui->label->setPalette( p );
+    ui->label_2->setPalette( p );
+    ui->label_3->setPalette( p );
+    
+    ui->label->setContentsMargins( 0, 0, 0, 0 );
+    ui->label_2->setContentsMargins( 0, 16, 0, 0 );
+    ui->label_3->setContentsMargins( 0, 16, 0, 0 );
+
+    QScrollArea* area = new QScrollArea();
+    area->setWidgetResizable( true );
+    area->setWidget( widget );
+
+    area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
+    area->setFrameShape( QFrame::NoFrame );
+    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget( area );
+    setLayout( layout );
+    TomahawkUtils::unmarginLayout( layout );
 
     load( artist );
 }
@@ -207,6 +253,8 @@ ArtistInfoWidget::onBiographyLoaded()
 {
     m_longDescription = m_artist->biography();
     emit longDescriptionChanged( m_longDescription );
+    
+    ui->biography->setHtml( m_artist->biography() );
 }
 
 
@@ -218,6 +266,8 @@ ArtistInfoWidget::onArtistImageUpdated()
 
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
+    
+    ui->cover->setPixmap( m_artist->cover( ui->cover->sizeHint() ) );
 }
 
 
