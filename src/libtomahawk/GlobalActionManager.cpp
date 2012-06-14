@@ -385,7 +385,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             tDebug() << "No xspf or jspf to load...";
             return false;
         }
-        if ( url.hasQueryItem( "xspf") )
+        if ( url.hasQueryItem( "xspf" ) )
         {
             QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
             QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
