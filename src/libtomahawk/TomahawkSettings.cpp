@@ -558,10 +558,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         }
 
         endGroup();
-
-//         setPlaylistUpdaters( updaters );
-
         remove( "playlistupdaters" );
+
+        setValue( "playlists/updaters", QVariant::fromValue< SerializedUpdaters >( updaters ) );
+
     }
     else if ( oldVersion == 11 )
     {
