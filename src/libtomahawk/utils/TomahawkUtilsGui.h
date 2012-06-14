@@ -35,6 +35,7 @@ class QPixmap;
 class QLayout;
 class QPalette;
 class QRect;
+class QScrollBar;
 
 namespace TomahawkUtils
 {
@@ -59,7 +60,8 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
 
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
-
+    
+    DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 }
 
 #endif // TOMAHAWKUTILSGUI_H

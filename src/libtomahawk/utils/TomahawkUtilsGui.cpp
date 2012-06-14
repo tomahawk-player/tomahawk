@@ -31,6 +31,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPalette>
 #include <QtGui/QApplication>
+#include <QtGui/QScrollBar>
 #include <QtGui/QWidget>
 #include <QStyleOption>
 
@@ -439,6 +440,30 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
 
         option->palette.setColor( QPalette::Text, textColor );
     }
+}
+
+
+void
+styleScrollBar( QScrollBar* scrollBar )
+{
+    scrollBar->setStyleSheet(
+        "QScrollBar:horizontal { background-color: transparent; }"
+        "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
+
+        "QScrollBar:vertical { background-color: transparent; }"
+        "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
 }
 
 } // ns
