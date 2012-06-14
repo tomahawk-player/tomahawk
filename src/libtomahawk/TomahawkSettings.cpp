@@ -484,6 +484,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 setValue( "enabled", enabled );
                 setValue( "autoconnect", autoconnect );
                 setValue( "types", QStringList() << "ResolverType" );
+                setValue( "accountfriendlyname", "Spotify" );
                 setValue( "configuration", configuration );
                 endGroup();
 
