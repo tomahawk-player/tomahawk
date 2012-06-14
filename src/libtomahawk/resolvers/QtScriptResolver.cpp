@@ -176,6 +176,20 @@ QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QStr
 }
 
 
+QByteArray
+QtScriptResolverHelper::base64Encode( const QByteArray& input )
+{
+    return input.toBase64();
+}
+
+
+QByteArray
+QtScriptResolverHelper::base64Decode( const QByteArray& input )
+{
+    return QByteArray::fromBase64( input );
+}
+
+
 QSharedPointer< QIODevice >
 QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result )
 {
