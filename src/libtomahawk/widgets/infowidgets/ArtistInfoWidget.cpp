@@ -128,18 +128,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
-    QString scrollBarStyleSheet(
-        "QScrollBar:horizontal { background-color: transparent; }"
-        "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
-        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
-        "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
-        "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
-
-    ui->albums->horizontalScrollBar()->setStyleSheet( scrollBarStyleSheet );
-    ui->relatedArtists->horizontalScrollBar()->setStyleSheet( scrollBarStyleSheet );
+    TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
+    TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
 
     load( artist );
 }

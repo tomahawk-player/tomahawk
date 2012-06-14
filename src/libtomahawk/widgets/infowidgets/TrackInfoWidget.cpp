@@ -59,15 +59,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setFrameShape( QFrame::NoFrame );
     ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    ui->similarTracksView->verticalScrollBar()->setStyleSheet( 
-        "QScrollBar:vertical { background-color: transparent; }"
-        "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
-        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
-        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
-        "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
+    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
+    TomahawkUtils::styleScrollBar( ui->lyricsView->verticalScrollBar() );
 
     QFont f = font();
     f.setBold( true );
