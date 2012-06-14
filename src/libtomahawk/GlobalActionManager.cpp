@@ -166,7 +166,7 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
 
     // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
     const QByteArray boundary = "----------------------------2434992cccab";
-    QByteArray data(QByteArray("--" + boundary + "\r\n"));
+    QByteArray data( QByteArray( "--" + boundary + "\r\n" ) );
     data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
     data += "Content-Type: application/octet-stream\r\n\r\n";
     data += msg;
@@ -1230,13 +1230,6 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 
         m_waitingToPlay.clear();
     }
-}
-
-
-QString
-GlobalActionManager::hostname() const
-{
-    return QString( "http://stage.toma.hk" );
 }
 
 
