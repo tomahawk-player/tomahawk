@@ -72,6 +72,7 @@ private slots:
     void loadPlaylist();
     void deletePlaylist( const QModelIndex& = QModelIndex() );
     void copyPlaylistLink();
+    void exportPlaylist();
     void addToLocal();
 
     void latchOnOrCatchUp();
