@@ -31,7 +31,7 @@
 #include "utils/Logger.h"
 
 
-AnimatedSpinner::AnimatedSpinner( QWidget *parent )
+AnimatedSpinner::AnimatedSpinner( QWidget* parent )
     : QWidget( parent )
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
@@ -41,7 +41,7 @@ AnimatedSpinner::AnimatedSpinner( QWidget *parent )
 }
 
 
-AnimatedSpinner::AnimatedSpinner( const QSize size, bool autoStart )
+AnimatedSpinner::AnimatedSpinner( const QSize& size, bool autoStart )
     : QWidget()
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
@@ -259,4 +259,28 @@ int
 AnimatedSpinner::segmentCount() const
 {
     return 11;
+}
+
+
+LoadingSpinner::LoadingSpinner( QAbstractItemView* parent )
+    : AnimatedSpinner( parent )
+    , m_parent( parent )
+{
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( fadeIn() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( fadeOut() ), Qt::UniqueConnection );
+    }
+    connect( m_parent, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
+}
+
+
+void
+LoadingSpinner::onViewModelChanged()
+{
+    if ( m_parent->model() )
+    {
+        connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( fadeIn() ), Qt::UniqueConnection );
+        connect( m_parent->model(), SIGNAL( loadingFinished() ), SLOT( fadeOut() ), Qt::UniqueConnection );
+    }
 }

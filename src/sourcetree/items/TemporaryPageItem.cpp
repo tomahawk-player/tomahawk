@@ -36,7 +36,7 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
     else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/album-icon.png" );
     else if ( dynamic_cast< TrackInfoWidget* >( page ) )
-        m_icon = QIcon( RESPATH "images/track-icon.png" );
+        m_icon = QIcon( RESPATH "images/track-icon-sidebar.png" );
     else if ( dynamic_cast< SearchWidget* >( page ) )
         m_icon = QIcon( RESPATH "images/search-icon.png" );
 
@@ -82,7 +82,7 @@ TemporaryPageItem::IDValue() const
 void
 TemporaryPageItem::removeFromList()
 {
-    ViewManager::instance()->removeFromHistory( m_page );
+    ViewManager::instance()->destroyPage( m_page );
 
     model()->removeSourceItemLink( this );
 

@@ -29,6 +29,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QTranslator>
 
 #include "Artist.h"
 #include "Album.h"
@@ -83,11 +84,6 @@
     #include <TomahawkSettingsGui.h>
 #endif
 
-// should go to a plugin actually
-#ifdef GLOOX_FOUND
-    #include "xmppbot/XmppBot.h"
-#endif
-
 #ifdef Q_WS_MAC
 #include "mac/MacShortcutHandler.h"
 
@@ -134,6 +130,43 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
+    installTranslator();
+}
+
+
+void
+TomahawkApp::installTranslator()
+{
+    QString locale = QLocale::system().name();
+    if ( locale == "C" )
+        locale = "en";
+
+    // Tomahawk translations
+    QTranslator* translator = new QTranslator( this );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug() << "Translation: Tomahawk: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    TOMAHAWK_APPLICATION::installTranslator( translator );
+
+    // Qt translations
+    translator = new QTranslator( this );
+    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
+    {
+        tDebug() << "Translation: Qt: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug() << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+    }
+
+    TOMAHAWK_APPLICATION::installTranslator( translator );
 }
 
 
@@ -309,9 +342,9 @@ TomahawkApp::init()
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Make sure to do this after main window is inited
-    Tomahawk::enableFullscreen();
+    Tomahawk::enableFullscreen( m_mainwindow );
 #endif
 }
 
@@ -426,6 +459,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
 
     // Extra definition for namespaced-versions of signals/slots required
+    qRegisterMetaType< Tomahawk::Resolver* >("Tomahawk::Resolver*");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
@@ -593,10 +627,6 @@ TomahawkApp::initSIP()
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
-#ifdef GLOOX_FOUND
-        m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
-#endif
-
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }

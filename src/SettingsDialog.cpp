@@ -32,16 +32,16 @@
 #include "AtticaManager.h"
 #include "TomahawkApp.h"
 #include "TomahawkSettings.h"
-#include "DelegateConfigWrapper.h"
+#include "accounts/DelegateConfigWrapper.h"
 #include "MusicScanner.h"
 #include "Pipeline.h"
 #include "Resolver.h"
 #include "ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "GuiHelpers.h"
+#include "utils/GuiHelpers.h"
 #include "ScanManager.h"
 #include "SettingsListDelegate.h"
-#include "AccountDelegate.h"
+#include "accounts/AccountDelegate.h"
 #include "database/Database.h"
 #include "network/Servent.h"
 #include "utils/AnimatedSpinner.h"
@@ -51,7 +51,7 @@
 #include <accounts/AccountModelFilterProxy.h>
 #include <accounts/ResolverAccount.h>
 #include "utils/Logger.h"
-#include "AccountFactoryWrapper.h"
+#include "accounts/AccountFactoryWrapper.h"
 #include "accounts/spotify/SpotifyAccount.h"
 
 #include "ui_ProxyDialog.h"

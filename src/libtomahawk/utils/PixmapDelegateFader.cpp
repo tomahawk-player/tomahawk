@@ -29,8 +29,6 @@
 
 using namespace Tomahawk;
 
-#define COVER_FADEIN 1000
-
 QWeakPointer< TomahawkUtils::SharedTimeLine > PixmapDelegateFader::s_stlInstance = QWeakPointer< TomahawkUtils::SharedTimeLine >();
 
 
@@ -51,7 +49,7 @@ PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize&
 {
     if ( !m_artist.isNull() )
     {
-        connect( m_artist.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_artist.data(), SIGNAL( updated() ), SLOT( artistChanged() ) );
         connect( m_artist.data(), SIGNAL( coverChanged() ), SLOT( artistChanged() ) );
         m_currentReference = m_artist->cover( size, forceLoad );
     }
@@ -67,7 +65,7 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
 {
     if ( !m_album.isNull() )
     {
-        connect( m_album.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_album.data(), SIGNAL( updated() ), SLOT( albumChanged() ) );
         connect( m_album.data(), SIGNAL( coverChanged() ), SLOT( albumChanged() ) );
         m_currentReference = m_album->cover( size, forceLoad );
     }
@@ -102,6 +100,8 @@ PixmapDelegateFader::init()
 {
     if ( m_currentReference.isNull() )
         m_defaultImage = true;
+    else
+        m_defaultImage = false;
 
     m_startFrame = 0;
     m_fadePct = 100;
@@ -126,7 +126,7 @@ void
 PixmapDelegateFader::setSize( const QSize& size )
 {
     m_size = size;
-    
+
     if ( m_defaultImage )
     {
         // No cover loaded yet, use default and don't fade in
@@ -188,11 +188,11 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         return;
 
     m_defaultImage = false;
-    QByteArray ba;
-    QBuffer buffer( &ba );
-    buffer.open( QIODevice::WriteOnly );
-    pixmap.save( &buffer, "PNG" );
-    QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
+    QCryptographicHash hash( QCryptographicHash::Md5 );
+    const QImage img = pixmap.toImage();
+    hash.addData( (const char*)img.constBits(), img.byteCount() );
+    const QString newImageMd5 = hash.result();
+
     if ( m_oldImageMd5 == newImageMd5 )
         return;
 

@@ -145,10 +145,13 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 void
 SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QFont normal = painter->font();
-    QFont bold = painter->font();
+    QFont normal = option.font;
+    QFont bold = option.font;
     bold.setBold( true );
+
     QFont figFont = bold;
+    figFont.setFamily( "Arial Bold" );
+    figFont.setWeight( QFont::Black );
     figFont.setPixelSize( 10 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
@@ -183,17 +186,10 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, text );
 
-    bool isPlaying = false;
-    QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
+    bool isPlaying = !( colItem->source()->currentTrack().isNull() );
+    QString desc = colItem->source()->textStatus();
     if ( colItem->source().isNull() )
         desc = tr( "All available tracks" );
-    if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
-    {
-        desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
-        isPlaying = true;
-    }
-    if ( desc.isEmpty() )
-        desc = tr( "Online" );
 
     painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
@@ -254,7 +250,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     {
         painter->setRenderHint( QPainter::Antialiasing );
 
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 8, 0, -13, -option.rect.height() + 16 );
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + 16 );
         int hd = ( option.rect.height() - figRect.height() ) / 2;
         figRect.adjust( 0, hd, 0, hd );
 

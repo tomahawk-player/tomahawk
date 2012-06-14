@@ -99,10 +99,11 @@ namespace Tomahawk
     typedef QList< SerializedUpdater > SerializedUpdaterList;
 
 
-    namespace InfoSystem {
-
-
-        enum InfoType { // as items are saved in cache, mark them here to not change them
+    namespace InfoSystem
+    {
+        enum InfoType
+        {
+            // as items are saved in cache, mark them here to not change them
             InfoNoInfo = 0, //WARNING: *ALWAYS* keep this first!
             InfoTrackID = 1,
             InfoTrackArtist = 2,

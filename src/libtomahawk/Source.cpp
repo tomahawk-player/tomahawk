@@ -23,6 +23,7 @@
 #include "SourceList.h"
 #include "SourcePlaylistInterface.h"
 
+#include "accounts/AccountManager.h"
 #include "network/ControlConnection.h"
 #include "database/DatabaseCommand_AddSource.h"
 #include "database/DatabaseCommand_CollectionStats.h"
@@ -33,10 +34,14 @@
 #include <QCoreApplication>
 #include <QBuffer>
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtilsGui.h"
 #include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
+
+#ifndef ENABLE_HEADLESS
+    #include "utils/TomahawkUtilsGui.h"
+#endif
+
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -58,13 +63,16 @@ Source::Source( int id, const QString& username )
     m_scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
     if ( id == 0 )
-    {
         m_isLocal = true;
-        m_online = true;
-    }
 
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
+    
+    if ( m_isLocal )
+    {
+        connect( Accounts::AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( setOnline() ) );
+        connect( Accounts::AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( setOffline() ) );
+    }
 }
 
 
@@ -135,7 +143,6 @@ Source::setAvatar( const QPixmap& avatar )
     buffer.open( QIODevice::WriteOnly );
     avatar.save( &buffer, "PNG" );
 
-    tDebug() << Q_FUNC_INFO << friendlyName() << m_username << ba.count();
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
     m_avatarUpdated = true;
 }
@@ -194,7 +201,10 @@ Source::setFriendlyName( const QString& fname )
 
     m_friendlyname = fname;
     if ( m_scrubFriendlyName )
-        m_friendlyname = m_friendlyname.split( "@" ).first();
+    {
+        if ( m_friendlyname.indexOf( "@" ) > 0 )
+            m_friendlyname = m_friendlyname.split( "@" ).first();
+    }
 }
 
 
@@ -226,12 +236,15 @@ Source::setOffline()
     m_online = false;
     emit offline();
 
-    m_currentTrack.clear();
-    emit stateChanged();
+    if ( !isLocal() )
+    {
+        m_currentTrack.clear();
+        emit stateChanged();
 
-    m_cc = 0;
-    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        m_cc = 0;
+        DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    }
 }
 
 
@@ -245,11 +258,14 @@ Source::setOnline()
     m_online = true;
     emit online();
 
-    // ensure username is in the database
-    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
-    connect( cmd, SIGNAL( done( unsigned int, QString ) ),
-                    SLOT( dbLoaded( unsigned int, const QString& ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    if ( !isLocal() )
+    {
+        // ensure username is in the database
+        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
+        connect( cmd, SIGNAL( done( unsigned int, QString ) ),
+                        SLOT( dbLoaded( unsigned int, const QString& ) ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
 }
 
 
@@ -360,24 +376,27 @@ Source::playlistInterface()
 void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
 {
-    qDebug() << Q_FUNC_INFO << query->toString();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << query->toString();
 
     m_currentTrack = query;
     m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
     if ( m_playlistInterface.isNull() )
         playlistInterface();
+
     emit playbackStarted( query );
+    emit stateChanged();
 }
 
 
 void
 Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
-    qDebug() << Q_FUNC_INFO << query->toString();
+    tDebug() << Q_FUNC_INFO << query->toString();
     emit playbackFinished( query );
 
-    m_currentTrackTimer.start();
+    m_currentTrack.clear();
+    emit stateChanged();
 }
 
 
@@ -385,7 +404,6 @@ void
 Source::trackTimerFired()
 {
     m_currentTrack.clear();
-
     emit stateChanged();
 }
 
@@ -506,4 +524,27 @@ void
 Source::updateIndexWhenSynced()
 {
     m_updateIndexWhenSynced = true;
+}
+
+
+QString
+Source::textStatus() const
+{
+    if ( !m_textStatus.isEmpty() )
+        return m_textStatus;
+
+    if ( !currentTrack().isNull() )
+    {
+        return currentTrack()->artist() + " - " + currentTrack()->track();
+    }
+
+    // do not use isOnline() here - it will always return true for the local source
+    if ( m_online )
+    {
+        return tr( "Online" );
+    }
+    else
+    {
+        return tr( "Offline" );
+    }
 }

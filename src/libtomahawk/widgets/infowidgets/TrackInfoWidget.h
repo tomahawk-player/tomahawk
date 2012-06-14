@@ -39,7 +39,7 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-class AlbumModel;
+class PlayableModel;
 
 namespace Ui
 {
@@ -82,16 +82,18 @@ private slots:
     void onSimilarTracksLoaded();
     void onLyricsLoaded();
 
+    void onArtistClicked();
+    void onAlbumClicked();
+
 private:
     Ui::TrackInfoWidget *ui;
 
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
 
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
-    QString m_infoId;
 };
 
 #endif // TRACKINFOWIDGET_H

@@ -64,12 +64,20 @@ private:
     QPixmap m_playlistIcon, m_autoIcon, m_stationIcon, m_defaultAvatar;
 };
 
+
 class DLLEXPORT PlaylistWidget : public QListView
 {
+Q_OBJECT
+
 public:
     PlaylistWidget( QWidget* parent = 0 );
 
     OverlayWidget* overlay() const { return m_overlay; }
+    
+    virtual void setModel( QAbstractItemModel* model );
+
+signals:
+    void modelChanged();
 
 private:
     OverlayWidget* m_overlay;

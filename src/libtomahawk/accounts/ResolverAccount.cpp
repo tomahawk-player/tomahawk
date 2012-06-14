@@ -72,7 +72,6 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 ResolverAccount::ResolverAccount( const QString& accountId )
     : Account( accountId )
 {
-
     const QString path = configuration()[ "path" ].toString();
     setTypes( AccountType( ResolverType ) );
 
@@ -125,7 +124,9 @@ ResolverAccount::init( const QString& path )
 void
 ResolverAccount::hookupResolver()
 {
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString(), true ) ) );
+    tDebug() << "Hooking up resolver:" << configuration().value( "path" ).toString() << enabled();
+
+    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString() ) ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
@@ -141,7 +142,7 @@ ResolverAccount::authenticate()
     if ( m_resolver.isNull() )
         return;
 
-    qDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver;
+    tDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver.data()->name();
 
     if ( !m_resolver.data()->running() )
         m_resolver.data()->start();
@@ -259,8 +260,8 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
 
 AtticaResolverAccount::~AtticaResolverAccount()
 {
-
 }
+
 
 void
 AtticaResolverAccount::loadIcon()
@@ -274,7 +275,6 @@ AtticaResolverAccount::loadIcon()
 
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
         m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
-
 }
 
 

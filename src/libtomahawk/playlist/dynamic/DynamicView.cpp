@@ -27,7 +27,6 @@
 
 #include "PlaylistModel.h"
 #include "PlayableProxyModel.h"
-#include "TrackHeader.h"
 #include "DynamicModel.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/Logger.h"
@@ -49,10 +48,6 @@ DynamicView::DynamicView( QWidget* parent )
         , m_fadebg( false )
         , m_fadeOnly( false )
 {
-    setContentsMargins( 0, 0, 0, 0 );
-    setFrameShape( QFrame::NoFrame );
-    setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );
@@ -71,18 +66,17 @@ DynamicView::DynamicView( QWidget* parent )
 
 DynamicView::~DynamicView()
 {
-
 }
 
 
 void
-DynamicView::setDynamicModel( DynamicModel* model)
+DynamicView::setDynamicModel( DynamicModel* model )
 {
     m_model = model;
     PlaylistView::setPlaylistModel( m_model );
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
-    connect( m_model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
+    connect( m_model, SIGNAL( checkForOverflow() ), SLOT( checkForOverflow() ) );
 }
 
 

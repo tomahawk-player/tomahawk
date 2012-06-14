@@ -68,6 +68,7 @@ RecentlyPlayedModel::loadHistory()
     {
         clear();
     }
+    loadingStarted();
 
     DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( m_source );
     cmd->setLimit( m_limit );

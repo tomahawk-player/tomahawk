@@ -32,6 +32,7 @@ Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
 public:
     OverlayWidget( QWidget* parent );
+    OverlayWidget( QAbstractItemView* parent );
     ~OverlayWidget();
 
     qreal opacity() const { return m_opacity; }
@@ -49,12 +50,20 @@ public slots:
 protected:
 //    void changeEvent( QEvent* e );
     void paintEvent( QPaintEvent* event );
+    
+private slots:
+    void onViewChanged();
+    void onViewModelChanged();
 
 private:
+    void init();
+
     QString m_text;
     qreal m_opacity;
 
     QWidget* m_parent;
+    QAbstractItemView* m_itemView;
+
     QTimer m_timer;
 };
 

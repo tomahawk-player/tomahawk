@@ -18,10 +18,14 @@
 
 #include "database/TomahawkSqlQuery.h"
 
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 #include <QSqlError>
 #include <QTime>
+#include <QThread>
 #include <QVariant>
 
 #define QUERY_THRESHOLD 60
@@ -35,7 +39,15 @@ TomahawkSqlQuery::TomahawkSqlQuery()
 
 TomahawkSqlQuery::TomahawkSqlQuery( const QSqlDatabase& db )
     : QSqlQuery( db )
+    , m_db( db )
 {
+}
+
+
+QString
+TomahawkSqlQuery::escape( const QString& identifier, QSqlDriver::IdentifierType type )
+{
+    return Database::instance()->impl()->database().driver()->escapeIdentifier( identifier, type );
 }
 
 
@@ -53,12 +65,23 @@ TomahawkSqlQuery::exec()
     QTime t;
     t.start();
 
-    bool ret = QSqlQuery::exec();
+    unsigned int retries = 0;
+    while ( !QSqlQuery::exec() && ++retries < 10 )
+    {
+        if ( isBusyError( lastError() ) )
+            retries = 0;
+
+        tDebug() << "INFO: Retrying failed query:" << lastQuery() << lastError().text();
+        TomahawkUtils::msleep( 10 );
+    }
+
+    bool ret = ( retries < 10 );
     if ( !ret )
         showError();
 
     int e = t.elapsed();
     bool log = ( e >= QUERY_THRESHOLD );
+
 #ifdef TOMAHAWK_QUERY_ANALYZE
     log = true;
 #endif
@@ -70,13 +93,39 @@ TomahawkSqlQuery::exec()
 }
 
 
+bool
+TomahawkSqlQuery::commitTransaction()
+{
+    unsigned int retries = 0;
+    while ( !m_db.commit() && ++retries < 10 )
+    {
+        if ( isBusyError( lastError() ) )
+            retries = 0;
+
+        tDebug() << "INFO: Retrying failed commit:" << retries << lastQuery() << lastError().text();
+        TomahawkUtils::msleep( 10 );
+    }
+    
+    return ( retries < 10 );
+}
+
+
 void
 TomahawkSqlQuery::showError()
 {
-    tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
-           << this->lastQuery() << "\n"
-           << "boundValues:" << this->boundValues() << "\n"
-           << this->lastError().text() << "\n";
+    tLog() << endl << "*** DATABASE ERROR ***" << endl
+           << lastQuery() << endl
+           << "boundValues:" << boundValues() << endl
+           << lastError().text() << endl;
 
     Q_ASSERT( false );
+}
+
+
+bool
+TomahawkSqlQuery::isBusyError( const QSqlError& error ) const
+{
+    const QString text = error.text().trimmed().toLower();
+
+    return ( text.contains( "locked" ) || text.contains( "busy" ) || text.isEmpty() );
 }

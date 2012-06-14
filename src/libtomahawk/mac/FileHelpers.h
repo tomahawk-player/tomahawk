@@ -33,6 +33,8 @@
 // Will be asynchronous: Implement the delegate protocol know about the completion
 + (void) moveFile:(NSString *)source to:(NSString*)dest withDelegate:delegate;
 
+// Internal
++ (void)notifyDelegate:(NSDictionary *)info;
 
 @end
 

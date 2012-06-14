@@ -41,13 +41,15 @@
 #include "utils/ShortenedLinkParser.h"
 #include "utils/RdioParser.h"
 
-#include "widgets/SearchWidget.h"
-#include "ViewManager.h"
-#include "playlist/topbar/TopBar.h"
-#include "playlist/PlaylistView.h"
+#ifndef ENABLE_HEADLESS
+    #include "ViewManager.h"
+    #include "playlist/topbar/TopBar.h"
+    #include "playlist/PlaylistView.h"
+    #include "widgets/SearchWidget.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
+    #include <QtGui/QApplication>
+    #include <QtGui/QClipboard>
+#endif
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -133,6 +135,8 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
 }
 
 
+#ifndef ENABLE_HEADLESS
+
 void
 GlobalActionManager::getShortLink( const playlist_ptr& pl )
 {
@@ -162,7 +166,7 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
 
     // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
     const QByteArray boundary = "----------------------------2434992cccab";
-    QByteArray data(QByteArray("--" + boundary + "\r\n"));
+    QByteArray data( QByteArray( "--" + boundary + "\r\n" ) );
     data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
     data += "Content-Type: application/octet-stream\r\n\r\n";
     data += msg;
@@ -177,6 +181,7 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
     connect( reply, SIGNAL( finished() ), SLOT( postShortenFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
+
 
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
@@ -423,6 +428,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
     return false;
 }
 
+
 void
 GlobalActionManager::playlistCreatedToShow( const playlist_ptr& pl )
 {
@@ -430,7 +436,9 @@ GlobalActionManager::playlistCreatedToShow( const playlist_ptr& pl )
     pl->setProperty( "sharedptr", QVariant::fromValue<Tomahawk::playlist_ptr>( pl ) );
 }
 
-void GlobalActionManager::playlistReadyToShow()
+
+void
+GlobalActionManager::playlistReadyToShow()
 {
     playlist_ptr pl = sender()->property( "sharedptr" ).value<Tomahawk::playlist_ptr>();
     if ( !pl.isNull() )
@@ -460,7 +468,7 @@ GlobalActionManager::handleCollectionCommand( const QUrl& url )
 
 
 bool
-GlobalActionManager::handleOpenCommand(const QUrl& url)
+GlobalActionManager::handleOpenCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 );
     if ( parts.isEmpty() )
@@ -474,7 +482,7 @@ GlobalActionManager::handleOpenCommand(const QUrl& url)
 
 
 void
-GlobalActionManager::handleOpenTrack ( const query_ptr& q )
+GlobalActionManager::handleOpenTrack( const query_ptr& q )
 {
     ViewManager::instance()->queue()->model()->append( q );
     ViewManager::instance()->showQueue();
@@ -486,12 +494,12 @@ GlobalActionManager::handleOpenTrack ( const query_ptr& q )
     }
 }
 
+
 void
 GlobalActionManager::handlePlayTrack( const query_ptr& qry )
 {
     playNow( qry );
 }
-
 
 
 bool
@@ -996,6 +1004,8 @@ GlobalActionManager::playRdio( const QUrl& url )
     return true;
 }
 
+#endif
+
 
 bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
 {
@@ -1076,6 +1086,7 @@ GlobalActionManager::shortenLinkRequestFinished()
     if ( !shortUrl.isValid() )
         error = true;
 
+#ifndef ENABLE_HEADLESS
     // Success!  Here is the short link
     if ( m_clipboardLongUrl == reply->request().url() )
     {
@@ -1088,6 +1099,7 @@ GlobalActionManager::shortenLinkRequestFinished()
         m_clipboardLongUrl.clear();
     }
     else
+#endif
     {
         if ( !error )
             emit shortLinkReady( longUrl, shortUrl, callbackObj );
@@ -1098,6 +1110,8 @@ GlobalActionManager::shortenLinkRequestFinished()
     reply->deleteLater();
 }
 
+
+#ifndef ENABLE_HEADLESS
 
 void
 GlobalActionManager::postShortenFinished()
@@ -1117,6 +1131,9 @@ GlobalActionManager::postShortenFinished()
 
     reply->deleteLater();
 }
+
+#endif
+
 
 void
 GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
@@ -1172,6 +1189,8 @@ GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
 }
 
 
+#ifndef ENABLE_HEADLESS
+
 void
 GlobalActionManager::showPlaylist()
 {
@@ -1214,13 +1233,6 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 }
 
 
-QString
-GlobalActionManager::hostname() const
-{
-    return QString( "http://toma.hk" );
-}
-
-
 /// SPOTIFY URL HANDLING
 
 bool
@@ -1243,3 +1255,11 @@ GlobalActionManager::openRdioLink( const QString& link )
     return true;
 }
 
+#endif
+
+
+QString
+GlobalActionManager::hostname() const
+{
+    return QString( "http://toma.hk" );
+}

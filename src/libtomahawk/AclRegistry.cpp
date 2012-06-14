@@ -26,10 +26,13 @@
 #include "TomahawkApp.h"
 #include "Source.h"
 
+#ifndef ENABLE_HEADLESS
+    #include "jobview/AclJobItem.h"
+    #include "jobview/JobStatusView.h"
+    #include "jobview/JobStatusModel.h"
+#endif
+
 #include "utils/Logger.h"
-#include "jobview/AclJobItem.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
 
 
 ACLRegistry* ACLRegistry::s_instance = 0;
@@ -124,6 +127,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
         return ACLRegistry::NotFound;
     }
 #endif
+
     m_cache.append( user );
     emit aclResult( dbid, username, user.acl );
     return user.acl;
@@ -131,6 +135,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 
 
 #ifndef ENABLE_HEADLESS
+
 void
 ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 {
@@ -138,7 +143,6 @@ ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
     m_jobQueue.enqueue( job );
     queueNextJob();
 }
-#endif
 
 
 void
@@ -188,6 +192,8 @@ ACLRegistry::queueNextJob()
         }
     }
 }
+
+#endif
 
 
 void

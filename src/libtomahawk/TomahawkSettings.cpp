@@ -158,7 +158,6 @@ TomahawkSettings::doInitialSetup()
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
 
-
     createLastFmAccount();
     createSpotifyAccount();
 }
@@ -709,6 +708,20 @@ void
 TomahawkSettings::setCrashReporterEnabled( bool enable )
 {
     setValue( "ui/crashReporter", enable );
+}
+
+
+unsigned int
+TomahawkSettings::volume() const
+{
+    return value( "audio/volume", 75 ).toUInt();
+}
+
+
+void
+TomahawkSettings::setVolume( unsigned int volume )
+{
+    setValue( "audio/volume", volume );
 }
 
 

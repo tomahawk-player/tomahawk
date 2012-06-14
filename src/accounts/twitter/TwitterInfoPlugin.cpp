@@ -76,15 +76,15 @@ TwitterInfoPlugin::~TwitterInfoPlugin()
 bool
 TwitterInfoPlugin::refreshTwitterAuth()
 {
-    tDebug() << Q_FUNC_INFO << " begin" << this;
-    if( !m_twitterAuth.isNull() )
+    tDebug() << Q_FUNC_INFO << "begin" << this;
+    if ( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
-    tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam() << this;
+    tDebug() << Q_FUNC_INFO << "with nam" << TomahawkUtils::nam() << this;
     m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
-    if( m_twitterAuth.isNull() )
+    if ( m_twitterAuth.isNull() )
       return false;
 
     m_twitterAuth.data()->setOAuthToken( m_account->credentials()[ "oauthtoken" ].toString().toLatin1() );
@@ -138,7 +138,8 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
         return;
     }
 
-    if ( !map[ "accountlist" ].toStringList().contains( m_account->accountId() ) )
+    const QStringList accountList = map[ "accountlist" ].toStringList();
+    if ( !accountList.contains( "all" ) && !accountList.contains( m_account->accountId() ) )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Our account not in the list, not tweeting out";
         return;
@@ -168,7 +169,7 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( m_twitterAuth.data(), this );
     connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postLovedStatusUpdateReply(const QTweetStatus &) ) );
     connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postLovedStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
-    tDebug() << Q_FUNC_INFO << "Posting message: " << msg;
+    tDebug() << Q_FUNC_INFO << "Posting message:" << msg;
     statUpdate->post( msg );
 }
 

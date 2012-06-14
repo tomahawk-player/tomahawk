@@ -50,6 +50,9 @@ public:
 
     bool shown() const;
 
+signals:
+    void hidden();
+
 public slots:
     void show( int timeoutSecs = 0 );
     void hide();
@@ -65,6 +68,7 @@ private slots:
     void onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
     
     void onGeometryUpdate();
+    void close();
 
 private:
     unsigned int charsAvailable() const;

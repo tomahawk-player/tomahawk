@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QHash>
 #include <QPixmap>
+#include <QNetworkReply>
 
 #include "DllMacro.h"
 #include "accounts/Account.h"
@@ -124,7 +125,10 @@ signals:
     void resolverInstallationFailed( const QString& resolverId );
 
     void startedInstalling( const QString& resolverId );
+
 private slots:
+    void providerFetched( QNetworkReply* reply );
+    void providerError( QNetworkReply::NetworkError );
     void providerAdded( const Attica::Provider& );
     void categoriesReturned( Attica::BaseJob* );
     void resolversList( Attica::BaseJob* );
@@ -139,7 +143,6 @@ private slots:
     void syncServerData();
 
 private:
-    QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
     void doInstallResolver(  const Attica::Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler );
 
@@ -171,5 +174,5 @@ protected:
 };
 
 Q_DECLARE_METATYPE( Attica::Content );
-
+Q_DECLARE_METATYPE( QNetworkReply* );
 #endif // ATTICAMANAGER_H

@@ -1,12 +1,32 @@
 Version 0.5.0:
-    * Added "Stop playback after this track" context menu items.
-    * You can now import your entire Last.fm playback history into Tomahawk.
-    * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux.
-    * When listening privately scrobbling to Last.fm is now disabled.
-    * Added a toolbar with page back / forward buttons and the global search.
-    * New grid view with direct playback controls.
-    * Added a track page showing a song's lyrics and other similar tracks.
+    * Priortize resolution of a track on double-click
+    * New Tomahawk logo and icon
+    * Spotify Resolver shipped with Tomahawk and installable via new Preferences interface
+    * Sync select playlists (and updates) with Spotify
+    * Support .aiff (AIFF mimetype) files
+    * Cleaned up Diagnostics window
+    * Don't show non-resolved tracks as Recently Played
+    * Added "Stop playback after this track" context menu items
+    * Double-clicking on a playlist name (in the sidebar) will play the playlist
+    * You can now import your entire Last.fm playback history into Tomahawk
+    * Related Artists now sorted by relatedness
+    * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux
+    * When listening privately scrobbling to Last.fm and Adium is now disabled
+    * Added a toolbar with page back / forward buttons and the global search
+    * New grid view with direct playback controls (Charts, Album Page, Artist Page, Track Page)
+    * New Releases (by Genre) pages added
+    * Add social sharing widget in Now Playing Controls
+    * Added a track page showing a song's lyrics and other similar tracks
+    * Selecting Track name in Now Playing now brings you to Track page
     * Separate Loved Tracks and Recently Played views per source.
+    * Added animated spinner where needed
+    * Some new sidebar icons
+    * Support Transifex for localization and add translations for Arabic, French, Bulgarian, Catalan, Spanish (Castillian), and more.
+    * New Context Menu items (Love, Add to Queue, etc.)
+    * Fading album art
+    * New Account and Plug-in Preferences/Management Interface
+    * Fix XSPF auto-updating
+
 
 Version 0.4.2:
     * Fix ZeroConf protocol showing IP addresses instead of host names.

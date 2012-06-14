@@ -179,13 +179,6 @@ appLogDir()
 
 
 QString
-sqlEscape( QString sql )
-{
-    return sql.replace( "'", "''" );
-}
-
-
-QString
 timeToString( int seconds )
 {
     int hrs  = seconds / 60 / 60;
@@ -303,16 +296,30 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
         s_ext2mime.insert( "oga",  "application/ogg" );
-        s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
         s_ext2mime.insert( "aac",  "audio/mp4" );
         s_ext2mime.insert( "m4a",  "audio/mp4" );
         s_ext2mime.insert( "mp4",  "audio/mp4" );
+        s_ext2mime.insert( "flac", "audio/flac" );
+        s_ext2mime.insert( "aiff", "audio/aiff" );
+        s_ext2mime.insert( "aif",  "audio/aiff" );
     }
 
     return s_ext2mime.value( extension, "unknown" );
 }
+
+
+void
+msleep( unsigned int ms )
+{
+  #ifdef WIN32
+    Sleep( ms );   
+  #else
+    ::usleep( ms * 1000 );
+  #endif
+}
+
 
 static QMutex s_noProxyHostsMutex;
 static QStringList s_noProxyHosts;

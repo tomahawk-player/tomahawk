@@ -54,7 +54,10 @@ DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
 void
 DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results )
 {
-    qDebug() << Q_FUNC_INFO << qid << results.length();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << qid << results.length();
+
+    foreach ( const Tomahawk::result_ptr& r, results )
+        r->setResolvedBy( this );
 
     Tomahawk::Pipeline::instance()->reportResults( qid, results );
 }

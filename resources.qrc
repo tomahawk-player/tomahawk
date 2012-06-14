@@ -141,6 +141,10 @@
         <file>data/images/process-stop.png</file>
         <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
         <file>data/images/collection.png</file>
-	<file>data/misc/tomahawk_pubkey.pem</file>
+        <file>data/misc/tomahawk_pubkey.pem</file>
+        <file>data/images/track-icon-sidebar.png</file>
+        <file>data/images/jump-link.png</file>
+        <file>data/images/scrollbar-vertical-handle.png</file>
+        <file>data/images/scrollbar-horizontal-handle.png</file>
     </qresource>
 </RCC>

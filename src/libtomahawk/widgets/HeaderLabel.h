@@ -43,6 +43,7 @@ public:
 
 signals:
     void clicked();
+    void resized( const QPoint& delta );
 
 protected:
 //    void changeEvent( QEvent* e );
@@ -50,10 +51,15 @@ protected:
 
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
 
 private:
     QWidget* m_parent;
     QTime m_time;
+
+    QPoint m_dragPoint;
+    bool m_pressed;
+    bool m_moved;
 };
 
 #endif // HEADERLABEL_H

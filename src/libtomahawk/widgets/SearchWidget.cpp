@@ -25,12 +25,11 @@
 
 #include "SourceList.h"
 #include "ViewManager.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
-#include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 
@@ -44,36 +43,18 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     ui->resultsView->setGuid( "searchwidget" );
     m_resultsModel = new PlaylistModel( ui->resultsView );
     ui->resultsView->setPlaylistModel( m_resultsModel );
-    ui->resultsView->overlay()->setEnabled( false );
     ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
 
-    m_albumsModel = new AlbumModel( ui->albumView );
-    ui->albumView->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albumView );
+    ui->albumView->setPlayableModel( m_albumsModel );
 
-    m_artistsModel = new AlbumModel( ui->artistView );
-    ui->artistView->setAlbumModel( m_artistsModel );
-
-    ui->artistView->setAutoFitItems( false );
-    ui->albumView->setAutoFitItems( false );
-    ui->artistView->setSpacing( 8 );
-    ui->albumView->setSpacing( 8 );
+    m_artistsModel = new PlayableModel( ui->artistView );
+    ui->artistView->setPlayableModel( m_artistsModel );
 
     ui->artistView->proxyModel()->sort( -1 );
     ui->albumView->proxyModel()->sort( -1 );
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
-
-    ui->artistView->setContentsMargins( 0, 0, 0, 0 );
-    ui->artistView->setFrameShape( QFrame::NoFrame );
-    ui->artistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    ui->albumView->setContentsMargins( 0, 0, 0, 0 );
-    ui->albumView->setFrameShape( QFrame::NoFrame );
-    ui->albumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    ui->resultsView->setContentsMargins( 0, 0, 0, 0 );
-    ui->resultsView->setFrameShape( QFrame::NoFrame );
-    ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     ui->resultsView->loadingSpinner()->fadeIn();
     m_queries << Tomahawk::Query::get( search, uuid() );
@@ -151,22 +132,22 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         albums << result->album();
     }
 
-    m_artistsModel->addArtists( artists );
-    m_albumsModel->addAlbums( albums );
+    m_artistsModel->append( artists );
+    m_albumsModel->append( albums );
 }
 
 
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    m_albumsModel->addAlbums( albums );
+    m_albumsModel->append( albums );
 }
 
 
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
-    m_artistsModel->addArtists( artists );
+    m_artistsModel->append( artists );
 }
 
 

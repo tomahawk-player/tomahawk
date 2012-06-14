@@ -86,13 +86,13 @@ public slots:
      **/
     ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
 
-    #ifndef ENABLE_HEADLESS
+#ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
-    #endif
 
 private slots:
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
+#endif
 
 private:
     /**

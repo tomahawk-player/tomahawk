@@ -27,12 +27,11 @@
 #include "JobStatusView.h"
 #include "Source.h"
 
+QPixmap* PipelineStatusItem::s_pixmap = 0;
 
 PipelineStatusItem::PipelineStatusItem()
     : JobStatusItem()
 {
-    m_icon.load( RESPATH"images/search-icon.png" );
-
     connect( Tomahawk::Pipeline::instance(), SIGNAL( resolving( Tomahawk::query_ptr ) ), this, SLOT( resolving( Tomahawk::query_ptr ) ) );
     connect( Tomahawk::Pipeline::instance(), SIGNAL( idle() ), this, SLOT( idle() ) );
 }
@@ -65,6 +64,18 @@ PipelineStatusItem::idle()
 }
 
 
+QPixmap
+PipelineStatusItem::icon() const
+{
+    if ( !s_pixmap )
+    {
+        s_pixmap = new QPixmap( RESPATH"images/search-icon.png" );
+    }
+
+    return *s_pixmap;
+}
+
+
 void
 PipelineStatusItem::resolving( const Tomahawk::query_ptr& query )
 {
@@ -72,6 +83,10 @@ PipelineStatusItem::resolving( const Tomahawk::query_ptr& query )
         m_latestQuery = query->fullTextQuery();
     else
         m_latestQuery = QString( "%1 - %2" ).arg( query->artist() ).arg( query->track() );
+
+    if ( m_latestQuery.isEmpty() )
+        qDebug() << "EMPTY STRING IN STATUS ITEM:" << query->fullTextQuery() << query->track() << query->artist() << query->album();
+    Q_ASSERT( !m_latestQuery.isEmpty() );
 
     emit statusChanged();
 }

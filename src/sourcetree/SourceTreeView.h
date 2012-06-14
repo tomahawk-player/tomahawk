@@ -72,6 +72,7 @@ private slots:
     void loadPlaylist();
     void deletePlaylist( const QModelIndex& = QModelIndex() );
     void copyPlaylistLink();
+    void exportPlaylist();
     void addToLocal();
 
     void latchOnOrCatchUp();
@@ -81,6 +82,7 @@ private slots:
     void latchModeToggled( bool checked );
 
     void onCustomContextMenu( const QPoint& pos );
+    void onSelectionChanged();
 
 protected:
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -113,6 +115,8 @@ private:
     bool m_dragging;
     QRect m_dropRect;
     QPersistentModelIndex m_dropIndex;
+    
+    QPersistentModelIndex m_selectedIndex;
 };
 
 #endif // SOURCETREEVIEW_H

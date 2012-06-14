@@ -30,7 +30,7 @@
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
 #define FONT_SIZE 16
-#define OPACITY 0.70
+#define OPACITY 0.85
 
 
 SocialWidget::SocialWidget( QWidget* parent )
@@ -55,17 +55,23 @@ SocialWidget::SocialWidget( QWidget* parent )
 #endif
 
     ui->charsLeftLabel->setForegroundRole( QPalette::HighlightedText );
-
+    
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Tweet" ) );
+    
     m_parent->installEventFilter( this );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( accept() ) );
-    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( deleteLater() ) );
+    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
     connect( ui->textEdit, SIGNAL( textChanged() ), SLOT( onChanged() ) );
     connect( ui->facebookButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( ui->twitterButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), SLOT( onShortLinkReady( QUrl, QUrl, QVariant ) ) );
 
     onChanged();
+
+    ui->twitterButton->setChecked( true );
+    ui->twitterButton->setVisible( false );
+    ui->facebookButton->setVisible( false );
 }
 
 
@@ -83,6 +89,7 @@ SocialWidget::setOpacity( qreal opacity )
     if ( m_opacity == 0.00 && !isHidden() )
     {
         QWidget::hide();
+        emit hidden();
     }
     else if ( m_opacity > 0.00 && isHidden() )
     {
@@ -197,9 +204,9 @@ SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const
     Q_UNUSED( callbackObj );
 
     if ( m_query->album().isEmpty() )
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 and loving it! %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2. %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
     else
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\" and loving it! %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\". %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
 }
 
 
@@ -229,7 +236,29 @@ void
 SocialWidget::accept()
 {
     tDebug() << "Sharing social link!";
+    
+    QVariantMap shareInfo;
+    Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
+    trackInfo["title"] = m_query->track();
+    trackInfo["artist"] = m_query->artist();
+    trackInfo["album"] = m_query->album();
+
+    shareInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+    shareInfo["message"] = ui->textEdit->toPlainText();
+    shareInfo["accountlist"] = QStringList( "all" );
+
+    Tomahawk::InfoSystem::InfoPushData pushData( uuid(), Tomahawk::InfoSystem::InfoShareTrack, shareInfo, Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+
+    deleteLater();
+}
+
+
+void
+SocialWidget::close()
+{
+    QWidget::hide();
     deleteLater();
 }
 

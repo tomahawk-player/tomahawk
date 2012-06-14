@@ -39,9 +39,8 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-class AlbumModel;
+class PlayableModel;
 class TreeModel;
-class OverlayButton;
 
 namespace Ui
 {
@@ -104,15 +103,13 @@ private:
 
     Tomahawk::album_ptr m_album;
 
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_albumsModel;
     TreeModel* m_tracksModel;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
-
-    QString m_infoId;
 };
 
 #endif // ALBUMINFOWIDGET_H

@@ -34,9 +34,6 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     , m_model( new PlaylistModel( this ) )
 {
     // Generate the tracks, add them to the playlist
-    setFrameShape( QFrame::NoFrame );
-    setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     m_model->setStyle( PlayableModel::Large );
     setPlaylistModel( m_model );
     generateTracks();
@@ -76,6 +73,8 @@ CustomPlaylistView::jumpToCurrentTrack()
 void
 CustomPlaylistView::generateTracks()
 {
+    m_model->startLoading();
+
     QString sql;
     switch ( m_type )
     {
@@ -106,8 +105,9 @@ void
 CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
 {
     bool changed = false;
-    QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks, changed);
+    QList< query_ptr > newTracks = TomahawkUtils::mergePlaylistChanges( m_model->queries(), tracks, changed );
 
+    m_model->finishLoading();
     if ( !changed )
         return;
 

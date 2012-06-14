@@ -40,10 +40,10 @@ public:
 
 private slots:
     void parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks );
-    void dialogClosed( int ret );
 
     // Do the rename only after the revision is loaded
     void playlistToRenameLoaded();
+
 private:
     SourcesModel::CategoryType m_categoryType;
     QIcon m_icon;

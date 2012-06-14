@@ -129,32 +129,6 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 }
 
 
-bool
-MusicBrainzPlugin::isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData )
-{
-    if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QVariantMap >() )
-    {
-        emit info( requestData, QVariant() );
-        qDebug() << Q_FUNC_INFO << "Data null, invalid, or can't convert";
-        return false;
-    }
-    QVariantMap hash = requestData.input.value< QVariantMap >();
-    if ( hash[ "trackName" ].toString().isEmpty() )
-    {
-        emit info( requestData, QVariant() );
-        qDebug() << Q_FUNC_INFO << "Track name is empty";
-        return false;
-    }
-    if ( hash[ "artistName" ].toString().isEmpty() )
-    {
-        emit info( requestData, QVariant() );
-        qDebug() << Q_FUNC_INFO << "No artist name found";
-        return false;
-    }
-    return true;
-}
-
-
 void
 MusicBrainzPlugin::artistSearchSlot()
 {

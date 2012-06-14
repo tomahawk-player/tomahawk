@@ -101,6 +101,8 @@ AccountModel::loadData()
                 qDebug() << "All accounts after remove:";
                 foreach ( Account* acct, allAccounts )
                     qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#else
+                Q_UNUSED( removed );
 #endif
             }
         } else
@@ -414,6 +416,9 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( role == CheckboxClickedRole )
     {
         Account* acct = 0;
+
+        Qt::CheckState checkState = static_cast< Qt::CheckState >( value.toInt() );
+
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
@@ -451,9 +456,11 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     state = AtticaManager::Uninstalled;
                 }
 
-                if ( state == AtticaManager::Installed )
+                // Don't install if we're unchecking. This happens if e.g. the user deletes his config file
+                // and opens tomahawk
+                if ( state == AtticaManager::Installed || checkState == Qt::Unchecked )
                 {
-                    qDebug() << "Already installed with resolver, just enabling";
+                    qDebug() << "Already installed with resolver, or unchecking, just enabling/disabling";
                     acct = node->atticaAccount;
                     break;
                 }
@@ -489,13 +496,15 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         if ( node->type == AccountModelNode::FactoryType )
         {
+            tLog() << "Factory account with members:" << node->accounts << node->accounts.size();
             // Turn on or off all accounts for this factory
-
-            Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
-
             foreach ( Account* acct, node->accounts )
             {
-                state == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
+                tLog() << "Account we are toggling for factory:" << acct;
+                if ( !acct )
+                    continue;
+
+                checkState == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
                                      : AccountManager::instance()->disableAccount( acct );
             }
 
@@ -520,7 +529,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
             box.setWindowTitle( tr( "Manual Install Required" ) );
             box.setTextFormat( Qt::RichText );
             box.setIcon( QMessageBox::Information );
-            box.setText( tr( "Unfortunately, automatic installation of this resolver is not yet available on Linux.<br /><br />"
+            box.setText( tr( "Unfortunately, automatic installation of this resolver is not available or disabled for your platform.<br /><br />"
             "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/%1" ).arg( acct->accountServiceName() ) );
             box.setStandardButtons( QMessageBox::Ok );
             box.exec();
@@ -557,18 +566,22 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         // We only support rating Attica resolvers for the moment.
         Attica::Content content;
         if ( node->type == AccountModelNode::AtticaType )
+        {
             content = node->atticaContent;
+
+            AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( content );
+            // For now only allow rating if a resolver is installed!
+            if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+                return false;
+        } // Allow rating custom attica accounts regardless as user may have installed manually
         else if ( node->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( node->customAccount ) )
             content = qobject_cast< CustomAtticaAccount* >( node->customAccount )->atticaContent();
 
         Q_ASSERT( !content.id().isNull() );
 
-        AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( content );
-        // For now only allow rating if a resolver is installed!
-        if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
-            return false;
         if ( AtticaManager::instance()->userHasRated( content ) )
             return false;
+
         content.setRating( value.toInt() * 20 );
         AtticaManager::instance()->uploadRating( content );
 

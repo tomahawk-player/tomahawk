@@ -145,6 +145,7 @@ public:
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
+    bool coverLoaded() const;
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
     void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
@@ -198,10 +199,7 @@ public slots:
     void addArtists( const QList< Tomahawk::artist_ptr >& );
 
     void onResolvingFinished();
-
-    // resolve if not solved()
     void onResolverAdded();
-    void onResolverRemoved();
 
 private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );

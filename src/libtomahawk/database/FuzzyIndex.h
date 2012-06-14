@@ -55,7 +55,7 @@ class FuzzyIndex : public QObject
 Q_OBJECT
 
 public:
-    explicit FuzzyIndex( DatabaseImpl& db, bool wipeIndex = false );
+    explicit FuzzyIndex( QObject* parent, bool wipe = false );
     ~FuzzyIndex();
 
     void beginIndexing();
@@ -71,8 +71,12 @@ public slots:
     QMap< int, float > search( const Tomahawk::query_ptr& query );
     QMap< int, float > searchAlbum( const Tomahawk::query_ptr& query );
 
+private slots:
+    void updateIndex();
+
 private:
-    DatabaseImpl& m_db;
+    bool wipeIndex();
+
     QMutex m_mutex;
     QString m_lucenePath;
 

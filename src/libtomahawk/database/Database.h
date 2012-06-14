@@ -53,11 +53,12 @@ public:
     ~Database();
 
     QString dbid() const;
-    bool indexReady() const { return m_indexReady; }
 
     void loadIndex();
-
+    bool indexReady() const { return m_indexReady; }
     bool isReady() const { return m_ready; }
+
+    DatabaseImpl* impl() const { return m_impl; }
 
 signals:
     void indexReady(); // search index
@@ -74,8 +75,6 @@ private slots:
     void setIsReadyTrue() { m_ready = true; }
 
 private:
-    DatabaseImpl* impl() const { return m_impl; }
-
     bool m_ready;
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;

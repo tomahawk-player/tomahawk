@@ -31,6 +31,7 @@
 class QDropEvent;
 class QDragEnterEvent;
 class QDragMoveEvent;
+class SocialWidget;
 
 namespace Ui
 {
@@ -91,6 +92,8 @@ private:
     void setSocialActions();
 
     Ui::AudioControls* ui;
+    
+    QWeakPointer<SocialWidget> m_socialWidget;
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistModes::RepeatMode m_repeatMode;

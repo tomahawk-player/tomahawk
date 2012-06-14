@@ -59,9 +59,6 @@ private slots:
 
     void albumFoundSlot();
     void tracksFoundSlot();
-
-private:
-    bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
 };
 
 }

@@ -25,16 +25,14 @@
 #include "ViewManager.h"
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
-#include "playlist/AlbumModel.h"
+#include "playlist/PlayableModel.h"
+#include "Source.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-
-#include "widgets/OverlayButton.h"
-#include "widgets/OverlayWidget.h"
 
 using namespace Tomahawk;
 
@@ -42,26 +40,22 @@ using namespace Tomahawk;
 AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
-    , m_infoId( uuid() )
 {
     ui->setupUi( this );
-
-    ui->albumsView->setFrameShape( QFrame::NoFrame );
-    ui->albumsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
 
-    m_albumsModel = new AlbumModel( ui->albumsView );
-    ui->albumsView->setAlbumModel( m_albumsModel );
+    m_albumsModel = new PlayableModel( ui->albumsView );
+    ui->albumsView->setPlayableModel( m_albumsModel );
+    ui->albumsView->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
 
     m_tracksModel = new TreeModel( ui->tracksView );
     m_tracksModel->setMode( Mixed );
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
+    ui->tracksView->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
@@ -162,7 +156,8 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
     connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                                          SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-    gotAlbums( m_album->artist()->albums( Mixed ) );
+    if ( !m_album->artist()->albums( Mixed ).isEmpty() )
+        gotAlbums( m_album->artist()->albums( Mixed ) );
 
 /*                tDebug() << "Auto refetching";
                 m_buttonAlbums->setChecked( false );
@@ -188,7 +183,7 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( al.contains( m_album ) )
         al.removeAll( m_album );
 
-    m_albumsModel->addAlbums( al );
+    m_albumsModel->append( al );
 }
 
 

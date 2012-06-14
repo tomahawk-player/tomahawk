@@ -48,9 +48,6 @@
     #include <QtGui/QMessageBox>
 #endif
 
-#define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
-#define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
-
 #include "accounts/AccountDllMacro.h"
 
 #include "../XmppInfoPlugin.h"
@@ -90,10 +87,11 @@ public slots:
     virtual void checkSettings();
     virtual void configurationChanged();
     virtual void sendMsg( const QString& to, const QString& msg );
-    void broadcastMsg( const QString &msg );
-    virtual void addContact( const QString &jid, const QString& msg = QString() );
+    virtual void addContact( const QString& jid, const QString& msg = QString() );
+
+    void broadcastMsg( const QString& msg );
     void showAddFriendDialog();
-    void publishTune( const QUrl &url, const Tomahawk::InfoSystem::InfoStringHash &trackInfo );
+    void publishTune( const QUrl& url, const Tomahawk::InfoSystem::InfoStringHash& trackInfo );
 
 protected:
     virtual QString defaultSuffix() const;
@@ -103,14 +101,14 @@ private slots:
     void onConnect();
     void onDisconnect( Jreen::Client::DisconnectReason reason );
 
-    void onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
-    void onSubscriptionReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
+    void onPresenceReceived( const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence );
+    void onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence );
     void onSubscriptionRequestConfirmed( int result );
 
     void onNewMessage( const Jreen::Message& message );
     void onError( const Jreen::Connection::SocketError& e );
-    void onNewIq( const Jreen::IQ &iq );
-    void onNewAvatar( const QString &jid );
+    void onNewIq( const Jreen::IQ& iq );
+    void onNewAvatar( const QString& jid );
 
 private:
     bool readXmlConsoleEnabled();
@@ -125,7 +123,7 @@ private:
     void removeMenuHelper();
 
     bool presenceMeansOnline( Jreen::Presence::Type p );
-    void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
+    void handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType );
 
     QString m_currentUsername;
     QString m_currentPassword;
@@ -133,22 +131,24 @@ private:
     int m_currentPort;
     QString m_currentResource;
 
-    QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin> m_infoPlugin;
+    QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_infoPlugin;
     Tomahawk::Accounts::Account::ConnectionState m_state;
 
     // sort out
-    Jreen::Client *m_client;
+    Jreen::Client* m_client;
 
-    Jreen::MUCRoom *m_room;
-    Jreen::SimpleRoster *m_roster;
-    QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+    Jreen::MUCRoom* m_room;
+    Jreen::SimpleRoster* m_roster;
+    QHash< Jreen::JID, Jreen::Presence::Type > m_peers;
+
 #ifndef ENABLE_HEADLESS
-    QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
+    QHash< Jreen::JID, QMessageBox* > m_subscriptionConfirmBoxes;
     QMenu* m_menu;
     XmlConsole* m_xmlConsole;
 #endif
+
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
-    AvatarManager *m_avatarManager;
+    AvatarManager* m_avatarManager;
     Jreen::PubSub::Manager* m_pubSubManager;
 };
 

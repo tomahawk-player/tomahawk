@@ -23,17 +23,14 @@
 #include "ViewManager.h"
 
 #include "playlist/AlbumModel.h"
-#include "playlist/CollectionFlatModel.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-
-#include "widgets/OverlayWidget.h"
 
 
 SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent )
@@ -43,13 +40,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 {
     ui->setupUi( this );
 
-    ui->historyView->setFrameShape( QFrame::NoFrame );
-    ui->historyView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->recentAlbumView->setFrameShape( QFrame::NoFrame );
-    ui->recentAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->recentCollectionView->setFrameShape( QFrame::NoFrame );
-    ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->horizontalLayout );
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
@@ -58,8 +48,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 
     ui->splitter->setStretchFactor( 0, 0 );
     ui->splitter->setStretchFactor( 1, 1 );
-
-    ui->historyView->overlay()->setEnabled( false );
 
     m_recentTracksModel = new RecentlyAddedModel( source, ui->recentCollectionView );
     m_recentTracksModel->setStyle( PlayableModel::Short );
@@ -71,7 +59,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->setPlaylistModel( m_historyModel );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
-    ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
+    ui->recentAlbumView->setPlayableModel( m_recentAlbumModel );
     ui->recentAlbumView->proxyModel()->sort( -1 );
 
     onCollectionChanged();

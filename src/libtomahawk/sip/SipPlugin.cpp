@@ -58,11 +58,15 @@ SipPlugin::serviceName() const
 }
 
 
+#ifndef ENABLE_HEADLESS
+
 QMenu*
 SipPlugin::menu()
 {
     return 0;
 }
+
+#endif
 
 
 Tomahawk::Accounts::Account*

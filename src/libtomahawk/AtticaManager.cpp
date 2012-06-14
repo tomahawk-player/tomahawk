@@ -22,6 +22,7 @@
 #include "TomahawkSettingsGui.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "config.h"
 
 #include <attica/downloaditem.h>
 
@@ -35,10 +36,22 @@
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
 #include "utils/BinaryInstallerHelper.h"
+#include "utils/Closure.h"
 
 using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
+
+
+// Sort binary resolvers above script resolvers, and script resolvers by download count
+bool
+resolverSort( const Attica::Content& first, const Attica::Content& second )
+{
+    if ( !first.attribute( "typeid" ).isEmpty() && second.attribute( "typeid" ).isEmpty() )
+        return true;
+
+    return first.downloads() > second.downloads();
+}
 
 
 AtticaManager::AtticaManager( QObject* parent )
@@ -49,7 +62,13 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-   m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+    
+    const QString url = QString( "http://bakery.tomahawk-player.org/resolvers/providers.xml?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
+    NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
+
 //     m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
@@ -59,6 +78,15 @@ AtticaManager::AtticaManager( QObject* parent )
 AtticaManager::~AtticaManager()
 {
     savePixmapsToCache();
+
+
+    foreach( const QString& id, m_resolverStates.keys() )
+    {
+        if ( !m_resolverStates[ id ].pixmap )
+            continue;
+
+        delete m_resolverStates[ id ].pixmap;
+    }
 }
 
 
@@ -245,6 +273,25 @@ AtticaManager::resolverData(const QString &atticaId) const
 
 
 void
+AtticaManager::providerError( QNetworkReply::NetworkError err )
+{
+    // So those who care know
+    emit resolversLoaded( Content::List() );
+}
+
+
+void
+AtticaManager::providerFetched( QNetworkReply* reply )
+{
+    Q_ASSERT( reply );
+    if ( !reply )
+        return;
+
+    m_manager.addProviderFromXml( reply->readAll() );
+}
+
+
+void
 AtticaManager::providerAdded( const Provider& provider )
 {
     if ( provider.name() == "Tomahawk Resolvers" )
@@ -329,7 +376,10 @@ AtticaManager::resolversList( BaseJob* j )
     syncServerData();
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 
@@ -350,7 +400,12 @@ AtticaManager::binaryResolversList( BaseJob* j )
     platform = "linux-x64";
 #elif defined(Q_OS_LINUX) // Horrible assumption here...
     platform = "linux-x86";
-    #endif
+#endif
+
+    // Override if no binary resolvers were requested
+#ifndef WITH_BINARY_ATTICA
+    platform = QString();
+#endif
 
     foreach ( const Content& c, binaryResolvers )
     {
@@ -375,7 +430,10 @@ AtticaManager::binaryResolversList( BaseJob* j )
     }
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 

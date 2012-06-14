@@ -58,7 +58,7 @@ public:
     virtual ~Source();
 
     bool isLocal() const { return m_isLocal; }
-    bool isOnline() const { return m_online; }
+    bool isOnline() const { return m_online || m_isLocal; }
 
     QString userName() const { return m_username; }
     QString friendlyName() const;
@@ -83,7 +83,7 @@ public:
     unsigned int trackCount() const;
 
     Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
-    QString textStatus() const { return m_textStatus; }
+    QString textStatus() const;
     DBSyncConnection::State state() const { return m_state; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();

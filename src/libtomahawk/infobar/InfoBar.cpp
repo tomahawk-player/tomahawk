@@ -22,15 +22,16 @@
 
 #include <QLabel>
 #include <QPixmap>
-
-#include "ViewManager.h"
-#include "thirdparty/Qocoa/qsearchfield.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
-#include <widgets/QueryLabel.h>
+
+#include "ViewManager.h"
+#include "thirdparty/Qocoa/qsearchfield.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
+#include "widgets/QueryLabel.h"
+#include "Source.h"
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64

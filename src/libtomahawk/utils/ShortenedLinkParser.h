@@ -26,7 +26,10 @@
 #include <QObject>
 #include <QSet>
 #include <QStringList>
-#include <QPixmap>
+
+#ifndef ENABLE_HEADLESS
+    #include <QPixmap>
+#endif
 
 class QNetworkReply;
 
@@ -61,13 +64,14 @@ private:
     void lookupUrl( const QString& url );
     void checkFinished();
 
+#ifndef ENABLE_HEADLESS
     static QPixmap pixmap();
+    static QPixmap* s_pixmap;
+#endif
 
     QStringList m_links;
     QSet< QNetworkReply* > m_queries;
     DropJobNotifier* m_expandJob;
-
-    static QPixmap* s_pixmap;
 };
 
 }

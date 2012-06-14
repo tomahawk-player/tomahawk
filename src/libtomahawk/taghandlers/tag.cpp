@@ -34,6 +34,7 @@
 #include <taglib/mp4file.h>
 #include <taglib/mpcfile.h>
 #include <taglib/asffile.h>
+#include <taglib/aifffile.h>
 
 #include <QStringList>
 
@@ -55,6 +56,12 @@ namespace Tomahawk
     {
         if( file->tag() )
             t = new OggTag( f.tag(), file->tag() );
+    }
+    else if( TagLib::RIFF::AIFF::File *file =
+             dynamic_cast< TagLib::RIFF::AIFF::File * >( f.file() ) )
+    {
+        if( file->tag() )
+            t = new ID3v2Tag( f.tag(), file->tag() );
     }
     else if( TagLib::Ogg::Speex::File *file =
              dynamic_cast< TagLib::Ogg::Speex::File * >( f.file() ) )

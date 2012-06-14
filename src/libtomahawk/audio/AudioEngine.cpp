@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -36,15 +36,17 @@
 #include "HeadlessCheck.h"
 #include "infosystem/InfoSystem.h"
 #include "Album.h"
+#include "Pipeline.h"
 
 #include "utils/Logger.h"
 
-
 using namespace Tomahawk;
 
-AudioEngine* AudioEngine::s_instance = 0;
+#define AUDIO_VOLUME_STEP 5
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
+
+AudioEngine* AudioEngine::s_instance = 0;
 
 
 AudioEngine*
@@ -79,21 +81,22 @@ AudioEngine::AudioEngine()
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
 
+    m_stateQueueTimer.setInterval( 5000 );
+    m_stateQueueTimer.setSingleShot( true );
+    connect( &m_stateQueueTimer, SIGNAL( timeout() ), SLOT( queueStateSafety() ) );
+
     onVolumeChanged( m_audioOutput->volume() );
 
-#ifndef Q_WS_X11
-    // On mac & win, phonon volume is independent from system volume, so the onVolumeChanged call above just sets our volume to 100%.
-    // Since it's indendent, we'll set it to 75% since that's nicer.
-    setVolume( 75 );
-#endif
+    setVolume( TomahawkSettings::instance()->volume() );
 }
 
 
 AudioEngine::~AudioEngine()
 {
     tDebug() << Q_FUNC_INFO;
+    
     m_mediaObject->stop();
-//    stop();
+    TomahawkSettings::instance()->setVolume( volume() );
 
     delete m_audioOutput;
     delete m_mediaObject;
@@ -132,9 +135,7 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
-        setVolume( m_volume );
-        m_mediaObject->play();
-        setVolume( m_volume );
+        queueState( Playing );
         emit resumed();
 
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
@@ -149,8 +150,7 @@ AudioEngine::pause()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    m_volume = volume();
-    m_mediaObject->pause();
+    queueState( Paused );
     emit paused();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( Tomahawk::InfoSystem::InfoPushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant(), Tomahawk::InfoSystem::PushNoFlag ) );
@@ -184,7 +184,6 @@ AudioEngine::stop( AudioErrorCode errorCode )
         sendWaitingNotification();
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
-
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -303,6 +302,20 @@ AudioEngine::setVolume( int percentage )
 
 
 void
+AudioEngine::lowerVolume()
+{
+    setVolume( volume() - AUDIO_VOLUME_STEP );
+}
+
+
+void
+AudioEngine::raiseVolume()
+{
+    setVolume( volume() + AUDIO_VOLUME_STEP );
+}
+
+
+void
 AudioEngine::mute()
 {
     setVolume( 0 );
@@ -329,13 +342,18 @@ AudioEngine::sendWaitingNotification() const
 void
 AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type )
 {
+    if ( m_currentTrack.isNull() )
+        return;
+
 #ifndef ENABLE_HEADLESS
-    if ( m_currentTrack->album().isNull() || m_currentTrack->album()->infoLoaded() )
+    if ( m_currentTrack->toQuery()->coverLoaded() )
+    {
         onNowPlayingInfoReady( type );
+    }
     else
     {
-        NewClosure( m_currentTrack->album().data(), SIGNAL( updated() ), const_cast< AudioEngine* >( this ), SLOT( onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType ) ), type );
-        m_currentTrack->album()->cover( QSize( 0, 0 ), true );
+        NewClosure( m_currentTrack->toQuery().data(), SIGNAL( coverChanged() ), const_cast< AudioEngine* >( this ), SLOT( sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ) ), type );
+        m_currentTrack->toQuery()->cover( QSize( 0, 0 ), true );
     }
 #endif
 }
@@ -344,7 +362,6 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
 void
 AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << type;
     if ( m_currentTrack.isNull() ||
          m_currentTrack->track().isNull() ||
          m_currentTrack->artist().isNull() )
@@ -352,36 +369,35 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 
     QVariantMap playInfo;
 
-    if ( !m_currentTrack->album().isNull() )
-    {
 #ifndef ENABLE_HEADLESS
-        QImage cover;
-        cover = m_currentTrack->album()->cover( QSize( 0, 0 ) ).toImage();
-        if ( !cover.isNull() )
-        {
-            playInfo["cover"] = cover;
+    QImage cover;
+    cover = m_currentTrack->toQuery()->cover( QSize( 0, 0 ) ).toImage();
+    if ( !cover.isNull() )
+    {
+        playInfo["cover"] = cover;
 
-            QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
-            if ( !coverTempFile->open() )
-                tDebug() << Q_FUNC_INFO << "WARNING: could not write temporary file for cover art!";
-            else
-            {
-                // Finally, save the image to the new temp file
-                coverTempFile->setAutoRemove( false );
-                if ( cover.save( coverTempFile, "PNG" ) )
-                {
-                    tDebug( LOGVERBOSE ) <<  Q_FUNC_INFO << "Saving cover image to:" << QFileInfo( *coverTempFile ).absoluteFilePath();
-                    playInfo["coveruri"] = QFileInfo( *coverTempFile ).absoluteFilePath();
-                }
-                else
-                    tDebug() << Q_FUNC_INFO << "failed to save cover image!";
-            }
-            delete coverTempFile;
+        QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
+        if ( !coverTempFile->open() )
+        {
+            tDebug() << Q_FUNC_INFO << "WARNING: could not write temporary file for cover art!";
         }
         else
-            tDebug() << Q_FUNC_INFO << "Cover from album is null!";
-#endif
+        {
+            // Finally, save the image to the new temp file
+            coverTempFile->setAutoRemove( false );
+            if ( cover.save( coverTempFile, "PNG" ) )
+            {
+                tDebug() <<  Q_FUNC_INFO << "Saving cover image to:" << QFileInfo( *coverTempFile ).absoluteFilePath();
+                playInfo["coveruri"] = QFileInfo( *coverTempFile ).absoluteFilePath();
+            }
+            else
+                tDebug() << Q_FUNC_INFO << "failed to save cover image!";
+        }
+        delete coverTempFile;
     }
+    else
+        tDebug() << Q_FUNC_INFO << "Cover from query is null!";
+#endif
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["title"] = m_currentTrack->track();
@@ -395,7 +411,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 
     Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushing data with type " << type;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushing data with type" << type;
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -470,8 +486,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_input.clear();
             }
             m_input = io;
-            m_mediaObject->play();
-
+            queueState( Playing );
             emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
@@ -594,6 +609,8 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     }
     else
     {
+        Pipeline::instance()->resolve( query );
+
         NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
                     const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
     }
@@ -670,12 +687,10 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     {
         stop( UnknownError );
 
-        tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        tDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
 
         emit error( UnknownError );
         setState( Error );
-
-        return;
     }
     if ( newState == Phonon::PlayingState )
     {
@@ -717,6 +732,16 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
                     m_waitingOnNewTrack = true;
                 stop();
             }
+        }
+    }
+    
+    if ( newState == Phonon::PausedState || newState == Phonon::PlayingState || newState == Phonon::ErrorState )
+    {
+        tDebug() << "Phonon state now:" << newState;
+        if ( m_stateQueue.count() )
+        {
+            AudioState qState = m_stateQueue.dequeue();
+            checkStateQueue();
         }
     }
 }
@@ -817,6 +842,64 @@ bool
 AudioEngine::isLocalResult( const QString& url ) const
 {
     return url.startsWith( "file://" );
+}
+
+
+void
+AudioEngine::checkStateQueue()
+{
+    if ( m_stateQueue.count() )
+    {
+        AudioState state = m_stateQueue.head();
+        tDebug() << "Applying state command:" << state;
+        switch ( state )
+        {
+            case Playing:
+            {
+                bool paused = isPaused();
+                m_mediaObject->play();
+                if ( paused )
+                    setVolume( m_volume );
+                
+                break;
+            }
+            
+            case Paused:
+            {
+                m_volume = volume();
+                m_mediaObject->pause();
+                break;
+            }
+        }
+    }
+    else
+        tDebug() << "Queue is empty";
+}
+
+
+void
+AudioEngine::queueStateSafety()
+{
+    tDebug() << Q_FUNC_INFO;
+    m_stateQueue.clear();
+}
+
+
+void
+AudioEngine::queueState( AudioState state )
+{
+    if ( m_stateQueueTimer.isActive() )
+        m_stateQueueTimer.stop();
+
+    tDebug() << "Enqueuing state command:" << state << m_stateQueue.count();
+    m_stateQueue.enqueue( state );
+
+    if ( m_stateQueue.count() == 1 )
+    {
+        checkStateQueue();
+    }
+
+    m_stateQueueTimer.start();
 }
 
 

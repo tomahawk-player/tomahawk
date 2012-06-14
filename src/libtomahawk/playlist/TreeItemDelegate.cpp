@@ -35,10 +35,10 @@
 #include "PlayableItem.h"
 #include "TreeProxyModel.h"
 #include "Source.h"
-#include "ArtistView.h"
+#include "TreeView.h"
 
 
-TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
+TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )

@@ -1,42 +1,34 @@
-# - Find LibLastFM
-# Find the liblastfm includes and the liblastfm libraries
-# This module defines
-# LIBLASTFM_INCLUDE_DIR, root lastfm include dir
-# LIBLASTFM_LIBRARY, the path to liblastfm
-# LIBLASTFM_FOUND, whether liblastfm was found
+# - Try to find LibLastFm
+#
+#  LIBLASTFM_FOUND - system has liblastfm
+#  LIBLASTFM_INCLUDE_DIRS - the liblastfm include directories
+#  LIBLASTFM_LIBRARIES - link these to use liblastfm
+#
+# (c) Dominik Schmidt <dev@dominik-schmidt.de>
+#
 
+# Dependencies
+if(NOT QT4_FOUND)
+    find_package(Qt4 REQUIRED)
+endif()
 
-find_path(LIBLASTFM_INCLUDE_DIR NAMES Audioscrobbler
-   HINTS
-   ~/usr/include
-   /opt/local/include
-   /usr/local/include
-   /usr/include
-   /opt/kde4/include
-   ${KDE4_INCLUDE_DIR}
-   PATH_SUFFIXES lastfm
+# Include dir
+find_path(LIBLASTFM_INCLUDE_DIR
+  # Track.h doesn't exist in liblastfm-0.3.1, was called Track back then
+  NAMES lastfm/Track.h
+  PATHS ${KDE4_INCLUDE_DIR}
 )
 
-find_library( LIBLASTFM_LIBRARY NAMES lastfm
-    PATHS
-    ~/usr/lib
-   /opt/local/lib
-   /usr/local/lib
-   /usr/lib
-   /usr/lib64
-   /opt/kde4/lib
-   ${KDE4_LIB_DIR}
+# Finally the library itself
+find_library(LIBLASTFM_LIBRARY
+  NAMES lastfm
+  PATHS ${KDE4_LIB_DIR}
 )
 
+set(LIBLASTFM_LIBRARIES ${LIBLASTFM_LIBRARY})
+set(LIBLASTFM_INCLUDE_DIRS ${LIBLASTFM_INCLUDE_DIR})
 
-if(LIBLASTFM_INCLUDE_DIR AND LIBLASTFM_LIBRARY)
-   set(LIBLASTFM_FOUND TRUE)
-   message(STATUS "Found liblastfm: ${LIBLASTFM_INCLUDE_DIR}, ${LIBLASTFM_LIBRARY}")
-else(LIBLASTFM_INCLUDE_DIR AND LIBLASTFM_LIBRARY)
-   set(LIBLASTFM_FOUND FALSE)   
-   if (LIBLASTFM_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find required package LibLastFm")
-   endif(LIBLASTFM_FIND_REQUIRED)
-endif(LIBLASTFM_INCLUDE_DIR AND LIBLASTFM_LIBRARY)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(LibLastFm DEFAULT_MSG LIBLASTFM_LIBRARIES LIBLASTFM_INCLUDE_DIRS)
 
-mark_as_advanced(LIBLASTFM_INCLUDE_DIR LIBLASTFM_LIBRARY)
+mark_as_advanced(LIBLASTFM_LIBRARIES LIBLASTFM_INCLUDE_DIRS)

@@ -35,13 +35,11 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
-#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 
-class AlbumModel;
+class PlayableModel;
 class PlaylistModel;
-class OverlayButton;
 
 namespace Ui
 {
@@ -78,6 +76,7 @@ public:
 
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showStatsBar() const { return false; }
+    virtual bool showInfoBar() const { return false; }
 
     virtual bool jumpToCurrentTrack();
     virtual bool isBeingPlayed() const;
@@ -91,10 +90,12 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void onArtistImageUpdated();
+    void onBiographyLoaded();
 
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
+    void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
+    void onSimilarArtistsLoaded();
 
     void onLoadingStarted();
     void onLoadingFinished();
@@ -104,15 +105,14 @@ private:
 
     Tomahawk::artist_ptr m_artist;
 
-    AlbumModel* m_relatedModel;
-    AlbumModel* m_albumsModel;
+    PlayableModel* m_relatedModel;
+    PlayableModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
-    QString m_infoId;
     QPixmap m_pixmap;
 
     friend class MetaPlaylistInterface;

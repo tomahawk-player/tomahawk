@@ -28,7 +28,6 @@
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/CustomPlaylistView.h"
-#include "playlist/CollectionView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -105,8 +104,8 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         onStationsAdded( stations );
     }
 
-    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
-        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
+/*    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );*/
 
     m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 
@@ -114,7 +113,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 
     connect( source.data(), SIGNAL( stats( QVariantMap ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SIGNAL( updated() ) );
-    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( stateChanged() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( offline() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( online() ), SIGNAL( updated() ) );
@@ -144,6 +142,16 @@ QString
 SourceItem::text() const
 {
     return m_source.isNull() ? tr( "SuperCollection" ) : m_source->friendlyName();
+}
+
+
+QString
+SourceItem::tooltip() const
+{
+    if ( !m_source.isNull() && !m_source->currentTrack().isNull() )
+        return m_source->textStatus();
+
+    return QString();
 }
 
 
@@ -507,6 +515,7 @@ SourceItem::lovedTracksClicked()
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
         view->setItemDelegate( del );
+        view->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
 
         m_lovedTracksPage = view;
     }
@@ -528,7 +537,7 @@ SourceItem::latestAdditionsClicked()
 {
     if ( !m_latestAdditionsPage )
     {
-        CollectionView* cv = new CollectionView( ViewManager::instance()->widget() );
+        TrackView* cv = new TrackView( ViewManager::instance()->widget() );
         cv->setFrameShape( QFrame::NoFrame );
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -547,6 +556,7 @@ SourceItem::latestAdditionsClicked()
 
         cv->setPlayableModel( raModel );
         cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        cv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
 
         m_latestAdditionsPage = cv;
     }
@@ -586,6 +596,7 @@ SourceItem::recentPlaysClicked()
         pv->setItemDelegate( del );
 
         pv->setPlaylistModel( raModel );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
 
         m_recentPlaysPage = pv;
     }
