@@ -191,6 +191,7 @@ TomahawkSettings::createSpotifyAccount()
     setValue( "types", QStringList() << "ResolverType" );
     setValue( "credentials", QVariantHash() );
     setValue( "configuration", QVariantHash() );
+    setValue( "accountfriendlyname", "Spotify" );
     endGroup();
 
     QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
