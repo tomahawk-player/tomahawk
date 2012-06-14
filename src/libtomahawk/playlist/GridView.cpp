@@ -74,6 +74,7 @@ GridView::GridView( QWidget* parent )
     setStyleSheet( "QListView { background-color: #323435; }" );
 
     setAutoFitItems( true );
+    setAutoResize( false );
     setProxyModel( new PlayableProxyModel( this ) );
 
 /*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
@@ -220,6 +221,13 @@ GridView::layoutItems()
         int newItemWidth = itemWidth + extraSpace;
         
         m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
+
+        if ( autoResize() )
+        {
+            int rows = ceil( (double)m_proxyModel->rowCount( QModelIndex() ) / (double)itemsPerRow );
+            int newHeight = rows * newItemWidth;
+            setFixedHeight( newHeight );
+        }
 
         if ( !m_inited )
         {

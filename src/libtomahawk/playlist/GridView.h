@@ -54,6 +54,9 @@ public:
     bool autoFitItems() const { return m_autoFitItems; }
     void setAutoFitItems( bool b ) { m_autoFitItems = b; }
 
+    bool autoResize() const { return m_autoResize; }
+    void setAutoResize( bool b ) { m_autoResize = b; }
+
     void setPlayableModel( PlayableModel* model );
     void setModel( QAbstractItemModel* model );
 
@@ -105,6 +108,7 @@ private:
     QString m_emptyTip;
     bool m_inited;
     bool m_autoFitItems;
+    bool m_autoResize;
     
     QRect m_paintRect;
 };
