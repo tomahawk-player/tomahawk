@@ -52,7 +52,8 @@ QueueView::QueueView( AnimatedSplitter* parent )
     ui->queue->setPlaylistModel( queueModel );
     queueModel->setReadOnly( false );
 
-    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
+//    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
+    ui->queue->setEmptyTip( QString() );
 
     connect( queueModel, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( updateLabel() ) );
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
