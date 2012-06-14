@@ -59,6 +59,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setFrameShape( QFrame::NoFrame );
     ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
+    ui->similarTracksView->setAutoResize( true );
+    ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
     TomahawkUtils::styleScrollBar( ui->lyricsView->verticalScrollBar() );
 
