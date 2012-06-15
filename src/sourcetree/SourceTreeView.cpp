@@ -367,6 +367,10 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
                              .arg( typeDesc ).arg( idx.data().toString() ),
                            QMessageBox::Yes | QMessageBox::No, this );
 
+#ifdef Q_OS_MAC
+    askDelete.setWindowModality( Qt::WindowModal );
+#endif
+
     int r = askDelete.exec();
     if ( r != QMessageBox::Yes )
         return;
