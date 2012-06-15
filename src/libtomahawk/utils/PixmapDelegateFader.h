@@ -23,6 +23,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
+#include "utils/SharedTimeLine.h"
 
 #include <QObject>
 #include <QTimeLine>

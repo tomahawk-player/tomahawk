@@ -56,7 +56,7 @@ public:
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
-    bool infoLoaded() const { return m_infoLoaded; }
+    bool coverLoaded() const { return m_coverLoaded; }
 
     QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
     Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
@@ -77,6 +77,7 @@ private slots:
 
 private:
     Q_DISABLE_COPY( Album )
+    QString infoid() const;
 
     unsigned int m_id;
     QString m_name;
@@ -85,8 +86,8 @@ private:
     artist_ptr m_artist;
     QByteArray m_coverBuffer;
 
-    bool m_infoLoaded;
-    mutable bool m_infoLoading;
+    bool m_coverLoaded;
+    mutable bool m_coverLoading;
     mutable QString m_uuid;
 
 #ifndef ENABLE_HEADLESS

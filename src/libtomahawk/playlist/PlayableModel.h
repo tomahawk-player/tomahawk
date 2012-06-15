@@ -22,6 +22,7 @@
 #define PLAYABLEMODEL_H
 
 #include <QAbstractItemModel>
+#include <QPixmap>
 
 #include "PlaylistInterface.h"
 #include "Typedefs.h"
@@ -38,7 +39,7 @@ Q_OBJECT
 
 public:
     enum PlayableItemStyle
-    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3 };
+    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
 
     enum PlayableModelRole
     { StyleRole = Qt::UserRole + 1 };
@@ -55,10 +56,11 @@ public:
         Year = 8,
         Filesize = 9,
         Origin = 10,
-        Score = 11
+        Score = 11,
+        Name = 12
     };
 
-    explicit PlayableModel( QObject* parent = 0 );
+    explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
 
     PlayableModel::PlayableItemStyle style() const { return m_style; }
@@ -69,19 +71,30 @@ public:
 
     virtual bool isReadOnly() const { return m_readOnly; }
     virtual void setReadOnly( bool b ) { m_readOnly = b; }
+    virtual bool isLoading() const { return m_loading; }
 
     virtual QString title() const { return m_title; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual QString description() const { return m_description; }
     virtual void setDescription( const QString& description ) { m_description = description; }
+    virtual QPixmap icon() const { return m_icon; }
+    virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual int itemCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual bool hasChildren( const QModelIndex& parent ) const;
+
+    QList< double > columnWeights() const;
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    
+    virtual QVariant artistData( const Tomahawk::artist_ptr& artist, int role = Qt::DisplayRole ) const;
+    virtual QVariant albumData( const Tomahawk::album_ptr& album, int role = Qt::DisplayRole ) const;
+    virtual QVariant queryData( const Tomahawk::query_ptr&, int column, int role = Qt::DisplayRole ) const;
 
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual QStringList mimeTypes() const;
@@ -101,12 +114,19 @@ public:
     QList< Tomahawk::query_ptr > queries() const;
 
     void updateDetailedInfo( const QModelIndex& index );
+    
+    QSize itemSize() const { return m_itemSize; }
+    void setItemSize( const QSize& size ) { m_itemSize = size; }
+
+    void startLoading();
+    void finishLoading();
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
+    void itemCountChanged( unsigned int items );
 
     void loadingStarted();
     void loadingFinished();
@@ -117,12 +137,18 @@ public slots:
     virtual void clear();
 
     virtual void append( const QList< Tomahawk::query_ptr >& queries );
+    virtual void append( const QList< Tomahawk::artist_ptr >& artists );
+    virtual void append( const QList< Tomahawk::album_ptr >& albums );
     virtual void append( const Tomahawk::query_ptr& query );
-    virtual void append( const Tomahawk::artist_ptr& artist ) { Q_UNUSED( artist ); }
-    virtual void append( const Tomahawk::album_ptr& album ) { Q_UNUSED( album ); }
+    virtual void append( const Tomahawk::artist_ptr& artist );
+    virtual void append( const Tomahawk::album_ptr& album );
 
     virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insert( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
+    virtual void insert( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
     virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
+    virtual void insert( const Tomahawk::artist_ptr& artist, int row = 0 );
+    virtual void insert( const Tomahawk::album_ptr& album, int row = 0 );
 
     virtual void remove( int row, bool moreToCome = false );
     virtual void remove( const QModelIndex& index, bool moreToCome = false );
@@ -142,18 +168,29 @@ private slots:
     void onPlaybackStopped();
 
 private:
+    template <typename T>
+    void insertInternal( const QList< T >& items, int row );
+    template <typename T>
+    void insertInternal( const T& item, int row );
+
     Qt::Alignment columnAlignment( int column ) const;
 
     PlayableItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;
+    QSize m_itemSize;
 
     bool m_readOnly;
 
     QString m_title;
     QString m_description;
+    QPixmap m_icon;
+
+    QHash< PlayableItemStyle, QList<Columns> > m_headerStyle;
+    QStringList m_header;
 
     PlayableItemStyle m_style;
+    bool m_loading;
 };
 
 #endif // PLAYABLEMODEL_H

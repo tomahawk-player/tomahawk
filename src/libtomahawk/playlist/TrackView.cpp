@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include "TrackHeader.h"
+#include "ViewHeader.h"
 #include "ViewManager.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
@@ -31,12 +31,13 @@
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "DropJob.h"
 #include "Artist.h"
 #include "Album.h"
+#include "Source.h"
 #include "utils/AnimatedSpinner.h"
 
 #define SCROLL_TIMEOUT 280
@@ -49,14 +50,18 @@ TrackView::TrackView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
-    , m_header( new TrackHeader( this ) )
+    , m_header( new ViewHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
-    , m_loadingSpinner( new AnimatedSpinner( this ) )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -94,6 +99,8 @@ TrackView::TrackView( QWidget* parent )
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
     connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
+    
+    setProxyModel( new PlayableProxyModel( this ) );
 }
 
 
@@ -142,13 +149,11 @@ TrackView::setPlayableModel( PlayableModel* model )
         m_proxyModel->setSourcePlayableModel( m_model );
     }
 
-    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
-    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
-
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( true );
+    m_header->setDefaultColumnWeights( model->columnWeights() );
 
     switch( model->style() )
     {
@@ -163,6 +168,16 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHeaderHidden( false );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
+
+    emit modelChanged();
+}
+
+
+void
+TrackView::setEmptyTip( const QString& tip )
+{
+    m_emptyTip = tip;
+    m_overlay->setText( tip );
 }
 
 
@@ -494,8 +509,17 @@ TrackView::onFilterChanged( const QString& )
         m_overlay->show();
     }
     else
+    {
         if ( model()->trackCount() )
+        {
             m_overlay->hide();
+        }
+        else
+        {
+            m_overlay->setText( m_emptyTip );
+            m_overlay->show();
+        }
+    }
 }
 
 
@@ -696,4 +720,40 @@ TrackView::mousePressEvent( QMouseEvent* event )
                 break;
         }
     }
+}
+
+
+Tomahawk::playlistinterface_ptr
+TrackView::playlistInterface() const
+{
+    return proxyModel()->playlistInterface();
+}
+
+
+QString
+TrackView::title() const
+{
+    return model()->title();
+}
+
+
+QString
+TrackView::description() const
+{
+    return model()->description();
+}
+
+
+QPixmap
+TrackView::pixmap() const
+{
+    return QPixmap( RESPATH "images/music-icon.png" );
+}
+
+
+bool
+TrackView::jumpToCurrentTrack()
+{
+    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
+    return true;
 }

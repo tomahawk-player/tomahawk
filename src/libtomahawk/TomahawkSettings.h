@@ -47,11 +47,13 @@ public:
 
     /// General settings
     virtual QString storageCacheLocation() const;
+
     virtual QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
     uint scannerTime() const;
     void setScannerTime( uint time );
+
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
 
@@ -80,6 +82,10 @@ public:
 
     bool enableEchonestCatalogs() const;
     void setEnableEchonestCatalogs( bool enable );
+
+    /// Audio stuff
+    unsigned int volume() const;
+    void setVolume( unsigned int volume );
 
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;

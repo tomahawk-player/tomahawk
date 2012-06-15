@@ -36,7 +36,7 @@
          </widget>
         </item>
         <item>
-         <widget class="AlbumView" name="newAlbumsView"/>
+         <widget class="GridView" name="newAlbumsView"/>
         </item>
        </layout>
       </widget>
@@ -92,9 +92,9 @@
    <header location="global">widgets/HeaderLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>AlbumView</class>
+   <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/AlbumView.h</header>
+   <header location="global">playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistWidget</class>

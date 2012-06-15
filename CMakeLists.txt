@@ -25,6 +25,7 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
 option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
+option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
@@ -68,7 +69,7 @@ SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 
 # make predefined install dirs available everywhere
-INCLUDE(GNUInstallDirs)
+INCLUDE( GNUInstallDirs )
 
 # installer creation
 INCLUDE( TomahawkCPack.cmake )
@@ -100,8 +101,8 @@ if(PHONON_FOUND)
     message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(LibEchonest 1.1.10)
-macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.10 is needed for dynamic playlists and the infosystem")
+macro_optional_find_package(LibEchonest 1.2.1)
+macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.2.1 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
@@ -132,11 +133,8 @@ macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP Library" "http://qutim.org/jreen 
 macro_optional_find_package(QTweetLib)
 macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin.\n")
 
-# required
-#While we distribute our own liblastfm2, don't need to look for it
-#macro_optional_find_package(LibLastFm 0.3.3)
-#macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
-set(LIBLASTFM_FOUND true)
+macro_optional_find_package(LibLastFm 1.0.0)
+macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again

@@ -49,11 +49,14 @@ protected:
     virtual QSplitterHandle* createHandle();
 
 private slots:
+    void changeSize( QWidget* child, const QSize& size );
+    
     void onShowRequest();
     void onHideRequest();
 
     void onSizeChanged( const QSize& size );
-
+    void onResizeRequest( const QPoint& delta );
+    
 private:
     int m_greedyIndex;
 };
@@ -95,10 +98,16 @@ public slots:
     virtual void onShown( QWidget*, bool animated );
     virtual void onHidden( QWidget*, bool animated );
 
+    virtual void hide() { emit hideWidget(); }
+    virtual void show() { emit showWidget(); }
+
 signals:
     void showWidget();
     void hideWidget();
+    
+    void animationFinished();
 
+    void resizeBy( const QPoint& delta );
     void sizeChanged( const QSize& size );
     void sizeHintChanged( const QSize& size );
     void hiddenSizeChanged();

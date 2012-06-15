@@ -69,13 +69,14 @@ ScriptResolver::~ScriptResolver()
     msg[ "_msgtype" ] = "quit";
     sendMessage( msg );
 
-    bool finished = m_proc.waitForFinished( 2500 ); // might call handleMsg
+    bool finished = m_proc.state() != QProcess::Running || m_proc.waitForFinished( 2500 ); // might call handleMsg
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
     if ( !finished || m_proc.state() == QProcess::Running )
     {
         qDebug() << "External resolver didn't exit after waiting 2s for it to die, killing forcefully";
+        Q_ASSERT(false);
 #ifdef Q_OS_WIN
         m_proc.kill();
 #else
@@ -287,6 +288,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 Q_ASSERT( !rp->mimetype().isEmpty() );
             }
 
+            rp->setResolvedBy( this );
             results << rp;
         }
 
@@ -440,7 +442,11 @@ void ScriptResolver::startProcess()
 #endif // Q_OS_WIN
 
     if( interpreter.isEmpty() )
+    {
+        const QFileInfo info( runPath );
+        m_proc.setWorkingDirectory( info.absolutePath() );
         m_proc.start( runPath );
+    }
     else
         m_proc.start( interpreter, QStringList() << filePath() );
 

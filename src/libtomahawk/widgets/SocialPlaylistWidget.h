@@ -38,7 +38,7 @@
 #include "Album.h"
 #include "Query.h"
 
-class AlbumModel;
+class PlayableModel;
 class PlaylistModel;
 class TreeModel;
 
@@ -81,7 +81,7 @@ private:
 
     Ui_SocialPlaylistWidget *ui;
     PlaylistModel* m_topForeignTracksModel;
-    AlbumModel* m_popularNewAlbumsModel;
+    PlayableModel* m_popularNewAlbumsModel;
 
     QString m_title;
     QString m_description;

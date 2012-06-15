@@ -53,6 +53,9 @@ public:
 
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName );
 
+    Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
+    Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
+
     QSharedPointer<QIODevice> customIODeviceFactory( const Tomahawk::result_ptr& result );
 
 public slots:

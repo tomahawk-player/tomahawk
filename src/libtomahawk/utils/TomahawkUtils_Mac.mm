@@ -16,16 +16,16 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "TomahawkUtils.h"
-
-#include "TomahawkUtils_Mac.h"
 #include "mac/FileHelpers.h"
-
-#include <QDir>
-#include <QTemporaryFile>
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/Foundation.h>
+
+#include "TomahawkUtils.h"
+#include "TomahawkUtils_Mac.h"
+
+#include <QDir>
+#include <QTemporaryFile>
 
 @implementation MoveDelegate
 
@@ -60,6 +60,8 @@
 
     if ( receiver )
         QMetaObject::invokeMethod(receiver, "installSucceeded", Qt::DirectConnection, Q_ARG(QString, path));
+
+    [target release];
 
 }
 

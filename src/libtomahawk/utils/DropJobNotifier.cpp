@@ -32,24 +32,24 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
-class QNetworkReply;
-
 using namespace Tomahawk;
+
 
 DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJob::DropType type, QNetworkReply* job )
     : JobStatusItem()
     , m_type( "unknown" )
     , m_job( 0 )
-    , m_pixmap ( servicePixmap )
-    , m_service ( service )
+    , m_pixmap( servicePixmap )
+    , m_service( service )
 {
     init( type );
 
-    if( m_service.isEmpty() )
+    if ( m_service.isEmpty() )
         m_service = "DropJob";
 
     connect( job, SIGNAL( finished() ), this, SLOT( setFinished() ) );
 }
+
 
 DropJobNotifier::DropJobNotifier( QPixmap pixmap, DropJob::DropType type )
     : JobStatusItem()
@@ -61,23 +61,24 @@ DropJobNotifier::DropJobNotifier( QPixmap pixmap, DropJob::DropType type )
 
 
 DropJobNotifier::~DropJobNotifier()
-{}
+{
+}
+
 
 void
 DropJobNotifier::init( DropJob::DropType type )
 {
-    if( type == DropJob::Playlist )
-        m_type = "playlist";
+    if ( type == DropJob::Playlist )
+        m_type = tr( "playlist" );
 
-    if( type == DropJob::Artist )
-        m_type = "artist";
+    if ( type == DropJob::Artist )
+        m_type = tr( "artist" );
 
-    if( type == DropJob::Track )
-        m_type = "track";
+    if ( type == DropJob::Track )
+        m_type = tr( "track" );
 
-    if( type == DropJob::Album )
-        m_type = "album";
-
+    if ( type == DropJob::Album )
+        m_type = tr( "album" );
 }
 
 
@@ -86,6 +87,7 @@ DropJobNotifier::rightColumnText() const
 {
     return QString();
 }
+
 
 QPixmap
 DropJobNotifier::icon() const
@@ -107,6 +109,7 @@ DropJobNotifier::mainText() const
                                     .arg( m_type );
     }
 }
+
 
 void
 DropJobNotifier::setFinished()

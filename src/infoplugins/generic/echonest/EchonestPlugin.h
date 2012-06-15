@@ -45,6 +45,8 @@ public:
     virtual ~EchonestPlugin();
 
 protected slots:
+    virtual void init();
+    
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )

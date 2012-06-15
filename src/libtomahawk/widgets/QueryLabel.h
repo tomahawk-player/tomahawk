@@ -22,6 +22,7 @@
 #include <QFrame>
 #include <QTime>
 #include <QPen>
+#include <QPixmap>
 
 #include "Result.h"
 #include "Query.h"
@@ -80,6 +81,7 @@ public:
     QFont font() const;
 
     void setExtraContentsMargins( int left, int top, int right, int bottom );
+    void setJumpLinkVisible( bool visible );
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -137,6 +139,9 @@ private:
     QRect m_hoverArea;
     QPoint m_dragPos;
     QMargins m_textMargins;
+    
+    bool m_jumpLinkVisible;
+    QPixmap m_jumpPixmap;
 };
 
 #endif // QUERYLABEL_H

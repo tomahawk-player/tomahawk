@@ -55,6 +55,7 @@ public:
     ChartType chartType() const { return m_chartType; }
 
 protected slots:
+    virtual void init();
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 

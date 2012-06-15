@@ -85,9 +85,7 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
 
 + (void)performMoveWithInfo:(NSDictionary *)info
 {
-        // *** GETS CALLED ON NON-MAIN THREAD!
-
-    CAutoreleasePool _p;
+    // *** GETS CALLED ON NON-MAIN THREAD!
 
     NSString* fromPath = [info objectForKey: TKCopySourceKey];
     NSString* toPath = [info objectForKey: TKCopyDestinationKey];
@@ -201,7 +199,13 @@ static BOOL AuthorizationExecuteWithPrivilegesAndWait(AuthorizationRef authoriza
     if (!success) {
         NSLog( @"Failed to do non-authenticated move! Help! %@", [[error userInfo] objectForKey: NSLocalizedDescriptionKey] );
     }
-    [self notifyDelegate:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:success], TKInstallerResultKey, [info objectForKey:TKInstallerDelegateKey], TKInstallerDelegateKey, error, TKInstallerErrorKey, nil]];
+
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:success], TKInstallerResultKey, [info objectForKey:TKInstallerDelegateKey], TKInstallerDelegateKey, error, TKInstallerErrorKey, nil];
+    [self notifyDelegate:dict];
+
+    // TODO Do not release yet as seems to crash on some systems.
+//    [fromPath release];
+//    [toPath release];
 }
 
 

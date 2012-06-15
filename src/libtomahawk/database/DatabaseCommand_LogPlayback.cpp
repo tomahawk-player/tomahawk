@@ -37,31 +37,33 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
+    if ( !m_query.isNull() )
+        return;
+
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr, unsigned int ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr, unsigned int ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
 
-    Tomahawk::query_ptr q;
-    if ( !m_result.isNull() )
+    if ( !m_result.isNull() && m_query.isNull() )
     {
-        q = m_result->toQuery();
+        m_query = m_result->toQuery();
     }
     else
     {
         // do not auto resolve this track
-        q = Tomahawk::Query::get( m_artist, m_track, QString() );
+        m_query = Tomahawk::Query::get( m_artist, m_track, QString() );
     }
-    q->setPlayedBy( source(), m_playtime );
+    m_query->setPlayedBy( source(), m_playtime );
 
     if ( m_action == Finished )
     {
-        emit trackPlayed( q );
+        emit trackPlayed( m_query );
     }
     // if the play time is more than 10 minutes in the past, ignore
     else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < STARTED_THRESHOLD )
     {
-        emit trackPlaying( q, m_trackDuration );
+        emit trackPlaying( m_query, m_trackDuration );
     }
 
     if ( source()->isLocal() )
@@ -78,25 +80,36 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     if ( m_action != Finished )
         return;
-    if ( m_secsPlayed < FINISHED_THRESHOLD )
+    if ( m_secsPlayed < FINISHED_THRESHOLD && m_trackDuration > 0 )
+        return;
+    if ( m_artist.isEmpty() || m_track.isEmpty() )
         return;
 
-    TomahawkSqlQuery query = dbi->newquery();
-    query.prepare( "INSERT INTO playback_log(source, track, playtime, secs_played) "
-                   "VALUES (?, ?, ?, ?)" );
-
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
-    qDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid;
+    TomahawkSqlQuery query = dbi->newquery();
+    
+    if ( !m_query.isNull() )
+    {
+        query.prepare( QString( "SELECT * FROM playback_log WHERE source %1 AND playtime = %2" ).arg( srcid.isNull() ? "IS NULL" : srcid.toString() ).arg( m_playtime ) );
+        query.exec();
+        if ( query.next() )
+        {
+            tDebug() << "Ignoring dupe playback log for source" << srcid << "with timestamp" << m_playtime;
+            return;
+        }
+    }
+
+//    tDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid << "- timestamp:" << m_playtime;
+
+    query.prepare( "INSERT INTO playback_log(source, track, playtime, secs_played) VALUES (?, ?, ?, ?)" );
     query.bindValue( 0, srcid );
 
-    // If there's no artist, becuase it's a resolver result with bad metadata for example, don't save it
-    bool autoCreate = m_artist.isEmpty();
-    int artid = dbi->artistId( m_artist, autoCreate );
+    // If there's no artist, because it's a resolver result with bad metadata for example, don't save it
+    int artid = dbi->artistId( m_artist, true );
     if( artid < 1 )
         return;
 
-    autoCreate = true; // artistId overwrites autoCreate (reference)
-    int trkid = dbi->trackId( artid, m_track, autoCreate );
+    int trkid = dbi->trackId( artid, m_track, true );
     if( trkid < 1 )
         return;
 

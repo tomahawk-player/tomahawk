@@ -58,7 +58,7 @@ public:
     void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
     void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
-    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
+    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
     QList< QWeakPointer< ExternalResolver > > scriptResolvers() const { return m_scriptResolvers; }
@@ -90,8 +90,8 @@ signals:
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
 
-    void resolverAdded( Resolver* );
-    void resolverRemoved( Resolver* );
+    void resolverAdded( Tomahawk::Resolver* );
+    void resolverRemoved( Tomahawk::Resolver* );
 
 private slots:
     void timeoutShunt( const query_ptr& q );

@@ -139,9 +139,6 @@ struct AccountModelNode {
         init();
         customAccount = account;
         factory = AccountManager::instance()->factoryForAccount( account );
-
-        if ( CustomAtticaAccount* customAtticaAccount = qobject_cast< CustomAtticaAccount* >( account ) )
-            atticaContent = customAtticaAccount->atticaContent();
     }
 
     void init()

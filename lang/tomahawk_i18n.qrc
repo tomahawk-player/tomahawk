@@ -10,5 +10,6 @@
 <file>tomahawk_es.qm</file>
 <file>tomahawk_sv.qm</file>
 <file>tomahawk_ja.qm</file>
+<file>tomahawk_ar.qm</file>
 </qresource>
 </RCC>

@@ -54,7 +54,17 @@ MprisPlugin::MprisPlugin()
 
     // Types of pushInfo we care about
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
+}
 
+
+MprisPlugin::~MprisPlugin()
+{
+}
+
+
+void
+MprisPlugin::init()
+{
     // DBus connection
     new MprisPluginRootAdaptor( this );
     new MprisPluginPlayerAdaptor( this );
@@ -81,11 +91,6 @@ MprisPlugin::MprisPlugin()
     // Connect to AudioEngine's seeked signal
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ),
                                         SLOT( onSeeked( qint64 ) ) );
-}
-
-
-MprisPlugin::~MprisPlugin()
-{
 }
 
 

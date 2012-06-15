@@ -278,7 +278,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
-        File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         ; plugins
         File "${INSTALL_PATH}\lib\libtomahawk_*_*.dll"
@@ -293,7 +292,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libtomahawklib.dll"
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
-        File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
         ; plugins
         File "${BUILD_PATH}\libtomahawk_*_*.dll"
    !endif
@@ -351,6 +349,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\zlib1.dll"
 
    File "${MING_BIN}\libechonest.dll"
+   File "${MING_BIN}\liblastfm.dll"
    File "${MING_BIN}\libQTweetLib.dll"
    File "${MING_BIN}\libquazip.dll"
 

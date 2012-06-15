@@ -20,17 +20,27 @@
 
 #include "accounts/AccountManager.h"
 #include "TomahawkSettingsGui.h"
+#include <QTemporaryFile>
 
-BinaryInstallerHelper::BinaryInstallerHelper( const QString& resolverId, bool createAccount, AtticaManager* manager )
+BinaryInstallerHelper::BinaryInstallerHelper( QTemporaryFile* tempFile, const QString& resolverId, bool createAccount, AtticaManager* manager )
     : QObject( manager )
+    , m_tempFile( tempFile )
     , m_resolverId( resolverId )
     , m_createAccount( createAccount )
     , m_manager( QWeakPointer< AtticaManager >( manager ) )
 {
+    Q_ASSERT( m_tempFile );
     Q_ASSERT( !m_resolverId.isEmpty() );
     Q_ASSERT( !m_manager.isNull() );
 
     setProperty( "resolverid", m_resolverId );
+}
+
+
+BinaryInstallerHelper::~BinaryInstallerHelper()
+{
+    Q_ASSERT( m_tempFile );
+    delete m_tempFile;
 }
 
 

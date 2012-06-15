@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QHash>
 #include <QPixmap>
+#include <QNetworkReply>
 
 #include "DllMacro.h"
 #include "accounts/Account.h"
@@ -31,6 +32,12 @@
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
+
+namespace Tomahawk {
+namespace Accounts {
+class AtticaResolverAccount;
+}
+}
 
 class BinaryInstallerHelper;
 
@@ -105,6 +112,8 @@ public:
 
 public slots:
     void installResolver( const Attica::Content& resolver, bool autoCreateAccount = true );
+    void installResolverWithHandler( const Attica::Content& resolver, Tomahawk::Accounts::AtticaResolverAccount* handler );
+
     void upgradeResolver( const Attica::Content& resolver );
 
 signals:
@@ -116,7 +125,10 @@ signals:
     void resolverInstallationFailed( const QString& resolverId );
 
     void startedInstalling( const QString& resolverId );
+
 private slots:
+    void providerFetched( QNetworkReply* reply );
+    void providerError( QNetworkReply::NetworkError );
     void providerAdded( const Attica::Provider& );
     void categoriesReturned( Attica::BaseJob* );
     void resolversList( Attica::BaseJob* );
@@ -131,8 +143,8 @@ private slots:
     void syncServerData();
 
 private:
-    QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
+    void doInstallResolver(  const Attica::Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler );
 
     Attica::ProviderManager m_manager;
 
@@ -162,5 +174,5 @@ protected:
 };
 
 Q_DECLARE_METATYPE( Attica::Content );
-
+Q_DECLARE_METATYPE( QNetworkReply* );
 #endif // ATTICAMANAGER_H

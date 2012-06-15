@@ -44,7 +44,6 @@ namespace Tomahawk {
             virtual ~TwitterInfoPlugin();
             
         public slots:
-            void init();
             void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
             {
                 Q_UNUSED( criteria );
@@ -52,6 +51,7 @@ namespace Tomahawk {
             }
 
         protected slots:
+            void init();
             void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
             void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             {

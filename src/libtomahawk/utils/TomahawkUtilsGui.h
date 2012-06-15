@@ -24,6 +24,7 @@
 #include <QModelIndex>
 #include <QColor>
 #include <QRect>
+#include <QTextOption>
 
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
@@ -34,6 +35,8 @@ class QPainter;
 class QPixmap;
 class QLayout;
 class QPalette;
+class QRect;
+class QScrollBar;
 
 namespace TomahawkUtils
 {
@@ -47,7 +50,9 @@ namespace TomahawkUtils
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
+    DLLEXPORT void drawShadowText( QPainter* p, const QRect& rect, const QString& text, const QTextOption& textOption );
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
+
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
     DLLEXPORT int headerHeight();
@@ -58,6 +63,8 @@ namespace TomahawkUtils
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
+
+    DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 }
 
 #endif // TOMAHAWKUTILSGUI_H

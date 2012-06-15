@@ -39,6 +39,8 @@ public:
     virtual ~FdoNotifyPlugin();
 
 protected slots:
+    virtual void init() {}
+    
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestData );

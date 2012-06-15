@@ -28,13 +28,14 @@
 #include "playlist/PlaylistView.h"
 #include "database/Database.h"
 #include "widgets/ImageButton.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Album.h"
 #include "DropJob.h"
 #include "SocialWidget.h"
 #include "GlobalActionManager.h"
 #include "ViewManager.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
@@ -60,6 +61,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
     ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
+    ui->artistTrackLabel->setJumpLinkVisible( true );
 
     ui->albumLabel->setFont( font );
     ui->albumLabel->setType( QueryLabel::Album );
@@ -87,6 +89,9 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
+    
+    ui->socialButton->setFixedSize( QSize( 20, 20 ) );
+    ui->loveButton->setFixedSize( QSize( 20, 20 ) );
 
 #ifdef Q_WS_MAC
     ui->ownerLabel->setForegroundRole( QPalette::Text );
@@ -545,7 +550,6 @@ void
 AudioControls::onTrackClicked()
 {
     ViewManager::instance()->show( m_currentTrack->toQuery() );
-//    ViewManager::instance()->showCurrentTrack();
 }
 
 
@@ -596,10 +600,13 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 void
 AudioControls::onSocialButtonClicked()
 {
-    SocialWidget* sw = new SocialWidget( m_parent );
-    sw->setPosition( QCursor::pos() );
-    sw->setQuery( m_currentTrack->toQuery() );
-    sw->show();
+    if ( !m_socialWidget.isNull() )
+        return;
+
+    m_socialWidget = new SocialWidget( m_parent );
+    m_socialWidget.data()->setPosition( m_socialWidget.data()->mapFromGlobal( QCursor::pos() ) );
+    m_socialWidget.data()->setQuery( m_currentTrack->toQuery() );
+    m_socialWidget.data()->show();
 }
 
 

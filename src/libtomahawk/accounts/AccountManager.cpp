@@ -234,8 +234,11 @@ AccountManager::connectAll()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach( Account* acc, m_accounts )
     {
-        acc->authenticate();
-        m_enabledAccounts << acc;
+        if ( acc->enabled() )
+        {
+            acc->authenticate();
+            m_enabledAccounts << acc;
+        }
 
     }
     m_connected = true;

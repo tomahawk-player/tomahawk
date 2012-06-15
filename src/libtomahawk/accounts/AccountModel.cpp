@@ -95,12 +95,14 @@ AccountModel::loadData()
             if ( acct )
             {
                 m_accounts << new AccountModelNode( acct );
-#if ACCOUNTMODEL_DEBUG
                 const int removed = allAccounts.removeAll( acct );
+#if ACCOUNTMODEL_DEBUG
                 qDebug() << "Removed custom account from misc accounts list, found:" << removed;
                 qDebug() << "All accounts after remove:";
                 foreach ( Account* acct, allAccounts )
                     qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();    // All other accounts we haven't dealt with yet
+#else
+                Q_UNUSED( removed );
 #endif
             }
         } else
@@ -109,10 +111,14 @@ AccountModel::loadData()
 
             foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
             {
-//                 qDebug() << "Found ResolverAccount" << acct->accountFriendlyName();
+#if ACCOUNTMODEL_DEBUG
+                qDebug() << "Found ResolverAccount" << acct->accountFriendlyName();
+#endif
                 if ( AtticaResolverAccount* resolver = qobject_cast< AtticaResolverAccount* >( acct ) )
                 {
-//                     qDebug() << "Which is an attica resolver with id:" << resolver->atticaId();
+#if ACCOUNTMODEL_DEBUG
+                    qDebug() << "Which is an attica resolver with id:" << resolver->atticaId();
+#endif
                     if ( resolver->atticaId() == content.id() )
                     {
                         allAccounts.removeAll( acct );
@@ -345,12 +351,15 @@ AccountModel::data( const QModelIndex& index, int role ) const
             Q_ASSERT( node->customAccount );
             Q_ASSERT( node->factory );
 
-            Account* account = node->customAccount;
-            // This is sort of ugly. CustomAccounts are pure Account*, but we know that
+            Attica::Content content = node->atticaContent;
+            // This is ugly. CustomAccounts are pure Account*, but we know that
             // some might also be linked to attica resolvers (not always). If that is the case
             // they have a Attica::Content set on the node, so we use that to display some
             // extra metadata and rating
-            const bool hasAttica = !node->atticaContent.id().isEmpty();
+            Account* account = node->customAccount;
+            if ( node->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( account ) )
+                content = qobject_cast< CustomAtticaAccount* >( node->customAccount )->atticaContent();
+            const bool hasAttica = !content.id().isNull();
 
             switch ( role )
             {
@@ -362,15 +371,15 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return ShippedWithTomahawk;
                 case Qt::ToolTipRole:
                 case DescriptionRole:
-                    return hasAttica ? node->atticaContent.description() : node->factory->description();
+                    return hasAttica ? content.description() : node->factory->description();
                 case CanRateRole:
                     return hasAttica;
                 case AuthorRole:
-                    return hasAttica ? node->atticaContent.author() : QString();
+                    return hasAttica ? content.author() : QString();
                 case RatingRole:
-                    return hasAttica ? node->atticaContent.rating() / 20 : 0; // rating is out of 100
+                    return hasAttica ? content.rating() / 20 : 0; // rating is out of 100
                 case DownloadCounterRole:
-                    return hasAttica ? node->atticaContent.downloads() : QVariant();
+                    return hasAttica ? content.downloads() : QVariant();
                 case RowTypeRole:
                     return CustomAccount;
                 case AccountData:
@@ -383,6 +392,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                     return account->enabled() ? Qt::Checked : Qt::Unchecked;
                 case ConnectionStateRole:
                     return account->connectionState();
+                case UserHasRatedRole:
+                    return hasAttica ? AtticaManager::instance()->userHasRated( content ) : false;
                 default:
                     return QVariant();
             }
@@ -405,6 +416,9 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( role == CheckboxClickedRole )
     {
         Account* acct = 0;
+
+        Qt::CheckState checkState = static_cast< Qt::CheckState >( value.toInt() );
+
         switch ( node->type )
         {
             case AccountModelNode::UniqueFactoryType:
@@ -442,9 +456,11 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     state = AtticaManager::Uninstalled;
                 }
 
-                if ( state == AtticaManager::Installed )
+                // Don't install if we're unchecking. This happens if e.g. the user deletes his config file
+                // and opens tomahawk
+                if ( state == AtticaManager::Installed || checkState == Qt::Unchecked )
                 {
-                    qDebug() << "Already installed with resolver, just enabling";
+                    qDebug() << "Already installed with resolver, or unchecking, just enabling/disabling";
                     acct = node->atticaAccount;
                     break;
                 }
@@ -459,7 +475,11 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
                     qDebug() << "Kicked off fetch+install, now waiting";
                     m_waitingForAtticaInstall.insert( resolver.id() );
 
-                    AtticaManager::instance()->installResolver( resolver );
+                    if ( node->atticaAccount )
+                        AtticaManager::instance()->installResolverWithHandler( resolver, node->atticaAccount );
+                    else
+                        AtticaManager::instance()->installResolver( resolver, true );
+
                     return true;
                 }
 
@@ -476,13 +496,15 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
 
         if ( node->type == AccountModelNode::FactoryType )
         {
+            tLog() << "Factory account with members:" << node->accounts << node->accounts.size();
             // Turn on or off all accounts for this factory
-
-            Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
-
             foreach ( Account* acct, node->accounts )
             {
-                state == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
+                tLog() << "Account we are toggling for factory:" << acct;
+                if ( !acct )
+                    continue;
+
+                checkState == Qt::Checked ? AccountManager::instance()->enableAccount( acct )
                                      : AccountManager::instance()->disableAccount( acct );
             }
 
@@ -507,7 +529,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
             box.setWindowTitle( tr( "Manual Install Required" ) );
             box.setTextFormat( Qt::RichText );
             box.setIcon( QMessageBox::Information );
-            box.setText( tr( "Unfortunately, automatic installation of this resolver is not yet available on Linux.<br /><br />"
+            box.setText( tr( "Unfortunately, automatic installation of this resolver is not available or disabled for your platform.<br /><br />"
             "Please use \"Install from file\" above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:<br /><br />http://www.tomahawk-player.org/resolvers/%1" ).arg( acct->accountServiceName() ) );
             box.setStandardButtons( QMessageBox::Ok );
             box.exec();
@@ -542,16 +564,29 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( role == RatingRole )
     {
         // We only support rating Attica resolvers for the moment.
-        Q_ASSERT( node->type == AccountModelNode::AtticaType );
+        Attica::Content content;
+        if ( node->type == AccountModelNode::AtticaType )
+        {
+            content = node->atticaContent;
 
-        AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( node->atticaContent );
-        // For now only allow rating if a resolver is installed!
-        if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+            AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( content );
+            // For now only allow rating if a resolver is installed!
+            if ( state != AtticaManager::Installed && state != AtticaManager::NeedsUpgrade )
+                return false;
+        } // Allow rating custom attica accounts regardless as user may have installed manually
+        else if ( node->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( node->customAccount ) )
+            content = qobject_cast< CustomAtticaAccount* >( node->customAccount )->atticaContent();
+
+        Q_ASSERT( !content.id().isNull() );
+
+        if ( AtticaManager::instance()->userHasRated( content ) )
             return false;
-        if ( AtticaManager::instance()->userHasRated( node->atticaContent ) )
-            return false;
-        node->atticaContent.setRating( value.toInt() * 20 );
-        AtticaManager::instance()->uploadRating( node->atticaContent );
+
+        content.setRating( value.toInt() * 20 );
+        AtticaManager::instance()->uploadRating( content );
+
+        if ( node->type == AccountModelNode::AtticaType )
+            node->atticaContent = content;
 
         emit dataChanged( index, index );
 
@@ -728,6 +763,12 @@ AccountModel::indexForAtticaId( const QString& resolverId ) const
         if ( m_accounts[ i ]->type == AccountModelNode::AtticaType && m_accounts[ i ]->atticaContent.id() == resolverId )
         {
             return index( i, 0, QModelIndex() );
+        }
+        else if ( m_accounts[ i ]->type == AccountModelNode::CustomAccountType && qobject_cast< CustomAtticaAccount* >( m_accounts[ i ]->customAccount ) )
+        {
+            const CustomAtticaAccount* atticaAcct = qobject_cast< CustomAtticaAccount* >( m_accounts[ i ]->customAccount );
+            if ( atticaAcct->atticaContent().id() == resolverId )
+                return index( i, 0, QModelIndex() );
         }
     }
 

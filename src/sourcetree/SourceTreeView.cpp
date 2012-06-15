@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2010-2012, Leo Franchi   <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,8 +27,9 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QPainter>
 #include <QtGui/QStyledItemDelegate>
-#include <QtCore/QSize>
 #include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+#include <QtCore/QSize>
 
 #include "ActionCollection.h"
 #include "Playlist.h"
@@ -42,12 +44,13 @@
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
-#include "utils/Logger.h"
 #include "items/GenericPageItems.h"
 #include "items/TemporaryPageItem.h"
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/Database.h"
 #include "LatchManager.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -109,7 +112,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
     connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
-//     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
+    connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
@@ -168,11 +171,11 @@ SourceTreeView::setupMenus()
         {
             if ( m_latchManager->isLatched( source ) )
             {
-                QAction *latchOffAction = ActionCollection::instance()->getAction( "latchOff" );
+                QAction* latchOffAction = ActionCollection::instance()->getAction( "latchOff" );
                 m_latchMenu.addAction( latchOffAction );
                 connect( latchOffAction, SIGNAL( triggered() ), SLOT( latchOff() ) );
                 m_latchMenu.addSeparator();
-                QAction *latchRealtimeAction = ActionCollection::instance()->getAction( "realtimeFollowingAlong" );
+                QAction* latchRealtimeAction = ActionCollection::instance()->getAction( "realtimeFollowingAlong" );
                 latchRealtimeAction->setChecked( source->playlistInterface()->latchMode() == Tomahawk::PlaylistModes::RealTime );
                 m_latchMenu.addAction( latchRealtimeAction );
                 connect( latchRealtimeAction, SIGNAL( toggled( bool ) ), SLOT( latchModeToggled( bool ) ) );
@@ -180,24 +183,31 @@ SourceTreeView::setupMenus()
         }
     }
 
-    QAction *loadPlaylistAction = ActionCollection::instance()->getAction( "loadPlaylist" );
+    QAction* loadPlaylistAction = ActionCollection::instance()->getAction( "loadPlaylist" );
     m_playlistMenu.addAction( loadPlaylistAction );
-    QAction *renamePlaylistAction = ActionCollection::instance()->getAction( "renamePlaylist" );
+    QAction* renamePlaylistAction = ActionCollection::instance()->getAction( "renamePlaylist" );
     m_playlistMenu.addAction( renamePlaylistAction );
     m_playlistMenu.addSeparator();
 
-    QAction *copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
-    QAction *deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
+    QAction* copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
 
-    QString addToText = QString( "Add to my %1" );
     if ( type == SourcesModel::StaticPlaylist )
-        addToText = addToText.arg( "playlists" );
-    if ( type == SourcesModel::AutomaticPlaylist )
-        addToText = addToText.arg( "Automatic Playlists" );
-    else if ( type == SourcesModel::Station )
-        addToText = addToText.arg( "Stations" );
+    {
+        QAction* exportPlaylist = m_playlistMenu.addAction( tr( "&Export Playlist") );
+        connect( exportPlaylist, SIGNAL( triggered() ), this, SLOT( exportPlaylist() ) );
+    }
 
-    QAction *addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
+    QAction* deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
+
+    QString addToText;
+    if ( type == SourcesModel::StaticPlaylist )
+        addToText = tr( "Add to my Playlists" );
+    if ( type == SourcesModel::AutomaticPlaylist )
+        addToText = tr( "Add to my Automatic Playlists" );
+    else if ( type == SourcesModel::Station )
+        addToText = tr( "Add to my Stations" );
+
+    QAction* addToLocalAction = m_roPlaylistMenu.addAction( addToText );
 
     m_roPlaylistMenu.addAction( copyPlaylistAction );
     deletePlaylistAction->setEnabled( !readonly );
@@ -209,7 +219,6 @@ SourceTreeView::setupMenus()
         !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
     {
         m_playlistMenu.addSeparator();
-
 
         const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         const playlist_ptr playlist = item->playlist();
@@ -225,10 +234,6 @@ SourceTreeView::setupMenus()
         }
     }
 
-
-   if ( type == SourcesModel::StaticPlaylist )
-       copyPlaylistAction->setText( tr( "&Export Playlist" ) );
-
     connect( loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
@@ -242,6 +247,18 @@ void
 SourceTreeView::showOfflineSources( bool offlineSourcesShown )
 {
     m_proxyModel->showOfflineSources( offlineSourcesShown );
+}
+
+
+void
+SourceTreeView::onSelectionChanged()
+{
+    if ( currentIndex() != m_selectedIndex )
+    {
+        selectionModel()->blockSignals( true );
+        selectionModel()->select( m_selectedIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
+        selectionModel()->blockSignals( false );
+    }
 }
 
 
@@ -271,7 +288,7 @@ void
 SourceTreeView::onItemExpanded( const QModelIndex& idx )
 {
     // make sure to expand children nodes for collections
-    if( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    if ( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
        for( int i = 0; i < model()->rowCount( idx ); i++ )
        {
@@ -284,6 +301,8 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
 void
 SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 {
+    m_selectedIndex = idx;
+
     if ( !selectionModel()->selectedIndexes().contains( idx ) )
     {
         scrollTo( idx, QTreeView::EnsureVisible );
@@ -319,20 +338,50 @@ SourceTreeView::loadPlaylist()
 void
 SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
 {
-    qDebug() << Q_FUNC_INFO;
-
     QModelIndex idx = idxIn.isValid() ? idxIn : m_contextMenuIndex;
     if ( !idx.isValid() )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    QString typeDesc;
+    switch ( type )
+    {
+        case SourcesModel::StaticPlaylist:
+            typeDesc = tr( "playlist" );
+            break;
+
+        case SourcesModel::AutomaticPlaylist:
+            typeDesc = tr( "automatic playlist" );
+            break;
+
+        case SourcesModel::Station:
+            typeDesc = tr( "station" );
+            break;
+
+        default:
+            Q_ASSERT( false );
+    }
+
+    QMessageBox askDelete( QMessageBox::Question, tr( "Delete %1?", "playlist/station/..." ).arg( typeDesc ),
+                           tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
+                             .arg( typeDesc ).arg( idx.data().toString() ),
+                           QMessageBox::Yes | QMessageBox::No, this );
+
+#ifdef Q_OS_MAC
+    askDelete.setWindowModality( Qt::WindowModal );
+#endif
+
+    int r = askDelete.exec();
+    if ( r != QMessageBox::Yes )
+        return;
+
     if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
         playlist_ptr playlist = item->playlist();
         Playlist::remove( playlist );
     }
-    else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    else if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -349,7 +398,7 @@ SourceTreeView::copyPlaylistLink()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -357,22 +406,37 @@ SourceTreeView::copyPlaylistLink()
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {
+       const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+       const playlist_ptr playlist = item->playlist();
 
-        // Disable toma.hk playlist mode until ready
-        // GlobalActionManager::instance()->getShortLink( playlist );
+       GlobalActionManager::instance()->getShortLink( playlist );
+    }
+}
 
-       PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-       playlist_ptr playlist = item->playlist();
 
-       QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
-       QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
-                                                        suggestedFilename, tr( "Playlists (*.xspf)" ) );
-       if ( !filename.isEmpty() )
-       {
-           QFileInfo playlistAbsoluteFilePath = filename;
-           TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
-           GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
-       }
+void
+SourceTreeView::exportPlaylist()
+{
+    const QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    const SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    Q_ASSERT( type == SourcesModel::StaticPlaylist );
+    if ( type != SourcesModel::StaticPlaylist )
+        return;
+
+    const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+    const playlist_ptr playlist = item->playlist();
+
+    const QString suggestedFilename = TomahawkSettings::instance()->playlistDefaultPath() + "/" + playlist->title();
+    const QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
+                                                     suggestedFilename, tr( "Playlists (*.xspf)" ) );
+    if ( !filename.isEmpty() )
+    {
+        const  QFileInfo playlistAbsoluteFilePath( filename );
+        TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
+        GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
     }
 }
 
@@ -385,7 +449,7 @@ SourceTreeView::addToLocal()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -418,7 +482,7 @@ SourceTreeView::latchOnOrCatchUp()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -437,7 +501,7 @@ SourceTreeView::latchOff()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -474,7 +538,7 @@ SourceTreeView::latchModeToggled( bool checked )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -486,7 +550,7 @@ SourceTreeView::latchModeToggled( bool checked )
 void
 SourceTreeView::renamePlaylist()
 {
-    if( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
+    if ( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
         edit( selectionModel()->selectedIndexes().first() );
     else
         edit( m_contextMenuIndex );
@@ -509,7 +573,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
          model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Station )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
-        if( item->playlist()->author()->isLocal() )
+        if ( item->playlist()->author()->isLocal() )
             m_playlistMenu.exec( mapToGlobal( pos ) );
         else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
@@ -586,7 +650,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = rect;
 
             SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
-            if( item->willAcceptDrag( event->mimeData() ) )
+            if ( item->willAcceptDrag( event->mimeData() ) )
             {
 
                 accept = true;
@@ -643,7 +707,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
     {
         qDebug() << Q_FUNC_INFO << "Current Event";
-        DropJob *dropThis = new DropJob;
+        DropJob* dropThis = new DropJob;
         dropThis->setDropTypes( DropJob::Playlist );
         dropThis->setDropAction( DropJob::Create );
         dropThis->parseMimeData( event->mimeData() );
@@ -672,9 +736,9 @@ SourceTreeView::dropEvent( QDropEvent* event )
 
 
 void
-SourceTreeView::keyPressEvent( QKeyEvent *event )
+SourceTreeView::keyPressEvent( QKeyEvent* event )
 {
-    if( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !selectionModel()->selectedIndexes().isEmpty() )
+    if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !selectionModel()->selectedIndexes().isEmpty() )
     {
         QModelIndex idx = selectionModel()->selectedIndexes().first();
         if ( model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
@@ -684,9 +748,8 @@ SourceTreeView::keyPressEvent( QKeyEvent *event )
             PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
             Q_ASSERT( item );
 
-            if( item->playlist()->author()->isLocal() ) {
+            if ( item->playlist()->author()->isLocal() )
                 deletePlaylist( idx );
-            }
         }
         event->accept();
     }

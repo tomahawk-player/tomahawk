@@ -22,6 +22,7 @@
 #include "TomahawkSettingsGui.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "config.h"
 
 #include <attica/downloaditem.h>
 
@@ -35,10 +36,22 @@
 #include "accounts/ResolverAccount.h"
 #include "accounts/AccountManager.h"
 #include "utils/BinaryInstallerHelper.h"
+#include "utils/Closure.h"
 
 using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
+
+
+// Sort binary resolvers above script resolvers, and script resolvers by download count
+bool
+resolverSort( const Attica::Content& first, const Attica::Content& second )
+{
+    if ( !first.attribute( "typeid" ).isEmpty() && second.attribute( "typeid" ).isEmpty() )
+        return true;
+
+    return first.downloads() > second.downloads();
+}
 
 
 AtticaManager::AtticaManager( QObject* parent )
@@ -48,7 +61,13 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-   m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+    
+    const QString url = QString( "http://bakery.tomahawk-player.org/resolvers/providers.xml?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
+    NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
+
 //     m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
@@ -58,6 +77,15 @@ AtticaManager::AtticaManager( QObject* parent )
 AtticaManager::~AtticaManager()
 {
     savePixmapsToCache();
+
+
+    foreach( const QString& id, m_resolverStates.keys() )
+    {
+        if ( !m_resolverStates[ id ].pixmap )
+            continue;
+
+        delete m_resolverStates[ id ].pixmap;
+    }
 }
 
 
@@ -244,6 +272,25 @@ AtticaManager::resolverData(const QString &atticaId) const
 
 
 void
+AtticaManager::providerError( QNetworkReply::NetworkError err )
+{
+    // So those who care know
+    emit resolversLoaded( Content::List() );
+}
+
+
+void
+AtticaManager::providerFetched( QNetworkReply* reply )
+{
+    Q_ASSERT( reply );
+    if ( !reply )
+        return;
+
+    m_manager.addProviderFromXml( reply->readAll() );
+}
+
+
+void
 AtticaManager::providerAdded( const Provider& provider )
 {
     if ( provider.name() == "Tomahawk Resolvers" )
@@ -328,7 +375,10 @@ AtticaManager::resolversList( BaseJob* j )
     syncServerData();
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 
@@ -345,6 +395,15 @@ AtticaManager::binaryResolversList( BaseJob* j )
     platform = "osx";
 #elif defined(Q_OS_WIN)
     platform = "win";
+#elif defined(Q_OS_LINUX) && defined(__GNUC__) && defined(__x86_64__)
+    platform = "linux-x64";
+#elif defined(Q_OS_LINUX) // Horrible assumption here...
+    platform = "linux-x86";
+#endif
+
+    // Override if no binary resolvers were requested
+#ifndef WITH_BINARY_ATTICA
+    platform = QString();
 #endif
 
     foreach ( const Content& c, binaryResolvers )
@@ -370,7 +429,10 @@ AtticaManager::binaryResolversList( BaseJob* j )
     }
 
     if ( ++m_resolverJobsLoaded == 2 )
+    {
+        qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
         emit resolversLoaded( m_resolvers );
+    }
 }
 
 
@@ -434,7 +496,20 @@ AtticaManager::syncServerData()
 
 
 void
-AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount )
+AtticaManager::installResolver( const Content& resolver, bool autoCreate )
+{
+    doInstallResolver( resolver, autoCreate, 0 );
+}
+
+
+void
+AtticaManager::installResolverWithHandler( const Content& resolver, Tomahawk::Accounts::AtticaResolverAccount* handler )
+{
+    doInstallResolver( resolver, false, handler );
+}
+
+
+void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
@@ -450,7 +525,8 @@ AtticaManager::installResolver( const Content& resolver, bool autoCreateAccount 
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
     job->setProperty( "resolverId", resolver.id() );
-    job->setProperty( "createAccount", autoCreateAccount );
+    job->setProperty( "createAccount", autoCreate );
+    job->setProperty( "handler", QVariant::fromValue< QObject* >( handler ) );
     job->setProperty( "binarySignature", resolver.attribute("signature"));
 
     job->start();
@@ -488,6 +564,7 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
         connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
         reply->setProperty( "resolverId", job->property( "resolverId" ) );
         reply->setProperty( "createAccount", job->property( "createAccount" ) );
+        reply->setProperty( "handler", job->property( "handler" ) );
         reply->setProperty( "binarySignature", job->property( "binarySignature" ) );
     }
     else
@@ -509,14 +586,14 @@ AtticaManager::payloadFetched()
     // we got a zip file, save it to a temporary file, then unzip it to our destination data dir
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QTemporaryFile f( QDir::tempPath() + QDir::separator() + "tomahawkattica_XXXXXX.zip" );
-        if ( !f.open() )
+        QTemporaryFile* f = new QTemporaryFile( QDir::tempPath() + QDir::separator() + "tomahawkattica_XXXXXX.zip" );
+        if ( !f->open() )
         {
-            tLog() << "Failed to write zip file to temp file:" << f.fileName();
+            tLog() << "Failed to write zip file to temp file:" << f->fileName();
             return;
         }
-        f.write( reply->readAll() );
-        f.close();
+        f->write( reply->readAll() );
+        f->close();
 
         if ( m_resolverStates[ resolverId ].binary )
         {
@@ -526,20 +603,20 @@ AtticaManager::payloadFetched()
             Q_ASSERT( !signature.isEmpty() );
             if ( signature.isEmpty() )
                 return;
-            if ( !TomahawkUtils::verifyFile( f.fileName(), signature ) )
+            if ( !TomahawkUtils::verifyFile( f->fileName(), signature ) )
             {
-                qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f.fileName() << signature;
+                qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f->fileName() << signature;
             }
             else
             {
-                TomahawkUtils::extractBinaryResolver( f.fileName(), new BinaryInstallerHelper( resolverId, reply->property( "createAccount" ).toBool(), this ) );
-                // Don't emit success or failed yet, helpre will do that.
+                TomahawkUtils::extractBinaryResolver( f->fileName(), new BinaryInstallerHelper( f, resolverId, reply->property( "createAccount" ).toBool(), this ) );
+                // Don't emit success or failed yet, helper will do that.
                 return;
             }
         }
         else
         {
-            QDir dir( TomahawkUtils::extractScriptPayload( f.fileName(), resolverId ) );
+            QDir dir( TomahawkUtils::extractScriptPayload( f->fileName(), resolverId ) );
             QString resolverPath = dir.absoluteFilePath( m_resolverStates[ resolverId ].scriptPath );
 
             if ( !resolverPath.isEmpty() )
@@ -547,7 +624,14 @@ AtticaManager::payloadFetched()
                 // update with absolute, not relative, path
                 m_resolverStates[ resolverId ].scriptPath = resolverPath;
 
-                if ( reply->property( "createAccount" ).toBool() )
+                Tomahawk::Accounts::AtticaResolverAccount* handlerAccount = qobject_cast< Tomahawk::Accounts::AtticaResolverAccount* >( reply->property( "handler" ).value< QObject* >() );
+                const bool createAccount = reply->property( "createAccount" ).toBool();
+                if ( handlerAccount )
+                {
+                    handlerAccount->setPath( resolverPath );
+                    Tomahawk::Accounts::AccountManager::instance()->enableAccount( handlerAccount );
+                }
+                else if ( createAccount )
                 {
                     // Do the install / add to tomahawk
                     Tomahawk::Accounts::Account* resolver = Tomahawk::Accounts::ResolverAccountFactory::createFromPath( resolverPath, "resolveraccount", true );
@@ -558,6 +642,8 @@ AtticaManager::payloadFetched()
                 installedSuccessfully = true;
             }
         }
+
+        delete f;
     }
     else
     {

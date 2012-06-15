@@ -6,6 +6,10 @@ SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
 SET( QT_USE_QTUITOOLS TRUE )
 
+IF( UNIX AND NOT APPLE )
+  SET( QT_USE_QTDBUS TRUE )
+ENDIF( UNIX AND NOT APPLE )
+
 include( ${QT_USE_FILE} )
 
 add_definitions( ${QT_DEFINITIONS} )
@@ -48,31 +52,20 @@ set( libGuiSources
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
-    playlist/TreeHeader.cpp
     playlist/TreeItemDelegate.cpp
-    playlist/CollectionProxyModel.cpp
-    playlist/CollectionProxyModelPlaylistInterface.cpp
-    playlist/CollectionFlatModel.cpp
-    playlist/CollectionView.cpp
     playlist/PlaylistModel.cpp
-    playlist/PlaylistProxyModel.cpp
-    playlist/PlaylistProxyModelPlaylistInterface.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
     playlist/QueueProxyModel.cpp
-    playlist/QueueProxyModelPlaylistInterface.cpp
     playlist/QueueView.cpp
     playlist/PlayableModel.cpp
     playlist/PlayableProxyModel.cpp
     playlist/PlayableProxyModelPlaylistInterface.cpp
     playlist/TrackView.cpp
-    playlist/TrackHeader.cpp
     playlist/AlbumModel.cpp
-    playlist/AlbumProxyModel.cpp
-    playlist/AlbumProxyModelPlaylistInterface.cpp
-    playlist/AlbumItemDelegate.cpp
-    playlist/AlbumView.cpp
-    playlist/ArtistView.cpp
+    playlist/GridItemDelegate.cpp
+    playlist/GridView.cpp
+    playlist/TreeView.cpp
     playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp
     playlist/RecentlyAddedModel.cpp
@@ -122,6 +115,8 @@ set( libGuiSources
     utils/SmartPointerList.h
     utils/AnimatedSpinner.cpp
     utils/BinaryInstallerHelper.cpp
+    utils/BinaryExtractWorker.cpp
+    utils/SharedTimeLine.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/CheckDirTree.cpp
@@ -189,12 +184,24 @@ set( libSources
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
     accounts/ResolverAccount.cpp
+    accounts/AccountDelegate.cpp
+    accounts/DelegateConfigWrapper.cpp
+    accounts/AccountFactoryWrapper.cpp
+    accounts/AccountFactoryWrapperDelegate.cpp
+
+    accounts/spotify/SpotifyAccount.cpp
+    accounts/spotify/SpotifyAccountConfig.cpp
+    accounts/spotify/SpotifyPlaylistUpdater.cpp
+
+    accounts/lastfm/LastFmAccount.cpp
+    accounts/lastfm/LastFmConfig.cpp
+    accounts/lastfm/LastFmInfoPlugin.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipInfo.cpp
 
     audio/AudioEngine.cpp
-
 
     database/Database.cpp
     database/FuzzyIndex.cpp
@@ -248,6 +255,7 @@ set( libSources
     database/DatabaseCommand_TrackAttributes.cpp
     database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
+    database/TomahawkSqlQuery.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
@@ -286,6 +294,7 @@ set( libSources
     utils/Qnr_IoDeviceStream.cpp
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
+    utils/GuiHelpers.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -309,6 +318,9 @@ set( libUI ${libUI}
     playlist/QueueView.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
+    accounts/AccountFactoryWrapper.ui
+    accounts/spotify/SpotifyAccountConfig.ui
+    accounts/lastfm/LastFmConfig.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
@@ -317,9 +329,10 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
+    ${LIBLASTFM_INCLUDE_DIRS}
+    ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
-    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     playlist
 
@@ -390,7 +403,7 @@ ELSE( APPLE )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
 ENDIF(LIBLASTFM_FOUND)
 
 IF(BUILD_GUI)
@@ -412,6 +425,10 @@ IF(LIBATTICA_FOUND)
     SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
 ENDIF(LIBATTICA_FOUND)
 
+IF( UNIX AND NOT APPLE )
+    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${QT_QTDBUS_LIBRARY} )
+ENDIF( UNIX AND NOT APPLE )
+
 TARGET_LINK_LIBRARIES( tomahawklib
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
@@ -425,7 +442,11 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${QT_QTWEBKIT_LIBRARY}
     ${QT_QTSCRIPT_LIBRARY}
+    ${QT_QTNETWORK_LIBRARY}
+    ${QT_QTXML_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

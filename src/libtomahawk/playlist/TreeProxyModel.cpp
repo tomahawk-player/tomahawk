@@ -32,52 +32,30 @@
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
-    : QSortFilterProxyModel( parent )
+    : PlayableProxyModel( parent )
     , m_artistsFilterCmd( 0 )
     , m_model( 0 )
 {
-    setFilterCaseSensitivity( Qt::CaseInsensitive );
-    setSortCaseSensitivity( Qt::CaseInsensitive );
-    setDynamicSortFilter( true );
-
-    setSourceTreeModel( 0 );
-}
-
-
-QPersistentModelIndex
-TreeProxyModel::currentIndex() const
-{
-    if ( !m_model )
-        return QPersistentModelIndex();
-
-    return mapFromSource( m_model->currentItem() );
 }
 
 
 void
-TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+TreeProxyModel::setSourcePlayableModel( TreeModel* model )
 {
-    Q_UNUSED( sourceModel );
-    qDebug() << "Explicitly use setSourceTreeModel instead";
-    Q_ASSERT( false );
-}
-
-
-void
-TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
-{
-    m_model = sourceModel;
-
-    if ( m_model )
+    if ( sourceModel() )
     {
-        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-            connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+        disconnect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onRowsInserted( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( modelReset() ), this, SLOT( onModelReset() ) );
+    }
 
+    PlayableProxyModel::setSourcePlayableModel( model );
+    m_model = model;
+
+    if ( sourceModel() )
+    {
         connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onRowsInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( modelReset() ), SLOT( onModelReset() ) );
     }
-
-    QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
 
@@ -114,7 +92,7 @@ TreeProxyModel::onModelReset()
 
 
 void
-TreeProxyModel::newFilterFromPlaylistInterface( const QString &pattern )
+TreeProxyModel::newFilterFromPlaylistInterface( const QString& pattern )
 {
     emit filteringStarted();
 
@@ -336,33 +314,6 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
         return (qint64)&p1 < (qint64)&p2;
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
-}
-
-
-void
-TreeProxyModel::removeIndex( const QModelIndex& index )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !sourceModel() )
-        return;
-    if ( index.column() > 0 )
-        return;
-
-    sourceModel()->removeIndex( mapToSource( index ) );
-}
-
-
-void
-TreeProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
-{
-    if ( !sourceModel() )
-        return;
-
-    foreach( const QModelIndex& idx, indexes )
-    {
-        removeIndex( idx );
-    }
 }
 
 

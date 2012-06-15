@@ -24,12 +24,36 @@
 
 using namespace Tomahawk::InfoSystem;
 
+bool newReleaseSort( const InfoStringHash& left, const InfoStringHash& right )
+{
+    if ( !left.contains( "date" ) || !right.contains( "date" ) )
+    {
+        return true;
+    }
+
+    const QDate lDate = QDate::fromString( left[ "date" ], "yyyy-MM-dd" );
+    const QDate rDate = QDate::fromString( right[ "date" ], "yyyy-MM-dd" );
+
+    return lDate > rDate;
+}
+
+
 NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs ( 0 )
 {
     m_nrVersion = "0";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
+}
+
+NewReleasesPlugin::~NewReleasesPlugin()
+{
+    tDebug ( LOGVERBOSE ) << Q_FUNC_INFO;
+}
+
+void
+NewReleasesPlugin::init()
+{
     QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "NewReleasesPlugin", "nr_sources" ).toList();
     foreach( const QVariant & source, source_qvarlist ) {
         m_nrSources.append( source.toString() );
@@ -39,11 +63,6 @@ NewReleasesPlugin::NewReleasesPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_nrSources.size() << source_qvarlist.size();
     if( m_nrSources.size() == 0 )
         fetchNRSourcesList( true );
-}
-
-NewReleasesPlugin::~NewReleasesPlugin()
-{
-    tDebug ( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 void NewReleasesPlugin::dataError ( InfoRequestData requestData )
@@ -269,6 +288,7 @@ void NewReleasesPlugin::nrList()
 
             }
         }
+
         if ( !albumNRs.isEmpty() )
             newreleases.insert ( tr ( "Albums" ), QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( albumNRs ) );
 
@@ -329,11 +349,14 @@ void NewReleasesPlugin::nrReturned()
                 Tomahawk::InfoSystem::InfoStringHash pair;
                 pair["artist"] = artist;
                 pair["album"] = album;
+                pair["date"] = date;
                 newreleases.append( pair );
             }
         }
 
-        tDebug() << "NewReleasesPlugin:" << "\tgot " << newreleases.size() << " albums";
+        qSort( newreleases.begin(), newreleases.end(), newReleaseSort );
+
+//        tDebug() << "NewReleasesPlugin:" << "\tgot " << newreleases.size() << " albums";
         returnedData[ "albums" ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( newreleases );
         returnedData[ "type" ] = "albums";
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();

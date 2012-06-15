@@ -96,6 +96,7 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         return;
     }
 
+    plugin.data()->moveToThread( this->thread() );
     m_plugins.append( plugin );
     registerInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
 
@@ -121,6 +122,8 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
             SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             Qt::QueuedConnection
     );
+    
+    QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
 }
 
 

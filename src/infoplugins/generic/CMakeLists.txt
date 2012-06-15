@@ -9,6 +9,7 @@ list(APPEND simple_plugins
     MusixMatch
     MusicBrainz
     Rovi
+    Discogs
 )
 
 foreach(simple_plugin ${simple_plugins})

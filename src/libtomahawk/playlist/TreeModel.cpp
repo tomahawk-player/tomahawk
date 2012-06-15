@@ -38,44 +38,20 @@ using namespace Tomahawk;
 
 
 TreeModel::TreeModel( QObject* parent )
-    : QAbstractItemModel( parent )
-    , m_rootItem( new PlayableItem( 0, this ) )
-    , m_infoId( uuid() )
-    , m_columnStyle( AllColumns )
+    : PlayableModel( parent )
     , m_mode( DatabaseMode )
 {
+    setStyle( Collection );
     setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
-
-    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-               SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 }
 
 
 TreeModel::~TreeModel()
 {
     tDebug() << Q_FUNC_INFO;
-    
-    delete m_rootItem;
-}
-
-
-void
-TreeModel::clear()
-{
-    if ( rowCount( QModelIndex() ) )
-    {
-        emit loadingFinished();
-
-        emit beginResetModel();
-        delete m_rootItem;
-        m_rootItem = 0;
-        m_rootItem = new PlayableItem( 0, this );
-        emit endResetModel();
-    }
 }
 
 
@@ -100,49 +76,10 @@ TreeModel::getCover( const QModelIndex& index )
 {
     PlayableItem* item = itemFromIndex( index );
 
-    if ( !item->artist().isNull() && !item->artist()->infoLoaded() )
+    if ( !item->artist().isNull() && !item->artist()->coverLoaded() )
         item->artist()->cover( QSize( 0, 0 ) );
-    else if ( !item->album().isNull() && !item->album()->infoLoaded() )
+    else if ( !item->album().isNull() && !item->album()->coverLoaded() )
         item->album()->cover( QSize( 0, 0 ) );
-}
-
-
-void
-TreeModel::setCurrentItem( const QModelIndex& index )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
-    if ( oldEntry )
-    {
-        oldEntry->setIsPlaying( false );
-    }
-
-    PlayableItem* entry = itemFromIndex( index );
-    if ( entry )
-    {
-        m_currentIndex = index;
-        entry->setIsPlaying( true );
-    }
-    else
-    {
-        m_currentIndex = QModelIndex();
-    }
-}
-
-
-QModelIndex
-TreeModel::index( int row, int column, const QModelIndex& parent ) const
-{
-    if ( !m_rootItem || row < 0 || column < 0 )
-        return QModelIndex();
-
-    PlayableItem* parentItem = itemFromIndex( parent );
-    PlayableItem* childItem = parentItem->children.value( row );
-    if ( !childItem )
-        return QModelIndex();
-
-    return createIndex( row, column, childItem );
 }
 
 
@@ -190,388 +127,11 @@ TreeModel::fetchMore( const QModelIndex& parent )
 }
 
 
-bool
-TreeModel::hasChildren( const QModelIndex& parent ) const
-{
-    PlayableItem* parentItem = itemFromIndex( parent );
-    if ( !parentItem )
-        return false;
-
-    if ( parentItem == m_rootItem )
-        return true;
-
-    return ( !parentItem->artist().isNull() || !parentItem->album().isNull() );
-}
-
-
-int
-TreeModel::rowCount( const QModelIndex& parent ) const
-{
-    if ( parent.column() > 0 )
-        return 0;
-
-    PlayableItem* parentItem = itemFromIndex( parent );
-    if ( !parentItem )
-        return 0;
-
-    return parentItem->children.count();
-}
-
-
-int
-TreeModel::columnCount( const QModelIndex& parent ) const
-{
-    Q_UNUSED( parent );
-
-    if ( m_columnStyle == AllColumns )
-        return 8;
-    else if ( m_columnStyle == TrackOnly )
-        return 1;
-
-    // UH..
-    return 0;
-}
-
-
-QModelIndex
-TreeModel::parent( const QModelIndex& child ) const
-{
-    PlayableItem* entry = itemFromIndex( child );
-    if ( !entry )
-        return QModelIndex();
-
-    PlayableItem* parentEntry = entry->parent();
-    if ( !parentEntry )
-        return QModelIndex();
-
-    PlayableItem* grandparentEntry = parentEntry->parent();
-    if ( !grandparentEntry )
-        return QModelIndex();
-
-    int row = grandparentEntry->children.indexOf( parentEntry );
-    return createIndex( row, 0, parentEntry );
-}
-
-
-QVariant
-TreeModel::data( const QModelIndex& index, int role ) const
-{
-    PlayableItem* entry = itemFromIndex( index );
-    if ( !entry )
-        return QVariant();
-
-    if ( role == Qt::SizeHintRole )
-    {
-        if ( !entry->result().isNull() || !entry->query().isNull() )
-        {
-            return QSize( 128, 20 );
-        }
-        else if ( !entry->album().isNull() )
-        {
-            return QSize( 128, 32 );
-        }
-        else if ( !entry->artist().isNull() )
-        {
-            return QSize( 128, 44 );
-        }
-
-        return QSize( 128, 0 );
-    }
-
-    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
-        return QVariant();
-
-    if ( !entry->artist().isNull() && index.column() == Name )
-    {
-        return entry->artist()->name();
-    }
-    else if ( !entry->album().isNull() && index.column() == Name )
-    {
-        return entry->album()->name();
-    }
-    else if ( !entry->result().isNull() )
-    {
-        const result_ptr& result = entry->result();
-        unsigned int discnumber = 0;
-        if ( !entry->query().isNull() )
-            discnumber = entry->query()->discnumber();
-        if ( discnumber == 0 )
-            discnumber = result->discnumber();
-
-        unsigned int albumpos = 0;
-        if ( !entry->query().isNull() )
-            albumpos = entry->query()->albumpos();
-        if ( albumpos == 0 )
-            albumpos = result->albumpos();
-
-        switch( index.column() )
-        {
-            case Name:
-                return QString( "%1%2%3" ).arg( discnumber > 0 ? QString( "%1." ).arg( discnumber ) : QString() )
-                                          .arg( albumpos > 0 ? QString( "%1. ").arg( albumpos ) : QString() )
-                                          .arg( result->track() );
-
-            case Duration:
-                return TomahawkUtils::timeToString( result->duration() );
-
-            case Bitrate:
-                if ( result->bitrate() > 0 )
-                    return result->bitrate();
-                break;
-
-            case Age:
-                return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
-
-            case Year:
-                if ( result->year() != 0 )
-                    return result->year();
-                break;
-
-            case Filesize:
-                return TomahawkUtils::filesizeToString( result->size() );
-
-            case Origin:
-                return result->friendlySource();
-
-            case AlbumPosition:
-                return result->albumpos();
-
-            case Composer:
-                if ( !result->composer().isNull() )
-                    return result->composer()->name();
-                break;
-
-            default:
-                return QVariant();
-        }
-    }
-    else if ( !entry->query().isNull() )
-    {
-        const query_ptr& query = entry->query();
-        switch( index.column() )
-        {
-            case Name:
-                return QString( "%1%2%3" ).arg( query->discnumber() > 0 ? QString( "%1." ).arg( query->discnumber() ) : QString() )
-                                          .arg( query->albumpos() > 0 ? QString( "%1. ").arg( query->albumpos() ) : QString() )
-                                          .arg( query->track() );
-
-            case AlbumPosition:
-                return entry->query()->albumpos();
-
-            default:
-                return QVariant();
-        }
-    }
-
-    return QVariant();
-}
-
-
-QVariant
-TreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    QStringList headers;
-    headers << tr( "Name" ) << tr( "Composer" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
-    {
-        return headers.at( section );
-    }
-
-    return QVariant();
-}
-
-
-Qt::ItemFlags
-TreeModel::flags( const QModelIndex& index ) const
-{
-    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
-
-    if ( index.isValid() && index.column() == 0 )
-    {
-        PlayableItem* item = itemFromIndex( index );
-        if ( item && !item->result().isNull() )
-            return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-        if ( item && ( !item->album().isNull() || !item->artist().isNull() ) )
-            return Qt::ItemIsDragEnabled | defaultFlags;
-    }
-
-    return defaultFlags;
-}
-
-
-QStringList
-TreeModel::mimeTypes() const
-{
-    QStringList types;
-    types << "application/tomahawk.mixed";
-    return types;
-}
-
-
-QMimeData*
-TreeModel::mimeData( const QModelIndexList &indexes ) const
-{
-    qDebug() << Q_FUNC_INFO;
-
-    QByteArray resultData;
-    QDataStream resultStream( &resultData, QIODevice::WriteOnly );
-
-    // lets try with artist only
-    bool fail = false;
-    foreach ( const QModelIndex& i, indexes)
-    {
-        if ( i.column() > 0 || indexes.contains( i.parent() ) )
-            continue;
-
-        PlayableItem* item = itemFromIndex( i );
-        if ( !item )
-            continue;
-
-        if ( !item->artist().isNull() )
-        {
-            const artist_ptr& artist = item->artist();
-            resultStream << artist->name();
-        }
-        else
-        {
-            fail = true;
-            break;
-        }
-    }
-    if ( !fail )
-    {
-        QMimeData* mimeData = new QMimeData();
-        mimeData->setData( "application/tomahawk.metadata.artist", resultData );
-        return mimeData;
-    }
-
-    // lets try with album only
-    fail = false;
-    resultData.clear();
-    foreach ( const QModelIndex& i, indexes )
-    {
-        if ( i.column() > 0 || indexes.contains( i.parent() ) )
-            continue;
-
-        PlayableItem* item = itemFromIndex( i );
-        if ( !item )
-            continue;
-
-        if ( !item->album().isNull() )
-        {
-            const album_ptr& album = item->album();
-            resultStream << album->artist()->name();
-            resultStream << album->name();
-        }
-        else
-        {
-            fail = true;
-            break;
-        }
-    }
-    if ( !fail )
-    {
-        QMimeData* mimeData = new QMimeData();
-        mimeData->setData( "application/tomahawk.metadata.album", resultData );
-        return mimeData;
-    }
-
-    // lets try with tracks only
-    fail = false;
-    resultData.clear();
-    foreach ( const QModelIndex& i, indexes )
-    {
-        if ( i.column() > 0 || indexes.contains( i.parent() ) )
-            continue;
-
-        PlayableItem* item = itemFromIndex( i );
-        if ( !item )
-            continue;
-
-        if ( !item->result().isNull() )
-        {
-            const result_ptr& result = item->result();
-            resultStream << qlonglong( &result );
-        }
-        else
-        {
-            fail = true;
-            break;
-        }
-    }
-    if ( !fail )
-    {
-        QMimeData* mimeData = new QMimeData();
-        mimeData->setData( "application/tomahawk.result.list", resultData );
-        return mimeData;
-    }
-
-    // Ok... we have to use mixed
-    resultData.clear();
-    foreach ( const QModelIndex& i, indexes )
-    {
-        if ( i.column() > 0 || indexes.contains( i.parent() ) )
-            continue;
-
-        PlayableItem* item = itemFromIndex( i );
-        if ( !item )
-            continue;
-
-        if ( !item->artist().isNull() )
-        {
-            const artist_ptr& artist = item->artist();
-            resultStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
-        }
-        else if ( !item->album().isNull() )
-        {
-            const album_ptr& album = item->album();
-            resultStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
-        }
-        else if ( !item->result().isNull() )
-        {
-            const result_ptr& result = item->result();
-            resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
-        }
-    }
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.mixed", resultData );
-    return mimeData;
-}
-
-
-void
-TreeModel::removeIndex( const QModelIndex& index )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if ( index.column() > 0 )
-        return;
-
-    PlayableItem* item = itemFromIndex( index );
-    if ( item )
-    {
-        emit beginRemoveRows( index.parent(), index.row(), index.row() );
-        delete item;
-        emit endRemoveRows();
-    }
-}
-
-
-void
-TreeModel::removeIndexes( const QList<QModelIndex>& indexes )
-{
-    foreach( const QModelIndex& idx, indexes )
-    {
-        removeIndex( idx );
-    }
-}
-
-
 void
 TreeModel::addAllCollections()
 {
-    emit loadingStarted();
+    startLoading();
+
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists();
 
     connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
@@ -587,7 +147,7 @@ TreeModel::addAllCollections()
         connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
     }
 
-    m_title = tr( "All Artists" );
+    setTitle( tr( "All Artists" ) );
 }
 
 
@@ -597,7 +157,7 @@ TreeModel::addArtists( const artist_ptr& artist )
     if ( artist.isNull() )
         return;
 
-    emit loadingStarted();
+    startLoading();
 
     QList<Tomahawk::artist_ptr> artists;
     artists << artist;
@@ -608,7 +168,7 @@ TreeModel::addArtists( const artist_ptr& artist )
 void
 TreeModel::fetchAlbums( const artist_ptr& artist )
 {
-    emit loadingStarted();
+    startLoading();
 
     connect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                               SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ), Qt::UniqueConnection );
@@ -624,7 +184,7 @@ TreeModel::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mo
     if ( m_mode != mode )
         return;
 
-    Artist* artist = qobject_cast< Artist* >( sender() );
+    Tomahawk::Artist* artist = qobject_cast< Tomahawk::Artist* >( sender() );
     if ( !artist )
         return;
 
@@ -640,7 +200,7 @@ TreeModel::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, ModelMode mo
 void
 TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums )
 {
-    emit loadingFinished();
+    finishLoading();
     if ( !albums.count() )
         return;
 
@@ -672,12 +232,13 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool au
 {
     Q_UNUSED( autoRefetch );
 
-    emit loadingStarted();
+    startLoading();
 
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                              SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
 
-    onTracksAdded( album->tracks( m_mode, m_collection ), parent );
+    if ( !album->tracks( m_mode, m_collection ).isEmpty() )
+        onTracksAdded( album->tracks( m_mode, m_collection ), parent );
 }
 
 
@@ -755,12 +316,7 @@ TreeModel::onCollectionChanged()
 void
 TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 {
-    emit loadingFinished();
-    if ( !artists.count() )
-    {
-        emit itemCountChanged( rowCount( QModelIndex() ) );
-        return;
-    }
+    finishLoading();
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -772,20 +328,19 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     PlayableItem* artistitem;
     foreach( const artist_ptr& artist, artists )
     {
-        artistitem = new PlayableItem( artist, m_rootItem );
-        artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
+        artistitem = new PlayableItem( artist, rootItem() );
+        artistitem->index = createIndex( rootItem()->children.count() - 1, 0, artistitem );
         connect( artistitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
 
     emit endInsertRows();
-    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 
 void
 TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& parent )
 {
-    emit loadingFinished();
+    finishLoading();
     if ( !tracks.count() )
         return;
 
@@ -817,135 +372,17 @@ TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::Mo
     if ( mode != m_mode || collection != m_collection )
         return;
 
-    Album* album = qobject_cast<Album*>( sender() );
+    Tomahawk::Album* album = qobject_cast<Tomahawk::Album*>( sender() );
 
     QModelIndex idx = indexFromAlbum( album->weakRef().toStrongRef() );
     onTracksAdded( tracks, idx );
 }
 
 
-void
-TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-    if ( requestData.caller != m_infoId )
-    {
-        return;
-    }
-
-    switch ( requestData.type )
-    {
-        case Tomahawk::InfoSystem::InfoAlbumSongs:
-        {
-            m_receivedInfoData.append( requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >() );
-
-            QVariantMap returnedData = output.value< QVariantMap >();
-            if ( !returnedData.isEmpty() )
-            {
-                emit loadingFinished();
-
-                QList< QVariant > rows = requestData.customData[ "rows" ].toList();
-                QModelIndex idx = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
-                if ( rowCount( idx ) )
-                    return;
-
-                Tomahawk::InfoSystem::InfoStringHash inputInfo;
-                inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-                QStringList tracks = returnedData[ "tracks" ].toStringList();
-                QList<query_ptr> ql;
-
-                //TODO: Figure out how to do this with a multi-disk album without breaking the
-                //      current behaviour. I just know too little about InfoSystem to deal with
-                //      it right now, I've only taken the liberty of adding Query::setDiscNumber
-                //      which should make this easier. --Teo 11/2011
-                unsigned int trackNo = 1;
-
-                foreach ( const QString& trackName, tracks )
-                {
-                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ] );
-                    query->setAlbumPos( trackNo++ );
-                    ql << query;
-                }
-                Pipeline::instance()->resolve( ql );
-
-                onTracksAdded( ql, idx );
-            }
-            else if ( m_receivedInfoData.count() == 2 /* FIXME */ )
-            {
-                // If the second load got no data, but the first load did, don't do anything
-                QList< QVariant > rows = requestData.customData[ "rows" ].toList();
-                QModelIndex idx = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
-                if ( rowCount( idx ) )
-                    return;
-
-                if ( requestData.customData[ "refetch" ].toBool() )
-                {
-                    setMode( DatabaseMode );
-
-                    Tomahawk::InfoSystem::InfoStringHash inputInfo;
-                    inputInfo = requestData.input.value< InfoSystem::InfoStringHash >();
-                    artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
-                    album_ptr album = Album::get( artist, inputInfo[ "album" ], false );
-
-                    addTracks( album, QModelIndex() );
-                }
-                else
-                    emit loadingFinished();
-            }
-
-            break;
-        }
-
-        default:
-        {
-            Q_ASSERT( false );
-            break;
-        }
-    }
-}
-
-
-void
-TreeModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
-{
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
-    if ( oldEntry && ( oldEntry->result().isNull() || oldEntry->result().data() != result.data() ) )
-    {
-        oldEntry->setIsPlaying( false );
-    }
-}
-
-
-void
-TreeModel::onPlaybackStopped()
-{
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
-    if ( oldEntry )
-    {
-        oldEntry->setIsPlaying( false );
-    }
-}
-
-
-void
-TreeModel::onDataChanged()
-{
-    PlayableItem* p = (PlayableItem*)sender();
-    emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
-}
-
-
-void
-TreeModel::setColumnStyle( TreeModel::ColumnStyle style )
-{
-    m_columnStyle = style;
-}
-
-
 QModelIndex
 TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
 {
-    for ( int i = 0; i < rowCount(); i++ )
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
         QModelIndex idx = index( i, 0, QModelIndex() );
         PlayableItem* item = itemFromIndex( idx );

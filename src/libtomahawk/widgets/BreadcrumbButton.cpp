@@ -34,7 +34,11 @@ using namespace Tomahawk;
 class BreadcrumbArrow : public QWidget
 {
 public:
-    BreadcrumbArrow(QWidget* parent) : QWidget(parent) {}
+    BreadcrumbArrow( QWidget* parent )
+        : QWidget(parent)
+    {
+        setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    }
 
 protected:
     virtual void paintEvent( QPaintEvent* ) {

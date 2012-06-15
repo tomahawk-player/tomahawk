@@ -42,6 +42,9 @@ public slots:
 
 signals:
     void emptinessChanged( bool isEmpty );
+    
+    void loadingStarted();
+    void loadingFinished();
 
 private slots:
     void onRefresh();

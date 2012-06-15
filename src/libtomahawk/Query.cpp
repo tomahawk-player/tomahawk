@@ -125,10 +125,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
 
-    connect( Pipeline::instance(), SIGNAL( resolverAdded( Resolver* ) ),
-             SLOT( onResolverAdded() ), Qt::QueuedConnection );
-    connect( Pipeline::instance(), SIGNAL( resolverRemoved( Resolver* ) ),
-             SLOT( onResolverRemoved() ), Qt::QueuedConnection );
+    connect( Pipeline::instance(), SIGNAL( resolverAdded( Tomahawk::Resolver* ) ), SLOT( onResolverAdded() ), Qt::QueuedConnection );
 }
 
 
@@ -216,7 +213,6 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
         m_results << newresults;
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
-        query_ptr q = m_ownRef.toStrongRef();
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -310,16 +306,6 @@ Query::onResolvingFinished()
 
 void
 Query::onResolverAdded()
-{
-    if ( !solved() )
-    {
-        refreshResults();
-    }
-}
-
-
-void
-Query::onResolverRemoved()
 {
     if ( !solved() )
     {
@@ -447,7 +433,7 @@ Query::checkResults()
         }
     }
 
-    if ( m_playable && !playable )
+    if ( m_solved && !solved )
     {
         refreshResults();
     }
@@ -780,7 +766,7 @@ Query::cover( const QSize& size, bool forceLoad ) const
     }
 
     m_albumPtr->cover( size, forceLoad );
-    if ( m_albumPtr->infoLoaded() )
+    if ( m_albumPtr->coverLoaded() )
     {
         if ( !m_albumPtr->cover( size ).isNull() )
             return m_albumPtr->cover( size );
@@ -790,6 +776,20 @@ Query::cover( const QSize& size, bool forceLoad ) const
 
     return QPixmap();
 }
+
+
+bool
+Query::coverLoaded() const
+{
+    if ( m_albumPtr.isNull() )
+        return false;
+    
+    if ( m_albumPtr->coverLoaded() && !m_albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+        return true;
+    
+    return m_artistPtr->coverLoaded();
+}
+
 #endif
 
 

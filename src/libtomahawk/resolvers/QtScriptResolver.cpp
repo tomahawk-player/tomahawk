@@ -131,6 +131,7 @@ QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
     m_resolverConfig = config;
 }
 
+
 QString
 QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 {
@@ -156,12 +157,14 @@ QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 #endif
 }
 
+
 QString
 QtScriptResolverHelper::md5( const QByteArray& input )
 {
     QByteArray const digest = QCryptographicHash::hash( input, QCryptographicHash::Md5 );
     return QString::fromLatin1( digest.toHex() );
 }
+
 
 void
 QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName )
@@ -171,6 +174,21 @@ QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QStr
 
     m_urlCallback = callbackFuncName;
 }
+
+
+QByteArray
+QtScriptResolverHelper::base64Encode( const QByteArray& input )
+{
+    return input.toBase64();
+}
+
+
+QByteArray
+QtScriptResolverHelper::base64Decode( const QByteArray& input )
+{
+    return QByteArray::fromBase64( input );
+}
+
 
 QSharedPointer< QIODevice >
 QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result )
@@ -227,7 +245,9 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
 
 QtScriptResolver::~QtScriptResolver()
 {
-    Tomahawk::Pipeline::instance()->removeResolver( this );
+    if ( !m_stopped )
+        stop();
+
     delete m_engine;
 }
 
@@ -252,6 +272,7 @@ QtScriptResolver::running() const
 {
     return m_ready && !m_stopped;
 }
+
 
 void
 QtScriptResolver::reload()
@@ -312,6 +333,7 @@ QtScriptResolver::init()
     m_ready = true;
 }
 
+
 void
 QtScriptResolver::start()
 {
@@ -361,8 +383,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
 
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
-
-    if( m.isEmpty() )
+    if ( m.isEmpty() )
     {
         // if the resolver doesn't return anything, async api is used
         return;
@@ -422,6 +443,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
             Q_ASSERT( !rp->mimetype().isEmpty() );
         }
 
+        rp->setResolvedBy( this );
         results << rp;
     }
 

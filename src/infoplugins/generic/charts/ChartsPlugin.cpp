@@ -52,8 +52,23 @@ ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
     /// If you add resource, update version aswell
     m_chartVersion = "2.3";
+    m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
+}
+
+
+ChartsPlugin::~ChartsPlugin()
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
+}
+
+
+void
+ChartsPlugin::init()
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
     QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "ChartsPlugin", "chart_sources" ).toList();
     foreach( const QVariant & source, source_qvarlist ) {
         m_chartResources.append( source.toString() );
@@ -63,14 +78,6 @@ ChartsPlugin::ChartsPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << source_qvarlist.size();
     if( m_chartResources.size() == 0 )
         fetchChartSourcesList( true );
-    m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
-
-}
-
-
-ChartsPlugin::~ChartsPlugin()
-{
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 
@@ -219,7 +226,7 @@ ChartsPlugin::fetchChartSourcesList( bool fetchOnlySourceList )
     reply->setProperty( "only_source_list", fetchOnlySourceList );
 
 
-    tDebug() << "fetching:" << url;
+    tDebug() << Q_FUNC_INFO << "fetching:" << url;
     connect( reply, SIGNAL( finished() ), SLOT( chartSourcesList() ) );
 
 }
@@ -227,7 +234,7 @@ ChartsPlugin::fetchChartSourcesList( bool fetchOnlySourceList )
 void
 ChartsPlugin::chartSourcesList()
 {
-    tDebug( LOGVERBOSE )  << "Got chart sources list";
+    tDebug( LOGVERBOSE )  << Q_FUNC_INFO << "Got chart sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -239,7 +246,7 @@ ChartsPlugin::chartSourcesList()
 
         if ( !ok )
         {
-            tLog() << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
+            tLog() << Q_FUNC_INFO << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
             return;
         }
 
@@ -253,6 +260,8 @@ ChartsPlugin::chartSourcesList()
         if( !reply->property("only_source_list" ).toBool() )
             fetchAllChartSources();
     }
+    else
+        tDebug() << Q_FUNC_INFO << "Encountered error fetching chart sources list";
 }
 
 void ChartsPlugin::fetchAllChartSources()
@@ -266,7 +275,7 @@ void ChartsPlugin::fetchAllChartSources()
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "chart_source", source);
 
-            tDebug() << "fetching:" << url;
+            tDebug() << Q_FUNC_INFO << "fetching:" << url;
             connect( reply, SIGNAL( finished() ), SLOT( chartsList() ) );
 
             m_chartsFetchJobs++;
@@ -291,7 +300,7 @@ void ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData
 void
 ChartsPlugin::chartsList()
 {
-    tDebug( LOGVERBOSE )  << "Got chart list result";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got chart list result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     if ( reply->error() == QNetworkReply::NoError )

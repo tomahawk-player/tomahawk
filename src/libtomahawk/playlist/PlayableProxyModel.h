@@ -39,6 +39,8 @@ public:
     virtual void setSourcePlayableModel( PlayableModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* model );
 
+    virtual bool isLoading() const;
+
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
@@ -58,13 +60,23 @@ public:
 signals:
     void filterChanged( const QString& filter );
 
+    void filteringStarted();
+    void filteringFinished();
+
+    void loadingStarted();
+    void loadingFinished();
+
 protected:
     virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
+
+private:
+    virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
+
     PlayableModel* m_model;
     bool m_showOfflineResults;
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 #endif // TRACKPROXYMODEL_H

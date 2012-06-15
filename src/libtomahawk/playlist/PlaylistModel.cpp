@@ -84,6 +84,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
                   .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true ) ) );
 
     m_isTemporary = false;
+    emit playlistChanged();
 
     if ( !loadEntries )
     {
@@ -92,8 +93,6 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     }
 
     QList<plentry_ptr> entries = playlist->entries();
-
-    qDebug() << "playlist loading entries:";
     foreach( const plentry_ptr& p, entries )
         qDebug() << p->guid() << p->query()->track() << p->query()->artist();
 
@@ -211,6 +210,7 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
     if ( !entries.count() )
     {
         emit trackCountChanged( rowCount( QModelIndex() ) );
+        finishLoading();
         return;
     }
 
@@ -257,6 +257,7 @@ PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );
+    finishLoading();
 }
 
 

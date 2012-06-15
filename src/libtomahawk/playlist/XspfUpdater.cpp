@@ -77,14 +77,19 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
 
 
 XspfUpdater::~XspfUpdater()
-{}
+{
+}
 
+
+#ifndef ENABLE_HEADLESS
 
 QWidget*
 XspfUpdater::configurationWidget() const
 {
     return m_toggleCheckbox;
 }
+
+#endif
 
 
 void

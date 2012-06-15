@@ -42,12 +42,16 @@ Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
     , m_ready( false )
     , m_impl( new DatabaseImpl( dbname, this ) )
-    , m_workerRW( new DatabaseWorker( m_impl, this, true ) )
+    , m_workerRW( new DatabaseWorker( this, true ) )
 {
     s_instance = this;
 
-    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
-    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "threads";
+    if ( MAX_WORKER_THREADS < DEFAULT_WORKER_THREADS )
+        m_maxConcurrentThreads = MAX_WORKER_THREADS;
+    else
+        m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
+
+    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
@@ -96,7 +100,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
         // create new thread if < WORKER_THREADS
         if ( m_workers.count() < m_maxConcurrentThreads )
         {
-            DatabaseWorker* worker = new DatabaseWorker( m_impl, this, false );
+            DatabaseWorker* worker = new DatabaseWorker( this, false );
             worker->start();
 
             m_workers << worker;

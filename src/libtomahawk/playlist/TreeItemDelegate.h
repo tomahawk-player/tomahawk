@@ -28,7 +28,7 @@ namespace Tomahawk {
 class PixmapDelegateFader;
 }
 
-class ArtistView;
+class TreeView;
 class TreeProxyModel;
 
 class DLLEXPORT TreeItemDelegate : public QStyledItemDelegate
@@ -36,7 +36,7 @@ class DLLEXPORT TreeItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    TreeItemDelegate( ArtistView* parent = 0, TreeProxyModel* proxy = 0 );
+    TreeItemDelegate( TreeView* parent = 0, TreeProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -51,7 +51,7 @@ private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
 
 private:
-    ArtistView* m_view;
+    TreeView* m_view;
     TreeProxyModel* m_model;
 
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;

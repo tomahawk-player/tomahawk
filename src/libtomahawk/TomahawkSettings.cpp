@@ -158,7 +158,6 @@ TomahawkSettings::doInitialSetup()
     // by default we add a local network resolver
     addAccount( "sipzeroconf_autocreated" );
 
-
     createLastFmAccount();
     createSpotifyAccount();
 }
@@ -192,6 +191,7 @@ TomahawkSettings::createSpotifyAccount()
     setValue( "types", QStringList() << "ResolverType" );
     setValue( "credentials", QVariantHash() );
     setValue( "configuration", QVariantHash() );
+    setValue( "accountfriendlyname", "Spotify" );
     endGroup();
 
     QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
@@ -484,6 +484,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 setValue( "enabled", enabled );
                 setValue( "autoconnect", autoconnect );
                 setValue( "types", QStringList() << "ResolverType" );
+                setValue( "accountfriendlyname", "Spotify" );
                 setValue( "configuration", configuration );
                 endGroup();
 
@@ -557,10 +558,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         }
 
         endGroup();
-
-//         setPlaylistUpdaters( updaters );
-
         remove( "playlistupdaters" );
+
+        setValue( "playlists/updaters", QVariant::fromValue< SerializedUpdaters >( updaters ) );
+
     }
     else if ( oldVersion == 11 )
     {
@@ -709,6 +710,20 @@ void
 TomahawkSettings::setCrashReporterEnabled( bool enable )
 {
     setValue( "ui/crashReporter", enable );
+}
+
+
+unsigned int
+TomahawkSettings::volume() const
+{
+    return value( "audio/volume", 75 ).toUInt();
+}
+
+
+void
+TomahawkSettings::setVolume( unsigned int volume )
+{
+    setValue( "audio/volume", volume );
 }
 
 

@@ -43,6 +43,18 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
 }
 
 
+bool
+PlayableProxyModel::isLoading() const
+{
+    if ( m_model )
+    {
+        return m_model->isLoading();
+    }
+
+    return false;
+}
+
+
 void
 PlayableProxyModel::setSourceModel( QAbstractItemModel* model )
 {
@@ -55,10 +67,25 @@ PlayableProxyModel::setSourceModel( QAbstractItemModel* model )
 void
 PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 {
+    if ( m_model )
+    {
+        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+            disconnect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), this, SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+
+        disconnect( m_model, SIGNAL( loadingStarted() ), this, SIGNAL( loadingStarted() ) );
+        disconnect( m_model, SIGNAL( loadingFinished() ), this, SIGNAL( loadingFinished() ) );
+    }
+
     m_model = sourceModel;
 
-    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model )
+    {
+        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+            connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+        
+        connect( m_model, SIGNAL( loadingStarted() ), SIGNAL( loadingStarted() ) );
+        connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
+    }
 
     QSortFilterProxyModel::setSourceModel( m_model );
 }
@@ -71,30 +98,67 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     if ( !pi )
         return false;
 
-    const Tomahawk::query_ptr& q = pi->query()->displayQuery();
-    if ( q.isNull() ) // uh oh? filter out invalid queries i guess
-        return false;
-
-    Tomahawk::result_ptr r;
-    if ( q->numResults() )
-        r = q->results().first();
-
-    if ( !m_showOfflineResults && !r.isNull() && !r->isOnline() )
-        return false;
-
-    if ( filterRegExp().isEmpty() )
-        return true;
-
-    QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-    foreach( QString s, sl )
+    if ( pi->query() )
     {
-        s = s.toLower();
-        if ( !q->artist().toLower().contains( s ) &&
-             !q->album().toLower().contains( s ) &&
-             !q->track().toLower().contains( s ) )
-        {
+        const Tomahawk::query_ptr& q = pi->query()->displayQuery();
+        if ( q.isNull() ) // uh oh? filter out invalid queries i guess
             return false;
+
+        Tomahawk::result_ptr r;
+        if ( q->numResults() )
+            r = q->results().first();
+
+        if ( !m_showOfflineResults && !r.isNull() && !r->isOnline() )
+            return false;
+        
+        if ( filterRegExp().isEmpty() )
+            return true;
+        
+        QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
+        foreach( QString s, sl )
+        {
+            s = s.toLower();
+            if ( !q->artist().toLower().contains( s ) &&
+                !q->album().toLower().contains( s ) &&
+                !q->track().toLower().contains( s ) )
+            {
+                return false;
+            }
         }
+    }
+
+    const Tomahawk::album_ptr& al = pi->album();
+    if ( al )
+    {
+        QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
+
+        bool found = true;
+        foreach( const QString& s, sl )
+        {
+            if ( !al->name().contains( s, Qt::CaseInsensitive ) && !al->artist()->name().contains( s, Qt::CaseInsensitive ) )
+            {
+                found = false;
+            }
+        }
+
+        return found;
+    }
+
+    const Tomahawk::album_ptr& ar = pi->album();
+    if ( ar )
+    {
+        QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
+
+        bool found = true;
+        foreach( const QString& s, sl )
+        {
+            if ( !ar->name().contains( s, Qt::CaseInsensitive ) && !ar->artist()->name().contains( s, Qt::CaseInsensitive ) )
+            {
+                found = false;
+            }
+        }
+
+        return found;
     }
 
     return true;
@@ -148,32 +212,22 @@ PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 
 
 bool
-PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const Tomahawk::query_ptr& q2 ) const
 {
-    PlayableItem* p1 = itemFromIndex( left );
-    PlayableItem* p2 = itemFromIndex( right );
-
-    if ( !p1 )
-        return true;
-    if ( !p2 )
-        return false;
-
-    const Tomahawk::query_ptr& q1 = p1->query()->displayQuery();
-    const Tomahawk::query_ptr& q2 = p2->query()->displayQuery();
-
-    QString artist1 = q1->artistSortname();
-    QString artist2 = q2->artistSortname();
-    QString album1 = q1->albumSortname();
-    QString album2 = q2->albumSortname();
-    QString track1 = q1->trackSortname();
-    QString track2 = q2->trackSortname();
-    unsigned int albumpos1 = q1->albumpos();
-    unsigned int albumpos2 = q2->albumpos();
-    unsigned int discnumber1 = q1->discnumber();
-    unsigned int discnumber2 = q2->discnumber();
+    const QString artist1 = q1->artistSortname();
+    const QString artist2 = q2->artistSortname();
+    const QString album1 = q1->albumSortname();
+    const QString album2 = q2->albumSortname();
+    const QString track1 = q1->trackSortname();
+    const QString track2 = q2->trackSortname();
+    const unsigned int albumpos1 = q1->albumpos();
+    const unsigned int albumpos2 = q2->albumpos();
+    const unsigned int discnumber1 = q1->discnumber();
+    const unsigned int discnumber2 = q2->discnumber();
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
+    float score1 = 0, score2 = 0;
     qint64 id1 = 0, id2 = 0;
 
     if ( q1->numResults() )
@@ -181,16 +235,18 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
-        id1 = r->trackId();
         size1 = r->size();
+        score1 = r->score();
+        id1 = (qint64)&r;
     }
     if ( q2->numResults() )
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
-        id2 = r->trackId();
         size2 = r->size();
+        score2 = r->score();
+        id2 = (qint64)&r;
     }
 
     // This makes it a stable sorter and prevents items from randomly jumping about.
@@ -200,7 +256,7 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
         id2 = (qint64)&q2;
     }
 
-    if ( left.column() == PlayableModel::Artist ) // sort by artist
+    if ( column == PlayableModel::Artist ) // sort by artist
     {
         if ( artist1 == artist2 )
         {
@@ -222,7 +278,7 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
 
         return QString::localeAwareCompare( artist1, artist2 ) < 0;
     }
-    else if ( left.column() == PlayableModel::Album ) // sort by album
+    else if ( column == PlayableModel::Album ) // sort by album
     {
         if ( album1 == album2 )
         {
@@ -239,28 +295,28 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
 
         return QString::localeAwareCompare( album1, album2 ) < 0;
     }
-    else if ( left.column() == PlayableModel::Bitrate ) // sort by bitrate
+    else if ( column == PlayableModel::Bitrate ) // sort by bitrate
     {
         if ( bitrate1 == bitrate2 )
             return id1 < id2;
 
         return bitrate1 < bitrate2;
     }
-    else if ( left.column() == PlayableModel::Age ) // sort by mtime
+    else if ( column == PlayableModel::Age ) // sort by mtime
     {
         if ( mtime1 == mtime2 )
             return id1 < id2;
 
         return mtime1 < mtime2;
     }
-    else if ( left.column() == PlayableModel::Filesize ) // sort by file size
+    else if ( column == PlayableModel::Filesize ) // sort by file size
     {
         if ( size1 == size2 )
             return id1 < id2;
 
         return size1 < size2;
     }
-    else if ( left.column() == PlayableModel::AlbumPos ) // sort by album pos
+    else if ( column == PlayableModel::AlbumPos ) // sort by album pos
     {
         if ( discnumber1 != discnumber2 )
         {
@@ -272,13 +328,35 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
                 return albumpos1 < albumpos2;
         }
     }
-
-    const QString& lefts = sourceModel()->data( left ).toString();
-    const QString& rights = sourceModel()->data( right ).toString();
+    
+    const QString& lefts = q1->track();
+    const QString& rights = q2->track();
     if ( lefts == rights )
         return id1 < id2;
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
+}
+
+
+bool
+PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    PlayableItem* p1 = itemFromIndex( left );
+    PlayableItem* p2 = itemFromIndex( right );
+
+    if ( !p1 )
+        return true;
+    if ( !p2 )
+        return false;
+
+    if ( p1->query() && p2->query() )
+    {
+        const Tomahawk::query_ptr& q1 = p1->query()->displayQuery();
+        const Tomahawk::query_ptr& q2 = p2->query()->displayQuery();
+        return lessThan( left.column(), q1, q2 );
+    }
+
+    return QString::localeAwareCompare( sourceModel()->data( left ).toString(), sourceModel()->data( right ).toString() ) < 0;
 }
 
 

@@ -59,7 +59,7 @@ private slots:
 
 private:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
-    void drawRichText( QPainter* painter, const QRect& rect, int flags, QTextDocument& text ) const;
+    void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
 
     QTextOption m_topOption;
     QTextOption m_centerRightOption;

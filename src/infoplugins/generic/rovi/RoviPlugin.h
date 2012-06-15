@@ -43,6 +43,8 @@ public:
     virtual ~RoviPlugin();
 
 protected:
+    virtual void init() {}
+    
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )

@@ -49,7 +49,6 @@ void DatabaseCommand_TrackAttributes::exec( DatabaseImpl* lib )
     PairList results;
     if ( !m_ids.isEmpty() )
     {
-
         foreach ( const QID id, m_ids )
         {
             query.prepare( "SELECT v FROM track_attributes WHERE id = ? AND k = ?" );
@@ -58,11 +57,13 @@ void DatabaseCommand_TrackAttributes::exec( DatabaseImpl* lib )
             if ( query.exec() )
                 results.append( QPair< QID, QString >( id, query.value( 0 ).toString() ) );
         }
-    } else {
+    }
+    else
+    {
         query.prepare( "SELECT id, v FROM track_attributes WHERE k = ?" );
         query.bindValue( 0, k );
         query.exec();
-        while ( !query.next() )
+        while ( query.next() )
         {
             results.append( QPair< QID, QString >( query.value( 0 ).toString(), query.value( 1 ).toString() ) );
         }

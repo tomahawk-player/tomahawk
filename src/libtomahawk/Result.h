@@ -36,6 +36,8 @@ class DatabaseCommand_LoadFile;
 namespace Tomahawk
 {
 
+class Resolver;
+
 class DLLEXPORT Result : public QObject
 {
 Q_OBJECT
@@ -53,6 +55,9 @@ public:
     QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery();
+
+    Tomahawk::Resolver* resolvedBy() const;
+    void setResolvedBy( Tomahawk::Resolver* resolver );
 
     float score() const;
     RID id() const;
@@ -110,6 +115,8 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
+    
+    void onResolverRemoved( Tomahawk::Resolver* resolver );
 
 private:
     // private constructor
@@ -121,6 +128,7 @@ private:
     mutable RID m_rid;
     collection_ptr m_collection;
     Tomahawk::query_ptr m_query;
+    QWeakPointer< Tomahawk::Resolver > m_resolvedBy;
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;

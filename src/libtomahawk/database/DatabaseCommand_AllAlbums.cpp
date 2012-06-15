@@ -73,11 +73,11 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
         QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
         foreach( QString s, sl )
         {
-            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkUtils::sqlEscape( s ) );
+            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkSqlQuery::escape( s ) );
         }
 
         filterToken = QString( "AND artist.id = file_join.artist AND file_join.track = track.id %1" ).arg( filtersql );
-        tables = "artist, track, file, file_join";
+        tables = "file, file_join, artist, track";
     }
     else
         tables = "file, file_join";
@@ -139,7 +139,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
 
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
-        "FROM album, file, file_join "
+        "FROM file_join, file, album "
         "LEFT OUTER JOIN artist ON album.artist = artist.id "
         "WHERE file.id = file_join.file "
         "AND file_join.album = album.id "
