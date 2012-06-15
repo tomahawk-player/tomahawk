@@ -264,7 +264,9 @@ ACLRegistry::save()
     foreach ( ACLRegistry::User user, m_cache )
     {
         tDebug() << Q_FUNC_INFO << "user is " << user.uuid << " with known name " << user.knownAccountIds.first();
-        entryList.append( QVariant::fromValue< ACLRegistry::User >( user ) );
+        QVariant val = QVariant::fromValue< ACLRegistry::User >( user );
+        if ( val.isValid() )
+            entryList.append( val );
     }
     TomahawkSettings::instance()->setAclEntries( entryList );
 }
