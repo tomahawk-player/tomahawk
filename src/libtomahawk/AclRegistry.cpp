@@ -251,6 +251,8 @@ ACLRegistry::load()
             continue;
         tDebug() << Q_FUNC_INFO << "loading entry";
         ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
+        if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
+            continue;
         m_cache.append( entryUser );
     }
 }
