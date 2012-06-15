@@ -21,7 +21,7 @@
 
 #include "DllMacro.h"
 
-#include <functional>
+#include <tr1/functional>
 
 #include <QMetaMethod>
 #include <QObject>
@@ -64,7 +64,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
           const ClosureArgumentWrapper* val3 = 0);
 
   Closure(QObject* sender, const char* signal,
-          std::function<void()> callback);
+          std::tr1::function<void()> callback);
 
   void setAutoDelete( bool autoDelete ) { autoDelete_ = autoDelete; }
 
@@ -87,7 +87,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   void Connect(QObject* sender, const char* signal);
 
   QMetaMethod slot_;
-  std::function<void()> callback_;
+  std::tr1::function<void()> callback_;
   bool autoDelete_;
 
   boost::scoped_ptr<const ClosureArgumentWrapper> val0_;

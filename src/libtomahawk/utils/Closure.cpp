@@ -46,7 +46,7 @@ Closure::Closure(QObject* sender,
 
 Closure::Closure(QObject* sender,
                  const char* signal,
-                 std::function<void()> callback)
+                 std::tr1::function<void()> callback)
     : callback_(callback) {
   Connect(sender, signal);
 }

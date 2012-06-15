@@ -94,9 +94,8 @@ SET( tomahawkUI ${tomahawkUI}
 INCLUDE_DIRECTORIES(
     .
     ${CMAKE_CURRENT_BINARY_DIR}
-    /usr/include/c++/v1/
 
-audio
+    audio
     database
     playlist
     network

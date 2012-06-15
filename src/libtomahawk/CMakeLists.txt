@@ -15,6 +15,7 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
+add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 
 
 set( libGuiSources
@@ -332,8 +333,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
-    /usr/include/c++/v1/
-
 
     playlist
 
