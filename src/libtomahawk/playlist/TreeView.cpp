@@ -419,7 +419,7 @@ TreeView::onMenuTriggered( int action )
 bool
 TreeView::jumpToCurrentTrack()
 {
-    if ( !m_proxyModel )
+    if ( !m_proxyModel || !m_proxyModel->sourceModel() )
         return false;
 
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
