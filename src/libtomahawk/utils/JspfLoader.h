@@ -45,6 +45,8 @@ public:
     QList< Tomahawk::query_ptr > entries() const;
     void setOverrideTitle( const QString& newTitle ) { m_overrideTitle = newTitle; }
 
+    void setAutoDelete( bool autoDelete ) { m_autoDelete = autoDelete; }
+
 signals:
     void failed();
     void ok( const Tomahawk::playlist_ptr& );
@@ -61,7 +63,7 @@ private:
     void reportError();
     void gotBody();
 
-    bool m_autoCreate;
+    bool m_autoCreate, m_autoDelete;
     QList< Tomahawk::query_ptr > m_entries;
     QString m_title, m_info, m_creator, m_overrideTitle;
 

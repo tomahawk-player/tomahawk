@@ -67,6 +67,8 @@ public slots:
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 
     void handleOpenTrack( const Tomahawk::query_ptr& qry );
+    void handleOpenTracks( const QList< Tomahawk::query_ptr >& queries );
+
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 #endif
 

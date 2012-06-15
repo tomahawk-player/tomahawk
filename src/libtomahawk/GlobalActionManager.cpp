@@ -496,6 +496,23 @@ GlobalActionManager::handleOpenTrack( const query_ptr& q )
 
 
 void
+GlobalActionManager::handleOpenTracks( const QList< query_ptr >& queries )
+{
+    if ( queries.isEmpty() )
+        return;
+
+    ViewManager::instance()->queue()->model()->append( queries );
+    ViewManager::instance()->showQueue();
+
+    if ( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() )
+    {
+        connect( queries.first().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+        m_waitingToPlay = queries.first();
+    }
+}
+
+
+void
 GlobalActionManager::handlePlayTrack( const query_ptr& qry )
 {
     playNow( qry );
@@ -589,6 +606,43 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 }
                 return true;
             }
+        }
+    }
+    else if ( parts.size() && parts[ 0 ] == "playlist" )
+    {
+        QString xspfUrl, jspfUrl;
+        for ( int i = 0; i < queryItems.size(); i++ )
+        {
+            const QPair< QString, QString > queryItem = queryItems.at( i );
+            if ( queryItem.first == "xspf" )
+            {
+                xspfUrl = queryItem.second;
+                break;
+            }
+            else if ( queryItem.first == "jspf" )
+            {
+                jspfUrl = queryItem.second;
+                break;
+            }
+        }
+
+        if ( !xspfUrl.isEmpty() )
+        {
+            XSPFLoader* loader = new XSPFLoader( false, false, this );
+            connect( loader, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( handleOpenTracks( QList< Tomahawk::query_ptr > ) ) );
+            loader->load( QUrl( xspfUrl ) );
+            loader->setAutoDelete( true );
+
+            return true;
+        }
+        else if ( !jspfUrl.isEmpty() )
+        {
+            JSPFLoader* loader = new JSPFLoader( false, this );
+            connect( loader, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( handleOpenTracks( QList< Tomahawk::query_ptr > ) ) );
+            loader->load( QUrl( jspfUrl ) );
+            loader->setAutoDelete( true );
+
+            return true;
         }
     }
     return false;
@@ -1225,7 +1279,8 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
                 ViewManager::instance()->queue()->model()->append( m_waitingToPlay );
                 AudioEngine::instance()->play();
             }
-        } else
+        }
+        else
             AudioEngine::instance()->play();
 
         m_waitingToPlay.clear();
