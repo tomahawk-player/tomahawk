@@ -13,8 +13,6 @@ SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
 SET( QT_USE_QTWEBKIT TRUE )
 
-add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
-
 INCLUDE( ${QT_USE_FILE} )
 INCLUDE( AddAppIconMacro )
 
@@ -96,8 +94,9 @@ SET( tomahawkUI ${tomahawkUI}
 INCLUDE_DIRECTORIES(
     .
     ${CMAKE_CURRENT_BINARY_DIR}
+    /usr/include/c++/v1/
 
-    audio
+audio
     database
     playlist
     network
