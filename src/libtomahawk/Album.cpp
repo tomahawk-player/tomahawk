@@ -23,6 +23,7 @@
 #include "AlbumPlaylistInterface.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "database/IdThreadWorker.h"
 #include "Query.h"
 #include "Source.h"
 
@@ -30,6 +31,12 @@
 
 using namespace Tomahawk;
 
+QHash< QString, album_ptr > Album::s_albumsByName = QHash< QString, album_ptr >();
+QHash< unsigned int, album_ptr > Album::s_albumsById = QHash< unsigned int, album_ptr >();
+
+static QMutex s_nameCacheMutex;
+static QMutex s_idCacheMutex;
+static QMutex s_idMutex;
 
 Album::~Album()
 {
@@ -47,11 +54,21 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     if ( !Database::instance() || !Database::instance()->impl() )
         return album_ptr();
 
-    int albid = Database::instance()->impl()->albumId( artist->id(), name, autoCreate );
-    if ( albid < 1 && autoCreate )
-        return album_ptr();
+    QMutexLocker l( &s_nameCacheMutex );
 
-    return Album::get( albid, name, artist );
+    if ( s_albumsByName.contains( artist->name() + name ) )
+    {
+        return s_albumsByName[ artist->name() + name ];
+    }
+
+//    qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
+    album_ptr album = album_ptr( new  Album( name, artist ) );
+    album->setWeakRef( album.toWeakRef() );
+    album->loadId( autoCreate );
+
+    s_albumsByName[ artist->name() + name ] = album;
+
+    return album;
 }
 
 
@@ -61,17 +78,17 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     static QHash< unsigned int, album_ptr > s_albums;
     static QMutex s_mutex;
 
-    QMutexLocker lock( &s_mutex );
-    if ( s_albums.contains( id ) )
+    QMutexLocker lock( &s_idCacheMutex );
+    if ( s_albumsById.contains( id ) )
     {
-        return s_albums.value( id );
+        return s_albumsById.value( id );
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
     if ( id > 0 )
-        s_albums.insert( id, a );
+        s_albumsById.insert( id, a );
 
     return a;
 }
@@ -79,6 +96,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
 Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
     : QObject()
+    , m_waitingForId( false )
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
@@ -92,6 +110,20 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
 }
 
 
+Album::Album( const QString& name, const Tomahawk::artist_ptr& artist )
+    : QObject()
+    , m_waitingForId( true )
+    , m_name( name )
+    , m_artist( artist )
+    , m_coverLoaded( false )
+    , m_coverLoading( false )
+#ifndef ENABLE_HEADLESS
+    , m_cover( 0 )
+#endif
+{
+    m_sortname = DatabaseImpl::sortname( name );
+}
+
 void
 Album::onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
@@ -103,6 +135,31 @@ artist_ptr
 Album::artist() const
 {
     return m_artist;
+}
+
+
+void
+Album::loadId( bool autoCreate )
+{
+    Q_ASSERT( m_waitingForId );
+    m_idFuture = IdThreadWorker::getAlbumId( m_ownRef.toStrongRef(), autoCreate );
+}
+
+unsigned int
+Album::id() const
+{
+    QMutexLocker l( &s_idMutex );
+
+    if ( m_waitingForId )
+    {
+        m_id = m_idFuture.get();
+        m_waitingForId = false;
+
+        if ( m_id > 0 )
+            s_albumsById[ m_id ] = m_ownRef.toStrongRef();
+    }
+
+    return m_id;
 }
 
 

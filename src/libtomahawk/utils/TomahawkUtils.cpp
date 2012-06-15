@@ -832,6 +832,20 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 }
 
 
+boost::unique_future< unsigned int >
+getArtistId( const QString &artistName )
+{
+
+}
+
+
+boost::unique_future< unsigned int >
+getAlbumId( const QString &artistName, const QString& albumId )
+{
+
+}
+
+
 } // ns
 
 #include "TomahawkUtils.moc"
