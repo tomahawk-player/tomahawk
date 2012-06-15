@@ -66,9 +66,8 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
  
-    const QString text = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4*PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
-    painter->drawText( rRect, Qt::AlignHCenter, text );
+    painter->drawText( rRect, Qt::AlignHCenter, mainText );
 
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Using rect " << rRect << ", opt rect is " << opt.rect;
 
