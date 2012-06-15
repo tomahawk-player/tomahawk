@@ -17,7 +17,7 @@ Detailed building instructions for Ubuntu
 
 Detailed building instructions for OS X
 ---------------------------------------
- See: http://wiki.tomahawk-player.org/mediawiki/index.php/Building_OS_X_Application_Bundle_on_Snow_Leopard_(10.6)
+ See: http://wiki.tomahawk-player.org/mediawiki/index.php/Building_OS_X_Application_Bundle_on_Snow_Leopard_(10.6)_and_Lion_(10.7)
 
 Doxygen Documentation
 ---------------------
@@ -42,10 +42,10 @@ Dependencies
   QuaZip 0.4.3 - http://quazip.sourceforge.net/
   Jreen 1.0.5 - http://qutim.org/jreen / https://github.com/euroelessar/jreen
   QTweetLib 0.5.0 - https://github.com/minimoog/QTweetLib
+  liblastfm 1.0.0 - http://github.com/eartle/liblastfm/
 
  Third party libraries that we ship with our source:
 
   MiniUPnP 1.6 - http://miniupnp.free.fr/
-  liblastfm 0.4.0 - http://github.com/jonocole/liblastfm/
 
 Enjoy!
