@@ -23,6 +23,8 @@
 #include "Database.h"
 #include "DatabaseImpl.h"
 
+#define ID_THREAD_DEBUG 0
+
 using namespace Tomahawk;
 
 namespace {
@@ -94,12 +96,17 @@ IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
 {
     QueueItem* item = internalGet( artist, album_ptr(), autoCreate, ArtistType );
 
-//    qDebug() << "QUEUEING ARTIST:" << artist->name();
+#if ID_THREAD_DEBUG
+    qDebug() << "QUEUEING ARTIST:" << artist->name();
+#endif
+
     s_mutex.lock();
     s_workQueue.enqueue( item );
     s_mutex.unlock();
     s_waitCond.wakeOne();
-//    qDebug() << "DONE WOKE UP THREAD:" << artist->name();
+#if ID_THREAD_DEBUG
+    qDebug() << "DONE WOKE UP THREAD:" << artist->name();
+#endif
 
     return item->promise.get_future();
 }
@@ -110,12 +117,16 @@ IdThreadWorker::getAlbumId( const album_ptr& album, bool autoCreate )
 {
     QueueItem* item = internalGet( artist_ptr(), album, autoCreate, AlbumType );
 
-//    qDebug() << "QUEUEING ALUBM:" << album->artist()->name() << album->name();
+#if ID_THREAD_DEBUG
+    qDebug() << "QUEUEING ALUBM:" << album->artist()->name() << album->name();
+#endif
     s_mutex.lock();
     s_workQueue.enqueue( item );
     s_mutex.unlock();
     s_waitCond.wakeOne();
-//    qDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
+#if ID_THREAD_DEBUG
+    qDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
+#endif
 
     return item->promise.get_future();
 }
@@ -129,15 +140,22 @@ IdThreadWorker::run()
     while ( !m_stop )
     {
         s_mutex.lock();
-//        qDebug() << "IdWorkerThread waiting on condition...";
+#if ID_THREAD_DEBUG
+        qDebug() << "IdWorkerThread waiting on condition...";
+#endif
         s_waitCond.wait( &s_mutex );
-//        qDebug() << "IdWorkerThread WOKEN UP";
-        if ( !s_workQueue.isEmpty() )
+#if ID_THREAD_DEBUG
+        qDebug() << "IdWorkerThread WOKEN UP";
+#endif
+
+        while ( !s_workQueue.isEmpty() )
         {
             QueueItem* item = s_workQueue.dequeue();
             s_mutex.unlock();
 
-//            qDebug() << "WITH CONTENTS:" << (item->type == ArtistType ? item->artist->name() :  item->album->artist()->name() + " _ " + item->album->name());
+#if ID_THREAD_DEBUG
+            qDebug() << "WITH CONTENTS:" << (item->type == ArtistType ? item->artist->name() :  item->album->artist()->name() + " _ " + item->album->name());
+#endif
             if ( item->type == ArtistType )
             {
                 unsigned int id = m_impl->artistId( item->artist->name(), item->create );
@@ -155,10 +173,10 @@ IdThreadWorker::run()
                 item->album->id();
                 delete item;
             }
+
+            s_mutex.lock();
         }
-        else
-        {
-            s_mutex.unlock();
-        }
+
+        s_mutex.unlock();
     }
 }
