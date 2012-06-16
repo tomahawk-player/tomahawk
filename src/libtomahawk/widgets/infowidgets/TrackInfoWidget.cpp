@@ -34,6 +34,8 @@
 
 using namespace Tomahawk;
 
+#define BGCOLOR_LEFT QString( "#323435" )
+#define BGCOLOR_RIGHT QString( "#454e59" )
 
 TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent )
     : QWidget( parent )
@@ -43,11 +45,11 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+    pal.setColor( QPalette::Window, QColor( BGCOLOR_LEFT ) );
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
 
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+    pal.setColor( QPalette::Window, QColor( BGCOLOR_RIGHT ) );
     ui->rightBar->setPalette( pal );
     ui->rightBar->setAutoFillBackground( true );
 
@@ -109,7 +111,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     area->setWidget( widget );
     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    area->setStyleSheet( "QScrollArea { background-color: qlineargradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #323435, stop: 0.95 #323435, stop: 1 #454e59 ); }" );
+    area->setStyleSheet( "QScrollArea { background-color:"
+                            "qlineargradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 " + BGCOLOR_LEFT + ", stop: 0.95 " + BGCOLOR_LEFT + ", stop: 1 " + BGCOLOR_RIGHT + "); }" );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
