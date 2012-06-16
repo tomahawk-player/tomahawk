@@ -94,6 +94,7 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
 
     void layoutItems();
+    void verifySize();
 
 private:
     PlayableModel* m_model;

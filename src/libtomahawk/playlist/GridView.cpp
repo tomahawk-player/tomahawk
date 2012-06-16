@@ -82,8 +82,10 @@ GridView::GridView( QWidget* parent )
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+
     connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
-//    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
+    connect( proxyModel(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( proxyModel(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 }
 
 
@@ -198,6 +200,29 @@ GridView::resizeEvent( QResizeEvent* event )
 
 
 void
+GridView::verifySize()
+{
+    if ( !autoResize() || !m_model )
+        return;
+
+#ifdef Q_WS_X11
+//    int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
+    int scrollbar = 0; verticalScrollBar()->rect().width();
+#else
+    int scrollbar = verticalScrollBar()->rect().width();
+#endif
+
+    const int rectWidth = contentsRect().width() - scrollbar - 3;
+    const int itemWidth = 160;
+    const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
+
+    const int rows = ceil( (double)m_proxyModel->rowCount( QModelIndex() ) / (double)itemsPerRow );
+    const int newHeight = rows * m_model->itemSize().height();
+    setFixedHeight( newHeight );
+}
+
+
+void
 GridView::layoutItems()
 {
     if ( autoFitItems() && m_model )
@@ -208,26 +233,17 @@ GridView::layoutItems()
 #else
         int scrollbar = verticalScrollBar()->rect().width();
 #endif
-        int rectWidth = contentsRect().width() - scrollbar - 3;
-        int itemWidth = 160;
-//        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-        int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
-//        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
-//        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+        const int rectWidth = contentsRect().width() - scrollbar - 3;
+        const int itemWidth = 160;
+        const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
-        int remSpace = rectWidth - ( itemsPerRow * itemWidth );
-        int extraSpace = remSpace / itemsPerRow;
-        int newItemWidth = itemWidth + extraSpace;
+        const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
+        const int extraSpace = remSpace / itemsPerRow;
+        const int newItemWidth = itemWidth + extraSpace;
         
         m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
-
-        if ( autoResize() )
-        {
-            int rows = ceil( (double)m_proxyModel->rowCount( QModelIndex() ) / (double)itemsPerRow );
-            int newHeight = rows * newItemWidth;
-            setFixedHeight( newHeight );
-        }
+        verifySize();
 
         if ( !m_inited )
         {
