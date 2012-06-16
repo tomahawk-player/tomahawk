@@ -44,9 +44,12 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     QPalette pal = palette();
     pal.setColor( QPalette::Window, QColor( "#323435" ) );
-
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
+
+    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+    ui->rightBar->setPalette( pal );
+    ui->rightBar->setAutoFillBackground( true );
 
 //    layout()->setSpacing( 0 );
 //    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
@@ -106,7 +109,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     area->setWidget( widget );
     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
+    area->setStyleSheet( "QScrollArea { background-color: qlineargradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #323435, stop: 0.95 #323435, stop: 1 #454e59 ); }" );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
