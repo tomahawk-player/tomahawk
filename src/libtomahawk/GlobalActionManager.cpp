@@ -433,21 +433,13 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
         }
         if ( url.hasQueryItem( "xspf" ) )
         {
-            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            XSPFLoader* l= new XSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( xspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
         }
         else if ( url.hasQueryItem( "jspf" ) )
         {
-            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            JSPFLoader* l= new JSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( jspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
         }
     }
     else if ( parts [ 0 ] == "new" )
@@ -486,29 +478,39 @@ GlobalActionManager::handleImportCommand( const QUrl& url )
     {
         if ( url.hasQueryItem( "xspf" ) )
         {
-            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            XSPFLoader* l= new XSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( xspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
-
+            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
             return true;
         }
         else if ( url.hasQueryItem( "jspf" ) )
         {
-            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            JSPFLoader* l= new JSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( jspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
-
+            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
             return true;
         }
     }
 
     return false;
+}
+
+
+void
+GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString &url, const QString& title )
+{
+    if ( type == "xspf" )
+    {
+        QUrl xspf = QUrl::fromUserInput( url );
+        XSPFLoader* l= new XSPFLoader( true, this );
+        l->setOverrideTitle( title );
+        l->load( xspf );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+    }
+    else if ( type == "jspf" )
+    {
+        QUrl jspf = QUrl::fromUserInput( url );
+        JSPFLoader* l= new JSPFLoader( true, this );
+        l->setOverrideTitle( title );
+        l->load( jspf );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+    }
 }
 
 

@@ -125,6 +125,8 @@ private:
     bool handleBookmarkCommand( const QUrl& url );
     bool handleOpenCommand( const QUrl& url );
 
+    void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
+
     QString hostname() const;
 
     Tomahawk::playlist_ptr m_toShow;
