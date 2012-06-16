@@ -50,6 +50,9 @@ public:
 
     virtual bool showOfflineResults() const { return m_showOfflineResults; }
     virtual void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
+    
+    virtual int maxVisibleItems() const { return m_maxVisibleItems; }
+    virtual void setMaxVisibleItems( int items );
 
     virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
@@ -76,7 +79,9 @@ private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
     PlayableModel* m_model;
+
     bool m_showOfflineResults;
+    int m_maxVisibleItems;
 };
 
 #endif // TRACKPROXYMODEL_H

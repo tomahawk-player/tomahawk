@@ -34,6 +34,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , m_model( 0 )
     , m_showOfflineResults( true )
+    , m_maxVisibleItems( -1 )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
@@ -96,6 +97,9 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 {
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
+        return false;
+    
+    if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
 
     if ( pi->query() )
@@ -208,6 +212,17 @@ PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
     }
 
     sourceModel()->remove( pil );
+}
+
+
+void
+PlayableProxyModel::setMaxVisibleItems( int items )
+{
+    if ( m_maxVisibleItems == items )
+        return;
+
+    m_maxVisibleItems = items;
+    invalidateFilter();
 }
 
 
