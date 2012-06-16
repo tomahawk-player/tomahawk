@@ -1,32 +1,23 @@
 Version 0.5.0:
-    * Priortize resolution of a track on double-click
-    * New Tomahawk logo and icon
-    * Spotify Resolver shipped with Tomahawk and installable via new Preferences interface
-    * Sync select playlists (and updates) with Spotify
-    * Support .aiff (AIFF mimetype) files
-    * Cleaned up Diagnostics window
-    * Don't show non-resolved tracks as Recently Played
-    * Added "Stop playback after this track" context menu items
-    * Double-clicking on a playlist name (in the sidebar) will play the playlist
-    * You can now import your entire Last.fm playback history into Tomahawk
-    * Related Artists now sorted by relatedness
-    * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux
-    * When listening privately scrobbling to Last.fm and Adium is now disabled
-    * Added a toolbar with page back / forward buttons and the global search
-    * New grid view with direct playback controls (Charts, Album Page, Artist Page, Track Page)
-    * New Releases (by Genre) pages added
-    * Add social sharing widget in Now Playing Controls
-    * Added a track page showing a song's lyrics and other similar tracks
-    * Selecting Track name in Now Playing now brings you to Track page
+    * Spotify Resolver can now be easily installed on-demand from the settings.
+    * You can now sync selected playlists (and updates) with Spotify.
+    * Support .aiff (AIFF mimetype) files.
+    * Cleaned up Diagnostics window.
+    * You can tell Tomahawk to stop playback after a certain track finished.
+    * Double-clicking a playlist name (in the sidebar) will start the playlist.
+    * You can now import your entire Last.fm playback history into Tomahawk.
+    * Fixed sorting of related artists.
+    * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux.
+    * When listening privately scrobbling to Last.fm and Adium is now disabled.
+    * Added a toolbar with page back / forward buttons and the global search.
+    * New grid-like view with direct playback controls.
+    * You can now browse new releases (by genre).
+    * Add social sharing widget, which allows you to tweet about a song.
+    * Added a track page showing a song's lyrics and other similar tracks.
     * Separate Loved Tracks and Recently Played views per source.
-    * Added animated spinner where needed
-    * Some new sidebar icons
-    * Support Transifex for localization and add translations for Arabic, French, Bulgarian, Catalan, Spanish (Castillian), and more.
-    * New Context Menu items (Love, Add to Queue, etc.)
-    * Fading album art
-    * New Account and Plug-in Preferences/Management Interface
-    * Fix XSPF auto-updating
-
+    * Added translations for Arabic, French, Bulgarian, Spanish and more.
+    * Fixed XSPF auto-updating.
+    * New Tomahawk logo and icon.
 
 Version 0.4.2:
     * Fix ZeroConf protocol showing IP addresses instead of host names.
