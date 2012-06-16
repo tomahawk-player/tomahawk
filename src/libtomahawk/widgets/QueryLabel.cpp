@@ -607,29 +607,44 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     QRect hoverArea;
     m_hoverType = None;
 
-    if ( m_type & Artist && x < artistX )
+    if ( m_align & Qt::AlignLeft )
     {
-        m_hoverType = Artist;
+        if ( m_type & Artist && x < artistX )
+        {
+            m_hoverType = Artist;
+            hoverArea.setLeft( 0 );
+            hoverArea.setRight( artistX + contentsMargins().left() - 1 );
+        }
+        else if ( m_type & Album && x < albumX && x > artistX )
+        {
+            m_hoverType = Album;
+            int spacing = ( m_type & Artist ) ? dashX : 0;
+            hoverArea.setLeft( artistX + spacing );
+            hoverArea.setRight( albumX + spacing + contentsMargins().left() - 1 );
+        }
+        else if ( m_type & Track && x < trackX && x > albumX )
+        {
+            m_hoverType = Track;
+            int spacing = ( m_type & Album ) ? dashX : 0;
+            hoverArea.setLeft( albumX + spacing );
+            hoverArea.setRight( trackX + contentsMargins().left() - 1 );
+        }
+        else if ( m_jumpLinkVisible && x < trackX + 6 + m_jumpPixmap.width() && x > trackX + 6 )
+        {
+            m_hoverType = Complete;
+        }
+    }
+    else
+    {
         hoverArea.setLeft( 0 );
-        hoverArea.setRight( artistX + contentsMargins().left() - 1 );
-    }
-    else if ( m_type & Album && x < albumX && x > artistX )
-    {
-        m_hoverType = Album;
-        int spacing = ( m_type & Artist ) ? dashX : 0;
-        hoverArea.setLeft( artistX + spacing );
-        hoverArea.setRight( albumX + spacing + contentsMargins().left() - 1 );
-    }
-    else if ( m_type & Track && x < trackX && x > albumX )
-    {
-        m_hoverType = Track;
-        int spacing = ( m_type & Album ) ? dashX : 0;
-        hoverArea.setLeft( albumX + spacing );
-        hoverArea.setRight( trackX + contentsMargins().left() - 1 );
-    }
-    else if ( m_jumpLinkVisible && x < trackX + 6 + m_jumpPixmap.width() && x > trackX + 6 )
-    {
-        m_hoverType = Complete;
+        hoverArea.setRight( width() - 1 );
+        
+        if ( m_type & Artist )
+            m_hoverType = Artist;
+        else if ( m_type & Album )
+            m_hoverType = Album;
+        else if ( m_type & Track )
+            m_hoverType = Track;
     }
 
     if ( hoverArea.width() )
