@@ -34,6 +34,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , m_model( 0 )
     , m_showOfflineResults( true )
+    , m_hideDupeItems( false )
     , m_maxVisibleItems( -1 )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
@@ -101,6 +102,23 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     
     if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
+    
+    if ( m_hideDupeItems )
+    {
+        for ( int i = 0; i < sourceRow; i++ )
+        {
+            PlayableItem* di = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+            if ( !di )
+                continue;
+
+            bool b = ( pi->query() && pi->query()->equals( di->query() ) ) ||
+                     ( pi->album() && pi->album() == di->album() ) ||
+                     ( pi->artist() && pi->artist()->name() == di->artist()->name() );
+
+            if ( b && filterAcceptsRow( i, sourceParent ) )
+                return false;
+        }
+    }
 
     if ( pi->query() )
     {
@@ -212,6 +230,22 @@ PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
     }
 
     sourceModel()->remove( pil );
+}
+
+
+void
+PlayableProxyModel::setShowOfflineResults( bool b )
+{
+    m_showOfflineResults = b;
+    invalidateFilter();
+}
+
+
+void
+PlayableProxyModel::setHideDupeItems( bool b )
+{
+    m_hideDupeItems = b;
+    invalidateFilter();
 }
 
 

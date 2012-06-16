@@ -49,8 +49,11 @@ public:
     virtual void remove( const QList< QPersistentModelIndex >& indexes );
 
     virtual bool showOfflineResults() const { return m_showOfflineResults; }
-    virtual void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
-    
+    virtual void setShowOfflineResults( bool b );
+
+    virtual bool hideDupeItems() const { return m_hideDupeItems; }
+    virtual void setHideDupeItems( bool b );
+
     virtual int maxVisibleItems() const { return m_maxVisibleItems; }
     virtual void setMaxVisibleItems( int items );
 
@@ -81,6 +84,7 @@ private:
     PlayableModel* m_model;
 
     bool m_showOfflineResults;
+    bool m_hideDupeItems;
     int m_maxVisibleItems;
 };
 
