@@ -180,6 +180,7 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->trackLabel->setText( query->track() );
     ui->artistLabel->setQuery( query );
     ui->albumLabel->setQuery( query );
+    ui->albumLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
     
