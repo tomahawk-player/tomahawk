@@ -50,6 +50,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_albumsModel = new PlayableModel( ui->albumsView );
     ui->albumsView->setPlayableModel( m_albumsModel );
     ui->albumsView->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
+    ui->albumsView->proxyModel()->setHideDupeItems( true );
 
     m_tracksModel = new TreeModel( ui->tracksView );
     m_tracksModel->setMode( Mixed );
