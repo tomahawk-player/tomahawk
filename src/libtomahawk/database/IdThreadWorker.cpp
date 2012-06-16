@@ -37,7 +37,6 @@ namespace {
 
 static QWaitCondition s_waitCond;
 static QMutex s_mutex;
-//static QSet< boost::promise< unsigned int >* > s_cachedPromises;
 
 struct QueueItem
 {
