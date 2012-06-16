@@ -331,6 +331,13 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
         return size1 < size2;
     }
+    else if ( column == PlayableModel::Score ) // sort by file score
+    {
+        if ( score1 == score2 )
+            return id1 < id2;
+
+        return score1 < score2;
+    }
     else if ( column == PlayableModel::AlbumPos ) // sort by album pos
     {
         if ( discnumber1 != discnumber2 )
