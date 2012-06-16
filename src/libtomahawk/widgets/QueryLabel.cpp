@@ -482,8 +482,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_jumpLinkVisible )
         {
             r.adjust( 6, 0, 0, 0 );
-            r.setSize( m_jumpPixmap.size() );
-            p.drawPixmap( r, m_jumpPixmap );
+            r.setWidth( r.height() );
+            p.drawPixmap( r, m_jumpPixmap.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
         }
     }
 
