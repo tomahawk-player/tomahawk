@@ -104,6 +104,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
     area->setWidget( widget );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
     area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
     area->setFrameShape( QFrame::NoFrame );
