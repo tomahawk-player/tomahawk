@@ -54,7 +54,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     setFont( f );
 #endif
 
-    ui->charsLeftLabel->setForegroundRole( QPalette::HighlightedText );
+    ui->charsLeftLabel->setForegroundRole( QPalette::BrightText );
     
     ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Tweet" ) );
     
