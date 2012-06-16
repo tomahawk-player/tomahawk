@@ -29,6 +29,8 @@
 
 #include "utils/Logger.h"
 
+#include <QReadWriteLock>
+
 using namespace Tomahawk;
 
 QHash< QString, album_ptr > Album::s_albumsByName = QHash< QString, album_ptr >();
@@ -36,7 +38,7 @@ QHash< unsigned int, album_ptr > Album::s_albumsById = QHash< unsigned int, albu
 
 static QMutex s_nameCacheMutex;
 static QMutex s_idCacheMutex;
-static QMutex s_idMutex;
+static QReadWriteLock s_idMutex;
 
 Album::~Album()
 {
@@ -155,18 +157,25 @@ Album::loadId( bool autoCreate )
 unsigned int
 Album::id() const
 {
-    QMutexLocker l( &s_idMutex );
+    s_idMutex.lockForRead();
+    const bool waiting = m_waitingForId;
+    unsigned int finalId = m_id;
+    s_idMutex.unlock();
 
-    if ( m_waitingForId )
+    if ( waiting )
     {
-        m_id = m_idFuture.get();
+        finalId = m_idFuture.get();
+
+        s_idMutex.lockForWrite();
+        m_id = finalId;
         m_waitingForId = false;
 
         if ( m_id > 0 )
             s_albumsById[ m_id ] = m_ownRef.toStrongRef();
+        s_idMutex.unlock();
     }
 
-    return m_id;
+    return finalId;
 }
 
 
