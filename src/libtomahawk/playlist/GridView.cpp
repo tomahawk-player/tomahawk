@@ -84,8 +84,6 @@ GridView::GridView( QWidget* parent )
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
     connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
-    connect( proxyModel(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( proxyModel(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 }
 
 
@@ -98,7 +96,14 @@ GridView::~GridView()
 void
 GridView::setProxyModel( PlayableProxyModel* model )
 {
+    if ( m_proxyModel )
+    {
+        disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
+    }
+
     m_proxyModel = model;
+    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+
     m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
     setItemDelegate( m_delegate );
@@ -119,6 +124,12 @@ GridView::setModel( QAbstractItemModel* model )
 void
 GridView::setPlayableModel( PlayableModel* model )
 {
+    if ( m_model )
+    {
+        disconnect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+    }
+
     m_inited = false;
     m_model = model;
 
@@ -128,7 +139,8 @@ GridView::setPlayableModel( PlayableModel* model )
         m_proxyModel->sort( 0 );
     }
 
-    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     emit modelChanged();
 }
@@ -216,9 +228,12 @@ GridView::verifySize()
     const int itemWidth = 160;
     const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
-    const int rows = ceil( (double)m_proxyModel->rowCount( QModelIndex() ) / (double)itemsPerRow );
+    const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
+    const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
     const int newHeight = rows * m_model->itemSize().height();
+
     setFixedHeight( newHeight );
+    m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
 }
 
 
