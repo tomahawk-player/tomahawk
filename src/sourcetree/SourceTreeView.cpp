@@ -568,6 +568,8 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
 
     setupMenus();
 
+    const QList< QAction* > customActions = model()->data( m_contextMenuIndex, SourcesModel::CustomActionRole ).value< QList< QAction* > >();
+
     if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
          model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::AutomaticPlaylist ||
          model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Station )
@@ -585,6 +587,12 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
             m_latchMenu.exec( mapToGlobal( pos ) );
         else if ( !item->source().isNull() )
             m_privacyMenu.exec( mapToGlobal( pos ) );
+    }
+    else if ( !customActions.isEmpty() )
+    {
+        QMenu customMenu;
+        customMenu.addActions( customActions );
+        customMenu.exec( mapToGlobal( pos ) );
     }
 }
 

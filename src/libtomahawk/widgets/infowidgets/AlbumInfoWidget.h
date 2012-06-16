@@ -55,6 +55,8 @@ public:
     AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
     ~AlbumInfoWidget();
 
+    Tomahawk::album_ptr album() const { return m_album; }
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 

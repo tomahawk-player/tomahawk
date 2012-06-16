@@ -43,6 +43,11 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+
+    QUrl copyOpenLink( const Tomahawk::artist_ptr& artist ) const;
+    QUrl copyOpenLink( const Tomahawk::album_ptr& album ) const;
+    QUrl copyOpenLink( const Tomahawk::query_ptr& query ) const;
+
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
 public slots:

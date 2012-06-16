@@ -54,6 +54,8 @@ public:
     TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent = 0 );
     ~TrackInfoWidget();
 
+    Tomahawk::query_ptr query() const { return m_query; }
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 

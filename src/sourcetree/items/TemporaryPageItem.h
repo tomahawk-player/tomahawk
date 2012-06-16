@@ -22,6 +22,8 @@
 #include "items/SourceTreeItem.h"
 #include "ViewPage.h"
 
+class QAction;
+
 class TemporaryPageItem : public SourceTreeItem
 {
     Q_OBJECT
@@ -34,6 +36,7 @@ public:
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;
+    virtual QList< QAction* > customActions() const { return m_customActions; }
 
     Tomahawk::ViewPage* page() const { return m_page; }
     virtual bool isBeingPlayed() const { return m_page->isBeingPlayed(); }
@@ -44,10 +47,16 @@ public slots:
 signals:
     bool removed();
 
+private slots:
+    void linkActionTriggered( QAction* );
+
 private:
     Tomahawk::ViewPage* m_page;
     QIcon m_icon;
     int m_sortValue;
+    QList< QAction* > m_customActions;
 };
+
+Q_DECLARE_METATYPE( QAction* )
 
 #endif // TEMPORARYPAGEITEM_H

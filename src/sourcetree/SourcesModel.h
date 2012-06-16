@@ -28,6 +28,9 @@
 #include "Typedefs.h"
 #include "Source.h"
 
+#include <QList>
+#include <QAction>
+
 class QMimeData;
 
 class SourceTreeItem;
@@ -72,7 +75,8 @@ public:
         SortRole                = Qt::UserRole + 12,
         IDRole                  = Qt::UserRole + 13,
         LatchedOnRole           = Qt::UserRole + 14,
-        LatchedRealtimeRole     = Qt::UserRole + 15
+        LatchedRealtimeRole     = Qt::UserRole + 15,
+        CustomActionRole        = Qt::UserRole + 16 // QList< QAction* >
     };
 
     SourcesModel( QObject* parent = 0 );
@@ -148,5 +152,7 @@ private:
     QHash< Tomahawk::ViewPage*, SourceTreeItem* > m_sourceTreeLinks;
     Tomahawk::ViewPage* m_viewPageDelayedCacheItem;
 };
+
+Q_DECLARE_METATYPE( QList< QAction* > )
 
 #endif // SOURCESMODEL_H
