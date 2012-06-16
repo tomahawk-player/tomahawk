@@ -45,9 +45,9 @@ TomahawkSqlQuery::TomahawkSqlQuery( const QSqlDatabase& db )
 
 
 QString
-TomahawkSqlQuery::escape( const QString& identifier, QSqlDriver::IdentifierType type )
+TomahawkSqlQuery::escape( QString identifier )
 {
-    return Database::instance()->impl()->database().driver()->escapeIdentifier( identifier, type );
+    return identifier.replace( "'", "''" );
 }
 
 

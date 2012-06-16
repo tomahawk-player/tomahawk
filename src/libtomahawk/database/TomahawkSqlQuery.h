@@ -33,7 +33,7 @@ public:
     TomahawkSqlQuery();
     TomahawkSqlQuery( const QSqlDatabase& db );
 
-    static QString escape( const QString& identifier, QSqlDriver::IdentifierType type = QSqlDriver::FieldName );
+    static QString escape( QString identifier );
 
     bool exec( const QString& query );
     bool exec();
