@@ -103,6 +103,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
