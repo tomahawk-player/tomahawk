@@ -39,7 +39,7 @@ static QMutex s_mutex;
 
 struct QueueItem
 {
-    boost::promise< unsigned int >* promise;
+    boost::promise< unsigned int > promise;
     artist_ptr artist;
     album_ptr album;
     QueryType type;
@@ -54,7 +54,7 @@ IdThreadWorker::IdThreadWorker( Database* db )
     , m_db( db )
     , m_stop( false )
 {
-    m_impl = m_db->impl()->clone();
+    moveToThread( this );
 }
 
 
@@ -80,7 +80,6 @@ QueueItem*
 internalGet( const artist_ptr& artist, const album_ptr& album, bool autoCreate, QueryType type )
 {
     QueueItem* item = new QueueItem;
-    item->promise = new boost::promise< unsigned int >();
     item->artist = artist;
     item->album = album;
     item->type = type;
@@ -102,7 +101,7 @@ IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
     s_waitCond.wakeOne();
 //    qDebug() << "DONE WOKE UP THREAD:" << artist->name();
 
-    return item->promise->get_future();
+    return item->promise.get_future();
 }
 
 
@@ -118,14 +117,14 @@ IdThreadWorker::getAlbumId( const album_ptr& album, bool autoCreate )
     s_waitCond.wakeOne();
 //    qDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
 
-    return item->promise->get_future();
+    return item->promise.get_future();
 }
 
 
 void
 IdThreadWorker::run()
 {
-    Q_ASSERT( !m_impl );
+    m_impl = m_db->impl()->clone();
 
     while ( !m_stop )
     {
@@ -142,7 +141,7 @@ IdThreadWorker::run()
             if ( item->type == ArtistType )
             {
                 unsigned int id = m_impl->artistId( item->artist->name(), item->create );
-                item->promise->set_value( id );
+                item->promise.set_value( id );
 
                 item->artist->id();
                 delete item;
@@ -151,7 +150,7 @@ IdThreadWorker::run()
             {
                 unsigned int artistId = m_impl->artistId( item->album->artist()->name(), item->create );
                 unsigned int albumId = m_impl->albumId( artistId, item->album->name(), item->create );
-                item->promise->set_value( albumId );
+                item->promise.set_value( albumId );
 
                 item->album->id();
                 delete item;

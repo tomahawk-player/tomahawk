@@ -44,7 +44,7 @@
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
-    : QObject( 0 )
+    : QObject( parent )
     , m_parent( parent )
 {
     QTime t;

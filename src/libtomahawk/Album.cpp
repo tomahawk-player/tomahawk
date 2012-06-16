@@ -47,6 +47,12 @@ Album::~Album()
 #endif
 }
 
+inline QString
+albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
+{
+    return QString( "%1\t\t%2" ).arg( artist->name() ).arg( albumName );
+}
+
 
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
@@ -56,9 +62,10 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
 
     QMutexLocker l( &s_nameCacheMutex );
 
-    if ( s_albumsByName.contains( artist->name() + name ) )
+    const QString key = albumCacheKey( artist, name );
+    if ( s_albumsByName.contains( key ) )
     {
-        return s_albumsByName[ artist->name() + name ];
+        return s_albumsByName[ key ];
     }
 
 //    qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
@@ -66,7 +73,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
 
-    s_albumsByName[ artist->name() + name ] = album;
+    s_albumsByName[ key ] = album;
 
     return album;
 }
