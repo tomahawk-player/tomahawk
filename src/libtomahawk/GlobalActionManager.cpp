@@ -354,6 +354,10 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
         {
             return handleViewCommand( u );
         }
+        else if ( cmdType == "import" )
+        {
+            return handleImportCommand( u );
+        }
         else
         {
             tLog() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
@@ -423,6 +427,43 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
         }
         // TODO implement. Let the user select what playlist to add to
         return false;
+    }
+
+    return false;
+}
+
+
+bool
+GlobalActionManager::handleImportCommand( const QUrl& url )
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
+    if ( parts.size() < 1 )
+        return false;
+
+    if ( parts[ 0 ] == "playlist" )
+    {
+        if ( url.hasQueryItem( "xspf" ) )
+        {
+            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            XSPFLoader* l= new XSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( xspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+
+            return true;
+        }
+        else if ( url.hasQueryItem( "jspf" ) )
+        {
+            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
+            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
+            JSPFLoader* l= new JSPFLoader( true, this );
+            l->setOverrideTitle( title );
+            l->load( jspf );
+            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+
+            return true;
+        }
     }
 
     return false;

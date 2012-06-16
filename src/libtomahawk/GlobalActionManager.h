@@ -106,6 +106,7 @@ private:
     bool handleSearchCommand( const QUrl& url );
     bool handleQueueCommand( const QUrl& url );
     bool handleAutoPlaylistCommand( const QUrl& url );
+    bool handleImportCommand( const QUrl& url );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
     
     bool playSpotify( const QUrl& url );
