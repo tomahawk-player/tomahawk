@@ -50,7 +50,8 @@ QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
     {
         QModelIndex idx = index( i, 0 );
         PlayableItem* item = itemFromIndex( mapToSource( idx ) );
-        if ( item && item->query() && item->query()->equals( result->toQuery() ) )
+        if ( item && item->query() && ( item->query()->results().contains( result ) ||
+                                        item->query()->equals( result->toQuery() ) ) )
             remove( idx );
     }
 }
