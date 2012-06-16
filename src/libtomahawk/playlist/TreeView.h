@@ -78,6 +78,8 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
+    QModelIndex hoveredIndex() const { return m_hoveredIndex; }
+
     bool updatesContextView() const { return m_updateContextView; }
     void setUpdatesContextView( bool b ) { m_updateContextView = b; }
 
@@ -92,6 +94,10 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
 
     virtual void keyPressEvent( QKeyEvent* event );
+    void wheelEvent( QWheelEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
+    void mousePressEvent( QMouseEvent* event );
+    void leaveEvent( QEvent* event );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
@@ -106,6 +112,8 @@ private slots:
     void onMenuTriggered( int action );
 
 private:
+    void updateHoverIndex( const QPoint& pos );
+
     ViewHeader* m_header;
     OverlayWidget* m_overlay;
     TreeModel* m_model;
@@ -114,6 +122,7 @@ private:
 
     bool m_updateContextView;
 
+    QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
 

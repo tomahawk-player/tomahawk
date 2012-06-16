@@ -60,6 +60,7 @@ TreeView::TreeView( QWidget* parent )
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     setContentsMargins( 0, 0, 0, 0 );
+    setMouseTracking( true );
     setAlternatingRowColors( true );
     setDragEnabled( true );
     setDropIndicatorShown( false );
@@ -424,6 +425,96 @@ TreeView::jumpToCurrentTrack()
 
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
+}
+
+
+void
+TreeView::updateHoverIndex( const QPoint& pos )
+{
+    QModelIndex idx = indexAt( pos );
+
+    if ( idx != m_hoveredIndex )
+    {
+        m_hoveredIndex = idx;
+        repaint();
+    }
+
+    if ( !m_model || m_model->style() != PlayableModel::Collection )
+        return;
+
+    PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+    if ( idx.column() == 0 && !item->query().isNull() )
+    {
+        if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+             pos.x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+        {
+            setCursor( Qt::PointingHandCursor );
+            return;
+        }
+    }
+
+    if ( cursor().shape() != Qt::ArrowCursor )
+        setCursor( Qt::ArrowCursor );
+}
+
+
+void
+TreeView::wheelEvent( QWheelEvent* event )
+{
+    QTreeView::wheelEvent( event );
+
+    if ( m_hoveredIndex.isValid() )
+    {
+        m_hoveredIndex = QModelIndex();
+        repaint();
+    }
+}
+
+
+void
+TreeView::leaveEvent( QEvent* event )
+{
+    QTreeView::leaveEvent( event );
+    updateHoverIndex( QPoint( -1, -1 ) );
+}
+
+
+void
+TreeView::mouseMoveEvent( QMouseEvent* event )
+{
+    QTreeView::mouseMoveEvent( event );
+    updateHoverIndex( event->pos() );
+}
+
+
+void
+TreeView::mousePressEvent( QMouseEvent* event )
+{
+    QTreeView::mousePressEvent( event );
+
+    if ( !m_model || m_model->style() != PlayableModel::Collection )
+        return;
+
+    QModelIndex idx = indexAt( event->pos() );
+    if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+         event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+    {
+        PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        if ( item->query().isNull() )
+            return;
+
+        switch ( idx.column() )
+        {
+            case 0:
+            {
+                ViewManager::instance()->show( item->query()->displayQuery() );
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
 }
 
 
