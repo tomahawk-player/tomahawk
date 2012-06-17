@@ -31,6 +31,7 @@
 #include "DllMacro.h"
 #include "Query.h"
 
+#include <boost/thread/mutex.hpp>
 #include <boost/thread/future.hpp>
 
 namespace Tomahawk
