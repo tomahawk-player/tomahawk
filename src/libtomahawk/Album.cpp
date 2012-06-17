@@ -151,8 +151,16 @@ void
 Album::loadId( bool autoCreate )
 {
     Q_ASSERT( m_waitingForId );
-    m_idFuture = IdThreadWorker::getAlbumId( m_ownRef.toStrongRef(), autoCreate );
+    IdThreadWorker::getAlbumId( m_ownRef.toStrongRef(), autoCreate );
 }
+
+
+void
+Album::setIdFuture( boost::unique_future< unsigned int > future )
+{
+    m_idFuture = boost::move( future );
+}
+
 
 unsigned int
 Album::id() const

@@ -36,6 +36,8 @@
 #include "Collection.h"
 #include "infosystem/InfoSystem.h"
 
+class IdThreadWorker;
+
 namespace Tomahawk
 {
 
@@ -82,6 +84,7 @@ private slots:
 private:
     Q_DISABLE_COPY( Album )
     QString infoid() const;
+    void setIdFuture( boost::unique_future< unsigned int > future );
 
     mutable bool m_waitingForId;
     mutable boost::unique_future< unsigned int > m_idFuture;
@@ -107,6 +110,8 @@ private:
 
     static QHash< QString, album_ptr > s_albumsByName;
     static QHash< unsigned int, album_ptr > s_albumsById;
+
+    friend class ::IdThreadWorker;
 };
 
 } // ns

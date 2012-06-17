@@ -42,8 +42,8 @@ public:
     void run();
     void stop();
 
-    static boost::unique_future< unsigned int > getArtistId( const Tomahawk::artist_ptr& artist, bool autoCreate = false );
-    static boost::unique_future< unsigned int > getAlbumId( const Tomahawk::album_ptr& album, bool autoCreate = false );
+    static void getArtistId( const Tomahawk::artist_ptr& artist, bool autoCreate = false );
+    static void getAlbumId( const Tomahawk::album_ptr& album, bool autoCreate = false );
 
 private:
     Database* m_db;

@@ -230,7 +230,15 @@ void
 Artist::loadId( bool autoCreate )
 {
     Q_ASSERT( m_waitingForFuture );
-    m_idFuture = IdThreadWorker::getArtistId( m_ownRef.toStrongRef(), autoCreate );
+
+    IdThreadWorker::getArtistId( m_ownRef.toStrongRef(), autoCreate );
+}
+
+
+void
+Artist::setIdFuture( boost::unique_future< unsigned int > future )
+{
+    m_idFuture = boost::move(future);
 }
 
 

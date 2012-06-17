@@ -33,6 +33,8 @@
 
 #include <boost/thread.hpp>
 
+class IdThreadWorker;
+
 namespace Tomahawk
 {
 
@@ -97,6 +99,8 @@ private:
     Artist();
     QString infoid() const;
 
+    void setIdFuture( boost::unique_future< unsigned int > future );
+
     mutable bool m_waitingForFuture;
     mutable boost::unique_future< unsigned int > m_idFuture;
     mutable unsigned int m_id;
@@ -133,6 +137,8 @@ private:
 
     static QHash< QString, artist_ptr > s_artistsByName;
     static QHash< unsigned int, artist_ptr > s_artistsById;
+
+    friend class ::IdThreadWorker;
 };
 
 } // ns

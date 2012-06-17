@@ -22,6 +22,7 @@
 #include "Album.h"
 #include "Database.h"
 #include "DatabaseImpl.h"
+#include "Source.h"
 
 #define ID_THREAD_DEBUG 0
 
@@ -90,10 +91,11 @@ internalGet( const artist_ptr& artist, const album_ptr& album, bool autoCreate, 
 }
 
 
-boost::unique_future< unsigned int >
+void
 IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
 {
     QueueItem* item = internalGet( artist, album_ptr(), autoCreate, ArtistType );
+    artist->setIdFuture( item->promise.get_future() );
 
 #if ID_THREAD_DEBUG
     qDebug() << "QUEUEING ARTIST:" << artist->name();
@@ -106,15 +108,14 @@ IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
 #if ID_THREAD_DEBUG
     qDebug() << "DONE WOKE UP THREAD:" << artist->name();
 #endif
-
-    return item->promise.get_future();
 }
 
 
-boost::unique_future< unsigned int >
+void
 IdThreadWorker::getAlbumId( const album_ptr& album, bool autoCreate )
 {
     QueueItem* item = internalGet( artist_ptr(), album, autoCreate, AlbumType );
+    album->setIdFuture( item->promise.get_future() );
 
 #if ID_THREAD_DEBUG
     qDebug() << "QUEUEING ALUBM:" << album->artist()->name() << album->name();
@@ -126,8 +127,6 @@ IdThreadWorker::getAlbumId( const album_ptr& album, bool autoCreate )
 #if ID_THREAD_DEBUG
     qDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
 #endif
-
-    return item->promise.get_future();
 }
 
 
