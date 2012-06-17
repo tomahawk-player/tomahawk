@@ -244,15 +244,23 @@ Artist::id() const
 
     if ( waiting )
     {
-        finalid = m_idFuture.get();
+        try
+        {
+            finalid = m_idFuture.get();
 
-        s_idMutex.lockForWrite();
-        m_id = finalid;
-        m_waitingForFuture = false;
+            s_idMutex.lockForWrite();
+            m_id = finalid;
+            m_waitingForFuture = false;
 
-        if ( m_id > 0 )
-            s_artistsById[ m_id ] = m_ownRef.toStrongRef();
-        s_idMutex.unlock();
+            if ( m_id > 0 )
+                s_artistsById[ m_id ] = m_ownRef.toStrongRef();
+            s_idMutex.unlock();
+        }
+        catch( boost::future_uninitialized& e )
+        {
+            qWarning() << "Caught boost::future_uninitialized when trying to get artist id from future, WTF?";
+            qWarning() << "Potential race condition, do we have an ID?" << m_id << "and waiting?" << m_waitingForFuture << e.what();
+        }
     }
 
     return m_id;
