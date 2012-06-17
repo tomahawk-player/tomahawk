@@ -40,6 +40,13 @@
 AclJobDelegate::AclJobDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
 {
+    tLog() << Q_FUNC_INFO;
+}
+
+
+AclJobDelegate::~AclJobDelegate()
+{
+    tLog() << Q_FUNC_INFO;
 }
 
 
@@ -148,17 +155,22 @@ AclJobItem::AclJobItem( ACLRegistry::User user, const QString &username )
     , m_user( user )
     , m_username( username )
 {
+    tLog() << Q_FUNC_INFO;
 }
 
 
 AclJobItem::~AclJobItem()
 {
+    tLog() << Q_FUNC_INFO;
+    if ( m_delegate )
+        delete m_delegate;
 }
 
 
 void
 AclJobItem::createDelegate( QObject* parent )
 {
+    tLog() << Q_FUNC_INFO;
     if ( m_delegate )
         return;
 
@@ -179,15 +191,9 @@ AclJobDelegate::emitSizeHintChanged( const QModelIndex& index )
 void
 AclJobItem::aclResult( ACLRegistry::ACL result )
 {
+    tLog() << Q_FUNC_INFO;
     m_user.acl = result;
     emit userDecision( m_user );
-    done();
-}
-
-
-void
-AclJobItem::done()
-{
     emit finished();
 }
 

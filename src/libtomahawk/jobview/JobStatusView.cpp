@@ -100,22 +100,24 @@ JobStatusView::setModel( JobStatusModel* m )
 void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    tLog() << Q_FUNC_INFO << "item is " << item << ", row is " << row;
     if ( !item )
         return;
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "telling item to create delegate";
+    tLog() << Q_FUNC_INFO << "telling item to create delegate";
     item->createDelegate( m_view );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
+    tLog() << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
-    m_customDelegateRefCounter[ row ] = m_customDelegateRefCounter[ row ] + 1;
     AclJobDelegate* delegate = qobject_cast< AclJobDelegate* >( item->customDelegate() );
     if ( delegate )
     {
+        tLog() << Q_FUNC_INFO << "delegate found";
         connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
         connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
         delegate->emitSizeHintChanged( m_model->index( row ) );
     }
+    else
+        tLog() << Q_FUNC_INFO << "delegate was not properly found!";
 
     checkCount();
 }
@@ -124,9 +126,24 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
-    if ( m_customDelegateRefCounter[ row ] == 1 )
-        m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
-    m_customDelegateRefCounter[ row ] = m_customDelegateRefCounter[ row ] - 1;
+    tLog() << Q_FUNC_INFO << "row is " << row;
+    int count = m_model->rowCount();
+    for ( int i = 0; i < count; i++ )
+    {
+        tLog() << Q_FUNC_INFO << "checking row " << i;
+        QModelIndex index = m_model->index( i );
+        QVariant itemVar = index.data( JobStatusModel::JobDataRole );
+        if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )
+        {
+            tLog() << Q_FUNC_INFO << "unable to fetch JobStatusItem* at row " << i;
+            continue;
+        }
+        JobStatusItem* item = itemVar.value< JobStatusItem* >();
+        if ( item->hasCustomDelegate() )
+            m_view->setItemDelegateForRow( i, item->customDelegate() );
+        else
+            m_view->setItemDelegateForRow( i, m_view->itemDelegate() );
+    }
 
     checkCount();
 }

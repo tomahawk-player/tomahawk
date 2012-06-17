@@ -61,7 +61,6 @@ private:
     JobStatusModel* m_model;
     AnimatedSplitter* m_parent;
     mutable int m_cachedHeight;
-    QHash< int, int > m_customDelegateRefCounter;
 
     static JobStatusView* s_instance;
 };

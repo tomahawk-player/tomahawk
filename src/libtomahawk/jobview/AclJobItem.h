@@ -33,7 +33,7 @@ class AclJobDelegate : public QStyledItemDelegate
 
 public:
     explicit AclJobDelegate ( QObject* parent = 0 );
-    virtual ~AclJobDelegate() {}
+    virtual ~AclJobDelegate();
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -63,8 +63,6 @@ public:
     explicit AclJobItem( ACLRegistry::User user, const QString &username );
     virtual ~AclJobItem();
     
-    void done();
-
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const { return QString(); }
     virtual QPixmap icon() const { return QPixmap(); }
