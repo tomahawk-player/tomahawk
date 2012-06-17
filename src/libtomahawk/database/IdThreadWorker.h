@@ -26,7 +26,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 
-#include <boost/thread/future.hpp>
+#include <boost/thread.hpp>
 
 class QueueItem;
 class Database;
