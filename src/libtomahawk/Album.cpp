@@ -176,10 +176,12 @@ Album::id() const
                 s_albumsById[ m_id ] = m_ownRef.toStrongRef();
             s_idMutex.unlock();
         }
-        catch( boost::future_uninitialized& e )
+        catch( const boost::future_uninitialized& e )
         {
             qWarning() << "Caught boost::future_uninitialized when trying to get artist id from future, WTF?";
             qWarning() << "Potential race condition, do we have an ID?" << m_id << "and waiting?" << m_waitingForId << e.what();
+
+            Q_ASSERT( !m_waitingForId );
         }
     }
 
