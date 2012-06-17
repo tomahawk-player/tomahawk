@@ -28,9 +28,7 @@
     #include <QtGui/QPixmap>
 #endif
 
-#include <boost/thread/locks.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/future.hpp>
+#include <boost/thread.hpp>
 
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
