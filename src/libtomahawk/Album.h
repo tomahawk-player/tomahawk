@@ -28,6 +28,7 @@
     #include <QtGui/QPixmap>
 #endif
 
+#include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/future.hpp>
 
