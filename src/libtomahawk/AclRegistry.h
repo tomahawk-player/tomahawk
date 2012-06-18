@@ -54,12 +54,14 @@ public:
 
     struct User {
         QString uuid;
+        QString friendlyName;
         QStringList knownDbids;
         QStringList knownAccountIds;
         ACLRegistry::ACL acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
+            , friendlyName()
             , knownDbids()
             , knownAccountIds()
             , acl( ACLRegistry::NotFound )
@@ -68,8 +70,9 @@ public:
         ~User()
             {}
 
-        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
+        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
             : uuid( p_uuid )
+            , friendlyName( p_friendlyName )
             , knownDbids( p_knownDbids )
             , knownAccountIds( p_knownAccountIds )
             , acl( p_acl )
@@ -77,6 +80,7 @@ public:
 
         User( const User &other )
             : uuid( other.uuid )
+            , friendlyName( other.friendlyName )
             , knownDbids( other.knownDbids )
             , knownAccountIds( other.knownAccountIds )
             , acl( other.acl )

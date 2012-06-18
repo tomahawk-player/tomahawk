@@ -39,6 +39,7 @@ QDataStream& operator<<( QDataStream &out, const ACLRegistry::User &user )
 {
     out << ACLUSERVERSION;
     out << user.uuid;
+    out << user.friendlyName;
     out << user.knownDbids.length();
     foreach( QString knownDbid, user.knownDbids )
         out << knownDbid;
@@ -56,6 +57,7 @@ QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
     if ( ver == ACLUSERVERSION )
     {
         in >> user.uuid;
+        in >> user.friendlyName;
         int dbidsLength;
         in >> dbidsLength;
         QString knownDbid;
