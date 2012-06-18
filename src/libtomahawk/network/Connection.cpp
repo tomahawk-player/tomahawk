@@ -194,7 +194,7 @@ Connection::checkACL()
 {
     if ( !property( "nodeid" ).isValid() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
+        tLog() << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;
     }
@@ -210,8 +210,12 @@ Connection::checkACL()
 void
 Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
 {
-    if ( nodeid != property( "nodeid" ).toString() || username != name() )
+    QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
+    if ( nodeid != property( "nodeid" ).toString() || username != bareName )
+    {
+        tLog() << Q_FUNC_INFO << "nodeid not ours, or username not our barename";
         return;
+    }
 
     disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ) );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "ACL status is" << peerStatus;
