@@ -46,6 +46,7 @@ public:
 
     QUrl copyOpenLink( const Tomahawk::artist_ptr& artist ) const;
     QUrl copyOpenLink( const Tomahawk::album_ptr& album ) const;
+    QUrl copyOpenLink( const Tomahawk::query_ptr& query ) const;
 
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
@@ -60,10 +61,7 @@ public slots:
     /// Takes a spotify link and performs the default open action on it
     bool openRdioLink( const QString& link );
 
-    /// Creates a link from the requested data and copies it to the clipboard
     void copyToClipboard( const Tomahawk::query_ptr& query );
-
-
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 

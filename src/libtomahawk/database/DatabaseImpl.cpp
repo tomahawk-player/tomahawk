@@ -45,7 +45,7 @@
 #define CURRENT_SCHEMA_VERSION 28
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
-    : QObject( parent )
+    : QObject( (QObject*) parent )
     , m_parent( parent )
 {
     QTime t;

@@ -165,7 +165,7 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
     {
         TrackInfoWidget* tPage = dynamic_cast< TrackInfoWidget* >( m_page );
         Q_ASSERT( tPage );
-        GlobalActionManager::instance()->copyToClipboard( tPage->query() );
+        GlobalActionManager::instance()->copyOpenLink( tPage->query() );
 
         break;
     }

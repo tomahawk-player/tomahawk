@@ -28,15 +28,11 @@
     #include <QtGui/QPixmap>
 #endif
 
-#include <boost/thread.hpp>
-
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
 #include "Collection.h"
 #include "infosystem/InfoSystem.h"
-
-class IdThreadWorker;
 
 namespace Tomahawk
 {
@@ -49,11 +45,10 @@ public:
     static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
-    Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
-    Album( const QString& name, const Tomahawk::artist_ptr& artist );
+    explicit Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
     virtual ~Album();
 
-    unsigned int id() const;
+    unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
@@ -69,7 +64,6 @@ public:
     QWeakPointer< Tomahawk::Album > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Album > weakRef ) { m_ownRef = weakRef; }
 
-    void loadId( bool autoCreate );
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void updated();
@@ -84,11 +78,8 @@ private slots:
 private:
     Q_DISABLE_COPY( Album )
     QString infoid() const;
-    void setIdFuture( boost::unique_future< unsigned int > future );
 
-    mutable bool m_waitingForId;
-    mutable boost::unique_future< unsigned int > m_idFuture;
-    mutable unsigned int m_id;
+    unsigned int m_id;
     QString m_name;
     QString m_sortname;
 
@@ -107,11 +98,6 @@ private:
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
 
     QWeakPointer< Tomahawk::Album > m_ownRef;
-
-    static QHash< QString, album_ptr > s_albumsByName;
-    static QHash< unsigned int, album_ptr > s_albumsById;
-
-    friend class ::IdThreadWorker;
 };
 
 } // ns

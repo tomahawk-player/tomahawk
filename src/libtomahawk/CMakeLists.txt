@@ -256,7 +256,6 @@ set( libSources
     database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
     database/TomahawkSqlQuery.cpp
-    database/IdThreadWorker.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
@@ -455,7 +454,6 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
-    ${Boost_LIBRARIES}
     ${SQLITE_LIBRARIES}
 )
 

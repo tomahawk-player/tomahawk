@@ -22,7 +22,6 @@
 #include "DatabaseCommand.h"
 #include "DatabaseImpl.h"
 #include "DatabaseWorker.h"
-#include "IdThreadWorker.h"
 #include "utils/Logger.h"
 #include "Source.h"
 
@@ -44,7 +43,6 @@ Database::Database( const QString& dbname, QObject* parent )
     , m_ready( false )
     , m_impl( new DatabaseImpl( dbname, this ) )
     , m_workerRW( new DatabaseWorker( this, true ) )
-    , m_idWorker( new IdThreadWorker( this ) )
 {
     s_instance = this;
 
@@ -60,7 +58,6 @@ Database::Database( const QString& dbname, QObject* parent )
     connect( m_impl, SIGNAL( indexReady() ), SLOT( setIsReadyTrue() ) );
 
     m_workerRW->start();
-    m_idWorker->start();
 }
 
 
@@ -70,8 +67,6 @@ Database::~Database()
 
     qDeleteAll( m_workers );
     delete m_workerRW;
-    m_idWorker->stop();
-    delete m_idWorker;
     delete m_impl;
 }
 
