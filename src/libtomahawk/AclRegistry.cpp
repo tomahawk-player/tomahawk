@@ -167,7 +167,9 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     user.knownAccountIds.append( username );
     if ( globalType != ACLRegistry::NotFound )
         user.acl = globalType;
-#ifndef ENABLE_HEADLESS
+#ifdef ENABLE_HEADLESS
+    user.acl = ACLRegistry::Stream;
+#else
     else
     {
         getUserDecision( user, username );
