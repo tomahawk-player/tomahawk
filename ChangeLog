@@ -1,5 +1,6 @@
 Version 0.5.0:
-		* Initial Access Control support. Entries can be cleared en masse in the Advanced area of Settings.
+    * SOCKS5 proxy support improvements for resolvers and more.
+    * Initial Access Control support. Entries can be cleared en masse in the Advanced area of Settings.
     * Priortize resolution of a track on double-click.
     * Spotify Resolver can now be easily installed on-demand from the settings.
     * You can now sync selected playlists (and updates) with Spotify.
