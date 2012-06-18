@@ -164,8 +164,6 @@ AclJobItem::AclJobItem( ACLRegistry::User user, const QString &username )
 AclJobItem::~AclJobItem()
 {
     tLog() << Q_FUNC_INFO;
-    if ( m_delegate )
-        delete m_delegate;
 }
 
 
@@ -173,6 +171,7 @@ void
 AclJobItem::createDelegate( QObject* parent )
 {
     tLog() << Q_FUNC_INFO;
+    
     if ( m_delegate )
         return;
 

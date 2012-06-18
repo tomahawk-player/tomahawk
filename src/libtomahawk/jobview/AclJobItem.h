@@ -71,7 +71,7 @@ public:
     virtual int concurrentJobLimit() const { return 3; }
     
     virtual bool hasCustomDelegate() const { return true; }
-    virtual void createDelegate( QObject* parent );
+    virtual void createDelegate( QObject* parent = 0 );
     virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
     virtual ACLRegistry::User user() const { return m_user; }
