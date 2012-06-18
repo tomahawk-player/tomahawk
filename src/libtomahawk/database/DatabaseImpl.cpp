@@ -34,6 +34,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include "qsql_thsqlite.h"
+
 /* !!!! You need to manually generate Schema.sql.h when the schema changes:
     cd src/libtomahawk/database
    ./gen_schema.h.sh ./Schema.sql tomahawk > Schema.sql.h
@@ -41,7 +43,6 @@
 #include "Schema.sql.h"
 
 #define CURRENT_SCHEMA_VERSION 28
-
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( parent )
@@ -714,7 +715,8 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     bool schemaUpdated = false;
     int version = -1;
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", connName );
+        QTHSQLiteDriver* driver = new QTHSQLiteDriver();
+        QSqlDatabase db = QSqlDatabase::addDatabase( driver, connName );
         db.setDatabaseName( dbname );
         db.setConnectOptions( "QSQLITE_ENABLE_SHARED_CACHE=1" );
         if ( !db.open() )
@@ -753,7 +755,8 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 
         QFile::copy( dbname, newname );
         {
-            m_db = QSqlDatabase::addDatabase( "QSQLITE", connName );
+            QTHSQLiteDriver* driver = new QTHSQLiteDriver();
+            m_db = QSqlDatabase::addDatabase( driver, connName );
             m_db.setDatabaseName( dbname );
             if ( !m_db.open() )
                 throw "db moving failed";
