@@ -33,6 +33,8 @@
 #include "HeadlessCheck.h"
 #include "DllMacro.h"
 
+#define ACLUSERVERSION 1
+
 class AclJobItem;
 
 class DLLEXPORT ACLRegistry : public QObject
@@ -54,18 +56,30 @@ public:
         QString uuid;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        ACL acl;
+        ACLRegistry::ACL acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
+            , knownDbids()
+            , knownAccountIds()
             , acl( ACLRegistry::NotFound )
             {}
 
-        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACL p_acl )
+        ~User()
+            {}
+
+        User( QString p_uuid, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
             : uuid( p_uuid )
             , knownDbids( p_knownDbids )
             , knownAccountIds( p_knownAccountIds )
             , acl( p_acl )
+            {}
+
+        User( const User &other )
+            : uuid( other.uuid )
+            , knownDbids( other.knownDbids )
+            , knownAccountIds( other.knownAccountIds )
+            , acl( other.acl )
             {}
     };
 
@@ -85,10 +99,11 @@ public slots:
      * @return ACLRegistry::ACL
      **/
     ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
-
+    void wipeEntries();
+    
 #ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
-
+    
 private slots:
     void userDecision( ACLRegistry::User user );
     void queueNextJob();

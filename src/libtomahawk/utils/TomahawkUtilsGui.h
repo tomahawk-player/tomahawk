@@ -22,6 +22,8 @@
 
 #include <QSize>
 #include <QModelIndex>
+#include <QColor>
+#include <QRect>
 #include <QTextOption>
 
 #include "TomahawkUtils.h"
@@ -30,7 +32,6 @@
 class PlayableItem;
 class QStyleOptionViewItemV4;
 class QPainter;
-class QColor;
 class QPixmap;
 class QLayout;
 class QPalette;
@@ -60,7 +61,9 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
 
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
-    
+
+    DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
+
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 }
 

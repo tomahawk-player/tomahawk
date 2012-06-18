@@ -20,6 +20,7 @@
 #include "JobStatusView.h"
 
 #include "Pipeline.h"
+#include "AclJobItem.h"
 #include "JobStatusModel.h"
 #include "JobStatusItem.h"
 #include "JobStatusDelegate.h"
@@ -75,6 +76,9 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
+
+    setMouseTracking( true );
+    m_view->setMouseTracking( true );
 }
 
 
@@ -90,27 +94,66 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
     connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
+    connect( m_view->model(), SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegates() ) );
 }
 
 
 void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    tLog() << Q_FUNC_INFO << "item is " << item << ", row is " << row;
     if ( !item )
         return;
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "telling item to create delegate";
+    tLog() << Q_FUNC_INFO << "telling item to create delegate";
     item->createDelegate( m_view );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
+    tLog() << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
+    AclJobDelegate* delegate = qobject_cast< AclJobDelegate* >( item->customDelegate() );
+    if ( delegate )
+    {
+        tLog() << Q_FUNC_INFO << "delegate found";
+        connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
+        connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
+        delegate->emitSizeHintChanged( m_model->index( row ) );
+    }
+    else
+        tLog() << Q_FUNC_INFO << "delegate was not properly found!";
+
+    checkCount();
 }
 
 
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
-    m_view->setItemDelegateForRow( row, m_view->itemDelegate() );
+    tLog() << Q_FUNC_INFO << "row is " << row;
+}
+
+
+void
+JobStatusView::refreshDelegates()
+{
+    tLog() << Q_FUNC_INFO;
+    int count = m_model->rowCount();
+    for ( int i = 0; i < count; i++ )
+    {
+        tLog() << Q_FUNC_INFO << "checking row " << i;
+        QModelIndex index = m_model->index( i );
+        QVariant itemVar = index.data( JobStatusModel::JobDataRole );
+        if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )
+        {
+            tLog() << Q_FUNC_INFO << "unable to fetch JobStatusItem* at row " << i;
+            continue;
+        }
+        JobStatusItem* item = itemVar.value< JobStatusItem* >();
+        if ( item->hasCustomDelegate() )
+            m_view->setItemDelegateForRow( i, item->customDelegate() );
+        else
+            m_view->setItemDelegateForRow( i, m_view->itemDelegate() );
+    }
+
+    checkCount();
 }
 
 

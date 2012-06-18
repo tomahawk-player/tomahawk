@@ -21,31 +21,39 @@
 
 #include "JobStatusModel.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "libtomahawk/infosystem/InfoSystem.h"
 #include "utils/Logger.h"
 
 #include <QPixmap>
 #include <QPainter>
 #include <QListView>
 #include <QApplication>
+#include <QMouseEvent>
 
 
-#define ROW_HEIGHT 40
+#define ROW_HEIGHT 20
 #define ICON_PADDING 1
 #define PADDING 2
 
 
 AclJobDelegate::AclJobDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
-    , m_parentView( qobject_cast< QListView* >( parent ) )
 {
-    Q_ASSERT( m_parentView );
+    tLog() << Q_FUNC_INFO;
+}
+
+
+AclJobDelegate::~AclJobDelegate()
+{
+    tLog() << Q_FUNC_INFO;
 }
 
 
 void
 AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
@@ -55,96 +63,91 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     painter->setRenderHint( QPainter::Antialiasing );
 
+    painter->fillRect( opt.rect, Qt::lightGray );
+
     QString mainText;
     AclJobItem* item = dynamic_cast< AclJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
     if ( !item )
         mainText = tr( "Error displaying ACL info" );
     else
         mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
+ 
+    const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4*PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
+    painter->drawText( rRect, Qt::AlignHCenter, mainText );
 
-    const QString text = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
-    const int w = fm.width( text );
-    Q_UNUSED( w ); // looks obsolete
-    const QRect rRect( opt.rect.left() + PADDING, ROW_HEIGHT + PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
-    painter->drawText( rRect, Qt::AlignCenter, text );
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Using rect " << rRect << ", opt rect is " << opt.rect;
 
+    int totalwidth = opt.rect.width();
+    int thirds = totalwidth/3;
+    QRect btnRect;
+    painter->setPen( Qt::white );
+    
+    QString btnText = tr( "Allow Streaming" );
+    int btnWidth = fm.width( btnText ) + 2*PADDING;
+    btnRect = QRect( opt.rect.left() + thirds - btnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  btnWidth + 2*PADDING, fm.height() + 2*PADDING );
+    drawRoundedButton( painter, btnRect, btnRect.contains( m_savedHoverPos ) );
+    painter->drawText( btnRect, Qt::AlignCenter, btnText );
+    m_savedAcceptRect = btnRect;
 
-/*
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
-    QFontMetrics fm( opt.font );
-    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
-
-    opt.state &= ~QStyle::State_MouseOver;
-    QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
-
-//     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
-
-    painter->setRenderHint( QPainter::Antialiasing );
-    QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
-    if ( allowMultiLine )
-        iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
-    QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
-    painter->drawPixmap( iconRect, p );
-
-    // draw right column if there is one
-    const QString rCol = index.data( JobStatusModel::RightColumnRole ).toString();
-    int rightEdge = opt.rect.right();
-    if ( !rCol.isEmpty() )
-    {
-        const int w = fm.width( rCol );
-        const QRect rRect( opt.rect.right() - PADDING - w, PADDING + opt.rect.y(), w, opt.rect.height() - 2*PADDING );
-        painter->drawText( rRect, Qt::AlignCenter, rCol );
-
-        rightEdge = rRect.left();
-    }
-
-    QString mainText;
-    AclJobItem* item = dynamic_cast< AclJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
-    //QString mainText = index.data( Qt::DisplayRole ).toString();
-    if ( !item )
-        mainText = tr( "Error displaying ACL info" );
-    else
-        mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
-    const int mainW = rightEdge - 3*PADDING - iconRect.right();
-    QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
-    if ( !allowMultiLine )
-        mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
-    else
-        to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
-    painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), mainText, to );
-    */
+    btnText = tr( "Deny Access" );
+    btnWidth = fm.width( btnText ) + 2*PADDING;
+    btnRect = QRect( opt.rect.right() - thirds - btnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  btnWidth + 2*PADDING, fm.height() + 2*PADDING );
+    drawRoundedButton( painter, btnRect, btnRect.contains( m_savedHoverPos ) );
+    painter->drawText( btnRect, Qt::AlignCenter, btnText );
+    m_savedDenyRect = btnRect;
 }
 
 QSize
 AclJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
+    QSize size( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT * 3 );
+    return size;
+}
 
-    /*
-    const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
-    if ( !allowMultiLine )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
-    else if ( m_cachedMultiLineHeights.contains( index ) )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), m_cachedMultiLineHeights[ index ] );
+void
+AclJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
+{
+    if ( !red )
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
+    else
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(206, 63, 63), QColor(170, 52, 52), QColor(150, 50, 50), QColor(130, 40, 40) );
+}
 
-    // Don't elide, but stretch across as many rows as required
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
 
-    const QString text = index.data( Qt::DisplayRole ).toString();
-    const int leftEdge =  ICON_PADDING + ROW_HEIGHT + 2*PADDING;
-    const QRect rect = opt.fontMetrics.boundingRect( leftEdge, opt.rect.top(), m_parentView->width() - leftEdge, 200, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text );
+bool
+AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+    Q_UNUSED( option )
+    Q_UNUSED( model )
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    if ( event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseButtonDblClick &&
+         event->type() != QEvent::MouseMove )
+        return false;
 
-    m_cachedMultiLineHeights.insert( index, rect.height() + 4*PADDING );
+    if ( event->type() == QEvent::MouseMove )
+    {
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+        m_savedHoverPos = me->pos();
+        //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Setting position to " << m_savedHoverPos;
+        emit update( index );
+        return true;
+    }
 
-    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), rect.height() + 4*PADDING );
-    */
+    if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
+    {
+        QMouseEvent* me = static_cast< QMouseEvent* >( event );
+        if ( m_savedAcceptRect.contains( me->pos() ) )
+            emit aclResult( ACLRegistry::Stream );
+        else if ( m_savedDenyRect.contains( me->pos() ) )
+            emit aclResult( ACLRegistry::Deny );
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -154,27 +157,44 @@ AclJobItem::AclJobItem( ACLRegistry::User user, const QString &username )
     , m_user( user )
     , m_username( username )
 {
+    tLog() << Q_FUNC_INFO;
 }
 
 
 AclJobItem::~AclJobItem()
 {
+    tLog() << Q_FUNC_INFO;
 }
 
 
 void
 AclJobItem::createDelegate( QObject* parent )
 {
+    tLog() << Q_FUNC_INFO;
+    
     if ( m_delegate )
         return;
 
     m_delegate = new AclJobDelegate( parent );
+
+    Tomahawk::InfoSystem::InfoPushData pushData( "AclJobItem", Tomahawk::InfoSystem::InfoNotifyUser, tr( "Tomahawk needs you to decide whether %1 is allowed to connect." ).arg( m_username ), Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
 
 void
-AclJobItem::done()
+AclJobDelegate::emitSizeHintChanged( const QModelIndex& index )
 {
+    emit sizeHintChanged( index );
+}
+
+
+void
+AclJobItem::aclResult( ACLRegistry::ACL result )
+{
+    tLog() << Q_FUNC_INFO;
+    m_user.acl = result;
+    emit userDecision( m_user );
     emit finished();
 }
 

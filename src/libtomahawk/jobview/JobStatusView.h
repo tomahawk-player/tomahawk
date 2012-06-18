@@ -55,6 +55,7 @@ private slots:
     void checkCount();
     void customDelegateJobInserted( int row, JobStatusItem* item );
     void customDelegateJobRemoved( int row );
+    void refreshDelegates();
 
 private:
     QListView* m_view;
