@@ -98,20 +98,6 @@ GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
 
 
 QUrl
-GlobalActionManager::copyOpenLink( const query_ptr& query ) const
-{
-    const QUrl link = openLinkFromQuery( query );
-
-    QClipboard* cb = QApplication::clipboard();
-    QByteArray data = link.toEncoded();
-    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
-    cb->setText( data );
-
-    return link;
-}
-
-
-QUrl
 GlobalActionManager::copyOpenLink( const artist_ptr& artist ) const
 {
     const QUrl link( QString( "%1/artist/%2" ).arg( hostname() ).arg( artist->name() ) );
