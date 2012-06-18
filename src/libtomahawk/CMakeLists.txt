@@ -301,6 +301,8 @@ set( libSources
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
     thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
+
+    ${THIRDPARTY_DIR}/qsqlite-4.8.1/qsql_thsqlite.cpp
 )
 
 set( libUI ${libUI}
@@ -334,11 +336,13 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
+    ${SQLITE_INCLUDE_DIR}
 
     playlist
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/qsqlite-4.8.1
     ${QuaZip_INCLUDE_DIR}
 )
 
@@ -452,6 +456,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
     ${Boost_LIBRARIES}
+    ${SQLITE_LIBRARIES}
 )
 
 INSTALL( TARGETS tomahawklib
