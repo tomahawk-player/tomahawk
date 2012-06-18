@@ -44,7 +44,7 @@ QDataStream& operator<<( QDataStream &out, const ACLRegistry::User &user )
         out << knownDbid;
     out << user.knownAccountIds.length();
     foreach( QString knownAccount, user.knownAccountIds )
-        out << user.knownAccountIds;
+        out << knownAccount;
     out << (int)( user.acl );
     return out;
 }
@@ -58,12 +58,20 @@ QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
         in >> user.uuid;
         int dbidsLength;
         in >> dbidsLength;
+        QString knownDbid;
         for ( int i = 0; i < dbidsLength; i++ )
-            in >> user.knownDbids;
+        {
+            in >> knownDbid;
+            user.knownDbids << knownDbid;
+        }
         int accountsLength;
         in >> accountsLength;
+        QString knownAccountId;
         for ( int i = 0; i < accountsLength; i++ )
-            in >> user.knownAccountIds;
+        {
+            in >> knownAccountId;
+            user.knownAccountIds << knownAccountId;
+        }
         int aclIn;
         in >> aclIn;
         user.acl = (ACLRegistry::ACL)( aclIn );
@@ -253,11 +261,17 @@ ACLRegistry::load()
     foreach ( QVariant entry, entryList )
     {
         if ( !entry.isValid() || !entry.canConvert< ACLRegistry::User >() )
+        {
+            tLog() << Q_FUNC_INFO << "entry is invalid";
             continue;
+        }
         tLog() << Q_FUNC_INFO << "loading entry";
         ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
         if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
+        {
+            tLog() << Q_FUNC_INFO << "user known account/dbids is empty";
             continue;
+        }
         m_cache.append( entryUser );
     }
 }
