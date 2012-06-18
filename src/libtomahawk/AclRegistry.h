@@ -102,11 +102,14 @@ public slots:
 
 #ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
-
+#endif
+    
 private slots:
+#ifndef ENABLE_HEADLESS
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
 #endif
+    void wipeEntries();
 
 private:
     /**

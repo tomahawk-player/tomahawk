@@ -291,3 +291,12 @@ ACLRegistry::save()
     }
     TomahawkSettings::instance()->setAclEntries( entryList );
 }
+
+
+void
+ACLRegistry::wipeEntries()
+{
+    tLog() << Q_FUNC_INFO;
+    m_cache.clear();
+    save();
+}
