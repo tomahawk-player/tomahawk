@@ -53,6 +53,9 @@ AclJobDelegate::~AclJobDelegate()
 void
 AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    AclJobItem* item = dynamic_cast< AclJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
+    if ( !item )
+        return;
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
@@ -65,12 +68,7 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     painter->fillRect( opt.rect, Qt::lightGray );
 
-    QString mainText;
-    AclJobItem* item = dynamic_cast< AclJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
-    if ( !item )
-        mainText = tr( "Error displaying ACL info" );
-    else
-        mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
+    QString mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
  
     const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4*PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
