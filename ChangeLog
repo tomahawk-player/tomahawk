@@ -1,4 +1,5 @@
 Version 0.5.0:
+		* Initial Access Control support. Entries can be cleared en masse in the Advanced area of Settings.
     * Priortize resolution of a track on double-click
     * New Tomahawk logo and icon
     * Spotify Resolver shipped with Tomahawk and installable via new Preferences interface
@@ -11,7 +12,7 @@ Version 0.5.0:
     * You can now import your entire Last.fm playback history into Tomahawk
     * Related Artists now sorted by relatedness
     * Support for multimedia keys (Play, Pause, Next etc.) on Windows & Linux
-    * When listening privately scrobbling to Last.fm and Adium is now disabled
+    * When listening privately, scrobbling to Last.fm and sending updates to Adium/MRPIS is now disabled
     * Added a toolbar with page back / forward buttons and the global search
     * New grid view with direct playback controls (Charts, Album Page, Artist Page, Track Page)
     * New Releases (by Genre) pages added
