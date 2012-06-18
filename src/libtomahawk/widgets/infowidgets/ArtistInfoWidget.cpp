@@ -83,11 +83,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     m_relatedModel->setItemSize( QSize( 170, 170 ) );
+
     ui->albums->setAutoFitItems( false );
     ui->albums->setWrapping( false );
     ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     m_albumsModel->setItemSize( QSize( 170, 170 ) );
+    ui->albums->proxyModel()->setHideDupeItems( true );
 
     ui->topHits->setFrameShape( QFrame::StyledPanel );
     ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -101,6 +103,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );

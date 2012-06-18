@@ -685,34 +685,20 @@ TrackView::mousePressEvent( QMouseEvent* event )
         {
             case PlayableModel::Artist:
             {
-                if ( item->query()->numResults() )
-                {
-                    ViewManager::instance()->show( item->query()->results().first()->artist() );
-                }
-                else
-                {
-                    ViewManager::instance()->show( Artist::get( item->query()->artist() ) );
-                }
+                ViewManager::instance()->show( Artist::get( item->query()->displayQuery()->artist() ) );
                 break;
             }
 
             case PlayableModel::Album:
             {
-                if ( item->query()->numResults() )
-                {
-                    ViewManager::instance()->show( item->query()->results().first()->album() );
-                }
-                else
-                {
-                    artist_ptr artist = Artist::get( item->query()->artist() );
-                    ViewManager::instance()->show( Album::get( artist, item->query()->album() ) );
-                }
+                artist_ptr artist = Artist::get( item->query()->displayQuery()->artist() );
+                ViewManager::instance()->show( Album::get( artist, item->query()->displayQuery()->album() ) );
                 break;
             }
 
             case PlayableModel::Track:
             {
-                ViewManager::instance()->show( item->query() );
+                ViewManager::instance()->show( item->query()->displayQuery() );
                 break;
             }
 

@@ -535,6 +535,8 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
     if( id.length() )
         conn->setId( id );
 
+    conn->setProperty( "nodeid", id );
+
     connectToPeer( ha, port, key, conn );
 }
 

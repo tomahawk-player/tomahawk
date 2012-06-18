@@ -61,6 +61,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( !item )
         return;
 
+    QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );
+    textOption.setWrapMode( QTextOption::NoWrap );
+
     QString text;
     if ( !item->artist().isNull() )
     {
@@ -106,6 +109,16 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             if ( oldX > 0 )
                 o.rect.setX( oldX );
 
+            if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() &&
+               ( index.column() == 0 ) )
+            {
+                o.rect.setWidth( o.rect.width() - 16 );
+                QRect arrowRect( o.rect.x() + o.rect.width(), o.rect.y() + 1, o.rect.height() - 2, o.rect.height() - 2 );
+
+                QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
+                painter->drawPixmap( arrowRect, infoIcon );
+            }
+
             {
                 QRect r = o.rect.adjusted( 3, 0, 0, 0 );
 
@@ -120,9 +133,8 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
                 painter->setPen( o.palette.text().color() );
 
-                QTextOption to( Qt::AlignVCenter );
                 QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
-                painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+                painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, textOption );
             }
             painter->restore();
         }
@@ -174,12 +186,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->drawPixmap( r, cover );
 
-    QTextOption to;
-    to.setAlignment( Qt::AlignVCenter );
-
     r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
-    painter->drawText( r, text, to );
+    painter->drawText( r, text, textOption );
 
     painter->restore();
 }

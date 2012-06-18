@@ -98,6 +98,34 @@ GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
 
 
 QUrl
+GlobalActionManager::copyOpenLink( const artist_ptr& artist ) const
+{
+    const QUrl link( QString( "%1/artist/%2" ).arg( hostname() ).arg( artist->name() ) );
+
+    QClipboard* cb = QApplication::clipboard();
+    QByteArray data = link.toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
+
+    return link;
+}
+
+
+QUrl
+GlobalActionManager::copyOpenLink( const album_ptr& album ) const
+{
+    const QUrl link( QString( "%1/album/%2/%3" ).arg( hostname() ).arg( album->artist().isNull() ? QString() : album->artist()->name() ).arg( album->name()) );
+
+    QClipboard* cb = QApplication::clipboard();
+    QByteArray data = link.toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
+
+    return link;
+}
+
+
+QUrl
 GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
     QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
@@ -354,6 +382,10 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
         {
             return handleViewCommand( u );
         }
+        else if ( cmdType == "import" )
+        {
+            return handleImportCommand( u );
+        }
         else
         {
             tLog() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
@@ -385,23 +417,15 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             tDebug() << "No xspf or jspf to load...";
             return false;
         }
-        if ( url.hasQueryItem( "xspf") )
+        if ( url.hasQueryItem( "xspf" ) )
         {
-            QUrl xspf = QUrl::fromUserInput( url.queryItemValue( "xspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            XSPFLoader* l= new XSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( xspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
         }
         else if ( url.hasQueryItem( "jspf" ) )
         {
-            QUrl jspf = QUrl::fromUserInput( url.queryItemValue( "jspf" ) );
-            QString title =  url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString();
-            JSPFLoader* l= new JSPFLoader( true, this );
-            l->setOverrideTitle( title );
-            l->load( jspf );
-            connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
         }
     }
     else if ( parts [ 0 ] == "new" )
@@ -426,6 +450,53 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
     }
 
     return false;
+}
+
+
+bool
+GlobalActionManager::handleImportCommand( const QUrl& url )
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
+    if ( parts.size() < 1 )
+        return false;
+
+    if ( parts[ 0 ] == "playlist" )
+    {
+        if ( url.hasQueryItem( "xspf" ) )
+        {
+            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
+        }
+        else if ( url.hasQueryItem( "jspf" ) )
+        {
+            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void
+GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString &url, const QString& title )
+{
+    if ( type == "xspf" )
+    {
+        QUrl xspf = QUrl::fromUserInput( url );
+        XSPFLoader* l= new XSPFLoader( true, this );
+        l->setOverrideTitle( title );
+        l->load( xspf );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+    }
+    else if ( type == "jspf" )
+    {
+        QUrl jspf = QUrl::fromUserInput( url );
+        JSPFLoader* l= new JSPFLoader( true, this );
+        l->setOverrideTitle( title );
+        l->load( jspf );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+    }
 }
 
 
@@ -491,6 +562,23 @@ GlobalActionManager::handleOpenTrack( const query_ptr& q )
     {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
         m_waitingToPlay = q;
+    }
+}
+
+
+void
+GlobalActionManager::handleOpenTracks( const QList< query_ptr >& queries )
+{
+    if ( queries.isEmpty() )
+        return;
+
+    ViewManager::instance()->queue()->model()->append( queries );
+    ViewManager::instance()->showQueue();
+
+    if ( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() )
+    {
+        connect( queries.first().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+        m_waitingToPlay = queries.first();
     }
 }
 
@@ -589,6 +677,43 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 }
                 return true;
             }
+        }
+    }
+    else if ( parts.size() && parts[ 0 ] == "playlist" )
+    {
+        QString xspfUrl, jspfUrl;
+        for ( int i = 0; i < queryItems.size(); i++ )
+        {
+            const QPair< QString, QString > queryItem = queryItems.at( i );
+            if ( queryItem.first == "xspf" )
+            {
+                xspfUrl = queryItem.second;
+                break;
+            }
+            else if ( queryItem.first == "jspf" )
+            {
+                jspfUrl = queryItem.second;
+                break;
+            }
+        }
+
+        if ( !xspfUrl.isEmpty() )
+        {
+            XSPFLoader* loader = new XSPFLoader( false, false, this );
+            connect( loader, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( handleOpenTracks( QList< Tomahawk::query_ptr > ) ) );
+            loader->load( QUrl( xspfUrl ) );
+            loader->setAutoDelete( true );
+
+            return true;
+        }
+        else if ( !jspfUrl.isEmpty() )
+        {
+            JSPFLoader* loader = new JSPFLoader( false, this );
+            connect( loader, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( handleOpenTracks( QList< Tomahawk::query_ptr > ) ) );
+            loader->load( QUrl( jspfUrl ) );
+            loader->setAutoDelete( true );
+
+            return true;
         }
     }
     return false;
@@ -1225,7 +1350,8 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
                 ViewManager::instance()->queue()->model()->append( m_waitingToPlay );
                 AudioEngine::instance()->play();
             }
-        } else
+        }
+        else
             AudioEngine::instance()->play();
 
         m_waitingToPlay.clear();

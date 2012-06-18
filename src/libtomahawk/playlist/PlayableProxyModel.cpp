@@ -34,6 +34,8 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , m_model( 0 )
     , m_showOfflineResults( true )
+    , m_hideDupeItems( false )
+    , m_maxVisibleItems( -1 )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
@@ -97,6 +99,26 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
+    
+    if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
+        return false;
+    
+    if ( m_hideDupeItems )
+    {
+        for ( int i = 0; i < sourceRow; i++ )
+        {
+            PlayableItem* di = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+            if ( !di )
+                continue;
+
+            bool b = ( pi->query() && pi->query()->equals( di->query() ) ) ||
+                     ( pi->album() && pi->album() == di->album() ) ||
+                     ( pi->artist() && pi->artist()->name() == di->artist()->name() );
+
+            if ( b && filterAcceptsRow( i, sourceParent ) )
+                return false;
+        }
+    }
 
     if ( pi->query() )
     {
@@ -211,6 +233,33 @@ PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
 }
 
 
+void
+PlayableProxyModel::setShowOfflineResults( bool b )
+{
+    m_showOfflineResults = b;
+    invalidateFilter();
+}
+
+
+void
+PlayableProxyModel::setHideDupeItems( bool b )
+{
+    m_hideDupeItems = b;
+    invalidateFilter();
+}
+
+
+void
+PlayableProxyModel::setMaxVisibleItems( int items )
+{
+    if ( m_maxVisibleItems == items )
+        return;
+
+    m_maxVisibleItems = items;
+    invalidateFilter();
+}
+
+
 bool
 PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const Tomahawk::query_ptr& q2 ) const
 {
@@ -315,6 +364,13 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
             return id1 < id2;
 
         return size1 < size2;
+    }
+    else if ( column == PlayableModel::Score ) // sort by file score
+    {
+        if ( score1 == score2 )
+            return id1 < id2;
+
+        return score1 < score2;
     }
     else if ( column == PlayableModel::AlbumPos ) // sort by album pos
     {

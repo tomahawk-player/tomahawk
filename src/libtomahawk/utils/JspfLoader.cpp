@@ -37,6 +37,7 @@ using namespace Tomahawk;
 JSPFLoader::JSPFLoader( bool autoCreate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
+    , m_autoDelete( true )
 {}
 
 JSPFLoader::~JSPFLoader()
@@ -87,7 +88,9 @@ void
 JSPFLoader::reportError()
 {
     emit failed();
-    deleteLater();
+
+    if ( m_autoDelete )
+        deleteLater();
 }
 
 
@@ -180,7 +183,6 @@ JSPFLoader::gotBody()
         if ( m_autoCreate )
         {
             QMessageBox::critical( 0, tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
-            deleteLater();
             return;
         }
         else
@@ -200,8 +202,10 @@ JSPFLoader::gotBody()
                                        false,
                                        m_entries );
 
-        deleteLater();
     }
 
     emit ok( m_playlist );
+
+    if ( m_autoDelete )
+        deleteLater();
 }

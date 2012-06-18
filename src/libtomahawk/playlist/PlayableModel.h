@@ -115,6 +115,7 @@ public:
 
     void updateDetailedInfo( const QModelIndex& index );
     
+    QSize itemSize() const { return m_itemSize; }
     void setItemSize( const QSize& size ) { m_itemSize = size; }
 
     void startLoading();

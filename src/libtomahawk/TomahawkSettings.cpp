@@ -191,6 +191,7 @@ TomahawkSettings::createSpotifyAccount()
     setValue( "types", QStringList() << "ResolverType" );
     setValue( "credentials", QVariantHash() );
     setValue( "configuration", QVariantHash() );
+    setValue( "accountfriendlyname", "Spotify" );
     endGroup();
 
     QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
@@ -483,6 +484,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 setValue( "enabled", enabled );
                 setValue( "autoconnect", autoconnect );
                 setValue( "types", QStringList() << "ResolverType" );
+                setValue( "accountfriendlyname", "Spotify" );
                 setValue( "configuration", configuration );
                 endGroup();
 
@@ -556,10 +558,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         }
 
         endGroup();
-
-//         setPlaylistUpdaters( updaters );
-
         remove( "playlistupdaters" );
+
+        setValue( "playlists/updaters", QVariant::fromValue< SerializedUpdaters >( updaters ) );
+
     }
     else if ( oldVersion == 11 )
     {
@@ -837,7 +839,10 @@ TomahawkSettings::aclEntries() const
 void
 TomahawkSettings::setAclEntries( const QVariantList &entries )
 {
+    tDebug() << "Setting entries";
     setValue( "acl/entries", entries );
+    sync();
+    tDebug() << "Done setting entries";
 }
 
 

@@ -139,12 +139,12 @@ connect and stream from you?</translation>
         <translation>Sorry, we could not find any other albums for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="58"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Sorry, we could not find any tracks for this album!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="140"/>
         <source>Other Albums by %1</source>
         <translation>Other Albums by %1</translation>
     </message>
@@ -176,32 +176,32 @@ connect and stream from you?</translation>
         <translation>Top Hits</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="74"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="108"/>
         <source>Related Artists</source>
         <translation>Related Artists</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="109"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="74"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="154"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="153"/>
         <source>Cover</source>
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Sorry, we could not find any albums for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="72"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Sorry, we could not find any related artists!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="78"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Sorry, we could not find any top hits for this artist!</translation>
     </message>
@@ -229,57 +229,57 @@ connect and stream from you?</translation>
         <translation>Next</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="211"/>
+        <location filename="../src/AudioControls.ui" line="229"/>
         <source>Artist</source>
         <translation>Artist</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="230"/>
+        <location filename="../src/AudioControls.ui" line="248"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="259"/>
+        <location filename="../src/AudioControls.ui" line="277"/>
         <source>Owner</source>
         <translation>Owner</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="296"/>
+        <location filename="../src/AudioControls.ui" line="314"/>
         <source>social</source>
         <translation>social</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="312"/>
+        <location filename="../src/AudioControls.ui" line="330"/>
         <source>love</source>
         <translation>love</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="356"/>
+        <location filename="../src/AudioControls.ui" line="383"/>
         <source>Time</source>
         <translation>Time</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="385"/>
+        <location filename="../src/AudioControls.ui" line="412"/>
         <source>Time Left</source>
         <translation>Time Left</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="463"/>
+        <location filename="../src/AudioControls.ui" line="493"/>
         <source>Shuffle</source>
         <translation>Shuffle</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="476"/>
+        <location filename="../src/AudioControls.ui" line="506"/>
         <source>Repeat</source>
         <translation>Repeat</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="514"/>
+        <location filename="../src/AudioControls.ui" line="544"/>
         <source>Low</source>
         <translation>Low</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="546"/>
+        <location filename="../src/AudioControls.ui" line="576"/>
         <source>High</source>
         <translation>High</translation>
     </message>
@@ -946,22 +946,17 @@ connect and stream from you?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="187"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
         <source>Open Queue</source>
         <translation>Open Queue</translation>
     </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="55"/>
-        <source>The queue is currently empty. Drop something to enqueue it!</source>
-        <translation>The queue is currently empty. Drop something to enqueue it!</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="185"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>Open Queue - %n item(s)</numerusform><numerusform>Open Queue - %n item(s)</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="191"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
         <source>Close Queue</source>
         <translation>Close Queue</translation>
     </message>
@@ -1262,69 +1257,69 @@ connect and stream from you?</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="191"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="192"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Copy Link</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="192"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Delete %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="196"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
         <source>Add to my Playlists</source>
         <translation>Add to my Playlists</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="198"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Add to my Automatic Playlists</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>Add to my Stations</source>
         <translation>Add to my Stations</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="230"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="196"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Export Playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="345"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="350"/>
         <source>playlist</source>
         <translation>playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="349"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="354"/>
         <source>automatic playlist</source>
         <translation>automatic playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="353"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
         <source>station</source>
         <translation>station</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="365"/>
         <source>Delete %1?</source>
         <comment>playlist/station/...</comment>
         <translation>Delete %1?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="361"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="407"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="433"/>
         <source>Save XSPF</source>
         <translation>Save XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="408"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="434"/>
         <source>Playlists (*.xspf)</source>
         <translation>Playlists (*.xspf)</translation>
     </message>
@@ -1357,52 +1352,52 @@ connect and stream from you?</translation>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="275"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="279"/>
         <source>Browse</source>
         <translation>Browse</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="276"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
         <source>Search History</source>
         <translation>Search History</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="278"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="282"/>
         <source>My Music</source>
         <translation>My Music</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="286"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="290"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="292"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
         <source>Top Loved Tracks</source>
         <translation>Top Loved Tracks</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="284"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="297"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="301"/>
         <source>Recently Played</source>
         <translation>Recently Played</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="302"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="306"/>
         <source>Charts</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="307"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="311"/>
         <source>New Releases</source>
         <translation>New Releases</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="312"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="316"/>
         <source>Friends</source>
         <translation>Friends</translation>
     </message>
@@ -1600,6 +1595,24 @@ connect and stream from you?</translation>
         <location filename="../src/StackedSettingsDialog.ui" line="401"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>Allow web browsers to interact with Tomahawk (recommended)</translation>
+    </message>
+</context>
+<context>
+    <name>TemporaryPageItem</name>
+    <message>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="51"/>
+        <source>Copy Artist Link</source>
+        <translation>Copy Artist Link</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="58"/>
+        <source>Copy Album Link</source>
+        <translation>Copy Album Link</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="65"/>
+        <source>Copy Track Link</source>
+        <translation>Copy Track Link</translation>
     </message>
 </context>
 <context>
@@ -2628,7 +2641,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="278"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="293"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -2652,27 +2665,27 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="137"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="140"/>
         <source>New Playlist</source>
         <translation>New Playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="166"/>
         <source>Failed to save tracks</source>
         <translation>Failed to save tracks</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="163"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="166"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="185"/>
         <source>XSPF Error</source>
         <translation>XSPF Error</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="185"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>This is not a valid XSPF playlist.</translation>
     </message>
@@ -2765,13 +2778,13 @@ Try tweaking the filters for a new set of songs to play.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="327"/>
-        <source>Fetching</source>
-        <translation>Fetching</translation>
+        <source>Syncing</source>
+        <translation>Syncing</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="332"/>
-        <source>Parsing</source>
-        <translation>Parsing</translation>
+        <source>Importing</source>
+        <translation>Importing</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="463"/>
@@ -3285,62 +3298,62 @@ enter the displayed PIN number here:</translation>
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="138"/>
         <source>Cover</source>
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="95"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="156"/>
         <source>Track</source>
         <translation>Track</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="107"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="174"/>
         <source>Artist</source>
         <translation>Artist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="121"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="194"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="151"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="224"/>
         <source>Statistics</source>
         <translation>Statistics</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="44"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="59"/>
         <source>Similar Tracks</source>
         <translation>Similar Tracks</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="93"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="104"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Sorry, but we could not find similar tracks for this song!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="205"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="219"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>You&apos;ve listened to this track %n time(s).</numerusform><numerusform>You&apos;ve listened to this track %n time(s).</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="207"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="221"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>You&apos;ve never listened to this track before.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="211"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
         <source>You first listened to it on %1.</source>
         <translation>You first listened to it on %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="231"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>You&apos;ve never listened to %1 before.</translation>
     </message>
@@ -3369,7 +3382,7 @@ enter the displayed PIN number here:</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="136"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="148"/>
         <source>Unknown</source>
         <translation>Unknown</translation>
     </message>
@@ -3397,7 +3410,7 @@ enter the displayed PIN number here:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="297"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="298"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, your filter &apos;%1&apos; did not match any results.</translation>
     </message>

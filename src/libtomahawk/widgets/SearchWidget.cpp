@@ -53,6 +53,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     ui->artistView->proxyModel()->sort( -1 );
     ui->albumView->proxyModel()->sort( -1 );
+    ui->artistView->proxyModel()->setHideDupeItems( true );
+    ui->albumView->proxyModel()->setHideDupeItems( true );
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
 

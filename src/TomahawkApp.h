@@ -99,6 +99,9 @@ public:
 
     bool isTomahawkLoaded() const { return m_loaded; }
 
+    // reimplemented from QApplication/QCoreApplication
+    virtual bool notify( QObject* receiver, QEvent* e );
+
 signals:
     void tomahawkLoaded();
 

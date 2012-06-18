@@ -204,10 +204,11 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
 void
 AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 {
-    m_databaseLoaded = true;
-
     if ( m_collection.isNull() )
+    {
+        m_databaseLoaded = true;
         m_queries << filterTracks( tracks );
+    }
     else
         m_queries << tracks;
 

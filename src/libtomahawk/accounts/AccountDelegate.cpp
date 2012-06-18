@@ -27,6 +27,7 @@
 #include "accounts/AccountManager.h"
 
 #include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Closure.h"
@@ -549,53 +550,10 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
 void
 AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
-    QPainterPath btnPath;
-    const int radius = 3;
-    // draw top half gradient
-    const int btnCenter = btnRect.bottom() - ( btnRect.height() / 2 );
-    btnPath.moveTo( btnRect.left(), btnCenter );
-    btnPath.lineTo( btnRect.left(), btnRect.top() + radius );
-    btnPath.quadTo( QPoint( btnRect.topLeft() ), QPoint( btnRect.left() + radius, btnRect.top() ) );
-    btnPath.lineTo( btnRect.right() - radius, btnRect.top() );
-    btnPath.quadTo( QPoint( btnRect.topRight() ), QPoint( btnRect.right(), btnRect.top() + radius ) );
-    btnPath.lineTo( btnRect.right(),btnCenter );
-    btnPath.lineTo( btnRect.left(), btnCenter );
-
-    QLinearGradient g;
     if ( !red )
-    {
-        g.setColorAt( 0, QColor(54, 127, 211) );
-        g.setColorAt( 0.5, QColor(43, 104, 182) );
-    }
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
     else
-    {
-        g.setColorAt( 0, QColor(206, 63, 63) );
-        g.setColorAt( 0.5, QColor(170, 52, 52) );
-    }
-    //painter->setPen( bg.darker() );
-    painter->fillPath( btnPath, g );
-    //painter->drawPath( btnPath );
-
-    btnPath = QPainterPath();
-    btnPath.moveTo( btnRect.left(), btnCenter );
-    btnPath.lineTo( btnRect.left(), btnRect.bottom() - radius );
-    btnPath.quadTo( QPoint( btnRect.bottomLeft() ), QPoint( btnRect.left() + radius, btnRect.bottom() ) );
-    btnPath.lineTo( btnRect.right() - radius, btnRect.bottom() );
-    btnPath.quadTo( QPoint( btnRect.bottomRight() ), QPoint( btnRect.right(), btnRect.bottom() - radius ) );
-    btnPath.lineTo( btnRect.right(), btnCenter );
-    btnPath.lineTo( btnRect.left(), btnCenter );
-
-    if ( !red )
-    {
-        g.setColorAt( 0, QColor(34, 85, 159) );
-        g.setColorAt( 0.5, QColor(35, 79, 147) );
-    }
-    else
-    {
-        g.setColorAt( 0, QColor(150, 50, 50) );
-        g.setColorAt( 0.5, QColor(130, 40, 40) );
-    }
-    painter->fillPath( btnPath, g );
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(206, 63, 63), QColor(170, 52, 52), QColor(150, 50, 50), QColor(130, 40, 40) );
 }
 
 

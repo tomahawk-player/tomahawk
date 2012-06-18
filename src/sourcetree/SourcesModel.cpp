@@ -107,39 +107,43 @@ SourcesModel::data( const QModelIndex& index, int role ) const
 
     switch ( role )
     {
-        case Qt::SizeHintRole:
-            return QSize( 0, 18 );
-        case SourceTreeItemRole:
-            return QVariant::fromValue< SourceTreeItem* >( item );
-        case SourceTreeItemTypeRole:
-            return item->type();
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return item->text();
-        case Qt::DecorationRole:
-            return item->icon();
-        case SourcesModel::SortRole:
-            return item->peerSortValue();
-        case SourcesModel::IDRole:
-            return item->IDValue();
-        case SourcesModel::LatchedOnRole:
+    case Qt::SizeHintRole:
+        return QSize( 0, 18 );
+    case SourceTreeItemRole:
+        return QVariant::fromValue< SourceTreeItem* >( item );
+    case SourceTreeItemTypeRole:
+        return item->type();
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        return item->text();
+    case Qt::DecorationRole:
+        return item->icon();
+    case SourcesModel::SortRole:
+        return item->peerSortValue();
+    case SourcesModel::IDRole:
+        return item->IDValue();
+    case SourcesModel::LatchedOnRole:
+    {
+        if ( item->type() == Collection )
         {
-            if ( item->type() == Collection )
-            {
-                SourceItem* cItem = qobject_cast< SourceItem* >( item );
-                return cItem->localLatchedOn();
-            }
-            return false;
+            SourceItem* cItem = qobject_cast< SourceItem* >( item );
+            return cItem->localLatchedOn();
         }
-        case SourcesModel::LatchedRealtimeRole:
+        return false;
+    }
+    case SourcesModel::LatchedRealtimeRole:
+    {
+        if ( item->type() == Collection )
         {
-            if ( item->type() == Collection )
-            {
-                SourceItem* cItem = qobject_cast< SourceItem* >( item );
-                return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
-            }
-            return false;
+            SourceItem* cItem = qobject_cast< SourceItem* >( item );
+            return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
         }
+        return false;
+    }
+    case SourcesModel::CustomActionRole:
+    {
+        return QVariant::fromValue< QList< QAction* > >( item->customActions() );
+    }
     case Qt::ToolTipRole:
         if ( !item->tooltip().isEmpty() )
             return item->tooltip();

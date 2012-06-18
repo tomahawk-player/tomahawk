@@ -97,6 +97,8 @@ private slots:
     void changePage( QListWidgetItem*, QListWidgetItem* );
     void serventReady();
 
+    void aclEntryClearButtonClicked();
+    
     void requiresRestart();
 
 private:

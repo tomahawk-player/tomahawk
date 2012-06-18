@@ -33,14 +33,26 @@ class AclJobDelegate : public QStyledItemDelegate
 
 public:
     explicit AclJobDelegate ( QObject* parent = 0 );
-    virtual ~AclJobDelegate() {}
+    virtual ~AclJobDelegate();
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+    virtual void emitSizeHintChanged( const QModelIndex &index );
+    
+signals:
+    void update( const QModelIndex& idx );
+    void aclResult( ACLRegistry::ACL result );
+    
+protected:
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    
 private:
-    mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
-    QListView* m_parentView;
+    void drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red = false ) const;
+    
+    QPoint m_savedHoverPos;
+    mutable QRect m_savedAcceptRect;
+    mutable QRect m_savedDenyRect;
 };
 
 
@@ -51,8 +63,6 @@ public:
     explicit AclJobItem( ACLRegistry::User user, const QString &username );
     virtual ~AclJobItem();
     
-    void done();
-
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const { return QString(); }
     virtual QPixmap icon() const { return QPixmap(); }
@@ -61,7 +71,7 @@ public:
     virtual int concurrentJobLimit() const { return 3; }
     
     virtual bool hasCustomDelegate() const { return true; }
-    virtual void createDelegate( QObject* parent );
+    virtual void createDelegate( QObject* parent = 0 );
     virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
     virtual ACLRegistry::User user() const { return m_user; }
@@ -69,6 +79,9 @@ public:
     
 signals:
     void userDecision( ACLRegistry::User user );
+
+public slots:
+    void aclResult( ACLRegistry::ACL result );
     
 private:
     QStyledItemDelegate* m_delegate;

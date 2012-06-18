@@ -43,6 +43,10 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+
+    QUrl copyOpenLink( const Tomahawk::artist_ptr& artist ) const;
+    QUrl copyOpenLink( const Tomahawk::album_ptr& album ) const;
+
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
 public slots:
@@ -56,7 +60,10 @@ public slots:
     /// Takes a spotify link and performs the default open action on it
     bool openRdioLink( const QString& link );
 
+    /// Creates a link from the requested data and copies it to the clipboard
     void copyToClipboard( const Tomahawk::query_ptr& query );
+
+
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
@@ -67,6 +74,8 @@ public slots:
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 
     void handleOpenTrack( const Tomahawk::query_ptr& qry );
+    void handleOpenTracks( const QList< Tomahawk::query_ptr >& queries );
+
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 #endif
 
@@ -104,6 +113,7 @@ private:
     bool handleSearchCommand( const QUrl& url );
     bool handleQueueCommand( const QUrl& url );
     bool handleAutoPlaylistCommand( const QUrl& url );
+    bool handleImportCommand( const QUrl& url );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
     
     bool playSpotify( const QUrl& url );
@@ -116,6 +126,8 @@ private:
     bool handlePlayCommand( const QUrl& url );
     bool handleBookmarkCommand( const QUrl& url );
     bool handleOpenCommand( const QUrl& url );
+
+    void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
 
     QString hostname() const;
 

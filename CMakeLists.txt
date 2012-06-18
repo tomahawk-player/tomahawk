@@ -101,8 +101,8 @@ if(PHONON_FOUND)
     message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(LibEchonest 1.1.10)
-macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.10 is needed for dynamic playlists and the infosystem")
+macro_optional_find_package(LibEchonest 1.2.1)
+macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.2.1 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
@@ -115,7 +115,7 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
-macro_optional_find_package(Boost)
+macro_optional_find_package( Boost COMPONENTS thread )
 macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ source libraries" "http://www.boost.org" TRUE "" "") #FIXME: give useful explaination
 
 macro_optional_find_package(QCA2)
@@ -135,6 +135,9 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
+
+macro_optional_find_package(Sqlite)
+macro_log_feature(SQLITE_FOUND "SQLite" "Provides a SQL database in a C library" "http://www.sqlite.org" TRUE "" "sqlite is needed for our forked QSQLite driver, since 4.8.2 screws it up")
 
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again

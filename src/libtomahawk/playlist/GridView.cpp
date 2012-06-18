@@ -74,6 +74,7 @@ GridView::GridView( QWidget* parent )
     setStyleSheet( "QListView { background-color: #323435; }" );
 
     setAutoFitItems( true );
+    setAutoResize( false );
     setProxyModel( new PlayableProxyModel( this ) );
 
 /*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
@@ -81,8 +82,8 @@ GridView::GridView( QWidget* parent )
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+
     connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
-//    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -95,7 +96,14 @@ GridView::~GridView()
 void
 GridView::setProxyModel( PlayableProxyModel* model )
 {
+    if ( m_proxyModel )
+    {
+        disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
+    }
+
     m_proxyModel = model;
+    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+
     m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
     setItemDelegate( m_delegate );
@@ -116,6 +124,12 @@ GridView::setModel( QAbstractItemModel* model )
 void
 GridView::setPlayableModel( PlayableModel* model )
 {
+    if ( m_model )
+    {
+        disconnect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+    }
+
     m_inited = false;
     m_model = model;
 
@@ -125,7 +139,8 @@ GridView::setPlayableModel( PlayableModel* model )
         m_proxyModel->sort( 0 );
     }
 
-    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     emit modelChanged();
 }
@@ -197,6 +212,32 @@ GridView::resizeEvent( QResizeEvent* event )
 
 
 void
+GridView::verifySize()
+{
+    if ( !autoResize() || !m_model )
+        return;
+
+#ifdef Q_WS_X11
+//    int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
+    int scrollbar = 0; verticalScrollBar()->rect().width();
+#else
+    int scrollbar = verticalScrollBar()->rect().width();
+#endif
+
+    const int rectWidth = contentsRect().width() - scrollbar - 3;
+    const int itemWidth = 160;
+    const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
+
+    const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
+    const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
+    const int newHeight = rows * m_model->itemSize().height();
+
+    setFixedHeight( newHeight );
+    m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
+}
+
+
+void
 GridView::layoutItems()
 {
     if ( autoFitItems() && m_model )
@@ -207,19 +248,17 @@ GridView::layoutItems()
 #else
         int scrollbar = verticalScrollBar()->rect().width();
 #endif
-        int rectWidth = contentsRect().width() - scrollbar - 3;
-        int itemWidth = 160;
-//        QSize itemSize = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize();
 
-        int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
-//        int rightSpacing = rectWidth - ( itemsPerRow * ( itemSize.width() + 16 ) );
-//        int newSpacing = 16 + floor( rightSpacing / ( itemsPerRow + 1 ) );
+        const int rectWidth = contentsRect().width() - scrollbar - 3;
+        const int itemWidth = 160;
+        const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
-        int remSpace = rectWidth - ( itemsPerRow * itemWidth );
-        int extraSpace = remSpace / itemsPerRow;
-        int newItemWidth = itemWidth + extraSpace;
+        const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
+        const int extraSpace = remSpace / itemsPerRow;
+        const int newItemWidth = itemWidth + extraSpace;
         
         m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
+        verifySize();
 
         if ( !m_inited )
         {

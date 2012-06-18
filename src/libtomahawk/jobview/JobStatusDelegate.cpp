@@ -59,8 +59,11 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     if ( allowMultiLine )
         iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
-    painter->drawPixmap( iconRect, p );
+    if ( !p.isNull() )
+    {
+        p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
+        painter->drawPixmap( iconRect, p );
+    }
 
     // draw right column if there is one
     const QString rCol = index.data( JobStatusModel::RightColumnRole ).toString();

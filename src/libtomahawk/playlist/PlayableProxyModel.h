@@ -49,7 +49,13 @@ public:
     virtual void remove( const QList< QPersistentModelIndex >& indexes );
 
     virtual bool showOfflineResults() const { return m_showOfflineResults; }
-    virtual void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
+    virtual void setShowOfflineResults( bool b );
+
+    virtual bool hideDupeItems() const { return m_hideDupeItems; }
+    virtual void setHideDupeItems( bool b );
+
+    virtual int maxVisibleItems() const { return m_maxVisibleItems; }
+    virtual void setMaxVisibleItems( int items );
 
     virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
 
@@ -76,7 +82,10 @@ private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
     PlayableModel* m_model;
+
     bool m_showOfflineResults;
+    bool m_hideDupeItems;
+    int m_maxVisibleItems;
 };
 
 #endif // TRACKPROXYMODEL_H

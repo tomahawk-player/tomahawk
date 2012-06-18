@@ -34,6 +34,8 @@
 
 using namespace Tomahawk;
 
+#define BGCOLOR_LEFT QString( "#323435" )
+#define BGCOLOR_RIGHT QString( "#454e59" )
 
 TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent )
     : QWidget( parent )
@@ -43,10 +45,13 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#323435" ) );
-
+    pal.setColor( QPalette::Window, QColor( BGCOLOR_LEFT ) );
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
+
+    pal.setColor( QPalette::Window, QColor( BGCOLOR_RIGHT ) );
+    ui->rightBar->setPalette( pal );
+    ui->rightBar->setAutoFillBackground( true );
 
 //    layout()->setSpacing( 0 );
 //    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
@@ -59,7 +64,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setFrameShape( QFrame::NoFrame );
     ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
+    ui->similarTracksView->setAutoResize( true );
+    ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
     TomahawkUtils::styleScrollBar( ui->lyricsView->verticalScrollBar() );
 
     QFont f = font();
@@ -102,8 +109,10 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
     area->setWidget( widget );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
+    area->setStyleSheet( "QScrollArea { background-color:"
+                            "qlineargradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 " + BGCOLOR_LEFT + ", stop: 0.95 " + BGCOLOR_LEFT + ", stop: 1 " + BGCOLOR_RIGHT + "); }" );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -177,6 +186,7 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->trackLabel->setText( query->track() );
     ui->artistLabel->setQuery( query );
     ui->albumLabel->setQuery( query );
+    ui->albumLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
     

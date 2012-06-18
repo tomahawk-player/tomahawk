@@ -169,6 +169,11 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
     tDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
 
+    QString barePeerId = peerId.left( peerId.indexOf( "/" ) );
+
+    //FIXME: We should probably be using barePeerId in the connectToPeer call below.
+    //But, verify this doesn't cause any problems (there is still a uniquename after all)
+    
     /*
       If only one party is externally visible, connection is obvious
       If both are, peer with lowest IP address initiates the connection.
@@ -199,7 +204,7 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
     m_peersSipInfos.insert( peerId, info );
 }
 
-void SipHandler::onSoftwareVersion(const QString& peerId, const QString& versionString)
+void SipHandler::onSoftwareVersion( const QString& peerId, const QString& versionString )
 {
     m_peersSoftwareVersions.insert( peerId, versionString );
 }

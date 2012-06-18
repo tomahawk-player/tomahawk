@@ -324,12 +324,12 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
         }
         case DBSyncConnection::FETCHING:
         {
-            msg = tr( "Fetching" );
+            msg = tr( "Syncing" );
             break;
         }
         case DBSyncConnection::PARSING:
         {
-            msg = tr( "Parsing" );
+            msg = tr( "Importing" );
             break;
         }
         case DBSyncConnection::SCANNING:

@@ -31,6 +31,7 @@
 
 class DatabaseImpl;
 class DatabaseWorker;
+class IdThreadWorker;
 
 /*
     This class is really a firewall/pimpl - the public functions of LibraryImpl
@@ -79,6 +80,7 @@ private:
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
     QList<DatabaseWorker*> m_workers;
+    IdThreadWorker* m_idWorker;
     bool m_indexReady;
     int m_maxConcurrentThreads;
 

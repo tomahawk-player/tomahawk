@@ -249,6 +249,6 @@ Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
 
-Q_DECLARE_INTERFACE( Tomahawk::InfoSystem::InfoPlugin, "tomahawk.InfoPluginy/1.0" )
+Q_DECLARE_INTERFACE( Tomahawk::InfoSystem::InfoPlugin, "tomahawk.InfoPlugin/1.0" )
 
 #endif // TOMAHAWK_INFOSYSTEM_H

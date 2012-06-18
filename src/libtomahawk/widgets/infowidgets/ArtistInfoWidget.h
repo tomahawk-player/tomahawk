@@ -66,6 +66,8 @@ public:
      */
     void load( const Tomahawk::artist_ptr& artist );
 
+    Tomahawk::artist_ptr artist() const { return m_artist; }
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 

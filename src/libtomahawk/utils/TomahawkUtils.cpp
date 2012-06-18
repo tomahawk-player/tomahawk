@@ -333,14 +333,14 @@ NetworkProxyFactory::NetworkProxyFactory( const NetworkProxyFactory& other )
 QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
-    //tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName();
+    //tDebug() << Q_FUNC_INFO << "query hostname is " << query.peerHostName() << ", proxy host is " << m_proxy.hostName();
 
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     s_noProxyHostsMutex.lock();
-    if ( s_noProxyHosts.contains( hostname ) )
+    if ( !hostname.isEmpty() && s_noProxyHosts.contains( hostname ) )
         proxies << QNetworkProxy::NoProxy << systemProxyForQuery( query );
-    else if ( m_proxy.hostName().isEmpty() || hostname.isEmpty() || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
+    else if ( m_proxy.hostName().isEmpty() || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
         proxies << systemProxyForQuery( query );
     else
         proxies << m_proxy << systemProxyForQuery( query );

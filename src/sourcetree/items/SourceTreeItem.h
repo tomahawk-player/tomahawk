@@ -70,6 +70,7 @@ public:
     virtual void setDropType( DropType type ) { m_dropType = type; }
     virtual DropType dropType() const { return m_dropType; }
     virtual bool isBeingPlayed() const { return false; }
+    virtual QList< QAction* > customActions() const { return QList< QAction* >(); }
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }

@@ -26,17 +26,21 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+
 DatabaseCommand_AllArtists::DatabaseCommand_AllArtists( const Tomahawk::collection_ptr &collection, QObject *parent )
     : DatabaseCommand( parent )
     , m_collection( collection )
     , m_amount( 0 )
     , m_sortOrder( DatabaseCommand_AllArtists::None )
     , m_sortDescending( false )
-{}
+{
+}
+
 
 DatabaseCommand_AllArtists::~DatabaseCommand_AllArtists()
 {
 }
+
 
 void
 DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )

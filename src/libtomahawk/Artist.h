@@ -31,6 +31,10 @@
 #include "DllMacro.h"
 #include "Query.h"
 
+#include <boost/thread.hpp>
+
+class IdThreadWorker;
+
 namespace Tomahawk
 {
 
@@ -42,10 +46,11 @@ public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
 
-    explicit Artist( unsigned int id, const QString& name );
+    Artist( unsigned int id, const QString& name );
+    explicit Artist( const QString& name );
     virtual ~Artist();
 
-    unsigned int id() const { return m_id; }
+    unsigned int id() const;
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
@@ -72,6 +77,7 @@ public:
     QWeakPointer< Tomahawk::Artist > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
 
+    void loadId( bool autoCreate );
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
@@ -93,7 +99,12 @@ private:
     Artist();
     QString infoid() const;
 
-    unsigned int m_id;
+    void setIdFuture( boost::unique_future< unsigned int > future );
+
+    mutable bool m_waitingForFuture;
+    mutable boost::unique_future< unsigned int > m_idFuture;
+    mutable unsigned int m_id;
+
     QString m_name;
     QString m_sortname;
 
@@ -123,6 +134,11 @@ private:
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
     
     QWeakPointer< Tomahawk::Artist > m_ownRef;
+
+    static QHash< QString, artist_ptr > s_artistsByName;
+    static QHash< unsigned int, artist_ptr > s_artistsById;
+
+    friend class ::IdThreadWorker;
 };
 
 } // ns

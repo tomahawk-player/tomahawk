@@ -110,8 +110,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     Jreen::JID jid = Jreen::JID( readUsername() );
 
     // general client setup
-    m_client = new Jreen::Client( jid, m_currentPassword );
-    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
+    m_client = new Jreen::Client( jid, m_currentPassword );    
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );
@@ -624,6 +623,7 @@ XmppSipPlugin::configurationChanged()
 void
 XmppSipPlugin::setupClientHelper()
 {
+    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
     Jreen::JID jid = Jreen::JID( m_currentUsername );
     m_client->setJID( jid );
     m_client->setPassword( m_currentPassword );
@@ -799,7 +799,7 @@ XmppSipPlugin::onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const
     QMessageBox *confirmBox = new QMessageBox(
                                 QMessageBox::Question,
                                 tr( "Authorize User" ),
-                                QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg( presence.from().bare() ),
+                                QString( tr( "Do you want to add <b>%1</b> to your friend list?" ) ).arg( presence.from().bare() ),
                                 QMessageBox::Yes | QMessageBox::No,
                                 TomahawkUtils::tomahawkWindow()
                               );
