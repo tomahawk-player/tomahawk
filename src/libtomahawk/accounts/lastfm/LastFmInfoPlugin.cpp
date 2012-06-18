@@ -596,10 +596,13 @@ LastFmInfoPlugin::similarArtistsReturned()
 
     emit info( requestData, returnedData );
 
-    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
-    Tomahawk::InfoSystem::InfoStringHash criteria;
-    criteria["artist"] = origData["artist"];
-    emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+    if ( !sortedArtists.isEmpty() )
+    {
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+        Tomahawk::InfoSystem::InfoStringHash criteria;
+        criteria["artist"] = origData["artist"];
+        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+    }
 }
 
 
@@ -638,15 +641,20 @@ LastFmInfoPlugin::similarTracksReturned()
     returnedData["artists"] = sortedArtists;
     returnedData["score"] = sortedScores;
 
+    qDebug() << "Returning data, tracks:" << sortedTracks << "artists:" << sortedArtists << "scors:" << sortedScores;
+
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
     emit info( requestData, returnedData );
 
-    Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
-    Tomahawk::InfoSystem::InfoStringHash criteria;
-    criteria["artist"] = origData["artist"];
-    criteria["track"] = origData["track"];
-    emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+    if ( !sortedTracks.isEmpty() )
+    {
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+        Tomahawk::InfoSystem::InfoStringHash criteria;
+        criteria["artist"] = origData["artist"];
+        criteria["track"] = origData["track"];
+        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+    }
 }
 
 
