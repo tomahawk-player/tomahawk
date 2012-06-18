@@ -49,6 +49,7 @@ public:
 signals:
     void customDelegateJobInserted( int row, JobStatusItem* item );
     void customDelegateJobRemoved( int row );
+    void refreshDelegates();
 
 public slots:
     /// Takes ownership of job

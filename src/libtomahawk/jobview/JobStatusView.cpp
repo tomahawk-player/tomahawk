@@ -94,6 +94,7 @@ JobStatusView::setModel( JobStatusModel* m )
     connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
     connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
+    connect( m_view->model(), SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegates() ) );
 }
 
 
@@ -127,6 +128,13 @@ void
 JobStatusView::customDelegateJobRemoved( int row )
 {
     tLog() << Q_FUNC_INFO << "row is " << row;
+}
+
+
+void
+JobStatusView::refreshDelegates()
+{
+    tLog() << Q_FUNC_INFO;
     int count = m_model->rowCount();
     for ( int i = 0; i < count; i++ )
     {

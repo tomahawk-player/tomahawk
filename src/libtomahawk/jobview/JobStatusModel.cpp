@@ -187,6 +187,7 @@ JobStatusModel::itemFinished()
             // One less to count, but item is still there
             const QModelIndex idx = index( indexOf, 0, QModelIndex() );
             emit dataChanged( idx, idx );
+            emit refreshDelegates();
             return;
         }
     }
@@ -203,6 +204,7 @@ JobStatusModel::itemFinished()
     if ( item->customDelegate() )
         emit customDelegateJobRemoved( idx );
 
+    emit refreshDelegates();
 
     tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
     if ( item->concurrentJobLimit() > 0 )
