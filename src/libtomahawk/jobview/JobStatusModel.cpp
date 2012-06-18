@@ -85,6 +85,8 @@ JobStatusModel::addJob( JobStatusItem* item )
         tLog() << Q_FUNC_INFO << "job has custom delegate";
         emit customDelegateJobInserted( currentEndRow, item );
     }
+
+    emit refreshDelegates();
 }
 
 
