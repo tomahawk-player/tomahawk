@@ -799,7 +799,7 @@ XmppSipPlugin::onSubscriptionReceived( const Jreen::RosterItem::Ptr& item, const
     QMessageBox *confirmBox = new QMessageBox(
                                 QMessageBox::Question,
                                 tr( "Authorize User" ),
-                                QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg( presence.from().bare() ),
+                                QString( tr( "Do you want to add <b>%1</b> to your friend list?" ) ).arg( presence.from().bare() ),
                                 QMessageBox::Yes | QMessageBox::No,
                                 TomahawkUtils::tomahawkWindow()
                               );
