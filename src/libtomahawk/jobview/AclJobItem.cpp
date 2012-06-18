@@ -119,6 +119,8 @@ AclJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool
 bool
 AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    Q_UNUSED( option )
+    Q_UNUSED( model )
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( event->type() != QEvent::MouseButtonPress &&
          event->type() != QEvent::MouseButtonRelease &&

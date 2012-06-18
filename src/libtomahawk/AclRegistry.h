@@ -99,17 +99,15 @@ public slots:
      * @return ACLRegistry::ACL
      **/
     ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
-
+    void wipeEntries();
+    
 #ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
-#endif
     
 private slots:
-#ifndef ENABLE_HEADLESS
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
 #endif
-    void wipeEntries();
 
 private:
     /**
