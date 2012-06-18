@@ -336,6 +336,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
+    ${SQLITE_INCLUDE_DIR}
 
     playlist
 
@@ -437,8 +438,6 @@ TARGET_LINK_LIBRARIES( tomahawklib
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
 
-    sqlite3
-
     # External deps
     ${QJSON_LIBRARIES}
     ${PHONON_LIBS}
@@ -457,6 +456,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
     ${Boost_LIBRARIES}
+    ${SQLITE_LIBRARIES}
 )
 
 INSTALL( TARGETS tomahawklib
