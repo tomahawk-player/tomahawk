@@ -110,8 +110,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     Jreen::JID jid = Jreen::JID( readUsername() );
 
     // general client setup
-    m_client = new Jreen::Client( jid, m_currentPassword );
-    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
+    m_client = new Jreen::Client( jid, m_currentPassword );    
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );
@@ -624,6 +623,7 @@ XmppSipPlugin::configurationChanged()
 void
 XmppSipPlugin::setupClientHelper()
 {
+    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
     Jreen::JID jid = Jreen::JID( m_currentUsername );
     m_client->setJID( jid );
     m_client->setPassword( m_currentPassword );
