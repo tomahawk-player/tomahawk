@@ -131,6 +131,8 @@ private:
 
     QString hostname() const;
 
+    inline QByteArray percentEncode( const QUrl& url ) const;
+
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;
     Tomahawk::query_ptr m_waitingToPlay;
