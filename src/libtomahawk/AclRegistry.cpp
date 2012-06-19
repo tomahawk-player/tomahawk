@@ -175,6 +175,8 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
         getUserDecision( user, username );
         return ACLRegistry::NotFound;
     }
+    else
+        user.acl = ACLRegistry::Stream;
 #endif
 
     m_cache.append( user );
