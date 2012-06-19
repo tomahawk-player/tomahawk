@@ -22,6 +22,7 @@
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include "UbuntuUnityHack.h"
 #include "TomahawkSettings.h"
+#include "utils/TomahawkUtils.h"
 #include "config.h"
 #include "utils/Logger.h"
 
@@ -149,7 +150,7 @@ main( int argc, char *argv[] )
 
 #ifndef ENABLE_HEADLESSs
 #ifdef WITH_BREAKPAD
-    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() );
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
 #endif
 #endif
 
