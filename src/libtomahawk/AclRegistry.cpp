@@ -188,6 +188,9 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 void
 ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 {
+    if ( TomahawkUtils::headless() )
+        return;
+    
     tLog() << Q_FUNC_INFO;
     AclJobItem* job = new AclJobItem( user, username );
     m_jobQueue.enqueue( job );
@@ -198,6 +201,9 @@ ACLRegistry::getUserDecision( ACLRegistry::User user, const QString &username )
 void
 ACLRegistry::userDecision( ACLRegistry::User user )
 {
+    if ( TomahawkUtils::headless() )
+        return;
+    
     tLog() << Q_FUNC_INFO;
     m_cache.append( user );
     save();
@@ -212,6 +218,9 @@ ACLRegistry::userDecision( ACLRegistry::User user )
 void
 ACLRegistry::queueNextJob()
 {
+    if ( TomahawkUtils::headless() )
+        return;
+    
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         QMetaObject::invokeMethod( this, "queueNextJob", Qt::QueuedConnection );

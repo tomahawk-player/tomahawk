@@ -86,6 +86,7 @@ headless()
 void
 setHeadless( bool headless )
 {
+    tLog() << Q_FUNC_INFO << "headless is" << (headless? "true" : "false");
     s_headless = headless;
 }
 
