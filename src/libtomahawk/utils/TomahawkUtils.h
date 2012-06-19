@@ -87,6 +87,8 @@ namespace TomahawkUtils
         QNetworkProxy m_proxy;
     };
 
+    DLLEXPORT bool headless();
+    DLLEXPORT void setHeadless( bool headless );
 
     DLLEXPORT QString appFriendlyVersion();
 

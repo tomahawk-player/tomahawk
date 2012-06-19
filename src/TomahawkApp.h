@@ -98,7 +98,7 @@ public:
     virtual bool loadUrl( const QString& url );
 
     bool isTomahawkLoaded() const { return m_loaded; }
-
+    
 signals:
     void tomahawkLoaded();
 

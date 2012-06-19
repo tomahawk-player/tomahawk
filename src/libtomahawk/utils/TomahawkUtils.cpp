@@ -64,7 +64,7 @@ namespace TomahawkUtils
 {
 static quint64 s_infosystemRequestId = 0;
 static QMutex s_infosystemRequestIdMutex;
-
+static bool s_headless = false;
 
 #ifdef Q_WS_MAC
 QString
@@ -74,6 +74,20 @@ appSupportFolderPath()
     return QDir::home().filePath( "Library/Application Support" );
 }
 #endif // Q_WS_MAC
+
+
+bool
+headless()
+{
+    return s_headless;
+}
+
+
+void
+setHeadless( bool headless )
+{
+    s_headless = headless;
+}
 
 
 QString

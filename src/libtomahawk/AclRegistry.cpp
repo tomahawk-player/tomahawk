@@ -170,7 +170,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 #ifdef ENABLE_HEADLESS
     user.acl = ACLRegistry::Stream;
 #else
-    else
+    if ( !TomahawkUtils::headless() )
     {
         getUserDecision( user, username );
         return ACLRegistry::NotFound;

@@ -198,6 +198,8 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 #endif
+    
+    TomahawkUtils::setHeadless( m_headless );
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
