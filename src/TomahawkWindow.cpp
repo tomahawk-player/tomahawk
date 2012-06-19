@@ -23,6 +23,7 @@
 
 #include <QAction>
 #include <QCloseEvent>
+#include <QDesktopServices>
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QInputDialog>
@@ -341,6 +342,7 @@ TomahawkWindow::setupSignals()
     //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
+    connect( ui->actionLegalInfo, SIGNAL( triggered() ), SLOT( legalInfo() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
     connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
@@ -512,10 +514,18 @@ TomahawkWindow::showSettingsDialog()
 }
 
 
-void TomahawkWindow::showDiagnosticsDialog()
+void 
+TomahawkWindow::showDiagnosticsDialog()
 {
     DiagnosticsDialog win;
     win.exec();
+}
+
+
+void
+TomahawkWindow::legalInfo()
+{
+    QDesktopServices::openUrl( QUrl( "http://www.tomahawk-player.org/legal.html" ) );
 }
 
 

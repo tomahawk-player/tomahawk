@@ -82,6 +82,7 @@ public slots:
     void loadSpiff();
     void showSettingsDialog();
     void showDiagnosticsDialog();
+    void legalInfo();
     void updateCollectionManually();
     void rescanCollectionManually();
     void pluginMenuAdded(QMenu*);

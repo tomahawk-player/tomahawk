@@ -115,6 +115,7 @@
     </property>
     <addaction name="actionDiagnostics"/>
     <addaction name="actionAboutTomahawk"/>
+    <addaction name="actionLegalInfo"/>
    </widget>
    <addaction name="menuApp"/>
    <addaction name="menuNetwork"/>
@@ -215,6 +216,14 @@
    </property>
    <property name="shortcut">
     <string>Meta+Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionLegalInfo">
+   <property name="text">
+    <string>&amp;Legal Info...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionDiagnostics">
