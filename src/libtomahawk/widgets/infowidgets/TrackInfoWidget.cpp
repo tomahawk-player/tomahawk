@@ -34,8 +34,6 @@
 
 using namespace Tomahawk;
 
-#define BGCOLOR_LEFT QString( "#323435" )
-#define BGCOLOR_RIGHT QString( "#454e59" )
 
 TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent )
     : QWidget( parent )
@@ -45,19 +43,13 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( BGCOLOR_LEFT ) );
+    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
-
-    pal.setColor( QPalette::Window, QColor( BGCOLOR_RIGHT ) );
     ui->rightBar->setPalette( pal );
     ui->rightBar->setAutoFillBackground( true );
 
-//    layout()->setSpacing( 0 );
-//    ui->tracksWidget->setStyleSheet( "QWidget#tracksWidget { background-color: #323435; }" );
-//    ui->headerWidget->setStyleSheet( "QWidget#headerWidget { background-image: url(" RESPATH "images/playlist-header-tiled.png); }" );
-//    ui->headerWidget->setStyleSheet( "background-color: #323435;" );
-//    ui->tracksWidget->setStyleSheet( "background-color: #323435;" );
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->lyricsView->setStyleSheet( "QTextBrowser#lyricsView { background-color: transparent; }" );
 
@@ -111,8 +103,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     area->setWidget( widget );
     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    area->setStyleSheet( "QScrollArea { background-color:"
-                            "qlineargradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 " + BGCOLOR_LEFT + ", stop: 0.95 " + BGCOLOR_LEFT + ", stop: 1 " + BGCOLOR_RIGHT + "); }" );
+    area->setStyleSheet( "QScrollArea { background-color: #454e59 }" );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -121,8 +112,14 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
+    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; }" );
+    ui->frame->setStyleSheet( "QFrame#frame { background-color: transparent; }"
+                              "QFrame#frame { "
+                              "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                              "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+
     load( query );
-    
+
     connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->albumLabel,  SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
 }
