@@ -136,9 +136,6 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
-macro_optional_find_package(Sqlite)
-macro_log_feature(SQLITE_FOUND "SQLite" "Provides a SQL database in a C library" "http://www.sqlite.org" TRUE "" "sqlite is needed for our forked QSQLite driver, since 4.8.2 screws it up")
-
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again
 
