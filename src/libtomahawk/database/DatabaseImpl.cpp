@@ -706,8 +706,12 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 bool
 DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 {
-    const QStringList conns = QSqlDatabase::connectionNames();
-    const QString connName = QString( "tomahawk%1" ).arg( conns.count() ? QString::number( conns.count() ) : "" );
+    QString connName( "tomahawk" );
+    if ( !checkSchema )
+    {
+        // secondary connection, use a unique connection name
+        connName += "_" + uuid();
+    }
 
     bool schemaUpdated = false;
     int version = -1;
