@@ -41,7 +41,7 @@ Database::instance()
 Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
     , m_ready( false )
-    , m_impl( new DatabaseImpl( dbname, this ) )
+    , m_impl( new DatabaseImpl( dbname ) )
     , m_workerRW( new DatabaseWorker( this, true ) )
 {
     s_instance = this;

@@ -43,9 +43,8 @@
 #define CURRENT_SCHEMA_VERSION 28
 
 
-DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
-    : QObject( (QObject*) parent )
-    , m_parent( parent )
+DatabaseImpl::DatabaseImpl( const QString& dbname )
+    : QObject( (QObject*) QThread::currentThread() )
 {
     QTime t;
     t.start();
@@ -86,10 +85,10 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 }
 
 
-DatabaseImpl::DatabaseImpl( Database* parent, const QString& dbname )
+DatabaseImpl::DatabaseImpl( const QString& dbname, bool internal )
     : QObject( (QObject*) QThread::currentThread() )
-    , m_parent( parent )
 {
+    Q_UNUSED( internal );
     openDatabase( dbname, false );
     init();
 }
@@ -132,7 +131,7 @@ DatabaseImpl::clone() const
 {
     QMutexLocker lock( &m_mutex );
 
-    DatabaseImpl* impl = new DatabaseImpl( m_parent, m_db.databaseName() );
+    DatabaseImpl* impl = new DatabaseImpl( m_db.databaseName(), true );
     impl->setDatabaseID( m_dbid );
     impl->setFuzzyIndex( m_fuzzyIndex );
     return impl;

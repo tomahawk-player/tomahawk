@@ -45,7 +45,7 @@ friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
 
 public:
-    DatabaseImpl( const QString& dbname, Database* parent = 0 );
+    DatabaseImpl( const QString& dbname );
     ~DatabaseImpl();
 
     DatabaseImpl* clone() const;
@@ -82,7 +82,7 @@ signals:
     void indexReady();
 
 private:
-    DatabaseImpl( Database* parent, const QString& dbname );
+    DatabaseImpl( const QString& dbname, bool internal );
     void setFuzzyIndex( FuzzyIndex* fi ) { m_fuzzyIndex = fi; }
     void setDatabaseID( const QString& dbid ) { m_dbid = dbid; }
 
@@ -92,7 +92,6 @@ private:
     void dumpDatabase();
     QString cleanSql( const QString& sql );
 
-    Database* m_parent;
     bool m_ready;
     QSqlDatabase m_db;
 
