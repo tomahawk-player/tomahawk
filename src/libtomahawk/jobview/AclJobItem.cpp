@@ -78,22 +78,31 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     int totalwidth = opt.rect.width();
     int thirds = totalwidth/3;
-    QRect btnRect;
+    QRect allowBtnRect;
+    QRect denyBtnRect;
     painter->setPen( Qt::white );
-    
-    QString btnText = tr( "Allow Streaming" );
-    int btnWidth = fm.width( btnText ) + 2*PADDING;
-    btnRect = QRect( opt.rect.left() + thirds - btnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  btnWidth + 2*PADDING, fm.height() + 2*PADDING );
-    drawRoundedButton( painter, btnRect, btnRect.contains( m_savedHoverPos ) );
-    painter->drawText( btnRect, Qt::AlignCenter, btnText );
-    m_savedAcceptRect = btnRect;
 
-    btnText = tr( "Deny Access" );
-    btnWidth = fm.width( btnText ) + 2*PADDING;
-    btnRect = QRect( opt.rect.right() - thirds - btnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  btnWidth + 2*PADDING, fm.height() + 2*PADDING );
-    drawRoundedButton( painter, btnRect, btnRect.contains( m_savedHoverPos ) );
-    painter->drawText( btnRect, Qt::AlignCenter, btnText );
-    m_savedDenyRect = btnRect;
+    int minPixels = 20;
+    
+    QString allowBtnText = tr( "Allow Streaming" );
+    int allowBtnWidth = fm.width( allowBtnText ) + 2*PADDING;
+    allowBtnRect = QRect( opt.rect.left() + thirds - allowBtnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  allowBtnWidth + 2*PADDING, fm.height() + 2*PADDING );
+    QString denyBtnText = tr( "Deny Access" );
+    int denyBtnWidth = fm.width( denyBtnText ) + 2*PADDING;
+    denyBtnRect = QRect( opt.rect.right() - thirds - denyBtnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  denyBtnWidth + 2*PADDING, fm.height() + 2*PADDING );
+
+    if ( allowBtnRect.right() >= denyBtnRect.left() )
+    {
+        allowBtnRect.moveLeft( minPixels / 2 );
+        denyBtnRect.moveRight( minPixels / 2 );
+    }
+
+    drawRoundedButton( painter, allowBtnRect, allowBtnRect.contains( m_savedHoverPos ) );
+    painter->drawText( allowBtnRect, Qt::AlignCenter, allowBtnText );
+    m_savedAcceptRect = allowBtnRect;
+    drawRoundedButton( painter, denyBtnRect, denyBtnRect.contains( m_savedHoverPos ) );
+    painter->drawText( denyBtnRect, Qt::AlignCenter, denyBtnText );
+    m_savedDenyRect = denyBtnRect;
 }
 
 QSize
