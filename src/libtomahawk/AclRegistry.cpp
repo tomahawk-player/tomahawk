@@ -180,6 +180,7 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
 #endif
 
     m_cache.append( user );
+    save();
     emit aclResult( dbid, username, user.acl );
     return user.acl;
 }
