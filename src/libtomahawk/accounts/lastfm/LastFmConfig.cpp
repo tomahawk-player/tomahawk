@@ -129,7 +129,7 @@ LastFmConfig::loadHistory()
 void
 LastFmConfig::onHistoryLoaded()
 {
-    int total = 0;
+    uint total = 0;
     bool finished = false;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     
@@ -152,8 +152,8 @@ LastFmConfig::onHistoryLoaded()
         {
             lastfm::XmlQuery stats = lfm.children( "recenttracks" ).first();
             
-            int page = stats.attribute( "page" ).toInt();
-            total = stats.attribute( "totalPages" ).toInt();
+            uint page = stats.attribute( "page" ).toUInt();
+            total = stats.attribute( "totalPages" ).toUInt();
             
             m_ui->progressBar->setMaximum( total );
             m_ui->progressBar->setValue( page );
