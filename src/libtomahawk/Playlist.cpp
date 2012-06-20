@@ -245,6 +245,7 @@ Playlist::rename( const QString& title )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
+
 void
 Playlist::setTitle( const QString& title )
 {
@@ -257,6 +258,7 @@ Playlist::setTitle( const QString& title )
     emit changed();
     emit renamed( m_title, oldTitle );
 }
+
 
 void
 Playlist::reportCreated( const playlist_ptr& self )
@@ -281,6 +283,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 
     emit deleted( self );
 }
+
 
 void
 Playlist::addUpdater( PlaylistUpdaterInterface* updater )
@@ -419,7 +422,7 @@ Playlist::setRevision( const QString& rev,
                        const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
                        bool applied )
 {
-    if( QThread::currentThread() != thread() )
+    if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this,
                                    "setRevision",
@@ -586,6 +589,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
     emit tracksInserted( added, prevSize );
 }
 
+
 void
 Playlist::insertEntries( const QList< query_ptr >& queries, const int position, const QString& oldrev )
 {
@@ -650,7 +654,7 @@ Playlist::newEntries( const QList< plentry_ptr >& entries )
     QList<plentry_ptr> added;
     foreach( const plentry_ptr& p, entries )
     {
-        if( !currentguids.contains( p->guid() ) )
+        if ( !currentguids.contains( p->guid() ) )
             added << p;
     }
     return added;
