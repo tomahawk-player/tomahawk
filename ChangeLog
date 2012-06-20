@@ -1,6 +1,7 @@
 Version 0.5.0:
     * SOCKS5 proxy support improvements for resolvers and more.
-    * Initial Access Control support. Entries can be cleared en masse in the Advanced area of Settings.
+    * Initial Access Control support, allowing users to define who is able to
+      access and stream from their collection.
     * Priortize resolution of a track on double-click.
     * Spotify Resolver can now be easily installed on-demand from the settings.
     * You can now sync selected playlists (and updates) with Spotify.
@@ -18,7 +19,7 @@ Version 0.5.0:
     * Added social sharing widget, which allows you to tweet about a song.
     * Added a track page showing a song's lyrics and other similar tracks.
     * Separate Loved Tracks and Recently Played views per source.
-    * Combine Artist albums into a single aggregated view (instead of "Official" vs. "SuperCollection")
+    * Combine an artist's albums into a single aggregated view.
     * Added translations for Arabic, French, Bulgarian, Spanish and more.
     * Fixed XSPF auto-updating.
     * New Tomahawk logo and icon.
