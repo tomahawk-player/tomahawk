@@ -180,7 +180,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         painter->setPen( option.palette.color( QPalette::HighlightedText ) );
     }
 
-    QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
+    QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 28, 0 );
     if ( status || colItem->source().isNull() )
         painter->setFont( bold );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
@@ -241,7 +241,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     }
 
     textRect.adjust( 0, 0, 0, 2 );
-    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 4 );
+    text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     QTextOption to( Qt::AlignVCenter );
     to.setWrapMode( QTextOption::NoWrap );
     painter->drawText( textRect, text, to );
