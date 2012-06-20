@@ -67,6 +67,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 
     tLog() << "Database ID:" << m_dbid;
     init();
+    query.exec( "PRAGMA auto_vacuum = FULL" );
 
     tDebug( LOGVERBOSE ) << "Tweaked db pragmas:" << t.elapsed();
 
@@ -101,7 +102,6 @@ DatabaseImpl::init()
     TomahawkSqlQuery query = newquery();
 
      // make sqlite behave how we want:
-    query.exec( "PRAGMA auto_vacuum = FULL" );
     query.exec( "PRAGMA synchronous  = ON" );
     query.exec( "PRAGMA foreign_keys = ON" );
     //query.exec( "PRAGMA temp_store = MEMORY" );
