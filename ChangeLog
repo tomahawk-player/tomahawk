@@ -15,9 +15,10 @@ Version 0.5.0:
     * Added a toolbar with page back / forward buttons and the global search.
     * New grid-like view with direct playback controls.
     * You can now browse new releases (by genre).
-    * Add social sharing widget, which allows you to tweet about a song.
+    * Added social sharing widget, which allows you to tweet about a song.
     * Added a track page showing a song's lyrics and other similar tracks.
     * Separate Loved Tracks and Recently Played views per source.
+    * Combine Artist albums into a single aggregated view (instead of "Official" vs. "SuperCollection")
     * Added translations for Arabic, French, Bulgarian, Spanish and more.
     * Fixed XSPF auto-updating.
     * New Tomahawk logo and icon.
