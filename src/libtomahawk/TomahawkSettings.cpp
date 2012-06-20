@@ -1093,14 +1093,20 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
 QStringList
 TomahawkSettings::accounts() const
 {
-    return value( "accounts/allaccounts", QStringList() ).toStringList();
+    QStringList accounts = value( "accounts/allaccounts", QStringList() ).toStringList();
+    accounts.removeDuplicates();
+
+    return accounts;
 }
 
 
 void
 TomahawkSettings::setAccounts( const QStringList& accountIds )
 {
-    setValue( "accounts/allaccounts", accountIds );
+    QStringList accounts = accountIds;
+    accounts.removeDuplicates();
+
+    setValue( "accounts/allaccounts", accounts );
 }
 
 
