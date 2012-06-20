@@ -68,8 +68,7 @@ DatabaseWorker::~DatabaseWorker()
 void
 DatabaseWorker::run()
 {
-    m_dbimpl = Database::instance()->impl();
-    tDebug() << "New db connection with name:" << m_dbimpl->database().connectionName();
+    tDebug() << "New db connection with name:" << Database::instance()->impl()->database().connectionName();
     exec();
     qDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
 }
@@ -122,9 +121,10 @@ DatabaseWorker::doWork()
         cmd = m_commands.takeFirst();
     }
 
+    DatabaseImpl* impl = Database::instance()->impl();
     if ( cmd->doesMutates() )
     {
-        bool transok = m_dbimpl->database().transaction();
+        bool transok = impl->database().transaction();
         Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
@@ -137,7 +137,7 @@ DatabaseWorker::doWork()
             while ( !finished )
             {
                 completed++;
-                cmd->_exec( m_dbimpl ); // runs actual SQL stuff
+                cmd->_exec( impl ); // runs actual SQL stuff
 
                 if ( cmd->loggable() )
                 {
@@ -160,7 +160,7 @@ DatabaseWorker::doWork()
                         //
                         if ( !cmd->singletonCmd() )
                         {
-                            TomahawkSqlQuery query = m_dbimpl->newquery();
+                            TomahawkSqlQuery query = impl->newquery();
                             query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
                             query.addBindValue( cmd->guid() );
                             query.addBindValue( cmd->source()->id() );
@@ -193,7 +193,7 @@ DatabaseWorker::doWork()
             if ( cmd->doesMutates() )
             {
                 qDebug() << "Committing" << cmd->commandname() << cmd->guid();
-                if ( !m_dbimpl->newquery().commitTransaction() )
+                if ( !impl->newquery().commitTransaction() )
                 {
                     tDebug() << "FAILED TO COMMIT TRANSACTION*";
                     throw "commit failed";
@@ -219,12 +219,12 @@ DatabaseWorker::doWork()
                  << "*ERROR* processing databasecommand:"
                  << cmd->commandname()
                  << msg
-                 << m_dbimpl->database().lastError().databaseText()
-                 << m_dbimpl->database().lastError().driverText()
+                 << impl->database().lastError().databaseText()
+                 << impl->database().lastError().driverText()
                  << endl;
 
         if ( cmd->doesMutates() )
-            m_dbimpl->database().rollback();
+            impl->database().rollback();
 
         Q_ASSERT( false );
     }
@@ -232,7 +232,7 @@ DatabaseWorker::doWork()
     {
         qDebug() << "Uncaught exception processing dbcmd";
         if ( cmd->doesMutates() )
-            m_dbimpl->database().rollback();
+            impl->database().rollback();
 
         Q_ASSERT( false );
         throw;
@@ -252,7 +252,7 @@ DatabaseWorker::doWork()
 void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
-    TomahawkSqlQuery oplogquery = m_dbimpl->newquery();
+    TomahawkSqlQuery oplogquery = Database::instance()->impl()->newquery();
     qDebug() << "INSERTING INTO OPTLOG:" << command->source()->id() << command->guid() << command->commandname();
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
@@ -278,7 +278,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     {
         tDebug() << "Singleton command, deleting previous oplog commands";
 
-        TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
+        TomahawkSqlQuery oplogdelquery = Database::instance()->impl()->newquery();
         oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
                                   .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
 
