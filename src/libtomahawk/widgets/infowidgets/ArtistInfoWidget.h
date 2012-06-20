@@ -99,9 +99,6 @@ private slots:
     void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
     void onSimilarArtistsLoaded();
 
-    void onLoadingStarted();
-    void onLoadingFinished();
-
 private:
     Ui::ArtistInfoWidget *ui;
 
