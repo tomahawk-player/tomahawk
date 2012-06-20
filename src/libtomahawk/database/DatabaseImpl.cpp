@@ -68,6 +68,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     tLog() << "Database ID:" << m_dbid;
     init();
     query.exec( "PRAGMA auto_vacuum = FULL" );
+    query.exec( "PRAGMA synchronous = NORMAL" );
 
     tDebug( LOGVERBOSE ) << "Tweaked db pragmas:" << t.elapsed();
 
@@ -102,9 +103,7 @@ DatabaseImpl::init()
     TomahawkSqlQuery query = newquery();
 
      // make sqlite behave how we want:
-    query.exec( "PRAGMA synchronous  = ON" );
     query.exec( "PRAGMA foreign_keys = ON" );
-    //query.exec( "PRAGMA temp_store = MEMORY" );
 }
 
 
@@ -115,14 +114,14 @@ DatabaseImpl::~DatabaseImpl()
 /*
 #ifdef TOMAHAWK_QUERY_ANALYZE
     TomahawkSqlQuery q = newquery();
-    
+
     q.exec( "ANALYZE" );
     q.exec( "SELECT * FROM sqlite_stat1" );
     while ( q.next() )
     {
         tLog( LOGSQL ) << q.value( 0 ).toString() << q.value( 1 ).toString() << q.value( 2 ).toString();
     }
-    
+
 #endif
 */
 }
@@ -722,7 +721,7 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
             tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
-        
+
         if ( checkSchema )
         {
             QSqlQuery qry = QSqlQuery( db );
@@ -735,7 +734,7 @@ DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
         }
         else
             version = CURRENT_SCHEMA_VERSION;
-            
+
         if ( version < 0 || version == CURRENT_SCHEMA_VERSION )
             m_db = db;
     }
