@@ -438,10 +438,15 @@ Source::executeCommands()
         return;
     }
 
-    QMutexLocker lock( &m_cmdMutex );
-
-    if ( !m_cmds.isEmpty() )
+    bool commandsAvail = false;
     {
+        QMutexLocker lock( &m_cmdMutex );
+        commandsAvail = !m_cmds.isEmpty();
+    }
+
+    if ( commandsAvail )
+    {
+        QMutexLocker lock( &m_cmdMutex );
         QList< QSharedPointer<DatabaseCommand> > cmdGroup;
         QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
         while ( cmd->groupable() )
