@@ -35,14 +35,14 @@ Dependencies
   Boost 1.3 - http://www.boost.org/
   CLucene 0.9.23 (0.9.21 will fail) - http://clucene.sourceforge.net/download.shtml
   libechonest 1.2.1 - http://projects.kde.org/projects/playground/libs/libechonest/
-  Attica 0.3.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
+  Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
   QuaZip 0.4.3 - http://quazip.sourceforge.net/
 
  The following dependencies are optional, but recommended:
 
   Jreen 1.0.5 - http://qutim.org/jreen / https://github.com/euroelessar/jreen
   QTweetLib 0.5.0 - https://github.com/minimoog/QTweetLib
-  liblastfm 1.0.0 - http://github.com/eartle/liblastfm/
+  liblastfm 1.0.1 - http://github.com/eartle/liblastfm/
 
  Third party libraries that we ship with our source:
 
