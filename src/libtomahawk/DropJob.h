@@ -126,7 +126,7 @@ private:
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromArtistMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
-    QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
+    void tracksFromMixedData( const QMimeData* d );
 
     QList< Tomahawk::query_ptr > getArtist( const QString& artist, Tomahawk::ModelMode mode = Tomahawk::Mixed );
     QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
