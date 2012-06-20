@@ -131,10 +131,16 @@
        </property>
        <item>
         <widget class="QWidget" name="rightBar" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>300</width>
-           <height>300</height>
+           <height>500</height>
           </size>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
