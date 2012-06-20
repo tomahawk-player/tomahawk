@@ -57,7 +57,7 @@ public:
     void loadIndex();
     bool isReady() const { return m_ready; }
 
-    DatabaseImpl* impl() const { return m_impl; }
+    DatabaseImpl* impl();
 
 signals:
     void indexReady(); // search index
@@ -80,6 +80,9 @@ private:
     DatabaseWorker* m_workerRW;
     QList<DatabaseWorker*> m_workers;
     int m_maxConcurrentThreads;
+
+    QHash< QThread*, DatabaseImpl* > m_implHash;
+    QMutex m_mutex;
 
     static Database* s_instance;
 

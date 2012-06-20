@@ -130,6 +130,22 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 }
 
 
+DatabaseImpl*
+Database::impl()
+{
+    QMutexLocker lock( &m_mutex );
+
+    QThread* thread = QThread::currentThread();
+    if ( !m_implHash.contains( thread ) )
+    {
+        DatabaseImpl* impl = m_impl->clone();
+        m_implHash.insert( thread, impl );
+    }
+
+    return m_implHash.value( thread );
+}
+
+
 QString
 Database::dbid() const
 {
