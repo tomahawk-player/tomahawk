@@ -51,7 +51,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -97,7 +97,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
-    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
@@ -110,16 +109,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
     ui->label_3->setPalette( p );
-    
-    ui->label->setContentsMargins( 0, 0, 0, 0 );
-    ui->label_2->setContentsMargins( 0, 16, 0, 0 );
-    ui->label_3->setContentsMargins( 0, 16, 0, 0 );
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
     area->setWidget( widget );
 
-    area->setStyleSheet( "QScrollArea { background-color: #323435; }" );
+    area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -130,6 +125,26 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
     TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
+
+    ui->biography->setStyleSheet( "QTextBrowser { background-color: transparent; }" );
+
+    ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
+    ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
+                               "QFrame#albumFrame { "
+                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+
+    ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
+    ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
+                               "QFrame#artistFrame { "
+                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+
+//    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
+    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
+                               "QFrame#trackFrame { "
+                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     load( artist );
 }
@@ -207,13 +222,13 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     if ( !m_artist->albums( Mixed ).isEmpty() )
         onAlbumsFound( m_artist->albums( Mixed ), Mixed );
-    
+
     if ( !m_artist->tracks().isEmpty() )
         onTracksFound( m_artist->tracks(), Mixed );
-    
+
     if ( !m_artist->similarArtists().isEmpty() )
         onSimilarArtistsLoaded();
-    
+
     if ( !m_artist->biography().isEmpty() )
         onBiographyLoaded();
 
@@ -251,7 +266,7 @@ ArtistInfoWidget::onBiographyLoaded()
 {
     m_longDescription = m_artist->biography();
     emit longDescriptionChanged( m_longDescription );
-    
+
     ui->biography->setHtml( m_artist->biography() );
 }
 
@@ -264,7 +279,7 @@ ArtistInfoWidget::onArtistImageUpdated()
 
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
-    
+
     ui->cover->setPixmap( m_artist->cover( ui->cover->sizeHint() ) );
 }
 
