@@ -506,7 +506,7 @@ SettingsDialog::aclEntryClearButtonClicked()
     QMessageBox::StandardButton button = QMessageBox::question(
                            ui->stackedWidget,
                            tr( "Delete all Access Control entries?" ),
-                           tr( "Do you really want to delete all Access Control entries? You will be be asked for a decision again for each peer that you connect to." ),
+                           tr( "Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to." ),
                            QMessageBox::Ok | QMessageBox::Cancel,
                            QMessageBox::Ok
                          );
