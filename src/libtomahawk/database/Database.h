@@ -55,7 +55,6 @@ public:
     QString dbid() const;
 
     void loadIndex();
-    bool indexReady() const { return m_indexReady; }
     bool isReady() const { return m_ready; }
 
     DatabaseImpl* impl() const { return m_impl; }
@@ -76,10 +75,10 @@ private slots:
 
 private:
     bool m_ready;
+
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
     QList<DatabaseWorker*> m_workers;
-    bool m_indexReady;
     int m_maxConcurrentThreads;
 
     static Database* s_instance;
