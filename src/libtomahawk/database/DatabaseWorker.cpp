@@ -68,7 +68,7 @@ DatabaseWorker::~DatabaseWorker()
 void
 DatabaseWorker::run()
 {
-    m_dbimpl = m_db->impl()->clone();
+    m_dbimpl = Database::instance()->impl();
     tDebug() << "New db connection with name:" << m_dbimpl->database().connectionName();
     exec();
     qDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
