@@ -93,8 +93,8 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     if ( allowBtnRect.right() >= denyBtnRect.left() )
     {
-        allowBtnRect.moveLeft( minPixels / 2 );
-        denyBtnRect.moveRight( minPixels / 2 );
+        allowBtnRect.moveLeft( allowBtnRect.left() - minPixels / 2 );
+        denyBtnRect.moveLeft( denyBtnRect.left() + minPixels / 2 );
     }
 
     drawRoundedButton( painter, allowBtnRect, allowBtnRect.contains( m_savedHoverPos ) );
