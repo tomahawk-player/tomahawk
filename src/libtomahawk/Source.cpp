@@ -408,14 +408,18 @@ Source::trackTimerFired()
 }
 
 
+QString
+Source::lastCmdGuid() const
+{
+    QMutexLocker lock( &m_cmdMutex );
+    return m_lastCmdGuid;
+}
+
+
 void
 Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "addCommand", Qt::QueuedConnection, Q_ARG( const QSharedPointer<DatabaseCommand>, command ) );
-        return;
-    }
+    QMutexLocker lock( &m_cmdMutex );
 
     m_cmds << command;
     if ( !command->singletonCmd() )
@@ -433,6 +437,8 @@ Source::executeCommands()
         QMetaObject::invokeMethod( this, "executeCommands", Qt::QueuedConnection );
         return;
     }
+
+    QMutexLocker lock( &m_cmdMutex );
 
     if ( !m_cmds.isEmpty() )
     {

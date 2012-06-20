@@ -117,7 +117,7 @@ public slots:
 
 private slots:
     void dbLoaded( unsigned int id, const QString& fname );
-    QString lastCmdGuid() const { return m_lastCmdGuid; }
+    QString lastCmdGuid() const;
     void updateIndexWhenSynced();
 
     void setOffline();
@@ -138,7 +138,6 @@ private:
 
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;
-    QString m_lastCmdGuid;
 
     bool m_isLocal;
     bool m_online;
@@ -157,6 +156,8 @@ private:
     ControlConnection* m_cc;
     QList< QSharedPointer<DatabaseCommand> > m_cmds;
     int m_commandCount;
+    QString m_lastCmdGuid;
+    mutable QMutex m_cmdMutex;
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
