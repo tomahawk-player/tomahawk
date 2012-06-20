@@ -418,7 +418,7 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
 
     // lets try with artist only
     bool fail = false;
-    foreach ( const QModelIndex& i, indexes)
+    foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
@@ -532,7 +532,7 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
             const result_ptr& result = item->result();
             resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
         }
-        else if ( !item->result().isNull() )
+        else if ( !item->query().isNull() )
         {
             const query_ptr& query = item->query();
             resultStream << QString( "application/tomahawk.query.list" ) << qlonglong( &query );
