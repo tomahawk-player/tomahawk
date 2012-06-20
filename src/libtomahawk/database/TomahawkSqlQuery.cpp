@@ -102,7 +102,7 @@ TomahawkSqlQuery::commitTransaction()
         if ( isBusyError( lastError() ) )
             retries = 0;
 
-        tDebug() << "INFO: Retrying failed commit:" << retries << lastQuery() << lastError().text();
+        tDebug() << "INFO: Retrying failed commit:" << retries << lastError().text();
         TomahawkUtils::msleep( 10 );
     }
     
@@ -127,5 +127,5 @@ TomahawkSqlQuery::isBusyError( const QSqlError& error ) const
 {
     const QString text = error.text().trimmed().toLower();
 
-    return ( text.contains( "locked" ) || text.contains( "busy" ) || text.isEmpty() );
+    return ( text.contains( "no query" ) || text.contains( "locked" ) || text.contains( "busy" ) || text.isEmpty() );
 }
