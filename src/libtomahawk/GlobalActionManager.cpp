@@ -1383,7 +1383,7 @@ GlobalActionManager::openRdioLink( const QString& link )
 QString
 GlobalActionManager::hostname() const
 {
-    return QString( "http://stage.toma.hk" );
+    return QString( "http://toma.hk" );
 }
 
 
