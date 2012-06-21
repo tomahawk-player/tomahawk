@@ -42,7 +42,7 @@ Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
     , m_ready( false )
     , m_impl( new DatabaseImpl( dbname ) )
-    , m_workerRW( new DatabaseWorker( this, true ) )
+    , m_workerRW( new DatabaseWorker( this ) )
 {
     s_instance = this;
 
@@ -100,7 +100,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
         // create new thread if < WORKER_THREADS
         if ( m_workers.count() < m_maxConcurrentThreads )
         {
-            DatabaseWorker* worker = new DatabaseWorker( this, false );
+            DatabaseWorker* worker = new DatabaseWorker( this );
             worker->start();
 
             m_workers << worker;
