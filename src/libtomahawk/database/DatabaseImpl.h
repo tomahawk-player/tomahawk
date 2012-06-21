@@ -50,8 +50,8 @@ public:
 
     DatabaseImpl* clone() const;
 
-    TomahawkSqlQuery newquery() { return TomahawkSqlQuery( m_db ); }
-    QSqlDatabase& database() { return m_db; }
+    TomahawkSqlQuery newquery();
+    QSqlDatabase& database();
 
     int artistId( const QString& name_orig, bool autoCreate ); //also for composers!
     int trackId( int artistid, const QString& name_orig, bool autoCreate );

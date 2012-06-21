@@ -126,6 +126,22 @@ DatabaseImpl::~DatabaseImpl()
 }
 
 
+TomahawkSqlQuery
+DatabaseImpl::newquery()
+{
+    QMutexLocker lock( &m_mutex );
+    return TomahawkSqlQuery( m_db );
+}
+
+
+QSqlDatabase&
+DatabaseImpl::database()
+{
+    QMutexLocker lock( &m_mutex );
+    return m_db;
+}
+
+
 DatabaseImpl*
 DatabaseImpl::clone() const
 {
