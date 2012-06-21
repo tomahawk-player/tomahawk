@@ -101,10 +101,16 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
+    QFont f = font();
+    f.setBold( true );
+    f.setPixelSize( 18 );
+    ui->artistLabel->setFont( f );
+
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
     p.setColor( QPalette::Text, Qt::white );
 
+    ui->artistLabel->setPalette( p );
     ui->biography->setPalette( p );
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
@@ -219,6 +225,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
                                 SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+
+    ui->artistLabel->setText( artist->name() );
 
     if ( !m_artist->albums( Mixed ).isEmpty() )
         onAlbumsFound( m_artist->albums( Mixed ), Mixed );
