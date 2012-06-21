@@ -228,6 +228,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     ui->artistLabel->setText( artist->name() );
 
+    m_topHitsModel->startLoading();
+
     if ( !m_artist->albums( Mixed ).isEmpty() )
         onAlbumsFound( m_artist->albums( Mixed ), Mixed );
 
@@ -258,6 +260,7 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
 {
     Q_UNUSED( mode );
 
+    m_topHitsModel->finishLoading();
     m_topHitsModel->append( queries );
 }
 
