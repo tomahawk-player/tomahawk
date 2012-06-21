@@ -17,7 +17,7 @@ Version 0.5.0:
     * New grid-like view with direct playback controls.
     * You can now browse new releases (by genre).
     * Added social sharing widget, which allows you to tweet about a song.
-    * Added a track page showing a song's lyrics and other similar tracks.
+    * Added a track page showing a song's similar tracks and statistics.
     * Separate Loved Tracks and Recently Played views per source.
     * Combine an artist's albums into a single aggregated view.
     * Added translations for Arabic, French, Bulgarian, Spanish and more.
