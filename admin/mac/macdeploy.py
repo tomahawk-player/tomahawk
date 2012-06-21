@@ -513,7 +513,7 @@ except:
   print 'Failed to find tomahawk_crash_reporter'
 
 try:
-  FixPlugin(LIBSPOTIFY_PATH, "../MacOS")
+  FixPlugin(LIBSPOTIFY_PATH, "../Frameworks")
 except:
   print "Failed to copy libspotify from os: %s" % LIBSPOTIFY_PATH
 
