@@ -85,12 +85,12 @@ DatabaseImpl::DatabaseImpl( const QString& dbname )
 }
 
 
-DatabaseImpl::DatabaseImpl( const QString &dbname, const QString &dbid )
+DatabaseImpl::DatabaseImpl( const QString& dbname, bool internal )
     : QObject( (QObject*) QThread::currentThread() )
 {
+    Q_UNUSED( internal );
     openDatabase( dbname, false );
     init();
-    m_dbid = dbid;
 }
 
 
@@ -142,12 +142,15 @@ DatabaseImpl::database()
 }
 
 
-QPair< QString, QString >
-DatabaseImpl::cloneArgs() const
+DatabaseImpl*
+DatabaseImpl::clone() const
 {
     QMutexLocker lock( &m_mutex );
-    QPair< QString, QString > args( m_db.databaseName(), m_dbid );
-    return args;
+
+    DatabaseImpl* impl = new DatabaseImpl( m_db.databaseName(), true );
+    impl->setDatabaseID( m_dbid );
+    impl->setFuzzyIndex( m_fuzzyIndex );
+    return impl;
 }
 
 
