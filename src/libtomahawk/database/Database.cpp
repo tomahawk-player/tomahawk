@@ -67,6 +67,7 @@ Database::~Database()
 
     qDeleteAll( m_workers );
     delete m_workerRW;
+    qDeleteAll( m_implHash.values() );
     delete m_impl;
 }
 

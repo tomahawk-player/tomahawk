@@ -44,7 +44,6 @@
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname )
-    : QObject( (QObject*) QThread::currentThread() )
 {
     QTime t;
     t.start();
@@ -86,7 +85,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname )
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, bool internal )
-    : QObject( (QObject*) QThread::currentThread() )
 {
     Q_UNUSED( internal );
     openDatabase( dbname, false );
