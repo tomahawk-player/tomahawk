@@ -82,6 +82,7 @@ Database::loadIndex()
 void
 Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 {
+    Q_ASSERT( m_ready );
     qDebug() << "Enqueueing" << lc.count() << "commands to rw thread";
     m_workerRW->enqueue( lc );
 }
@@ -90,6 +91,7 @@ Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 void
 Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 {
+    Q_ASSERT( m_ready );
     if ( lc->doesMutates() )
     {
         qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
@@ -134,6 +136,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 DatabaseImpl*
 Database::impl()
 {
+    Q_ASSERT( m_ready );
     QMutexLocker lock( &m_mutex );
 
     QThread* thread = QThread::currentThread();
