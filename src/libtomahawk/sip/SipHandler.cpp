@@ -32,6 +32,7 @@
 #include "FuncTimeout.h"
 
 #include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
 #include "SourceList.h"
@@ -130,7 +131,7 @@ SipHandler::onPeerOnline( const QString& jid )
         QString key = uuid();
         ControlConnection* conn = new ControlConnection( Servent::instance(), QString() );
 
-        const QString& nodeid = Database::instance()->dbid();
+        const QString& nodeid = Database::instance()->impl()->dbid();
         conn->setName( jid.left( jid.indexOf( "/" ) ) );
         conn->setId( nodeid );
 

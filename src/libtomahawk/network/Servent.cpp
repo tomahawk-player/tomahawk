@@ -34,6 +34,7 @@
 #include "Connection.h"
 #include "ControlConnection.h"
 #include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "StreamConnection.h"
 #include "SourceList.h"
 
@@ -437,7 +438,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "key", tmpkey );
         m.insert( "offer", key );
         m.insert( "port", externalPort() );
-        m.insert( "controlid", Database::instance()->dbid() );
+        m.insert( "controlid", Database::instance()->impl()->dbid() );
 
         QJson::Serializer ser;
         orig_conn->sendMsg( Msg::factory( ser.serialize(m), Msg::JSON ) );
@@ -527,7 +528,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
     m["conntype"]  = "accept-offer";
     m["key"]       = key;
     m["port"]      = externalPort();
-    m["nodeid"]    = Database::instance()->dbid();
+    m["nodeid"]    = Database::instance()->impl()->dbid();
 
     conn->setFirstMessage( m );
     if( name.length() )
@@ -563,7 +564,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
         m["conntype"]  = "accept-offer";
         m["key"]       = key;
         m["port"]      = externalPort();
-        m["controlid"] = Database::instance()->dbid();
+        m["controlid"] = Database::instance()->impl()->dbid();
         conn->setFirstMessage( m );
     }
 
@@ -602,7 +603,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
     m["conntype"]  = "push-offer";
     m["key"]       = theirkey;
     m["port"]      = externalPort();
-    m["controlid"] = Database::instance()->dbid();
+    m["controlid"] = Database::instance()->impl()->dbid();
     new_conn->setFirstMessage( m );
     createParallelConnection( orig_conn, new_conn, QString() );
 }

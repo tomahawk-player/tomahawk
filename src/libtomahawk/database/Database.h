@@ -52,8 +52,6 @@ public:
     explicit Database( const QString& dbname, QObject* parent = 0 );
     ~Database();
 
-    QString dbid() const;
-
     void loadIndex();
     bool isReady() const { return m_ready; }
 

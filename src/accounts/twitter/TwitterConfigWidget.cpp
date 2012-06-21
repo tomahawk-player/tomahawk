@@ -24,6 +24,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "Source.h"
 
 #include "TomahawkOAuthTwitter.h"
@@ -241,7 +242,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postGotTomahawkStatusUpdateReply(const QTweetStatus &) ) );
         connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
         QString uuid = QUuid::createUuid();
-        QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
+        QString message = QString( "Got Tomahawk? {" ) + Database::instance()->impl()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
         if ( m_postGTtype == "@Mention" )
         {
             QString user = m_ui->twitterUserTweetLineEdit->text();
@@ -257,7 +258,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         connect( statUpdate, SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( postGotTomahawkDirectMessageReply(const QTweetDMStatus &) ) );
         connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
         QString uuid = QUuid::createUuid();
-        QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
+        QString message = QString( "Got Tomahawk? {" ) + Database::instance()->impl()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
         QString user = m_ui->twitterUserTweetLineEdit->text();
         if ( user.startsWith( "@" ) )
             user.remove( 0, 1 );

@@ -144,10 +144,3 @@ Database::impl()
 
     return m_implHash.value( thread );
 }
-
-
-QString
-Database::dbid() const
-{
-    return m_impl->dbid();
-}

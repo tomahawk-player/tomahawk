@@ -36,6 +36,7 @@
 #include <utils/TomahawkUtils.h>
 #include <TomahawkSettings.h>
 #include <database/Database.h>
+#include <database/DatabaseImpl.h>
 #include <network/Servent.h>
 #include "Source.h"
 
@@ -63,10 +64,10 @@ TwitterSipPlugin::TwitterSipPlugin( Tomahawk::Accounts::Account* account )
 
     m_configuration = account->configuration();
     qDebug() << "SIP configuration:" << m_configuration << m_configuration[ "cachedpeers" ];
-    if ( Database::instance()->dbid() != m_account->configuration()[ "saveddbid" ].toString() )
+    if ( Database::instance()->impl()->dbid() != m_account->configuration()[ "saveddbid" ].toString() )
     {
         m_configuration[ "cachedpeers" ] = QVariantHash();
-        m_configuration[ "saveddbid" ] = Database::instance()->dbid();
+        m_configuration[ "saveddbid" ] = Database::instance()->impl()->dbid();
         syncConfig();
     }
 
@@ -226,7 +227,7 @@ TwitterSipPlugin::registerOffers( const QStringList &peerList )
     {
         QVariantHash peerData = m_cachedPeers[screenName].toHash();
 
-        if ( peerData.contains( "onod" ) && peerData["onod"] != Database::instance()->dbid() )
+        if ( peerData.contains( "onod" ) && peerData["onod"] != Database::instance()->impl()->dbid() )
         {
             m_cachedPeers.remove( screenName );
             m_configuration[ "cachedpeers" ] = m_cachedPeers;
@@ -313,7 +314,7 @@ TwitterSipPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenN
     else
         qDebug() << "TwitterSipPlugin parsed node " << node << " out of the tweet";
 
-    if ( node == Database::instance()->dbid() )
+    if ( node == Database::instance()->impl()->dbid() )
     {
         qDebug() << "My dbid found; ignoring";
         return;
@@ -489,7 +490,7 @@ TwitterSipPlugin::directMessages( const QList< QTweetDMStatus > &messages )
 
             QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), Q_ARG( QVariantHash, peerData ) );
 
-            if ( Database::instance()->dbid().startsWith( splitNode[1] ) )
+            if ( Database::instance()->impl()->dbid().startsWith( splitNode[1] ) )
             {
                 qDebug() << "TwitterSipPlugin found message destined for this node; destroying it";
                 if ( !m_directMessageDestroy.isNull() )
@@ -533,12 +534,12 @@ TwitterSipPlugin::registerOffer( const QString &screenName, const QVariantHash &
 
     if ( !_peerData.contains( "okey" ) ||
          !_peerData.contains( "onod" ) ||
-         ( _peerData.contains( "onod" ) && _peerData["onod"] != Database::instance()->dbid() ) )
+         ( _peerData.contains( "onod" ) && _peerData["onod"] != Database::instance()->impl()->dbid() ) )
     {
         QString okey = QUuid::createUuid().toString().split( '-' ).last();
         okey.chop( 1 );
         _peerData["okey"] = QVariant::fromValue< QString >( okey );
-        _peerData["onod"] = QVariant::fromValue< QString >( Database::instance()->dbid() );
+        _peerData["onod"] = QVariant::fromValue< QString >( Database::instance()->impl()->dbid() );
         peersChanged = true;
         needToAddToCache = true;
         needToSend = true;
@@ -593,7 +594,7 @@ TwitterSipPlugin::sendOffer( const QString &screenName, const QVariantHash &peer
     qDebug() << Q_FUNC_INFO;
     QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3*%4:PKey=%5" ).arg( peerData["ohst"].toString() )
                                                                                       .arg( peerData["oprt"].toString() )
-                                                                                      .arg( Database::instance()->dbid() )
+                                                                                      .arg( Database::instance()->impl()->dbid() )
                                                                                       .arg( peerData["node"].toString().left( 8 ) )
                                                                                       .arg( peerData["okey"].toString() );
     qDebug() << "TwitterSipPlugin sending message to " << screenName << ": " << offerString;

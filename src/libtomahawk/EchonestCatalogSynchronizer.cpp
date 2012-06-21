@@ -20,6 +20,7 @@
 
 #include "Collection.h"
 #include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "database/DatabaseCommand_SetCollectionAttributes.h"
 #include "database/DatabaseCommand_LoadFiles.h"
@@ -134,12 +135,13 @@ void
 EchonestCatalogSynchronizer::uploadDb()
 {
     // create two catalogs: uuid_song, and uuid_artist.
-    QNetworkReply* r =  Echonest::Catalog::create( QString( "%1_song" ).arg( Database::instance()->dbid() ), Echonest::CatalogTypes::Song );
+    QNetworkReply* r =  Echonest::Catalog::create( QString( "%1_song" ).arg( Database::instance()->impl()->dbid() ), Echonest::CatalogTypes::Song );
     connect( r, SIGNAL( finished() ), this, SLOT( songCreateFinished() ) );
 
 //     r =  Echonest::Catalog::create( QString( "%1_artist" ).arg( Database::instance()->dbid() ), Echonest::CatalogTypes::Artist );
 //     connect( r, SIGNAL( finished() ), this, SLOT( artistCreateFinished() ) );
 }
+
 
 void
 EchonestCatalogSynchronizer::songCreateFinished()

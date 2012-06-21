@@ -19,6 +19,7 @@
 #include "SourceList.h"
 
 #include "database/Database.h"
+#include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LoadAllSources.h"
 #include "network/RemoteCollection.h"
 #include "network/ControlConnection.h"
@@ -189,7 +190,7 @@ SourceList::get( const QString& username, const QString& friendlyName )
     QMutexLocker lock( &m_mut );
 
     source_ptr source;
-    if ( Database::instance()->dbid() == username )
+    if ( Database::instance()->impl()->dbid() == username )
     {
         return m_local;
     }
