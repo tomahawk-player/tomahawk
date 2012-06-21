@@ -48,7 +48,7 @@ public:
     DatabaseImpl( const QString& dbname );
     ~DatabaseImpl();
 
-    DatabaseImpl* clone() const;
+    QPair< QString, QString > cloneArgs() const;
 
     TomahawkSqlQuery newquery();
     QSqlDatabase& database();
@@ -82,9 +82,9 @@ signals:
     void indexReady();
 
 private:
-    DatabaseImpl( const QString& dbname, bool internal );
+    DatabaseImpl( const QString &dbname, const QString &dbid );
+    FuzzyIndex* fuzzyIndex() const { return m_fuzzyIndex; }
     void setFuzzyIndex( FuzzyIndex* fi ) { m_fuzzyIndex = fi; }
-    void setDatabaseID( const QString& dbid ) { m_dbid = dbid; }
 
     void init();
     bool openDatabase( const QString& dbname, bool checkSchema = true );
@@ -101,6 +101,8 @@ private:
     QString m_dbid;
     FuzzyIndex* m_fuzzyIndex;
     mutable QMutex m_mutex;
+
+    friend class Database;
 };
 
 #endif // DATABASEIMPL_H

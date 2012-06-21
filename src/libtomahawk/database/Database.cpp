@@ -138,7 +138,9 @@ Database::impl()
     QThread* thread = QThread::currentThread();
     if ( !m_implHash.contains( thread ) )
     {
-        DatabaseImpl* impl = m_impl->clone();
+        QPair< QString, QString > args = m_impl->cloneArgs();
+        DatabaseImpl* impl = new DatabaseImpl( args.first, args.second );
+        impl->setFuzzyIndex( m_impl->fuzzyIndex() );
         m_implHash.insert( thread, impl );
     }
 
