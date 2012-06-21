@@ -328,10 +328,9 @@ DatabaseImpl::artistId( const QString& name_orig, bool autoCreate )
     int id = 0;
     QString sortname = DatabaseImpl::sortname( name_orig );
 
+    QString queryString = QString( "SELECT id FROM artist WHERE sortname = %1" ).arg( sortname );
     TomahawkSqlQuery query = newquery();
-    query.prepare( "SELECT id FROM artist WHERE sortname = ?" );
-    query.addBindValue( sortname );
-    query.exec();
+    query.exec( queryString );
     if ( query.next() )
     {
         id = query.value( 0 ).toInt();
