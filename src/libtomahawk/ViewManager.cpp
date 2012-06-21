@@ -611,19 +611,22 @@ ViewManager::historyPages() const
 void
 ViewManager::destroyPage( ViewPage* page )
 {
+    if ( !page )
+        return;
+
+    tDebug() << Q_FUNC_INFO << "Deleting page:" << page->title();
     if ( m_currentPage == page )
     {
+        delete page;
         m_currentPage = 0;
-        historyBack();
-        return;
-    }
 
-    QList< Tomahawk::ViewPage* > p = historyPages();
-    if ( p.contains( page ) )
+        historyBack();
+    }
+    else if ( historyPages().contains( page ) )
     {
         m_pageHistoryBack.removeAll( page );
         m_pageHistoryFwd.removeAll( page );
-        
+
         emit historyBackAvailable( m_pageHistoryBack.count() );
         emit historyForwardAvailable( m_pageHistoryFwd.count() );
 
