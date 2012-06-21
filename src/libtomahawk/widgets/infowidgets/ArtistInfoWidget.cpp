@@ -132,7 +132,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
     TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
 
-    ui->biography->setStyleSheet( "QTextBrowser { background-color: transparent; }" );
+    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
 
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
