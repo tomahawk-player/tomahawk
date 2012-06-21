@@ -95,7 +95,8 @@ StreamConnection::~StreamConnection()
         // protected, we could expose it:
         //m_iodev->setErrorString("FTConnection providing data went away mid-transfer");
 
-        ((BufferIODevice*)m_iodev.data())->inputComplete();
+        if ( !m_iodev.isNull() )
+            ((BufferIODevice*)m_iodev.data())->inputComplete();
     }
 
     Servent::instance()->onStreamFinished( this );
