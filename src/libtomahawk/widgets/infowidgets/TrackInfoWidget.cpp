@@ -186,7 +186,8 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->albumLabel->setVisible( !query->album().isEmpty() );
 
     m_relatedTracksModel->clear();
-    
+    m_relatedTracksModel->startLoading();
+
     if ( !m_query->similarTracks().isEmpty() )
         onSimilarTracksLoaded();
 }
@@ -244,6 +245,7 @@ void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
     m_relatedTracksModel->append( m_query->similarTracks() );
+    m_relatedTracksModel->finishLoading();
 }
 
 

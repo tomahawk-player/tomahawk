@@ -232,7 +232,9 @@ GridView::verifySize()
     const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
     const int newHeight = rows * m_model->itemSize().height();
 
-    setFixedHeight( newHeight );
+    if ( newHeight > 0 )
+        setFixedHeight( newHeight );
+
     m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
 }
 
