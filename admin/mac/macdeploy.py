@@ -27,6 +27,8 @@ FRAMEWORK_SEARCH_PATH=[
 
 LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.18.1.1/lib', '.']
 
+LIBSPOTIFY_VERSION = subprocess.check_output("brew ls -version libspotify | tr -s \" \" \"\\\\012\" | tail -n 1", shell=True).strip()
+LIBSPOTIFY_PATH = "/usr/local/lib/libspotify.%s.dylib" % LIBSPOTIFY_VERSION
 
 VLC_PLUGINS=[
   'libaccess_attachment_plugin.dylib',
@@ -508,6 +510,11 @@ try:
   FixPlugin('tomahawk_crash_reporter', '../MacOS')
 except:
   print 'Failed to find tomahawk_crash_reporter'
+
+try:
+  FixPlugin(LIBSPOTIFY_PATH, "../MacOS")
+except:
+  print "Failed to copy libspotify from os: %s" % LIBSPOTIFY_PATH
 
 for plugin in QT_PLUGINS:
   FixPlugin(FindQtPlugin(plugin), os.path.dirname(plugin))
