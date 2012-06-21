@@ -63,6 +63,13 @@ TomahawkSqlQuery::exec( const QString& query )
 bool
 TomahawkSqlQuery::exec()
 {
+    bool log = false;
+#ifdef TOMAHAWK_QUERY_ANALYZE
+    log = true;
+#endif
+    if ( log )
+        tLog( LOGSQL ) << "TomahawkSqlQuery::exec running in thread " << QThread::currentThread();
+        
     QTime t;
     t.start();
 
@@ -81,14 +88,9 @@ TomahawkSqlQuery::exec()
         showError();
 
     int e = t.elapsed();
-    bool log = ( e >= QUERY_THRESHOLD );
 
-#ifdef TOMAHAWK_QUERY_ANALYZE
-    log = true;
-#endif
-    
-    if ( log )
-        tLog( LOGSQL ) << "TomahawkSqlQuery (" << t.elapsed() << "ms ):" << lastQuery();
+    if ( log || e >= QUERY_THRESHOLD )
+        tLog( LOGSQL ) << "TomahawkSqlQuery::exec (" << t.elapsed() << "ms ):" << lastQuery();
     
     return ret;
 }
@@ -97,6 +99,13 @@ TomahawkSqlQuery::exec()
 bool
 TomahawkSqlQuery::commitTransaction()
 {
+    bool log = false;
+#ifdef TOMAHAWK_QUERY_ANALYZE
+    log = true;
+#endif
+    if ( log )
+        tLog( LOGSQL ) << "TomahawkSqlQuery::commitTransaction running in thread " << QThread::currentThread();
+    
     unsigned int retries = 0;
     while ( !m_db.commit() && ++retries < 10 )
     {

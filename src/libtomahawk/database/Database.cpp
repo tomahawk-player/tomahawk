@@ -51,7 +51,7 @@ Database::Database( const QString& dbname, QObject* parent )
     else
         m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
 
-    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
+    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads; current (GUI) thread is " << QThread::currentThread();
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
@@ -142,6 +142,7 @@ Database::impl()
     QThread* thread = QThread::currentThread();
     if ( !m_implHash.contains( thread ) )
     {
+        tDebug() << Q_FUNC_INFO << "Creating database impl for thread " << QThread::currentThread();
         DatabaseImpl* impl = m_impl->clone();
         m_implHash.insert( thread, impl );
     }
