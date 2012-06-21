@@ -681,7 +681,7 @@ SpotifyAccount::icon() const
 QWidget*
 SpotifyAccount::configurationWidget()
 {
-    if ( m_spotifyResolver.isNull() )
+    if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
         return 0;
 
     if ( m_configWidget.isNull() )
