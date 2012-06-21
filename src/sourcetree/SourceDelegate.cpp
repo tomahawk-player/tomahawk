@@ -128,6 +128,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
         type == SourcesModel::AutomaticPlaylist ||
         type == SourcesModel::Station ||
         type == SourcesModel::TemporaryPage ||
+        type == SourcesModel::LovedTracksPage ||
         type == SourcesModel::GenericPage );
     const bool playing = ( AudioEngine::instance()->isPlaying() || AudioEngine::instance()->isPaused() );
 
