@@ -18,6 +18,7 @@
 import os
 import re
 import subprocess
+import commands
 import sys
 
 FRAMEWORK_SEARCH_PATH=[
@@ -27,7 +28,7 @@ FRAMEWORK_SEARCH_PATH=[
 
 LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.18.1.1/lib', '.']
 
-LIBSPOTIFY_VERSION = subprocess.check_output("brew ls -version libspotify | tr -s \" \" \"\\\\012\" | tail -n 1", shell=True).strip()
+LIBSPOTIFY_VERSION = commands.getoutput("brew ls -version libspotify | tr -s \" \" \"\\\\012\" | tail -n 1").strip()
 LIBSPOTIFY_PATH = "/usr/local/lib/libspotify.%s.dylib" % LIBSPOTIFY_VERSION
 
 VLC_PLUGINS=[
