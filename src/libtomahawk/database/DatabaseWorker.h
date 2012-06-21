@@ -39,7 +39,7 @@ class DatabaseWorker : public QThread
 Q_OBJECT
 
 public:
-    DatabaseWorker( Database* );
+    DatabaseWorker( Database*, bool mutates );
     ~DatabaseWorker();
 
     bool busy() const { return m_outstanding > 0; }

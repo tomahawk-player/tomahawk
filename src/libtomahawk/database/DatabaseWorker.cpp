@@ -34,11 +34,14 @@
     //#define DEBUG_TIMING TRUE
 #endif
 
-DatabaseWorker::DatabaseWorker( Database* db )
+DatabaseWorker::DatabaseWorker( Database* db, bool mutates )
     : QThread()
     , m_db( db )
     , m_outstanding( 0 )
 {
+    Q_UNUSED( db );
+    Q_UNUSED( mutates );
+
     moveToThread( this );
 
     qDebug() << "CTOR DatabaseWorker" << this->thread();
