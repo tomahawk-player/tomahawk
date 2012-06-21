@@ -54,7 +54,8 @@ TomahawkSqlQuery::escape( QString identifier )
 bool
 TomahawkSqlQuery::exec( const QString& query )
 {
-    prepare( query );
+    bool prepareResult = prepare( query );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Query preparation successful?" << ( prepareResult ? "true" : "false" );
     return exec();
 }
 
