@@ -41,7 +41,8 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="71"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation>Willst du %1 erlauben sich mit dir zu verbinden und deine Sammlung anzuhören?</translation>
+        <translation>Willst du %1
+erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
@@ -1794,17 +1795,17 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="366"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Sync with Spotify</source>
         <translation>Mit Spotify synchronisieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="378"/>
         <source>Stop syncing with Spotify</source>
         <translation>Synchronisation beenden</translation>
     </message>
@@ -2847,7 +2848,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="593"/>
+        <location filename="../src/TomahawkApp.cpp" line="596"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>

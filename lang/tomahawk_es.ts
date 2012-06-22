@@ -1796,17 +1796,17 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="366"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Sync with Spotify</source>
         <translation>Sincronizar con Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="378"/>
         <source>Stop syncing with Spotify</source>
         <translation>Dejar de sincronizar con Spotify</translation>
     </message>
@@ -2851,7 +2851,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="593"/>
+        <location filename="../src/TomahawkApp.cpp" line="596"/>
         <source>My Collection</source>
         <translation>Mi colección</translation>
     </message>

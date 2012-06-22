@@ -1797,17 +1797,17 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="366"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Sync with Spotify</source>
         <translation>Sincronitza amb Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="378"/>
         <source>Stop syncing with Spotify</source>
         <translation>Atura la sincronització amb Spotify</translation>
     </message>
@@ -2852,7 +2852,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="593"/>
+        <location filename="../src/TomahawkApp.cpp" line="596"/>
         <source>My Collection</source>
         <translation>La meva Col·lecció</translation>
     </message>

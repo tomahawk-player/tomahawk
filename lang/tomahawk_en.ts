@@ -1798,17 +1798,17 @@ connect and stream from you?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="366"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
         <source>Sync with Spotify</source>
         <translation>Sync with Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="370"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Re-enable syncing with Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="374"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="378"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stop syncing with Spotify</translation>
     </message>
@@ -2853,7 +2853,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="593"/>
+        <location filename="../src/TomahawkApp.cpp" line="596"/>
         <source>My Collection</source>
         <translation>My Collection</translation>
     </message>
