@@ -69,7 +69,7 @@ TomahawkSqlQuery::exec()
 #endif
     if ( log )
         tLog( LOGSQL ) << "TomahawkSqlQuery::exec running in thread " << QThread::currentThread();
-        
+
     QTime t;
     t.start();
 
@@ -88,10 +88,9 @@ TomahawkSqlQuery::exec()
         showError();
 
     int e = t.elapsed();
-
     if ( log || e >= QUERY_THRESHOLD )
         tLog( LOGSQL ) << "TomahawkSqlQuery::exec (" << t.elapsed() << "ms ):" << lastQuery();
-    
+
     return ret;
 }
 
