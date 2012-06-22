@@ -122,24 +122,23 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
             QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( ACLRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
         return ACLRegistry::NotFound;
     }
-    tLog() << Q_FUNC_INFO << "in right thread";
-    //FIXME: Remove when things are working
-//     emit aclResult( dbid, username, ACLRegistry::Stream );
-//     return ACLRegistry::NotFound;
 
 #ifndef ENABLE_HEADLESS
     if ( Tomahawk::Accounts::AccountManager::instance() )
     {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking account friendly names against" << username;
         Tomahawk::Accounts::AccountManager* accountManager = Tomahawk::Accounts::AccountManager::instance();
         QList< Tomahawk::Accounts::Account* > accounts = accountManager->accounts();
         foreach( Tomahawk::Accounts::Account* account, accounts )
         {
-            QVariantHash credentials = account->credentials();
-            if ( credentials.contains( "username" ) && credentials[ "username" ].toString() == username )
+            if ( !( account->types() & Tomahawk::Accounts::SipType ) )
+                continue;
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking against account friendly name" << account->accountFriendlyName();
+            if ( account->accountFriendlyName() == username )
             {
                 if ( !skipEmission )
                     emit aclResult( dbid, username, ACLRegistry::Stream );
-                return ACLRegistry::Stream; 
+                return ACLRegistry::Stream;
             }
         }
     }
