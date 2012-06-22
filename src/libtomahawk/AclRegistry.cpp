@@ -27,6 +27,8 @@
 #include "Source.h"
 
 #ifndef ENABLE_HEADLESS
+    #include "accounts/AccountManager.h"
+    #include "accounts/Account.h"
     #include "jobview/AclJobItem.h"
     #include "jobview/JobStatusView.h"
     #include "jobview/JobStatusModel.h"
@@ -124,6 +126,25 @@ ACLRegistry::isAuthorizedUser( const QString& dbid, const QString &username, ACL
     //FIXME: Remove when things are working
 //     emit aclResult( dbid, username, ACLRegistry::Stream );
 //     return ACLRegistry::NotFound;
+
+#ifndef ENABLE_HEADLESS
+    if ( Tomahawk::Accounts::AccountManager::instance() )
+    {
+        Tomahawk::Accounts::AccountManager* accountManager = Tomahawk::Accounts::AccountManager::instance();
+        QList< Tomahawk::Accounts::Account* > accounts = accountManager->accounts();
+        foreach( Tomahawk::Accounts::Account* account, accounts )
+        {
+            QVariantHash credentials = account->credentials();
+            if ( credentials.contains( "username" ) && credentials[ "username" ].toString() == username )
+            {
+                if ( !skipEmission )
+                    emit aclResult( dbid, username, ACLRegistry::Stream );
+                return ACLRegistry::Stream; 
+            }
+        }
+    }
+#endif
+    
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
     while ( i.hasNext() )
