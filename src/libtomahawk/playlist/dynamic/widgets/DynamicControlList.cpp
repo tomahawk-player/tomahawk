@@ -169,7 +169,7 @@ DynamicControlList::removeControl()
     m_controls.removeAll( w );
 
     m_generator->removeControl( w->control() );
-    delete w;
+    w->deleteLater();
 
     emit controlsChanged( false );
 }
