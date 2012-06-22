@@ -51,7 +51,7 @@ public:
     QList<Tomahawk::source_ptr> sources( bool onlyOnline = false ) const;
     unsigned int count() const;
 
-    Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString() );
+    Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString(), bool autoCreate = false );
     Tomahawk::source_ptr get( int id ) const;
 
 signals:

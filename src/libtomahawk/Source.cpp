@@ -67,7 +67,7 @@ Source::Source( int id, const QString& username )
 
     m_currentTrackTimer.setSingleShot( true );
     connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
-    
+
     if ( m_isLocal )
     {
         connect( Accounts::AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( setOnline() ) );
@@ -251,7 +251,7 @@ Source::setOffline()
 void
 Source::setOnline()
 {
-    qDebug() << Q_FUNC_INFO << friendlyName();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << friendlyName();
     if ( m_online )
         return;
 
