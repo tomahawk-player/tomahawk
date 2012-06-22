@@ -136,13 +136,12 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 DatabaseImpl*
 Database::impl()
 {
-    Q_ASSERT( m_ready );
     QMutexLocker lock( &m_mutex );
 
     QThread* thread = QThread::currentThread();
     if ( !m_implHash.contains( thread ) )
     {
-        tDebug() << Q_FUNC_INFO << "Creating database impl for thread " << QThread::currentThread();
+        tDebug() << Q_FUNC_INFO << "Creating database impl for thread" << QThread::currentThread();
         DatabaseImpl* impl = m_impl->clone();
         m_implHash.insert( thread, impl );
     }
