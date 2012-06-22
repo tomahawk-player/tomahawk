@@ -291,7 +291,11 @@ SpotifyAccount::resolverInstalled(const QString& resolverId)
     {
         // We requested this install, so we want to launch it
         hookupResolver();
-        AccountManager::instance()->enableAccount( this );
+
+        if ( enabled() )
+            authenticate();
+        else
+            AccountManager::instance()->enableAccount( this );
     }
 }
 
