@@ -767,22 +767,19 @@ Servent::printCurrentTransfers()
 bool
 Servent::isIPWhitelisted( QHostAddress ip )
 {
-    typedef QPair<QHostAddress, int> range;
-    static QList<range> whitelist;
-    if( whitelist.isEmpty() )
+    typedef QPair< QHostAddress, int > range;
+    QList< range > subnetEntries;
+    
+    QList< QNetworkInterface > networkInterfaces = QNetworkInterface::allInterfaces();
+    foreach( QNetworkInterface interface, networkInterfaces )
     {
-        whitelist << range( QHostAddress( "10.0.0.0" ), 8 )
-                  << range( QHostAddress( "172.16.0.0" ), 12 )
-                  << range( QHostAddress( "192.168.0.0" ), 16 )
-                  << range( QHostAddress( "169.254.0.0" ), 16 )
-                  << range( QHostAddress( "127.0.0.0" ), 24 );
-
-//        tDebug( LOGVERBOSE ) << "Loaded whitelist IP range:" << whitelist;
+        QList< QNetworkAddressEntry > addressEntries = interface.addressEntries();
+        foreach( QNetworkAddressEntry addressEntry, addressEntries )
+        {
+            if ( ip.isInSubnet( addressEntry.ip(), addressEntry.prefixLength() ) )
+                return true;
+        }
     }
-
-    foreach( const range& r, whitelist )
-        if( ip.isInSubnet( r ) )
-            return true;
 
     return false;
 }
