@@ -443,8 +443,10 @@ void ScriptResolver::startProcess()
 
     if( interpreter.isEmpty() )
     {
+#ifndef Q_OS_WIN
         const QFileInfo info( runPath );
         m_proc.setWorkingDirectory( info.absolutePath() );
+#endif
         m_proc.start( runPath );
     }
     else
