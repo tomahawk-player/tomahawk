@@ -15,7 +15,7 @@ SET( TOMAHAWK_VERSION_MAJOR 0 )
 SET( TOMAHAWK_VERSION_MINOR 5 )
 SET( TOMAHAWK_VERSION_PATCH 0 )
 
-SET( TOMAHAWK_VERSION_RC 0 )
+#SET( TOMAHAWK_VERSION_RC 0 )
 
 # enforce proper symbol exporting on all platforms
 add_definitions( "-fvisibility=hidden" )
