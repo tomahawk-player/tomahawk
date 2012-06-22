@@ -121,6 +121,9 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+#ifndef ENABLE_HEADLESS
+    , m_mainwindow( 0 )
+#endif
     , m_headless( false )
     , m_loaded( false )
 {
@@ -188,7 +191,6 @@ TomahawkApp::init()
 #ifdef ENABLE_HEADLESS
     m_headless = true;
 #else
-    m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
@@ -360,7 +362,8 @@ TomahawkApp::~TomahawkApp()
     if ( !m_connector.isNull() )
         delete m_connector.data();
 
-    Pipeline::instance()->stop();
+    if ( Pipeline::instance() )
+        Pipeline::instance()->stop();
 
     if ( !m_servent.isNull() )
         delete m_servent.data();

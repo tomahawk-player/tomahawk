@@ -166,7 +166,10 @@ main( int argc, char *argv[] )
         a.loadUrl( arg );
     }
 
-    int returnCode = a.exec();
+    int returnCode = 0;
+    if ( guard.isPrimaryInstance() )
+        returnCode = a.exec();
+
 #ifdef Q_OS_WIN
     // clean up keyboard hook
     if ( hKeyboardHook )
