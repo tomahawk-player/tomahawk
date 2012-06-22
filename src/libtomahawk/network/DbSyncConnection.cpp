@@ -47,6 +47,7 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
     : Connection( s )
     , m_source( src )
     , m_state( UNKNOWN )
+    , m_fetchCount( 0 )
 {
     qDebug() << Q_FUNC_INFO << src->id() << thread();
 
@@ -127,6 +128,7 @@ DBSyncConnection::check()
 
     if ( m_source->lastCmdGuid().isEmpty() )
     {
+        tDebug() << "Fetching lastCmdGuid from database!";
         DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
         connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
@@ -225,6 +227,8 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
     if ( m.value( "method" ).toString() == "fetchops" )
     {
+        ++m_fetchCount;
+        tDebug() << "Fetching new dbops:" << m["lastop"].toString() << m_fetchCount;
         m_uscache = m;
         sendOps();
         return;
@@ -232,7 +236,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
     if ( m.value( "method" ).toString() == "trigger" )
     {
-        tLog( LOGVERBOSE ) << "Got trigger msg on dbsyncconnection, checking for new stuff.";
+        tLog() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
         check();
         return;
     }
@@ -255,13 +259,15 @@ DBSyncConnection::lastOpApplied()
 void
 DBSyncConnection::sendOps()
 {
-    tLog( LOGVERBOSE ) << "Will send peer" << m_source->id() << "all ops since" << m_uscache.value( "lastop" ).toString();
+    tLog() << "Will send peer" << m_source->id() << "all ops since" << m_uscache.value( "lastop" ).toString();
 
     source_ptr src = SourceList::instance()->getLocal();
 
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_uscache.value( "lastop" ).toString() );
     connect( cmd, SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
                     SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
+
+    m_uscache.clear();
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }

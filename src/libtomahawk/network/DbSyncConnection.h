@@ -78,6 +78,7 @@ private:
     void synced();
     void changeState( State newstate );
 
+    int m_fetchCount;
     Tomahawk::source_ptr m_source;
     QVariantMap m_uscache;
 
