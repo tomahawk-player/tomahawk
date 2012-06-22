@@ -65,7 +65,6 @@ public slots:
     void trigger();
 
 private slots:
-    void gotUs( const QVariantMap& m );
     void gotThem( const QVariantMap& m );
 
     void fetchOpsData( const QString& sinceguid );

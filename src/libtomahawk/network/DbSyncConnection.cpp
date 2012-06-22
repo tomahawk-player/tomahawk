@@ -121,11 +121,6 @@ DBSyncConnection::check()
     m_uscache.clear();
     changeState( CHECKING );
 
-    // load last-modified etc data for our collection and theirs from our DB:
-    DatabaseCommand_CollectionStats* cmd_us = new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
-    connect( cmd_us, SIGNAL( done( QVariantMap ) ), SLOT( gotUs( QVariantMap ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
-
     if ( m_source->lastCmdGuid().isEmpty() )
     {
         tDebug() << "Fetching lastCmdGuid from database!";
@@ -137,17 +132,6 @@ DBSyncConnection::check()
     {
         fetchOpsData( m_source->lastCmdGuid() );
     }
-}
-
-
-/// Called once we've loaded our mtimes etc from the DB for our local
-/// collection - send them to the remote peer to compare.
-void
-DBSyncConnection::gotUs( const QVariantMap& m )
-{
-    Q_UNUSED( m )
-    if ( !m_uscache.empty() )
-        sendOps();
 }
 
 
