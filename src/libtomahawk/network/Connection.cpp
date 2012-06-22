@@ -199,6 +199,12 @@ Connection::checkACL()
         return;
     }
 
+    if ( Servent::isIPWhitelisted( m_peerIpAddress ) )
+    {
+        QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        return;
+    }
+
     QString nodeid = property( "nodeid" ).toString();
     QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
