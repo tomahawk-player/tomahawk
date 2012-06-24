@@ -32,7 +32,7 @@ IF(UNIX)
             common/mac/macho_utilities.cc
             common/mac/macho_walker.cc
             common/mac/string_utilities.cc
-            common/md5.c
+            common/md5.cc
             common/mac/dump_syms.mm
             common/mac/MachIPC.mm
             common/mac/SimpleStringDictionary.mm
