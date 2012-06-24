@@ -2853,7 +2853,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="596"/>
+        <location filename="../src/TomahawkApp.cpp" line="597"/>
         <source>My Collection</source>
         <translation>My Collection</translation>
     </message>
