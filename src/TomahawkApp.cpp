@@ -200,7 +200,7 @@ TomahawkApp::init()
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 #endif
-    
+
     TomahawkUtils::setHeadless( m_headless );
 
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -210,10 +210,17 @@ TomahawkApp::init()
     Q_UNUSED( TomahawkUtils::nam() );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
-    m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
 
     // init pipeline and resolver factories
     new Pipeline();
+
+    m_servent = QWeakPointer<Servent>( new Servent( this ) );
+    connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
+
+    tDebug() << "Init Database.";
+    initDatabase();
+
+    m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
 
 #ifndef ENABLE_HEADLESS
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1 ) );
@@ -222,12 +229,6 @@ TomahawkApp::init()
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
 #endif
-
-    m_servent = QWeakPointer<Servent>( new Servent( this ) );
-    connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
-
-    tDebug() << "Init Database.";
-    initDatabase();
 
     QByteArray magic = QByteArray::fromBase64( enApiSecret );
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
