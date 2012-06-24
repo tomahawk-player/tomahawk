@@ -67,7 +67,7 @@ namespace TomahawkUtils
     public:
         NetworkProxyFactory()
             : m_proxy( QNetworkProxy::NoProxy )
-            {}
+        {}
 
         NetworkProxyFactory( const NetworkProxyFactory &other );
         virtual ~NetworkProxyFactory() {}
