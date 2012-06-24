@@ -1,3 +1,7 @@
+Version 0.5.1:
+    * Better detection of local networks for the Local Network connector.
+    * Don't prompt for access permission for your own accounts.
+
 Version 0.5.0:
     * SOCKS5 proxy support improvements for resolvers and more.
     * Initial Access Control support, allowing users to define who is able to
