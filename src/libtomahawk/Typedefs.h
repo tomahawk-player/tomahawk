@@ -170,6 +170,9 @@ namespace Tomahawk
             InfoNewReleaseCapabilities = 52,
             InfoNewRelease = 53,
 
+            InfoArtistConcerts = 54,
+            InfoArtistSetlists = 55,
+
             InfoMiscTopHotttness = 60,
             InfoMiscTopTerms = 61,
 

@@ -36,7 +36,7 @@ SongkickPlugin::SongkickPlugin()
     , m_apiKey( "61be4ea5aea7dd942d52b2f1311dd9fe" )
 {
     tDebug() << Q_FUNC_INFO;
-    m_supportedGetTypes << Tomahawk::InfoSystem::InfoTrackLyrics;
+    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistConcerts << Tomahawk::InfoSystem::InfoArtistSetlists;
 }
 
 
