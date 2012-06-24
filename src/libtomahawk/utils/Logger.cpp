@@ -38,8 +38,10 @@
 #define LOG_SQL_QUERIES 1
 
 using namespace std;
+
 ofstream logfile;
 static int s_threshold = -1;
+QMutex s_mutex;
 
 namespace Logger
 {
@@ -66,7 +68,7 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
     if ( debugLevel > DEBUG_LEVEL_THRESHOLD )
         toDisk = false;
     #endif
-        
+
     #ifdef LOG_SQL_QUERIES
     if ( debugLevel == LOGSQL )
         toDisk = true;
@@ -74,6 +76,8 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
     if ( toDisk || (int)debugLevel <= s_threshold )
     {
+        QMutexLocker lock( &s_mutex );
+
         #ifdef LOG_SQL_QUERIES
         if ( debugLevel == LOGSQL )
             logfile << "TSQLQUERY: ";
@@ -85,6 +89,8 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
     if ( debugLevel <= LOGEXTRA || (int)debugLevel <= s_threshold )
     {
+        QMutexLocker lock( &s_mutex );
+
         cout << msg << endl;
         cout.flush();
     }
