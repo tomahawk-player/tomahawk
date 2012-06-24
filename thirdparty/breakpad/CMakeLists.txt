@@ -36,6 +36,7 @@ IF(UNIX)
             common/mac/dump_syms.mm
             common/mac/MachIPC.mm
             common/mac/SimpleStringDictionary.mm
+            common/mac/bootstrap_compat.cc
         )
     ELSE(APPLE)
         SET( breakpadSources
