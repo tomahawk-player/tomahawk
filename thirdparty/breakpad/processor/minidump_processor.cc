@@ -386,6 +386,11 @@ bool MinidumpProcessor::GetOSInfo(Minidump *dump, SystemInfo *info) {
       break;
     }
 
+    case MD_OS_IOS: {
+      info->os = "iOS";
+      break;
+    }
+
     case MD_OS_LINUX: {
       info->os = "Linux";
       break;
@@ -451,7 +456,8 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, u_int64_t *address) {
     return reason;
 
   switch (raw_system_info->platform_id) {
-    case MD_OS_MAC_OS_X: {
+    case MD_OS_MAC_OS_X:
+    case MD_OS_IOS: {
       char flags_string[11];
       snprintf(flags_string, sizeof(flags_string), "0x%08x", exception_flags);
       switch (exception_code) {
@@ -637,6 +643,12 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, u_int64_t *address) {
         case MD_EXCEPTION_MAC_SOFTWARE:
           reason = "EXC_SOFTWARE / ";
           switch (exception_flags) {
+            case MD_EXCEPTION_CODE_MAC_ABORT:
+              reason.append("SIGABRT");
+              break;
+            case MD_EXCEPTION_CODE_MAC_NS_EXCEPTION:
+              reason.append("UNCAUGHT_NS_EXCEPTION");
+              break;
             // These are ppc only but shouldn't be a problem as they're
             // unused on x86
             case MD_EXCEPTION_CODE_MAC_PPC_TRAP:

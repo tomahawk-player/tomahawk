@@ -39,6 +39,7 @@ IF(UNIX)
         )
     ELSE(APPLE)
         SET( breakpadSources
+            common/linux/safe_readlink.cc
             client/linux/crash_generation/crash_generation_client.cc
             client/linux/crash_generation/crash_generation_server.cc
             client/linux/minidump_writer/minidump_writer.cc
@@ -52,9 +53,10 @@ IF(UNIX)
             common/linux/http_upload.cc
             common/linux/guid_creator.cc
             common/linux/elf_symbols_to_module.cc
-            common/string_conversion.cc
-            common/convert_UTF.c
             client/minidump_file_writer.cc
+            client/linux/minidump_writer/linux_ptrace_dumper.cc
+            common/linux/memory_mapped_file.cc
+            client/linux/log/log.cc
         )
     ENDIF(APPLE)
 

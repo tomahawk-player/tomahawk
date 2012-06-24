@@ -36,22 +36,19 @@
 
 #include <arpa/inet.h>
 #include <assert.h>
-#include <elf.h>
-#include <fcntl.h>
 #if defined(__ANDROID__)
+#include <linux/elf.h>
 #include "client/linux/android_link.h"
 #else
+#include <elf.h>
 #include <link.h>
 #endif
-#include <stdio.h>
 #include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <algorithm>
 
 #include "common/linux/linux_libc_support.h"
+#include "common/linux/memory_mapped_file.h"
 #include "third_party/lss/linux_syscall_support.h"
 
 namespace google_breakpad {
@@ -107,10 +104,10 @@ static void FindElfClassSection(const char *elf_base,
   const Shdr* section = NULL;
   for (int i = 0; i < elf_header->e_shnum; ++i) {
     if (sections[i].sh_type == section_type) {
-      const char* section_name = (char*)(elf_base +
-                                         string_section->sh_offset +
-                                         sections[i].sh_name);
-      if (!my_strncmp(section_name, section_name, name_len)) {
+      const char* current_section_name = (char*)(elf_base +
+                                                 string_section->sh_offset +
+                                                 sections[i].sh_name);
+      if (!my_strncmp(current_section_name, section_name, name_len)) {
         section = &sections[i];
         break;
       }
@@ -166,8 +163,7 @@ static bool FindElfSection(const void *elf_mapped_base,
 
 template<typename ElfClass>
 static bool ElfClassBuildIDNoteIdentifier(const void *section,
-                                          uint8_t identifier[kMDGUIDSize])
-{
+                                          uint8_t identifier[kMDGUIDSize]) {
   typedef typename ElfClass::Nhdr Nhdr;
 
   const Nhdr* note_header = reinterpret_cast<const Nhdr*>(section);
@@ -190,8 +186,7 @@ static bool ElfClassBuildIDNoteIdentifier(const void *section,
 // Attempt to locate a .note.gnu.build-id section in an ELF binary
 // and copy as many bytes of it as will fit into |identifier|.
 static bool FindElfBuildIDNote(const void *elf_mapped_base,
-                               uint8_t identifier[kMDGUIDSize])
-{
+                               uint8_t identifier[kMDGUIDSize]) {
   void* note_section;
   int note_size, elfclass;
   if (!FindElfSection(elf_mapped_base, ".note.gnu.build-id", SHT_NOTE,
@@ -213,7 +208,6 @@ static bool FindElfBuildIDNote(const void *elf_mapped_base,
 // a simple hash by XORing the first page worth of bytes into |identifier|.
 static bool HashElfTextSection(const void *elf_mapped_base,
                                uint8_t identifier[kMDGUIDSize]) {
-
   void* text_section;
   int text_size;
   if (!FindElfSection(elf_mapped_base, ".text", SHT_PROGBITS,
@@ -234,9 +228,8 @@ static bool HashElfTextSection(const void *elf_mapped_base,
 }
 
 // static
-bool FileID::ElfFileIdentifierFromMappedFile(void* base,
-                                             uint8_t identifier[kMDGUIDSize])
-{
+bool FileID::ElfFileIdentifierFromMappedFile(const void* base,
+                                             uint8_t identifier[kMDGUIDSize]) {
   // Look for a build id note first.
   if (FindElfBuildIDNote(base, identifier))
     return true;
@@ -246,23 +239,11 @@ bool FileID::ElfFileIdentifierFromMappedFile(void* base,
 }
 
 bool FileID::ElfFileIdentifier(uint8_t identifier[kMDGUIDSize]) {
-  int fd = open(path_, O_RDONLY);
-  if (fd < 0)
-    return false;
-  struct stat st;
-  if (fstat(fd, &st) != 0) {
-    close(fd);
-    return false;
-  }
-  void* base = mmap(NULL, st.st_size,
-                    PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-  close(fd);
-  if (base == MAP_FAILED)
+  MemoryMappedFile mapped_file(path_);
+  if (!mapped_file.data())  // Should probably check if size >= ElfW(Ehdr)?
     return false;
 
-  bool success = ElfFileIdentifierFromMappedFile(base, identifier);
-  munmap(base, st.st_size);
-  return success;
+  return ElfFileIdentifierFromMappedFile(mapped_file.data(), identifier);
 }
 
 // static

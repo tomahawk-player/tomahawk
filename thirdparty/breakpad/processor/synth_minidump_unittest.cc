@@ -150,7 +150,7 @@ TEST(ContextDeathTest, X86BadFlags) {
   MDRawContextX86 raw;
   raw.context_flags = 0;
   ASSERT_DEATH(Context context(dump, raw);,
-               "context\\.context_flags & 0x[0-9a-f]+");
+               "context\\.context_flags & (0x[0-9a-f]+|MD_CONTEXT_X86)");
 }
 
 TEST(ContextDeathTest, X86BadEndianness) {

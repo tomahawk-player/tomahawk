@@ -47,6 +47,7 @@ namespace google_breakpad {
 bool WriteSymbolFileInternal(uint8_t* obj_file,
                              const std::string &obj_filename,
                              const std::string &debug_dir,
+                             bool cfi,
                              std::ostream &sym_stream);
 }
 
@@ -62,7 +63,7 @@ using std::vector;
 using ::testing::Test;
 
 class DumpSymbols : public Test {
-public:
+ public:
   void GetElfContents(ELF& elf) {
     string contents;
     ASSERT_TRUE(elf.GetContents(&contents));
@@ -84,6 +85,7 @@ TEST_F(DumpSymbols, Invalid) {
   EXPECT_FALSE(WriteSymbolFileInternal(reinterpret_cast<uint8_t*>(&header),
                                        "foo",
                                        "",
+                                       true,
                                        s));
 }
 
@@ -105,11 +107,11 @@ TEST_F(DumpSymbols, SimplePublic32) {
                  SHN_UNDEF + 1);
   int index = elf.AddSection(".dynstr", table, SHT_STRTAB);
   elf.AddSection(".dynsym", syms,
-                 SHT_DYNSYM, // type
-                 SHF_ALLOC,  // flags
-                 0,          // addr
-                 index,      // link
-                 sizeof(Elf32_Sym)); // entsize
+                 SHT_DYNSYM,          // type
+                 SHF_ALLOC,           // flags
+                 0,                   // addr
+                 index,               // link
+                 sizeof(Elf32_Sym));  // entsize
 
   elf.Finish();
   GetElfContents(elf);
@@ -118,6 +120,7 @@ TEST_F(DumpSymbols, SimplePublic32) {
   ASSERT_TRUE(WriteSymbolFileInternal(elfdata,
                                       "foo",
                                       "",
+                                      true,
                                       s));
   EXPECT_EQ("MODULE Linux x86 000000000000000000000000000000000 foo\n"
             "PUBLIC 1000 0 superfunc\n",
@@ -141,11 +144,11 @@ TEST_F(DumpSymbols, SimplePublic64) {
                  SHN_UNDEF + 1);
   int index = elf.AddSection(".dynstr", table, SHT_STRTAB);
   elf.AddSection(".dynsym", syms,
-                 SHT_DYNSYM, // type
-                 SHF_ALLOC,  // flags
-                 0,          // addr
-                 index,      // link
-                 sizeof(Elf64_Sym)); // entsize
+                 SHT_DYNSYM,          // type
+                 SHF_ALLOC,           // flags
+                 0,                   // addr
+                 index,               // link
+                 sizeof(Elf64_Sym));  // entsize
 
   elf.Finish();
   GetElfContents(elf);
@@ -154,6 +157,7 @@ TEST_F(DumpSymbols, SimplePublic64) {
   ASSERT_TRUE(WriteSymbolFileInternal(elfdata,
                                       "foo",
                                       "",
+                                      true,
                                       s));
   EXPECT_EQ("MODULE Linux x86_64 000000000000000000000000000000000 foo\n"
             "PUBLIC 1000 0 superfunc\n",

@@ -248,6 +248,7 @@ TEST_F(TestFastSourceLineResolver, TestLoadAndResolve) {
   ASSERT_EQ(frame.source_line, 0);
   windows_frame_info.reset(fast_resolver.FindWindowsFrameInfo(&frame));
   ASSERT_TRUE(windows_frame_info.get());
+  ASSERT_EQ(windows_frame_info->type_, WindowsFrameInfo::STACK_INFO_UNKNOWN);
   ASSERT_FALSE(windows_frame_info->allocates_base_pointer);
   ASSERT_TRUE(windows_frame_info->program_string.empty());
 
@@ -258,6 +259,7 @@ TEST_F(TestFastSourceLineResolver, TestLoadAndResolve) {
   ASSERT_EQ(frame.source_line, 0);
   windows_frame_info.reset(fast_resolver.FindWindowsFrameInfo(&frame));
   ASSERT_TRUE(windows_frame_info.get());
+  ASSERT_EQ(windows_frame_info->type_, WindowsFrameInfo::STACK_INFO_FRAME_DATA);
   ASSERT_FALSE(windows_frame_info->allocates_base_pointer);
   ASSERT_FALSE(windows_frame_info->program_string.empty());
 
@@ -380,6 +382,7 @@ TEST_F(TestFastSourceLineResolver, TestLoadAndResolve) {
   ASSERT_EQ(frame.source_line_base, 0x2180);
   windows_frame_info.reset(fast_resolver.FindWindowsFrameInfo(&frame));
   ASSERT_TRUE(windows_frame_info.get());
+  ASSERT_EQ(windows_frame_info->type_, WindowsFrameInfo::STACK_INFO_FRAME_DATA);
   ASSERT_EQ(windows_frame_info->prolog_size, 1);
 
   frame.instruction = 0x216f;

@@ -59,8 +59,12 @@ TEST(LinuxLibcSupportTest, strcmp) {
   for (unsigned i = 0; ; ++i) {
     if (!test_data[i*2])
       break;
-    ASSERT_EQ(my_strcmp(test_data[i*2], test_data[i*2 + 1]),
-              strcmp(test_data[i*2], test_data[i*2 + 1]));
+    int libc_result = strcmp(test_data[i*2], test_data[i*2 + 1]);
+    if (libc_result > 1)
+      libc_result = 1;
+    else if (libc_result < -1)
+      libc_result = -1;
+    ASSERT_EQ(my_strcmp(test_data[i*2], test_data[i*2 + 1]), libc_result);
   }
 }
 

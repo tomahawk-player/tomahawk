@@ -65,6 +65,7 @@ class CrashGenerationServerTest : public ::testing::Test {
                                  CallOnClientConnected, &mock_callbacks_,
                                  CallOnClientDumpRequested, &mock_callbacks_,
                                  CallOnClientExited, &mock_callbacks_,
+                                 CallOnClientUploadRequested, &mock_callbacks_,
                                  false,
                                  NULL),
         thread_id_(0),
@@ -82,6 +83,8 @@ class CrashGenerationServerTest : public ::testing::Test {
                       const std::wstring* file_path));
     MOCK_METHOD1(OnClientExited,
                  void(const google_breakpad::ClientInfo* client_info));
+    MOCK_METHOD1(OnClientUploadRequested,
+                 void(const DWORD crash_id));
   };
 
   enum ClientFault {
@@ -246,6 +249,11 @@ class CrashGenerationServerTest : public ::testing::Test {
     void* context, const google_breakpad::ClientInfo* client_info) {
     static_cast<MockCrashGenerationServerCallbacks*>(context)->
       OnClientExited(client_info);
+  }
+
+  static void CallOnClientUploadRequested(void* context, const DWORD crash_id) {
+    static_cast<MockCrashGenerationServerCallbacks*>(context)->
+      OnClientUploadRequested(crash_id);
   }
 
   DWORD thread_id_;

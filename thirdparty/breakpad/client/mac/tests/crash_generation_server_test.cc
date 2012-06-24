@@ -43,8 +43,8 @@
 #include "client/mac/crash_generation/crash_generation_client.h"
 #include "client/mac/crash_generation/crash_generation_server.h"
 #include "client/mac/handler/exception_handler.h"
-#include "client/mac/tests/auto_tempdir.h"
 #include "client/mac/tests/spawn_child_process.h"
+#include "common/tests/auto_tempdir.h"
 #include "google_breakpad/processor/minidump.h"
 
 namespace google_breakpad {
@@ -111,12 +111,12 @@ TEST_F(CrashGenerationServerTest, testStartStopServer) {
 // Test without actually dumping
 TEST_F(CrashGenerationServerTest, testRequestDumpNoDump) {
   CrashGenerationServer server(mach_port_name,
-			       NULL,  // dump callback
-			       NULL,  // dump context
-			       NULL,  // exit callback
-			       NULL,  // exit context
-			       false, // don't generate dumps
-			       temp_dir.path); // dump path
+                               NULL,  // dump callback
+                               NULL,  // dump context
+                               NULL,  // exit callback
+                               NULL,  // exit context
+                               false, // don't generate dumps
+                               temp_dir.path()); // dump path
   ASSERT_TRUE(server.Start());
 
   pid_t pid = fork();
@@ -133,7 +133,7 @@ TEST_F(CrashGenerationServerTest, testRequestDumpNoDump) {
   EXPECT_EQ(0, WEXITSTATUS(ret));
   EXPECT_TRUE(server.Stop());
   // check that no minidump was written
-  string pattern = temp_dir.path + "/*";
+  string pattern = temp_dir.path() + "/*";
   glob_t dirContents;
   ret = glob(pattern.c_str(), GLOB_NOSORT, NULL, &dirContents);
   EXPECT_EQ(GLOB_NOMATCH, ret);
@@ -161,12 +161,12 @@ void *RequestDump(void *context) {
 // Test that actually writing a minidump works
 TEST_F(CrashGenerationServerTest, testRequestDump) {
   CrashGenerationServer server(mach_port_name,
-			       dumpCallback,  // dump callback
-			       this,  // dump context
-			       NULL,  // exit callback
-			       NULL,  // exit context
-			       true, //  generate dumps
-			       temp_dir.path); // dump path
+                               dumpCallback,  // dump callback
+                               this,  // dump context
+                               NULL,  // exit callback
+                               NULL,  // exit context
+                               true, //  generate dumps
+                               temp_dir.path()); // dump path
   ASSERT_TRUE(server.Start());
 
   pid_t pid = fork();
@@ -209,12 +209,12 @@ static void Crasher() {
 // the parent.
 TEST_F(CrashGenerationServerTest, testChildProcessCrash) {
   CrashGenerationServer server(mach_port_name,
-			       dumpCallback,  // dump callback
-			       this,  // dump context
-			       NULL,  // exit callback
-			       NULL,  // exit context
-			       true, //  generate dumps
-			       temp_dir.path); // dump path
+                               dumpCallback,  // dump callback
+                               this,  // dump context
+                               NULL,  // exit callback
+                               NULL,  // exit context
+                               true, //  generate dumps
+                               temp_dir.path()); // dump path
   ASSERT_TRUE(server.Start());
 
   pid_t pid = fork();
@@ -270,12 +270,12 @@ TEST_F(CrashGenerationServerTest, testChildProcessCrash) {
 // produces a valid minidump.
 TEST_F(CrashGenerationServerTest, testChildProcessCrashCrossArchitecture) {
   CrashGenerationServer server(mach_port_name,
-			       dumpCallback,  // dump callback
-			       this,  // dump context
-			       NULL,  // exit callback
-			       NULL,  // exit context
-			       true, //  generate dumps
-			       temp_dir.path); // dump path
+                               dumpCallback,  // dump callback
+                               this,  // dump context
+                               NULL,  // exit callback
+                               NULL,  // exit context
+                               true, //  generate dumps
+                               temp_dir.path()); // dump path
   ASSERT_TRUE(server.Start());
 
   // Spawn a child process

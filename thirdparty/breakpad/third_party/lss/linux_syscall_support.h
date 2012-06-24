@@ -87,7 +87,7 @@
  */
 #if (defined(__i386__) || defined(__x86_64__) || defined(__ARM_ARCH_3__) ||   \
      defined(__mips__) || defined(__PPC__) || defined(__ARM_EABI__)) \
-  && defined(__linux)
+  && (defined(__linux) || defined(__ANDROID__))
 
 #ifndef SYS_CPLUSPLUS
 #ifdef __cplusplus
@@ -99,6 +99,7 @@ extern "C" {
 #endif
 
 #include <errno.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stddef.h>
@@ -107,7 +108,7 @@ extern "C" {
 #include <sys/resource.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <syscall.h>
+#include <sys/syscall.h>
 #include <unistd.h>
 #include <linux/unistd.h>
 #include <endian.h>
@@ -1844,8 +1845,6 @@ struct kernel_statfs {
                                    void *newtls, int *child_tidptr) {
       long __res;
       {
-        register void *__tls  __asm__("r8")  = newtls;
-        register int  *__ctid __asm__("r10") = child_tidptr;
         __asm__ __volatile__(/* if (fn == NULL)
                               *   return -EINVAL;
                               */
@@ -1876,6 +1875,8 @@ struct kernel_statfs {
                               *                %r10 = child_tidptr)
                               */
                              "movq   %2,%%rax\n"
+                             "movq   %9,%%r8\n"
+                             "movq   %10,%%r10\n"
                              LSS_ENTRYPOINT
 
                              /* if (%rax != 0)
@@ -1906,8 +1907,9 @@ struct kernel_statfs {
                              : "=a" (__res)
                              : "0"(-EINVAL), "i"(__NR_clone), "i"(__NR_exit),
                                "r"(fn), "S"(child_stack), "D"(flags), "r"(arg),
-                               "d"(parent_tidptr), "r"(__tls), "r"(__ctid)
-                             : "rsp", "memory", "r11", "rcx");
+                               "d"(parent_tidptr), "r"(newtls),
+                               "r"(child_tidptr)
+                             : "rsp", "memory", "r8", "r10", "r11", "rcx");
       }
       LSS_RETURN(int, __res);
     }
@@ -2138,7 +2140,9 @@ struct kernel_statfs {
                               *   return -EINVAL;
                               */
                              "cmp   %2,#0\n"
+                             "it    ne\n"
                              "cmpne %3,#0\n"
+                             "it    eq\n"
                              "moveq %0,%1\n"
                              "beq   1f\n"
 
@@ -2166,8 +2170,24 @@ struct kernel_statfs {
                              /* In the child, now. Call "fn(arg)".
                               */
                              "ldr   r0,[sp, #4]\n"
+
+                             /* When compiling for Thumb-2 the "MOV LR,PC" here
+                              * won't work because it loads PC+4 into LR,
+                              * whereas the LDR is a 4-byte instruction.
+                              * This results in the child thread always
+                              * crashing with an "Illegal Instruction" when it
+                              * returned into the middle of the LDR instruction
+                              * The instruction sequence used instead was
+                              * recommended by
+                              * "https://wiki.edubuntu.org/ARM/Thumb2PortingHowto#Quick_Reference".
+                              */
+                           #ifdef __thumb2__
+                             "ldr   r7,[sp]\n"
+                             "blx   r7\n"
+                           #else
                              "mov   lr,pc\n"
                              "ldr   pc,[sp]\n"
+                           #endif
 
                              /* Call _exit(%r0).
                               */
@@ -2724,7 +2744,7 @@ struct kernel_statfs {
   LSS_INLINE _syscall2(int,     sigaltstack,     const stack_t*, s,
                        const stack_t*, o)
   #if defined(__NR_sigreturn)
-  LSS_INLINE _syscall1(int,     sigreturn,       unsigned long, u);
+  LSS_INLINE _syscall1(int,     sigreturn,       unsigned long, u)
   #endif
   LSS_INLINE _syscall2(int,     stat,            const char*, f,
                       struct kernel_stat*,   b)
@@ -2741,7 +2761,7 @@ struct kernel_statfs {
                        const struct kernel_iovec*, v, size_t, c)
   #if defined(__NR_getcpu)
     LSS_INLINE _syscall3(long, getcpu, unsigned *, cpu,
-                         unsigned *, node, void *, unused);
+                         unsigned *, node, void *, unused)
   #endif
   #if defined(__x86_64__) ||                                                  \
      (defined(__mips__) && _MIPS_SIM != _MIPS_SIM_ABI32)
@@ -3012,9 +3032,13 @@ struct kernel_statfs {
     #define __NR__sigprocmask __NR_sigprocmask
     #define __NR__sigsuspend  __NR_sigsuspend
     #define __NR__socketcall  __NR_socketcall
+#if ! defined(__ANDROID__)
+    /* The Android NDK #defines stat64 stat, so avoid multiple-definition */
     LSS_INLINE _syscall2(int, fstat64,             int, f,
                          struct kernel_stat64 *, b)
-    LSS_INLINE _syscall5(int, _llseek,     uint, fd, ulong, hi, ulong, lo,
+#endif
+    LSS_INLINE _syscall5(int, _llseek,     uint, fd,
+                         unsigned long, hi, unsigned long, lo,
                          loff_t *, res, uint, wh)
 #if !defined(__ARM_EABI__)
     LSS_INLINE _syscall1(void*, mmap,              void*, a)
@@ -3022,7 +3046,7 @@ struct kernel_statfs {
     LSS_INLINE _syscall6(void*, mmap2,             void*, s,
                          size_t,                   l, int,               p,
                          int,                      f, int,               d,
-                         __off64_t,                o)
+                         off_t,                o)
     LSS_INLINE _syscall3(int,   _sigaction,        int,   s,
                          const struct kernel_old_sigaction*,  a,
                          struct kernel_old_sigaction*,        o)
@@ -3037,8 +3061,11 @@ struct kernel_statfs {
                          int,                      b,
                          unsigned long,            s)
     #endif
+#if ! defined(__ANDROID__)
+    /* The Android NDK #defines stat64 stat, so avoid multiple-definition */
     LSS_INLINE _syscall2(int, stat64,              const char *, p,
                          struct kernel_stat64 *, b)
+#endif
 
     LSS_INLINE int LSS_NAME(sigaction)(int signum,
                                        const struct kernel_sigaction *act,

@@ -41,13 +41,14 @@
 // it until we actually have to deal with DWARF on Windows.
 
 // Return true if PATH is an absolute path, false if it is relative.
-static bool PathIsAbsolute(const string &path) {
+static bool PathIsAbsolute(const std::string &path) {
   return (path.size() >= 1 && path[0] == '/');
 }
 
 // If PATH is an absolute path, return PATH.  If PATH is a relative path,
 // treat it as relative to BASE and return the combined path.
-static string ExpandPath(const string &path, const string &base) {
+static std::string ExpandPath(const std::string &path,
+                              const std::string &base) {
   if (PathIsAbsolute(path))
     return path;
   return base + "/" + path;
@@ -55,14 +56,14 @@ static string ExpandPath(const string &path, const string &base) {
 
 namespace google_breakpad {
 
-void DwarfLineToModule::DefineDir(const string &name, uint32 dir_num) {
+void DwarfLineToModule::DefineDir(const std::string &name, uint32 dir_num) {
   // Directory number zero is reserved to mean the compilation
   // directory. Silently ignore attempts to redefine it.
   if (dir_num != 0)
     directories_[dir_num] = name;
 }
 
-void DwarfLineToModule::DefineFile(const string &name, int32 file_num,
+void DwarfLineToModule::DefineFile(const std::string &name, int32 file_num,
                                    uint32 dir_num, uint64 mod_time,
                                    uint64 length) {
   if (file_num == -1)

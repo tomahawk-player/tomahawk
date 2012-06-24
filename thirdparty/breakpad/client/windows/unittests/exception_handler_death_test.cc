@@ -161,8 +161,8 @@ TEST_F(ExceptionHandlerDeathTest, OutOfProcTest) {
   ASSERT_TRUE(DoesPathExist(temp_path_));
   std::wstring dump_path(temp_path_);
   google_breakpad::CrashGenerationServer server(
-    kPipeName, NULL, NULL, NULL, &clientDumpCallback, NULL, NULL, NULL, true,
-    &dump_path);
+    kPipeName, NULL, NULL, NULL, &clientDumpCallback, NULL, NULL, NULL, NULL,
+    NULL, true, &dump_path);
 
   // This HAS to be EXPECT_, because when this test case is executed in the
   // child process, the server registration will fail due to the named pipe

@@ -47,7 +47,7 @@
 namespace google_breakpad {
 
 struct WindowsFrameInfo;
-struct CFIFrameInfo;
+class CFIFrameInfo;
 
 struct StackFrameX86 : public StackFrame {
   // ContextValidity has one entry for each relevant hardware pointer

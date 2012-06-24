@@ -1,4 +1,4 @@
-// Copyright (c) 2010, Google Inc.
+// Copyright (c) 2012 Google Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,46 +27,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Utility class for creating a temporary directory for unit tests
-// that is deleted in the destructor.
-#ifndef GOOGLE_BREAKPAD_CLIENT_MAC_TESTS_AUTO_TEMPDIR
-#define GOOGLE_BREAKPAD_CLIENT_MAC_TESTS_AUTO_TEMPDIR
+#include "client/linux/log/log.h"
 
-#include <dirent.h>
-#include <sys/types.h>
+#if defined(__ANDROID__)
+#include <android/log.h>
+#else
+#include "third_party/lss/linux_syscall_support.h"
+#endif
 
-#include <string>
+namespace logger {
 
-namespace google_breakpad {
+int write(const char* buf, size_t nbytes) {
+#if defined(__ANDROID__)
+  return __android_log_write(ANDROID_LOG_WARN, "google-breakpad", buf);
+#else
+  return sys_write(2, buf, nbytes);
+#endif
+}
 
-class AutoTempDir {
- public:
-  AutoTempDir() {
-    char tempDir[16] = "/tmp/XXXXXXXXXX";
-    mkdtemp(tempDir);
-    path = tempDir;
-  }
-
-  ~AutoTempDir() {
-    // First remove any files in the dir
-    DIR* dir = opendir(path.c_str());
-    if (!dir)
-      return;
-
-    dirent* entry;
-    while ((entry = readdir(dir)) != NULL) {
-      if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-	continue;
-      std::string entryPath = path + "/" + entry->d_name;
-      unlink(entryPath.c_str());
-    }
-    closedir(dir);
-    rmdir(path.c_str());
-  }
-
-  std::string path;
-};
-
-}  // namespace google_breakpad
-
-#endif  // GOOGLE_BREAKPAD_CLIENT_MAC_TESTS_AUTO_TEMPDIR
+}  // namespace logger

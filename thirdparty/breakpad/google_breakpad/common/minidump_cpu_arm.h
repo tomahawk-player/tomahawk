@@ -120,10 +120,11 @@ typedef struct {
  * purpose.
  */
 enum MDARMRegisterNumbers {
-  MD_CONTEXT_ARM_REG_FP = 11,
-  MD_CONTEXT_ARM_REG_SP = 13,
-  MD_CONTEXT_ARM_REG_LR = 14,
-  MD_CONTEXT_ARM_REG_PC = 15
+  MD_CONTEXT_ARM_REG_IOS_FP = 7,
+  MD_CONTEXT_ARM_REG_FP     = 11,
+  MD_CONTEXT_ARM_REG_SP     = 13,
+  MD_CONTEXT_ARM_REG_LR     = 14,
+  MD_CONTEXT_ARM_REG_PC     = 15
 };
 
 /* For (MDRawContextARM).context_flags.  These values indicate the type of

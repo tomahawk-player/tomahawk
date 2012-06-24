@@ -57,7 +57,7 @@ class FileID {
   // Load the identifier for the elf file mapped into memory at |base| into
   // |identifier|.  Return false if the identifier could not be created for the
   // file.
-  static bool ElfFileIdentifierFromMappedFile(void* base,
+  static bool ElfFileIdentifierFromMappedFile(const void* base,
                                               uint8_t identifier[kMDGUIDSize]);
 
   // Convert the |identifier| data to a NULL terminated string.  The string will

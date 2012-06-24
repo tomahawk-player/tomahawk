@@ -92,13 +92,13 @@ bool PDBSourceLineWriter::Open(const wstring &file, FileFormat format) {
   switch (format) {
     case PDB_FILE:
       if (FAILED(data_source->loadDataFromPdb(file.c_str()))) {
-        fprintf(stderr, "loadDataFromPdb failed\n");
+        fprintf(stderr, "loadDataFromPdb failed for %ws\n", file.c_str());
         return false;
       }
       break;
     case EXE_FILE:
       if (FAILED(data_source->loadDataForExe(file.c_str(), NULL, NULL))) {
-        fprintf(stderr, "loadDataForExe failed\n");
+        fprintf(stderr, "loadDataForExe failed for %ws\n", file.c_str());
         return false;
       }
       code_file_ = file;
@@ -106,7 +106,7 @@ bool PDBSourceLineWriter::Open(const wstring &file, FileFormat format) {
     case ANY_FILE:
       if (FAILED(data_source->loadDataFromPdb(file.c_str()))) {
         if (FAILED(data_source->loadDataForExe(file.c_str(), NULL, NULL))) {
-          fprintf(stderr, "loadDataForPdb and loadDataFromExe failed\n");
+          fprintf(stderr, "loadDataForPdb and loadDataFromExe failed for %ws\n", file.c_str());
           return false;
         }
 	code_file_ = file;

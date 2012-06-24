@@ -31,11 +31,15 @@
 
 // dwarf_cu_to_module.cc: Unit tests for google_breakpad::DwarfCUToModule.
 
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "breakpad_googletest_includes.h"
 #include "common/dwarf_cu_to_module.h"
 
+using std::make_pair;
+using std::string;
 using std::vector;
 
 using dwarf2reader::AttributeList;
@@ -144,8 +148,8 @@ class CUFixtureBase {
 
     // The handler will consult this section map to decide what to
     // pass to our line reader.
-    file_context_.section_map[".debug_line"] = std::make_pair(dummy_line_program_, 
-                                                   dummy_line_size_);
+    file_context_.section_map[".debug_line"] = make_pair(dummy_line_program_,
+                                                         dummy_line_size_);
   }
 
   // Add a line with the given address, size, filename, and line
@@ -158,7 +162,7 @@ class CUFixtureBase {
   // Use LANGUAGE for the compilation unit. More precisely, arrange
   // for StartCU to pass the compilation unit's root DIE a
   // DW_AT_language attribute whose value is LANGUAGE.
-  void SetLanguage(dwarf2reader::DwarfLanguage language) { 
+  void SetLanguage(dwarf2reader::DwarfLanguage language) {
     language_ = language;
   }
 
@@ -192,7 +196,7 @@ class CUFixtureBase {
   // not Finish. If NAME is non-zero, use it as the DW_AT_name
   // attribute.
   DIEHandler *StartSpecifiedDIE(DIEHandler *parent, DwarfTag tag,
-                                uint64 offset, const char *name = NULL);
+                                uint64 specification, const char *name = NULL);
  
   // Define a function as a child of PARENT with the given name,
   // address, and size. Call EndAttributes and Finish; one cannot

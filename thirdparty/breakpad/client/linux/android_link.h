@@ -33,7 +33,11 @@
 #ifndef GOOGLE_BREAKPAD_CLIENT_LINUX_ANDROID_LINK_H_
 #define GOOGLE_BREAKPAD_CLIENT_LINUX_ANDROID_LINK_H_
 
-#include <sys/exec_elf.h>
+// TODO(zhenghao): exec_elf.h conflicts with linux/elf.h.
+// But we still need ELFSIZE.
+//#include <sys/exec_elf.h>
+#include <machine/exec.h>
+#define ELFSIZE ARCH_ELFSIZE
 
 #ifndef ElfW
 #define ElfW(type)	_ElfW (Elf, ELFSIZE, type)

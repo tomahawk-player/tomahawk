@@ -44,7 +44,7 @@ using std::string;
 
 struct StackFrame;
 struct WindowsFrameInfo;
-struct CFIFrameInfo;
+class CFIFrameInfo;
 
 class SourceLineResolverInterface {
  public:

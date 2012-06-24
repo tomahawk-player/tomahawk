@@ -67,6 +67,141 @@ class AutoStackClearer {
 
 
 template<typename ValueType>
+bool PostfixEvaluator<ValueType>::EvaluateToken(
+    const string &token,
+    const string &expression,
+    DictionaryValidityType *assigned) {
+  // There are enough binary operations that do exactly the same thing
+  // (other than the specific operation, of course) that it makes sense
+  // to share as much code as possible.
+  enum BinaryOperation {
+    BINARY_OP_NONE = 0,
+    BINARY_OP_ADD,
+    BINARY_OP_SUBTRACT,
+    BINARY_OP_MULTIPLY,
+    BINARY_OP_DIVIDE_QUOTIENT,
+    BINARY_OP_DIVIDE_MODULUS,
+    BINARY_OP_ALIGN
+  };
+
+  BinaryOperation operation = BINARY_OP_NONE;
+  if (token == "+")
+    operation = BINARY_OP_ADD;
+  else if (token == "-")
+    operation = BINARY_OP_SUBTRACT;
+  else if (token == "*")
+    operation = BINARY_OP_MULTIPLY;
+  else if (token == "/")
+    operation = BINARY_OP_DIVIDE_QUOTIENT;
+  else if (token == "%")
+    operation = BINARY_OP_DIVIDE_MODULUS;
+  else if (token == "@")
+    operation = BINARY_OP_ALIGN;
+
+  if (operation != BINARY_OP_NONE) {
+    // Get the operands.
+    ValueType operand1 = ValueType();
+    ValueType operand2 = ValueType();
+    if (!PopValues(&operand1, &operand2)) {
+      BPLOG(ERROR) << "Could not PopValues to get two values for binary "
+                      "operation " << token << ": " << expression;
+      return false;
+    }
+
+    // Perform the operation.
+    ValueType result;
+    switch (operation) {
+      case BINARY_OP_ADD:
+        result = operand1 + operand2;
+        break;
+      case BINARY_OP_SUBTRACT:
+        result = operand1 - operand2;
+        break;
+      case BINARY_OP_MULTIPLY:
+        result = operand1 * operand2;
+        break;
+      case BINARY_OP_DIVIDE_QUOTIENT:
+        result = operand1 / operand2;
+        break;
+      case BINARY_OP_DIVIDE_MODULUS:
+        result = operand1 % operand2;
+        break;
+      case BINARY_OP_ALIGN:
+	result =
+	  operand1 & (static_cast<ValueType>(-1) ^ (operand2 - 1));
+        break;
+      case BINARY_OP_NONE:
+        // This will not happen, but compilers will want a default or
+        // BINARY_OP_NONE case.
+        BPLOG(ERROR) << "Not reached!";
+        return false;
+        break;
+    }
+
+    // Save the result.
+    PushValue(result);
+  } else if (token == "^") {
+    // ^ for unary dereference.  Can't dereference without memory.
+    if (!memory_) {
+      BPLOG(ERROR) << "Attempt to dereference without memory: " <<
+                      expression;
+      return false;
+    }
+
+    ValueType address;
+    if (!PopValue(&address)) {
+      BPLOG(ERROR) << "Could not PopValue to get value to derefence: " <<
+                      expression;
+      return false;
+    }
+
+    ValueType value;
+    if (!memory_->GetMemoryAtAddress(address, &value)) {
+      BPLOG(ERROR) << "Could not dereference memory at address " <<
+                      HexString(address) << ": " << expression;
+      return false;
+    }
+
+    PushValue(value);
+  } else if (token == "=") {
+    // = for assignment.
+    ValueType value;
+    if (!PopValue(&value)) {
+      BPLOG(INFO) << "Could not PopValue to get value to assign: " <<
+                     expression;
+      return false;
+    }
+
+    // Assignment is only meaningful when assigning into an identifier.
+    // The identifier must name a variable, not a constant.  Variables
+    // begin with '$'.
+    string identifier;
+    if (PopValueOrIdentifier(NULL, &identifier) != POP_RESULT_IDENTIFIER) {
+      BPLOG(ERROR) << "PopValueOrIdentifier returned a value, but an "
+                      "identifier is needed to assign " <<
+                      HexString(value) << ": " << expression;
+      return false;
+    }
+    if (identifier.empty() || identifier[0] != '$') {
+      BPLOG(ERROR) << "Can't assign " << HexString(value) << " to " <<
+                      identifier << ": " << expression;
+      return false;
+    }
+
+    (*dictionary_)[identifier] = value;
+    if (assigned)
+      (*assigned)[identifier] = true;
+  } else {
+    // The token is not an operator, it's a literal value or an identifier.
+    // Push it onto the stack as-is.  Use push_back instead of PushValue
+    // because PushValue pushes ValueType as a string, but token is already
+    // a string.
+    stack_.push_back(token);
+  }
+  return true;
+}
+
+template<typename ValueType>
 bool PostfixEvaluator<ValueType>::EvaluateInternal(
     const string &expression,
     DictionaryValidityType *assigned) {
@@ -74,125 +209,21 @@ bool PostfixEvaluator<ValueType>::EvaluateInternal(
   istringstream stream(expression);
   string token;
   while (stream >> token) {
-    // There are enough binary operations that do exactly the same thing
-    // (other than the specific operation, of course) that it makes sense
-    // to share as much code as possible.
-    enum BinaryOperation {
-      BINARY_OP_NONE = 0,
-      BINARY_OP_ADD,
-      BINARY_OP_SUBTRACT,
-      BINARY_OP_MULTIPLY,
-      BINARY_OP_DIVIDE_QUOTIENT,
-      BINARY_OP_DIVIDE_MODULUS
-    };
-
-    BinaryOperation operation = BINARY_OP_NONE;
-    if (token == "+")
-      operation = BINARY_OP_ADD;
-    else if (token == "-")
-      operation = BINARY_OP_SUBTRACT;
-    else if (token == "*")
-      operation = BINARY_OP_MULTIPLY;
-    else if (token == "/")
-      operation = BINARY_OP_DIVIDE_QUOTIENT;
-    else if (token == "%")
-      operation = BINARY_OP_DIVIDE_MODULUS;
-
-    if (operation != BINARY_OP_NONE) {
-      // Get the operands.
-      ValueType operand1 = ValueType();
-      ValueType operand2 = ValueType();
-      if (!PopValues(&operand1, &operand2)) {
-        BPLOG(ERROR) << "Could not PopValues to get two values for binary "
-                        "operation " << token << ": " << expression;
+    // Normally, tokens are whitespace-separated, but occasionally, the
+    // assignment operator is smashed up against the next token, i.e.
+    // $T0 $ebp 128 + =$eip $T0 4 + ^ =$ebp $T0 ^ =
+    // This has been observed in program strings produced by MSVS 2010 in LTO
+    // mode.
+    if (token.size() > 1 && token[0] == '=') {
+      if (!EvaluateToken("=", expression, assigned)) {
         return false;
       }
 
-      // Perform the operation.
-      ValueType result;
-      switch (operation) {
-        case BINARY_OP_ADD:
-          result = operand1 + operand2;
-          break;
-        case BINARY_OP_SUBTRACT:
-          result = operand1 - operand2;
-          break;
-        case BINARY_OP_MULTIPLY:
-          result = operand1 * operand2;
-          break;
-        case BINARY_OP_DIVIDE_QUOTIENT:
-          result = operand1 / operand2;
-          break;
-        case BINARY_OP_DIVIDE_MODULUS:
-          result = operand1 % operand2;
-          break;
-        case BINARY_OP_NONE:
-          // This will not happen, but compilers will want a default or
-          // BINARY_OP_NONE case.
-          BPLOG(ERROR) << "Not reached!";
-          return false;
-          break;
-      }
-
-      // Save the result.
-      PushValue(result);
-    } else if (token == "^") {
-      // ^ for unary dereference.  Can't dereference without memory.
-      if (!memory_) {
-        BPLOG(ERROR) << "Attempt to dereference without memory: " <<
-                        expression;
+      if (!EvaluateToken(token.substr(1), expression, assigned)) {
         return false;
       }
-
-      ValueType address;
-      if (!PopValue(&address)) {
-        BPLOG(ERROR) << "Could not PopValue to get value to derefence: " <<
-                        expression;
-        return false;
-      }
-
-      ValueType value;
-      if (!memory_->GetMemoryAtAddress(address, &value)) {
-        BPLOG(ERROR) << "Could not dereference memory at address " <<
-                        HexString(address) << ": " << expression;
-        return false;
-      }
-
-      PushValue(value);
-    } else if (token == "=") {
-      // = for assignment.
-      ValueType value;
-      if (!PopValue(&value)) {
-        BPLOG(INFO) << "Could not PopValue to get value to assign: " <<
-                       expression;
-        return false;
-      }
-
-      // Assignment is only meaningful when assigning into an identifier.
-      // The identifier must name a variable, not a constant.  Variables
-      // begin with '$'.
-      string identifier;
-      if (PopValueOrIdentifier(NULL, &identifier) != POP_RESULT_IDENTIFIER) {
-        BPLOG(ERROR) << "PopValueOrIdentifier returned a value, but an "
-                        "identifier is needed to assign " <<
-                        HexString(value) << ": " << expression;
-        return false;
-      }
-      if (identifier.empty() || identifier[0] != '$') {
-        BPLOG(ERROR) << "Can't assign " << HexString(value) << " to " <<
-                        identifier << ": " << expression;
-        return false;
-      }
-
-      (*dictionary_)[identifier] = value;
-      if (assigned)
-        (*assigned)[identifier] = true;
-    } else {
-      // The token is not an operator, it's a literal value or an identifier.
-      // Push it onto the stack as-is.  Use push_back instead of PushValue
-      // because PushValue pushes ValueType as a string, but token is already
-      // a string.
-      stack_.push_back(token);
+    } else if (!EvaluateToken(token, expression, assigned)) {
+      return false;
     }
   }
 

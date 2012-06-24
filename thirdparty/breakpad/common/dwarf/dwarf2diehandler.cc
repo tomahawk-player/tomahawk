@@ -176,11 +176,21 @@ void DIEDispatcher::ProcessAttributeBuffer(uint64 offset,
 void DIEDispatcher::ProcessAttributeString(uint64 offset,
                                            enum DwarfAttribute attr,
                                            enum DwarfForm form,
-                                           const string& data) {
+                                           const std::string& data) {
   HandlerStack &current = die_handlers_.top();
   // This had better be an attribute of the DIE we were meant to handle.
   assert(offset == current.offset_);
   current.handler_->ProcessAttributeString(attr, form, data);
+}
+
+void DIEDispatcher::ProcessAttributeSignature(uint64 offset,
+                                              enum DwarfAttribute attr,
+                                              enum DwarfForm form,
+                                              uint64 signature) {
+  HandlerStack &current = die_handlers_.top();
+  // This had better be an attribute of the DIE we were meant to handle.
+  assert(offset == current.offset_);
+  current.handler_->ProcessAttributeSignature(attr, form, signature);
 }
 
 } // namespace dwarf2reader

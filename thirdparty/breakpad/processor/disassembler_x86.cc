@@ -48,6 +48,9 @@ DisassemblerX86::DisassemblerX86(const u_int8_t *bytecode,
 }
 
 DisassemblerX86::~DisassemblerX86() {
+  if (instr_valid_)
+    libdis::x86_oplist_free(&current_instr_);
+
   libdis::x86_cleanup();
 }
 

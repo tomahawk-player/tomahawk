@@ -42,7 +42,7 @@ class Minidump;
 class ProcessState;
 class SourceLineResolverInterface;
 class SymbolSupplier;
-class SystemInfo;
+struct SystemInfo;
 // Return type for Process()
 enum ProcessResult {
   PROCESS_OK,                                 // The minidump was

@@ -88,7 +88,7 @@ bool SourceLineResolverBase::ReadSymbolFile(char **symbol_data,
   int error_code = stat(map_file.c_str(), &buf);
   if (error_code == -1) {
     string error_string;
-    int error_code = ErrnoString(&error_string);
+    error_code = ErrnoString(&error_string);
     BPLOG(ERROR) << "Could not open " << map_file <<
         ", error " << error_code << ": " << error_string;
     return false;
@@ -110,7 +110,7 @@ bool SourceLineResolverBase::ReadSymbolFile(char **symbol_data,
   FILE *f = fopen(map_file.c_str(), "rt");
   if (!f) {
     string error_string;
-    int error_code = ErrnoString(&error_string);
+    error_code = ErrnoString(&error_string);
     BPLOG(ERROR) << "Could not open " << map_file <<
         ", error " << error_code << ": " << error_string;
     delete [] (*symbol_data);
@@ -126,7 +126,7 @@ bool SourceLineResolverBase::ReadSymbolFile(char **symbol_data,
 
   if (items_read != file_size) {
     string error_string;
-    int error_code = ErrnoString(&error_string);
+    error_code = ErrnoString(&error_string);
     BPLOG(ERROR) << "Could not slurp " << map_file <<
         ", error " << error_code << ": " << error_string;
     delete [] (*symbol_data);
@@ -240,11 +240,11 @@ void SourceLineResolverBase::UnloadModule(const CodeModule *code_module) {
   if (!code_module)
     return;
 
-  ModuleMap::iterator iter = modules_->find(code_module->code_file());
-  if (iter != modules_->end()) {
-    Module *symbol_module = iter->second;
+  ModuleMap::iterator mod_iter = modules_->find(code_module->code_file());
+  if (mod_iter != modules_->end()) {
+    Module *symbol_module = mod_iter->second;
     delete symbol_module;
-    modules_->erase(iter);
+    modules_->erase(mod_iter);
   }
 
   if (ShouldDeleteMemoryBufferAfterLoadModule()) {

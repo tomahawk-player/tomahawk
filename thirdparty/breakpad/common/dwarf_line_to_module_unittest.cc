@@ -31,8 +31,12 @@
 
 // dwarf_line_to_module.cc: Unit tests for google_breakpad::DwarfLineToModule.
 
+#include <vector>
+
 #include "breakpad_googletest_includes.h"
 #include "common/dwarf_line_to_module.h"
+
+using std::vector;
 
 using google_breakpad::DwarfLineToModule;
 using google_breakpad::Module;
@@ -44,7 +48,7 @@ TEST(SimpleModule, One) {
   DwarfLineToModule h(&m, &lines);
 
   h.DefineFile("file1", 0x30bf0f27, 0, 0, 0);
-  h.AddLine(0x6fd126fbf74f2680LL, 0x63c9a14cf556712bLL, 0x30bf0f27, 
+  h.AddLine(0x6fd126fbf74f2680LL, 0x63c9a14cf556712bLL, 0x30bf0f27,
             0x4c090cbf, 0x1cf9fe0d);
 
   vector<Module::File *> files;

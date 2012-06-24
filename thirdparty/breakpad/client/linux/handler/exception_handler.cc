@@ -73,19 +73,16 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/prctl.h>
+#include <sys/syscall.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 #if !defined(__ANDROID__)
 #include <sys/signal.h>
-#endif
-#include <sys/syscall.h>
-#if !defined(__ANDROID__)
 #include <sys/ucontext.h>
 #include <sys/user.h>
-#endif
-#include <sys/wait.h>
-#if !defined(__ANDROID__)
 #include <ucontext.h>
 #endif
-#include <unistd.h>
 
 #include <algorithm>
 #include <utility>
@@ -93,6 +90,7 @@
 
 #include "common/linux/linux_libc_support.h"
 #include "common/memory.h"
+#include "client/linux/log/log.h"
 #include "client/linux/minidump_writer/linux_dumper.h"
 #include "client/linux/minidump_writer/minidump_writer.h"
 #include "common/linux/guid_creator.h"
@@ -190,14 +188,18 @@ bool ExceptionHandler::InstallHandlers() {
   // such a small stack.
   static const unsigned kSigStackSize = 8192;
 
-  signal_stack = malloc(kSigStackSize);
   stack_t stack;
-  memset(&stack, 0, sizeof(stack));
-  stack.ss_sp = signal_stack;
-  stack.ss_size = kSigStackSize;
+  // Only set an alternative stack if there isn't already one, or if the current
+  // one is too small.
+  if (sys_sigaltstack(NULL, &stack) == -1 || !stack.ss_sp ||
+      stack.ss_size < kSigStackSize) {
+    memset(&stack, 0, sizeof(stack));
+    stack.ss_sp = malloc(kSigStackSize);
+    stack.ss_size = kSigStackSize;
 
-  if (sys_sigaltstack(&stack, NULL) == -1)
-    return false;
+    if (sys_sigaltstack(&stack, NULL) == -1)
+      return false;
+  }
 
   struct sigaction sa;
   memset(&sa, 0, sizeof(sa));
@@ -390,17 +392,23 @@ bool ExceptionHandler::GenerateDump(CrashContext *context) {
     // is the write() and read() calls will fail with EBADF
     static const char no_pipe_msg[] = "ExceptionHandler::GenerateDump \
                                        sys_pipe failed:";
-    sys_write(2, no_pipe_msg, sizeof(no_pipe_msg) - 1);
-    sys_write(2, strerror(errno), strlen(strerror(errno)));
-    sys_write(2, "\n", 1);
+    logger::write(no_pipe_msg, sizeof(no_pipe_msg) - 1);
+    logger::write(strerror(errno), strlen(strerror(errno)));
+    logger::write("\n", 1);
   }
 
+#if defined(__ANDROID__)
+  const pid_t child = clone(
+      ThreadEntry, stack, CLONE_FILES | CLONE_FS | CLONE_UNTRACED,
+      &thread_arg);
+#else
   const pid_t child = sys_clone(
       ThreadEntry, stack, CLONE_FILES | CLONE_FS | CLONE_UNTRACED,
       &thread_arg, NULL, NULL, NULL);
+#endif
   int r, status;
   // Allow the child to ptrace us
-  prctl(PR_SET_PTRACER, child, 0, 0, 0);
+  sys_prctl(PR_SET_PTRACER, child);
   SendContinueSignalToChild();
   do {
     r = sys_waitpid(child, &status, __WALL);
@@ -411,9 +419,9 @@ bool ExceptionHandler::GenerateDump(CrashContext *context) {
 
   if (r == -1) {
     static const char msg[] = "ExceptionHandler::GenerateDump waitpid failed:";
-    sys_write(2, msg, sizeof(msg) - 1);
-    sys_write(2, strerror(errno), strlen(strerror(errno)));
-    sys_write(2, "\n", 1);
+    logger::write(msg, sizeof(msg) - 1);
+    logger::write(strerror(errno), strlen(strerror(errno)));
+    logger::write("\n", 1);
   }
 
   bool success = r != -1 && WIFEXITED(status) && WEXITSTATUS(status) == 0;
@@ -433,9 +441,9 @@ void ExceptionHandler::SendContinueSignalToChild() {
   if(r == -1) {
     static const char msg[] = "ExceptionHandler::SendContinueSignalToChild \
                                sys_write failed:";
-    sys_write(2, msg, sizeof(msg) - 1);
-    sys_write(2, strerror(errno), strlen(strerror(errno)));
-    sys_write(2, "\n", 1);
+    logger::write(msg, sizeof(msg) - 1);
+    logger::write(strerror(errno), strlen(strerror(errno)));
+    logger::write("\n", 1);
   }
 }
 
@@ -448,9 +456,9 @@ void ExceptionHandler::WaitForContinueSignal() {
   if(r == -1) {
     static const char msg[] = "ExceptionHandler::WaitForContinueSignal \
                                sys_read failed:";
-    sys_write(2, msg, sizeof(msg) - 1);
-    sys_write(2, strerror(errno), strlen(strerror(errno)));
-    sys_write(2, "\n", 1);
+    logger::write(msg, sizeof(msg) - 1);
+    logger::write(strerror(errno), strlen(strerror(errno)));
+    logger::write("\n", 1);
   }
 }
 
@@ -503,7 +511,8 @@ void ExceptionHandler::AddMappingInfo(const std::string& name,
   info.start_addr = start_address;
   info.size = mapping_size;
   info.offset = file_offset;
-  strncpy(info.name, name.c_str(), std::min(name.size(), sizeof(info)));
+  strncpy(info.name, name.c_str(), sizeof(info.name) - 1);
+  info.name[sizeof(info.name) - 1] = '\0';
 
   MappingEntry mapping;
   mapping.first = info;

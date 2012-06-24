@@ -59,6 +59,9 @@ class CrashGenerationServer {
   typedef void (*OnClientExitedCallback)(void* context,
                                          const ClientInfo* client_info);
 
+  typedef void (*OnClientUploadRequestCallback)(void* context,
+                                                const DWORD crash_id);
+
   // Creates an instance with the given parameters.
   //
   // Parameter pipe_name: Name of the Windows named pipe
@@ -86,6 +89,8 @@ class CrashGenerationServer {
                         void* dump_context,
                         OnClientExitedCallback exit_callback,
                         void* exit_context,
+                        OnClientUploadRequestCallback upload_request_callback,
+                        void* upload_context,
                         bool generate_dumps,
                         const std::wstring* dump_path);
 
@@ -211,8 +216,9 @@ class CrashGenerationServer {
   // asynchronous IO operation.
   void EnterStateWhenSignaled(IPCServerState state);
 
-  // Sync object for thread-safe access to the shared list of clients.
-  CRITICAL_SECTION clients_sync_;
+  // Sync object for thread-safe access to the shared list of clients and
+  // the server's state.
+  CRITICAL_SECTION sync_;
 
   // List of clients.
   std::list<ClientInfo*> clients_;
@@ -250,6 +256,12 @@ class CrashGenerationServer {
   // Context for client process exit callback.
   void* exit_context_;
 
+  // Callback for upload request.
+  OnClientUploadRequestCallback upload_request_callback_;
+
+  // Context for upload request callback.
+  void* upload_context_;
+
   // Whether to generate dumps.
   bool generate_dumps_;
 
@@ -260,10 +272,10 @@ class CrashGenerationServer {
   // Note that since we restrict the pipe to one instance, we
   // only need to keep one state of the server. Otherwise, server
   // would have one state per client it is talking to.
-  volatile IPCServerState server_state_;
+  IPCServerState server_state_;
 
   // Whether the server is shutting down.
-  volatile bool shutting_down_;
+  bool shutting_down_;
 
   // Overlapped instance for async I/O on the pipe.
   OVERLAPPED overlapped_;

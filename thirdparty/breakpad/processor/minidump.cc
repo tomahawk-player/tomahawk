@@ -1758,6 +1758,7 @@ string MinidumpModule::code_identifier() const {
     }
 
     case MD_OS_MAC_OS_X:
+    case MD_OS_IOS:
     case MD_OS_SOLARIS:
     case MD_OS_LINUX: {
       // TODO(mmentovai): support uuid extension if present, otherwise fall
@@ -2482,7 +2483,7 @@ const MinidumpModule* MinidumpModuleList::GetMainModule() const {
 
   // The main code module is the first one present in a minidump file's
   // MDRawModuleList.
-  return GetModuleAtSequence(0);
+  return GetModuleAtIndex(0);
 }
 
 
@@ -3093,6 +3094,10 @@ string MinidumpSystemInfo::GetOS() {
 
     case MD_OS_MAC_OS_X:
       os = "mac";
+      break;
+
+    case MD_OS_IOS:
+      os = "ios";
       break;
 
     case MD_OS_LINUX:

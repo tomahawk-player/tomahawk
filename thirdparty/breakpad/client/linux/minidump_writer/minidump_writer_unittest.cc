@@ -42,15 +42,11 @@
 #include "client/linux/minidump_writer/minidump_writer.h"
 #include "common/linux/eintr_wrapper.h"
 #include "common/linux/file_id.h"
+#include "common/linux/safe_readlink.h"
+#include "common/tests/auto_tempdir.h"
 #include "google_breakpad/processor/minidump.h"
 
 using namespace google_breakpad;
-
-#if !defined(__ANDROID__)
-#define TEMPDIR "/tmp"
-#else
-#define TEMPDIR "/data/local/tmp"
-#endif
 
 // Length of a formatted GUID string =
 // sizeof(MDGUID) * 2 + 4 (for dashes) + 1 (null terminator)
@@ -77,15 +73,14 @@ TEST(MinidumpWriterTest, Setup) {
   ExceptionHandler::CrashContext context;
   memset(&context, 0, sizeof(context));
 
-  char templ[] = TEMPDIR "/minidump-writer-unittest-XXXXXX";
-  mktemp(templ);
+  AutoTempDir temp_dir;
+  std::string templ = temp_dir.path() + "/minidump-writer-unittest";
   // Set a non-zero tid to avoid tripping asserts.
   context.tid = 1;
-  ASSERT_TRUE(WriteMinidump(templ, child, &context, sizeof(context)));
+  ASSERT_TRUE(WriteMinidump(templ.c_str(), child, &context, sizeof(context)));
   struct stat st;
-  ASSERT_EQ(stat(templ, &st), 0);
+  ASSERT_EQ(stat(templ.c_str(), &st), 0);
   ASSERT_GT(st.st_size, 0u);
-  unlink(templ);
 
   close(fds[1]);
 }
@@ -126,7 +121,7 @@ TEST(MinidumpWriterTest, MappingInfo) {
                                  MAP_PRIVATE | MAP_ANON,
                                  -1,
                                  0));
-  const u_int64_t kMemoryAddress = reinterpret_cast<u_int64_t>(memory);
+  const uintptr_t kMemoryAddress = reinterpret_cast<uintptr_t>(memory);
   ASSERT_TRUE(memory);
 
   const pid_t child = fork();
@@ -143,8 +138,8 @@ TEST(MinidumpWriterTest, MappingInfo) {
   memset(&context, 0, sizeof(context));
   context.tid = 1;
 
-  char templ[] = TEMPDIR "/minidump-writer-unittest-XXXXXX";
-  mktemp(templ);
+  AutoTempDir temp_dir;
+  std::string templ = temp_dir.path() + "/minidump-writer-unittest";
 
   // Add information about the mapped memory.
   MappingInfo info;
@@ -158,12 +153,13 @@ TEST(MinidumpWriterTest, MappingInfo) {
   mapping.first = info;
   memcpy(mapping.second, kModuleGUID, sizeof(MDGUID));
   mappings.push_back(mapping);
-  ASSERT_TRUE(WriteMinidump(templ, child, &context, sizeof(context), mappings));
+  ASSERT_TRUE(WriteMinidump(templ.c_str(), child, &context, sizeof(context),
+                            mappings));
 
   // Read the minidump. Load the module list, and ensure that
   // the mmap'ed |memory| is listed with the given module name
   // and debug ID.
-  Minidump minidump(templ);
+  Minidump minidump(templ.c_str());
   ASSERT_TRUE(minidump.Read());
 
   MinidumpModuleList* module_list = minidump.GetModuleList();
@@ -177,7 +173,6 @@ TEST(MinidumpWriterTest, MappingInfo) {
   EXPECT_EQ(kMemoryName, module->code_file());
   EXPECT_EQ(module_identifier, module->debug_identifier());
 
-  unlink(templ);
   close(fds[1]);
 }
 
@@ -211,11 +206,11 @@ TEST(MinidumpWriterTest, MappingInfoContained) {
   module_identifier += "0";
 
   // mmap a file
-  char tempfile[] = TEMPDIR "/minidump-writer-unittest-temp-XXXXXX";
-  mktemp(tempfile);
-  int fd = open(tempfile, O_RDWR | O_CREAT, 0);
+  AutoTempDir temp_dir;
+  std::string tempfile = temp_dir.path() + "/minidump-writer-unittest-temp";
+  int fd = open(tempfile.c_str(), O_RDWR | O_CREAT, 0);
   ASSERT_NE(-1, fd);
-  unlink(tempfile);
+  unlink(tempfile.c_str());
   // fill with zeros
   char buffer[kMemorySize];
   memset(buffer, 0, kMemorySize);
@@ -229,7 +224,7 @@ TEST(MinidumpWriterTest, MappingInfoContained) {
                                  MAP_PRIVATE,
                                  fd,
                                  0));
-  const u_int64_t kMemoryAddress = reinterpret_cast<u_int64_t>(memory);
+  const uintptr_t kMemoryAddress = reinterpret_cast<uintptr_t>(memory);
   ASSERT_TRUE(memory);
   close(fd);
 
@@ -247,8 +242,7 @@ TEST(MinidumpWriterTest, MappingInfoContained) {
   memset(&context, 0, sizeof(context));
   context.tid = 1;
 
-  char dumpfile[] = TEMPDIR "/minidump-writer-unittest-XXXXXX";
-  mktemp(dumpfile);
+  std::string dumpfile = temp_dir.path() + "/minidump-writer-unittest";
 
   // Add information about the mapped memory. Report it as being larger than
   // it actually is.
@@ -264,12 +258,13 @@ TEST(MinidumpWriterTest, MappingInfoContained) {
   memcpy(mapping.second, kModuleGUID, sizeof(MDGUID));
   mappings.push_back(mapping);
   ASSERT_TRUE(
-      WriteMinidump(dumpfile, child, &context, sizeof(context), mappings));
+      WriteMinidump(dumpfile.c_str(), child, &context, sizeof(context),
+                    mappings));
 
   // Read the minidump. Load the module list, and ensure that
   // the mmap'ed |memory| is listed with the given module name
   // and debug ID.
-  Minidump minidump(dumpfile);
+  Minidump minidump(dumpfile.c_str());
   ASSERT_TRUE(minidump.Read());
 
   MinidumpModuleList* module_list = minidump.GetModuleList();
@@ -283,7 +278,6 @@ TEST(MinidumpWriterTest, MappingInfoContained) {
   EXPECT_EQ(kMemoryName, module->code_file());
   EXPECT_EQ(module_identifier, module->debug_identifier());
 
-  unlink(dumpfile);
   close(fds[1]);
 }
 
@@ -294,8 +288,8 @@ TEST(MinidumpWriterTest, DeletedBinary) {
 
   // Locate helper binary next to the current binary.
   char self_path[PATH_MAX];
-  if (readlink("/proc/self/exe", self_path, sizeof(self_path) - 1) == -1) {
-    FAIL() << "readlink failed: " << strerror(errno);
+  if (!SafeReadLink("/proc/self/exe", self_path)) {
+    FAIL() << "readlink failed";
     exit(1);
   }
   string helper_path(self_path);
@@ -308,12 +302,13 @@ TEST(MinidumpWriterTest, DeletedBinary) {
   helper_path += "linux_dumper_unittest_helper";
 
   // Copy binary to a temp file.
-  char binpath[] = TEMPDIR "/linux-dumper-unittest-helper-XXXXXX";
-  mktemp(binpath);
+  AutoTempDir temp_dir;
+  std::string binpath = temp_dir.path() + "/linux-dumper-unittest-helper";
   char cmdline[2 * PATH_MAX];
-  sprintf(cmdline, "/bin/cp \"%s\" \"%s\"", helper_path.c_str(), binpath);
+  sprintf(cmdline, "/bin/cp \"%s\" \"%s\"", helper_path.c_str(),
+          binpath.c_str());
   ASSERT_EQ(0, system(cmdline));
-  ASSERT_EQ(0, chmod(binpath, 0755));
+  ASSERT_EQ(0, chmod(binpath.c_str(), 0755));
 
   int fds[2];
   ASSERT_NE(-1, pipe(fds));
@@ -326,8 +321,8 @@ TEST(MinidumpWriterTest, DeletedBinary) {
     // Pass the pipe fd and the number of threads as arguments.
     char pipe_fd_string[8];
     sprintf(pipe_fd_string, "%d", fds[1]);
-    execl(binpath,
-          binpath,
+    execl(binpath.c_str(),
+          binpath.c_str(),
           pipe_fd_string,
           kNumberOfThreadsArgument,
           NULL);
@@ -343,37 +338,38 @@ TEST(MinidumpWriterTest, DeletedBinary) {
   ASSERT_EQ(1, r);
   ASSERT_TRUE(pfd.revents & POLLIN);
   uint8_t junk;
-  read(fds[0], &junk, sizeof(junk));
+  const int nr = HANDLE_EINTR(read(fds[0], &junk, sizeof(junk)));
+  ASSERT_EQ(sizeof(junk), nr);
   close(fds[0]);
 
   // Child is ready now.
   // Unlink the test binary.
-  unlink(binpath);
+  unlink(binpath.c_str());
 
   ExceptionHandler::CrashContext context;
   memset(&context, 0, sizeof(context));
 
-  char templ[] = TEMPDIR "/minidump-writer-unittest-XXXXXX";
-  mktemp(templ);
+  std::string templ = temp_dir.path() + "/minidump-writer-unittest";
   // Set a non-zero tid to avoid tripping asserts.
   context.tid = 1;
-  ASSERT_TRUE(WriteMinidump(templ, child_pid, &context, sizeof(context)));
+  ASSERT_TRUE(WriteMinidump(templ.c_str(), child_pid, &context,
+                            sizeof(context)));
   kill(child_pid, SIGKILL);
 
   struct stat st;
-  ASSERT_EQ(stat(templ, &st), 0);
+  ASSERT_EQ(stat(templ.c_str(), &st), 0);
   ASSERT_GT(st.st_size, 0u);
 
 
 
-  Minidump minidump(templ);
+  Minidump minidump(templ.c_str());
   ASSERT_TRUE(minidump.Read());
 
   // Check that the main module filename is correct.
   MinidumpModuleList* module_list = minidump.GetModuleList();
   ASSERT_TRUE(module_list);
   const MinidumpModule* module = module_list->GetMainModule();
-  EXPECT_STREQ(binpath, module->code_file().c_str());
+  EXPECT_STREQ(binpath.c_str(), module->code_file().c_str());
   // Check that the file ID is correct.
   FileID fileid(helper_path.c_str());
   uint8_t identifier[sizeof(MDGUID)];
@@ -391,6 +387,4 @@ TEST(MinidumpWriterTest, DeletedBinary) {
   // which is always zero on Linux.
   module_identifier += "0";
   EXPECT_EQ(module_identifier, module->debug_identifier());
-
-  unlink(templ);
 }

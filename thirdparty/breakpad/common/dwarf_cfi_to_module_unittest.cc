@@ -31,8 +31,14 @@
 
 // dwarf_cfi_to_module_unittest.cc: Tests for google_breakpad::DwarfCFIToModule.
 
+#include <string>
+#include <vector>
+
 #include "breakpad_googletest_includes.h"
 #include "common/dwarf_cfi_to_module.h"
+
+using std::string;
+using std::vector;
 
 using google_breakpad::Module;
 using google_breakpad::DwarfCFIToModule;

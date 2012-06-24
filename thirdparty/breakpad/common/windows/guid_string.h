@@ -32,7 +32,7 @@
 #ifndef COMMON_WINDOWS_GUID_STRING_H__
 #define COMMON_WINDOWS_GUID_STRING_H__
 
-#include <guiddef.h>
+#include <Guiddef.h>
 
 #include <string>
 
