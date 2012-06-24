@@ -10,6 +10,7 @@ list(APPEND simple_plugins
     MusicBrainz
     Rovi
     Discogs
+    Songkick
 )
 
 foreach(simple_plugin ${simple_plugins})
