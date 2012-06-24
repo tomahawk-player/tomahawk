@@ -107,10 +107,15 @@ void FastSourceLineResolver::Module::LookupAddress(StackFrame *frame) const {
 // WFI: WindowsFrameInfo.
 // Returns a WFI object reading from a raw memory chunk of data
 WindowsFrameInfo FastSourceLineResolver::CopyWFI(const char *raw) {
-  // The first 4Bytes of int data are unused.
-  // They corresponds to "int valid;" data member of WFI.
+  const WindowsFrameInfo::StackInfoTypes type =
+     static_cast<const WindowsFrameInfo::StackInfoTypes>(
+         *reinterpret_cast<const int32_t*>(raw));
+
+  // The first 8 bytes of int data are unused.
+  // They correspond to "StackInfoTypes type_;" and "int valid;"
+  // data member of WFI.
   const u_int32_t *para_uint32 = reinterpret_cast<const u_int32_t*>(
-      raw + sizeof(int32_t));
+      raw + 2 * sizeof(int32_t));
 
   u_int32_t prolog_size = para_uint32[0];;
   u_int32_t epilog_size = para_uint32[1];
@@ -122,7 +127,8 @@ WindowsFrameInfo FastSourceLineResolver::CopyWFI(const char *raw) {
   bool allocates_base_pointer = (*boolean != 0);
   std::string program_string = boolean + 1;
 
-  return WindowsFrameInfo(prolog_size,
+  return WindowsFrameInfo(type,
+                          prolog_size,
                           epilog_size,
                           parameter_size,
                           saved_register_size,

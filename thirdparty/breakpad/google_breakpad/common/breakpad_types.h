@@ -57,7 +57,7 @@ typedef uint64_t u_int64_t;
 
 #else  /* !_WIN32 */
 
-#include <wtypes.h>
+#include <WTypes.h>
 
 typedef unsigned __int8  u_int8_t;
 typedef unsigned __int16 u_int16_t;

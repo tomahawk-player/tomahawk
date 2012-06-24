@@ -39,7 +39,7 @@ namespace google_breakpad {
 
 using std::string;
 class CodeModule;
-class SystemInfo;
+struct SystemInfo;
 
 class SymbolSupplier {
  public:

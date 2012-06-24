@@ -70,7 +70,7 @@ static Module::Function *generate_duplicate_function(const string &name) {
 TEST(Write, Header) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n",
                contents.c_str());
@@ -91,7 +91,7 @@ TEST(Write, OneLineFunc) {
   function->lines.push_back(line);
   m.AddFunction(function);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FILE 0 file_name.cc\n"
@@ -141,7 +141,7 @@ TEST(Write, RelativeLoadAddress) {
   // the module must work fine.
   m.SetLoadAddress(0x2ab698b0b6407073LL);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FILE 0 filename-a.cc\n"
@@ -164,7 +164,7 @@ TEST(Write, OmitUnusedFiles) {
 
   // Create some source files.
   Module::File *file1 = m.FindFile("filename1");
-  m.FindFile("filename2"); // not used by any line
+  m.FindFile("filename2");  // not used by any line
   Module::File *file3 = m.FindFile("filename3");
 
   // Create a function.
@@ -197,7 +197,7 @@ TEST(Write, OmitUnusedFiles) {
   EXPECT_NE(-1, vec[2]->source_id);
 
   stringstream s;
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FILE 0 filename1\n"
@@ -206,6 +206,52 @@ TEST(Write, OmitUnusedFiles) {
                " function_name\n"
                "595fa44ebacc1086 1e1e0191b066c5b3 137850127 0\n"
                "401ce8c8a12d25e3 895751c41b8d2ce2 28113549 1\n",
+               contents.c_str());
+}
+
+TEST(Write, NoCFI) {
+  stringstream s;
+  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
+
+  // Some source files.  We will expect to see them in lexicographic order.
+  Module::File *file1 = m.FindFile("filename.cc");
+
+  // A function.
+  Module::Function *function = new(Module::Function);
+  function->name = "A_FLIBBERTIJIBBET::a_will_o_the_wisp(a clown)";
+  function->address = 0xbec774ea5dd935f3LL;
+  function->size = 0x2922088f98d3f6fcLL;
+  function->parameter_size = 0xe5e9aa008bd5f0d0LL;
+
+  // Some source lines.  The module should not sort these.
+  Module::Line line1 = { 0xbec774ea5dd935f3LL, 0x1c2be6d6c5af2611LL,
+                         file1, 41676901 };
+  function->lines.push_back(line1);
+
+  m.AddFunction(function);
+
+  // Some stack information.
+  Module::StackFrameEntry *entry = new Module::StackFrameEntry();
+  entry->address = 0x30f9e5c83323973dULL;
+  entry->size = 0x49fc9ca7c7c13dc2ULL;
+  entry->initial_rules[".cfa"] = "he was a handsome man";
+  entry->initial_rules["and"] = "what i want to know is";
+  entry->rule_changes[0x30f9e5c83323973eULL]["how"] =
+    "do you like your blueeyed boy";
+  entry->rule_changes[0x30f9e5c83323973eULL]["Mister"] = "Death";
+  m.AddStackFrameEntry(entry);
+
+  // Set the load address.  Doing this after adding all the data to
+  // the module must work fine.
+  m.SetLoadAddress(0x2ab698b0b6407073LL);
+
+  m.Write(s, false);
+  string contents = s.str();
+  EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
+               "FILE 0 filename.cc\n"
+               "FUNC 9410dc39a798c580 2922088f98d3f6fc e5e9aa008bd5f0d0"
+               " A_FLIBBERTIJIBBET::a_will_o_the_wisp(a clown)\n"
+               "9410dc39a798c580 1c2be6d6c5af2611 41676901 0\n",
                contents.c_str());
 }
 
@@ -233,7 +279,7 @@ TEST(Construct, AddFunctions) {
 
   m.AddFunctions(vec.begin(), vec.end());
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FUNC 2987743d0b35b13f b369db048deb3010 938e556cb5a79988"
@@ -285,7 +331,7 @@ TEST(Construct, AddFrames) {
   m.AddStackFrameEntry(entry3);
 
   // Check that Write writes STACK CFI records properly.
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "STACK CFI INIT ddb5f41285aa7757 1486493370dc5073 \n"
@@ -361,7 +407,7 @@ TEST(Construct, DuplicateFunctions) {
   m.AddFunction(function1);
   m.AddFunction(function2);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FUNC d35402aac7a7ad5c 200b26e605f99071 f14ac4fed48c4a99"
@@ -380,7 +426,7 @@ TEST(Construct, FunctionsWithSameAddress) {
   m.AddFunction(function1);
   m.AddFunction(function2);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
   EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
                "FUNC d35402aac7a7ad5c 200b26e605f99071 f14ac4fed48c4a99"
@@ -407,7 +453,7 @@ TEST(Construct, Externs) {
   m.AddExtern(extern1);
   m.AddExtern(extern2);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
 
   EXPECT_STREQ("MODULE " MODULE_OS " " MODULE_ARCH " "
@@ -434,7 +480,7 @@ TEST(Construct, DuplicateExterns) {
   m.AddExtern(extern1);
   m.AddExtern(extern2);
 
-  m.Write(s);
+  m.Write(s, true);
   string contents = s.str();
 
   EXPECT_STREQ("MODULE " MODULE_OS " " MODULE_ARCH " "

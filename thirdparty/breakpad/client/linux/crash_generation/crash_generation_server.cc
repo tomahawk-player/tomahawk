@@ -47,6 +47,7 @@
 #include "client/linux/minidump_writer/minidump_writer.h"
 #include "common/linux/eintr_wrapper.h"
 #include "common/linux/guid_creator.h"
+#include "common/linux/safe_readlink.h"
 
 static const char kCommandQuit = 'x';
 
@@ -79,12 +80,10 @@ GetInodeForProcPath(ino_t* inode_out, const char* path)
   assert(inode_out);
   assert(path);
 
-  char buf[256];
-  const ssize_t n = readlink(path, buf, sizeof(buf) - 1);
-  if (n == -1) {
+  char buf[PATH_MAX];
+  if (!google_breakpad::SafeReadLink(path, buf)) {
     return false;
   }
-  buf[n] = 0;
 
   if (0 != memcmp(kSocketLinkPrefix, buf, sizeof(kSocketLinkPrefix) - 1)) {
     return false;
@@ -130,7 +129,7 @@ FindProcessHoldingSocket(pid_t* pid_out, ino_t socket_inode)
   for (std::vector<pid_t>::const_iterator
        i = pids.begin(); i != pids.end(); ++i) {
     const pid_t current_pid = *i;
-    char buf[256];
+    char buf[PATH_MAX];
     snprintf(buf, sizeof(buf), "/proc/%d/fd", current_pid);
     DIR* fd = opendir(buf);
     if (!fd)

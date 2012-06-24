@@ -203,10 +203,37 @@ StackFrameX86 *StackwalkerX86::GetCallerByWindowsFrameInfo(
   dictionary[".cbCalleeParams"] = last_frame_callee_parameter_size;
   dictionary[".cbSavedRegs"] = last_frame_info->saved_register_size;
   dictionary[".cbLocals"] = last_frame_info->local_size;
-  dictionary[".raSearchStart"] = last_frame->context.esp +
-                                 last_frame_callee_parameter_size +
-                                 last_frame_info->local_size +
-                                 last_frame_info->saved_register_size;
+
+  u_int32_t raSearchStart = last_frame->context.esp +
+                            last_frame_callee_parameter_size +
+                            last_frame_info->local_size +
+                            last_frame_info->saved_register_size;
+
+  u_int32_t raSearchStartOld = raSearchStart;
+  u_int32_t found = 0; // dummy value
+  // Scan up to three words above the calculated search value, in case
+  // the stack was aligned to a quadword boundary.
+  if (ScanForReturnAddress(raSearchStart, &raSearchStart, &found, 3) &&
+      last_frame->trust == StackFrame::FRAME_TRUST_CONTEXT &&
+      last_frame->windows_frame_info != NULL &&
+      last_frame_info->type_ == WindowsFrameInfo::STACK_INFO_FPO &&
+      raSearchStartOld == raSearchStart &&
+      found == last_frame->context.eip) {
+    // The context frame represents an FPO-optimized Windows system call.
+    // On the top of the stack we have a pointer to the current instruction.
+    // This means that the callee has returned but the return address is still
+    // on the top of the stack which is very atypical situaltion.
+    // Skip one slot from the stack and do another scan in order to get the
+    // actual return address.
+    raSearchStart += 4;
+    ScanForReturnAddress(raSearchStart, &raSearchStart, &found, 3);
+  }
+
+  // The difference between raSearch and raSearchStart is unknown,
+  // but making them the same seems to work well in practice.
+  dictionary[".raSearchStart"] = raSearchStart;
+  dictionary[".raSearch"] = raSearchStart;
+
   dictionary[".cbParams"] = last_frame_info->parameter_size;
 
   // Decide what type of program string to use. The program string is in

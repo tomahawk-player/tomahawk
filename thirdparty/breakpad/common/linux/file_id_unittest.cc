@@ -33,39 +33,52 @@
 #include <stdlib.h>
 
 #include "common/linux/file_id.h"
+#include "common/linux/safe_readlink.h"
 #include "common/linux/synth_elf.h"
 #include "common/test_assembler.h"
+#include "common/tests/auto_tempdir.h"
 #include "breakpad_googletest_includes.h"
 
 using namespace google_breakpad;
+using google_breakpad::SafeReadLink;
 using google_breakpad::synth_elf::BuildIDNote;
 using google_breakpad::synth_elf::ELF;
 using google_breakpad::test_assembler::kLittleEndian;
 using google_breakpad::test_assembler::Section;
+
+namespace {
+
+// Simply calling Section::Append(size, byte) produces a uninteresting pattern
+// that tends to get hashed to 0000...0000. This populates the section with
+// data to produce better hashes.
+void PopulateSection(Section* section, int size, int prime_number) {
+  for (int i = 0; i < size; i++)
+    section->Append(1, (i % prime_number) % 256);
+}
+
+}  // namespace
 
 TEST(FileIDStripTest, StripSelf) {
   // Calculate the File ID of this binary using
   // FileID::ElfFileIdentifier, then make a copy of this binary,
   // strip it, and ensure that the result is the same.
   char exe_name[PATH_MAX];
-  ssize_t len = readlink("/proc/self/exe", exe_name, PATH_MAX - 1);
-  ASSERT_NE(len, -1);
-  exe_name[len] = '\0';
+  ASSERT_TRUE(SafeReadLink("/proc/self/exe", exe_name));
 
   // copy our binary to a temp file, and strip it
-  char templ[] = "/tmp/file-id-unittest-XXXXXX";
-  mktemp(templ);
+  AutoTempDir temp_dir;
+  std::string templ = temp_dir.path() + "/file-id-unittest";
   char cmdline[4096];
-  sprintf(cmdline, "cp \"%s\" \"%s\"", exe_name, templ);
+  sprintf(cmdline, "cp \"%s\" \"%s\"", exe_name, templ.c_str());
   ASSERT_EQ(system(cmdline), 0);
-  sprintf(cmdline, "strip \"%s\"", templ);
+  sprintf(cmdline, "strip \"%s\"", templ.c_str());
   ASSERT_EQ(system(cmdline), 0);
 
   uint8_t identifier1[sizeof(MDGUID)];
   uint8_t identifier2[sizeof(MDGUID)];
   FileID fileid1(exe_name);
   EXPECT_TRUE(fileid1.ElfFileIdentifier(identifier1));
-  FileID fileid2(templ);
+  FileID fileid2(templ.c_str());
   EXPECT_TRUE(fileid2.ElfFileIdentifier(identifier2));
   char identifier_string1[37];
   char identifier_string2[37];
@@ -74,7 +87,6 @@ TEST(FileIDStripTest, StripSelf) {
   FileID::ConvertIdentifierToString(identifier2, identifier_string2,
                                     37);
   EXPECT_STREQ(identifier_string1, identifier_string2);
-  unlink(templ);
 }
 
 class FileIDTest : public testing::Test {
@@ -180,4 +192,93 @@ TEST_F(FileIDTest, BuildID) {
   FileID::ConvertIdentifierToString(identifier, identifier_string,
                                     sizeof(identifier_string));
   EXPECT_STREQ(expected_identifier_string, identifier_string);
+}
+
+// Test to make sure two files with different text sections produce
+// different hashes when not using a build id.
+TEST_F(FileIDTest, UniqueHashes32) {
+  char identifier_string_1[] =
+    "00000000-0000-0000-0000-000000000000";
+  char identifier_string_2[] =
+    "00000000-0000-0000-0000-000000000000";
+  uint8_t identifier_1[sizeof(MDGUID)];
+  uint8_t identifier_2[sizeof(MDGUID)];
+
+  {
+    ELF elf1(EM_386, ELFCLASS32, kLittleEndian);
+    Section foo_1(kLittleEndian);
+    PopulateSection(&foo_1, 32, 5);
+    elf1.AddSection(".foo", foo_1, SHT_PROGBITS);
+    Section text_1(kLittleEndian);
+    PopulateSection(&text_1, 4096, 17);
+    elf1.AddSection(".text", text_1, SHT_PROGBITS);
+    elf1.Finish();
+    GetElfContents(elf1);
+  }
+
+  EXPECT_TRUE(FileID::ElfFileIdentifierFromMappedFile(elfdata, identifier_1));
+  FileID::ConvertIdentifierToString(identifier_1, identifier_string_1,
+                                    sizeof(identifier_string_1));
+
+  {
+    ELF elf2(EM_386, ELFCLASS32, kLittleEndian);
+    Section text_2(kLittleEndian);
+    Section foo_2(kLittleEndian);
+    PopulateSection(&foo_2, 32, 5);
+    elf2.AddSection(".foo", foo_2, SHT_PROGBITS);
+    PopulateSection(&text_2, 4096, 31);
+    elf2.AddSection(".text", text_2, SHT_PROGBITS);
+    elf2.Finish();
+    GetElfContents(elf2);
+  }
+
+  EXPECT_TRUE(FileID::ElfFileIdentifierFromMappedFile(elfdata, identifier_2));
+  FileID::ConvertIdentifierToString(identifier_2, identifier_string_2,
+                                    sizeof(identifier_string_2));
+
+  EXPECT_STRNE(identifier_string_1, identifier_string_2);
+}
+
+// Same as UniqueHashes32, for x86-64.
+TEST_F(FileIDTest, UniqueHashes64) {
+  char identifier_string_1[] =
+    "00000000-0000-0000-0000-000000000000";
+  char identifier_string_2[] =
+    "00000000-0000-0000-0000-000000000000";
+  uint8_t identifier_1[sizeof(MDGUID)];
+  uint8_t identifier_2[sizeof(MDGUID)];
+
+  {
+    ELF elf1(EM_X86_64, ELFCLASS64, kLittleEndian);
+    Section foo_1(kLittleEndian);
+    PopulateSection(&foo_1, 32, 5);
+    elf1.AddSection(".foo", foo_1, SHT_PROGBITS);
+    Section text_1(kLittleEndian);
+    PopulateSection(&text_1, 4096, 17);
+    elf1.AddSection(".text", text_1, SHT_PROGBITS);
+    elf1.Finish();
+    GetElfContents(elf1);
+  }
+
+  EXPECT_TRUE(FileID::ElfFileIdentifierFromMappedFile(elfdata, identifier_1));
+  FileID::ConvertIdentifierToString(identifier_1, identifier_string_1,
+                                    sizeof(identifier_string_1));
+
+  {
+    ELF elf2(EM_X86_64, ELFCLASS64, kLittleEndian);
+    Section text_2(kLittleEndian);
+    Section foo_2(kLittleEndian);
+    PopulateSection(&foo_2, 32, 5);
+    elf2.AddSection(".foo", foo_2, SHT_PROGBITS);
+    PopulateSection(&text_2, 4096, 31);
+    elf2.AddSection(".text", text_2, SHT_PROGBITS);
+    elf2.Finish();
+    GetElfContents(elf2);
+  }
+
+  EXPECT_TRUE(FileID::ElfFileIdentifierFromMappedFile(elfdata, identifier_2));
+  FileID::ConvertIdentifierToString(identifier_2, identifier_string_2,
+                                    sizeof(identifier_string_2));
+
+  EXPECT_STRNE(identifier_string_1, identifier_string_2);
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2010 Google Inc.
+// Copyright (c) 2011 Google Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -226,7 +226,7 @@ class DumperLineToModule: public DwarfCUToModule::LineToModuleFunctor {
   explicit DumperLineToModule(dwarf2reader::ByteReader *byte_reader)
       : byte_reader_(byte_reader) { }
   void operator()(const char *program, uint64 length,
-                  Module *module, vector<Module::Line> *lines) {
+                  Module *module, std::vector<Module::Line> *lines) {
     DwarfLineToModule handler(module, lines);
     dwarf2reader::LineInfo parser(program, length, byte_reader_, &handler);
     parser.Start();
@@ -235,7 +235,7 @@ class DumperLineToModule: public DwarfCUToModule::LineToModuleFunctor {
   dwarf2reader::ByteReader *byte_reader_;
 };
 
-static bool LoadDwarf(const string &dwarf_filename,
+static bool LoadDwarf(const std::string &dwarf_filename,
                       const ElfW(Ehdr) *elf_header,
                       const bool big_endian,
                       Module *module) {
@@ -253,8 +253,8 @@ static bool LoadDwarf(const string &dwarf_filename,
   const ElfW(Shdr) *section_names = sections + elf_header->e_shstrndx;
   for (int i = 0; i < num_sections; i++) {
     const ElfW(Shdr) *section = &sections[i];
-    string name = reinterpret_cast<const char *>(section_names->sh_offset
-                                                 + section->sh_name);
+    std::string name = reinterpret_cast<const char *>(section_names->sh_offset +
+                                                      section->sh_name);
     const char *contents = reinterpret_cast<const char *>(section->sh_offset);
     uint64 length = section->sh_size;
     file_context.section_map[name] = std::make_pair(contents, length);
@@ -292,7 +292,7 @@ static bool LoadDwarf(const string &dwarf_filename,
 // success, or false if we don't recognize HEADER's machine
 // architecture.
 static bool DwarfCFIRegisterNames(const ElfW(Ehdr) *elf_header,
-                                  vector<string> *register_names) {
+                                  std::vector<std::string> *register_names) {
   switch (elf_header->e_machine) {
     case EM_386:
       *register_names = DwarfCFIToModule::RegisterNames::I386();
@@ -308,7 +308,7 @@ static bool DwarfCFIRegisterNames(const ElfW(Ehdr) *elf_header,
   }
 }
 
-static bool LoadDwarfCFI(const string &dwarf_filename,
+static bool LoadDwarfCFI(const std::string &dwarf_filename,
                          const ElfW(Ehdr) *elf_header,
                          const char *section_name,
                          const ElfW(Shdr) *section,
@@ -319,7 +319,7 @@ static bool LoadDwarfCFI(const string &dwarf_filename,
                          Module *module) {
   // Find the appropriate set of register names for this file's
   // architecture.
-  vector<string> register_names;
+  std::vector<std::string> register_names;
   if (!DwarfCFIRegisterNames(elf_header, &register_names)) {
     fprintf(stderr, "%s: unrecognized ELF machine architecture '%d';"
             " cannot convert DWARF call frame information\n",
@@ -728,6 +728,7 @@ namespace google_breakpad {
 bool WriteSymbolFileInternal(uint8_t* obj_file,
                              const std::string &obj_filename,
                              const std::string &debug_dir,
+                             bool cfi,
                              std::ostream &sym_stream) {
   ElfW(Ehdr) *elf_header = reinterpret_cast<ElfW(Ehdr) *>(obj_file);
 
@@ -803,7 +804,7 @@ bool WriteSymbolFileInternal(uint8_t* obj_file,
       return false;
     }
   }
-  if (!module.Write(sym_stream))
+  if (!module.Write(sym_stream, cfi))
     return false;
 
   return true;
@@ -811,6 +812,7 @@ bool WriteSymbolFileInternal(uint8_t* obj_file,
 
 bool WriteSymbolFile(const std::string &obj_file,
                      const std::string &debug_dir,
+                     bool cfi,
                      std::ostream &sym_stream) {
   MmapWrapper map_wrapper;
   ElfW(Ehdr) *elf_header = NULL;
@@ -818,7 +820,7 @@ bool WriteSymbolFile(const std::string &obj_file,
     return false;
 
   return WriteSymbolFileInternal(reinterpret_cast<uint8_t*>(elf_header),
-                                 obj_file, debug_dir, sym_stream);
+                                 obj_file, debug_dir, cfi, sym_stream);
 }
 
 }  // namespace google_breakpad

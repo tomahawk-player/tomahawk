@@ -146,17 +146,12 @@ StackFrameAMD64 *StackwalkerAMD64::GetCallerByStackScan(
     const vector<StackFrame *> &frames) {
   StackFrameAMD64 *last_frame = static_cast<StackFrameAMD64 *>(frames.back());
   u_int64_t last_rsp = last_frame->context.rsp;
-  u_int64_t caller_rsp, caller_rip;
-  
-  if (!ScanForReturnAddress(last_rsp, &caller_rsp, &caller_rip)) {
+  u_int64_t caller_rip_address, caller_rip;
+
+  if (!ScanForReturnAddress(last_rsp, &caller_rip_address, &caller_rip)) {
     // No plausible return address was found.
     return NULL;
   }
-
-  // ScanForReturnAddress found a reasonable return address. Advance
-  // %rsp to the location above the one where the return address was
-  // found.
-  caller_rsp += 8;
 
   // Create a new stack frame (ownership will be transferred to the caller)
   // and fill it in.
@@ -165,9 +160,33 @@ StackFrameAMD64 *StackwalkerAMD64::GetCallerByStackScan(
   frame->trust = StackFrame::FRAME_TRUST_SCAN;
   frame->context = last_frame->context;
   frame->context.rip = caller_rip;
-  frame->context.rsp = caller_rsp;
+  // The caller's %rsp is directly underneath the return address pushed by
+  // the call.
+  frame->context.rsp = caller_rip_address + 8;
   frame->context_validity = StackFrameAMD64::CONTEXT_VALID_RIP |
                             StackFrameAMD64::CONTEXT_VALID_RSP;
+
+  // Other unwinders give up if they don't have an %rbp value, so see if we
+  // can pass some plausible value on.
+  if (last_frame->context_validity & StackFrameAMD64::CONTEXT_VALID_RBP) {
+    // Functions typically push their caller's %rbp immediately upon entry,
+    // and then set %rbp to point to that. So if the callee's %rbp is
+    // pointing to the first word below the alleged return address, presume
+    // that the caller's %rbp is saved there.
+    if (caller_rip_address - 8 == last_frame->context.rbp) {
+      u_int64_t caller_rbp = 0;
+      if (memory_->GetMemoryAtAddress(last_frame->context.rbp, &caller_rbp) &&
+          caller_rbp > caller_rip_address) {
+        frame->context.rbp = caller_rbp;
+        frame->context_validity |= StackFrameAMD64::CONTEXT_VALID_RBP;
+      }
+    } else if (last_frame->context.rbp >= caller_rip_address + 8) {
+      // If the callee's %rbp is plausible as a value for the caller's
+      // %rbp, presume that the callee left it unchanged.
+      frame->context.rbp = last_frame->context.rbp;
+      frame->context_validity |= StackFrameAMD64::CONTEXT_VALID_RBP;
+    }
+  }
 
   return frame;
 }

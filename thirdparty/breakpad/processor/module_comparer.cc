@@ -240,6 +240,7 @@ bool ModuleComparer::ComparePubSymbol(const BasicPubSymbol* basic_ps,
 
 bool ModuleComparer::CompareWFI(const WindowsFrameInfo& wfi1,
                                const WindowsFrameInfo& wfi2) const {
+  ASSERT_TRUE(wfi1.type_ == wfi2.type_);
   ASSERT_TRUE(wfi1.valid == wfi2.valid);
   ASSERT_TRUE(wfi1.prolog_size == wfi2.prolog_size);
   ASSERT_TRUE(wfi1.epilog_size == wfi2.epilog_size);

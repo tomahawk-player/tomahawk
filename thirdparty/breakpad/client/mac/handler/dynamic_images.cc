@@ -35,18 +35,21 @@ extern "C" { // needed to compile on Leopard
   #include <stdio.h>
 }
 
-#include "breakpad_nlist_64.h"
-#include <AvailabilityMacros.h>
 #include <assert.h>
-#include <CoreServices/CoreServices.h>
+#include <AvailabilityMacros.h>
 #include <dlfcn.h>
-#include <mach/mach_vm.h>
 #include <mach/task_info.h>
 #include <sys/sysctl.h>
+#include <TargetConditionals.h>
 
 #include <algorithm>
 #include <string>
 #include <vector>
+
+#include "breakpad_nlist_64.h"
+
+#if !TARGET_OS_IPHONE
+#include <CoreServices/CoreServices.h>
 
 #ifndef MAC_OS_X_VERSION_10_6
 #define MAC_OS_X_VERSION_10_6 1060
@@ -66,6 +69,8 @@ typedef struct task_dyld_info *task_dyld_info_t;
 #define TASK_DYLD_INFO_COUNT (sizeof(task_dyld_info_data_t) / sizeof(natural_t))
 
 #endif
+
+#endif  // !TARGET_OS_IPHONE
 
 namespace google_breakpad {
 
@@ -358,6 +363,11 @@ static uint64_t LookupSymbol(const char* symbol_name,
   return list.n_value;
 }
 
+#if TARGET_OS_IPHONE
+static bool HasTaskDyldInfo() {
+  return true;
+}
+#else
 static SInt32 GetOSVersionInternal() {
   SInt32 os_version = 0;
   Gestalt(gestaltSystemVersion, &os_version);
@@ -369,21 +379,22 @@ static SInt32 GetOSVersion() {
   return os_version;
 }
 
-static bool IsSnowLeopardOrLater() {
+static bool HasTaskDyldInfo() {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
   return true;
 #else
   return GetOSVersion() >= 0x1060;
 #endif
 }
+#endif  // TARGET_OS_IPHONE
 
 uint64_t DynamicImages::GetDyldAllImageInfosPointer() {
-  if (IsSnowLeopardOrLater()) {
+  if (HasTaskDyldInfo()) {
     task_dyld_info_data_t task_dyld_info;
     mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
     if (task_info(task_, TASK_DYLD_INFO, (task_info_t)&task_dyld_info,
                   &count) != KERN_SUCCESS) {
-      return NULL;
+      return 0;
     }
 
     return (uint64_t)task_dyld_info.all_image_info_addr;

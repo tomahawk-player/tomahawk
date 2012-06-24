@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 
-// Copyright (c) 2010, Google Inc.
+// Copyright (c) 2011, Google Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -45,8 +45,10 @@ namespace google_breakpad {
 // file format.
 // If OBJ_FILE has been stripped but contains a .gnu_debuglink section,
 // then look for the debug file in DEBUG_DIR.
+// If CFI is set to false, then omit the CFI section.
 bool WriteSymbolFile(const std::string &obj_file,
                      const std::string &debug_dir,
+                     bool cfi,
                      std::ostream &sym_stream);
 
 }  // namespace google_breakpad

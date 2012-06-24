@@ -31,6 +31,7 @@
 #include "client/windows/common/ipc_protocol.h"
 
 static const wchar_t kCustomInfoProcessUptimeName[] = L"ptime";
+static const size_t kMaxCustomInfoEntries = 4096;
 
 namespace google_breakpad {
 
@@ -52,7 +53,8 @@ ClientInfo::ClientInfo(CrashGenerationServer* crash_server,
       dump_requested_handle_(NULL),
       dump_generated_handle_(NULL),
       dump_request_wait_handle_(NULL),
-      process_exit_wait_handle_(NULL) {
+      process_exit_wait_handle_(NULL),
+      crash_id_(NULL) {
   GetSystemTimeAsFileTime(&start_time_);
 }
 
@@ -61,6 +63,12 @@ bool ClientInfo::Initialize() {
   if (!process_handle_) {
     return false;
   }
+
+  // The crash_id will be the low order word of the process creation time.
+  FILETIME creation_time, exit_time, kernel_time, user_time;
+  if (GetProcessTimes(process_handle_, &creation_time, &exit_time,
+                      &kernel_time, &user_time))
+    crash_id_ = creation_time.dwLowDateTime;
 
   dump_requested_handle_ = CreateEvent(NULL,    // Security attributes.
                                        TRUE,    // Manual reset.
@@ -160,6 +168,9 @@ void ClientInfo::SetProcessUptime() {
 }
 
 bool ClientInfo::PopulateCustomInfo() {
+  if (custom_client_info_.count > kMaxCustomInfoEntries)
+    return false;
+
   SIZE_T bytes_count = 0;
   SIZE_T read_count = sizeof(CustomInfoEntry) * custom_client_info_.count;
 

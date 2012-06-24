@@ -259,14 +259,15 @@ class Module {
   // breakpad symbol format. Return true if all goes well, or false if
   // an error occurs. This method writes out:
   // - a header based on the values given to the constructor,
-  // - the source files added via FindFile, and finally
-  // - the functions added via AddFunctions, each with its lines.
+  // - the source files added via FindFile,
+  // - the functions added via AddFunctions, each with its lines,
+  // - all public records,
+  // - and if CFI is true, all CFI records.
   // Addresses in the output are all relative to the load address
   // established by SetLoadAddress.
-  bool Write(std::ostream &stream);
+  bool Write(std::ostream &stream, bool cfi);
 
  private:
-
   // Report an error that has occurred writing the symbol file, using
   // errno to find the appropriate cause.  Return false.
   static bool ReportError();
@@ -287,7 +288,7 @@ class Module {
   // Relation for maps whose keys are strings shared with some other
   // structure.
   struct CompareStringPtrs {
-    bool operator()(const string *x, const string *y) { return *x < *y; };
+    bool operator()(const string *x, const string *y) { return *x < *y; }
   };
 
   // A map from filenames to File structures.  The map's keys are
@@ -315,6 +316,6 @@ class Module {
   ExternSet externs_;
 };
 
-} // namespace google_breakpad
+}  // namespace google_breakpad
 
 #endif  // COMMON_LINUX_MODULE_H__

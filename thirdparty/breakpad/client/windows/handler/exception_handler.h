@@ -57,8 +57,8 @@
 #define CLIENT_WINDOWS_HANDLER_EXCEPTION_HANDLER_H__
 
 #include <stdlib.h>
-#include <windows.h>
-#include <dbghelp.h>
+#include <Windows.h>
+#include <DbgHelp.h>
 #include <rpc.h>
 
 #pragma warning( push )
@@ -88,9 +88,9 @@ class ExceptionHandler {
   // if any.
   //
   // If a FilterCallback returns true, Breakpad will continue processing,
-  // attempting to write a minidump.  If a FilterCallback returns false, Breakpad
-  // will immediately report the exception as unhandled without writing a
-  // minidump, allowing another handler the opportunity to handle it.
+  // attempting to write a minidump.  If a FilterCallback returns false,
+  // Breakpad will immediately report the exception as unhandled without
+  // writing a minidump, allowing another handler the opportunity to handle it.
   typedef bool (*FilterCallback)(void* context, EXCEPTION_POINTERS* exinfo,
                                  MDRawAssertionInfo* assertion);
 
@@ -176,6 +176,9 @@ class ExceptionHandler {
     dump_path_c_ = dump_path_.c_str();
     UpdateNextID();  // Necessary to put dump_path_ in next_minidump_path_.
   }
+
+  // Requests that a previously reported crash be uploaded.
+  bool RequestUpload(DWORD crash_id);
 
   // Writes a minidump immediately.  This can be used to capture the
   // execution state independently of a crash.  Returns true on success.

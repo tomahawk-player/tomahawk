@@ -44,16 +44,11 @@
 #include "common/linux/eintr_wrapper.h"
 #include "common/linux/file_id.h"
 #include "common/linux/linux_libc_support.h"
+#include "common/tests/auto_tempdir.h"
 #include "third_party/lss/linux_syscall_support.h"
 #include "google_breakpad/processor/minidump.h"
 
 using namespace google_breakpad;
-
-#if !defined(__ANDROID__)
-#define TEMPDIR "/tmp"
-#else
-#define TEMPDIR "/data/local/tmp"
-#endif
 
 // Length of a formatted GUID string =
 // sizeof(MDGUID) * 2 + 4 (for dashes) + 1 (null terminator)
@@ -79,7 +74,8 @@ class ExceptionHandlerTest : public ::testing::Test {
 };
 
 TEST(ExceptionHandlerTest, Simple) {
-  ExceptionHandler handler(TEMPDIR, NULL, NULL, NULL, true);
+  AutoTempDir temp_dir;
+  ExceptionHandler handler(temp_dir.path(), NULL, NULL, NULL, true);
 }
 
 static bool DoneCallback(const char* dump_path,
@@ -99,13 +95,14 @@ static bool DoneCallback(const char* dump_path,
 }
 
 TEST(ExceptionHandlerTest, ChildCrash) {
+  AutoTempDir temp_dir;
   int fds[2];
   ASSERT_NE(pipe(fds), -1);
 
   const pid_t child = fork();
   if (child == 0) {
     close(fds[0]);
-    ExceptionHandler handler(TEMPDIR, NULL, DoneCallback, (void*) fds[1],
+    ExceptionHandler handler(temp_dir.path(), NULL, DoneCallback, (void*) fds[1],
                              true);
     *reinterpret_cast<volatile int*>(NULL) = 0;
   }
@@ -133,7 +130,7 @@ TEST(ExceptionHandlerTest, ChildCrash) {
   filename[len] = 0;
   close(fds[0]);
 
-  const std::string minidump_filename = std::string(TEMPDIR) + "/" + filename +
+  const std::string minidump_filename = temp_dir.path() + "/" + filename +
                                         ".dmp";
 
   struct stat st;
@@ -145,6 +142,7 @@ TEST(ExceptionHandlerTest, ChildCrash) {
 // Test that memory around the instruction pointer is written
 // to the dump as a MinidumpMemoryRegion.
 TEST(ExceptionHandlerTest, InstructionPointerMemory) {
+  AutoTempDir temp_dir;
   int fds[2];
   ASSERT_NE(pipe(fds), -1);
 
@@ -158,8 +156,8 @@ TEST(ExceptionHandlerTest, InstructionPointerMemory) {
   const pid_t child = fork();
   if (child == 0) {
     close(fds[0]);
-    ExceptionHandler handler(TEMPDIR, NULL, DoneCallback, (void*) fds[1],
-                             true);
+    ExceptionHandler handler(temp_dir.path(), NULL, DoneCallback,
+                             (void*) fds[1], true);
     // Get some executable memory.
     char* memory =
       reinterpret_cast<char*>(mmap(NULL,
@@ -206,7 +204,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemory) {
   filename[len] = 0;
   close(fds[0]);
 
-  const std::string minidump_filename = std::string(TEMPDIR) + "/" + filename +
+  const std::string minidump_filename = temp_dir.path() + "/" + filename +
                                         ".dmp";
 
   struct stat st;
@@ -269,6 +267,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemory) {
 // Test that the memory region around the instruction pointer is
 // bounded correctly on the low end.
 TEST(ExceptionHandlerTest, InstructionPointerMemoryMinBound) {
+  AutoTempDir temp_dir;
   int fds[2];
   ASSERT_NE(pipe(fds), -1);
 
@@ -282,8 +281,8 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMinBound) {
   const pid_t child = fork();
   if (child == 0) {
     close(fds[0]);
-    ExceptionHandler handler(TEMPDIR, NULL, DoneCallback, (void*) fds[1],
-                             true);
+    ExceptionHandler handler(temp_dir.path(), NULL, DoneCallback,
+                             (void*) fds[1], true);
     // Get some executable memory.
     char* memory =
       reinterpret_cast<char*>(mmap(NULL,
@@ -330,7 +329,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMinBound) {
   filename[len] = 0;
   close(fds[0]);
 
-  const std::string minidump_filename = std::string(TEMPDIR) + "/" + filename +
+  const std::string minidump_filename = temp_dir.path() + "/" + filename +
                                         ".dmp";
 
   struct stat st;
@@ -390,6 +389,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMinBound) {
 // Test that the memory region around the instruction pointer is
 // bounded correctly on the high end.
 TEST(ExceptionHandlerTest, InstructionPointerMemoryMaxBound) {
+  AutoTempDir temp_dir;
   int fds[2];
   ASSERT_NE(pipe(fds), -1);
 
@@ -406,8 +406,8 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMaxBound) {
   const pid_t child = fork();
   if (child == 0) {
     close(fds[0]);
-    ExceptionHandler handler(TEMPDIR, NULL, DoneCallback, (void*) fds[1],
-                             true);
+    ExceptionHandler handler(temp_dir.path(), NULL, DoneCallback,
+                             (void*) fds[1], true);
     // Get some executable memory.
     char* memory =
       reinterpret_cast<char*>(mmap(NULL,
@@ -454,7 +454,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMaxBound) {
   filename[len] = 0;
   close(fds[0]);
 
-  const std::string minidump_filename = std::string(TEMPDIR) + "/" + filename +
+  const std::string minidump_filename = temp_dir.path() + "/" + filename +
                                         ".dmp";
 
   struct stat st;
@@ -515,6 +515,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryMaxBound) {
 // Ensure that an extra memory block doesn't get added when the
 // instruction pointer is not in mapped memory.
 TEST(ExceptionHandlerTest, InstructionPointerMemoryNullPointer) {
+  AutoTempDir temp_dir;
   int fds[2];
   ASSERT_NE(pipe(fds), -1);
 
@@ -522,8 +523,8 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryNullPointer) {
   const pid_t child = fork();
   if (child == 0) {
     close(fds[0]);
-    ExceptionHandler handler(TEMPDIR, NULL, DoneCallback, (void*) fds[1],
-                             true);
+    ExceptionHandler handler(temp_dir.path(), NULL, DoneCallback,
+                             (void*) fds[1], true);
     // Try calling a NULL pointer.
     typedef void (*void_function)(void);
     void_function memory_function =
@@ -554,7 +555,7 @@ TEST(ExceptionHandlerTest, InstructionPointerMemoryNullPointer) {
   filename[len] = 0;
   close(fds[0]);
 
-  const std::string minidump_filename = std::string(TEMPDIR) + "/" + filename +
+  const std::string minidump_filename = temp_dir.path() + "/" + filename +
                                         ".dmp";
 
   struct stat st;
@@ -625,11 +626,12 @@ TEST(ExceptionHandlerTest, ModuleInfo) {
                                  MAP_PRIVATE | MAP_ANON,
                                  -1,
                                  0));
-  const u_int64_t kMemoryAddress = reinterpret_cast<u_int64_t>(memory);
+  const uintptr_t kMemoryAddress = reinterpret_cast<uintptr_t>(memory);
   ASSERT_TRUE(memory);
 
   string minidump_filename;
-  ExceptionHandler handler(TEMPDIR, NULL, SimpleCallback,
+  AutoTempDir temp_dir;
+  ExceptionHandler handler(temp_dir.path(), NULL, SimpleCallback,
                            (void*)&minidump_filename, true);
   // Add info about the anonymous memory mapping.
   handler.AddMappingInfo(kMemoryName,
@@ -667,7 +669,14 @@ CrashHandler(const void* crash_context, size_t crash_context_size,
              void* context) {
   const int fd = (intptr_t) context;
   int fds[2];
-  pipe(fds);
+  if (pipe(fds) == -1) {
+    // There doesn't seem to be any way to reliably handle
+    // this failure without the parent process hanging
+    // At least make sure that this process doesn't access
+    // unexpected file descriptors
+    fds[0] = -1;
+    fds[1] = -1;
+  }
   struct kernel_msghdr msg = {0};
   struct kernel_iovec iov;
   iov.iov_base = const_cast<void*>(crash_context);
@@ -734,6 +743,7 @@ TEST(ExceptionHandlerTest, ExternalDumper) {
   ASSERT_EQ(n, kCrashContextSize);
   ASSERT_EQ(msg.msg_controllen, kControlMsgSize);
   ASSERT_EQ(msg.msg_flags, 0);
+  ASSERT_EQ(close(fds[0]), 0);
 
   pid_t crashing_pid = -1;
   int signal_fd = -1;
@@ -756,12 +766,13 @@ TEST(ExceptionHandlerTest, ExternalDumper) {
   ASSERT_NE(crashing_pid, -1);
   ASSERT_NE(signal_fd, -1);
 
-  char templ[] = TEMPDIR "/exception-handler-unittest-XXXXXX";
-  mktemp(templ);
-  ASSERT_TRUE(WriteMinidump(templ, crashing_pid, context,
+  AutoTempDir temp_dir;
+  std::string templ = temp_dir.path() + "/exception-handler-unittest";
+  ASSERT_TRUE(WriteMinidump(templ.c_str(), crashing_pid, context,
                             kCrashContextSize));
   static const char b = 0;
   HANDLE_EINTR(write(signal_fd, &b, 1));
+  ASSERT_EQ(close(signal_fd), 0);
 
   int status;
   ASSERT_NE(HANDLE_EINTR(waitpid(child, &status, 0)), -1);
@@ -769,7 +780,7 @@ TEST(ExceptionHandlerTest, ExternalDumper) {
   ASSERT_EQ(WTERMSIG(status), SIGSEGV);
 
   struct stat st;
-  ASSERT_EQ(stat(templ, &st), 0);
+  ASSERT_EQ(stat(templ.c_str(), &st), 0);
   ASSERT_GT(st.st_size, 0u);
-  unlink(templ);
+  unlink(templ.c_str());
 }

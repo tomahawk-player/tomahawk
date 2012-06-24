@@ -116,7 +116,7 @@ class StackwalkerARMFixture {
     for (size_t i = 0; i < sizeof(*raw_context); i++)
       reinterpret_cast<u_int8_t *>(raw_context)[i] = (x += 17);
   }
-  
+
   SystemInfo system_info;
   MDRawContextARM raw_context;
   Section stack_section;
@@ -136,7 +136,7 @@ TEST_F(SanityCheck, NoResolver) {
   // Since we have no call frame information, and all unwinding
   // requires call frame information, the stack walk will end after
   // the first frame.
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         NULL, NULL);
   // This should succeed even without a resolver or supplier.
   ASSERT_TRUE(walker.Walk(&call_stack));
@@ -154,7 +154,7 @@ TEST_F(GetContextFrame, Simple) {
   // Since we have no call frame information, and all unwinding
   // requires call frame information, the stack walk will end after
   // the first frame.
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         &supplier, &resolver);
   ASSERT_TRUE(walker.Walk(&call_stack));
   frames = call_stack.frames();
@@ -201,7 +201,7 @@ TEST_F(GetCallerFrame, ScanWithoutSymbols) {
   raw_context.iregs[MD_CONTEXT_ARM_REG_PC] = 0x40005510;
   raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = stack_section.start().Value();
 
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         &supplier, &resolver);
   ASSERT_TRUE(walker.Walk(&call_stack));
   frames = call_stack.frames();
@@ -264,7 +264,7 @@ TEST_F(GetCallerFrame, ScanWithFunctionSymbols) {
                    // The calling frame's function.
                    "FUNC 100 400 10 marsupial\n");
 
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         &supplier, &resolver);
   ASSERT_TRUE(walker.Walk(&call_stack));
   frames = call_stack.frames();
@@ -374,8 +374,8 @@ struct CFIFixture: public StackwalkerARMFixture {
     RegionFromSection();
     raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = stack_section.start().Value();
 
-    StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
-                          &supplier, &resolver);
+    StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region,
+                          &modules, &supplier, &resolver);
     walker.SetContextFrameValidity(context_frame_validity);
     ASSERT_TRUE(walker.Walk(&call_stack));
     frames = call_stack.frames();
@@ -417,7 +417,7 @@ struct CFIFixture: public StackwalkerARMFixture {
     EXPECT_EQ(expected.iregs[MD_CONTEXT_ARM_REG_PC],
               frame1->context.iregs[MD_CONTEXT_ARM_REG_PC]);
     EXPECT_EQ(expected.iregs[MD_CONTEXT_ARM_REG_PC],
-              frame1->instruction + 1);
+              frame1->instruction + 2);
     EXPECT_EQ("epictetus", frame1->function_name);
   }
 
@@ -564,9 +564,9 @@ TEST_F(CFI, At4006) {
 // move in the wrong direction.
 TEST_F(CFI, RejectBackwards) {
   raw_context.iregs[MD_CONTEXT_ARM_REG_PC] = 0x40006000;
-  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = 0x80000000;  
+  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = 0x80000000;
   raw_context.iregs[MD_CONTEXT_ARM_REG_LR] = 0x40005510;
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         &supplier, &resolver);
   ASSERT_TRUE(walker.Walk(&call_stack));
   frames = call_stack.frames();
@@ -576,11 +576,189 @@ TEST_F(CFI, RejectBackwards) {
 // Check that we reject rules whose expressions' evaluation fails.
 TEST_F(CFI, RejectBadExpressions) {
   raw_context.iregs[MD_CONTEXT_ARM_REG_PC] = 0x40007000;
-  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = 0x80000000;  
-  StackwalkerARM walker(&system_info, &raw_context, &stack_region, &modules,
+  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = 0x80000000;
+  StackwalkerARM walker(&system_info, &raw_context, -1, &stack_region, &modules,
                         &supplier, &resolver);
   ASSERT_TRUE(walker.Walk(&call_stack));
   frames = call_stack.frames();
   ASSERT_EQ(1U, frames->size());
 }
 
+class StackwalkerARMFixtureIOS : public StackwalkerARMFixture {
+ public:
+  StackwalkerARMFixtureIOS() {
+    system_info.os = "iOS";
+    system_info.os_short = "ios";
+  }
+};
+
+class GetFramesByFramePointer: public StackwalkerARMFixtureIOS, public Test { };
+
+TEST_F(GetFramesByFramePointer, OnlyFramePointer) {
+  stack_section.start() = 0x80000000;
+  u_int32_t return_address1 = 0x50000100;
+  u_int32_t return_address2 = 0x50000900;
+  Label frame1_sp, frame2_sp;
+  Label frame1_fp, frame2_fp;
+  stack_section
+    // frame 0
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000)         // a return address.
+
+    .Mark(&frame1_fp)        // Next fp will point to the next value.
+    .D32(frame2_fp)          // Save current frame pointer.
+    .D32(return_address2)    // Save current link register.
+    .Mark(&frame1_sp)
+
+    // frame 1
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000)         // a return address.
+
+    .Mark(&frame2_fp)
+    .D32(0)
+    .D32(0)
+    .Mark(&frame2_sp)
+
+    // frame 2
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000);        // a return address.
+  RegionFromSection();
+
+
+  raw_context.iregs[MD_CONTEXT_ARM_REG_PC] = 0x40005510;
+  raw_context.iregs[MD_CONTEXT_ARM_REG_LR] = return_address1;
+  raw_context.iregs[MD_CONTEXT_ARM_REG_IOS_FP] = frame1_fp.Value();
+  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = stack_section.start().Value();
+
+  StackwalkerARM walker(&system_info, &raw_context, MD_CONTEXT_ARM_REG_IOS_FP,
+                        &stack_region, &modules, &supplier, &resolver);
+
+  ASSERT_TRUE(walker.Walk(&call_stack));
+  frames = call_stack.frames();
+  ASSERT_EQ(3U, frames->size());
+
+  StackFrameARM *frame0 = static_cast<StackFrameARM *>(frames->at(0));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_CONTEXT, frame0->trust);
+  ASSERT_EQ(StackFrameARM::CONTEXT_VALID_ALL, frame0->context_validity);
+  EXPECT_EQ(0, memcmp(&raw_context, &frame0->context, sizeof(raw_context)));
+
+  StackFrameARM *frame1 = static_cast<StackFrameARM *>(frames->at(1));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_FP, frame1->trust);
+  ASSERT_EQ((StackFrameARM::CONTEXT_VALID_PC |
+             StackFrameARM::CONTEXT_VALID_LR |
+             StackFrameARM::RegisterValidFlag(MD_CONTEXT_ARM_REG_IOS_FP) |
+             StackFrameARM::CONTEXT_VALID_SP),
+            frame1->context_validity);
+  EXPECT_EQ(return_address1, frame1->context.iregs[MD_CONTEXT_ARM_REG_PC]);
+  EXPECT_EQ(return_address2, frame1->context.iregs[MD_CONTEXT_ARM_REG_LR]);
+  EXPECT_EQ(frame1_sp.Value(), frame1->context.iregs[MD_CONTEXT_ARM_REG_SP]);
+  EXPECT_EQ(frame2_fp.Value(),
+            frame1->context.iregs[MD_CONTEXT_ARM_REG_IOS_FP]);
+
+  StackFrameARM *frame2 = static_cast<StackFrameARM *>(frames->at(2));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_FP, frame2->trust);
+  ASSERT_EQ((StackFrameARM::CONTEXT_VALID_PC |
+             StackFrameARM::CONTEXT_VALID_LR |
+             StackFrameARM::RegisterValidFlag(MD_CONTEXT_ARM_REG_IOS_FP) |
+             StackFrameARM::CONTEXT_VALID_SP),
+            frame2->context_validity);
+  EXPECT_EQ(return_address2, frame2->context.iregs[MD_CONTEXT_ARM_REG_PC]);
+  EXPECT_EQ(0, frame2->context.iregs[MD_CONTEXT_ARM_REG_LR]);
+  EXPECT_EQ(frame2_sp.Value(), frame2->context.iregs[MD_CONTEXT_ARM_REG_SP]);
+  EXPECT_EQ(0, frame2->context.iregs[MD_CONTEXT_ARM_REG_IOS_FP]);
+}
+
+TEST_F(GetFramesByFramePointer, FramePointerAndCFI) {
+  // Provide the standatd STACK CFI records that is obtained when exmining an
+  // executable produced by XCode.
+  SetModuleSymbols(&module1,
+                     // Adding a function in CFI.
+                     "FUNC 4000 1000 10 enchiridion\n"
+
+                     "STACK CFI INIT 4000 100 .cfa: sp 0 + .ra: lr\n"
+                     "STACK CFI 4001 .cfa: sp 8 + .ra: .cfa -4 + ^"
+                     " r7: .cfa -8 + ^\n"
+                     "STACK CFI 4002 .cfa: r7 8 +\n"
+                  );
+
+  stack_section.start() = 0x80000000;
+  u_int32_t return_address1 = 0x40004010;
+  u_int32_t return_address2 = 0x50000900;
+  Label frame1_sp, frame2_sp;
+  Label frame1_fp, frame2_fp;
+  stack_section
+    // frame 0
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000)         // a return address.
+
+    .Mark(&frame1_fp)        // Next fp will point to the next value.
+    .D32(frame2_fp)          // Save current frame pointer.
+    .D32(return_address2)    // Save current link register.
+    .Mark(&frame1_sp)
+
+    // frame 1
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000)         // a return address.
+
+    .Mark(&frame2_fp)
+    .D32(0)
+    .D32(0)
+    .Mark(&frame2_sp)
+
+    // frame 2
+    .Append(32, 0)           // Whatever values on the stack.
+    .D32(0x0000000D)         // junk that's not
+    .D32(0xF0000000);        // a return address.
+  RegionFromSection();
+
+
+  raw_context.iregs[MD_CONTEXT_ARM_REG_PC] = 0x50000400;
+  raw_context.iregs[MD_CONTEXT_ARM_REG_LR] = return_address1;
+  raw_context.iregs[MD_CONTEXT_ARM_REG_IOS_FP] = frame1_fp.Value();
+  raw_context.iregs[MD_CONTEXT_ARM_REG_SP] = stack_section.start().Value();
+
+  StackwalkerARM walker(&system_info, &raw_context, MD_CONTEXT_ARM_REG_IOS_FP,
+                        &stack_region, &modules, &supplier, &resolver);
+
+  ASSERT_TRUE(walker.Walk(&call_stack));
+  frames = call_stack.frames();
+  ASSERT_EQ(3U, frames->size());
+
+  StackFrameARM *frame0 = static_cast<StackFrameARM *>(frames->at(0));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_CONTEXT, frame0->trust);
+  ASSERT_EQ(StackFrameARM::CONTEXT_VALID_ALL, frame0->context_validity);
+  EXPECT_EQ(0, memcmp(&raw_context, &frame0->context, sizeof(raw_context)));
+
+  StackFrameARM *frame1 = static_cast<StackFrameARM *>(frames->at(1));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_FP, frame1->trust);
+  ASSERT_EQ((StackFrameARM::CONTEXT_VALID_PC |
+             StackFrameARM::CONTEXT_VALID_LR |
+             StackFrameARM::RegisterValidFlag(MD_CONTEXT_ARM_REG_IOS_FP) |
+             StackFrameARM::CONTEXT_VALID_SP),
+            frame1->context_validity);
+  EXPECT_EQ(return_address1, frame1->context.iregs[MD_CONTEXT_ARM_REG_PC]);
+  EXPECT_EQ(return_address2, frame1->context.iregs[MD_CONTEXT_ARM_REG_LR]);
+  EXPECT_EQ(frame1_sp.Value(), frame1->context.iregs[MD_CONTEXT_ARM_REG_SP]);
+  EXPECT_EQ(frame2_fp.Value(),
+            frame1->context.iregs[MD_CONTEXT_ARM_REG_IOS_FP]);
+  EXPECT_EQ("enchiridion", frame1->function_name);
+  EXPECT_EQ(0x40004000U, frame1->function_base);
+
+
+  StackFrameARM *frame2 = static_cast<StackFrameARM *>(frames->at(2));
+  EXPECT_EQ(StackFrame::FRAME_TRUST_CFI, frame2->trust);
+  ASSERT_EQ((StackFrameARM::CONTEXT_VALID_PC |
+             StackFrameARM::CONTEXT_VALID_LR |
+             StackFrameARM::RegisterValidFlag(MD_CONTEXT_ARM_REG_IOS_FP) |
+             StackFrameARM::CONTEXT_VALID_SP),
+            frame2->context_validity);
+  EXPECT_EQ(return_address2, frame2->context.iregs[MD_CONTEXT_ARM_REG_PC]);
+  EXPECT_EQ(0, frame2->context.iregs[MD_CONTEXT_ARM_REG_LR]);
+  EXPECT_EQ(frame2_sp.Value(), frame2->context.iregs[MD_CONTEXT_ARM_REG_SP]);
+  EXPECT_EQ(0, frame2->context.iregs[MD_CONTEXT_ARM_REG_IOS_FP]);
+}

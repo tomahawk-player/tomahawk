@@ -132,7 +132,7 @@ string DwarfCFIToModule::RegisterName(int i) {
   if (reg == return_address_)
     return ra_name_;
 
-  if (0 <= reg && reg < register_names_.size())
+  if (reg < register_names_.size())
     return register_names_[reg];
 
   reporter_->UnnamedRegister(entry_offset_, reg);

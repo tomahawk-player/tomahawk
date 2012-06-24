@@ -45,8 +45,8 @@
 
 namespace dwarf2reader {
 
-CULineInfoHandler::CULineInfoHandler(vector<SourceFileInfo>* files,
-                                     vector<string>* dirs,
+CULineInfoHandler::CULineInfoHandler(std::vector<SourceFileInfo>* files,
+                                     std::vector<std::string>* dirs,
                                      LineMap* linemap):linemap_(linemap),
                                                        files_(files),
                                                        dirs_(dirs) {
@@ -61,13 +61,13 @@ CULineInfoHandler::CULineInfoHandler(vector<SourceFileInfo>* files,
   files->push_back(s);
 }
 
-void CULineInfoHandler::DefineDir(const string& name, uint32 dir_num) {
+void CULineInfoHandler::DefineDir(const std::string& name, uint32 dir_num) {
   // These should never come out of order, actually
   assert(dir_num == dirs_->size());
   dirs_->push_back(name);
 }
 
-void CULineInfoHandler::DefineFile(const string& name,
+void CULineInfoHandler::DefineFile(const std::string& name,
                                    int32 file_num, uint32 dir_num,
                                    uint64 mod_time, uint64 length) {
   assert(dir_num >= 0);
@@ -75,7 +75,7 @@ void CULineInfoHandler::DefineFile(const string& name,
 
   // These should never come out of order, actually.
   if (file_num == (int32)files_->size() || file_num == -1) {
-    string dir = dirs_->at(dir_num);
+    std::string dir = dirs_->at(dir_num);
 
     SourceFileInfo s;
     s.lowpc = ULLONG_MAX;
@@ -95,8 +95,10 @@ void CULineInfoHandler::DefineFile(const string& name,
 void CULineInfoHandler::AddLine(uint64 address, uint64 length, uint32 file_num,
                                 uint32 line_num, uint32 column_num) {
   if (file_num < files_->size()) {
-    linemap_->insert(make_pair(address, make_pair(files_->at(file_num).name.c_str(),
-                                                  line_num)));
+    linemap_->insert(
+        std::make_pair(address,
+                       std::make_pair(files_->at(file_num).name.c_str(),
+                                      line_num)));
 
     if(address < files_->at(file_num).lowpc) {
       files_->at(file_num).lowpc = address;
@@ -130,7 +132,8 @@ bool CUFunctionInfoHandler::StartDIE(uint64 offset, enum DwarfTag tag,
       current_function_info_->name = "";
       current_function_info_->line = 0;
       current_function_info_->file = "";
-      offset_to_funcinfo_->insert(make_pair(offset, current_function_info_));
+      offset_to_funcinfo_->insert(std::make_pair(offset,
+                                                 current_function_info_));
     };
       // FALLTHROUGH
     case DW_TAG_compile_unit:
@@ -146,7 +149,7 @@ bool CUFunctionInfoHandler::StartDIE(uint64 offset, enum DwarfTag tag,
 void CUFunctionInfoHandler::ProcessAttributeString(uint64 offset,
                                                    enum DwarfAttribute attr,
                                                    enum DwarfForm form,
-                                                   const string &data) {
+                                                   const std::string &data) {
   if (current_function_info_) {
     if (attr == DW_AT_name)
       current_function_info_->name = data;
@@ -164,9 +167,9 @@ void CUFunctionInfoHandler::ProcessAttributeUnsigned(uint64 offset,
     assert(iter != sections_.end());
 
     // this should be a scoped_ptr but we dont' use boost :-(
-    auto_ptr<LineInfo> lireader(new LineInfo(iter->second.first + data,
-                                               iter->second.second  - data,
-                                               reader_, linehandler_));
+    std::auto_ptr<LineInfo> lireader(new LineInfo(iter->second.first + data,
+                                                  iter->second.second  - data,
+                                                  reader_, linehandler_));
     lireader->Start();
   } else if (current_function_info_) {
     switch (attr) {
@@ -219,8 +222,8 @@ void CUFunctionInfoHandler::ProcessAttributeReference(uint64 offset,
 
 void CUFunctionInfoHandler::EndDIE(uint64 offset) {
   if (current_function_info_ && current_function_info_->lowpc)
-    address_to_funcinfo_->insert(make_pair(current_function_info_->lowpc,
-                                           current_function_info_));
+    address_to_funcinfo_->insert(std::make_pair(current_function_info_->lowpc,
+                                                current_function_info_));
 }
 
 }  // namespace dwarf2reader

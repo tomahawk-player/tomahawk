@@ -132,6 +132,7 @@ class SimpleSerializer<WindowsFrameInfo> {
  public:
   static size_t SizeOf(const WindowsFrameInfo &wfi) {
     unsigned int size = 0;
+    size += sizeof(int32_t);  // wfi.type_
     size += SimpleSerializer<int32_t>::SizeOf(wfi.valid);
     size += SimpleSerializer<u_int32_t>::SizeOf(wfi.prolog_size);
     size += SimpleSerializer<u_int32_t>::SizeOf(wfi.epilog_size);
@@ -144,6 +145,8 @@ class SimpleSerializer<WindowsFrameInfo> {
     return size;
   }
   static char *Write(const WindowsFrameInfo &wfi, char *dest) {
+    dest = SimpleSerializer<int32_t>::Write(
+        static_cast<const int32_t>(wfi.type_), dest);
     dest = SimpleSerializer<int32_t>::Write(wfi.valid, dest);
     dest = SimpleSerializer<u_int32_t>::Write(wfi.prolog_size, dest);
     dest = SimpleSerializer<u_int32_t>::Write(wfi.epilog_size, dest);

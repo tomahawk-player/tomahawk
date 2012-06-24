@@ -34,7 +34,7 @@
 
 using std::string;
 
-DEFINE_string(crash_server, "http://clients2.google.com/cr",
+DEFINE_string(crash_server, "https://clients2.google.com/cr",
               "The crash server to upload minidumps to.");
 DEFINE_string(product_name, "",
               "The product name that the minidump corresponds to.");

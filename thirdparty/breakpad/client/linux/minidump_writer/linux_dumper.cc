@@ -27,6 +27,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// linux_dumper.cc: Implement google_breakpad::LinuxDumper.
+// See linux_dumper.h for details.
+
 // This code deals with the mechanics of getting information about a crashed
 // process. Since this code may run in a compromised address space, the same
 // rules apply as detailed at the top of minidump_writer.h: no libc calls and
@@ -34,74 +37,21 @@
 
 #include "client/linux/minidump_writer/linux_dumper.h"
 
-#include <asm/ptrace.h>
 #include <assert.h>
-#include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
-#if !defined(__ANDROID__)
-#include <link.h>
-#endif
 #include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
-#include <sys/ptrace.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
-#include <algorithm>
-
-#include "client/linux/minidump_writer/directory_reader.h"
 #include "client/linux/minidump_writer/line_reader.h"
 #include "common/linux/file_id.h"
 #include "common/linux/linux_libc_support.h"
+#include "common/linux/memory_mapped_file.h"
+#include "common/linux/safe_readlink.h"
 #include "third_party/lss/linux_syscall_support.h"
 
 static const char kMappedFileUnsafePrefix[] = "/dev/";
 static const char kDeletedSuffix[] = " (deleted)";
-
-// Suspend a thread by attaching to it.
-static bool SuspendThread(pid_t pid) {
-  // This may fail if the thread has just died or debugged.
-  errno = 0;
-  if (sys_ptrace(PTRACE_ATTACH, pid, NULL, NULL) != 0 &&
-      errno != 0) {
-    return false;
-  }
-  while (sys_waitpid(pid, NULL, __WALL) < 0) {
-    if (errno != EINTR) {
-      sys_ptrace(PTRACE_DETACH, pid, NULL, NULL);
-      return false;
-    }
-  }
-#if defined(__i386) || defined(__x86_64)
-  // On x86, the stack pointer is NULL or -1, when executing trusted code in
-  // the seccomp sandbox. Not only does this cause difficulties down the line
-  // when trying to dump the thread's stack, it also results in the minidumps
-  // containing information about the trusted threads. This information is
-  // generally completely meaningless and just pollutes the minidumps.
-  // We thus test the stack pointer and exclude any threads that are part of
-  // the seccomp sandbox's trusted code.
-  user_regs_struct regs;
-  if (sys_ptrace(PTRACE_GETREGS, pid, NULL, &regs) == -1 ||
-#if defined(__i386)
-      !regs.esp
-#elif defined(__x86_64)
-      !regs.rsp
-#endif
-      ) {
-    sys_ptrace(PTRACE_DETACH, pid, NULL, NULL);
-    return false;
-  }
-#endif
-  return true;
-}
-
-// Resume a thread by detaching from it.
-static bool ResumeThread(pid_t pid) {
-  return sys_ptrace(PTRACE_DETACH, pid, NULL, NULL) >= 0;
-}
 
 inline static bool IsMappedFileOpenUnsafe(
     const google_breakpad::MappingInfo& mapping) {
@@ -116,90 +66,20 @@ inline static bool IsMappedFileOpenUnsafe(
 
 namespace google_breakpad {
 
-LinuxDumper::LinuxDumper(int pid)
+LinuxDumper::LinuxDumper(pid_t pid)
     : pid_(pid),
-      threads_suspended_(false),
+      crash_address_(0),
+      crash_signal_(0),
+      crash_thread_(0),
       threads_(&allocator_, 8),
       mappings_(&allocator_) {
 }
 
+LinuxDumper::~LinuxDumper() {
+}
+
 bool LinuxDumper::Init() {
-  return EnumerateThreads(&threads_) &&
-         EnumerateMappings(&mappings_);
-}
-
-bool LinuxDumper::ThreadsSuspend() {
-  if (threads_suspended_)
-    return true;
-  for (size_t i = 0; i < threads_.size(); ++i) {
-    if (!SuspendThread(threads_[i])) {
-      // If the thread either disappeared before we could attach to it, or if
-      // it was part of the seccomp sandbox's trusted code, it is OK to
-      // silently drop it from the minidump.
-      memmove(&threads_[i], &threads_[i+1],
-              (threads_.size() - i - 1) * sizeof(threads_[i]));
-      threads_.resize(threads_.size() - 1);
-      --i;
-    }
-  }
-  threads_suspended_ = true;
-  return threads_.size() > 0;
-}
-
-bool LinuxDumper::ThreadsResume() {
-  if (!threads_suspended_)
-    return false;
-  bool good = true;
-  for (size_t i = 0; i < threads_.size(); ++i)
-    good &= ResumeThread(threads_[i]);
-  threads_suspended_ = false;
-  return good;
-}
-
-void
-LinuxDumper::BuildProcPath(char* path, pid_t pid, const char* node) const {
-  assert(path);
-  if (!path) {
-    return;
-  }
-
-  path[0] = '\0';
-
-  const unsigned pid_len = my_int_len(pid);
-
-  assert(node);
-  if (!node) {
-    return;
-  }
-
-  size_t node_len = my_strlen(node);
-  assert(node_len < NAME_MAX);
-  if (node_len >= NAME_MAX) {
-    return;
-  }
-
-  assert(node_len > 0);
-  if (node_len == 0) {
-    return;
-  }
-
-  assert(pid > 0);
-  if (pid <= 0) {
-    return;
-  }
-
-  const size_t total_length = 6 + pid_len + 1 + node_len;
-
-  assert(total_length < NAME_MAX);
-  if (total_length >= NAME_MAX) {
-    return;
-  }
-
-  memcpy(path, "/proc/", 6);
-  my_itos(path + 6, pid, pid_len);
-  memcpy(path + 6 + pid_len, "/", 1);
-  memcpy(path + 6 + pid_len + 1, node, node_len);
-  path[total_length] = '\0';
+  return EnumerateThreads() && EnumerateMappings();
 }
 
 bool
@@ -237,24 +117,12 @@ LinuxDumper::ElfFileIdentifierForMapping(const MappingInfo& mapping,
   filename[filename_len] = '\0';
   bool filename_modified = HandleDeletedFileInMapping(filename);
 
-  int fd = sys_open(filename, O_RDONLY, 0);
-  if (fd < 0)
-    return false;
-  struct kernel_stat st;
-  if (sys_fstat(fd, &st) != 0) {
-    sys_close(fd);
-    return false;
-  }
-#if defined(__x86_64)
-#define sys_mmap2 sys_mmap
-#endif
-  void* base = sys_mmap2(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-  sys_close(fd);
-  if (base == MAP_FAILED)
+  MemoryMappedFile mapped_file(filename);
+  if (!mapped_file.data())  // Should probably check if size >= ElfW(Ehdr)?
     return false;
 
-  bool success = FileID::ElfFileIdentifierFromMappedFile(base, identifier);
-  sys_munmap(base, st.st_size);
+  bool success =
+      FileID::ElfFileIdentifierFromMappedFile(mapped_file.data(), identifier);
   if (success && member && filename_modified) {
     mappings_[mapping_id]->name[filename_len -
                                 sizeof(kDeletedSuffix) + 1] = '\0';
@@ -264,12 +132,10 @@ LinuxDumper::ElfFileIdentifierForMapping(const MappingInfo& mapping,
 }
 
 void*
-LinuxDumper::FindBeginningOfLinuxGateSharedLibrary(const pid_t pid) const {
+LinuxDumper::FindBeginningOfLinuxGateSharedLibrary(pid_t pid) const {
   char auxv_path[NAME_MAX];
-  BuildProcPath(auxv_path, pid, "auxv");
-
-  // If BuildProcPath errors out due to invalid input, we'll handle it when
-  // we try to sys_open the file.
+  if (!BuildProcPath(auxv_path, pid, "auxv"))
+    return NULL;
 
   // Find the AT_SYSINFO_EHDR entry for linux-gate.so
   // See http://www.trilithium.com/johan/2005/08/linux-gate/ for more
@@ -293,10 +159,36 @@ LinuxDumper::FindBeginningOfLinuxGateSharedLibrary(const pid_t pid) const {
   return NULL;
 }
 
-bool
-LinuxDumper::EnumerateMappings(wasteful_vector<MappingInfo*>* result) const {
+void*
+LinuxDumper::FindEntryPoint(pid_t pid) const {
+  char auxv_path[NAME_MAX];
+  if (!BuildProcPath(auxv_path, pid, "auxv"))
+    return NULL;
+
+  int fd = sys_open(auxv_path, O_RDONLY, 0);
+  if (fd < 0) {
+    return NULL;
+  }
+
+  // Find the AT_ENTRY entry
+  elf_aux_entry one_aux_entry;
+  while (sys_read(fd,
+                  &one_aux_entry,
+                  sizeof(elf_aux_entry)) == sizeof(elf_aux_entry) &&
+         one_aux_entry.a_type != AT_NULL) {
+    if (one_aux_entry.a_type == AT_ENTRY) {
+      close(fd);
+      return reinterpret_cast<void*>(one_aux_entry.a_un.a_val);
+    }
+  }
+  close(fd);
+  return NULL;
+}
+
+bool LinuxDumper::EnumerateMappings() {
   char maps_path[NAME_MAX];
-  BuildProcPath(maps_path, pid_, "maps");
+  if (!BuildProcPath(maps_path, pid_, "maps"))
+    return false;
 
   // linux_gate_loc is the beginning of the kernel's mapping of
   // linux-gate.so in the process.  It doesn't actually show up in the
@@ -305,6 +197,10 @@ LinuxDumper::EnumerateMappings(wasteful_vector<MappingInfo*>* result) const {
   // of mappings.
   const void* linux_gate_loc;
   linux_gate_loc = FindBeginningOfLinuxGateSharedLibrary(pid_);
+  // Although the initial executable is usually the first mapping, it's not
+  // guaranteed (see http://crosbug.com/25355); therefore, try to use the
+  // actual entry point to find the mapping.
+  const void* entry_point_loc = FindEntryPoint(pid_);
 
   const int fd = sys_open(maps_path, O_RDONLY, 0);
   if (fd < 0)
@@ -333,8 +229,8 @@ LinuxDumper::EnumerateMappings(wasteful_vector<MappingInfo*>* result) const {
           }
           // Merge adjacent mappings with the same name into one module,
           // assuming they're a single library mapped by the dynamic linker
-          if (name && result->size()) {
-            MappingInfo* module = (*result)[result->size() - 1];
+          if (name && !mappings_.empty()) {
+            MappingInfo* module = mappings_.back();
             if ((start_addr == module->start_addr + module->size) &&
                 (my_strlen(name) == my_strlen(module->name)) &&
                 (my_strncmp(name, module->name, my_strlen(name)) == 0)) {
@@ -353,7 +249,25 @@ LinuxDumper::EnumerateMappings(wasteful_vector<MappingInfo*>* result) const {
             if (l < sizeof(module->name))
               memcpy(module->name, name, l);
           }
-          result->push_back(module);
+          // If this is the entry-point mapping, and it's not already the
+          // first one, then we need to make it be first.  This is because
+          // the minidump format assumes the first module is the one that
+          // corresponds to the main executable (as codified in
+          // processor/minidump.cc:MinidumpModuleList::GetMainModule()).
+          if (entry_point_loc &&
+              (entry_point_loc >=
+                  reinterpret_cast<void*>(module->start_addr)) &&
+              (entry_point_loc <
+                  reinterpret_cast<void*>(module->start_addr+module->size)) &&
+              !mappings_.empty()) {
+            // push the module onto the front of the list.
+            mappings_.resize(mappings_.size() + 1);
+            for (size_t idx = mappings_.size() - 1; idx > 0; idx--)
+              mappings_[idx] = mappings_[idx - 1];
+            mappings_[0] = module;
+          } else {
+            mappings_.push_back(module);
+          }
         }
       }
     }
@@ -362,114 +276,7 @@ LinuxDumper::EnumerateMappings(wasteful_vector<MappingInfo*>* result) const {
 
   sys_close(fd);
 
-  return result->size() > 0;
-}
-
-// Parse /proc/$pid/task to list all the threads of the process identified by
-// pid.
-bool LinuxDumper::EnumerateThreads(wasteful_vector<pid_t>* result) const {
-  char task_path[NAME_MAX];
-  BuildProcPath(task_path, pid_, "task");
-
-  const int fd = sys_open(task_path, O_RDONLY | O_DIRECTORY, 0);
-  if (fd < 0)
-    return false;
-  DirectoryReader* dir_reader = new(allocator_) DirectoryReader(fd);
-
-  // The directory may contain duplicate entries which we filter by assuming
-  // that they are consecutive.
-  int last_tid = -1;
-  const char* dent_name;
-  while (dir_reader->GetNextEntry(&dent_name)) {
-    if (my_strcmp(dent_name, ".") &&
-        my_strcmp(dent_name, "..")) {
-      int tid = 0;
-      if (my_strtoui(&tid, dent_name) &&
-          last_tid != tid) {
-        last_tid = tid;
-        result->push_back(tid);
-      }
-    }
-    dir_reader->PopEntry();
-  }
-
-  sys_close(fd);
-  return true;
-}
-
-// Read thread info from /proc/$pid/status.
-// Fill out the |tgid|, |ppid| and |pid| members of |info|. If unavailable,
-// these members are set to -1. Returns true iff all three members are
-// available.
-bool LinuxDumper::ThreadInfoGet(pid_t tid, ThreadInfo* info) {
-  assert(info != NULL);
-  char status_path[NAME_MAX];
-  BuildProcPath(status_path, tid, "status");
-
-  const int fd = open(status_path, O_RDONLY);
-  if (fd < 0)
-    return false;
-
-  LineReader* const line_reader = new(allocator_) LineReader(fd);
-  const char* line;
-  unsigned line_len;
-
-  info->ppid = info->tgid = -1;
-
-  while (line_reader->GetNextLine(&line, &line_len)) {
-    if (my_strncmp("Tgid:\t", line, 6) == 0) {
-      my_strtoui(&info->tgid, line + 6);
-    } else if (my_strncmp("PPid:\t", line, 6) == 0) {
-      my_strtoui(&info->ppid, line + 6);
-    }
-
-    line_reader->PopLine(line_len);
-  }
-
-  if (info->ppid == -1 || info->tgid == -1)
-    return false;
-
-  if (sys_ptrace(PTRACE_GETREGS, tid, NULL, &info->regs) == -1) {
-    return false;
-  }
-
-#if !defined(__ANDROID__)
-  if (sys_ptrace(PTRACE_GETFPREGS, tid, NULL, &info->fpregs) == -1) {
-    return false;
-  }
-#endif
-
-#if defined(__i386)
-  if (sys_ptrace(PTRACE_GETFPXREGS, tid, NULL, &info->fpxregs) == -1)
-    return false;
-#endif
-
-#if defined(__i386) || defined(__x86_64)
-  for (unsigned i = 0; i < ThreadInfo::kNumDebugRegisters; ++i) {
-    if (sys_ptrace(
-        PTRACE_PEEKUSER, tid,
-        reinterpret_cast<void*> (offsetof(struct user,
-                                          u_debugreg[0]) + i *
-                                 sizeof(debugreg_t)),
-        &info->dregs[i]) == -1) {
-      return false;
-    }
-  }
-#endif
-
-  const uint8_t* stack_pointer;
-#if defined(__i386)
-  memcpy(&stack_pointer, &info->regs.esp, sizeof(info->regs.esp));
-#elif defined(__x86_64)
-  memcpy(&stack_pointer, &info->regs.rsp, sizeof(info->regs.rsp));
-#elif defined(__ARM_EABI__)
-  memcpy(&stack_pointer, &info->regs.ARM_sp, sizeof(info->regs.ARM_sp));
-#else
-#error "This code hasn't been ported to your platform yet."
-#endif
-
-  return GetStackInfo(&info->stack, &info->stack_len,
-                      (uintptr_t) stack_pointer);
+  return !mappings_.empty();
 }
 
 // Get information about the stack, given the stack pointer. We don't try to
@@ -496,25 +303,6 @@ bool LinuxDumper::GetStackInfo(const void** stack, size_t* stack_len,
       kStackToCapture : distance_to_end;
   *stack = stack_pointer;
   return true;
-}
-
-// static
-void LinuxDumper::CopyFromProcess(void* dest, pid_t child, const void* src,
-                                  size_t length) {
-  unsigned long tmp = 55;
-  size_t done = 0;
-  static const size_t word_size = sizeof(tmp);
-  uint8_t* const local = (uint8_t*) dest;
-  uint8_t* const remote = (uint8_t*) src;
-
-  while (done < length) {
-    const size_t l = length - done > word_size ? word_size : length - done;
-    if (sys_ptrace(PTRACE_PEEKDATA, child, remote + done, &tmp) == -1) {
-      tmp = 0;
-    }
-    memcpy(local + done, &tmp, l);
-    done += l;
-  }
 }
 
 // Find the mapping which the given memory address falls in.
@@ -546,11 +334,10 @@ bool LinuxDumper::HandleDeletedFileInMapping(char* path) const {
   // Check |path| against the /proc/pid/exe 'symlink'.
   char exe_link[NAME_MAX];
   char new_path[NAME_MAX];
-  BuildProcPath(exe_link, pid_, "exe");
-  ssize_t new_path_len = sys_readlink(exe_link, new_path, NAME_MAX);
-  if (new_path_len <= 0 || new_path_len == NAME_MAX)
+  if (!BuildProcPath(exe_link, pid_, "exe"))
     return false;
-  new_path[new_path_len] = '\0';
+  if (!SafeReadLink(exe_link, new_path))
+    return false;
   if (my_strcmp(path, new_path) != 0)
     return false;
 

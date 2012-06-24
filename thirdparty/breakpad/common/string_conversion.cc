@@ -42,7 +42,7 @@ void UTF8ToUTF16(const char *in, vector<u_int16_t> *out) {
   const UTF8 *source_ptr = reinterpret_cast<const UTF8 *>(in);
   const UTF8 *source_end_ptr = source_ptr + source_length;
   // Erase the contents and zero fill to the expected size
-  out->empty();
+  out->clear();
   out->insert(out->begin(), source_length, 0);
   u_int16_t *target_ptr = &(*out)[0];
   u_int16_t *target_end_ptr = target_ptr + out->capacity() * sizeof(u_int16_t);
@@ -86,7 +86,7 @@ void UTF32ToUTF16(const wchar_t *in, vector<u_int16_t> *out) {
   const UTF32 *source_ptr = reinterpret_cast<const UTF32 *>(in);
   const UTF32 *source_end_ptr = source_ptr + source_length;
   // Erase the contents and zero fill to the expected size
-  out->empty();
+  out->clear();
   out->insert(out->begin(), source_length, 0);
   u_int16_t *target_ptr = &(*out)[0];
   u_int16_t *target_end_ptr = target_ptr + out->capacity() * sizeof(u_int16_t);

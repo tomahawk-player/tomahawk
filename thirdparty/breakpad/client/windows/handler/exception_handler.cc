@@ -27,7 +27,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <objbase.h>
+#include <ObjBase.h>
 
 #include <algorithm>
 #include <cassert>
@@ -38,8 +38,6 @@
 #include "client/windows/common/ipc_protocol.h"
 #include "client/windows/handler/exception_handler.h"
 #include "common/windows/guid_string.h"
-
-typedef VOID (WINAPI *RtlCaptureContextPtr) (PCONTEXT pContextRecord);
 
 namespace google_breakpad {
 
@@ -223,8 +221,8 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
       previous_iph_ = _set_invalid_parameter_handler(HandleInvalidParameter);
 #endif  // _MSC_VER >= 1400
 
-//     if (handler_types & HANDLER_PURECALL)
-//       previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
+    if (handler_types & HANDLER_PURECALL)
+      previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
 
     LeaveCriticalSection(&handler_stack_critical_section_);
   }
@@ -250,8 +248,8 @@ ExceptionHandler::~ExceptionHandler() {
       _set_invalid_parameter_handler(previous_iph_);
 #endif  // _MSC_VER >= 1400
 
-//     if (handler_types_ & HANDLER_PURECALL)
-//       _set_purecall_handler(previous_pch_);
+    if (handler_types_ & HANDLER_PURECALL)
+      _set_purecall_handler(previous_pch_);
 
     if (handler_stack_->back() == this) {
       handler_stack_->pop_back();
@@ -312,6 +310,10 @@ ExceptionHandler::~ExceptionHandler() {
   if (InterlockedDecrement(&instance_count_) == 0) {
     DeleteCriticalSection(&handler_stack_critical_section_);
   }
+}
+
+bool ExceptionHandler::RequestUpload(DWORD crash_id) {
+  return crash_generation_client_->RequestUpload(crash_id);
 }
 
 // static
@@ -380,7 +382,7 @@ class AutoExceptionHandler {
 #if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(handler_->previous_iph_);
 #endif  // _MSC_VER >= 1400
-//     _set_purecall_handler(handler_->previous_pch_);
+    _set_purecall_handler(handler_->previous_pch_);
   }
 
   ~AutoExceptionHandler() {
@@ -389,7 +391,7 @@ class AutoExceptionHandler {
 #if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(ExceptionHandler::HandleInvalidParameter);
 #endif  // _MSC_VER >= 1400
-//     _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
+    _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
 
     --ExceptionHandler::handler_stack_index_;
     LeaveCriticalSection(&ExceptionHandler::handler_stack_critical_section_);
@@ -498,27 +500,19 @@ void ExceptionHandler::HandleInvalidParameter(const wchar_t* expression,
   CONTEXT exception_context = {};
   EXCEPTION_POINTERS exception_ptrs = { &exception_record, &exception_context };
 
-  EXCEPTION_POINTERS* exinfo = NULL;
+  ::RtlCaptureContext(&exception_context);
 
-  RtlCaptureContextPtr fnRtlCaptureContext = (RtlCaptureContextPtr)
-    GetProcAddress(GetModuleHandleW(L"kernel32"), "RtlCaptureContext");
-  if (fnRtlCaptureContext) {
-    fnRtlCaptureContext(&exception_context);
+  exception_record.ExceptionCode = STATUS_INVALID_PARAMETER;
 
-    exception_record.ExceptionCode = STATUS_NONCONTINUABLE_EXCEPTION;
-
-    // We store pointers to the the expression and function strings,
-    // and the line as exception parameters to make them easy to
-    // access by the developer on the far side.
-    exception_record.NumberParameters = 3;
-    exception_record.ExceptionInformation[0] =
-        reinterpret_cast<ULONG_PTR>(&assertion.expression);
-    exception_record.ExceptionInformation[1] =
-        reinterpret_cast<ULONG_PTR>(&assertion.file);
-    exception_record.ExceptionInformation[2] = assertion.line;
-
-    exinfo = &exception_ptrs;
-  }
+  // We store pointers to the the expression and function strings,
+  // and the line as exception parameters to make them easy to
+  // access by the developer on the far side.
+  exception_record.NumberParameters = 3;
+  exception_record.ExceptionInformation[0] =
+      reinterpret_cast<ULONG_PTR>(&assertion.expression);
+  exception_record.ExceptionInformation[1] =
+      reinterpret_cast<ULONG_PTR>(&assertion.file);
+  exception_record.ExceptionInformation[2] = assertion.line;
 
   bool success = false;
   // In case of out-of-process dump generation, directly call
@@ -526,10 +520,10 @@ void ExceptionHandler::HandleInvalidParameter(const wchar_t* expression,
   if (current_handler->IsOutOfProcess()) {
     success = current_handler->WriteMinidumpWithException(
         GetCurrentThreadId(),
-        exinfo,
+        &exception_ptrs,
         &assertion);
   } else {
-    success = current_handler->WriteMinidumpOnHandlerThread(exinfo,
+    success = current_handler->WriteMinidumpOnHandlerThread(&exception_ptrs,
                                                             &assertion);
   }
 
@@ -586,27 +580,19 @@ void ExceptionHandler::HandlePureVirtualCall() {
   CONTEXT exception_context = {};
   EXCEPTION_POINTERS exception_ptrs = { &exception_record, &exception_context };
 
-  EXCEPTION_POINTERS* exinfo = NULL;
+  ::RtlCaptureContext(&exception_context);
 
-  RtlCaptureContextPtr fnRtlCaptureContext = (RtlCaptureContextPtr)
-    GetProcAddress(GetModuleHandleW(L"kernel32"), "RtlCaptureContext");
-  if (fnRtlCaptureContext) {
-    fnRtlCaptureContext(&exception_context);
+  exception_record.ExceptionCode = STATUS_NONCONTINUABLE_EXCEPTION;
 
-    exception_record.ExceptionCode = STATUS_NONCONTINUABLE_EXCEPTION;
-
-    // We store pointers to the the expression and function strings,
-    // and the line as exception parameters to make them easy to
-    // access by the developer on the far side.
-    exception_record.NumberParameters = 3;
-    exception_record.ExceptionInformation[0] =
-        reinterpret_cast<ULONG_PTR>(&assertion.expression);
-    exception_record.ExceptionInformation[1] =
-        reinterpret_cast<ULONG_PTR>(&assertion.file);
-    exception_record.ExceptionInformation[2] = assertion.line;
-
-    exinfo = &exception_ptrs;
-  }
+  // We store pointers to the the expression and function strings,
+  // and the line as exception parameters to make them easy to
+  // access by the developer on the far side.
+  exception_record.NumberParameters = 3;
+  exception_record.ExceptionInformation[0] =
+      reinterpret_cast<ULONG_PTR>(&assertion.expression);
+  exception_record.ExceptionInformation[1] =
+      reinterpret_cast<ULONG_PTR>(&assertion.file);
+  exception_record.ExceptionInformation[2] = assertion.line;
 
   bool success = false;
   // In case of out-of-process dump generation, directly call
@@ -615,10 +601,10 @@ void ExceptionHandler::HandlePureVirtualCall() {
   if (current_handler->IsOutOfProcess()) {
     success = current_handler->WriteMinidumpWithException(
         GetCurrentThreadId(),
-        exinfo,
+        &exception_ptrs,
         &assertion);
   } else {
-    success = current_handler->WriteMinidumpOnHandlerThread(exinfo,
+    success = current_handler->WriteMinidumpOnHandlerThread(&exception_ptrs,
                                                             &assertion);
   }
 
@@ -678,7 +664,18 @@ bool ExceptionHandler::WriteMinidumpOnHandlerThread(
 }
 
 bool ExceptionHandler::WriteMinidump() {
-  return WriteMinidumpForException(NULL);
+  // Make up an exception record for the current thread and CPU context
+  // to make it possible for the crash processor to classify these
+  // as do regular crashes, and to make it humane for developers to
+  // analyze them.
+  EXCEPTION_RECORD exception_record = {};
+  CONTEXT exception_context = {};
+  EXCEPTION_POINTERS exception_ptrs = { &exception_record, &exception_context };
+
+  ::RtlCaptureContext(&exception_context);
+  exception_record.ExceptionCode = STATUS_NONCONTINUABLE_EXCEPTION;
+
+  return WriteMinidumpForException(&exception_ptrs);
 }
 
 bool ExceptionHandler::WriteMinidumpForException(EXCEPTION_POINTERS* exinfo) {
@@ -775,7 +772,7 @@ bool ExceptionHandler::WriteMinidumpWithException(
         if (exinfo) {
           // Find a memory region of 256 bytes centered on the
           // faulting instruction pointer.
-          const ULONG64 instruction_pointer =
+          const ULONG64 instruction_pointer = 
 #if defined(_M_IX86)
             exinfo->ContextRecord->Eip;
 #elif defined(_M_AMD64)
@@ -854,7 +851,7 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
     callback_context->finished = true;
     return TRUE;
   }
-
+    
     // Include all modules.
   case IncludeModuleCallback:
   case ModuleCallback:
@@ -866,11 +863,10 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
     return TRUE;
 
     // Stop receiving cancel callbacks.
-//FIXME: CancelCallback is missing in our mingw headers currently, but it's present in trunk, so we need to comment this in as soon as mingw is updated in opensuse (domme)
-//   case CancelCallback:
-//     callback_output->CheckCancel = FALSE;
-//     callback_output->Cancel = FALSE;
-//     return TRUE;
+  case CancelCallback:
+    callback_output->CheckCancel = FALSE;
+    callback_output->Cancel = FALSE;
+    return TRUE;
   }
   // Ignore other callback types.
   return FALSE;

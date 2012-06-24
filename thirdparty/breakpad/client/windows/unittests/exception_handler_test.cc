@@ -220,8 +220,8 @@ TEST_F(ExceptionHandlerTest, InvalidParameterMiniDumpTest) {
   ASSERT_TRUE(DoesPathExist(temp_path_));
   wstring dump_path(temp_path_);
   google_breakpad::CrashGenerationServer server(
-      kPipeName, NULL, NULL, NULL, ClientDumpCallback, NULL, NULL, NULL, true,
-      &dump_path);
+      kPipeName, NULL, NULL, NULL, ClientDumpCallback, NULL, NULL, NULL, NULL,
+      NULL, true, &dump_path);
 
   ASSERT_TRUE(dump_file.empty() && full_dump_file.empty());
 
@@ -291,8 +291,8 @@ TEST_F(ExceptionHandlerTest, PureVirtualCallMiniDumpTest) {
   ASSERT_TRUE(DoesPathExist(temp_path_));
   wstring dump_path(temp_path_);
   google_breakpad::CrashGenerationServer server(
-      kPipeName, NULL, NULL, NULL, ClientDumpCallback, NULL, NULL, NULL, true,
-      &dump_path);
+      kPipeName, NULL, NULL, NULL, ClientDumpCallback, NULL, NULL, NULL, NULL,
+      NULL, true, &dump_path);
 
   ASSERT_TRUE(dump_file.empty() && full_dump_file.empty());
 

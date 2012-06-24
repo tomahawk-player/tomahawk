@@ -291,6 +291,8 @@ void CrashServerStart() {
                                            NULL,
                                            ShowClientExited,
                                            NULL,
+                                           NULL,
+                                           NULL,
                                            true,
                                            &dump_path);
 

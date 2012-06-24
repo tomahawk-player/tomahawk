@@ -33,7 +33,6 @@
 //
 // Author: Mark Mentovai, Ted Mielczarek, Jim Blandy
 
-
 #include "google_breakpad/processor/call_stack.h"
 #include "google_breakpad/processor/memory_region.h"
 #include "google_breakpad/processor/source_line_resolver_interface.h"
@@ -48,12 +47,13 @@ namespace google_breakpad {
 
 StackwalkerARM::StackwalkerARM(const SystemInfo *system_info,
                                const MDRawContextARM *context,
+                               int fp_register,
                                MemoryRegion *memory,
                                const CodeModules *modules,
                                SymbolSupplier *supplier,
                                SourceLineResolverInterface *resolver)
     : Stackwalker(system_info, memory, modules, supplier, resolver),
-      context_(context), 
+      context_(context), fp_register_(fp_register),
       context_frame_validity_(StackFrameARM::CONTEXT_VALID_ALL) { }
 
 
@@ -70,7 +70,7 @@ StackFrame* StackwalkerARM::GetContextFrame() {
   frame->context = *context_;
   frame->context_validity = context_frame_validity_;
   frame->trust = StackFrame::FRAME_TRUST_CONTEXT;
-  frame->instruction = frame->context.iregs[15];
+  frame->instruction = frame->context.iregs[MD_CONTEXT_ARM_REG_PC];
 
   return frame;
 }
@@ -125,8 +125,18 @@ StackFrameARM *StackwalkerARM::GetCallerByCFIFrameInfo(
     CFIFrameInfo::RegisterValueMap<u_int32_t>::iterator entry =
       caller_registers.find(".ra");
     if (entry != caller_registers.end()) {
-      frame->context_validity |= StackFrameARM::CONTEXT_VALID_PC;
-      frame->context.iregs[MD_CONTEXT_ARM_REG_PC] = entry->second;
+      if (fp_register_ == -1) {
+        frame->context_validity |= StackFrameARM::CONTEXT_VALID_PC;
+        frame->context.iregs[MD_CONTEXT_ARM_REG_PC] = entry->second;
+      } else {
+        // The CFI updated the link register and not the program counter.
+        // Handle getting the program counter from the link register.
+        frame->context_validity |= StackFrameARM::CONTEXT_VALID_PC;
+        frame->context_validity |= StackFrameARM::CONTEXT_VALID_LR;
+        frame->context.iregs[MD_CONTEXT_ARM_REG_LR] = entry->second;
+        frame->context.iregs[MD_CONTEXT_ARM_REG_PC] =
+            last_frame->context.iregs[MD_CONTEXT_ARM_REG_LR];
+      }
     }
   }
   // If the CFI doesn't recover the SP explicitly, then use .cfa.
@@ -154,7 +164,7 @@ StackFrameARM *StackwalkerARM::GetCallerByStackScan(
   StackFrameARM *last_frame = static_cast<StackFrameARM *>(frames.back());
   u_int32_t last_sp = last_frame->context.iregs[MD_CONTEXT_ARM_REG_SP];
   u_int32_t caller_sp, caller_pc;
-  
+
   if (!ScanForReturnAddress(last_sp, &caller_sp, &caller_pc)) {
     // No plausible return address was found.
     return NULL;
@@ -179,6 +189,52 @@ StackFrameARM *StackwalkerARM::GetCallerByStackScan(
   return frame;
 }
 
+StackFrameARM *StackwalkerARM::GetCallerByFramePointer(
+    const vector<StackFrame *> &frames) {
+  StackFrameARM *last_frame = static_cast<StackFrameARM *>(frames.back());
+
+  if (!(last_frame->context_validity &
+        StackFrameARM::RegisterValidFlag(fp_register_))) {
+    return NULL;
+  }
+
+  u_int32_t last_fp = last_frame->context.iregs[fp_register_];
+
+  u_int32_t caller_fp = 0;
+  if (last_fp && !memory_->GetMemoryAtAddress(last_fp, &caller_fp)) {
+    BPLOG(ERROR) << "Unable to read caller_fp from last_fp: 0x"
+                 << std::hex << last_fp;
+    return NULL;
+  }
+
+  u_int32_t caller_lr = 0;
+  if (last_fp && !memory_->GetMemoryAtAddress(last_fp + 4, &caller_lr)) {
+    BPLOG(ERROR) << "Unable to read caller_lr from last_fp + 4: 0x"
+                 << std::hex << (last_fp + 4);
+    return NULL;
+  }
+
+  u_int32_t caller_sp = last_fp ? last_fp + 8 :
+      last_frame->context.iregs[MD_CONTEXT_ARM_REG_SP];
+
+  // Create a new stack frame (ownership will be transferred to the caller)
+  // and fill it in.
+  StackFrameARM *frame = new StackFrameARM();
+
+  frame->trust = StackFrame::FRAME_TRUST_FP;
+  frame->context = last_frame->context;
+  frame->context.iregs[fp_register_] = caller_fp;
+  frame->context.iregs[MD_CONTEXT_ARM_REG_SP] = caller_sp;
+  frame->context.iregs[MD_CONTEXT_ARM_REG_PC] =
+      last_frame->context.iregs[MD_CONTEXT_ARM_REG_LR];
+  frame->context.iregs[MD_CONTEXT_ARM_REG_LR] = caller_lr;
+  frame->context_validity = StackFrameARM::CONTEXT_VALID_PC |
+                            StackFrameARM::CONTEXT_VALID_LR |
+                            StackFrameARM::RegisterValidFlag(fp_register_) |
+                            StackFrameARM::CONTEXT_VALID_SP;
+  return frame;
+}
+
 StackFrame* StackwalkerARM::GetCallerFrame(const CallStack *stack) {
   if (!memory_ || !stack) {
     BPLOG(ERROR) << "Can't get caller frame without memory or stack";
@@ -196,10 +252,13 @@ StackFrame* StackwalkerARM::GetCallerFrame(const CallStack *stack) {
     frame.reset(GetCallerByCFIFrameInfo(frames, cfi_frame_info.get()));
 
   // If CFI failed, or there wasn't CFI available, fall back
-  // to stack scanning.
-  if (!frame.get()) {
+  // to frame pointer, if this is configured.
+  if (fp_register_ >= 0 && !frame.get())
+    frame.reset(GetCallerByFramePointer(frames));
+
+  // If everuthing failed, fall back to stack scanning.
+  if (!frame.get())
     frame.reset(GetCallerByStackScan(frames));
-  }
 
   // If nothing worked, tell the caller.
   if (!frame.get())
@@ -225,7 +284,7 @@ StackFrame* StackwalkerARM::GetCallerFrame(const CallStack *stack) {
   // match up with the line that contains the function call. Callers that
   // require the exact return address value may access
   // frame->context.iregs[MD_CONTEXT_ARM_REG_PC].
-  frame->instruction = frame->context.iregs[MD_CONTEXT_ARM_REG_PC] - 1;
+  frame->instruction = frame->context.iregs[MD_CONTEXT_ARM_REG_PC] - 2;
 
   return frame.release();
 }

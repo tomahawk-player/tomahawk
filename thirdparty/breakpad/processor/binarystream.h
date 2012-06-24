@@ -77,6 +77,9 @@ class binarystream {
   void rewind() {
     stream_.seekg (0, ios::beg);
     stream_.seekp (0, ios::beg);
+    // This is to clear all the error flags, since only the EOF flag is cleared
+    // with seekg().
+    stream_.clear();
   }
 
  private:

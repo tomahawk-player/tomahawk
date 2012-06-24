@@ -54,7 +54,7 @@ class MinidumpContext;
 class SourceLineResolverInterface;
 struct StackFrame;
 class SymbolSupplier;
-class SystemInfo;
+struct SystemInfo;
 
 using std::set;
 
@@ -108,6 +108,15 @@ class Stackwalker {
   // Returns false otherwise.
   bool InstructionAddressSeemsValid(u_int64_t address);
 
+  template<typename InstructionType>
+  bool ScanForReturnAddress(InstructionType location_start,
+                            InstructionType *location_found,
+                            InstructionType *ip_found) {
+    const int kRASearchWords = 30;
+    return ScanForReturnAddress(location_start, location_found, ip_found,
+                                kRASearchWords);
+  }
+
   // Scan the stack starting at location_start, looking for an address
   // that looks like a valid instruction pointer. Addresses must
   // 1) be contained in the current stack memory
@@ -120,10 +129,10 @@ class Stackwalker {
   template<typename InstructionType>
   bool ScanForReturnAddress(InstructionType location_start,
                             InstructionType *location_found,
-                            InstructionType *ip_found) {
-    const int kRASearchWords = 30;
+                            InstructionType *ip_found,
+                            int searchwords) {
     for (InstructionType location = location_start;
-         location <= location_start + kRASearchWords * sizeof(InstructionType);
+         location <= location_start + searchwords * sizeof(InstructionType);
          location += sizeof(InstructionType)) {
       InstructionType ip;
       if (!memory_->GetMemoryAtAddress(location, &ip))
