@@ -77,6 +77,7 @@ private:
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );
     void setupConfWidget( const QVariantMap& m );
+    void sendStatus();
 
     void startProcess();
 
