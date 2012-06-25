@@ -55,7 +55,7 @@ private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
-    void onScrolled( int dx, int dy );
+    void onViewChanged();
     void onPlaybackStarted( const QPersistentModelIndex& index );
     void onPlaybackFinished();
 
@@ -64,6 +64,7 @@ private slots:
 
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
+
 private:
     QTimeLine* createTimeline( QTimeLine::Direction direction );
 
