@@ -56,7 +56,8 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 
-    connect( m_view, SIGNAL( scrolledContents( int, int ) ), SLOT( onScrolled( int, int ) ) );
+    connect( m_view, SIGNAL( scrolledContents( int, int ) ), SLOT( onViewChanged() ) );
+    connect( m_view, SIGNAL( resized() ), SLOT( onViewChanged() ) );
 }
 
 
@@ -421,19 +422,22 @@ GridItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 
 
 void
-GridItemDelegate::onScrolled( int dx, int dy )
+GridItemDelegate::onViewChanged()
 {
-    foreach ( QWidget* widget, m_spinner.values() )
+    foreach ( const QPersistentModelIndex& index, m_spinner.keys() )
     {
-        widget->move( widget->pos() + QPoint( dx, dy ) );
+        QRect rect = m_view->visualRect( index );
+        m_spinner.value( index )->move( rect.center() - QPoint( 23, 23 ) );
     }
-    foreach ( ImageButton* button, m_playButton.values() )
+    foreach ( const QPersistentModelIndex& index, m_playButton.keys() )
     {
-        button->move( button->pos() + QPoint( dx, dy ) );
+        QRect rect = m_view->visualRect( index );
+        m_playButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
     }
-    foreach ( ImageButton* button, m_pauseButton.values() )
+    foreach ( const QPersistentModelIndex& index, m_pauseButton.keys() )
     {
-        button->move( button->pos() + QPoint( dx, dy ) );
+        QRect rect = m_view->visualRect( index );
+        m_pauseButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
     }
 }
 
