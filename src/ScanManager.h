@@ -39,6 +39,8 @@ class ScanManager : public QObject
 Q_OBJECT
 
 public:
+    enum ScanMode { DirScan, FileScan };
+    
     static ScanManager* instance();
 
     explicit ScanManager( QObject* parent = 0 );
@@ -48,13 +50,15 @@ signals:
     void finished();
 
 public slots:
-    void runScan( bool manualFull = false );
-    void runDirScan();
+    bool runFileScan( const QStringList &paths );
+    void runFullRescan();
+    bool runNormalScan( bool manualFull = false );
 
 private slots:
-    void scannerFinished();
-
     void runStartupScan();
+    void runScan();
+
+    void scannerFinished();
     void scanTimerTimeout();
 
     void onSettingsChanged();
@@ -65,9 +69,11 @@ private slots:
 private:
     static ScanManager* s_instance;
 
+    ScanMode m_currScanMode;
     QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPaths;
+    QStringList m_cachedScannerDirs;
 
     QTimer* m_scanTimer;
 };

@@ -23,6 +23,8 @@
 #include "TomahawkSettings.h"
 #include "database/DatabaseCommand.h"
 
+#include "ScanManager.h"
+
 /* taglib */
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
@@ -83,7 +85,7 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, quint32 bs = 0 );
+    MusicScanner( ScanManager::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -96,7 +98,7 @@ private:
     void executeCommand( QSharedPointer< DatabaseCommand > cmd );
 
 private slots:
-    void listerFinished();
+    void postOps();
     void scanFile( const QFileInfo& fi );
     void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
     void startScan();
@@ -106,7 +108,10 @@ private slots:
     void commandFinished();
 
 private:
-    QStringList m_dirs;
+    void scanFilePaths();
+    
+    ScanManager::ScanMode m_scanMode;
+    QStringList m_paths;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;

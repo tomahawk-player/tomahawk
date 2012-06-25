@@ -72,19 +72,19 @@ DirLister::scanDir( QDir dir, int depth )
         return;
     }
 
-    QFileInfoList dirs;
+    QFileInfoList filteredEntries;
 
     dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
     dir.setSorting( QDir::Name );
-    dirs = dir.entryInfoList();
+    filteredEntries = dir.entryInfoList();
 
-    foreach ( const QFileInfo& di, dirs )
+    foreach ( const QFileInfo& di, filteredEntries )
         emit fileToScan( di );
 
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
-    dirs = dir.entryInfoList();
+    filteredEntries = dir.entryInfoList();
 
-    foreach ( const QFileInfo& di, dirs )
+    foreach ( const QFileInfo& di, filteredEntries )
     {
         const QString canonical = di.canonicalFilePath();
         m_opcount++;
@@ -100,9 +100,10 @@ DirLister::scanDir( QDir dir, int depth )
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
+MusicScanner::MusicScanner( ScanManager::ScanMode scanMode, const QStringList& paths, quint32 bs )
     : QObject()
-    , m_dirs( dirs )
+    , m_scanMode( scanMode )
+    , m_paths( paths )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
 {
@@ -175,9 +176,15 @@ MusicScanner::scan()
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
+    if ( m_scanMode == ScanManager::FileScan )
+    {
+        scanFilePaths();
+        return;
+    }
+    
     m_dirListerThreadController = new QThread( this );
 
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs ) );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_paths ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
@@ -185,7 +192,7 @@ MusicScanner::scan()
 
     // queued, so will only fire after all dirs have been scanned:
     connect( m_dirLister.data(), SIGNAL( finished() ),
-                                   SLOT( listerFinished() ), Qt::QueuedConnection );
+                                   SLOT( postOps() ), Qt::QueuedConnection );
 
     m_dirListerThreadController->start( QThread::IdlePriority );
     QMetaObject::invokeMethod( m_dirLister.data(), "go" );
@@ -193,13 +200,30 @@ MusicScanner::scan()
 
 
 void
-MusicScanner::listerFinished()
+MusicScanner::scanFilePaths()
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    foreach( QString path, m_paths )
+    {
+        QFileInfo fi( path );
+        if ( fi.exists() && fi.isReadable() )
+            scanFile( fi );
+    }
+}
+
+
+
+void
+MusicScanner::postOps()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    // any remaining stuff that wasnt emitted as a batch:
-    foreach( const QString& key, m_filemtimes.keys() )
-        m_filesToDelete << m_filemtimes[ key ].keys().first();
+    if ( m_scanMode == ScanManager::DirScan )
+    {
+        // any remaining stuff that wasnt emitted as a batch:
+        foreach( const QString& key, m_filemtimes.keys() )
+            m_filesToDelete << m_filemtimes[ key ].keys().first();
+    }
 
     tDebug( LOGINFO ) << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
     tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";

@@ -533,7 +533,7 @@ void
 TomahawkWindow::updateCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
-        ScanManager::instance()->runScan();
+        ScanManager::instance()->runNormalScan();
 }
 
 
@@ -541,7 +541,7 @@ void
 TomahawkWindow::rescanCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
-        ScanManager::instance()->runScan( true );
+        ScanManager::instance()->runFullRescan();
 }
 
 
