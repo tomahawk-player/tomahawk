@@ -255,7 +255,11 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         setupConfWidget( m );
         return;
     }
-
+    else if ( msgtype == "status" )
+    {
+        sendStatus();
+        return;
+    }
     else if ( msgtype == "results" )
     {
         const QString qid = m.value( "qid" ).toString();
@@ -333,6 +337,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     }
 }
 
+
 void
 ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
@@ -355,6 +360,16 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
     sendMsg( msg );
+}
+
+
+void
+ScriptResolver::sendStatus()
+{
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "status";
+    msg[ "_status" ] = 1;
+    sendMessage( msg );
 }
 
 
