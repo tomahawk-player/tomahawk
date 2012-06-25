@@ -160,6 +160,7 @@ ScriptResolver::running() const
     return !m_stopped;
 }
 
+
 void
 ScriptResolver::sendMessage( const QVariantMap& map )
 {
@@ -413,7 +414,8 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
 }
 
 
-void ScriptResolver::startProcess()
+void
+ScriptResolver::startProcess()
 {
     if ( !QFile::exists( filePath() ) )
         m_error = Tomahawk::ExternalResolver::FileNotFound;
@@ -426,6 +428,9 @@ void ScriptResolver::startProcess()
 
     QString interpreter;
     QString runPath = filePath();
+
+    QFile file( filePath() );
+    file.setPermissions( file.permissions() | QFile::ExeOwner | QFile::ExeGroup | QFile::ExeOther );
 
 #ifdef Q_OS_WIN
     if ( fi.suffix().toLower() != "exe" )
@@ -456,7 +461,7 @@ void ScriptResolver::startProcess()
     }
 #endif // Q_OS_WIN
 
-    if( interpreter.isEmpty() )
+    if ( interpreter.isEmpty() )
     {
 #ifndef Q_OS_WIN
         const QFileInfo info( runPath );
