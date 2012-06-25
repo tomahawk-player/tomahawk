@@ -448,6 +448,7 @@ Connection::sendMsg( QVariant j )
 
     QJson::Serializer serializer;
     const QByteArray payload = serializer.serialize( j );
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Sending to" << id() << ":" << payload;
     sendMsg( Msg::factory( payload, Msg::JSON ) );
 }
 
