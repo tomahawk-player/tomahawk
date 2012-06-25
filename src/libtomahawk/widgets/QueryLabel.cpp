@@ -210,11 +210,7 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
         m_result = result;
-
         m_query = m_result->toQuery();
-        QList<Tomahawk::result_ptr> rl;
-        rl << m_result;
-        m_query->addResults( rl );
 
         updateLabel();
 
