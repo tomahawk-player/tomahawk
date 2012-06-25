@@ -52,7 +52,7 @@
 namespace google_breakpad {
 
 #if defined(__i386) || defined(__x86_64)
-typedef typeof(((struct user*) 0)->u_debugreg[0]) debugreg_t;
+#define debugreg_t typeof(((struct user*) 0)->u_debugreg[0])
 #endif
 
 // Typedef for our parsing of the auxv variables in /proc/pid/auxv.
