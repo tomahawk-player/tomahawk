@@ -35,8 +35,11 @@ IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
 ENDIF()
 
 # add definitions based on build options
-IF(WITH_BREAKPAD)
+IF( WITH_BREAKPAD )
     message(STATUS "Build with support for breakpad.")
+    IF( CMAKE_COMPILER_IS_GNUCXX )
+        ADD_DEFINITIONS( -DSTDC_HEADERS -std=gnu++98 )
+    ENDIF()
 ENDIF()
 
 # generate version string
