@@ -640,6 +640,8 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
         return;
+    if ( page == m_currentPage )
+        return;
 
     // save the old playlist shuffle state in config before we change playlists
     saveCurrentPlaylistSettings();
