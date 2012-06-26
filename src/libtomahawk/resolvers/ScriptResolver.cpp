@@ -76,7 +76,6 @@ ScriptResolver::~ScriptResolver()
     if ( !finished || m_proc.state() == QProcess::Running )
     {
         qDebug() << "External resolver didn't exit after waiting 2s for it to die, killing forcefully";
-        Q_ASSERT(false);
 #ifdef Q_OS_WIN
         m_proc.kill();
 #else
