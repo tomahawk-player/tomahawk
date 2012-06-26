@@ -703,19 +703,6 @@ AtticaManager::uninstallResolver( const Content& resolver )
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
         TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
-
-        // remove account as well
-        QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::ResolverType );
-        foreach ( Tomahawk::Accounts::Account* account, accounts )
-        {
-            if ( Tomahawk::Accounts::AtticaResolverAccount* atticaAccount = qobject_cast< Tomahawk::Accounts::AtticaResolverAccount* >( account ) )
-            {
-                if ( atticaAccount->atticaId() == resolver.id() ) // this is the account we want to remove
-                {
-                    Tomahawk::Accounts::AccountManager::instance()->removeAccount( atticaAccount );
-                }
-            }
-        }
     }
 
     doResolverRemove( resolver.id() );
