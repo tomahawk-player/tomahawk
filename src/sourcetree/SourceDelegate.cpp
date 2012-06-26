@@ -525,8 +525,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( !index.parent().parent().isValid() )
             o.rect.adjust( 7, 0, 0, 0 );
 
-        QStyledItemDelegate::paint( painter, o, index );
-
         if ( type == SourcesModel::TemporaryPage )
         {
             TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
@@ -534,16 +532,24 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
             if ( gpi && o3.state & QStyle::State_MouseOver )
             {
-                // draw close icon
                 int padding = 3;
                 m_iconHeight = ( o3.rect.height() - 2 * padding );
+
+                o.rect.adjust( 0, 0, -( padding + m_iconHeight ), 0 );
+                QStyledItemDelegate::paint( painter, o, index );
+
+                // draw close icon
                 QPixmap p( RESPATH "images/list-remove.png" );
                 p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
 
                 QRect r( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
                 painter->drawPixmap( r, p );
             }
+            else
+                QStyledItemDelegate::paint( painter, o, index );
         }
+        else
+            QStyledItemDelegate::paint( painter, o, index );
     }
 
     paintDecorations( painter, o3, index );
