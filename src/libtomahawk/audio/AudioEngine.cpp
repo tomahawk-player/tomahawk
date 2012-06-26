@@ -440,7 +440,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             setCurrentTrack( result );
 
-            if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
+            if ( !TomahawkUtils::isHttpResult( m_currentTrack->url() ) &&
+                 !TomahawkUtils::isLocalResult( m_currentTrack->url() ) )
             {
                 io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
@@ -458,7 +459,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             m_state = Loading;
             emit loading( m_currentTrack );
 
-            if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
+            if ( !TomahawkUtils::isHttpResult( m_currentTrack->url() ) &&
+                 !TomahawkUtils::isLocalResult( m_currentTrack->url() ) )
             {
                 if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
                     m_mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr_io, this ) );
@@ -468,7 +470,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             else
             {
-                if ( !isLocalResult( m_currentTrack->url() ) )
+                if ( !TomahawkUtils::isLocalResult( m_currentTrack->url() ) )
                 {
                     QUrl furl = m_currentTrack->url();
                     if ( m_currentTrack->url().contains( "?" ) )
@@ -974,20 +976,6 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
             m_playlist->setCurrentIndex( m_playlist->indexOfResult( result ) );
         }
     }
-}
-
-
-bool
-AudioEngine::isHttpResult( const QString& url ) const
-{
-    return url.startsWith( "http://" ) || url.startsWith( "https://" );
-}
-
-
-bool
-AudioEngine::isLocalResult( const QString& url ) const
-{
-    return url.startsWith( "file://" );
 }
 
 

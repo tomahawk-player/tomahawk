@@ -152,9 +152,6 @@ private:
 
     void setState( AudioState state );
 
-    bool isHttpResult( const QString& ) const;
-    bool isLocalResult( const QString& ) const;
-
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::query_ptr m_stopAfterTrack;

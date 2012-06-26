@@ -189,6 +189,9 @@ namespace TomahawkUtils
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
 
+    DLLEXPORT bool isHttpResult( const QString& url );
+    DLLEXPORT bool isLocalResult( const QString& url );
+
     DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
     DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
     DLLEXPORT bool unzipFileInFolder( const QString& zipFileName, const QDir& folder );

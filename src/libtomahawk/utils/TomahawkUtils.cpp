@@ -772,6 +772,20 @@ md5( const QByteArray& data )
 }
 
 
+bool
+isHttpResult( const QString& url )
+{
+    return url.startsWith( "http://" ) || url.startsWith( "https://" );
+}
+
+
+bool
+isLocalResult( const QString& url )
+{
+    return url.startsWith( "file://" );
+}
+
+
 void
 crash()
 {
