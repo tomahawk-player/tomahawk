@@ -61,7 +61,7 @@ public:
     void beginIndexing();
     void endIndexing();
     void appendFields( const QMap< unsigned int, QMap< QString, QString > >& trackData );
-    
+
 signals:
     void indexReady();
 
@@ -73,10 +73,9 @@ public slots:
 
 private slots:
     void updateIndex();
-
-private:
     bool wipeIndex();
 
+private:
     QMutex m_mutex;
     QString m_lucenePath;
 

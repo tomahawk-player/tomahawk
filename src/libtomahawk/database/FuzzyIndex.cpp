@@ -83,7 +83,7 @@ FuzzyIndex::wipeIndex()
     endIndexing();
 
     QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
-    
+
     return true; // FIXME
 }
 
@@ -189,8 +189,8 @@ FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& 
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        
-        wipeIndex();
+
+        QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
 }
 
@@ -282,9 +282,9 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     }
     catch( CLuceneError& error )
     {
-        tDebug() << "Caught CLucene error:" << error.what();
-        
-        wipeIndex();
+        tDebug() << "Caught CLucene error:" << error.what() << query->toString();
+
+        QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
 
     return resultsmap;
@@ -338,8 +338,8 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     catch( CLuceneError& error )
     {
         tDebug() << "Caught CLucene error:" << error.what();
-        
-        wipeIndex();
+
+        QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
 
     return resultsmap;
