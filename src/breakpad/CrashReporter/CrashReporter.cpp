@@ -66,16 +66,16 @@ CrashReporter::CrashReporter( const QStringList& args )
     m_minidump = m_dir + '/' + args.value( 2 ) + ".dmp";
     m_product_name = args.value( 3 );
 
-    setFixedSize( sizeHint() );
-
     //hide until "send report" has been clicked
     ui.progressBar->setVisible( false );
     ui.button->setVisible( false );
     ui.progressLabel->setVisible( false );
-    connect( ui.sendButton, SIGNAL( clicked() ), SLOT( onSendButton() ));
+    connect( ui.sendButton, SIGNAL( clicked() ), SLOT( onSendButton() ) );
 
-
+    adjustSize();
+    setFixedSize( size() );
 }
+
 
 CrashReporter::~CrashReporter()
 {
@@ -186,6 +186,7 @@ CrashReporter::onFail( int error, const QString& errorString )
     qDebug() << "Error:" << error << errorString;
 }
 
+
 void
 CrashReporter::onSendButton()
 {
@@ -194,5 +195,9 @@ CrashReporter::onSendButton()
     ui.progressLabel->setVisible( true );
     ui.sendButton->setEnabled( false );
     ui.dontSendButton->setEnabled( false );
+
+    adjustSize();
+    setFixedSize( size() );
+
     QTimer::singleShot( 0, this, SLOT( send() ) );
 }
