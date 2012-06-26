@@ -134,7 +134,16 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 
     if ( playable && playing && item->isBeingPlayed() )
     {
-        const int iconW = option.rect.height() - 4;
+        int iconW = option.rect.height() - 4;
+        if ( m_expandedMap.contains( index ) )
+        {
+            AnimationHelper* ah = m_expandedMap.value( index );
+            if ( ah->initialized() )
+            {
+                iconW = ah->originalSize().height() - 4;
+            }
+        }
+ 
         QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
         QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
         speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
