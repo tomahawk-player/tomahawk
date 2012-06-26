@@ -541,7 +541,7 @@ SourceItem::latestAdditionsClicked()
         cv->setFrameShape( QFrame::NoFrame );
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-        RecentlyAddedModel* raModel = new RecentlyAddedModel( m_source, cv );
+        RecentlyAddedModel* raModel = new RecentlyAddedModel( cv );
         raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Latest Additions" ) );
 
@@ -557,6 +557,8 @@ SourceItem::latestAdditionsClicked()
         cv->setPlayableModel( raModel );
         cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
         cv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
+
+        raModel->setSource( m_source );
 
         m_latestAdditionsPage = cv;
     }
@@ -582,7 +584,7 @@ SourceItem::recentPlaysClicked()
         pv->setFrameShape( QFrame::NoFrame );
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( m_source, pv );
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setStyle( PlayableModel::Large );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
 
@@ -597,6 +599,7 @@ SourceItem::recentPlaysClicked()
 
         pv->setPlaylistModel( raModel );
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
+        raModel->setSource( m_source );
 
         m_recentPlaysPage = pv;
     }

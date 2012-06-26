@@ -68,10 +68,11 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     updatePlaylists();
 
-    m_tracksModel = new RecentlyPlayedModel( source_ptr(), ui->tracksView );
+    m_tracksModel = new RecentlyPlayedModel( ui->tracksView );
     m_tracksModel->setStyle( PlayableModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
+    m_tracksModel->setSource( source_ptr() );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setPlayableModel( m_recentAlbumsModel );
