@@ -118,7 +118,7 @@ ArtistPlaylistInterface::tracks()
             DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
             cmd->setArtist( m_artist );
             cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
-            
+
             connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                             SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
 
@@ -186,7 +186,7 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
         cmd->setArtist( m_artist );
         //this takes discnumber into account as well
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
-        
+
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                         SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
 
@@ -194,6 +194,7 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
     }
     else
     {
+        m_finished = true;
         emit tracksLoaded( m_mode, m_collection );
     }
 }
@@ -210,5 +211,6 @@ ArtistPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
     else
         m_queries << tracks;
 
+    m_finished = true;
     emit tracksLoaded( m_mode, m_collection );
 }
