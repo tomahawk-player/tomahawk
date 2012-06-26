@@ -82,6 +82,9 @@ PlaybackLog::PlaybackLog( const PlaybackLog& other )
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
+    Q_ASSERT( !artist.trimmed().isEmpty() );
+    Q_ASSERT( !track.trimmed().isEmpty() );
+
     if ( qid.isEmpty() )
         autoResolve = false;
 
@@ -98,6 +101,8 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 query_ptr
 Query::get( const QString& query, const QID& qid )
 {
+    Q_ASSERT( !query.trimmed().isEmpty() );
+
     query_ptr q = query_ptr( new Query( query, qid ), &QObject::deleteLater );
     q->setWeakRef( q.toWeakRef() );
 
