@@ -109,7 +109,7 @@ ScanManager::onSettingsChanged()
 void
 ScanManager::runStartupScan()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
     else
@@ -120,7 +120,7 @@ ScanManager::runStartupScan()
 void
 ScanManager::scanTimerTimeout()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !TomahawkSettings::instance()->watchForChanges() ||
          !Database::instance() ||
          ( Database::instance() && !Database::instance()->isReady() ) )
