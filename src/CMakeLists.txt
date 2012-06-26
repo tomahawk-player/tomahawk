@@ -37,9 +37,7 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      web/Api_v1.cpp
 
-     MusicScanner.cpp
      ShortcutHandler.cpp
-     ScanManager.cpp
      UbuntuUnityHack.cpp
      TomahawkApp.cpp
      main.cpp

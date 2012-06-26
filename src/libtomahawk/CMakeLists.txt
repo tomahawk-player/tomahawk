@@ -261,6 +261,9 @@ set( libSources
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
 
+    filemetadata/MusicScanner.cpp
+    filemetadata/ScanManager.cpp
+
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
     network/StreamConnection.cpp

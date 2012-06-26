@@ -67,7 +67,7 @@
 #include "TomahawkSettings.h"
 #include "SourceList.h"
 #include "TomahawkTrayIcon.h"
-#include "ScanManager.h"
+#include "libtomahawk/filemetadata/ScanManager.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
 
