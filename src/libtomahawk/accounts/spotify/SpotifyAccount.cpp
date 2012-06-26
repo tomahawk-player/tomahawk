@@ -181,6 +181,10 @@ SpotifyAccount::hookupResolver()
         return;
     }
 
+    // HACK
+    // Since the resolver in 0.4.x used an incompatible version of kdsingleappguard, we can't auto-kill old resolvers on the
+    // 0.4.x->0.5.x upgrade. So we do it manually for a while
+    killExistingResolvers();
     m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
@@ -195,6 +199,20 @@ SpotifyAccount::hookupResolver()
         m_spotifyResolver.data()->sendMessage( msg );
     }
 
+}
+
+
+void
+SpotifyAccount::killExistingResolvers()
+{
+    QProcess p;
+#if defined(Q_OS_UNIX)
+    const int ret = p.execute( "killall -9 spotify_tomahawkresolver" );
+    qDebug() << "Tried to killall -9 spotify_tomahawkresolver with return code:" << ret;
+#elif defined(Q_OS_WIN)
+    const int ret = p.execute( "taskkill.exe /F /im spotify_tomahawkresolver.exe" );
+    qDebug() << "Tried to taskkill.exe /F /im spotify_tomahawkresolver.exe with return code:" << ret;
+#endif
 }
 
 
