@@ -1,6 +1,9 @@
 Version 0.5.1:
+    * Show an error message when not able to resolve a requested song.
+    * Fixed a few crash and freeze issues.
     * Better detection of local networks for the Local Network connector.
     * Don't prompt for access permission for your own accounts.
+    * (OS X) Fixed not being able to connect to Last.fm.
 
 Version 0.5.0:
     * SOCKS5 proxy support improvements for resolvers and more.
