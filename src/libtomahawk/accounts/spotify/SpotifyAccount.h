@@ -126,6 +126,7 @@ private:
     void init();
     bool checkForResolver();
     void hookupResolver();
+    void killExistingResolvers();
 
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
