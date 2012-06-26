@@ -229,11 +229,11 @@ ScanManager::filesDeleted()
 void
 ScanManager::runScan()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
 
     QStringList paths = m_currScannerPaths.empty() ? TomahawkSettings::instance()->scannerPaths() : m_currScannerPaths;
 
-    if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
+    if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
         m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( m_currScanMode, paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
@@ -251,8 +251,8 @@ ScanManager::runScan()
 void
 ScanManager::scannerFinished()
 {
-    tDebug() << "deleting scanner";
-    if ( !m_scanner.isNull() )
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+    if ( m_musicScannerThreadController && !m_scanner.isNull() )
     {
         m_musicScannerThreadController->quit();
         m_musicScannerThreadController->wait( 60000 );
