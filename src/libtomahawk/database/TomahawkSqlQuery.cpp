@@ -87,7 +87,15 @@ TomahawkSqlQuery::exec()
         if ( lastError().text().toLower().contains( "no query" ) )
         {
             tDebug() << Q_FUNC_INFO << "Re-preparing query!";
+
+            QMap< QString, QVariant > bv = boundValues();
             prepare( m_query );
+
+            foreach ( const QString& key, bv.keys() )
+            {
+                tDebug() << Q_FUNC_INFO << "Rebinding key" << key << "with value" << bv.value( key );
+                bindValue( key, bv.value( key ) );
+            }
         }
 
         if ( isBusyError( lastError() ) )
