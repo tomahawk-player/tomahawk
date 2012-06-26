@@ -29,6 +29,7 @@ using namespace Tomahawk;
 PlaylistInterface::PlaylistInterface ()
     : QObject()
     , m_latchMode( PlaylistModes::StayOnSong )
+    , m_finished( false )
 {
     m_id = uuid();
 }
