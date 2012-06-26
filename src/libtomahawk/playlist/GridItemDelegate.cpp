@@ -245,6 +245,9 @@ GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 
         closure = NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
                               const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+        closure = NewClosure( AudioEngine::instance(), SIGNAL( stopped() ),
+                              const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+
         closure->setAutoDelete( false );
 
         connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackFinished() ) );
@@ -481,6 +484,11 @@ GridItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
             {
                 m_pauseButton[ index ]->deleteLater();
                 m_pauseButton.remove( index );
+            }
+            if ( m_spinner.contains( index ) )
+            {
+                m_spinner[ index ]->deleteLater();
+                m_spinner.remove( index );
             }
         }
     }
