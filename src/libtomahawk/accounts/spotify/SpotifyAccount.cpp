@@ -137,9 +137,15 @@ SpotifyAccount::delayedInit()
         if ( !path.isEmpty() )
         {
             QFileInfo info( path );
-            // Resolver was deleted, so abort.
+            // Resolver was deleted, so abort and remove our manual override, as it's no longer valid
             if ( !info.exists() )
+            {
+                QVariantHash conf = configuration();
+                conf.remove( "path" );
+                setConfiguration( conf );
+                sync();
                 return;
+            }
         }
         hookupResolver();
     }
@@ -164,6 +170,17 @@ SpotifyAccount::hookupResolver()
     }
 
     qDebug() << "Starting spotify resolver with path:" << path;
+    if ( !m_spotifyResolver.isNull() )
+    {
+        delete m_spotifyResolver.data();
+    }
+
+    if ( !QFile::exists( path ) )
+    {
+        qWarning() << "Asked to hook up spotify resolver but it doesn't exist, ignoring";
+        return;
+    }
+
     m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
@@ -227,13 +244,18 @@ SpotifyAccount::authenticate()
     const AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( res );
 
     qDebug() << "Spotify account authenticating...";
+
+    const QString path = configuration().value( "path" ).toString();
+    const QFileInfo info( path );
+    const bool manualResolverRemoved = !path.isEmpty() && !info.exists();
+
     if ( m_spotifyResolver.isNull() && state == AtticaManager::Installed )
     {
         // We don;t have the resolver but it has been installed via attica already, so lets just turn it on
         qDebug() << "No valid spotify resolver running, but attica reports it is installed, so start it up";
         hookupResolver();
     }
-    else if ( m_spotifyResolver.isNull() )
+    else if ( m_spotifyResolver.isNull() || manualResolverRemoved )
     {
         qDebug() << "Got null resolver but asked to authenticate, so installing if we have one from attica:" << res.isValid() << res.id();
         if ( res.isValid() && !res.id().isEmpty() )
@@ -316,6 +338,11 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     conf[ "path" ] = resolverPath;
     setConfiguration( conf );
     sync();
+
+    // uninstall
+    const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
+    if ( AtticaManager::instance()->resolverState( res ) != AtticaManager::Uninstalled )
+        AtticaManager::instance()->uninstallResolver( res );
 
     m_preventEnabling = false;
 
