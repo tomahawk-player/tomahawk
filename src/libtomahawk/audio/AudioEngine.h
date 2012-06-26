@@ -138,7 +138,7 @@ private slots:
 
     void sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type );
     void sendWaitingNotification() const;
-    
+
     void queueStateSafety();
 
 private:
