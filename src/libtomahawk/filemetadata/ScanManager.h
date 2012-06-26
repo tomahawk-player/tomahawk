@@ -73,7 +73,7 @@ private:
     ScanMode m_currScanMode;
     QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
-    QStringList m_currScannerPaths;
+    QSet< QString > m_currScannerPaths;
     QStringList m_cachedScannerDirs;
 
     QTimer* m_scanTimer;

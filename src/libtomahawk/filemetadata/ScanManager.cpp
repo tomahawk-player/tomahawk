@@ -22,6 +22,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTimer>
+#include <QtCore/QSet>
 
 #include "MusicScanner.h"
 #include "TomahawkSettings.h"
@@ -179,6 +180,8 @@ bool
 ScanManager::runFileScan( const QStringList &paths )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    foreach( const QString& path, paths )
+        m_currScannerPaths.insert( path );
 
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return false;
@@ -191,7 +194,6 @@ ScanManager::runFileScan( const QStringList &paths )
 
     m_scanTimer->stop();
     m_musicScannerThreadController = new QThread( this );
-    m_currScannerPaths = paths;
     m_currScanMode = FileScan;
 
     QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
@@ -231,7 +233,7 @@ ScanManager::runScan()
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    QStringList paths = m_currScannerPaths.empty() ? TomahawkSettings::instance()->scannerPaths() : m_currScannerPaths;
+    QStringList paths = m_currScannerPaths.empty() ? TomahawkSettings::instance()->scannerPaths() : m_currScannerPaths.toList();
 
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
@@ -263,7 +265,7 @@ ScanManager::scannerFinished()
     }
 
     m_scanTimer->start();
-    m_currScannerPaths = QStringList();
+    m_currScannerPaths = QSet< QString >();
     SourceList::instance()->getLocal()->scanningFinished( 0 );
     emit finished();
 }

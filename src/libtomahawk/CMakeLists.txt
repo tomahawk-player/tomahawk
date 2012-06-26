@@ -269,6 +269,7 @@ set( libSources
     filemetadata/taghandlers/id3v2tag.cpp
     filemetadata/taghandlers/mp4tag.cpp
     filemetadata/taghandlers/oggtag.cpp
+    filemetadata/MetadataEditor.cpp
 
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
@@ -317,6 +318,7 @@ set( libUI ${libUI}
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/topbar/TopBar.ui
     playlist/QueueView.ui
+    filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui

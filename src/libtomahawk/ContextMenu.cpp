@@ -23,11 +23,15 @@
 #include "PlaylistView.h"
 #include "ViewManager.h"
 #include "Query.h"
+#include "Result.h"
+#include "Collection.h"
 #include "Source.h"
 #include "Artist.h"
 #include "Album.h"
+
 #include "utils/Logger.h"
 #include "audio/AudioEngine.h"
+#include "filemetadata/MetadataEditor.h"
 
 using namespace Tomahawk;
 
@@ -39,7 +43,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata;
 }
 
 
@@ -106,6 +110,18 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Show Track Page" ) ), ActionPage );
+
+    if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 ) {
+
+        if ( m_queries.first()->results().isEmpty() )
+            return;
+
+        Tomahawk::result_ptr result = m_queries.first()->results().first();
+        if ( result->collection() && result->collection()->source() &&
+             result->collection()->source()->isLocal() ) {
+            m_sigmap->setMapping( addAction( tr( "Edit Metadata") ), ActionEditMetadata );
+        }
+    }
 
     addSeparator();
 
@@ -238,6 +254,13 @@ ContextMenu::onTriggered( int action )
                 AudioEngine::instance()->setStopAfterTrack( query_ptr() );
             else
                 AudioEngine::instance()->setStopAfterTrack( m_queries.first() );
+            break;
+
+        case ActionEditMetadata:
+            if ( !m_queries.first()->results().isEmpty() ) {
+                MetadataEditor* d = new MetadataEditor( m_queries.first()->results().first(), this );
+                d->show();
+            }
             break;
 
         default:
