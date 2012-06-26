@@ -227,7 +227,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
-    if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() &&
+    if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() && !index.data().toString().isEmpty() &&
        ( index.column() == PlayableModel::Artist || index.column() == PlayableModel::Album || index.column() == PlayableModel::Track ) )
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
