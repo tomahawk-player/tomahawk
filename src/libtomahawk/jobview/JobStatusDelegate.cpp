@@ -26,14 +26,17 @@
 #include <QListView>
 
 #define ROW_HEIGHT 20
-#define ICON_PADDING 1
+#define ICON_PADDING 2
 #define PADDING 2
+
+
 JobStatusDelegate::JobStatusDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
     , m_parentView( qobject_cast< QListView* >( parent ) )
 {
     Q_ASSERT( m_parentView );
 }
+
 
 JobStatusDelegate::~JobStatusDelegate()
 {
@@ -55,7 +58,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 //     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
 
     painter->setRenderHint( QPainter::Antialiasing );
-    QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
+    QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2 * ICON_PADDING, ROW_HEIGHT - 2 * ICON_PADDING );
     if ( allowMultiLine )
         iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
@@ -71,21 +74,23 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     if ( !rCol.isEmpty() )
     {
         const int w = fm.width( rCol );
-        const QRect rRect( opt.rect.right() - PADDING - w, PADDING + opt.rect.y(), w, opt.rect.height() - 2*PADDING );
+        const QRect rRect( opt.rect.right() - PADDING - w, PADDING + opt.rect.y(), w, opt.rect.height() - 2 * PADDING );
         painter->drawText( rRect, Qt::AlignCenter, rCol );
 
         rightEdge = rRect.left();
     }
 
-    const int mainW = rightEdge - 3*PADDING - iconRect.right();
+    const int mainW = rightEdge - 3 * PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
         mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
     else
         to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
-    painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), mainText, to );
+
+    painter->drawText( QRect( iconRect.right() + 4 * PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2 * PADDING ), mainText, to );
 }
+
 
 QSize
 JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -102,11 +107,11 @@ JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
     initStyleOption( &opt, index );
 
     const QString text = index.data( Qt::DisplayRole ).toString();
-    const int leftEdge =  ICON_PADDING + ROW_HEIGHT + 2*PADDING;
+    const int leftEdge =  ICON_PADDING + ROW_HEIGHT + 2 * PADDING;
     const QRect rect = opt.fontMetrics.boundingRect( leftEdge, opt.rect.top(), m_parentView->width() - leftEdge, 200, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text );
 
-    m_cachedMultiLineHeights.insert( index, rect.height() + 4*PADDING );
+    m_cachedMultiLineHeights.insert( index, rect.height() + 4 * PADDING );
 
-    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), rect.height() + 4*PADDING );
+    return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), rect.height() + 4 * PADDING );
 }
 

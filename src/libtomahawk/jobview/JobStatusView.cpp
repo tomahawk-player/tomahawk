@@ -101,13 +101,12 @@ JobStatusView::setModel( JobStatusModel* m )
 void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
-    tLog() << Q_FUNC_INFO << "item is " << item << ", row is " << row;
+    tLog() << Q_FUNC_INFO << "item is" << item << ", row is" << row;
     if ( !item )
         return;
 
-    tLog() << Q_FUNC_INFO << "telling item to create delegate";
     item->createDelegate( m_view );
-    tLog() << Q_FUNC_INFO << "item delegate is " << item->customDelegate();
+    tLog() << Q_FUNC_INFO << "item delegate is" << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
     AclJobDelegate* delegate = qobject_cast< AclJobDelegate* >( item->customDelegate() );
     if ( delegate )
@@ -127,7 +126,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
-    tLog() << Q_FUNC_INFO << "row is " << row;
+    tLog() << Q_FUNC_INFO << "row is" << row;
 }
 
 
@@ -138,12 +137,12 @@ JobStatusView::refreshDelegates()
     int count = m_model->rowCount();
     for ( int i = 0; i < count; i++ )
     {
-        tLog() << Q_FUNC_INFO << "checking row " << i;
+        tLog() << Q_FUNC_INFO << "checking row" << i;
         QModelIndex index = m_model->index( i );
         QVariant itemVar = index.data( JobStatusModel::JobDataRole );
         if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )
         {
-            tLog() << Q_FUNC_INFO << "unable to fetch JobStatusItem* at row " << i;
+            tLog() << Q_FUNC_INFO << "unable to fetch JobStatusItem* at row" << i;
             continue;
         }
         JobStatusItem* item = itemVar.value< JobStatusItem* >();
