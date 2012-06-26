@@ -305,7 +305,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
             view = new TreeView();
             TreeModel* model = new TreeModel();
             view->setTreeModel( model );
-            
+
             if ( collection && collection->source()->isLocal() )
                 view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
             else
@@ -483,7 +483,7 @@ ViewManager::showRecentPlaysPage()
     {
         PlaylistView* pv = new PlaylistView( m_widget );
 
-        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( source_ptr(), pv );
+        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
         raModel->setStyle( PlayableModel::Large );
@@ -493,6 +493,7 @@ ViewManager::showRecentPlaysPage()
         pv->setItemDelegate( del );
 
         pv->setPlaylistModel( raModel );
+        raModel->setSource( source_ptr() );
 
         m_recentPlaysWidget = pv;
     }
@@ -639,6 +640,8 @@ void
 ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
+        return;
+    if ( page == m_currentPage )
         return;
 
     // save the old playlist shuffle state in config before we change playlists

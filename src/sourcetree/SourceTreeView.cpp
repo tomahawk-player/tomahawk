@@ -649,7 +649,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
-        dataChanged(m_dropIndex, m_dropIndex);
+        dataChanged( m_dropIndex, m_dropIndex );
         m_dropIndex = QPersistentModelIndex( index );
 
         if ( index.isValid() )
@@ -658,12 +658,23 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = rect;
 
             SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
+
             if ( item->willAcceptDrag( event->mimeData() ) )
             {
-
                 accept = true;
-                m_delegate->hovered( index, event->mimeData() );
-                dataChanged(index, index);
+
+                switch ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() )
+                {
+                    case SourcesModel::StaticPlaylist:
+                    case SourcesModel::CategoryAdd:
+                        m_delegate->hovered( index, event->mimeData() );
+                        dataChanged( index, index );
+                        break;
+
+                    default:
+                        break;
+                }
+
             }
             else
                 m_delegate->hovered( QModelIndex(), 0 );
@@ -702,6 +713,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QModelIndex index = indexAt( pos );
 
     if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist
+         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::LovedTracksPage
          || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::CategoryAdd )
     {
         SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );

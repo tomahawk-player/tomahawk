@@ -249,6 +249,8 @@ TreeModel::addCollection( const collection_ptr& collection )
                             << collection->source()->id()
                             << collection->source()->userName();
 
+    startLoading();
+
     m_collection = collection;
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );
 

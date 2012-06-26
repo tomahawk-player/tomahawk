@@ -32,13 +32,16 @@ class DLLEXPORT RecentlyAddedModel : public PlayableModel
 Q_OBJECT
 
 public:
-    explicit RecentlyAddedModel( const Tomahawk::source_ptr& source, QObject* parent = 0 );
+    explicit RecentlyAddedModel( QObject* parent = 0 );
     ~RecentlyAddedModel();
 
     unsigned int limit() const { return m_limit; }
     void setLimit( unsigned int limit ) { m_limit = limit; }
 
     bool isTemporary() const;
+
+public slots:
+    void setSource( const Tomahawk::source_ptr& source );
 
 private slots:
     void onSourcesReady();

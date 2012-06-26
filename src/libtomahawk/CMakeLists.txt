@@ -261,6 +261,16 @@ set( libSources
     infosystem/InfoSystemCache.cpp
     infosystem/InfoSystemWorker.cpp
 
+    filemetadata/MusicScanner.cpp
+    filemetadata/ScanManager.cpp
+    filemetadata/taghandlers/tag.cpp
+    filemetadata/taghandlers/apetag.cpp
+    filemetadata/taghandlers/asftag.cpp
+    filemetadata/taghandlers/id3v1tag.cpp
+    filemetadata/taghandlers/id3v2tag.cpp
+    filemetadata/taghandlers/mp4tag.cpp
+    filemetadata/taghandlers/oggtag.cpp
+
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
     network/StreamConnection.cpp
@@ -280,14 +290,6 @@ set( libSources
     playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
-
-    taghandlers/tag.cpp
-    taghandlers/apetag.cpp
-    taghandlers/asftag.cpp
-    taghandlers/id3v1tag.cpp
-    taghandlers/id3v2tag.cpp
-    taghandlers/mp4tag.cpp
-    taghandlers/oggtag.cpp
 
     utils/TomahawkUtils.cpp
     utils/Logger.cpp

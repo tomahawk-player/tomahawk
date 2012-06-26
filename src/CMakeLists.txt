@@ -37,9 +37,7 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      web/Api_v1.cpp
 
-     MusicScanner.cpp
      ShortcutHandler.cpp
-     ScanManager.cpp
      UbuntuUnityHack.cpp
      TomahawkApp.cpp
      main.cpp
@@ -62,6 +60,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/PlaylistItems.cpp
      sourcetree/items/CategoryItems.cpp
      sourcetree/items/GenericPageItems.cpp
+     sourcetree/items/LovedTracksItem.cpp
      sourcetree/items/TemporaryPageItem.cpp
      sourcetree/items/GroupItem.cpp
      sourcetree/items/HistoryItem.cpp

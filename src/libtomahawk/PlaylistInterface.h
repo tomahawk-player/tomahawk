@@ -40,6 +40,7 @@ public:
     const QString id() { return m_id; }
 
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
+    virtual bool isFinished() const { return m_finished; }
 
     virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
@@ -91,7 +92,8 @@ protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     PlaylistModes::LatchMode m_latchMode;
-    
+    bool m_finished;
+
 private:
     Q_DISABLE_COPY( PlaylistInterface )
 

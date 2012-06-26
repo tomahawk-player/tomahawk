@@ -35,17 +35,19 @@ public:
 
     static QString escape( QString identifier );
 
+    bool prepare( const QString& query );
     bool exec( const QString& query );
     bool exec();
-    
+
     bool commitTransaction();
 
 private:
     bool isBusyError( const QSqlError& error ) const;
 
     void showError();
-    
+
     QSqlDatabase m_db;
+    QString m_query;
 };
 
 #endif // TOMAHAWKSQLQUERY_H

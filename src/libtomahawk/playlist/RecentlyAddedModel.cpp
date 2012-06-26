@@ -33,21 +33,10 @@
 using namespace Tomahawk;
 
 
-RecentlyAddedModel::RecentlyAddedModel( const source_ptr& source, QObject* parent )
+RecentlyAddedModel::RecentlyAddedModel( QObject* parent )
     : PlayableModel( parent )
-    , m_source( source )
     , m_limit( LATEST_TRACK_ITEMS )
 {
-    if ( source.isNull() )
-    {
-        connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
-        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    }
-    else
-    {
-        onSourceAdded( source );
-        loadHistory();
-    }
 }
 
 
@@ -63,6 +52,7 @@ RecentlyAddedModel::loadHistory()
     {
         clear();
     }
+    startLoading();
 
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_source->collection() );
     cmd->setLimit( m_limit );
@@ -85,6 +75,28 @@ RecentlyAddedModel::onSourcesReady()
 
     foreach ( const source_ptr& source, SourceList::instance()->sources() )
         onSourceAdded( source );
+}
+
+
+void
+RecentlyAddedModel::setSource( const Tomahawk::source_ptr& source )
+{
+    m_source = source;
+
+    if ( source.isNull() )
+    {
+        if ( SourceList::instance()->isReady() )
+            onSourcesReady();
+        else
+            connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
+
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+    }
+    else
+    {
+        onSourceAdded( source );
+        loadHistory();
+    }
 }
 
 

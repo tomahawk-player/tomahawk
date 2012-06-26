@@ -61,7 +61,8 @@ public:
         Station = 5,
 
         GenericPage = 6,
-        TemporaryPage = 7
+        TemporaryPage = 7,
+        LovedTracksPage = 10
     };
 
     enum CategoryType {

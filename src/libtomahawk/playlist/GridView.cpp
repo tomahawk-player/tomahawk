@@ -77,9 +77,6 @@ GridView::GridView( QWidget* parent )
     setAutoResize( false );
     setProxyModel( new PlayableProxyModel( this ) );
 
-/*    m_overlay->setText( tr( "After you have scanned your music collection you will find your latest album additions right here." ) );
-    m_overlay->setText( tr( "This collection doesn't have any recent albums." ) );*/
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
@@ -208,6 +205,8 @@ GridView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
     layoutItems();
+
+    emit resized();
 }
 
 

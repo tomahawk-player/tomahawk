@@ -21,6 +21,7 @@
 #define SCANMANAGER_H
 
 #include "Typedefs.h"
+#include "DllMacro.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QMap>
@@ -34,7 +35,7 @@ class QThread;
 class QFileSystemWatcher;
 class QTimer;
 
-class ScanManager : public QObject
+class DLLEXPORT ScanManager : public QObject
 {
 Q_OBJECT
 
