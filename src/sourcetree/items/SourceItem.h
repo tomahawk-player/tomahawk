@@ -79,9 +79,6 @@ private slots:
     Tomahawk::ViewPage* coolPlaylistsClicked();
     Tomahawk::ViewPage* getCoolPlaylistsPage() const;
 
-    Tomahawk::ViewPage* lovedTracksClicked();
-    Tomahawk::ViewPage* getLovedTracksPage() const;
-
     Tomahawk::ViewPage* latestAdditionsClicked();
     Tomahawk::ViewPage* getLatestAdditionsPage() const;
 
@@ -104,14 +101,12 @@ private:
     GenericPageItem* m_collectionItem;
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
-    GenericPageItem* m_lovedTracksItem;
     GenericPageItem* m_latestAdditionsItem;
     GenericPageItem* m_recentPlaysItem;
 
     Tomahawk::ViewPage* m_collectionPage;
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
-    Tomahawk::ViewPage* m_lovedTracksPage;
     Tomahawk::ViewPage* m_latestAdditionsPage;
     Tomahawk::ViewPage* m_recentPlaysPage;
     Tomahawk::ViewPage* m_whatsHotPage;

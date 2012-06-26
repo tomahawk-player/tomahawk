@@ -702,6 +702,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QModelIndex index = indexAt( pos );
 
     if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist
+         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::LovedTracksPage
          || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::CategoryAdd )
     {
         SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );

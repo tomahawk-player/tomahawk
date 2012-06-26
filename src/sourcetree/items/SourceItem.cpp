@@ -24,6 +24,7 @@
 #include "ViewManager.h"
 #include "Playlist.h"
 #include "GenericPageItems.h"
+#include "LovedTracksItem.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
@@ -50,7 +51,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_collectionPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
-    , m_lovedTracksPage( 0 )
     , m_latestAdditionsPage( 0 )
     , m_recentPlaysPage( 0 )
     , m_whatsHotPage( 0 )
@@ -77,15 +77,12 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
                                              boost::bind( &SourceItem::recentPlaysClicked, this ),
                                              boost::bind( &SourceItem::getRecentPlaysPage, this ) );
 
-    m_lovedTracksItem = new GenericPageItem( model(), this, tr( "Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
-                                             boost::bind( &SourceItem::lovedTracksClicked, this ),
-                                             boost::bind( &SourceItem::getLovedTracksPage, this ) );
+    new LovedTracksItem( model(), this );
 
     m_collectionItem->setSortValue( -350 );
 //    m_sourceInfoItem->setSortValue( -300 );
     m_latestAdditionsItem->setSortValue( -250 );
     m_recentPlaysItem->setSortValue( -200 );
-    m_lovedTracksItem->setSortValue( -150 );
 
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
@@ -503,32 +500,6 @@ ViewPage*
 SourceItem::getCoolPlaylistsPage() const
 {
     return m_coolPlaylistsPage;
-}
-
-
-ViewPage*
-SourceItem::lovedTracksClicked()
-{
-    if ( !m_lovedTracksPage )
-    {
-        CustomPlaylistView* view = new CustomPlaylistView( m_source.isNull() ? CustomPlaylistView::TopLovedTracks : CustomPlaylistView::SourceLovedTracks, m_source, ViewManager::instance()->widget() );
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
-        view->setItemDelegate( del );
-        view->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
-
-        m_lovedTracksPage = view;
-    }
-
-    ViewManager::instance()->show( m_lovedTracksPage );
-    return m_lovedTracksPage;
-}
-
-
-ViewPage*
-SourceItem::getLovedTracksPage() const
-{
-    return m_lovedTracksPage;
 }
 
 
