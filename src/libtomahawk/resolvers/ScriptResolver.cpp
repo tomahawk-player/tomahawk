@@ -424,10 +424,11 @@ ScriptResolver::startProcess()
         m_error = Tomahawk::ExternalResolver::NoError;
     }
 
-    QFileInfo fi( filePath() );
+    const QFileInfo fi( filePath() );
 
     QString interpreter;
-    QString runPath = filePath();
+    // have to enclose in quotes if path contains spaces...
+    const QString runPath = QString( "\"%1\"" ).arg( filePath() );
 
     QFile file( filePath() );
     file.setPermissions( file.permissions() | QFile::ExeOwner | QFile::ExeGroup | QFile::ExeOther );
@@ -453,11 +454,6 @@ ScriptResolver::startProcess()
         {
             interpreter = QString( "\"%1\"" ).arg(QString::fromUtf16((const ushort *) path));
         }
-    }
-    else
-    {
-        // have to enclose in quotes if path contains spaces on windows...
-        runPath = QString( "\"%1\"" ).arg( filePath() );
     }
 #endif // Q_OS_WIN
 
