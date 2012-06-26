@@ -52,6 +52,14 @@ TomahawkSqlQuery::escape( QString identifier )
 
 
 bool
+TomahawkSqlQuery::prepare( const QString& query )
+{
+    m_query = query;
+    return QSqlQuery::prepare( query );
+}
+
+
+bool
 TomahawkSqlQuery::exec( const QString& query )
 {
     bool prepareResult = prepare( query );
@@ -76,6 +84,12 @@ TomahawkSqlQuery::exec()
     unsigned int retries = 0;
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
+        if ( lastError().text().toLower().contains( "no query" ) )
+        {
+            tDebug() << Q_FUNC_INFO << "Re-preparing query!";
+            prepare( m_query );
+        }
+
         if ( isBusyError( lastError() ) )
             retries = 0;
 
@@ -104,7 +118,7 @@ TomahawkSqlQuery::commitTransaction()
 #endif
     if ( log )
         tLog( LOGSQL ) << "TomahawkSqlQuery::commitTransaction running in thread " << QThread::currentThread();
-    
+
     unsigned int retries = 0;
     while ( !m_db.commit() && ++retries < 10 )
     {
@@ -114,7 +128,7 @@ TomahawkSqlQuery::commitTransaction()
         tDebug() << "INFO: Retrying failed commit:" << retries << lastError().text();
         TomahawkUtils::msleep( 10 );
     }
-    
+
     return ( retries < 10 );
 }
 
@@ -136,5 +150,5 @@ TomahawkSqlQuery::isBusyError( const QSqlError& error ) const
 {
     const QString text = error.text().trimmed().toLower();
 
-    return ( text.contains( "no query" ) || text.contains( "locked" ) || text.contains( "busy" ) || text.isEmpty() );
+    return ( text.contains( "locked" ) || text.contains( "busy" ) || text.isEmpty() );
 }
