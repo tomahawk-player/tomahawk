@@ -121,7 +121,6 @@ SpotifyAccount::init()
 void
 SpotifyAccount::delayedInit()
 {
-
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( resolverInstalled( QString ) ) );
 
     const Attica::Content res = AtticaManager::instance()->resolverForId( s_resolverId );
