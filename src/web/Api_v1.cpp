@@ -94,7 +94,7 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
         if ( keyval.size() == 2 )
             queryItems.insert( keyval.first(), keyval.last() );
         else
-            qDebug() << "Failed parsing url parameters: " << part;
+            qDebug() << "Failed parsing url parameters:" << part;
     }
 
     qDebug() << "has query items:" << pieces;
@@ -173,7 +173,7 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
     Q_UNUSED( unused );
 
     RID rid = event->url.path().mid( 5 );
-    qDebug() << "Request for sid " << rid;
+    qDebug() << "Request for sid" << rid;
 
     result_ptr rp = Pipeline::instance()->result( rid );
     if ( rp.isNull() )
@@ -328,7 +328,8 @@ Api_v1::get_results( QxtWebRequestEvent* event )
     QVariantList res;
     foreach( const result_ptr& rp, qry->results() )
     {
-        res << rp->toVariant();
+        if ( rp->isOnline() )
+            res << rp->toVariant();
     }
     r.insert( "results", res );
 
