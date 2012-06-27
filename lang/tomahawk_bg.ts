@@ -303,17 +303,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="617"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="614"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="641"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="638"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="667"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="664"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation type="unfinished"/>
     </message>
@@ -1825,17 +1825,17 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="396"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="414"/>
         <source>Sync with Spotify</source>
         <translation>Синхронизирай със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="400"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="418"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Включи отново синхронизирането със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="404"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="422"/>
         <source>Stop syncing with Spotify</source>
         <translation>Спри синхронизацията със Spotify</translation>
     </message>
@@ -2041,6 +2041,16 @@ You may wish to try re-authenticating.</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
     <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
+        <source>Continue Playback after this &amp;Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
+        <source>Stop Playback after this &amp;Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="308"/>
         <source>&amp;Love</source>
@@ -2060,16 +2070,6 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="113"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Изтрий позициите</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
-        <source>&amp;Continue Playback after this Track</source>
-        <translation>&amp;Продължи след тази песен</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
-        <source>&amp;Stop Playback after this Track</source>
-        <translation>&amp;Спри след тази песен</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="108"/>
