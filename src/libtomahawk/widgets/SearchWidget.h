@@ -73,6 +73,9 @@ private slots:
     void onQueryFinished();
 
 private:
+    void sortArtists();
+    void sortAlbums();
+
     Ui::SearchWidget *ui;
 
     QString m_search;
@@ -80,7 +83,10 @@ private:
     PlayableModel* m_artistsModel;
     PlayableModel* m_albumsModel;
     PlaylistModel* m_resultsModel;
+
     QList< Tomahawk::query_ptr > m_queries;
+    QList< Tomahawk::artist_ptr > m_artists;
+    QList< Tomahawk::album_ptr > m_albums;
 };
 
 #endif // NEWPLAYLISTWIDGET_H
