@@ -303,17 +303,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="617"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="614"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="641"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="638"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="667"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="664"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation type="unfinished"/>
     </message>
@@ -1817,17 +1817,17 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="396"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="414"/>
         <source>Sync with Spotify</source>
         <translation>Sincronizar con Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="400"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="418"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="404"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="422"/>
         <source>Stop syncing with Spotify</source>
         <translation>Dejar de sincronizar con Spotify</translation>
     </message>
@@ -2031,6 +2031,16 @@ Hay que volverse a autenticar.</translation>
         <translation>Añadir a la &amp;cola</translation>
     </message>
     <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
+        <source>Continue Playback after this &amp;Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
+        <source>Stop Playback after this &amp;Track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="308"/>
         <source>&amp;Love</source>
@@ -2050,16 +2060,6 @@ Hay que volverse a autenticar.</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="113"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Eliminar de la cola</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
-        <source>&amp;Continue Playback after this Track</source>
-        <translation>&amp;Continuar la Reproducción después de este Tema</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
-        <source>&amp;Stop Playback after this Track</source>
-        <translation>&amp;Para la Reproducción después de este Tema</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="108"/>

@@ -195,7 +195,7 @@ se connecter et streamer depuis chez vous ?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="310"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artiste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="153"/>
@@ -304,19 +304,19 @@ se connecter et streamer depuis chez vous ?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="617"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="614"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, on a pas pu trouver la piste &apos;%1&apos; pour %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="641"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="638"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, on a pas pu trouver l&apos;artiste &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="667"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="664"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, on a pas pu trouver l&apos;album &apos;%1&apos; pour %2</translation>
     </message>
 </context>
 <context>
@@ -616,12 +616,12 @@ se connecter et streamer depuis chez vous ?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="59"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, on a pas pu trouver aucune piste favoris!</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.h" line="36"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Titres favoris</translation>
     </message>
 </context>
 <context>
@@ -1819,17 +1819,17 @@ et des stations basées sur vos goûts.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="396"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="414"/>
         <source>Sync with Spotify</source>
         <translation>Synchroniser avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="400"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="418"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Réactiver la synchronisation avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="404"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="422"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stopper la synchronisation avec Spotify</translation>
     </message>
@@ -2033,6 +2033,16 @@ Essayez de vous authentifier de nouveau.</translation>
         <translation>&amp;Ajouter à la file d&apos;attente</translation>
     </message>
     <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
+        <source>Continue Playback after this &amp;Track</source>
+        <translation>Continuer la lecture après cette &amp;piste</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
+        <source>Stop Playback after this &amp;Track</source>
+        <translation>Stopper la lecture après cette &amp;piste</translation>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="308"/>
         <source>&amp;Love</source>
@@ -2052,16 +2062,6 @@ Essayez de vous authentifier de nouveau.</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="113"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Supprimer les éléments</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="88"/>
-        <source>&amp;Continue Playback after this Track</source>
-        <translation>&amp;Continuer la lecture après cette piste</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="90"/>
-        <source>&amp;Stop Playback after this Track</source>
-        <translation>&amp;Stopper la lecture après cette piste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="108"/>
