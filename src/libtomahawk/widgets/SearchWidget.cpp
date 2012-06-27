@@ -58,7 +58,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
 
-    ui->resultsView->loadingSpinner()->fadeIn();
+    m_resultsModel->startLoading();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
     ui->splitter_2->setStretchFactor( 0, 0 );
@@ -156,5 +156,5 @@ SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 void
 SearchWidget::onQueryFinished()
 {
-    ui->resultsView->loadingSpinner()->fadeOut();
+    m_resultsModel->finishLoading();
 }
