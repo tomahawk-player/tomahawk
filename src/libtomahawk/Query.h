@@ -97,7 +97,7 @@ public:
     QID id() const;
 
     /// sorter for list of results
-    static bool resultSorter( const result_ptr &left, const result_ptr& right );
+    static bool resultSorter( const result_ptr& left, const result_ptr& right );
 
     /// true when a perfect result has been found (score of 1.0)
     bool solved() const { return m_solved; }
@@ -221,7 +221,6 @@ private:
     void checkResults();
 
     void updateSortNames();
-    static int levenshtein( const QString& source, const QString& target );
 
     void parseSocialActions();
 
