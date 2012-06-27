@@ -604,13 +604,10 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 {
     if ( query->resolvingFinished() )
     {
-        foreach ( const result_ptr& result, query->results() )
+        if ( query->numResults() && query->results().first()->isOnline() )
         {
-            if ( result->isOnline() )
-            {
-                playItem( playlist, result );
-                return;
-            }
+            playItem( playlist, query->results().first() );
+            return;
         }
 
         JobStatusView::instance()->model()->addJob(
@@ -764,7 +761,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             }
         }
     }
-    
+
     if ( newState == Phonon::PausedState || newState == Phonon::PlayingState || newState == Phonon::ErrorState )
     {
         tDebug() << "Phonon state now:" << newState;
@@ -890,10 +887,10 @@ AudioEngine::checkStateQueue()
                 m_mediaObject->play();
                 if ( paused )
                     setVolume( m_volume );
-                
+
                 break;
             }
-            
+
             case Paused:
             {
                 m_volume = volume();
