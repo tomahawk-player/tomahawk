@@ -84,7 +84,8 @@ TomahawkSqlQuery::exec()
     unsigned int retries = 0;
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
-        if ( lastError().text().toLower().contains( "no query" ) )
+        if ( lastError().text().toLower().contains( "no query" ) ||
+             lastError().text().toLower().contains( "parameter count mismatch" ) )
         {
             tDebug() << Q_FUNC_INFO << "Re-preparing query!";
 
