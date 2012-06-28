@@ -84,7 +84,7 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
     {
         if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
             connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
-        
+
         connect( m_model, SIGNAL( loadingStarted() ), SIGNAL( loadingStarted() ) );
         connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
     }
@@ -99,10 +99,10 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
-    
+
     if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
-    
+
     if ( m_hideDupeItems )
     {
         for ( int i = 0; i < sourceRow; i++ )
@@ -132,10 +132,10 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 
         if ( !m_showOfflineResults && !r.isNull() && !r->isOnline() )
             return false;
-        
+
         if ( filterRegExp().isEmpty() )
             return true;
-        
+
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
         foreach( QString s, sl )
         {
@@ -269,6 +269,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     const QString album2 = q2->albumSortname();
     const QString track1 = q1->trackSortname();
     const QString track2 = q2->trackSortname();
+    const QString composer1 = q1->composerSortname();
+    const QString composer2 = q2->composerSortname();
     const unsigned int albumpos1 = q1->albumpos();
     const unsigned int albumpos2 = q2->albumpos();
     const unsigned int discnumber1 = q1->discnumber();
@@ -277,6 +279,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
     float score1 = 0, score2 = 0;
+    QString origin1;
+    QString origin2;
     qint64 id1 = 0, id2 = 0;
 
     if ( q1->numResults() )
@@ -286,6 +290,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime1 = r->modificationTime();
         size1 = r->size();
         score1 = r->score();
+        origin1 = r->friendlySource().toLower();
         id1 = (qint64)&r;
     }
     if ( q2->numResults() )
@@ -295,6 +300,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime2 = r->modificationTime();
         size2 = r->size();
         score2 = r->score();
+        origin2 = r->friendlySource().toLower();
         id2 = (qint64)&r;
     }
 
@@ -326,6 +332,28 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         }
 
         return QString::localeAwareCompare( artist1, artist2 ) < 0;
+    }
+    else if ( column == PlayableModel::Composer ) // sort by composer
+    {
+        if ( composer1 == composer2 )
+        {
+            if ( album1 == album2 )
+            {
+                if ( discnumber1 == discnumber2 )
+                {
+                    if ( albumpos1 == albumpos2 )
+                        return id1 < id2;
+
+                    return albumpos1 < albumpos2;
+                }
+
+                return discnumber1 < discnumber2;
+            }
+
+            return QString::localeAwareCompare( album1, album2 ) < 0;
+        }
+
+        return QString::localeAwareCompare( composer1, composer2 ) < 0;
     }
     else if ( column == PlayableModel::Album ) // sort by album
     {
@@ -372,6 +400,13 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
         return score1 < score2;
     }
+    else if ( column == PlayableModel::Origin ) // sort by file origin
+    {
+        if ( origin1 == origin2 )
+            return id1 < id2;
+
+        return origin1 < origin2;
+    }
     else if ( column == PlayableModel::AlbumPos ) // sort by album pos
     {
         if ( discnumber1 != discnumber2 )
@@ -384,7 +419,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
                 return albumpos1 < albumpos2;
         }
     }
-    
+
     const QString& lefts = q1->track();
     const QString& rights = q2->track();
     if ( lefts == rights )

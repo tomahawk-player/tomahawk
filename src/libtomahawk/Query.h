@@ -97,7 +97,7 @@ public:
     QID id() const;
 
     /// sorter for list of results
-    static bool resultSorter( const result_ptr &left, const result_ptr& right );
+    static bool resultSorter( const result_ptr& left, const result_ptr& right );
 
     /// true when a perfect result has been found (score of 1.0)
     bool solved() const { return m_solved; }
@@ -129,6 +129,7 @@ public:
 
     QString resultHint() const { return m_resultHint; }
     QString artistSortname() const { return m_artistSortname; }
+    QString composerSortname() const { return m_composerSortname; }
     QString albumSortname() const { return m_albumSortname; }
     QString trackSortname() const { return m_trackSortname; }
 
@@ -139,7 +140,7 @@ public:
     int duration() const { return m_duration; }
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int discnumber() const { return m_discnumber; }
-    
+
     query_ptr displayQuery() const;
 
 #ifndef ENABLE_HEADLESS
@@ -220,7 +221,6 @@ private:
     void checkResults();
 
     void updateSortNames();
-    static int levenshtein( const QString& source, const QString& target );
 
     void parseSocialActions();
 
@@ -233,7 +233,7 @@ private:
     mutable QID m_qid;
 
     QString m_artistSortname;
-    QString m_composerSortName;
+    QString m_composerSortname;
     QString m_albumSortname;
     QString m_trackSortname;
 
@@ -266,10 +266,10 @@ private:
 
     bool m_simTracksLoaded;
     QList<Tomahawk::query_ptr> m_similarTracks;
-    
+
     bool m_lyricsLoaded;
     QStringList m_lyrics;
-    
+
     mutable int m_infoJobs;
 };
 

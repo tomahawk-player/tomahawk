@@ -92,7 +92,7 @@ QueryLabel::init()
     m_useCustomFont = false;
     m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
-    
+
     m_jumpLinkVisible = false;
     m_jumpPixmap = QPixmap( RESPATH "images/jump-link.png" ).scaled( QSize( fontMetrics().height(), fontMetrics().height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
@@ -508,7 +508,27 @@ void
 QueryLabel::contextMenuEvent( QContextMenuEvent* event )
 {
     m_contextMenu->clear();
-    m_contextMenu->setQuery( m_query );
+
+    switch( m_hoverType )
+    {
+        case Artist:
+        {
+            artist_ptr artist = Artist::get( m_query->artist() );
+            m_contextMenu->setArtist( artist );
+            break;
+        }
+        case Album:
+        {
+            artist_ptr artist = Artist::get( m_query->artist() );
+            album_ptr album = Album::get( artist, m_query->album() );
+            m_contextMenu->setAlbum( album );
+            break;
+        }
+
+        default:
+            m_contextMenu->setQuery( m_query );
+    }
+
     m_contextMenu->exec( event->globalPos() );
 }
 
@@ -528,7 +548,6 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
     QFrame::mouseReleaseEvent( event );
 
     m_dragPos = QPoint();
-    qDebug() << "ELAPSED TIME" << m_time.elapsed() << "limit:" << qApp->doubleClickInterval();
     if ( m_time.elapsed() < qApp->doubleClickInterval() )
     {
         switch( m_hoverType )
@@ -542,7 +561,7 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
             case Track:
                 emit clickedTrack();
                 break;
-                
+
             case Complete:
                 ViewManager::instance()->showCurrentTrack();
                 break;
@@ -634,7 +653,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     {
         hoverArea.setLeft( 0 );
         hoverArea.setRight( width() - 1 );
-        
+
         if ( m_type & Artist )
             m_hoverType = Artist;
         else if ( m_type & Album )
@@ -648,7 +667,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         hoverArea.setY( 1 );
         hoverArea.setHeight( height() - 2 );
     }
-    
+
     if ( m_hoverType != None )
         setCursor( Qt::PointingHandCursor );
     else

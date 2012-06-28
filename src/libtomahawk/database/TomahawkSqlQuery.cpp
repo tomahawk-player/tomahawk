@@ -84,10 +84,19 @@ TomahawkSqlQuery::exec()
     unsigned int retries = 0;
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
-        if ( lastError().text().toLower().contains( "no query" ) )
+        if ( lastError().text().toLower().contains( "no query" ) ||
+             lastError().text().toLower().contains( "parameter count mismatch" ) )
         {
             tDebug() << Q_FUNC_INFO << "Re-preparing query!";
+
+            QMap< QString, QVariant > bv = boundValues();
             prepare( m_query );
+
+            foreach ( const QString& key, bv.keys() )
+            {
+                tDebug() << Q_FUNC_INFO << "Rebinding key" << key << "with value" << bv.value( key );
+                bindValue( key, bv.value( key ) );
+            }
         }
 
         if ( isBusyError( lastError() ) )

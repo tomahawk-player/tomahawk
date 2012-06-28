@@ -58,7 +58,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
 
-    ui->resultsView->loadingSpinner()->fadeIn();
+    m_resultsModel->startLoading();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
     ui->splitter_2->setStretchFactor( 0, 0 );
@@ -113,9 +113,6 @@ SearchWidget::jumpToCurrentTrack()
 void
 SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
-    QList<Tomahawk::artist_ptr> artists;
-    QList<Tomahawk::album_ptr> albums;
-
     foreach( const Tomahawk::result_ptr& result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
@@ -125,36 +122,88 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         rl << result;
 
         Tomahawk::query_ptr q = result->toQuery();
-        q->setResolveFinished( true );
         q->addResults( rl );
 
         m_resultsModel->append( q );
 
-        artists << result->artist();
-        albums << result->album();
+        m_artists << result->artist();
+        m_albums << result->album();
     }
-
-    m_artistsModel->append( artists );
-    m_albumsModel->append( albums );
 }
 
 
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    m_albumsModel->append( albums );
+    m_albums << albums;
 }
 
 
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
-    m_artistsModel->append( artists );
+    m_artists << artists;
 }
 
 
 void
 SearchWidget::onQueryFinished()
 {
-    ui->resultsView->loadingSpinner()->fadeOut();
+    sortAlbums();
+    sortArtists();
+    m_resultsModel->finishLoading();
+}
+
+
+void
+SearchWidget::sortArtists()
+{
+    QMap< float, Tomahawk::artist_ptr > ars;
+    QList< Tomahawk::artist_ptr > sortedArtists;
+    foreach ( const Tomahawk::artist_ptr& artist, m_artists )
+    {
+        int distance = TomahawkUtils::levenshtein( m_search, artist->name() );
+        int maxlen = qMax( m_search.length(), artist->name().length() );
+        float score = (float)( maxlen - distance ) / maxlen;
+
+        ars.insert( score, artist );
+    }
+
+    QList< float > floats = ars.keys();
+    qSort( floats.begin(), floats.end() );
+
+    for ( int i = floats.count() - 1; i >= 0; i-- )
+    {
+        sortedArtists << ars.value( floats.at( i ) );
+    }
+
+    m_artistsModel->clear();
+    m_artistsModel->append( sortedArtists );
+}
+
+
+void
+SearchWidget::sortAlbums()
+{
+    QMap< float, Tomahawk::album_ptr > ars;
+    QList< Tomahawk::album_ptr > sortedAlbums;
+    foreach ( const Tomahawk::album_ptr& album, m_albums )
+    {
+        int distance = TomahawkUtils::levenshtein( m_search, album->name() );
+        int maxlen = qMax( m_search.length(), album->name().length() );
+        float score = (float)( maxlen - distance ) / maxlen;
+
+        ars.insert( score, album );
+    }
+
+    QList< float > floats = ars.keys();
+    qSort( floats.begin(), floats.end() );
+
+    for ( int i = floats.count() - 1; i >= 0; i-- )
+    {
+        sortedAlbums << ars.value( floats.at( i ) );
+    }
+
+    m_albumsModel->clear();
+    m_albumsModel->append( sortedAlbums );
 }
