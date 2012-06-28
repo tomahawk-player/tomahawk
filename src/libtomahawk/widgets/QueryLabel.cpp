@@ -509,23 +509,25 @@ QueryLabel::contextMenuEvent( QContextMenuEvent* event )
 {
     m_contextMenu->clear();
 
-    if ( m_result )
+    switch( m_hoverType )
     {
-        switch( m_hoverType )
+        case Artist:
         {
-            case Artist:
-                m_contextMenu->setArtist( m_result->artist() );
-                break;
-            case Album:
-                m_contextMenu->setAlbum( m_result->album() );
-                break;
-
-            default:
-                m_contextMenu->setQuery( m_query );
+            artist_ptr artist = Artist::get( m_query->artist() );
+            m_contextMenu->setArtist( artist );
+            break;
         }
+        case Album:
+        {
+            artist_ptr artist = Artist::get( m_query->artist() );
+            album_ptr album = Album::get( artist, m_query->album() );
+            m_contextMenu->setAlbum( album );
+            break;
+        }
+
+        default:
+            m_contextMenu->setQuery( m_query );
     }
-    else
-        m_contextMenu->setQuery( m_query );
 
     m_contextMenu->exec( event->globalPos() );
 }
