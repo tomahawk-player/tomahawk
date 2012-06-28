@@ -620,7 +620,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.h" line="36"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>喜爱曲目</translation>
     </message>
 </context>
 <context>
@@ -2661,7 +2661,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>喜爱曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
