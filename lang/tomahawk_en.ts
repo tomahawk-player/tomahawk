@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="en">
 <context>
     <name>AccountFactoryWrapper</name>
     <message>
@@ -899,52 +901,82 @@ connect and stream from you?</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="233"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>%n year ago</numerusform><numerusform>%n years ago</numerusform></translation>
+        <translation>
+            <numerusform>%n year ago</numerusform>
+            <numerusform>%n years ago</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="235"/>
         <source>%n year(s)</source>
-        <translation><numerusform>%n year</numerusform><numerusform>%n years</numerusform></translation>
+        <translation>
+            <numerusform>%n year</numerusform>
+            <numerusform>%n years</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
         <source>%n month(s) ago</source>
-        <translation><numerusform>%n month ago</numerusform><numerusform>%n months ago</numerusform></translation>
+        <translation>
+            <numerusform>%n month ago</numerusform>
+            <numerusform>%n months ago</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
         <source>%n month(s)</source>
-        <translation><numerusform>%n month</numerusform><numerusform>%n months</numerusform></translation>
+        <translation>
+            <numerusform>%n month</numerusform>
+            <numerusform>%n months</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
         <source>%n week(s) ago</source>
-        <translation><numerusform>%n week ago</numerusform><numerusform>%n weeks ago</numerusform></translation>
+        <translation>
+            <numerusform>%n week ago</numerusform>
+            <numerusform>%n weeks ago</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
         <source>%n week(s)</source>
-        <translation><numerusform>%n week</numerusform><numerusform>%n weeks</numerusform></translation>
+        <translation>
+            <numerusform>%n week</numerusform>
+            <numerusform>%n weeks</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n day ago</numerusform><numerusform>%n days ago</numerusform></translation>
+        <translation>
+            <numerusform>%n day ago</numerusform>
+            <numerusform>%n days ago</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
         <source>%n day(s)</source>
-        <translation><numerusform>%n day</numerusform><numerusform>%n days</numerusform></translation>
+        <translation>
+            <numerusform>%n day</numerusform>
+            <numerusform>%n days</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
         <source>%n hour(s) ago</source>
-        <translation><numerusform>%n hour ago</numerusform><numerusform>%n hours ago</numerusform></translation>
+        <translation>
+            <numerusform>%n hour ago</numerusform>
+            <numerusform>%n hours ago</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
         <source>%n hour(s)</source>
-        <translation><numerusform>%n hour</numerusform><numerusform>%n hours</numerusform></translation>
+        <translation>
+            <numerusform>%n hour</numerusform>
+            <numerusform>%n hours</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
@@ -1001,7 +1033,10 @@ connect and stream from you?</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
-        <translation><numerusform>Open Queue - %n item(s)</numerusform><numerusform>Open Queue - %n item(s)</numerusform></translation>
+        <translation>
+            <numerusform>Open Queue - %n item</numerusform>
+            <numerusform>Open Queue - %n items</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
@@ -2483,7 +2518,10 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="789"/>
         <source>about %n minute(s) long</source>
-        <translation><numerusform>about %n minute long</numerusform><numerusform>about %n minutes long</numerusform></translation>
+        <translation>
+            <numerusform>about %n minute long</numerusform>
+            <numerusform>about %n minutes long</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="791"/>
@@ -2782,7 +2820,10 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="747"/>
         <source>%n other(s)</source>
-        <translation><numerusform>%n other</numerusform><numerusform>%n others</numerusform></translation>
+        <translation>
+            <numerusform>%n other</numerusform>
+            <numerusform>%n others</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="750"/>
@@ -2888,7 +2929,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>After authenticating on Twitter's web site,
+        <source>After authenticating on Twitter&apos;s web site,
 enter the displayed PIN number here:</source>
         <translation>After authenticating on Twitter&apos;s web site,
 enter the displayed PIN number here:</translation>
@@ -3393,7 +3434,10 @@ enter the displayed PIN number here:</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>You&apos;ve listened to this track %n time(s).</numerusform><numerusform>You&apos;ve listened to this track %n time(s).</numerusform></translation>
+        <translation>
+            <numerusform>You&apos;ve listened to this track %n time.</numerusform>
+            <numerusform>You&apos;ve listened to this track %n times.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="219"/>
@@ -3408,7 +3452,10 @@ enter the displayed PIN number here:</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform></translation>
+        <translation>
+            <numerusform>You&apos;ve listened to %1 %n time.</numerusform>
+            <numerusform>You&apos;ve listened to %1 %n times.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
@@ -3503,7 +3550,7 @@ enter the displayed PIN number here:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
         <source>
-If you only want to post tweets, you're done.
+If you only want to post tweets, you&apos;re done.
 
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
