@@ -91,7 +91,7 @@ public:
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-    
+
     virtual QVariant artistData( const Tomahawk::artist_ptr& artist, int role = Qt::DisplayRole ) const;
     virtual QVariant albumData( const Tomahawk::album_ptr& album, int role = Qt::DisplayRole ) const;
     virtual QVariant queryData( const Tomahawk::query_ptr&, int column, int role = Qt::DisplayRole ) const;
@@ -114,7 +114,7 @@ public:
     QList< Tomahawk::query_ptr > queries() const;
 
     void updateDetailedInfo( const QModelIndex& index );
-    
+
     QSize itemSize() const { return m_itemSize; }
     void setItemSize( const QSize& size ) { m_itemSize = size; }
 
@@ -151,9 +151,9 @@ public slots:
     virtual void insert( const Tomahawk::album_ptr& album, int row = 0 );
 
     virtual void remove( int row, bool moreToCome = false );
-    virtual void remove( const QModelIndex& index, bool moreToCome = false );
-    virtual void remove( const QList<QModelIndex>& indexes );
-    virtual void remove( const QList<QPersistentModelIndex>& indexes );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+    virtual void removeIndexes( const QList<QPersistentModelIndex>& indexes );
 
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
