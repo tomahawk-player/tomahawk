@@ -58,12 +58,12 @@ public:
     virtual ~QueryLabel();
 
     QString text() const;
-    QString artist() const;
-    QString album() const;
     QString track() const;
 
     Tomahawk::result_ptr result() const { return m_result; }
     Tomahawk::query_ptr query() const { return m_query; }
+    Tomahawk::artist_ptr artist() const { return m_artist; }
+    Tomahawk::album_ptr album() const { return m_album; }
 
     DisplayType type() const { return m_type; }
     void setType( DisplayType type ) { m_type = type; }
@@ -93,6 +93,8 @@ public slots:
     void setText( const QString& text );
     void setResult( const Tomahawk::result_ptr& result );
     void setQuery( const Tomahawk::query_ptr& query );
+    void setArtist( const Tomahawk::artist_ptr& artist );
+    void setAlbum( const Tomahawk::album_ptr& album );
 
 signals:
     void clicked();
@@ -123,8 +125,11 @@ private:
 
     DisplayType m_type;
     QString m_text;
+
     Tomahawk::result_ptr m_result;
     Tomahawk::query_ptr m_query;
+    Tomahawk::artist_ptr m_artist;
+    Tomahawk::album_ptr m_album;
 
     Tomahawk::ContextMenu* m_contextMenu;
 
@@ -139,7 +144,7 @@ private:
     QRect m_hoverArea;
     QPoint m_dragPos;
     QMargins m_textMargins;
-    
+
     bool m_jumpLinkVisible;
     QPixmap m_jumpPixmap;
 };
