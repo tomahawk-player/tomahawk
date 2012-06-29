@@ -697,37 +697,40 @@ QueryLabel::startDrag()
     if ( m_query.isNull() )
         return;
 
-    QByteArray queryData;
-    QDataStream queryStream( &queryData, QIODevice::WriteOnly );
+    QDrag *drag = new QDrag( this );
+    QByteArray data;
+    QDataStream dataStream( &data, QIODevice::WriteOnly );
     QMimeData* mimeData = new QMimeData();
     mimeData->setText( text() );
 
-    queryStream << qlonglong( &m_query );
-
-    mimeData->setData( "application/tomahawk.query.list", queryData );
-
-    if ( m_hoverType != None )
+    switch( m_hoverType )
     {
-        QString extra;
-        switch( m_hoverType )
-        {
             case Artist:
-                extra = "artist";
+            {
+                dataStream << m_query->artist();
+                mimeData->setData( "application/tomahawk.metadata.artist", data );
+                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist ) );
                 break;
+            }
             case Album:
-                extra = "album";
+            {
+                dataStream << m_query->artist();
+                dataStream << m_query->album();
+                mimeData->setData( "application/tomahawk.metadata.album", data );
+                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum ) );
                 break;
-            case Track:
-                extra = "track";
-                break;
+            }
+
             default:
+            {
+                dataStream << qlonglong( &m_query );
+                mimeData->setData( "application/tomahawk.query.list", data );
+                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
                 break;
-        }
-        mimeData->setData( "application/tomahawk.dragsource.type", extra.toUtf8() );
+            }
     }
-    QDrag *drag = new QDrag( this );
+
     drag->setMimeData( mimeData );
-    drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
 
 //    QPoint hotSpot = event->pos() - child->pos();
 //    drag->setHotSpot( hotSpot );
