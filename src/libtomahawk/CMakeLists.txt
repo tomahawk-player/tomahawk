@@ -17,7 +17,6 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 
-
 set( libGuiSources
     ActionCollection.cpp
 
@@ -379,6 +378,8 @@ IF( APPLE )
     FIND_LIBRARY( FOUNDATION_LIBRARY Foundation )
     FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
+
+    SET( CMAKE_SHARED_LINKER_FLAGS "-headerpad_max_install_names ${CMAKE_SHARED_LINKER_FLAGS}" )
 
     SET( libSources ${libSources}
       utils/TomahawkUtils_Mac.mm
