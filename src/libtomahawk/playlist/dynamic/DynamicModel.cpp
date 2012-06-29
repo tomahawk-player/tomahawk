@@ -121,7 +121,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
 
         m_waitingFor << query.data();
-        append( query );
+        appendQuery( query );
     }
 }
 
@@ -316,11 +316,9 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
         m_playlist->addEntries( entries, m_playlist->currentrevision() );
     }
     else
-    { // read-only, so add tracks only in the GUI, not to the playlist itself
-        foreach ( const query_ptr& query, entries )
-        {
-            append( query );
-        }
+    {
+        // read-only, so add tracks only in the GUI, not to the playlist itself
+        appendQueries( entries );
     }
 
     emit tracksAdded();

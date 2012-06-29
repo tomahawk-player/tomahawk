@@ -60,7 +60,7 @@ RecentlyAddedModel::loadHistory()
     cmd->setSortDescending( true );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( append( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+                    SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
