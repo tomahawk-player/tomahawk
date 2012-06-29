@@ -31,6 +31,9 @@
 #include <QTemporaryFile>
 #include <QDir>
 #include <QTimer>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
 
 #include "utils/Logger.h"
 #include "accounts/ResolverAccount.h"
@@ -64,7 +67,7 @@ AtticaManager::AtticaManager( QObject* parent )
     // resolvers
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
     
-    const QString url = QString( "http://bakery.tomahawk-player.org/resolvers/providers.xml?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() );
+    const QString url = QString( "%1/resolvers/providers.xml?version=%2" ).arg( hostname() ).arg( TomahawkUtils::appFriendlyVersion() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
@@ -89,6 +92,12 @@ AtticaManager::~AtticaManager()
     }
 }
 
+
+QString
+AtticaManager::hostname() const
+{
+    return "http://bakery.tomahawk-player.org";
+}
 
 void
 AtticaManager::loadPixmapsFromCache()
@@ -523,14 +532,15 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
     m_resolverStates[ resolver.id() ].version = resolver.version();
     emit resolverStateChanged( resolver.id() );
 
-    ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
-    connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolverDownloadFinished( Attica::BaseJob* ) ) );
-    job->setProperty( "resolverId", resolver.id() );
-    job->setProperty( "createAccount", autoCreate );
-    job->setProperty( "handler", QVariant::fromValue< QObject* >( handler ) );
-    job->setProperty( "binarySignature", resolver.attribute("signature"));
-
-    job->start();
+//    ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
+    QUrl url( QString( "%1/resolvers/v1/content/download/%2/1" ).arg( hostname() ).arg( resolver.id() ) );
+    url.addQueryItem( "tomahawkversion", TomahawkUtils::appFriendlyVersion() );
+    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    NewClosure( r, SIGNAL( finished() ), this, SLOT( resolverDownloadFinished( QNetworkReply* ) ), r );
+    r->setProperty( "resolverId", resolver.id() );
+    r->setProperty( "createAccount", autoCreate );
+    r->setProperty( "handler", QVariant::fromValue< QObject* >( handler ) );
+    r->setProperty( "binarySignature", resolver.attribute("signature"));
 }
 
 
@@ -552,25 +562,49 @@ AtticaManager::upgradeResolver( const Content& resolver )
 
 
 void
-AtticaManager::resolverDownloadFinished ( BaseJob* j )
+AtticaManager::resolverDownloadFinished ( QNetworkReply *j )
 {
-    ItemJob< DownloadItem >* job = static_cast< ItemJob< DownloadItem >* >( j );
+    Q_ASSERT( j );
+    if ( !j )
+        return;
 
-    if ( job->metadata().error() == Attica::Metadata::NoError )
+    if ( j->error() == QNetworkReply::NoError )
     {
-        DownloadItem item = job->result();
-        QUrl url = item.url();
-        // download the resolver itself :)
-        QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-        connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
-        reply->setProperty( "resolverId", job->property( "resolverId" ) );
-        reply->setProperty( "createAccount", job->property( "createAccount" ) );
-        reply->setProperty( "handler", job->property( "handler" ) );
-        reply->setProperty( "binarySignature", job->property( "binarySignature" ) );
+        QDomDocument doc;
+        doc.setContent( j );
+
+       const QDomNodeList nodes = doc.documentElement().elementsByTagName( "downloadlink" );
+       if ( nodes.length() < 1 )
+       {
+           tLog() << "Found no download link for resolver:" << doc.toString();
+           return;
+       }
+
+       QUrl url( nodes.item( 0 ).toElement().text() );
+       // download the resolver itself :)
+       tDebug() << "Downloading resolver from url:" << url.toString();
+
+       const QDomNodeList signatures = doc.documentElement().elementsByTagName( "signature" );
+
+       // Use the original signature provided
+       QString signature = j->property( "binarySignature" ).toString();
+       if ( signatures.size() > 0 )
+       {
+            // THis download has an overriding signature. Take that one instead
+           const QString sig = signatures.item( 0 ).toElement().text();
+           tLog() << "Found overridden signature in binary download:" << sig;
+           signature = sig;
+       }
+       QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+       connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
+       reply->setProperty( "resolverId", j->property( "resolverId" ) );
+       reply->setProperty( "createAccount", j->property( "createAccount" ) );
+       reply->setProperty( "handler", j->property( "handler" ) );
+       reply->setProperty( "binarySignature", signature );
     }
     else
     {
-        tLog() << "Failed to do resolver download job!" << job->metadata().error();
+        tLog() << "Failed to do resolver download job!" << j->errorString() << j->error();
     }
 }
 
