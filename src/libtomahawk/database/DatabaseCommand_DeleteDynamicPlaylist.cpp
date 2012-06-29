@@ -64,7 +64,8 @@ DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 
     tLog( LOGVERBOSE ) << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull();
     Q_ASSERT( !playlist.isNull() );
-    tLog( LOGVERBOSE ) << "is it a station?" << ( playlist->mode() == OnDemand );
+    if ( !playlist.isNull() )
+        tLog( LOGVERBOSE ) << "is it a station?" << ( playlist->mode() == OnDemand );
 
     playlist->reportDeleted( playlist );
 
