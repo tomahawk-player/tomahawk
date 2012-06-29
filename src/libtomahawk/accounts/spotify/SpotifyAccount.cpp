@@ -130,6 +130,11 @@ SpotifyAccount::delayedInit()
     if ( !checkForResolver() && state != AtticaManager::Uninstalled )
     {
         // If the user manually deleted the resolver, mark it as uninstalled, so we re-fetch for the user
+        QVariantHash conf = configuration();
+        conf.remove( "path" );
+        setConfiguration( conf );
+        sync();
+
         AtticaManager::instance()->uninstallResolver( res );
     }
     else if ( state == AtticaManager::Installed || !path.isEmpty() )
