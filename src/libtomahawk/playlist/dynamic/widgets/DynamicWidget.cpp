@@ -442,7 +442,7 @@ DynamicWidget::steeringChanged()
         toRemove << m_view->proxyModel()->index( i, 0, QModelIndex() );
     }
 
-    m_view->proxyModel()->remove( toRemove );
+    m_view->proxyModel()->removeIndexes( toRemove );
 
     m_playlist->generator()->fetchNext();
 }

@@ -99,7 +99,7 @@ TrackView::TrackView( QWidget* parent )
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
     connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
-    
+
     setProxyModel( new PlayableProxyModel( this ) );
 }
 
@@ -554,7 +554,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
     if ( action == Qt::MoveAction )
     {
-        m_proxyModel->remove( pindexes );
+        m_proxyModel->removeIndexes( pindexes );
     }
 }
 
