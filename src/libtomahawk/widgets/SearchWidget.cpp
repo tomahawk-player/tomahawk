@@ -124,7 +124,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         Tomahawk::query_ptr q = result->toQuery();
         q->addResults( rl );
 
-        m_resultsModel->append( q );
+        m_resultsModel->appendQuery( q );
 
         m_artists << result->artist();
         m_albums << result->album();
@@ -178,7 +178,7 @@ SearchWidget::sortArtists()
     }
 
     m_artistsModel->clear();
-    m_artistsModel->append( sortedArtists );
+    m_artistsModel->appendArtists( sortedArtists );
 }
 
 
@@ -205,5 +205,5 @@ SearchWidget::sortAlbums()
     }
 
     m_albumsModel->clear();
-    m_albumsModel->append( sortedAlbums );
+    m_albumsModel->appendAlbums( sortedAlbums );
 }

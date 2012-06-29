@@ -85,7 +85,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
-    
+
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
 
@@ -588,7 +588,7 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
     {
         // queue and play the first no matter what
         GlobalActionManager::instance()->handlePlayTrack( tracks.first() );
-        ViewManager::instance()->queue()->model()->append( tracks );
+        ViewManager::instance()->queue()->model()->appendQueries( tracks );
     }
 }
 

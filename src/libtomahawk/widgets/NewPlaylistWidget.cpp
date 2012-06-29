@@ -125,10 +125,7 @@ NewPlaylistWidget::suggestionsFound()
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
     ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
 
-    foreach( const Tomahawk::query_ptr& query, m_queries )
-    {
-        m_suggestionsModel->append( query );
-    }
+    m_suggestionsModel->appendQueries( m_queries );
 
     loader->deleteLater();
 }

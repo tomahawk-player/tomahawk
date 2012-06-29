@@ -112,7 +112,7 @@ CustomPlaylistView::tracksGenerated( QList< query_ptr > tracks )
         return;
 
     m_model->clear();
-    m_model->append( newTracks );
+    m_model->appendQueries( newTracks );
 }
 
 
