@@ -100,7 +100,7 @@ TopTracksContext::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
 {
     Q_UNUSED( mode );
 
-    m_topHitsModel->append( queries );
+    m_topHitsModel->appendQueries( queries );
 }
 
 

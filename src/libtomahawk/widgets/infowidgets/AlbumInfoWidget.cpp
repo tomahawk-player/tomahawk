@@ -184,7 +184,7 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( al.contains( m_album ) )
         al.removeAll( m_album );
 
-    m_albumsModel->append( al );
+    m_albumsModel->appendAlbums( al );
 }
 
 

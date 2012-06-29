@@ -251,7 +251,7 @@ ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Model
 {
     Q_UNUSED( mode );
 
-    m_albumsModel->append( albums );
+    m_albumsModel->appendAlbums( albums );
 }
 
 
@@ -261,14 +261,14 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
     Q_UNUSED( mode );
 
     m_topHitsModel->finishLoading();
-    m_topHitsModel->append( queries );
+    m_topHitsModel->appendQueries( queries );
 }
 
 
 void
 ArtistInfoWidget::onSimilarArtistsLoaded()
 {
-    m_relatedModel->append( m_artist->similarArtists() );
+    m_relatedModel->appendArtists( m_artist->similarArtists() );
 }
 
 

@@ -507,7 +507,7 @@ WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_p
     if ( m_trackModels.contains( chartId ) )
     {
         Pipeline::instance()->resolve( tracks );
-        m_trackModels[ chartId ]->append( tracks );
+        m_trackModels[ chartId ]->appendQueries( tracks );
         m_trackModels[ chartId ]->finishLoading();
     }
 
@@ -524,7 +524,7 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
 
     if ( m_albumModels.contains( chartId ) )
     {
-        m_albumModels[ chartId ]->append( albums );
+        m_albumModels[ chartId ]->appendAlbums( albums );
         m_albumModels[ chartId ]->finishLoading();
     }
 

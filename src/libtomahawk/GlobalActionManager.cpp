@@ -553,7 +553,7 @@ GlobalActionManager::handleOpenCommand( const QUrl& url )
 void
 GlobalActionManager::handleOpenTrack( const query_ptr& q )
 {
-    ViewManager::instance()->queue()->model()->append( q );
+    ViewManager::instance()->queue()->model()->appendQuery( q );
     ViewManager::instance()->showQueue();
 
     if ( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() )
@@ -570,7 +570,7 @@ GlobalActionManager::handleOpenTracks( const QList< query_ptr >& queries )
     if ( queries.isEmpty() )
         return;
 
-    ViewManager::instance()->queue()->model()->append( queries );
+    ViewManager::instance()->queue()->model()->appendQueries( queries );
     ViewManager::instance()->showQueue();
 
     if ( !AudioEngine::instance()->isPlaying() && !AudioEngine::instance()->isPaused() )
@@ -670,7 +670,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 
                     Pipeline::instance()->resolve( q, true );
 
-                    ViewManager::instance()->queue()->model()->append( q );
+                    ViewManager::instance()->queue()->model()->appendQuery( q );
                     ViewManager::instance()->showQueue();
                 }
                 return true;
@@ -1343,7 +1343,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
                 AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
             else
             {
-                ViewManager::instance()->queue()->model()->append( m_waitingToPlay );
+                ViewManager::instance()->queue()->model()->appendQuery( m_waitingToPlay );
                 AudioEngine::instance()->play();
             }
         }

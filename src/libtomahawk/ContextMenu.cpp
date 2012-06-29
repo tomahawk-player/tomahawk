@@ -224,7 +224,7 @@ ContextMenu::onTriggered( int action )
         case ActionCopyLink:
             copyLink();
             break;
-            
+
         case ActionPage:
             openPage();
             break;
@@ -252,15 +252,15 @@ ContextMenu::addToQueue()
 {
     foreach ( const query_ptr& query, m_queries )
     {
-        ViewManager::instance()->queue()->model()->append( query );
+        ViewManager::instance()->queue()->model()->appendQuery( query );
     }
     foreach ( const artist_ptr& artist, m_artists )
     {
-        ViewManager::instance()->queue()->model()->append( artist );
+        ViewManager::instance()->queue()->model()->appendArtist( artist );
     }
     foreach ( const album_ptr& album, m_albums )
     {
-        ViewManager::instance()->queue()->model()->append( album );
+        ViewManager::instance()->queue()->model()->appendAlbum( album );
     }
 
     ViewManager::instance()->showQueue();
