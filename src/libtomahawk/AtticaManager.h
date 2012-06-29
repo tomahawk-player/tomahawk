@@ -132,7 +132,7 @@ private slots:
     void categoriesReturned( Attica::BaseJob* );
     void resolversList( Attica::BaseJob* );
     void binaryResolversList( Attica::BaseJob* );
-    void resolverDownloadFinished( Attica::BaseJob* );
+    void resolverDownloadFinished( QNetworkReply* );
     void payloadFetched();
 
     void loadPixmapsFromCache();
@@ -144,6 +144,7 @@ private slots:
 private:
     void doResolverRemove( const QString& id ) const;
     void doInstallResolver(  const Attica::Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler );
+    QString hostname() const;
 
     Attica::ProviderManager m_manager;
 
