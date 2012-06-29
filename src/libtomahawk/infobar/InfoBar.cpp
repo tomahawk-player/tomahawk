@@ -132,10 +132,11 @@ InfoBar::setDescription( const QString& s )
     ui->descriptionLabel->setText( s );
 }
 
+
 void
 InfoBar::setDescription( const artist_ptr& artist )
 {
-    m_queryLabel->setQuery( Query::get( artist->name(), QString(), QString() ) );
+    m_queryLabel->setArtist( artist );
     m_queryLabel->setExtraContentsMargins( 4, 0, 0, 0 );
 
     if ( !m_queryLabel->isVisible() )
@@ -151,16 +152,17 @@ InfoBar::setDescription( const artist_ptr& artist )
 }
 
 void
-InfoBar::setDescription( const album_ptr&  )
+InfoBar::setDescription( const album_ptr& )
 {
     // TODO
 }
 
+
 void
 InfoBar::artistClicked()
 {
-    if ( m_queryLabel && !m_queryLabel->query().isNull() )
-        ViewManager::instance()->show( Artist::get( m_queryLabel->artist() ) );
+    if ( m_queryLabel && !m_queryLabel->artist().isNull() )
+        ViewManager::instance()->show( m_queryLabel->artist() );
 }
 
 
@@ -211,7 +213,6 @@ InfoBar::setUpdaters( const QList<PlaylistUpdaterInterface*>& updaters )
         if ( updater->configurationWidget() )
             newUpdaterWidgets << updater->configurationWidget();
     }
-
 
     foreach ( QWidget* updaterWidget, m_updaterConfigurations )
     {
