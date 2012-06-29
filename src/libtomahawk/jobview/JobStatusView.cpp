@@ -113,7 +113,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
     {
         tLog() << Q_FUNC_INFO << "delegate found";
         connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
-        connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
+        connect( delegate, SIGNAL( aclResult( AclRegistry::ACL ) ), item, SLOT( aclResult( AclRegistry::ACL ) ) );
         delegate->emitSizeHintChanged( m_model->index( row ) );
     }
     else

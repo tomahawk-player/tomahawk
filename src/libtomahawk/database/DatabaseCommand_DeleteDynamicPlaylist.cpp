@@ -62,10 +62,13 @@ DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
     if( playlist.isNull() )
         playlist = source()->collection()->station( m_playlistguid );
 
-    qDebug() << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull() << "is it a station?" << (playlist->mode() == OnDemand);
+    tLog( LOGVERBOSE ) << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull();
     Q_ASSERT( !playlist.isNull() );
-
-    playlist->reportDeleted( playlist );
+    if ( !playlist.isNull() )
+    {
+        tLog( LOGVERBOSE ) << "is it a station?" << ( playlist->mode() == OnDemand );
+        playlist->reportDeleted( playlist );
+    }
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();

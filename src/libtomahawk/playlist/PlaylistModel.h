@@ -58,20 +58,14 @@ public:
 public slots:
     virtual void clear();
 
-    virtual void append( const Tomahawk::query_ptr& query );
-    virtual void append( const Tomahawk::album_ptr& album );
-    virtual void append( const Tomahawk::artist_ptr& artist );
-    virtual void append( const QList< Tomahawk::query_ptr >& queries );
-    virtual void append( const QList< Tomahawk::plentry_ptr >& entries );
+    virtual void appendEntries( const QList< Tomahawk::plentry_ptr >& entries );
 
-    virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
-    virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
-    virtual void insert( const QList< Tomahawk::plentry_ptr >& entries, int row = 0 );
+    virtual void insertAlbums( const QList< Tomahawk::album_ptr >& album, int row = 0 );
+    virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artist, int row = 0 );
+    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0 );
 
-    virtual void remove( int row, bool moreToCome = false );
-    virtual void remove( const QModelIndex& index, bool moreToCome = false );
-    virtual void remove( const QList<QModelIndex>& indexes );
-    virtual void remove( const QList<QPersistentModelIndex>& indexes );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );

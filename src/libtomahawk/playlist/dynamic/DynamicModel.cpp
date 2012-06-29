@@ -121,7 +121,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
 
         m_waitingFor << query.data();
-        append( query );
+        appendQuery( query );
     }
 }
 
@@ -316,11 +316,9 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
         m_playlist->addEntries( entries, m_playlist->currentrevision() );
     }
     else
-    { // read-only, so add tracks only in the GUI, not to the playlist itself
-        foreach ( const query_ptr& query, entries )
-        {
-            append( query );
-        }
+    {
+        // read-only, so add tracks only in the GUI, not to the playlist itself
+        appendQueries( entries );
     }
 
     emit tracksAdded();
@@ -328,7 +326,7 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
 
 
 void
-DynamicModel::remove(const QModelIndex& idx, bool moreToCome)
+DynamicModel::removeIndex( const QModelIndex& idx, bool moreToCome )
 {
     if ( m_playlist->mode() == Static && isReadOnly() )
         return;
@@ -340,10 +338,10 @@ DynamicModel::remove(const QModelIndex& idx, bool moreToCome)
         { // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
         }
-        PlayableModel::remove( idx );
+        PlayableModel::removeIndex( idx );
     }
     else
-        PlaylistModel::remove( idx, moreToCome );
+        PlaylistModel::removeIndex( idx, moreToCome );
     // don't call onPlaylistChanged.
 
     if( !moreToCome )

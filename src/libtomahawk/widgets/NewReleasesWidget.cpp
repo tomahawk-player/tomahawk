@@ -356,7 +356,7 @@ NewReleasesWidget::newReleasesLoaded( ChartDataLoader* loader, const QList< albu
     Q_ASSERT( m_albumModels.contains( chartId ) );
 
     if ( m_albumModels.contains( chartId ) )
-        m_albumModels[ chartId ]->append( albums );
+        m_albumModels[ chartId ]->appendAlbums( albums );
 
     m_workers.remove( loader );
     loader->deleteLater();

@@ -260,7 +260,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
             todel << proxyModel()->index( startRow + i, k );
         }
     }
-    proxyModel()->remove( todel );
+    proxyModel()->removeIndexes( todel );
 }
 
 

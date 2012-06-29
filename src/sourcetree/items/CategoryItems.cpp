@@ -234,8 +234,6 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 
     // Create a new playlist seeded with these items
     DropJob *dj = new DropJob();
-    if ( data->hasFormat( "application/tomahawk.dragsource.type" ) )
-        dj->setProperty( "dragsource", QString::fromUtf8( data->data( "application/tomahawk.dragsource.type" ) ) );
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ), Qt::QueuedConnection );
     if ( dropType() == DropTypeAllFromArtist )
@@ -280,44 +278,32 @@ CategoryAddItem::playlistToRenameLoaded()
 void
 CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
-    if( m_categoryType == SourcesModel::PlaylistsCategory ) {
-
+    if ( m_categoryType == SourcesModel::PlaylistsCategory )
+    {
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, tracks );
         ViewManager::instance()->show( newpl );
 
         connect( newpl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
-    } else if( m_categoryType == SourcesModel::StationsCategory ) {
+    }
+    else if ( m_categoryType == SourcesModel::StationsCategory )
+    {
         // seed the playlist with these song or artist filters
         QString name;
-        if ( sender() && sender()->property( "dragsource" ).toString() == "artist" )
-            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( ( tracks.first()->artist() ) );
-        else
-            name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
 
         dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
         newpl->setMode( OnDemand );
 
         // now we want to add each query as a song or similar artist filter...
-        QList< dyncontrol_ptr > contrls;
-        if ( sender() && sender()->property( "dragsource" ).toString() == "artist" )
+        QList< dyncontrol_ptr > controls;
+        foreach ( const Tomahawk::query_ptr& q, tracks )
         {
-            foreach( const Tomahawk::query_ptr& q, tracks ) {
-                dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
-                c->setInput( QString( "%1" ).arg( q->artist() ) );
-                contrls << c;
-            }
-        }
-        else
-        {
-            foreach( const Tomahawk::query_ptr& q, tracks ) {
-                dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-                c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
-                contrls << c;
-            }
+            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
+            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+            controls << c;
         }
 
-        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), controls );
 
         ViewManager::instance()->show( newpl );
         connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
@@ -342,7 +328,8 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
 {
     // in the constructor we're still being added to the parent, so we don't exist to have rows addded yet. so this is safe.
     //     beginRowsAdded( 0, 0 );
-    if( m_showAdd ) {
+    if ( m_showAdd )
+    {
         m_addItem = new CategoryAddItem( model, this, m_category );
     }
     //     endRowsAdded();
@@ -361,10 +348,12 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
 {
     // add the items to the category, and connect to the signals
     int curCount = children().size();
-    if( m_showAdd ) // if there's an add item, add it before that
+    if ( m_showAdd ) // if there's an add item, add it before that
         curCount--;
+
     beginRowsAdded( curCount, curCount + items.size() - 1 );
-    foreach( SourceTreeItem* item, items ) {
+    foreach( SourceTreeItem* item, items )
+    {
         insertChild( children().count() - 1, item );
     }
     endRowsAdded();
@@ -374,9 +363,9 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
 int
 CategoryItem::peerSortValue() const
 {
-    if( m_category == SourcesModel::PlaylistsCategory )
+    if ( m_category == SourcesModel::PlaylistsCategory )
         return -100;
-    else if( m_category == SourcesModel::StationsCategory )
+    else if ( m_category == SourcesModel::StationsCategory )
         return 100;
     else
         return 0;

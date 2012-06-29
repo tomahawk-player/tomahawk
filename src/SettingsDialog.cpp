@@ -510,7 +510,7 @@ SettingsDialog::aclEntryClearButtonClicked()
                          );
     if ( button == QMessageBox::Ok )
     {
-        ACLRegistry::instance()->wipeEntries();
+        AclRegistry::instance()->wipeEntries();
         ui->aclEntryClearButton->setEnabled( false );
     }
 }

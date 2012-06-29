@@ -93,10 +93,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     }
 
     QList<plentry_ptr> entries = playlist->entries();
-    foreach( const plentry_ptr& p, entries )
-        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
+/*    foreach ( const plentry_ptr& p, entries )
+        qDebug() << p->guid() << p->query()->track() << p->query()->artist();*/
 
-    append( entries );
+    appendEntries( entries );
 
     m_isLoading = false;
 }
@@ -112,78 +112,67 @@ PlaylistModel::clear()
 
 
 void
-PlaylistModel::append( const QList< plentry_ptr >& entries )
+PlaylistModel::appendEntries( const QList< plentry_ptr >& entries )
 {
-    insert( entries, rowCount( QModelIndex() ) );
+    insertEntries( entries, rowCount( QModelIndex() ) );
 }
 
 
 void
-PlaylistModel::append( const QList< query_ptr >& queries )
+PlaylistModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row )
 {
-    insert( queries, rowCount( QModelIndex() ) );
-}
+    // FIXME: This currently appends, not inserts!
 
-
-void
-PlaylistModel::append( const Tomahawk::query_ptr& query )
-{
-    insert( query, rowCount( QModelIndex() ) );
-}
-
-
-void
-PlaylistModel::append( const Tomahawk::album_ptr& album )
-{
-    if ( album.isNull() )
-        return;
-
-    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                             SLOT( append( QList<Tomahawk::query_ptr> ) ) );
-
-    if ( rowCount( QModelIndex() ) == 0 )
+    foreach ( const album_ptr& album, albums )
     {
-        setTitle( album->name() );
-        setDescription( tr( "All tracks by %1 on album %2" ).arg( album->artist()->name() ).arg( album->name() ) );
-        m_isTemporary = true;
+        if ( album.isNull() )
+            return;
+
+        connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                 SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
+
+        appendQueries( album->playlistInterface( Mixed )->tracks() );
     }
 
-    append( album->playlistInterface( Mixed )->tracks() );
-}
-
-
-void
-PlaylistModel::append( const Tomahawk::artist_ptr& artist )
-{
-    if ( artist.isNull() )
-        return;
-
-    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                              SLOT( append( QList<Tomahawk::query_ptr> ) ) );
-
-    if ( rowCount( QModelIndex() ) == 0 )
+    if ( rowCount( QModelIndex() ) == 0 && albums.count() == 1 )
     {
-        setTitle( artist->name() );
-        setDescription( tr( "All tracks by %1" ).arg( artist->name() ) );
+        setTitle( albums.first()->name() );
+        setDescription( tr( "All tracks by %1 on album %2" ).arg( albums.first()->artist()->name() ).arg( albums.first()->name() ) );
         m_isTemporary = true;
     }
-
-    append( artist->playlistInterface( Mixed )->tracks() );
 }
 
 
 void
-PlaylistModel::insert( const Tomahawk::query_ptr& query, int row )
+PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row )
 {
-    PlayableModel::insert( query, row );
+    // FIXME: This currently appends, not inserts!
+
+    foreach ( const artist_ptr& artist, artists )
+    {
+        if ( artist.isNull() )
+            return;
+
+        connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                                  SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
+
+        appendQueries( artist->playlistInterface( Mixed )->tracks() );
+    }
+
+    if ( rowCount( QModelIndex() ) == 0 && artists.count() == 1 )
+    {
+        setTitle( artists.first()->name() );
+        setDescription( tr( "All tracks by %1" ).arg( artists.first()->name() ) );
+        m_isTemporary = true;
+    }
 }
 
 
 void
-PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
+PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row )
 {
     QList< Tomahawk::plentry_ptr > entries;
-    foreach( const query_ptr& query, queries )
+    foreach ( const query_ptr& query, queries )
     {
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
@@ -200,12 +189,12 @@ PlaylistModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
         entries << entry;
     }
 
-    insert( entries, row );
+    insertEntries( entries, row );
 }
 
 
 void
-PlaylistModel::insert( const QList< Tomahawk::plentry_ptr >& entries, int row )
+PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row )
 {
     if ( !entries.count() )
     {
@@ -368,7 +357,7 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
         if ( update )
             beginPlaylistChanges();
 
-        insert( tracks, beginRow );
+        insertQueries( tracks, beginRow );
 
         if ( update && m_dropStorage.action & Qt::CopyAction )
             endPlaylistChanges();
@@ -488,14 +477,7 @@ PlaylistModel::playlistEntries() const
 
 
 void
-PlaylistModel::remove( int row, bool moreToCome )
-{
-    PlayableModel::remove( row, moreToCome );
-}
-
-
-void
-PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
+PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     PlayableItem* item = itemFromIndex( index );
 
@@ -513,24 +495,10 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
     if ( item && !m_isLoading )
         m_savedRemoveTracks << item->query();
 
-    PlayableModel::remove( index, moreToCome );
+    PlayableModel::removeIndex( index, moreToCome );
 
     if ( !moreToCome )
         endPlaylistChanges();
-}
-
-
-void
-PlaylistModel::remove( const QList<QModelIndex>& indexes )
-{
-    PlayableModel::remove( indexes );
-}
-
-
-void
-PlaylistModel::remove( const QList<QPersistentModelIndex>& indexes )
-{
-    PlayableModel::remove( indexes );
 }
 
 

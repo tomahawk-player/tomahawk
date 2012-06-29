@@ -244,7 +244,7 @@ TrackInfoWidget::onSimilarArtistsLoaded()
 void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
-    m_relatedTracksModel->append( m_query->similarTracks() );
+    m_relatedTracksModel->appendQueries( m_query->similarTracks() );
     m_relatedTracksModel->finishLoading();
 }
 

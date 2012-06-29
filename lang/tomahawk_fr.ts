@@ -333,15 +333,13 @@ se connecter et streamer depuis chez vous ?</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="293"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="295"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
         <translation>Nouvelle Station</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="293"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="295"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
         <translation>Station %1</translation>
     </message>
@@ -773,12 +771,12 @@ se connecter et streamer depuis chez vous ?</translation>
         <translation>vous</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="140"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Tous les titres de %1 sur l&apos;album %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="165"/>
         <source>All tracks by %1</source>
         <translation>Tous les titres de %1</translation>
     </message>
@@ -1819,17 +1817,17 @@ et des stations basées sur vos goûts.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="414"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="419"/>
         <source>Sync with Spotify</source>
         <translation>Synchroniser avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="418"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="423"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Réactiver la synchronisation avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="422"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="427"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stopper la synchronisation avec Spotify</translation>
     </message>
@@ -2874,7 +2872,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="596"/>
+        <location filename="../src/TomahawkApp.cpp" line="599"/>
         <source>My Collection</source>
         <translation>Ma Collection</translation>
     </message>

@@ -45,9 +45,9 @@ using namespace Tomahawk;
 
 DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
     : Connection( s )
+    , m_fetchCount( 0 )
     , m_source( src )
     , m_state( UNKNOWN )
-    , m_fetchCount( 0 )
 {
     qDebug() << Q_FUNC_INFO << src->id() << thread();
 

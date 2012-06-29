@@ -148,9 +148,9 @@ AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_savedAcceptRect.contains( me->pos() ) )
-            emit aclResult( ACLRegistry::Stream );
+            emit aclResult( AclRegistry::Stream );
         else if ( m_savedDenyRect.contains( me->pos() ) )
-            emit aclResult( ACLRegistry::Deny );
+            emit aclResult( AclRegistry::Deny );
         return true;
     }
 
@@ -159,7 +159,7 @@ AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
 
 
-AclJobItem::AclJobItem( ACLRegistry::User user, const QString &username )
+AclJobItem::AclJobItem( AclRegistry::User user, const QString &username )
     : m_delegate( 0 )
     , m_user( user )
     , m_username( username )
@@ -197,7 +197,7 @@ AclJobDelegate::emitSizeHintChanged( const QModelIndex& index )
 
 
 void
-AclJobItem::aclResult( ACLRegistry::ACL result )
+AclJobItem::aclResult( AclRegistry::ACL result )
 {
     tLog() << Q_FUNC_INFO;
     m_user.acl = result;

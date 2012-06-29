@@ -20,14 +20,15 @@
 #ifndef ACLJOBITEM_H
 #define ACLJOBITEM_H
 
-#include <jobview/JobStatusItem.h>
 #include "AclRegistry.h"
+#include "DllMacro.h"
+#include "jobview/JobStatusItem.h"
 
 #include <QStyledItemDelegate>
 
 class QListView;
 
-class AclJobDelegate : public QStyledItemDelegate
+class DLLEXPORT AclJobDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
@@ -39,53 +40,53 @@ public:
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual void emitSizeHintChanged( const QModelIndex &index );
-    
+
 signals:
     void update( const QModelIndex& idx );
-    void aclResult( ACLRegistry::ACL result );
-    
+    void aclResult( AclRegistry::ACL result );
+
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
-    
+
 private:
     void drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red = false ) const;
-    
+
     QPoint m_savedHoverPos;
     mutable QRect m_savedAcceptRect;
     mutable QRect m_savedDenyRect;
 };
 
 
-class AclJobItem : public JobStatusItem
+class DLLEXPORT AclJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit AclJobItem( ACLRegistry::User user, const QString &username );
+    explicit AclJobItem( AclRegistry::User user, const QString &username );
     virtual ~AclJobItem();
-    
+
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const { return QString(); }
     virtual QPixmap icon() const { return QPixmap(); }
     virtual QString type() const { return "acljob"; }
 
     virtual int concurrentJobLimit() const { return 3; }
-    
+
     virtual bool hasCustomDelegate() const { return true; }
     virtual void createDelegate( QObject* parent = 0 );
     virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
-    virtual ACLRegistry::User user() const { return m_user; }
+    virtual AclRegistry::User user() const { return m_user; }
     virtual const QString& username() const { return m_username; }
     
 signals:
-    void userDecision( ACLRegistry::User user );
+    void userDecision( AclRegistry::User user );
 
 public slots:
-    void aclResult( ACLRegistry::ACL result );
+    void aclResult( AclRegistry::ACL result );
     
 private:
     QStyledItemDelegate* m_delegate;
-    ACLRegistry::User m_user;
+    AclRegistry::User m_user;
     const QString m_username;
 };
 

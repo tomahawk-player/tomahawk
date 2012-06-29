@@ -65,7 +65,7 @@ Servent::Servent( QObject* parent )
     s_instance = this;
 
     m_lanHack = qApp->arguments().contains( "--lanhack" );
-    ACLRegistry::instance();
+    AclRegistry::instance();
     setProxy( QNetworkProxy::NoProxy );
 
     {
@@ -90,7 +90,7 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
-    delete ACLRegistry::instance();
+    delete AclRegistry::instance();
     delete m_portfwd;
 }
 

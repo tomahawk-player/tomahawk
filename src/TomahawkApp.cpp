@@ -31,8 +31,9 @@
 #include <QtCore/QFileInfo>
 #include <QTranslator>
 
-#include "Artist.h"
+#include "AclRegistryImpl.h"
 #include "Album.h"
+#include "Artist.h"
 #include "Collection.h"
 #include "infosystem/InfoSystem.h"
 #include "accounts/AccountManager.h"
@@ -203,6 +204,8 @@ TomahawkApp::init()
     TomahawkUtils::setHeadless( m_headless );
 
     TomahawkSettings* s = TomahawkSettings::instance();
+
+    AclRegistryImpl* ari = new AclRegistryImpl( this );
 
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning

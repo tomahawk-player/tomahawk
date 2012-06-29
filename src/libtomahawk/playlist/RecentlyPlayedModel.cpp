@@ -59,7 +59,7 @@ RecentlyPlayedModel::loadHistory()
     cmd->setLimit( m_limit );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
-                    SLOT( append( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+                    SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -119,7 +119,7 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
         PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
         if ( youngestItem->query()->playedBy().second <= playtime )
-            insert( query, 0 );
+            insertQuery( query, 0 );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -129,14 +129,14 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::query_ptr& query )
 
                 if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
                 {
-                    insert( query, i + 1 );
+                    insertQuery( query, i + 1 );
                     break;
                 }
             }
         }
     }
     else
-        insert( query, 0 );
+        insertQuery( query, 0 );
 
     if ( trackCount() > (int)m_limit )
         remove( m_limit );

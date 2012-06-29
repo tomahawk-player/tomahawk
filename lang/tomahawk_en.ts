@@ -333,15 +333,13 @@ connect and stream from you?</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="293"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="295"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
         <translation>New Station</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="293"/>
-        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="295"/>
+        <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
         <translation>%1 Station</translation>
     </message>
@@ -773,12 +771,12 @@ connect and stream from you?</translation>
         <translation>you</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="140"/>
         <source>All tracks by %1 on album %2</source>
         <translation>All tracks by %1 on album %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="165"/>
         <source>All tracks by %1</source>
         <translation>All tracks by %1</translation>
     </message>
@@ -1001,7 +999,7 @@ connect and stream from you?</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
-        <translation><numerusform>Open Queue - %n item(s)</numerusform><numerusform>Open Queue - %n item(s)</numerusform></translation>
+        <translation><numerusform>Open Queue - %n item</numerusform><numerusform>Open Queue - %n items</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
@@ -1819,17 +1817,17 @@ connect and stream from you?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="414"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="419"/>
         <source>Sync with Spotify</source>
         <translation>Sync with Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="418"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="423"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Re-enable syncing with Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="422"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="427"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stop syncing with Spotify</translation>
     </message>
@@ -2874,7 +2872,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="596"/>
+        <location filename="../src/TomahawkApp.cpp" line="599"/>
         <source>My Collection</source>
         <translation>My Collection</translation>
     </message>
@@ -3393,7 +3391,7 @@ enter the displayed PIN number here:</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>You&apos;ve listened to this track %n time(s).</numerusform><numerusform>You&apos;ve listened to this track %n time(s).</numerusform></translation>
+        <translation><numerusform>You&apos;ve listened to this track %n time.</numerusform><numerusform>You&apos;ve listened to this track %n times.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="219"/>
@@ -3408,7 +3406,7 @@ enter the displayed PIN number here:</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform><numerusform>You&apos;ve listened to %1 %n time(s).</numerusform></translation>
+        <translation><numerusform>You&apos;ve listened to %1 %n time.</numerusform><numerusform>You&apos;ve listened to %1 %n times.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>

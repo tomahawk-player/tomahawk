@@ -140,7 +140,7 @@ SocialPlaylistWidget::popularAlbumsFetched( QList< album_ptr > albums )
 {
     m_popularNewAlbumsModel->clear();
 
-    m_popularNewAlbumsModel->append( albums );
+    m_popularNewAlbumsModel->appendAlbums( albums );
 }
 
 
@@ -148,6 +148,6 @@ void
 SocialPlaylistWidget::topForeignTracksFetched( QList< query_ptr > tracks )
 {
     m_topForeignTracksModel->clear();
-    foreach( const query_ptr& q, tracks )
-        m_topForeignTracksModel->append( q );
+
+    m_topForeignTracksModel->appendQueries( tracks );
 }
