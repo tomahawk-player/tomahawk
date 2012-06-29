@@ -44,9 +44,9 @@ public:
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
-    virtual void remove( const QModelIndex& index );
-    virtual void remove( const QModelIndexList& indexes );
-    virtual void remove( const QList< QPersistentModelIndex >& indexes );
+    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndexes( const QModelIndexList& indexes );
+    virtual void removeIndexes( const QList< QPersistentModelIndex >& indexes );
 
     virtual bool showOfflineResults() const { return m_showOfflineResults; }
     virtual void setShowOfflineResults( bool b );

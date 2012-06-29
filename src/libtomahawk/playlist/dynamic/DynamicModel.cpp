@@ -328,7 +328,7 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
 
 
 void
-DynamicModel::remove(const QModelIndex& idx, bool moreToCome)
+DynamicModel::removeIndex( const QModelIndex& idx, bool moreToCome )
 {
     if ( m_playlist->mode() == Static && isReadOnly() )
         return;
@@ -340,10 +340,10 @@ DynamicModel::remove(const QModelIndex& idx, bool moreToCome)
         { // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
         }
-        PlayableModel::remove( idx );
+        PlayableModel::removeIndex( idx );
     }
     else
-        PlaylistModel::remove( idx, moreToCome );
+        PlaylistModel::removeIndex( idx, moreToCome );
     // don't call onPlaylistChanged.
 
     if( !moreToCome )

@@ -188,19 +188,19 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 
 
 void
-PlayableProxyModel::remove( const QModelIndex& index )
+PlayableProxyModel::removeIndex( const QModelIndex& index )
 {
     if ( !sourceModel() )
         return;
     if ( !index.isValid() )
         return;
 
-    sourceModel()->remove( mapToSource( index ) );
+    sourceModel()->removeIndex( mapToSource( index ) );
 }
 
 
 void
-PlayableProxyModel::remove( const QModelIndexList& indexes )
+PlayableProxyModel::removeIndexes( const QModelIndexList& indexes )
 {
     if ( !sourceModel() )
         return;
@@ -212,12 +212,12 @@ PlayableProxyModel::remove( const QModelIndexList& indexes )
             pil << mapToSource( idx );
     }
 
-    sourceModel()->remove( pil );
+    sourceModel()->removeIndexes( pil );
 }
 
 
 void
-PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
+PlayableProxyModel::removeIndexes( const QList< QPersistentModelIndex >& indexes )
 {
     if ( !sourceModel() )
         return;
@@ -229,7 +229,7 @@ PlayableProxyModel::remove( const QList< QPersistentModelIndex >& indexes )
             pil << mapToSource( idx );
     }
 
-    sourceModel()->remove( pil );
+    sourceModel()->removeIndexes( pil );
 }
 
 
