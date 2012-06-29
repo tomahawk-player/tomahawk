@@ -52,7 +52,7 @@ QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
         PlayableItem* item = itemFromIndex( mapToSource( idx ) );
         if ( item && item->query() && ( item->query()->results().contains( result ) ||
                                         item->query()->equals( result->toQuery() ) ) )
-            remove( idx );
+            removeIndex( idx );
     }
 }
 
@@ -61,7 +61,7 @@ void
 QueueProxyModel::onIndexActivated( const QModelIndex& index )
 {
     setCurrentIndex( QModelIndex() );
-    remove( index );
+    removeIndex( index );
 }
 
 

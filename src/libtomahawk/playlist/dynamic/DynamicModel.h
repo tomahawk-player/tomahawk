@@ -46,7 +46,7 @@ public:
 
     void loadPlaylist( const dynplaylist_ptr& playlist, bool loadEntries = true );
 
-    virtual void remove( const QModelIndex& index, bool moreToCome = false );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
     bool searchingForNext() const { return m_searchingForNext; }
 
