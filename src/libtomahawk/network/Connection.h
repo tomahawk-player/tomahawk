@@ -120,7 +120,7 @@ private slots:
     void readyRead();
     void doSetup();
     void checkACL();
-    void checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus );
+    void checkACLResult( const QString &nodeid, const QString &username, AclRegistry::ACL peerStatus );
     void authCheckTimeout();
     void bytesWritten( qint64 );
     void calcStats();

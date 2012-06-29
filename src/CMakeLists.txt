@@ -37,6 +37,7 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      web/Api_v1.cpp
 
+     AclRegistryImpl.cpp
      ShortcutHandler.cpp
      UbuntuUnityHack.cpp
      TomahawkApp.cpp
