@@ -488,14 +488,7 @@ PlaylistModel::playlistEntries() const
 
 
 void
-PlaylistModel::remove( int row, bool moreToCome )
-{
-    PlayableModel::remove( row, moreToCome );
-}
-
-
-void
-PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
+PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     PlayableItem* item = itemFromIndex( index );
 
@@ -513,24 +506,10 @@ PlaylistModel::remove( const QModelIndex& index, bool moreToCome )
     if ( item && !m_isLoading )
         m_savedRemoveTracks << item->query();
 
-    PlayableModel::remove( index, moreToCome );
+    PlayableModel::removeIndex( index, moreToCome );
 
     if ( !moreToCome )
         endPlaylistChanges();
-}
-
-
-void
-PlaylistModel::remove( const QList<QModelIndex>& indexes )
-{
-    PlayableModel::remove( indexes );
-}
-
-
-void
-PlaylistModel::remove( const QList<QPersistentModelIndex>& indexes )
-{
-    PlayableModel::remove( indexes );
 }
 
 

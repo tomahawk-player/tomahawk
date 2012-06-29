@@ -68,10 +68,7 @@ public slots:
     virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
     virtual void insert( const QList< Tomahawk::plentry_ptr >& entries, int row = 0 );
 
-    virtual void remove( int row, bool moreToCome = false );
-    virtual void remove( const QModelIndex& index, bool moreToCome = false );
-    virtual void remove( const QList<QModelIndex>& indexes );
-    virtual void remove( const QList<QPersistentModelIndex>& indexes );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
