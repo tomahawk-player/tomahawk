@@ -234,8 +234,6 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 
     // Create a new playlist seeded with these items
     DropJob *dj = new DropJob();
-    if ( data->hasFormat( "application/tomahawk.dragsource.type" ) )
-        dj->setProperty( "dragsource", QString::fromUtf8( data->data( "application/tomahawk.dragsource.type" ) ) );
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ), Qt::QueuedConnection );
     if ( dropType() == DropTypeAllFromArtist )
