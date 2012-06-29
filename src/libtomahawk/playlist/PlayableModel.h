@@ -136,19 +136,19 @@ public slots:
 
     virtual void clear();
 
-    virtual void append( const QList< Tomahawk::query_ptr >& queries );
-    virtual void append( const QList< Tomahawk::artist_ptr >& artists );
-    virtual void append( const QList< Tomahawk::album_ptr >& albums );
-    virtual void append( const Tomahawk::query_ptr& query );
-    virtual void append( const Tomahawk::artist_ptr& artist );
-    virtual void append( const Tomahawk::album_ptr& album );
+    virtual void appendQueries( const QList< Tomahawk::query_ptr >& queries );
+    virtual void appendArtists( const QList< Tomahawk::artist_ptr >& artists );
+    virtual void appendAlbums( const QList< Tomahawk::album_ptr >& albums );
+    virtual void appendQuery( const Tomahawk::query_ptr& query );
+    virtual void appendArtist( const Tomahawk::artist_ptr& artist );
+    virtual void appendAlbum( const Tomahawk::album_ptr& album );
 
-    virtual void insert( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
-    virtual void insert( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
-    virtual void insert( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
-    virtual void insert( const Tomahawk::query_ptr& query, int row = 0 );
-    virtual void insert( const Tomahawk::artist_ptr& artist, int row = 0 );
-    virtual void insert( const Tomahawk::album_ptr& album, int row = 0 );
+    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
+    virtual void insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
+    virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0 );
+    virtual void insertArtist( const Tomahawk::artist_ptr& artist, int row = 0 );
+    virtual void insertAlbum( const Tomahawk::album_ptr& album, int row = 0 );
 
     virtual void remove( int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
@@ -170,8 +170,6 @@ private slots:
 private:
     template <typename T>
     void insertInternal( const QList< T >& items, int row );
-    template <typename T>
-    void insertInternal( const T& item, int row );
 
     Qt::Alignment columnAlignment( int column ) const;
 

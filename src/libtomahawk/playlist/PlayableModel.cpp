@@ -576,20 +576,6 @@ PlayableModel::queries() const
 }
 
 
-template<typename T>
-void
-PlayableModel::insertInternal( const T& item, int row )
-{
-    if ( item.isNull() )
-        return;
-
-    QList< T > list;
-    list << item;
-
-    insert( list, row );
-}
-
-
 template <typename T>
 void
 PlayableModel::insertInternal( const QList< T >& items, int row )
@@ -828,84 +814,102 @@ PlayableModel::itemFromIndex( const QModelIndex& index ) const
 
 
 void
-PlayableModel::append( const Tomahawk::artist_ptr& artist )
+PlayableModel::appendArtist( const Tomahawk::artist_ptr& artist )
 {
-    insert( artist, rowCount( QModelIndex() ) );
+    QList< artist_ptr > artists;
+    artists << artist;
+
+    appendArtists( artists );
 }
 
 
 void
-PlayableModel::append( const Tomahawk::album_ptr& album )
+PlayableModel::appendAlbum( const Tomahawk::album_ptr& album )
 {
-    insert( album, rowCount( QModelIndex() ) );
+    QList< album_ptr > albums;
+    albums << album;
+
+    appendAlbums( albums );
 }
 
 
 void
-PlayableModel::append( const Tomahawk::query_ptr& query )
+PlayableModel::appendQuery( const Tomahawk::query_ptr& query )
 {
-    insert( query, rowCount( QModelIndex() ) );
+    QList< query_ptr > queries;
+    queries << query;
+
+    appendQueries( queries );
 }
 
 
 void
-PlayableModel::append( const QList< Tomahawk::artist_ptr >& artists )
+PlayableModel::appendArtists( const QList< Tomahawk::artist_ptr >& artists )
 {
-    insert( artists, rowCount( QModelIndex() ) );
+    insertArtists( artists, rowCount( QModelIndex() ) );
 }
 
 
 void
-PlayableModel::append( const QList< Tomahawk::album_ptr >& albums )
+PlayableModel::appendAlbums( const QList< Tomahawk::album_ptr >& albums )
 {
-    insert( albums, rowCount( QModelIndex() ) );
+    insertAlbums( albums, rowCount( QModelIndex() ) );
 }
 
 
 void
-PlayableModel::append( const QList< Tomahawk::query_ptr >& queries )
+PlayableModel::appendQueries( const QList< Tomahawk::query_ptr >& queries )
 {
-    insert( queries, rowCount( QModelIndex() ) );
+    insertQueries( queries, rowCount( QModelIndex() ) );
 }
 
 
 void
-PlayableModel::insert( const Tomahawk::artist_ptr& artist, int row )
+PlayableModel::insertArtist( const Tomahawk::artist_ptr& artist, int row )
 {
-    insertInternal( artist, row );
+    QList< artist_ptr > artists;
+    artists << artist;
+
+    insertArtists( artists, row );
 }
 
 
 void
-PlayableModel::insert( const Tomahawk::album_ptr& album, int row )
+PlayableModel::insertAlbum( const Tomahawk::album_ptr& album, int row )
 {
-    insertInternal( album, row );
+    QList< album_ptr > albums;
+    albums << album;
+
+    insertAlbums( albums, row );
 }
 
 
 void
-PlayableModel::insert( const Tomahawk::query_ptr& query, int row )
+PlayableModel::insertQuery( const Tomahawk::query_ptr& query, int row )
 {
-    insertInternal( query, row );
+    QList< query_ptr > queries;
+    queries << query;
+
+    insertQueries( queries, row );
 }
 
 
 void
-PlayableModel::insert( const QList< Tomahawk::artist_ptr >& artists, int row )
+PlayableModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row )
 {
     insertInternal( artists, row );
 }
 
 
 void
-PlayableModel::insert( const QList< Tomahawk::album_ptr >& albums, int row )
+PlayableModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row )
 {
     insertInternal( albums, row );
 }
 
 
 void
-PlayableModel::insert( const QList< Tomahawk::query_ptr >& queries, int row )
+PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row )
 {
     insertInternal( queries, row );
 }
