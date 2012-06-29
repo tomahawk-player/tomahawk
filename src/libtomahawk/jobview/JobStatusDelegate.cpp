@@ -80,11 +80,11 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         rightEdge = rRect.left();
     }
 
-    const int mainW = rightEdge - 3 * PADDING - iconRect.right();
+    const int mainW = rightEdge - 4 * PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
-        mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
+        mainText = fm.elidedText( mainText, Qt::ElideRight, mainW );
     else
         to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
 
