@@ -277,8 +277,13 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
 
-    switch ( m_queuedScanType ) {
+    SourceList::instance()->getLocal()->scanningFinished( 0 );
+    emit finished();
 
+    if ( !m_queuedScanType == File )
+        m_currScannerPaths.clear();
+    switch ( m_queuedScanType )
+    {
         case Full:
         case Normal:
             QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, m_queuedScanType == Full ) );
@@ -289,10 +294,7 @@ ScanManager::scannerFinished()
         default:
             break;
     }
-
     m_queuedScanType = None;
+
     m_scanTimer->start();
-    m_currScannerPaths.clear();
-    SourceList::instance()->getLocal()->scanningFinished( 0 );
-    emit finished();
 }
