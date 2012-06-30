@@ -281,10 +281,10 @@ ScanManager::scannerFinished()
 
         case Full:
         case Normal:
-            runNormalScan( m_queuedScanType == Full );
+            QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, m_queuedScanType == Full ) );
             break;
         case File:
-            runFileScan();
+            QMetaObject::invokeMethod( this, "runFileScan", Qt::QueuedConnection, Q_ARG( QStringList, QStringList() ) );
             break;
         default:
             break;
