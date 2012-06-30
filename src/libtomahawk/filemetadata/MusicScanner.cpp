@@ -209,6 +209,8 @@ MusicScanner::scanFilePaths()
         if ( fi.exists() && fi.isReadable() )
             scanFile( fi );
     }
+
+    QMetaObject::invokeMethod( this, "postOps", Qt::QueuedConnection );
 }
 
 
