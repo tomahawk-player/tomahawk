@@ -617,16 +617,15 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 {
     if ( parts.size() && parts[ 0 ] == "track" )
     {
-
         if ( queueSpotify( parts, queryItems ) )
             return true;
         else if ( queueRdio( parts, queryItems ) )
             return true;
 
         QPair< QString, QString > pair;
-
         QString title, artist, album, urlStr;
-        foreach ( pair, queryItems ) {
+        foreach ( pair, queryItems )
+        {
             pair.second = pair.second.replace( "+", " " ); // QUrl::queryItems doesn't decode + to a space :(
             if ( pair.first == "title" )
                 title = pair.second;
@@ -642,9 +641,12 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
         {
             // an individual; query to add to queue
             query_ptr q = Query::get( artist, title, album, uuid(), false );
+            if ( q.isNull() )
+                return false;
+
             if ( !urlStr.isEmpty() )
                 q->setResultHint( urlStr );
-            Pipeline::instance()->resolve( q, true );
+            Pipeline::instance()->resolve( q );
 
             handleOpenTrack( q );
             return true;
@@ -666,9 +668,11 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 { // give it a web result hint
                     QFileInfo info( track.path() );
                     query_ptr q = Query::get( QString(), info.baseName(), QString(), uuid(), false );
-                    q->setResultHint( track.toString() );
+                    if ( q.isNull() )
+                        continue;
 
-                    Pipeline::instance()->resolve( q, true );
+                    q->setResultHint( track.toString() );
+                    Pipeline::instance()->resolve( q );
 
                     ViewManager::instance()->queue()->model()->appendQuery( q );
                     ViewManager::instance()->showQueue();
@@ -1067,6 +1071,9 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
         }
 
         query_ptr q = Query::get( artist, title, album );
+        if ( q.isNull() )
+            return false;
+
         if ( !urlStr.isEmpty() )
             q->setResultHint( urlStr );
 
@@ -1155,18 +1162,25 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
                 urlStr = pair.second;
         }
         query_ptr q = Query::get( artist, title, album );
+        if ( q.isNull() )
+            return false;
+
         if ( !urlStr.isEmpty() )
             q->setResultHint( urlStr );
-        Pipeline::instance()->resolve( q, true );
+        Pipeline::instance()->resolve( q );
 
         // now we add it to the special "bookmarks" playlist, creating it if it doesn't exist. if nothing is playing, start playing the track
         QSharedPointer< LocalCollection > col = SourceList::instance()->getLocal()->collection().dynamicCast< LocalCollection >();
         playlist_ptr bookmarkpl = col->bookmarksPlaylist();
-        if ( bookmarkpl.isNull() ) { // create it and do the deed then
+        if ( bookmarkpl.isNull() )
+        {
+            // create it and do the deed then
             m_waitingToBookmark = q;
             col->createBookmarksPlaylist();
             connect( col.data(), SIGNAL( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), this, SLOT( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), Qt::UniqueConnection );
-        } else {
+        }
+        else
+        {
             doBookmark( bookmarkpl, q );
         }
 

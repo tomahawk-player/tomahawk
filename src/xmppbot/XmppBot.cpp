@@ -150,7 +150,7 @@ void XMPPBot::handleSubscription(const gloox::Subscription& subscription)
 void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
 {
     //TODO: implement "properly" with MessageSessions, if the bot is to be multi-user
-    if (msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty())
+    if ( msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty() )
         return;
 
     QString body = QString::fromStdString( msg.body() ).toLower().trimmed();
@@ -163,6 +163,9 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
             AudioEngine::instance()->play();
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( tokens.first().trimmed(), tokens.last().trimmed(), QString() );
+        if ( q.isNull() )
+            return;
+
         connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
 

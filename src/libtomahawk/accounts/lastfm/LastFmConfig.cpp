@@ -132,7 +132,7 @@ LastFmConfig::onHistoryLoaded()
     uint total = 0;
     bool finished = false;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    
+
     try
     {
         lastfm::XmlQuery lfm;
@@ -142,22 +142,25 @@ LastFmConfig::onHistoryLoaded()
         {
 //            tDebug() << "Found:" << e["artist"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
             Tomahawk::query_ptr query = Query::get( e["artist"].text(), e["name"].text(), QString(), QString(), false );
+            if ( query.isNull() )
+                continue;
+
             m_lastTimeStamp = e["date"].attribute( "uts" ).toUInt();
-            
+
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( query, DatabaseCommand_LogPlayback::Finished, m_lastTimeStamp );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
-        
+
         if ( !lfm.children( "recenttracks" ).isEmpty() )
         {
             lastfm::XmlQuery stats = lfm.children( "recenttracks" ).first();
-            
+
             uint page = stats.attribute( "page" ).toUInt();
             total = stats.attribute( "totalPages" ).toUInt();
-            
+
             m_ui->progressBar->setMaximum( total );
             m_ui->progressBar->setValue( page );
-            
+
             if ( page < total )
             {
                 m_page = page + 1;
@@ -174,7 +177,7 @@ LastFmConfig::onHistoryLoaded()
         tDebug() << "XmlQuery error:" << e.message();
         finished = true;
     }
-    
+
     if ( finished )
     {
         if ( m_page != total )

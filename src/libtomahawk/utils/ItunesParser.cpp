@@ -37,17 +37,17 @@ using namespace Tomahawk;
 
 QPixmap* ItunesParser::s_pixmap = 0;
 
+
 ItunesParser::ItunesParser( const QStringList& urls, QObject* parent )
     : QObject ( parent )
     , m_single( false )
-
 {
     foreach ( const QString& url, urls )
     {
-
         lookupItunesUri( url );
     }
 }
+
 
 ItunesParser::ItunesParser( const QString& Url, QObject* parent )
     : QObject ( parent )
@@ -56,10 +56,11 @@ ItunesParser::ItunesParser( const QString& Url, QObject* parent )
     lookupItunesUri( Url );
 }
 
+
 ItunesParser::~ItunesParser()
 {
-
 }
+
 
 void
 ItunesParser::lookupItunesUri( const QString& link )
@@ -89,17 +90,17 @@ ItunesParser::lookupItunesUri( const QString& link )
         }
         else
             return;
-
     }
     tLog() << "Parsing itunes track:" << link;
 
     QUrl url;
     DropJob::DropType type;
-    if( link.contains( "artist" ) )
+    if ( link.contains( "artist" ) )
     {
         type = DropJob::Artist;
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song&limit=30" ).arg( id ) );
-    }else
+    }
+    else
     {
         type = ( trackId.isEmpty() ? DropJob::Album : DropJob::Track );
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
@@ -113,8 +114,9 @@ ItunesParser::lookupItunesUri( const QString& link )
     JobStatusView::instance()->model()->addJob( j );
 
     m_queries.insert( reply );
-
 }
+
+
 void
 ItunesParser::itunesResponseLookupFinished()
 {
@@ -134,7 +136,8 @@ ItunesParser::itunesResponseLookupFinished()
             tLog() << "Failed to parse json from Spotify track lookup:" << p.errorString() << "On line" << p.errorLine();
             checkTrackFinished();
             return;
-        } else if ( !res.contains( "results" ) )
+        }
+        else if ( !res.contains( "results" ) )
         {
             tLog() << "No 'results' item in the itunes track lookup result... not doing anything";
             checkTrackFinished();
@@ -149,23 +152,25 @@ ItunesParser::itunesResponseLookupFinished()
 
             if ( ituneMap.value( "wrapperType" ).toString().contains( "track" ) )
             {
-
                 title = ituneMap.value( "trackName" ).toString();
                 artist = ituneMap.value( "artistName" ).toString();
                 album = ituneMap.value( "collectionName" ).toString();
                 if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
                 {
                     tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
-
-                }else{
-
+                }
+                else
+                {
                     Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
+                    if ( q.isNull() )
+                        continue;
+
                     m_tracks << q;
                 }
             }
         }
-
-    } else
+    }
+    else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching iTunes information from the network!" ) ) );
         tLog() << "Error in network request to Itunes for track decoding:" << r->errorString();
@@ -187,8 +192,8 @@ ItunesParser::checkTrackFinished()
 
         deleteLater();
     }
-
 }
+
 
 QPixmap
 ItunesParser::pixmap() const

@@ -40,6 +40,7 @@
 
 using namespace Tomahawk;
 
+
 QString
 XSPFLoader::errorToString( XSPFErrorCode error )
 {
@@ -56,7 +57,8 @@ XSPFLoader::errorToString( XSPFErrorCode error )
     }
 }
 
-XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
+
+XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject* parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
     , m_autoUpdate( autoUpdate )
@@ -69,7 +71,8 @@ XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject *parent )
 
 
 XSPFLoader::~XSPFLoader()
-{}
+{
+}
 
 
 void
@@ -235,6 +238,9 @@ XSPFLoader::gotBody()
         }
 
         query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), false );
+        if ( q.isNull() )
+            continue;
+
         q->setDuration( duration.toInt() / 1000 );
         if ( !url.isEmpty() )
             q->setResultHint( url );
@@ -279,5 +285,4 @@ XSPFLoader::gotBody()
 
     if ( m_autoDelete )
         deleteLater();
-
 }
