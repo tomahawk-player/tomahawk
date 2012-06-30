@@ -39,13 +39,14 @@ MetadataEditor::MetadataEditor( Tomahawk::result_ptr result, QWidget *parent )
     , m_result( result )
 {
     ui->setupUi( this );
-    setWindowTitle( QString( result->track() + tr( " Properties" ) ) );
+    setWindowTitle( QString( result->track() + tr( " - Properties" ) ) );
     setAttribute( Qt::WA_DeleteOnClose );
 
     setTitle( result->track() );
     setArtist( result->artist()->name() );
     setAlbum( result->album()->name() );
     setDiscNumber( result->albumpos() );
+    setBitrate( result->bitrate() );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( writeMetadata() ) );
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
@@ -117,3 +118,9 @@ MetadataEditor::setDiscNumber( unsigned int num )
     ui->discNumberSpinBox->setValue( num );
 }
 
+
+void
+MetadataEditor::setBitrate( unsigned int bitrate )
+{
+    ui->bitrateLabel->setNum( (int) bitrate );
+}

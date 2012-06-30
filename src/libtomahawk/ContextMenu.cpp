@@ -119,7 +119,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         Tomahawk::result_ptr result = m_queries.first()->results().first();
         if ( result->collection() && result->collection()->source() &&
              result->collection()->source()->isLocal() ) {
-            m_sigmap->setMapping( addAction( tr( "Edit Metadata") ), ActionEditMetadata );
+            m_sigmap->setMapping( addAction( tr( "Properties") ), ActionEditMetadata );
         }
     }
 

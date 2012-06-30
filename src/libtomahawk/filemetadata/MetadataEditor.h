@@ -50,6 +50,7 @@ private slots:
     void setArtist( const QString& artist );
     void setAlbum( const QString& album );
     void setDiscNumber( unsigned int num );
+    void setBitrate( unsigned int num );
 
 private:
     Ui::MetadataEditor* ui;

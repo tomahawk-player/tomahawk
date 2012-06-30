@@ -42,7 +42,7 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="titleLineEdit">
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="placeholderText">
          <string>Title...</string>
@@ -52,7 +52,7 @@
       <item row="5" column="1">
        <widget class="QLineEdit" name="artistLineEdit">
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="placeholderText">
          <string>Artist...</string>
@@ -62,7 +62,7 @@
       <item row="9" column="1">
        <widget class="QLineEdit" name="albumLineEdit">
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="placeholderText">
          <string>Album...</string>
@@ -81,7 +81,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
@@ -109,6 +109,20 @@
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Disc Number:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Bitrate:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QLabel" name="bitrateLabel">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
