@@ -205,7 +205,7 @@ TomahawkApp::init()
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    AclRegistryImpl* ari = new AclRegistryImpl( this );
+    new ACLRegistryImpl( this );
 
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
@@ -370,6 +370,9 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_servent.isNull() )
         delete m_servent.data();
+
+    delete dynamic_cast< ACLRegistryImpl* >( ACLRegistry::instance() );
+
     if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
 

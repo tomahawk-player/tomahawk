@@ -28,13 +28,13 @@
 
 class QListView;
 
-class DLLEXPORT AclJobDelegate : public QStyledItemDelegate
+class DLLEXPORT ACLJobDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit AclJobDelegate ( QObject* parent = 0 );
-    virtual ~AclJobDelegate();
+    explicit ACLJobDelegate ( QObject* parent = 0 );
+    virtual ~ACLJobDelegate();
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -43,7 +43,7 @@ public:
 
 signals:
     void update( const QModelIndex& idx );
-    void aclResult( AclRegistry::ACL result );
+    void aclResult( ACLRegistry::ACL result );
 
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
@@ -57,12 +57,12 @@ private:
 };
 
 
-class DLLEXPORT AclJobItem : public JobStatusItem
+class DLLEXPORT ACLJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit AclJobItem( AclRegistry::User user, const QString &username );
-    virtual ~AclJobItem();
+    explicit ACLJobItem( ACLRegistry::User user, const QString &username );
+    virtual ~ACLJobItem();
 
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const { return QString(); }
@@ -75,18 +75,18 @@ public:
     virtual void createDelegate( QObject* parent = 0 );
     virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
 
-    virtual AclRegistry::User user() const { return m_user; }
+    virtual ACLRegistry::User user() const { return m_user; }
     virtual const QString& username() const { return m_username; }
     
 signals:
-    void userDecision( AclRegistry::User user );
+    void userDecision( ACLRegistry::User user );
 
 public slots:
-    void aclResult( AclRegistry::ACL result );
+    void aclResult( ACLRegistry::ACL result );
     
 private:
     QStyledItemDelegate* m_delegate;
-    AclRegistry::User m_user;
+    ACLRegistry::User m_user;
     const QString m_username;
 };
 

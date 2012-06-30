@@ -37,23 +37,23 @@
 #define PADDING 2
 
 
-AclJobDelegate::AclJobDelegate( QObject* parent )
+ACLJobDelegate::ACLJobDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
 {
     tLog() << Q_FUNC_INFO;
 }
 
 
-AclJobDelegate::~AclJobDelegate()
+ACLJobDelegate::~ACLJobDelegate()
 {
     tLog() << Q_FUNC_INFO;
 }
 
 
 void
-AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    AclJobItem* item = dynamic_cast< AclJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
+    ACLJobItem* item = dynamic_cast< ACLJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
     if ( !item )
         return;
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
@@ -106,7 +106,7 @@ AclJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 }
 
 QSize
-AclJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+ACLJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QSize size( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT * 3 );
     return size;
@@ -114,7 +114,7 @@ AclJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
 
 void
-AclJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
+ACLJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
     if ( !red )
         TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
@@ -124,7 +124,7 @@ AclJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool
 
 
 bool
-AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     Q_UNUSED( option )
     Q_UNUSED( model )
@@ -148,9 +148,9 @@ AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_savedAcceptRect.contains( me->pos() ) )
-            emit aclResult( AclRegistry::Stream );
+            emit aclResult( ACLRegistry::Stream );
         else if ( m_savedDenyRect.contains( me->pos() ) )
-            emit aclResult( AclRegistry::Deny );
+            emit aclResult( ACLRegistry::Deny );
         return true;
     }
 
@@ -159,7 +159,7 @@ AclJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
 
 
-AclJobItem::AclJobItem( AclRegistry::User user, const QString &username )
+ACLJobItem::ACLJobItem( ACLRegistry::User user, const QString &username )
     : m_delegate( 0 )
     , m_user( user )
     , m_username( username )
@@ -168,36 +168,36 @@ AclJobItem::AclJobItem( AclRegistry::User user, const QString &username )
 }
 
 
-AclJobItem::~AclJobItem()
+ACLJobItem::~ACLJobItem()
 {
     tLog() << Q_FUNC_INFO;
 }
 
 
 void
-AclJobItem::createDelegate( QObject* parent )
+ACLJobItem::createDelegate( QObject* parent )
 {
     tLog() << Q_FUNC_INFO;
     
     if ( m_delegate )
         return;
 
-    m_delegate = new AclJobDelegate( parent );
+    m_delegate = new ACLJobDelegate( parent );
 
-    Tomahawk::InfoSystem::InfoPushData pushData( "AclJobItem", Tomahawk::InfoSystem::InfoNotifyUser, tr( "Tomahawk needs you to decide whether %1 is allowed to connect." ).arg( m_username ), Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoPushData pushData( "ACLJobItem", Tomahawk::InfoSystem::InfoNotifyUser, tr( "Tomahawk needs you to decide whether %1 is allowed to connect." ).arg( m_username ), Tomahawk::InfoSystem::PushNoFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
 
 void
-AclJobDelegate::emitSizeHintChanged( const QModelIndex& index )
+ACLJobDelegate::emitSizeHintChanged( const QModelIndex& index )
 {
     emit sizeHintChanged( index );
 }
 
 
 void
-AclJobItem::aclResult( AclRegistry::ACL result )
+ACLJobItem::aclResult( ACLRegistry::ACL result )
 {
     tLog() << Q_FUNC_INFO;
     m_user.acl = result;

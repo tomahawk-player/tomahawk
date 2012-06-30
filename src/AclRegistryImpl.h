@@ -34,43 +34,46 @@
 #include "HeadlessCheck.h"
 #include "DllMacro.h"
 
-class AclJobItem;
+class ACLJobItem;
 
-class AclRegistryImpl : public AclRegistry
+class ACLRegistryImpl : public ACLRegistry
 {
     Q_OBJECT
 
 public:
 
-    AclRegistryImpl( QObject *parent = 0 );
-    virtual ~AclRegistryImpl();
+    ACLRegistryImpl( QObject *parent = 0 );
+    virtual ~ACLRegistryImpl();
 
 signals:
-    void aclResult( QString nodeid, QString username, AclRegistry::ACL peerStatus );
+    void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
 
 public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
      *
      * @param dbid DBID of peer
-     * @param globalType Global ACL to store if peer not found; if AclRegistry::NotFound, does not store the peer Defaults to AclRegistry::NotFound.
+     * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return AclRegistry::ACL
+     * @return ACLRegistry::ACL
      **/
-    virtual AclRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, AclRegistry::ACL globalType = AclRegistry::NotFound, bool skipEmission = false );
-
-#ifndef ENABLE_HEADLESS
-    void getUserDecision( AclRegistry::User user, const QString &username );
-
+    virtual ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
     virtual void wipeEntries();
+    
+protected:
+    virtual void load();
+    virtual void save();
+    
+#ifndef ENABLE_HEADLESS
+    void getUserDecision( ACLRegistry::User user, const QString &username );
 
 private slots:
-    void userDecision( AclRegistry::User user );
+    void userDecision( ACLRegistry::User user );
     void queueNextJob();
 #endif
 
 private:
-    QQueue< AclJobItem* > m_jobQueue;
+    QQueue< ACLJobItem* > m_jobQueue;
     int m_jobCount;
 };
 
