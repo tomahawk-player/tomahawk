@@ -138,58 +138,60 @@ ScanManager::runFullRescan()
 
 
 
-bool
+void
 ScanManager::runNormalScan( bool manualFull )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
+    if ( QThread::currentThread() != ScanManager::instance()->thread() )
+        return;
+
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-        return false;
+        return;
 
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
         tDebug( LOGVERBOSE ) << "Could not run dir scan, old scan still running";
-        return false;
+        return;
     }
-    else
+
+    m_scanTimer->stop();
+    m_musicScannerThreadController = new QThread( this );
+    m_currScanMode = DirScan;
+
+    if ( manualFull )
     {
-        m_scanTimer->stop();
-        m_musicScannerThreadController = new QThread( this );
-        m_currScanMode = DirScan;
-        
-        if ( manualFull )
-        {
-            DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-            connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
-            Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-            return true;
-        }
-
-        DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
-        connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
-                        SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
-
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        return;
     }
 
-    return true;
+    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
+    connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
+                    SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
+
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
 
-bool
+void
 ScanManager::runFileScan( const QStringList &paths )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    if ( QThread::currentThread() != ScanManager::instance()->thread() )
+        return;
+
     foreach( const QString& path, paths )
         m_currScannerPaths.insert( path );
 
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-        return false;
+        return;
 
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
         tDebug( LOGVERBOSE ) << "Could not run file scan, old scan still running";
-        return false;
+        return;
     }
 
     m_scanTimer->stop();
@@ -197,8 +199,6 @@ ScanManager::runFileScan( const QStringList &paths )
     m_currScanMode = FileScan;
 
     QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
-
-    return true;
 }
 
 

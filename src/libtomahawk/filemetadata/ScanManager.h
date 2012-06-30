@@ -51,9 +51,9 @@ signals:
     void finished();
 
 public slots:
-    bool runFileScan( const QStringList &paths );
+    void runFileScan( const QStringList &paths );
     void runFullRescan();
-    bool runNormalScan( bool manualFull = false );
+    void runNormalScan( bool manualFull = false );
 
 private slots:
     void runStartupScan();
