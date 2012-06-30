@@ -41,6 +41,7 @@ Q_OBJECT
 
 public:
     enum ScanMode { DirScan, FileScan };
+    enum ScanType { None, Full, Normal, File };
     
     static ScanManager* instance();
 
@@ -51,7 +52,7 @@ signals:
     void finished();
 
 public slots:
-    void runFileScan( const QStringList &paths );
+    void runFileScan( const QStringList &paths = QStringList() );
     void runFullRescan();
     void runNormalScan( bool manualFull = false );
 
@@ -77,6 +78,7 @@ private:
     QStringList m_cachedScannerDirs;
 
     QTimer* m_scanTimer;
+    ScanType m_queuedScanType;
 };
 
 #endif

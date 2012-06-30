@@ -50,6 +50,7 @@ ScanManager::ScanManager( QObject* parent )
     , m_musicScannerThreadController( 0 )
     , m_currScannerPaths()
     , m_cachedScannerDirs()
+    , m_queuedScanType( None )
 {
     s_instance = this;
 
@@ -157,6 +158,8 @@ ScanManager::runNormalScan( bool manualFull )
     
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
+        if ( m_queuedScanType != Full )
+            m_queuedScanType = manualFull ? Full : Normal;
         tDebug( LOGVERBOSE ) << "Could not run dir scan, old scan still running";
         return;
     }
@@ -176,7 +179,6 @@ ScanManager::runNormalScan( bool manualFull )
     DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
     connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
                     SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
-
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
@@ -203,6 +205,8 @@ ScanManager::runFileScan( const QStringList &paths )
 
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
+        if ( m_queuedScanType == None )
+            m_queuedScanType = File;
         tDebug( LOGVERBOSE ) << "Could not run file scan, old scan still running";
         return;
     }
@@ -273,6 +277,20 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
 
+    switch ( m_queuedScanType ) {
+
+        case Full:
+        case Normal:
+            runNormalScan( m_queuedScanType == Full );
+            break;
+        case File:
+            runFileScan();
+            break;
+        default:
+            break;
+    }
+
+    m_queuedScanType = None;
     m_scanTimer->start();
     m_currScannerPaths.clear();
     SourceList::instance()->getLocal()->scanningFinished( 0 );
