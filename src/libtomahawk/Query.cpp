@@ -82,8 +82,8 @@ PlaybackLog::PlaybackLog( const PlaybackLog& other )
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
-    Q_ASSERT( !artist.trimmed().isEmpty() );
-    Q_ASSERT( !track.trimmed().isEmpty() );
+    if (  artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
+        return query_ptr();
 
     if ( qid.isEmpty() )
         autoResolve = false;
