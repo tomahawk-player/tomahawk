@@ -238,8 +238,8 @@ MusicScanner::postOps()
         m_scannedfiles.clear();
         m_filesToDelete.clear();
     }
-    else
-        cleanup();
+
+    cleanup();
 }
 
 
