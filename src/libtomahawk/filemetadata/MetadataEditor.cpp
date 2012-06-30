@@ -32,6 +32,7 @@
 
 #include "taglib/fileref.h"
 #include "filemetadata/taghandlers/tag.h"
+#include "utils/TomahawkUtils.h"
 
 MetadataEditor::MetadataEditor( Tomahawk::result_ptr result, QWidget *parent )
     : QDialog( parent )
@@ -46,7 +47,13 @@ MetadataEditor::MetadataEditor( Tomahawk::result_ptr result, QWidget *parent )
     setArtist( result->artist()->name() );
     setAlbum( result->album()->name() );
     setDiscNumber( result->albumpos() );
+    setDuration( result->duration() );
+    setYear( result->year() );
     setBitrate( result->bitrate() );
+
+    QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
+    setFileName( fi.fileName() );
+    setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( writeMetadata() ) );
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
@@ -120,7 +127,35 @@ MetadataEditor::setDiscNumber( unsigned int num )
 
 
 void
+MetadataEditor::setDuration( unsigned int duration )
+{
+    ui->durationLineEdit->setText( TomahawkUtils::timeToString( duration )  );
+}
+
+
+void
+MetadataEditor::setYear( int year )
+{
+    ui->yearLineEdit->setText( QString( "%1" ).arg( year ) );
+}
+
+
+void
 MetadataEditor::setBitrate( unsigned int bitrate )
 {
-    ui->bitrateLabel->setNum( (int) bitrate );
+    ui->bitrateLineEdit->setText( QString( "%1" ).arg( bitrate ) );
+}
+
+
+void
+MetadataEditor::setFileName( const QString& fn )
+{
+    ui->fileNameLineEdit->setText( fn );
+}
+
+
+void
+MetadataEditor::setFileSize( const QString& size )
+{
+    ui->fileSizeLineEdit->setText( size );
 }

@@ -46,11 +46,18 @@ public:
 private slots:
     void writeMetadata();
 
+    /* tag attributes */
     void setTitle( const QString& title );
     void setArtist( const QString& artist );
     void setAlbum( const QString& album );
     void setDiscNumber( unsigned int num );
+    void setDuration( unsigned int duration );
+    void setYear( int year );
     void setBitrate( unsigned int num );
+
+    /* file attributes */
+    void setFileName( const QString& fn );
+    void setFileSize( const QString& size );
 
 private:
     Ui::MetadataEditor* ui;
