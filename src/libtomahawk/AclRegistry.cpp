@@ -22,14 +22,10 @@
 #include <QThread>
 #include <QVariant>
 
-#include "TomahawkSettings.h"
-#include "TomahawkApp.h"
-#include "Source.h"
-
 #include "utils/Logger.h"
 
 
-QDataStream& operator<<( QDataStream &out, const AclRegistry::User &user )
+QDataStream& operator<<( QDataStream &out, const ACLRegistry::User &user )
 {
     out << ACLUSERVERSION;
     out << user.uuid;
@@ -44,7 +40,7 @@ QDataStream& operator<<( QDataStream &out, const AclRegistry::User &user )
     return out;
 }
 
-QDataStream& operator>>( QDataStream &in, AclRegistry::User &user )
+QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
 {
     int ver;
     in >> ver;
@@ -70,84 +66,56 @@ QDataStream& operator>>( QDataStream &in, AclRegistry::User &user )
         }
         int aclIn;
         in >> aclIn;
-        user.acl = (AclRegistry::ACL)( aclIn );
+        user.acl = (ACLRegistry::ACL)( aclIn );
     }
     return in;
 }
 
 
-AclRegistry* AclRegistry::s_instance = 0;
+ACLRegistry* ACLRegistry::s_instance = 0;
 
-AclRegistry*
-AclRegistry::instance()
+ACLRegistry*
+ACLRegistry::instance()
 {
     return s_instance;
 }
 
 
 void
-AclRegistry::setInstance( AclRegistry* instance )
+ACLRegistry::setInstance( ACLRegistry* instance )
 {
     s_instance = instance;
 }
 
 
-AclRegistry::AclRegistry( QObject* parent )
+ACLRegistry::ACLRegistry( QObject* parent )
     : QObject( parent )
 {
-    qRegisterMetaType< AclRegistry::ACL >( "AclRegistry::ACL" );
-    qRegisterMetaType< AclRegistry::User >( "AclRegistry::User" );
-    qRegisterMetaTypeStreamOperators< AclRegistry::User >( "AclRegistry::User" );
+    qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
+    qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
+    qRegisterMetaTypeStreamOperators< ACLRegistry::User >( "ACLRegistry::User" );
 }
 
 
-AclRegistry::~AclRegistry()
+ACLRegistry::~ACLRegistry()
 {
 }
 
 
 void
-AclRegistry::load()
+ACLRegistry::load()
 {
-    tLog() << Q_FUNC_INFO;
-    QVariantList entryList = TomahawkSettings::instance()->aclEntries();
-    foreach ( QVariant entry, entryList )
-    {
-        if ( !entry.isValid() || !entry.canConvert< AclRegistry::User >() )
-        {
-            tLog() << Q_FUNC_INFO << "entry is invalid";
-            continue;
-        }
-        tLog() << Q_FUNC_INFO << "loading entry";
-        AclRegistry::User entryUser = entry.value< AclRegistry::User >();
-        if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
-        {
-            tLog() << Q_FUNC_INFO << "user known account/dbids is empty";
-            continue;
-        }
-        m_cache.append( entryUser );
-    }
 }
 
 
 void
-AclRegistry::save()
+ACLRegistry::save()
 {
-    tLog() << Q_FUNC_INFO;
-    QVariantList entryList;
-    foreach ( AclRegistry::User user, m_cache )
-    {
-        tLog() << Q_FUNC_INFO << "user is " << user.uuid << " with known name " << user.knownAccountIds.first();
-        QVariant val = QVariant::fromValue< AclRegistry::User >( user );
-        if ( val.isValid() )
-            entryList.append( val );
-    }
-    TomahawkSettings::instance()->setAclEntries( entryList );
 }
 
 
 void
-AclRegistry::wipeEntries()
+ACLRegistry::wipeEntries()
 {
     tLog() << Q_FUNC_INFO;
     m_cache.clear();

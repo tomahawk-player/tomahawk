@@ -37,30 +37,30 @@
 #include "utils/Logger.h"
 
 
-AclRegistryImpl::AclRegistryImpl( QObject* parent )
-    : AclRegistry( parent )
+ACLRegistryImpl::ACLRegistryImpl( QObject* parent )
+    : ACLRegistry( parent )
     , m_jobCount( 0 )
 {
-    AclRegistry::setInstance( this );
+    ACLRegistry::setInstance( this );
     load();
 }
 
 
-AclRegistryImpl::~AclRegistryImpl()
+ACLRegistryImpl::~ACLRegistryImpl()
 {
     save();
 }
 
 
-AclRegistry::ACL
-AclRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, AclRegistry::ACL globalType, bool skipEmission )
+ACLRegistry::ACL
+ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType, bool skipEmission )
 {
     tLog() << Q_FUNC_INFO;
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         if ( !skipEmission )
-            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( AclRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
-        return AclRegistry::NotFound;
+            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( ACLRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
+        return ACLRegistry::NotFound;
     }
 
 #ifndef ENABLE_HEADLESS
@@ -77,18 +77,18 @@ AclRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
             if ( account->accountFriendlyName() == username )
             {
                 if ( !skipEmission )
-                    emit aclResult( dbid, username, AclRegistry::Stream );
-                return AclRegistry::Stream;
+                    emit aclResult( dbid, username, ACLRegistry::Stream );
+                return ACLRegistry::Stream;
             }
         }
     }
 #endif
     
     bool found = false;
-    QMutableListIterator< AclRegistry::User > i( m_cache );
+    QMutableListIterator< ACLRegistry::User > i( m_cache );
     while ( i.hasNext() )
     {
-        AclRegistry::User user = i.next();
+        ACLRegistry::User user = i.next();
         foreach ( QString knowndbid, user.knownDbids )
         {
             if ( dbid == knowndbid )
@@ -119,24 +119,24 @@ AclRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
     }
 
     if ( skipEmission )
-        return AclRegistry::NotFound;
+        return ACLRegistry::NotFound;
 
     // User was not found, create a new user entry
-    AclRegistry::User user;
+    ACLRegistry::User user;
     user.knownDbids.append( dbid );
     user.knownAccountIds.append( username );
-    if ( globalType != AclRegistry::NotFound )
+    if ( globalType != ACLRegistry::NotFound )
         user.acl = globalType;
 #ifdef ENABLE_HEADLESS
-    user.acl = AclRegistry::Stream;
+    user.acl = ACLRegistry::Stream;
 #else
     if ( !TomahawkUtils::headless() )
     {
         getUserDecision( user, username );
-        return AclRegistry::NotFound;
+        return ACLRegistry::NotFound;
     }
     else
-        user.acl = AclRegistry::Stream;
+        user.acl = ACLRegistry::Stream;
 #endif
     m_cache.append( user );
     save();
@@ -147,20 +147,20 @@ AclRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
 
 #ifndef ENABLE_HEADLESS
 void
-AclRegistryImpl::getUserDecision( AclRegistry::User user, const QString &username )
+ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString &username )
 {
     if ( TomahawkUtils::headless() )
         return;
 
     tLog() << Q_FUNC_INFO;
-    AclJobItem* job = new AclJobItem( user, username );
+    ACLJobItem* job = new ACLJobItem( user, username );
     m_jobQueue.enqueue( job );
     QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
 }
 
 
 void
-AclRegistryImpl::userDecision( AclRegistry::User user )
+ACLRegistryImpl::userDecision( ACLRegistry::User user )
 {
     if ( TomahawkUtils::headless() )
         return;
@@ -177,7 +177,7 @@ AclRegistryImpl::userDecision( AclRegistry::User user )
 
 
 void
-AclRegistryImpl::queueNextJob()
+ACLRegistryImpl::queueNextJob()
 {
     if ( TomahawkUtils::headless() )
         return;
@@ -194,13 +194,13 @@ AclRegistryImpl::queueNextJob()
 
     if ( !m_jobQueue.isEmpty() )
     {
-        AclJobItem* job = m_jobQueue.dequeue();
-        AclRegistry::User user = job->user();
+        ACLJobItem* job = m_jobQueue.dequeue();
+        ACLRegistry::User user = job->user();
         bool found = false;
         foreach( QString dbid, user.knownDbids )
         {
-            AclRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), AclRegistry::NotFound, true );
-            if ( acl != AclRegistry::NotFound )
+            ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
+            if ( acl != ACLRegistry::NotFound )
             {
                 tLog() << Q_FUNC_INFO << "Found existing acl entry for = " << user.knownAccountIds.first();
                 found = true;
@@ -219,15 +219,54 @@ AclRegistryImpl::queueNextJob()
             tLog() << Q_FUNC_INFO << "activating job for user" << user.knownAccountIds.first();
             m_jobCount++;
             JobStatusView::instance()->model()->addJob( job );
-            connect( job, SIGNAL( userDecision( AclRegistry::User ) ), this, SLOT( userDecision( AclRegistry::User ) ) );
+            connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );
         }
     }
 }
 #endif
 
 void
-AclRegistryImpl::wipeEntries()
+ACLRegistryImpl::wipeEntries()
 {
-    AclRegistry::wipeEntries();
+    ACLRegistry::wipeEntries();
     save();
+}
+
+void
+ACLRegistryImpl::load()
+{
+    tLog() << Q_FUNC_INFO;
+    QVariantList entryList = TomahawkSettings::instance()->aclEntries();
+    foreach ( QVariant entry, entryList )
+    {
+        if ( !entry.isValid() || !entry.canConvert< ACLRegistry::User >() )
+        {
+            tLog() << Q_FUNC_INFO << "entry is invalid";
+            continue;
+        }
+        tLog() << Q_FUNC_INFO << "loading entry";
+        ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
+        if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
+        {
+            tLog() << Q_FUNC_INFO << "user known account/dbids is empty";
+            continue;
+        }
+        m_cache.append( entryUser );
+    }
+}
+
+
+void
+ACLRegistryImpl::save()
+{
+    tLog() << Q_FUNC_INFO;
+    QVariantList entryList;
+    foreach ( ACLRegistry::User user, m_cache )
+    {
+        tLog() << Q_FUNC_INFO << "user is " << user.uuid << " with known name " << user.knownAccountIds.first();
+        QVariant val = QVariant::fromValue< ACLRegistry::User >( user );
+        if ( val.isValid() )
+            entryList.append( val );
+    }
+    TomahawkSettings::instance()->setAclEntries( entryList );
 }

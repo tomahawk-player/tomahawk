@@ -35,14 +35,14 @@
 
 #define ACLUSERVERSION 1
 
-class DLLEXPORT AclRegistry : public QObject
+class DLLEXPORT ACLRegistry : public QObject
 {
     Q_OBJECT
 
 public:
 
-    static AclRegistry* instance();
-    static void setInstance( AclRegistry* instance );
+    static ACLRegistry* instance();
+    static void setInstance( ACLRegistry* instance );
 
     enum ACL {
         NotFound = 0,
@@ -56,20 +56,20 @@ public:
         QString friendlyName;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        AclRegistry::ACL acl;
+        ACLRegistry::ACL acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
             , friendlyName()
             , knownDbids()
             , knownAccountIds()
-            , acl( AclRegistry::NotFound )
+            , acl( ACLRegistry::NotFound )
             {}
 
         ~User()
             {}
 
-        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, AclRegistry::ACL p_acl )
+        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
             : uuid( p_uuid )
             , friendlyName( p_friendlyName )
             , knownDbids( p_knownDbids )
@@ -86,22 +86,22 @@ public:
             {}
     };
 
-    AclRegistry( QObject *parent = 0 );
-    virtual ~AclRegistry();
+    ACLRegistry( QObject *parent = 0 );
+    virtual ~ACLRegistry();
 
 signals:
-    void aclResult( QString nodeid, QString username, AclRegistry::ACL peerStatus );
+    void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
 
 public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
      *
      * @param dbid DBID of peer
-     * @param globalType Global ACL to store if peer not found; if AclRegistry::NotFound, does not store the peer Defaults to AclRegistry::NotFound.
+     * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return AclRegistry::ACL
+     * @return ACLRegistry::ACL
      **/
-    virtual AclRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, AclRegistry::ACL globalType = AclRegistry::NotFound, bool skipEmission = false ) = 0;
+    virtual ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false ) = 0;
     virtual void wipeEntries();
 
 protected:
@@ -113,12 +113,12 @@ protected:
     virtual void save();
     virtual void load();
 
-    QList< AclRegistry::User > m_cache;
+    QList< ACLRegistry::User > m_cache;
 
-    static AclRegistry* s_instance;
+    static ACLRegistry* s_instance;
 };
 
-Q_DECLARE_METATYPE( AclRegistry::ACL );
-Q_DECLARE_METATYPE( AclRegistry::User );
+Q_DECLARE_METATYPE( ACLRegistry::ACL );
+Q_DECLARE_METATYPE( ACLRegistry::User );
 
 #endif // TOMAHAWK_ACLREGISTRY_H
