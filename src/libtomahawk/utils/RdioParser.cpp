@@ -48,6 +48,7 @@ QPixmap* RdioParser::s_pixmap = 0;
 QCA::Initializer RdioParser::m_qcaInit = QCA::Initializer();
 #endif
 
+
 RdioParser::RdioParser( QObject* parent )
     : QObject( parent )
     , m_count( 0 )
@@ -56,9 +57,11 @@ RdioParser::RdioParser( QObject* parent )
 {
 }
 
+
 RdioParser::~RdioParser()
 {
 }
+
 
 void
 RdioParser::parse( const QString& url )
@@ -67,6 +70,7 @@ RdioParser::parse( const QString& url )
     m_total = 1;
     parseUrl( url );
 }
+
 
 void
 RdioParser::parse( const QStringList& urls )
@@ -109,8 +113,8 @@ RdioParser::parseUrl( const QString& url )
         // artist, album, or playlist link requre fetching
         fetchObjectsFromUrl( url, type );
     }
-
 }
+
 
 void
 RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
@@ -134,10 +138,10 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
     m_reqQueries.insert( reply );
 }
 
+
 void
 RdioParser::rdioReturned()
 {
-
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
     m_reqQueries.remove( r );
@@ -185,20 +189,21 @@ RdioParser::rdioReturned()
             }
 
             Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), !m_createPlaylist );
+            if ( q.isNull() )
+                continue;
+
             m_tracks << q;
         }
-
-    } else
+    }
+    else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Rdio information from the network!" ) ) );
         tLog() << "Error in network request to Rdio for track decoding:" << r->errorString();
     }
 
-
     checkFinished();
-
-
 }
+
 
 void
 RdioParser::parseTrack( const QString& origUrl )
@@ -313,6 +318,7 @@ RdioParser::hmacSha1(QByteArray key, QByteArray baseString)
 #endif
 }
 
+
 void
 RdioParser::checkFinished()
 {
@@ -325,7 +331,7 @@ RdioParser::checkFinished()
         if ( m_tracks.isEmpty() )
             return;
 
-        if( m_createPlaylist )
+        if ( m_createPlaylist )
         {
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                            uuid(),
@@ -353,6 +359,7 @@ RdioParser::checkFinished()
     }
 }
 
+
 void
 RdioParser::playlistCreated( Tomahawk::PlaylistRevision )
 {
@@ -370,6 +377,7 @@ RdioParser::expandedLinks( const QStringList& urls )
     }
 }
 
+
 QPixmap
 RdioParser::pixmap() const
 {
@@ -378,4 +386,3 @@ RdioParser::pixmap() const
 
     return *s_pixmap;
 }
-

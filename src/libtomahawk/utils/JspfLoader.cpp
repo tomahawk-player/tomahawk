@@ -34,15 +34,19 @@
 
 using namespace Tomahawk;
 
-JSPFLoader::JSPFLoader( bool autoCreate, QObject *parent )
+
+JSPFLoader::JSPFLoader( bool autoCreate, QObject* parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
     , m_autoDelete( true )
-{}
+{
+}
+
 
 JSPFLoader::~JSPFLoader()
 {
 }
+
 
 QList< Tomahawk::query_ptr >
 JSPFLoader::entries() const
@@ -159,9 +163,9 @@ JSPFLoader::gotBody()
             if ( tM.value( "location" ).toList().size() > 0 )
                 url = tM.value( "location" ).toList().first().toString();
 
-            if( artist.isEmpty() || track.isEmpty() )
+            if ( artist.isEmpty() || track.isEmpty() )
             {
-                if( !shownError )
+                if ( !shownError )
                 {
                     QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
                     shownError = true;
@@ -170,6 +174,9 @@ JSPFLoader::gotBody()
             }
 
             query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
+            if ( q.isNull() )
+                continue;
+
             q->setDuration( duration.toInt() / 1000 );
             if( !url.isEmpty() )
                 q->setResultHint( url );
@@ -201,7 +208,6 @@ JSPFLoader::gotBody()
                                        m_creator,
                                        false,
                                        m_entries );
-
     }
 
     emit ok( m_playlist );

@@ -91,7 +91,8 @@ M3uLoader::getTags( const QFileInfo& info )
     {
         qDebug() << Q_FUNC_INFO << artist << track << album;
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), !m_createNewPlaylist );
-        m_tracks << q;
+        if ( !q.isNull() )
+            m_tracks << q;
     }
 }
 

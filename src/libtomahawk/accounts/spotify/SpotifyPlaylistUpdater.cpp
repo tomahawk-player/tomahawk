@@ -674,6 +674,9 @@ SpotifyPlaylistUpdater::variantToQueries( const QVariantList& list )
     {
         QVariantMap trackMap = blob.toMap();
         const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
+        if ( q.isNull() )
+            continue;
+
         if ( trackMap.contains( "id" ) )
             q->setProperty( "annotation", trackMap.value( "id" ) );
 
