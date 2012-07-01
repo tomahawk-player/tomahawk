@@ -91,7 +91,7 @@ IF( NOT BUILD_GUI )
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
 ELSE()
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" )
+    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtDeclarative" )
 ENDIF()
 
 IF( BUILD_GUI AND UNIX AND NOT APPLE )
