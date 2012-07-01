@@ -317,14 +317,14 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         {
             if ( !output.isNull() && output.isValid() )
             {
+                m_coverLoaded = true;
+
                 const QByteArray ba = returnedData["imgbytes"].toByteArray();
                 if ( ba.length() )
                 {
                     m_coverBuffer = ba;
                     emit coverChanged();
                 }
-
-                m_coverLoaded = true;
             }
 
             break;
@@ -353,7 +353,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                 if ( source == "last.fm" )
                     m_biography = bmap[ source ].toHash()[ "text" ].toString();
             }
-            
+
             m_biographyLoaded = true;
             emit biographyLoaded();
 
@@ -459,7 +459,7 @@ Artist::playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& colle
         pli = Tomahawk::playlistinterface_ptr( new Tomahawk::ArtistPlaylistInterface( this, mode, collection ) );
         connect( pli.data(), SIGNAL( tracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                SLOT( onTracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
-        
+
         m_playlistInterface[ mode ][ collection ] = pli;
     }
 
@@ -479,6 +479,6 @@ Artist::infoid() const
 {
     if ( m_uuid.isEmpty() )
         m_uuid = uuid();
-    
+
     return m_uuid;
 }
