@@ -36,6 +36,8 @@
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
 
+#include "QDeclarativeView"
+
 #include "DllMacro.h"
 
 class PlayableModel;
@@ -48,7 +50,7 @@ namespace Ui
 
 class MetaPlaylistInterface;
 
-class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT ArtistInfoWidget : public QDeclarativeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
