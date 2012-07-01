@@ -1,6 +1,6 @@
 Version 0.5.1:
     * Fixed a few issues with automatic downloading and launching
-      of the spotify account.
+      of the Spotify account.
     * Show an error message when not able to resolve a requested song.
     * Fixed a few crash and freeze issues.
     * Better detection of local networks for the Local Network connector.
