@@ -5,17 +5,18 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="71"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Permettre a %1
+de se connecter et streamer de vous?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Permettre Streaming</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="90"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>Refuser l&apos;accès</translation>
     </message>
 </context>
 <context>
@@ -23,7 +24,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="187"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk a besoin de vous pour décider si %1 est autorisé à se connecter.</translation>
     </message>
 </context>
 <context>
@@ -2053,12 +2054,12 @@ Essayez de vous authentifier de nouveau.</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
         <source>Copy Album &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Copier le &amp;lien de l&apos;album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="197"/>
         <source>Copy Artist &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Copier le &amp;lien de l&apos;artiste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="311"/>

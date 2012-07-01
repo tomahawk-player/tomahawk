@@ -5,17 +5,18 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="71"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Willst du %1
+erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Zugriff erlauben</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="90"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>Zugriff verweigern</translation>
     </message>
 </context>
 <context>
@@ -23,7 +24,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="187"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk will wissen, ob du dich mit %1 verbinden möchtest.</translation>
     </message>
 </context>
 <context>
@@ -94,17 +95,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Load Playlist</source>
-        <translation>&amp;Lade Playliste</translation>
+        <translation>&amp;Lade Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>&amp;Rename Playlist</source>
-        <translation>Playliste &amp;umbenennen</translation>
+        <translation>Playlist &amp;umbenennen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation>&amp;Kopiere Link zu dieser Playliste</translation>
+        <translation>&amp;Kopiere Link zu dieser Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
@@ -626,7 +627,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation>Gib einen Titel für die neue Playliste ein:</translation>
+        <translation>Gib einen Titel für die neue Playlist ein:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
@@ -636,17 +637,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation>Gib einfach ein Genre oder einen Tagnamen ein, und Tomahawk wird dir einige Lieder vorschlagen und dir helfen eine neue Playliste zu erstellen:</translation>
+        <translation>Gib einfach ein Genre oder einen Tagnamen ein, und Tomahawk wird dir einige Lieder vorschlagen und dir helfen eine neue Playlist zu erstellen:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>Playliste &amp;erstellen</translation>
+        <translation>Playlist &amp;erstellen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation>Erstelle eine neue Playliste</translation>
+        <translation>Erstelle eine neue Playlist</translation>
     </message>
 </context>
 <context>
@@ -762,7 +763,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>A playlist by %1, created %2</source>
-        <translation>Eine Playliste von %1, erstellt %2</translation>
+        <translation>Eine Playlist von %1, erstellt %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="83"/>
@@ -785,17 +786,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation>Neue Playliste</translation>
+        <translation>Neue Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Eine ganze normale Playliste... Gib ihr einen Namen, füg ein paar Lieder hinzu, und los geht&apos;s!</translation>
+        <translation>Eine ganze normale Playlist... Gib ihr einen Namen, füg ein paar Lieder hinzu, und los geht&apos;s!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
         <source>Don&apos;t know exactly what you want? Give Tomahawk a few pointers and let it build a playlist for you!</source>
-        <translation>Du weisst noch nicht genau was du willst? Mit etwas Hilfe kann Tomahawk eine Playliste nach deinem Geschmack erstellen!</translation>
+        <translation>Du weisst noch nicht genau was du willst? Mit etwas Hilfe kann Tomahawk eine Playlist nach deinem Geschmack erstellen!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
@@ -805,17 +806,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation>Neue Playliste...</translation>
+        <translation>Neue Playlist...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation>Manuelle Playliste erstellen</translation>
+        <translation>Manuelle Playlist erstellen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>Automatische Playliste erstellen</translation>
+        <translation>Automatische Playlist erstellen</translation>
     </message>
 </context>
 <context>
@@ -828,7 +829,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="165"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>Diese Playliste ist derzeit leer. Füge einige Stücke hinzu und genieße die Musik!</translation>
+        <translation>Diese Playlist ist derzeit leer. Füge einige Stücke hinzu und genieße die Musik!</translation>
     </message>
 </context>
 <context>
@@ -1329,7 +1330,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="196"/>
         <source>&amp;Export Playlist</source>
-        <translation>Playliste &amp;exportieren</translation>
+        <translation>Playlist &amp;exportieren</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="350"/>
@@ -1384,12 +1385,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="84"/>
         <source>Playlist</source>
-        <translation>Playliste</translation>
+        <translation>Playlist</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="87"/>
         <source>Automatic Playlist</source>
-        <translation>Automatische Playliste</translation>
+        <translation>Automatische Playlist</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="90"/>
@@ -2048,12 +2049,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
         <source>Copy Album &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Album-&amp;Link kopieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="197"/>
         <source>Copy Artist &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Künstler-&amp;Link kopieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="311"/>
@@ -2722,7 +2723,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="144"/>
         <source>New Playlist</source>
-        <translation>Neue Playliste</translation>
+        <translation>Neue Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
@@ -2732,7 +2733,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Einige Stücke in der Playliste enthalten weder Künstler noch Titel. Diese werden ignoriert.</translation>
+        <translation>Einige Stücke in der Playlist enthalten weder Künstler noch Titel. Diese werden ignoriert.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
@@ -2742,7 +2743,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation>Dies ist keine gültige XSPF-Playliste.</translation>
+        <translation>Dies ist keine gültige XSPF-Playlist.</translation>
     </message>
 </context>
 <context>
@@ -3020,7 +3021,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="171"/>
         <source>Create &amp;New Playlist...</source>
-        <translation>Neue &amp;Playliste erstellen…</translation>
+        <translation>Neue &amp;Playlist erstellen…</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="176"/>
@@ -3030,7 +3031,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="184"/>
         <source>Create New &amp;Automatic Playlist</source>
-        <translation>Neue &amp;automatische Playliste erstellen</translation>
+        <translation>Neue &amp;automatische Playlist erstellen</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="189"/>
@@ -3169,7 +3170,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="679"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation>Dies ist keine gültige XSPF-Playliste.</translation>
+        <translation>Dies ist keine gültige XSPF-Playlist.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="683"/>
@@ -3179,7 +3180,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="683"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Einige Stücke in der Playliste enthalten weder Künstler noch Titel. Diese werden ignoriert.</translation>
+        <translation>Einige Stücke in der Playlist enthalten weder Künstler noch Titel. Diese werden ignoriert.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="697"/>
@@ -3683,12 +3684,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
-        <translation>Fehler beim Laden der Playliste</translation>
+        <translation>Fehler beim Laden der Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
         <source>New Playlist</source>
-        <translation>Neue Playliste</translation>
+        <translation>Neue Playlist</translation>
     </message>
 </context>
 <context>
