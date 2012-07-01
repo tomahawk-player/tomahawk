@@ -90,6 +90,11 @@ MetadataEditor::writeMetadata()
     tag->setTrack( discnumber() );
     m_result->setDiscNumber( discnumber() );
 
+    if ( year() != m_result->year() ) {
+        tag->setYear( year() );
+        m_result->setYear( year() );
+    }
+
     f.save();
 
     QStringList files = QStringList( fileName );
@@ -136,14 +141,14 @@ MetadataEditor::setDuration( unsigned int duration )
 void
 MetadataEditor::setYear( int year )
 {
-    ui->yearLineEdit->setText( QString( "%1" ).arg( year ) );
+    ui->yearSpinBox->setValue( year );
 }
 
 
 void
 MetadataEditor::setBitrate( unsigned int bitrate )
 {
-    ui->bitrateLineEdit->setText( QString( "%1" ).arg( bitrate ) );
+    ui->bitrateSpinBox->setValue( bitrate );
 }
 
 

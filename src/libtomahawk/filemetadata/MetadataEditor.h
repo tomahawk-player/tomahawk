@@ -38,10 +38,13 @@ public:
     MetadataEditor( Tomahawk::result_ptr result, QWidget* parent = 0 );
     ~MetadataEditor() {};
 
+protected:
     QString title() { return ui->titleLineEdit->text(); }
     QString artist() { return ui->artistLineEdit->text(); }
     QString album() { return ui->albumLineEdit->text(); }
     int discnumber() { return ui->discNumberSpinBox->value(); }
+    int year() { return ui->yearSpinBox->value(); }
+    int bitrate() { return ui->bitrateSpinBox->value(); }
 
 private slots:
     void writeMetadata();

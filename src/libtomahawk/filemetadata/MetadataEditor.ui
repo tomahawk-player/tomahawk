@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>404</width>
-    <height>298</height>
+    <width>441</width>
+    <height>323</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabWidgetPage1" native="true">
+     <widget class="QWidget" name="tabWidgetPage1">
       <attribute name="title">
        <string>Tags</string>
       </attribute>
@@ -130,6 +130,32 @@
          </property>
         </widget>
        </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Year:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="1">
+        <widget class="QSpinBox" name="yearSpinBox">
+         <property name="minimumSize">
+          <size>
+           <width>76</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="minimum">
+          <number>1900</number>
+         </property>
+         <property name="maximum">
+          <number>2999</number>
+         </property>
+        </widget>
+       </item>
        <item row="19" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
@@ -138,29 +164,15 @@
         </widget>
        </item>
        <item row="19" column="1">
-        <widget class="QLineEdit" name="bitrateLineEdit">
+        <widget class="QSpinBox" name="bitrateSpinBox">
          <property name="readOnly">
           <bool>true</bool>
          </property>
-         <property name="placeholderText">
-          <string>Bitrate...</string>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
-        </widget>
-       </item>
-       <item row="17" column="1">
-        <widget class="QLineEdit" name="yearLineEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="placeholderText">
-          <string>Year...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Year:</string>
+         <property name="maximum">
+          <number>999999</number>
          </property>
         </widget>
        </item>
