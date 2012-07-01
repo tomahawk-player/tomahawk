@@ -145,6 +145,7 @@ set( libGuiSources
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
     widgets/infowidgets/TrackInfoWidget.cpp
+    widgets/infowidgets/AlbumArtImageProvider.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
 )
@@ -450,6 +451,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTXML_LIBRARY}
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTDECLARATIVE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

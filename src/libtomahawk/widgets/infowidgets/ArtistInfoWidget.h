@@ -31,12 +31,12 @@
 #define ARTISTINFOWIDGET_H
 
 #include <QWidget>
+#include <QDeclarativeView>
 
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
 
-#include "QDeclarativeView"
 
 #include "DllMacro.h"
 

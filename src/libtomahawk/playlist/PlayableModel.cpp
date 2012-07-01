@@ -44,6 +44,11 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     , m_style( Detailed )
     , m_loading( loading )
 {
+
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(Qt::DisplayRole, "label");
+    setRoleNames(roleNames);
+
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 

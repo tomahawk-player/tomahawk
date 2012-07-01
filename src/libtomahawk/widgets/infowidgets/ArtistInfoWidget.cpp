@@ -23,6 +23,9 @@
 
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include "AlbumArtImageProvider.h"
 
 #include "audio/AudioEngine.h"
 #include "playlist/PlayableModel.h"
@@ -47,110 +50,121 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
 {
-    QWidget* widget = new QWidget;
-    ui->setupUi( widget );
+    qDebug() << "*********************************************************************";
 
-    QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+    setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
-    widget->setPalette( pal );
-    widget->setAutoFillBackground( true );
 
-    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
+    m_albumsModel = new PlayableModel( this );
+    rootContext()->setContextProperty("albumsModel", m_albumsModel);
+    engine()->addImageProvider(QLatin1String("albums"), new AlbumArtImageProvider);
 
-/*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
-    TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
-    TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
-    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
+    setSource(QUrl::fromLocalFile("/home/micha/Develop/tomahawk/src/libtomahawk/widgets/infowidgets/ArtistInfoScene.qml"));
 
-    m_albumsModel = new PlayableModel( ui->albums );
-    ui->albums->setPlayableModel( m_albumsModel );
-    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
+//    QWidget* widget = new QWidget;
+//    ui->setupUi( widget );
 
-    m_relatedModel = new PlayableModel( ui->relatedArtists );
-    ui->relatedArtists->setPlayableModel( m_relatedModel );
-    ui->relatedArtists->proxyModel()->sort( -1 );
-    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
+//    QPalette pal = palette();
+//    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
 
-    m_topHitsModel = new PlaylistModel( ui->topHits );
-    m_topHitsModel->setStyle( PlayableModel::Short );
-    ui->topHits->setPlayableModel( m_topHitsModel );
-    ui->topHits->setSortingEnabled( false );
-    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
+//    widget->setPalette( pal );
+//    widget->setAutoFillBackground( true );
 
-    ui->relatedArtists->setAutoFitItems( false );
-    ui->relatedArtists->setWrapping( false );
-    ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    m_relatedModel->setItemSize( QSize( 170, 170 ) );
+//    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
 
-    ui->albums->setAutoFitItems( false );
-    ui->albums->setWrapping( false );
-    ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    m_albumsModel->setItemSize( QSize( 170, 170 ) );
-    ui->albums->proxyModel()->setHideDupeItems( true );
+///*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
+//    TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
+//    TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
+//    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
 
-    ui->topHits->setFrameShape( QFrame::StyledPanel );
-    ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//    m_albumsModel = new PlayableModel( ui->albums );
+//    ui->albums->setPlayableModel( m_albumsModel );
+//    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
+//    m_relatedModel = new PlayableModel( ui->relatedArtists );
+//    ui->relatedArtists->setPlayableModel( m_relatedModel );
+//    ui->relatedArtists->proxyModel()->sort( -1 );
+//    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
-    ui->biography->setFrameShape( QFrame::NoFrame );
-    ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
+//    m_topHitsModel = new PlaylistModel( ui->topHits );
+//    m_topHitsModel->setStyle( PlayableModel::Short );
+//    ui->topHits->setPlayableModel( m_topHitsModel );
+//    ui->topHits->setSortingEnabled( false );
+//    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
 
-    QFont f = font();
-    f.setBold( true );
-    f.setPixelSize( 18 );
-    ui->artistLabel->setFont( f );
+//    ui->relatedArtists->setAutoFitItems( false );
+//    ui->relatedArtists->setWrapping( false );
+//    ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+//    m_relatedModel->setItemSize( QSize( 170, 170 ) );
 
-    QPalette p = ui->biography->palette();
-    p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::white );
+//    ui->albums->setAutoFitItems( false );
+//    ui->albums->setWrapping( false );
+//    ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+//    m_albumsModel->setItemSize( QSize( 170, 170 ) );
+//    ui->albums->proxyModel()->setHideDupeItems( true );
 
-    ui->artistLabel->setPalette( p );
-    ui->biography->setPalette( p );
-    ui->label->setPalette( p );
-    ui->label_2->setPalette( p );
-    ui->label_3->setPalette( p );
+//    ui->topHits->setFrameShape( QFrame::StyledPanel );
+//    ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    QScrollArea* area = new QScrollArea();
-    area->setWidgetResizable( true );
-    area->setWidget( widget );
+//    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+//    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
-    area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
-    area->setFrameShape( QFrame::NoFrame );
-    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//    ui->biography->setFrameShape( QFrame::NoFrame );
+//    ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget( area );
-    setLayout( layout );
-    TomahawkUtils::unmarginLayout( layout );
+//    QFont f = font();
+//    f.setBold( true );
+//    f.setPixelSize( 18 );
+//    ui->artistLabel->setFont( f );
 
-    TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
+//    QPalette p = ui->biography->palette();
+//    p.setColor( QPalette::Foreground, Qt::white );
+//    p.setColor( QPalette::Text, Qt::white );
 
-    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
+//    ui->artistLabel->setPalette( p );
+//    ui->biography->setPalette( p );
+//    ui->label->setPalette( p );
+//    ui->label_2->setPalette( p );
+//    ui->label_3->setPalette( p );
 
-    ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
-                               "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+//    QScrollArea* area = new QScrollArea();
+//    area->setWidgetResizable( true );
+//    area->setWidget( widget );
 
-    ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
-                               "QFrame#artistFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+//    area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
+//    area->setFrameShape( QFrame::NoFrame );
+//    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-//    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
-    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
-                               "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+//    QVBoxLayout* layout = new QVBoxLayout();
+//    layout->addWidget( area );
+//    setLayout( layout );
+//    TomahawkUtils::unmarginLayout( layout );
+
+//    TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
+//    TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
+
+//    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
+
+//    ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
+//    ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
+//                               "QFrame#albumFrame { "
+//                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+//                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+
+//    ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
+//    ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
+//                               "QFrame#artistFrame { "
+//                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+//                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+
+////    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
+//    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
+//                               "QFrame#trackFrame { "
+//                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+//                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     load( artist );
 }
@@ -158,7 +172,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
-    delete ui;
+//    delete ui;
 }
 
 
@@ -226,9 +240,9 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
-    ui->artistLabel->setText( artist->name() );
+//    ui->artistLabel->setText( artist->name() );
 
-    m_topHitsModel->startLoading();
+//    m_topHitsModel->startLoading();
 
     if ( !m_artist->albums( Mixed ).isEmpty() )
         onAlbumsFound( m_artist->albums( Mixed ), Mixed );
@@ -260,38 +274,38 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
 {
     Q_UNUSED( mode );
 
-    m_topHitsModel->finishLoading();
-    m_topHitsModel->appendQueries( queries );
+//    m_topHitsModel->finishLoading();
+//    m_topHitsModel->appendQueries( queries );
 }
 
 
 void
 ArtistInfoWidget::onSimilarArtistsLoaded()
 {
-    m_relatedModel->appendArtists( m_artist->similarArtists() );
+//    m_relatedModel->appendArtists( m_artist->similarArtists() );
 }
 
 
 void
 ArtistInfoWidget::onBiographyLoaded()
 {
-    m_longDescription = m_artist->biography();
-    emit longDescriptionChanged( m_longDescription );
+//    m_longDescription = m_artist->biography();
+//    emit longDescriptionChanged( m_longDescription );
 
-    ui->biography->setHtml( m_artist->biography() );
+//    ui->biography->setHtml( m_artist->biography() );
 }
 
 
 void
 ArtistInfoWidget::onArtistImageUpdated()
 {
-    if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
-        return;
+//    if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
+//        return;
 
-    m_pixmap = m_artist->cover( QSize( 0, 0 ) );
-    emit pixmapChanged( m_pixmap );
+//    m_pixmap = m_artist->cover( QSize( 0, 0 ) );
+//    emit pixmapChanged( m_pixmap );
 
-    ui->cover->setPixmap( m_artist->cover( ui->cover->sizeHint() ) );
+//    ui->cover->setPixmap( m_artist->cover( ui->cover->sizeHint() ) );
 }
 
 
@@ -302,7 +316,7 @@ ArtistInfoWidget::changeEvent( QEvent* e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-            ui->retranslateUi( this );
+//            ui->retranslateUi( this );
             break;
 
         default:
