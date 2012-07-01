@@ -21,8 +21,8 @@ Rectangle {
 //                smooth: true
 //            }
             Rectangle {
-                width: 100
-                height: 100
+                width: 80
+                height: 80
                 color: "blue"
             }
 
@@ -41,7 +41,8 @@ Rectangle {
 
     PathView {
         id: view
-        anchors.fill: parent
+        anchors { left: parent.left; top: parent.top; right: parent.right }
+        height: 200
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         focus: true
@@ -58,4 +59,14 @@ Rectangle {
             PathAttribute { name: "iconScale"; value: 0.5 }
         }
     }
+
+    GridView {
+        id: grid
+        anchors { left: parent.left; top: view.bottom; right: parent.right; bottom: parent.bottom }
+
+        model: albumsModel
+
+        delegate: appDelegate
+    }
+
 }
