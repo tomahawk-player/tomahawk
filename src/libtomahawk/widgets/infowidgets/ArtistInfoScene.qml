@@ -8,18 +8,12 @@ Rectangle {
 
 
     Component {
-        id: appDelegate
+        id: pathDelegate
         Item {
             width: 100; height: 100
             scale: PathView.iconScale
 
-            // Use Image provider here
-//            Image {
-//                id: myIcon
-//                y: 20; anchors.horizontalCenter: parent.horizontalCenter
-//                source: icon
-//                smooth: true
-//            }
+            // TODO: Use Image provider here
             Image {
                 id: originalImage
                 width: 80
@@ -62,7 +56,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     gradient: Gradient {
                         // TODO: no clue how to get the RGB component of the container rectangle color
-                        GradientStop { position: 1.0; color: Qt.rgba(1,1,1,0.4) }
+                        GradientStop { position: 1.0; color: Qt.rgba(0,0,0,0.4) }
                         GradientStop { position: 0.3; color: reflectionContainer.color }
                     }
                 }
@@ -90,7 +84,7 @@ Rectangle {
         preferredHighlightEnd: 0.5
         focus: true
         model: albumsModel
-        delegate: appDelegate
+        delegate: pathDelegate
         pathItemCount: 8
         path: Path {
             startX: 10
@@ -103,13 +97,43 @@ Rectangle {
         }
     }
 
+
+    Component {
+        id: gridDelegate
+        Item {
+            width: 100; height: 100
+            scale: PathView.iconScale
+
+            // TODO: Use Image provider here
+            Image {
+                id: originalImage
+                width: 80
+                height: 80
+                source: index % 2 === 0 ? "http://www.muktware.com/sites/default/files/images/applications/tomahawk_icon.png" : "http://cloud.ohloh.net/attachments/53867/tomahawk-icon-64x64_med.png"
+            }
+
+            Text {
+                anchors { top: myIcon.bottom; horizontalCenter: parent.horizontalCenter }
+                text: label
+                smooth: true
+                color: "white"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: view.currentIndex = index
+            }
+        }
+    }
+
+
     GridView {
         id: grid
         anchors { left: parent.left; top: view.bottom; right: parent.right; bottom: parent.bottom }
 
         model: albumsModel
 
-        delegate: appDelegate
+        delegate: gridDelegate
     }
 
 }
