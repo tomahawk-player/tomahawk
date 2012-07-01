@@ -315,9 +315,14 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
 
         case Tomahawk::InfoSystem::InfoArtistImages:
         {
-            m_coverLoaded = true;
-            if ( !output.isNull() && output.isValid() )
+            if ( output.isNull() )
             {
+                m_coverLoaded = true;
+            }
+            else if ( output.isValid() )
+            {
+                m_coverLoaded = true;
+
                 const QByteArray ba = returnedData["imgbytes"].toByteArray();
                 if ( ba.length() )
                 {
