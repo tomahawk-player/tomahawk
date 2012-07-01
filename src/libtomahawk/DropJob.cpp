@@ -754,11 +754,14 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
     tDebug() << Q_FUNC_INFO << tracksList.count();
     
+#ifndef ENABLE_HEADLESS
 /*    if ( results.isEmpty() )
     {
+
         const QString which = album.isEmpty() ? "artist" : "album";
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "No tracks found for given %1" ).arg( which ), 5 ) );
     }*/
+#endif
 
     if ( !m_dropJob.isEmpty() )
     {
@@ -861,8 +864,10 @@ DropJob::getArtist( const QString &artist, Tomahawk::ModelMode mode )
         connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                      SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
+#ifndef ENABLE_HEADLESS
         m_dropJob << new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
         JobStatusView::instance()->model()->addJob( m_dropJob.last() );
+#endif
 
         m_queryCount++;
     }
@@ -891,8 +896,10 @@ DropJob::getAlbum( const QString& artist, const QString& album )
         connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
+#ifndef ENABLE_HEADLESS
         m_dropJob << new DropJobNotifier( QPixmap( RESPATH "images/album-icon.png" ), Album );
         JobStatusView::instance()->model()->addJob( m_dropJob.last() );
+#endif
 
         m_queryCount++;
     }

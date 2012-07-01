@@ -133,8 +133,10 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( request, data ) );
     connect( reply, SIGNAL( finished() ), SLOT( rdioReturned() ) );
 
+#ifndef ENABLE_HEADLESS
     m_browseJob = new DropJobNotifier( pixmap(), QString( "Rdio" ), type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
+#endif
 
     m_reqQueries.insert( reply );
 }
@@ -198,7 +200,10 @@ RdioParser::rdioReturned()
     }
     else
     {
+#ifndef ENABLE_HEADLESS
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Rdio information from the network!" ) ) );
+#endif
+
         tLog() << "Error in network request to Rdio for track decoding:" << r->reply()->errorString();
     }
 

@@ -18,8 +18,12 @@
 
 #include "TransferStatusItem.h"
 
+
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
+#include "network/StreamConnection.h"
+#include "network/Servent.h"
+#include "utils/TomahawkUtils.h"
 #include "Result.h"
 #include "Source.h"
 #include "Artist.h"
@@ -27,6 +31,11 @@
 #include "network/Servent.h"
 #include "utils/TomahawkUtilsGui.h"
 
+
+#ifndef ENABLE_HEADLESS
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
+#endif
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )
@@ -104,10 +113,13 @@ TransferStatusManager::TransferStatusManager( QObject* parent )
     connect( Servent::instance(), SIGNAL( streamStarted( StreamConnection* ) ), SLOT( streamRegistered( StreamConnection* ) ) );
 }
 
+
 void
 TransferStatusManager::streamRegistered( StreamConnection* sc )
 {
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new TransferStatusItem( this, sc ) );
+#endif
 }
 
 

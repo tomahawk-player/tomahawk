@@ -136,8 +136,10 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( QNetworkRequest( url ), data ) );
     connect( reply, SIGNAL( finished() ), SLOT( groovesharkLookupFinished() ) );
 
+#ifndef ENABLE_HEADLESS
     m_browseJob = new DropJobNotifier( pixmap(), "Grooveshark", type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
+#endif
 
     m_queries.insert( reply );
 }
@@ -151,8 +153,10 @@ GroovesharkParser::lookupGroovesharkTrack( const QString& track )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( track ) ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( trackPageFetchFinished() ) );
 
+#ifndef ENABLE_HEADLESS
     m_browseJob = new DropJobNotifier( pixmap(), "Grooveshark", DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
+#endif
 
     m_queries << reply;
 }
@@ -235,7 +239,10 @@ GroovesharkParser::groovesharkLookupFinished()
     }
     else
     {
+#ifndef ENABLE_HEADLESS
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Grooveshark information from the network!" ) ) );
+#endif
+
         tLog() << "Error in network request to grooveshark for track decoding:" << r->reply()->errorString();
     }
 
