@@ -174,10 +174,10 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
         return;
     }
 
+    m_coverLoaded = true;
+
     if ( !output.isNull() && output.isValid() )
     {
-        m_coverLoaded = true;
-
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
