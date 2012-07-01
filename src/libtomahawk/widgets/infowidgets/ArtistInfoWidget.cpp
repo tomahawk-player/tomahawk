@@ -59,7 +59,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     rootContext()->setContextProperty("albumsModel", m_albumsModel);
     engine()->addImageProvider(QLatin1String("albums"), new AlbumArtImageProvider);
 
-    setSource(QUrl::fromLocalFile("/home/micha/Develop/tomahawk/src/libtomahawk/widgets/infowidgets/ArtistInfoScene.qml"));
+    setSource(QUrl("qrc" RESPATH "qml/ArtistInfoScene.qml"));
 
 //    QWidget* widget = new QWidget;
 //    ui->setupUi( widget );
