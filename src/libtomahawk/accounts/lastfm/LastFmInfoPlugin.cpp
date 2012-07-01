@@ -519,7 +519,6 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
         {
             QString artistName = criteria["artist"];
             QString albumName = criteria["album"];
-            tDebug() << Q_FUNC_INFO << artistName << albumName;
 
             QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
             imgurl.addQueryItem( "method", "album.imageredirect" );
@@ -540,7 +539,6 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
         case InfoArtistImages:
         {
             QString artistName = criteria["artist"];
-            tDebug() << Q_FUNC_INFO << artistName;
 
             QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
             imgurl.addQueryItem( "method", "artist.imageredirect" );
