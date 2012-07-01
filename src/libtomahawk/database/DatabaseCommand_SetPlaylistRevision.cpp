@@ -80,7 +80,6 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
         tmp << s;
 
     setOrderedguids( tmp );
-
     setPlaylistguid( playlistguid );
 }
 
@@ -100,7 +99,6 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
     if ( playlist.isNull() )
     {
-        qDebug() << m_playlistguid;
         Q_ASSERT( !playlist.isNull() );
         return;
     }
@@ -150,7 +148,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
         foreach( const plentry_ptr& e, m_entries )
         {
-            if ( e->query()->results().isEmpty() )
+            if ( !e->isValid() )
+                continue;
+            if ( !e->query()->numResults() )
                 continue;
 
             adde.bindValue( 0, e->query()->results().first()->url() );
@@ -167,6 +167,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
         foreach( const plentry_ptr& e, m_entries )
         {
+            if ( !e->isValid() )
+                continue;
+
             adde.bindValue( 0, e->query()->track() );
             adde.bindValue( 1, e->query()->artist() );
             adde.bindValue( 2, e->query()->album() );
@@ -189,6 +192,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         qDebug() << "Num new playlist_items to add:" << m_addedentries.length();
         foreach( const plentry_ptr& e, m_addedentries )
         {
+            if ( !e->isValid() )
+                continue;
+
 //             qDebug() << "Adding:" << e->guid() << e->query()->track() << e->query()->artist();
 
             m_addedmap.insert( e->guid(), e ); // needed in postcommithook
