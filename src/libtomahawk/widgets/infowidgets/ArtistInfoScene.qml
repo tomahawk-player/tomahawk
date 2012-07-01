@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 Rectangle {
-    color: "darkgray"
+    color: "black"
     anchors.fill: parent
 //   height: 200
 //   width: 200
@@ -20,16 +20,59 @@ Rectangle {
 //                source: icon
 //                smooth: true
 //            }
-            Rectangle {
+            Image {
+                id: originalImage
                 width: 80
                 height: 80
-                color: "blue"
+                source: index % 2 === 0 ? "http://www.muktware.com/sites/default/files/images/applications/tomahawk_icon.png" : "http://cloud.ohloh.net/attachments/53867/tomahawk-icon-64x64_med.png"
+            }
+
+            // mirror image - album art and a gradient filled rectangle for darkening
+            Item {
+                width: originalImage.width; height: originalImage.height
+                anchors.horizontalCenter: originalImage.horizontalCenter
+
+                // transform this item (the image and rectangle) to create the
+                // mirror image using the values from the Path
+                transform : [
+                    Rotation {
+                        angle: 180; origin.y: originalImage.height
+                        axis.x: 1; axis.y: 0; axis.z: 0
+                    },
+                    Rotation {
+                        angle: PathView.rotateY; origin.x: originalImage.width/2
+                        axis.x: 0; axis.y: 1; axis.z: 0
+                    },
+                    Scale {
+                        xScale: PathView.scaleArt; yScale: PathView.scaleArt
+                        origin.x: originalImage.width/2; origin.y: originalImage.height/2
+                    }
+                ]
+
+                // mirror image
+                Image {
+                    width: originalImage.width; height: originalImage.height
+                    source: originalImage.source
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // mirror image dimming gradient filled rectangle
+                Rectangle {
+                    width: originalImage.width+4; height: originalImage.height
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    gradient: Gradient {
+                        // TODO: no clue how to get the RGB component of the container rectangle color
+                        GradientStop { position: 1.0; color: Qt.rgba(1,1,1,0.4) }
+                        GradientStop { position: 0.3; color: reflectionContainer.color }
+                    }
+                }
             }
 
             Text {
                 anchors { top: myIcon.bottom; horizontalCenter: parent.horizontalCenter }
                 text: label
                 smooth: true
+                color: "white"
             }
 
             MouseArea {
@@ -42,7 +85,7 @@ Rectangle {
     PathView {
         id: view
         anchors { left: parent.left; top: parent.top; right: parent.right }
-        height: 200
+        height: 300
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         focus: true
