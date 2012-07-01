@@ -176,6 +176,8 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
 
     if ( !output.isNull() && output.isValid() )
     {
+        m_coverLoaded = true;
+
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
@@ -183,8 +185,6 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
             m_coverBuffer = ba;
             emit coverChanged();
         }
-
-        m_coverLoaded = true;
     }
 }
 
@@ -237,6 +237,6 @@ Album::infoid() const
 {
     if ( m_uuid.isEmpty() )
         m_uuid = uuid();
-    
+
     return m_uuid;
 }
