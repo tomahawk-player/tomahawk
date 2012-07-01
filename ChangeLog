@@ -1,4 +1,10 @@
+Version 0.5.2:
+    * Fixed a crash when invalid results are coming back from a resolver or
+      are found in a playlist.
+
 Version 0.5.1:
+    * Fixed a few issues with automatic downloading and launching
+      of the Spotify account.
     * Show an error message when not able to resolve a requested song.
     * Fixed a few crash and freeze issues.
     * Better detection of local networks for the Local Network connector.
@@ -59,7 +65,7 @@ Version 0.4.0:
     * Fixed bug where filter text would be one step behind filter value.
     * Fixed bug where resolvers would enable themselves after auto-updating.
     * Fixed occasional crash when dropping tracks onto New Station item.
-    * Added jump-to-current-track support for search results page. 
+    * Added jump-to-current-track support for search results page.
     * Fixed non-resolving tracks when dragging from album view.
     * Fixed fetching album covers for albums with special characters.
     * Show errors and continue gracefully when resolved audio is not available.
@@ -84,7 +90,7 @@ Version 0.4.0:
     * Fixed out of sync Show/Hide menu items on OS X when hidden with cmd-h.
     * Fixed /Volumes directory not showing up on OS X.
     * Fixed startup crash on OS X.
- 
+
 Version 0.3.3:
     * Automatically load Super Collection tracks when no official release
       information is available.
@@ -96,7 +102,7 @@ Version 0.3.3:
     * Fixed dupe menu entry appearing on OS X.
     * Fixed invisible sidebar items on Linux.
 
-Version 0.3.2: 
+Version 0.3.2:
     * Improved syncing process, it's faster and more reliable now.
     * Fixed UPnP issues.
     * Fixed not updating collections and views after a collection changes.
@@ -150,7 +156,7 @@ Version 0.3.0:
     * Added YouTube resolver.
     * Fixed bug where going offline then online would not re-connect to many
       peers.
-    * Added support for auto-updating live XSPF playlists. 
+    * Added support for auto-updating live XSPF playlists.
     * Don't show an age of 41 years for tracks that have no age information.
     * Show config UI for resolvers that have them as soon as you add them.
     * Add support for Echo Nest Personal Catalogs and User Radio. Synchronize

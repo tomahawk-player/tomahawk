@@ -91,6 +91,8 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
             artist = query.value( 1 ).toString();
 
             qry = Tomahawk::Query::get( artist, track, QString() );
+            if ( qry.isNull() )
+                continue;
         }
         else if ( m_queryType == Artist )
         {

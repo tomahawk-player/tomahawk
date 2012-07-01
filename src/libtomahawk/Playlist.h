@@ -59,10 +59,11 @@ public:
     PlaylistEntry();
     virtual ~PlaylistEntry();
 
+    bool isValid() const { return !m_query.isNull(); }
+
     void setQuery( const Tomahawk::query_ptr& q );
     const Tomahawk::query_ptr& query() const;
 
-    // I wish Qt did this for me once i specified the Q_PROPERTIES:
     void setQueryVariant( const QVariant& v );
     QVariant queryVariant() const;
 

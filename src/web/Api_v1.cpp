@@ -253,8 +253,7 @@ Api_v1::resolve( QxtWebRequestEvent* event )
          !event->url.hasQueryItem( "track" ) )
     {
         qDebug() << "Malformed HTTP resolve request";
-        send404( event );
-        return;
+        return send404( event );
     }
 
     const QString artist = QUrl::fromPercentEncoding( event->url.queryItemValue( "artist" ).toUtf8() );
@@ -265,8 +264,7 @@ Api_v1::resolve( QxtWebRequestEvent* event )
          track.trimmed().isEmpty() )
     {
         qDebug() << "Malformed HTTP resolve request";
-        send404( event );
-        return;
+        return send404( event );
     }
 
     QString qid;
@@ -276,6 +274,11 @@ Api_v1::resolve( QxtWebRequestEvent* event )
         qid = uuid();
 
     query_ptr qry = Query::get( artist, track, album, qid, false );
+    if ( qry.isNull() )
+    {
+        return send404( event );
+    }
+
     Pipeline::instance()->resolve( qry, true, true );
 
     QVariantMap r;

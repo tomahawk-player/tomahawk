@@ -199,7 +199,8 @@ GroovesharkParser::trackPageFetchFinished()
         tDebug() << "Got track info from grooveshark, enough to create a query:" << title.toPlainText() << artist.toPlainText() << album.toPlainText();
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist.toPlainText(), title.toPlainText(), album.toPlainText(), uuid(), true );
-        m_tracks << q;
+        if ( !q.isNull() )
+            m_tracks << q;
     }
 
     checkTrackFinished();

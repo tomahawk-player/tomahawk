@@ -167,8 +167,8 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     addSeparator();
 
-/*    if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Copy Album &Link" ) ), ActionCopyLink ); */
+    if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "Copy Album &Link" ) ), ActionCopyLink );
 
     foreach ( QAction* action, actions() )
     {
@@ -209,8 +209,8 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     addSeparator();
 
-/*    if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Copy Artist &Link" ) ), ActionCopyLink ); */
+    if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
+        m_sigmap->setMapping( addAction( tr( "Copy Artist &Link" ) ), ActionCopyLink );
 
     foreach ( QAction* action, actions() )
     {
@@ -296,6 +296,14 @@ ContextMenu::copyLink()
     if ( m_queries.count() )
     {
         GlobalActionManager::instance()->copyToClipboard( m_queries.first() );
+    }
+    else if ( m_albums.count() )
+    {
+        GlobalActionManager::instance()->copyOpenLink( m_albums.first() );
+    }
+    else if ( m_artists.count() )
+    {
+        GlobalActionManager::instance()->copyOpenLink( m_artists.first() );
     }
 }
 

@@ -269,7 +269,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         foreach( const QVariant& rv, reslist )
         {
             QVariantMap m = rv.toMap();
-            qDebug() << "Found result:" << m;
+            tDebug( LOGVERBOSE ) << "Found result:" << m;
+            if ( m.value( "artist" ).toString().trimmed().isEmpty() || m.value( "track" ).toString().trimmed().isEmpty() )
+                continue;
 
             Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
             Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );

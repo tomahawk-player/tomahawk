@@ -571,7 +571,7 @@ ViewManager::historyBack()
         return;
 
     ViewPage* page = m_pageHistoryBack.takeLast();
-    
+
     if ( m_currentPage )
     {
         m_pageHistoryFwd << m_currentPage;
@@ -590,7 +590,7 @@ ViewManager::historyForward()
         return;
 
     ViewPage* page = m_pageHistoryFwd.takeLast();
-    
+
     if ( m_currentPage )
     {
         m_pageHistoryBack << m_currentPage;
@@ -616,14 +616,7 @@ ViewManager::destroyPage( ViewPage* page )
         return;
 
     tDebug() << Q_FUNC_INFO << "Deleting page:" << page->title();
-    if ( m_currentPage == page )
-    {
-        delete page;
-        m_currentPage = 0;
-
-        historyBack();
-    }
-    else if ( historyPages().contains( page ) )
+    if ( historyPages().contains( page ) )
     {
         m_pageHistoryBack.removeAll( page );
         m_pageHistoryFwd.removeAll( page );
@@ -632,6 +625,13 @@ ViewManager::destroyPage( ViewPage* page )
         emit historyForwardAvailable( m_pageHistoryFwd.count() );
 
         delete page;
+    }
+
+    if ( m_currentPage == page )
+    {
+        m_currentPage = 0;
+
+        historyBack();
     }
 }
 
@@ -868,7 +868,7 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
         {
             m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
         }
-        
+
         m_pageHistoryBack.removeAll( page );
         m_pageHistoryFwd.removeAll( page );
     }

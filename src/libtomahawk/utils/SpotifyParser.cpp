@@ -39,6 +39,7 @@ using namespace Tomahawk;
 
 QPixmap* SpotifyParser::s_pixmap = 0;
 
+
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_limit ( 40 )
@@ -52,6 +53,7 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
         lookupUrl( url );
 }
 
+
 SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_limit ( 40 )
@@ -63,6 +65,7 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     lookupUrl( Url );
 }
 
+
 SpotifyParser::~SpotifyParser()
 {
 }
@@ -71,12 +74,12 @@ SpotifyParser::~SpotifyParser()
 void
 SpotifyParser::lookupUrl( const QString& link )
 {
-    if( link.contains( "track" ) )
+    if ( link.contains( "track" ) )
     {
         m_trackMode = true;
         lookupTrack( link );
     }
-    else if( link.contains( "playlist" ) ||  link.contains( "album" ) || link.contains( "artist" ) )
+    else if ( link.contains( "playlist" ) ||  link.contains( "album" ) || link.contains( "artist" ) )
     {
         if( !m_createNewPlaylist )
             m_trackMode = true;
@@ -87,7 +90,6 @@ SpotifyParser::lookupUrl( const QString& link )
     }
     else
         return; // Not valid spotify item
-
 }
 
 
@@ -102,7 +104,6 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
         browseUri.replace( "/", ":" );
         browseUri = "spotify:" + browseUri;
     }
-
 
     DropJob::DropType type;
 
@@ -133,6 +134,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
     m_queries.insert( reply );
 }
 
+
 void
 SpotifyParser::lookupTrack( const QString& link )
 {
@@ -159,7 +161,6 @@ SpotifyParser::lookupTrack( const QString& link )
     JobStatusView::instance()->model()->addJob( j );
 
     m_queries.insert( reply );
-
 }
 
 
@@ -186,8 +187,6 @@ SpotifyParser::spotifyBrowseFinished()
         }
 
         QVariantMap resultResponse = res.value( res.value( "type" ).toString() ).toMap();
-
-
         if ( !resultResponse.isEmpty() )
         {
             m_title = resultResponse.value( "name" ).toString();
@@ -214,12 +213,14 @@ SpotifyParser::spotifyBrowseFinished()
                 }
 
                 Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
+                if ( q.isNull() )
+                    continue;
+
                 m_tracks << q;
             }
-
         }
-
-    } else
+    }
+    else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Spotify information from the network!" ) ) );
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
@@ -230,7 +231,6 @@ SpotifyParser::spotifyBrowseFinished()
     else
         checkBrowseFinished();
 }
-
 
 
 void
@@ -252,7 +252,8 @@ SpotifyParser::spotifyTrackLookupFinished()
             tLog() << "Failed to parse json from Spotify track lookup:" << p.errorString() << "On line" << p.errorLine();
             checkTrackFinished();
             return;
-        } else if ( !res.contains( "track" ) )
+        }
+        else if ( !res.contains( "track" ) )
         {
             tLog() << "No 'track' item in the spotify track lookup result... not doing anything";
             checkTrackFinished();
@@ -261,7 +262,6 @@ SpotifyParser::spotifyTrackLookupFinished()
 
         // lets parse this baby
         QVariantMap t = res.value( "track" ).toMap();
-
         QString title, artist, album;
 
         title = t.value( "name", QString() ).toString();
@@ -278,8 +278,10 @@ SpotifyParser::spotifyTrackLookupFinished()
         }
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
-        m_tracks << q;
-    } else
+        if ( !q.isNull() )
+            m_tracks << q;
+    }
+    else
     {
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
     }
@@ -288,8 +290,8 @@ SpotifyParser::spotifyTrackLookupFinished()
         checkTrackFinished();
     else
         checkBrowseFinished();
-
 }
+
 
 void
 SpotifyParser::checkBrowseFinished()
@@ -300,7 +302,7 @@ SpotifyParser::checkBrowseFinished()
         if ( m_browseJob )
             m_browseJob->setFinished();
 
-        if( m_createNewPlaylist && !m_tracks.isEmpty() )
+        if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
@@ -322,6 +324,7 @@ SpotifyParser::checkBrowseFinished()
     }
 }
 
+
 void
 SpotifyParser::checkTrackFinished()
 {
@@ -338,13 +341,12 @@ SpotifyParser::checkTrackFinished()
 
         deleteLater();
     }
-
 }
+
 
 void
 SpotifyParser::playlistCreated()
 {
-
     ViewManager::instance()->show( m_playlist );
 
     deleteLater();

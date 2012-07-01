@@ -212,7 +212,7 @@ LastFmInfoPlugin::scrobble()
         return;
 
     tLog() << Q_FUNC_INFO << "Scrobbling now:" << m_track.toString();
-    
+
     // FIXME: workaround for the duration-less dilandau (and others) tracks
     if ( m_track.duration() == 0 )
         m_track.setDuration( 31 );
@@ -525,7 +525,7 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
             imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
             imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
             imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
-            imgurl.addQueryItem( "size", "largesquare" );
+            imgurl.addQueryItem( "size", "large" );
             imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
 
             QNetworkRequest req( imgurl );

@@ -27,47 +27,52 @@ ChartDataLoader::ChartDataLoader()
 {
 }
 
+
 void
 ChartDataLoader::go()
 {
     switch ( m_type )
     {
-    case Track:
-    {
-        QList< query_ptr > track_ptrs;
-        foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, m_data )
+        case Track:
         {
-            track_ptrs << Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
+            QList< query_ptr > track_ptrs;
+            foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, m_data )
+            {
+                query_ptr q = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
+                if ( q.isNull() )
+                    continue;
+
+                track_ptrs << q;
+            }
+
+            emit tracks( this, track_ptrs );
+            break;
         }
-
-        emit tracks( this, track_ptrs );
-        break;
-    }
-    case Artist:
-    {
-        QList< artist_ptr > artist_ptrs;
-
-        foreach ( const QString& artistname, m_artists )
+        case Artist:
         {
-            artist_ptrs << Artist::get( artistname, false );
+            QList< artist_ptr > artist_ptrs;
+
+            foreach ( const QString& artistname, m_artists )
+            {
+                artist_ptrs << Artist::get( artistname, false );
+            }
+
+            emit artists( this, artist_ptrs );
+            break;
         }
-
-        emit artists( this, artist_ptrs );
-        break;
-    }
-    case Album:
-    {
-        QList< album_ptr > album_ptrs;
-
-        foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, m_data )
+        case Album:
         {
-            artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
-            album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
-            album_ptrs << albumPtr;
-        }
+            QList< album_ptr > album_ptrs;
 
-        emit albums( this, album_ptrs );
-        break;
-    }
+            foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, m_data )
+            {
+                artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
+                album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
+                album_ptrs << albumPtr;
+            }
+
+            emit albums( this, album_ptrs );
+            break;
+        }
     }
 }
