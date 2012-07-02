@@ -50,6 +50,7 @@ public:
 
     PlayableModel* model() const { return m_model; }
     PlayableProxyModel* proxyModel() const { return m_proxyModel; }
+    GridItemDelegate* delegate() const { return m_delegate; }
 
     bool autoFitItems() const { return m_autoFitItems; }
     void setAutoFitItems( bool b ) { m_autoFitItems = b; }
@@ -111,7 +112,7 @@ private:
     bool m_inited;
     bool m_autoFitItems;
     bool m_autoResize;
-    
+
     QRect m_paintRect;
 };
 

@@ -25,6 +25,7 @@
 #include <QScrollBar>
 
 #include "audio/AudioEngine.h"
+#include "playlist/GridItemDelegate.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
@@ -73,7 +74,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
-    m_topHitsModel->setStyle( PlayableModel::Short );
+    ui->topHits->proxyModel()->setStyle( PlayableProxyModel::Short );
     ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
     ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
@@ -82,13 +83,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->relatedArtists->setWrapping( false );
     ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    m_relatedModel->setItemSize( QSize( 170, 170 ) );
+    ui->relatedArtists->delegate()->setItemSize( QSize( 170, 170 ) );
 
     ui->albums->setAutoFitItems( false );
     ui->albums->setWrapping( false );
     ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    m_albumsModel->setItemSize( QSize( 170, 170 ) );
+    ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
     ui->albums->proxyModel()->setHideDupeItems( true );
 
     ui->topHits->setFrameShape( QFrame::StyledPanel );

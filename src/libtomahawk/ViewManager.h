@@ -40,6 +40,7 @@ class ArtistInfoWidget;
 class TreeView;
 class CollectionModel;
 class ContextWidget;
+class FlexibleView;
 class PlaylistModel;
 class PlaylistView;
 class TrackProxyModel;
@@ -104,7 +105,7 @@ public:
 
     // only use this is you need to create a playlist and show it directly and want it to be
     // linked to the sidebar. call it right after creating the playlist
-    PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
+    FlexibleView* createPageForPlaylist( const Tomahawk::playlist_ptr& playlist );
 
     bool isTomahawkLoaded() const { return m_loaded; }
 
@@ -132,7 +133,7 @@ signals:
     void hideQueueRequested();
 
     void tomahawkLoaded();
-    
+
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
 
@@ -156,7 +157,7 @@ public slots:
 
     void historyBack();
     void historyForward();
-    
+
     QList< Tomahawk::ViewPage* > historyPages() const;
     void destroyPage( Tomahawk::ViewPage* page );
 
@@ -220,7 +221,7 @@ private:
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;
-    QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
+    QHash< Tomahawk::playlist_ptr, QWeakPointer<FlexibleView> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
 
     QList<Tomahawk::ViewPage*> m_pageHistoryBack;

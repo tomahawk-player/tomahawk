@@ -69,7 +69,7 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 
     m_topForeignTracksModel = new PlaylistModel( ui->newTracksView );
     ui->newTracksView->setPlaylistModel( m_topForeignTracksModel );
-    m_topForeignTracksModel->setStyle( PlayableModel::Short );
+    ui->newTracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
     ui->newTracksView->overlay()->setEnabled( false );
 
     m_popularNewAlbumsModel = new PlayableModel( ui->newAlbumsView );

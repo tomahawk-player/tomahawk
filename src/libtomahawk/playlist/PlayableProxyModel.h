@@ -32,6 +32,12 @@ class DLLEXPORT PlayableProxyModel : public QSortFilterProxyModel
 Q_OBJECT
 
 public:
+    enum PlayableItemStyle
+    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
+
+    enum PlayableProxyModelRole
+    { StyleRole = Qt::UserRole + 1 };
+
     explicit PlayableProxyModel ( QObject* parent = 0 );
     virtual ~PlayableProxyModel() {}
 
@@ -40,6 +46,9 @@ public:
     virtual void setSourceModel( QAbstractItemModel* model );
 
     virtual bool isLoading() const;
+
+    PlayableProxyModel::PlayableItemStyle style() const { return m_style; }
+    void setStyle( PlayableProxyModel::PlayableItemStyle style ) { m_style = style; }
 
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
@@ -62,6 +71,14 @@ public:
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
+
+    QList< double > columnWeights() const;
+
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+
+    void updateDetailedInfo( const QModelIndex& index );
 
 signals:
     void filterChanged( const QString& filter );
@@ -86,6 +103,9 @@ private:
     bool m_showOfflineResults;
     bool m_hideDupeItems;
     int m_maxVisibleItems;
+
+    QHash< PlayableItemStyle, QList<PlayableModel::Columns> > m_headerStyle;
+    PlayableItemStyle m_style;
 };
 
 #endif // TRACKPROXYMODEL_H

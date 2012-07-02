@@ -145,8 +145,8 @@ TreeView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    m_header->setDefaultColumnWeights( model->columnWeights() );
-    if ( model->style() == PlayableModel::Large )
+    m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
+    if ( m_proxyModel->style() == PlayableProxyModel::Large )
     {
         setHeaderHidden( true );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -158,7 +158,7 @@ TreeView::setTreeModel( TreeModel* model )
     }
 
     emit modelChanged();
-    
+
 /*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
     setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
     setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
@@ -439,7 +439,7 @@ TreeView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( !m_model || m_model->style() != PlayableModel::Collection )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Collection )
         return;
 
     PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
@@ -492,7 +492,7 @@ TreeView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( !m_model || m_model->style() != PlayableModel::Collection )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Collection )
         return;
 
     QModelIndex idx = indexAt( event->pos() );

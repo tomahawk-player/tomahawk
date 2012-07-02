@@ -513,7 +513,7 @@ SourceItem::latestAdditionsClicked()
         cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( cv );
-        raModel->setStyle( PlayableModel::Large );
+        cv->proxyModel()->setStyle( PlayableProxyModel::Large );
         raModel->setTitle( tr( "Latest Additions" ) );
 
         if ( m_source->isLocal() )
@@ -556,7 +556,7 @@ SourceItem::recentPlaysClicked()
         pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
-        raModel->setStyle( PlayableModel::Large );
+        pv->proxyModel()->setStyle( PlayableProxyModel::Large );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
 
         if ( m_source->isLocal() )

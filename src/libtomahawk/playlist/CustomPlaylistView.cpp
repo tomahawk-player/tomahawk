@@ -34,7 +34,7 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     , m_model( new PlaylistModel( this ) )
 {
     // Generate the tracks, add them to the playlist
-    m_model->setStyle( PlayableModel::Large );
+    proxyModel()->setStyle( PlayableProxyModel::Large );
     setPlaylistModel( m_model );
     generateTracks();
 

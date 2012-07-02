@@ -38,12 +38,6 @@ class DLLEXPORT PlayableModel : public QAbstractItemModel
 Q_OBJECT
 
 public:
-    enum PlayableItemStyle
-    { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
-
-    enum PlayableModelRole
-    { StyleRole = Qt::UserRole + 1 };
-
     enum Columns {
         Artist = 0,
         Track = 1,
@@ -62,9 +56,6 @@ public:
 
     explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
-
-    PlayableModel::PlayableItemStyle style() const { return m_style; }
-    void setStyle( PlayableModel::PlayableItemStyle style );
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
@@ -86,8 +77,6 @@ public:
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual bool hasChildren( const QModelIndex& parent ) const;
-
-    QList< double > columnWeights() const;
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
@@ -112,11 +101,6 @@ public:
     PlayableItem* itemFromIndex( const QModelIndex& index ) const;
     /// Returns a flat list of all tracks in this model
     QList< Tomahawk::query_ptr > queries() const;
-
-    void updateDetailedInfo( const QModelIndex& index );
-
-    QSize itemSize() const { return m_itemSize; }
-    void setItemSize( const QSize& size ) { m_itemSize = size; }
 
     void startLoading();
     void finishLoading();
@@ -176,7 +160,6 @@ private:
     PlayableItem* m_rootItem;
     QPersistentModelIndex m_currentIndex;
     Tomahawk::QID m_currentUuid;
-    QSize m_itemSize;
 
     bool m_readOnly;
 
@@ -184,10 +167,8 @@ private:
     QString m_description;
     QPixmap m_icon;
 
-    QHash< PlayableItemStyle, QList<Columns> > m_headerStyle;
     QStringList m_header;
 
-    PlayableItemStyle m_style;
     bool m_loading;
 };
 
