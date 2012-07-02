@@ -36,12 +36,16 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     , m_showOfflineResults( true )
     , m_hideDupeItems( false )
     , m_maxVisibleItems( -1 )
+    , m_style( Detailed )
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
     setSourcePlayableModel( 0 );
+
+    m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
+    m_headerStyle[ Collection ] << PlayableModel::Name << PlayableModel::Composer << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin;
 }
 
 
@@ -460,4 +464,117 @@ PlayableProxyModel::playlistInterface()
     }
 
     return m_playlistInterface;
+}
+
+
+int
+PlayableProxyModel::columnCount( const QModelIndex& parent ) const
+{
+    Q_UNUSED( parent );
+
+    switch ( m_style )
+    {
+        case Short:
+        case ShortWithAvatars:
+        case Large:
+            return 1;
+            break;
+
+        case Collection:
+            return 8;
+            break;
+
+        case Detailed:
+        default:
+            return 12;
+            break;
+    }
+}
+
+
+QVariant
+PlayableProxyModel::data( const QModelIndex& index, int role ) const
+{
+    if ( role == StyleRole )
+    {
+        return m_style;
+    }
+
+    if ( !sourceModel() )
+        return QVariant();
+    if ( !m_headerStyle.contains( m_style ) )
+        return QVariant();
+
+    PlayableModel::Columns col = m_headerStyle[ m_style ].at( index.column() );
+    QModelIndex sourceIdx = mapToSource( index );
+    QModelIndex idx = sourceModel()->index( sourceIdx.row(), (int)col, sourceIdx.parent() );
+
+    return idx.data( role );
+}
+
+
+QVariant
+PlayableProxyModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( !sourceModel() )
+        return QVariant();
+    if ( !m_headerStyle.contains( m_style ) )
+        return QVariant();
+
+    if ( section < m_headerStyle[ m_style ].count() )
+    {
+        PlayableModel::Columns col = m_headerStyle[ m_style ].at( section );
+        return sourceModel()->headerData( (int)col, orientation, role );
+    }
+    else
+        return sourceModel()->headerData( 255, orientation, role );
+}
+
+
+QList< double >
+PlayableProxyModel::columnWeights() const
+{
+    QList< double > w;
+
+    switch ( m_style )
+    {
+        case Short:
+        case ShortWithAvatars:
+        case Large:
+            w << 1.0;
+            break;
+
+        case Collection:
+            w << 0.42 << 0.12 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.11;
+            break;
+
+        case Detailed:
+        default:
+            w << 0.16 << 0.16 << 0.14 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
+            break;
+    }
+
+    return w;
+}
+
+
+void
+PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
+{
+    if ( style() != PlayableProxyModel::Short && style() != PlayableProxyModel::Large )
+        return;
+
+    PlayableItem* item = itemFromIndex( mapToSource( index ) );
+    if ( item->query().isNull() )
+        return;
+
+    if ( style() == PlayableProxyModel::Short || style() == PlayableProxyModel::Large )
+    {
+        item->query()->cover( QSize( 0, 0 ) );
+    }
+
+    if ( style() == PlayableProxyModel::Large )
+    {
+        item->query()->loadSocialActions();
+    }
 }
