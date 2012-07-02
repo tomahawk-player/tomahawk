@@ -69,7 +69,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     updatePlaylists();
 
     m_tracksModel = new RecentlyPlayedModel( ui->tracksView );
-    m_tracksModel->setStyle( PlayableModel::ShortWithAvatars );
+    ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
     m_tracksModel->setSource( source_ptr() );

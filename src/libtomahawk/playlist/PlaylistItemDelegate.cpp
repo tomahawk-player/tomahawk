@@ -67,8 +67,8 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 
     if ( index.isValid() )
     {
-        int style = index.data( PlayableModel::StyleRole ).toInt();
-        if ( style == PlayableModel::Short || style == PlayableModel::ShortWithAvatars )
+        int style = index.data( PlayableProxyModel::StyleRole ).toInt();
+        if ( style == PlayableProxyModel::Short || style == PlayableProxyModel::ShortWithAvatars )
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
@@ -101,17 +101,17 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    int style = index.data( PlayableModel::StyleRole ).toInt();
+    int style = index.data( PlayableProxyModel::StyleRole ).toInt();
     switch ( style )
     {
-        case PlayableModel::Detailed:
+        case PlayableProxyModel::Detailed:
             paintDetailed( painter, option, index );
             break;
 
-        case PlayableModel::Short:
+        case PlayableProxyModel::Short:
             paintShort( painter, option, index );
             break;
-        case PlayableModel::ShortWithAvatars:
+        case PlayableProxyModel::ShortWithAvatars:
             paintShort( painter, option, index, true );
             break;
     }

@@ -262,7 +262,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setMode( InfoSystemMode );
-                artistsModel->setStyle( PlayableModel::Collection );
                 artistsModel->startLoading();
 
                 m_artistModels[ chartId ] = artistsModel;
@@ -293,7 +292,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
-                trackModel->setStyle( PlayableModel::Large );
                 trackModel->startLoading();
 
                 m_trackModels[ chartId ] = trackModel;
@@ -463,6 +461,7 @@ WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 void
 WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 {
+    ui->artistsViewLeft->proxyModel()->setStyle( PlayableProxyModel::Collection );
     ui->artistsViewLeft->setTreeModel( model );
     ui->artistsViewLeft->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 1 );
@@ -472,6 +471,7 @@ WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 void
 WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
 {
+    ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
     ui->tracksViewLeft->setPlaylistModel( model );
     ui->tracksViewLeft->proxyModel()->sort( -1 );
     ui->stackLeft->setCurrentIndex( 0 );
