@@ -5,17 +5,18 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="71"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>هل تريد السماح ل%1
+بالربط و التحميل منك؟</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>السماح بالتحميل</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="90"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>رفض الوصول</translation>
     </message>
 </context>
 <context>
@@ -23,7 +24,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="187"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>توماهوك يريد منك ان تقرر ان كنت تريد السماح ل%1 بالربط بك.</translation>
     </message>
 </context>
 <context>
@@ -2053,12 +2054,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
         <source>Copy Album &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>نسخ &amp;رابط الالبوم</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="197"/>
         <source>Copy Artist &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>نسخ &amp;رابط قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="311"/>
