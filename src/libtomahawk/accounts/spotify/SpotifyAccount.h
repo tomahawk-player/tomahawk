@@ -122,6 +122,8 @@ private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
     void login( const QString& username, const QString& password );
+    void logout();
+
     // SpotifyResolver message handlers, all take msgtype, msg as argument
   //  void <here>( const QString& msgType, const QVariantMap& msg );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );

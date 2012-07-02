@@ -25,6 +25,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QShowEvent>
+#include <QLabel>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -32,9 +33,11 @@ using namespace Accounts;
 SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     : QWidget( 0 )
     , m_ui( new Ui::SpotifyConfig )
+    , m_loggedInUser( 0 )
     , m_account( account )
     , m_playlistsLoading( 0 )
     , m_loggedInManually( false )
+    , m_isLoggedIn( false )
 {
     m_ui->setupUi( this );
 
@@ -132,32 +135,82 @@ SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlist
 void
 SpotifyAccountConfig::doLogin()
 {
-    m_ui->loginButton->setText( tr( "Logging in..." ) );
-    m_ui->loginButton->setEnabled( false );
+    if ( !m_isLoggedIn )
+    {
+        m_ui->loginButton->setText( tr( "Logging in..." ) );
+        m_ui->loginButton->setEnabled( false );
 
-    m_playlistsLoading->fadeIn();
-    m_loggedInManually = true;
+        m_playlistsLoading->fadeIn();
+        m_loggedInManually = true;
 
-    emit login( username(), password() );
+        emit login( username(), password() );
+    }
+    else
+    {
+        // Log out
+        m_isLoggedIn = false;
+        m_loggedInManually = false;
+        m_verifiedUsername.clear();
+        emit logout();
+        showLoggedOut();
+    }
 }
 
 
 void
-SpotifyAccountConfig::loginResponse( bool success, const QString& msg )
+SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QString& username )
 {
     if ( success )
     {
-        m_ui->loginButton->setText( tr( "Logged in!" ) );
-        m_ui->loginButton->setEnabled( false );
+        m_verifiedUsername = username;
+        m_isLoggedIn = true;
+        showLoggedIn();
     }
     else
     {
         setPlaylists( QList< SpotifyPlaylistInfo* >() );
         m_playlistsLoading->fadeOut();
+
         m_ui->loginButton->setText( tr( "Failed: %1" ).arg( msg ) );
         m_ui->loginButton->setEnabled( true );
     }
 
+}
+
+
+void
+SpotifyAccountConfig::showLoggedIn()
+{
+    m_ui->passwordEdit->hide();
+    m_ui->passwordLabel->hide();
+    m_ui->usernameEdit->hide();
+    m_ui->usernameLabel->hide();
+
+    if ( !m_loggedInUser )
+    {
+        m_loggedInUser = new QLabel( this );
+        m_ui->verticalLayout->insertWidget( 1, m_loggedInUser, 0, Qt::AlignCenter );
+    }
+
+    m_loggedInUser->setText( tr( "Logged in as %1" ).arg( m_verifiedUsername ) );
+
+    m_ui->loginButton->setText( tr( "Log Out" ) );
+    m_ui->loginButton->setEnabled( true );
+}
+
+
+void
+SpotifyAccountConfig::showLoggedOut()
+{
+    m_ui->passwordEdit->show();
+    m_ui->passwordLabel->show();
+    m_ui->usernameEdit->show();
+    m_ui->usernameLabel->show();
+
+    m_loggedInUser->hide();
+
+    m_ui->loginButton->setText( tr( "Log In" ) );
+    m_ui->loginButton->setEnabled( true );
 }
 
 

@@ -543,6 +543,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         creds[ "highQuality" ] = msg.value( "highQuality" );
         setCredentials( creds );
 
+        const bool loggedIn = msg.value( "loggedIn", false ).toBool();
+        if ( loggedIn )
+        {
+            configurationWidget();
+            m_configWidget.data()->loginResponse( true, QString(), creds[ "username" ].toString() );
+        }
+
         qDebug() << "Set creds:" << creds.value( "username" ) << creds.value( "password" ) << msg.value( "username" ) << msg.value( "password" );
 
         QVariantHash config = configuration();
@@ -710,7 +717,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( m_configWidget.data() )
         {
             const QString message = msg.value( "message" ).toString();
-            m_configWidget.data()->loginResponse( success, message );
+            m_configWidget.data()->loginResponse( success, message, creds[ "username" ].toString() );
         }
     }
     else if ( msgType == "playlistDeleted" )
@@ -769,6 +776,7 @@ SpotifyAccount::configurationWidget()
     {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
+        connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
     }
 
@@ -851,7 +859,6 @@ SpotifyAccount::saveConfig()
 void
 SpotifyAccount::login( const QString& username, const QString& password )
 {
-    // Send the result to the resolver
     QVariantMap msg;
     msg[ "_msgtype" ] = "login";
     msg[ "username" ] = username;
@@ -859,6 +866,15 @@ SpotifyAccount::login( const QString& username, const QString& password )
 
     msg[ "highQuality" ] = m_configWidget.data()->highQuality();
 
+    m_spotifyResolver.data()->sendMessage( msg );
+}
+
+
+void
+SpotifyAccount::logout()
+{
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "logout";
     m_spotifyResolver.data()->sendMessage( msg );
 }
 

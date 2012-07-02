@@ -23,6 +23,7 @@
 #include <QVariantMap>
 #include <QTimer>
 
+class QLabel;
 class AnimatedSpinner;
 class QShowEvent;
 
@@ -55,14 +56,13 @@ public:
     void loadFromConfig();
     void saveSettings();
 
-    void loginResponse( bool success, const QString& msg );
+    void loginResponse( bool success, const QString& msg, const QString& username );
 
     bool loggedInManually() const { return m_loggedInManually; }
+
 signals:
     void login( const QString& username, const QString& pw );
-
-public slots:
-//     void verifyResult( const QString& msgType, const QVariantMap& msg );
+    void logout();
 
 protected:
     void showEvent( QShowEvent* event );
@@ -72,10 +72,15 @@ private slots:
     void resetLoginButton();
 
 private:
+    void showLoggedIn();
+    void showLoggedOut();
+
     Ui::SpotifyConfig* m_ui;
+    QLabel* m_loggedInUser;
+    QString m_verifiedUsername;
     SpotifyAccount* m_account;
     AnimatedSpinner* m_playlistsLoading;
-    bool m_loggedInManually;
+    bool m_loggedInManually, m_isLoggedIn;
 };
 
 }
