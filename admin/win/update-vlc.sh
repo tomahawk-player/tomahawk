@@ -49,10 +49,33 @@ tar xvjf pvlc.tar.bz2
 #     libtaglib_plugin.dll
 
 
-# this is for vlc-1.2
-# rm -rvf video_*/ gui/ */libold* */libvcd* */libdvd* */liblibass* */libx264* */libschroe* */liblibmpeg2* \
-#      */libstream_out_* */libmjpeg_plugin* */libh264_plugin* */libzvbi_plugin* */lib*sub* \
-#      services_discover/ visualization/ control/ misc/
+# this is for vlc-2.x
+rm -rvf \
+    video_*/ \
+    gui/ \
+    **/libold* \
+    **/libvcd* \
+    **/libdvd* \
+    **/liblibass* \
+    **/libx264* \
+    **/libschroe* \
+    **/liblibmpeg2* \
+    **/libstream_out_* \
+    **/libmjpeg_plugin* \
+    **/libh264_plugin* \
+    **/libzvbi_plugin* \
+    **/lib*sub* \
+    services_discovery/ \
+    visualization/ \
+    control/ \
+    misc/ \
+    **/libi420* \
+    **/libi422* \
+    mux/ \
+    stream_filter/ \
+    **/libtheora_plugin* \
+    **/liblibbluray_plugin* \
+    **/libdtv_plugin*
 
 
 echo "Downloaded and stripped VLC"
