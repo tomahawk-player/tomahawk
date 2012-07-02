@@ -321,14 +321,14 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             }
             else if ( output.isValid() )
             {
-                m_coverLoaded = true;
-
                 const QByteArray ba = returnedData["imgbytes"].toByteArray();
                 if ( ba.length() )
                 {
                     m_coverBuffer = ba;
-                    emit coverChanged();
                 }
+
+                m_coverLoaded = true;
+                emit coverChanged();
             }
 
             break;
