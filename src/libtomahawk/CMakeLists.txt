@@ -48,6 +48,7 @@ set( libGuiSources
 
     infobar/InfoBar.cpp
 
+    playlist/FlexibleView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
