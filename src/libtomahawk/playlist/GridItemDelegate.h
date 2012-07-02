@@ -41,6 +41,9 @@ Q_OBJECT
 public:
     GridItemDelegate( QAbstractItemView* parent = 0, PlayableProxyModel* proxy = 0 );
 
+    QSize itemSize() const { return m_itemSize; }
+    void setItemSize( const QSize& size ) { m_itemSize = size; }
+
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -70,6 +73,7 @@ private:
 
     QAbstractItemView* m_view;
     PlayableProxyModel* m_model;
+    QSize m_itemSize;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
