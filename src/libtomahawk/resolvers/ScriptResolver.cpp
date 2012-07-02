@@ -389,6 +389,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
 
     m_ready = true;
     m_configSent = false;
+    m_num_restarts = 0;
 
     if ( !m_stopped )
         Tomahawk::Pipeline::instance()->addResolver( this );
