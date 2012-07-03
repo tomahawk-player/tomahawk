@@ -42,7 +42,6 @@ public:
     QList<Tomahawk::query_ptr> tracks();
 
     virtual int trackCount() const { return 1; }
-    virtual int unfilteredTrackCount() const { return 1; }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
     virtual bool sourceValid();

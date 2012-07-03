@@ -75,9 +75,6 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 {
     if ( m_model )
     {
-        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-            disconnect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), this, SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
-
         disconnect( m_model, SIGNAL( loadingStarted() ), this, SIGNAL( loadingStarted() ) );
         disconnect( m_model, SIGNAL( loadingFinished() ), this, SIGNAL( loadingFinished() ) );
     }
@@ -86,9 +83,6 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 
     if ( m_model )
     {
-        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-            connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
-
         connect( m_model, SIGNAL( loadingStarted() ), SIGNAL( loadingStarted() ) );
         connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
     }

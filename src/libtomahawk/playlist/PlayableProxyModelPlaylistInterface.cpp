@@ -46,13 +46,6 @@ PlayableProxyModelPlaylistInterface::~PlayableProxyModelPlaylistInterface()
 
 
 int
-PlayableProxyModelPlaylistInterface::unfilteredTrackCount() const
-{
-    return ( m_proxyModel.isNull() ? 0 : m_proxyModel.data()->sourceModel()->trackCount() );
-}
-
-
-int
 PlayableProxyModelPlaylistInterface::trackCount() const
 {
     return ( m_proxyModel.isNull() ? 0 : m_proxyModel.data()->rowCount( QModelIndex() ) );

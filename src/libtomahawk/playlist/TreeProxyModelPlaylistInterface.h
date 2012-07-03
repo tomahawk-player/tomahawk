@@ -41,7 +41,6 @@ public:
 
     virtual QList< Tomahawk::query_ptr > tracks() { Q_ASSERT( FALSE ); QList< Tomahawk::query_ptr > queries; return queries; }
 
-    virtual int unfilteredTrackCount() const;
     virtual int trackCount() const;
 
     virtual bool hasNextItem();

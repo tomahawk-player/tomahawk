@@ -41,13 +41,6 @@ PlaylistPlaylistInterface::~PlaylistPlaylistInterface()
 
 
 int
-PlaylistPlaylistInterface::unfilteredTrackCount() const
-{
-    return ( m_playlist.isNull() ? 0 : m_playlist.data()->entries().count() );
-}
-
-
-int
 PlaylistPlaylistInterface::trackCount() const
 {
     return ( m_playlist.isNull() ? 0 : m_playlist.data()->entries().count() );
