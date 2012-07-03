@@ -536,4 +536,5 @@ TreeView::setFilter( const QString& filter )
 {
     ViewPage::setFilter( filter );
     m_proxyModel->setFilter( filter );
+    return false;
 }
