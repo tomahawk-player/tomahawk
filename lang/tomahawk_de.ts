@@ -2765,7 +2765,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="728"/>
         <source> and </source>
-        <translation>und</translation>
+        <translation> und </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="736"/>
