@@ -26,9 +26,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
 
     m_model->loadPlaylist( m_playlist );
+    m_model->startOnDemand();
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
-    // TODO: fill m_model with the station stuff
 }
 
 
