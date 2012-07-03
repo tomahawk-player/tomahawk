@@ -66,8 +66,6 @@ public:
     virtual int maxVisibleItems() const { return m_maxVisibleItems; }
     virtual void setMaxVisibleItems( int items );
 
-    virtual void emitFilterChanged( const QString &pattern ) { emit filterChanged( pattern ); }
-
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
@@ -78,7 +76,8 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-    void updateDetailedInfo( const QModelIndex& index );
+    virtual void setFilter( const QString& pattern );
+    virtual void updateDetailedInfo( const QModelIndex& index );
 
 signals:
     void filterChanged( const QString& filter );

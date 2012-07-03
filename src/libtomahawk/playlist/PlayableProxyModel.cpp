@@ -578,3 +578,14 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
         item->query()->loadSocialActions();
     }
 }
+
+
+void
+PlayableProxyModel::setFilter( const QString& pattern )
+{
+    if ( pattern != filterRegExp().pattern() )
+    {
+        setFilterRegExp( pattern );
+        emit filterChanged( pattern );
+    }
+}
