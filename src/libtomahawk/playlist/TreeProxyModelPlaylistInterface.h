@@ -50,12 +50,6 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
 
     virtual QString filter() const;
-    virtual void setFilter( const QString& pattern );
-
-    virtual QString vanillaFilter() const { return PlaylistInterface::filter(); }
-    virtual void setVanillaFilter( const QString &filter ) { PlaylistInterface::setFilter( filter ); }
-
-    virtual void sendTrackCount() { emit trackCountChanged( trackCount() ); }
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }

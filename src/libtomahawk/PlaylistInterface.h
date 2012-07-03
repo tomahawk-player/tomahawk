@@ -66,9 +66,6 @@ public:
     virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
 
-    virtual QString filter() const { return m_filter; }
-    virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
-
     virtual void reset() {}
 
     //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out

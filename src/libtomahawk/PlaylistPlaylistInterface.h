@@ -55,8 +55,6 @@ public:
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    virtual void setFilter( const QString& /*pattern*/ ) {}
-
 public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}

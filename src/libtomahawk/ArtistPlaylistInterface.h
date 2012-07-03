@@ -55,8 +55,6 @@ public:
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-    virtual void setFilter( const QString& /*pattern*/ ) {}
-
 signals:
     void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 

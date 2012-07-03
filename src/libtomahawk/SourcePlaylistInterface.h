@@ -59,7 +59,6 @@ public:
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
 
     virtual bool shuffled() const { return false; }
-    virtual void setFilter( const QString& /*pattern*/ ) {}
 
     virtual QWeakPointer< Tomahawk::Source > source() const;
 

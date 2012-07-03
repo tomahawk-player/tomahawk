@@ -66,19 +66,6 @@ PlayableProxyModelPlaylistInterface::filter() const
 }
 
 
-void
-PlayableProxyModelPlaylistInterface::setFilter( const QString& pattern )
-{
-    if ( m_proxyModel.isNull() )
-        return;
-
-    m_proxyModel.data()->setFilterRegExp( pattern );
-    m_proxyModel.data()->emitFilterChanged( pattern );
-
-    emit trackCountChanged( trackCount() );
-}
-
-
 QList< Tomahawk::query_ptr >
 PlayableProxyModelPlaylistInterface::tracks()
 {
