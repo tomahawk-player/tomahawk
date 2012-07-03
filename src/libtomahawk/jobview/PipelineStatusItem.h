@@ -28,7 +28,7 @@ class PipelineStatusItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit PipelineStatusItem();
+    explicit PipelineStatusItem( const Tomahawk::query_ptr& q );
     virtual ~PipelineStatusItem();
 
     virtual QString rightColumnText() const;
