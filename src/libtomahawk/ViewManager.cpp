@@ -566,8 +566,8 @@ ViewManager::setFilter( const QString& filter )
 void
 ViewManager::applyFilter()
 {
-    if ( currentPlaylistInterface() && currentPlaylistInterface()->filter() != m_filter )
-        currentPlaylistInterface()->setFilter( m_filter );
+    if ( m_currentPage )
+        m_currentPage->setFilter( m_filter );
 }
 
 
@@ -778,14 +778,14 @@ ViewManager::updateView()
         connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                     SIGNAL( shuffleModeChanged( bool ) ) );
 
-        m_infobar->setFilter( currentPlaylistInterface()->filter() );
+        m_infobar->setFilter( currentPage()->filter() );
     }
 
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
     {
         emit numTracksChanged( currentPlaylistInterface()->unfilteredTrackCount() );
 
-        if ( !currentPlaylistInterface()->filter().isEmpty() )
+        if ( !currentPage()->filter().isEmpty() )
             emit numShownChanged( currentPlaylistInterface()->trackCount() );
         else
             emit numShownChanged( currentPlaylistInterface()->unfilteredTrackCount() );
