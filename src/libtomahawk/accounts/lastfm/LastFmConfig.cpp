@@ -140,8 +140,8 @@ LastFmConfig::onHistoryLoaded()
 
         foreach ( lastfm::XmlQuery e, lfm.children( "track" ) )
         {
-//            tDebug() << "Found:" << e["artist"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
-            Tomahawk::query_ptr query = Query::get( e["artist"].text(), e["name"].text(), QString(), QString(), false );
+//            tDebug() << "Found:" << e.children( "artist" ).first()["name"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
+            Tomahawk::query_ptr query = Query::get( e.children( "artist" ).first()["name"].text(), e["name"].text(), QString(), QString(), false );
             if ( query.isNull() )
                 continue;
 
