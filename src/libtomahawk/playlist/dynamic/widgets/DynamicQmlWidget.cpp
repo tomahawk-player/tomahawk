@@ -4,8 +4,10 @@
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "dynamic/DynamicModel.h"
+#include "PlayableItem.h"
 
 #include <QUrl>
+#include <qdeclarative.h>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
@@ -23,9 +25,10 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_proxyModel = new PlayableProxyModel( this );
     m_proxyModel->setSourcePlayableModel( m_model );
 
-    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
+    rootContext()->setContextProperty( "dynamicModel", m_model );
 
     m_model->loadPlaylist( m_playlist );
+    m_model->startOnDemand();
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
     // TODO: fill m_model with the station stuff
