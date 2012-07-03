@@ -71,26 +71,30 @@ MetadataEditor::writeMetadata()
     TagLib::FileRef f( encodedName );
     Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
 
-    if ( title() != m_result->track() ) {
+    if ( title() != m_result->track() )
+    {
         tag->setTitle( title() );
         m_result->setTrack( title() );
     }
 
-    Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist() );
-    if ( artist() != m_result->artist()->name() ) {
+    Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
+    if ( artist() != m_result->artist()->name() )
+    {
         tag->setArtist( artist() );
         m_result->setArtist( newArtist );
     }
 
-    if( album() != m_result->album()->name() ) {
+    if ( album() != m_result->album()->name() )
+    {
         tag->setAlbum( album() );
-        m_result->setAlbum( Tomahawk::Album::get( newArtist, album() ) );
+        m_result->setAlbum( Tomahawk::Album::get( newArtist, album(), true ) );
     }
 
     tag->setTrack( discnumber() );
     m_result->setDiscNumber( discnumber() );
 
-    if ( year() != m_result->year() ) {
+    if ( year() != m_result->year() )
+    {
         tag->setYear( year() );
         m_result->setYear( year() );
     }
