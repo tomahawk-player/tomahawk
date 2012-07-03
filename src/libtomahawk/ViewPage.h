@@ -65,7 +65,7 @@ public:
     virtual bool queueVisible() const { return true; }
 
     virtual QString filter() const { return m_filter; }
-    virtual bool setFilter( const QString& filter ) { m_filter = filter; }
+    virtual bool setFilter( const QString& filter );
 
     virtual bool jumpToCurrentTrack() = 0;
 
