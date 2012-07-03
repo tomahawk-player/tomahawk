@@ -88,6 +88,7 @@ set( libGuiSources
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/echonest/EchonestSteerer.cpp
     playlist/dynamic/widgets/DynamicWidget.cpp
+    playlist/dynamic/widgets/DynamicQmlWidget.cpp
     playlist/dynamic/widgets/DynamicControlWrapper.cpp
     playlist/dynamic/widgets/DynamicControlList.cpp
     playlist/dynamic/widgets/ReadOrWriteWidget.cpp
