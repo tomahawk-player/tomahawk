@@ -28,25 +28,28 @@
 using namespace Tomahawk;
 
 CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, const source_ptr& s, QWidget* parent )
-    : PlaylistView ( parent )
+    : PlaylistView( parent )
     , m_type( type )
     , m_source( s )
     , m_model( new PlaylistModel( this ) )
 {
     // Generate the tracks, add them to the playlist
-    m_model->setStyle( PlayableModel::Large );
+    proxyModel()->setStyle( PlayableProxyModel::Large );
+
     setPlaylistModel( m_model );
     generateTracks();
 
     if ( m_type == SourceLovedTracks )
-        connect( m_source.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
+    {
+        connect( m_source.data(), SIGNAL( socialAttributesChanged( QString ) ), SLOT( socialAttributesChanged( QString ) ) );
+    }
     else if ( m_type == TopLovedTracks )
     {
-        connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
+        connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged( QString ) ), SLOT( socialAttributesChanged( QString ) ) );
         foreach ( const source_ptr& s, SourceList::instance()->sources( true ) )
-            connect( s.data(), SIGNAL( socialAttributesChanged( QString ) ), this, SLOT( socialAttributesChanged( QString ) ) );
+            connect( s.data(), SIGNAL( socialAttributesChanged( QString ) ), SLOT( socialAttributesChanged( QString ) ) );
 
-        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( sourceAdded( Tomahawk::source_ptr ) ) );
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( sourceAdded( Tomahawk::source_ptr ) ) );
     }
 }
 

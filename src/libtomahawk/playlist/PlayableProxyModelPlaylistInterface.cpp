@@ -46,13 +46,6 @@ PlayableProxyModelPlaylistInterface::~PlayableProxyModelPlaylistInterface()
 
 
 int
-PlayableProxyModelPlaylistInterface::unfilteredTrackCount() const
-{
-    return ( m_proxyModel.isNull() ? 0 : m_proxyModel.data()->sourceModel()->trackCount() );
-}
-
-
-int
 PlayableProxyModelPlaylistInterface::trackCount() const
 {
     return ( m_proxyModel.isNull() ? 0 : m_proxyModel.data()->rowCount( QModelIndex() ) );
@@ -63,19 +56,6 @@ QString
 PlayableProxyModelPlaylistInterface::filter() const
 {
     return ( m_proxyModel.isNull() ? QString() : m_proxyModel.data()->filterRegExp().pattern() );
-}
-
-
-void
-PlayableProxyModelPlaylistInterface::setFilter( const QString& pattern )
-{
-    if ( m_proxyModel.isNull() )
-        return;
-
-    m_proxyModel.data()->setFilterRegExp( pattern );
-    m_proxyModel.data()->emitFilterChanged( pattern );
-
-    emit trackCountChanged( trackCount() );
 }
 
 

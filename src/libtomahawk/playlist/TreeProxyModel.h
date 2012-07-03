@@ -42,10 +42,9 @@ public:
     virtual ~TreeProxyModel() {}
 
     virtual void setSourcePlayableModel( TreeModel* model );
-
-    virtual void newFilterFromPlaylistInterface( const QString& pattern );
-
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
+
+    virtual void setFilter( const QString& pattern );
 
 signals:
 

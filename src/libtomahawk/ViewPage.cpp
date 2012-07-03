@@ -23,3 +23,10 @@
 
 using namespace Tomahawk;
 
+
+bool
+ViewPage::setFilter( const QString& filter )
+{
+    m_filter = filter;
+    return false;
+}

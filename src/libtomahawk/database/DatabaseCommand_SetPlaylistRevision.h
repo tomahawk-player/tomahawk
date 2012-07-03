@@ -77,9 +77,11 @@ public:
         m_addedentries.clear();
         foreach( const QVariant& v, vlist )
         {
-            PlaylistEntry * pep = new PlaylistEntry;
+            PlaylistEntry* pep = new PlaylistEntry;
             QJson::QObjectHelper::qvariant2qobject( v.toMap(), pep );
-            m_addedentries << plentry_ptr(pep);
+
+            if ( pep->isValid() )
+                m_addedentries << plentry_ptr( pep );
         }
     }
 
@@ -88,6 +90,9 @@ public:
         QVariantList vlist;
         foreach( const plentry_ptr& pe, m_addedentries )
         {
+            if ( !pe->isValid() )
+                continue;
+
             QVariant v = QJson::QObjectHelper::qobject2qvariant( pe.data() );
             vlist << v;
         }

@@ -180,15 +180,15 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
     }
     else if ( output.isValid() )
     {
-        m_coverLoaded = true;
-
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         if ( ba.length() )
         {
             m_coverBuffer = ba;
-            emit coverChanged();
         }
+
+        m_coverLoaded = true;
+        emit coverChanged();
     }
 }
 

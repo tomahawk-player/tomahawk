@@ -64,6 +64,9 @@ public:
     virtual bool showFilter() const { return false; }
     virtual bool queueVisible() const { return true; }
 
+    virtual QString filter() const { return m_filter; }
+    virtual bool setFilter( const QString& filter );
+
     virtual bool jumpToCurrentTrack() = 0;
 
     virtual bool isTemporaryPage() const { return false; }
@@ -82,6 +85,9 @@ public:
      *
      * See DynamicWidget for an example
      */
+
+private:
+    QString m_filter;
 };
 
 }; // ns

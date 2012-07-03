@@ -41,7 +41,6 @@ public:
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
-    virtual int unfilteredTrackCount() const;
     virtual int trackCount() const;
 
     virtual Tomahawk::result_ptr currentItem() const;
@@ -50,7 +49,6 @@ public:
     virtual bool hasNextItem();
 
     virtual QString filter() const;
-    virtual void setFilter( const QString& pattern );
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }

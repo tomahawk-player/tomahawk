@@ -92,7 +92,7 @@ TreeProxyModel::onModelReset()
 
 
 void
-TreeProxyModel::newFilterFromPlaylistInterface( const QString& pattern )
+TreeProxyModel::setFilter( const QString& pattern )
 {
     emit filteringStarted();
 
@@ -170,16 +170,8 @@ TreeProxyModel::filterFinished()
 {
     m_artistsFilterCmd = 0;
 
-    if ( qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface.data() )->vanillaFilter() != m_filter )
-    {
-        emit filterChanged( m_filter );
-    }
-
-    qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface )->setVanillaFilter( m_filter );
     setFilterRegExp( m_filter );
-
-    qobject_cast< Tomahawk::TreeProxyModelPlaylistInterface* >( m_playlistInterface )->sendTrackCount();
-
+    emit filterChanged( m_filter );
     emit filteringFinished();
 }
 

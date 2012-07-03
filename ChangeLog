@@ -1,3 +1,7 @@
+Version 0.5.2:
+    * Fixed a crash when invalid results are coming back from a resolver or
+      are found in a playlist.
+
 Version 0.5.1:
     * Fixed a few issues with automatic downloading and launching
       of the Spotify account.

@@ -41,7 +41,6 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     : QAbstractItemModel( parent )
     , m_rootItem( new PlayableItem( 0, this ) )
     , m_readOnly( true )
-    , m_style( Detailed )
     , m_loading( loading )
 {
 
@@ -54,9 +53,6 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
 
     m_header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
              << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" ) << tr( "Name" );
-
-    m_headerStyle[ Detailed ]   << Artist << Track << Composer << Album << AlbumPos << Duration << Bitrate << Age << Year << Filesize << Origin << Score;
-    m_headerStyle[ Collection ] << Name << Composer << Duration << Bitrate << Age << Year << Filesize << Origin;
 }
 
 
@@ -99,23 +95,7 @@ PlayableModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
 
-    switch ( m_style )
-    {
-        case Short:
-        case ShortWithAvatars:
-        case Large:
-            return 1;
-            break;
-
-        case Collection:
-            return 8;
-            break;
-
-        case Detailed:
-        default:
-            return 12;
-            break;
-    }
+    return 12;
 }
 
 
@@ -188,10 +168,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    if ( !m_headerStyle.contains( m_style ) )
-        return query->track();
-
-    switch( m_headerStyle[ m_style ].at( column ) )
+    switch ( column )
     {
         case Artist:
             return query->artist();
@@ -234,7 +211,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
     }
     if ( query->numResults() )
     {
-        switch( m_headerStyle[ m_style ].at( column ) )
+        switch ( column )
         {
             case Bitrate:
                 if ( query->results().first()->bitrate() > 0 )
@@ -288,16 +265,6 @@ PlayableModel::data( const QModelIndex& index, int role ) const
         return QVariant( columnAlignment( index.column() ) );
     }
 
-    if ( role == StyleRole )
-    {
-        return m_style;
-    }
-
-    if ( role == Qt::SizeHintRole && !m_itemSize.isEmpty() )
-    {
-        return m_itemSize;
-    }
-
     if ( !entry->query().isNull() )
     {
         return queryData( entry->query()->displayQuery(), index.column(), role );
@@ -322,10 +289,8 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
 
     if ( role == Qt::DisplayRole && section >= 0 )
     {
-        if ( m_headerStyle.contains( m_style ) )
-        {
-            return m_header.at( m_headerStyle[ m_style ].at( section ) );
-        }
+        if ( section < m_header.count() )
+            return m_header.at( section );
         else
             return tr( "Name" );
     }
@@ -336,28 +301,6 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
     }
 
     return QVariant();
-}
-
-
-void
-PlayableModel::updateDetailedInfo( const QModelIndex& index )
-{
-    if ( style() != PlayableModel::Short && style() != PlayableModel::Large )
-        return;
-
-    PlayableItem* item = itemFromIndex( index );
-    if ( item->query().isNull() )
-        return;
-
-    if ( style() == PlayableModel::Short || style() == PlayableModel::Large )
-    {
-        item->query()->cover( QSize( 0, 0 ) );
-    }
-
-    if ( style() == PlayableModel::Large )
-    {
-        item->query()->loadSocialActions();
-    }
 }
 
 
@@ -722,47 +665,10 @@ PlayableModel::ensureResolved()
 }
 
 
-void
-PlayableModel::setStyle( PlayableModel::PlayableItemStyle style )
-{
-    m_style = style;
-}
-
-
-QList< double >
-PlayableModel::columnWeights() const
-{
-    QList< double > w;
-
-    switch ( m_style )
-    {
-        case Short:
-        case ShortWithAvatars:
-        case Large:
-            w << 1.0;
-            break;
-
-        case Collection:
-            w << 0.42 << 0.12 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.11;
-            break;
-
-        case Detailed:
-        default:
-            w << 0.16 << 0.16 << 0.14 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
-            break;
-    }
-
-    return w;
-}
-
-
 Qt::Alignment
 PlayableModel::columnAlignment( int column ) const
 {
-    if ( !m_headerStyle.contains( m_style ) )
-        return Qt::AlignLeft;
-
-    switch( m_headerStyle[ m_style ].at( column ) )
+    switch ( column )
     {
         case Age:
         case AlbumPos:

@@ -48,7 +48,7 @@ DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
     connect( ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
 
     ui->scrollAreaWidgetContents->setLayout( new QVBoxLayout() );
-    
+
     updateLogView();
 }
 
@@ -89,7 +89,7 @@ DiagnosticsDialog::updateLogView()
     ui->scrollAreaWidgetContents->layout()->addWidget( new QLabel( log, this ) );
     // Peers / Accounts, TODO
     ui->scrollAreaWidgetContents->layout()->addWidget( new QLabel( "ACCOUNTS:\n", this ) );
-    
+
     const QList< Tomahawk::source_ptr > sources = SourceList::instance()->sources( true );
     const QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
     foreach ( Tomahawk::Accounts::Account* account, accounts )
@@ -107,13 +107,15 @@ DiagnosticsDialog::updateLogView()
         connect( account->sipPlugin(), SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
         connect( account->sipPlugin(), SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfoReceived( QString, SipInfo ) ) );
         connect( account->sipPlugin(), SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( onSoftwareVersionReceived( QString, QString ) ) );
-        
+
         QLabel* accountInfoLabel = new QLabel( this );
         ui->scrollAreaWidgetContents->layout()->addWidget( accountInfoLabel );
         m_accountDescriptionStore.insert( account, accountInfoLabel );
-        
+
         updateAccountLabel( account );
     }
+
+    ui->scrollAreaWidgetContents->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding ) );
 }
 
 
@@ -135,8 +137,8 @@ DiagnosticsDialog::onAccountConnectionStateChanged( Tomahawk::Accounts::Account:
 {
     Tomahawk::Accounts::Account* account = qobject_cast< Tomahawk::Accounts::Account* >( sender() );
     Q_ASSERT( account );
-    
-    updateAccountLabel( account );    
+
+    updateAccountLabel( account );
 }
 
 
@@ -153,7 +155,7 @@ DiagnosticsDialog::onPeerOnline( const QString& )
 {
     Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
     Q_ASSERT( account );
-    
+
     updateAccountLabel( account );
 }
 
@@ -163,7 +165,7 @@ DiagnosticsDialog::onPeerOffline( const QString& )
 {
     Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
     Q_ASSERT( account );
-    
+
     updateAccountLabel( account );
 }
 
@@ -173,7 +175,7 @@ DiagnosticsDialog::onSipInfoReceived( const QString& /* peerId */ , const SipInf
 {
     Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
     Q_ASSERT( account );
-    
+
     updateAccountLabel( account );
 }
 
@@ -183,7 +185,7 @@ DiagnosticsDialog::onSoftwareVersionReceived( const QString& /* peerId */ , cons
 {
     Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
     Q_ASSERT( account );
-    
+
     updateAccountLabel( account );
 }
 
@@ -192,7 +194,7 @@ void
 DiagnosticsDialog::updateAccountLabel( Tomahawk::Accounts::Account* account )
 {
     QLabel* accountInfoLabel = m_accountDescriptionStore.value( account );
-    
+
     if ( accountInfoLabel )
     {
         QString accountInfo;
@@ -256,7 +258,7 @@ DiagnosticsDialog::updateAccountLabel( Tomahawk::Accounts::Account* account )
             }
         }
         accountInfo.append( "\n" );
-        
+
         accountInfoLabel->setText( accountInfo );
     }
 }

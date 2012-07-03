@@ -64,8 +64,13 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
 QSize
 GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QSize size = QStyledItemDelegate::sizeHint( option, index );
-    return size;
+    if ( m_itemSize.isNull() )
+    {
+        QSize size = QStyledItemDelegate::sizeHint( option, index );
+        return size;
+    }
+    else
+        return m_itemSize;
 }
 
 
@@ -363,7 +368,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
     // reset mouse cursor. we switch to a pointing hand cursor when hovering an artist name
     m_view->setCursor( Qt::ArrowCursor );
-    
+
     if ( hoveringArtist )
     {
 

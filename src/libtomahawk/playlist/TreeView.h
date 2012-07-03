@@ -76,6 +76,7 @@ public:
     virtual void setShowModes( bool b ) { m_showModes = b; }
     virtual bool showModes() const { return m_showModes; }
 
+    virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }

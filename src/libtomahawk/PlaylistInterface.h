@@ -42,7 +42,6 @@ public:
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
     virtual bool isFinished() const { return m_finished; }
 
-    virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
@@ -66,9 +65,6 @@ public:
     virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
 
-    virtual QString filter() const { return m_filter; }
-    virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
-
     virtual void reset() {}
 
     //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out
@@ -81,10 +77,9 @@ public slots:
     virtual void setShuffled( bool enabled ) = 0;
 
 signals:
+    void trackCountChanged( unsigned int tracks );
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
-    void trackCountChanged( unsigned int tracks );
-    void sourceTrackCountChanged( unsigned int tracks );
     void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
     void nextTrackReady();
 

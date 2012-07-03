@@ -41,7 +41,6 @@ TreeModel::TreeModel( QObject* parent )
     : PlayableModel( parent )
     , m_mode( DatabaseMode )
 {
-    setStyle( Collection );
     setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
@@ -172,7 +171,7 @@ TreeModel::fetchAlbums( const artist_ptr& artist )
 
     connect( artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
                               SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ), Qt::UniqueConnection );
-        
+
     const QModelIndex parent = indexFromArtist( artist );
     addAlbums( parent, artist->albums( m_mode, m_collection ) );
 }

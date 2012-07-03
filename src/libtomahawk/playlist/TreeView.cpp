@@ -145,8 +145,8 @@ TreeView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    m_header->setDefaultColumnWeights( model->columnWeights() );
-    if ( model->style() == PlayableModel::Large )
+    m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
+    if ( m_proxyModel->style() == PlayableProxyModel::Large )
     {
         setHeaderHidden( true );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -293,9 +293,9 @@ TreeView::onFilterChangeFinished()
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->playlistInterface()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
+    if ( !filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->playlistInterface()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( filter() ) );
         m_overlay->show();
     }
     else
@@ -439,7 +439,7 @@ TreeView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( !m_model || m_model->style() != PlayableModel::Collection )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Collection )
         return;
 
     PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
@@ -492,7 +492,7 @@ TreeView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( !m_model || m_model->style() != PlayableModel::Collection )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Collection )
         return;
 
     QModelIndex idx = indexAt( event->pos() );
@@ -528,4 +528,13 @@ TreeView::guid() const
     }
 
     return m_guid;
+}
+
+
+bool
+TreeView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+    m_proxyModel->setFilter( filter );
+    return true;
 }

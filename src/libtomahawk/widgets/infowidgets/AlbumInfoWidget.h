@@ -97,9 +97,6 @@ private slots:
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
     void onAlbumCoverUpdated();
 
-    void onLoadingStarted();
-    void onLoadingFinished();
-
 private:
     Ui::AlbumInfoWidget* ui;
 

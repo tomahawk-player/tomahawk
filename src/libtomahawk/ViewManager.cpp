@@ -27,6 +27,7 @@
 #include "infobar/InfoBar.h"
 #include "topbar/TopBar.h"
 
+#include "FlexibleView.h"
 #include "TreeModel.h"
 #include "PlaylistModel.h"
 #include "PlaylistView.h"
@@ -95,6 +96,7 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->addWidget( m_contextWidget );
 
     m_superCollectionView = new TreeView();
+    m_superCollectionView->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_superCollectionModel = new TreeModel( m_superCollectionView );
     m_superCollectionView->setTreeModel( m_superCollectionModel );
     m_superCollectionView->setShowModes( false );
@@ -138,16 +140,20 @@ ViewManager::~ViewManager()
 }
 
 
-PlaylistView*
-ViewManager::createPageForPlaylist( const playlist_ptr& pl )
+FlexibleView*
+ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 {
-    PlaylistView* view = new PlaylistView();
+    FlexibleView* view = new FlexibleView();
     PlaylistModel* model = new PlaylistModel();
-    view->setPlaylistModel( model );
-    model->loadPlaylist( pl );
-    pl->resolve();
+    view->setPlayableModel( model );
 
-    m_playlistViews.insert( pl, view );
+    PlaylistView* pv = new PlaylistView();
+    pv->setPlaylistModel( model );
+    view->setDetailedView( pv );
+
+    model->loadPlaylist( playlist );
+    playlist->resolve();
+
     return view;
 }
 
@@ -171,11 +177,12 @@ ViewManager::playlistForPage( ViewPage* page ) const
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
-    PlaylistView* view;
+    FlexibleView* view;
 
     if ( !m_playlistViews.contains( playlist ) || m_playlistViews.value( playlist ).isNull() )
     {
         view = createPageForPlaylist( playlist );
+        m_playlistViews.insert( playlist, view );
     }
     else
     {
@@ -183,9 +190,6 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
     }
 
     setPage( view );
-
-    emit numSourcesChanged( SourceList::instance()->count() );
-
     return view;
 }
 
@@ -211,8 +215,6 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
         hideQueue();
     else
         showQueue();*/
-
-    emit numSourcesChanged( SourceList::instance()->count() );
 
     return m_dynamicWidgets.value( playlist ).data();
 }
@@ -309,6 +311,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
         {
             view = new TreeView();
+            view->proxyModel()->setStyle( PlayableProxyModel::Collection );
             TreeModel* model = new TreeModel();
             view->setTreeModel( model );
 
@@ -350,8 +353,6 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         shown = aview;
         setPage( aview );
     }
-
-    emit numSourcesChanged( 1 );
 
     return shown;
 }
@@ -420,8 +421,6 @@ ViewManager::showSuperCollection()
         shown = m_superGridView;
         setPage( m_superGridView );
     }
-
-    emit numSourcesChanged( m_superCollections.count() );
 
     return shown;
 }
@@ -492,7 +491,7 @@ ViewManager::showRecentPlaysPage()
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
-        raModel->setStyle( PlayableModel::Large );
+        pv->proxyModel()->setStyle( PlayableProxyModel::Large );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
         connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
@@ -565,8 +564,8 @@ ViewManager::setFilter( const QString& filter )
 void
 ViewManager::applyFilter()
 {
-    if ( currentPlaylistInterface() && currentPlaylistInterface()->filter() != m_filter )
-        currentPlaylistInterface()->setFilter( m_filter );
+    if ( m_currentPage )
+        m_currentPage->setFilter( m_filter );
 }
 
 
@@ -722,17 +721,11 @@ ViewManager::unlinkPlaylist()
 {
     if ( currentPlaylistInterface() )
     {
-        disconnect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                    this,                                 SIGNAL( numTracksChanged( unsigned int ) ) );
-
-        disconnect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
-                    this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
-
         disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                    this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+                    this,                              SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
+                    this,                              SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
 
@@ -743,12 +736,16 @@ ViewManager::saveCurrentPlaylistSettings()
     TomahawkSettings* s = TomahawkSettings::instance();
     Tomahawk::playlist_ptr pl = playlistForInterface( currentPlaylistInterface() );
 
-    if ( !pl.isNull() ) {
+    if ( !pl.isNull() )
+    {
         s->setShuffleState(  pl->guid(), currentPlaylistInterface()->shuffled() );
         s->setRepeatMode( pl->guid(), currentPlaylistInterface()->repeatMode() );
-    } else {
+    }
+    else
+    {
         Tomahawk::dynplaylist_ptr dynPl = dynamicPlaylistForInterface( currentPlaylistInterface() );
-        if ( !dynPl.isNull() ) {
+        if ( !dynPl.isNull() )
+        {
             s->setShuffleState( dynPl->guid(), currentPlaylistInterface()->shuffled() );
             s->setRepeatMode( dynPl->guid(), currentPlaylistInterface()->repeatMode() );
         }
@@ -761,30 +758,17 @@ ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                                                    SIGNAL( numTracksChanged( unsigned int ) ) );
-
-        connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
-                                                    SIGNAL( numShownChanged( unsigned int ) ) );
-
         connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
                                                     SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                     SIGNAL( shuffleModeChanged( bool ) ) );
 
-        m_infobar->setFilter( currentPlaylistInterface()->filter() );
+        m_infobar->setFilter( currentPage()->filter() );
     }
 
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
     {
-        emit numTracksChanged( currentPlaylistInterface()->unfilteredTrackCount() );
-
-        if ( !currentPlaylistInterface()->filter().isEmpty() )
-            emit numShownChanged( currentPlaylistInterface()->trackCount() );
-        else
-            emit numShownChanged( currentPlaylistInterface()->unfilteredTrackCount() );
-
         emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
         emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
         emit modeChanged( currentPlaylistInterface()->viewMode() );
@@ -983,7 +967,7 @@ ViewManager::currentPage() const
 Tomahawk::playlist_ptr
 ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<PlaylistView> view, m_playlistViews.values() )
+    foreach ( QWeakPointer<FlexibleView> view, m_playlistViews.values() )
     {
         if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {

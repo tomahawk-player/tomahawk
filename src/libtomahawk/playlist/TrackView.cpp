@@ -153,13 +153,13 @@ TrackView::setPlayableModel( PlayableModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( true );
-    m_header->setDefaultColumnWeights( model->columnWeights() );
+    m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
 
-    switch( model->style() )
+    switch( m_proxyModel->style() )
     {
-        case PlayableModel::Short:
-        case PlayableModel::ShortWithAvatars:
-        case PlayableModel::Large:
+        case PlayableProxyModel::Short:
+        case PlayableProxyModel::ShortWithAvatars:
+        case PlayableProxyModel::Large:
             setHeaderHidden( true );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         break;
@@ -184,7 +184,7 @@ TrackView::setEmptyTip( const QString& tip )
 void
 TrackView::onViewChanged()
 {
-    if ( m_model->style() != PlayableModel::Short && m_model->style() != PlayableModel::Large ) // eventual FIXME?
+    if ( m_proxyModel->style() != PlayableProxyModel::Short && m_proxyModel->style() != PlayableProxyModel::Large ) // eventual FIXME?
         return;
 
     if ( m_timer.isActive() )
@@ -217,7 +217,7 @@ TrackView::onScrollTimeout()
 
     for ( int i = left.row(); i <= max; i++ )
     {
-        m_model->updateDetailedInfo( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
+        m_proxyModel->updateDetailedInfo( m_proxyModel->index( i, 0 ) );
     }
 }
 
@@ -503,9 +503,9 @@ TrackView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->playlistInterface()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
+    if ( !filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->playlistInterface()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( filter() ) );
         m_overlay->show();
     }
     else
@@ -621,7 +621,7 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( !m_model || m_model->style() != PlayableModel::Detailed )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Detailed )
         return;
 
     if ( idx.column() == PlayableModel::Artist || idx.column() == PlayableModel::Album || idx.column() == PlayableModel::Track )
@@ -673,7 +673,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( !m_model || m_model->style() != PlayableModel::Detailed )
+    if ( !m_model || m_proxyModel->style() != PlayableProxyModel::Detailed )
         return;
 
     QModelIndex idx = indexAt( event->pos() );
@@ -741,5 +741,14 @@ bool
 TrackView::jumpToCurrentTrack()
 {
     scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
+    return true;
+}
+
+
+bool
+TrackView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+    m_proxyModel->setFilter( filter );
     return true;
 }

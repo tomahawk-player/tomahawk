@@ -62,15 +62,15 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
-    if ( guid().isEmpty() )
+    if ( guid().isEmpty() && proxyModel()->columnCount() > 1 )
     {
         if ( !m_model->playlist().isNull() )
         {
-            setGuid( QString( "playlistview/%1/%2" ).arg( m_model->columnCount() ).arg( m_model->playlist()->guid() ) );
+            setGuid( QString( "playlistview/%1/%2" ).arg( proxyModel()->columnCount() ).arg( m_model->playlist()->guid() ) );
         }
         else
         {
-            setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
+            setGuid( QString( "playlistview/%1" ).arg( proxyModel()->columnCount() ) );
         }
     }
 

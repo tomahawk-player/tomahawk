@@ -229,7 +229,7 @@ GridView::verifySize()
 
     const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
     const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
-    const int newHeight = rows * m_model->itemSize().height();
+    const int newHeight = rows * m_delegate->itemSize().height();
 
     if ( newHeight > 0 )
         setFixedHeight( newHeight );
@@ -257,8 +257,8 @@ GridView::layoutItems()
         const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
         const int extraSpace = remSpace / itemsPerRow;
         const int newItemWidth = itemWidth + extraSpace;
-        
-        m_model->setItemSize( QSize( newItemWidth, newItemWidth ) );
+
+        m_delegate->setItemSize( QSize( newItemWidth, newItemWidth ) );
         verifySize();
 
         if ( !m_inited )
@@ -346,4 +346,13 @@ GridView::onCustomContextMenu( const QPoint& pos )
     m_contextMenu->setAlbums( albums );
 
     m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
+}
+
+
+bool
+GridView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+    m_proxyModel->setFilter( filter );
+    return true;
 }

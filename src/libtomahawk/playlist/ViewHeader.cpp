@@ -60,7 +60,8 @@ ViewHeader::visibleSectionCount() const
 void
 ViewHeader::onSectionsChanged()
 {
-    TomahawkSettings::instance()->setPlaylistColumnSizes( m_guid, saveState() );
+    if ( !m_guid.isEmpty() )
+        TomahawkSettings::instance()->setPlaylistColumnSizes( m_guid, saveState() );
 }
 
 
@@ -70,7 +71,10 @@ ViewHeader::checkState()
     if ( !count() || m_init )
         return false;
 
-    QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_guid );
+    QByteArray state;
+    if ( !m_guid.isEmpty() )
+        state = TomahawkSettings::instance()->playlistColumnSizes( m_guid );
+
     if ( !state.isEmpty() )
     {
         restoreState( state );

@@ -54,7 +54,6 @@ public:
 
     // Any one is fine, we keep them all synched
     virtual PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->repeatMode(); }
-
     virtual bool shuffled() const { return m_w->ui->tracksViewLeft->proxyModel()->playlistInterface()->shuffled(); }
 
     // Do nothing
@@ -62,7 +61,6 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int ) { return Tomahawk::result_ptr(); }
     virtual int trackCount() const { return 0; }
     virtual QList< Tomahawk::query_ptr > tracks() { return QList< Tomahawk::query_ptr >(); }
-    virtual int unfilteredTrackCount() const { return 0; }
 
     virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr other )
     {
