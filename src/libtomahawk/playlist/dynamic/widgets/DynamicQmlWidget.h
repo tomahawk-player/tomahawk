@@ -53,6 +53,8 @@ public:
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
+
+    dynplaylist_ptr m_playlist;
 };
 
 }
