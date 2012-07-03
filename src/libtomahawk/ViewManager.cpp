@@ -42,6 +42,7 @@
 #include "PlaylistLargeItemDelegate.h"
 #include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
+#include "dynamic/widgets/DynamicQmlWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
 #include "widgets/WelcomeWidget.h"
@@ -192,6 +193,11 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
+    DynamicQmlWidget* w = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
+    setPage( w );
+    return w;
+
+    //// OLD FOO
     if ( !m_dynamicWidgets.contains( playlist ) || m_dynamicWidgets.value( playlist ).isNull() )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
