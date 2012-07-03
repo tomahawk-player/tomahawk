@@ -24,17 +24,35 @@
 
 #include <QDeclarativeView>
 
+class PlayableProxyModel;
+
 namespace Tomahawk
 {
 
+class DynamicModel;
 
 class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 public:
-    explicit DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0);
+    explicit DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicQmlWidget();
 
+    virtual QWidget* widget() { return this; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+
+    virtual QString title() const;
+    virtual QString description() const;
+    virtual QPixmap pixmap() const;
+
+    virtual bool showModes() const { return true; }
+    virtual bool showFilter() const { return true; }
+
+    virtual bool jumpToCurrentTrack();
+
+private:
+    DynamicModel* m_model;
+    PlayableProxyModel* m_proxyModel;
 };
 
 }
