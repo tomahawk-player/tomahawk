@@ -45,8 +45,8 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
 
     connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( doLogin() ) );
 
-    connect( m_ui->usernameEdit, SIGNAL( textChanged( QString ) ), this, SLOT( resetLoginButton() ) );
-    connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( resetLoginButton() ) );
+    connect( m_ui->usernameEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
+    connect( m_ui->passwordEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     loadFromConfig();
 
     m_playlistsLoading = new AnimatedSpinner( m_ui->playlistList );
@@ -153,6 +153,7 @@ SpotifyAccountConfig::doLogin()
         m_isLoggedIn = false;
         m_loggedInManually = false;
         m_verifiedUsername.clear();
+        m_ui->playlistList->clear();
         emit logout();
         showLoggedOut();
     }
@@ -219,7 +220,10 @@ SpotifyAccountConfig::showLoggedOut()
 void
 SpotifyAccountConfig::resetLoginButton()
 {
-    m_ui->loginButton->setText( tr( "Log In" ) );
-    m_ui->loginButton->setEnabled( true );
+    if ( !m_isLoggedIn )
+    {
+        m_ui->loginButton->setText( tr( "Log In" ) );
+        m_ui->loginButton->setEnabled( true );
+    }
 }
 
