@@ -57,6 +57,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
     ui->tracksView->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
+    ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::Collection );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
