@@ -14,17 +14,23 @@ namespace Tomahawk
 
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
     : QDeclarativeView( parent )
+    , m_playlist( playlist )
 {
-    setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    setSource( QUrl( "qrc" RESPATH "qml/ArtistInfoScene.qml" ) );
 
     m_model = new DynamicModel( this );
+    m_proxyModel = new PlayableProxyModel( this );
+    m_proxyModel->setSourcePlayableModel( m_model );
 
-    rootContext()->setContextProperty("dynamicModel", m_model);
+    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
 
-    setSource(QUrl("qrc" RESPATH "qml/StationScene.qml"));
+    m_model->loadPlaylist( m_playlist );
 
+    setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
     // TODO: fill m_model with the station stuff
 }
+
 
 DynamicQmlWidget::~DynamicQmlWidget()
 {
