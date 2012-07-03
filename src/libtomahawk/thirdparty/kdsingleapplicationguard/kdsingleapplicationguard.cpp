@@ -26,7 +26,9 @@
 
 #ifdef Q_WS_WIN
 #include <windows.h>
+#ifndef _SSIZE_T_DEFINED
 typedef signed int ssize_t;
+#endif
 #endif
 
 using namespace kdtools;
@@ -401,7 +403,7 @@ void ProcessInfo::setArguments( const QStringList & arguments )
         return;
     }
 
-    char* const commandline = this->commandline + reinterpret_cast<long>(reg->commandLines);
+    char* const commandline = this->commandline + reinterpret_cast<qptrdiff>(reg->commandLines);
 
     int argpos = 0;
     Q_FOREACH( const QString & arg, arguments )
@@ -443,7 +445,7 @@ QStringList ProcessInfo::arguments( bool * prematureEnd  ) const
     }
 
     InstanceRegister* const reg = reinterpret_cast<InstanceRegister*>( KDSingleApplicationGuard::Private::primaryInstance->d->mem.data() );
-    const char* const commandline = this->commandline + reinterpret_cast<long>(reg->commandLines);
+    const char* const commandline = this->commandline + reinterpret_cast<qptrdiff>(reg->commandLines);
 
     int argpos = 0;
     while ( true ) {
@@ -511,7 +513,7 @@ void KDSingleApplicationGuard::Private::sharedmem_free( char* pointer )
 {
     InstanceRegister* const reg = reinterpret_cast<InstanceRegister*>( KDSingleApplicationGuard::Private::primaryInstance->d->mem.data() );
     char* const heap = reg->commandLines;
-    char* const heap_ptr = heap + reinterpret_cast<long>(pointer) - sizeof( segmentheader );
+    char* const heap_ptr = heap + reinterpret_cast<qptrdiff>(pointer) - sizeof( segmentheader );
     const segmentheader* const header = reinterpret_cast< const segmentheader* >( heap_ptr );
     const size_t size = header->size;
 
@@ -538,7 +540,7 @@ char* KDSingleApplicationGuard::Private::sharedmem_malloc( size_t size )
         if( header->size == 0 )
         {
             header->size = size;
-            return heap + sizeof( segmentheader ) - reinterpret_cast<long>(reg->commandLines);
+            return heap + sizeof( segmentheader ) - reinterpret_cast<qptrdiff>(reg->commandLines);
         }
         heap += sizeof( header ) + header->size;
     }
