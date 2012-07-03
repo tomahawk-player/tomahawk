@@ -38,7 +38,8 @@ class DLLEXPORT PlayableModel : public QAbstractItemModel
 Q_OBJECT
 
 public:
-    enum Columns {
+    enum Columns
+    {
         Artist = 0,
         Track = 1,
         Composer = 2,
@@ -53,6 +54,24 @@ public:
         Score = 11,
         Name = 12
     };
+
+    enum PlayableRoles
+    {
+        ArtistRole = Qt::UserRole,
+        TrackRole,
+        ComposerRole,
+        AlbumRole,
+        AlbumPosRole,
+        DurationRole,
+        BitrateRole,
+        AgeRole,
+        YearRole,
+        FilesizeRole,
+        OriginRole,
+        ScoreRole,
+        NameRole
+    };
+
 
     explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
