@@ -71,6 +71,7 @@ public:
 
     virtual bool showModes() const { return true; }
 
+    virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack() { return false; }
 
 public slots:

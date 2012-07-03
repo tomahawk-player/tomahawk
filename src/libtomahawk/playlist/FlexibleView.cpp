@@ -235,3 +235,16 @@ FlexibleView::jumpToCurrentTrack()
     m_gridView->jumpToCurrentTrack();
     return true;
 }
+
+
+bool
+FlexibleView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+
+    m_trackView->setFilter( filter );
+    m_detailedView->setFilter( filter );
+    m_gridView->setFilter( filter );
+
+    return true;
+}

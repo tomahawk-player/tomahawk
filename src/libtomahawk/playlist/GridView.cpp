@@ -347,3 +347,11 @@ GridView::onCustomContextMenu( const QPoint& pos )
 
     m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }
+
+
+bool
+GridView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+    m_proxyModel->setFilter( filter );
+}

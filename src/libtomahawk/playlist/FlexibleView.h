@@ -53,6 +53,7 @@ public:
 //    virtual void setShowModes( bool b ) { m_showModes = b; }
     virtual bool showModes() const { return false; }
 
+    virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
     void setTrackView( TrackView* view );
