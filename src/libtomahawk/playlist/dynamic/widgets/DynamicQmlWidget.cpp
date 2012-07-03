@@ -3,8 +3,11 @@
 #include "playlist/dynamic/DynamicModel.h"
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "dynamic/DynamicModel.h"
 
 #include <QUrl>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 
 namespace Tomahawk
 {
@@ -14,9 +17,14 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 {
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
-    setSource(QUrl("qrc" RESPATH "qml/ArtistInfoScene.qml"));
-}
+    m_model = new DynamicModel( this );
 
+    rootContext()->setContextProperty("dynamicModel", m_model);
+
+    setSource(QUrl("qrc" RESPATH "qml/StationScene.qml"));
+
+    // TODO: fill m_model with the station stuff
+}
 
 DynamicQmlWidget::~DynamicQmlWidget()
 {

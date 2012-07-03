@@ -163,5 +163,6 @@
         <file>data/images/cancel.png</file>
         <file>data/images/delete.png</file>
         <file>data/images/ok.png</file>
+        <file>data/qml/StationScene.qml</file>
     </qresource>
 </RCC>
