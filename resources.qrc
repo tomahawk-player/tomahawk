@@ -147,5 +147,6 @@
         <file>data/images/scrollbar-vertical-handle.png</file>
         <file>data/images/scrollbar-horizontal-handle.png</file>
         <file>data/qml/ArtistInfoScene.qml</file>
+        <file>data/qml/StationScene.qml</file>
     </qresource>
 </RCC>

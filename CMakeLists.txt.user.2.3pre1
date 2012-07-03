@@ -1,0 +1,147 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
+  <valuemap type="QVariantMap">
+   <value key="EditorConfiguration.AutoIndent" type="bool">true</value>
+   <value key="EditorConfiguration.AutoSpacesForTabs" type="bool">false</value>
+   <value key="EditorConfiguration.Codec" type="QByteArray">UTF-8</value>
+   <value key="EditorConfiguration.DoubleIndentBlocks" type="bool">false</value>
+   <value key="EditorConfiguration.IndentBraces" type="bool">false</value>
+   <value key="EditorConfiguration.IndentSize" type="int">4</value>
+   <value key="EditorConfiguration.MouseNavigation" type="bool">true</value>
+   <value key="EditorConfiguration.PaddingMode" type="int">1</value>
+   <value key="EditorConfiguration.ScrollWheelZooming" type="bool">true</value>
+   <value key="EditorConfiguration.SmartBackspace" type="bool">false</value>
+   <value key="EditorConfiguration.SpacesForTabs" type="bool">true</value>
+   <value key="EditorConfiguration.TabKeyBehavior" type="int">0</value>
+   <value key="EditorConfiguration.TabSize" type="int">8</value>
+   <value key="EditorConfiguration.UseGlobal" type="bool">true</value>
+   <value key="EditorConfiguration.Utf8BomBehavior" type="int">1</value>
+   <value key="EditorConfiguration.addFinalNewLine" type="bool">true</value>
+   <value key="EditorConfiguration.cleanIndentation" type="bool">true</value>
+   <value key="EditorConfiguration.cleanWhitespace" type="bool">true</value>
+   <value key="EditorConfiguration.inEntireDocument" type="bool">false</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Target.0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Desktop</value>
+   <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+   <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">CMakeProjectManager.DefaultCMakeTarget</value>
+   <value key="ProjectExplorer.Target.ActiveBuildConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.Target.ActiveDeployConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.Target.ActiveRunConfiguration" type="int">0</value>
+   <valuemap key="ProjectExplorer.Target.BuildConfiguration.0" type="QVariantMap">
+    <value key="CMakeProjectManager.CMakeBuildConfiguration.BuildDirectory" type="QString">/home/micha/Develop/tomahawk-build</value>
+    <value key="CMakeProjectManager.CMakeBuildConfiguration.ToolChain" type="QString">ProjectExplorer.ToolChain.Gcc:/usr/bin/g++.x86-linux-generic-elf-64bit.</value>
+    <value key="ProjectExplorer.BuildCOnfiguration.ToolChain" type="QString">ProjectExplorer.ToolChain.Gcc:/usr/bin/g++.x86-linux-generic-elf-64bit.</value>
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.0" type="QVariantMap">
+     <valuemap key="ProjectExplorer.BuildStepList.Step.0" type="QVariantMap">
+      <value key="CMakeProjectManager.MakeStep.AdditionalArguments" type="QString"></value>
+      <valuelist key="CMakeProjectManager.MakeStep.BuildTargets" type="QVariantList"/>
+      <value key="CMakeProjectManager.MakeStep.Clean" type="bool">false</value>
+      <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Make</value>
+      <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+      <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value key="ProjectExplorer.BuildStepList.StepsCount" type="int">1</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Build</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.1" type="QVariantMap">
+     <valuemap key="ProjectExplorer.BuildStepList.Step.0" type="QVariantMap">
+      <value key="CMakeProjectManager.MakeStep.AdditionalArguments" type="QString">clean</value>
+      <valuelist key="CMakeProjectManager.MakeStep.BuildTargets" type="QVariantList"/>
+      <value key="CMakeProjectManager.MakeStep.Clean" type="bool">true</value>
+      <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Make</value>
+      <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+      <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value key="ProjectExplorer.BuildStepList.StepsCount" type="int">1</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Clean</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.BuildSteps.Clean</value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.BuildStepListCount" type="int">2</value>
+    <value key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment" type="bool">false</value>
+    <valuelist key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">all</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">CMakeProjectManager.CMakeBuildConfiguration</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.BuildConfigurationCount" type="int">1</value>
+   <valuemap key="ProjectExplorer.Target.DeployConfiguration.0" type="QVariantMap">
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStepList.0" type="QVariantMap">
+     <value key="ProjectExplorer.BuildStepList.StepsCount" type="int">0</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Deploy</value>
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.BuildSteps.Deploy</value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.BuildStepListCount" type="int">1</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">No deployment</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">ProjectExplorer.DefaultDeployConfiguration</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.DeployConfigurationCount" type="int">1</value>
+   <valuemap key="ProjectExplorer.Target.RunConfiguration.0" type="QVariantMap">
+    <valuelist key="Analyzer.Valgrind.AddedSupressionFiles" type="QVariantList"/>
+    <value key="Analyzer.Valgrind.FilterExternalIssues" type="bool">true</value>
+    <value key="Analyzer.Valgrind.NumCallers" type="int">25</value>
+    <valuelist key="Analyzer.Valgrind.RemovedSupressionFiles" type="QVariantList"/>
+    <value key="Analyzer.Valgrind.TrackOrigins" type="bool">true</value>
+    <value key="Analyzer.Valgrind.ValgrindExecutable" type="QString">valgrind</value>
+    <valuelist key="Analyzer.Valgrind.VisibleErrorKinds" type="QVariantList">
+     <value type="int">0</value>
+     <value type="int">1</value>
+     <value type="int">2</value>
+     <value type="int">3</value>
+     <value type="int">4</value>
+     <value type="int">5</value>
+     <value type="int">6</value>
+     <value type="int">7</value>
+     <value type="int">8</value>
+     <value type="int">9</value>
+     <value type="int">10</value>
+     <value type="int">11</value>
+     <value type="int">12</value>
+     <value type="int">13</value>
+     <value type="int">14</value>
+    </valuelist>
+    <value key="CMakeProjectManager.BaseEnvironmentBase" type="int">2</value>
+    <value key="CMakeProjectManager.CMakeRunConfiguation.Title" type="QString">tomahawk</value>
+    <value key="CMakeProjectManager.CMakeRunConfiguration.Arguments" type="QString">--verbose</value>
+    <value key="CMakeProjectManager.CMakeRunConfiguration.UseTerminal" type="bool">false</value>
+    <valuelist key="CMakeProjectManager.CMakeRunConfiguration.UserEnvironmentChanges" type="QVariantList">
+     <value type="QString">Q_FATAL_WARNINGS=1</value>
+    </valuelist>
+    <value key="CMakeProjectManager.CMakeRunConfiguration.UserWorkingDirectory" type="QString"></value>
+    <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">tomahawk</value>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">CMakeProjectManager.CMakeRunConfiguration.</value>
+    <value key="RunConfiguration.QmlDebugServerPort" type="uint">3768</value>
+    <value key="RunConfiguration.UseCppDebugger" type="bool">true</value>
+    <value key="RunConfiguration.UseQmlDebugger" type="bool">false</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.RunConfigurationCount" type="int">1</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
+  <value type="int">1</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
+  <value type="QString">{6caf061d-47d5-4e4f-a8d8-0d83c14e4267}</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">9</value>
+ </data>
+</qtcreator>
