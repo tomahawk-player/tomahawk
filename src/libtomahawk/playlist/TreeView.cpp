@@ -293,9 +293,9 @@ TreeView::onFilterChangeFinished()
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->playlistInterface()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
+    if ( !filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->playlistInterface()->filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( filter() ) );
         m_overlay->show();
     }
     else
@@ -528,4 +528,13 @@ TreeView::guid() const
     }
 
     return m_guid;
+}
+
+
+bool
+TreeView::setFilter( const QString& filter )
+{
+    ViewPage::setFilter( filter );
+    m_proxyModel->setFilter( filter );
+    return true;
 }

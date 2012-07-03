@@ -56,25 +56,6 @@ TreeProxyModelPlaylistInterface::filter() const
 }
 
 
-void
-TreeProxyModelPlaylistInterface::setFilter( const QString& pattern )
-{
-    if ( m_proxyModel.isNull() )
-        return;
-    m_proxyModel.data()->newFilterFromPlaylistInterface( pattern );
-}
-
-
-int
-TreeProxyModelPlaylistInterface::unfilteredTrackCount() const
-{
-    if ( m_proxyModel.isNull() )
-        return 0;
-    TreeProxyModel* proxyModel = m_proxyModel.data();
-    return proxyModel->sourceModel()->rowCount( QModelIndex() );
-}
-
-
 int
 TreeProxyModelPlaylistInterface::trackCount() const
 {

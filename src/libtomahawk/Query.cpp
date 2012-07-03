@@ -601,6 +601,9 @@ Query::playbackCount( const source_ptr& source )
 void
 Query::loadSocialActions()
 {
+    if ( m_socialActionsLoaded )
+        return;
+
     m_socialActionsLoaded = true;
     query_ptr q = m_ownRef.toStrongRef();
 

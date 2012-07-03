@@ -42,7 +42,6 @@ public:
     QList<Tomahawk::query_ptr> tracks();
 
     virtual int trackCount() const { return 1; }
-    virtual int unfilteredTrackCount() const { return 1; }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
     virtual bool sourceValid();
@@ -59,7 +58,6 @@ public:
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
 
     virtual bool shuffled() const { return false; }
-    virtual void setFilter( const QString& /*pattern*/ ) {}
 
     virtual QWeakPointer< Tomahawk::Source > source() const;
 

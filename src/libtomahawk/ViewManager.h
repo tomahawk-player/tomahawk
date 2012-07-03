@@ -110,11 +110,6 @@ public:
     bool isTomahawkLoaded() const { return m_loaded; }
 
 signals:
-    void numSourcesChanged( unsigned int sources );
-    void numTracksChanged( unsigned int tracks );
-    void numArtistsChanged( unsigned int artists );
-    void numShownChanged( unsigned int shown );
-
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 

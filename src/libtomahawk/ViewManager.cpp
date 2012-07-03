@@ -189,8 +189,6 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
     }
 
     setPage( view );
-    emit numSourcesChanged( SourceList::instance()->count() );
-
     return view;
 }
 
@@ -211,8 +209,6 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
         hideQueue();
     else
         showQueue();*/
-
-    emit numSourcesChanged( SourceList::instance()->count() );
 
     return m_dynamicWidgets.value( playlist ).data();
 }
@@ -352,8 +348,6 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( aview );
     }
 
-    emit numSourcesChanged( 1 );
-
     return shown;
 }
 
@@ -421,8 +415,6 @@ ViewManager::showSuperCollection()
         shown = m_superGridView;
         setPage( m_superGridView );
     }
-
-    emit numSourcesChanged( m_superCollections.count() );
 
     return shown;
 }
@@ -566,8 +558,8 @@ ViewManager::setFilter( const QString& filter )
 void
 ViewManager::applyFilter()
 {
-    if ( currentPlaylistInterface() && currentPlaylistInterface()->filter() != m_filter )
-        currentPlaylistInterface()->setFilter( m_filter );
+    if ( m_currentPage )
+        m_currentPage->setFilter( m_filter );
 }
 
 
@@ -723,17 +715,11 @@ ViewManager::unlinkPlaylist()
 {
     if ( currentPlaylistInterface() )
     {
-        disconnect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                    this,                                 SIGNAL( numTracksChanged( unsigned int ) ) );
-
-        disconnect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
-                    this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
-
         disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                    this,                                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+                    this,                              SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
+                    this,                              SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
 
@@ -766,30 +752,17 @@ ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                                                    SIGNAL( numTracksChanged( unsigned int ) ) );
-
-        connect( currentPlaylistInterface().data(), SIGNAL( trackCountChanged( unsigned int ) ),
-                                                    SIGNAL( numShownChanged( unsigned int ) ) );
-
         connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
                                                     SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
         connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                                                     SIGNAL( shuffleModeChanged( bool ) ) );
 
-        m_infobar->setFilter( currentPlaylistInterface()->filter() );
+        m_infobar->setFilter( currentPage()->filter() );
     }
 
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
     {
-        emit numTracksChanged( currentPlaylistInterface()->unfilteredTrackCount() );
-
-        if ( !currentPlaylistInterface()->filter().isEmpty() )
-            emit numShownChanged( currentPlaylistInterface()->trackCount() );
-        else
-            emit numShownChanged( currentPlaylistInterface()->unfilteredTrackCount() );
-
         emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
         emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
         emit modeChanged( currentPlaylistInterface()->viewMode() );

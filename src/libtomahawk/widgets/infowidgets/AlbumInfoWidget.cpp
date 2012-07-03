@@ -57,11 +57,9 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracksView->setTreeModel( m_tracksModel );
     ui->tracksView->setRootIsDecorated( false );
     ui->tracksView->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
+    ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::Collection );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
-
-    connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
-    connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
 
     load( album );
 }
@@ -77,18 +75,6 @@ Tomahawk::playlistinterface_ptr
 AlbumInfoWidget::playlistInterface() const
 {
     return ui->tracksView->playlistInterface();
-}
-
-
-void
-AlbumInfoWidget::onLoadingStarted()
-{
-}
-
-
-void
-AlbumInfoWidget::onLoadingFinished()
-{
 }
 
 

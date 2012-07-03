@@ -72,6 +72,7 @@ public:
     virtual bool showModes() const { return true; }
     virtual bool showFilter() const { return true; }
 
+    virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }
