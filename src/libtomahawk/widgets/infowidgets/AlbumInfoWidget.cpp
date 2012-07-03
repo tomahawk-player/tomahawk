@@ -61,9 +61,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
-    connect( m_tracksModel, SIGNAL( loadingStarted() ), SLOT( onLoadingStarted() ) );
-    connect( m_tracksModel, SIGNAL( loadingFinished() ), SLOT( onLoadingFinished() ) );
-
     load( album );
 }
 
@@ -78,18 +75,6 @@ Tomahawk::playlistinterface_ptr
 AlbumInfoWidget::playlistInterface() const
 {
     return ui->tracksView->playlistInterface();
-}
-
-
-void
-AlbumInfoWidget::onLoadingStarted()
-{
-}
-
-
-void
-AlbumInfoWidget::onLoadingFinished()
-{
 }
 
 
