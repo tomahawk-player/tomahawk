@@ -259,15 +259,22 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     {
         return QVariant();
     }
-
-    if ( role == Qt::TextAlignmentRole )
+    else if ( role == Qt::TextAlignmentRole )
     {
         return QVariant( columnAlignment( index.column() ) );
     }
 
+    int column = index.column();
+    if ( role >= Qt::UserRole )
+    {
+        // Map user-role to column
+        column = role - Qt::UserRole;
+        role = Qt::DisplayRole;
+    }
+
     if ( !entry->query().isNull() )
     {
-        return queryData( entry->query()->displayQuery(), index.column(), role );
+        return queryData( entry->query()->displayQuery(), column, role );
     }
     else if ( !entry->artist().isNull() )
     {
