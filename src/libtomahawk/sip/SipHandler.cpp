@@ -118,50 +118,47 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
 
 
 void
-SipHandler::onPeerOnline( const QString& jid )
+SipHandler::onPeerOnline( const QString& peerId )
 {
 //    qDebug() << Q_FUNC_INFO;
-    tDebug() << "SIP online:" << jid;
+    tDebug() << "SIP online:" << peerId;
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
-    QVariantMap m;
+    SipInfo info;
     if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
         ControlConnection* conn = new ControlConnection( Servent::instance(), QString() );
 
         const QString& nodeid = Database::instance()->impl()->dbid();
-        conn->setName( jid.left( jid.indexOf( "/" ) ) );
+        conn->setName( peerId.left( peerId.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
-        m["visible"] = true;
-        m["ip"] = Servent::instance()->externalAddress();
-        m["port"] = Servent::instance()->externalPort();
-        m["key"] = key;
-        m["uniqname"] = nodeid;
+        info.setVisible( true );
+        info.setHost( QHostInfo::fromName( Servent::instance()->externalAddress() ) );
+        info.setPort( Servent::instance()->externalPort() );
+        info.setKey( key );
+        info.setUniqname( nodeid );
 
-        qDebug() << "Asking them to connect to us:" << m;
+        tDebug() << "Asking them to connect to us:" << info;
     }
     else
     {
-        m["visible"] = false;
-        qDebug() << "We are not visible externally:" << m;
+        info.setVisible( false );
+        tDebug() << "We are not visible externally:" << info;
     }
 
-    QJson::Serializer ser;
-    QByteArray ba = ser.serialize( m );
-
-    sip->sendMsg( jid, QString::fromAscii( ba ) );
+    sip->sendMsg( peerId, info );
 }
 
 
 void
-SipHandler::onPeerOffline( const QString& jid )
+SipHandler::onPeerOffline( const QString& peerId )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP offline:" << jid;
+    tDebug() << "SIP offline:" << peerId;
 }
 
 
@@ -174,7 +171,7 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 
     //FIXME: We should probably be using barePeerId in the connectToPeer call below.
     //But, verify this doesn't cause any problems (there is still a uniquename after all)
-    
+
     /*
       If only one party is externally visible, connection is obvious
       If both are, peer with lowest IP address initiates the connection.

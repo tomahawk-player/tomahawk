@@ -59,10 +59,10 @@ public slots:
     void disconnectPlugin();
     void configurationChanged();
 
-    void sendMsg( const QString& to, const QString& msg )
+    void sendMsg( const QString& peerId, const SipInfo& info )
     {
-        Q_UNUSED( to );
-        Q_UNUSED( msg );
+        Q_UNUSED( peerId );
+        Q_UNUSED( info );
     }
 
     void broadcastMsg( const QString &msg )
@@ -70,9 +70,9 @@ public slots:
         Q_UNUSED( msg );
     }
 
-    void addContact( const QString &jid, const QString& msg = QString() )
+    void addContact( const QString &peerId, const QString& msg = QString() )
     {
-        Q_UNUSED( jid );
+        Q_UNUSED( peerId );
         Q_UNUSED( msg );
     }
 

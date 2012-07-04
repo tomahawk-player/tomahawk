@@ -86,8 +86,8 @@ public slots:
     virtual void disconnectPlugin();
     virtual void checkSettings();
     virtual void configurationChanged();
-    virtual void sendMsg( const QString& to, const QString& msg );
-    virtual void addContact( const QString& jid, const QString& msg = QString() );
+    virtual void sendMsg( const QString& peerId, const SipInfo& info );
+    virtual void addContact( const QString& peerId, const QString& msg = QString() );
 
     void broadcastMsg( const QString& msg );
     void showAddFriendDialog();
