@@ -84,6 +84,8 @@ ViewHeader::checkState()
         {
             if ( isSectionHidden( i ) )
                 continue;
+            if ( i >= m_columnWeights.count() )
+                break;
 
             double nw = (double)m_parent->width() * m_columnWeights.at( i );
             resizeSection( i, qMax( minimumSectionSize(), int( nw - 0.5 ) ) );
