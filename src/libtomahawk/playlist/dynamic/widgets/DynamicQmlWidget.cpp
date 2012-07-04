@@ -10,27 +10,35 @@
 #include <qdeclarative.h>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
+#include <QSize>
 
 namespace Tomahawk
 {
 
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
     : QDeclarativeView( parent )
+    , QDeclarativeImageProvider( QDeclarativeImageProvider::Pixmap )
     , m_playlist( playlist )
 {
+
+    engine()->addImageProvider( "albumart", this );
+
     setResizeMode( QDeclarativeView::SizeRootObjectToView );
-    setSource( QUrl( "qrc" RESPATH "qml/ArtistInfoScene.qml" ) );
 
     m_model = new DynamicModel( this );
     m_proxyModel = new PlayableProxyModel( this );
     m_proxyModel->setSourcePlayableModel( m_model );
 
-    rootContext()->setContextProperty( "dynamicModel", m_model );
 
     m_model->loadPlaylist( m_playlist );
     m_model->startOnDemand();
 
+    rootContext()->setContextProperty( "dynamicModel", m_model );
+    currentItemChanged( m_model->currentItem() );
+
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
+
+    connect( m_model, SIGNAL( currentItemChanged( QPersistentModelIndex ) ), SLOT( currentItemChanged( QPersistentModelIndex ) ) );
 }
 
 
@@ -71,6 +79,44 @@ bool
 DynamicQmlWidget::jumpToCurrentTrack()
 {
     return false;
+}
+
+QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    qDebug() << "*!*!*!*!*!*!*!*!*!* image requested:" << id;
+
+    // We always can generate it in the requested size
+    int width = requestedSize.width() > 0 ? requestedSize.width() : 230;
+    int height = requestedSize.height() > 0 ? requestedSize.height() : 230;
+
+    if( size )
+        *size = QSize( width, height );
+
+    QModelIndex index = m_model->index( id.toInt(), 0, QModelIndex() );
+    qDebug() << "got index" << index;
+    if( index.isValid() ) {
+        PlayableItem *item = m_model->itemFromIndex( index );
+        qDebug() << "got item" << item << item->query();
+        qDebug() << "got item" << item << item->query()->coverLoaded();
+        if ( !item->album().isNull() && item->album()->coverLoaded() ) {
+            return item->album()->cover( *size );
+        } else if ( !item->artist().isNull() && item->artist()->coverLoaded() ) {
+            return item->artist()->cover( *size );
+        } else if ( !item->query().isNull() && item->query()->coverLoaded() ) {
+            return item->query()->cover( *size );
+        }
+    }
+
+    // TODO: create default cover art image
+    QPixmap pixmap( *size );
+    pixmap.fill();
+
+    return pixmap;
+}
+
+void DynamicQmlWidget::currentItemChanged(const QPersistentModelIndex &currentIndex)
+{
+    rootContext()->setContextProperty( "currentlyPlayedIndex", m_model->currentItem().row() );
 }
 
 }
