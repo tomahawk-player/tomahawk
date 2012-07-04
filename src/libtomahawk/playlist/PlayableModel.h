@@ -139,6 +139,7 @@ signals:
     void loadingFinished();
 
     void changed();
+    void currentItemChanged( const QPersistentModelIndex &currentIndex );
 
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );

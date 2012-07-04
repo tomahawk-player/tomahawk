@@ -23,6 +23,7 @@
 #include "Typedefs.h"
 
 #include <QDeclarativeView>
+#include <QDeclarativeImageProvider>
 
 class PlayableProxyModel;
 
@@ -31,7 +32,7 @@ namespace Tomahawk
 
 class DynamicModel;
 
-class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage
+class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage, public QDeclarativeImageProvider
 {
 Q_OBJECT
 public:
@@ -49,6 +50,11 @@ public:
     virtual bool showFilter() const { return true; }
 
     virtual bool jumpToCurrentTrack();
+
+    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+
+private slots:
+    void currentItemChanged( const QPersistentModelIndex &currentIndex );
 
 private:
     DynamicModel* m_model;

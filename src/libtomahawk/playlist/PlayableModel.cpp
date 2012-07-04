@@ -43,6 +43,11 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     , m_readOnly( true )
     , m_loading( loading )
 {
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(ArtistRole, "artistName");
+    roleNames.insert(TrackRole, "trackName");
+    setRoleNames(roleNames);
+
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
@@ -327,6 +332,7 @@ PlayableModel::setCurrentItem( const QModelIndex& index )
         m_currentIndex = QModelIndex();
         m_currentUuid = QString();
     }
+    emit currentItemChanged( m_currentIndex );
 }
 
 
