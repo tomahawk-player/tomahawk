@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "playlist/topbar/SearchLineEdit.h"
+#include "widgets/searchlineedit/SearchLineEdit.h"
 #include "utils/TomahawkUtilsGui.h"
 
 class DLLEXPORT QSearchFieldPrivate
