@@ -117,8 +117,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             m_covers.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), r.size(), TomahawkUtils::Grid ) ) );
         }
 
-        _detail::Closure* closure = NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ), const_cast<GridItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
-        closure->setAutoDelete( false );
+        NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ),
+                    const_cast<GridItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) )->setAutoDelete( false );
     }
 
     QSharedPointer< Tomahawk::PixmapDelegateFader > fader = m_covers[ index ];
@@ -238,17 +238,18 @@ GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( item )
     {
-        _detail::Closure* closure;
+        NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
+                    const_cast<GridItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
-        closure = NewClosure( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ),
-                              const_cast<GridItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+        m_closures.remove( index );
 
-        closure = NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
-                              const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
-        closure = NewClosure( AudioEngine::instance(), SIGNAL( stopped() ),
-                              const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+        m_closures.insertMulti( index, NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
+                                                   const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) ) );
+        m_closures.insertMulti( index, NewClosure( AudioEngine::instance(), SIGNAL( stopped() ),
+                                       const_cast<GridItemDelegate*>(this), SLOT( onPlaylistChanged( QPersistentModelIndex ) ), QPersistentModelIndex( index ) ) );
 
-        closure->setAutoDelete( false );
+        foreach ( _detail::Closure* closure, m_closures.values( index ) )
+            closure->setAutoDelete( false );
 
         connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackFinished() ) );
 
@@ -480,6 +481,9 @@ GridItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
 
         if ( finished )
         {
+            foreach ( _detail::Closure* closure, m_closures.values( index ) )
+                closure->deleteLater();
+
             if ( m_pauseButton.contains( index ) )
             {
                 m_pauseButton[ index ]->deleteLater();

@@ -29,6 +29,10 @@ namespace Tomahawk {
     class PixmapDelegateFader;
 }
 
+namespace _detail {
+    class Closure;
+}
+
 class QEvent;
 class QTimeLine;
 class PlayableProxyModel;
@@ -82,8 +86,8 @@ private:
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
-
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
+    mutable QHash< QPersistentModelIndex, _detail::Closure* > m_closures;
 };
 
 #endif // GRIDITEMDELEGATE_H
