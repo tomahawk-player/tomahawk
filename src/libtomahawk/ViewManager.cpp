@@ -25,7 +25,6 @@
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "infobar/InfoBar.h"
-#include "topbar/TopBar.h"
 
 #include "FlexibleView.h"
 #include "TreeModel.h"
@@ -79,7 +78,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_currentPage( 0 )
-    , m_currentMode( PlaylistModes::Tree )
     , m_loaded( false )
 {
     s_instance = this;
@@ -100,10 +98,6 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView->setTreeModel( m_superCollectionModel );
     m_superCollectionView->setShowModes( false );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
-
-    m_superGridView = new GridView();
-    m_superAlbumModel = new AlbumModel( m_superGridView );
-    m_superGridView->setPlayableModel( m_superAlbumModel );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -274,81 +268,32 @@ ViewManager::show( const Tomahawk::query_ptr& query )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
-    qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
-    ViewPage* shown = 0;
-    if ( m_currentMode == PlaylistModes::Flat )
+
+    TreeView* view;
+    if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
     {
-/*        CollectionView* view;
-        if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
-        {
-            view = new CollectionView();
-            CollectionFlatModel* model = new CollectionFlatModel();
-            view->setPlayableModel( model );
+        view = new TreeView();
+        view->proxyModel()->setStyle( PlayableProxyModel::Collection );
+        TreeModel* model = new TreeModel();
+        view->setTreeModel( model );
 
-            model->addCollection( collection );
-
-            m_collectionViews.insert( collection, view );
-        }
+        if ( collection && collection->source()->isLocal() )
+            view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
         else
-        {
-            view = m_collectionViews.value( collection ).data();
-        }
+            view->setEmptyTip( tr( "This collection is empty." ) );
 
-        shown = view;
-        setPage( view );*/
+        model->addCollection( collection );
+
+        m_treeViews.insert( collection, view );
+    }
+    else
+    {
+        view = m_treeViews.value( collection ).data();
     }
 
-    if ( m_currentMode == PlaylistModes::Tree )
-    {
-        TreeView* view;
-        if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
-        {
-            view = new TreeView();
-            view->proxyModel()->setStyle( PlayableProxyModel::Collection );
-            TreeModel* model = new TreeModel();
-            view->setTreeModel( model );
-
-            if ( collection && collection->source()->isLocal() )
-                view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
-            else
-                view->setEmptyTip( tr( "This collection is empty." ) );
-
-            model->addCollection( collection );
-
-            m_treeViews.insert( collection, view );
-        }
-        else
-        {
-            view = m_treeViews.value( collection ).data();
-        }
-
-        shown = view;
-        setPage( view );
-    }
-
-    if ( m_currentMode == PlaylistModes::Album )
-    {
-        GridView* aview;
-        if ( !m_collectionGridViews.contains( collection ) || m_collectionGridViews.value( collection ).isNull() )
-        {
-            aview = new GridView();
-            AlbumModel* amodel = new AlbumModel( aview );
-            aview->setPlayableModel( amodel );
-            amodel->addCollection( collection );
-
-            m_collectionGridViews.insert( collection, aview );
-        }
-        else
-        {
-            aview = m_collectionGridViews.value( collection ).data();
-        }
-
-        shown = aview;
-        setPage( aview );
-    }
-
-    return shown;
+    setPage( view );
+    return view;
 }
 
 
@@ -397,26 +342,9 @@ ViewManager::showSuperCollection()
 
     m_superCollectionModel->setTitle( tr( "SuperCollection" ) );
     m_superCollectionModel->setDescription( tr( "Combined libraries of all your online friends" ) );
-    m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
-    ViewPage* shown = 0;
-    if ( m_currentMode == PlaylistModes::Tree )
-    {
-        shown = m_superCollectionView;
-        setPage( m_superCollectionView );
-    }
-    else if ( m_currentMode == PlaylistModes::Flat )
-    {
-        shown = m_superCollectionView;
-        setPage( m_superCollectionView );
-    }
-    else if ( m_currentMode == PlaylistModes::Album )
-    {
-        shown = m_superGridView;
-        setPage( m_superGridView );
-    }
-
-    return shown;
+    setPage( m_superCollectionView );
+    return m_superCollectionView;
 }
 
 
@@ -498,48 +426,6 @@ ViewManager::showRecentPlaysPage()
     }
 
     return show( m_recentPlaysWidget );
-}
-
-
-void
-ViewManager::setTableMode()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    m_currentMode = PlaylistModes::Flat;
-
-    if ( isSuperCollectionVisible() )
-        showSuperCollection();
-    else
-        show( m_currentCollection );
-}
-
-
-void
-ViewManager::setTreeMode()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    m_currentMode = PlaylistModes::Tree;
-
-    if ( isSuperCollectionVisible() )
-        showSuperCollection();
-    else
-        show( m_currentCollection );
-}
-
-
-void
-ViewManager::setAlbumMode()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    m_currentMode = PlaylistModes::Album;
-
-    if ( isSuperCollectionVisible() )
-        showSuperCollection();
-    else
-        show( m_currentCollection );
 }
 
 
@@ -759,13 +645,9 @@ ViewManager::updateView()
                                                     SIGNAL( shuffleModeChanged( bool ) ) );
 
         m_infobar->setFilter( currentPage()->filter() );
-    }
 
-    if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
-    {
         emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
         emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
-        emit modeChanged( currentPlaylistInterface()->viewMode() );
     }
 
 /*    if ( currentPage()->queueVisible() )
@@ -773,8 +655,6 @@ ViewManager::updateView()
     else
         hideQueue();*/
 
-    emit statsAvailable( currentPage()->showStatsBar() );
-    emit modesAvailable( currentPage()->showModes() );
     emit filterAvailable( currentPage()->showFilter() );
 
 /*    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
@@ -784,7 +664,6 @@ ViewManager::updateView()
 
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
-
     m_infobar->setUpdaters( currentPage()->updaters() );
 
     switch( currentPage()->descriptionType() )
@@ -988,27 +867,11 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interf
 }
 
 
-Tomahawk::collection_ptr
-ViewManager::collectionForInterface( Tomahawk::playlistinterface_ptr interface ) const
-{
-    foreach ( QWeakPointer<GridView> view, m_collectionGridViews.values() )
-    {
-        if ( view.data()->playlistInterface() == interface )
-        {
-            return m_collectionGridViews.key( view );
-        }
-    }
-
-    return collection_ptr();
-}
-
-
 bool
 ViewManager::isSuperCollectionVisible() const
 {
     return ( currentPage() != 0 &&
-           ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ||
-             currentPage()->playlistInterface() == m_superGridView->playlistInterface() ) );
+           ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ) );
 }
 
 
@@ -1021,19 +884,6 @@ ViewManager::showCurrentTrack()
     {
         setPage( page );
         page->jumpToCurrentTrack();
-
-        // reset the correct mode, if the user has changed it since
-
-        if ( dynamic_cast< TrackView* >( page ) )
-            m_currentMode = PlaylistModes::Flat;
-        else if ( dynamic_cast< GridView* >( page ) )
-            m_currentMode = PlaylistModes::Album;
-        else if ( dynamic_cast< TreeView* >( page ) )
-            m_currentMode = PlaylistModes::Tree;
-        else
-            return;
-
-        emit modeChanged( (PlaylistModes::ViewMode)m_currentMode );
     }
 }
 
