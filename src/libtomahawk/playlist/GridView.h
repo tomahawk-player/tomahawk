@@ -69,8 +69,6 @@ public:
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
 
-    virtual bool showModes() const { return true; }
-
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack() { return false; }
 

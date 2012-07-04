@@ -22,6 +22,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTimer>
+#include <QtCore/QSet>
 
 #include "MusicScanner.h"
 #include "TomahawkSettings.h"
@@ -48,6 +49,8 @@ ScanManager::ScanManager( QObject* parent )
     : QObject( parent )
     , m_musicScannerThreadController( 0 )
     , m_currScannerPaths()
+    , m_cachedScannerDirs()
+    , m_queuedScanType( None )
 {
     s_instance = this;
 
@@ -60,7 +63,7 @@ ScanManager::ScanManager( QObject* parent )
 
     if ( TomahawkSettings::instance()->hasScannerPaths() )
     {
-        m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
+        m_cachedScannerDirs = TomahawkSettings::instance()->scannerPaths();
         m_scanTimer->start();
         if ( TomahawkSettings::instance()->watchForChanges() )
             QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
@@ -94,10 +97,10 @@ ScanManager::onSettingsChanged()
     m_scanTimer->setInterval( TomahawkSettings::instance()->scannerTime() * 1000 );
 
     if ( TomahawkSettings::instance()->hasScannerPaths() &&
-        m_currScannerPaths != TomahawkSettings::instance()->scannerPaths() )
+        m_cachedScannerDirs != TomahawkSettings::instance()->scannerPaths() )
     {
-        m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
-        runScan();
+        m_cachedScannerDirs = TomahawkSettings::instance()->scannerPaths();
+        runNormalScan();
     }
 
     if ( TomahawkSettings::instance()->watchForChanges() && !m_scanTimer->isActive() )
@@ -108,62 +111,64 @@ ScanManager::onSettingsChanged()
 void
 ScanManager::runStartupScan()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
     else
-        runScan();
+        runNormalScan();
 }
 
 
 void
 ScanManager::scanTimerTimeout()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !TomahawkSettings::instance()->watchForChanges() ||
          !Database::instance() ||
          ( Database::instance() && !Database::instance()->isReady() ) )
         return;
     else
-        runScan();
+        runNormalScan();
+}
+
+void
+ScanManager::runFullRescan()
+{
+    runNormalScan( true );
 }
 
 
+
 void
-ScanManager::runScan( bool manualFull )
+ScanManager::runNormalScan( bool manualFull )
 {
-    qDebug() << Q_FUNC_INFO;
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-        return;
-
-    if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
-        if ( manualFull )
-        {
-            DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
-            connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
-            Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-            return;
-        }
-
-        DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
-        connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
-                        SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
-
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-    }
-    else
-    {
-        qDebug() << "Could not run dir scan, old scan still running";
+        tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
         return;
     }
-}
+    
+    if ( QThread::currentThread() != ScanManager::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, manualFull ) );
+        return;
+    }
 
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    
+    if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
+    {
+        if ( m_queuedScanType != Full )
+            m_queuedScanType = manualFull ? Full : Normal;
+        tDebug( LOGVERBOSE ) << "Could not run dir scan, old scan still running";
+        return;
+    }
 
-void
-ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes )
-{
-    if ( !mtimes.isEmpty() && TomahawkSettings::instance()->scannerPaths().isEmpty() )
+    m_scanTimer->stop();
+    m_musicScannerThreadController = new QThread( this );
+    m_currScanMode = DirScan;
+
+    if ( manualFull )
     {
         DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
         connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
@@ -171,7 +176,62 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
         return;
     }
 
-    runDirScan();
+    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
+    connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
+                    SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
+
+
+void
+ScanManager::runFileScan( const QStringList &paths )
+{
+    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+    {
+        tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
+        return;
+    }
+    
+    if ( QThread::currentThread() != ScanManager::instance()->thread() )
+    {
+        QMetaObject::invokeMethod( this, "runFileScan", Qt::QueuedConnection, Q_ARG( QStringList, paths ) );
+        return;
+    }
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    
+    foreach( const QString& path, paths )
+        m_currScannerPaths.insert( path );
+
+    if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
+    {
+        if ( m_queuedScanType == None )
+            m_queuedScanType = File;
+        tDebug( LOGVERBOSE ) << "Could not run file scan, old scan still running";
+        return;
+    }
+
+    m_scanTimer->stop();
+    m_musicScannerThreadController = new QThread( this );
+    m_currScanMode = FileScan;
+
+    QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
+}
+
+
+
+void
+ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes )
+{
+    if ( !mtimes.isEmpty() && m_currScanMode == DirScan && TomahawkSettings::instance()->scannerPaths().isEmpty() )
+    {
+        DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+        connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        return;
+    }
+
+    QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
 }
 
 
@@ -179,33 +239,26 @@ void
 ScanManager::filesDeleted()
 {
     if ( !TomahawkSettings::instance()->scannerPaths().isEmpty() )
-        runDirScan();
+        QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
     else
         scannerFinished();
 }
 
 
 void
-ScanManager::runDirScan()
+ScanManager::runScan()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    QStringList paths = TomahawkSettings::instance()->scannerPaths();
+    QStringList paths = m_currScannerPaths.empty() ? TomahawkSettings::instance()->scannerPaths() : m_currScannerPaths.toList();
 
-    if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
+    if ( m_musicScannerThreadController && m_scanner.isNull() )
     {
-        m_scanTimer->stop();
-        m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( paths ) );
+        m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( m_currScanMode, paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner.data(), "startScan" );
-    }
-    else
-    {
-        qDebug() << "Could not run dir scan, old scan still running";
-        return;
     }
 }
 
@@ -213,7 +266,7 @@ ScanManager::runDirScan()
 void
 ScanManager::scannerFinished()
 {
-    tDebug() << "deleting scanner";
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !m_scanner.isNull() )
     {
         m_musicScannerThreadController->quit();
@@ -224,7 +277,24 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
 
-    m_scanTimer->start();
     SourceList::instance()->getLocal()->scanningFinished( 0 );
     emit finished();
+
+    if ( !m_queuedScanType == File )
+        m_currScannerPaths.clear();
+    switch ( m_queuedScanType )
+    {
+        case Full:
+        case Normal:
+            QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, m_queuedScanType == Full ) );
+            break;
+        case File:
+            QMetaObject::invokeMethod( this, "runFileScan", Qt::QueuedConnection, Q_ARG( QStringList, QStringList() ) );
+            break;
+        default:
+            break;
+    }
+    m_queuedScanType = None;
+
+    m_scanTimer->start();
 }

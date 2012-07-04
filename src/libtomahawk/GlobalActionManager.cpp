@@ -43,7 +43,6 @@
 
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"
-    #include "playlist/topbar/TopBar.h"
     #include "playlist/PlaylistView.h"
     #include "widgets/SearchWidget.h"
 

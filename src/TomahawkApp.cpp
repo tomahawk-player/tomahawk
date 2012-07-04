@@ -321,7 +321,7 @@ TomahawkApp::init()
 
     if ( arguments().contains( "--filescan" ) )
     {
-        m_scanManager.data()->runScan( true );
+        m_scanManager.data()->runFullRescan();
     }
 
     // Set up echonest catalog synchronizer

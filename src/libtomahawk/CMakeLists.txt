@@ -89,11 +89,7 @@ set( libGuiSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
 
-    playlist/topbar/TopBar.cpp
-    playlist/topbar/ClearButton.cpp
-    playlist/topbar/SearchLineEdit.cpp
-    playlist/topbar/LineEdit.cpp
-    playlist/topbar/SearchButton.cpp
+
 
     ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
@@ -120,6 +116,8 @@ set( libGuiSources
     utils/SharedTimeLine.cpp
 
     widgets/AnimatedCounterLabel.cpp
+    widgets/Breadcrumb.cpp
+    widgets/BreadcrumbButton.cpp
     widgets/CheckDirTree.cpp
     widgets/QueryLabel.cpp
     widgets/ImageButton.cpp
@@ -148,8 +146,10 @@ set( libGuiSources
     widgets/infowidgets/AlbumInfoWidget.cpp
     widgets/infowidgets/TrackInfoWidget.cpp
     widgets/infowidgets/AlbumArtImageProvider.cpp
-    widgets/Breadcrumb.cpp
-    widgets/BreadcrumbButton.cpp
+    widgets/searchlineedit/ClearButton.cpp
+    widgets/searchlineedit/LineEdit.cpp
+    widgets/searchlineedit/SearchButton.cpp
+    widgets/searchlineedit/SearchLineEdit.cpp
 )
 
 IF(QCA2_FOUND)
@@ -272,6 +272,7 @@ set( libSources
     filemetadata/taghandlers/id3v2tag.cpp
     filemetadata/taghandlers/mp4tag.cpp
     filemetadata/taghandlers/oggtag.cpp
+    filemetadata/MetadataEditor.cpp
 
     network/BufferIoDevice.cpp
     network/MsgProcessor.cpp
@@ -318,8 +319,8 @@ set( libUI ${libUI}
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
     widgets/infowidgets/TrackInfoWidget.ui
-    playlist/topbar/TopBar.ui
     playlist/QueueView.ui
+    filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui

@@ -58,9 +58,7 @@ public:
     virtual QString longDescription() const { return QString(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
 
-    virtual bool showStatsBar() const { return true; }
     virtual bool showInfoBar() const { return true; }
-    virtual bool showModes() const { return false; }
     virtual bool showFilter() const { return false; }
     virtual bool queueVisible() const { return true; }
 

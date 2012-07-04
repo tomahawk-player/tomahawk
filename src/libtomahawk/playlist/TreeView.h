@@ -70,12 +70,7 @@ public:
     virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return m_model->icon(); }
 
-    virtual bool showStatsBar() const { return false; }
     virtual bool showFilter() const { return true; }
-
-    virtual void setShowModes( bool b ) { m_showModes = b; }
-    virtual bool showModes() const { return m_showModes; }
-
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
@@ -128,7 +123,6 @@ private:
     Tomahawk::ContextMenu* m_contextMenu;
 
     QString m_emptyTip;
-    bool m_showModes;
     QTimer m_timer;
     mutable QString m_guid;
 };

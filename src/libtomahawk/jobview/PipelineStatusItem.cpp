@@ -29,11 +29,14 @@
 
 QPixmap* PipelineStatusItem::s_pixmap = 0;
 
-PipelineStatusItem::PipelineStatusItem()
+PipelineStatusItem::PipelineStatusItem( const Tomahawk::query_ptr& q )
     : JobStatusItem()
 {
     connect( Tomahawk::Pipeline::instance(), SIGNAL( resolving( Tomahawk::query_ptr ) ), this, SLOT( resolving( Tomahawk::query_ptr ) ) );
     connect( Tomahawk::Pipeline::instance(), SIGNAL( idle() ), this, SLOT( idle() ) );
+
+    if ( !q.isNull() )
+        resolving( q );
 }
 
 
@@ -102,11 +105,10 @@ PipelineStatusManager::PipelineStatusManager( QObject* parent )
 void
 PipelineStatusManager::resolving( const Tomahawk::query_ptr& p )
 {
-    Q_UNUSED( p );
     if ( m_curItem.isNull() )
     {
         // No current query item and we're resolving something, so show it
-        m_curItem = QWeakPointer< PipelineStatusItem >( new PipelineStatusItem );
+        m_curItem = QWeakPointer< PipelineStatusItem >( new PipelineStatusItem( p ) );
         JobStatusView::instance()->model()->addJob( m_curItem.data() );
     }
 }

@@ -5,6 +5,8 @@ build/*
 *.o
 ._*
 *.user
+*.swp
+*.swo
 Makefile*
 moc_*
 *~

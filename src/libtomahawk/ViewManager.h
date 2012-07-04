@@ -50,7 +50,6 @@ class TreeModel;
 class TrackView;
 class SourceInfoWidget;
 class InfoBar;
-class TopBar;
 class TrackInfoWidget;
 class NewReleasesWidget;
 class WelcomeWidget;
@@ -113,10 +112,7 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void statsAvailable( bool b );
-    void modesAvailable( bool b );
     void filterAvailable( bool b );
-    void modeChanged( Tomahawk::PlaylistModes::ViewMode mode );
 
     void playClicked();
     void pauseClicked();
@@ -159,10 +155,6 @@ public slots:
     void showQueue() { emit showQueueRequested(); }
     void hideQueue() { emit hideQueueRequested(); }
 
-    void setTreeMode();
-    void setTableMode();
-    void setAlbumMode();
-
     void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
     void setShuffled( bool enabled );
 
@@ -189,7 +181,6 @@ private:
 
     Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
-    Tomahawk::collection_ptr collectionForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     QWidget* m_widget;
     InfoBar* m_infobar;
@@ -197,8 +188,6 @@ private:
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 
-    AlbumModel* m_superAlbumModel;
-    GridView* m_superGridView;
     TreeModel* m_superCollectionModel;
     TreeView* m_superCollectionView;
     QueueView* m_queue;
@@ -212,7 +201,6 @@ private:
 
     QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QWeakPointer<TreeView> > m_treeViews;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<GridView> > m_collectionGridViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;
@@ -224,7 +212,6 @@ private:
     Tomahawk::ViewPage* m_currentPage;
 
     Tomahawk::collection_ptr m_currentCollection;
-    int m_currentMode;
 
     QTimer m_filterTimer;
     QString m_filter;

@@ -69,11 +69,10 @@ public:
     virtual QString title() const { return tr( "Charts" ); }
     virtual QString description() const { return QString(); }
 
-    virtual bool showStatsBar() const { return false; }
     virtual bool showInfoBar() const { return false; }
+    virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
-    virtual bool isBeingPlayed() const;
 
 protected:
     void changeEvent( QEvent* e );

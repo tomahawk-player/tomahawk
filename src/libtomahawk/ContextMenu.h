@@ -42,7 +42,8 @@ public:
        ActionCopyLink =     8,
        ActionLove =         16,
        ActionStopAfter =    32,
-       ActionPage =         64
+       ActionPage =         64,
+       ActionEditMetadata = 128
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

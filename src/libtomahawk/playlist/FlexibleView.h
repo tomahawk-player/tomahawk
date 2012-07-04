@@ -47,12 +47,7 @@ public:
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showStatsBar() const { return false; }
     virtual bool showFilter() const { return true; }
-
-//    virtual void setShowModes( bool b ) { m_showModes = b; }
-    virtual bool showModes() const { return false; }
-
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
