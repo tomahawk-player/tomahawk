@@ -54,7 +54,6 @@ TreeView::TreeView( QWidget* parent )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
-    , m_showModes( true )
 {
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );

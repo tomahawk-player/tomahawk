@@ -52,8 +52,6 @@ public:
     virtual QString description() const { return m_description; }
     virtual QPixmap pixmap() const { return m_pixmap; }
 
-    virtual bool showStatsBar() const { return false; }
-
     virtual bool jumpToCurrentTrack() { return false; }
 
 protected:

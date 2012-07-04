@@ -96,7 +96,6 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_superCollectionModel = new TreeModel( m_superCollectionView );
     m_superCollectionView->setTreeModel( m_superCollectionModel );
-    m_superCollectionView->setShowModes( false );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
@@ -656,11 +655,6 @@ ViewManager::updateView()
         hideQueue();*/
 
     emit filterAvailable( currentPage()->showFilter() );
-
-/*    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
-        m_topbar->setVisible( false );
-    else
-        m_topbar->setVisible( true );*/
 
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );

@@ -77,7 +77,6 @@ public:
     virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
 
     virtual bool isTemporaryPage() const { return true; }
-    virtual bool showStatsBar() const { return false; }
     virtual bool showInfoBar() const { return false; }
 
     virtual bool jumpToCurrentTrack();

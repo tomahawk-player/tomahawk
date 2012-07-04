@@ -68,10 +68,9 @@ public:
     virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
 
     virtual bool isTemporaryPage() const { return true; }
-    virtual bool showStatsBar() const { return false; }
+    virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack() { return false; }
-    virtual bool isBeingPlayed() const;
 
 public slots:
     /** \brief Loads information for a given album.

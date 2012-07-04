@@ -31,7 +31,8 @@ class DLLEXPORT CustomPlaylistView : public PlaylistView
 {
     Q_OBJECT
 public:
-    enum PlaylistType {
+    enum PlaylistType
+    {
         SourceLovedTracks,
         TopLovedTracks
     };
@@ -40,7 +41,6 @@ public:
     virtual ~CustomPlaylistView();
 
     virtual bool showFilter() const { return true; }
-    virtual bool showStatsBar() const { return false; }
 
     virtual QString title() const;
     virtual QPixmap pixmap() const;

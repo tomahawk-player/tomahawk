@@ -50,8 +50,6 @@ public:
     virtual QString title() const { return tr( "Create a new playlist" ); }
     virtual QString description() const { return QString(); }
 
-    virtual bool showStatsBar() const { return false; }
-
     virtual bool jumpToCurrentTrack() { return false; }
 
 protected:
