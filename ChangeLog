@@ -1,3 +1,7 @@
+Version 0.5.3:
+    * Fixed broken artist names when importing Last.fm playback history.
+    * Fixed crash when filtering collections.
+
 Version 0.5.2:
     * Fixed a crash when invalid results are coming back from a resolver or
       are found in a playlist.
