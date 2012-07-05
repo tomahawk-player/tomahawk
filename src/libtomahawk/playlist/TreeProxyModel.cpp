@@ -190,18 +190,18 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     PlayableItem* item = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( item );
 
-    if ( m_model->mode() == Tomahawk::DatabaseMode && !item->result().isNull() )
+    if ( m_model->mode() == Tomahawk::DatabaseMode && !item->query().isNull() )
     {
-        QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
-        foreach ( const Tomahawk::result_ptr& cachedResult, rl )
+        QList< Tomahawk::query_ptr > rl = m_cache.values( sourceParent );
+        foreach ( const Tomahawk::query_ptr& cachedQuery, rl )
         {
-            if ( cachedResult.isNull() )
+            if ( cachedQuery.isNull() )
                 continue;
 
-            if ( cachedResult->track() == item->result()->track() &&
-               ( cachedResult->albumpos() == item->result()->albumpos() || cachedResult->albumpos() == 0 ) )
+            if ( cachedQuery->track() == item->query()->track() &&
+               ( cachedQuery->albumpos() == item->query()->albumpos() || cachedQuery->albumpos() == 0 ) )
             {
-                return ( cachedResult.data() == item->result().data() );
+                return ( cachedQuery.data() == item->query().data() );
             }
         }
 
@@ -212,17 +212,24 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
             PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
-            if ( ti->name() == item->name() &&
-               ( ti->result()->albumpos() == item->result()->albumpos() ||
-                 ti->result()->albumpos() == 0 || item->result()->albumpos() == 0 ) )
+            if ( ti && ti->name() == item->name() )
             {
-                if ( !item->result()->isOnline() && ti->result()->isOnline() )
-                    return false;
-
-                if ( ( item->result()->collection().isNull() || !item->result()->collection()->source()->isLocal() ) &&
-                     !ti->result()->collection().isNull() && ti->result()->collection()->source()->isLocal() )
+                if ( ti->query()->albumpos() == item->query()->albumpos() || ti->query()->albumpos() == 0 || item->query()->albumpos() == 0 )
                 {
-                    return false;
+                    if ( item->result().isNull() )
+                        return false;
+
+                    if ( !ti->result().isNull() )
+                    {
+                        if ( !item->result()->isOnline() && ti->result()->isOnline() )
+                            return false;
+
+                        if ( ( item->result()->collection().isNull() || !item->result()->collection()->source()->isLocal() ) &&
+                             !ti->result()->collection().isNull() && ti->result()->collection()->source()->isLocal() )
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
         }
@@ -250,7 +257,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         }
     }
 
-    m_cache.insertMulti( sourceParent, item->result() );
+    m_cache.insertMulti( sourceParent, item->query() );
     return true;
 }
 
