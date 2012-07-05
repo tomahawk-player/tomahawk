@@ -172,12 +172,6 @@ PlayableItem::onResultsChanged()
     emit dataChanged();
 }
 
-void PlayableItem::slotCoverChanged()
-{
-    qDebug() << "emitted coverChanged";
-}
-
-
 QString
 PlayableItem::name() const
 {
