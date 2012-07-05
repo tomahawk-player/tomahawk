@@ -109,7 +109,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
     arguments << quint32( 0 ); //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
-    arguments << QString( messageText ).replace("&", "&amp;"); //body
+    arguments << QString( messageText ); //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
@@ -150,7 +150,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << m_nowPlayingId; //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
-    arguments << messageText.replace("&", "&amp;"); //body
+    arguments << messageText; //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
