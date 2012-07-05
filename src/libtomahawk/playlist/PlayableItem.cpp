@@ -102,6 +102,9 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
 
     connect( query.data(), SIGNAL( coverChanged() ),
                            SIGNAL( coverChanged() ) );
+
+    connect( query->displayQuery().data(), SIGNAL( coverChanged() ),
+                           SIGNAL( coverChanged() ) );
 }
 
 
@@ -129,6 +132,9 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
 
     connect( m_query.data(), SIGNAL( coverChanged() ),
                              SIGNAL( coverChanged() ) );
+
+    connect( m_query->displayQuery().data(), SIGNAL( coverChanged() ),
+                           SIGNAL( coverChanged() ) );
 }
 
 
