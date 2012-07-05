@@ -51,7 +51,7 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    QPixmap requestPixmap( const QString &id, QSize *size, const QSize &requestedSize );
 
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );

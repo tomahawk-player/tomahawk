@@ -28,12 +28,12 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_model = new DynamicModel( this );
     m_proxyModel = new PlayableProxyModel( this );
     m_proxyModel->setSourcePlayableModel( m_model );
-
+    m_proxyModel->setShowOfflineResults( false );
 
     m_model->loadPlaylist( m_playlist );
     m_model->startOnDemand();
 
-    rootContext()->setContextProperty( "dynamicModel", m_model );
+    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     currentItemChanged( m_model->currentItem() );
 
     // TODO: In case QML is used in more places, this should probably be moved to some generic place
@@ -93,10 +93,12 @@ QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QS
     if( size )
         *size = QSize( width, height );
 
-    QModelIndex index = m_model->index( id.toInt(), 0, QModelIndex() );
-    qDebug() << "got index" << index;
+    QModelIndex index = m_proxyModel->index( id.toInt(), 0, QModelIndex() );
+    qDebug() << "!*!*!*! got index" << index << id;
     if( index.isValid() ) {
-        PlayableItem *item = m_model->itemFromIndex( index );
+        PlayableItem *item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+        qDebug() << "item:" << item;
+        qDebug() << "item2:" << item->artistName() << item->name();
         if ( !item->album().isNull() ) {
             return item->album()->cover( *size );
         } else if ( !item->artist().isNull() ) {
@@ -113,9 +115,9 @@ QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QS
     return pixmap;
 }
 
-void DynamicQmlWidget::currentItemChanged(const QPersistentModelIndex &currentIndex)
+void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
 {
-    rootContext()->setContextProperty( "currentlyPlayedIndex", m_model->currentItem().row() );
+    rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
 }
 
 }
