@@ -224,7 +224,10 @@ MusicScanner::postOps()
     {
         // any remaining stuff that wasnt emitted as a batch:
         foreach( const QString& key, m_filemtimes.keys() )
-            m_filesToDelete << m_filemtimes[ key ].keys().first();
+        {
+            if ( !m_filemtimes[ key ].keys().isEmpty() )
+                m_filesToDelete << m_filemtimes[ key ].keys().first();
+        }
     }
 
     tDebug( LOGINFO ) << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
@@ -303,13 +306,15 @@ MusicScanner::scanFile( const QFileInfo& fi )
 {
     if ( m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
     {
-        if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
+        if ( !m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().isEmpty() &&
+                fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
         {
             m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
             return;
         }
 
-        m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
+        if ( !m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().isEmpty() )
+            m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
         m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
