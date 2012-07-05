@@ -93,10 +93,10 @@ QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QS
     if( size )
         *size = QSize( width, height );
 
-    QModelIndex index = m_proxyModel->index( id.toInt(), 0, QModelIndex() );
+    QModelIndex index = m_model->index( id.toInt(), 0, QModelIndex() );
     qDebug() << "!*!*!*! got index" << index << id;
     if( index.isValid() ) {
-        PlayableItem *item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+        PlayableItem *item = m_model->itemFromIndex( index );
         qDebug() << "item:" << item;
         qDebug() << "item2:" << item->artistName() << item->name();
         if ( !item->album().isNull() ) {
