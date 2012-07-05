@@ -461,8 +461,9 @@ ScriptResolver::startProcess()
     if ( interpreter.isEmpty() )
     {
 #ifndef Q_OS_WIN
-        const QFileInfo info( runPath );
+        const QFileInfo info( filePath() );
         m_proc.setWorkingDirectory( info.absolutePath() );
+        tLog() << "Setting working dir:" << info.absolutePath();
 #endif
         m_proc.start( runPath );
     }
