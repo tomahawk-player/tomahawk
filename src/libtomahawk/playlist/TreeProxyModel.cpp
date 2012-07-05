@@ -205,13 +205,17 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
             if ( ti->name() == item->name() &&
-               ( ti->result()->albumpos() == item->result()->albumpos() || ti->result()->albumpos() == 0 || item->result()->albumpos() == 0 ) )
+               ( ti->result()->albumpos() == item->result()->albumpos() ||
+                 ti->result()->albumpos() == 0 || item->result()->albumpos() == 0 ) )
             {
                 if ( !item->result()->isOnline() && ti->result()->isOnline() )
                     return false;
 
-                if ( !item->result()->collection()->source()->isLocal() && ti->result()->collection()->source()->isLocal() )
+                if ( ( item->result()->collection().isNull() || !item->result()->collection()->source()->isLocal() ) &&
+                     !ti->result()->collection().isNull() && ti->result()->collection()->source()->isLocal() )
+                {
                     return false;
+                }
             }
         }
     }
