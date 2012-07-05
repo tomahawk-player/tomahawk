@@ -142,9 +142,9 @@ Rectangle {
         anchors.fill: parent
         highlight: appHighlight
 
-        preferredHighlightBegin: 0.1
-        preferredHighlightEnd: 0.1
-        pathItemCount: 3
+        preferredHighlightBegin: 0.07
+        preferredHighlightEnd: 0.07
+        pathItemCount: 4
         highlightMoveDuration: 500
 
         model: dynamicModel
@@ -157,15 +157,19 @@ Rectangle {
             startY: 155
             PathAttribute { name: "itemOpacity"; value: 0 }
             PathAttribute { name: "shadowOpacity"; value: 0 }
-            PathAttribute { name: "itemScale"; value: 1.0 }
+            PathAttribute { name: "itemScale"; value: 1.5 }
             PathLine { x: scene.width / 2; y: 150 }
             PathAttribute { name: "itemOpacity"; value: 1 }
             PathAttribute { name: "shadowOpacity"; value: 0 }
             PathAttribute { name: "itemScale"; value: 1.0 }
+            PathLine { x: scene.width / 2 - 100; y: 180;}
+            PathAttribute { name: "itemOpacity"; value: 1 }
+            PathAttribute { name: "shadowOpacity"; value: 0 }
+            PathAttribute { name: "itemScale"; value: 0.6 }
             PathLine { x: 100; y: 100;}
             PathAttribute { name: "itemOpacity"; value: 1 }
             PathAttribute { name: "shadowOpacity"; value: 1 }
-            PathAttribute { name: "itemScale"; value: 0.75 }
+            PathAttribute { name: "itemScale"; value: 0.4 }
         }
     }
 }
