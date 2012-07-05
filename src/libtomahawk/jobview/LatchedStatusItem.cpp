@@ -30,7 +30,7 @@ LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const To
     , m_to( to )
     , m_parent( parent )
 {
-    m_text = tr( "%1 is listening along to you!" ).arg( from->friendlyName() );
+    m_text = tr( "%1 is listening along with you!" ).arg( from->friendlyName() );
 }
 
 LatchedStatusItem::~LatchedStatusItem()
