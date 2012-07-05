@@ -118,6 +118,8 @@ public:
     virtual void ensureResolved();
 
     PlayableItem* itemFromIndex( const QModelIndex& index ) const;
+    Q_INVOKABLE PlayableItem* itemFromIndex( int itemIndex ) const;
+
     /// Returns a flat list of all tracks in this model
     QList< Tomahawk::query_ptr > queries() const;
 

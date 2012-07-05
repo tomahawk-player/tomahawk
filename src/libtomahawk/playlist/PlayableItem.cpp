@@ -56,6 +56,7 @@ PlayableItem::PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* pare
     init( parent, row );
 
     connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
+    connect( album.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ) );
 }
 
 
@@ -66,6 +67,7 @@ PlayableItem::PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* pa
     init( parent, row );
 
     connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
+    connect( artist.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ) );
 }
 
 
@@ -97,6 +99,9 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
 
     connect( query.data(), SIGNAL( resultsChanged() ),
                              SLOT( onResultsChanged() ) );
+
+    connect( query.data(), SIGNAL( coverChanged() ),
+                           SIGNAL( coverChanged() ) );
 }
 
 
@@ -121,6 +126,9 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
 
     connect( m_query.data(), SIGNAL( resultsChanged() ),
                                SLOT( onResultsChanged() ) );
+
+    connect( m_query.data(), SIGNAL( coverChanged() ),
+                             SIGNAL( coverChanged() ) );
 }
 
 
@@ -162,6 +170,11 @@ PlayableItem::onResultsChanged()
         m_result = result_ptr();
 
     emit dataChanged();
+}
+
+void PlayableItem::slotCoverChanged()
+{
+    qDebug() << "emitted coverChanged";
 }
 
 

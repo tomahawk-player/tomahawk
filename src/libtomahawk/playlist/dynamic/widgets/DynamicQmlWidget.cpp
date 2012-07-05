@@ -36,6 +36,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     rootContext()->setContextProperty( "dynamicModel", m_model );
     currentItemChanged( m_model->currentItem() );
 
+    // TODO: In case QML is used in more places, this should probably be moved to some generic place
+    qmlRegisterType<PlayableItem>("tomahawk", 1, 0, "PlayableItem");
+
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
     connect( m_model, SIGNAL( currentItemChanged( QPersistentModelIndex ) ), SLOT( currentItemChanged( QPersistentModelIndex ) ) );
@@ -83,8 +86,6 @@ DynamicQmlWidget::jumpToCurrentTrack()
 
 QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    qDebug() << "*!*!*!*!*!*!*!*!*!* image requested:" << id;
-
     // We always can generate it in the requested size
     int width = requestedSize.width() > 0 ? requestedSize.width() : 230;
     int height = requestedSize.height() > 0 ? requestedSize.height() : 230;
@@ -96,13 +97,11 @@ QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QS
     qDebug() << "got index" << index;
     if( index.isValid() ) {
         PlayableItem *item = m_model->itemFromIndex( index );
-        qDebug() << "got item" << item << item->query();
-        qDebug() << "got item" << item << item->query()->coverLoaded();
-        if ( !item->album().isNull() && item->album()->coverLoaded() ) {
+        if ( !item->album().isNull() ) {
             return item->album()->cover( *size );
-        } else if ( !item->artist().isNull() && item->artist()->coverLoaded() ) {
+        } else if ( !item->artist().isNull() ) {
             return item->artist()->cover( *size );
-        } else if ( !item->query().isNull() && item->query()->coverLoaded() ) {
+        } else if ( !item->query().isNull() ) {
             return item->query()->cover( *size );
         }
     }
