@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import tomahawk 1.0
 
 Rectangle {
     id: scene
@@ -25,7 +26,6 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: parent.border.width
                 source: "image://albumart/" + parent.artworkId
-                onSourceChanged: print("!*!*!*!*!*!*!*!*!", source)
             }
 
             Rectangle {
@@ -67,7 +67,7 @@ Rectangle {
         id: mirroredDelegate
 
         Item {
-            id: mirrorItem
+            id: mirroredItem
             height: scene.coverSize
             width: scene.coverSize
 
@@ -76,6 +76,18 @@ Rectangle {
 
             property double itemOpacity: PathView.itemOpacity
             property double shadowOp: PathView.shadowOpacity
+
+            Connections {
+                target: dynamicModel.itemFromIndex( index )
+                onCoverChanged: {
+                    // We need to unset and re-set it because QML wouldn't re-query the image if it still has the same url
+                    normalCover.item.artworkId = ""
+                    mirroredCover.item.artworkId = ""
+                    normalCover.item.artworkId = index
+                    mirroredCover.item.artworkId = index
+                }
+            }
+            //Component.onCompleted: print("created delegate for", dynamicModel.itemFromIndex( index ) )
 
             Loader {
                 id: normalCover
@@ -107,7 +119,7 @@ Rectangle {
             Rectangle {
                 color: scene.color
                 anchors.fill: parent
-                opacity: mirrorItem.shadowOp
+                opacity: mirroredItem.shadowOp
             }
             Rectangle {
                 color: scene.color
@@ -118,7 +130,7 @@ Rectangle {
                 gradient: Gradient {
                     // TODO: no clue how to get the RGB component of the container rectangle color
                     // For now the Qt.rgba needs to be manually updated to match scene.color
-                    GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, mirrorItem.shadowOp + ( (1 - mirrorItem.shadowOp) * .4)) }
+                    GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, mirroredItem.shadowOp + ( (1 - mirroredItem.shadowOp) * .4)) }
                     GradientStop { position: 0.5; color: scene.color }
                 }
             }
@@ -139,9 +151,6 @@ Rectangle {
         currentIndex: currentlyPlayedIndex
 
         delegate: mirroredDelegate
-
-
-        onCurrentIndexChanged: print("***************************************** current index:", currentIndex)
 
         path: Path {
             startX: scene.width / 2 + 20

@@ -732,6 +732,18 @@ PlayableModel::itemFromIndex( const QModelIndex& index ) const
     }
 }
 
+PlayableItem *PlayableModel::itemFromIndex(int itemIndex) const
+{
+    QModelIndex modelIndex = index( itemIndex, 0, QModelIndex() );
+    if ( modelIndex.isValid() )
+    {
+        return static_cast<PlayableItem*>( modelIndex.internalPointer() );
+    }
+    else
+    {
+        return m_rootItem;
+    }
+}
 
 void
 PlayableModel::appendArtist( const Tomahawk::artist_ptr& artist )

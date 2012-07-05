@@ -64,9 +64,11 @@ public:
 
 signals:
     void dataChanged();
+    void coverChanged();
 
 private slots:
     void onResultsChanged();
+    void slotCoverChanged();
 
 private:
     void init( PlayableItem* parent, int row = -1 );
