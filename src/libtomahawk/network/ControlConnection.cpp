@@ -158,7 +158,7 @@ ControlConnection::registerSource()
 
 #ifndef ENABLE_HEADLESS
 //    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
-    if( !SipHandler::instance()->avatar( name() ).isNull() )
+    if ( !SipHandler::instance()->avatar( name() ).isNull() )
     {
         source->setAvatar( SipHandler::instance()->avatar( name() ) );
     }
@@ -180,7 +180,7 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
 
     Q_ASSERT( m_source->id() > 0 );
 
-    if( !m_dbconnkey.isEmpty() )
+    if ( !m_dbconnkey.isEmpty() )
     {
         qDebug() << "Connecting to DBSync offer from peer...";
         m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
@@ -188,7 +188,7 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
         m_servent->createParallelConnection( this, m_dbsyncconn, m_dbconnkey );
         m_dbconnkey.clear();
     }
-    else if( !outbound() || ondemand ) // only one end makes the offer
+    else if ( !outbound() || ondemand ) // only one end makes the offer
     {
         qDebug() << "Offering a DBSync key to peer...";
         m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
@@ -216,7 +216,7 @@ void
 ControlConnection::dbSyncConnFinished( QObject* c )
 {
     qDebug() << Q_FUNC_INFO << "DBSync connection closed (for now)";
-    if( (DBSyncConnection*)c == m_dbsyncconn )
+    if ( (DBSyncConnection*)c == m_dbsyncconn )
     {
         //qDebug() << "Setting m_dbsyncconn to NULL";
         m_dbsyncconn = NULL;
@@ -251,13 +251,13 @@ ControlConnection::handleMsg( msg_ptr msg )
     }
 
     // if small and not compresed, print it out for debug
-    if( msg->length() < 1024 && !msg->is( Msg::COMPRESSED ) )
+    if ( msg->length() < 1024 && !msg->is( Msg::COMPRESSED ) )
     {
         qDebug() << id() << "got msg:" << QString::fromAscii( msg->payload() );
     }
 
     // All control connection msgs are JSON
-    if( !msg->is( Msg::JSON ) )
+    if ( !msg->is( Msg::JSON ) )
     {
         Q_ASSERT( msg->is( Msg::JSON ) );
         markAsFailed();
@@ -265,21 +265,21 @@ ControlConnection::handleMsg( msg_ptr msg )
     }
 
     QVariantMap m = msg->json().toMap();
-    if( !m.isEmpty() )
+    if ( !m.isEmpty() )
     {
-        if( m.value("conntype").toString() == "request-offer" )
+        if ( m.value( "conntype" ).toString() == "request-offer" )
         {
             QString theirkey = m["key"].toString();
             QString ourkey   = m["offer"].toString();
             QString theirdbid = m["controlid"].toString();
             servent()->reverseOfferRequest( this, theirdbid, ourkey, theirkey );
         }
-        else if( m.value( "method" ).toString() == "dbsync-offer" )
+        else if ( m.value( "method" ).toString() == "dbsync-offer" )
         {
             m_dbconnkey = m.value( "key" ).toString() ;
             setupDbSyncConnection();
         }
-        else if( m.value( "method" ) == "protovercheckfail" )
+        else if ( m.value( "method" ) == "protovercheckfail" )
         {
             qDebug() << "*** Remote peer protocol version mismatch, connection closed";
             shutdown( true );
@@ -287,13 +287,13 @@ ControlConnection::handleMsg( msg_ptr msg )
         }
         else
         {
-            qDebug() << id() << "Unhandled msg:" << QString::fromAscii( msg->payload() );
+            tDebug() << id() << "Unhandled msg:" << QString::fromAscii( msg->payload() );
         }
 
         return;
     }
 
-    qDebug() << id() << "Invalid msg:" << QString::fromAscii(msg->payload());
+    tDebug() << id() << "Invalid msg:" << QString::fromAscii( msg->payload() );
 }
 
 
