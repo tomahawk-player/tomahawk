@@ -35,6 +35,12 @@ class QTimer;
 class ScriptResolver;
 
 namespace Tomahawk {
+
+namespace InfoSystem
+{
+    class SpotifyInfoPlugin;
+}
+
 namespace Accounts {
 
 class SpotifyAccountConfig;
@@ -89,7 +95,7 @@ public:
     virtual void deauthenticate();
 
     virtual QWidget* aclWidget() { return 0; }
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
     virtual SipPlugin* sipPlugin() { return 0; }
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
@@ -101,6 +107,8 @@ public:
     bool deleteOnUnsync() const;
 
     void setManualResolverPath( const QString& resolverPath );
+
+    bool loggedIn() const;
 
 public slots:
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
@@ -114,6 +122,8 @@ private slots:
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
 
     void login( const QString& username, const QString& password );
+    void logout();
+
     // SpotifyResolver message handlers, all take msgtype, msg as argument
   //  void <here>( const QString& msgType, const QVariantMap& msg );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
@@ -143,6 +153,7 @@ private:
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<QWidget> m_aboutWidget;
     QWeakPointer<ScriptResolver> m_spotifyResolver;
+    QWeakPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
 
     QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
 
@@ -152,7 +163,7 @@ private:
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
 
-    bool m_preventEnabling;
+    bool m_preventEnabling, m_loggedIn;
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;

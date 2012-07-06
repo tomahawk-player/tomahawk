@@ -207,6 +207,10 @@ Result::toQuery()
     if ( m_query.isNull() )
     {
         m_query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
+
+        if ( m_query.isNull() )
+            return query_ptr();
+
         m_query->setAlbumPos( albumpos() );
         m_query->setDiscNumber( discnumber() );
         m_query->setDuration( duration() );

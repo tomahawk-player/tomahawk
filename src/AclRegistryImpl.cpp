@@ -83,7 +83,7 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
         }
     }
 #endif
-    
+
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
     while ( i.hasNext() )
@@ -187,8 +187,8 @@ ACLRegistryImpl::queueNextJob()
         QMetaObject::invokeMethod( this, "queueNextJob", Qt::QueuedConnection );
         return;
     }
-    tLog() << Q_FUNC_INFO << "jobCount = " << m_jobCount;
-    tLog() << Q_FUNC_INFO << "jobQueue size = " << m_jobQueue.length();
+    tLog() << Q_FUNC_INFO << "jobCount =" << m_jobCount;
+    tLog() << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.length();
     if ( m_jobCount != 0 )
         return;
 
@@ -202,14 +202,14 @@ ACLRegistryImpl::queueNextJob()
             ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
             if ( acl != ACLRegistry::NotFound )
             {
-                tLog() << Q_FUNC_INFO << "Found existing acl entry for = " << user.knownAccountIds.first();
+                tLog() << Q_FUNC_INFO << "Found existing acl entry for =" << user.knownAccountIds.first();
                 found = true;
                 break;
             }
         }
         if ( found )
         {
-            tLog() << Q_FUNC_INFO << "deleting job, already have ACL for " << user.knownAccountIds.first();
+            tLog() << Q_FUNC_INFO << "deleting job, already have ACL for" << user.knownAccountIds.first();
             delete job;
             QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
             return;
@@ -225,12 +225,14 @@ ACLRegistryImpl::queueNextJob()
 }
 #endif
 
+
 void
 ACLRegistryImpl::wipeEntries()
 {
     ACLRegistry::wipeEntries();
     save();
 }
+
 
 void
 ACLRegistryImpl::load()
@@ -244,7 +246,6 @@ ACLRegistryImpl::load()
             tLog() << Q_FUNC_INFO << "entry is invalid";
             continue;
         }
-        tLog() << Q_FUNC_INFO << "loading entry";
         ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
         if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
         {
@@ -263,7 +264,7 @@ ACLRegistryImpl::save()
     QVariantList entryList;
     foreach ( ACLRegistry::User user, m_cache )
     {
-        tLog() << Q_FUNC_INFO << "user is " << user.uuid << " with known name " << user.knownAccountIds.first();
+        tLog() << Q_FUNC_INFO << "user is" << user.uuid << "with known name" << user.knownAccountIds.first();
         QVariant val = QVariant::fromValue< ACLRegistry::User >( user );
         if ( val.isValid() )
             entryList.append( val );

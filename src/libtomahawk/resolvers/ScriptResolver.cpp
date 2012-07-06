@@ -255,11 +255,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         setupConfWidget( m );
         return;
     }
-    else if ( msgtype == "status" )
-    {
-        sendStatus();
-        return;
-    }
     else if ( msgtype == "results" )
     {
         const QString qid = m.value( "qid" ).toString();
@@ -366,16 +361,6 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
 
 void
-ScriptResolver::sendStatus()
-{
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "status";
-    msg[ "_status" ] = 1;
-    sendMessage( msg );
-}
-
-
-void
 ScriptResolver::doSetup( const QVariantMap& m )
 {
 //    qDebug() << Q_FUNC_INFO << m;
@@ -387,6 +372,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
 
     m_ready = true;
     m_configSent = false;
+    m_num_restarts = 0;
 
     if ( !m_stopped )
         Tomahawk::Pipeline::instance()->addResolver( this );

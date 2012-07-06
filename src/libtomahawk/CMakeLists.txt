@@ -194,6 +194,7 @@ set( libSources
     accounts/spotify/SpotifyAccount.cpp
     accounts/spotify/SpotifyAccountConfig.cpp
     accounts/spotify/SpotifyPlaylistUpdater.cpp
+    accounts/spotify/SpotifyInfoPlugin.cpp
 
     accounts/lastfm/LastFmAccount.cpp
     accounts/lastfm/LastFmConfig.cpp

@@ -29,6 +29,8 @@
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
 #include "utils/Closure.h"
+#include "SpotifyInfoPlugin.h"
+#include "infosystem/InfoSystem.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -80,6 +82,7 @@ SpotifyAccountFactory::icon() const
 SpotifyAccount::SpotifyAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
     , m_preventEnabling( false )
+    , m_loggedIn( false )
 {
     init();
 }
@@ -105,6 +108,12 @@ SpotifyAccount::init()
 
     AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
+
+    if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+    {
+        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+    }
 
     if ( !AtticaManager::instance()->resolversLoaded() )
     {
@@ -195,15 +204,10 @@ SpotifyAccount::hookupResolver()
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
 
-    const bool hasMigrated = configuration().value( "hasMigrated" ).toBool();
-    if ( !hasMigrated )
-    {
-        qDebug() << "Getting credentials from spotify resolver to migrate to in-app config";
-        QVariantMap msg;
-        msg[ "_msgtype" ] = "getCredentials";
-        m_spotifyResolver.data()->sendMessage( msg );
-    }
-
+    // Always get logged in status
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "getCredentials";
+    m_spotifyResolver.data()->sendMessage( msg );
 }
 
 
@@ -328,6 +332,18 @@ SpotifyAccount::connectionState() const
 }
 
 
+InfoSystem::InfoPluginPtr
+SpotifyAccount::infoPlugin()
+{
+    if ( m_infoPlugin.isNull() )
+    {
+        m_infoPlugin = QWeakPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
+    }
+
+    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
+}
+
+
 void
 SpotifyAccount::resolverInstalled(const QString& resolverId)
 {
@@ -381,6 +397,13 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
         hookupResolver();
         AccountManager::instance()->enableAccount( this );
     }
+}
+
+
+bool
+SpotifyAccount::loggedIn() const
+{
+    return m_loggedIn;
 }
 
 
@@ -514,6 +537,15 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         creds[ "password" ] = msg.value( "password" );
         creds[ "highQuality" ] = msg.value( "highQuality" );
         setCredentials( creds );
+
+        m_loggedIn = msg.value( "loggedIn", false ).toBool();
+        if ( m_loggedIn )
+        {
+            configurationWidget();
+
+            if ( !m_configWidget.isNull() )
+                m_configWidget.data()->loginResponse( true, QString(), creds[ "username" ].toString() );
+        }
 
         qDebug() << "Set creds:" << creds.value( "username" ) << creds.value( "password" ) << msg.value( "username" ) << msg.value( "password" );
 
@@ -675,6 +707,8 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         const bool success = msg.value( "success" ).toBool();
 
+        m_loggedIn = success;
+
         if ( success )
             createActions();
 
@@ -682,7 +716,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( m_configWidget.data() )
         {
             const QString message = msg.value( "message" ).toString();
-            m_configWidget.data()->loginResponse( success, message );
+            m_configWidget.data()->loginResponse( success, message, creds[ "username" ].toString() );
         }
     }
     else if ( msgType == "playlistDeleted" )
@@ -694,6 +728,23 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         SpotifyPlaylistUpdater* updater = m_updaters.take( plid );
         updater->remove( false );
+    }
+    else if ( msgType == "status" )
+    {
+        const bool loggedIn = msg.value( "loggedIn" ).toBool();
+        const QString username = msg.value( "username" ).toString();
+
+        qDebug() << "Got status message with login info:" << loggedIn << username;
+
+        if ( !loggedIn || username.isEmpty() || credentials().value( "username").toString() != username )
+            m_loggedIn = false;
+
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "status";
+        msg[ "_status" ] = 1;
+        sendMessage( msg );
+
+        return;
     }
 }
 
@@ -734,15 +785,16 @@ SpotifyAccount::icon() const
 QWidget*
 SpotifyAccount::configurationWidget()
 {
-    if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
-        return 0;
-
     if ( m_configWidget.isNull() )
     {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
+        connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
     }
+
+    if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
+        return 0;
 
     return static_cast< QWidget* >( m_configWidget.data() );
 }
@@ -823,7 +875,6 @@ SpotifyAccount::saveConfig()
 void
 SpotifyAccount::login( const QString& username, const QString& password )
 {
-    // Send the result to the resolver
     QVariantMap msg;
     msg[ "_msgtype" ] = "login";
     msg[ "username" ] = username;
@@ -831,6 +882,15 @@ SpotifyAccount::login( const QString& username, const QString& password )
 
     msg[ "highQuality" ] = m_configWidget.data()->highQuality();
 
+    m_spotifyResolver.data()->sendMessage( msg );
+}
+
+
+void
+SpotifyAccount::logout()
+{
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "logout";
     m_spotifyResolver.data()->sendMessage( msg );
 }
 
