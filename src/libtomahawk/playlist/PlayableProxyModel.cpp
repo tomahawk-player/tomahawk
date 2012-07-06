@@ -128,7 +128,7 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         if ( q->numResults() )
             r = q->results().first();
 
-        if ( !m_showOfflineResults && !r.isNull() && !r->isOnline() )
+        if ( !m_showOfflineResults && ( r.isNull() || !r->isOnline() ) )
             return false;
 
         if ( filterRegExp().isEmpty() )
