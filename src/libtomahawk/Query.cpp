@@ -228,6 +228,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 
     checkResults();
     emit resultsAdded( newresults );
+    emit resultsChanged();
 }
 
 
@@ -292,6 +293,7 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 
     emit resultsRemoved( result );
     checkResults();
+    emit resultsChanged();
 }
 
 
