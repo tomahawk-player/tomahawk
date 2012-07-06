@@ -44,7 +44,7 @@ FadingPixmap::FadingPixmap( QWidget* parent )
     , m_oldPixmap( QPixmap() )
     , m_fadePct( 100 )
     , m_startFrame( 0 )
-    , m_isDefault( true )
+    , m_isDefault( false )
 {
 //    setCursor( Qt::PointingHandCursor );
 }
@@ -61,7 +61,7 @@ FadingPixmap::onAnimationStep( int frame )
     m_fadePct = (float)( frame - m_startFrame ) / 10.0;
     if ( m_fadePct > 100.0 )
         m_fadePct = 100.0;
-    
+
     repaint();
 
     if ( m_fadePct == 100.0 )
@@ -73,12 +73,12 @@ void
 FadingPixmap::onAnimationFinished()
 {
     tDebug() << Q_FUNC_INFO;
-    
+
     m_oldPixmap = QPixmap();
     repaint();
 
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
-    
+
     if ( m_pixmapQueue.count() )
         QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_pixmapQueue.takeFirst() ), Q_ARG( bool, false ) );
 }
@@ -87,10 +87,8 @@ FadingPixmap::onAnimationFinished()
 void
 FadingPixmap::setPixmap( const QPixmap& pixmap, bool isDefault )
 {
-    tDebug() << Q_FUNC_INFO << "isDefault is " << ( isDefault ? "true" : "false" );
     if ( !m_oldPixmap.isNull() && !isDefault )
     {
-        tDebug() << Q_FUNC_INFO << "adding pixmap to queue and clearing queue";
         m_pixmapQueue.clear();
         m_pixmapQueue << pixmap;
         if ( m_isDefault )
@@ -99,24 +97,17 @@ FadingPixmap::setPixmap( const QPixmap& pixmap, bool isDefault )
     }
 
     if ( m_isDefault && isDefault )
-    {
-        tDebug() << Q_FUNC_INFO << "moving from default to default, doing nothing";
         return;
-    }
-    
+
     QByteArray ba;
     QBuffer buffer( &ba );
     buffer.open( QIODevice::WriteOnly );
     pixmap.save( &buffer, "PNG" );
     QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
     if ( m_oldImageMd5 == newImageMd5 )
-    {
-        tDebug() << Q_FUNC_INFO << "md5s match, doing nothing";
         return;
-    }
 
     m_oldImageMd5 = newImageMd5;
-
     m_oldPixmap = m_pixmap;
     m_pixmap = pixmap;
 
@@ -124,7 +115,6 @@ FadingPixmap::setPixmap( const QPixmap& pixmap, bool isDefault )
     m_startFrame = stlInstance().data()->currentFrame();
     m_fadePct = 0;
     m_isDefault = isDefault;
-    tDebug() << Q_FUNC_INFO << "connecting to timeline";
     connect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 }
 
@@ -142,7 +132,7 @@ void
 FadingPixmap::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
-    
+
     QPainter p( this );
     QRect r = contentsRect();
 
