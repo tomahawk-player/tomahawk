@@ -163,7 +163,7 @@ private:
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
 
-    bool m_preventEnabling;
+    bool m_preventEnabling, m_loggedIn;
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;

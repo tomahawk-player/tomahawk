@@ -64,10 +64,21 @@ SpotifyAccountConfig::showEvent( QShowEvent *event )
 void
 SpotifyAccountConfig::loadFromConfig()
 {
-    m_ui->usernameEdit->setText( m_account->credentials().value( "username" ).toString() );
+    const QString username = m_account->credentials().value( "username" ).toString();
+    m_ui->usernameEdit->setText( username );
     m_ui->passwordEdit->setText( m_account->credentials().value( "password" ).toString() );
     m_ui->streamingCheckbox->setChecked( m_account->credentials().value( "highQuality" ).toBool() );
     m_ui->deleteOnUnsync->setChecked( m_account->deleteOnUnsync() );
+
+    if ( m_account->loggedIn() )
+    {
+        qDebug() << "Loading spotify config widget with logged in username:" << username;
+        if ( !username.isEmpty() )
+            m_verifiedUsername = username;
+        showLoggedIn();
+    }
+    else
+        showLoggedOut();
 }
 
 void
@@ -149,7 +160,7 @@ SpotifyAccountConfig::doLogin()
     {
         // Log out
         m_isLoggedIn = false;
-        m_loggedInManually = false;
+        m_loggedInManually = true;
         m_verifiedUsername.clear();
         m_ui->playlistList->clear();
         emit logout();
@@ -163,6 +174,7 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QSt
 {
     if ( success )
     {
+        qDebug() << Q_FUNC_INFO << "Login response with username:" << username;
         m_verifiedUsername = username;
         m_isLoggedIn = true;
         showLoggedIn();
@@ -193,6 +205,8 @@ SpotifyAccountConfig::showLoggedIn()
         m_ui->verticalLayout->insertWidget( 1, m_loggedInUser, 0, Qt::AlignCenter );
     }
 
+    qDebug() << "Showing logged in withuserame:" << m_verifiedUsername;
+    m_loggedInUser->show();
     m_loggedInUser->setText( tr( "Logged in as %1" ).arg( m_verifiedUsername ) );
 
     m_ui->loginButton->setText( tr( "Log Out" ) );
@@ -208,7 +222,8 @@ SpotifyAccountConfig::showLoggedOut()
     m_ui->usernameEdit->show();
     m_ui->usernameLabel->show();
 
-    m_loggedInUser->hide();
+    if ( m_loggedInUser )
+        m_loggedInUser->hide();
 
     m_ui->loginButton->setText( tr( "Log In" ) );
     m_ui->loginButton->setEnabled( true );

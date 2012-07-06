@@ -82,6 +82,7 @@ SpotifyAccountFactory::icon() const
 SpotifyAccount::SpotifyAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
     , m_preventEnabling( false )
+    , m_loggedIn( false )
 {
     init();
 }
@@ -203,15 +204,10 @@ SpotifyAccount::hookupResolver()
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
 
-    const bool hasMigrated = configuration().value( "hasMigrated" ).toBool();
-    if ( !hasMigrated )
-    {
-        qDebug() << "Getting credentials from spotify resolver to migrate to in-app config";
-        QVariantMap msg;
-        msg[ "_msgtype" ] = "getCredentials";
-        m_spotifyResolver.data()->sendMessage( msg );
-    }
-
+    // Always get logged in status
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "getCredentials";
+    m_spotifyResolver.data()->sendMessage( msg );
 }
 
 
@@ -407,8 +403,7 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
 bool
 SpotifyAccount::loggedIn() const
 {
-    // TODO pending newconfigui branch
-    return enabled() && !m_spotifyResolver.isNull() && m_spotifyResolver.data()->running();
+    return m_loggedIn;
 }
 
 
@@ -543,11 +538,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         creds[ "highQuality" ] = msg.value( "highQuality" );
         setCredentials( creds );
 
-        const bool loggedIn = msg.value( "loggedIn", false ).toBool();
-        if ( loggedIn )
+        m_loggedIn = msg.value( "loggedIn", false ).toBool();
+        if ( m_loggedIn )
         {
             configurationWidget();
-            m_configWidget.data()->loginResponse( true, QString(), creds[ "username" ].toString() );
+
+            if ( !m_configWidget.isNull() )
+                m_configWidget.data()->loginResponse( true, QString(), creds[ "username" ].toString() );
         }
 
         qDebug() << "Set creds:" << creds.value( "username" ) << creds.value( "password" ) << msg.value( "username" ) << msg.value( "password" );
@@ -710,6 +707,8 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         const bool success = msg.value( "success" ).toBool();
 
+        m_loggedIn = success;
+
         if ( success )
             createActions();
 
@@ -729,6 +728,23 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         SpotifyPlaylistUpdater* updater = m_updaters.take( plid );
         updater->remove( false );
+    }
+    else if ( msgType == "status" )
+    {
+        const bool loggedIn = msg.value( "loggedIn" ).toBool();
+        const QString username = msg.value( "username" ).toString();
+
+        qDebug() << "Got status message with login info:" << loggedIn << username;
+
+        if ( !loggedIn || username.isEmpty() || credentials().value( "username").toString() != username )
+            m_loggedIn = false;
+
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "status";
+        msg[ "_status" ] = 1;
+        sendMessage( msg );
+
+        return;
     }
 }
 
@@ -769,9 +785,6 @@ SpotifyAccount::icon() const
 QWidget*
 SpotifyAccount::configurationWidget()
 {
-    if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
-        return 0;
-
     if ( m_configWidget.isNull() )
     {
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
@@ -779,6 +792,9 @@ SpotifyAccount::configurationWidget()
         connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
     }
+
+    if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
+        return 0;
 
     return static_cast< QWidget* >( m_configWidget.data() );
 }
