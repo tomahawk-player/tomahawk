@@ -564,7 +564,8 @@ bool
 TomahawkWindow::winEvent ( MSG * msg, long * result )
 {
 #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
-    switch(msg->message){
+    switch(msg->message)
+    {
     case WM_COMMAND:
         if (HIWORD(msg->wParam) == THBN_CLICKED)
         {
@@ -588,7 +589,8 @@ TomahawkWindow::winEvent ( MSG * msg, long * result )
                 break;
             case 5:
                 tLog()<<TB_PRESSED<<"Love";
-//                AudioEngine::instance()->
+                if(!AudioEngine::instance()->currentTrack().isNull())
+                    AudioEngine::instance()->currentTrack()->toQuery()->setLoved( true );
                 break;
             }
             return true;
