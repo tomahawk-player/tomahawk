@@ -74,6 +74,9 @@ protected:
     void showEvent( QShowEvent* e );
     void hideEvent( QHideEvent* e );
     void keyPressEvent( QKeyEvent* e );
+#ifdef Q_OS_WIN
+    bool winEvent ( MSG * message, long * result );
+#endif
 
 public slots:
     void createAutomaticPlaylist( QString );
@@ -141,6 +144,9 @@ private:
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
+#ifdef Q_OS_WIN
+    bool setupButtons();
+#endif
 
     Ui::TomahawkWindow* ui;
     QSearchField* m_searchWidget;
@@ -159,6 +165,9 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
     int m_audioRetryCounter;
+#ifdef Q_OS_WIN
+    const uint m_buttonCreatedID;
+#endif
 };
 
 #endif // TOMAHAWKWINDOW_H
