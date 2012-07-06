@@ -352,7 +352,7 @@ AudioControls::onPlaybackStopped()
     ui->ownerLabel->setText( "" );
     ui->timeLabel->setText( "" );
     ui->timeLeftLabel->setText( "" );
-    ui->coverImage->setPixmap( QPixmap(), true );
+    ui->coverImage->setPixmap( QPixmap(), false );
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
