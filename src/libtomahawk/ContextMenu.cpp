@@ -111,19 +111,20 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Show Track Page" ) ), ActionPage );
 
-    if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 ) {
+    addSeparator();
 
+    if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
+    {
         if ( m_queries.first()->results().isEmpty() )
             return;
 
         Tomahawk::result_ptr result = m_queries.first()->results().first();
         if ( result->collection() && result->collection()->source() &&
-             result->collection()->source()->isLocal() ) {
-            m_sigmap->setMapping( addAction( tr( "Properties") ), ActionEditMetadata );
+             result->collection()->source()->isLocal() )
+        {
+            m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
         }
     }
-
-    addSeparator();
 
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
