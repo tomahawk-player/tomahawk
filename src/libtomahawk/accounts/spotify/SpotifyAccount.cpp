@@ -29,6 +29,8 @@
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
 #include "utils/Closure.h"
+#include "SpotifyInfoPlugin.h"
+#include "infosystem/InfoSystem.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -105,6 +107,12 @@ SpotifyAccount::init()
 
     AtticaManager::instance()->registerCustomAccount( s_resolverId, this );
     qRegisterMetaType< Tomahawk::Accounts::SpotifyPlaylistInfo* >( "Tomahawk::Accounts::SpotifyPlaylist*" );
+
+    if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
+    {
+        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
+    }
 
     if ( !AtticaManager::instance()->resolversLoaded() )
     {
@@ -328,6 +336,18 @@ SpotifyAccount::connectionState() const
 }
 
 
+InfoSystem::InfoPluginPtr
+SpotifyAccount::infoPlugin()
+{
+    if ( m_infoPlugin.isNull() )
+    {
+        m_infoPlugin = QWeakPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
+    }
+
+    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
+}
+
+
 void
 SpotifyAccount::resolverInstalled(const QString& resolverId)
 {
@@ -381,6 +401,14 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
         hookupResolver();
         AccountManager::instance()->enableAccount( this );
     }
+}
+
+
+bool
+SpotifyAccount::loggedIn() const
+{
+    // TODO pending newconfigui branch
+    return enabled() && !m_spotifyResolver.isNull() && m_spotifyResolver.data()->running();
 }
 
 
