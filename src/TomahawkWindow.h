@@ -31,10 +31,12 @@
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
 
-namespace Tomahawk {
-namespace Accounts {
-    class Account;
-}
+namespace Tomahawk
+{
+    namespace Accounts
+    {
+        class Account;
+    }
 }
 
 class JobStatusModel;
@@ -74,8 +76,9 @@ protected:
     void showEvent( QShowEvent* e );
     void hideEvent( QHideEvent* e );
     void keyPressEvent( QKeyEvent* e );
+
 #ifdef Q_OS_WIN
-    bool winEvent ( MSG * message, long * result );
+    bool winEvent( MSG* message, long* result );
 #endif
 
 public slots:
@@ -88,8 +91,8 @@ public slots:
     void legalInfo();
     void updateCollectionManually();
     void rescanCollectionManually();
-    void pluginMenuAdded(QMenu*);
-    void pluginMenuRemoved(QMenu*);
+    void pluginMenuAdded( QMenu* );
+    void pluginMenuRemoved( QMenu* );
     void showOfflineSources();
 
     void fullScreenEntered();
@@ -144,8 +147,10 @@ private:
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
+
 #ifdef Q_OS_WIN
-    bool setupButtons();
+    bool setupWindowsButtons();
+    const unsigned int m_buttonCreatedID;
 #endif
 
     Ui::TomahawkWindow* ui;
@@ -165,9 +170,6 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
     int m_audioRetryCounter;
-#ifdef Q_OS_WIN
-    const uint m_buttonCreatedID;
-#endif
 };
 
 #endif // TOMAHAWKWINDOW_H
