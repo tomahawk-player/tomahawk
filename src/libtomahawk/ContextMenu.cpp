@@ -122,6 +122,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 void
 ContextMenu::setQuery( const Tomahawk::query_ptr& query )
 {
+    if ( query.isNull() )
+        return;
+
     QList<query_ptr> queries;
     queries << query;
     setQueries( queries );
@@ -306,6 +309,9 @@ ContextMenu::openPage()
 void
 ContextMenu::onSocialActionsLoaded()
 {
+    if ( m_queries.isEmpty() || m_queries.first().isNull() )
+        return;
+
     if ( m_queries.first()->loved() )
     {
         m_loveAction->setText( tr( "Un-&Love" ) );
