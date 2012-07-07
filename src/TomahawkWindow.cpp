@@ -71,8 +71,12 @@
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <qtsparkle/Updater>
+#include <shobjidl.h>
+#ifndef THBN_CLICKED
+# define THBN_CLICKED        0x1800
+#endif
 #endif
 
 #include "utils/Logger.h"
@@ -87,6 +91,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_audioRetryCounter( 0 )
+#ifdef Q_OS_WIN
+    , m_buttonCreatedID(RegisterWindowMessage(L"TaskbarButtonCreated"))
+#endif
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
@@ -320,6 +327,67 @@ TomahawkWindow::setupUpdateCheck()
 #endif
 }
 
+#ifdef Q_OS_WIN
+bool
+TomahawkWindow::setupButtons()
+{
+    const GUID IID_ITaskbarList3 = { 0xea1afb91,0x9e28,0x4b86,{0x90,0xe9,0x9e,0x9f,0x8a,0x5e,0xef,0xaf}};
+    HRESULT hr = S_OK;
+
+
+    QPixmap play( RESPATH "images/play-rest.png");
+    QPixmap pause( RESPATH "images/pause-rest.png");
+    QPixmap back( RESPATH "images/back-rest.png");
+    QPixmap love( RESPATH "images/not-loved.png");
+
+    QTransform transform;
+    transform.rotate(180);
+    QPixmap next(back.transformed(transform));
+
+    THUMBBUTTON thumbButtons[5];
+
+    THUMBBUTTONMASK dwMask = THUMBBUTTONMASK(THB_ICON| THB_TOOLTIP);
+    thumbButtons[0].dwMask = dwMask;
+    thumbButtons[0].iId = 1;
+    thumbButtons[0].hIcon = back.toWinHICON();
+    thumbButtons[0].szTip[tr("Back").toWCharArray(thumbButtons[0].szTip)] = 0;
+
+    thumbButtons[1].dwMask = dwMask;
+    thumbButtons[1].iId = 2;
+    thumbButtons[1].hIcon = pause.toWinHICON();
+    thumbButtons[1].szTip[tr("Pause").toWCharArray(thumbButtons[1].szTip)] = 0;
+
+    thumbButtons[2].dwMask = dwMask;
+    thumbButtons[2].iId = 3;
+    thumbButtons[2].hIcon = play.toWinHICON();
+    thumbButtons[2].szTip[tr("Play").toWCharArray(thumbButtons[2].szTip)] = 0;
+
+    thumbButtons[3].dwMask = dwMask;
+    thumbButtons[3].iId = 4;
+    thumbButtons[3].hIcon = next.toWinHICON();
+    thumbButtons[3].szTip[tr("Next").toWCharArray(thumbButtons[3].szTip)] = 0;
+
+    thumbButtons[4].dwMask = dwMask;
+    thumbButtons[4].iId = 5;
+    thumbButtons[4].hIcon = love.toWinHICON();
+    thumbButtons[4].szTip[tr("Love").toWCharArray(thumbButtons[4].szTip)] = 0;
+
+
+
+    ITaskbarList3 *taskbarList;
+    if( S_OK == CoCreateInstance( CLSID_TaskbarList,NULL, CLSCTX_INPROC_SERVER,IID_ITaskbarList3,(void **)&taskbarList) )
+    {
+        taskbarList->HrInit();
+
+        if (SUCCEEDED(hr))
+        {
+            hr = taskbarList->ThumbBarAddButtons(winId(), ARRAYSIZE(thumbButtons), thumbButtons);
+        }
+        taskbarList->Release();
+    }
+    return SUCCEEDED(hr);
+}
+#endif
 
 void
 TomahawkWindow::setupSignals()
@@ -490,6 +558,50 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 
     QMainWindow::keyPressEvent( e );
 }
+
+#ifdef Q_OS_WIN
+bool
+TomahawkWindow::winEvent ( MSG * msg, long * result )
+{
+#define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
+    switch(msg->message)
+    {
+    case WM_COMMAND:
+        if (HIWORD(msg->wParam) == THBN_CLICKED)
+        {
+            switch(LOWORD(msg->wParam))
+            {
+            case 1:
+                tLog()<<TB_PRESSED<<"Previous";
+                AudioEngine::instance()->previous();
+                break;
+            case 2:
+                tLog()<<TB_PRESSED<<"Pause";
+                AudioEngine::instance()->pause();
+                break;
+            case 3:
+                tLog()<<TB_PRESSED<<"Play";
+                AudioEngine::instance()->play();
+                break;
+            case 4:
+                tLog()<<TB_PRESSED<<"Next";
+                AudioEngine::instance()->next();
+                break;
+            case 5:
+                tLog()<<TB_PRESSED<<"Love";
+                if(!AudioEngine::instance()->currentTrack().isNull())
+                    AudioEngine::instance()->currentTrack()->toQuery()->setLoved( true );
+                break;
+            }
+            return true;
+        }
+        break;
+    }
+    if ( msg->message == m_buttonCreatedID)
+        return setupButtons();
+    return false;
+}
+#endif
 
 
 void
