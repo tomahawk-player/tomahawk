@@ -147,7 +147,7 @@ ScanManager::runNormalScan( bool manualFull )
         tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
         return;
     }
-    
+
     if ( QThread::currentThread() != ScanManager::instance()->thread() )
     {
         QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, manualFull ) );
@@ -155,7 +155,7 @@ ScanManager::runNormalScan( bool manualFull )
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    
+
     if ( m_musicScannerThreadController || !m_scanner.isNull() ) //still running if these are not zero
     {
         if ( m_queuedScanType != Full )
@@ -191,7 +191,7 @@ ScanManager::runFileScan( const QStringList &paths )
         tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
         return;
     }
-    
+
     if ( QThread::currentThread() != ScanManager::instance()->thread() )
     {
         QMetaObject::invokeMethod( this, "runFileScan", Qt::QueuedConnection, Q_ARG( QStringList, paths ) );
@@ -199,7 +199,7 @@ ScanManager::runFileScan( const QStringList &paths )
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    
+
     foreach( const QString& path, paths )
         m_currScannerPaths.insert( path );
 
@@ -277,7 +277,7 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
 
-    SourceList::instance()->getLocal()->scanningFinished( 0 );
+    SourceList::instance()->getLocal()->scanningFinished();
     emit finished();
 
     if ( !m_queuedScanType == File )

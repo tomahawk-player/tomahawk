@@ -292,10 +292,8 @@ Source::scanningProgress( unsigned int files )
 
 
 void
-Source::scanningFinished( unsigned int files )
+Source::scanningFinished()
 {
-    Q_UNUSED( files );
-
     m_textStatus = QString();
 
     if ( m_updateIndexWhenSynced )

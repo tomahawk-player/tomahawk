@@ -36,6 +36,7 @@ class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
 class DatabaseCommand_DeleteFiles;
+class MusicScanner;
 
 namespace Tomahawk
 {
@@ -50,6 +51,7 @@ friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_SocialAction;
 friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_DeleteFiles;
+friend class ::MusicScanner;
 
 public:
     enum AvatarStyle { Original, FancyStyle };
@@ -78,7 +80,7 @@ public:
     void setControlConnection( ControlConnection* cc );
 
     void scanningProgress( unsigned int files );
-    void scanningFinished( unsigned int files );
+    void scanningFinished();
 
     unsigned int trackCount() const;
 
