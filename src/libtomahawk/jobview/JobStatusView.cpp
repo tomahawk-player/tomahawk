@@ -83,7 +83,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 
 
 void
-JobStatusView::setModel( JobStatusModel* m )
+JobStatusView::setModel( JobStatusSortModel* m )
 {
     m_model = m;
     m_view->setModel( m );
@@ -114,7 +114,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
         tLog() << Q_FUNC_INFO << "delegate found";
         connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
         connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
-        delegate->emitSizeHintChanged( m_model->index( row ) );
+        delegate->emitSizeHintChanged( m_model->index( row, 0 ) );
     }
     else
         tLog() << Q_FUNC_INFO << "delegate was not properly found!";
@@ -127,6 +127,7 @@ void
 JobStatusView::customDelegateJobRemoved( int row )
 {
     tLog() << Q_FUNC_INFO << "row is" << row;
+    checkCount();
 }
 
 
@@ -138,7 +139,7 @@ JobStatusView::refreshDelegates()
     for ( int i = 0; i < count; i++ )
     {
         tLog() << Q_FUNC_INFO << "checking row" << i;
-        QModelIndex index = m_model->index( i );
+        QModelIndex index = m_model->index( i, 0 );
         QVariant itemVar = index.data( JobStatusModel::JobDataRole );
         if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )
         {

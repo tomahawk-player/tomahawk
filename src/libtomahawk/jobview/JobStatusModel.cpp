@@ -25,6 +25,70 @@
 #include <QPixmap>
 
 
+JobStatusSortModel::JobStatusSortModel( QObject* parent )
+    : QSortFilterProxyModel( parent )
+    , m_subModel( this )
+{
+    setDynamicSortFilter( true );
+    
+    connect( &m_subModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SIGNAL( rowsInserted( QModelIndex, int, int ) ) );
+    connect( &m_subModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SIGNAL( rowsRemoved( QModelIndex, int, int ) ) );
+    connect( &m_subModel, SIGNAL( modelReset() ), this, SIGNAL( modelReset() ) );
+
+    connect( &m_subModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
+    connect( &m_subModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
+    connect( &m_subModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
+}
+
+
+JobStatusSortModel::~JobStatusSortModel()
+{
+}
+
+
+void
+JobStatusSortModel::addJob( JobStatusItem* item )
+{
+    m_subModel.addJob( item );
+}
+
+
+void
+JobStatusSortModel::customDelegateJobInsertedSlot( int row, JobStatusItem* item )
+{
+    emit customDelegateJobInserted( mapFromSource( m_subModel.index( row ) ).row(), item );
+}
+
+
+void
+JobStatusSortModel::customDelegateJobRemovedSlot( int row )
+{
+    emit customDelegateJobRemoved( mapFromSource( m_subModel.index( row ) ).row() );
+}
+
+
+void
+JobStatusSortModel::refreshDelegatesSlot()
+{
+    emit refreshDelegates();
+}
+
+
+bool
+JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    QVariant leftVar = left.data( JobStatusModel::JobDataRole );
+    JobStatusItem* leftItem = leftVar.value< JobStatusItem* >();
+    QVariant rightVar = right.data( JobStatusModel::JobDataRole );
+    JobStatusItem* rightItem = rightVar.value< JobStatusItem* >();
+    if ( !leftItem || !rightItem )
+        return false;
+
+    return leftItem->weight() < rightItem->weight();
+}
+
+
+
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
 {

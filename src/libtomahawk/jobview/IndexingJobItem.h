@@ -30,6 +30,7 @@ public:
 
     void done();
 
+    virtual int weight() const { return 50; }
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const;
     virtual QPixmap icon() const;

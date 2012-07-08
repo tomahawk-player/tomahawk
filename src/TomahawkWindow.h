@@ -39,7 +39,7 @@ namespace Tomahawk
     }
 }
 
-class JobStatusModel;
+class JobStatusSortModel;
 class QSearchField;
 class SourceTreeView;
 class QAction;
@@ -162,7 +162,7 @@ private:
     QPushButton* m_queueButton;
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
-    JobStatusModel* m_jobsModel;
+    JobStatusSortModel* m_jobsModel;
 
     QAction* m_backAction;
     QAction* m_forwardAction;

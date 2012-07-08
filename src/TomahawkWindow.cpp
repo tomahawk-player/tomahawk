@@ -266,7 +266,7 @@ TomahawkWindow::setupSideBar()
 
     m_sourcetree = new SourceTreeView( this );
     JobStatusView* jobsView = new JobStatusView( m_sidebar );
-    m_jobsModel = new JobStatusModel( jobsView );
+    m_jobsModel = new JobStatusSortModel( jobsView );
     jobsView->setModel( m_jobsModel );
 
     m_queueView = new QueueView( m_sidebar );

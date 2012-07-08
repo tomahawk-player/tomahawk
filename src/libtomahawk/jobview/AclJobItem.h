@@ -64,6 +64,8 @@ public:
     explicit ACLJobItem( ACLRegistry::User user, const QString &username );
     virtual ~ACLJobItem();
 
+    virtual int weight() const { return 99; }
+    
     virtual QString rightColumnText() const { return QString(); }
     virtual QString mainText() const { return QString(); }
     virtual QPixmap icon() const { return QPixmap(); }
