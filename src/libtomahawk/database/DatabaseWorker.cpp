@@ -34,17 +34,42 @@
     //#define DEBUG_TIMING TRUE
 #endif
 
-DatabaseWorker::DatabaseWorker( Database* db, bool mutates )
+
+DatabaseWorkerThread::DatabaseWorkerThread( Database* db, bool mutates )
     : QThread()
+    , m_db( db )
+    , m_mutates( mutates )
+{
+    Q_UNUSED( db );
+    Q_UNUSED( mutates );
+}
+
+
+void
+DatabaseWorkerThread::run()
+{
+    m_worker = QWeakPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
+    exec();    
+    tDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
+    if ( m_worker )
+        delete m_worker.data();
+}
+
+
+DatabaseWorkerThread::~DatabaseWorkerThread()
+{
+}
+
+
+
+DatabaseWorker::DatabaseWorker( Database* db, bool mutates )
+    : QObject()
     , m_db( db )
     , m_outstanding( 0 )
 {
     Q_UNUSED( db );
     Q_UNUSED( mutates );
-
-    moveToThread( this );
-
-    qDebug() << "CTOR DatabaseWorker" << this->thread();
+    tDebug() << Q_FUNC_INFO << "New db connection with name:" << Database::instance()->impl()->database().connectionName() << "on thread" << this->thread();
 }
 
 
@@ -62,15 +87,6 @@ DatabaseWorker::~DatabaseWorker()
 
     thread()->quit();
     wait();
-}
-
-
-void
-DatabaseWorker::run()
-{
-    tDebug() << "New db connection with name:" << Database::instance()->impl()->database().connectionName();
-    exec();
-    qDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
 }
 
 

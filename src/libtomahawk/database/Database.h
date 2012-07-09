@@ -30,6 +30,7 @@
 #include "DllMacro.h"
 
 class DatabaseImpl;
+class DatabaseWorkerThread;
 class DatabaseWorker;
 
 /*
@@ -75,8 +76,8 @@ private:
     bool m_ready;
 
     DatabaseImpl* m_impl;
-    DatabaseWorker* m_workerRW;
-    QList<DatabaseWorker*> m_workers;
+    DatabaseWorkerThread* m_workerRW;
+    QList< DatabaseWorkerThread* > m_workers;
     int m_maxConcurrentThreads;
 
     QHash< QThread*, DatabaseImpl* > m_implHash;
