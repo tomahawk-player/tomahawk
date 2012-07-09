@@ -1305,7 +1305,7 @@ TomahawkSettings::updateIndex()
     DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    QTimer::singleShot( 2000, this, SLOT( updateIndex() ) );
+    QTimer::singleShot( 5000, this, SLOT( updateIndex() ) );
 }
 
 

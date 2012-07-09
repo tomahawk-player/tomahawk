@@ -44,10 +44,6 @@ JobStatusSortModel::setJobModel( JobStatusModel* model )
 
     m_sourceModel = model;
 
-    connect( m_sourceModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( rowsInsertedSlot( QModelIndex, int, int ) ) );
-    connect( m_sourceModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( rowsRemovedSlot( QModelIndex, int, int ) ) );
-    connect( m_sourceModel, SIGNAL( modelReset() ), this, SLOT( modelResetSlot() ) );
-    connect( m_sourceModel, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ), this, SLOT( dataChangedSlot( QModelIndex, QModelIndex ) ) );
     connect( m_sourceModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
     connect( m_sourceModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
     connect( m_sourceModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
@@ -58,34 +54,6 @@ void
 JobStatusSortModel::addJob( JobStatusItem* item )
 {
     m_sourceModel->addJob( item );
-}
-
-
-void
-JobStatusSortModel::rowsInsertedSlot( const QModelIndex& index, int start, int end )
-{
-   emit checkCount();
-}
-
-
-void
-JobStatusSortModel::rowsRemovedSlot( const QModelIndex& index, int start, int end )
-{
-   emit checkCount();
-}
-
-
-void
-JobStatusSortModel::modelResetSlot()
-{
-   emit checkCount();
-}
-
-
-void
-JobStatusSortModel::dataChangedSlot( const QModelIndex& topLeft, const QModelIndex& bottomRight )
-{
-    emit dataChanged( mapFromSource( topLeft ), mapFromSource( bottomRight ) );
 }
 
 
