@@ -143,6 +143,8 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         createSpotifyAccount();
     if ( lastfmAcct.isEmpty() )
         createLastFmAccount();
+
+    QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
 }
 
 
@@ -1302,6 +1304,8 @@ TomahawkSettings::updateIndex()
 {
     DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+
+    QTimer::singleShot( 2000, this, SLOT( updateIndex() ) );
 }
 
 
