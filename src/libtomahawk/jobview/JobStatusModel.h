@@ -88,6 +88,7 @@ public slots:
     void rowsInsertedSlot( const QModelIndex& index, int start, int end );
     void rowsRemovedSlot( const QModelIndex& index, int start, int end );
     void modelResetSlot();
+    void dataChangedSlot( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     void customDelegateJobInsertedSlot( int row, JobStatusItem* item);
     void customDelegateJobRemovedSlot( int row );
     void refreshDelegatesSlot();

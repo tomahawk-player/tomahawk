@@ -47,6 +47,7 @@ JobStatusSortModel::setJobModel( JobStatusModel* model )
     connect( m_sourceModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( rowsInsertedSlot( QModelIndex, int, int ) ) );
     connect( m_sourceModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( rowsRemovedSlot( QModelIndex, int, int ) ) );
     connect( m_sourceModel, SIGNAL( modelReset() ), this, SLOT( modelResetSlot() ) );
+    connect( m_sourceModel, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ), this, SLOT( dataChangedSlot( QModelIndex, QModelIndex ) ) );
     connect( m_sourceModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
     connect( m_sourceModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
     connect( m_sourceModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
@@ -56,7 +57,6 @@ JobStatusSortModel::setJobModel( JobStatusModel* model )
 void
 JobStatusSortModel::addJob( JobStatusItem* item )
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     m_sourceModel->addJob( item );
 }
 
@@ -64,7 +64,6 @@ JobStatusSortModel::addJob( JobStatusItem* item )
 void
 JobStatusSortModel::rowsInsertedSlot( const QModelIndex& index, int start, int end )
 {
-   tLog( LOGVERBOSE ) << Q_FUNC_INFO;
    emit checkCount();
 }
 
@@ -72,7 +71,6 @@ JobStatusSortModel::rowsInsertedSlot( const QModelIndex& index, int start, int e
 void
 JobStatusSortModel::rowsRemovedSlot( const QModelIndex& index, int start, int end )
 {
-   tLog( LOGVERBOSE ) << Q_FUNC_INFO;
    emit checkCount();
 }
 
@@ -80,15 +78,20 @@ JobStatusSortModel::rowsRemovedSlot( const QModelIndex& index, int start, int en
 void
 JobStatusSortModel::modelResetSlot()
 {
-   tLog( LOGVERBOSE ) << Q_FUNC_INFO;
    emit checkCount();
+}
+
+
+void
+JobStatusSortModel::dataChangedSlot( const QModelIndex& topLeft, const QModelIndex& bottomRight )
+{
+    emit dataChanged( mapFromSource( topLeft ), mapFromSource( bottomRight ) );
 }
 
 
 void
 JobStatusSortModel::customDelegateJobInsertedSlot( int row, JobStatusItem* item )
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     emit customDelegateJobInserted( mapFromSource( m_sourceModel->index( row ) ).row(), item );
 }
 
@@ -96,7 +99,6 @@ JobStatusSortModel::customDelegateJobInsertedSlot( int row, JobStatusItem* item 
 void
 JobStatusSortModel::customDelegateJobRemovedSlot( int row )
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     emit customDelegateJobRemoved( mapFromSource( m_sourceModel->index( row ) ).row() );
 }
 
@@ -104,7 +106,7 @@ JobStatusSortModel::customDelegateJobRemovedSlot( int row )
 void
 JobStatusSortModel::refreshDelegatesSlot()
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+    sort( 0 );
     emit refreshDelegates();
 }
 
@@ -112,7 +114,6 @@ JobStatusSortModel::refreshDelegatesSlot()
 bool
 JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     QVariant leftVar = left.data( JobStatusModel::JobDataRole );
     JobStatusItem* leftItem = leftVar.value< JobStatusItem* >();
     QVariant rightVar = right.data( JobStatusModel::JobDataRole );

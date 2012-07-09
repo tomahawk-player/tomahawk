@@ -160,7 +160,6 @@ JobStatusView::refreshDelegates()
 void
 JobStatusView::checkCount()
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     m_cachedHeight = -1;
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
