@@ -76,12 +76,16 @@ public:
     virtual ~JobStatusSortModel();
 
 signals:
+    void checkCount();
     void customDelegateJobInserted( int row, JobStatusItem* item );
     void customDelegateJobRemoved( int row );
     void refreshDelegates();
 
 public slots:
     void addJob( JobStatusItem* item );
+    void rowsInsertedSlot( const QModelIndex& index, int start, int end );
+    void rowsRemovedSlot( const QModelIndex& index, int start, int end );
+    void modelResetSlot();
     void customDelegateJobInsertedSlot( int row, JobStatusItem* item);
     void customDelegateJobRemovedSlot( int row );
     void refreshDelegatesSlot();
@@ -90,7 +94,7 @@ protected:
     virtual bool lessThan( const QModelIndex & left, const QModelIndex & right ) const;
     
 private:
-    JobStatusModel m_subModel;
+    JobStatusModel m_sourceModel;
 };
 
 #endif // JOBSTATUSMODEL_H

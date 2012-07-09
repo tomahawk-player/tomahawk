@@ -89,9 +89,9 @@ JobStatusView::setModel( JobStatusSortModel* m )
     m_view->setModel( m );
     m_view->setItemDelegate( new JobStatusDelegate( m_view ) );
 
-    connect( m_view->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
-    connect( m_view->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( checkCount() ) );
-    connect( m_view->model(), SIGNAL( modelReset() ), this, SLOT( checkCount() ) );
+    connect( m_view->model(), SIGNAL( checkCount() ), this, SLOT( checkCount() ) );
+    connect( m_view->model(), SIGNAL( checkCount() ), this, SLOT( checkCount() ) );
+    connect( m_view->model(), SIGNAL( checkCount() ), this, SLOT( checkCount() ) );
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
     connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
     connect( m_view->model(), SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegates() ) );
@@ -160,6 +160,7 @@ JobStatusView::refreshDelegates()
 void
 JobStatusView::checkCount()
 {
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     m_cachedHeight = -1;
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
         emit hideWidget();
