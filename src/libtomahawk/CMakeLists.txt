@@ -207,10 +207,6 @@ list(APPEND libSources
     accounts/spotify/SpotifyPlaylistUpdater.cpp
     accounts/spotify/SpotifyInfoPlugin.cpp
 
-    accounts/lastfm/LastFmAccount.cpp
-    accounts/lastfm/LastFmConfig.cpp
-    accounts/lastfm/LastFmInfoPlugin.cpp
-
     sip/SipPlugin.cpp
     sip/SipInfo.cpp
     sip/PeerInfo.cpp
@@ -320,6 +316,14 @@ list(APPEND libSources
     thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
+
+IF(LIBLASTFM_FOUND)
+    set( libSources ${libSources}
+                    accounts/lastfm/LastFmAccount.cpp
+                    accounts/lastfm/LastFmConfig.cpp
+                    accounts/lastfm/LastFmInfoPlugin.cpp
+    )
+ENDIF(LIBLASTFM_FOUND)
 
 set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui

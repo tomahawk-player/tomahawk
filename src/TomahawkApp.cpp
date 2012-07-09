@@ -640,8 +640,10 @@ TomahawkApp::spotifyApiCheckFinished()
 void
 TomahawkApp::accountManagerReady()
 {
+#ifdef LIBLASTFM_FOUND
     Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
     m_accountManager.data()->addAccountFactory( lastfmFactory );
+#endif
 
     Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
     m_accountManager.data()->addAccountFactory( spotifyFactory );
