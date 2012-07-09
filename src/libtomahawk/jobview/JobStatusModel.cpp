@@ -27,16 +27,8 @@
 
 JobStatusSortModel::JobStatusSortModel( QObject* parent )
     : QSortFilterProxyModel( parent )
-    , m_sourceModel( this )
 {
     setDynamicSortFilter( true );
-    
-    connect( &m_sourceModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( rowsInsertedSlot( QModelIndex, int, int ) ) );
-    connect( &m_sourceModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( rowsRemovedSlot( QModelIndex, int, int ) ) );
-    connect( &m_sourceModel, SIGNAL( modelReset() ), this, SLOT( modelResetSlot() ) );
-    connect( &m_sourceModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
-    connect( &m_sourceModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
-    connect( &m_sourceModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
 }
 
 
@@ -46,10 +38,26 @@ JobStatusSortModel::~JobStatusSortModel()
 
 
 void
+JobStatusSortModel::setJobModel( JobStatusModel* model )
+{
+    setSourceModel( model );
+
+    m_sourceModel = model;
+
+    connect( m_sourceModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( rowsInsertedSlot( QModelIndex, int, int ) ) );
+    connect( m_sourceModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( rowsRemovedSlot( QModelIndex, int, int ) ) );
+    connect( m_sourceModel, SIGNAL( modelReset() ), this, SLOT( modelResetSlot() ) );
+    connect( m_sourceModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
+    connect( m_sourceModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
+    connect( m_sourceModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
+}
+
+
+void
 JobStatusSortModel::addJob( JobStatusItem* item )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO;
-    m_sourceModel.addJob( item );
+    m_sourceModel->addJob( item );
 }
 
 
@@ -81,7 +89,7 @@ void
 JobStatusSortModel::customDelegateJobInsertedSlot( int row, JobStatusItem* item )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO;
-    emit customDelegateJobInserted( mapFromSource( m_sourceModel.index( row ) ).row(), item );
+    emit customDelegateJobInserted( mapFromSource( m_sourceModel->index( row ) ).row(), item );
 }
 
 
@@ -89,7 +97,7 @@ void
 JobStatusSortModel::customDelegateJobRemovedSlot( int row )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO;
-    emit customDelegateJobRemoved( mapFromSource( m_sourceModel.index( row ) ).row() );
+    emit customDelegateJobRemoved( mapFromSource( m_sourceModel->index( row ) ).row() );
 }
 
 
@@ -203,9 +211,9 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
     {
         case Qt::DecorationRole:
             return item->icon();
-            
+
         case Qt::ToolTipRole:
-            
+
         case Qt::DisplayRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
@@ -213,7 +221,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
             else
                 return item->mainText();
         }
-        
+
         case RightColumnRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
@@ -221,7 +229,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
             else
                 return item->rightColumnText();
         }
-        
+
         case AllowMultiLineRole:
             return item->allowMultiLine();
 

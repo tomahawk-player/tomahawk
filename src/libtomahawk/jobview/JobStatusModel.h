@@ -55,7 +55,7 @@ signals:
 public slots:
     /// Takes ownership of job
     void addJob( JobStatusItem* item );
-    
+
 private slots:
     void itemUpdated();
     void itemFinished();
@@ -75,6 +75,8 @@ public:
     JobStatusSortModel( QObject* parent = 0 );
     virtual ~JobStatusSortModel();
 
+    void setJobModel( JobStatusModel* model );
+
 signals:
     void checkCount();
     void customDelegateJobInserted( int row, JobStatusItem* item );
@@ -92,9 +94,9 @@ public slots:
 
 protected:
     virtual bool lessThan( const QModelIndex & left, const QModelIndex & right ) const;
-    
+
 private:
-    JobStatusModel m_sourceModel;
+    JobStatusModel* m_sourceModel;
 };
 
 #endif // JOBSTATUSMODEL_H
