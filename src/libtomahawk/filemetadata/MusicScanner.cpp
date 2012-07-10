@@ -181,7 +181,7 @@ MusicScanner::scan()
         scanFilePaths();
         return;
     }
-    
+
     m_dirListerThreadController = new QThread( this );
 
     m_dirLister = QWeakPointer< DirLister >( new DirLister( m_paths ) );
@@ -237,6 +237,7 @@ MusicScanner::postOps()
 
     if ( m_filesToDelete.length() || m_scannedfiles.length() )
     {
+        SourceList::instance()->getLocal()->updateIndexWhenSynced();
         commitBatch( m_scannedfiles, m_filesToDelete );
         m_scannedfiles.clear();
         m_filesToDelete.clear();
@@ -366,7 +367,7 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     int bitrate = 0;
     int duration = 0;
-    
+
     Tag *tag = Tag::fromFile( f );
     if ( f.audioProperties() )
     {

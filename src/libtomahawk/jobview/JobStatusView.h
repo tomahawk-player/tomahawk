@@ -26,7 +26,7 @@
 
 class QAbstractItemModel;
 class QListView;
-class JobStatusModel;
+class JobStatusSortModel;
 class JobStatusItem;
 class StreamConnection;
 class QStyledItemDelegate;
@@ -47,9 +47,9 @@ public:
 
     QSize sizeHint() const;
 
-    void setModel( JobStatusModel* model );
+    void setModel( JobStatusSortModel* model );
 
-    JobStatusModel* model() { return m_model; }
+    JobStatusSortModel* model() { return m_model; }
 
 private slots:
     void checkCount();
@@ -59,7 +59,7 @@ private slots:
 
 private:
     QListView* m_view;
-    JobStatusModel* m_model;
+    JobStatusSortModel* m_model;
     AnimatedSplitter* m_parent;
     mutable int m_cachedHeight;
 

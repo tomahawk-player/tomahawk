@@ -22,6 +22,7 @@
 #include "DllMacro.h"
 
 #include <QModelIndex>
+#include <QSortFilterProxyModel>
 #include <QQueue>
 
 class QStyledItemDelegate;
@@ -54,7 +55,7 @@ signals:
 public slots:
     /// Takes ownership of job
     void addJob( JobStatusItem* item );
-    
+
 private slots:
     void itemUpdated();
     void itemFinished();
@@ -64,6 +65,35 @@ private:
     QHash< QString, QList< JobStatusItem* > > m_collapseCount;
     QHash< QString, QQueue< JobStatusItem* > > m_jobQueue;
     QHash< QString, int > m_jobTypeCount;
+};
+
+class DLLEXPORT JobStatusSortModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    JobStatusSortModel( QObject* parent = 0 );
+    virtual ~JobStatusSortModel();
+
+    void setJobModel( JobStatusModel* model );
+
+signals:
+    void checkCount();
+    void customDelegateJobInserted( int row, JobStatusItem* item );
+    void customDelegateJobRemoved( int row );
+    void refreshDelegates();
+
+public slots:
+    void addJob( JobStatusItem* item );
+    void customDelegateJobInsertedSlot( int row, JobStatusItem* item);
+    void customDelegateJobRemovedSlot( int row );
+    void refreshDelegatesSlot();
+
+protected:
+    virtual bool lessThan( const QModelIndex & left, const QModelIndex & right ) const;
+
+private:
+    JobStatusModel* m_sourceModel;
 };
 
 #endif // JOBSTATUSMODEL_H

@@ -182,7 +182,7 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
         if( !Servent::instance()->visibleExternally() ||
             Servent::instance()->externalAddress() <= info.host().hostName() )
         {
-            qDebug() << "Initiate connection to" << peerId;
+            tDebug() << "Initiate connection to" << peerId << Servent::instance()->externalAddress() << info.host().hostName() << ( Servent::instance()->externalAddress() <= info.host().hostName() );
             Servent::instance()->connectToPeer( info.host().hostName(),
                                           info.port(),
                                           info.key(),
@@ -191,12 +191,12 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << "They should be conecting to us...";
+            tDebug() << Q_FUNC_INFO << "They should be conecting to us...";
         }
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
+        tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
     }
 
     m_peersSipInfos.insert( peerId, info );

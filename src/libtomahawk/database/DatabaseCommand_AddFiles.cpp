@@ -162,11 +162,9 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         m_ids << fileid;
         added++;
     }
+
     qDebug() << "Inserted" << added << "tracks to database";
-
-    if ( added )
-        source()->updateIndexWhenSynced();
-
     tDebug() << "Committing" << added << "tracks...";
+
     emit done( m_files, source()->collection() );
 }

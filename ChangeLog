@@ -1,3 +1,7 @@
+Version 0.6.0:
+    * Access Control queries now stay on the bottom of the job view,
+      removing the tendency to jump away from the mouse.
+
 Version 0.5.3:
     * Fixed broken artist names when importing Last.fm playback history.
     * Fixed crash when filtering collections.

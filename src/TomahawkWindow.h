@@ -31,13 +31,15 @@
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
 
-namespace Tomahawk {
-namespace Accounts {
-    class Account;
-}
+namespace Tomahawk
+{
+    namespace Accounts
+    {
+        class Account;
+    }
 }
 
-class JobStatusModel;
+class JobStatusSortModel;
 class QSearchField;
 class SourceTreeView;
 class QAction;
@@ -75,6 +77,10 @@ protected:
     void hideEvent( QHideEvent* e );
     void keyPressEvent( QKeyEvent* e );
 
+#ifdef Q_OS_WIN
+    bool winEvent( MSG* message, long* result );
+#endif
+
 public slots:
     void createAutomaticPlaylist( QString );
     void createStation();
@@ -85,8 +91,8 @@ public slots:
     void legalInfo();
     void updateCollectionManually();
     void rescanCollectionManually();
-    void pluginMenuAdded(QMenu*);
-    void pluginMenuRemoved(QMenu*);
+    void pluginMenuAdded( QMenu* );
+    void pluginMenuRemoved( QMenu* );
     void showOfflineSources();
 
     void fullScreenEntered();
@@ -142,6 +148,11 @@ private:
     void setupSideBar();
     void setupUpdateCheck();
 
+#ifdef Q_OS_WIN
+    bool setupWindowsButtons();
+    const unsigned int m_buttonCreatedID;
+#endif
+
     Ui::TomahawkWindow* ui;
     QSearchField* m_searchWidget;
     AudioControls* m_audioControls;
@@ -151,7 +162,7 @@ private:
     QPushButton* m_queueButton;
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
-    JobStatusModel* m_jobsModel;
+    JobStatusSortModel* m_jobsModel;
 
     QAction* m_backAction;
     QAction* m_forwardAction;

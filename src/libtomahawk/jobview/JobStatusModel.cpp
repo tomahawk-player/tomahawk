@@ -25,6 +25,75 @@
 #include <QPixmap>
 
 
+JobStatusSortModel::JobStatusSortModel( QObject* parent )
+    : QSortFilterProxyModel( parent )
+{
+    setDynamicSortFilter( true );
+}
+
+
+JobStatusSortModel::~JobStatusSortModel()
+{
+}
+
+
+void
+JobStatusSortModel::setJobModel( JobStatusModel* model )
+{
+    setSourceModel( model );
+
+    m_sourceModel = model;
+
+    connect( m_sourceModel, SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInsertedSlot( int, JobStatusItem* ) ) );
+    connect( m_sourceModel, SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemovedSlot( int ) ) );
+    connect( m_sourceModel, SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegatesSlot() ) );
+}
+
+
+void
+JobStatusSortModel::addJob( JobStatusItem* item )
+{
+    m_sourceModel->addJob( item );
+}
+
+
+void
+JobStatusSortModel::customDelegateJobInsertedSlot( int row, JobStatusItem* item )
+{
+    emit customDelegateJobInserted( mapFromSource( m_sourceModel->index( row ) ).row(), item );
+}
+
+
+void
+JobStatusSortModel::customDelegateJobRemovedSlot( int row )
+{
+    emit customDelegateJobRemoved( mapFromSource( m_sourceModel->index( row ) ).row() );
+}
+
+
+void
+JobStatusSortModel::refreshDelegatesSlot()
+{
+    sort( 0 );
+    emit refreshDelegates();
+}
+
+
+bool
+JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    QVariant leftVar = left.data( JobStatusModel::JobDataRole );
+    JobStatusItem* leftItem = leftVar.value< JobStatusItem* >();
+    QVariant rightVar = right.data( JobStatusModel::JobDataRole );
+    JobStatusItem* rightItem = rightVar.value< JobStatusItem* >();
+    if ( !leftItem || !rightItem )
+        return false;
+
+    return leftItem->weight() < rightItem->weight();
+}
+
+
+
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
 {
@@ -111,9 +180,9 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
     {
         case Qt::DecorationRole:
             return item->icon();
-            
+
         case Qt::ToolTipRole:
-            
+
         case Qt::DisplayRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
@@ -121,7 +190,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
             else
                 return item->mainText();
         }
-        
+
         case RightColumnRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
@@ -129,7 +198,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
             else
                 return item->rightColumnText();
         }
-        
+
         case AllowMultiLineRole:
             return item->allowMultiLine();
 
@@ -152,6 +221,7 @@ JobStatusModel::rowCount( const QModelIndex& parent ) const
 void
 JobStatusModel::itemFinished()
 {
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
@@ -229,6 +299,7 @@ JobStatusModel::itemFinished()
 void
 JobStatusModel::itemUpdated()
 {
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 

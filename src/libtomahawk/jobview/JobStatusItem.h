@@ -44,6 +44,7 @@ public:
     virtual ~JobStatusItem();
 
     virtual QString type() const = 0;
+    virtual int weight() const { return 0; }
 
     /// Please cache this.
     virtual QPixmap icon() const = 0;
