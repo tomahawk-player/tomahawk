@@ -55,7 +55,8 @@ public:
 
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
-
+    void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
+    void onRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;

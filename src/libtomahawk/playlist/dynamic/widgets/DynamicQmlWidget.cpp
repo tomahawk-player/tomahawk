@@ -4,7 +4,9 @@
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "dynamic/DynamicModel.h"
+#include "dynamic/GeneratorInterface.h"
 #include "PlayableItem.h"
+#include "Source.h"
 
 #include <QUrl>
 #include <qdeclarative.h>
@@ -33,6 +35,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_model->loadPlaylist( m_playlist );
     m_model->startOnDemand();
 
+    m_playlist->generator()->generate( 20 );
+    m_playlist->resolve();
+
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     currentItemChanged( m_model->currentItem() );
 
@@ -42,6 +47,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
     connect( m_model, SIGNAL( currentItemChanged( QPersistentModelIndex ) ), SLOT( currentItemChanged( QPersistentModelIndex ) ) );
+    connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+    connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
+
 }
 
 
@@ -114,6 +122,29 @@ QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QS
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
 {
     rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
+}
+
+void
+DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
+{
+    int limit = -1; // only limit the "preview" of a station
+//    if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
+//    {
+//        m_resolveOnNextLoad = true;
+//    }
+//    else if ( m_playlist->mode() == OnDemand )
+//    {
+        limit = 5;
+//    }
+
+    m_model->tracksGenerated( queries, limit );
+    m_playlist->resolve();
+
+}
+
+void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)
+{
+    m_playlist->resolve();
 }
 
 }
