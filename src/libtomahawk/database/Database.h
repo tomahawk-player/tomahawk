@@ -76,8 +76,8 @@ private:
     bool m_ready;
 
     DatabaseImpl* m_impl;
-    DatabaseWorkerThread* m_workerRW;
-    QList< DatabaseWorkerThread* > m_workerThreads;
+    QWeakPointer< DatabaseWorkerThread > m_workerRW;
+    QList< QWeakPointer< DatabaseWorkerThread > > m_workerThreads;
     int m_maxConcurrentThreads;
 
     QHash< QThread*, DatabaseImpl* > m_implHash;

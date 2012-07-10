@@ -48,7 +48,6 @@ DatabaseWorkerThread::run()
 {
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread starting...";
     m_worker = QWeakPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P5" << ( m_worker ? "true" : "false" );
     exec();    
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread finishing...";
     if ( m_worker )
@@ -64,7 +63,6 @@ DatabaseWorkerThread::~DatabaseWorkerThread()
 QWeakPointer< DatabaseWorker >
 DatabaseWorkerThread::worker() const
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P4" << ( m_worker ? "true" : "false" );
     return m_worker;
 }
 
