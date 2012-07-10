@@ -66,7 +66,7 @@ Database::~Database()
     qDebug() << Q_FUNC_INFO;
 
     m_workerRW->quit();
-    foreach ( DatabaseWorkerThread *thread, m_workers )
+    foreach ( DatabaseWorkerThread *thread, m_workerThreads )
     {
         if ( thread->worker() )
             thread->quit();
@@ -75,12 +75,12 @@ Database::~Database()
     m_workerRW->wait( 60000 );
     delete m_workerRW;
     m_workerRW = 0;
-    foreach ( DatabaseWorkerThread *thread, m_workers )
+    foreach ( DatabaseWorkerThread *thread, m_workerThreads )
     {
         thread->wait( 60000 );
         delete thread;
     }
-    m_workers.clear();
+    m_workerThreads.clear();
     
     qDeleteAll( m_implHash.values() );
     delete m_impl;
@@ -118,21 +118,24 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
     {
         // find existing amount of worker threads for commandname
         // create new thread if < WORKER_THREADS
-        if ( m_workers.count() < m_maxConcurrentThreads )
+        if ( m_workerThreads.count() < m_maxConcurrentThreads )
         {
-            DatabaseWorkerThread* worker = new DatabaseWorkerThread( this, false );
-            worker->start();
+            DatabaseWorkerThread* workerThread = new DatabaseWorkerThread( this, false );
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P1" << ( workerThread->worker() ? "true" : "false" );
+            workerThread->start();
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P2" << ( workerThread->worker() ? "true" : "false" );
 
-            m_workers << worker;
+            m_workerThreads << workerThread;
         }
 
         // find thread for commandname with lowest amount of outstanding jobs and enqueue job
         int busyThreads = 0;
         QWeakPointer< DatabaseWorker > happyWorker;
-        for ( int i = 0; i < m_workers.count(); i++ )
+        for ( int i = 0; i < m_workerThreads.count(); i++ )
         {
-            DatabaseWorkerThread* workerThread = m_workers.at( i );
+            DatabaseWorkerThread* workerThread = m_workerThreads.at( i );
 
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << i << ( workerThread->worker() ? "true" : "false" );
             if ( workerThread->worker() && !workerThread->worker().data()->busy() )
             {
                 happyWorker = workerThread->worker();
@@ -145,6 +148,8 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
         }
 
 //        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_workerThreads.count() << m_maxConcurrentThreads;
+        Q_ASSERT( happyWorker );
         happyWorker.data()->enqueue( lc );
     }
 }

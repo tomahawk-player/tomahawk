@@ -71,7 +71,7 @@ public:
     DatabaseWorkerThread( Database* db, bool mutates );
     ~DatabaseWorkerThread();
 
-    QWeakPointer< DatabaseWorker > worker() { return m_worker; }
+    QWeakPointer< DatabaseWorker > worker() const;
     
 protected:
     void run();

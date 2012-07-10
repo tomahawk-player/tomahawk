@@ -40,17 +40,17 @@ DatabaseWorkerThread::DatabaseWorkerThread( Database* db, bool mutates )
     , m_db( db )
     , m_mutates( mutates )
 {
-    Q_UNUSED( db );
-    Q_UNUSED( mutates );
 }
 
 
 void
 DatabaseWorkerThread::run()
 {
+    tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread starting...";
     m_worker = QWeakPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P5" << ( m_worker ? "true" : "false" );
     exec();    
-    tDebug() << Q_FUNC_INFO << "DatabaseWorker finishing...";
+    tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread finishing...";
     if ( m_worker )
         delete m_worker.data();
 }
@@ -61,13 +61,19 @@ DatabaseWorkerThread::~DatabaseWorkerThread()
 }
 
 
+QWeakPointer< DatabaseWorker >
+DatabaseWorkerThread::worker() const
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "P4" << ( m_worker ? "true" : "false" );
+    return m_worker;
+}
+
 
 DatabaseWorker::DatabaseWorker( Database* db, bool mutates )
     : QObject()
     , m_db( db )
     , m_outstanding( 0 )
 {
-    Q_UNUSED( db );
     Q_UNUSED( mutates );
     tDebug() << Q_FUNC_INFO << "New db connection with name:" << Database::instance()->impl()->database().connectionName() << "on thread" << this->thread();
 }
@@ -84,9 +90,6 @@ DatabaseWorker::~DatabaseWorker()
             tDebug() << "Outstanding db command to finish:" << cmd->guid() << cmd->commandname();
         }
     }
-
-    thread()->quit();
-    wait();
 }
 
 
