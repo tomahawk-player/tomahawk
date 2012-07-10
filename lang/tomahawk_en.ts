@@ -3219,7 +3219,7 @@ enter the displayed PIN number here:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="247"/>
-        <location filename="../src/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/TomahawkWindow.cpp" line="967"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
@@ -3264,147 +3264,147 @@ enter the displayed PIN number here:</translation>
         <translation>Global Search...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="309"/>
-        <location filename="../src/TomahawkWindow.cpp" line="326"/>
+        <location filename="../src/TomahawkWindow.cpp" line="311"/>
+        <location filename="../src/TomahawkWindow.cpp" line="328"/>
         <source>Check For Updates...</source>
         <translation>Check For Updates...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="671"/>
-        <location filename="../src/TomahawkWindow.cpp" line="678"/>
-        <location filename="../src/TomahawkWindow.cpp" line="686"/>
+        <location filename="../src/TomahawkWindow.cpp" line="673"/>
+        <location filename="../src/TomahawkWindow.cpp" line="680"/>
+        <location filename="../src/TomahawkWindow.cpp" line="688"/>
         <source>Connect To Peer</source>
         <translation>Connect To Peer</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="672"/>
+        <location filename="../src/TomahawkWindow.cpp" line="674"/>
         <source>Enter peer address:</source>
         <translation>Enter peer address:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="679"/>
+        <location filename="../src/TomahawkWindow.cpp" line="681"/>
         <source>Enter peer port:</source>
         <translation>Enter peer port:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="687"/>
+        <location filename="../src/TomahawkWindow.cpp" line="689"/>
         <source>Enter peer key:</source>
         <translation>Enter peer key:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="797"/>
+        <location filename="../src/TomahawkWindow.cpp" line="799"/>
         <source>XSPF Error</source>
         <translation>XSPF Error</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="797"/>
+        <location filename="../src/TomahawkWindow.cpp" line="799"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>This is not a valid XSPF playlist.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="801"/>
+        <location filename="../src/TomahawkWindow.cpp" line="803"/>
         <source>Failed to save tracks</source>
         <translation>Failed to save tracks</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="801"/>
+        <location filename="../src/TomahawkWindow.cpp" line="803"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="815"/>
+        <location filename="../src/TomahawkWindow.cpp" line="817"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="817"/>
+        <location filename="../src/TomahawkWindow.cpp" line="819"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="849"/>
+        <location filename="../src/TomahawkWindow.cpp" line="851"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="851"/>
+        <location filename="../src/TomahawkWindow.cpp" line="853"/>
         <source>Create New Station</source>
         <translation>Create New Station</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="851"/>
+        <location filename="../src/TomahawkWindow.cpp" line="853"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="914"/>
+        <location filename="../src/TomahawkWindow.cpp" line="916"/>
         <source>Playlist</source>
         <translation>Playlist</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="936"/>
+        <location filename="../src/TomahawkWindow.cpp" line="938"/>
         <source>Automatic Playlist</source>
         <translation>Automatic Playlist</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="957"/>
+        <location filename="../src/TomahawkWindow.cpp" line="959"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="991"/>
+        <location filename="../src/TomahawkWindow.cpp" line="993"/>
         <source>Go &amp;offline</source>
         <translation>Go &amp;offline</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="998"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1000"/>
         <source>Go &amp;online</source>
         <translation>Go &amp;online</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1021"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1023"/>
         <source>Authentication Error</source>
         <translation>Authentication Error</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1024"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation>Error connecting to SIP: Authentication failed!</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1036"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1038"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 by %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1037"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1039"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1048"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1050"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1052"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1054"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1056"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1058"/>
         <source>Copyright 2010 - 2012</source>
         <translation>Copyright 2010 - 2012</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1057"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1059"/>
         <source>Thanks to:</source>
         <translation>Thanks to:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1064"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1066"/>
         <source>About Tomahawk</source>
         <translation>About Tomahawk</translation>
     </message>
