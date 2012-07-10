@@ -241,7 +241,7 @@ DiagnosticsDialog::updateAccountLabel( Tomahawk::Accounts::Account* account )
                 accountInfo.append(
                     QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
                         .arg( peerId )
-                        .arg( sipInfo.host().hostName() )
+                        .arg( sipInfo.host() )
                         .arg( sipInfo.port() )
                         .arg( versionString )
                         // .arg( connected ? "connected" : "not connected")

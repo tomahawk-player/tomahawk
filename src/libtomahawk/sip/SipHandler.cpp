@@ -136,11 +136,11 @@ SipHandler::onPeerOnline( const QString& jid )
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
-        m["visible"] = true;
-        m["ip"] = Servent::instance()->externalAddress();
-        m["port"] = Servent::instance()->externalPort();
-        m["key"] = key;
-        m["uniqname"] = nodeid;
+        info.setVisible( true );
+        info.setHost( Servent::instance()->externalAddress() );
+        info.setPort( Servent::instance()->externalPort() );
+        info.setKey( key );
+        info.setUniqname( nodeid );
 
         qDebug() << "Asking them to connect to us:" << m;
     }
@@ -183,10 +183,11 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
     if ( info.isVisible() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress() <= info.host().hostName() )
+            Servent::instance()->externalAddress() < info.host() ||
+            ( Servent::instance()->externalAddress() == info.host() && Servent::instance()->externalPort() < info.port() ) )
         {
-            qDebug() << "Initiate connection to" << peerId;
-            Servent::instance()->connectToPeer( info.host().hostName(),
+            tDebug() << "Initiate connection to" << peerId << "at" << info.host();
+            Servent::instance()->connectToPeer( info.host(),
                                           info.port(),
                                           info.key(),
                                           peerId,
