@@ -163,6 +163,7 @@ SpotifyAccountConfig::doLogin()
         m_loggedInManually = true;
         m_verifiedUsername.clear();
         m_ui->playlistList->clear();
+        m_ui->passwordEdit->clear();
         emit logout();
         showLoggedOut();
     }
