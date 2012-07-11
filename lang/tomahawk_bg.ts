@@ -2899,37 +2899,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="733"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="738"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="741"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="746"/>
         <source>You</source>
         <translation>Ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="743"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="748"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="752"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="752"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="755"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="760"/>
         <source>%1 people</source>
         <translation>%1 хора</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>loved this track</source>
         <translation>хареса тази песен</translation>
     </message>
