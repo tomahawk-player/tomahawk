@@ -60,7 +60,6 @@ Servent::Servent( QObject* parent )
     , m_port( 0 )
     , m_externalPort( 0 )
     , m_ready( false )
-    , m_portfwd( 0 )
 {
     s_instance = this;
 
@@ -89,7 +88,13 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
-    delete m_portfwd;
+
+    if ( m_portfwd )
+    {
+        m_portfwd.data()->quit();
+        m_portfwd.data()->wait( 60000 );
+        delete m_portfwd.data();
+    }
 }
 
 
@@ -144,9 +149,11 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             }
             // TODO check if we have a public/internet IP on this machine directly
             tLog() << "External address mode set to upnp...";
-            m_portfwd = new PortFwdThread( m_port );
-            connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+            m_portfwd = QWeakPointer< PortFwdThread >( new PortFwdThread( m_port ) );
+            Q_ASSERT( m_portfwd );
+            connect( m_portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                   SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+            m_portfwd.data()->start();
             break;
     }
 
@@ -226,6 +233,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
         return;
     }
 
+    tLog() << "UPnP setup successful";
     m_ready = true;
     emit ready();
 }

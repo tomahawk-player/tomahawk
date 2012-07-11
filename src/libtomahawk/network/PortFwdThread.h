@@ -22,8 +22,34 @@
 #include <QThread>
 #include <QMutex>
 #include <QHostAddress>
+#include <QWeakPointer>
 
 class Portfwd;
+
+class PortFwdWorker : public QObject
+{
+Q_OBJECT
+
+public:
+    explicit PortFwdWorker( unsigned int port );
+    ~PortFwdWorker();
+
+    unsigned int externalPort() const { return m_externalPort; }
+
+    void unregister();
+    
+signals:
+    void externalAddressDetected( QHostAddress ha, unsigned int port );
+
+public slots:
+    void work();
+
+private:
+    Portfwd* m_portfwd;
+    QHostAddress m_externalAddress;
+    unsigned int m_externalPort, m_port;
+};
+
 
 class PortFwdThread : public QThread
 {
@@ -33,18 +59,17 @@ public:
     explicit PortFwdThread( unsigned int port );
     ~PortFwdThread();
 
+    QWeakPointer< PortFwdWorker > worker() const;
+
 signals:
     void externalAddressDetected( QHostAddress ha, unsigned int port );
-
-private slots:
-    void work();
-
-private:
+    
+protected:
     void run();
 
-    Portfwd* m_portfwd;
-    QHostAddress m_externalAddress;
-    unsigned int m_externalPort, m_port;
+private:
+    QWeakPointer< PortFwdWorker > m_worker;
+    unsigned int m_port;
 };
 
 #endif // PORTFWDTHREAD_H
