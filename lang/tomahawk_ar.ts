@@ -472,9 +472,14 @@ connect and stream from you?</source>
         <translation>تشخيص توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/DiagnosticsDialog.ui" line="52"/>
-        <source>Copy to Clipboard</source>
-        <translation>نسخ إلى الحافظة</translation>
+        <location filename="../src/DiagnosticsDialog.ui" line="42"/>
+        <source>&amp;Copy to Clipboard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/DiagnosticsDialog.ui" line="49"/>
+        <source>Open &amp;Log-file</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -730,7 +735,7 @@ connect and stream from you?</source>
         <translation>تقدم</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="43"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="44"/>
         <source> - Properties</source>
         <translation> - خصائص</translation>
     </message>
@@ -3219,7 +3224,7 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="247"/>
-        <location filename="../src/TomahawkWindow.cpp" line="967"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1043"/>
         <source>Play</source>
         <translation>إستمع</translation>
     </message>
@@ -3239,172 +3244,172 @@ enter the displayed PIN number here:</source>
         <translation>التالي</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="234"/>
+        <location filename="../src/TomahawkWindow.cpp" line="237"/>
         <source>Back</source>
         <translation>إلى الوراء</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="235"/>
+        <location filename="../src/TomahawkWindow.cpp" line="238"/>
         <source>Go back one page</source>
         <translation>العودة صفحة واحدة إلى الوراء</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="236"/>
+        <location filename="../src/TomahawkWindow.cpp" line="239"/>
         <source>Forward</source>
         <translation>تقدم</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="237"/>
+        <location filename="../src/TomahawkWindow.cpp" line="240"/>
         <source>Go forward one page</source>
         <translation>تقدم صفحة واحدة </translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="244"/>
+        <location filename="../src/TomahawkWindow.cpp" line="247"/>
         <source>Global Search...</source>
         <translation>بحث شامل...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="311"/>
-        <location filename="../src/TomahawkWindow.cpp" line="328"/>
+        <location filename="../src/TomahawkWindow.cpp" line="314"/>
+        <location filename="../src/TomahawkWindow.cpp" line="331"/>
         <source>Check For Updates...</source>
         <translation>التحقق من التحديثات...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="673"/>
-        <location filename="../src/TomahawkWindow.cpp" line="680"/>
-        <location filename="../src/TomahawkWindow.cpp" line="688"/>
+        <location filename="../src/TomahawkWindow.cpp" line="749"/>
+        <location filename="../src/TomahawkWindow.cpp" line="756"/>
+        <location filename="../src/TomahawkWindow.cpp" line="764"/>
         <source>Connect To Peer</source>
         <translation>ربط بالند</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="674"/>
+        <location filename="../src/TomahawkWindow.cpp" line="750"/>
         <source>Enter peer address:</source>
         <translation>أدخل عنوان الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="681"/>
+        <location filename="../src/TomahawkWindow.cpp" line="757"/>
         <source>Enter peer port:</source>
         <translation>أدخل بوابة الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="689"/>
+        <location filename="../src/TomahawkWindow.cpp" line="765"/>
         <source>Enter peer key:</source>
         <translation>أدخل مفتاح الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="799"/>
+        <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>XSPF Error</source>
         <translation>خطأ XSPF</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="799"/>
+        <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>قائمة الأغاني XSPF هذه ليست صالحة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="803"/>
+        <location filename="../src/TomahawkWindow.cpp" line="879"/>
         <source>Failed to save tracks</source>
         <translation>فشل في حفظ الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="803"/>
+        <location filename="../src/TomahawkWindow.cpp" line="879"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>بعض الأغاني في قائمة الأغاني لا تحتوي على إسم الفنان أو إسم الأغنية. هذه الأغاني سوف تتجاهل.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="817"/>
+        <location filename="../src/TomahawkWindow.cpp" line="893"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية. تأكد أن لديك خلفية فونون المناسبة والإضافات المطلوبة مثبتة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="819"/>
+        <location filename="../src/TomahawkWindow.cpp" line="895"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="851"/>
+        <location filename="../src/TomahawkWindow.cpp" line="927"/>
         <source>Station</source>
         <translation>إذاعة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="853"/>
+        <location filename="../src/TomahawkWindow.cpp" line="929"/>
         <source>Create New Station</source>
         <translation>إنشاء قائمة أغاني جديدة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="853"/>
+        <location filename="../src/TomahawkWindow.cpp" line="929"/>
         <source>Name:</source>
         <translation>الاسم:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="916"/>
+        <location filename="../src/TomahawkWindow.cpp" line="992"/>
         <source>Playlist</source>
         <translation>قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="938"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1014"/>
         <source>Automatic Playlist</source>
         <translation>قائمة أغاني أوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="959"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1035"/>
         <source>Pause</source>
         <translation>تعليق</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="993"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1069"/>
         <source>Go &amp;offline</source>
         <translation>أصبح &amp;غير متصل</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1000"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1076"/>
         <source>Go &amp;online</source>
         <translation>اصبح &amp;متصل</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1023"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1099"/>
         <source>Authentication Error</source>
         <translation>خطأ في المصادقة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1024"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1100"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation>خطأ في الاتصال بسيب (SIP): فشلت المصادقة!</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1038"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1114"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 من قبل %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1039"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1115"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1050"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1126"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1054"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1130"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1058"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1134"/>
         <source>Copyright 2010 - 2012</source>
         <translation>حقوق الطبع والنشر ٢٠١٠ - ٢٠١٢</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1059"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1135"/>
         <source>Thanks to:</source>
         <translation>شكر لكل من:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1066"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1142"/>
         <source>About Tomahawk</source>
         <translation>عن توماهوك</translation>
     </message>
