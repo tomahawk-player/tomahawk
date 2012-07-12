@@ -299,7 +299,7 @@ void
 openUrl( const QUrl& url )
 {
 #ifdef Q_OS_WIN
-    ShellExecuteW( 0, 0, (TCHAR*)url.toString().utf16(), 0, 0, SW_SHOWNORMAL );
+    ShellExecuteW( 0, 0, (LPCWSTR*)url.toString().utf16(), 0, 0, SW_SHOWNORMAL );
 #else
     QDesktopServices::openUrl( url );
 #endif
