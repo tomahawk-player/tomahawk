@@ -53,6 +53,7 @@ public:
 
     QPixmap requestPixmap( const QString &id, QSize *size, const QSize &requestedSize );
 
+
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
@@ -62,6 +63,80 @@ private:
     PlayableProxyModel* m_proxyModel;
 
     dynplaylist_ptr m_playlist;
+};
+
+}
+
+#include "dynamic/GeneratorInterface.h"
+
+namespace Tomahawk
+{
+class EchonestStation: public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
+    Q_PROPERTY(Tomahawk::DynamicControl* mainControl READ mainControl)
+
+public:
+    EchonestStation(geninterface_ptr generator, QObject *parent = 0) : QObject(parent), m_generator(generator) {}
+
+    Tomahawk::DynamicControl* mainControl() {
+        foreach(dyncontrol_ptr control, m_generator->controls()) {
+            qDebug() << "got control" << control->selectedType();
+            if(control->selectedType() == "Artist" || control->selectedType() == "Style") {
+                return control.data();
+            }
+        }
+        return 0;
+    }
+
+    bool configured() { return mainControl() != 0; }
+
+    Q_INVOKABLE void setMainControl(const QString &type) {
+        dyncontrol_ptr control = m_generator->createControl("echonest");
+        control->setSelectedType("Style");
+        control->setMatch("1");
+        control->setInput(type);
+        qDebug() << "created control" << control->type() << control->selectedType() << control->match();
+        m_generator->generate(20);
+
+        emit configuredChanged();
+    }
+
+signals:
+    void configuredChanged();
+
+private:
+    geninterface_ptr m_generator;
+};
+}
+
+namespace Tomahawk
+{
+
+class ControlModel: public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    ControlModel(geninterface_ptr generator, QObject *parent = 0): QAbstractListModel(parent), m_generator(generator) {
+        connect(generator.data(), SIGNAL(controlAdded(const dyncontrol_ptr&)), SLOT(controlAdded()));
+    }
+
+    int rowCount(const QModelIndex &parent) const { return m_generator->controls().size(); }
+    QVariant data(const QModelIndex &index, int role) const {
+        return "blabla";
+    }
+    Q_INVOKABLE Tomahawk::DynamicControl *controlAt( int index ) { qDebug() << "returning" << m_generator->controls().at(index).data(); return m_generator->controls().at(index).data(); }
+
+private slots:
+    void controlAdded() {
+        qDebug() << "control added";
+        beginInsertRows(QModelIndex(), m_generator->controls().size() - 1, m_generator->controls().size() - 1);
+        endInsertRows();
+    }
+private:
+    geninterface_ptr m_generator;
+
 };
 
 }

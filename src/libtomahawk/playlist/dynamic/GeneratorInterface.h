@@ -59,7 +59,7 @@ public:
     // empty QString means use default
     /// The generator will keep track of all the controls it creates. No need to tell it about controls
     ///  you ask it to create
-    virtual dyncontrol_ptr createControl( const QString& type = QString() );
+    Q_INVOKABLE virtual dyncontrol_ptr createControl( const QString& type = QString() );
 
     /// A logo to display for this generator, if it has one
     virtual QPixmap logo();
@@ -127,6 +127,8 @@ signals:
     void error( const QString& title, const QString& body);
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
+    void controlAdded(const dyncontrol_ptr& control);
+    void controlRemoved(const dyncontrol_ptr& control);
 
 protected:
     QString m_type;

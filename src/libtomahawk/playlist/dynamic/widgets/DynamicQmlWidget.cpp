@@ -4,6 +4,7 @@
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "dynamic/DynamicModel.h"
+#include "dynamic/echonest/EchonestControl.h"
 #include "dynamic/GeneratorInterface.h"
 #include "PlayableItem.h"
 #include "Source.h"
@@ -30,19 +31,40 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_model = new DynamicModel( this );
     m_proxyModel = new PlayableProxyModel( this );
     m_proxyModel->setSourcePlayableModel( m_model );
-    m_proxyModel->setShowOfflineResults( false );
+    m_proxyModel->setShowOfflineResults( true );
 
     m_model->loadPlaylist( m_playlist );
-    m_model->startOnDemand();
 
+    // Initially seed the playlist
     m_playlist->generator()->generate( 20 );
-    m_playlist->resolve();
 
-    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
-    currentItemChanged( m_model->currentItem() );
+    qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
+
+    qmlRegisterUncreatableType<EchonestStation>("tomahawk", 1, 0, "EchonestStation", "bla");
 
     // TODO: In case QML is used in more places, this should probably be moved to some generic place
     qmlRegisterType<PlayableItem>("tomahawk", 1, 0, "PlayableItem");
+//    qmlRegisterUncreatableType<Tomahawk::DynamicControl>("tomahawk", 1, 0, "DynamicControl", "use generator.createControl() isntead");
+//    qmlRegisterUncreatableType<Tomahawk::EchonestControl>("tomahawk", 1, 0, "EchonestControl", "use Generator.createControl() instead");
+    qmlRegisterUncreatableType<DynamicControl>("tomahawk", 1, 0, "DynamicControl", "use generator.createControl() isntead");
+    qmlRegisterUncreatableType<EchonestControl>("tomahawk", 1, 0, "EchonestControl", "use Generator.createControl() instead");
+    qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
+
+    QStringList generatorControls;
+
+    foreach(dyncontrol_ptr control, m_playlist->generator()->controls()) {
+        qDebug() << "**CTRL" << control->summary() << control->input() << control->match() << control->type() << control->selectedType();
+        generatorControls << control->summary();
+    }
+
+    ControlModel *controls = new ControlModel(m_playlist->generator(), this);
+
+    EchonestStation *station = new EchonestStation(m_playlist->generator(), this);
+    rootContext()->setContextProperty( "echonestStation", station);
+    rootContext()->setContextProperty( "controlModel", controls );
+    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
+    rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
+    currentItemChanged( m_model->currentItem() );
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
@@ -127,19 +149,12 @@ void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentI
 void
 DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
-    int limit = -1; // only limit the "preview" of a station
-//    if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
-//    {
-//        m_resolveOnNextLoad = true;
-//    }
-//    else if ( m_playlist->mode() == OnDemand )
-//    {
-        limit = 5;
-//    }
-
-    m_model->tracksGenerated( queries, limit );
+    qDebug() << queries.count() << "tracks generated";
+    m_model->tracksGenerated( queries, queries.count() );
     m_playlist->resolve();
 
+    // Ok... we have some intial stuff, switch to dynamic mode
+    //m_model->startOnDemand();
 }
 
 void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)

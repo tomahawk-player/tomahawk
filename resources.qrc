@@ -148,5 +148,6 @@
         <file>data/images/scrollbar-horizontal-handle.png</file>
         <file>data/qml/ArtistInfoScene.qml</file>
         <file>data/qml/StationScene.qml</file>
+        <file>data/qml/CoverImage.qml</file>
     </qresource>
 </RCC>

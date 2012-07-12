@@ -56,6 +56,7 @@ void
 Tomahawk::GeneratorInterface::addControl( const Tomahawk::dyncontrol_ptr& control )
 {
     m_controls << control;
+    emit controlAdded( control );
 }
 
 
@@ -77,6 +78,7 @@ void
 Tomahawk::GeneratorInterface::removeControl( const Tomahawk::dyncontrol_ptr& control )
 {
     m_controls.removeAll( control );
+    controlRemoved( control );
 }
 
 
