@@ -118,10 +118,10 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
 
 
 void
-SipHandler::onPeerOnline( const QString& jid )
+SipHandler::onPeerOnline( const QString& peerId )
 {
 //    qDebug() << Q_FUNC_INFO;
-    tDebug() << "SIP online:" << jid;
+    tDebug() << "SIP online:" << peerId;
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
@@ -132,7 +132,7 @@ SipHandler::onPeerOnline( const QString& jid )
         ControlConnection* conn = new ControlConnection( Servent::instance(), QString() );
 
         const QString& nodeid = Database::instance()->impl()->dbid();
-        conn->setName( jid.left( jid.indexOf( "/" ) ) );
+        conn->setName( peerId.left( peerId.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
@@ -155,10 +155,10 @@ SipHandler::onPeerOnline( const QString& jid )
 
 
 void
-SipHandler::onPeerOffline( const QString& jid )
+SipHandler::onPeerOffline( const QString& peerId )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP offline:" << jid;
+    qDebug() << "SIP offline:" << peerId;
 }
 
 
