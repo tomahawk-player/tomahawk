@@ -110,7 +110,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     Jreen::JID jid = Jreen::JID( readUsername() );
 
     // general client setup
-    m_client = new Jreen::Client( jid, m_currentPassword );    
+    m_client = new Jreen::Client( jid, m_currentPassword );
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );
@@ -425,30 +425,15 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendMsg( const QString& to, const QString& msg )
+XmppSipPlugin::sendMsg( const QString& to, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO << to << msg;
+    qDebug() << Q_FUNC_INFO << to << info;
 
     if ( !m_client )
         return;
 
-    /*******************************************************
-     * Obsolete this by a SipMessage class
-     */
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok || v.type() != QVariant::Map )
-    {
-        qDebug() << "Invalid JSON in Xmpp msg";
-        return;
-    }
-
-    QVariantMap m = v.toMap();
-    /*******************************************************/
-
     TomahawkXmppMessage *sipMessage;
-    if ( m["visible"].toBool() )
+    if ( info.isVisible() )
     {
         sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.uniqname(), info.key() );
     }
@@ -467,13 +452,6 @@ XmppSipPlugin::sendMsg( const QString& to, const QString& msg )
 void
 XmppSipPlugin::broadcastMsg( const QString& msg )
 {
-    if ( !m_client )
-        return;
-
-    foreach ( const Jreen::JID& jid, m_peers.keys() )
-    {
-        sendMsg( jid.full(), msg );
-    }
 }
 
 

@@ -142,12 +142,12 @@ SipHandler::onPeerOnline( const QString& peerId )
         info.setKey( key );
         info.setUniqname( nodeid );
 
-        qDebug() << "Asking them to connect to us:" << info;
+        tDebug() << "Asking them to connect to us:" << info;
     }
     else
     {
         info.setVisible( false );
-        qDebug() << "We are not visible externally:" << info;
+        tDebug() << "We are not visible externally:" << info;
     }
 
     sip->sendMsg( peerId, info );
@@ -158,7 +158,7 @@ void
 SipHandler::onPeerOffline( const QString& peerId )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP offline:" << peerId;
+    tDebug() << "SIP offline:" << peerId;
 }
 
 
@@ -171,7 +171,7 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 
     //FIXME: We should probably be using barePeerId in the connectToPeer call below.
     //But, verify this doesn't cause any problems (there is still a uniquename after all)
-    
+
     /*
       If only one party is externally visible, connection is obvious
       If both are, peer with lowest IP address initiates the connection.
@@ -192,12 +192,12 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << "They should be conecting to us...";
+            tDebug() << Q_FUNC_INFO << "They should be conecting to us...";
         }
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
+        tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
     }
 
     m_peersSipInfos.insert( peerId, info );
