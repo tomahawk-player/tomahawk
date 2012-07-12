@@ -22,10 +22,6 @@
 
 #include "config.h"
 
-#include "accounts/AccountManager.h"
-#include "network/Servent.h"
-#include "SourceList.h"
-
 #include <QLabel>
 #include <QTextEdit>
 #include <QDialogButtonBox>
@@ -34,8 +30,13 @@
 #include <QClipboard>
 #include <QDebug>
 
-#include "utils/Logger.h"
+#include "accounts/AccountManager.h"
+#include "network/Servent.h"
+#include "SourceList.h"
+
 #include "sip/SipHandler.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
@@ -44,10 +45,9 @@ DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
 {
     ui->setupUi( this );
 
-    connect( ui->clipboardButton, SIGNAL( clicked() ), this, SLOT( copyToClipboard() ) );
-    connect( ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
-
-    ui->scrollAreaWidgetContents->setLayout( new QVBoxLayout() );
+    connect( ui->clipboardButton, SIGNAL( clicked() ), SLOT( copyToClipboard() ) );
+    connect( ui->logfileButton, SIGNAL( clicked() ), SLOT( openLogfile() ) );
+    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( reject() ) );
 
     updateLogView();
 }
@@ -58,16 +58,10 @@ DiagnosticsDialog::updateLogView()
 {
     QString log;
 
-    log.append(
-        QString("TOMAHAWK DIAGNOSTICS LOG -%1 \n\n")
-            .arg( QDateTime::currentDateTime().toString() )
-    );
-
-    // network
+    log.append( QString( "TOMAHAWK DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
     log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n\n" );
-
-    // network
     log.append( "NETWORK:\n    General:\n" );
+
     if ( Servent::instance()->visibleExternally() )
     {
         log.append(
@@ -86,9 +80,7 @@ DiagnosticsDialog::updateLogView()
         log.append( "      visible: false" );
     }
 
-    ui->scrollAreaWidgetContents->layout()->addWidget( new QLabel( log, this ) );
-    // Peers / Accounts, TODO
-    ui->scrollAreaWidgetContents->layout()->addWidget( new QLabel( "ACCOUNTS:\n", this ) );
+    log.append( "ACCOUNTS:\n" );
 
     const QList< Tomahawk::source_ptr > sources = SourceList::instance()->sources( true );
     const QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
@@ -98,167 +90,98 @@ DiagnosticsDialog::updateLogView()
         if ( !account || !account->sipPlugin() )
             continue;
 
-        connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ),
-                            SLOT( onAccountConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
-        connect( account, SIGNAL( error( int, QString ) ),
-                            SLOT( onAccountError( int, QString ) ) );
+        connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account, SIGNAL( error( int, QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( peerOnline( QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( peerOffline( QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
 
-        connect( account->sipPlugin(), SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
-        connect( account->sipPlugin(), SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
-        connect( account->sipPlugin(), SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfoReceived( QString, SipInfo ) ) );
-        connect( account->sipPlugin(), SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( onSoftwareVersionReceived( QString, QString ) ) );
-
-        QLabel* accountInfoLabel = new QLabel( this );
-        ui->scrollAreaWidgetContents->layout()->addWidget( accountInfoLabel );
-        m_accountDescriptionStore.insert( account, accountInfoLabel );
-
-        updateAccountLabel( account );
+        log.append( accountLog( account ) + "\n" );
     }
 
-    ui->scrollAreaWidgetContents->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding ) );
+    ui->text->setText( log );
 }
 
 
 void
 DiagnosticsDialog::copyToClipboard()
 {
-    QString log;
-    foreach ( QLabel* label, m_accountDescriptionStore.values() )
+    QApplication::clipboard()->setText( ui->text->toPlainText() );
+}
+
+
+void
+DiagnosticsDialog::openLogfile()
+{
+    TomahawkUtils::openUrl( Logger::logFile() );
+}
+
+
+QString
+DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
+{
+    QString accountInfo;
+    QString stateString;
+    switch( account->connectionState() )
     {
-        log += label->text() + "\n\n";
+        case Tomahawk::Accounts::Account::Connecting:
+            stateString = "Connecting";
+            break;
+        case Tomahawk::Accounts::Account::Connected:
+            stateString = "Connected";
+            break;
+
+        case Tomahawk::Accounts::Account::Disconnected:
+            stateString = "Disconnected";
+            break;
+        case Tomahawk::Accounts::Account::Disconnecting:
+            stateString = "Disconnecting";
     }
+    accountInfo.append(
+        QString( "  %2 (%1): %3 (%4)\n" )
+            .arg( account->accountServiceName() )
+            .arg( account->sipPlugin()->friendlyName() )
+            .arg( account->accountFriendlyName())
+            .arg( stateString )
+    );
 
-    QApplication::clipboard()->setText( log );
-}
-
-
-void
-DiagnosticsDialog::onAccountConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState /* state */ )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< Tomahawk::Accounts::Account* >( sender() );
-    Q_ASSERT( account );
-
-    updateAccountLabel( account );
-}
-
-
-void
-DiagnosticsDialog::onAccountError( int /* errorId */ , QString /* errorString */ )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< Tomahawk::Accounts::Account* >( sender() );
-    Q_ASSERT( account );
-}
-
-
-void
-DiagnosticsDialog::onPeerOnline( const QString& )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
-    Q_ASSERT( account );
-
-    updateAccountLabel( account );
-}
-
-
-void
-DiagnosticsDialog::onPeerOffline( const QString& )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
-    Q_ASSERT( account );
-
-    updateAccountLabel( account );
-}
-
-
-void
-DiagnosticsDialog::onSipInfoReceived( const QString& /* peerId */ , const SipInfo& /* info */ )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
-    Q_ASSERT( account );
-
-    updateAccountLabel( account );
-}
-
-
-void
-DiagnosticsDialog::onSoftwareVersionReceived( const QString& /* peerId */ , const QString& /* versionString */ )
-{
-    Tomahawk::Accounts::Account* account = qobject_cast< SipPlugin* >( sender() )->account();
-    Q_ASSERT( account );
-
-    updateAccountLabel( account );
-}
-
-
-void
-DiagnosticsDialog::updateAccountLabel( Tomahawk::Accounts::Account* account )
-{
-    QLabel* accountInfoLabel = m_accountDescriptionStore.value( account );
-
-    if ( accountInfoLabel )
+    foreach( const QString& peerId, account->sipPlugin()->peersOnline() )
     {
-        QString accountInfo;
-        QString stateString;
-        switch( account->connectionState() )
+        QString versionString = SipHandler::instance()->versionString( peerId );
+        SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
+        if ( !sipInfo.isValid() )
         {
-            case Tomahawk::Accounts::Account::Connecting:
-                stateString = "Connecting";
-                break;
-            case Tomahawk::Accounts::Account::Connected:
-                stateString = "Connected";
-                break;
-
-            case Tomahawk::Accounts::Account::Disconnected:
-                stateString = "Disconnected";
-                break;
-            case Tomahawk::Accounts::Account::Disconnecting:
-                stateString = "Disconnecting";
+            accountInfo.append(
+                QString("       %1: %2 %3" /*"(%4)"*/ "\n")
+                    .arg( peerId )
+                    .arg( "sipinfo invalid" )
+                    .arg( versionString )
+                    // .arg( connected ? "connected" : "not connected")
+            );
         }
-        accountInfo.append(
-            QString( "  %2 (%1): %3 (%4)\n" )
-                .arg( account->accountServiceName() )
-                .arg( account->sipPlugin()->friendlyName() )
-                .arg( account->accountFriendlyName())
-                .arg( stateString )
-        );
-
-        foreach( const QString& peerId, account->sipPlugin()->peersOnline() )
+        else if ( sipInfo.isVisible() )
         {
-            QString versionString = SipHandler::instance()->versionString( peerId );
-            SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
-            if ( !sipInfo.isValid() )
-            {
-                accountInfo.append(
-                    QString("       %1: %2 %3" /*"(%4)"*/ "\n")
-                        .arg( peerId )
-                        .arg( "sipinfo invalid" )
-                        .arg( versionString )
-                        // .arg( connected ? "connected" : "not connected")
-                );
-            }
-            else if ( sipInfo.isVisible() )
-            {
-                accountInfo.append(
-                    QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
-                        .arg( peerId )
-                        .arg( sipInfo.host() )
-                        .arg( sipInfo.port() )
-                        .arg( versionString )
-                        // .arg( connected ? "connected" : "not connected")
-                );
-            }
-            else
-            {
-                accountInfo.append(
-                    QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
-                        .arg( peerId )
-                        .arg( versionString )
-                        // .arg( connected ? "connected" : "not connected")
-                );
-            }
+            accountInfo.append(
+                QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
+                    .arg( peerId )
+                    .arg( sipInfo.host() )
+                    .arg( sipInfo.port() )
+                    .arg( versionString )
+                    // .arg( connected ? "connected" : "not connected")
+            );
         }
-        accountInfo.append( "\n" );
-
-        accountInfoLabel->setText( accountInfo );
+        else
+        {
+            accountInfo.append(
+                QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
+                    .arg( peerId )
+                    .arg( versionString )
+                    // .arg( connected ? "connected" : "not connected")
+            );
+        }
     }
+    accountInfo.append( "\n" );
+
+    return accountInfo;
 }

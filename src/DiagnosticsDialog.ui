@@ -26,20 +26,10 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
+      <widget class="QTextBrowser" name="text">
+       <property name="lineWrapMode">
+        <enum>QTextEdit::NoWrap</enum>
        </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>708</width>
-          <height>386</height>
-         </rect>
-        </property>
-       </widget>
       </widget>
      </item>
     </layout>
@@ -49,7 +39,14 @@
      <item>
       <widget class="QPushButton" name="clipboardButton">
        <property name="text">
-        <string>Copy to Clipboard</string>
+        <string>&amp;Copy to Clipboard</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="logfileButton">
+       <property name="text">
+        <string>Open &amp;Log-file</string>
        </property>
       </widget>
      </item>
