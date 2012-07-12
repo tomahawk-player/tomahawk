@@ -45,6 +45,8 @@ namespace TomahawkUtils
     /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
     DLLEXPORT void bringToFront();
 
+    DLLEXPORT void openUrl( const QUrl& url );
+
     DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
