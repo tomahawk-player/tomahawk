@@ -67,7 +67,7 @@ public slots:
     virtual void configurationChanged() = 0;
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
-    virtual void sendMsg( const QString& to, const QString& msg ) = 0;
+    virtual void sendMsg( const QString& to, const SipInfo& info ) = 0;
 
 signals:
     void peerOnline( const QString& );
