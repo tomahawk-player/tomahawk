@@ -82,6 +82,8 @@ public:
 
     Account* zeroconfAccount() const;
 
+    bool isConnected() { return m_connected; }
+
 public slots:
     void connectAll();
     void disconnectAll();
