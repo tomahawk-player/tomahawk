@@ -156,6 +156,7 @@ dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
 {
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
+    emit controlAdded( m_controls.last() );
     return m_controls.last();
 }
 

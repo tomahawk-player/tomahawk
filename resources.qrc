@@ -164,5 +164,6 @@
         <file>data/images/delete.png</file>
         <file>data/images/ok.png</file>
         <file>data/qml/StationScene.qml</file>
+        <file>data/qml/CoverImage.qml</file>
     </qresource>
 </RCC>

@@ -71,7 +71,7 @@ public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
 
-    virtual dyncontrol_ptr createControl( const QString& type = QString() );
+    Q_INVOKABLE virtual dyncontrol_ptr createControl( const QString& type = QString() );
     virtual QPixmap logo();
     virtual void generate ( int number = -1 );
     virtual void startOnDemand();
@@ -80,7 +80,7 @@ public:
     virtual bool onDemandSteerable() const { return false; }
     virtual QWidget* steeringWidget() { return 0; }
 
-    static QStringList styles();
+    Q_INVOKABLE static QStringList styles();
     static QStringList moods();
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
