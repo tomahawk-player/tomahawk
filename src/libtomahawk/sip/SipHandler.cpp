@@ -125,7 +125,7 @@ SipHandler::onPeerOnline( const QString& jid )
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
-    QVariantMap m;
+    SipInfo info;
     if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
@@ -142,18 +142,15 @@ SipHandler::onPeerOnline( const QString& jid )
         info.setKey( key );
         info.setUniqname( nodeid );
 
-        qDebug() << "Asking them to connect to us:" << m;
+        qDebug() << "Asking them to connect to us:" << info;
     }
     else
     {
-        m["visible"] = false;
-        qDebug() << "We are not visible externally:" << m;
+        info.setVisible( false );
+        qDebug() << "We are not visible externally:" << info;
     }
 
-    QJson::Serializer ser;
-    QByteArray ba = ser.serialize( m );
-
-    sip->sendMsg( jid, QString::fromAscii( ba ) );
+    sip->sendMsg( peerId, info );
 }
 
 
