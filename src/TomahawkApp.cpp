@@ -360,33 +360,45 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_session.isNull() )
         delete m_session.data();
+    tLog() << "Deleting connector";
     if ( !m_connector.isNull() )
         delete m_connector.data();
 
+    tLog() << "Stopping pipeline";
     if ( Pipeline::instance() )
         Pipeline::instance()->stop();
 
+    tLog() << "Deleting servent";
     if ( !m_servent.isNull() )
         delete m_servent.data();
+    tLog() << "Deleting ScanManager";
     if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
 
+    tLog() << "Deleting AudioEngine";
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
+    tLog() << "Deleting AccountManager";
     delete Tomahawk::Accounts::AccountManager::instance();
+    tLog() << "Deleting Cache";
     delete TomahawkUtils::Cache::instance();
 
 #ifndef ENABLE_HEADLESS
+    tLog() << "Deleting Window";
     delete m_mainwindow;
+    tLog() << "Deleting AtticaManager";
     delete AtticaManager::instance();
 #endif
 
+    tLog() << "Deleting database";
     if ( !m_database.isNull() )
         delete m_database.data();
 
+    tLog() << "Deleting Pipeline";
     delete Pipeline::instance();
 
+    tLog() << "Deleting InfoSystem";
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
 
