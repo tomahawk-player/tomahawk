@@ -51,7 +51,7 @@ namespace Logger
         {
         }
     };
-    
+
     class DLLEXPORT TSqlLog : public TLog
     {
     public:
@@ -60,8 +60,9 @@ namespace Logger
         }
     };
 
-    DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char *msg );
+    DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char* msg );
     DLLEXPORT void setupLogfile();
+    DLLEXPORT QString logFile();
 }
 
 #define tLog Logger::TLog
