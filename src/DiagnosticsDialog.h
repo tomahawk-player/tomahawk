@@ -45,19 +45,11 @@ public:
 private slots:
     void updateLogView();
     void copyToClipboard();
-    
-    void onAccountConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
-    void onAccountError( int errorId, QString errorString );
-    void onPeerOnline( const QString& );
-    void onPeerOffline( const QString& );
-    void onSipInfoReceived( const QString& peerId, const SipInfo& info );
-    void onSoftwareVersionReceived( const QString& peerId, const QString& versionString );
+    void openLogfile();
 
-    void updateAccountLabel( Tomahawk::Accounts::Account* );
+    QString accountLog( Tomahawk::Accounts::Account* );
+
 private:
-    
-    QMap< Tomahawk::Accounts::Account*, QLabel* > m_accountDescriptionStore;
-    
     Ui::DiagnosticsDialog* ui;
 };
 
