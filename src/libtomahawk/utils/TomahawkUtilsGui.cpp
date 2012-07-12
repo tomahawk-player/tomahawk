@@ -34,6 +34,7 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QWidget>
 #include <QStyleOption>
+#include <QDesktopServices>
 
 #ifdef Q_WS_X11
     #include <QtGui/QX11Info>
@@ -43,6 +44,7 @@
 #ifdef Q_WS_WIN
     #include <windows.h>
     #include <windowsx.h>
+    #include <shellapi.h>
 #endif
 
 
@@ -134,7 +136,7 @@ drawShadowText( QPainter* painter, const QRect& rect, const QString& text, const
     painter->save();
 
     painter->drawText( rect, text, textOption );
-    
+
 /*    QFont font = painter->font();
     font.setPixelSize( font.pixelSize() + 2 );
     painter->setFont( font );
@@ -182,7 +184,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     painter->setPen( origpen );
     painter->setPen( Qt::white );
     painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
-    
+
     painter->restore();
 }
 
@@ -291,6 +293,17 @@ bringToFront()
 #endif
 }
 #endif
+
+
+void
+openUrl( const QUrl& url )
+{
+#ifdef Q_OS_WIN
+    ShellExecuteW( 0, 0, (TCHAR*)url.toString().utf16(), 0, 0, SW_SHOWNORMAL );
+#else
+    QDesktopServices::openUrl( url );
+#endif
+}
 
 
 QPixmap
