@@ -32,7 +32,7 @@
 #include "utils/XspfLoader.h"
 
 #ifdef Q_OS_WIN
-#include <shobjidl.h>
+    #include <shobjidl.h>
 #endif
 
 namespace Tomahawk
