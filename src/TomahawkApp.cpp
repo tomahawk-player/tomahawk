@@ -381,8 +381,8 @@ TomahawkApp::~TomahawkApp()
 
     tLog() << "Deleting AccountManager";
     delete Tomahawk::Accounts::AccountManager::instance();
-    tLog() << "Deleting Cache";
-    delete TomahawkUtils::Cache::instance();
+/*    tLog() << "Deleting Cache";
+    delete TomahawkUtils::Cache::instance();*/
 
 #ifndef ENABLE_HEADLESS
     tLog() << "Deleting Window";
