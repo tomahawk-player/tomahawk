@@ -103,9 +103,10 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             message[ "artist" ] = artist;
             message[ "album" ] = album;
 
-            const QString qid = m_account.data()->sendMessage( message, this, "albumListingResult" );
-
-            m_waitingForResults[ qid ] = requestData;
+            QMetaObject::invokeMethod( m_account.data(), "sendMessage", Qt::QueuedConnection, Q_ARG( QVariantMap, message ),
+                                                                                              Q_ARG( QObject*, this ),
+                                                                                              Q_ARG( QString, "albumListingResult" ),
+                                                                                              Q_ARG( QVariant, QVariant::fromValue< InfoRequestData >( requestData ) ) );
         }
         break;
     }
@@ -119,15 +120,12 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 
 
 void
-SpotifyInfoPlugin::albumListingResult( const QString& msgType, const QVariantMap& msg )
+SpotifyInfoPlugin::albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData )
 {
     Q_ASSERT( msg.contains( "qid" ) );
-    Q_ASSERT( m_waitingForResults.contains( msg.value( "qid" ).toString() ) );
+    Q_ASSERT( extraData.canConvert< InfoRequestData >() );
 
-    if ( !msg.contains( "qid" ) || !m_waitingForResults.contains( msg.value( "qid" ).toString() ) )
-        return;
-
-    const InfoRequestData requestData = m_waitingForResults.take( msg.value( "qid" ).toString() );
+    const InfoRequestData requestData = extraData.value< InfoRequestData >();
 
     QVariantList tracks = msg.value( "tracks" ).toList();
     QStringList trackNameList;
