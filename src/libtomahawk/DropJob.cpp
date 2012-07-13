@@ -425,11 +425,17 @@ DropJob::tracksFromMixedData( const QMimeData *data )
         QDataStream singleStream( &singleData, QIODevice::WriteOnly );
 
         QMimeData singleMimeData;
-        if ( mimeType == "application/tomahawk.query.list" || mimeType == "application/tomahawk.result.list" )
+        if ( mimeType == "application/tomahawk.query.list" ) 
         {
             qlonglong query;
             stream >> query;
             singleStream << query;
+        }
+        else if ( mimeType == "application/tomahawk.result.list" )
+        {
+            qlonglong result;
+            stream >> result;
+            singleStream << result;
         }
         else if ( mimeType == "application/tomahawk.metadata.album" )
         {
