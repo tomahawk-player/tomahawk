@@ -381,14 +381,12 @@ TomahawkApp::~TomahawkApp()
 
     tLog() << "Deleting AccountManager";
     delete Tomahawk::Accounts::AccountManager::instance();
-/*    tLog() << "Deleting Cache";
-    delete TomahawkUtils::Cache::instance();*/
 
 #ifndef ENABLE_HEADLESS
-    tLog() << "Deleting Window";
-    delete m_mainwindow;
     tLog() << "Deleting AtticaManager";
     delete AtticaManager::instance();
+    tLog() << "Deleting Window";
+    delete m_mainwindow;
 #endif
 
     tLog() << "Deleting database";
@@ -399,8 +397,11 @@ TomahawkApp::~TomahawkApp()
     delete Pipeline::instance();
 
     tLog() << "Deleting InfoSystem";
-/*    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();*/
+    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
+        
+    tLog() << "Deleting Cache";
+    delete TomahawkUtils::Cache::instance();
 
     tLog() << "Finished shutdown.";
 }
