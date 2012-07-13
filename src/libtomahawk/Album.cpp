@@ -70,7 +70,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
         return s_albumsByName[ key ];
     }
 
-    qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
+//     qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
     album_ptr album = album_ptr( new  Album( name, artist ) );
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
@@ -172,10 +172,8 @@ Album::id() const
 
     if ( waiting )
     {
-        qDebug() << Q_FUNC_INFO << "ALBUM WAITING FOR MUTEX:" << m_name;
         finalId = m_idFuture.result();
 
-        qDebug() << Q_FUNC_INFO << "ALBUM GOT ID::" << m_name << finalId;
         s_idMutex.lockForWrite();
         m_id = finalId;
         m_waitingForId = false;

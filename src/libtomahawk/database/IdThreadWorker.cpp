@@ -24,7 +24,7 @@
 #include "DatabaseImpl.h"
 #include "Source.h"
 
-#define ID_THREAD_DEBUG 1
+#define ID_THREAD_DEBUG 0
 
 #include <Qt/qfutureinterface.h>
 
