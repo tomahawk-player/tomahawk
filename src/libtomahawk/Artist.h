@@ -27,7 +27,6 @@
     #include <QtGui/QPixmap>
 #endif
 
-#include <Qt/qfutureinterface.h>
 #include <QFuture>
 
 #include "Typedefs.h"
