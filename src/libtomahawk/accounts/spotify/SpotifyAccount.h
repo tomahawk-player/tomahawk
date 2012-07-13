@@ -99,7 +99,6 @@ public:
     virtual SipPlugin* sipPlugin() { return 0; }
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
-    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
     void unregisterUpdater( const QString& plid );
@@ -111,6 +110,8 @@ public:
     bool loggedIn() const;
 
 public slots:
+    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString(), const QVariant& extraData = QVariant() );
+    
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
     void syncActionTriggered( bool );
     void atticaLoaded(Attica::Content::List);
@@ -125,9 +126,9 @@ private slots:
     void logout();
 
     // SpotifyResolver message handlers, all take msgtype, msg as argument
-  //  void <here>( const QString& msgType, const QVariantMap& msg );
-    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
-    void playlistCreated( const QString& msgType, const QVariantMap& msg );
+  //  void <here>( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
@@ -156,6 +157,7 @@ private:
     QWeakPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
 
     QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
+    QMap<QString, QVariant > m_qidToExtraData;
 
     // List of synced spotify playlists in config UI
     QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;

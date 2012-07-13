@@ -61,6 +61,7 @@ signals:
 private slots:
     void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( const QString& infoId );
 
 private:
     QList< Tomahawk::query_ptr > m_queries;

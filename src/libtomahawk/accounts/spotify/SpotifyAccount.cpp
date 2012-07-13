@@ -564,8 +564,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         QObject* receiver = m_qidToSlotMap[ qid ].first;
         QString slot = m_qidToSlotMap[ qid ].second;
         m_qidToSlotMap.remove( qid );
+        
+        QVariant extraData;
+        if ( m_qidToExtraData.contains( qid ) )
+            extraData = m_qidToExtraData.take( qid );
 
-        QMetaObject::invokeMethod( receiver, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ) );
+        QMetaObject::invokeMethod( receiver, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ), Q_ARG( QVariant, extraData ) );
     }
     else if ( msgType == "allPlaylists" )
     {
@@ -911,7 +915,7 @@ SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
 
 
 void
-SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg )
+SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     Q_UNUSED( msgType );
     qDebug() << Q_FUNC_INFO <<  "Got full spotify playlist body, creating a tomahawk playlist and enabling sync!!";
@@ -959,7 +963,7 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
 
 
 void
-SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg )
+SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     Q_UNUSED( msgType );
 
@@ -990,20 +994,20 @@ SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg 
 
 
 QString
-SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& slot )
+SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& slot, const QVariant& extraData )
 {
     QVariantMap msg = m;
-    QString qid;
+    const QString qid = uuid();
 
     if ( obj )
     {
-        qid = QUuid::createUuid().toString().replace( "{", "" ).replace( "}", "" );
-
         m_qidToSlotMap[ qid ] = qMakePair( obj, slot );
         msg[ "qid" ] = qid;
 
     }
 
+    m_qidToExtraData[ qid ] = extraData;
+    
     m_spotifyResolver.data()->sendMessage( msg );
 
     return qid;
