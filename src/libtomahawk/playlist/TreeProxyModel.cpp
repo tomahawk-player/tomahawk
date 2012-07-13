@@ -204,7 +204,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
             PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
-            if ( ti && ti->name() == item->name() )
+            if ( ti && ti->name() == item->name() && !ti->query().isNull() )
             {
                 if ( ti->query()->albumpos() == item->query()->albumpos() || ti->query()->albumpos() == 0 || item->query()->albumpos() == 0 )
                 {
