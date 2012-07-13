@@ -114,6 +114,10 @@ AlbumPlaylistInterface::tracks()
             connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                     SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                     SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+            connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                    SIGNAL( finished( QString ) ),
+                    SLOT( infoSystemFinished( QString ) ) );
         }
         else if ( m_mode == DatabaseMode && !m_databaseLoaded )
         {
@@ -178,9 +182,24 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
         }
     }
 
+    if ( !m_queries.isEmpty() )
+    {
+        infoSystemFinished( id() );
+    }
+}
+
+
+void
+AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
+{
+    if ( infoId != id() )
+        return;
+
     m_infoSystemLoaded = true;
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+    disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
+                this, SLOT( infoSystemFinished( QString ) ) );
 
     if ( m_queries.isEmpty() && m_mode == Mixed )
     {
