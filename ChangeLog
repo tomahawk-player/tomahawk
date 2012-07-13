@@ -4,6 +4,7 @@ Version 0.6.0:
 
 Version 0.5.4:
     * Improved stability.
+    * Added support for Spotify album lookups.
     * Fixed not always updating the database index after scanning.
     * Fixed connection issue between Tomahawk peers.
 
