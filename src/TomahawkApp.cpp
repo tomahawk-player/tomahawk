@@ -380,11 +380,10 @@ TomahawkApp::~TomahawkApp()
         delete m_audioEngine.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
-    delete TomahawkUtils::Cache::instance();
 
 #ifndef ENABLE_HEADLESS
-    delete m_mainwindow;
     delete AtticaManager::instance();
+    delete m_mainwindow;
 #endif
 
     if ( !m_database.isNull() )
@@ -394,6 +393,8 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
+
+    delete TomahawkUtils::Cache::instance();
 
     tLog() << "Finished shutdown.";
 }
