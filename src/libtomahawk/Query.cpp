@@ -498,6 +498,11 @@ Query::toString() const
 float
 Query::howSimilar( const Tomahawk::result_ptr& r )
 {
+    Q_ASSERT( !r->artist().isNull() );
+    Q_ASSERT( !r->album().isNull() );
+    if ( r->artist().isNull() || r->album().isNull() )
+        return 0.0;
+    
     // result values
     const QString rArtistname = r->artist()->sortname();
     const QString rAlbumname  = r->album()->sortname();

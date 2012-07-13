@@ -34,7 +34,8 @@
 #include "filemetadata/taghandlers/tag.h"
 #include "utils/TomahawkUtils.h"
 
-MetadataEditor::MetadataEditor( Tomahawk::result_ptr result, QWidget *parent )
+
+MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, QWidget* parent )
     : QDialog( parent )
     , ui( new Ui::MetadataEditor )
     , m_result( result )

@@ -22,6 +22,7 @@
 #include "DatabaseCommand.h"
 #include "DatabaseImpl.h"
 #include "DatabaseWorker.h"
+#include "IdThreadWorker.h"
 #include "utils/Logger.h"
 #include "Source.h"
 
@@ -42,7 +43,8 @@ Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
     , m_ready( false )
     , m_impl( new DatabaseImpl( dbname ) )
-    , m_workerRW( new DatabaseWorker( this, true ) )
+    , m_workerRW( new DatabaseWorkerThread( this, true ) )
+    , m_idWorker( new IdThreadWorker( this ) )
 {
     s_instance = this;
 
@@ -57,7 +59,17 @@ Database::Database( const QString& dbname, QObject* parent )
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
     connect( m_impl, SIGNAL( indexReady() ), SLOT( setIsReadyTrue() ) );
 
-    m_workerRW->start();
+    Q_ASSERT( m_workerRW );
+    m_workerRW.data()->start();
+
+    while ( m_workerThreads.count() < m_maxConcurrentThreads )
+    {
+        QWeakPointer< DatabaseWorkerThread > workerThread( new DatabaseWorkerThread( this, false ) );
+        Q_ASSERT( workerThread );
+        workerThread.data()->start();
+        m_workerThreads << workerThread;
+    }
+    m_idWorker->start();
 }
 
 
@@ -65,10 +77,35 @@ Database::~Database()
 {
     qDebug() << Q_FUNC_INFO;
 
-    qDeleteAll( m_workers );
-    delete m_workerRW;
+    m_idWorker->stop();
+    delete m_idWorker;
+    
+    if ( m_workerRW )
+        m_workerRW.data()->quit();
+    foreach ( QWeakPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
+    {
+        if ( workerThread && workerThread.data()->worker() )
+            workerThread.data()->quit();
+    }
+
+    if ( m_workerRW )
+    {
+        m_workerRW.data()->wait( 60000 );
+        delete m_workerRW.data();
+    }
+    foreach ( QWeakPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
+    {
+        if ( workerThread )
+        {
+            workerThread.data()->wait( 60000 );
+            delete workerThread.data();
+        }
+    }
+    m_workerThreads.clear();
+    
     qDeleteAll( m_implHash.values() );
     delete m_impl;
+    
 }
 
 
@@ -84,7 +121,8 @@ Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 {
     Q_ASSERT( m_ready );
     qDebug() << "Enqueueing" << lc.count() << "commands to rw thread";
-    m_workerRW->enqueue( lc );
+    if ( m_workerRW && m_workerRW.data()->worker() )
+        m_workerRW.data()->worker().data()->enqueue( lc );
 }
 
 
@@ -95,40 +133,34 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
     if ( lc->doesMutates() )
     {
         qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
-        m_workerRW->enqueue( lc );
+        if ( m_workerRW && m_workerRW.data()->worker() )
+            m_workerRW.data()->worker().data()->enqueue( lc );
     }
     else
     {
-        // find existing amount of worker threads for commandname
-        // create new thread if < WORKER_THREADS
-        if ( m_workers.count() < m_maxConcurrentThreads )
-        {
-            DatabaseWorker* worker = new DatabaseWorker( this, false );
-            worker->start();
-
-            m_workers << worker;
-        }
-
         // find thread for commandname with lowest amount of outstanding jobs and enqueue job
         int busyThreads = 0;
-        DatabaseWorker* happyThread = 0;
-        for ( int i = 0; i < m_workers.count(); i++ )
+        QWeakPointer< DatabaseWorkerThread > workerThread;
+        QWeakPointer< DatabaseWorker > happyWorker;
+        for ( int i = 0; i < m_workerThreads.count(); i++ )
         {
-            DatabaseWorker* worker = m_workers.at( i );
-
-            if ( !worker->busy() )
+            workerThread = m_workerThreads.at( i );
+            
+            if ( workerThread && workerThread.data()->worker() && !workerThread.data()->worker().data()->busy() )
             {
-                happyThread = worker;
+                happyWorker = workerThread.data()->worker();
                 break;
             }
             busyThreads++;
 
-            if ( !happyThread || worker->outstandingJobs() < happyThread->outstandingJobs() )
-                happyThread = worker;
+            if ( ( !happyWorker && workerThread && workerThread.data()->worker() ) ||
+                 ( workerThread && workerThread.data()->worker() && workerThread.data()->worker().data()->outstandingJobs() < happyWorker.data()->outstandingJobs() ) )
+                happyWorker = workerThread.data()->worker();
         }
 
 //        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
-        happyThread->enqueue( lc );
+        Q_ASSERT( happyWorker );
+        happyWorker.data()->enqueue( lc );
     }
 }
 

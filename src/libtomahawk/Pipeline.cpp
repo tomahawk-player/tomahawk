@@ -272,9 +272,16 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
     const query_ptr& q = m_qids.value( qid );
 
+    Q_ASSERT( !q.isNull() );
+    if ( q.isNull() )
+        return;
+    
     QList< result_ptr > cleanResults;
     foreach ( const result_ptr& r, results )
     {
+        if ( r.isNull() )
+            continue;
+        
         float score = q->howSimilar( r );
         r->setScore( score );
         if ( !q->isFullTextQuery() && score < MINSCORE )

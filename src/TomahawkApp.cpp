@@ -380,11 +380,10 @@ TomahawkApp::~TomahawkApp()
         delete m_audioEngine.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
-    delete TomahawkUtils::Cache::instance();
 
 #ifndef ENABLE_HEADLESS
-    delete m_mainwindow;
     delete AtticaManager::instance();
+    delete m_mainwindow;
 #endif
 
     if ( !m_database.isNull() )
@@ -394,6 +393,8 @@ TomahawkApp::~TomahawkApp()
 
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
+
+    delete TomahawkUtils::Cache::instance();
 
     tLog() << "Finished shutdown.";
 }
@@ -714,6 +715,27 @@ TomahawkApp::loadUrl( const QString& url )
         }
     }
 #endif
+    return false;
+}
+
+
+bool
+TomahawkApp::notify( QObject *receiver, QEvent *e )
+{
+    try
+    {
+        return TOMAHAWK_APPLICATION::notify( receiver, e );
+    }
+    catch ( const std::exception& e )
+    {
+        qWarning( "TomahawkApp::notify caught a std exception in a Qt event handler: " );
+        qFatal( e.what() );
+    }
+    catch ( ... )
+    {
+        qFatal( "TomahawkApp::notify caught a non-std-exception from a Qt event handler. Aborting." );
+    }
+
     return false;
 }
 

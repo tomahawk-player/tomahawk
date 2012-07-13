@@ -137,7 +137,7 @@ SipHandler::onPeerOnline( const QString& peerId )
 
         Servent::instance()->registerOffer( key, conn );
         info.setVisible( true );
-        info.setHost( QHostInfo::fromName( Servent::instance()->externalAddress() ) );
+        info.setHost( Servent::instance()->externalAddress() );
         info.setPort( Servent::instance()->externalPort() );
         info.setKey( key );
         info.setUniqname( nodeid );
@@ -180,10 +180,11 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
     if ( info.isVisible() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress() <= info.host().hostName() )
+            Servent::instance()->externalAddress() < info.host() ||
+            ( Servent::instance()->externalAddress() == info.host() && Servent::instance()->externalPort() < info.port() ) )
         {
-            tDebug() << "Initiate connection to" << peerId << Servent::instance()->externalAddress() << info.host().hostName() << ( Servent::instance()->externalAddress() <= info.host().hostName() );
-            Servent::instance()->connectToPeer( info.host().hostName(),
+            tDebug() << "Initiate connection to" << peerId << "at" << info.host();
+            Servent::instance()->connectToPeer( info.host(),
                                           info.port(),
                                           info.key(),
                                           peerId,

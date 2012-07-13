@@ -29,29 +29,69 @@
 #include <QTimer>
 
 
-
 PortFwdThread::PortFwdThread( unsigned int port )
     : QThread()
-    , m_externalPort( 0 )
     , m_port( port )
 {
-    moveToThread( this );
-    start();
 }
 
 
 PortFwdThread::~PortFwdThread()
 {
-    qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
-    quit();
-    wait( 6000 );
 
+}
+
+
+void
+PortFwdThread::run()
+{
+    m_worker = QWeakPointer< PortFwdWorker >( new PortFwdWorker( m_port ) );
+    Q_ASSERT( m_worker );
+    connect( m_worker.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ), this, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ) );
+    QTimer::singleShot( 0, m_worker.data(), SLOT( work() ) );
+    exec();
+
+    if ( m_worker.data()->externalPort() )
+    {
+        qDebug() << "Unregistering port fwd";
+        m_worker.data()->unregister();
+    }
+
+    if ( m_worker )
+        delete m_worker.data();
+}
+
+
+QWeakPointer< PortFwdWorker >
+PortFwdThread::worker() const
+{
+    return m_worker;
+}
+
+
+PortFwdWorker::PortFwdWorker( unsigned int port )
+    : QObject()
+    , m_externalPort( 0 )
+    , m_port( port )
+{
+}
+
+
+PortFwdWorker::~PortFwdWorker()
+{
     delete m_portfwd;
 }
 
 
 void
-PortFwdThread::work()
+PortFwdWorker::unregister()
+{
+    m_portfwd->remove( m_externalPort );
+}
+
+
+void
+PortFwdWorker::work()
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
     m_portfwd = new Portfwd();
@@ -103,16 +143,3 @@ PortFwdThread::work()
     emit externalAddressDetected( m_externalAddress, m_externalPort );
 }
 
-
-void
-PortFwdThread::run()
-{
-    QTimer::singleShot( 0, this, SLOT( work() ) );
-    exec();
-
-    if ( m_externalPort )
-    {
-        qDebug() << "Unregistering port fwd";
-        m_portfwd->remove( m_externalPort );
-    }
-}
