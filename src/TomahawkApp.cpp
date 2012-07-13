@@ -399,8 +399,8 @@ TomahawkApp::~TomahawkApp()
     delete Pipeline::instance();
 
     tLog() << "Deleting InfoSystem";
-    if ( !m_infoSystem.isNull() )
-        delete m_infoSystem.data();
+/*    if ( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();*/
 
     tLog() << "Finished shutdown.";
 }
