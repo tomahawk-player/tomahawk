@@ -257,6 +257,7 @@ set( libSources
     database/DatabaseCommand_SetTrackAttributes.cpp
     database/Database.cpp
     database/TomahawkSqlQuery.cpp
+    database/IdThreadWorker.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp

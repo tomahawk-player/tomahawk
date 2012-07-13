@@ -60,7 +60,10 @@ public slots:
     /// Takes a spotify link and performs the default open action on it
     bool openRdioLink( const QString& link );
 
+    /// Creates a link from the requested data and copies it to the clipboard
     void copyToClipboard( const Tomahawk::query_ptr& query );
+
+
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 

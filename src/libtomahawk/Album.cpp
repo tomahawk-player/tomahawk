@@ -23,13 +23,22 @@
 #include "AlbumPlaylistInterface.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "database/IdThreadWorker.h"
 #include "Query.h"
 #include "Source.h"
 
 #include "utils/Logger.h"
 
+#include <QReadWriteLock>
+
 using namespace Tomahawk;
 
+QHash< QString, album_ptr > Album::s_albumsByName = QHash< QString, album_ptr >();
+QHash< unsigned int, album_ptr > Album::s_albumsById = QHash< unsigned int, album_ptr >();
+
+static QMutex s_nameCacheMutex;
+static QMutex s_idCacheMutex;
+static QReadWriteLock s_idMutex;
 
 Album::~Album()
 {
@@ -40,6 +49,12 @@ Album::~Album()
 #endif
 }
 
+inline QString
+albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
+{
+    return QString( "%1\t\t%2" ).arg( artist->name() ).arg( albumName );
+}
+
 
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
@@ -47,11 +62,22 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     if ( !Database::instance() || !Database::instance()->impl() )
         return album_ptr();
 
-    int albid = Database::instance()->impl()->albumId( artist->id(), name, autoCreate );
-    if ( albid < 1 && autoCreate )
-        return album_ptr();
+    QMutexLocker l( &s_nameCacheMutex );
 
-    return Album::get( albid, name, artist );
+    const QString key = albumCacheKey( artist, name );
+    if ( s_albumsByName.contains( key ) )
+    {
+        return s_albumsByName[ key ];
+    }
+
+    qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
+    album_ptr album = album_ptr( new  Album( name, artist ) );
+    album->setWeakRef( album.toWeakRef() );
+    album->loadId( autoCreate );
+
+    s_albumsByName[ key ] = album;
+
+    return album;
 }
 
 
@@ -61,17 +87,17 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     static QHash< unsigned int, album_ptr > s_albums;
     static QMutex s_mutex;
 
-    QMutexLocker lock( &s_mutex );
-    if ( s_albums.contains( id ) )
+    QMutexLocker lock( &s_idCacheMutex );
+    if ( s_albumsById.contains( id ) )
     {
-        return s_albums.value( id );
+        return s_albumsById.value( id );
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
     if ( id > 0 )
-        s_albums.insert( id, a );
+        s_albumsById.insert( id, a );
 
     return a;
 }
@@ -79,6 +105,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
 Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
     : QObject()
+    , m_waitingForId( false )
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
@@ -92,6 +119,20 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
 }
 
 
+Album::Album( const QString& name, const Tomahawk::artist_ptr& artist )
+    : QObject()
+    , m_waitingForId( true )
+    , m_name( name )
+    , m_artist( artist )
+    , m_coverLoaded( false )
+    , m_coverLoading( false )
+#ifndef ENABLE_HEADLESS
+    , m_cover( 0 )
+#endif
+{
+    m_sortname = DatabaseImpl::sortname( name );
+}
+
 void
 Album::onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
 {
@@ -103,6 +144,49 @@ artist_ptr
 Album::artist() const
 {
     return m_artist;
+}
+
+
+void
+Album::loadId( bool autoCreate )
+{
+    Q_ASSERT( m_waitingForId );
+    IdThreadWorker::getAlbumId( m_ownRef.toStrongRef(), autoCreate );
+}
+
+
+void
+Album::setIdFuture( QFuture<unsigned int> future )
+{
+    m_idFuture = future;
+}
+
+
+unsigned int
+Album::id() const
+{
+    s_idMutex.lockForRead();
+    const bool waiting = m_waitingForId;
+    unsigned int finalId = m_id;
+    s_idMutex.unlock();
+
+    if ( waiting )
+    {
+        qDebug() << Q_FUNC_INFO << "ALBUM WAITING FOR MUTEX:" << m_name;
+        finalId = m_idFuture.result();
+
+        qDebug() << Q_FUNC_INFO << "ALBUM GOT ID::" << m_name << finalId;
+        s_idMutex.lockForWrite();
+        m_id = finalId;
+        m_waitingForId = false;
+
+        if ( m_id > 0 )
+            s_albumsById[ m_id ] = m_ownRef.toStrongRef();
+        s_idMutex.unlock();
+
+    }
+
+    return finalId;
 }
 
 

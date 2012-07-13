@@ -719,6 +719,27 @@ TomahawkApp::loadUrl( const QString& url )
 }
 
 
+bool
+TomahawkApp::notify( QObject *receiver, QEvent *e )
+{
+    try
+    {
+        return TOMAHAWK_APPLICATION::notify( receiver, e );
+    }
+    catch ( const std::exception& e )
+    {
+        qWarning( "TomahawkApp::notify caught a std exception in a Qt event handler: " );
+        qFatal( e.what() );
+    }
+    catch ( ... )
+    {
+        qFatal( "TomahawkApp::notify caught a non-std-exception from a Qt event handler. Aborting." );
+    }
+
+    return false;
+}
+
+
 void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
