@@ -508,6 +508,7 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
 
     // Ok... we have to use mixed
     resultData.clear();
+    QDataStream mixedStream( &resultData, QIODevice::WriteOnly );
     foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
@@ -520,22 +521,22 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
         if ( !item->artist().isNull() )
         {
             const artist_ptr& artist = item->artist();
-            resultStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
+            mixedStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
         }
         else if ( !item->album().isNull() )
         {
             const album_ptr& album = item->album();
-            resultStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
+            mixedStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
         }
         else if ( !item->result().isNull() )
         {
             const result_ptr& result = item->result();
-            resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
+            mixedStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
         }
         else if ( !item->query().isNull() )
         {
             const query_ptr& query = item->query();
-            resultStream << QString( "application/tomahawk.query.list" ) << qlonglong( &query );
+            mixedStream << QString( "application/tomahawk.query.list" ) << qlonglong( &query );
         }
     }
 
