@@ -353,6 +353,8 @@ SpotifyPlaylistUpdater::tomahawkPlaylistRenamed(const QString &newT, const QStri
     msg[ "newTitle" ] = newT;
     msg[ "oldTitle" ] = oldT;
     msg[ "playlistid" ] = m_spotifyId;
+
+    // TODO check return value
     m_spotify.data()->sendMessage( msg, this, "onPlaylistRename" );
 }
 
@@ -493,7 +495,7 @@ SpotifyPlaylistUpdater::plentryToVariant( const QList< plentry_ptr >& entries )
 
 
 void
-SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 
@@ -577,7 +579,7 @@ SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks 
 
 
 void
-SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 
@@ -626,7 +628,7 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
 
 
 void
-SpotifyPlaylistUpdater::onTracksMovedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksMovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 

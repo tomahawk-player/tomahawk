@@ -74,9 +74,9 @@ protected:
 
 private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
-    void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg );
-    void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg );
-    void onTracksMovedReturn( const QString& msgType, const QVariantMap& msg );
+    void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void onTracksMovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
     void checkDeleteDialog() const;
 

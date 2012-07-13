@@ -46,7 +46,7 @@ public:
     virtual ~SpotifyInfoPlugin();
 
 public slots:
-    void  albumListingResult( const QString& msgType, const QVariantMap& msg );
+    void  albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
 protected slots:
     virtual void init() {}
@@ -61,8 +61,6 @@ private slots:
 private:
     void dataError( InfoRequestData );
     void trackListResult( const QStringList& trackNameList, const Tomahawk::InfoSystem::InfoRequestData& requestData );
-
-    QHash< QString, InfoRequestData > m_waitingForResults;
 
     QWeakPointer< Tomahawk::Accounts::SpotifyAccount > m_account;
 };
