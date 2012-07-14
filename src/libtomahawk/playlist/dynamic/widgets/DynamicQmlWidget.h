@@ -32,7 +32,7 @@ namespace Tomahawk
 
 class DynamicModel;
 
-class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage, public QDeclarativeImageProvider
+class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 public:
@@ -51,12 +51,12 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    QPixmap requestPixmap( const QString &id, QSize *size, const QSize &requestedSize );
-
-
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
+    void nextTrackGenerated( const Tomahawk::query_ptr& track );
+    void error( const QString& title, const QString& body);
+
     void onRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
 private:
     DynamicModel* m_model;
@@ -68,49 +68,6 @@ private:
 }
 
 #include "dynamic/GeneratorInterface.h"
-
-namespace Tomahawk
-{
-class EchonestStation: public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
-    Q_PROPERTY(Tomahawk::DynamicControl* mainControl READ mainControl)
-
-public:
-    EchonestStation(geninterface_ptr generator, QObject *parent = 0) : QObject(parent), m_generator(generator) {}
-
-    Tomahawk::DynamicControl* mainControl() {
-        foreach(dyncontrol_ptr control, m_generator->controls()) {
-            qDebug() << "got control" << control->selectedType();
-            if(control->selectedType() == "Artist" || control->selectedType() == "Style") {
-                return control.data();
-            }
-        }
-        return 0;
-    }
-
-    bool configured() { return mainControl() != 0; }
-
-    Q_INVOKABLE void setMainControl(const QString &type) {
-        dyncontrol_ptr control = m_generator->createControl("echonest");
-        control->setSelectedType("Style");
-        control->setMatch("1");
-        control->setInput(type);
-        qDebug() << "created control" << control->type() << control->selectedType() << control->match();
-        m_generator->generate(20);
-
-        emit configuredChanged();
-    }
-
-signals:
-    void configuredChanged();
-
-private:
-    geninterface_ptr m_generator;
-};
-}
-
 namespace Tomahawk
 {
 

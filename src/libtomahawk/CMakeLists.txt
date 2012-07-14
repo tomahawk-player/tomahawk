@@ -80,6 +80,7 @@ set( libGuiSources
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/echonest/EchonestSteerer.cpp
+    playlist/dynamic/echonest/EchonestStation.cpp
     playlist/dynamic/widgets/DynamicWidget.cpp
     playlist/dynamic/widgets/DynamicQmlWidget.cpp
     playlist/dynamic/widgets/DynamicControlWrapper.cpp
@@ -141,6 +142,7 @@ set( libGuiSources
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
     widgets/SocialPlaylistWidget.cpp
+    widgets/DeclarativeCoverArtProvider.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp

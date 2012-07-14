@@ -1,5 +1,6 @@
 #include "DynamicQmlWidget.h"
 
+#include "dynamic/echonest/EchonestStation.h"
 #include "playlist/dynamic/DynamicModel.h"
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -8,6 +9,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "PlayableItem.h"
 #include "Source.h"
+#include "widgets/DeclarativeCoverArtProvider.h"
 
 #include <QUrl>
 #include <qdeclarative.h>
@@ -20,23 +22,28 @@ namespace Tomahawk
 
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
     : QDeclarativeView( parent )
-    , QDeclarativeImageProvider( QDeclarativeImageProvider::Pixmap )
     , m_playlist( playlist )
 {
 
-    engine()->addImageProvider( "albumart", this );
+
 
     setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     m_model = new DynamicModel( this );
+
     m_proxyModel = new PlayableProxyModel( this );
     m_proxyModel->setSourcePlayableModel( m_model );
-    m_proxyModel->setShowOfflineResults( true );
+    m_proxyModel->setShowOfflineResults( false );
+
+    // QML image providers will be deleted by the view
+    engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider( m_proxyModel ) );
 
     m_model->loadPlaylist( m_playlist );
+    m_model->startOnDemand();
 
     // Initially seed the playlist
-    m_playlist->generator()->generate( 20 );
+    playlist->generator()->fetchNext();
+//    m_playlist->generator()->generate( 20 );
 
     qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
 
@@ -59,7 +66,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     ControlModel *controls = new ControlModel(m_playlist->generator(), this);
 
-    EchonestStation *station = new EchonestStation(m_playlist->generator(), this);
+    EchonestStation *station = new EchonestStation(m_proxyModel, m_playlist->generator(), this);
     rootContext()->setContextProperty( "echonestStation", station);
     rootContext()->setContextProperty( "controlModel", controls );
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
@@ -70,7 +77,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     connect( m_model, SIGNAL( currentItemChanged( QPersistentModelIndex ) ), SLOT( currentItemChanged( QPersistentModelIndex ) ) );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+    connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
+    connect( m_playlist->generator().data(), SIGNAL( error( QString, QString )), SLOT( error(QString,QString) ) );
 
 }
 
@@ -111,39 +120,13 @@ DynamicQmlWidget::pixmap() const
 bool
 DynamicQmlWidget::jumpToCurrentTrack()
 {
-    return false;
-}
-
-QPixmap DynamicQmlWidget::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
-    // We always can generate it in the requested size
-    int width = requestedSize.width() > 0 ? requestedSize.width() : 230;
-    int height = requestedSize.height() > 0 ? requestedSize.height() : 230;
-
-    if( size )
-        *size = QSize( width, height );
-
-    QModelIndex index = m_proxyModel->mapToSource( m_proxyModel->index( id.toInt(), 0, QModelIndex() ) );
-    qDebug() << "!*!*!*! got index" << index << id;
-    if( index.isValid() ) {
-        PlayableItem *item = m_model->itemFromIndex( index );
-        qDebug() << "item:" << item;
-        qDebug() << "item2:" << item->artistName() << item->name();
-        if ( !item->query().isNull() ) {
-            return item->query()->displayQuery()->cover( *size );
-        }
-    }
-
-    // TODO: create default cover art image
-    QPixmap pixmap( *size );
-    pixmap.fill();
-
-    return pixmap;
+    return true;
 }
 
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
 {
     rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
+    m_playlist->generator()->fetchNext();
 }
 
 void
@@ -155,6 +138,26 @@ DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
 
     // Ok... we have some intial stuff, switch to dynamic mode
     //m_model->startOnDemand();
+}
+
+void DynamicQmlWidget::nextTrackGenerated(const query_ptr &track)
+{
+    m_model->tracksGenerated( QList<query_ptr>() << track );
+    m_playlist->resolve();
+
+    qDebug() << "next track generated" << m_proxyModel->rowCount() << m_proxyModel->currentIndex().row();
+    if( m_proxyModel->rowCount() <= m_proxyModel->currentIndex().row() + 8 ) {
+        qDebug() << "fetching next one";
+        m_playlist->generator()->fetchNext();
+    }
+}
+
+void DynamicQmlWidget::error(const QString &title, const QString &body)
+{
+    qDebug() << "got a generator error:" << title << body;
+
+    m_playlist->generator()->fetchNext();
+
 }
 
 void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)
