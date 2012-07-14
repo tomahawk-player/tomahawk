@@ -28,7 +28,6 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
-#include "playlist/CustomPlaylistView.h"
 #include "playlist/FlexibleView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
