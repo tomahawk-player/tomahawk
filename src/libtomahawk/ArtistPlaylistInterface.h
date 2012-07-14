@@ -63,6 +63,7 @@ signals:
 private slots:
     void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( const QString& infoId );
 
 private:
     Q_DISABLE_COPY( ArtistPlaylistInterface )
