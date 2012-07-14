@@ -509,12 +509,10 @@ SourceItem::latestAdditionsClicked()
 {
     if ( !m_latestAdditionsPage )
     {
-        TrackView* cv = new TrackView( ViewManager::instance()->widget() );
-        cv->setFrameShape( QFrame::NoFrame );
-        cv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
+        pv->setPixmap( QPixmap( RESPATH "images/new-additions.png" ) );
 
-        RecentlyAddedModel* raModel = new RecentlyAddedModel( cv );
-        cv->proxyModel()->setStyle( PlayableProxyModel::Large );
+        RecentlyAddedModel* raModel = new RecentlyAddedModel( pv );
         raModel->setTitle( tr( "Latest Additions" ) );
 
         if ( m_source->isLocal() )
@@ -522,17 +520,17 @@ SourceItem::latestAdditionsClicked()
         else
             raModel->setDescription( tr( "Latest additions to %1's collection" ).arg( m_source->friendlyName() ) );
 
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, cv, cv->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), cv, SLOT( update( QModelIndex ) ) );
-        cv->setItemDelegate( del );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, pv->trackView(), pv->trackView()->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
+        pv->trackView()->setItemDelegate( del );
 
-        cv->setPlayableModel( raModel );
-        cv->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
-        cv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
-
+        pv->setPlayableModel( raModel );
+        pv->trackView()->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        pv->detailedView()->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
         raModel->setSource( m_source );
 
-        m_latestAdditionsPage = cv;
+        m_latestAdditionsPage = pv;
     }
 
     ViewManager::instance()->show( m_latestAdditionsPage );
