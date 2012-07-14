@@ -24,7 +24,9 @@
 #include "DropJob.h"
 #include "ViewManager.h"
 
-#include "playlist/CustomPlaylistView.h"
+#include "playlist/FlexibleView.h"
+#include "playlist/TrackView.h"
+#include "playlist/LovedTracksModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 
 using namespace Tomahawk;
@@ -33,6 +35,7 @@ using namespace Tomahawk;
 LovedTracksItem::LovedTracksItem( SourcesModel* mdl, SourceTreeItem* parent )
     : SourceTreeItem( mdl, parent, SourcesModel::LovedTracksPage )
     , m_lovedTracksPage( 0 )
+    , m_sortValue( -150 )
 {
 }
 
@@ -42,23 +45,49 @@ LovedTracksItem::~LovedTracksItem()
 }
 
 
+QString
+LovedTracksItem::text() const
+{
+    SourceItem* par = dynamic_cast< SourceItem* >( parent() );
+
+    if ( !par )
+        return QString( tr( "Top Loved Tracks" ) );
+    else
+        return QString( tr( "Loved Tracks" ) );
+}
+
+
 void
 LovedTracksItem::activate()
 {
     if ( !m_lovedTracksPage )
     {
         SourceItem* par = dynamic_cast< SourceItem* >( parent() );
+        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
+        pv->setPixmap( QPixmap( RESPATH "images/loved_playlist.png" ) );
+
+        LovedTracksModel* raModel = new LovedTracksModel( pv );
+        raModel->setTitle( text() );
+
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
+        pv->trackView()->setItemDelegate( del );
+
+        pv->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
         if ( !par )
-            return;
+            raModel->setDescription( tr( "The most loved tracks from all your friends" ) );
+        else
+        {
+            if ( par->source()->isLocal() )
+                raModel->setDescription( tr( "All of your loved tracks" ) );
+            else
+                raModel->setDescription( tr( "All of %1's loved tracks" ).arg( par->source()->friendlyName() ) );
+        }
 
-        CustomPlaylistView* view = new CustomPlaylistView( par->source().isNull() ? CustomPlaylistView::TopLovedTracks :
-                                            CustomPlaylistView::SourceLovedTracks, par->source(), ViewManager::instance()->widget() );
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate(PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
-        view->setItemDelegate( del );
-        view->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
+        pv->setPlayableModel( raModel );
+        raModel->setSource( !par ? source_ptr() : par->source() );
 
-        m_lovedTracksPage = view;
+        m_lovedTracksPage = pv;
     }
 
     ViewManager::instance()->show( m_lovedTracksPage );
