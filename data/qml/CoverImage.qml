@@ -20,12 +20,17 @@ Item {
     property double itemBrightness: 1
     property double mirrorBrightness: .5
 
+    // will be emitted when the on hower play button is clicked
+    signal playClicked()
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
-        onClicked: print("cover clicked")
-    }
+        hoverEnabled: true
 
+        onClicked: print("cover clicked")
+
+    }
 
     Component {
         id: coverImage
@@ -80,7 +85,6 @@ Item {
     Loader {
         id: mirroredCover
         sourceComponent: coverImage
-        opacity: parent.mirrorOpacity
         anchors.fill: parent
         transform : [
             Rotation {
@@ -101,7 +105,11 @@ Item {
         anchors.rightMargin: -2
         anchors.topMargin: -2
 
-        opacity: 1 - itemBrightness
+        opacity: 1 - itemBrightness + (mouseArea.containsMouse ? .2 : 0)
+
+        Behavior on opacity {
+            NumberAnimation { easing: Easing.Linear; duration: 300 }
+        }
     }
 
     Rectangle {
@@ -119,4 +127,18 @@ Item {
             GradientStop { position: 0.5; color: backgroundColor }
         }
     }
+
+    Image {
+        id: playButton
+        source: "../images/play-rest.png"
+        anchors.centerIn: parent
+//        width:
+//        height: 32
+        visible: mouseArea.containsMouse
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.playClicked();
+        }
+    }
+
 }
