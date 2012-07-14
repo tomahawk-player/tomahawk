@@ -10,7 +10,7 @@ QRadioButton {
   padding:0;
   background-repeat: none;
   /*width:0; height:0;*/
-} 
+}
 
 QRadioButton::indicator {
   width: 29px;
@@ -18,15 +18,15 @@ QRadioButton::indicator {
  }
 
 QRadioButton::indicator::unchecked {
-  background-image: url(:/data/images/view-toggle-inactive-right.png);
+  background-image: url(:/data/images/view-toggle-inactive-centre.png);
   image: url(:/data/images/view-toggle-icon-list-inactive.png);
 }
 QRadioButton::indicator::checked {
-  background-image: url(:/data/images/view-toggle-active-right.png);
+  background-image: url(:/data/images/view-toggle-active-centre.png);
   image: url(:/data/images/view-toggle-icon-list-active.png);
 }
 QRadioButton::indicator::pressed {
-  background-image: url(:/data/images/view-toggle-pressed-right.png);
+  background-image: url(:/data/images/view-toggle-pressed-centre.png);
   image: url(:/data/images/view-toggle-icon-list-active.png);
 }
 QRadioButton#radioNormal::indicator::unchecked {
@@ -43,13 +43,13 @@ QRadioButton#radioNormal::indicator::pressed {
 }
 QRadioButton#radioCloud::indicator::unchecked {
   background-image: url(:/data/images/view-toggle-inactive-right.png);
-  image: url(:/data/images/view-toggle-icon-cloud-inactive.png);
+  image: url(:/data/images/view-toggle-icon-grid-inactive.png);
 }
 QRadioButton#radioCloud::indicator::checked {
   background-image: url(:/data/images/view-toggle-active-right.png);
-  image: url(:/data/images/view-toggle-icon-cloud-active.png);
+  image: url(:/data/images/view-toggle-icon-grid-active.png);
 }
 QRadioButton#radioCloud::indicator::pressed {
   background-image: url(:/data/images/view-toggle-pressed-right.png);
-  image: url(:/data/images/view-toggle-icon-cloud-active.png);
+  image: url(:/data/images/view-toggle-icon-grid-active.png);
 }
