@@ -47,6 +47,7 @@ Q_OBJECT
 public:
     static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
+    static album_ptr getByUniqueId( const QString& uuid );
 
     Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
     Album( const QString& name, const Tomahawk::artist_ptr& artist );
@@ -55,6 +56,7 @@ public:
     unsigned int id() const;
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
+    QString uniqueId() const;
 
     artist_ptr artist() const;
 #ifndef ENABLE_HEADLESS
@@ -82,7 +84,6 @@ private slots:
 
 private:
     Q_DISABLE_COPY( Album )
-    QString infoid() const;
     void setIdFuture( QFuture<unsigned int> future );
 
     mutable bool m_waitingForId;
@@ -109,6 +110,7 @@ private:
 
     static QHash< QString, album_ptr > s_albumsByName;
     static QHash< unsigned int, album_ptr > s_albumsById;
+    static QHash< QString, album_ptr > s_albumsByUniqueId;
 
     friend class ::IdThreadWorker;
 };

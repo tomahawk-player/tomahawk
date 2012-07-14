@@ -46,6 +46,7 @@ Q_OBJECT
 public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
+    static artist_ptr getByUniqueId( const QString& uuid );
 
     Artist( unsigned int id, const QString& name );
     explicit Artist( const QString& name );
@@ -54,6 +55,7 @@ public:
     unsigned int id() const;
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
+    QString uniqueId() const;
 
     QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<Tomahawk::artist_ptr> similarArtists() const;
@@ -65,7 +67,7 @@ public:
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
-    
+
     QString biography() const;
 
 #ifndef ENABLE_HEADLESS
@@ -98,7 +100,6 @@ private slots:
 
 private:
     Artist();
-    QString infoid() const;
 
     void setIdFuture( QFuture<unsigned int> idFuture );
 
@@ -133,11 +134,12 @@ private:
 #endif
 
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
-    
+
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 
     static QHash< QString, artist_ptr > s_artistsByName;
     static QHash< unsigned int, artist_ptr > s_artistsById;
+    static QHash< QString, artist_ptr > s_artistsByUniqueId;
 
     friend class ::IdThreadWorker;
 };

@@ -35,13 +35,27 @@ using namespace Tomahawk;
 
 QHash< QString, album_ptr > Album::s_albumsByName = QHash< QString, album_ptr >();
 QHash< unsigned int, album_ptr > Album::s_albumsById = QHash< unsigned int, album_ptr >();
+QHash< QString, album_ptr > Album::s_albumsByUniqueId = QHash< QString, album_ptr >();
 
-static QMutex s_nameCacheMutex;
-static QMutex s_idCacheMutex;
+static QMutex s_mutex;
 static QReadWriteLock s_idMutex;
+
+
+inline QString
+albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
+{
+    return QString( "%1\t\t%2" ).arg( artist->name() ).arg( albumName );
+}
+
 
 Album::~Album()
 {
+    QMutexLocker lock( &s_mutex );
+    s_albumsByName.remove( albumCacheKey( artist(), name() ) );
+    s_albumsByUniqueId.remove( uniqueId() );
+/*    if ( id() > 0 )
+        s_albumsById.remove( id() );*/
+
     m_ownRef.clear();
 
 #ifndef ENABLE_HEADLESS
@@ -55,14 +69,13 @@ albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
     return QString( "%1\t\t%2" ).arg( artist->name().toLower() ).arg( albumName.toLower() );
 }
 
-
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
 {
     if ( !Database::instance() || !Database::instance()->impl() )
         return album_ptr();
 
-    QMutexLocker l( &s_nameCacheMutex );
+    QMutexLocker l( &s_mutex );
 
     const QString key = albumCacheKey( artist, name );
     if ( s_albumsByName.contains( key ) )
@@ -75,6 +88,8 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     album->loadId( autoCreate );
     s_albumsByName.insert( key, album );
 
+    s_albumsByUniqueId[ album->uniqueId() ] = album;
+
     return album;
 }
 
@@ -83,9 +98,8 @@ album_ptr
 Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
 {
     static QHash< unsigned int, album_ptr > s_albums;
-    static QMutex s_mutex;
 
-    QMutexLocker lock( &s_idCacheMutex );
+    QMutexLocker lock( &s_mutex );
 
     const QString key = albumCacheKey( artist, name );
     if ( s_albumsByName.contains( key ) )
@@ -101,12 +115,26 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     a->setWeakRef( a.toWeakRef() );
     s_albumsByName.insert( key, a );
 
+    s_albumsByUniqueId[ a->uniqueId() ] = a;
+    s_albumsByName[ albumCacheKey( artist, name ) ] = a;
     if ( id > 0 )
     {
         s_albumsById.insert( id, a );
     }
 
     return a;
+}
+
+
+album_ptr
+Album::getByUniqueId( const QString& uuid )
+{
+    QMutexLocker lock( &s_mutex );
+
+    if ( s_albumsByUniqueId.contains( uuid ) )
+        return s_albumsByUniqueId.value( uuid );
+
+    return album_ptr();
 }
 
 
@@ -209,7 +237,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
         trackInfo["album"] = name();
 
         Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = infoid();
+        requestData.caller = uniqueId();
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
         requestData.customData = QVariantMap();
@@ -257,7 +285,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
 void
 Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
-    if ( requestData.caller != infoid() ||
+    if ( requestData.caller != uniqueId() ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         return;
@@ -285,7 +313,7 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
 void
 Album::infoSystemFinished( const QString& target )
 {
-    if ( target != infoid() )
+    if ( target != uniqueId() )
         return;
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -326,7 +354,7 @@ Album::tracks( ModelMode mode, const Tomahawk::collection_ptr& collection )
 
 
 QString
-Album::infoid() const
+Album::uniqueId() const
 {
     if ( m_uuid.isEmpty() )
         m_uuid = uuid();
