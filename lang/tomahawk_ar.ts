@@ -474,11 +474,19 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>&amp;نسخ إلى الحافظة</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
+        <translation>فتح &amp;ملف السجل</translation>
+    </message>
+</context>
+<context>
+    <name>FlexibleHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="73"/>
+        <source>Filter...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -557,7 +565,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 يستمع معك!</translation>
     </message>
 </context>
 <context>
@@ -617,12 +625,32 @@ connect and stream from you?</source>
 <context>
     <name>LovedTracksItem</name>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="59"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
+        <source>Top Loved Tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
         <source>Sorry, we could not find any loved tracks!</source>
         <translation>نعتذر، لم نستطيع إيجاد اي من الأغاني المحبوبة!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.h" line="36"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
+        <source>The most loved tracks from all your friends</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
+        <source>All of your loved tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
+        <source>All of %1&apos;s loved tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Loved Tracks</source>
         <translation>الأغاني المحبوبة</translation>
     </message>
@@ -843,6 +871,31 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="290"/>
         <source>Name</source>
         <translation>إسم</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="26"/>
+        <source>InfoBar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="96"/>
+        <source>Caption</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="106"/>
+        <source>Description</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="190"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="197"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="204"/>
+        <source>RadioButton</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1369,7 +1422,7 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="517"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="515"/>
         <source>Latest Additions</source>
         <translation>أحدث الإضافات</translation>
     </message>
@@ -1384,37 +1437,37 @@ connect and stream from you?</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="520"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="518"/>
         <source>Latest additions to your collection</source>
         <translation>آخر إضافات على مجموعتك</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="522"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="520"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>آخر إضافات على مجموعة %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="530"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="529"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>نعتذر، لم نستطيع إيجاد إضافة جديدة!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="560"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="556"/>
         <source>Recently Played Tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="563"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="559"/>
         <source>Your recently played tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="565"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="561"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>الأغاني التي سمعها مؤخرا %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="572"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>نعتذر، لم نستطيع إيجاد أغاني مسموعة مؤخرا!</translation>
     </message>
@@ -1492,77 +1545,72 @@ connect and stream from you?</source>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="78"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="79"/>
         <source>Group</source>
         <translation>فئة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="81"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="82"/>
         <source>Collection</source>
         <translation>مجموعة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="84"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="85"/>
         <source>Playlist</source>
         <translation>قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="87"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="88"/>
         <source>Automatic Playlist</source>
         <translation>قائمة أغاني أوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="90"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="91"/>
         <source>Station</source>
         <translation>إذاعة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="279"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
         <source>Browse</source>
         <translation>تصفح</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
         <source>Search History</source>
         <translation>تاريخ البحث</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="282"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
         <source>My Music</source>
         <translation>موسيقتي الخاصة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="290"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
         <source>SuperCollection</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
-        <source>Top Loved Tracks</source>
-        <translation>الأغاني المحبوبة الأكثر شهرة</translation>
-    </message>
-    <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="284"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
         <source>Dashboard</source>
         <translation>لوحة القيادة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="301"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Recently Played</source>
         <translation>تم الاستماع لها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="306"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Charts</source>
         <translation>الرسوم البيانية</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="311"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
         <source>New Releases</source>
         <translation>جديد الاصدارات</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="316"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Friends</source>
         <translation>الأصدقاء</translation>
     </message>
@@ -1953,28 +2001,28 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="151"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="153"/>
         <source>Logging in...</source>
         <translation>جاري تسجيل الدخول...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="188"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="190"/>
         <source>Failed: %1</source>
         <translation>فشل: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="211"/>
-        <source>Logged in as %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="213"/>
-        <source>Log Out</source>
-        <translation type="unfinished"/>
+        <source>Logged in as %1</source>
+        <translation>مسجل تحت اسم %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="229"/>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="239"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="215"/>
+        <source>Log Out</source>
+        <translation>تسجيل الخروج</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="231"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="241"/>
         <source>Log In</source>
         <translation>تسجيل الدخول</translation>
     </message>
@@ -2203,7 +2251,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="125"/>
         <source>Properties...</source>
-        <translation type="unfinished"/>
+        <translation>خصائص...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
@@ -2219,39 +2267,6 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="210"/>
         <source>&amp;Show Artist Page</source>
         <translation>&amp;أظهر صفحة الفنان</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::CustomPlaylistView</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="126"/>
-        <source>Top Loved Tracks</source>
-        <translation>الأغاني المحبوبة الأكثر شهرة</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="130"/>
-        <source>Your loved tracks</source>
-        <translation>الأغاني التي أحببتها</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="132"/>
-        <source>%1&apos;s loved tracks</source>
-        <translation>الأغاني المحبوبة ل%1</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="141"/>
-        <source>The most loved tracks from all your friends</source>
-        <translation>الأغاني المحبوبة كثيرا بين أصدقائك</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="145"/>
-        <source>All of your loved tracks</source>
-        <translation>جميع الأغاني التي أحببتها</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/CustomPlaylistView.cpp" line="147"/>
-        <source>All of %1&apos;s loved tracks</source>
-        <translation>جميع الأغاني المحبوبة ل%1</translation>
     </message>
 </context>
 <context>
@@ -3623,34 +3638,39 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="281"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="279"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>بعد إجراء مسح مجموعة أغانيك الخاصة ستجد أغانيك هنا.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="283"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="281"/>
         <source>This collection is empty.</source>
         <translation>هذه المجموعة فارغة.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="340"/>
         <source>SuperCollection</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
         <source>Combined libraries of all your online friends</source>
         <translation>مكتبات مجمعة لكل اصحابك المتصلين</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="413"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="395"/>
         <source>Recently Played Tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="414"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Recently played tracks from all your friends</source>
         <translation>جميع الأغاني التي استمع إليها أصدقائك مؤخرا</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
+        <source>Sorry, we could not find any recent plays!</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
