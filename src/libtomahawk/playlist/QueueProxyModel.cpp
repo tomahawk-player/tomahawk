@@ -33,7 +33,6 @@ QueueProxyModel::QueueProxyModel( TrackView* parent )
     : PlayableProxyModel( parent )
 {
     connect( parent, SIGNAL( itemActivated( QModelIndex ) ), SLOT( onIndexActivated( QModelIndex ) ) );
-    connect( playlistInterface().data(), SIGNAL( sourceTrackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
 }
 
@@ -52,7 +51,11 @@ QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
         PlayableItem* item = itemFromIndex( mapToSource( idx ) );
         if ( item && item->query() && ( item->query()->results().contains( result ) ||
                                         item->query()->equals( result->toQuery() ) ) )
+        {
             removeIndex( idx );
+            if ( !rowCount() )
+                ViewManager::instance()->hideQueue();
+        }
     }
 }
 
@@ -62,12 +65,7 @@ QueueProxyModel::onIndexActivated( const QModelIndex& index )
 {
     setCurrentIndex( QModelIndex() );
     removeIndex( index );
-}
 
-
-void
-QueueProxyModel::onTrackCountChanged( unsigned int count )
-{
-    if ( count == 0 )
+    if ( !rowCount() )
         ViewManager::instance()->hideQueue();
 }
