@@ -280,7 +280,11 @@ Artist::id() const
         m_waitingForFuture = false;
 
         if ( m_id > 0 )
+        {
+            QMutexLocker lock( &s_mutex );
             s_artistsById[ m_id ] = m_ownRef.toStrongRef();
+        }
+
         s_idMutex.unlock();
     }
 
