@@ -29,6 +29,7 @@
 #include "utils/Logger.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/CustomPlaylistView.h"
+#include "playlist/FlexibleView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -551,12 +552,10 @@ SourceItem::recentPlaysClicked()
 {
     if ( !m_recentPlaysPage )
     {
-        PlaylistView* pv = new PlaylistView( ViewManager::instance()->widget() );
-        pv->setFrameShape( QFrame::NoFrame );
-        pv->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
+        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
-        pv->proxyModel()->setStyle( PlayableProxyModel::Large );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
 
         if ( m_source->isLocal() )
@@ -564,11 +563,11 @@ SourceItem::recentPlaysClicked()
         else
             raModel->setDescription( tr( "%1's recently played tracks" ).arg( m_source->friendlyName() ) );
 
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
-        pv->setItemDelegate( del );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
+        pv->trackView()->setItemDelegate( del );
 
-        pv->setPlaylistModel( raModel );
+        pv->setPlayableModel( raModel );
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
         raModel->setSource( m_source );
 
