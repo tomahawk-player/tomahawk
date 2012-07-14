@@ -54,6 +54,10 @@ DatabaseCommand_LogPlayback::postCommitHook()
         // do not auto resolve this track
         m_query = Tomahawk::Query::get( m_artist, m_track, QString() );
     }
+    
+    if ( m_query.isNull() )
+        return;
+    
     m_query->setPlayedBy( source(), m_playtime );
 
     if ( m_action == Finished )

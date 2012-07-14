@@ -35,16 +35,16 @@ class MetadataEditor : public QDialog
 Q_OBJECT
 
 public:
-    MetadataEditor( Tomahawk::result_ptr result, QWidget* parent = 0 );
+    MetadataEditor( const Tomahawk::result_ptr& result, QWidget* parent = 0 );
     ~MetadataEditor() {};
 
 protected:
-    QString title() { return ui->titleLineEdit->text(); }
-    QString artist() { return ui->artistLineEdit->text(); }
-    QString album() { return ui->albumLineEdit->text(); }
-    int discnumber() { return ui->discNumberSpinBox->value(); }
-    int year() { return ui->yearSpinBox->value(); }
-    int bitrate() { return ui->bitrateSpinBox->value(); }
+    QString title() const { return ui->titleLineEdit->text(); }
+    QString artist() const { return ui->artistLineEdit->text(); }
+    QString album() const { return ui->albumLineEdit->text(); }
+    int discnumber() const { return ui->discNumberSpinBox->value(); }
+    int year() const { return ui->yearSpinBox->value(); }
+    int bitrate() const { return ui->bitrateSpinBox->value(); }
 
 private slots:
     void writeMetadata();

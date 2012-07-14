@@ -42,7 +42,6 @@
 
 #define CURRENT_SCHEMA_VERSION 28
 
-
 DatabaseImpl::DatabaseImpl( const QString& dbname )
 {
     QTime t;

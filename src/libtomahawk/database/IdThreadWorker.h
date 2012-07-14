@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2011, Dominik Schmidt <dev@dominik-schmidt.de>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -15,42 +15,40 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef IDTHREADWORKER_H
+#define IDTHREADWORKER_H
 
-#ifndef DIGANOSTICSDIALOG_H
-#define DIAGNOSTICSDIALOG_H
+#include "DllMacro.h"
+#include "Typedefs.h"
 
-#include "accounts/Account.h"
+#include <QThread>
+#include <QQueue>
+#include <QWaitCondition>
+#include <QMutex>
 
-#include <QDialog>
-#include <QMap>
+class QueueItem;
+class Database;
+class DatabaseImpl;
 
-
-class QLabel;
-
-class SipInfo;
-
-namespace Ui
+class DLLEXPORT IdThreadWorker : public QThread
 {
-    class DiagnosticsDialog;
-}
-
-class DiagnosticsDialog : public QDialog
-{
-Q_OBJECT
-
+    Q_OBJECT
 public:
-    explicit DiagnosticsDialog( QWidget* parent = 0 );
-    ~DiagnosticsDialog() {};
+    explicit IdThreadWorker( Database* db );
+    virtual ~IdThreadWorker();
 
-private slots:
-    void updateLogView();
-    void copyToClipboard();
-    void openLogfile();
+    void run();
+    void stop();
 
-    QString accountLog( Tomahawk::Accounts::Account* );
+    static void getArtistId( const Tomahawk::artist_ptr& artist, bool autoCreate = false );
+    static void getAlbumId( const Tomahawk::album_ptr& album, bool autoCreate = false );
 
 private:
-    Ui::DiagnosticsDialog* ui;
+    Database* m_db;
+    DatabaseImpl* m_impl;
+    bool m_stop;
+
+    static QQueue< QueueItem* > s_workQueue;
 };
 
-#endif // DIAGNOSTICSDIALOG_H
+#endif // IDTHREADWORKER_H

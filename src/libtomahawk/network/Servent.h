@@ -174,7 +174,7 @@ private:
 
     QMap< QString,boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > > m_iofactories;
 
-    PortFwdThread* m_portfwd;
+    QWeakPointer< PortFwdThread > m_portfwd;
     static Servent* s_instance;
 };
 

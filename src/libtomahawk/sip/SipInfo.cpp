@@ -44,7 +44,7 @@ public:
     ~SipInfoPrivate() { }
 
     QVariant visible;
-    QHostInfo host;
+    QString host;
     int port;
     QString uniqname;
     QString key;
@@ -81,7 +81,7 @@ void
 SipInfo::clear()
 {
     d->visible.clear();
-    d->host = QHostInfo();
+    d->host = QString();
     d->port = -1;
     d->uniqname = QString();
     d->key = QString();
@@ -96,9 +96,9 @@ SipInfo::isValid() const
     {
         if(
             // visible and all data available
-            (  d->visible.toBool() && !d->host.hostName().isNull() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
+            (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
             // invisible and no data available
-         || ( !d->visible.toBool() &&  d->host.hostName().isNull() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
+         || ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
         )
             return true;
     }
@@ -124,13 +124,13 @@ SipInfo::isVisible() const
 
 
 void
-SipInfo::setHost( const QHostInfo& host )
+SipInfo::setHost( const QString& host )
 {
     d->host = host;
 }
 
 
-const QHostInfo
+const QString
 SipInfo::host() const
 {
     Q_ASSERT( isValid() );
@@ -195,7 +195,7 @@ SipInfo::toJson() const
     m["visible"] = isVisible();
     if( isVisible() )
     {
-        m["ip"] = host().hostName();
+        m["ip"] = host();
         m["port"] = port();
         m["key"] = key();
         m["uniqname"] = uniqname();
@@ -227,9 +227,7 @@ SipInfo::fromJson( QString json )
     info.setVisible( m["visible"].toBool() );
     if( m["visible"].toBool() )
     {
-        QHostInfo hostInfo;
-        hostInfo.setHostName( m["host"].toString() );
-        info.setHost( hostInfo );
+        info.setHost( m["host"].toString() );
         info.setPort( m["port"].toInt() );
         info.setUniqname( m["uniqname"].toString() );
         info.setKey( m["key"].toString() );

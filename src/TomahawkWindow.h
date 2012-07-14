@@ -31,6 +31,10 @@
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
 
+#ifdef Q_OS_WIN
+    #include <shobjidl.h>
+#endif
+
 namespace Tomahawk
 {
     namespace Accounts
@@ -138,6 +142,10 @@ private slots:
 
     void crashNow();
 
+#ifdef Q_OS_WIN
+    void audioStateChanged( AudioState newState, AudioState oldState );
+#endif
+
 private:
     void loadSettings();
     void saveSettings();
@@ -151,6 +159,9 @@ private:
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;
+    ITaskbarList3 *m_taskbarList;
+    THUMBBUTTON m_thumbButtons[5];
+    enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2,TP_LOVE = 4 };
 #endif
 
     Ui::TomahawkWindow* ui;

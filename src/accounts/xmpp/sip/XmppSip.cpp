@@ -435,7 +435,7 @@ XmppSipPlugin::sendMsg( const QString& to, const SipInfo& info )
     TomahawkXmppMessage *sipMessage;
     if ( info.isVisible() )
     {
-        sipMessage = new TomahawkXmppMessage( info.host().hostName(), info.port(), info.uniqname(), info.key() );
+        sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.uniqname(), info.key() );
     }
     else
         sipMessage = new TomahawkXmppMessage();
@@ -892,9 +892,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             info.setVisible( sipMessage->visible() );
             if ( sipMessage->visible() )
             {
-                QHostInfo hi;
-                hi.setHostName( sipMessage->ip() );
-                info.setHost( hi );
+                info.setHost( sipMessage->ip() );
                 info.setPort( sipMessage->port() );
                 info.setUniqname( sipMessage->uniqname() );
                 info.setKey( sipMessage->key() );
