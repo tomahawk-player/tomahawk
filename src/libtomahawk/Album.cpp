@@ -214,7 +214,10 @@ Album::id() const
         m_waitingForId = false;
 
         if ( m_id > 0 )
+        {
+            QMutexLocker lock( &s_mutex );
             s_albumsById[ m_id ] = m_ownRef.toStrongRef();
+        }
 
         s_idMutex.unlock();
     }
