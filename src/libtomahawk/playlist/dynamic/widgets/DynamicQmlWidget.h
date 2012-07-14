@@ -46,8 +46,9 @@ public:
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showModes() const { return true; }
-    virtual bool showFilter() const { return true; }
+    virtual bool showInfoBar() const { return false; }
+    virtual bool showModes() const { return false; }
+    virtual bool showFilter() const { return false; }
 
     virtual bool jumpToCurrentTrack();
 
