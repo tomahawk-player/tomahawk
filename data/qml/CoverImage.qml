@@ -3,6 +3,11 @@ import QtQuick 1.1
 Item {
     id: root
 
+    // Should the artist + track labels be painted
+    property bool showLabels: true
+    // Should the play button be painted on mouse hover?
+    property bool showPlayButton: false
+
     // Labels & Cover
     property string artistName
     property string trackName
@@ -22,13 +27,15 @@ Item {
 
     // will be emitted when the on hower play button is clicked
     signal playClicked()
+    // will be emitted when the cover is clicked
+    signal clicked()
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
 
-        onClicked: print("cover clicked")
+        onClicked: root.clicked();
 
     }
 
@@ -53,10 +60,10 @@ Item {
                 height: 32
                 anchors.margins: 5
                 color: "black"
-                opacity: 0.5
+                opacity: showLabels ? 0.5 : 0
                 radius: 3
-
             }
+
             Text {
                 color: "white"
                 font.bold: true
@@ -65,6 +72,7 @@ Item {
                 anchors.margins: 2
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
+                opacity: showLabels ? 1 : 0
             }
             Text {
                 color: "white"
@@ -73,6 +81,7 @@ Item {
                 anchors.margins: 2
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
+                opacity: showLabels ? 1 : 0
             }
         }
 
@@ -130,11 +139,9 @@ Item {
 
     Image {
         id: playButton
+        visible: showPlayButton ? mouseArea.containsMouse : false
         source: "../images/play-rest.png"
         anchors.centerIn: parent
-//        width:
-//        height: 32
-        visible: mouseArea.containsMouse
         MouseArea {
             anchors.fill: parent
             onClicked: root.playClicked();

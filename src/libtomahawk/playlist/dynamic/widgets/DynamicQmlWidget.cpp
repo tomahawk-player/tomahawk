@@ -56,6 +56,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     qmlRegisterUncreatableType<DynamicControl>("tomahawk", 1, 0, "DynamicControl", "use generator.createControl() isntead");
     qmlRegisterUncreatableType<EchonestControl>("tomahawk", 1, 0, "EchonestControl", "use Generator.createControl() instead");
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
+    qmlRegisterUncreatableType<PlayableItem>("tomahawk", 1, 0, "PlayableItem", "you cannot create it on your own - they will appear in the model");
 
     QStringList generatorControls;
 
@@ -66,7 +67,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     ControlModel *controls = new ControlModel(m_playlist->generator(), this);
 
-    EchonestStation *station = new EchonestStation(m_proxyModel, m_playlist->generator(), this);
+    EchonestStation *station = new EchonestStation( m_proxyModel, m_playlist->generator(), this);
     rootContext()->setContextProperty( "echonestStation", station);
     rootContext()->setContextProperty( "controlModel", controls );
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
