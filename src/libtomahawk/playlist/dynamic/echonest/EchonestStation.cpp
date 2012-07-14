@@ -7,11 +7,23 @@ namespace Tomahawk
 {
 
 EchonestStation::EchonestStation( PlayableProxyModel *model, geninterface_ptr generator, QObject *parent )
-    : QObject(parent)
-    , m_model(model)
-    , m_generator(generator)
+    : QObject( parent )
+    , m_name( model->sourceModel()->title() )
+    , m_model( model )
+    , m_generator( generator )
 {
 
+}
+
+QString EchonestStation::name() const
+{
+    return m_name;
+}
+
+void EchonestStation::setName(const QString &name)
+{
+    m_name = name;
+    emit nameChanged();
 }
 
 Tomahawk::DynamicControl* EchonestStation::mainControl() {

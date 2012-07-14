@@ -70,7 +70,7 @@ public:
 
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
     virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const { return sourceModel()->itemFromQuery( query ); }
-    Q_INVOKABLE virtual PlayableItem* itemFromIndex( int itemIndex ) const { return sourceModel()->itemFromIndex( itemIndex ); }
+    Q_INVOKABLE virtual PlayableItem* itemFromIndex( int itemIndex ) const;
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 

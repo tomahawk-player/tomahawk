@@ -165,5 +165,8 @@
         <file>data/images/ok.png</file>
         <file>data/qml/StationScene.qml</file>
         <file>data/qml/CoverImage.qml</file>
+        <file>data/qml/TagCloud.qml</file>
+        <file>data/qml/StationConfig.qml</file>
+        <file>data/qml/StationView.qml</file>
     </qresource>
 </RCC>

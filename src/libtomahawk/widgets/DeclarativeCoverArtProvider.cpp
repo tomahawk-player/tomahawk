@@ -2,6 +2,7 @@
 #include "PlayableItem.h"
 #include "playlist/PlayableProxyModel.h"
 #include "Query.h"
+#include "Album.h"
 
 #include <QDeclarativeImageProvider>
 #include <QModelIndex>
@@ -30,13 +31,18 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
     if( size )
         *size = QSize( width, height );
 
-    PlayableItem *item = m_model->itemFromIndex( id.toInt() );
-    if( item ) {
-        qDebug() << "item:" << item;
-        qDebug() << "item2:" << item->artistName() << item->name();
-        if ( !item->query().isNull() ) {
-            return item->query()->displayQuery()->cover( *size );
-        }
+//    PlayableItem *item = m_model->itemFromIndex( id.toInt() );
+//    if( item ) {
+//        qDebug() << "item:" << item;
+//        qDebug() << "item2:" << item->artistName() << item->name();
+//        if ( !item->query().isNull() ) {
+//            return item->query()->displayQuery()->cover( *size );
+//        }
+//    }
+
+    album_ptr album = Album::getByUniqueId(id);
+    if ( !album.isNull() ) {
+        return album->cover(requestedSize);
     }
 
     // TODO: create default cover art image
