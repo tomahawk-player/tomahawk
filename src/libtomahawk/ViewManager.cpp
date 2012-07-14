@@ -38,7 +38,6 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 
-#include "CustomPlaylistView.h"
 #include "PlaylistLargeItemDelegate.h"
 #include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
@@ -75,7 +74,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_newReleasesWidget( new NewReleasesWidget() )
-    , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_currentPage( 0 )
     , m_loaded( false )
@@ -125,7 +123,6 @@ ViewManager::~ViewManager()
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
     delete m_welcomeWidget;
-    delete m_topLovedWidget;
     delete m_recentPlaysWidget;
     delete m_contextWidget;
     delete m_widget;
@@ -383,23 +380,6 @@ Tomahawk::ViewPage*
 ViewManager::showNewReleasesPage()
 {
     return show( m_newReleasesWidget );
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::showTopLovedPage()
-{
-    if ( !m_topLovedWidget )
-    {
-        CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
-        view->setItemDelegate( del );
-
-        m_topLovedWidget = view;
-    }
-
-    return show( m_topLovedWidget );
 }
 
 
@@ -902,13 +882,6 @@ Tomahawk::ViewPage*
 ViewManager::newReleasesWidget() const
 {
     return m_newReleasesWidget;
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::topLovedWidget() const
-{
-    return m_topLovedWidget;
 }
 
 

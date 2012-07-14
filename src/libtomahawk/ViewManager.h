@@ -90,7 +90,6 @@ public:
     Tomahawk::ViewPage* welcomeWidget() const;
     Tomahawk::ViewPage* whatsHotWidget() const;
     Tomahawk::ViewPage* newReleasesWidget() const;
-    Tomahawk::ViewPage* topLovedWidget() const;
     Tomahawk::ViewPage* recentPlaysWidget() const;
     TreeView* superCollectionView() const;
 
@@ -133,7 +132,6 @@ public slots:
     Tomahawk::ViewPage* showWelcomePage();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showNewReleasesPage();
-    Tomahawk::ViewPage* showTopLovedPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     void showCurrentTrack();
 
@@ -194,7 +192,6 @@ private:
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
     NewReleasesWidget* m_newReleasesWidget;
-    Tomahawk::ViewPage* m_topLovedWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
