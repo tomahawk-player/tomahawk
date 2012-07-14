@@ -193,14 +193,9 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    DynamicQmlWidget* w = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
-    setPage( w );
-    return w;
-
-    //// OLD FOO
     if ( !m_dynamicWidgets.contains( playlist ) || m_dynamicWidgets.value( playlist ).isNull() )
     {
-       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
+       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
 
        playlist->resolve();
     }
@@ -854,7 +849,7 @@ ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) c
 Tomahawk::dynplaylist_ptr
 ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
+    foreach ( QWeakPointer<DynamicQmlWidget> view, m_dynamicWidgets.values() )
     {
         if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {
