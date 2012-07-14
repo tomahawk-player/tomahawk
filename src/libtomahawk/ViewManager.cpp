@@ -408,18 +408,19 @@ ViewManager::showRecentPlaysPage()
 {
     if ( !m_recentPlaysWidget )
     {
-        PlaylistView* pv = new PlaylistView( m_widget );
+        FlexibleView* pv = new FlexibleView( m_widget );
+        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
-        pv->proxyModel()->setStyle( PlayableProxyModel::Large );
 
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
-        pv->setItemDelegate( del );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
+        pv->trackView()->setItemDelegate( del );
 
-        pv->setPlaylistModel( raModel );
+        pv->setPlayableModel( raModel );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
         raModel->setSource( source_ptr() );
 
         m_recentPlaysWidget = pv;
