@@ -48,6 +48,7 @@ set( libGuiSources
 
     infobar/InfoBar.cpp
 
+    playlist/FlexibleHeader.cpp
     playlist/FlexibleView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
@@ -87,8 +88,6 @@ set( libGuiSources
     playlist/dynamic/widgets/MiscControlWidgets.cpp
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
-
-
 
     ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
@@ -320,6 +319,7 @@ set( libUI ${libUI}
     widgets/infowidgets/AlbumInfoWidget.ui
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
+    playlist/PlaylistHeader.ui
     filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
