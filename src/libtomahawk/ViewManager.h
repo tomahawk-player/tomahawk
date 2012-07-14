@@ -59,6 +59,7 @@ class QPushButton;
 namespace Tomahawk
 {
     class DynamicWidget;
+    class DynamicQmlWidget;
 }
 
 class DLLEXPORT ViewManager : public QObject
@@ -199,7 +200,7 @@ private:
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
-    QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
+    QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicQmlWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QWeakPointer<TreeView> > m_treeViews;
     QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
