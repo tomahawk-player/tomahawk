@@ -67,8 +67,8 @@ set( libGuiSources
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
     playlist/TreeView.cpp
-    playlist/CustomPlaylistView.cpp
     playlist/ViewHeader.cpp
+    playlist/LovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
     playlist/PlaylistLargeItemDelegate.cpp
