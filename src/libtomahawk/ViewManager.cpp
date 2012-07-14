@@ -137,13 +137,14 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 {
     FlexibleView* view = new FlexibleView();
     PlaylistModel* model = new PlaylistModel();
-    view->setPlayableModel( model );
 
     PlaylistView* pv = new PlaylistView();
     pv->setPlaylistModel( model );
     view->setDetailedView( pv );
+    view->setPixmap( pv->pixmap() );
 
     model->loadPlaylist( playlist );
+    view->setPlayableModel( model );
     playlist->resolve();
 
     return view;
