@@ -22,11 +22,11 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "playlist/FlexibleHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
-#include "utils/Closure.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -35,6 +35,7 @@ using namespace Tomahawk;
 
 FlexibleView::FlexibleView( QWidget* parent )
     : QWidget( parent )
+    , m_header( new FlexibleHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
@@ -51,54 +52,16 @@ FlexibleView::FlexibleView( QWidget* parent )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-    QWidget* modeBar = new QWidget();
-    modeBar->setLayout( new QHBoxLayout() );
-    TomahawkUtils::unmarginLayout( modeBar->layout() );
-
-    QWidget* modeWidget = new QWidget();
-    modeWidget->setLayout( new QHBoxLayout() );
-    modeWidget->setFixedSize( QSize( 87, 30 ) );
-    TomahawkUtils::unmarginLayout( modeWidget->layout() );
-
-    QRadioButton* radioNormal = new QRadioButton();
-    radioNormal->setObjectName( "radioNormal" );
-    QRadioButton* radioDetailed = new QRadioButton();
-    radioDetailed->setObjectName( "radioDetailed" );
-    QRadioButton* radioCloud = new QRadioButton();
-    radioCloud->setObjectName( "radioCloud" );
-
-    radioNormal->setFocusPolicy( Qt::NoFocus );
-    radioDetailed->setFocusPolicy( Qt::NoFocus );
-    radioCloud->setFocusPolicy( Qt::NoFocus );
-
-    QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
-    f.open( QFile::ReadOnly );
-    QString css = QString::fromAscii( f.readAll() );
-    f.close();
-
-    modeWidget->setStyleSheet( css );
-    modeWidget->layout()->addWidget( radioNormal );
-    modeWidget->layout()->addWidget( radioDetailed );
-    modeWidget->layout()->addWidget( radioCloud );
-    modeWidget->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-
-    modeBar->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-    modeBar->layout()->addWidget( modeWidget );
-    modeBar->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-
-    layout()->addWidget( modeBar );
+    layout()->addWidget( m_header );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_trackView );
     m_stack->addWidget( m_detailedView );
     m_stack->addWidget( m_gridView );
 
-    radioNormal->setChecked( true );
     setCurrentMode( Flat );
 
-    NewClosure( radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), Flat )->setAutoDelete( false );
-    NewClosure( radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), Detailed )->setAutoDelete( false );
-    NewClosure( radioCloud,    SIGNAL( clicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), Grid )->setAutoDelete( false );
+    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 }
 
 
@@ -166,6 +129,10 @@ FlexibleView::setPlayableModel( PlayableModel* model )
     m_trackView->proxyModel()->sort( -1 );
     m_detailedView->proxyModel()->sort( -1 );
     m_gridView->proxyModel()->sort( -1 );
+
+    m_header->setPixmap( m_pixmap );
+    m_header->setCaption( model->title() );
+    m_header->setDescription( model->description() );
 }
 
 
@@ -223,7 +190,7 @@ FlexibleView::description() const
 QPixmap
 FlexibleView::pixmap() const
 {
-    return m_trackView->pixmap();
+    return m_pixmap;
 }
 
 
@@ -238,13 +205,30 @@ FlexibleView::jumpToCurrentTrack()
 
 
 bool
-FlexibleView::setFilter( const QString& filter )
+FlexibleView::setFilter( const QString& pattern )
 {
-    ViewPage::setFilter( filter );
+    ViewPage::setFilter( pattern );
 
-    m_trackView->setFilter( filter );
-    m_detailedView->setFilter( filter );
-    m_gridView->setFilter( filter );
+    m_trackView->setFilter( pattern );
+    m_detailedView->setFilter( pattern );
+    m_gridView->setFilter( pattern );
 
     return true;
+}
+
+
+void
+FlexibleView::setEmptyTip( const QString& tip )
+{
+    m_trackView->setEmptyTip( tip );
+    m_detailedView->setEmptyTip( tip );
+    m_gridView->setEmptyTip( tip );
+}
+
+
+void
+FlexibleView::setPixmap( const QPixmap& pixmap )
+{
+    m_pixmap = pixmap;
+    m_header->setPixmap( pixmap );
 }
