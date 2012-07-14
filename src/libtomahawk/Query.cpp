@@ -39,6 +39,9 @@
 
 using namespace Tomahawk;
 
+QHash< QString, query_ptr > Query::s_queriesByUniqueId = QHash< QString, query_ptr >();
+static QMutex s_mutex;
+
 
 SocialAction::SocialAction() {}
 SocialAction::~SocialAction() {}
@@ -82,7 +85,7 @@ PlaybackLog::PlaybackLog( const PlaybackLog& other )
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
-    if (  artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
+    if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
         return query_ptr();
 
     if ( qid.isEmpty() )
@@ -93,6 +96,9 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
+
+    QMutexLocker lock( &s_mutex );
+    s_queriesByUniqueId[ qid ] = q;
 
     return q;
 }
@@ -109,7 +115,22 @@ Query::get( const QString& query, const QID& qid )
     if ( !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
 
+    QMutexLocker lock( &s_mutex );
+    s_queriesByUniqueId[ qid ] = q;
+
     return q;
+}
+
+
+query_ptr
+Query::getByUniqueId( const QString& qid )
+{
+    QMutexLocker lock( &s_mutex );
+
+    if ( s_queriesByUniqueId.contains( qid ) )
+        return s_queriesByUniqueId.value( qid );
+
+    return query_ptr();
 }
 
 
@@ -150,6 +171,10 @@ Query::Query( const QString& query, const QID& qid )
 Query::~Query()
 {
     QMutexLocker lock( &m_mutex );
+    QMutexLocker slock( &s_mutex );
+
+    s_queriesByUniqueId.remove( id() );
+
     m_ownRef.clear();
     m_results.clear();
 }
@@ -502,7 +527,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     Q_ASSERT( !r->album().isNull() );
     if ( r->artist().isNull() || r->album().isNull() )
         return 0.0;
-    
+
     // result values
     const QString rArtistname = r->artist()->sortname();
     const QString rAlbumname  = r->album()->sortname();
