@@ -59,6 +59,8 @@ private slots:
     void error( const QString& title, const QString& body);
 
     void onRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
+
+    void resolvingFinished( bool hasResults );
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
