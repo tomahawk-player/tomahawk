@@ -50,7 +50,7 @@ Item {
                     id: delegateText
                     color: "white"
                     //text: controlModel.controlAt( index ).summary
-                    text: "bla" + modelData
+                    text: modelData
                     font.pixelSize: 28
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)

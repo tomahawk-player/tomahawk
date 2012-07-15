@@ -146,24 +146,31 @@ void DynamicQmlWidget::nextTrackGenerated(const query_ptr &track)
     m_model->tracksGenerated( QList<query_ptr>() << track );
     m_playlist->resolve();
 
-    qDebug() << "next track generated" << m_proxyModel->rowCount() << m_proxyModel->currentIndex().row();
-    if( m_proxyModel->rowCount() <= m_proxyModel->currentIndex().row() + 8 ) {
-        qDebug() << "fetching next one";
-        m_playlist->generator()->fetchNext();
-    }
+    connect( track.data(), SIGNAL( resolvingFinished( bool )), SLOT( resolvingFinished( bool ) ) );
+
 }
 
 void DynamicQmlWidget::error(const QString &title, const QString &body)
 {
     qDebug() << "got a generator error:" << title << body;
 
-    m_playlist->generator()->fetchNext();
+//    m_playlist->generator()->fetchNext();
 
 }
 
 void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)
 {
     m_playlist->resolve();
+}
+
+void DynamicQmlWidget::resolvingFinished(bool hasResults)
+{
+    Q_UNUSED(hasResults)
+    qDebug() << "next track generated" << m_proxyModel->rowCount() << m_proxyModel->currentIndex().row();
+    if( m_proxyModel->rowCount() <= m_proxyModel->currentIndex().row() + 8 ) {
+        qDebug() << "fetching next one";
+        m_playlist->generator()->fetchNext();
+    }
 }
 
 }
