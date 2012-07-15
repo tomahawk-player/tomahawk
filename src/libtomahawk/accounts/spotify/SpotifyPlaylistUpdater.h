@@ -53,7 +53,10 @@ public:
 
     bool sync() const;
     void setSync( bool sync );
-
+    bool subscribed() const;
+    void setSubscribed( bool subscribed );
+    bool canSubscribe() const;
+    void setCanSubscribe( bool canSub );
     QString spotifyId() const { return m_spotifyId; }
 
     void remove( bool askToDeletePlaylist = true );
@@ -99,7 +102,8 @@ private:
 
     bool m_blockUpdatesForNextRevision;
     bool m_sync;
-
+    bool m_subscribed;
+    bool m_canSubscribe;
     QQueue<_detail::Closure*> m_queuedOps;
 #ifndef ENABLE_HEADLESS
     static QPixmap* s_typePixmap;

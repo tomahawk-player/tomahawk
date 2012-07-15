@@ -57,10 +57,14 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     const QString spotifyId = settings.value( "spotifyId" ).toString();
     const QString latestRev = settings.value( "latestrev" ).toString();
     const bool sync         = settings.value( "sync" ).toBool();
+    const bool canSubscribe = settings.value( "canSubscribe" ).toBool();
+    const bool isSubscribed = settings.value( "subscribed" ).toBool();
 
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
+    updater->setCanSubscribe( canSubscribe );
+    updater->setSubscribed( isSubscribed );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -74,6 +78,8 @@ SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const QStr
     , m_spotifyId( spotifyId )
     , m_blockUpdatesForNextRevision( false )
     , m_sync( false )
+    , m_canSubscribe( false )
+    , m_subscribed( false )
 {
     init();
 }
@@ -177,6 +183,8 @@ SpotifyPlaylistUpdater::saveToSettings()
 
     s[ "latestrev" ] = m_latestRev;
     s[ "sync" ] = m_sync;
+    s[ "canSubscribe" ] = m_canSubscribe;
+    s[ "subscribed" ] = m_subscribed;
     s[ "spotifyId" ] = m_spotifyId;
 
     saveSettings( s );
@@ -225,6 +233,46 @@ bool
 SpotifyPlaylistUpdater::sync() const
 {
     return m_sync;
+}
+
+void
+SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+{
+    if ( m_subscribed == subscribed )
+        return;
+
+    m_subscribed = subscribed;
+    setSync( subscribed );
+    saveToSettings();
+    emit changed();
+}
+
+
+bool
+SpotifyPlaylistUpdater::subscribed() const
+{
+    return m_subscribed;
+}
+
+
+void
+SpotifyPlaylistUpdater::setCanSubscribe( bool canSubscribe )
+{
+
+    if ( m_canSubscribe == canSubscribe )
+        return;
+
+    m_canSubscribe = canSubscribe;
+
+    saveToSettings();
+    emit changed();
+}
+
+
+bool
+SpotifyPlaylistUpdater::canSubscribe() const
+{
+    return m_canSubscribe;
 }
 
 

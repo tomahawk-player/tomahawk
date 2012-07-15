@@ -24,7 +24,8 @@
 #include "Typedefs.h"
 #include "Query.h"
 #include "jobview/JobStatusItem.h"
-
+#include "accounts/spotify/SpotifyPlaylistUpdater.h"
+#include "accounts/spotify/SpotifyAccount.h"
 #include <QObject>
 #include <QSet>
 #include <QtCore/QStringList>
@@ -38,6 +39,8 @@
  */
 
 class QNetworkReply;
+class SpotifyAccount;
+class SpotifyPlaylistUpdater;
 namespace Tomahawk
 {
 
@@ -84,7 +87,7 @@ private:
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
-
+    QString m_browseUri;
     static QPixmap* s_pixmap;
 };
 

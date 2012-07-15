@@ -48,11 +48,11 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, changed;
+    bool sync, subscribed, changed;
 
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ) {}
 
     SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
 };
@@ -83,7 +83,7 @@ public:
     SpotifyAccount( const QString& accountId );
     SpotifyAccount( const QString& accountId, const QString& path );
     virtual ~SpotifyAccount();
-
+    static SpotifyAccount* instance();
     virtual QPixmap icon() const;
     virtual QWidget* configurationWidget();
     virtual QWidget* aboutWidget();
@@ -101,6 +101,8 @@ public:
 
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
+    void registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed );
+    void registerPlaylistInfo( SpotifyPlaylistInfo* info );
     void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
@@ -114,6 +116,7 @@ public slots:
     
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
     void syncActionTriggered( bool );
+    void subscribeActionTriggered( bool );
     void atticaLoaded(Attica::Content::List);
 
 private slots:
@@ -129,7 +132,7 @@ private slots:
   //  void <here>( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
-
+    void playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
 
@@ -150,6 +153,8 @@ private:
 
     void createActions();
     void removeActions();
+
+    static SpotifyAccount* s_instance;
 
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<QWidget> m_aboutWidget;

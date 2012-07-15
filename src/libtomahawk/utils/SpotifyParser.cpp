@@ -97,31 +97,31 @@ void
 SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
 {
     tLog() << "Parsing Spotify Browse URI:" << linkRaw;
-    QString browseUri = linkRaw;
-    if ( browseUri.contains( "open.spotify.com/" ) ) // convert to a URI
+    m_browseUri = linkRaw;
+    if ( m_browseUri.contains( "open.spotify.com/" ) ) // convert to a URI
     {
-        browseUri.replace( "http://open.spotify.com/", "" );
-        browseUri.replace( "/", ":" );
-        browseUri = "spotify:" + browseUri;
+        m_browseUri.replace( "http://open.spotify.com/", "" );
+        m_browseUri.replace( "/", ":" );
+        m_browseUri = "spotify:" + m_browseUri;
     }
 
     DropJob::DropType type;
 
-    if ( browseUri.contains( "spotify:user" ) )
+    if ( m_browseUri.contains( "spotify:user" ) )
         type = DropJob::Playlist;
-    if ( browseUri.contains( "spotify:artist" ) )
+    if ( m_browseUri.contains( "spotify:artist" ) )
         type = DropJob::Artist;
-    if ( browseUri.contains( "spotify:album" ) )
+    if ( m_browseUri.contains( "spotify:album" ) )
         type = DropJob::Album;
-    if ( browseUri.contains( "spotify:track" ) )
+    if ( m_browseUri.contains( "spotify:track" ) )
         type = DropJob::Track;
 
     QUrl url;
 
     if( type != DropJob::Artist )
-         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( browseUri ) );
+         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( m_browseUri ) );
     else
-         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( browseUri )
+         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( m_browseUri )
                                                                         .arg ( m_limit ) );
     tDebug() << "Looking up URL..." << url.toString();
 
@@ -304,6 +304,7 @@ SpotifyParser::checkBrowseFinished()
 
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
+
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
@@ -312,6 +313,25 @@ SpotifyParser::checkBrowseFinished()
                                        false,
                                        m_tracks );
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+
+            if( Accounts::SpotifyAccount::instance() != 0 )
+            {
+                SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
+                                                    Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
+
+                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
+
+                // If the user isnt dropping a playlist the he owns, its subscribeable
+                if( !m_browseUri.contains( creds.value( "username" ).toString() ) )
+                    updater->setCanSubscribe( true );
+
+                updater->setSubscribed( false );
+                updater->setSync( false );
+
+                // Just register the infos
+                Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false );
+                Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
+            }
             return;
         }
 
