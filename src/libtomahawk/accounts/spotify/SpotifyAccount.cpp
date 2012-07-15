@@ -446,7 +446,7 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
         {
             found = true;
 
-            if( spotifyUpdater->canSubscribe() )
+            if ( spotifyUpdater->canSubscribe() )
                 canSubscribe = true;
 
             isSubscribed = spotifyUpdater->subscribed();
@@ -454,13 +454,13 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
             if ( !spotifyUpdater->canSubscribe() && !spotifyUpdater->sync() )
                 manuallyDisabled = true;
 
-            if( spotifyUpdater->sync() )
+            if ( spotifyUpdater->sync() )
                 sync = true;
 
         }
     }
 
-    if( action->data().toString() == "sync" )
+    if ( action->data().toString() == "sync" )
     {
 
         if ( !found )
@@ -476,9 +476,9 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
             // We dont want to sync a subscribeable playlist but if a playlist isnt
             // collaborative, he will loose his changes on next update, thus,
             // we create a new copy of it
-            if( canSubscribe )
+            if ( canSubscribe )
                 action->setText( tr( "Create subscribed copy and sync with Spotify") );
-            else if( sync )
+            else if ( sync )
                 action->setText( tr( "Stop syncing with Spotify" ) );
             else
                 action->setVisible( false );
@@ -487,9 +487,9 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 
     // User can sync or subscribe on playlist.
     // Sync means creating a new copy of it, subscribe is listening on changes from owner
-    if( action->data().toString() == "subscribe" )
+    if ( action->data().toString() == "subscribe" )
     {
-        if( found && canSubscribe )
+        if ( found && canSubscribe )
         {
             if ( canSubscribe && !isSubscribed )
             {
@@ -499,18 +499,19 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
             {
                 action->setText( tr( "Re-enable subscribing with Spotify" ) );
             }
-            else if( isSubscribed )
+            else if ( isSubscribed )
             {
                 action->setText( tr( "Stop subscribing with Spotify" ) );
             }
             else
             {
                 // Hide the action, we dont have this option on the playlist
-                action->setVisible(false);
+                action->setVisible( false );
             }
         }else
             action->setVisible( false );
     }
+
 }
 
 void
@@ -562,7 +563,7 @@ SpotifyAccount::subscribeActionTriggered( bool checked )
         // and we will could loose the SpotifyPlaylistInfo, but all we really need is the id
         if ( !updater->spotifyId().isEmpty() )
         {
-            if( !info )
+            if ( !info )
             {
                 info = new SpotifyPlaylistInfo( playlist->title()
                                                 , updater->spotifyId()
@@ -823,7 +824,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyTracksMoved( tracksList, newStartPos, newRev, oldRev  );
     }
-    else if( msgType == "playlistRenamed" )
+    else if ( msgType == "playlistRenamed" )
     {
         const QString plid = msg.value( "id" ).toString();
         // We should already be syncing this playlist if we get updates for it
@@ -843,18 +844,18 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyPlaylistRenamed( title, newRev, oldRev  );
     }
-    else if( msgType == "spotifyError" )
+    else if ( msgType == "spotifyError" )
     {
         const QString error = msg.value( "msg" ).toString();
-        if( error.isEmpty() )
+        if ( error.isEmpty() )
             return;
 
-        if( msg.value( "isDebugMsg" ).toBool() )
+        if ( msg.value( "isDebugMsg" ).toBool() )
             tDebug( LOGVERBOSE ) << "SpotifyResolverError: " << error;
         else
             JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
     }
-    else if( msgType == "userChanged" )
+    else if ( msgType == "userChanged" )
     {
         const QString rmsg = msg.value( "msg" ).toString();
         clearUser( true );
@@ -1299,7 +1300,7 @@ SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync 
 {
     foreach ( SpotifyPlaylistInfo* info, m_allSpotifyPlaylists )
     {
-        if( info->plid == spotifyPlaylistId )
+        if ( info->plid == spotifyPlaylistId )
             info->sync = sync;
     }
 
@@ -1327,6 +1328,7 @@ SpotifyAccount::createActions()
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, subscribeAction, this );
     subscribeAction->setData( "subscribe" );
     m_customActions.append( subscribeAction );
+
 }
 
 

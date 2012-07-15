@@ -312,9 +312,10 @@ SpotifyParser::checkBrowseFinished()
                                        m_creator,
                                        false,
                                        m_tracks );
+
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
 
-            if( Accounts::SpotifyAccount::instance() != 0 )
+            if ( Accounts::SpotifyAccount::instance() != 0 )
             {
                 SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
                                                     Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
@@ -322,7 +323,7 @@ SpotifyParser::checkBrowseFinished()
                 QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
 
                 // If the user isnt dropping a playlist the he owns, its subscribeable
-                if( !m_browseUri.contains( creds.value( "username" ).toString() ) )
+                if ( !m_browseUri.contains( creds.value( "username" ).toString() ) )
                     updater->setCanSubscribe( true );
 
                 updater->setSubscribed( false );
@@ -334,7 +335,6 @@ SpotifyParser::checkBrowseFinished()
             }
             return;
         }
-
         else if ( m_single && !m_tracks.isEmpty() )
             emit track( m_tracks.first() );
         else if ( !m_single && !m_tracks.isEmpty() )
