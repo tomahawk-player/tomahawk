@@ -92,6 +92,31 @@ AlbumPlaylistInterface::hasNextItem()
 }
 
 
+bool
+AlbumPlaylistInterface::hasPreviousItem()
+{
+    int p = m_currentTrack;
+    p--;
+    if ( p < 0 || p >= m_queries.count() )
+        return false;
+
+    return true;
+}
+
+
+bool
+AlbumPlaylistInterface::setCurrentTrack( unsigned int albumpos )
+{
+    albumpos--;
+    if ( albumpos < 0 || albumpos >= m_queries.count() )
+        return false;
+
+    m_currentTrack = albumpos;
+    m_currentItem = m_queries.at( albumpos )->results().first();
+    return true;
+}
+
+
 QList< Tomahawk::query_ptr >
 AlbumPlaylistInterface::tracks()
 {

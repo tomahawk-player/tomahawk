@@ -45,9 +45,13 @@ protected:
     int discnumber() const { return ui->discNumberSpinBox->value(); }
     int year() const { return ui->yearSpinBox->value(); }
     int bitrate() const { return ui->bitrateSpinBox->value(); }
+    void loadResult( const Tomahawk::result_ptr& result );
 
 private slots:
-    void writeMetadata();
+    void writeMetadata( bool closeDlg = false );
+    void enablePushButtons();
+    void loadNextResult();
+    void loadPreviousResult();
 
     /* tag attributes */
     void setTitle( const QString& title );
@@ -66,6 +70,8 @@ private:
     Ui::MetadataEditor* ui;
 
     Tomahawk::result_ptr m_result;
+    Tomahawk::playlistinterface_ptr m_interface;
+    QStringList m_editFiles;
 };
 
 #endif // METADATAEDITOR_H
