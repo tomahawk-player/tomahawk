@@ -66,7 +66,7 @@ public:
     virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
 
-    virtual bool setCurrentTrack( unsigned int albumpos ) { return false; }
+    virtual bool setCurrentTrack( unsigned int albumpos ) { Q_UNUSED( albumpos ); return false; }
 
     virtual void reset() {}
 
