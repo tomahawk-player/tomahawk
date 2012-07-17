@@ -371,7 +371,7 @@ SpotifyParser::checkBrowseFinished()
                     updater->setCanSubscribe( true );
 
                 updater->setSubscribed( true );
-                updater->setSync( false );
+                updater->setSync( true );
 
                 // Just register the infos
                 Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false );
