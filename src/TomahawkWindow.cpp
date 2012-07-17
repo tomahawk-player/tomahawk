@@ -104,7 +104,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
 
 #ifdef Q_OS_WIN
-    connect(AudioEngine::instance(),SIGNAL(stateChanged(AudioState,AudioState)),this,SLOT(audioStateChanged(AudioState,AudioState)));
+    connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState) ), SLOT( audioStateChanged( AudioState, AudioState) ) );
 #endif
     ui->setupUi( this );
 
@@ -412,6 +412,7 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( finished(Tomahawk::result_ptr) ), SLOT( audioFinished() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
@@ -626,10 +627,6 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     {
         case AudioEngine::Playing:
         {
-            if ( !AudioEngine::instance()->currentTrack().isNull() )
-            {
-                connect(AudioEngine::instance()->currentTrack()->toQuery().data(),SIGNAL(socialActionsLoaded()),this,SLOT(updateWindowsLoveButton()));
-            }
             QPixmap pause( RESPATH "images/pause-rest.png" );
             m_thumbButtons[TP_PLAY_PAUSE].hIcon = pause.toWinHICON();
             m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Pause" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
@@ -1037,6 +1034,18 @@ TomahawkWindow::audioStarted()
 
     ui->actionPlay->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
+
+#ifdef Q_OS_WIN
+    connect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
+#endif
+}
+
+void
+TomahawkWindow::audioFinished()
+{
+#ifdef Q_OS_WIN
+    disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
+#endif
 }
 
 

@@ -121,6 +121,7 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
     void audioStarted();
+    void audioFinished();
     void audioPaused();
     void audioStopped();
 
