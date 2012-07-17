@@ -89,15 +89,19 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
     if ( type == SourcesModel::Collection )
     {
-        return QSize( option.rect.width(), 40 );
+//        return QSize( option.rect.width(), 40 );
+        return QSize( option.rect.width(), option.fontMetrics.height() * 2.5 );
     }
     else if ( type == SourcesModel::Divider )
     {
+        // TODO: what is the divider?
         return QSize( option.rect.width(), 6 );
     }
-    else if ( type == SourcesModel::Group && index.row() > 0 )
+    else if ( type == SourcesModel::Group )
     {
-        return QSize( option.rect.width(), 24 );
+//        return QSize( option.rect.width(), 26 );
+        int groupSpacer = index.row() > 0 ? option.fontMetrics.height() / 2 : 0;
+        return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
     }
     else if ( m_expandedMap.contains( index ) )
     {
@@ -113,7 +117,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
         return m_expandedMap.value( index )->size();
     }
     else
-        return QStyledItemDelegate::sizeHint( option, index );
+        return QSize( option.rect.width(), option.fontMetrics.height() * 1.2 ); //QStyledItemDelegate::sizeHint( option, index ) );
 }
 
 
@@ -143,7 +147,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
                 iconW = ah->originalSize().height() - 4;
             }
         }
- 
+
         QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
         QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
         speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
@@ -162,7 +166,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QFont figFont = bold;
     figFont.setFamily( "Arial Bold" );
     figFont.setWeight( QFont::Black );
-    figFont.setPixelSize( 10 );
+    //figFont.setPixelSize( 10 );
+    figFont.setPixelSize( option.fontMetrics.height() * 0.7 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -260,7 +265,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     {
         painter->setRenderHint( QPainter::Antialiasing );
 
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + 16 );
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
         int hd = ( option.rect.height() - figRect.height() ) / 2;
         figRect.adjust( 0, hd, 0, hd );
 
@@ -297,7 +302,8 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
             text = tr( "Hide" );
 
         QFont font = painter->font();
-        font.setPixelSize( 11 );
+        //font.setPixelSize( 11 );
+        font.setPixelSize( option.fontMetrics.height() * 0.7 );
         font.setBold( true );
         painter->setFont( font );
         QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
@@ -315,7 +321,8 @@ void
 SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QFont font = painter->font();
-    font.setPixelSize( 12 );
+//    font.setPixelSize( 12 );
+    font.setPixelSize( option.fontMetrics.height() * 0.8 );
     font.setBold( true );
     painter->setFont( font );
 
@@ -359,7 +366,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->save();
 
     QFont font = painter->font();
-    font.setPixelSize( 11 );
+//    font.setPixelSize( 11 );
+    font.setPixelSize( option.fontMetrics.height() * 0.75 );
     painter->setFont( font );
     o.font = font;
     o3.font = font;
@@ -458,7 +466,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         painter->setPen( pen );
 
         QFont font = painter->font();
-        font.setPixelSize( 12 );
+//        font.setPixelSize( 12 );
+        font.setPixelSize( option.fontMetrics.height() * 0.8 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );
