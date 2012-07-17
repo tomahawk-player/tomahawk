@@ -98,11 +98,30 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
 {
     tLog() << "Parsing Spotify Browse URI:" << linkRaw;
     m_browseUri = linkRaw;
+
     if ( m_browseUri.contains( "open.spotify.com/" ) ) // convert to a URI
     {
         m_browseUri.replace( "http://open.spotify.com/", "" );
         m_browseUri.replace( "/", ":" );
         m_browseUri = "spotify:" + m_browseUri;
+    }
+    
+    if ( m_browseUri.contains( "playlist" ) &&
+         Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
+         Tomahawk::Accounts::SpotifyAccount::instance()->loggedIn() )
+    {
+        // Do a playlist lookup locally
+        // Running resolver, so do the lookup through that
+        qDebug() << Q_FUNC_INFO << "Doing playlist lookup through spotify resolver:" << m_browseUri;
+        QVariantMap message;
+        message[ "_msgtype" ] = "playlistListing";
+        message[ "id" ] = m_browseUri;
+
+        QMetaObject::invokeMethod( Tomahawk::Accounts::SpotifyAccount::instance(), "sendMessage", Qt::QueuedConnection, Q_ARG( QVariantMap, message ),
+                                                                                                                        Q_ARG( QObject*, this ),
+                                                                                                                        Q_ARG( QString, "playlistListingResult" ) );
+
+        return;
     }
 
     DropJob::DropType type;
@@ -290,6 +309,31 @@ SpotifyParser::spotifyTrackLookupFinished()
         checkTrackFinished();
     else
         checkBrowseFinished();
+}
+
+
+void
+SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData )
+{
+    Q_ASSERT( msgType == "playlistListing" );
+
+    m_title = msg.value( "name" ).toString();
+    m_single = false;
+    m_creator = msg.value( "creator" ).toString();
+
+    const QVariantList tracks = msg.value( "tracks" ).toList();
+    foreach ( const QVariant& blob, tracks )
+    {
+        QVariantMap trackMap = blob.toMap();
+        const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
+        
+        if ( q.isNull() )
+            continue;
+        
+        m_tracks << q;
+    }
+
+    checkBrowseFinished();
 }
 
 

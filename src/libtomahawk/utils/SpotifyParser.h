@@ -60,6 +60,9 @@ public:
     // the single track signal
     void setSingleMode( bool single ) { m_single = single; }
 
+public slots:
+    void  playlistListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+
 signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
