@@ -312,12 +312,12 @@ ContextMenu::onSocialActionsLoaded()
     if ( m_queries.isEmpty() || m_queries.first().isNull() )
         return;
 
-    if ( m_queries.first()->loved() )
+    if ( m_loveAction && m_queries.first()->loved() )
     {
         m_loveAction->setText( tr( "Un-&Love" ) );
         m_loveAction->setIcon( QIcon( RESPATH "images/not-loved.png" ) );
     }
-    else
+    else if ( m_loveAction )
     {
         m_loveAction->setText( tr( "&Love" ) );
         m_loveAction->setIcon( QIcon( RESPATH "images/loved.png" ) );
