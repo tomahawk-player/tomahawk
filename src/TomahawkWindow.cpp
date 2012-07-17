@@ -1044,7 +1044,7 @@ void
 TomahawkWindow::audioFinished()
 {
 #ifdef Q_OS_WIN
-    disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
+    disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
 #endif
 }
 
