@@ -763,7 +763,7 @@ connect and stream from you?</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="44"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="48"/>
         <source> - Properties</source>
         <translation>- 情報</translation>
     </message>
@@ -1980,38 +1980,38 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="468"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="475"/>
         <source>Sync with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="472"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="479"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="480"/>
-        <source>Create subscribed copy and sync with Spotify</source>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="487"/>
+        <source>Create local copy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="503"/>
+        <source>Subscribe to playlist changes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="507"/>
+        <source>Re-enable playlist subscription</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="511"/>
+        <source>Stop subscribing to changes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="489"/>
         <source>Stop syncing with Spotify</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="496"/>
-        <source>Subscribe with Spotify</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="500"/>
-        <source>Re-enable subscribing with Spotify</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="504"/>
-        <source>Stop subscribing with Spotify</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3020,7 +3020,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="225"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="244"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation type="unfinished"/>
     </message>
