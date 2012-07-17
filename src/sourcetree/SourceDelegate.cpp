@@ -90,7 +90,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     if ( type == SourcesModel::Collection )
     {
 //        return QSize( option.rect.width(), 40 );
-        return QSize( option.rect.width(), option.fontMetrics.height() * 2.5 );
+        return QSize( option.rect.width(), option.fontMetrics.height() * 2.6 );
     }
     else if ( type == SourcesModel::Divider )
     {
@@ -100,7 +100,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     else if ( type == SourcesModel::Group )
     {
 //        return QSize( option.rect.width(), 26 );
-        int groupSpacer = index.row() > 0 ? option.fontMetrics.height() / 2 : 0;
+        int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 0.6 : option.fontMetrics.height() * 0.2;
         return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
     }
     else if ( m_expandedMap.contains( index ) )
@@ -167,7 +167,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     figFont.setFamily( "Arial Bold" );
     figFont.setWeight( QFont::Black );
     //figFont.setPixelSize( 10 );
-    figFont.setPixelSize( option.fontMetrics.height() * 0.7 );
+    figFont.setPointSize( 7 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -303,7 +303,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
 
         QFont font = painter->font();
         //font.setPixelSize( 11 );
-        font.setPixelSize( option.fontMetrics.height() * 0.7 );
+        font.setPointSize( 8 );
         font.setBold( true );
         painter->setFont( font );
         QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
@@ -322,7 +322,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 {
     QFont font = painter->font();
 //    font.setPixelSize( 12 );
-    font.setPixelSize( option.fontMetrics.height() * 0.8 );
+    font.setPointSize( 9 );
     font.setBold( true );
     painter->setFont( font );
 
@@ -344,7 +344,8 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        font.setPixelSize( font.pixelSize() - 1 );
+        QFont tmpFont = font;
+        font.setPointSize( font.pointSize() - 1 );
         painter->setFont( font );
         QTextOption to( Qt::AlignBottom | Qt::AlignRight );
 
@@ -353,6 +354,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         painter->drawText( option.rect.translated( -4, 1 ), text, to );
         painter->setPen( QColor( 99, 113, 128 ) );
         painter->drawText( option.rect.translated( -4, 0 ), text, to );
+        painter->setFont( tmpFont );
     }
 }
 
@@ -367,7 +369,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     QFont font = painter->font();
 //    font.setPixelSize( 11 );
-    font.setPixelSize( option.fontMetrics.height() * 0.75 );
+    font.setPointSize( 8 );
     painter->setFont( font );
     o.font = font;
     o3.font = font;
@@ -467,7 +469,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QFont font = painter->font();
 //        font.setPixelSize( 12 );
-        font.setPixelSize( option.fontMetrics.height() * 0.8 );
+        font.setPointSize( 9 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );
