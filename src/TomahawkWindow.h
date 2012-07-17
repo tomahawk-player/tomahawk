@@ -144,6 +144,7 @@ private slots:
 
 #ifdef Q_OS_WIN
     void audioStateChanged( AudioState newState, AudioState oldState );
+    void updateWindowsLoveButton();
 #endif
 
 private:
