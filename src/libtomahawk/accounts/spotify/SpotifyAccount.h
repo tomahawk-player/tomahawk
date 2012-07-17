@@ -166,7 +166,7 @@ private:
     QMap<QString, QVariant > m_qidToExtraData;
 
     // List of synced spotify playlists in config UI
-    QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
+    QHash< QString, SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
