@@ -132,7 +132,7 @@ SpotifyPlaylistUpdater::remove( bool askToDeletePlaylist )
 void
 SpotifyPlaylistUpdater::aboutToDelete()
 {
-    if ( m_sync )
+    if ( m_sync && !m_subscribed )
     {
         if ( QThread::currentThread() != QApplication::instance()->thread() )
             QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "checkDeleteDialog", Qt::BlockingQueuedConnection );
