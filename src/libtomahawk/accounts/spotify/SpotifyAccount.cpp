@@ -547,47 +547,12 @@ SpotifyAccount::subscribeActionTriggered( bool )
         }
     }
 
+    Q_ASSERT( updater );
     if ( !updater )
-    {
-        tLog() << "No SpotifyPlaylistUpdater in payload slot of triggered action! Uh oh!!";
         return;
-    }
 
-    SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( updater->spotifyId(), 0 );
-    
-    // When we unsubscribe, all playlists is resent
-    // and we will could loose the SpotifyPlaylistInfo, but all we really need is the id
-    if ( updater->spotifyId().isEmpty() )
-    {
-        tLog() << "No spotify id in updater, WTF?";
-        return;
-    }
-
-    if ( !info )
-    {
-        info = new SpotifyPlaylistInfo( playlist->title(),
-                                        updater->spotifyId(),
-                                        updater->spotifyId(),
-                                        false,
-                                        false
-                                        );
-
-        registerPlaylistInfo( info );
-    }
-
-    info->subscribed = !updater->subscribed();
-
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "setSubscription";
-    msg[ "subscribe" ] = info->subscribed;
-    msg[ "playlistid" ] = info->plid;
-
-    sendMessage( msg, this );
-
-    updater->setSync( !updater->sync() );
-    updater->setSubscribed( !updater->subscribed() );
-    info->sync = !updater->sync();
-    info->subscribed = !updater->subscribed();
+    // Toggle subscription status
+    setSubscribedForPlaylist( playlist, !updater->subscribed() );
 }
 
 
@@ -658,6 +623,63 @@ SpotifyAccount::syncActionTriggered( bool )
             stopPlaylistSync( info, true );
         }
     }
+}
+
+
+void
+SpotifyAccount::setSubscribedForPlaylist( const playlist_ptr& playlist, bool subscribed )
+{
+    SpotifyPlaylistUpdater* updater = 0;
+    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
+    foreach ( PlaylistUpdaterInterface* u, updaters )
+    {
+        if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( u ) )
+        {
+            updater = spotifyUpdater;
+            break;
+        }
+    }
+
+    if ( !updater )
+    {
+        tLog() << "No SpotifyPlaylistUpdater in payload slot of triggered action! Uh oh!!";
+        return;
+    }
+
+    SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( updater->spotifyId(), 0 );
+
+    // When we unsubscribe, all playlists is resent
+    // and we will could loose the SpotifyPlaylistInfo, but all we really need is the id
+    if ( updater->spotifyId().isEmpty() )
+    {
+        tLog() << "No spotify id in updater, WTF?";
+        return;
+    }
+
+    if ( !info )
+    {
+        info = new SpotifyPlaylistInfo( playlist->title(),
+                                        updater->spotifyId(),
+                                        updater->spotifyId(),
+                                        false,
+                                        false
+                                        );
+
+        registerPlaylistInfo( info );
+    }
+
+    info->subscribed = subscribed;
+    info->sync = subscribed;
+
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "setSubscription";
+    msg[ "subscribe" ] = info->subscribed;
+    msg[ "playlistid" ] = info->plid;
+
+    sendMessage( msg, this );
+
+    updater->setSync( subscribed );
+    updater->setSubscribed( subscribed );
 }
 
 

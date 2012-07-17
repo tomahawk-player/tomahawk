@@ -370,12 +370,13 @@ SpotifyParser::checkBrowseFinished()
                 if ( !m_browseUri.contains( creds.value( "username" ).toString() ) )
                     updater->setCanSubscribe( true );
 
-                updater->setSubscribed( true );
-                updater->setSync( true );
-
                 // Just register the infos
                 Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false );
                 Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
+
+
+                Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
+
             }
             return;
         }
