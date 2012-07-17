@@ -258,7 +258,6 @@ SpotifyPlaylistUpdater::subscribed() const
 void
 SpotifyPlaylistUpdater::setCanSubscribe( bool canSubscribe )
 {
-
     if ( m_canSubscribe == canSubscribe )
         return;
 

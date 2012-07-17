@@ -315,7 +315,7 @@ SpotifyParser::checkBrowseFinished()
 
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
 
-            if ( Accounts::SpotifyAccount::instance() != 0 )
+            if ( Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn() )
             {
                 SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
                                                     Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
@@ -326,7 +326,7 @@ SpotifyParser::checkBrowseFinished()
                 if ( !m_browseUri.contains( creds.value( "username" ).toString() ) )
                     updater->setCanSubscribe( true );
 
-                updater->setSubscribed( false );
+                updater->setSubscribed( true );
                 updater->setSync( false );
 
                 // Just register the infos

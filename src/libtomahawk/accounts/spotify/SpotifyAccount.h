@@ -153,6 +153,7 @@ private:
 
     void createActions();
     void removeActions();
+    playlist_ptr playlistFromAction( QAction* action ) const;
 
     static SpotifyAccount* s_instance;
 
