@@ -72,9 +72,8 @@ public slots:
     void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
     void tomahawkPlaylistRenamed( const QString&, const QString& );
 
-protected:
     void aboutToDelete();
-
+    
 private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
