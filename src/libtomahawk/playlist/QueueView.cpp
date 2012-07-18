@@ -41,7 +41,10 @@ QueueView::QueueView( AnimatedSplitter* parent )
     TomahawkUtils::unmarginLayout( layout() );
     setContentsMargins( 0, 0, 0, 0 );
 
-    setHiddenSize( QSize( 0, 22 ) );
+    QFont f;
+    f.setPointSize( 10 );
+    QFontMetrics fm( f );
+    setHiddenSize( QSize( 0,  fm.height() * 1.1 ) );
 
     ui->queue->setProxyModel( new QueueProxyModel( ui->queue ) );
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
