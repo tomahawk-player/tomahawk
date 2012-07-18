@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>774</width>
-    <height>80</height>
+    <height>72</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -28,9 +28,6 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
      <item>
       <widget class="QLabel" name="imageLabel">
        <property name="minimumSize">
@@ -59,16 +56,13 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
        <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
         <widget class="ElidedLabel" name="captionLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -81,7 +75,7 @@
        <item>
         <widget class="ElidedLabel" name="descriptionLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -104,16 +98,13 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>16</width>
-         <height>20</height>
+         <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMaximumSize</enum>
-       </property>
        <item>
         <widget class="ElidedLabel" name="longDescriptionLabel">
          <property name="sizePolicy">
