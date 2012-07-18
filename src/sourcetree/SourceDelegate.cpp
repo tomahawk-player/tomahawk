@@ -166,7 +166,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QFont figFont = bold;
     figFont.setFamily( "Arial Bold" );
     figFont.setWeight( QFont::Black );
-    //figFont.setPixelSize( 10 );
     figFont.setPointSize( 8 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
@@ -302,7 +301,6 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
             text = tr( "Hide" );
 
         QFont font = painter->font();
-        //font.setPixelSize( 11 );
         font.setPointSize( 9 );
         font.setBold( true );
         painter->setFont( font );
@@ -321,7 +319,6 @@ void
 SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QFont font = painter->font();
-//    font.setPixelSize( 12 );
     font.setPointSize( 10 );
     font.setBold( true );
     painter->setFont( font );
@@ -368,7 +365,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->save();
 
     QFont font = painter->font();
-//    font.setPixelSize( 11 );
     font.setPointSize( 9 );
     painter->setFont( font );
     o.font = font;
@@ -468,7 +464,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         painter->setPen( pen );
 
         QFont font = painter->font();
-//        font.setPixelSize( 12 );
+
         font.setPointSize( 10 );
         painter->setFont( font );
         QFont fontBold = painter->font();

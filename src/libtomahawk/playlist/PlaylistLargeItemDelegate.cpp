@@ -205,20 +205,22 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             painter->drawPixmap( avatarRect, avatar );
 
         QFont boldFont = opt.font;
-        boldFont.setPixelSize( 15 );
+        boldFont.setPointSize( 12 );
         boldFont.setWeight( 99 );
+        QFontMetrics boldFontMetrics( boldFont );
 
         QFont smallBoldFont = opt.font;
-        smallBoldFont.setPixelSize( 12 );
+        smallBoldFont.setPointSize( 9 );
         smallBoldFont.setBold( true );
         smallBoldFont.setWeight( 60 );
+        QFontMetrics smallBoldFontMetrics( smallBoldFont );
 
         QFont smallFont = opt.font;
-        smallFont.setPixelSize( 10 );
+        smallFont.setPointSize( 8 );
 
         r.adjust( pixmapRect.width() + 12, 1, -28 - avatar.width(), 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
-        QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
+        QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
@@ -226,7 +228,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setFont( smallBoldFont );
         text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
-        painter->drawText( leftRect.adjusted( 0, 19, 0, 0 ), text, m_topOption );
+        painter->drawText( leftRect.adjusted( 0, boldFontMetrics.height(), 0, 0 ), text, m_topOption );
 
         painter->setFont( smallFont );
         painter->setPen( Qt::gray );

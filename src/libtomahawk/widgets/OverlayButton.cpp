@@ -81,7 +81,7 @@ OverlayButton::setText( const QString& text )
     m_text = text;
 
     QFont f( font() );
-    f.setPixelSize( FONT_SIZE );
+    f.setPointSize( FONT_SIZE );
     f.setBold( true );
 
     QFontMetrics fm( f );

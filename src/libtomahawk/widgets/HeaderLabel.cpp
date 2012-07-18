@@ -26,7 +26,7 @@
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 
-static const int s_defaultFontSize = 12;
+static const int s_defaultFontSize = 10;
 
 
 HeaderLabel::HeaderLabel( QWidget* parent )
@@ -37,10 +37,11 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( s_defaultFontSize );
+    f.setPointSize( s_defaultFontSize );
+    QFontMetrics fm( f );
 
     setFont( f );
-    setFixedHeight( TomahawkUtils::headerHeight() );
+    setFixedHeight( fm.height() * 1.2 );
     setMouseTracking( true );
 }
 
