@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -731,8 +732,10 @@ SpotifyPlaylistUpdater::variantToQueries( const QVariantList& list )
             continue;
 
         if ( trackMap.contains( "id" ) )
+        {
+            q->setResultHint( trackMap.value( "id" ).toString()  );
             q->setProperty( "annotation", trackMap.value( "id" ) );
-
+        }
         queries << q;
     }
 
