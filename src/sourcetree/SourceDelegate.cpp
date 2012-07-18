@@ -167,7 +167,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     figFont.setFamily( "Arial Bold" );
     figFont.setWeight( QFont::Black );
     //figFont.setPixelSize( 10 );
-    figFont.setPointSize( 7 );
+    figFont.setPointSize( 8 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -303,7 +303,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
 
         QFont font = painter->font();
         //font.setPixelSize( 11 );
-        font.setPointSize( 8 );
+        font.setPointSize( 9 );
         font.setBold( true );
         painter->setFont( font );
         QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
@@ -322,7 +322,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 {
     QFont font = painter->font();
 //    font.setPixelSize( 12 );
-    font.setPointSize( 9 );
+    font.setPointSize( 10 );
     font.setBold( true );
     painter->setFont( font );
 
@@ -369,7 +369,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     QFont font = painter->font();
 //    font.setPixelSize( 11 );
-    font.setPointSize( 8 );
+    font.setPointSize( 9 );
     painter->setFont( font );
     o.font = font;
     o3.font = font;
@@ -469,7 +469,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QFont font = painter->font();
 //        font.setPixelSize( 12 );
-        font.setPointSize( 9 );
+        font.setPointSize( 10 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );

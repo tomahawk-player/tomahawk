@@ -192,9 +192,9 @@ PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
     int height = 2 * 6; // margins
     QFont font = option.font;
     QFontMetrics fm1( font );
-    font.setPointSize( 8 );
-    height += fm1.height() * 3;
     font.setPointSize( 9 );
+    height += fm1.height() * 3;
+    font.setPointSize( 12 );
     QFontMetrics fm2( font );
     height += fm2.height();
 
@@ -221,17 +221,15 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-    font.setPointSize( 8 );
-    QFontMetrics fontMetrics( font );
+    font.setPointSize( 9 );
 
     QFont boldFont = font;
     boldFont.setBold( true );
-    boldFont.setPointSize( 9 );
+    boldFont.setPointSize( 10 );
     QFontMetrics boldFontMetrics( boldFont );
 
     QFont figFont = boldFont;
-    figFont.setPointSize( 8 );
-    QFontMetrics figFontMetrics( figFont );
+    figFont.setPointSize( 9 );
 
     QPixmap icon;
     RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
