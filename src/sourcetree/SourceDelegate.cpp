@@ -464,7 +464,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QFont font = painter->font();
 
-        font.setPointSize( 10 );
+        font.setPointSize( 8 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );

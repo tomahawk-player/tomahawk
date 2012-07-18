@@ -74,6 +74,12 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->tracksView->setPlaylistModel( m_tracksModel );
     m_tracksModel->setSource( source_ptr() );
 
+    QFont f;
+    f.setPointSize( 11 );
+    f.setBold( true );
+    QFontMetrics fm( f );
+    ui->tracksView->setMinimumWidth( fm.width( tr("Recently played tracks") ) );
+
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setPlayableModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );

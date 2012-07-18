@@ -72,14 +72,7 @@
         </widget>
        </item>
        <item>
-        <widget class="PlaylistView" name="tracksView">
-         <property name="minimumSize">
-          <size>
-           <width>320</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="PlaylistView" name="tracksView"/>
        </item>
       </layout>
      </widget>
