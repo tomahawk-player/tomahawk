@@ -99,7 +99,6 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     }
     else if ( type == SourcesModel::Group )
     {
-//        return QSize( option.rect.width(), 26 );
         int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 0.6 : option.fontMetrics.height() * 0.2;
         return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
     }
@@ -108,8 +107,8 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
         if ( !m_expandedMap.value( index )->initialized() )
         {
             int dropTypes = dropTypeCount( item );
-            QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
-            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 56 );
+            QSize originalSize = QSize( option.rect.width(), option.fontMetrics.height() * 1.2 );
+            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 38 + option.fontMetrics.height() * 1.2 );
             m_expandedMap.value( index )->initialize( originalSize, targetSize, 300 );
             m_expandedMap.value( index )->expand();
         }
