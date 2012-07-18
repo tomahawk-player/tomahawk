@@ -85,7 +85,6 @@ ContextWidget::ContextWidget( QWidget* parent )
     ui->toggleButton->setPalette( whitePal );
 
     QFont boldFont = ui->toggleButton->font();
-    //boldFont.setPixelSize( 12 );
     boldFont.setPointSize( 10 );
     boldFont.setBold( true );
     ui->toggleButton->setFont( boldFont );

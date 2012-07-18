@@ -52,7 +52,6 @@ InfoBar::InfoBar( QWidget* parent )
     requiredHeight += 8; // Top + bottom margins
 
     QFont boldFont = ui->captionLabel->font();
-    //boldFont.setPixelSize( 18 );
     boldFont.setPointSize( 16 );
     boldFont.setBold( true );
     ui->captionLabel->setFont( boldFont );
