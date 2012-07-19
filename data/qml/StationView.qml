@@ -1,5 +1,6 @@
 import QtQuick 1.1
 import tomahawk 1.0
+import "tomahawkimports"
 
 Item {
     id: root
@@ -84,14 +85,14 @@ Item {
             anchors { left: parent.left; top: parent.top; right: parent.right }
             Text {
                 color: "white"
-                font.pixelSize: 16
+                font.pointSize: 12
                 width: parent.width
                 elide: Text.ElideRight
                 text: "Station:"
             }
             Text {
                 color: "white"
-                font.pixelSize: 24
+                font.pointSize: 14
                 font.bold: true
                 width: parent.width
                 elide: Text.ElideRight
@@ -108,16 +109,16 @@ Item {
 
             Text {
                 color: "white"
-                font.pixelSize: 16
+                font.pointSize: 12
                 width: parent.width
                 elide: Text.ElideRight
                 text: "Now Playing:"
                 visible: currentlyPlayedIndex !== -1
             }
             Rectangle {
-                height: 64
-                width: parent.width
-                radius: 32
+                height: image.height + image.height / 5
+                width: image.width + startPlayingText.width * 1.2
+                radius: height / 2
                 border.width: 2
                 border.color: "white"
                 color: startPlayingMouseArea.containsMouse ? "blue" : "gray"
@@ -131,12 +132,13 @@ Item {
                 }
 
                 Text {
+                    id: startPlayingText
                     color: "white"
-                    font.pixelSize: 24
+                    font.pointSize: 20
                     anchors.left: image.right
-                    anchors.margins: 10
+                    anchors.margins: height / 5
                     anchors.verticalCenter: parent.verticalCenter
-                    width: parent.width - 30 - image.width
+                    //width: parent.width - 30 - image.width
                     elide: Text.ElideRight
                     text: "Start playing"
                 }
@@ -150,21 +152,21 @@ Item {
 
             Text {
                 color: "white"
-                font.pixelSize: 24
+                font.pointSize: 16
                 width: parent.width
                 elide: Text.ElideRight
                 text: coverView.model.itemFromIndex( currentlyPlayedIndex ).name
             }
             Text {
                 color: "white"
-                font.pixelSize: 20
+                font.pointSize: 14
                 width: parent.width
                 elide: Text.ElideRight
                 text: coverView.model.itemFromIndex( currentlyPlayedIndex ).artistName
             }
             Text {
                 color: "white"
-                font.pixelSize: 20
+                font.pointSize: 14
                 width: parent.width
                 elide: Text.ElideRight
                 text: coverView.model.itemFromIndex( currentlyPlayedIndex ).albumName
@@ -172,29 +174,13 @@ Item {
         }
     }
 
-    Rectangle {
+    Button {
         id: configureButton
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "gray"
-        height: 20
-        width: 150
-        radius: 10
-        //opacity: 0
-
-        Text {
-            anchors.centerIn: parent
-            text: "configure"
-            color: "white"
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                root.configure();
-            }
-        }
+        text: "configure"
+        onClicked: root.configure();
     }
 
 }

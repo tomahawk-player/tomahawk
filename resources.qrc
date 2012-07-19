@@ -152,5 +152,8 @@
         <file>data/qml/TagCloud.qml</file>
         <file>data/qml/StationConfig.qml</file>
         <file>data/qml/StationView.qml</file>
+        <file>data/qml/tomahawkimports/InputField.qml</file>
+        <file>data/qml/tomahawkimports/Button.qml</file>
+        <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
     </qresource>
 </RCC>
