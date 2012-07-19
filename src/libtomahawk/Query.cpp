@@ -39,9 +39,6 @@
 
 using namespace Tomahawk;
 
-QHash< QString, query_ptr > Query::s_queriesByUniqueId = QHash< QString, query_ptr >();
-static QMutex s_mutex;
-
 
 SocialAction::SocialAction() {}
 SocialAction::~SocialAction() {}
@@ -97,9 +94,6 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
 
-    QMutexLocker lock( &s_mutex );
-    s_queriesByUniqueId[ qid ] = q;
-
     return q;
 }
 
@@ -115,22 +109,7 @@ Query::get( const QString& query, const QID& qid )
     if ( !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
 
-    QMutexLocker lock( &s_mutex );
-    s_queriesByUniqueId[ qid ] = q;
-
     return q;
-}
-
-
-query_ptr
-Query::getByUniqueId( const QString& qid )
-{
-    QMutexLocker lock( &s_mutex );
-
-    if ( s_queriesByUniqueId.contains( qid ) )
-        return s_queriesByUniqueId.value( qid );
-
-    return query_ptr();
 }
 
 
@@ -171,9 +150,6 @@ Query::Query( const QString& query, const QID& qid )
 Query::~Query()
 {
     QMutexLocker lock( &m_mutex );
-    QMutexLocker slock( &s_mutex );
-
-    s_queriesByUniqueId.remove( id() );
 
     m_ownRef.clear();
     m_results.clear();
@@ -371,6 +347,19 @@ Query::id() const
     }
 
     return m_qid;
+}
+
+
+QString
+Query::coverId() const
+{
+    if ( m_albumPtr->coverLoaded() )
+    {
+        if ( !m_albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+            return m_albumPtr->coverId();
+
+        return m_artistPtr->uniqueId();
+    }
 }
 
 

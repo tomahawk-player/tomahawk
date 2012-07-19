@@ -69,7 +69,8 @@ public:
         FilesizeRole,
         OriginRole,
         ScoreRole,
-        NameRole
+        NameRole,
+        CoverIDRole = Qt::UserRole + 100
     };
 
 

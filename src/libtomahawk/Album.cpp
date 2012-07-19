@@ -35,7 +35,7 @@ using namespace Tomahawk;
 
 QHash< QString, album_ptr > Album::s_albumsByName = QHash< QString, album_ptr >();
 QHash< unsigned int, album_ptr > Album::s_albumsById = QHash< unsigned int, album_ptr >();
-QHash< QString, album_ptr > Album::s_albumsByUniqueId = QHash< QString, album_ptr >();
+QHash< QString, album_ptr > Album::s_albumsByCoverId = QHash< QString, album_ptr >();
 
 static QMutex s_mutex;
 static QReadWriteLock s_idMutex;
@@ -52,7 +52,7 @@ Album::~Album()
 {
     QMutexLocker lock( &s_mutex );
     s_albumsByName.remove( albumCacheKey( artist(), name() ) );
-    s_albumsByUniqueId.remove( uniqueId() );
+    s_albumsByCoverId.remove( coverId() );
 /*    if ( id() > 0 )
         s_albumsById.remove( id() );*/
 
@@ -83,7 +83,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
 
-    s_albumsByUniqueId[ album->uniqueId() ] = album;
+    s_albumsByCoverId[ album->coverId() ] = album;
     s_albumsByName[ key ] = album;
 
     return album;
@@ -104,7 +104,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
-    s_albumsByUniqueId[ a->uniqueId() ] = a;
+    s_albumsByCoverId[ a->coverId() ] = a;
     s_albumsByName[ albumCacheKey( artist, name ) ] = a;
     if ( id > 0 )
         s_albumsById.insert( id, a );
@@ -114,12 +114,12 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
 
 album_ptr
-Album::getByUniqueId( const QString& uuid )
+Album::getByCoverId( const QString& uuid )
 {
     QMutexLocker lock( &s_mutex );
 
-    if ( s_albumsByUniqueId.contains( uuid ) )
-        return s_albumsByUniqueId.value( uuid );
+    if ( s_albumsByCoverId.contains( uuid ) )
+        return s_albumsByCoverId.value( uuid );
 
     return album_ptr();
 }
@@ -295,6 +295,9 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
         }
 
         m_coverLoaded = true;
+        s_albumsByCoverId.remove( coverId() );
+        m_coverId = uuid();
+        s_albumsByCoverId[ m_coverId ] = m_ownRef.toStrongRef();
         emit coverChanged();
     }
 }
@@ -350,4 +353,14 @@ Album::uniqueId() const
         m_uuid = uuid();
 
     return m_uuid;
+}
+
+
+QString
+Album::coverId() const
+{
+    if ( m_coverId.isEmpty() )
+        m_coverId = uuid();
+
+    return m_coverId;
 }

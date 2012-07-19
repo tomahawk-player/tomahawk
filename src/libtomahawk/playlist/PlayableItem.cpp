@@ -94,8 +94,8 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     connect( query.data(), SIGNAL( resultsChanged() ),
                              SLOT( onResultsChanged() ) );
 
-    connect( query->displayQuery().data(), SIGNAL( coverChanged() ),
-                           SIGNAL( coverChanged() ) );
+    connect( query->displayQuery().data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ) );
+    connect( query->displayQuery().data(), SIGNAL( coverChanged() ), SIGNAL( dataChanged() ) );
 }
 
 
@@ -163,6 +163,7 @@ PlayableItem::onResultsChanged()
 
     emit dataChanged();
 }
+
 
 QString
 PlayableItem::name() const
