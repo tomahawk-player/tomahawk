@@ -360,6 +360,7 @@ Query::coverId() const
 
         return m_artistPtr->uniqueId();
     }
+    return QString();
 }
 
 
