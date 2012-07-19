@@ -14,7 +14,7 @@ class EchonestStation: public QObject
     Q_PROPERTY( Tomahawk::DynamicControl* mainControl READ mainControl )
 
 public:
-    EchonestStation( PlayableProxyModel *model, geninterface_ptr generator, QObject *parent = 0);
+    EchonestStation( PlayableProxyModel *model, dynplaylist_ptr playlist, QObject *parent = 0);
 
     QString name() const;
     void setName( const QString &name );
@@ -34,7 +34,7 @@ signals:
 private:
     QString m_name;
     PlayableProxyModel *m_model;
-    geninterface_ptr m_generator;
+    dynplaylist_ptr m_playlist;
 };
 }
 

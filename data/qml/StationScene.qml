@@ -28,7 +28,7 @@ Rectangle {
         }
 
         StationView {
-            coverSize: 250
+            coverSize: Math.min(scene.height, scene.width) / 2
             height: scene.height
             width: scene.width
 

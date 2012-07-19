@@ -71,7 +71,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     ControlModel *controls = new ControlModel(m_playlist->generator(), this);
 
-    EchonestStation *station = new EchonestStation( m_proxyModel, m_playlist->generator(), this);
+    EchonestStation *station = new EchonestStation( m_proxyModel, m_playlist, this);
     rootContext()->setContextProperty( "echonestStation", station);
     rootContext()->setContextProperty( "controlModel", controls );
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
@@ -134,7 +134,6 @@ DynamicQmlWidget::jumpToCurrentTrack()
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
 {
     rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
-    m_playlist->generator()->fetchNext();
 }
 
 void
@@ -143,9 +142,6 @@ DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
     qDebug() << queries.count() << "tracks generated";
     m_model->tracksGenerated( queries, queries.count() );
     m_playlist->resolve();
-
-    // Ok... we have some intial stuff, switch to dynamic mode
-    //m_model->startOnDemand();
 }
 
 void DynamicQmlWidget::nextTrackGenerated(const query_ptr &track)
