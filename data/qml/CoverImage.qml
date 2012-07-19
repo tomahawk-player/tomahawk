@@ -13,6 +13,8 @@ Item {
     property string trackName
     property string artworkId
 
+    onArtworkIdChanged: print("!*!*!*!*!* artworkId", artworkId)
+
     // The border color for the cover image
     property color borderColor: "black"
     // The border width for the cover image
@@ -117,7 +119,7 @@ Item {
         opacity: 1 - itemBrightness + (mouseArea.containsMouse ? .2 : 0)
 
         Behavior on opacity {
-            NumberAnimation { easing: Easing.Linear; duration: 300 }
+            NumberAnimation { easing.type: Easing.Linear; duration: 300 }
         }
     }
 
