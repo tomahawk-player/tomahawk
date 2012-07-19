@@ -70,7 +70,7 @@ public:
         OriginRole,
         ScoreRole,
         NameRole,
-        CoverIDRole = Qt::UserRole + 100
+        CoverIDRole
     };
 
 
