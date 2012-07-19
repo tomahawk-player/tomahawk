@@ -59,13 +59,21 @@ private slots:
     void error( const QString& title, const QString& body);
 
     void onRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
+    void playlistChanged( Tomahawk::playlistinterface_ptr pl );
 
     void resolvingFinished( bool hasResults );
+
+    void trackStarted();
+    void startStation();
+    void stopStation( bool stopPlaying );
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
 
     dynplaylist_ptr m_playlist;
+
+    bool m_runningOnDemand;
+    bool m_activePlaylist;
 };
 
 }
