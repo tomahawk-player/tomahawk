@@ -45,6 +45,9 @@ VERSION=$1
     header "Creating DMG"
     cd ..
 
+    header "Signing bundle"
+    codesign -s "Developer ID Application: Leonardo Franchi" -f -v ./Tomahawk.app
+
     $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
     mv Tomahawk.dmg Tomahawk-$VERSION.dmg
     
