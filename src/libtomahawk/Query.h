@@ -85,7 +85,6 @@ public:
 
     static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
-    static query_ptr getByUniqueId( const QString& qid );
 
     virtual ~Query();
 
@@ -96,6 +95,7 @@ public:
     unsigned int numResults() const;
 
     QID id() const;
+    QString coverId() const;
 
     /// sorter for list of results
     static bool resultSorter( const result_ptr& left, const result_ptr& right );
@@ -277,8 +277,6 @@ private:
     QStringList m_lyrics;
 
     mutable int m_infoJobs;
-
-    static QHash< QString, query_ptr > s_queriesByUniqueId;
 };
 
 }; //ns

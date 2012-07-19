@@ -44,9 +44,10 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     , m_loading( loading )
 {
     QHash<int, QByteArray> roleNames;
-    roleNames.insert(ArtistRole, "artistName");
-    roleNames.insert(TrackRole, "trackName");
-    setRoleNames(roleNames);
+    roleNames.insert( ArtistRole, "artistName" );
+    roleNames.insert( TrackRole, "trackName" );
+    roleNames.insert( CoverIDRole, "coverID" );
+    setRoleNames( roleNames );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
@@ -165,6 +166,12 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
     if ( role == Qt::SizeHintRole )
         return QSize( 0, 18 );
 
+    if ( role == CoverIDRole )
+    {
+        tDebug() << "Cover role for:" << query->toString();
+        return query->displayQuery()->id();
+    }
+
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -265,7 +272,7 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     }
 
     int column = index.column();
-    if ( role >= Qt::UserRole )
+    if ( role < CoverIDRole && role >= Qt::UserRole )
     {
         // Map user-role to column
         column = role - Qt::UserRole;

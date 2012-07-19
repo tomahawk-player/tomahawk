@@ -47,7 +47,7 @@ Q_OBJECT
 public:
     static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
-    static album_ptr getByUniqueId( const QString& uuid );
+    static album_ptr getByCoverId( const QString& uuid );
 
     Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
     Album( const QString& name, const Tomahawk::artist_ptr& artist );
@@ -57,6 +57,7 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
     QString uniqueId() const;
+    QString coverId() const;
 
     artist_ptr artist() const;
 #ifndef ENABLE_HEADLESS
@@ -98,6 +99,7 @@ private:
     bool m_coverLoaded;
     mutable bool m_coverLoading;
     mutable QString m_uuid;
+    mutable QString m_coverId;
 
 #ifndef ENABLE_HEADLESS
     mutable QPixmap* m_cover;
@@ -110,7 +112,7 @@ private:
 
     static QHash< QString, album_ptr > s_albumsByName;
     static QHash< unsigned int, album_ptr > s_albumsById;
-    static QHash< QString, album_ptr > s_albumsByUniqueId;
+    static QHash< QString, album_ptr > s_albumsByCoverId;
 
     friend class ::IdThreadWorker;
 };

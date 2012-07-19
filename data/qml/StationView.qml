@@ -30,7 +30,7 @@ Item {
             showLabels: false
             //artistName: model.artistName
             //trackName: model.trackName
-            artworkId: index
+            artworkId: model.coverID
 
             scale: PathView.itemScale
             itemBrightness: PathView.itemBrightness

@@ -3,6 +3,7 @@
 #include "playlist/PlayableProxyModel.h"
 #include "Query.h"
 #include "Album.h"
+#include "Artist.h"
 
 #include <QDeclarativeImageProvider>
 #include <QModelIndex>
@@ -40,10 +41,19 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
 //        }
 //    }
 
-    album_ptr album = Album::getByUniqueId(id);
+    tDebug() << "Getting by id:" << id;
+    album_ptr album = Album::getByCoverId(id);
     if ( !album.isNull() ) {
         return album->cover(requestedSize);
     }
+    artist_ptr artist = Artist::getByUniqueId(id);
+    if ( !artist.isNull() ) {
+        return artist->cover(requestedSize);
+    }
+/*    query_ptr query = Query::getByCoverId(id);
+    if ( !query.isNull() ) {
+        return query->cover(requestedSize);
+    }*/
 
     // TODO: create default cover art image
     QPixmap pixmap( *size );
