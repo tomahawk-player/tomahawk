@@ -236,7 +236,7 @@ SpotifyParser::spotifyBrowseFinished()
                     continue;
 
                 tLog() << "Setting resulthint to " << trackResult.value( "trackuri" );
-                q->setResultHint( trackResult.value("trackuri").toString() );
+                q->setResultHint( trackResult.value( "trackuri" ).toString() );
 
                 m_tracks << q;
             }
@@ -302,8 +302,8 @@ SpotifyParser::spotifyTrackLookupFinished()
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
         if ( !q.isNull() )
         {
-            tLog() << "Setting resulthint to " << t.value( "trackuri" );
-            q->setResultHint( t.value("trackuri").toString() );
+            q->setResultHint( t.value( "trackuri" ).toString() );
+            
             m_tracks << q;
         }
     }
