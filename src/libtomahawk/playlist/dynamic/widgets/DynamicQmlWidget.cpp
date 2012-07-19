@@ -10,6 +10,7 @@
 #include "PlayableItem.h"
 #include "Source.h"
 #include "widgets/DeclarativeCoverArtProvider.h"
+#include "audio/AudioEngine.h"
 
 #include <QUrl>
 #include <qdeclarative.h>
@@ -23,6 +24,8 @@ namespace Tomahawk
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
     : QDeclarativeView( parent )
     , m_playlist( playlist )
+    , m_runningOnDemand( false )
+    , m_activePlaylist( false )
 {
 
 
@@ -39,11 +42,12 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider( m_proxyModel ) );
 
     m_model->loadPlaylist( m_playlist );
-    m_model->startOnDemand();
+//    m_model->changeStation();
+//    m_model->startOnDemand();
 
     // Initially seed the playlist
-    playlist->generator()->fetchNext();
-//    m_playlist->generator()->generate( 20 );
+//    playlist->generator()->fetchNext();
+    m_playlist->generator()->generate( 20 );
 
     qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
 
@@ -81,6 +85,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     connect( m_playlist->generator().data(), SIGNAL( error( QString, QString )), SLOT( error(QString,QString) ) );
+
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
 }
 
@@ -172,5 +179,48 @@ void DynamicQmlWidget::resolvingFinished(bool hasResults)
         m_playlist->generator()->fetchNext();
     }
 }
+
+void DynamicQmlWidget::trackStarted()
+{
+    if ( m_activePlaylist && !m_playlist.isNull() &&
+        m_playlist->mode() == OnDemand && !m_runningOnDemand )
+    {
+
+        startStation();
+    }
+}
+
+void
+DynamicQmlWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
+{
+    if ( pl == m_proxyModel->playlistInterface() ) // same playlist
+        m_activePlaylist = true;
+    else
+    {
+        m_activePlaylist = false;
+
+        // user started playing something somewhere else, so give it a rest
+        if ( m_runningOnDemand )
+        {
+            stopStation( false );
+        }
+    }
+}
+
+void
+DynamicQmlWidget::stopStation( bool stopPlaying )
+{
+    m_model->stopOnDemand( stopPlaying );
+    m_runningOnDemand = false;
+
+}
+
+void
+DynamicQmlWidget::startStation()
+{
+    m_runningOnDemand = true;
+    m_model->startOnDemand();
+}
+
 
 }
