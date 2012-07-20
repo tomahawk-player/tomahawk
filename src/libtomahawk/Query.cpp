@@ -83,7 +83,10 @@ query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
     if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
+    {
+        Q_ASSERT( false );
         return query_ptr();
+    }
 
     if ( qid.isEmpty() )
         autoResolve = false;
