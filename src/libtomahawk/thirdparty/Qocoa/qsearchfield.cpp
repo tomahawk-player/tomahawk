@@ -139,4 +139,10 @@ void QSearchField::setFocus(Qt::FocusReason reason)
 }
 
 
+void QSearchField::resizeEvent(QResizeEvent* e)
+{
+    QWidget::resizeEvent(e);
+}
+
+
 #include "qsearchfield.moc"

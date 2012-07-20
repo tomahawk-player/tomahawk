@@ -32,6 +32,9 @@ signals:
     void editingFinished();
     void returnPressed();
 
+protected:
+    void resizeEvent(QResizeEvent*);
+
 private:
     friend class QSearchFieldPrivate;
     QPointer <QSearchFieldPrivate> pimpl;
