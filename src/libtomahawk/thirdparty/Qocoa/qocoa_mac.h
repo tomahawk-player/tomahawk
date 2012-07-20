@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 static inline NSString* fromQString(const QString &string)
 {
-    char* cString = string.toUtf8().data();
+    const QByteArray utf8 = string.toUtf8();
+    const char* cString = utf8.constData();
     return [[NSString alloc] initWithUTF8String:cString];
 }
 
@@ -41,11 +42,17 @@ static inline QString toQString(NSString *string)
     return QString::fromUtf8([string UTF8String]);
 }
 
-static inline void zeroLayout(void *cocoaView, QWidget *parent)
+static inline NSImage* fromQPixmap(const QPixmap &pixmap)
 {
+    CGImageRef cgImage = pixmap.toMacCGImageRef();
+    return [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
+}
+
+static inline void setupLayout(void *cocoaView, QWidget *parent)
+{
+    parent->setAttribute(Qt::WA_NativeWindow);
     QVBoxLayout *layout = new QVBoxLayout(parent);
     layout->setMargin(0);
-    parent->setAttribute(Qt::WA_NativeWindow);
     layout->addWidget(new QMacCocoaViewContainer(cocoaView, parent));
 }
 
