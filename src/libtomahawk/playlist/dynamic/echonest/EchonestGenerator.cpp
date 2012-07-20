@@ -134,6 +134,13 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 
 EchonestGenerator::~EchonestGenerator()
 {
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
     delete m_dynPlaylist;
 }
 
@@ -194,6 +201,13 @@ EchonestGenerator::generate( int number )
 void
 EchonestGenerator::startOnDemand()
 {
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
     connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
     try {
         getParams();
@@ -225,7 +239,7 @@ EchonestGenerator::doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistPar
 {
     disconnect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
 
-    QNetworkReply* reply = m_dynPlaylist->start( params );
+    QNetworkReply* reply = m_dynPlaylist->create( params );
     qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
 }
@@ -240,14 +254,15 @@ EchonestGenerator::fetchNext( int rating )
         return;
     }
 
-    QNetworkReply* reply;
-    if( m_steeredSinceLastTrack ) {
-        qDebug() << "Steering dynamic playlist!" << m_steerData.first << m_steerData.second;
-        reply = m_dynPlaylist->fetchNextSong( Echonest::DynamicPlaylist::DynamicControls() << m_steerData );
-        m_steeredSinceLastTrack = false;
-    } else {
-        reply = m_dynPlaylist->fetchNextSong( rating );
+    if ( rating > -1 )
+    {
+        Echonest::DynamicPlaylist::DynamicFeedback feedback;
+        feedback.append( Echonest::DynamicPlaylist::DynamicFeedbackParamData( Echonest::DynamicPlaylist::RateSong, QString( "last^%1").arg( rating * 2 ).toUtf8() ) );
+        QNetworkReply* reply = m_dynPlaylist->feedback( feedback );
+        connect( reply, SIGNAL( finished() ), reply, SLOT( deleteLater() ) ); // we don't care about the result, just send it off
     }
+
+    QNetworkReply* reply = m_dynPlaylist->next( 1, 0 );
     qDebug() << "getting next song from echonest" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( dynamicFetched() ) );
 }
@@ -369,9 +384,8 @@ EchonestGenerator::dynamicStarted()
 
     try
     {
-        Echonest::Song song = m_dynPlaylist->parseStart( reply );
-        query_ptr songQuery = queryFromSong( song );
-        emit nextTrackGenerated( songQuery );
+        m_dynPlaylist->parseCreate( reply );
+        fetchNext();
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "libechonest threw an error parsing the start of the dynamic playlist:" << e.errorType() << e.what();
         emit error( "The Echo Nest returned an error starting the station", e.what() );
@@ -386,12 +400,18 @@ EchonestGenerator::dynamicFetched()
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
 
-    resetSteering();
-
     try
     {
-        Echonest::Song song = m_dynPlaylist->parseNextSong( reply );
-        query_ptr songQuery = queryFromSong( song );
+        Echonest::DynamicPlaylist::FetchPair fetched = m_dynPlaylist->parseNext( reply );
+
+        if ( fetched.first.size() != 1 )
+        {
+            qWarning() << "Did not get any track when looking up the next song from the echo nest!";
+            emit error( "No more songs from The Echo Nest available in the station", "" );
+            return;
+        }
+
+        query_ptr songQuery = queryFromSong( fetched.first.first() );
         emit nextTrackGenerated( songQuery );
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "libechonest threw an error parsing the next song of the dynamic playlist:" << e.errorType() << e.what();
