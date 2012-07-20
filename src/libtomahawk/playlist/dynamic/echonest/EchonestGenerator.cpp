@@ -121,7 +121,6 @@ CatalogManager::catalogs() const
 EchonestGenerator::EchonestGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
     , m_dynPlaylist( new Echonest::DynamicPlaylist() )
-    , m_steeredSinceLastTrack( false )
 {
     m_type = "echonest";
     m_mode = OnDemand;
@@ -401,33 +400,6 @@ EchonestGenerator::dynamicFetched()
 }
 
 
-void
-EchonestGenerator::steerDescription( const QString& desc )
-{
-    m_steeredSinceLastTrack = true;
-    m_steerData.first = Echonest::DynamicPlaylist::SteerDescription;
-    m_steerData.second = desc;
-}
-
-
-void
-EchonestGenerator::steerField( const QString& field )
-{
-    m_steeredSinceLastTrack = true;
-    m_steerData.first = Echonest::DynamicPlaylist::Steer;
-    m_steerData.second = field;
-}
-
-
-void
-EchonestGenerator::resetSteering()
-{
-    m_steeredSinceLastTrack = false;
-    m_steerData.first = Echonest::DynamicPlaylist::Steer;
-    m_steerData.second = QString();
-}
-
-
 QByteArray
 EchonestGenerator::catalogId(const QString &collectionId)
 {
@@ -504,21 +476,6 @@ EchonestGenerator::queryFromSong( const Echonest::Song& song )
 {
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
     return Query::get( song.artistName(), song.title(), QString(), uuid(), false );
-}
-
-
-QWidget*
-EchonestGenerator::steeringWidget()
-{
-    if( m_steerer.isNull() ) {
-        m_steerer = QWeakPointer< EchonestSteerer >( new EchonestSteerer );
-
-        connect( m_steerer.data(), SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
-        connect( m_steerer.data(), SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
-        connect( m_steerer.data(), SIGNAL( reset() ), this, SLOT( resetSteering() ) );
-    }
-
-    return m_steerer.data();
 }
 
 
