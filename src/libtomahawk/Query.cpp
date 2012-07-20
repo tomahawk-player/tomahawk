@@ -357,8 +357,12 @@ Query::coverId() const
     if ( m_albumPtr->coverLoaded() )
     {
         if ( !m_albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+        {
+            tDebug() << "Returning cover from album:" << m_albumPtr->coverId();
             return m_albumPtr->coverId();
+        }
 
+        tDebug() << "Returning cover from artist:" << m_artistPtr->uniqueId();
         return m_artistPtr->uniqueId();
     }
     return QString();

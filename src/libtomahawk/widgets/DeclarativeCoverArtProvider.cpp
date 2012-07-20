@@ -42,17 +42,21 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
 //    }
 
     tDebug() << "Getting by id:" << id;
-    album_ptr album = Album::getByCoverId(id);
-    if ( !album.isNull() ) {
-        return album->cover(requestedSize);
+    album_ptr album = Album::getByCoverId( id );
+    if ( !album.isNull() )
+    {
+        tDebug() << "Returning album cover:" << album->cover( requestedSize ).isNull();
+        return album->cover( requestedSize );
     }
-    artist_ptr artist = Artist::getByUniqueId(id);
-    if ( !artist.isNull() ) {
-        return artist->cover(requestedSize);
+    artist_ptr artist = Artist::getByUniqueId( id );
+    if ( !artist.isNull() )
+    {
+        tDebug() << "Returning artist cover:" << artist->cover( requestedSize ).isNull();
+        return artist->cover( requestedSize );
     }
-/*    query_ptr query = Query::getByCoverId(id);
+/*    query_ptr query = Query::getByCoverId( id );
     if ( !query.isNull() ) {
-        return query->cover(requestedSize);
+        return query->cover( requestedSize );
     }*/
 
     // TODO: create default cover art image

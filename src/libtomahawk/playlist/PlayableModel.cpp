@@ -169,7 +169,8 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
     if ( role == CoverIDRole )
     {
         tDebug() << "Cover role for:" << query->toString();
-        return query->displayQuery()->id();
+        query->displayQuery()->cover( QSize( 0, 0 ) );
+        return query->displayQuery()->coverId();
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
