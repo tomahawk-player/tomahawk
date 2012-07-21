@@ -20,6 +20,7 @@
 
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
+#include "AlbumInfoWidget_p.h"
 
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"
@@ -61,6 +62,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
 
+    m_playlistInterface = playlistinterface_ptr( new MetaAlbumInfoInterface( this ) );
     load( album );
 }
 
@@ -74,7 +76,7 @@ AlbumInfoWidget::~AlbumInfoWidget()
 Tomahawk::playlistinterface_ptr
 AlbumInfoWidget::playlistInterface() const
 {
-    return ui->tracksView->playlistInterface();
+    return m_playlistInterface;
 }
 
 
@@ -84,6 +86,10 @@ AlbumInfoWidget::isBeingPlayed() const
     //tDebug() << Q_FUNC_INFO << "audioengine playlistInterface = " << AudioEngine::instance()->currentTrackPlaylist()->id();
     //tDebug() << Q_FUNC_INFO << "albumsView playlistInterface = " << ui->albumsView->playlistInterface()->id();
     //tDebug() << Q_FUNC_INFO << "tracksView playlistInterface = " << ui->tracksView->playlistInterface()->id();
+
+    if ( ui->albumsView->isBeingPlayed() )
+        return true;
+
     if ( ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
@@ -91,6 +97,13 @@ AlbumInfoWidget::isBeingPlayed() const
         return true;
 
     return false;
+}
+
+
+bool
+AlbumInfoWidget::jumpToCurrentTrack()
+{
+    return ui->albumsView->jumpToCurrentTrack();
 }
 
 

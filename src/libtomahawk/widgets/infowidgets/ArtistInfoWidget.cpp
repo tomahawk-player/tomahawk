@@ -57,7 +57,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
 
-    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaPlaylistInterface( this ) );
+    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaArtistInfoInterface( this ) );
 
 /*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
@@ -173,6 +173,12 @@ ArtistInfoWidget::playlistInterface() const
 bool
 ArtistInfoWidget::isBeingPlayed() const
 {
+    if ( ui->albums->isBeingPlayed() )
+        return true;
+
+    if ( ui->relatedArtists->isBeingPlayed() )
+        return true;
+
     if ( ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
@@ -196,6 +202,12 @@ ArtistInfoWidget::jumpToCurrentTrack()
         return true;
 
     if ( ui->topHits->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->albums->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->relatedArtists->jumpToCurrentTrack() )
         return true;
 
     return false;
