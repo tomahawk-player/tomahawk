@@ -32,6 +32,8 @@
 
 #include <QReadWriteLock>
 
+#define ID_THREAD_DEBUG 0
+
 using namespace Tomahawk;
 
 QHash< QString, artist_ptr > Artist::s_artistsByName = QHash< QString, artist_ptr >();
@@ -55,6 +57,9 @@ Artist::get( const QString& name, bool autoCreate )
     if ( !Database::instance() || !Database::instance()->impl() )
         return artist_ptr();
 
+#if ID_THREAD_DEBUG
+        qDebug() << "Creating artist:" << name;
+#endif
     artist_ptr artist = artist_ptr( new Artist( name ), &QObject::deleteLater );
     artist->setWeakRef( artist.toWeakRef() );
     artist->loadId( autoCreate );
@@ -274,8 +279,20 @@ Artist::id() const
 
     if ( waiting )
     {
+
+#if ID_THREAD_DEBUG
+        qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
+#endif
+        m_idFuture.waitForFinished();
+#if ID_THREAD_DEBUG
+        qDebug() << "DONE WAITING:" << m_idFuture.resultCount() << m_idFuture.isResultReadyAt(0) << m_idFuture.isCanceled() << m_idFuture.isFinished() << m_idFuture.isPaused() << m_idFuture.isRunning() << m_idFuture.isStarted();
+#endif
         finalid = m_idFuture.result();
 
+#if ID_THREAD_DEBUG
+        qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
+#endif
+        
         s_idMutex.lockForWrite();
         m_id = finalid;
         m_waitingForFuture = false;

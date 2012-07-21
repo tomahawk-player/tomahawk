@@ -609,7 +609,6 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
            m_dropRect = QRect();
            m_dropIndex = QPersistentModelIndex();
 
-           qDebug() << Q_FUNC_INFO << "Accepting Drag Event";
            event->setDropAction( Qt::CopyAction );
            event->acceptProposedAction();
      }

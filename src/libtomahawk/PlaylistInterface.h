@@ -47,6 +47,7 @@ public:
     virtual Tomahawk::result_ptr currentItem() const = 0;
     virtual Tomahawk::result_ptr previousItem();
     virtual bool hasNextItem() { return true; }
+    virtual bool hasPreviousItem() { return true; }
     virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 
@@ -64,6 +65,8 @@ public:
 
     virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
     virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
+
+    virtual bool setCurrentTrack( unsigned int albumpos ) { Q_UNUSED( albumpos ); return false; }
 
     virtual void reset() {}
 

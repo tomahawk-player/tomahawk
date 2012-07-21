@@ -30,6 +30,7 @@
 #include "sourcetree/items/GroupItem.h"
 #include "sourcetree/items/GenericPageItems.h"
 #include "sourcetree/items/HistoryItem.h"
+#include "sourcetree/items/LovedTracksItem.h"
 #include "SourceList.h"
 #include "Playlist.h"
 #include "Collection.h"
@@ -293,9 +294,7 @@ SourcesModel::appendGroups()
     sc->setSortValue( 1 );
 
     // browse section
-    GenericPageItem* loved = new GenericPageItem( this, browse, tr( "Top Loved Tracks" ), QIcon( RESPATH "images/loved_playlist.png" ),
-                                                  boost::bind( &ViewManager::showTopLovedPage, ViewManager::instance() ),
-                                                  boost::bind( &ViewManager::topLovedWidget, ViewManager::instance() ) );
+    LovedTracksItem* loved = new LovedTracksItem( this, browse );
     loved->setSortValue( 2 );
 
     GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),

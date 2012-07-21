@@ -23,7 +23,6 @@
 #include "GenericPageItems.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "playlist/CustomPlaylistView.h"
 #include "TemporaryPageItem.h"
 #include "SourceList.h"
 

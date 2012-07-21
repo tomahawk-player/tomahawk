@@ -47,6 +47,7 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
     virtual bool hasNextItem();
+    virtual bool hasPreviousItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
@@ -54,6 +55,7 @@ public:
 
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
+    virtual bool setCurrentTrack( unsigned int albumpos );
 
 signals:
     void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
@@ -61,6 +63,7 @@ signals:
 private slots:
     void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( const QString& infoId );
 
 private:
     QList< Tomahawk::query_ptr > m_queries;

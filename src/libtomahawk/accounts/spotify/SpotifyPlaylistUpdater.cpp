@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -57,10 +58,14 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     const QString spotifyId = settings.value( "spotifyId" ).toString();
     const QString latestRev = settings.value( "latestrev" ).toString();
     const bool sync         = settings.value( "sync" ).toBool();
+    const bool canSubscribe = settings.value( "canSubscribe" ).toBool();
+    const bool isSubscribed = settings.value( "subscribed" ).toBool();
 
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
+    updater->setCanSubscribe( canSubscribe );
+    updater->setSubscribed( isSubscribed );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -74,6 +79,8 @@ SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const QStr
     , m_spotifyId( spotifyId )
     , m_blockUpdatesForNextRevision( false )
     , m_sync( false )
+    , m_canSubscribe( false )
+    , m_subscribed( false )
 {
     init();
 }
@@ -126,12 +133,18 @@ SpotifyPlaylistUpdater::remove( bool askToDeletePlaylist )
 void
 SpotifyPlaylistUpdater::aboutToDelete()
 {
-    if ( m_sync )
+    if ( QThread::currentThread() != QApplication::instance()->thread() )
+        QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "aboutToDelete", Qt::BlockingQueuedConnection );
+    else
     {
-        if ( QThread::currentThread() != QApplication::instance()->thread() )
-            QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "checkDeleteDialog", Qt::BlockingQueuedConnection );
-        else
-            checkDeleteDialog();
+        if ( m_subscribed )
+        {
+            m_spotify.data()->setSubscribedForPlaylist( playlist(), false );
+        }
+        else if ( m_sync )
+        {
+                checkDeleteDialog();
+        }
     }
 }
 
@@ -177,6 +190,8 @@ SpotifyPlaylistUpdater::saveToSettings()
 
     s[ "latestrev" ] = m_latestRev;
     s[ "sync" ] = m_sync;
+    s[ "canSubscribe" ] = m_canSubscribe;
+    s[ "subscribed" ] = m_subscribed;
     s[ "spotifyId" ] = m_spotifyId;
 
     saveSettings( s );
@@ -225,6 +240,45 @@ bool
 SpotifyPlaylistUpdater::sync() const
 {
     return m_sync;
+}
+
+void
+SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+{
+    if ( m_subscribed == subscribed )
+        return;
+
+    m_subscribed = subscribed;
+    setSync( subscribed );
+    saveToSettings();
+    emit changed();
+}
+
+
+bool
+SpotifyPlaylistUpdater::subscribed() const
+{
+    return m_subscribed;
+}
+
+
+void
+SpotifyPlaylistUpdater::setCanSubscribe( bool canSubscribe )
+{
+    if ( m_canSubscribe == canSubscribe )
+        return;
+
+    m_canSubscribe = canSubscribe;
+
+    saveToSettings();
+    emit changed();
+}
+
+
+bool
+SpotifyPlaylistUpdater::canSubscribe() const
+{
+    return m_canSubscribe;
 }
 
 
@@ -353,6 +407,8 @@ SpotifyPlaylistUpdater::tomahawkPlaylistRenamed(const QString &newT, const QStri
     msg[ "newTitle" ] = newT;
     msg[ "oldTitle" ] = oldT;
     msg[ "playlistid" ] = m_spotifyId;
+
+    // TODO check return value
     m_spotify.data()->sendMessage( msg, this, "onPlaylistRename" );
 }
 
@@ -493,7 +549,7 @@ SpotifyPlaylistUpdater::plentryToVariant( const QList< plentry_ptr >& entries )
 
 
 void
-SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 
@@ -577,7 +633,7 @@ SpotifyPlaylistUpdater::tomahawkTracksRemoved( const QList< query_ptr >& tracks 
 
 
 void
-SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 
@@ -626,7 +682,7 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
 
 
 void
-SpotifyPlaylistUpdater::onTracksMovedReturn( const QString& msgType, const QVariantMap& msg )
+SpotifyPlaylistUpdater::onTracksMovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     const bool success = msg.value( "success" ).toBool();
 
@@ -678,8 +734,10 @@ SpotifyPlaylistUpdater::variantToQueries( const QVariantList& list )
             continue;
 
         if ( trackMap.contains( "id" ) )
+        {
+            q->setResultHint( trackMap.value( "id" ).toString()  );
             q->setProperty( "annotation", trackMap.value( "id" ) );
-
+        }
         queries << q;
     }
 

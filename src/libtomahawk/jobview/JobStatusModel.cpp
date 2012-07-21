@@ -110,7 +110,7 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
-    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
+//    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
     if ( item->concurrentJobLimit() > 0 )
     {
         if ( m_jobTypeCount[ item->type() ] >= item->concurrentJobLimit() )
@@ -123,7 +123,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         m_jobTypeCount[ item->type() ] = currentJobCount;
     }
 
-    tLog() << Q_FUNC_INFO << "new current jobs of item type: " << m_jobTypeCount[ item->type() ];
+//    tLog() << Q_FUNC_INFO << "new current jobs of item type: " << m_jobTypeCount[ item->type() ];
 
     connect( item, SIGNAL( statusChanged() ), SLOT( itemUpdated() ) );
     connect( item, SIGNAL( finished() ), SLOT( itemFinished() ) );
@@ -142,7 +142,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         }
 
     }
-    tLog() << Q_FUNC_INFO << "Adding item:" << item;
+//    tLog() << Q_FUNC_INFO << "Adding item:" << item;
 
     int currentEndRow = m_items.count();
     beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
@@ -151,7 +151,7 @@ JobStatusModel::addJob( JobStatusItem* item )
 
     if ( item->hasCustomDelegate() )
     {
-        tLog() << Q_FUNC_INFO << "job has custom delegate";
+//        tLog() << Q_FUNC_INFO << "job has custom delegate";
         emit customDelegateJobInserted( currentEndRow, item );
     }
 
@@ -221,7 +221,7 @@ JobStatusModel::rowCount( const QModelIndex& parent ) const
 void
 JobStatusModel::itemFinished()
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+//    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
@@ -278,7 +278,7 @@ JobStatusModel::itemFinished()
 
     emit refreshDelegates();
 
-    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
+//    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
     if ( item->concurrentJobLimit() > 0 )
     {
         int currentJobs = m_jobTypeCount[ item->type() ];
@@ -299,7 +299,7 @@ JobStatusModel::itemFinished()
 void
 JobStatusModel::itemUpdated()
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+//    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 

@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,27 +16,53 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QUEUEPROXYMODEL_H
-#define QUEUEPROXYMODEL_H
+#ifndef FLEXIBLEHEADER_H
+#define FLEXIBLEHEADER_H
 
-#include "PlayableProxyModel.h"
+#include <QWidget>
+#include <QTimer>
 
 #include "DllMacro.h"
+#include "Artist.h"
 
-class QMetaData;
-class TrackView;
+class FlexibleView;
 
-class DLLEXPORT QueueProxyModel : public PlayableProxyModel
+namespace Ui
+{
+    class PlaylistHeader;
+}
+
+class DLLEXPORT FlexibleHeader : public QWidget
 {
 Q_OBJECT
 
 public:
-    explicit QueueProxyModel( TrackView* parent = 0 );
-    virtual ~QueueProxyModel();
+    FlexibleHeader( FlexibleView* parent );
+    ~FlexibleHeader();
+
+public slots:
+    void setCaption( const QString& s );
+    void setDescription( const QString& s );
+    void setPixmap( const QPixmap& p );
+
+    void setFilter( const QString& filter );
+
+signals:
+    void filterTextChanged( const QString& filter );
+
+protected:
+    void changeEvent( QEvent* e );
 
 private slots:
-    void onIndexActivated( const QModelIndex& index );
-    void onPlaybackStarted( const Tomahawk::result_ptr& result );
+    void onFilterEdited();
+    void applyFilter();
+
+private:
+    FlexibleView* m_parent;
+    Ui::PlaylistHeader* ui;
+
+    QString m_filter;
+    QTimer m_filterTimer;
 };
 
-#endif // QUEUEPROXYMODEL_H
+#endif

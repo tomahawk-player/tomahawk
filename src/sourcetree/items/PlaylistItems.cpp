@@ -170,6 +170,34 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 PlaylistItem::DropTypes
 PlaylistItem::supportedDropTypes( const QMimeData* data ) const
 {
+    if ( data->hasFormat( "application/tomahawk.mixed" ) )
+    {
+        // If this is mixed but only queries/results, we can still handle them
+        bool mixedQueries = true;
+
+        QByteArray itemData = data->data( "application/tomahawk.mixed" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+        QString mimeType;
+        qlonglong val;
+
+        while ( !stream.atEnd() )
+        {
+            stream >> mimeType;
+            if ( mimeType != "application/tomahawk.query.list" &&
+                 mimeType != "application/tomahawk.result.list" )
+            {
+                mixedQueries = false;
+                break;
+            }
+            stream >> val;
+        }
+
+        if ( mixedQueries )
+            return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        else
+            return DropTypesNone;
+    }
+
     if ( data->hasFormat( "application/tomahawk.query.list" ) )
         return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
     else if ( data->hasFormat( "application/tomahawk.result.list" ) )
@@ -178,10 +206,6 @@ PlaylistItem::supportedDropTypes( const QMimeData* data ) const
         return DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
     else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
         return DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
-    else if ( data->hasFormat( "application/tomahawk.mixed" ) )
-    {
-        return DropTypesNone;
-    }
     else if ( data->hasFormat( "text/plain" ) )
     {
         return DropTypesNone;

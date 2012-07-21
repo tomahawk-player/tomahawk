@@ -28,6 +28,7 @@ class QStackedWidget;
 class GridView;
 class TrackView;
 class PlayableModel;
+class FlexibleHeader;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
@@ -47,23 +48,34 @@ public:
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showFilter() const { return true; }
-    virtual bool setFilter( const QString& filter );
+    virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
+
+    TrackView* trackView() const { return m_trackView; }
+    TrackView* detailedView() const { return m_detailedView; }
+    GridView* gridView() const { return m_gridView; }
 
     void setTrackView( TrackView* view );
     void setDetailedView( TrackView* view );
     void setGridView( GridView* view );
 
+    void setPixmap( const QPixmap& pixmap );
     void setPlayableModel( PlayableModel* model );
+    void setEmptyTip( const QString& tip );
 
 public slots:
     void setCurrentMode( FlexibleViewMode mode );
+    virtual bool setFilter( const QString& pattern );
 
 signals:
     void modeChanged( FlexibleViewMode mode );
 
+private slots:
+
 private:
+    FlexibleHeader* m_header;
+    QPixmap m_pixmap;
+
     TrackView* m_trackView;
     TrackView* m_detailedView;
     GridView* m_gridView;
