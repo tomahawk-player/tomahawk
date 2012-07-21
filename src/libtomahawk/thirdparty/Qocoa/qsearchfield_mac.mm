@@ -30,42 +30,105 @@ THE SOFTWARE.
 #import "Foundation/NSNotification.h"
 #import "AppKit/NSSearchField.h"
 
-class QSearchFieldPrivate
+#include <QApplication>
+#include <QClipboard>
+
+#define KEYCODE_A 0
+#define KEYCODE_X 7
+#define KEYCODE_C 8
+#define KEYCODE_V 9
+
+class QSearchFieldPrivate : public QObject
 {
 public:
     QSearchFieldPrivate(QSearchField *qSearchField, NSSearchField *nsSearchField)
-        : qSearchField(qSearchField), nsSearchField(nsSearchField) {}
+        : QObject(qSearchField), qSearchField(qSearchField), nsSearchField(nsSearchField) {}
 
     void textDidChange(const QString &text)
     {
-        emit qSearchField->textChanged(text);
+        if (qSearchField)
+            emit qSearchField->textChanged(text);
     }
 
     void textDidEndEditing()
     {
-        emit qSearchField->returnPressed();
+        if (qSearchField)
+            emit qSearchField->editingFinished();
     }
 
-    QSearchField *qSearchField;
+    void returnPressed()
+    {
+        if (qSearchField)
+            emit qSearchField->returnPressed();
+    }
+
+    QPointer<QSearchField> qSearchField;
     NSSearchField *nsSearchField;
 };
 
 @interface QSearchFieldDelegate : NSObject<NSTextFieldDelegate>
 {
 @public
-    QSearchFieldPrivate* pimpl;
+    QPointer<QSearchFieldPrivate> pimpl;
 }
 -(void)controlTextDidChange:(NSNotification*)notification;
--(void)controlTextDidEndEditing:(NSNotification*)aNotification;
+-(void)controlTextDidEndEditing:(NSNotification*)notification;
 @end
 
 @implementation QSearchFieldDelegate
 -(void)controlTextDidChange:(NSNotification*)notification {
-    pimpl->textDidChange(toQString([[notification object] stringValue]));
+    Q_ASSERT(pimpl);
+    if (pimpl)
+        pimpl->textDidChange(toQString([[notification object] stringValue]));
 }
 
 -(void)controlTextDidEndEditing:(NSNotification*)notification {
-    pimpl->textDidEndEditing();
+    Q_UNUSED(notification);
+    // No Q_ASSERT here as it is called on destruction.
+    if (pimpl)
+        pimpl->textDidEndEditing();
+
+    if ([[[notification userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement)
+        pimpl->returnPressed();
+}
+@end
+
+@interface QocoaSearchField : NSSearchField
+-(BOOL)performKeyEquivalent:(NSEvent*)event;
+@end
+
+@implementation QocoaSearchField
+-(BOOL)performKeyEquivalent:(NSEvent*)event {
+    if ([event type] == NSKeyDown && [event modifierFlags] & NSCommandKeyMask)
+    {
+        const unsigned short keyCode = [event keyCode];
+        if (keyCode == KEYCODE_A)
+        {
+            [self performSelector:@selector(selectText:)];
+            return YES;
+        }
+        else if (keyCode == KEYCODE_C)
+        {
+            QClipboard* clipboard = QApplication::clipboard();
+            clipboard->setText(toQString([self stringValue]));
+            return YES;
+        }
+        else if (keyCode == KEYCODE_V)
+        {
+            QClipboard* clipboard = QApplication::clipboard();
+            [self setStringValue:fromQString(clipboard->text())];
+            return YES;
+        }
+        else if (keyCode == KEYCODE_X)
+        {
+            QClipboard* clipboard = QApplication::clipboard();
+            clipboard->setText(toQString([self stringValue]));
+            [self setStringValue:@""];
+            return YES;
+        }
+    }
+
+    return NO;
 }
 @end
 
@@ -73,20 +136,19 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    NSSearchField *search = [[NSSearchField alloc] init];
-    pimpl = new QSearchFieldPrivate(this, search);
+    NSSearchField *search = [[QocoaSearchField alloc] init];
 
     QSearchFieldDelegate *delegate = [[QSearchFieldDelegate alloc] init];
-    delegate->pimpl = pimpl;
+    pimpl = delegate->pimpl = new QSearchFieldPrivate(this, search);
     [search setDelegate:delegate];
 
-    zeroLayout(search, this);
+    setupLayout(search, this);
+
+    setFixedHeight(24);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     layout()->setContentsMargins(2, 0, 2, 0);
     setStyleSheet( "* { background: #DDE4EB; }" );
-
-    setMinimumSize(layout()->sizeHint().width(), 20);
 
     [search release];
     [pool drain];
@@ -94,6 +156,10 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
 
 void QSearchField::setText(const QString &text)
 {
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [pimpl->nsSearchField setStringValue:fromQString(text)];
     [pool drain];
@@ -101,6 +167,10 @@ void QSearchField::setText(const QString &text)
 
 void QSearchField::setPlaceholderText(const QString& text)
 {
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [[pimpl->nsSearchField cell] setPlaceholderString:fromQString(text)];
     [pool drain];
@@ -108,10 +178,57 @@ void QSearchField::setPlaceholderText(const QString& text)
 
 void QSearchField::clear()
 {
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
     [pimpl->nsSearchField setStringValue:@""];
+    emit textChanged(QString());
+}
+
+void QSearchField::selectAll()
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+    [pimpl->nsSearchField performSelector:@selector(selectText:)];
 }
 
 QString QSearchField::text() const
 {
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return QString();
+
     return toQString([pimpl->nsSearchField stringValue]);
+}
+
+QString QSearchField::placeholderText() const
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return QString();
+
+    return toQString([[pimpl->nsSearchField cell] placeholderString]);
+}
+
+void QSearchField::setFocus(Qt::FocusReason reason)
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+    if ([pimpl->nsSearchField acceptsFirstResponder])
+        [[pimpl->nsSearchField window] makeFirstResponder: pimpl->nsSearchField];
+}
+
+void QSearchField::setFocus()
+{
+    setFocus(Qt::OtherFocusReason);
+}
+
+void QSearchField::resizeEvent(QResizeEvent *resizeEvent)
+{
+    QWidget::resizeEvent(resizeEvent);
 }

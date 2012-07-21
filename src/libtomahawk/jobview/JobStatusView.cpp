@@ -101,17 +101,14 @@ JobStatusView::setModel( JobStatusSortModel* m )
 void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
-    tLog() << Q_FUNC_INFO << "item is" << item << ", row is" << row;
     if ( !item )
         return;
 
     item->createDelegate( m_view );
-    tLog() << Q_FUNC_INFO << "item delegate is" << item->customDelegate();
     m_view->setItemDelegateForRow( row, item->customDelegate() );
     ACLJobDelegate* delegate = qobject_cast< ACLJobDelegate* >( item->customDelegate() );
     if ( delegate )
     {
-        tLog() << Q_FUNC_INFO << "delegate found";
         connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
         connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
         delegate->emitSizeHintChanged( m_model->index( row, 0 ) );
@@ -126,7 +123,6 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
-    tLog() << Q_FUNC_INFO << "row is" << row;
     checkCount();
 }
 
@@ -134,11 +130,9 @@ JobStatusView::customDelegateJobRemoved( int row )
 void
 JobStatusView::refreshDelegates()
 {
-    tLog() << Q_FUNC_INFO;
     int count = m_model->rowCount();
     for ( int i = 0; i < count; i++ )
     {
-        tLog() << Q_FUNC_INFO << "checking row" << i;
         QModelIndex index = m_model->index( i, 0 );
         QVariant itemVar = index.data( JobStatusModel::JobDataRole );
         if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )

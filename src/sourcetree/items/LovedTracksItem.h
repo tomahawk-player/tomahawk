@@ -33,20 +33,23 @@ public:
     LovedTracksItem( SourcesModel* model, SourceTreeItem* parent );
     virtual ~LovedTracksItem();
 
-    virtual QString text() const { return QString( tr( "Loved Tracks" ) ); }
+    virtual QString text() const;
     virtual QIcon icon() const { return QIcon( RESPATH "images/loved_playlist.png" ); }
-    virtual int peerSortValue() const { return -150; }
+    virtual int peerSortValue() const { return m_sortValue; }
     virtual void activate();
 
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
 
+    void setSortValue( int value ) { m_sortValue = value; }
+
 private slots:
     void loveDroppedTracks( QList< Tomahawk::query_ptr > qrys );
 
 private:
     Tomahawk::ViewPage* m_lovedTracksPage;
+    int m_sortValue;
 };
 
 #endif

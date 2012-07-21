@@ -38,7 +38,6 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 
-#include "CustomPlaylistView.h"
 #include "PlaylistLargeItemDelegate.h"
 #include "RecentlyPlayedModel.h"
 #include "dynamic/widgets/DynamicWidget.h"
@@ -76,7 +75,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_newReleasesWidget( new NewReleasesWidget() )
-    , m_topLovedWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_currentPage( 0 )
     , m_loaded( false )
@@ -126,7 +124,6 @@ ViewManager::~ViewManager()
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
     delete m_welcomeWidget;
-    delete m_topLovedWidget;
     delete m_recentPlaysWidget;
     delete m_contextWidget;
     delete m_widget;
@@ -138,13 +135,14 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 {
     FlexibleView* view = new FlexibleView();
     PlaylistModel* model = new PlaylistModel();
-    view->setPlayableModel( model );
 
     PlaylistView* pv = new PlaylistView();
     pv->setPlaylistModel( model );
     view->setDetailedView( pv );
+    view->setPixmap( pv->pixmap() );
 
     model->loadPlaylist( playlist );
+    view->setPlayableModel( model );
     playlist->resolve();
 
     return view;
@@ -387,39 +385,23 @@ ViewManager::showNewReleasesPage()
 
 
 Tomahawk::ViewPage*
-ViewManager::showTopLovedPage()
-{
-    if ( !m_topLovedWidget )
-    {
-        CustomPlaylistView* view = new CustomPlaylistView( CustomPlaylistView::TopLovedTracks, source_ptr(), m_widget );
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, view, view->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), view, SLOT( update( QModelIndex ) ) );
-        view->setItemDelegate( del );
-
-        m_topLovedWidget = view;
-    }
-
-    return show( m_topLovedWidget );
-}
-
-
-Tomahawk::ViewPage*
 ViewManager::showRecentPlaysPage()
 {
     if ( !m_recentPlaysWidget )
     {
-        PlaylistView* pv = new PlaylistView( m_widget );
+        FlexibleView* pv = new FlexibleView( m_widget );
+        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
-        pv->proxyModel()->setStyle( PlayableProxyModel::Large );
 
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv, pv->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv, SLOT( update( QModelIndex ) ) );
-        pv->setItemDelegate( del );
+        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
+        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
+        pv->trackView()->setItemDelegate( del );
 
-        pv->setPlaylistModel( raModel );
+        pv->setPlayableModel( raModel );
+        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
         raModel->setSource( source_ptr() );
 
         m_recentPlaysWidget = pv;
@@ -901,13 +883,6 @@ Tomahawk::ViewPage*
 ViewManager::newReleasesWidget() const
 {
     return m_newReleasesWidget;
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::topLovedWidget() const
-{
-    return m_topLovedWidget;
 }
 
 

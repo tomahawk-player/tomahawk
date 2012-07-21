@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,27 +16,43 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QUEUEPROXYMODEL_H
-#define QUEUEPROXYMODEL_H
+#ifndef LOVEDTRACKSMODEL_H
+#define LOVEDTRACKSMODEL_H
 
-#include "PlayableProxyModel.h"
+#include <QList>
+#include <QHash>
+
+#include "Typedefs.h"
+#include "PlaylistModel.h"
 
 #include "DllMacro.h"
 
-class QMetaData;
-class TrackView;
-
-class DLLEXPORT QueueProxyModel : public PlayableProxyModel
+class DLLEXPORT LovedTracksModel : public PlaylistModel
 {
 Q_OBJECT
 
 public:
-    explicit QueueProxyModel( TrackView* parent = 0 );
-    virtual ~QueueProxyModel();
+    explicit LovedTracksModel( QObject* parent = 0 );
+    ~LovedTracksModel();
+
+    unsigned int limit() const { return m_limit; }
+    void setLimit( unsigned int limit ) { m_limit = limit; }
+
+    bool isTemporary() const;
+
+public slots:
+    void setSource( const Tomahawk::source_ptr& source );
 
 private slots:
-    void onIndexActivated( const QModelIndex& index );
-    void onPlaybackStarted( const Tomahawk::result_ptr& result );
+    void onSourcesReady();
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+
+    void onTrackLoved();
+    void loadTracks();
+
+private:
+    Tomahawk::source_ptr m_source;
+    unsigned int m_limit;
 };
 
-#endif // QUEUEPROXYMODEL_H
+#endif // LOVEDTRACKSMODEL_H

@@ -45,6 +45,8 @@
         <file>data/images/view-toggle-icon-artist-inactive.png</file>
         <file>data/images/view-toggle-icon-cloud-active.png</file>
         <file>data/images/view-toggle-icon-cloud-inactive.png</file>
+        <file>data/images/view-toggle-icon-grid-active.png</file>
+        <file>data/images/view-toggle-icon-grid-inactive.png</file>
         <file>data/images/view-toggle-icon-list-active.png</file>
         <file>data/images/view-toggle-icon-list-inactive.png</file>
         <file>data/images/view-toggle-inactive-centre.png</file>

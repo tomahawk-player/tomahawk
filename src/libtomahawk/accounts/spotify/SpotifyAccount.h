@@ -36,6 +36,8 @@ class ScriptResolver;
 
 namespace Tomahawk {
 
+class SpotifyParser;
+
 namespace InfoSystem
 {
     class SpotifyInfoPlugin;
@@ -48,11 +50,11 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, changed;
+    bool sync, subscribed, changed;
 
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), changed( false ) {}
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ) {}
 
     SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
 };
@@ -83,7 +85,7 @@ public:
     SpotifyAccount( const QString& accountId );
     SpotifyAccount( const QString& accountId, const QString& path );
     virtual ~SpotifyAccount();
-
+    static SpotifyAccount* instance();
     virtual QPixmap icon() const;
     virtual QWidget* configurationWidget();
     virtual QWidget* aboutWidget();
@@ -99,9 +101,10 @@ public:
     virtual SipPlugin* sipPlugin() { return 0; }
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
-    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString() );
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
+    void registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed );
+    void registerPlaylistInfo( SpotifyPlaylistInfo* info );
     void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
@@ -111,8 +114,11 @@ public:
     bool loggedIn() const;
 
 public slots:
+    QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString(), const QVariant& extraData = QVariant() );
+    
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
     void syncActionTriggered( bool );
+    void subscribeActionTriggered( bool );
     void atticaLoaded(Attica::Content::List);
 
 private slots:
@@ -125,10 +131,10 @@ private slots:
     void logout();
 
     // SpotifyResolver message handlers, all take msgtype, msg as argument
-  //  void <here>( const QString& msgType, const QVariantMap& msg );
-    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg );
-    void playlistCreated( const QString& msgType, const QVariantMap& msg );
-
+  //  void <here>( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    void playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
 
@@ -146,9 +152,13 @@ private:
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
+    void setSubscribedForPlaylist( const playlist_ptr& pl, bool subscribed );
 
     void createActions();
     void removeActions();
+    playlist_ptr playlistFromAction( QAction* action ) const;
+
+    static SpotifyAccount* s_instance;
 
     QWeakPointer<SpotifyAccountConfig> m_configWidget;
     QWeakPointer<QWidget> m_aboutWidget;
@@ -156,9 +166,10 @@ private:
     QWeakPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
 
     QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
+    QMap<QString, QVariant > m_qidToExtraData;
 
     // List of synced spotify playlists in config UI
-    QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
+    QHash< QString, SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
@@ -167,6 +178,7 @@ private:
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;
+    friend class Tomahawk::SpotifyParser;
 };
 
 }

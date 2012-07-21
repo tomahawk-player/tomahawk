@@ -897,6 +897,9 @@ AudioEngine::checkStateQueue()
                 m_mediaObject->pause();
                 break;
             }
+
+            default:
+                break;
         }
     }
     else

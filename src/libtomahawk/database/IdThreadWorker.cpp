@@ -87,6 +87,7 @@ internalGet( const artist_ptr& artist, const album_ptr& album, bool autoCreate, 
     item->album = album;
     item->type = type;
     item->create = autoCreate;
+    item->promise.reportStarted();
 
     return item;
 }

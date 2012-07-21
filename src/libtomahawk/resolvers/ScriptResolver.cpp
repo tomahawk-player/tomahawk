@@ -353,6 +353,9 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
         m.insert( "artist", query->artist() );
         m.insert( "track", query->track() );
         m.insert( "qid", query->id() );
+
+        if ( !query->resultHint().isEmpty() )
+            m.insert( "resultHint", query->resultHint() );
     }
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );

@@ -41,6 +41,8 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
 {
     m_ui->setupUi( this );
 
+    m_ui->loginButton->setDefault( true );
+
     connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( doLogin() ) );
 
     connect( m_ui->usernameEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
