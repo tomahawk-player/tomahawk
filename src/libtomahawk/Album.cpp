@@ -48,22 +48,6 @@ albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
 }
 
 
-Album::~Album()
-{
-    QMutexLocker lock( &s_mutex );
-    s_albumsByName.remove( albumCacheKey( artist(), name() ) );
-    s_albumsByCoverId.remove( coverId() );
-/*    if ( id() > 0 )
-        s_albumsById.remove( id() );*/
-
-    m_ownRef.clear();
-
-#ifndef ENABLE_HEADLESS
-    delete m_cover;
-#endif
-}
-
-
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
 {
@@ -154,6 +138,23 @@ Album::Album( const QString& name, const Tomahawk::artist_ptr& artist )
 {
     m_sortname = DatabaseImpl::sortname( name );
 }
+
+
+Album::~Album()
+{
+    QMutexLocker lock( &s_mutex );
+    s_albumsByName.remove( albumCacheKey( artist(), name() ) );
+    s_albumsByCoverId.remove( coverId() );
+/*    if ( id() > 0 )
+        s_albumsById.remove( id() );*/
+
+    m_ownRef.clear();
+
+#ifndef ENABLE_HEADLESS
+    delete m_cover;
+#endif
+}
+
 
 void
 Album::onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
