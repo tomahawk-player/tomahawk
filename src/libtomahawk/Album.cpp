@@ -320,10 +320,13 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
             m_coverBuffer = ba;
         }
 
-        m_coverLoaded = true;
-        s_albumsByCoverId.remove( coverId() );
-        m_coverId = uuid();
-        s_albumsByCoverId[ m_coverId ] = m_ownRef.toStrongRef();
+        {
+            QMutexLocker lock( &s_mutex );
+            m_coverLoaded = true;
+            s_albumsByCoverId.remove( coverId() );
+            m_coverId = uuid();
+            s_albumsByCoverId[ m_coverId ] = m_ownRef.toStrongRef();
+        }
         emit coverChanged();
     }
 }

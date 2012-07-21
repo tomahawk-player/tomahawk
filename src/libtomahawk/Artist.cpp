@@ -454,10 +454,13 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                     m_coverBuffer = ba;
                 }
 
-                m_coverLoaded = true;
-                s_artistsByCoverId.remove( coverId() );
-                m_coverId = uuid();
-                s_artistsByCoverId[ m_coverId ] = m_ownRef.toStrongRef();
+                {
+                    QMutexLocker lock( &s_mutex );
+                    m_coverLoaded = true;
+                    s_artistsByCoverId.remove( coverId() );
+                    m_coverId = uuid();
+                    s_artistsByCoverId[ m_coverId ] = m_ownRef.toStrongRef();
+                }
                 emit coverChanged();
             }
 
