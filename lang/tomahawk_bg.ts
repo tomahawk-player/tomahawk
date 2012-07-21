@@ -1673,12 +1673,12 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="153"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="156"/>
         <source>Delete in Spotify?</source>
         <translation>Изтривам и в Spotify?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="153"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="156"/>
         <source>Would you like to delete the corresponding Spotify playlist as well?</source>
         <translation>Желаеш ли да изтриеш и съответните Spotify списъци?</translation>
     </message>
@@ -3037,7 +3037,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="244"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="247"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Грешка при извличане на информация от Spotify</translation>
     </message>

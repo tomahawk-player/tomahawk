@@ -1671,12 +1671,12 @@ connect and stream from you?</source>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="153"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="156"/>
         <source>Delete in Spotify?</source>
         <translation>أحذف في سبوتيفي (Spotify)؟</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="153"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="156"/>
         <source>Would you like to delete the corresponding Spotify playlist as well?</source>
         <translation>هل ترغب في حذف قائمة التشغيل المطابقة على سبوتيفي (Spotify)؟</translation>
     </message>
@@ -3030,7 +3030,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="244"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="247"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>مشكلة في جلب معلومات &quot;Spotify&quot; من الشبكة!</translation>
     </message>
