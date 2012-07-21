@@ -520,19 +520,12 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
             QString artistName = criteria["artist"];
             QString albumName = criteria["album"];
 
-            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
-            imgurl.addQueryItem( "method", "album.imageredirect" );
-            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
-            imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
-            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
-            imgurl.addQueryItem( "size", "large" );
-            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
+            lastfm::Artist lfmArtist( artistName );
+            lastfm::Album lfmAlbum( lfmArtist, albumName );
 
-            QNetworkRequest req( imgurl );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            QNetworkReply* reply = lfmAlbum.getInfo();
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
-
-            connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+            connect( reply, SIGNAL( finished() ), SLOT( albumInfoReturned() ) );
             return;
         }
 
@@ -723,6 +716,40 @@ LastFmInfoPlugin::topTracksReturned()
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     emit updateCache( criteria, 0, requestData.type, returnedData );
+}
+
+
+void
+LastFmInfoPlugin::albumInfoReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    QHash< QString, QString > covers;
+    QString url;
+
+    lastfm::XmlQuery lfm;
+    lfm.parse( reply->readAll() );
+
+    foreach ( lastfm::XmlQuery xq, lfm.children( "album" ) )
+    {
+        foreach ( lastfm::XmlQuery xxq, xq.children( "image" ) )
+        {
+            covers[ xxq.attribute( "size" ).toLower() ] = xxq.text();
+        }
+    }
+
+    if ( covers.contains( "mega" ) )
+        url = covers[ "mega" ];
+    else if ( covers.contains( "extralarge" ) )
+        url = covers[ "extralarge" ];
+    else if ( covers.contains( "large" ) )
+        url = covers[ "large" ];
+    else if ( covers.contains( "medium" ) )
+        url = covers[ "medium" ];
+
+    QNetworkRequest req( url );
+    QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
+    newReply->setProperty( "requestData", reply->property( "requestData" ) );
+    connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
 }
 
 
