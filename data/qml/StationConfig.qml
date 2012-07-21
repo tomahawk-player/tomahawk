@@ -33,19 +33,23 @@ Item {
         }
 
         Text {
+            id: tempoText
             text: "Tempo:"
             color: "white"
         }
         DoubleSlider {
             width: 500
+            height: tempoText.height
         }
 
         Text {
+            id: hotnessText
             text: "Hotness:"
             color: "white"
         }
         DoubleSlider {
             width: 500
+            height: hotnessText.height
         }
     }
 

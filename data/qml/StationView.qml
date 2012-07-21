@@ -19,7 +19,7 @@ Item {
         //highlightMoveDuration: 500
 
         model: dynamicModel
-        currentIndex: currentlyPlayedIndex
+        currentIndex: currentlyPlayedIndex >= 0 ? currentlyPlayedIndex : 0
 
         property int pathStartX: width / 2
         property int pathStartY: height / 2

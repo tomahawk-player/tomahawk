@@ -45,11 +45,13 @@ bool EchonestStation::configured()
 void EchonestStation::playItem(int row)
 {
     QModelIndex index( m_model->index( row, 0) );
-    PlayableItem* item = m_model->itemFromIndex( index );
-    if ( item && !item->query().isNull() )
-    {
-        m_model->setCurrentIndex( index );
-        AudioEngine::instance()->playItem( m_model->playlistInterface(), item->query() );
+    if( index.isValid() ) {
+        PlayableItem* item = m_model->itemFromIndex( index );
+        if ( item && !item->query().isNull() )
+        {
+            m_model->setCurrentIndex( index );
+            AudioEngine::instance()->playItem( m_model->playlistInterface(), item->query() );
+        }
     }
 }
 
