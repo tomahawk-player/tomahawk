@@ -168,9 +168,8 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
     if ( role == CoverIDRole )
     {
-        tDebug() << "Cover role for:" << query->toString();
-        query->displayQuery()->cover( QSize( 0, 0 ) );
-        return query->displayQuery()->coverId();
+        query->cover( QSize( 0, 0 ) );
+        return query->coverId();
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -205,7 +204,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
             if ( query->albumpos() != 0 )
             {
                 tPos = QString::number( query->albumpos() );
-                if( query->discnumber() == 0 )
+                if ( query->discnumber() == 0 )
                     return tPos;
                 else
                     return QString( "%1.%2" ).arg( QString::number( query->discnumber() ) )

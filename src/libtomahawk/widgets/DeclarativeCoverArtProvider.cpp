@@ -48,7 +48,7 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
         tDebug() << "Returning album cover:" << album->cover( requestedSize ).isNull();
         return album->cover( requestedSize );
     }
-    artist_ptr artist = Artist::getByUniqueId( id );
+    artist_ptr artist = Artist::getByCoverId( id );
     if ( !artist.isNull() )
     {
         tDebug() << "Returning artist cover:" << artist->cover( requestedSize ).isNull();
