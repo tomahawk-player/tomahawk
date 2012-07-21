@@ -53,6 +53,7 @@ PlayableItem::PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* pare
     : QObject( parent )
     , m_album( album )
 {
+    Q_ASSERT( !m_album.isNull() );
     init( parent, row );
 
     connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
@@ -64,6 +65,7 @@ PlayableItem::PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* pa
     : QObject( parent )
     , m_artist( artist )
 {
+    Q_ASSERT( !m_artist.isNull() );
     init( parent, row );
 
     connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
@@ -75,6 +77,7 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
     : QObject( parent )
     , m_result( result )
 {
+    Q_ASSERT( !m_result.isNull() );
     init( parent, row );
 }
 
@@ -83,6 +86,7 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     : QObject( parent )
     , m_query( query )
 {
+    Q_ASSERT( !m_query.isNull() );
     init( parent, row );
 
     connect( query.data(), SIGNAL( socialActionsLoaded() ),
@@ -104,6 +108,7 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     , m_entry( entry )
 {
     m_query = entry->query();
+    Q_ASSERT( !m_query.isNull() );
     init( parent, row );
 
     connect( m_query.data(), SIGNAL( socialActionsLoaded() ),
