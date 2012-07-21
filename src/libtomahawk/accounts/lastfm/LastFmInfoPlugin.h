@@ -61,6 +61,7 @@ public slots:
     void topTracksReturned();
     void chartReturned();
     void similarTracksReturned();
+    void albumInfoReturned();
 
 protected slots:
     virtual void init();
