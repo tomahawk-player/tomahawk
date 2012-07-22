@@ -508,7 +508,7 @@ Playlist::setNewRevision( const QString& rev,
             tDebug() << "m_entries" << m_entries;
 
             tLog() << "Playlist error for playlist with guid" << guid() << "from source" << author()->friendlyName();
-            Q_ASSERT( false ); // XXX
+//             Q_ASSERT( false ); // XXX
         }
     }
 

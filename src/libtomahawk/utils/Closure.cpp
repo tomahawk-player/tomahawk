@@ -1,5 +1,6 @@
 /* This file is part of Clementine.
    Copyright 2011, David Sansome <me@davidsansome.com>
+   Copyright 2012, Leo Franchi <lfranchi@kde.org>
 
    Clementine is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +30,7 @@ Closure::Closure(QObject* sender,
                  const ClosureArgumentWrapper* val3)
     : QObject(receiver),
       callback_(NULL),
-      autoDelete_( true ),
+      autoDelete_(true),
       val0_(val0),
       val1_(val1),
       val2_(val2),
