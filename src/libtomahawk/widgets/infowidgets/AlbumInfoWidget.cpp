@@ -87,13 +87,13 @@ AlbumInfoWidget::isBeingPlayed() const
     //tDebug() << Q_FUNC_INFO << "albumsView playlistInterface = " << ui->albumsView->playlistInterface()->id();
     //tDebug() << Q_FUNC_INFO << "tracksView playlistInterface = " << ui->tracksView->playlistInterface()->id();
 
-    if ( ui->albumsView->isBeingPlayed() )
+    if ( ui->albumsView && ui->albumsView->isBeingPlayed() )
         return true;
 
-    if ( ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    if ( ui->albumsView && ui->albumsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
-    if ( ui->tracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    if ( ui->tracksView && ui->tracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
     return false;
@@ -103,7 +103,7 @@ AlbumInfoWidget::isBeingPlayed() const
 bool
 AlbumInfoWidget::jumpToCurrentTrack()
 {
-    return ui->albumsView->jumpToCurrentTrack();
+    return  ui->albumsView && ui->albumsView->jumpToCurrentTrack();
 }
 
 

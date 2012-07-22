@@ -173,19 +173,19 @@ ArtistInfoWidget::playlistInterface() const
 bool
 ArtistInfoWidget::isBeingPlayed() const
 {
-    if ( ui->albums->isBeingPlayed() )
+    if ( ui->albums && ui->albums->isBeingPlayed() )
         return true;
 
-    if ( ui->relatedArtists->isBeingPlayed() )
+    if ( ui->relatedArtists && ui->relatedArtists->isBeingPlayed() )
         return true;
 
-    if ( ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    if ( ui->albums && ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
-    if ( ui->relatedArtists->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    if ( ui->relatedArtists && ui->relatedArtists->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
-    if ( ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    if ( ui->topHits && ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
 
     return false;
@@ -195,19 +195,19 @@ ArtistInfoWidget::isBeingPlayed() const
 bool
 ArtistInfoWidget::jumpToCurrentTrack()
 {
-    if ( ui->albums->jumpToCurrentTrack() )
+    if ( ui->albums && ui->albums->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->relatedArtists->jumpToCurrentTrack() )
+    if ( ui->relatedArtists && ui->relatedArtists->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->topHits->jumpToCurrentTrack() )
+    if ( ui->topHits && ui->topHits->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->albums->jumpToCurrentTrack() )
+    if ( ui->albums && ui->albums->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->relatedArtists->jumpToCurrentTrack() )
+    if ( ui->relatedArtists && ui->relatedArtists->jumpToCurrentTrack() )
         return true;
 
     return false;
