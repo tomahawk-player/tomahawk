@@ -123,7 +123,7 @@ private:
 
     QRect m_paintRect;
 
-    friend ::GridPlaylistInterface;
+    friend class ::GridPlaylistInterface;
 };
 
 #endif // GRIDVIEW_H
