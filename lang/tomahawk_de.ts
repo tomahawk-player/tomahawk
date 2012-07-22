@@ -146,17 +146,17 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Andere Alben des Künstlers</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="52"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Sorry, wir konnten keine anderen Alben für diesen Künstler finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Sorry, wir konnten keine anderen Lieder für dieses Album finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="126"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
         <translation>Andere Alben von %1</translation>
     </message>
@@ -3701,12 +3701,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="150"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
         <translation>Es gibt keine kürzlich erstellten Playlisten in deinem Netzwerk.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="98"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
         <translation>Willkommen bei Tomahawk</translation>
     </message>

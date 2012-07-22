@@ -145,17 +145,17 @@ connect and stream from you?</source>
         <translation>Други албуми на този артист</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="52"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Съжалявам, но не откривам нито един албум от този артист!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Съжалявам, но не откривам нито една песен за този артист!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="126"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
         <translation>Други албуми от %1</translation>
     </message>
@@ -3723,12 +3723,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Наскоро изпълнени</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="150"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
         <translation>Не откривам наскоро създадени списъци в твоята мрежа</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="98"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
         <translation>Здравей!</translation>
     </message>

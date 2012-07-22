@@ -5,12 +5,12 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="71"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>%1からの接続、又はストリーミングを許可しますか？</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>ストリーミングを許可</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="90"/>
@@ -23,7 +23,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="187"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>%1からの接続を許可することが必要です。</translation>
     </message>
 </context>
 <context>
@@ -145,17 +145,17 @@ connect and stream from you?</source>
         <translation>他のアルバム</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="52"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>このアーティストのアルバムは他に見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>このアルバムの曲は見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="126"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
         <translation>%1の他のアルバム</translation>
     </message>
@@ -451,7 +451,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="77"/>
@@ -1690,12 +1690,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="158"/>
         <source>Local Music Information</source>
-        <translation type="unfinished"/>
+        <translation>ローカルミュージック情報</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="166"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>音楽ファイルの検索パス:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="180"/>
@@ -1708,42 +1708,42 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="186"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nestにコレクションのリストをアップロードして、ユーザーラジオを有効にする</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="199"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>変更を監視</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="208"/>
         <source>Time between scans, in seconds:</source>
-        <translation type="unfinished"/>
+        <translation>スキャン作業の時間間隔(秒数):</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="245"/>
         <source>Advanced Settings</source>
-        <translation type="unfinished"/>
+        <translation>詳細設定</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="254"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>リモートピアとの接続方法</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="260"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>無 (出接続のみ)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="267"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnPを使用して、ポートのフォワーディングを設ける (推奨)</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="274"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>グローバル静的IP、又はホスト名とポートを使用する</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="287"/>
@@ -1753,22 +1753,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="356"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKSのプロクシ</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="362"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKSのプロクシを使用する</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="439"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>全てのアクセス制御のエントリーを削除する</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="98"/>
         <source>Internet Services</source>
-        <translation type="unfinished"/>
+        <translation>インターネットサービス</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="109"/>
@@ -3701,12 +3701,12 @@ Twitterを使っている友達にTomahawkを接続したいなら、ツイー�
         <translation>最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="150"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
         <translation>ネットワークに最近作成したプレイリストはありません。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="98"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
         <translation>Tomahawkへようこそ</translation>
     </message>

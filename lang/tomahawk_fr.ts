@@ -146,17 +146,17 @@ de se connecter et streamer de vous?</translation>
         <translation>Tous les albums par cet artiste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="52"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Désolé, aucun autre album n&apos;a pu être trouvé pour cet artiste !</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Désolé, on a pas pu trouver aucune pistes pour cet album!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="126"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
         <translation>Autres albums de %1</translation>
     </message>
@@ -3711,12 +3711,12 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
         <translation>Joués récemment</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="150"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
         <translation>Pas de liste de lecture créée récemment sur votre réseau.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="98"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
         <translation>Bienvenue dans Tomahawk</translation>
     </message>

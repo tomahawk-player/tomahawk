@@ -145,17 +145,17 @@ connect and stream from you?</source>
         <translation>列出演出者的其他專輯</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="52"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="59"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="126"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
         <translation>列出所有其他專輯，依 %1</translation>
     </message>
@@ -3693,12 +3693,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>最近播放的曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="150"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
         <translation>沒有最近建立的播放清單在您的網路。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="98"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
         <translation>歡迎到 Tomahawk</translation>
     </message>
