@@ -355,11 +355,19 @@ SpotifyParser::checkBrowseFinished()
 
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
+            QString spotifyUsername;
+
+            if ( Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn() )
+            {
+                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
+                spotifyUsername = creds.value( "username" ).toString();
+            }
+
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
                                        m_info,
-                                       m_creator,
+                                       spotifyUsername == m_creator ? QString() : m_creator,
                                        false,
                                        m_tracks );
 
@@ -370,10 +378,9 @@ SpotifyParser::checkBrowseFinished()
                 SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
                                                     Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
 
-                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
 
                 // If the user isnt dropping a playlist the he owns, its subscribeable
-                if ( !m_browseUri.contains( creds.value( "username" ).toString() ) )
+                if ( !m_browseUri.contains( spotifyUsername ) )
                     updater->setCanSubscribe( true );
 
                 // Just register the infos
