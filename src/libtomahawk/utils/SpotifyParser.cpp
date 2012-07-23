@@ -105,7 +105,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
         m_browseUri.replace( "/", ":" );
         m_browseUri = "spotify:" + m_browseUri;
     }
-    
+
     if ( m_browseUri.contains( "playlist" ) &&
          Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
          Tomahawk::Accounts::SpotifyAccount::instance()->loggedIn() )
@@ -303,7 +303,7 @@ SpotifyParser::spotifyTrackLookupFinished()
         if ( !q.isNull() )
         {
             q->setResultHint( t.value( "trackuri" ).toString() );
-            
+
             m_tracks << q;
         }
     }
@@ -333,10 +333,10 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
     {
         QVariantMap trackMap = blob.toMap();
         const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
-        
+
         if ( q.isNull() )
             continue;
-        
+
         m_tracks << q;
     }
 
@@ -355,7 +355,6 @@ SpotifyParser::checkBrowseFinished()
 
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
-
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,

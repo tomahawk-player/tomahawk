@@ -80,7 +80,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     setReadOnly( !m_playlist->author()->isLocal() );
     setTitle( playlist->title() );
     setDescription( tr( "A playlist by %1, created %2" )
-                  .arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() )
+                  .arg( playlist->creator().isEmpty() ? ( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) : playlist->creator() )
                   .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true ) ) );
 
     m_isTemporary = false;
