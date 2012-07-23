@@ -28,6 +28,10 @@
 #include <QPushButton>
 #include <QTimer>
 
+#ifdef QT_MAC_USE_COCOA
+#include "SourceTreePopupDialog_mac.h"
+#endif
+
 SourceTreePopupDialog::SourceTreePopupDialog( SourceTreeView* parent )
     : QWidget( 0 )
     , m_result( false )
@@ -127,6 +131,13 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     p.drawPath( outline );
 
     p.fillPath( outline, QColor( "#D6E3F1" ) );
+
+#ifdef QT_MAC_USE_COCOA
+    // Work around bug in Qt/Mac Cocoa where opening subsequent popups
+    // would incorrectly calculate the background due to it not being
+    // invalidated.
+    SourceTreePopupHelper::clearBackground( this );
+#endif
 }
 
 
