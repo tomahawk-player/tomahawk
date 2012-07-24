@@ -3532,12 +3532,14 @@ wprowadź pokazany numer PIN tutaj:</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
-        <translation>od</translation>
+        <comment>streaming artist - track from friend</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
-        <translation>do</translation>
+        <comment>streaming artist - track to friend</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

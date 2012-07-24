@@ -3537,12 +3537,14 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
-        <translation>de</translation>
+        <comment>streaming artist - track from friend</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
-        <translation>a</translation>
+        <comment>streaming artist - track to friend</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

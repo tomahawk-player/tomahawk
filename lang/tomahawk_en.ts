@@ -3538,11 +3538,13 @@ enter the displayed PIN number here:</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
+        <comment>streaming artist - track from friend</comment>
         <translation>from</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
+        <comment>streaming artist - track to friend</comment>
         <translation>to</translation>
     </message>
 </context>

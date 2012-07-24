@@ -3538,12 +3538,14 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
-        <translation>من</translation>
+        <comment>streaming artist - track from friend</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
-        <translation>إلى</translation>
+        <comment>streaming artist - track to friend</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
