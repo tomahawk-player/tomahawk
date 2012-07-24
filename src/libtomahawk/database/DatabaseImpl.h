@@ -32,13 +32,14 @@
 #include <QHash>
 #include <QThread>
 
+#include "DllMacro.h"
 #include "TomahawkSqlQuery.h"
 #include "Typedefs.h"
 
 class Database;
 class FuzzyIndex;
 
-class DatabaseImpl : public QObject
+class DLLEXPORT DatabaseImpl : public QObject
 {
 Q_OBJECT
 
