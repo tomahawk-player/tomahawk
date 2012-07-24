@@ -73,6 +73,11 @@ AvatarManager::fetchVCard( const QString& jid )
 void
 AvatarManager::onNewPresence( const Jreen::Presence& presence )
 {
+    if ( presence.error() )
+    {
+        return;
+    }
+
     Jreen::VCardUpdate::Ptr update = presence.payload<Jreen::VCardUpdate>();
     if ( update )
     {
