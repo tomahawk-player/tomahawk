@@ -114,14 +114,13 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
     qDebug() << Q_FUNC_INFO << "..reporting..";
     if( m_playlist.isNull() ) {
         source_ptr src = source();
-#ifndef ENABLE_HEADLESS
-        QMetaObject::invokeMethod( ViewManager::instance(),
-                                   "createDynamicPlaylist",
-                                   Qt::BlockingQueuedConnection,
-                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
-                                   Q_ARG( QVariant, m_v ) );
-#endif
-    } else {
+
+        Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, m_v.toMap().value( "type", QString() ).toString()  ) );
+        QJson::QObjectHelper::qvariant2qobject( m_v.toMap(), p.data() );
+        p->reportCreated( p );
+    }
+    else
+    {
         m_playlist->reportCreated( m_playlist );
     }
     if( source()->isLocal() )

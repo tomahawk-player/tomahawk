@@ -82,13 +82,10 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     if ( m_playlist.isNull() )
     {
         source_ptr src = source();
-#ifndef ENABLE_HEADLESS
-        QMetaObject::invokeMethod( ViewManager::instance(),
-                                   "createPlaylist",
-                                   Qt::BlockingQueuedConnection,
-                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
-                                   Q_ARG( QVariant, m_v ) );
-#endif
+
+        Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
+        QJson::QObjectHelper::qvariant2qobject( m_v.toMap(), p.data() );
+        p->reportCreated( p );
     }
     else
     {
