@@ -1,4 +1,6 @@
 Version 0.5.5:
+    * Changed the Spotify config dialog to indicate when the user
+      is logged in.
     * Fixed bug where the wrong avatar could be shown for a user.
     * Fixed shortcuts not working in the global search field on OS X.
     * Fixed The Echo Nest stations.
