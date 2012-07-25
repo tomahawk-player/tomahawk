@@ -337,6 +337,8 @@ EchonestGenerator::getParams() throw( std::runtime_error )
     } else {
         emit paramsGenerated( params );
     }
+
+    qDebug() << "ParamsGenerated" << params;
 }
 
 
