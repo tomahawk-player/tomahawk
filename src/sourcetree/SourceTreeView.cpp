@@ -375,6 +375,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     m_popupDialog.data()->setOkButtonText( tr( "Delete" ) );
     m_popupDialog.data()->setProperty( "idx", QVariant::fromValue< QModelIndex >( idx ) );
 
+    qDebug() << "POPUP HAS HEIGHT:" << m_popupDialog.data()->sizeHint().height();
     const QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
     m_popupDialog.data()->move( rightCenter.x() - m_popupDialog.data()->offset(), rightCenter.y() - m_popupDialog.data()->sizeHint().height() / 2. );
     m_popupDialog.data()->show();
