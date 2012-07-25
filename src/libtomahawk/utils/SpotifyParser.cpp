@@ -337,6 +337,9 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
         if ( q.isNull() )
             continue;
 
+        if( !trackMap.value( "id" ).toString().isEmpty() )
+            q->setResultHint( trackMap.value( "id" ).toString() );
+
         m_tracks << q;
     }
 
