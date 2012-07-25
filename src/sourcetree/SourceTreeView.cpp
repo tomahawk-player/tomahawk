@@ -51,7 +51,7 @@
 #include "LatchManager.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include <utils/Closure.h>
+#include "utils/Closure.h"
 #include "widgets/SourceTreePopupDialog.h"
 
 using namespace Tomahawk;
