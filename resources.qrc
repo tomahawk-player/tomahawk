@@ -148,5 +148,6 @@
         <file>data/images/jump-link.png</file>
         <file>data/images/scrollbar-vertical-handle.png</file>
         <file>data/images/scrollbar-horizontal-handle.png</file>
+        <file>data/images/playlist-subscribed.png</file>
     </qresource>
 </RCC>

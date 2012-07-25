@@ -1,6 +1,6 @@
 /*
  *
- *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *    Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -280,6 +280,7 @@ PlaylistItem::onUpdated()
     if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
 
+
     emit updated();
 }
 
@@ -291,6 +292,19 @@ PlaylistItem::createOverlay()
 
     if ( m_playlist->updaters().isEmpty() )
         return false;
+
+        m_showSubscribed = false;
+    foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
+    {
+        if ( updater->subscribed() )
+        {
+            m_showSubscribed = true;
+            break;
+        }
+    }
+
+    if ( m_showSubscribed && m_subscribedIcon.isNull() )
+        m_subscribedIcon = QPixmap( RESPATH "images/playlist-subscribed.png" );
 
     QList< QPixmap > icons;
     foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *    Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,10 @@ public:
 
     virtual SourceTreeItem* activateCurrent();
 
+    bool subscribed() const { return m_showSubscribed; }
+    QPixmap subscribedIcon() const { return m_subscribedIcon; }
+    QList< QAction* > subscribedActions() const;
+
 public slots:
     virtual void activate();
     virtual void doubleClicked();
@@ -58,9 +62,10 @@ private slots:
 private:
     bool createOverlay();
 
-    bool m_loaded;
+    bool m_loaded, m_showSubscribed;
     Tomahawk::playlist_ptr m_playlist;
     QIcon m_icon, m_overlaidIcon;
+    QPixmap m_subscribedIcon;
     QList<Tomahawk::PlaylistUpdaterInterface*> m_overlaidUpdaters;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)

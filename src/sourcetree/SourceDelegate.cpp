@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Michael Zanetti <mzanetti@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -143,7 +143,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
                 iconW = ah->originalSize().height() - 4;
             }
         }
- 
+
         QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
         QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
         speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
@@ -548,6 +548,22 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             }
             else
                 QStyledItemDelegate::paint( painter, o, index );
+        }
+        else if ( type == SourcesModel::StaticPlaylist )
+        {
+            QStyledItemDelegate::paint( painter, o, index );
+
+            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
+            if ( plItem->subscribed() && !plItem->subscribedIcon().isNull() )
+            {
+                const int padding = 2;
+                const int imgWidth = o.rect.height() - 2*padding;
+
+                const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+                const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
+                painter->drawPixmap( subRect, icon );
+            }
         }
         else
             QStyledItemDelegate::paint( painter, o, index );
