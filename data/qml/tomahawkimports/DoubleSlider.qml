@@ -8,8 +8,19 @@ Item {
     property int min: 0
     property int max: 100
 
+    /** The labels next to the slider
+      * if empty, min and max values are used
+      */
+    property string minLabel: ""
+    property string maxLabel: ""
+
+    /** Should the floating label indicating the current position be shown? */
+    property bool showFloatingLabel: true
+
     property int lowerSliderPos: 25
     property int upperSliderPos: 75
+
+    signal valueChanged()
 
     Row {
         anchors.fill: parent
@@ -17,7 +28,7 @@ Item {
 
         Text {
             id: minText
-            text: min
+            text: root.minLabel.length > 0 ? root.minLabel : min
             color: "white"
         }
 
@@ -60,7 +71,7 @@ Item {
                     color: "white"
                     anchors.bottom: lowerSlider.top
                     anchors.bottomMargin: 10
-                    visible: lowerSliderMouseArea.pressed
+                    visible: root.showFloatingLabel && lowerSliderMouseArea.pressed
                     width: lowerFloatingText.width * 1.2
                     height: lowerFloatingText.height + height * 1.2
                     x: -(width - lowerSlider.width) / 2
@@ -80,6 +91,10 @@ Item {
                 drag.axis: "XAxis"
                 drag.minimumX: 0
                 drag.maximumX: upperSlider.x - lowerSlider.width
+                onReleased: {
+                    root.lowerSliderPos = sliderRect.sliderPosToValue( lowerSlider.x );
+                    root.valueChanged();
+                }
             }
 
             Rectangle {
@@ -96,7 +111,7 @@ Item {
                     color: "white"
                     anchors.bottom: upperSlider.top
                     anchors.bottomMargin: 10
-                    visible: upperSliderMouseArea.pressed
+                    visible: root.showFloatingLabel && upperSliderMouseArea.pressed
                     width: upperFloatingText.width * 1.2
                     height: upperFloatingText.height + height * 1.2
                     radius: height / 4
@@ -118,13 +133,18 @@ Item {
                 drag.axis: "XAxis"
                 drag.minimumX: lowerSlider.x + lowerSlider.width
                 drag.maximumX: parent.width - upperSlider.width
+                onReleased: {
+                    root.upperSliderPos = sliderRect.sliderPosToValue( upperSlider.x );
+                    root.valueChanged();
+                }
+
             }
         }
 
 
         Text {
             id: maxText
-            text: max
+            text: root.maxLabel.length > 0 ? root.maxLabel : max
             color: "white"
         }
     }

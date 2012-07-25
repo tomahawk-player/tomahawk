@@ -19,7 +19,7 @@ Item {
         //highlightMoveDuration: 500
 
         model: dynamicModel
-        currentIndex: currentlyPlayedIndex >= 0 ? currentlyPlayedIndex : 0
+        currentIndex: currentlyPlayedIndex
 
         property int pathStartX: width / 2
         property int pathStartY: height / 2
@@ -155,21 +155,21 @@ Item {
                 font.pointSize: 16
                 width: parent.width
                 elide: Text.ElideRight
-                text: coverView.model.itemFromIndex( currentlyPlayedIndex ).name
+                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).name : ""
             }
             Text {
                 color: "white"
                 font.pointSize: 14
                 width: parent.width
                 elide: Text.ElideRight
-                text: coverView.model.itemFromIndex( currentlyPlayedIndex ).artistName
+                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).artistName : ""
             }
             Text {
                 color: "white"
                 font.pointSize: 14
                 width: parent.width
                 elide: Text.ElideRight
-                text: coverView.model.itemFromIndex( currentlyPlayedIndex ).albumName
+                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).albumName : ""
             }
         }
     }

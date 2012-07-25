@@ -40,6 +40,11 @@ Item {
         DoubleSlider {
             width: 500
             height: tempoText.height
+            min: 0
+            max: 500
+            lowerSliderPos: echonestStation.minTempo
+            upperSliderPos: echonestStation.maxTempo
+            onValueChanged: echonestStation.setTempo( lowerSliderPos, upperSliderPos )
         }
 
         Text {
@@ -50,6 +55,14 @@ Item {
         DoubleSlider {
             width: 500
             height: hotnessText.height
+            min: 0
+            max: 100
+            minLabel: "Less"
+            maxLabel: "More"
+            showFloatingLabel: false
+            lowerSliderPos: echonestStation.minHotttness * 100
+            upperSliderPos: echonestStation.maxHotttness * 100
+            onValueChanged: echonestStation.setHotttness( 1.0 * lowerSliderPos / 100, 1.0 * upperSliderPos / 100 )
         }
     }
 

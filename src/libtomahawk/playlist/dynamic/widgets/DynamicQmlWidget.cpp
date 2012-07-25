@@ -42,11 +42,8 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider( m_proxyModel ) );
 
     m_model->loadPlaylist( m_playlist );
-//    m_model->changeStation();
-//    m_model->startOnDemand();
 
     // Initially seed the playlist
-//    playlist->generator()->fetchNext();
     m_playlist->generator()->generate( 20 );
 
     qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
@@ -55,25 +52,12 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     // TODO: In case QML is used in more places, this should probably be moved to some generic place
     qmlRegisterType<PlayableItem>("tomahawk", 1, 0, "PlayableItem");
-//    qmlRegisterUncreatableType<Tomahawk::DynamicControl>("tomahawk", 1, 0, "DynamicControl", "use generator.createControl() isntead");
-//    qmlRegisterUncreatableType<Tomahawk::EchonestControl>("tomahawk", 1, 0, "EchonestControl", "use Generator.createControl() instead");
-    qmlRegisterUncreatableType<DynamicControl>("tomahawk", 1, 0, "DynamicControl", "use generator.createControl() isntead");
-    qmlRegisterUncreatableType<EchonestControl>("tomahawk", 1, 0, "EchonestControl", "use Generator.createControl() instead");
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
     qmlRegisterUncreatableType<PlayableItem>("tomahawk", 1, 0, "PlayableItem", "you cannot create it on your own - they will appear in the model");
 
-    QStringList generatorControls;
-
-    foreach(dyncontrol_ptr control, m_playlist->generator()->controls()) {
-        qDebug() << "**CTRL" << control->summary() << control->input() << control->match() << control->type() << control->selectedType();
-        generatorControls << control->summary();
-    }
-
-    ControlModel *controls = new ControlModel(m_playlist->generator(), this);
 
     EchonestStation *station = new EchonestStation( m_proxyModel, m_playlist, this);
     rootContext()->setContextProperty( "echonestStation", station);
-    rootContext()->setContextProperty( "controlModel", controls );
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
     currentItemChanged( m_model->currentItem() );

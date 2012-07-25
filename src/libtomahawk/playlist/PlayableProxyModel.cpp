@@ -587,7 +587,7 @@ PlayableProxyModel::setFilter( const QString& pattern )
 PlayableItem*
 PlayableProxyModel::itemFromIndex(int itemIndex) const
 {
-    qDebug() << "returning item" << sourceModel()->itemFromIndex( itemIndex )->name();
+//    qDebug() << "returning item" << sourceModel()->itemFromIndex( itemIndex )->name();
     QModelIndex modelIndex = index( itemIndex, 0 );
     return sourceModel()->itemFromIndex( mapToSource( modelIndex ) );
 }
