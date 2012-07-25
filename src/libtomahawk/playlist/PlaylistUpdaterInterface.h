@@ -78,7 +78,11 @@ public:
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 
     virtual bool sync() const { return false; }
+    virtual void setSync( bool ) {}
+
+    virtual bool canSubscribe() const { return false; }
     virtual bool subscribed() const { return false; }
+    virtual void setSubscribed( bool ) {}
 
 signals:
     void changed();

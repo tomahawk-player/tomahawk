@@ -554,7 +554,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             QStyledItemDelegate::paint( painter, o, index );
 
             PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
-            if ( plItem->subscribed() && !plItem->subscribedIcon().isNull() )
+            if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
             {
                 const int padding = 2;
                 const int imgWidth = o.rect.height() - 2*padding;
@@ -655,10 +655,29 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 }
             }
         }
+        else if ( event->type() == QEvent::MouseButtonRelease && type == SourcesModel::StaticPlaylist )
+        {
+            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            Q_ASSERT( plItem );
+
+            QMouseEvent* mev = static_cast< QMouseEvent* >( event );
+            if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
+            {
+                const int padding = 2;
+                const int imgWidth = option.rect.height() - 2*padding;
+                const QRect subRect( option.rect.right() - padding - imgWidth, option.rect.top() + padding, imgWidth, imgWidth );
+
+                if ( subRect.contains( mev->pos() ) )
+                {
+                    // Toggle playlist subscription
+                    plItem->setSubscribed( !plItem->subscribed() );
+                }
+            }
+        }
     }
 
     // We emit our own clicked() signal instead of relying on QTreeView's, because that is fired whether or not a delegate accepts
-    // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here wemake sure we only
+    // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here we make sure we only
     // emit if we really want to
     if ( event->type() == QEvent::MouseButtonRelease )
     {

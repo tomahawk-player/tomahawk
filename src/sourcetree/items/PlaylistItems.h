@@ -42,9 +42,11 @@ public:
 
     virtual SourceTreeItem* activateCurrent();
 
+    // subscription management
+    bool canSubscribe() const { return m_canSubscribe; }
     bool subscribed() const { return m_showSubscribed; }
-    QPixmap subscribedIcon() const { return m_subscribedIcon; }
-    QList< QAction* > subscribedActions() const;
+    QPixmap subscribedIcon() const { return m_showSubscribed ? m_subscribedOnIcon : m_subscribedOffIcon; }
+    void setSubscribed( bool subscribed );
 
 public slots:
     virtual void activate();
@@ -62,10 +64,10 @@ private slots:
 private:
     bool createOverlay();
 
-    bool m_loaded, m_showSubscribed;
+    bool m_loaded, m_canSubscribe, m_showSubscribed;
     Tomahawk::playlist_ptr m_playlist;
     QIcon m_icon, m_overlaidIcon;
-    QPixmap m_subscribedIcon;
+    QPixmap m_subscribedOnIcon, m_subscribedOffIcon;
     QList<Tomahawk::PlaylistUpdaterInterface*> m_overlaidUpdaters;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
