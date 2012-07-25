@@ -55,7 +55,10 @@ public:
     bool sync() const;
     void setSync( bool sync );
     bool subscribed() const;
+    // actually change the subscribed value in spotify
     void setSubscribed( bool subscribed );
+    // Just set the subscribed flag
+    void setSubscribedStatus( bool subscribed );
     bool canSubscribe() const;
     void setCanSubscribe( bool canSub );
     QString spotifyId() const { return m_spotifyId; }

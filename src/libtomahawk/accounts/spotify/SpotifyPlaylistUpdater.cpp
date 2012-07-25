@@ -65,7 +65,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
     updater->setCanSubscribe( canSubscribe );
-    updater->setSubscribed( isSubscribed );
+    updater->setSubscribedStatus( isSubscribed );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -242,8 +242,9 @@ SpotifyPlaylistUpdater::sync() const
     return m_sync;
 }
 
+
 void
-SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+SpotifyPlaylistUpdater::setSubscribedStatus( bool subscribed )
 {
     if ( m_subscribed == subscribed )
         return;
@@ -252,6 +253,16 @@ SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
     setSync( subscribed );
     saveToSettings();
     emit changed();
+}
+
+
+void
+SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+{
+    if ( !m_spotify.isNull() )
+        m_spotify.data()->setSubscribedForPlaylist( playlist(), subscribed );
+
+    // Spotify account will in turn call setSUbscribedStatus
 }
 
 

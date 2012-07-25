@@ -679,7 +679,7 @@ SpotifyAccount::setSubscribedForPlaylist( const playlist_ptr& playlist, bool sub
     sendMessage( msg, this );
 
     updater->setSync( subscribed );
-    updater->setSubscribed( subscribed );
+    updater->setSubscribedStatus( subscribed );
 }
 
 
@@ -733,7 +733,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         QObject* receiver = m_qidToSlotMap[ qid ].first;
         QString slot = m_qidToSlotMap[ qid ].second;
         m_qidToSlotMap.remove( qid );
-        
+
         QVariant extraData;
         if ( m_qidToExtraData.contains( qid ) )
             extraData = m_qidToExtraData.take( qid );
@@ -1214,7 +1214,7 @@ SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& 
     }
 
     m_qidToExtraData[ qid ] = extraData;
-    
+
     m_spotifyResolver.data()->sendMessage( msg );
 
     return qid;
@@ -1312,7 +1312,7 @@ SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync 
 
     if ( info )
         info->sync = sync;
-    
+
 
     if ( !m_configWidget.isNull() )
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
