@@ -39,7 +39,7 @@ class DLLEXPORT SourceTreePopupDialog : public QWidget
 public:
     explicit SourceTreePopupDialog( SourceTreeView* parent );
 
-    int offset() const { return 14; }
+    int offset() const { return 16; }
 
     void setMainText( const QString& text );
     void setOkButtonText( const QString& text );

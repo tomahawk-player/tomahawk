@@ -58,6 +58,7 @@ SourceTreePopupDialog::SourceTreePopupDialog( SourceTreeView* parent )
 
     layout()->addWidget( m_label );
     layout()->addWidget( m_buttons );
+
 /*
     m_buttons->button( QDialogButtonBox::Ok )->setStyleSheet(
                        "QPushButton { \
@@ -105,8 +106,8 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 
     QPainterPath outline;
     // Left triangle top branch
-    outline.moveTo( brect.left(), brect.height() / 2 );
-    outline.lineTo( leftEdgeOffset, brect.height() / 2 - leftTriangleWidth / 2 );
+    outline.moveTo( brect.left(), brect.top() + brect.height() / 2 );
+    outline.lineTo( leftEdgeOffset, brect.top() + brect.height() / 2 - leftTriangleWidth / 2 );
 
     // main outline
     outline.lineTo( leftEdgeOffset, cornerRounding );
@@ -119,10 +120,11 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     outline.quadTo( QPoint( leftEdgeOffset, brect.height() ), QPoint( leftEdgeOffset, brect.height() - cornerRounding ) );
 
     // Left triangle bottom branch
-    outline.lineTo( leftEdgeOffset, brect.height() / 2 + leftTriangleWidth / 2 );
-    outline.lineTo( brect.left(), brect.height() / 2 );
+    outline.lineTo( leftEdgeOffset, brect.top() + brect.height() / 2 + leftTriangleWidth / 2 );
+    outline.lineTo( brect.left(), brect.top() + brect.height() / 2 );
 
     QPainter p( this );
+
     p.setRenderHint( QPainter::Antialiasing );
 
     QPen pen( QColor( "#3F4247" ) );
@@ -130,6 +132,7 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     p.setPen( pen );
     p.drawPath( outline );
 
+    p.setOpacity( 0.93 );
     p.fillPath( outline, QColor( "#D6E3F1" ) );
 
 #ifdef QT_MAC_USE_COCOA
