@@ -89,6 +89,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   QMetaMethod slot_;
   std::tr1::function<void()> callback_;
   bool autoDelete_;
+  QObject* outOfThreadReceiver_;
 
   boost::scoped_ptr<const ClosureArgumentWrapper> val0_;
   boost::scoped_ptr<const ClosureArgumentWrapper> val1_;

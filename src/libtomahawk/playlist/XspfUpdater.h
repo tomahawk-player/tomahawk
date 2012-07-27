@@ -48,6 +48,10 @@ public:
     void setInterval( int intervalMsecs ) ;
     int intervalMsecs() const { return m_timer->interval(); }
 
+    bool canSubscribe() const { return true; }
+    bool subscribed() const { return m_autoUpdate; }
+    void setSubscribed( bool subscribed );
+
 public slots:
     void updateNow();
     void setAutoUpdate( bool autoUpdate );

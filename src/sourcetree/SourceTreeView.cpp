@@ -51,6 +51,8 @@
 #include "LatchManager.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/Closure.h"
+#include "widgets/SourceTreePopupDialog.h"
 
 using namespace Tomahawk;
 
@@ -362,29 +364,59 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
             Q_ASSERT( false );
     }
 
-    QMessageBox askDelete( QMessageBox::Question, tr( "Delete %1?", "playlist/station/..." ).arg( typeDesc ),
-                           tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
-                             .arg( typeDesc ).arg( idx.data().toString() ),
-                           QMessageBox::Yes | QMessageBox::No, this );
+    PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
+    playlist_ptr playlist = item->playlist();
 
-#ifdef Q_OS_MAC
-    askDelete.setWindowModality( Qt::WindowModal );
-#endif
+    const QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
+    if ( playlist->hasCustomDeleter() )
+    {
+        playlist->customDelete( rightCenter );
+    }
+    else
+    {
+        if ( m_popupDialog.isNull() )
+        {
+            m_popupDialog = QWeakPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
+            connect( m_popupDialog.data(), SIGNAL( result( bool ) ), this, SLOT( onDeletePlaylistResult( bool ) ) );
+        }
 
-    int r = askDelete.exec();
-    if ( r != QMessageBox::Yes )
+        m_popupDialog.data()->setMainText( tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
+                                .arg( typeDesc ).arg( idx.data().toString() ) );
+        m_popupDialog.data()->setOkButtonText( tr( "Delete" ) );
+        m_popupDialog.data()->setProperty( "idx", QVariant::fromValue< QModelIndex >( idx ) );
+
+        m_popupDialog.data()->move( rightCenter.x() - m_popupDialog.data()->offset(), rightCenter.y() - m_popupDialog.data()->sizeHint().height() / 2. );
+        m_popupDialog.data()->show();
+    }
+
+}
+
+
+void
+SourceTreeView::onDeletePlaylistResult( bool result )
+{
+    Q_ASSERT( !m_popupDialog.isNull() );
+
+    const QModelIndex idx = m_popupDialog.data()->property( "idx" ).value< QModelIndex >();
+    Q_ASSERT( idx.isValid() );
+
+    if ( !result )
         return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
 
     if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
         playlist_ptr playlist = item->playlist();
+        qDebug() << "Doing delete of playlist:" << playlist->title();
         Playlist::remove( playlist );
     }
     else if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
         dynplaylist_ptr playlist = item->dynPlaylist();
+        qDebug() << "Doing delete of playlist:" << playlist->title();
         DynamicPlaylist::remove( playlist );
     }
 }

@@ -35,6 +35,7 @@
 
 #include "DllMacro.h"
 
+class SourceTreePopupDialog;
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -194,6 +195,18 @@ public:
     void removeUpdater( PlaylistUpdaterInterface* updater );
     QList<PlaylistUpdaterInterface*> updaters() const { return m_updaters; }
 
+    /**
+     * Some updaters might have custom deleters in order to perform more actions that require
+     * user prompting on delete.
+     */
+    bool hasCustomDeleter() const;
+    /**
+     * If this playlist has a custom deleter, let it do the deleting itself.
+     *
+     * If it needs user prompting, use the \param customDeleter as the right-most center point.
+     */
+    void customDelete( const QPoint& rightCenter );
+
     Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
@@ -249,6 +262,7 @@ public slots:
 
     void resolve();
 
+    void setWeakSelf( QWeakPointer< Playlist > self );
 protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
@@ -282,6 +296,7 @@ private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
 
+    void onDeleteResult( SourceTreePopupDialog* );
 private:
     Playlist();
     void init();
@@ -289,6 +304,7 @@ private:
     void setBusy( bool b );
     void checkRevisionQueue();
 
+    QWeakPointer< Playlist > m_weakSelf;
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;

@@ -1,6 +1,6 @@
 /*
  *
- *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *    Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ using namespace Tomahawk;
 PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl, int index )
     : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist, index )
     , m_loaded( false )
+    , m_canSubscribe( false )
+    , m_showSubscribed( false )
     , m_playlist( pl )
 {
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
@@ -280,6 +282,7 @@ PlaylistItem::onUpdated()
     if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
 
+
     emit updated();
 }
 
@@ -292,12 +295,32 @@ PlaylistItem::createOverlay()
     if ( m_playlist->updaters().isEmpty() )
         return false;
 
+    m_showSubscribed = false;
+    m_canSubscribe = false;
+    foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
+    {
+        if ( updater->canSubscribe() )
+        {
+            m_canSubscribe = true;
+            m_showSubscribed = updater->subscribed();
+            break;
+        }
+    }
+
+    if ( m_canSubscribe && m_showSubscribed && m_subscribedOnIcon.isNull() )
+        m_subscribedOnIcon = QPixmap( RESPATH "images/subscribe-on.png" );
+    else if ( m_canSubscribe && !m_showSubscribed && m_subscribedOffIcon.isNull() )
+        m_subscribedOffIcon = QPixmap( RESPATH "images/subscribe-off.png" );
+
     QList< QPixmap > icons;
     foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
     {
         if ( updater->sync() && !updater->typeIcon().isNull() )
             icons << updater->typeIcon();
     }
+
+    m_overlaidIcon = QIcon();
+    m_overlaidUpdaters = m_playlist->updaters();
 
     if ( icons.isEmpty() )
         return false;
@@ -307,8 +330,6 @@ PlaylistItem::createOverlay()
     if ( icons.size() > 2 )
         icons = icons.mid( 0, 2 );
 
-    m_overlaidIcon = QIcon();
-    m_overlaidUpdaters = m_playlist->updaters();
 
     QPixmap base = m_icon.pixmap( 48, 48 );
     QPainter p( &base );
@@ -367,6 +388,27 @@ PlaylistItem::activateCurrent()
     }
 
     return 0;
+}
+
+
+void
+PlaylistItem::setSubscribed( bool subscribed )
+{
+    Q_ASSERT( !m_overlaidUpdaters.isEmpty() );
+    if ( m_overlaidUpdaters.isEmpty() )
+    {
+        qWarning() << "NO playlist updater but got a toggle subscribed action on the playlist item!?";
+        return;
+    }
+    else if ( m_overlaidUpdaters.size() > 1 )
+    {
+        qWarning() << "Got TWO subscribed updaters at the same time? Toggling both... wtf";
+    }
+
+    foreach( PlaylistUpdaterInterface* updater, m_overlaidUpdaters )
+    {
+        updater->setSubscribed( subscribed );
+    }
 }
 
 

@@ -144,6 +144,8 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
     // Update immediately as well
     if ( m_autoUpdate )
         QTimer::singleShot( 0, this, SLOT( updateNow() ) );
+
+    emit changed();
 }
 
 void
@@ -157,4 +159,11 @@ XspfUpdater::setInterval( int intervalMsecs )
         m_timer = new QTimer( this );
 
     m_timer->setInterval( intervalMsecs );
+}
+
+
+void
+XspfUpdater::setSubscribed( bool subscribed )
+{
+    setAutoUpdate( subscribed );
 }

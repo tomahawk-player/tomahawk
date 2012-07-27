@@ -26,6 +26,7 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QMenu>
 
+class SourceTreePopupDialog;
 class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
@@ -84,6 +85,8 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onSelectionChanged();
 
+    void onDeletePlaylistResult( bool result );
+
 protected:
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
@@ -106,6 +109,7 @@ private:
     QModelIndex m_contextMenuIndex;
     SourceDelegate* m_delegate;
     Tomahawk::LatchManager* m_latchManager;
+    QWeakPointer<SourceTreePopupDialog> m_popupDialog;
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
@@ -115,7 +119,7 @@ private:
     bool m_dragging;
     QRect m_dropRect;
     QPersistentModelIndex m_dropIndex;
-    
+
     QPersistentModelIndex m_selectedIndex;
 };
 

@@ -65,7 +65,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
     updater->setCanSubscribe( canSubscribe );
-    updater->setSubscribed( isSubscribed );
+    updater->setSubscribedStatus( isSubscribed );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -131,40 +131,24 @@ SpotifyPlaylistUpdater::remove( bool askToDeletePlaylist )
 
 
 void
-SpotifyPlaylistUpdater::aboutToDelete()
+SpotifyPlaylistUpdater::unsyncOrDelete( bool toDelete )
 {
     if ( QThread::currentThread() != QApplication::instance()->thread() )
-        QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "aboutToDelete", Qt::BlockingQueuedConnection );
+        QMetaObject::invokeMethod( const_cast<SpotifyPlaylistUpdater*>(this), "unsyncOrDelete", Qt::BlockingQueuedConnection, Q_ARG( bool, toDelete ) );
     else
     {
         if ( m_subscribed )
         {
             m_spotify.data()->setSubscribedForPlaylist( playlist(), false );
         }
-        else if ( m_sync )
+        else if ( m_sync && toDelete )
         {
-                checkDeleteDialog();
+            // User wants to delete it!
+            QVariantMap msg;
+            msg[ "_msgtype" ] = "deletePlaylist";
+            msg[ "playlistid" ] = m_spotifyId;
+            m_spotify.data()->sendMessage( msg );
         }
-    }
-}
-
-
-void
-SpotifyPlaylistUpdater::checkDeleteDialog() const
-{
-    // Ask if we should delete the playlist on the spotify side as well
-    QMessageBox askDelete( QMessageBox::Question, tr( "Delete in Spotify?" ), tr( "Would you like to delete the corresponding Spotify playlist as well?" ), QMessageBox::Yes | QMessageBox::No, 0 );
-    int ret = askDelete.exec();
-    if ( ret == QMessageBox::Yes )
-    {
-        if ( m_spotify.isNull() )
-            return;
-
-        // User wants to delete it!
-        QVariantMap msg;
-        msg[ "_msgtype" ] = "deletePlaylist";
-        msg[ "playlistid" ] = m_spotifyId;
-        m_spotify.data()->sendMessage( msg );
     }
 }
 
@@ -242,8 +226,9 @@ SpotifyPlaylistUpdater::sync() const
     return m_sync;
 }
 
+
 void
-SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+SpotifyPlaylistUpdater::setSubscribedStatus( bool subscribed )
 {
     if ( m_subscribed == subscribed )
         return;
@@ -252,6 +237,16 @@ SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
     setSync( subscribed );
     saveToSettings();
     emit changed();
+}
+
+
+void
+SpotifyPlaylistUpdater::setSubscribed( bool subscribed )
+{
+    if ( !m_spotify.isNull() )
+        m_spotify.data()->setSubscribedForPlaylist( playlist(), subscribed );
+
+    // Spotify account will in turn call setSUbscribedStatus
 }
 
 
@@ -279,6 +274,25 @@ bool
 SpotifyPlaylistUpdater::canSubscribe() const
 {
     return m_canSubscribe;
+}
+
+
+PlaylistDeleteQuestions
+SpotifyPlaylistUpdater::deleteQuestions() const
+{
+    // 1234 is our magic key
+    if ( m_sync && !m_subscribed )
+        return Tomahawk::PlaylistDeleteQuestions() << qMakePair<QString, int>( tr( "Delete associated Spotify playlist?" ), 1234 );
+    else
+        return Tomahawk::PlaylistDeleteQuestions();
+}
+
+
+void
+SpotifyPlaylistUpdater::setQuestionResults( const QMap< int, bool > results )
+{
+    const bool toDelete = results.value( 1234, false );
+    unsyncOrDelete( toDelete );
 }
 
 
