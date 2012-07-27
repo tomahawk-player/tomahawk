@@ -364,21 +364,31 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
             Q_ASSERT( false );
     }
 
-    if ( m_popupDialog.isNull() )
+    PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
+    playlist_ptr playlist = item->playlist();
+
+    const QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
+    if ( playlist->hasCustomDeleter() )
     {
-        m_popupDialog = QWeakPointer< SourceTreePopupDialog >( new SourceTreePopupDialog( this ) );
-        connect( m_popupDialog.data(), SIGNAL( result( bool ) ), this, SLOT( onDeletePlaylistResult( bool ) ) );
+        playlist->customDelete( rightCenter );
+    }
+    else
+    {
+        if ( m_popupDialog.isNull() )
+        {
+            m_popupDialog = QWeakPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
+            connect( m_popupDialog.data(), SIGNAL( result( bool ) ), this, SLOT( onDeletePlaylistResult( bool ) ) );
+        }
+
+        m_popupDialog.data()->setMainText( tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
+                                .arg( typeDesc ).arg( idx.data().toString() ) );
+        m_popupDialog.data()->setOkButtonText( tr( "Delete" ) );
+        m_popupDialog.data()->setProperty( "idx", QVariant::fromValue< QModelIndex >( idx ) );
+
+        m_popupDialog.data()->move( rightCenter.x() - m_popupDialog.data()->offset(), rightCenter.y() - m_popupDialog.data()->sizeHint().height() / 2. );
+        m_popupDialog.data()->show();
     }
 
-    m_popupDialog.data()->setMainText( tr( "Would you like to delete the %1 <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
-                             .arg( typeDesc ).arg( idx.data().toString() ) );
-    m_popupDialog.data()->setOkButtonText( tr( "Delete" ) );
-    m_popupDialog.data()->setProperty( "idx", QVariant::fromValue< QModelIndex >( idx ) );
-
-    qDebug() << "POPUP HAS HEIGHT:" << m_popupDialog.data()->sizeHint().height();
-    const QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
-    m_popupDialog.data()->move( rightCenter.x() - m_popupDialog.data()->offset(), rightCenter.y() - m_popupDialog.data()->sizeHint().height() / 2. );
-    m_popupDialog.data()->show();
 }
 
 

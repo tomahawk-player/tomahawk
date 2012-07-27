@@ -195,6 +195,18 @@ public:
     void removeUpdater( PlaylistUpdaterInterface* updater );
     QList<PlaylistUpdaterInterface*> updaters() const { return m_updaters; }
 
+    /**
+     * Some updaters might have custom deleters in order to perform more actions that require
+     * user prompting on delete.
+     */
+    bool hasCustomDeleter() const;
+    /**
+     * If this playlist has a custom deleter, let it do the deleting itself.
+     *
+     * If it needs user prompting, use the \param customDeleter as the right-most center point.
+     */
+    void customDelete( const QPoint& rightCenter );
+
     Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
@@ -284,6 +296,7 @@ private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
 
+    void onDeleteResult( SourceTreePopupDialog* );
 private:
     Playlist();
     void init();

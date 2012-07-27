@@ -20,15 +20,18 @@
 #define SOURCETREE_POPUP_DIALOG
 
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QWidget>
+#include <QMetaType>
 
+class QVBoxLayout;
 class QShowEvent;
 class QLabel;
 class QDialogButtonBox;
 class QPushButton;
 class QFocusEvent;
-class SourceTreeView;
+class QCheckBox;
 
 /**
  * Place me at offset() to the left of the right edge of the sourcetree.
@@ -37,14 +40,16 @@ class DLLEXPORT SourceTreePopupDialog : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SourceTreePopupDialog( SourceTreeView* parent );
+    explicit SourceTreePopupDialog();
 
     int offset() const { return 16; }
 
     void setMainText( const QString& text );
     void setOkButtonText( const QString& text );
+    void setExtraQuestions( const Tomahawk::PlaylistDeleteQuestions& questions );
 
     bool resultValue() const { return m_result; }
+    QMap< int, bool > questionResults() const { return m_questionResults; }
 
 signals:
     void result( bool accepted );
@@ -59,11 +64,22 @@ private slots:
     void onRejected();
 
 private:
+    void calculateResults();
+
+    QVBoxLayout* m_layout;
+    QList< QCheckBox* > m_questionCheckboxes;
+
     QString m_text;
     bool m_result;
+    Tomahawk::PlaylistDeleteQuestions m_questions;
+    QMap< int, bool > m_questionResults;
 
     QLabel* m_label;
     QDialogButtonBox* m_buttons;
 };
 
+
+Q_DECLARE_METATYPE( SourceTreePopupDialog* )
 #endif
+
+class QCheckBox;

@@ -98,6 +98,9 @@ namespace Tomahawk
     typedef QMultiHash< QString, SerializedUpdater > SerializedUpdaters;
     typedef QList< SerializedUpdater > SerializedUpdaterList;
 
+    // Yes/no questions with an associated enum value
+    typedef QPair< QString, int > PlaylistDeleteQuestion;
+    typedef QList< PlaylistDeleteQuestion > PlaylistDeleteQuestions;
 
     namespace InfoSystem
     {

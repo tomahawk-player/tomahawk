@@ -37,7 +37,9 @@
 #include "PlaylistPlaylistInterface.h"
 
 #include "utils/Logger.h"
+#include "utils/Closure.h"
 #include "PlaylistUpdaterInterface.h"
+#include "widgets/SourceTreePopupDialog.h"
 
 using namespace Tomahawk;
 
@@ -308,6 +310,84 @@ Playlist::removeUpdater( PlaylistUpdaterInterface* updater )
     disconnect( updater, SIGNAL( destroyed( QObject* ) ), this, SIGNAL( changed() ) );
 
     emit changed();
+}
+
+
+bool
+Playlist::hasCustomDeleter() const
+{
+    foreach ( PlaylistUpdaterInterface* updater, m_updaters )
+    {
+        if ( !updater->deleteQuestions().isEmpty() )
+            return true;
+    }
+
+    return false;
+}
+
+
+void
+Playlist::customDelete( const QPoint& leftCenter )
+{
+    if ( !hasCustomDeleter() )
+        return;
+
+    Tomahawk::PlaylistDeleteQuestions questions;
+    foreach ( PlaylistUpdaterInterface* updater, m_updaters )
+    {
+        if ( updater->deleteQuestions().isEmpty() )
+            continue;
+
+        questions.append( updater->deleteQuestions() );
+    }
+
+    Q_ASSERT( !questions.isEmpty() );
+    SourceTreePopupDialog* dialog = new SourceTreePopupDialog;
+    NewClosure( dialog, SIGNAL( result( bool ) ), this, SLOT( onDeleteResult( SourceTreePopupDialog* ) ), dialog );
+
+    dialog->setMainText( tr( "Would you like to delete the playlist <b>\"%2\"</b>?", "e.g. Would you like to delete the playlist named Foobar?" )
+                             .arg( title() ) );
+    dialog->setOkButtonText( tr( "Delete" ) );
+    dialog->setExtraQuestions( questions );
+
+    dialog->move( leftCenter.x() - dialog->offset(), leftCenter.y() - dialog->sizeHint().height() / 2. );
+    dialog->show();
+}
+
+
+void
+Playlist::onDeleteResult( SourceTreePopupDialog* dialog )
+{
+    dialog->deleteLater();
+
+    const bool ret = dialog->resultValue();
+
+    if ( !ret )
+        return;
+
+    playlist_ptr p = m_weakSelf.toStrongRef();
+    if ( p.isNull() )
+    {
+        qWarning() << "Got null m_weakSelf weak ref in Playlsit::onDeleteResult!!";
+        Q_ASSERT( false );
+        return;
+    }
+
+    const QMap< int, bool > questionResults = dialog->questionResults();
+    foreach ( PlaylistUpdaterInterface* updater, m_updaters )
+    {
+        updater->setQuestionResults( questionResults );
+    }
+
+    dynplaylist_ptr dynpl = p.dynamicCast< DynamicPlaylist >();
+    if ( !dynpl.isNull() )
+    {
+        DynamicPlaylist::remove( dynpl );
+    }
+    else
+    {
+        remove( p );
+    }
 }
 
 

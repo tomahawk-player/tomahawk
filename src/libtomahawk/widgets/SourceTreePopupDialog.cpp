@@ -18,22 +18,25 @@
 
 #include "SourceTreePopupDialog.h"
 
-#include "sourcetree/SourceTreeView.h"
-
 #include <QPaintEvent>
 #include <QPainter>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QTimer>
 
 #ifdef QT_MAC_USE_COCOA
 #include "SourceTreePopupDialog_mac.h"
 #endif
 
-SourceTreePopupDialog::SourceTreePopupDialog( SourceTreeView* parent )
+using namespace Tomahawk;
+
+SourceTreePopupDialog::SourceTreePopupDialog()
     : QWidget( 0 )
+    , m_layout( 0 )
     , m_result( false )
     , m_label( 0 )
     , m_buttons( 0 )
@@ -54,10 +57,12 @@ SourceTreePopupDialog::SourceTreePopupDialog( SourceTreeView* parent )
     connect( m_buttons, SIGNAL( accepted() ), this, SLOT( onAccepted() ) );
     connect( m_buttons, SIGNAL( rejected() ), this, SLOT( onRejected() ) );
 
-    setLayout( new QVBoxLayout );
+    m_layout = new QVBoxLayout;
+    setLayout( m_layout );
 
     layout()->addWidget( m_label );
     layout()->addWidget( m_buttons );
+    setContentsMargins( contentsMargins().left() + 2, contentsMargins().top(), contentsMargins().right(), contentsMargins().bottom() );
 
 /*
     m_buttons->button( QDialogButtonBox::Ok )->setStyleSheet(
@@ -92,6 +97,30 @@ SourceTreePopupDialog::setOkButtonText( const QString& text )
 {
     if ( m_buttons && m_buttons->button( QDialogButtonBox::Ok ) )
         m_buttons->button( QDialogButtonBox::Ok )->setText( text );
+}
+
+
+void
+SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestions& questions )
+{
+    m_questions = questions;
+
+    int idx = m_layout->indexOf( m_label ) + 1;
+    foreach ( const Tomahawk::PlaylistDeleteQuestion& question, m_questions )
+    {
+        QCheckBox* cb = new QCheckBox( question.first, this );
+        cb->setLayoutDirection( Qt::RightToLeft );
+        cb->setProperty( "data", question.second );
+
+        QHBoxLayout* h = new QHBoxLayout;
+        h->addStretch( 1 );
+        h->addWidget( cb );
+//         m_layout->insertLayout( h, cb, 0 );
+        m_layout->insertLayout( idx, h, 0 );
+
+        m_questionCheckboxes << cb;
+        idx++;
+    }
 }
 
 
@@ -163,6 +192,7 @@ SourceTreePopupDialog::onAccepted()
 {
     hide();
     m_result = true;
+    calculateResults();
     emit result( m_result );
 }
 
@@ -172,5 +202,19 @@ SourceTreePopupDialog::onRejected()
 {
     hide();
     m_result = false;
+    calculateResults();
     emit result( m_result );
+}
+
+
+void
+SourceTreePopupDialog::calculateResults()
+{
+    foreach ( const QCheckBox* b, m_questionCheckboxes )
+    {
+        if ( b->property( "data" ).toInt() != 0 )
+        {
+            m_questionResults[ b->property( "data" ).toInt() ] = ( b->checkState() == Qt::Checked );
+        }
+    }
 }

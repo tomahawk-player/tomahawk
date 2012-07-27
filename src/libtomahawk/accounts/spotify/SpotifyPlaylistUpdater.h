@@ -23,6 +23,7 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Closure.h"
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QQueue>
 #include <QVariant>
@@ -63,6 +64,9 @@ public:
     void setCanSubscribe( bool canSub );
     QString spotifyId() const { return m_spotifyId; }
 
+    virtual Tomahawk::PlaylistDeleteQuestions deleteQuestions() const;
+    virtual void setQuestionResults( const QMap< int, bool > results );
+
     void remove( bool askToDeletePlaylist = true );
 public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
@@ -76,15 +80,13 @@ public slots:
     void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
     void tomahawkPlaylistRenamed( const QString&, const QString& );
 
-    void aboutToDelete();
-
 private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void onTracksMovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
-    void checkDeleteDialog() const;
+    void unsyncOrDelete( bool toDelete );
 
     void playlistRevisionLoaded();
 private:
