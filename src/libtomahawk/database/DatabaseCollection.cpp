@@ -144,6 +144,8 @@ DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVarian
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ), &QObject::deleteLater );  //GUID
+    p->setWeakSelf( p.toWeakRef() );
+
     addAutoPlaylist( p );
 }
 
@@ -162,6 +164,8 @@ DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ), &QObject::deleteLater );  //GUID
+    p->setWeakSelf( p.toWeakRef() );
+
     addStation( p );
 }
 

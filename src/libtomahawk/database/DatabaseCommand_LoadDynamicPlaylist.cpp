@@ -60,6 +60,8 @@ Tomahawk::DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
                                                 query.value(5).toInt(),     //lastmod
                                                 query.value(0).toString() ) );  //GUID
 
+        p->setWeakSelf( p.toWeakRef() );
+/*
         tLog() << "Loaded individual dynamic playlist:" <<      query.value(7).toString()  //current rev
         <<      query.value(1).toString()  //title
         <<      query.value(2).toString()  //info
@@ -69,7 +71,7 @@ Tomahawk::DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
         <<      static_cast<GeneratorMode>(query.value(9).toInt())  // dynamic mode
         <<      query.value(6).toBool()    //shared
         <<      query.value(5).toInt()     //lastmod
-        <<      query.value(0).toString();  //GUID
+        <<      query.value(0).toString();  //GUID */
 
         emit dynamicPlaylistLoaded( p );
     }

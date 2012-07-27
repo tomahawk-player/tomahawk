@@ -155,6 +155,7 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
                        )
 {
     dynplaylist_ptr dynplaylist = Tomahawk::dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared, autoLoad ), &QObject::deleteLater );
+    dynplaylist->setWeakSelf( dynplaylist.toWeakRef() );
 
     DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
     connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );

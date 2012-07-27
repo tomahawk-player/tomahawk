@@ -35,6 +35,7 @@
 
 #include "DllMacro.h"
 
+class SourceTreePopupDialog;
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -249,6 +250,7 @@ public slots:
 
     void resolve();
 
+    void setWeakSelf( QWeakPointer< Playlist > self );
 protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
@@ -289,6 +291,7 @@ private:
     void setBusy( bool b );
     void checkRevisionQueue();
 
+    QWeakPointer< Playlist > m_weakSelf;
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;

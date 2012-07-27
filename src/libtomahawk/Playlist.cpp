@@ -189,6 +189,7 @@ Playlist::create( const source_ptr& author,
     }
 
     playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared, entries ), &QObject::deleteLater );
+    playlist->setWeakSelf( playlist.toWeakRef() );
 
     // save to DB in the background
     // Watch for the created() signal if you need to be sure it's written.
@@ -707,6 +708,13 @@ Playlist::checkRevisionQueue()
         }
         updateEntries( item.newRev, item.oldRev, item.entries );
     }
+}
+
+
+void
+Playlist::setWeakSelf( QWeakPointer< Playlist > self )
+{
+    m_weakSelf = self;
 }
 
 
