@@ -181,10 +181,7 @@ Playlist::create( const source_ptr& author,
         p->setGuid( uuid() );
         p->setDuration( query->duration() );
         p->setLastmodified( 0 );
-        QString annotation = "";
-        if ( !query->property( "annotation" ).toString().isEmpty() )
-            annotation = query->property( "annotation" ).toString();
-        p->setAnnotation( annotation );
+        p->setAnnotation( query->property( "annotation" ).toString() );
         p->setQuery( query );
 
         entries << p;

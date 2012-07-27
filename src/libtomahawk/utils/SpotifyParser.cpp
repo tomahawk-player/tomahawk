@@ -237,6 +237,7 @@ SpotifyParser::spotifyBrowseFinished()
 
                 tLog() << "Setting resulthint to " << trackResult.value( "trackuri" );
                 q->setResultHint( trackResult.value( "trackuri" ).toString() );
+                q->setProperty( "annotation", trackResult.value( "trackuri" ).toString() );
 
                 m_tracks << q;
             }
@@ -337,8 +338,12 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
         if ( q.isNull() )
             continue;
 
-        if( !trackMap.value( "id" ).toString().isEmpty() )
-            q->setResultHint( trackMap.value( "id" ).toString() );
+        const QString id = trackMap.value( "id" ).toString();
+        if( !id.isEmpty() )
+        {
+            q->setResultHint( id );
+            q->setProperty( "annotation", id );
+        }
 
         m_tracks << q;
     }
