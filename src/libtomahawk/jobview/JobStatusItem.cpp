@@ -18,10 +18,12 @@
 
 
 #include "JobStatusItem.h"
+#include <QTime>
 
 
 JobStatusItem::JobStatusItem()
     : QObject()
+    , m_createdOn( QDateTime::currentMSecsSinceEpoch() )
 {
 }
 

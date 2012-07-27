@@ -65,12 +65,16 @@ public:
     virtual void createDelegate( QObject* parent );
     virtual QStyledItemDelegate* customDelegate() const;
 
+    qint64 age() const { return m_createdOn; }
 signals:
     /// Ask for an update
     void statusChanged();
 
     /// Job is finished, will be deleted by the model
     void finished();
+
+private:
+    qint64 m_createdOn;
 };
 
 Q_DECLARE_METATYPE( JobStatusItem* );

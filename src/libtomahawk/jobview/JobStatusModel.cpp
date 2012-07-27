@@ -82,14 +82,14 @@ JobStatusSortModel::refreshDelegatesSlot()
 bool
 JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    QVariant leftVar = left.data( JobStatusModel::JobDataRole );
-    JobStatusItem* leftItem = leftVar.value< JobStatusItem* >();
-    QVariant rightVar = right.data( JobStatusModel::JobDataRole );
-    JobStatusItem* rightItem = rightVar.value< JobStatusItem* >();
-    if ( !leftItem || !rightItem )
-        return false;
+    const int leftSort = left.data( JobStatusModel::SortRole ).toInt();
+    const int rightSort = right.data( JobStatusModel::SortRole ).toInt();
 
-    return leftItem->weight() < rightItem->weight();
+    if ( leftSort == rightSort )
+        return left.data( JobStatusModel::AgeRole ).toUInt() > right.data( JobStatusModel::AgeRole ).toUInt();
+
+
+    return leftSort < rightSort;
 }
 
 
@@ -204,6 +204,15 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
 
         case JobDataRole:
             return QVariant::fromValue< JobStatusItem* >( item );
+
+        case SortRole:
+            return item->weight();
+
+        case AgeRole:
+            return item->age();
+
+        default:
+            return QVariant();
     }
 
     return QVariant();
