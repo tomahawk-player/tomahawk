@@ -87,6 +87,7 @@ public:
 
     // The int data value associated with each question must be unique across *all* playlist updaters,
     // as setQuestionResults is called with all questions from all updaters.
+    virtual bool hasCustomDeleter() const { return false; }
     virtual PlaylistDeleteQuestions deleteQuestions() const { return PlaylistDeleteQuestions(); }
     virtual void setQuestionResults( const QMap< int, bool > results ) {}
 

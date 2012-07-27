@@ -64,6 +64,7 @@ public:
     void setCanSubscribe( bool canSub );
     QString spotifyId() const { return m_spotifyId; }
 
+    virtual bool hasCustomDeleter() const { return true; }
     virtual Tomahawk::PlaylistDeleteQuestions deleteQuestions() const;
     virtual void setQuestionResults( const QMap< int, bool > results );
 

@@ -318,7 +318,7 @@ Playlist::hasCustomDeleter() const
 {
     foreach ( PlaylistUpdaterInterface* updater, m_updaters )
     {
-        if ( !updater->deleteQuestions().isEmpty() )
+        if ( updater->hasCustomDeleter() )
             return true;
     }
 
@@ -341,7 +341,6 @@ Playlist::customDelete( const QPoint& leftCenter )
         questions.append( updater->deleteQuestions() );
     }
 
-    Q_ASSERT( !questions.isEmpty() );
     SourceTreePopupDialog* dialog = new SourceTreePopupDialog;
     NewClosure( dialog, SIGNAL( result( bool ) ), this, SLOT( onDeleteResult( SourceTreePopupDialog* ) ), dialog );
 
