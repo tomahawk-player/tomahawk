@@ -15,26 +15,8 @@ Item {
 
     Flow {
         anchors.centerIn: parent
-        width: parent.width - 100
-        //model: controlModel
+        width: parent.width
         spacing: 3
-
-        Timer {
-            interval: 5000
-            running: false
-            repeat: true
-
-            onTriggered: {
-                for(var i = 0; i < cloudRepeater.count; i++) {
-                    var item = cloudRepeater.itemAt(i);
-                    if(item.itemScale > 0.6) {
-                        item.itemScale = Math.random();
-                    } else {
-                        item.itemScale = Math.random();
-                    }
-                }
-            }
-        }
 
         Repeater {
             id: cloudRepeater
@@ -42,16 +24,16 @@ Item {
 
             delegate: Item {
                 id: cloudItem
-                width: delegateText.width * scale
-                height: 28
-                property double itemScale: Math.random()
+                width: delegateText.width * 1.1
+                height: delegateText.height
+                property double itemScale: Math.random() + .3
                 scale: itemScale
                 Text {
                     id: delegateText
                     color: "white"
                     //text: controlModel.controlAt( index ).summary
                     text: modelData
-                    font.pixelSize: 28
+                    font.pointSize: 16
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)
                 }
@@ -60,16 +42,6 @@ Item {
                     anchors.fill: parent
                     onClicked: tagCloud.tagClicked( modelData )
 
-                    onMousePositionChanged: {
-                        cloudItem.scale = 1;
-                        delegateTimer.restart();
-                    }
-                }
-                Timer {
-                    id: delegateTimer
-                    interval: 3000
-                    repeat: false
-                    onTriggered: cloudItem.scale = cloudItem.itemScale
                 }
 
                 Behavior on scale {
