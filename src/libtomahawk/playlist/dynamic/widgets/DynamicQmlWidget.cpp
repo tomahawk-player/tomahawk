@@ -60,7 +60,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     rootContext()->setContextProperty( "echonestStation", station);
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
-    currentItemChanged( m_model->currentItem() );
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
