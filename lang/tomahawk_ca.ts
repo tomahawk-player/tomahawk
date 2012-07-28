@@ -2925,13 +2925,13 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="347"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="344"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="349"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="346"/>
         <source>Delete</source>
         <translation type="unfinished"/>
     </message>
@@ -3037,7 +3037,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="247"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="248"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Error en cercar la informació de Spotify a través de la xarxa!</translation>
     </message>
