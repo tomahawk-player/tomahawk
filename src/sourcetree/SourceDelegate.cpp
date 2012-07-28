@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Michael Zanetti <mzanetti@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -555,6 +555,22 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             else
                 QStyledItemDelegate::paint( painter, o, index );
         }
+        else if ( type == SourcesModel::StaticPlaylist )
+        {
+            QStyledItemDelegate::paint( painter, o, index );
+
+            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
+            if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
+            {
+                const int padding = 2;
+                const int imgWidth = o.rect.height() - 2*padding;
+
+                const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+                const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
+                painter->drawPixmap( subRect, icon );
+            }
+        }
         else
             QStyledItemDelegate::paint( painter, o, index );
     }
@@ -645,10 +661,29 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 }
             }
         }
+        else if ( event->type() == QEvent::MouseButtonRelease && type == SourcesModel::StaticPlaylist )
+        {
+            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            Q_ASSERT( plItem );
+
+            QMouseEvent* mev = static_cast< QMouseEvent* >( event );
+            if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
+            {
+                const int padding = 2;
+                const int imgWidth = option.rect.height() - 2*padding;
+                const QRect subRect( option.rect.right() - padding - imgWidth, option.rect.top() + padding, imgWidth, imgWidth );
+
+                if ( subRect.contains( mev->pos() ) )
+                {
+                    // Toggle playlist subscription
+                    plItem->setSubscribed( !plItem->subscribed() );
+                }
+            }
+        }
     }
 
     // We emit our own clicked() signal instead of relying on QTreeView's, because that is fired whether or not a delegate accepts
-    // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here wemake sure we only
+    // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here we make sure we only
     // emit if we really want to
     if ( event->type() == QEvent::MouseButtonRelease )
     {

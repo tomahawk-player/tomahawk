@@ -2,6 +2,20 @@ Version 0.6.0:
     * Access Control queries now stay on the bottom of the job view,
       removing the tendency to jump away from the mouse.
 
+Version 0.5.5:
+    * Changed the Spotify config dialog to indicate when the user
+      is logged in.
+    * Fixed bug where the wrong avatar could be shown for a user.
+    * Fixed shortcuts not working in the global search field on OS X.
+    * Fixed The Echo Nest stations.
+    * Code-signed executable on OS X for GateKeeper.
+    * Fixed logging in to Spotify when pressing return in the config dialog.
+    * Fixed queue not auto-collapsing when playing the last track.
+    * Fixed bug where album listings would fail to show up.
+    * Improved stability.
+    * Fixed bug where it was not possible to drop a mixture of resolved
+      and unresolved tracks onto a playlist.
+
 Version 0.5.4:
     * Improved stability.
     * Added support for Spotify album lookups.

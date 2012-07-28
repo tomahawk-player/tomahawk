@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,61 +16,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef SOURCETREE_POPUP_DIALOG_MAC_H
+#define SOURCETREE_POPUP_DIALOG_MAC_H
 
-#include "JobStatusItem.h"
-#include <QTime>
+class QWidget;
 
+namespace SourceTreePopupHelper {
 
-JobStatusItem::JobStatusItem()
-    : QObject()
-    , m_createdOn( QDateTime::currentMSecsSinceEpoch() )
-{
+void clearBackground( QWidget* widget );
+
 }
-
-
-JobStatusItem::~JobStatusItem()
-{
-}
-
-
-bool
-JobStatusItem::allowMultiLine() const
-{
-    return false;
-}
-
-
-bool
-JobStatusItem::collapseItem() const
-{
-    return false;
-}
-
-
-int
-JobStatusItem::concurrentJobLimit() const
-{
-    return 0;
-}
-
-
-bool
-JobStatusItem::hasCustomDelegate() const
-{
-    return false;
-}
-
-
-void
-JobStatusItem::createDelegate( QObject* parent )
-{
-    Q_UNUSED( parent );
-    return;
-}
-
-
-QStyledItemDelegate*
-JobStatusItem::customDelegate() const
-{
-    return 0;
-}
+#endif

@@ -70,38 +70,7 @@ DatabaseCommand_LoadAllSortedPlaylists::exec( DatabaseImpl* dbi )
     while ( query.next() )
     {
         plists << QPair< int, QString >( query.value(9).toInt(), query.value(0).toString() );
-//         playlist_ptr p;
-//         bool dynamic = query.value(8).toBool();
-//         source_ptr s = SourceList::instance()->get( query.value(9).toInt() );
-//
-//         if ( dynamic )
-//         {
-//             p = dynplaylist_ptr( new DynamicPlaylist( s,
-//                                                         query.value(6).toString(), //current rev
-//                                                         query.value(1).toString(), //title
-//                                                         query.value(2).toString(), //info
-//                                                         query.value(3).toString(), //creator
-//                                                         query.value(7).toInt(),    //createdOn
-//                                                         query.value(10).toString(), //type
-//                                                         (GeneratorMode)query.value(11).toInt(), // mode
-//                                                         query.value(5).toBool(),   //shared
-//                                                         query.value(4).toInt(),    //lastmod
-//                                                         query.value(0).toString()  //GUID
-//                 ) );
-//         } else
-//         {
-//             p = playlist_ptr( new Playlist( s,                  //src
-//                                         query.value(6).toString(), //current rev
-//                                         query.value(1).toString(), //title
-//                                         query.value(2).toString(), //info
-//                                         query.value(3).toString(), //creator
-//                                         query.value(7).toInt(),    //createdOn
-//                                         query.value(5).toBool(),   //shared
-//                                         query.value(4).toInt(),    //lastmod
-//                                         query.value(0).toString()  //GUID
-//             ) );
-//         }
-//         plists.append( p );
+
     }
 
     emit done( plists );

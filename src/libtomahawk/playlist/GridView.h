@@ -37,6 +37,7 @@ namespace Tomahawk
 class AnimatedSpinner;
 class GridItemDelegate;
 class PlayableModel;
+class GridPlaylistInterface;
 
 class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
 {
@@ -64,13 +65,15 @@ public:
     void setEmptyTip( const QString& tip );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return m_playlistInterface; }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
 
     virtual bool setFilter( const QString& filter );
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
+
+    virtual bool isBeingPlayed() const { return m_playing.isValid(); }
 
 public slots:
     void onItemActivated( const QModelIndex& index );
@@ -94,6 +97,9 @@ private slots:
     void onFilterChanged( const QString& filter );
     void onCustomContextMenu( const QPoint& pos );
 
+    void onDelegatePlaying( const QPersistentModelIndex& idx );
+    void onDelegateStopped( const QPersistentModelIndex& idx );
+
     void layoutItems();
     void verifySize();
 
@@ -103,8 +109,11 @@ private:
     GridItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QModelIndex m_contextMenuIndex;
+    QPersistentModelIndex m_playing;
+
     Tomahawk::ContextMenu* m_contextMenu;
 
     QString m_emptyTip;
@@ -113,6 +122,8 @@ private:
     bool m_autoResize;
 
     QRect m_paintRect;
+
+    friend class ::GridPlaylistInterface;
 };
 
 #endif // GRIDVIEW_H

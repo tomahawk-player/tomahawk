@@ -72,6 +72,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                                       query.value(4).toInt(),    //lastmod
                                       query.value(0).toString()  //GUID
                                     ), &QObject::deleteLater );
+        p->setWeakSelf( p.toWeakRef() );
         plists.append( p );
     }
 

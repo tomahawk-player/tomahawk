@@ -43,6 +43,54 @@
 using namespace Tomahawk;
 
 
+class WelcomeWidgetInterface : public Tomahawk::PlaylistInterface
+{
+    Q_OBJECT
+public:
+    explicit WelcomeWidgetInterface( WelcomeWidget* w )
+        : PlaylistInterface()
+        , m_w( w )
+    {
+        connect( m_w->ui->tracksView->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+                 SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+
+        connect( m_w->ui->tracksView->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
+                 SIGNAL( shuffleModeChanged( bool ) ) );
+    }
+    virtual ~WelcomeWidgetInterface() {}
+
+
+    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->repeatMode(); }
+    virtual bool shuffled() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->shuffled(); }
+
+    virtual Tomahawk::result_ptr currentItem() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->currentItem(); }
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return m_w->ui->tracksView->proxyModel()->playlistInterface()->siblingItem( itemsAway ); }
+    virtual int trackCount() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->trackCount(); }
+    virtual QList< Tomahawk::query_ptr > tracks() { return m_w->ui->tracksView->proxyModel()->playlistInterface()->tracks(); }
+
+    virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr other )
+    {
+        return m_w->ui->tracksView->proxyModel()->playlistInterface() == other ||
+               m_w->ui->tracksView->proxyModel()->playlistInterface()->hasChildInterface( other ) ||
+               m_w->ui->additionsView->playlistInterface()->hasChildInterface( other );
+    }
+
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
+    {
+        m_w->ui->tracksView->proxyModel()->playlistInterface()->setRepeatMode( mode );
+    }
+
+    virtual void setShuffled( bool enabled )
+    {
+        m_w->ui->tracksView->proxyModel()->playlistInterface()->setShuffled( enabled );
+    }
+
+private:
+    WelcomeWidget* m_w;
+
+};
+
+
 WelcomeWidget::WelcomeWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WelcomeWidget )
@@ -84,6 +132,8 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->additionsView->setPlayableModel( m_recentAlbumsModel );
     ui->additionsView->proxyModel()->sort( -1 );
 
+    m_playlistInterface = playlistinterface_ptr( new WelcomeWidgetInterface( this ) );
+
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
@@ -107,20 +157,29 @@ WelcomeWidget::loadData()
 Tomahawk::playlistinterface_ptr
 WelcomeWidget::playlistInterface() const
 {
-    return ui->tracksView->playlistInterface();
+    return m_playlistInterface;
 }
 
 
 bool
 WelcomeWidget::jumpToCurrentTrack()
 {
-    return ui->tracksView->jumpToCurrentTrack();
+    if ( ui->tracksView->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->additionsView->jumpToCurrentTrack() )
+        return true;
+
+    return false;
 }
 
 
 bool
 WelcomeWidget::isBeingPlayed() const
 {
+    if ( ui->additionsView->isBeingPlayed() )
+        return true;
+
     return AudioEngine::instance()->currentTrackPlaylist() == ui->tracksView->playlistInterface();
 }
 
@@ -338,3 +397,4 @@ PlaylistWidget::setModel( QAbstractItemModel* model )
     emit modelChanged();
 }
 
+#include "WelcomeWidget.moc"

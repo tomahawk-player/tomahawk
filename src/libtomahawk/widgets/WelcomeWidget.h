@@ -37,6 +37,7 @@
 class AlbumModel;
 class RecentlyPlayedModel;
 class OverlayWidget;
+class WelcomeWidgetInterface;
 
 namespace Ui
 {
@@ -125,6 +126,9 @@ private:
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
+
+    friend class ::WelcomeWidgetInterface;
 };
 
 #endif // WELCOMEWIDGET_H

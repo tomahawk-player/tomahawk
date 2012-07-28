@@ -139,6 +139,7 @@ set( libGuiSources
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
     widgets/SocialPlaylistWidget.cpp
+    widgets/SourceTreePopupDialog.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
@@ -332,8 +333,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${QT_INCLUDE_DIR}
     ${QJSON_INCLUDE_DIR}
-    ${LIBECHONEST_INCLUDE_DIR}
-    ${LIBECHONEST_INCLUDE_DIR}/..
+    ${ECHONEST_INCLUDE_DIR}
     ${LIBLASTFM_INCLUDE_DIRS}
     ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
@@ -390,7 +390,8 @@ IF( APPLE )
     SET( libSources ${libSources}
       utils/TomahawkUtils_Mac.mm
       mac/FileHelpers.mm
-      thirdparty/Qocoa/qsearchfield_mac.mm )
+      thirdparty/Qocoa/qsearchfield_mac.mm
+      widgets/SourceTreePopupDialog_mac.mm )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
 
@@ -445,7 +446,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
-    ${LIBECHONEST_LIBRARY}
+    ${ECHONEST_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     ${QT_QTGUI_LIBRARY}

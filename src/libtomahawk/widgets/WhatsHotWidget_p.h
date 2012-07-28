@@ -65,7 +65,8 @@ public:
     virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr other )
     {
         return m_w->ui->tracksViewLeft->playlistInterface() == other ||
-               m_w->ui->artistsViewLeft->playlistInterface() == other;
+               m_w->ui->artistsViewLeft->playlistInterface() == other ||
+               m_w->ui->albumsView->playlistInterface()->hasChildInterface( other );
 
     }
 

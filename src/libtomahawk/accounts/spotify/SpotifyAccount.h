@@ -36,6 +36,8 @@ class ScriptResolver;
 
 namespace Tomahawk {
 
+class SpotifyParser;
+
 namespace InfoSystem
 {
     class SpotifyInfoPlugin;
@@ -150,6 +152,7 @@ private:
     void fetchFullPlaylist( SpotifyPlaylistInfo* playlist );
 
     void setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync  );
+    void setSubscribedForPlaylist( const playlist_ptr& pl, bool subscribed );
 
     void createActions();
     void removeActions();
@@ -166,7 +169,7 @@ private:
     QMap<QString, QVariant > m_qidToExtraData;
 
     // List of synced spotify playlists in config UI
-    QList< SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
+    QHash< QString, SpotifyPlaylistInfo* > m_allSpotifyPlaylists;
     QHash< QString, SpotifyPlaylistUpdater* > m_updaters;
 
     QHash< QString, playlist_ptr > m_waitingForCreateReply;
@@ -175,6 +178,7 @@ private:
 
     SmartPointerList< QAction > m_customActions;
     friend class ::SpotifyPlaylistUpdater;
+    friend class Tomahawk::SpotifyParser;
 };
 
 }

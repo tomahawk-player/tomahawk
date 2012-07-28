@@ -49,7 +49,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
-    while( query.next() )
+    while ( query.next() )
     {
         TomahawkSqlQuery query_track = dbi->newquery();
 
@@ -66,6 +66,8 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
         if ( query_track.next() )
         {
             Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString() );
+            if ( q.isNull() )
+                continue;
 
             if ( query.value( 3 ).toUInt() == 0 )
             {

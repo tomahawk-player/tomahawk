@@ -130,6 +130,9 @@ WhatsHotWidget::isBeingPlayed() const
     if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
         return true;
 
+    if ( ui->albumsView->isBeingPlayed() )
+        return true;
+
     return false;
 }
 
@@ -137,10 +140,13 @@ WhatsHotWidget::isBeingPlayed() const
 bool
 WhatsHotWidget::jumpToCurrentTrack()
 {
-    if ( ui->artistsViewLeft->jumpToCurrentTrack() )
+    if ( ui->artistsViewLeft->model() && ui->artistsViewLeft->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->tracksViewLeft->jumpToCurrentTrack() )
+    if ( ui->tracksViewLeft->model() && ui->tracksViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    if ( ui->albumsView->model() && ui->albumsView->jumpToCurrentTrack() )
         return true;
 
     return false;

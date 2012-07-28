@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,61 +16,20 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "SourceTreePopupDialog_mac.h"
 
-#include "JobStatusItem.h"
-#include <QTime>
+#include <QWidget>
 
-
-JobStatusItem::JobStatusItem()
-    : QObject()
-    , m_createdOn( QDateTime::currentMSecsSinceEpoch() )
-{
-}
-
-
-JobStatusItem::~JobStatusItem()
-{
-}
-
-
-bool
-JobStatusItem::allowMultiLine() const
-{
-    return false;
-}
-
-
-bool
-JobStatusItem::collapseItem() const
-{
-    return false;
-}
-
-
-int
-JobStatusItem::concurrentJobLimit() const
-{
-    return 0;
-}
-
-
-bool
-JobStatusItem::hasCustomDelegate() const
-{
-    return false;
-}
-
+#import <Foundation/Foundation.h>
+#import <AppKit/NSView.h>
+#import <AppKit/NSWindow.h>
 
 void
-JobStatusItem::createDelegate( QObject* parent )
+SourceTreePopupHelper::clearBackground( QWidget* widget )
 {
-    Q_UNUSED( parent );
-    return;
-}
-
-
-QStyledItemDelegate*
-JobStatusItem::customDelegate() const
-{
-    return 0;
+    Q_ASSERT( widget );
+    // Workaround from QTBUG-15368
+    NSView* view = reinterpret_cast< NSView* >( widget->winId() );
+    NSWindow* cocoaWindow = [view window];
+    [cocoaWindow invalidateShadow];
 }

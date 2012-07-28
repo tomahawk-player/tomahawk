@@ -25,6 +25,7 @@
 
 #include <QTimer>
 #include <QMutex>
+#include <QPair>
 
 #ifndef ENABLE_HEADLESS
 #include <QPixmap>
@@ -35,6 +36,12 @@ namespace Tomahawk
 /**
   * PlaylistUpdaters are attached to playlists. They usually manipulate the playlist in some way
   * due to external input (spotify syncing) or timers (xspf updating)
+  *
+  * Updaters have 2 modes of operation: syncing and subscribing. Syncing implies two-way sync, that is, this
+  * playlist is reproduced on some other service (e.g. spotify or rdio).
+  *
+  * Subscribing implies the playlist is being updated periodically with changes from some source, and the user
+  * is working with a copy: e.g. an xspf updater or a spotify subscribed playlist.
   */
 
 class PlaylistUpdaterFactory;
@@ -71,7 +78,18 @@ public:
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 
-    virtual bool sync() const { return true; }
+    virtual bool sync() const { return false; }
+    virtual void setSync( bool ) {}
+
+    virtual bool canSubscribe() const { return false; }
+    virtual bool subscribed() const { return false; }
+    virtual void setSubscribed( bool ) {}
+
+    // The int data value associated with each question must be unique across *all* playlist updaters,
+    // as setQuestionResults is called with all questions from all updaters.
+    virtual bool hasCustomDeleter() const { return false; }
+    virtual PlaylistDeleteQuestions deleteQuestions() const { return PlaylistDeleteQuestions(); }
+    virtual void setQuestionResults( const QMap< int, bool > results ) {}
 
 signals:
     void changed();

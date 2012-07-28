@@ -105,7 +105,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
         m_browseUri.replace( "/", ":" );
         m_browseUri = "spotify:" + m_browseUri;
     }
-    
+
     if ( m_browseUri.contains( "playlist" ) &&
          Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
          Tomahawk::Accounts::SpotifyAccount::instance()->loggedIn() )
@@ -235,6 +235,10 @@ SpotifyParser::spotifyBrowseFinished()
                 if ( q.isNull() )
                     continue;
 
+                tLog() << "Setting resulthint to " << trackResult.value( "trackuri" );
+                q->setResultHint( trackResult.value( "trackuri" ).toString() );
+                q->setProperty( "annotation", trackResult.value( "trackuri" ).toString() );
+
                 m_tracks << q;
             }
         }
@@ -298,7 +302,11 @@ SpotifyParser::spotifyTrackLookupFinished()
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
         if ( !q.isNull() )
+        {
+            q->setResultHint( t.value( "trackuri" ).toString() );
+
             m_tracks << q;
+        }
     }
     else
     {
@@ -326,10 +334,17 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
     {
         QVariantMap trackMap = blob.toMap();
         const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
-        
+
         if ( q.isNull() )
             continue;
-        
+
+        const QString id = trackMap.value( "id" ).toString();
+        if( !id.isEmpty() )
+        {
+            q->setResultHint( id );
+            q->setProperty( "annotation", id );
+        }
+
         m_tracks << q;
     }
 
@@ -348,12 +363,19 @@ SpotifyParser::checkBrowseFinished()
 
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
+            QString spotifyUsername;
+
+            if ( Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn() )
+            {
+                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
+                spotifyUsername = creds.value( "username" ).toString();
+            }
 
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
                                        m_info,
-                                       m_creator,
+                                       spotifyUsername == m_creator ? QString() : m_creator,
                                        false,
                                        m_tracks );
 
@@ -364,18 +386,18 @@ SpotifyParser::checkBrowseFinished()
                 SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
                                                     Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
 
-                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
 
                 // If the user isnt dropping a playlist the he owns, its subscribeable
-                if ( !m_browseUri.contains( creds.value( "username" ).toString() ) )
+                if ( !m_browseUri.contains( spotifyUsername ) )
                     updater->setCanSubscribe( true );
-
-                updater->setSubscribed( true );
-                updater->setSync( true );
 
                 // Just register the infos
                 Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false );
                 Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
+
+
+                Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
+
             }
             return;
         }

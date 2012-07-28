@@ -42,7 +42,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs ( 0 )
 {
-    m_nrVersion = "0";
+    m_nrVersion = "0.1";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
@@ -54,8 +54,10 @@ NewReleasesPlugin::~NewReleasesPlugin()
 void
 NewReleasesPlugin::init()
 {
+
     QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "NewReleasesPlugin", "nr_sources" ).toList();
-    foreach( const QVariant & source, source_qvarlist ) {
+    foreach( const QVariant & source, source_qvarlist )
+    {
         m_nrSources.append( source.toString() );
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetched source from cache" << source.toString();
 
@@ -79,21 +81,28 @@ void NewReleasesPlugin::getInfo ( InfoRequestData requestData )
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     bool foundSource = false;
 
-    switch ( requestData.type ) {
+    switch ( requestData.type )
+    {
     case InfoNewRelease:
         /// We need something to check if the request is actually ment to go to this plugin
-        if ( !hash.contains ( "nr_source" ) ) {
+        if ( !hash.contains ( "nr_source" ) )
+        {
             tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required param!";
             dataError ( requestData );
             break;
-        } else {
-            foreach ( QString resource, m_nrSources ) {
-                if ( resource == hash["nr_source"] ) {
+        }
+        else
+        {
+            foreach ( QString resource, m_nrSources )
+            {
+                if ( resource == hash["nr_source"] )
+                {
                     foundSource = true;
                 }
             }
 
-            if ( !foundSource ) {
+            if ( !foundSource )
+            {
                 dataError ( requestData );
                 break;
             }
@@ -112,7 +121,8 @@ void NewReleasesPlugin::getInfo ( InfoRequestData requestData )
 
 void NewReleasesPlugin::fetchNRFromCache ( InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() ) {
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         dataError ( requestData );
         return;
     }
@@ -121,7 +131,8 @@ void NewReleasesPlugin::fetchNRFromCache ( InfoRequestData requestData )
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
     /// Each request needs to contain both a id and source
-    if ( !hash.contains ( "nr_id" ) && !hash.contains ( "nr_source" ) ) {
+    if ( !hash.contains ( "nr_id" ) && !hash.contains ( "nr_source" ) )
+    {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required params!";
         dataError ( requestData );
         return;
@@ -136,7 +147,8 @@ void NewReleasesPlugin::fetchNRFromCache ( InfoRequestData requestData )
 
 void NewReleasesPlugin::fetchNRCapabilitiesFromCache ( InfoRequestData requestData )
 {
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() ) {
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Could not convert requestData to InfoStringHash!";
         dataError ( requestData );
         return;
@@ -150,15 +162,18 @@ void NewReleasesPlugin::fetchNRCapabilitiesFromCache ( InfoRequestData requestDa
 
 void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestData requestData )
 {
-    switch ( requestData.type ) {
-    case InfoNewRelease: {
+    switch ( requestData.type )
+    {
+    case InfoNewRelease:
+    {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoNewRelease not in cache! Fetching...";
         fetchNR ( requestData, criteria["nr_source"], criteria["nr_id"] );
         return;
 
     }
 
-    case InfoNewReleaseCapabilities: {
+    case InfoNewReleaseCapabilities:
+    {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching...";
         fetchNRSourcesList( false );
         m_cachedRequests.append ( requestData );
@@ -166,7 +181,8 @@ void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestDat
         return;
     }
 
-    default: {
+    default:
+    {
         tLog() << Q_FUNC_INFO << "Couldn't figure out what to do with this type of request after cache miss";
         emit info ( requestData, QVariant() );
         return;
@@ -191,19 +207,22 @@ void NewReleasesPlugin::nrSourcesList()
     tDebug ( LOGVERBOSE )  << "Got newreleases sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
 
-    if ( reply->error() == QNetworkReply::NoError ) {
+    if ( reply->error() == QNetworkReply::NoError )
+    {
         QJson::Parser p;
         bool ok;
         const QVariantMap res = p.parse ( reply, &ok ).toMap();
         const QVariantList sources = res.value ( "sources" ).toList();
 
-        if ( !ok ) {
+        if ( !ok )
+        {
             tLog() << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
             return;
         }
 
         m_nrSources.clear();
-        foreach ( const QVariant &source, sources ) {
+        foreach ( const QVariant &source, sources )
+        {
             m_nrSources << source.toString();
         }
         TomahawkUtils::Cache::instance()->putData( "NewReleasesPlugin", 172800000 /* 2 days */, "nr_sources", m_nrSources );
@@ -214,9 +233,11 @@ void NewReleasesPlugin::nrSourcesList()
 
 void NewReleasesPlugin::fetchAllNRSources()
 {
-    if ( !m_nrSources.isEmpty() && m_allNRsMap.isEmpty() ) {
+    if ( !m_nrSources.isEmpty() && m_allNRsMap.isEmpty() )
+    {
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoNewRelease fetching source data";
-        foreach ( QString source, m_nrSources ) {
+        foreach ( QString source, m_nrSources )
+        {
             QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1" ).arg ( source ) );
             QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
             reply->setProperty ( "nr_source", source );
@@ -246,12 +267,14 @@ void NewReleasesPlugin::nrList()
     tDebug ( LOGVERBOSE )  << "Got newreleases list result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
 
-    if ( reply->error() == QNetworkReply::NoError ) {
+    if ( reply->error() == QNetworkReply::NoError )
+    {
         QJson::Parser p;
         bool ok;
         const QVariantMap res = p.parse ( reply, &ok ).toMap();
 
-        if ( !ok ) {
+        if ( !ok )
+        {
             tLog() << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
 
             return;
@@ -267,30 +290,52 @@ void NewReleasesPlugin::nrList()
         // Building:
         // [Source] - New Release
         QList< InfoStringHash > albumNRs;
-
-        foreach ( const QVariant &nrObj, res.values() ) {
-            if ( !nrObj.toMap().isEmpty() ) {
+        QHash< QString, QVariantMap > extraType;
+        foreach ( const QVariant &nrObj, res.values() )
+        {
+            if ( !nrObj.toMap().isEmpty() )
+            {
                 const QVariantMap nrMap = nrObj.toMap();
                 const QString type = nrMap.value ( "type" ).toString();
+                const QString extra = nrMap.value( "extra" ).toString();
 
                 InfoStringHash nr;
                 nr["id"] = nrMap.value ( "id" ).toString();
                 nr["label"] = nrMap.value ( "name" ).toString();
                 nr["date"] = nrMap.value ( "date" ).toString();
 
-                if ( type == "Album" ) {
+                if ( type == "Album" )
+                {
                     nr[ "type" ] = "album";
-                    albumNRs.append ( nr );
-                } else {
+
+                    if( !extra.isEmpty() )
+                    {
+                        qDebug() << "FOUND EXTRA!! " << extra;
+                        QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+                        extraTypeData.append( nr );
+                        extraType[ extra ][ type ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
+                    }
+                    else
+                        albumNRs.append ( nr );
+                }
+                else
+                {
                     tLog() << "Unknown newrelease type " << type;
                     continue;
                 }
 
             }
+
+            foreach( const QString& c, extraType.keys() )
+            {
+                newreleases[ c ] = extraType[ c ];
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "extraType has types:" << c;
+            }
         }
 
         if ( !albumNRs.isEmpty() )
             newreleases.insert ( tr ( "Albums" ), QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( albumNRs ) );
+
 
         /// @note For displaying purposes, upper the first letter
         /// @note Remeber to lower it when fetching this!
@@ -306,8 +351,10 @@ void NewReleasesPlugin::nrList()
     }
 
     m_nrFetchJobs--;
-    if ( !m_cachedRequests.isEmpty() && m_nrFetchJobs == 0 ) {
-        foreach ( InfoRequestData request, m_cachedRequests ) {
+    if ( !m_cachedRequests.isEmpty() && m_nrFetchJobs == 0 )
+    {
+        foreach ( InfoRequestData request, m_cachedRequests )
+        {
             emit info ( request, m_allNRsMap );
             // update cache
             Tomahawk::InfoSystem::InfoStringHash criteria;
@@ -325,12 +372,14 @@ void NewReleasesPlugin::nrReturned()
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
     QVariantMap returnedData;
 
-    if ( reply->error() == QNetworkReply::NoError ) {
+    if ( reply->error() == QNetworkReply::NoError )
+    {
         QJson::Parser p;
         bool ok;
         QVariantMap res = p.parse ( reply, &ok ).toMap();
 
-        if ( !ok ) {
+        if ( !ok )
+        {
             tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
             return;
         }
@@ -339,9 +388,11 @@ void NewReleasesPlugin::nrReturned()
         QVariantList albumList = res.value ( "list" ).toList();
         QList< Tomahawk::InfoSystem::InfoStringHash > newreleases;
 
-        foreach( const QVariant & albumObj, albumList ) {
+        foreach( const QVariant & albumObj, albumList )
+        {
             QVariantMap albumMap = albumObj.toMap();
-            if(!albumMap.isEmpty()) {
+            if( !albumMap.isEmpty() )
+            {
                 const QString album = albumMap.value("album").toString();
                 const QString artist = albumMap.value("artist").toString();
                 const QString date = albumMap.value("date").toString();

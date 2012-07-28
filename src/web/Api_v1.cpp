@@ -235,6 +235,11 @@ Api_v1::statResult( const QString& clientToken, const QString& name, bool valid 
 {
     Q_UNUSED( clientToken )
     Q_UNUSED( name )
+
+    Q_ASSERT( m_storedEvent );
+    if ( !m_storedEvent )
+        return;
+    
     QVariantMap m;
     m.insert( "name", "playdar" );
     m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)

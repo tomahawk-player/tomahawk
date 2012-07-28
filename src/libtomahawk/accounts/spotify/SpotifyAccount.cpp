@@ -547,55 +547,12 @@ SpotifyAccount::subscribeActionTriggered( bool )
         }
     }
 
+    Q_ASSERT( updater );
     if ( !updater )
-    {
-        tLog() << "No SpotifyPlaylistUpdater in payload slot of triggered action! Uh oh!!";
         return;
-    }
 
-    SpotifyPlaylistInfo* info = 0;
-    foreach ( SpotifyPlaylistInfo* ifo, m_allSpotifyPlaylists )
-    {
-        if ( ifo->plid == updater->spotifyId() )
-        {
-            info = ifo;
-            break;
-        }
-    }
-
-    // When we unsubscribe, all playlists is resent
-    // and we will could loose the SpotifyPlaylistInfo, but all we really need is the id
-    if ( updater->spotifyId().isEmpty() )
-    {
-        tLog() << "No spotify id in updater, WTF?";
-        return;
-    }
-
-    if ( !info )
-    {
-        info = new SpotifyPlaylistInfo( playlist->title(),
-                                        updater->spotifyId(),
-                                        updater->spotifyId(),
-                                        false,
-                                        false
-                                        );
-
-        registerPlaylistInfo( info );
-    }
-
-    info->subscribed = !updater->subscribed();
-
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "setSubscription";
-    msg[ "subscribe" ] = info->subscribed;
-    msg[ "playlistid" ] = info->plid;
-
-    sendMessage( msg, this );
-
-    updater->setSync( !updater->sync() );
-    updater->setSubscribed( !updater->subscribed() );
-    info->sync = !updater->sync();
-    info->subscribed = !updater->subscribed();
+    // Toggle subscription status
+    setSubscribedForPlaylist( playlist, !updater->subscribed() );
 }
 
 
@@ -648,22 +605,14 @@ SpotifyAccount::syncActionTriggered( bool )
     }
     else
     {
-        SpotifyPlaylistInfo* info = 0;
-        foreach ( SpotifyPlaylistInfo* ifo, m_allSpotifyPlaylists )
-        {
-            if ( ifo->plid == updater->spotifyId() )
-            {
-                info = ifo;
-                break;
-            }
-        }
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( updater->spotifyId(), 0 );
 
         Q_ASSERT( info );
         if ( info )
             info->sync = !updater->sync();
 
         if ( m_configWidget.data() )
-            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
 
         if ( !updater->sync() )
         {
@@ -674,6 +623,63 @@ SpotifyAccount::syncActionTriggered( bool )
             stopPlaylistSync( info, true );
         }
     }
+}
+
+
+void
+SpotifyAccount::setSubscribedForPlaylist( const playlist_ptr& playlist, bool subscribed )
+{
+    SpotifyPlaylistUpdater* updater = 0;
+    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
+    foreach ( PlaylistUpdaterInterface* u, updaters )
+    {
+        if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( u ) )
+        {
+            updater = spotifyUpdater;
+            break;
+        }
+    }
+
+    if ( !updater )
+    {
+        tLog() << "No SpotifyPlaylistUpdater in payload slot of triggered action! Uh oh!!";
+        return;
+    }
+
+    SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( updater->spotifyId(), 0 );
+
+    // When we unsubscribe, all playlists is resent
+    // and we will could loose the SpotifyPlaylistInfo, but all we really need is the id
+    if ( updater->spotifyId().isEmpty() )
+    {
+        tLog() << "No spotify id in updater, WTF?";
+        return;
+    }
+
+    if ( !info )
+    {
+        info = new SpotifyPlaylistInfo( playlist->title(),
+                                        updater->spotifyId(),
+                                        updater->spotifyId(),
+                                        false,
+                                        false
+                                        );
+
+        registerPlaylistInfo( info );
+    }
+
+    info->subscribed = subscribed;
+    info->sync = subscribed;
+
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "setSubscription";
+    msg[ "subscribe" ] = info->subscribed;
+    msg[ "playlistid" ] = info->plid;
+
+    sendMessage( msg, this );
+
+    updater->setSync( subscribed );
+    updater->setSubscribedStatus( subscribed );
 }
 
 
@@ -727,7 +733,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         QObject* receiver = m_qidToSlotMap[ qid ].first;
         QString slot = m_qidToSlotMap[ qid ].second;
         m_qidToSlotMap.remove( qid );
-        
+
         QVariant extraData;
         if ( m_qidToExtraData.contains( qid ) )
             extraData = m_qidToExtraData.take( qid );
@@ -737,7 +743,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     else if ( msgType == "allPlaylists" )
     {
         const QVariantList playlists = msg.value( "playlists" ).toList();
-        qDeleteAll( m_allSpotifyPlaylists );
+        qDeleteAll( m_allSpotifyPlaylists.values() );
         m_allSpotifyPlaylists.clear();
 
         foreach ( const QVariant& playlist, playlists )
@@ -755,12 +761,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
                 continue;
             }
 
-            m_allSpotifyPlaylists << new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed );
+            registerPlaylistInfo( new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed ) );
         }
 
         if ( !m_configWidget.isNull() )
         {
-            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+            m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
         }
     }
     else if ( msgType == "tracksAdded" )
@@ -936,7 +942,7 @@ SpotifyAccount::clearUser( bool permanentlyDelete )
 
     m_updaters.clear();
 
-    qDeleteAll( m_allSpotifyPlaylists );
+    qDeleteAll( m_allSpotifyPlaylists.values() );
     m_allSpotifyPlaylists.clear();
 
     m_qidToSlotMap.clear();
@@ -964,7 +970,7 @@ SpotifyAccount::configurationWidget()
         m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
         connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
-        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
     }
 
     if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
@@ -1021,7 +1027,7 @@ SpotifyAccount::saveConfig()
     setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
-    foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists )
+    foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists.values() )
     {
 //        qDebug() << "Checking changed state:" << pl->changed << pl->name << pl->sync;
         if ( pl->changed )
@@ -1208,7 +1214,7 @@ SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& 
     }
 
     m_qidToExtraData[ qid ] = extraData;
-    
+
     m_spotifyResolver.data()->sendMessage( msg );
 
     return qid;
@@ -1224,14 +1230,16 @@ SpotifyAccount::registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylist
 void
 SpotifyAccount::registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed )
 {
-    m_allSpotifyPlaylists << new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed );
+    m_allSpotifyPlaylists[ plid ] = new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed );
 }
 
 void
 SpotifyAccount::registerPlaylistInfo( SpotifyPlaylistInfo* info )
 {
-    m_allSpotifyPlaylists << info;
+    m_allSpotifyPlaylists[ info->plid ] = info;
 }
+
+
 void
 SpotifyAccount::unregisterUpdater( const QString& plid )
 {
@@ -1300,14 +1308,14 @@ SpotifyAccount::loadPlaylists()
 void
 SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync )
 {
-    foreach ( SpotifyPlaylistInfo* info, m_allSpotifyPlaylists )
-    {
-        if ( info->plid == spotifyPlaylistId )
-            info->sync = sync;
-    }
+    SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( spotifyPlaylistId, 0 );
+
+    if ( info )
+        info->sync = sync;
+
 
     if ( !m_configWidget.isNull() )
-        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists );
+        m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
 }
 
 

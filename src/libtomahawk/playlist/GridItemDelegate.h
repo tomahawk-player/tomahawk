@@ -58,6 +58,9 @@ protected:
 signals:
     void updateIndex( const QModelIndex& idx );
 
+    void startedPlaying( const QPersistentModelIndex& );
+    void stoppedPlaying( const QPersistentModelIndex& );
+
 private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
