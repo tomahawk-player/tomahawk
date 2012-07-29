@@ -27,11 +27,38 @@
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
+#include "PlayableProxyModelPlaylistInterface.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
 
+
+class FlexibleViewInterface : public PlayableProxyModelPlaylistInterface {
+    Q_OBJECT
+public:
+    explicit FlexibleViewInterface( PlayableProxyModel* proxy, FlexibleView* view ) : PlayableProxyModelPlaylistInterface( proxy ), m_view( view ) {}
+
+    virtual bool hasChildInterface( playlistinterface_ptr playlistInterface )
+    {
+        if ( m_view.isNull() )
+            return false;
+
+        if ( m_view.data()->detailedView() && m_view.data()->detailedView()->proxyModel()->playlistInterface() == playlistInterface )
+            return true;
+
+        if ( m_view.data()->gridView() && m_view.data()->gridView()->playlistInterface()->hasChildInterface( playlistInterface ) )
+            return true;
+
+        if ( m_view.data()->trackView() && m_view.data()->trackView()->proxyModel()->playlistInterface() == playlistInterface )
+            return true;
+
+        return false;
+    }
+
+private:
+    QWeakPointer<FlexibleView> m_view;
+};
 
 FlexibleView::FlexibleView( QWidget* parent )
     : QWidget( parent )
@@ -42,6 +69,8 @@ FlexibleView::FlexibleView( QWidget* parent )
     , m_model( 0 )
 {
     qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
+
+    m_playlistInterface = playlistinterface_ptr( new FlexibleViewInterface( m_trackView->proxyModel(), this ) );
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     connect( del, SIGNAL( updateIndex( QModelIndex ) ), m_trackView, SLOT( update( QModelIndex ) ) );
@@ -79,8 +108,12 @@ FlexibleView::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
+    if ( view && m_trackView != view )
+        m_playlistInterface = playlistinterface_ptr( new FlexibleViewInterface( view->proxyModel(), this ) );
+
     m_trackView = view;
     m_stack->addWidget( view );
+
 }
 
 
@@ -169,7 +202,7 @@ FlexibleView::setCurrentMode( FlexibleViewMode mode )
 Tomahawk::playlistinterface_ptr
 FlexibleView::playlistInterface() const
 {
-    return m_trackView->playlistInterface();
+    return m_playlistInterface;
 }
 
 
@@ -232,3 +265,5 @@ FlexibleView::setPixmap( const QPixmap& pixmap )
     m_pixmap = pixmap;
     m_header->setPixmap( pixmap );
 }
+
+#include "FlexibleView.moc"
