@@ -42,6 +42,7 @@
 #include "jobview/ErrorStatusMessage.h"
 
 #include "utils/Logger.h"
+#include "SingleTrackPlaylistInterface.h"
 
 using namespace Tomahawk;
 
@@ -582,7 +583,11 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist;
+
+    if ( playlist.isNull() )
+        m_currentTrackPlaylist = playlistinterface_ptr( new SingleTrackPlaylistInterface( result->toQuery() ) );
+    else
+        m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
     {

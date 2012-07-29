@@ -219,7 +219,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
         emit albums( m_query->id(), albumList );
     }
-    
+
     if ( trackPairs.length() == 0 )
     {
         qDebug() << "No candidates found in first pass, aborting resolve" << m_query->fullTextQuery();

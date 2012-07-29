@@ -35,6 +35,7 @@
 #include "AlbumModel.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModelPlaylistInterface.h"
+#include "SingleTrackPlaylistInterface.h"
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
@@ -64,6 +65,8 @@ public:
                 return item->album()->playlistInterface( Tomahawk::Mixed ) == playlistInterface;
             else if ( !item->artist().isNull() )
                 return item->artist()->playlistInterface( Tomahawk::Mixed ) == playlistInterface;
+            else if ( !item->query().isNull() && !playlistInterface.dynamicCast< SingleTrackPlaylistInterface >().isNull() )
+                return item->query() == playlistInterface.dynamicCast< SingleTrackPlaylistInterface >()->track();
         }
 
         return false;
