@@ -213,7 +213,7 @@ GridView::onItemActivated( const QModelIndex& index )
         else if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->query().isNull() )
-            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query() );
+            ViewManager::instance()->show( item->query() );
     }
 }
 
