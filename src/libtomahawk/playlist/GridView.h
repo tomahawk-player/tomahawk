@@ -72,6 +72,7 @@ public:
 
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
+    QRect currentTrackRect() const;
 
     virtual bool isBeingPlayed() const { return m_playing.isValid(); }
 

@@ -417,4 +417,15 @@ GridView::jumpToCurrentTrack()
     return true;
 }
 
+
+QRect
+GridView::currentTrackRect() const
+{
+    if ( !m_playing.isValid() )
+        return QRect();
+
+    return visualRect( m_playing );
+}
+
+
 #include "GridView.moc"
