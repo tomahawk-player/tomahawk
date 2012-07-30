@@ -575,7 +575,7 @@ AudioEngine::loadNextTrack()
 
 
 void
-AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
@@ -584,8 +584,8 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
     setPlaylist( playlist );
 
-    if ( playlist.isNull() )
-        m_currentTrackPlaylist = playlistinterface_ptr( new SingleTrackPlaylistInterface( result->toQuery() ) );
+    if ( playlist.isNull() && !fromQuery.isNull() )
+        m_currentTrackPlaylist = playlistinterface_ptr( new SingleTrackPlaylistInterface( fromQuery ) );
     else
         m_currentTrackPlaylist = playlist;
 
@@ -611,7 +611,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     {
         if ( query->numResults() && query->results().first()->isOnline() )
         {
-            playItem( playlist, query->results().first() );
+            playItem( playlist, query->results().first(), query );
             return;
         }
 
