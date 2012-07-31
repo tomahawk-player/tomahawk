@@ -459,14 +459,19 @@ Query::checkResults()
 
 
 bool
-Query::equals( const Tomahawk::query_ptr& other ) const
+Query::equals( const Tomahawk::query_ptr& other, bool ignoreCase ) const
 {
     if ( other.isNull() )
         return false;
 
-    return ( artist() == other->artist() &&
-             album() == other->album() &&
-             track() == other->track() );
+    if ( ignoreCase )
+        return ( artist().toLower() == other->artist().toLower() &&
+                 album().toLower() == other->album().toLower() &&
+                 track().toLower() == other->track().toLower() );
+    else
+        return ( artist() == other->artist() &&
+                 album() == other->album() &&
+                 track() == other->track() );
 }
 
 
@@ -502,7 +507,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     Q_ASSERT( !r->album().isNull() );
     if ( r->artist().isNull() || r->album().isNull() )
         return 0.0;
-    
+
     // result values
     const QString rArtistname = r->artist()->sortname();
     const QString rAlbumname  = r->album()->sortname();

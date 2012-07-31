@@ -26,6 +26,7 @@
 #include <attica/content.h>
 
 #include <QObject>
+#include <QSet>
 
 namespace Tomahawk {
 class ExternalResolverGui;
