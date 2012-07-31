@@ -3490,32 +3490,32 @@ enter the displayed PIN number here:</source>
         <translation>Panašūs takeliai</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Atsiprašome, neradome jokių į šią dainą panašių takelių!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Jūs klausėtės šio takelio %n kartą.</numerusform><numerusform>Jūs klausėtės šio takelio %n kartus.</numerusform><numerusform>Jūs klausėtės šio takelio %n kartų.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="219"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Jūs niekad anksčiau nesiklausėte šio takelio.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="223"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
         <source>You first listened to it on %1.</source>
         <translation>Pirmąkart klausėtės jo %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="244"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Jūs klausėtės %1 %n kartą.</numerusform><numerusform>Jūs klausėtės %1 %n kartus.</numerusform><numerusform>Jūs klausėtės %1 %n kartų.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Jūs niekada anksčiau nesiklausėte %1.</translation>
     </message>

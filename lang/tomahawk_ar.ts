@@ -3503,32 +3503,32 @@ enter the displayed PIN number here:</source>
         <translation>أغاني قريبة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>نعتذر، لم نستطيع إيجاد أغاني قريبة من هذه الأغنية!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>لقد استمعت إلى هذه الأغنية %n مرة.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرة %n.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية مرتين %n.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform><numerusform>لقد استمعت إلى هذه الأغنية %n مرات.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="219"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>لم تستمع لهذه الأغنية من قبل.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="223"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
         <source>You first listened to it on %1.</source>
         <translation>استمعت إليها أولاً في %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="244"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>لقد استمعت إلى %1 %n مرة.</numerusform><numerusform>لقد استمعت إلى %1 مرة %n.</numerusform><numerusform>لقد استمعت إلى %1 مرتين %n.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform><numerusform>لقد استمعت إلى %1 %n مرات.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>لم تستمع إلى %1 من قبل.</translation>
     </message>
