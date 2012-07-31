@@ -126,6 +126,7 @@ public:
      */
     void setTrack( const QString& s ) { m_track = s; }
 
+    virtual bool doesMutates() const { return false; }
 signals:
     /**
      * All loaded social actions for each track found, for queries that generate all tracks

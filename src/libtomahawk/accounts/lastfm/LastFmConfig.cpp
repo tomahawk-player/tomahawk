@@ -43,6 +43,7 @@ LastFmConfig::LastFmConfig( LastFmAccount* account )
     , m_lastTimeStamp( 0 )
     , m_totalLovedPages( -1 )
     , m_doneFetchingLoved( false )
+    , m_doneFetchingLocal( false )
 {
     m_ui = new Ui_LastFmConfig;
     m_ui->setupUi( this );
@@ -252,6 +253,8 @@ LastFmConfig::syncLovedTracks( uint page )
 {
     QNetworkReply* reply = lastfm::User( username() ).getLovedTracks( 200, page );
 
+    m_ui->syncLovedTracks->setEnabled( false );
+    m_ui->syncLovedTracks->setText( tr( "Synchronizing..." ) );
     m_ui->progressBar->show();
 
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onLovedFinished( QNetworkReply* ) ), reply );
@@ -283,7 +286,7 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
             if ( m_totalLovedPages < 0 )
             {
                 m_totalLovedPages = loved.attribute( "totalPages" ).toInt();
-                m_ui->progressBar->setMaximum( m_totalLovedPages );
+                m_ui->progressBar->setMaximum( m_totalLovedPages + 2 );
             }
 
             m_ui->progressBar->setValue( thisPage );
@@ -302,7 +305,7 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
             {
                 m_doneFetchingLoved = true;
 
-                if ( !m_localLoved.isEmpty() )
+                if ( m_doneFetchingLocal )
                     syncLoved();
 
                 return;
@@ -330,6 +333,7 @@ void
 LastFmConfig::localLovedLoaded( DatabaseCommand_LoadSocialActions::TrackActions tracks )
 {
     m_localLoved = tracks;
+    m_doneFetchingLocal = true;
 
     if ( m_doneFetchingLoved )
         syncLoved();
@@ -342,6 +346,8 @@ LastFmConfig::syncLoved()
     QSet< Tomahawk::query_ptr > localToLove, lastFmToLove, lastFmToUnlove;
 
     const QSet< Tomahawk::query_ptr > myLoved = m_localLoved.keys().toSet();
+
+    m_ui->progressBar->setValue( m_ui->progressBar->value() + 1 );
 
     foreach ( const Tomahawk::query_ptr& lastfmLoved, m_lastfmLoved )
     {
@@ -389,5 +395,8 @@ LastFmConfig::syncLoved()
         else
             lfmTrack.love();
     }
+
+    m_ui->progressBar->setValue( m_ui->progressBar->value() + 1 );
+    m_ui->syncLovedTracks->setText( tr( "Synchronization Finished" ) );
 }
 

@@ -72,7 +72,7 @@ private:
     unsigned int m_lastTimeStamp;
 
     int m_totalLovedPages;
-    bool m_doneFetchingLoved;
+    bool m_doneFetchingLoved, m_doneFetchingLocal;
     QSet< Tomahawk::query_ptr > m_lastfmLoved;
     DatabaseCommand_LoadSocialActions::TrackActions m_localLoved;
 };
