@@ -29,6 +29,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include <QTimer>
+
 #define LOVED_TRACK_ITEMS 25
 
 using namespace Tomahawk;
@@ -36,8 +38,13 @@ using namespace Tomahawk;
 
 LovedTracksModel::LovedTracksModel( QObject* parent )
     : PlaylistModel( parent )
+    , m_smoothingTimer( new QTimer )
     , m_limit( LOVED_TRACK_ITEMS )
 {
+    m_smoothingTimer->setInterval( 150 );
+    m_smoothingTimer->setSingleShot( false );
+
+    connect( m_smoothingTimer, SIGNAL( timeout() ), this, SLOT( loadTracks() ) );
 }
 
 
@@ -49,10 +56,6 @@ LovedTracksModel::~LovedTracksModel()
 void
 LovedTracksModel::loadTracks()
 {
-    if ( rowCount( QModelIndex() ) )
-    {
-        clear();
-    }
     startLoading();
 
     QString sql;
@@ -122,7 +125,7 @@ LovedTracksModel::onSourceAdded( const Tomahawk::source_ptr& source )
 void
 LovedTracksModel::onTrackLoved()
 {
-    loadTracks();
+    m_smoothingTimer->start();
 }
 
 
