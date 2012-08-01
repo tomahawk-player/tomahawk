@@ -256,6 +256,7 @@ LastFmConfig::syncLovedTracks( uint page )
     m_ui->syncLovedTracks->setEnabled( false );
     m_ui->syncLovedTracks->setText( tr( "Synchronizing..." ) );
     m_ui->progressBar->show();
+    emit sizeHintChanged();
 
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onLovedFinished( QNetworkReply* ) ), reply );
 
@@ -319,12 +320,14 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
         {
             m_ui->syncLovedTracks->setText( "Failed" );
             m_ui->progressBar->hide();
+            emit sizeHintChanged();
         }
     }
     catch( lastfm::ws::ParseError e )
     {
         m_ui->syncLovedTracks->setText( "Failed" );
         m_ui->progressBar->hide();
+        emit sizeHintChanged();
         tDebug() << "XmlQuery error:" << e.message();
     }
 }
