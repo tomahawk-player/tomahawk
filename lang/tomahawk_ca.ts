@@ -550,6 +550,11 @@ connect and stream from you?</source>
         <source>Import Playback History</source>
         <translation>Importa l&apos;historial de reproducció</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="90"/>
+        <source>Synchronize Loved Tracks</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>LastfmContext</name>
@@ -1918,7 +1923,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
 <context>
     <name>Tomahawk::Accounts::LastFmAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="48"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="49"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
         <translation>Fes scrobbling de les cançons a last.fm, i cerca cançons descarregables gratuïtament per escoltar-les</translation>
     </message>
@@ -1926,51 +1931,61 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="82"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="91"/>
         <source>Testing...</source>
         <translation>S&apos;està comprovant...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="104"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="113"/>
         <source>Test Login</source>
         <translation>Comprova l&apos;inici de sessió</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="114"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="123"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
         <translation>S&apos;està important %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="117"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing History...</source>
         <translation>S&apos;està important l&apos;historial...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="185"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="194"/>
         <source>History Incomplete. Resume</source>
         <translation>Historial incomplet... Reprèn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="190"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="199"/>
         <source>Playback History Imported</source>
         <translation>S&apos;ha importat l&apos;historial de reproducció</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="213"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="228"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="222"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="238"/>
         <source>Failed</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="218"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="227"/>
         <source>Success</source>
         <translation>Èxit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="234"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="244"/>
         <source>Could not contact server</source>
         <translation>No s&apos;ha pogut contactar amb el servidor</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
+        <source>Synchronizing...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="411"/>
+        <source>Synchronization Finished</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2939,37 +2954,37 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="738"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="743"/>
         <source> and </source>
         <translation>i</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="746"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="751"/>
         <source>You</source>
         <translation>Jo</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="748"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="753"/>
         <source>you</source>
         <translation>jo</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>and</source>
         <translation>i</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n més</numerusform><numerusform>%n més</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="760"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>%1 people</source>
         <translation>%1 persones</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="767"/>
         <source>loved this track</source>
         <translation>els ha encantat aquesta cançó</translation>
     </message>

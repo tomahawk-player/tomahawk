@@ -551,6 +551,11 @@ se conecte e faça o stream de você?</translation>
         <source>Import Playback History</source>
         <translation>Importar Histórico de Reprodução</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="90"/>
+        <source>Synchronize Loved Tracks</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>LastfmContext</name>
@@ -1919,7 +1924,7 @@ automáticas baseadas no seu gosto pessoal.</translation>
 <context>
     <name>Tomahawk::Accounts::LastFmAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="48"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="49"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
         <translation>Faça o scrobble para o last.fm e encontre faixas gratuitas para reproduzir</translation>
     </message>
@@ -1927,51 +1932,61 @@ automáticas baseadas no seu gosto pessoal.</translation>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="82"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="91"/>
         <source>Testing...</source>
         <translation>Testando...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="104"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="113"/>
         <source>Test Login</source>
         <translation>Testar Login</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="114"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="123"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
         <translation>Importando %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="117"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing History...</source>
         <translation>Importando Histórico...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="185"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="194"/>
         <source>History Incomplete. Resume</source>
         <translation>Histórico Incompleto. Retomar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="190"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="199"/>
         <source>Playback History Imported</source>
         <translation>Reproduzir Histórico Importado</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="213"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="228"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="222"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="238"/>
         <source>Failed</source>
         <translation>Falhou</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="218"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="227"/>
         <source>Success</source>
         <translation>Sucesso</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="234"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="244"/>
         <source>Could not contact server</source>
         <translation>Não foi possível contatar o servidor</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
+        <source>Synchronizing...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="411"/>
+        <source>Synchronization Finished</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2940,37 +2955,37 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="738"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="743"/>
         <source> and </source>
         <translation> e </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="746"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="751"/>
         <source>You</source>
         <translation>Você</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="748"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="753"/>
         <source>you</source>
         <translation>você</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>and</source>
         <translation>e</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="757"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n outro</numerusform><numerusform>%n outros</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="760"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>%1 people</source>
         <translation>%1 pessoas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="767"/>
         <source>loved this track</source>
         <translation>favoritou essa faixa</translation>
     </message>
