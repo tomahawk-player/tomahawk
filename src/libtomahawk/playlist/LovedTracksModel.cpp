@@ -41,8 +41,8 @@ LovedTracksModel::LovedTracksModel( QObject* parent )
     , m_smoothingTimer( new QTimer )
     , m_limit( LOVED_TRACK_ITEMS )
 {
-    m_smoothingTimer->setInterval( 150 );
-    m_smoothingTimer->setSingleShot( false );
+    m_smoothingTimer->setInterval( 300 );
+    m_smoothingTimer->setSingleShot( true );
 
     connect( m_smoothingTimer, SIGNAL( timeout() ), this, SLOT( loadTracks() ) );
 }
