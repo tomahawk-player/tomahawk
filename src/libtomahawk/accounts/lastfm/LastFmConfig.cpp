@@ -226,6 +226,7 @@ LastFmConfig::onLastFmFinished()
         {
             m_ui->testLogin->setText( tr( "Success" ) );
             m_ui->testLogin->setEnabled( false );
+            m_ui->syncLovedTracks->setEnabled( true );
         }
     }
     else
