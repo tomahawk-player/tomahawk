@@ -838,6 +838,13 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
     QTreeView::drawRow( painter, option, index );
 }
 
+void
+SourceTreeView::drawBranches( QPainter *painter, const QRect &rect, const QModelIndex &index ) const
+{
+    if( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+        QTreeView::drawBranches( painter, rect, index );
+}
+
 
 template< typename T > T*
 SourceTreeView::itemFromIndex( const QModelIndex& index ) const
