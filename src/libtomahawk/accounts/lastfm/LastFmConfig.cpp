@@ -315,9 +315,16 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
                 syncLovedTracks( thisPage + 1 );
             }
         }
+        else
+        {
+            m_ui->syncLovedTracks->setText( "Failed" );
+            m_ui->progressBar->hide();
+        }
     }
     catch( lastfm::ws::ParseError e )
     {
+        m_ui->syncLovedTracks->setText( "Failed" );
+        m_ui->progressBar->hide();
         tDebug() << "XmlQuery error:" << e.message();
     }
 }
