@@ -82,6 +82,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
 
+    QFrame *sepLine = new QFrame( this );
+    sepLine->setFrameShape( QFrame::HLine );
+    sepLine->setFrameShadow( QFrame::Sunken );
+    ui->horizontalLayout->insertWidget( 0, sepLine );
+
     m_toolBar = new QToolBar( tr( "Tomahawk Settings" ), this );
     ui->horizontalLayout->insertWidget( 0, m_toolBar );
     m_toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
