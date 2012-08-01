@@ -165,7 +165,7 @@ AnimatedSpinner::drawFrame( QPainter* p, const QRect& rect )
 void
 AnimatedSpinner::fadeIn()
 {
-    if ( parentWidget() && isVisible() )
+    if ( parentWidget() && isVisible() || m_animation->state() == QTimeLine::Running )
         return;
 
     m_animation->start();
