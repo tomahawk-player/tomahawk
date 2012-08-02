@@ -292,6 +292,10 @@ SettingsDialog::createIcons()
 
     m_settingsGroup = new QActionGroup( m_toolBar );
 
+    QWidget *leftSpacer = new QWidget( m_toolBar );
+    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_toolBar->addWidget( leftSpacer );
+
     QAction *accountsAction = new QAction( QIcon( RESPATH "images/account-settings.png" ),
                                            tr( "Services" ),
                                            m_toolBar );
@@ -324,6 +328,10 @@ SettingsDialog::createIcons()
     m_settingsGroup->setExclusive( true );
 
     m_toolBar->addActions( m_settingsGroup->actions() );
+
+    QWidget *rightSpacer = new QWidget( m_toolBar );
+    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_toolBar->addWidget( rightSpacer );
 
     connect( m_settingsGroup, SIGNAL( triggered( QAction * ) ),
              this, SLOT( changePage( QAction * ) ) );
