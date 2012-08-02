@@ -70,7 +70,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      AudioControls.cpp
      SettingsDialog.cpp
      DiagnosticsDialog.cpp
-     SettingsListDelegate.cpp
      TomahawkWindow.cpp
      LoadXSPFDialog.cpp
      SocialWidget.cpp
