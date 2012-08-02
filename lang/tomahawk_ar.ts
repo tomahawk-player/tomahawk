@@ -374,12 +374,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="343"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
         <source>Show Footnotes</source>
         <translation>أظهر الحاشية</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="337"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
         <source>Hide Footnotes</source>
         <translation>إخفي الحاشية</translation>
     </message>
@@ -1229,47 +1229,67 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="300"/>
+        <location filename="../src/SettingsDialog.cpp" line="310"/>
         <source>Collection</source>
         <translation>مجموعة</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="307"/>
+        <location filename="../src/SettingsDialog.cpp" line="319"/>
         <source>Advanced</source>
         <translation>متقدمة</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="155"/>
+        <location filename="../src/SettingsDialog.cpp" line="166"/>
         <source>All</source>
         <translation>الكل</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="246"/>
+        <location filename="../src/SettingsDialog.cpp" line="90"/>
+        <source>Tomahawk Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>بعض الإعدادات التي تم تغييرها لن تصبح نافذة المفعول حتى يتم إعادة تشغيل توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="293"/>
+        <location filename="../src/SettingsDialog.cpp" line="300"/>
         <source>Services</source>
         <translation>خدمات</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="459"/>
+        <location filename="../src/SettingsDialog.cpp" line="303"/>
+        <source>&lt;b&gt;Services&lt;/b&gt;&lt;br&gt;Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="313"/>
+        <source>&lt;b&gt;Collection&lt;/b&gt;&lt;br&gt;Manage how Tomahawk finds music on your computer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="322"/>
+        <source>&lt;b&gt;Advanced&lt;/b&gt;&lt;br&gt;Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="478"/>
         <source>Install resolver from file</source>
         <translation>تثبيت محلل من ملف</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="506"/>
+        <location filename="../src/SettingsDialog.cpp" line="525"/>
         <source>Delete all Access Control entries?</source>
         <translation>حذف كافة بيانات التحكم بالوصول؟</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/SettingsDialog.cpp" line="526"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>هل فعلا تريد حذف جميع بيانات التحكم بالوصول؟ سوف يطلب منك اتخاذ القرار مجددا لكل ند على اتصال به.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="246"/>
+        <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Information</source>
         <translation>معلومات</translation>
     </message>
@@ -1688,17 +1708,12 @@ connect and stream from you?</source>
         <translation>إعدادات توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="158"/>
-        <source>Local Music Information</source>
-        <translation>معلومات الأغاني المحلية</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="166"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="112"/>
         <source>Path to scan for music files:</source>
         <translation>ماسار لتفحص ملفات الموسيقى:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="180"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="126"/>
         <source>The Echo Nest supports keeping track of your catalog metadata
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
@@ -1708,107 +1723,97 @@ connect and stream from you?</source>
 إنشاء قوائم أغاني أوتوماتيكيا و إذاعات حسب ذوقك الشخصي.</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="186"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="132"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
         <translation>تحميل قائمة المجموعة إلى &quot;The Echo&quot; لتمكين راديو المستخدم</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="199"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="145"/>
         <source>Watch for changes</source>
         <translation>إنتبه للتغييرات</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="208"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="154"/>
         <source>Time between scans, in seconds:</source>
         <translation>الوقت بين المسوحات، بالثواني:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="245"/>
-        <source>Advanced Settings</source>
-        <translation>إعدادات متقدمة</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="254"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="206"/>
         <source>Remote Peer Connection Method</source>
         <translation>طريقة الاتصال بالند البعيد</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="260"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="212"/>
         <source>None (outgoing connections only)</source>
         <translation>لا شيء (الاتصالات الصادرة فقط)</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="267"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="219"/>
         <source>Use UPnP to establish port forward (recommended)</source>
         <translation>استخدم عمل UPnP لإنشاء بوابة إعادة التوجيه (موصى به)</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="274"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="226"/>
         <source>Use static external IP address/host name and port</source>
         <translation>استخدم عنوان/مضيف ايب (IP) و بوابة ثابتين</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="287"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="239"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
         <translation>عين هذا إلى عنوان الايب الخارجي (External IP) الخاص بك أو اسم المضيف. تأكد من إحالة البوابة إلى هذا المضيف!</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="356"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="311"/>
         <source>SOCKS Proxy</source>
         <translation>سوكس الوكيل</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="362"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="317"/>
         <source>Use SOCKS Proxy</source>
         <translation>استخدم سوكس الوكيل</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="439"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="397"/>
         <source>Clear All Access Control Entries</source>
         <translation>حذف كافة بيانات التحكم بالوصول</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="98"/>
-        <source>Internet Services</source>
-        <translation>خدمات الانترنت</translation>
-    </message>
-    <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="109"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="49"/>
         <source>Install from file...</source>
         <translation>تثبيت من ملف...</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="129"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="69"/>
         <source>Filter by capability:</source>
         <translation>ترشيح حسب القدرة:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="305"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="257"/>
         <source>Static Host Name:</source>
         <translation>اسم مضيف ثابت:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="321"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="273"/>
         <source>Static Port:</source>
         <translation>بوابة ثابتة:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="369"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="324"/>
         <source>Proxy Settings...</source>
         <translation>إعدادات الوسيط...</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="392"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="350"/>
         <source>Other Settings</source>
         <translation>إعدادات أخرى</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="414"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>أرسل تقارير بعد فشل توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="401"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="359"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>السماح لمحرك البحث بالتفاعل مع توماهوك (موصى به)</translation>
     </message>
@@ -3282,7 +3287,7 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="247"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1055"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1051"/>
         <source>Play</source>
         <translation>إستمع</translation>
     </message>
@@ -3302,172 +3307,172 @@ enter the displayed PIN number here:</source>
         <translation>التالي</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="237"/>
+        <location filename="../src/TomahawkWindow.cpp" line="233"/>
         <source>Back</source>
         <translation>إلى الوراء</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="238"/>
+        <location filename="../src/TomahawkWindow.cpp" line="234"/>
         <source>Go back one page</source>
         <translation>العودة صفحة واحدة إلى الوراء</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="239"/>
+        <location filename="../src/TomahawkWindow.cpp" line="235"/>
         <source>Forward</source>
         <translation>تقدم</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="240"/>
+        <location filename="../src/TomahawkWindow.cpp" line="236"/>
         <source>Go forward one page</source>
         <translation>تقدم صفحة واحدة </translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="247"/>
+        <location filename="../src/TomahawkWindow.cpp" line="243"/>
         <source>Global Search...</source>
         <translation>بحث شامل...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="314"/>
-        <location filename="../src/TomahawkWindow.cpp" line="331"/>
+        <location filename="../src/TomahawkWindow.cpp" line="310"/>
+        <location filename="../src/TomahawkWindow.cpp" line="327"/>
         <source>Check For Updates...</source>
         <translation>التحقق من التحديثات...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="749"/>
-        <location filename="../src/TomahawkWindow.cpp" line="756"/>
-        <location filename="../src/TomahawkWindow.cpp" line="764"/>
+        <location filename="../src/TomahawkWindow.cpp" line="745"/>
+        <location filename="../src/TomahawkWindow.cpp" line="752"/>
+        <location filename="../src/TomahawkWindow.cpp" line="760"/>
         <source>Connect To Peer</source>
         <translation>ربط بالند</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="750"/>
+        <location filename="../src/TomahawkWindow.cpp" line="746"/>
         <source>Enter peer address:</source>
         <translation>أدخل عنوان الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="757"/>
+        <location filename="../src/TomahawkWindow.cpp" line="753"/>
         <source>Enter peer port:</source>
         <translation>أدخل بوابة الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="765"/>
+        <location filename="../src/TomahawkWindow.cpp" line="761"/>
         <source>Enter peer key:</source>
         <translation>أدخل مفتاح الند:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="875"/>
+        <location filename="../src/TomahawkWindow.cpp" line="871"/>
         <source>XSPF Error</source>
         <translation>خطأ XSPF</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="875"/>
+        <location filename="../src/TomahawkWindow.cpp" line="871"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>قائمة الأغاني XSPF هذه ليست صالحة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="879"/>
+        <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>Failed to save tracks</source>
         <translation>فشل في حفظ الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="879"/>
+        <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>بعض الأغاني في قائمة الأغاني لا تحتوي على إسم الفنان أو إسم الأغنية. هذه الأغاني سوف تتجاهل.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="893"/>
+        <location filename="../src/TomahawkWindow.cpp" line="889"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية. تأكد أن لديك خلفية فونون المناسبة والإضافات المطلوبة مثبتة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="895"/>
+        <location filename="../src/TomahawkWindow.cpp" line="891"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="927"/>
+        <location filename="../src/TomahawkWindow.cpp" line="923"/>
         <source>Station</source>
         <translation>إذاعة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="929"/>
+        <location filename="../src/TomahawkWindow.cpp" line="925"/>
         <source>Create New Station</source>
         <translation>إنشاء قائمة أغاني جديدة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="929"/>
+        <location filename="../src/TomahawkWindow.cpp" line="925"/>
         <source>Name:</source>
         <translation>الاسم:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="992"/>
+        <location filename="../src/TomahawkWindow.cpp" line="988"/>
         <source>Playlist</source>
         <translation>قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1014"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1010"/>
         <source>Automatic Playlist</source>
         <translation>قائمة أغاني أوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1035"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1031"/>
         <source>Pause</source>
         <translation>تعليق</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1081"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1077"/>
         <source>Go &amp;offline</source>
         <translation>أصبح &amp;غير متصل</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1088"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1084"/>
         <source>Go &amp;online</source>
         <translation>اصبح &amp;متصل</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1111"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1107"/>
         <source>Authentication Error</source>
         <translation>خطأ في المصادقة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1112"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1108"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation>خطأ في الاتصال بسيب (SIP): فشلت المصادقة!</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1126"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1122"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 من قبل %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1127"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1123"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1138"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1134"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1142"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1138"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1146"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1142"/>
         <source>Copyright 2010 - 2012</source>
         <translation>حقوق الطبع والنشر ٢٠١٠ - ٢٠١٢</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1147"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1143"/>
         <source>Thanks to:</source>
         <translation>شكر لكل من:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1154"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1150"/>
         <source>About Tomahawk</source>
         <translation>عن توماهوك</translation>
     </message>
