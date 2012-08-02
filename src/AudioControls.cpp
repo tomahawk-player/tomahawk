@@ -37,6 +37,8 @@
 #include "ViewManager.h"
 #include "Source.h"
 
+const static int ALLOWED_MAX_DIVERSION = 300;
+
 using namespace Tomahawk;
 
 
@@ -205,22 +207,20 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
 
-    m_phononTickCheckTimer.stop();
-
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     m_sliderTimeLine.setCurrentTime( 0 );
-    m_seekMsecs = -1;
+    m_seeked = false;
 
     ui->seekSlider->setVisible( true );
 
     int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
     m_sliderTimeLine.setUpdateInterval( qBound( 40, updateRate, 500 ) );
 
-    m_noTimeChange = false;
     m_lastSliderCheck = 0;
+    m_phononTickCheckTimer.start( 500 );
 }
 
 
@@ -326,18 +326,15 @@ AudioControls::onPlaybackResumed()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
-    m_sliderTimeLine.resume();
 }
 
 
 void
 AudioControls::onPlaybackSeeked( qint64 msec )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << " setting current timer to " << msec;
-    m_sliderTimeLine.setPaused( true );
-    m_sliderTimeLine.setCurrentTime( msec );
-    m_lastSliderCheck = msec;
-    m_seekMsecs = msec;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    m_seeked = true;
+    onPlaybackTimer( msec );
 }
 
 
@@ -356,7 +353,8 @@ AudioControls::onPlaybackStopped()
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
-
+    m_phononTickCheckTimer.stop();
+    
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
@@ -368,65 +366,90 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
+    //tDebug() << Q_FUNC_INFO;
+    
+    m_phononTickCheckTimer.stop();
+    
+    if ( m_currentTrack.isNull() )
+    {
+        m_sliderTimeLine.stop();
+        return;
+    }
+    
     const int seconds = msElapsed / 1000;
-    if ( seconds != m_lastTextSecondShown && !m_currentTrack.isNull() )
+    if ( seconds != m_lastTextSecondShown )
     {
         ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
         ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
         m_lastTextSecondShown = seconds;
     }
 
-    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime() << "and m_seekMsecs =" << m_seekMsecs;
-    if ( msElapsed > 0 && msElapsed != m_lastSliderCheck && m_seekMsecs == -1 && msElapsed - 500 < m_lastSliderCheck )
+    m_phononTickCheckTimer.start( 500 );
+
+    if ( msElapsed == 0 )
         return;
-    m_lastSliderCheck = msElapsed;
-
-    if ( m_currentTrack.isNull() )
-    {
-        m_sliderTimeLine.stop();
-        return;
-    }
-
-    ui->seekSlider->blockSignals( true );
-
-    if ( sender() != &m_phononTickCheckTimer )
-        m_phononTickCheckTimer.start( 1000 );
 
     int currentTime = m_sliderTimeLine.currentTime();
-    if ( m_noTimeChange )
+    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime();
+    
+    // First condition checks for the common case where
+    // 1) the track has been started
+    // 2) we haven't seeked,
+    // 3) the timeline is pretty close to the actual time elapsed, within ALLOWED_MAX_DIVERSIONmsec, so no adustment needed, and
+    // 4) The audio engine is actually currently running
+    if ( msElapsed > 0
+            && !m_seeked
+            && qAbs( msElapsed - currentTime ) <= ALLOWED_MAX_DIVERSION
+            && AudioEngine::instance()->state() == AudioEngine::Playing )
     {
-        if ( currentTime != msElapsed )
+        if ( m_sliderTimeLine.state() != QTimeLine::Running )
+            m_sliderTimeLine.resume();
+        m_lastSliderCheck = msElapsed;
+        return;
+    }
+    else
+    {
+        //tDebug() << Q_FUNC_INFO << "Fallthrough";
+        // If we're in here we're offset, so we need to do some munging around
+        ui->seekSlider->blockSignals( true );
+
+        // First handle seeks
+        if ( m_seeked )
         {
+            //tDebug() << Q_FUNC_INFO << "Seeked";
             m_sliderTimeLine.setPaused( true );
-            m_noTimeChange = false;
             m_sliderTimeLine.setCurrentTime( msElapsed );
-            m_seekMsecs = -1;
-            m_sliderTimeLine.resume();
+            m_seeked = false;
+            if ( AudioEngine::instance()->state() == AudioEngine::Playing )
+                m_sliderTimeLine.resume();
         }
+        // Next handle falling behind by too much, or getting ahead by too much (greater than allowed amount, which would have been sorted above)
+        // However, a Phonon bug means that after a seek we'll actually have AudioEngine's state be Playing, when it ain't, so have to detect that
+        else if ( AudioEngine::instance()->state() == AudioEngine::Playing )
+        {
+            //tDebug() << Q_FUNC_INFO << "AudioEngine playing";
+            m_sliderTimeLine.setPaused( true );
+            m_sliderTimeLine.setCurrentTime( msElapsed );
+            if ( msElapsed != m_lastSliderCheck )
+                m_sliderTimeLine.resume();
+        }
+        // Finally, the case where the audioengine isn't playing; if the timeline is still running, pause it and catch up
+        else if ( AudioEngine::instance()->state() != AudioEngine::Playing )
+        {
+            //tDebug() << Q_FUNC_INFO << "AudioEngine not playing";
+            if ( msElapsed != currentTime || m_sliderTimeLine.state() == QTimeLine::Running)
+            {
+                m_sliderTimeLine.setPaused( true );
+                m_sliderTimeLine.setCurrentTime( msElapsed );
+            }
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "What to do? How could we even get here?";
+        }
+        m_lastSliderCheck = msElapsed;
+        ui->seekSlider->blockSignals( false );
     }
-    else if ( currentTime >= msElapsed || m_seekMsecs != -1 )
-    {
-        m_sliderTimeLine.setPaused( true );
-
-        m_noTimeChange = false;
-        if ( currentTime == msElapsed )
-            m_noTimeChange = true;
-
-        m_sliderTimeLine.setCurrentTime( msElapsed );
-        m_seekMsecs = -1;
-        if ( AudioEngine::instance()->state() != AudioEngine::Paused && sender() != &m_phononTickCheckTimer )
-            m_sliderTimeLine.resume();
-    }
-    else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning && AudioEngine::instance()->state() == AudioEngine::Playing )
-    {
-        m_sliderTimeLine.start();
-    }
-    else if ( m_sliderTimeLine.state() == QTimeLine::Paused && AudioEngine::instance()->state() != AudioEngine::Paused )
-    {
-        m_sliderTimeLine.resume();
-    }
-
-    ui->seekSlider->blockSignals( false );
 }
 
 
