@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -81,4 +82,19 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
     }
     else
         QProxyStyle::drawControl( ce, opt, p, w );
+}
+
+QSize
+ProxyStyle::sizeFromContents( QStyle::ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const
+{
+    if( type == CT_Splitter )
+    {
+        const QSplitter* splitter = qobject_cast< const QSplitter* >( widget );
+        if( splitter->orientation() == Qt::Horizontal )
+            return QSize( 1, size.height() );
+        else
+            return QSize( size.width(), 1 );
+    }
+    else
+        return QProxyStyle::sizeFromContents( type, option, size, widget );
 }
