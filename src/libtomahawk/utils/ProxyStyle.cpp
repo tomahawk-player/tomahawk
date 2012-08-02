@@ -77,7 +77,12 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
         if ( !splitter->sizes().contains( 0 ) )
         {
             p->setPen( QColor( 0x8c, 0x8c, 0x8c ) );
-            p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
+            // We must special-case this because of the AnimatedSplitterHandle which has a
+            // SizeHint of 0,0.
+            if( splitter->orientation() == Qt::Vertical )
+                p->drawLine( opt->rect.topLeft(), opt->rect.topRight() );
+            else
+                p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
         }
     }
     else
