@@ -193,6 +193,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     {
         ui->dirTree->checkPath( dir, Qt::Checked );
     }
+    ui->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
 
     // NOW PLAYING
 // #ifdef Q_WS_MAC
