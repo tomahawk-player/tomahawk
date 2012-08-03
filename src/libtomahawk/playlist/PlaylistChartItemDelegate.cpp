@@ -157,43 +157,44 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }
 
         QFont figureFont = opt.font;
-        figureFont.setPixelSize( 18 );
+        figureFont.setPointSize( 17 );
         figureFont.setWeight( 99 );
 
         QFont boldFont = opt.font;
-        boldFont.setPixelSize( 15 );
+        boldFont.setPointSize( 12 );
         boldFont.setWeight( 99 );
 
         QFont smallBoldFont = opt.font;
-        smallBoldFont.setPixelSize( 12 );
+        smallBoldFont.setPointSize( 9 );
         smallBoldFont.setWeight( 60 );
 
         QFont durationFont = opt.font;
-        durationFont.setPixelSize( 12 );
+        durationFont.setPointSize( 9 );
         durationFont.setWeight( 80 );
+        QFontMetrics durationFontMetrics( durationFont );
 
         if ( index.row() == 0 )
         {
-            figureFont.setPixelSize( 36 );
-            boldFont.setPixelSize( 26 );
-            smallBoldFont.setPixelSize( 22 );
+            figureFont.setPointSize( 34 );
+            boldFont.setPointSize( 24 );
+            smallBoldFont.setPointSize( 20 );
         }
         else if ( index.row() == 1 )
         {
-            figureFont.setPixelSize( 30 );
-            boldFont.setPixelSize( 22 );
-            smallBoldFont.setPixelSize( 18 );
+            figureFont.setPointSize( 28 );
+            boldFont.setPointSize( 20 );
+            smallBoldFont.setPointSize( 15 );
         }
         else if ( index.row() == 2 )
         {
-            figureFont.setPixelSize( 24 );
-            boldFont.setPixelSize( 18 );
-            smallBoldFont.setPixelSize( 14 );
+            figureFont.setPointSize( 20 );
+            boldFont.setPointSize( 15 );
+            smallBoldFont.setPointSize( 11 );
         }
         else if ( index.row() >= 10 )
         {
-            boldFont.setPixelSize( 12 );
-            smallBoldFont.setPixelSize( 11 );
+            boldFont.setPointSize( 9 );
+            smallBoldFont.setPointSize( 8 );
         }
 
         QRect figureRect = r.adjusted( 0, 0, -option.rect.width() + 60 - 6 + r.left(), 0 );
@@ -215,8 +216,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->drawPixmap( pixmapRect, pixmap );
 
         r.adjust( pixmapRect.width() + figureRect.width() + 18, 1, -28, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -48, 0 );
-        QRect rightRect = r.adjusted( r.width() - 40, 0, 0, 0 );
+        QRect leftRect = r.adjusted( 0, 0, -durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ) - 8, 0 );
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
@@ -229,6 +229,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( duration > 0 )
         {
             painter->setFont( durationFont );
+            QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
             text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
             painter->drawText( rightRect, text, m_centerRightOption );
         }

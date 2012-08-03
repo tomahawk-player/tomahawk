@@ -72,6 +72,9 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
+        } else if ( style == PlayableProxyModel::Detailed ) {
+            int rowHeight = option.fontMetrics.height() * 1.4;
+            size.setHeight( rowHeight );
         }
     }
 
@@ -230,7 +233,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() && !index.data().toString().isEmpty() &&
        ( index.column() == PlayableModel::Artist || index.column() == PlayableModel::Album || index.column() == PlayableModel::Track ) )
     {
-        opt.rect.setWidth( opt.rect.width() - 16 );
+        opt.rect.setWidth( opt.rect.width() - opt.rect.height() - 2 );
         QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
 
         QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );

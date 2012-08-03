@@ -107,7 +107,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     QFont f = font();
     f.setBold( true );
-    f.setPixelSize( 18 );
+    f.setPointSize( 14 );
     ui->artistLabel->setFont( f );
 
     QPalette p = ui->biography->palette();

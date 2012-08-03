@@ -38,11 +38,12 @@ ContextProxyPage::paint( QPainter* painter, const QStyleOptionGraphicsItem* opti
 
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( 14 );
+    f.setPointSize( 8 );
     painter->setFont( f );
     painter->setPen( Qt::white );
 
-    QRect r( 1, 1, option->rect.width(), 19 );
+    QFontMetrics fm( f );
+    QRect r( 1, 1, option->rect.width(), fm.height() * 1.1 );
     QTextOption to( Qt::AlignCenter );
     painter->drawText( r, m_page->title(), to );
 
@@ -65,8 +66,12 @@ ContextProxyPage::setPage( Tomahawk::ContextPage* page )
     }
 #endif
 
+    QFont f( font() );
+    f.setBold( true );
+    f.setPointSize( 8 );
+    QFontMetrics fm( f );
     QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
-    layout->setContentsMargins( 4, 20, 4, 4 );
+    layout->setContentsMargins( 4, fm.height() * 1.1, 4, 4 );
     layout->addItem( page->widget() );
     setLayout( layout );
 

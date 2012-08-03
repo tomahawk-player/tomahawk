@@ -67,7 +67,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
-    setMinimumWidth( 220 );
+
+    QFont dummyFont;
+    dummyFont.setPointSize( 9 );
+    QFontMetrics fm( dummyFont );
+    // This is sort of the longest string in there. With translations
+    // we will never get it right so setting it to something reasonable for the average case
+    setMinimumWidth( fm.width( "Track Album Artist Local Top10") );
 
     setHeaderHidden( true );
     setRootIsDecorated( true );
