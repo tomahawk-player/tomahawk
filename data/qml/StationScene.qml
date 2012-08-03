@@ -57,19 +57,31 @@ Rectangle {
                 width: scene.width
                 spacing: width * .1
 
-                GridView {
-                    id: gridView
+                Item {
                     height: parent.height
                     width: (parent.width - orText.width - parent.spacing * 2 ) * 2 / 3
-                    model: dummyArtistModel
+                    GridView {
+                        id: gridView
+                        anchors.fill: parent
+                        anchors.margins: cellWidth / 2
+                        model: dummyArtistModel
 
-                    delegate: Item {
-                        height: gridView.height / 3;
-                        width: height
+                        cellWidth: gridView.width / 4 - 1 // -1 to make sure there is space for 4 items even with rounding error
+                        cellHeight: cellWidth
 
-                        CoverImage {
-                            artistName: modelData
-                            anchors.fill: parent
+                        delegate: Item {
+                            height: gridView.cellHeight * .9
+                            width: height
+
+                            CoverImage {
+                                artistName: modelData
+                                anchors.fill: parent
+
+                                onClicked: {
+                                    echonestStation.setMainControl( EchonestStation.StationTypeArtist, modelData );
+                                    stationListView.incrementCurrentIndex();
+                                }
+                            }
                         }
                     }
                 }
@@ -89,7 +101,7 @@ Rectangle {
                     opacity: echonestStation.configured ? 0 : 1
 
                     onTagClicked: {
-                        echonestStation.setMainControl( item );
+                        echonestStation.setMainControl( EchonestStation.StationTypeStyle, item );
                         stationListView.incrementCurrentIndex();
                     }
 

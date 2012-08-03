@@ -29,6 +29,7 @@ Item {
             width: root.coverSize
 
             showLabels: false
+            showMirror: true
             //artistName: model.artistName
             //trackName: model.trackName
             artworkId: model.coverID
