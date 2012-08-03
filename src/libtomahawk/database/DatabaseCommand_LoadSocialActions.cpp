@@ -37,40 +37,74 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
     TomahawkSqlQuery query = dbi->newquery();
 
-    QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
-
-    int artid = dbi->artistId( m_artist, false );
-    if( artid < 1 )
-        return;
-
-    int trkid = dbi->trackId( artid, m_track, false );
-    if( trkid < 1 )
-        return;
-
-    QString whereToken;
-    whereToken = QString( "WHERE id IS %1" ).arg( trkid );
-
-    QString sql = QString(
-            "SELECT k, v, timestamp, source "
-            "FROM social_attributes %1 "
-            "ORDER BY timestamp ASC" ).arg( whereToken );
-
-    query.prepare( sql );
-    query.exec();
-
-    QList< Tomahawk::SocialAction > allSocialActions;
-    while ( query.next() )
+    if ( m_actionOnly.isNull() )
     {
-        Tomahawk::SocialAction action;
-        action.action    = query.value( 0 );  // action
-        action.value     = query.value( 1 );  // comment
-        action.timestamp = query.value( 2 );  // timestamp
-        action.source    = SourceList::instance()->get( query.value( 3 ).toInt() );  // source
-        
-        if ( !action.source.isNull() )
-            allSocialActions.append( action );
-    }
+        // Load for just specified track
+        int artid = dbi->artistId( m_artist, false );
+        if( artid < 1 )
+            return;
 
-    m_query->setAllSocialActions( allSocialActions );
+        int trkid = dbi->trackId( artid, m_track, false );
+        if( trkid < 1 )
+            return;
+
+        QString whereToken;
+        whereToken = QString( "WHERE id IS %1" ).arg( trkid );
+
+        QString sql = QString(
+                "SELECT k, v, timestamp, source "
+                "FROM social_attributes %1 "
+                "ORDER BY timestamp ASC" ).arg( whereToken );
+
+        query.prepare( sql );
+        query.exec();
+
+        QList< Tomahawk::SocialAction > allSocialActions;
+        while ( query.next() )
+        {
+            Tomahawk::SocialAction action;
+            action.action    = query.value( 0 );  // action
+            action.value     = query.value( 1 );  // comment
+            action.timestamp = query.value( 2 );  // timestamp
+            action.source    = SourceList::instance()->get( query.value( 3 ).toInt() );  // source
+
+            if ( !action.source.isNull() )
+                allSocialActions.append( action );
+        }
+
+        m_query->setAllSocialActions( allSocialActions );
+    }
+    else
+    {
+        // Load all tracks with this social action
+        const QString srcStr = source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() );
+
+        query.prepare( QString( "SELECT id, v, timestamp FROM social_attributes WHERE source %1 AND k = ? " ).arg( srcStr ) );
+        query.addBindValue( m_actionOnly );
+
+        query.exec();
+
+        DatabaseCommand_LoadSocialActions::TrackActions trackActions;
+        while ( query.next() )
+        {
+            const QVariantMap track = dbi->track( query.value( 0 ).toInt() );
+            if ( track.value( "artist" ).toString().isEmpty() || track.value( "name" ).toString().isEmpty() )
+                continue;
+
+            const QVariantMap artist = dbi->artist( track.value( "artist" ).toInt() );
+
+            const query_ptr trackQuery = Query::get( artist.value( "name" ).toString(), track.value( "name" ).toString(), QString(), QString(), false );
+
+            Tomahawk::SocialAction action;
+            action.action    = m_actionOnly;  // action
+            action.value     = query.value( 1 );  // comment
+            action.timestamp = query.value( 2 );  // timestamp
+            action.source    = source();  // source
+
+            trackActions[ trackQuery ] = action;
+        }
+
+        emit done( trackActions );
+    }
 }
 

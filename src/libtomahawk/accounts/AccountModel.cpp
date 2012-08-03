@@ -38,8 +38,9 @@ using namespace Accounts;
 
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
+    , m_waitingForAtticaLoaded( true )
 {
-    connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadData() ) );
+    connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded() ) );
     connect( AtticaManager::instance(), SIGNAL( startedInstalling( QString ) ), this, SLOT( onStartedInstalling( QString ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( onFinishedInstalling( QString ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverInstallationFailed( QString ) ), this, SLOT( resolverInstallFailed( QString ) ) );
@@ -50,6 +51,15 @@ AccountModel::AccountModel( QObject* parent )
 
     loadData();
 }
+
+
+void
+AccountModel::atticaLoaded()
+{
+    m_waitingForAtticaLoaded = false;
+    loadData();
+}
+
 
 void
 AccountModel::loadData()
@@ -644,7 +654,8 @@ AccountModel::accountAdded( Account* account )
     if ( ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account ) )
     {
         qDebug() << "Plain old manual resolver added, appending at end";
-        Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
+        if ( !m_waitingForAtticaLoaded )
+            Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
         const int count = m_accounts.size();
         beginInsertRows( QModelIndex(), count, count );
         m_accounts << new AccountModelNode( resolver );

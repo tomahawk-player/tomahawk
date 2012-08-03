@@ -411,6 +411,11 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         if ( m.value( "artist" ).toString().trimmed().isEmpty() || m.value( "track" ).toString().trimmed().isEmpty() )
             continue;
 
+        // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
+        // the purchaseUrl for the user to upgrade to a full stream.
+        if ( m.value( "preview" ).toBool() == true )
+            continue;
+
         Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
         Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
         rp->setArtist( ap );

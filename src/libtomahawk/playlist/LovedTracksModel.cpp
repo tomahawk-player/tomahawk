@@ -29,6 +29,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include <QTimer>
+
 #define LOVED_TRACK_ITEMS 25
 
 using namespace Tomahawk;
@@ -36,8 +38,13 @@ using namespace Tomahawk;
 
 LovedTracksModel::LovedTracksModel( QObject* parent )
     : PlaylistModel( parent )
+    , m_smoothingTimer( new QTimer )
     , m_limit( LOVED_TRACK_ITEMS )
 {
+    m_smoothingTimer->setInterval( 300 );
+    m_smoothingTimer->setSingleShot( true );
+
+    connect( m_smoothingTimer, SIGNAL( timeout() ), this, SLOT( loadTracks() ) );
 }
 
 
@@ -49,10 +56,6 @@ LovedTracksModel::~LovedTracksModel()
 void
 LovedTracksModel::loadTracks()
 {
-    if ( rowCount( QModelIndex() ) )
-    {
-        clear();
-    }
     startLoading();
 
     QString sql;
@@ -74,7 +77,7 @@ LovedTracksModel::loadTracks()
     }
 
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -122,7 +125,7 @@ LovedTracksModel::onSourceAdded( const Tomahawk::source_ptr& source )
 void
 LovedTracksModel::onTrackLoved()
 {
-    loadTracks();
+    m_smoothingTimer->start();
 }
 
 
@@ -130,4 +133,27 @@ bool
 LovedTracksModel::isTemporary() const
 {
     return true;
+}
+
+
+void
+LovedTracksModel::tracksLoaded( QList< query_ptr > newLoved )
+{
+    finishLoading();
+
+    QList< query_ptr > tracks;
+
+    foreach ( const plentry_ptr ple, playlistEntries() )
+        tracks << ple->query();
+
+    bool changed = false;
+    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newLoved, changed );
+
+    if ( changed )
+    {
+        QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
+
+        clear();
+        appendEntries( el );
+    }
 }

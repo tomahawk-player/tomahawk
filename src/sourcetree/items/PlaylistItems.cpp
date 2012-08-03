@@ -108,8 +108,13 @@ PlaylistItem::IDValue() const
 bool
 PlaylistItem::isBeingPlayed() const
 {
-    if ( ViewManager::instance()->pageForPlaylist( m_playlist ) )
-        return AudioEngine::instance()->currentTrackPlaylist() == ViewManager::instance()->pageForPlaylist( m_playlist )->playlistInterface();
+    if ( ViewPage* page = ViewManager::instance()->pageForPlaylist( m_playlist ) )
+    {
+        if ( AudioEngine::instance()->currentTrackPlaylist() == page->playlistInterface() )
+            return true;
+        if ( page->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+            return true;
+    }
     return false;
 }
 

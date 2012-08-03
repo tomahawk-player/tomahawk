@@ -86,7 +86,16 @@ bool
 GenericPageItem::isBeingPlayed() const
 {
     if ( m_get() )
-        return m_get()->isBeingPlayed();
+    {
+        if ( m_get()->isBeingPlayed() )
+            return true;
+
+        if ( !m_get()->playlistInterface().isNull() && m_get()->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+            return true;
+
+        if ( !m_get()->playlistInterface().isNull() && m_get()->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+            return true;
+    }
 
     return false;
 }

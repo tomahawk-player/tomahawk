@@ -23,7 +23,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../resources.qrc">:/data/images/lastfm-icon.png</pixmap>
+      <pixmap>:/data/images/lastfm-icon.png</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -81,6 +81,13 @@
       <widget class="QPushButton" name="importHistory">
        <property name="text">
         <string>Import Playback History</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="syncLovedTracks">
+       <property name="text">
+        <string>Synchronize Loved Tracks</string>
        </property>
       </widget>
      </item>

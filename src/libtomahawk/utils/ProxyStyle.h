@@ -31,6 +31,7 @@ public:
 
     virtual void drawPrimitive( PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
     virtual void drawControl( ControlElement ce, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
+    virtual QSize sizeFromContents( ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const;
 };
 
 #endif // PROXYSTYLE_H

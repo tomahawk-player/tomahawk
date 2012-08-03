@@ -74,6 +74,7 @@ set( libGuiSources
     playlist/PlaylistLargeItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp
+    playlist/SingleTrackPlaylistInterface.h
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp

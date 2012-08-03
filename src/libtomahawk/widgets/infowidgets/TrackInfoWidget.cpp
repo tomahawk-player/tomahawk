@@ -38,6 +38,7 @@ using namespace Tomahawk;
 TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::TrackInfoWidget )
+    , m_scrollArea( 0 )
 {
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
@@ -98,17 +99,17 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
-    QScrollArea* area = new QScrollArea();
-    area->setWidgetResizable( true );
-    area->setWidget( widget );
-    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    m_scrollArea = new QScrollArea();
+    m_scrollArea->setWidgetResizable( true );
+    m_scrollArea->setWidget( widget );
+    m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    area->setStyleSheet( "QScrollArea { background-color: #454e59 }" );
-    area->setFrameShape( QFrame::NoFrame );
-    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_scrollArea->setStyleSheet( "QScrollArea { background-color: #454e59 }" );
+    m_scrollArea->setFrameShape( QFrame::NoFrame );
+    m_scrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget( area );
+    layout->addWidget( m_scrollArea );
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
@@ -141,11 +142,27 @@ TrackInfoWidget::playlistInterface() const
 bool
 TrackInfoWidget::isBeingPlayed() const
 {
-    //tDebug() << Q_FUNC_INFO << "audioengine playlistInterface = " << AudioEngine::instance()->currentTrackPlaylist()->id();
-    //tDebug() << Q_FUNC_INFO << "albumsView playlistInterface = " << ui->albumsView->playlistInterface()->id();
-    //tDebug() << Q_FUNC_INFO << "tracksView playlistInterface = " << ui->tracksView->playlistInterface()->id();
     if ( ui->similarTracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
         return true;
+
+    if ( ui->similarTracksView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
+}
+
+
+bool
+TrackInfoWidget::jumpToCurrentTrack()
+{
+    if ( ui->similarTracksView->jumpToCurrentTrack() && !ui->similarTracksView->currentTrackRect().isEmpty() )
+    {
+        // We embed the view in a scrollarea, so we have to manually ensure we make it visible
+        const QRect itemRect = ui->similarTracksView->currentTrackRect();
+        m_scrollArea->ensureVisible( itemRect.right(), itemRect.bottom(), 50, 50 );
+
+        return true;
+    }
 
     return false;
 }

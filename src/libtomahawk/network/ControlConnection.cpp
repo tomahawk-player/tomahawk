@@ -96,11 +96,13 @@ ControlConnection::~ControlConnection()
         m_dbsyncconn->deleteLater();
 }
 
+
 source_ptr
 ControlConnection::source() const
 {
     return m_source;
 }
+
 
 Connection*
 ControlConnection::clone()

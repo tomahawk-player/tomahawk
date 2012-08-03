@@ -298,9 +298,8 @@ AnimatedSplitterHandle::sizeHint() const
         m_lastCount = splitter()->count();
     }
 
-    // sizeHint is 0,0 if widget below handle has size 0 or is hidden
-    if ( splitter()->widget( m_indexInSplitter )->height() == 0 )
-        return QSize( 0, 0 );
-    else
-        return QSize( 1, 1 );
+    // Since we are in an AnimatedSplitter, we always return 0,0 for SizeHint, simply
+    // because we know there's going to be a handle in the bottom widget to move the
+    // splitter.
+    return QSize( 0, 0 );
 }

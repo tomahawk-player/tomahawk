@@ -77,6 +77,7 @@ protected:
     bool waitForRevision( const QString& revisionguid ) const { return m_waitForRevision.contains( revisionguid ); }
     void removeFromWaitList( const QString& revisionguid ) { m_waitForRevision.removeAll( revisionguid ); }
 
+    QList<Tomahawk::plentry_ptr> playlistEntries() const;
 private slots:
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
@@ -85,8 +86,6 @@ private slots:
 private:
     void beginPlaylistChanges();
     void endPlaylistChanges();
-
-    QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
     bool m_isTemporary;

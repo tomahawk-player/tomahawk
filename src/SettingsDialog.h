@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +24,8 @@
 
 #include <QtGui/QDialog>
 #include <QtCore/QModelIndex>
+#include <QtGui/QActionGroup>
+#include <QtGui/QToolBar>
 
 #include "config.h"
 
@@ -94,7 +97,7 @@ private slots:
 
     void updateScanOptionsView();
 
-    void changePage( QListWidgetItem*, QListWidgetItem* );
+    void changePage( QAction *action );
     void serventReady();
 
     void aclEntryClearButtonClicked();
@@ -105,6 +108,9 @@ private:
     void createIcons();
 
     Ui_StackedSettingsDialog* ui;
+
+    QToolBar *m_toolBar;
+    QActionGroup *m_settingsGroup;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;

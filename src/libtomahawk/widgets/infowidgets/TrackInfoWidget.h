@@ -40,6 +40,7 @@
 #include "Typedefs.h"
 
 class PlayableModel;
+class QScrollArea;
 
 namespace Ui
 {
@@ -68,7 +69,7 @@ public:
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showInfoBar() const { return false; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
 
 public slots:
     void load( const Tomahawk::query_ptr& query );
@@ -88,6 +89,7 @@ private slots:
 
 private:
     Ui::TrackInfoWidget *ui;
+    QScrollArea* m_scrollArea;
 
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;

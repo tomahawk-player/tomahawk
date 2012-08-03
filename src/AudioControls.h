@@ -101,9 +101,8 @@ private:
 
     QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;
-    qint64 m_seekMsecs;
+    bool m_seeked;
     qint64 m_lastSliderCheck;
-    bool m_noTimeChange;
     qint64 m_lastTextSecondShown;
 
     QWidget* m_parent;

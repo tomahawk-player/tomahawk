@@ -35,6 +35,7 @@
 #include "AlbumModel.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModelPlaylistInterface.h"
+#include "SingleTrackPlaylistInterface.h"
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "utils/Logger.h"
@@ -64,6 +65,8 @@ public:
                 return item->album()->playlistInterface( Tomahawk::Mixed ) == playlistInterface;
             else if ( !item->artist().isNull() )
                 return item->artist()->playlistInterface( Tomahawk::Mixed ) == playlistInterface;
+            else if ( !item->query().isNull() && !playlistInterface.dynamicCast< SingleTrackPlaylistInterface >().isNull() )
+                return item->query() == playlistInterface.dynamicCast< SingleTrackPlaylistInterface >()->track();
         }
 
         return false;
@@ -210,7 +213,7 @@ GridView::onItemActivated( const QModelIndex& index )
         else if ( !item->artist().isNull() )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->query().isNull() )
-            AudioEngine::instance()->playItem( playlistinterface_ptr(), item->query() );
+            ViewManager::instance()->show( item->query() );
     }
 }
 
@@ -413,5 +416,16 @@ GridView::jumpToCurrentTrack()
 
     return true;
 }
+
+
+QRect
+GridView::currentTrackRect() const
+{
+    if ( !m_playing.isValid() )
+        return QRect();
+
+    return visualRect( m_playing );
+}
+
 
 #include "GridView.moc"

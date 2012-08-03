@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.0">
 <context>
     <name>ACLJobDelegate</name>
     <message>
@@ -10,12 +10,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="87"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Leisti transliavimą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="90"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>Drausti priėjimą</translation>
     </message>
 </context>
 <context>
@@ -31,17 +31,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Diàleg</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.ui" line="30"/>
         <source>Description goes here</source>
-        <translation>Aquí va la descripció</translation>
+        <translation>Apibūdinimo vieta čia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
-        <translation>Afegiu un compte</translation>
+        <translation>Pridėti paskyrą</translation>
     </message>
 </context>
 <context>
@@ -49,17 +49,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="106"/>
         <source>Online</source>
-        <translation>En línia</translation>
+        <translation>Prisijungęs</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="111"/>
         <source>Connecting...</source>
-        <translation>Connectant-se...</translation>
+        <translation>Jungiamasi...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="116"/>
         <source>Offline</source>
-        <translation>Fora de línia</translation>
+        <translation>Atsijungęs</translation>
     </message>
 </context>
 <context>
@@ -67,69 +67,69 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="54"/>
         <source>&amp;Listen Along</source>
-        <translation>&amp;Escolta a la vegada</translation>
+        <translation>K&amp;lausytis kartu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="57"/>
         <source>Stop &amp;Listening Along</source>
-        <translation>Deixa d&apos;&amp;escoltar a la vegada</translation>
+        <translation>Stabdyti k&amp;lausymąsi kartu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="61"/>
         <source>&amp;Follow in real-time</source>
-        <translation>&amp;Segueix en temps real</translation>
+        <translation>Se&amp;kti realiu laiku</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="66"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
         <source>&amp;Listen Privately</source>
-        <translation>&amp;Escolta privada</translation>
+        <translation>K&amp;lausytis privačiai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="66"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
         <source>&amp;Listen Publicly</source>
-        <translation>&amp;Escolta Pública</translation>
+        <translation>K&amp;lausytis viešai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Load Playlist</source>
-        <translation>&amp;Carrega la llista de reproducció</translation>
+        <translation>Įke&amp;lti grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>&amp;Rename Playlist</source>
-        <translation>&amp;Reanomena la llista de reproducció</translation>
+        <translation>Per&amp;vadinti grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation>&amp;Copia l&apos;enllaç a la llista de reproducció</translation>
+        <translation>&amp;Kopijuoti grojaraščio nuorodą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
         <source>&amp;Play</source>
-        <translation>&amp;Reprodueix</translation>
+        <translation>&amp;Groti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
         <source>&amp;Stop</source>
-        <translation>&amp;Atura</translation>
+        <translation>&amp;Sustabdyti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Previous Track</source>
-        <translation>Cançó &amp;Anterior</translation>
+        <translation>Ankstesnis takelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Next Track</source>
-        <translation>Cançó &amp;Següent</translation>
+        <translation>Kitas takelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Surt</translation>
+        <translation>&amp;Baigti darbą</translation>
     </message>
 </context>
 <context>
@@ -137,27 +137,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="31"/>
         <source>Other Albums by Artist</source>
-        <translation>Altres Àlbums de l&apos;Artista</translation>
+        <translation>Kiti atlikėjo albumai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="53"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių kitų šio atlikėjo albumų!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių takelių iš šio albumo!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
         <source>Other Albums by %1</source>
-        <translation>Altres Àlbums de %1</translation>
+        <translation>Kiti %1 albumai</translation>
     </message>
 </context>
 <context>
@@ -166,12 +166,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="65"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="107"/>
         <source>All albums from %1</source>
-        <translation>Tots els Àlbums de %1</translation>
+        <translation>Visi %1 albumai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="109"/>
         <source>All albums</source>
-        <translation>Tots els Àlbums</translation>
+        <translation>Visi albumai</translation>
     </message>
 </context>
 <context>
@@ -179,42 +179,42 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="73"/>
         <source>Top Hits</source>
-        <translation>Grans Èxits</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="236"/>
         <source>Related Artists</source>
-        <translation>Artistes Relacionats</translation>
+        <translation>Susiję atlikėjai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="310"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>Atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="153"/>
         <source>Albums</source>
-        <translation>Àlbums</translation>
+        <translation>Albumai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="284"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>Viršelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="69"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių šio atlikėjo albumų!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="74"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių susijusių atlikėjų!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="80"/>
@@ -227,77 +227,77 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="75"/>
         <source>Prev</source>
-        <translation>Anterior</translation>
+        <translation>Ankstesnis</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="87"/>
         <source>Play</source>
-        <translation>Reprodueix</translation>
+        <translation>Groti</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="94"/>
         <source>Pause</source>
-        <translation>Pausa</translation>
+        <translation>Pristabdyti</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="103"/>
         <source>Next</source>
-        <translation>Següent</translation>
+        <translation>Kitas</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="229"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>Atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="248"/>
         <source>Album</source>
-        <translation>Àlbum</translation>
+        <translation>Albumas</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="277"/>
         <source>Owner</source>
-        <translation>Propietari</translation>
+        <translation>Savininkas</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="314"/>
         <source>social</source>
-        <translation>social</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="330"/>
         <source>love</source>
-        <translation>M&apos;encanta</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="383"/>
         <source>Time</source>
-        <translation>Temps</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="412"/>
         <source>Time Left</source>
-        <translation>Temps Restant</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="493"/>
         <source>Shuffle</source>
-        <translation>Mescla</translation>
+        <translation>Maišyti</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="506"/>
         <source>Repeat</source>
-        <translation>Repeteix</translation>
+        <translation>Kartoti</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="544"/>
         <source>Low</source>
-        <translation>Baix</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="576"/>
         <source>High</source>
-        <translation>Alt</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -305,17 +305,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="619"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, Tomahawk nepavyko rasti takelio &apos;%1&apos;, atliekamo %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="643"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, Tomahawk nepavyko rasti atlikėjo &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="669"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, Tomahawk nepavyko rasti %2 atliekamo albumo &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -323,24 +323,24 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="62"/>
         <source>Create new Playlist</source>
-        <translation>Crea una nova Llista</translation>
+        <translation>Sukurti naują grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation>Crea una nova Emissora</translation>
+        <translation>Sukurti naują stotį</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
-        <translation>Nova Emissora</translation>
+        <translation>Nauja stotis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
-        <translation>Emissora %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -348,12 +348,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="63"/>
         <source>Playlists</source>
-        <translation>Llistes de reproducció</translation>
+        <translation>Grojaraščiai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="65"/>
         <source>Stations</source>
-        <translation>Emissores</translation>
+        <translation>Stotys</translation>
     </message>
 </context>
 <context>
@@ -361,7 +361,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/ClearButton.cpp" line="38"/>
         <source>Clear</source>
-        <translation>Suprimeix</translation>
+        <translation>Valyti</translation>
     </message>
 </context>
 <context>
@@ -369,18 +369,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="26"/>
         <source>InfoBar</source>
-        <translation>Barra d&apos;Informació</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
         <source>Show Footnotes</source>
-        <translation>Mostra les Notes al peu</translation>
+        <translation>Rodyti išnašas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
         <source>Hide Footnotes</source>
-        <translation>Amaga les Notes al peu</translation>
+        <translation>Slėpti išnašas</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="23"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation>Enviament de Fallades de Tomahawk</translation>
+        <translation>Tomahawk strigties pranešyklė</translation>
     </message>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
@@ -398,43 +398,43 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
         <source>Send this report</source>
-        <translation>Envia aquest informe</translation>
+        <translation>Siųsti šią ataskaitą</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="136"/>
         <source>Don&apos;t send</source>
-        <translation>No l&apos;enviïs</translation>
+        <translation>Nesiųsti</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
-        <translation>Interromp</translation>
+        <translation>Nutraukti</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="210"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Podeu deshabilitar l&apos;enviament d&apos;informació sobre les fallades des del diàleg de configuració.</translation>
+        <translation>Galite išjungti strigčių ataskaitų siuntimą konfigūracijos dialogo lange.</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>%L1 de %L2 KB carregats.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="168"/>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="184"/>
         <source>Close</source>
-        <translation>Tanca</translation>
+        <translation>Užverti</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="177"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Enviat! &lt;b&gt;Moltes gràcies&lt;/b&gt;.</translation>
+        <translation>Išsiųsta! &lt;b&gt;Labai ačiū&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.cpp" line="185"/>
         <source>Failed to send crash info.</source>
-        <translation>S&apos;ha produït un error en enviar la informació sobre la fallada.</translation>
+        <translation>Nepavyko nusiųsti strigties informacijos.</translation>
     </message>
 </context>
 <context>
@@ -442,7 +442,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="109"/>
         <source>Unknown</source>
-        <translation>Desconegut</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -450,17 +450,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation>Quant a</translation>
+        <translation>Apie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="77"/>
         <source>Delete Account</source>
-        <translation>Esborra el Compte</translation>
+        <translation>Pašalinti paskyrą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="140"/>
         <source>About this Account</source>
-        <translation>Quant a aquest compte</translation>
+        <translation>Apie šią paskyrą</translation>
     </message>
 </context>
 <context>
@@ -468,17 +468,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation>Diagnòstics de Tomahawk</translation>
+        <translation>Tomahawk diagnostika</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kopijuoti į iškarpinę</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation type="unfinished"/>
+        <translation>Atverti žurna&amp;lą</translation>
     </message>
 </context>
 <context>
@@ -486,7 +486,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="73"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtruoti...</translation>
     </message>
 </context>
 <context>
@@ -494,7 +494,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SearchBox.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
 </context>
 <context>
@@ -502,7 +502,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="31"/>
         <source>Indexing database</source>
-        <translation>S&apos;està indexant la base de dades</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -510,12 +510,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.ui" line="26"/>
         <source>InfoBar</source>
-        <translation>Barra d&apos;Informació</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="90"/>
         <source>Filter...</source>
-        <translation>Filtra...</translation>
+        <translation>Filtruoti...</translation>
     </message>
 </context>
 <context>
@@ -523,32 +523,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="41"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation>Fes scrobbling de les cançons a Last.fm</translation>
+        <translation>Pranešti grojamus takelius Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="50"/>
         <source>Username:</source>
-        <translation>Nom d&apos;usuari:</translation>
+        <translation>Vartotojo vardas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="60"/>
         <source>Password:</source>
-        <translation>Contrasenya:</translation>
+        <translation>Slaptažodis:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="76"/>
         <source>Test Login</source>
-        <translation>Comprova l&apos;autenticació</translation>
+        <translation>Išbandyti prisijungimą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="83"/>
         <source>Import Playback History</source>
-        <translation>Importa l&apos;historial de reproducció</translation>
+        <translation>Įkelti klausymosi istoriją</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="90"/>
@@ -569,7 +569,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 klausosi kartu su Jumis!</translation>
     </message>
 </context>
 <context>
@@ -577,17 +577,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="14"/>
         <source>Load XSPF</source>
-        <translation>Carrega una XSPF</translation>
+        <translation>Įkelti XSPF</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation>URL de la llista de reproduccó</translation>
+        <translation>Grojaraščio URL</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
-        <translation>Introduïu l&apos;URL...</translation>
+        <translation>Įveskite URL...</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="42"/>
@@ -597,7 +597,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="51"/>
         <source>Automatically update</source>
-        <translation>Actualitza automàticament</translation>
+        <translation>Atnaujinti automatiškai</translation>
     </message>
 </context>
 <context>
@@ -605,12 +605,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/LoadXSPFDialog.cpp" line="50"/>
         <source>Load XSPF File</source>
-        <translation>Carrega un fitxer XSPF</translation>
+        <translation>Įkelti XSPF failą</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.cpp" line="50"/>
         <source>XSPF Files (*.xspf)</source>
-        <translation>Fitxers XSPF (*.xspf)</translation>
+        <translation>XSPF failai (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -618,12 +618,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
         <source>Bookmarks</source>
-        <translation>Preferits</translation>
+        <translation>Žymelės</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
         <source>Saved tracks</source>
-        <translation>Cançons desades</translation>
+        <translation>Išsaugoti takeliai</translation>
     </message>
 </context>
 <context>
@@ -631,32 +631,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Populiariausios mylimos dainos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Deja, neradome jokių mylimų dainų!</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Visų Jūsų draugų labiausiai mylimos dainos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Visos Jūsų mylimos dainos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Visos %1 mylimos dainos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Mylimos dainos</translation>
     </message>
 </context>
 <context>
@@ -664,112 +664,112 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Žymės</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
         <source>Title:</source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="49"/>
         <source>Title...</source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="56"/>
         <source>Artist:</source>
-        <translation type="unfinished"/>
+        <translation>Atlikėjas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="66"/>
         <source>Artist...</source>
-        <translation type="unfinished"/>
+        <translation>Atlikėjas...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="73"/>
         <source>Album:</source>
-        <translation type="unfinished"/>
+        <translation>Albumas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="83"/>
         <source>Album...</source>
-        <translation type="unfinished"/>
+        <translation>Albumas...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Disc Number:</source>
-        <translation type="unfinished"/>
+        <translation>Disko numeris:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Trukmė:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
         <source>00.00</source>
-        <translation type="unfinished"/>
+        <translation>00.00</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="136"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>Metai:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Bitų dažnis:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Failas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="189"/>
         <source>File Name:</source>
-        <translation type="unfinished"/>
+        <translation>Failo vardas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation type="unfinished"/>
+        <translation>Failo vardas...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation type="unfinished"/>
+        <translation>Failo dydis...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation type="unfinished"/>
+        <translation>Failo dydis...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
         <source>File Size:</source>
-        <translation type="unfinished"/>
+        <translation>Failo dydis:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="235"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atgal</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="245"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Pirmyn</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="48"/>
         <source> - Properties</source>
-        <translation type="unfinished"/>
+        <translation>- Savybės</translation>
     </message>
 </context>
 <context>
@@ -777,27 +777,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation>Introduïu un títol per la nova llista de reproducció:</translation>
+        <translation>Įveskite naujojo grojaraščio pavadinimą:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
-        <translation>Tomahawk us ofereix diverses formes per ajudar-vos a crear llistes de reproducció i trobar la música que us agrada!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation>Introduïu el nom d&apos;un gènere o una etiqueta i Tomahawk us suggerirà unes quantes cançons per començar la nova llista:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>&amp;Crea la Llista de Reproducció</translation>
+        <translation>Su&amp;kurti grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation>Crea una nova llista de reproducció</translation>
+        <translation>Sukurti naują grojaraštį</translation>
     </message>
 </context>
 <context>
@@ -805,7 +805,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="71"/>
         <source>New Releases</source>
-        <translation>Nous llançaments</translation>
+        <translation>Nauji leidimai</translation>
     </message>
 </context>
 <context>
@@ -813,68 +813,68 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>Atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Title</source>
-        <translation>Cançó</translation>
+        <translation>Pavadinimas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Composer</source>
-        <translation>Compositor</translation>
+        <translation>Kompozitorius</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Album</source>
-        <translation>Àlbum</translation>
+        <translation>Albumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Track</source>
-        <translation>Número</translation>
+        <translation>Takelio numeris</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Duration</source>
-        <translation>Durada</translation>
+        <translation>Trukmė</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Bitrate</source>
-        <translation>Bitrate</translation>
+        <translation>Bitų dažnis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Age</source>
-        <translation>Edat</translation>
+        <translation>Amžius</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Year</source>
-        <translation>Any</translation>
+        <translation>Metai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Size</source>
-        <translation>Mida</translation>
+        <translation>Dydis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Origin</source>
-        <translation>Origen</translation>
+        <translation>Šaltinis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Score</source>
-        <translation>Puntuació</translation>
+        <translation>Įvertis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="290"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation>Vardas</translation>
     </message>
 </context>
 <context>
@@ -887,19 +887,19 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="96"/>
         <source>Caption</source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="106"/>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Apibūdinimas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="190"/>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="197"/>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="204"/>
         <source>RadioButton</source>
-        <translation type="unfinished"/>
+        <translation>Akutė</translation>
     </message>
 </context>
 <context>
@@ -907,12 +907,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
         <source>played %1 by you</source>
-        <translation>reproduït %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="156"/>
         <source>played %1 by %2</source>
-        <translation>reproduït %1 per %2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -920,17 +920,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="158"/>
         <source>played %1 by you</source>
-        <translation>reproduït %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="160"/>
         <source>played %1 by %2</source>
-        <translation>reproduït %1 per %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="167"/>
         <source>added %1</source>
-        <translation>afegit %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -938,22 +938,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="82"/>
         <source>A playlist by %1, created %2</source>
-        <translation>Una llista de reproduccó de %1, creada %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="83"/>
         <source>you</source>
-        <translation> </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="140"/>
         <source>All tracks by %1 on album %2</source>
-        <translation>Totes les cançons de %1 a l&apos;àlbum %2</translation>
+        <translation>Visi %1 takeliai iš albumo %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="165"/>
         <source>All tracks by %1</source>
-        <translation>Totes les cançons de %1</translation>
+        <translation>Visi %1 takeliai</translation>
     </message>
 </context>
 <context>
@@ -961,37 +961,37 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation>Nova Llista de Reproducció</translation>
+        <translation>Naujas grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Una llista vella i regular... Poseu-li un nom, arrossegueu-hi algunes cançons i llestos!</translation>
+        <translation>Tiesiog senas geras grojaraštis... Suteikite jam vardą, įtempkite keletą dainų ir pirmyn!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
         <source>Don&apos;t know exactly what you want? Give Tomahawk a few pointers and let it build a playlist for you!</source>
-        <translation>No sabeu exactament què voleu? Doneu-li unes indicacions a Tomahawk i deixeu que us faci la llista!</translation>
+        <translation>Nežinote, ko tiksliai norite? Suteikite Tomahawk keletą nuorodų ir leiskite jam sukurti Jums grojaraštį!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
         <source>Name:</source>
-        <translation>Nom:</translation>
+        <translation>Vardas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation>Nova Llista de Reproducció...</translation>
+        <translation>Naujas grojaraštis...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation>Crea una Llista de Reproducció Manual</translation>
+        <translation>Sukurti rankinį grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>Crea una Llista de Reproducció Automàtica</translation>
+        <translation>Sukurti automatinį grojaraštį</translation>
     </message>
 </context>
 <context>
@@ -999,12 +999,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="163"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Šis grojaraštis kol kas tuščias.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="165"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>Aquesta llista es troba buida. Afegiu-hi algunes cançons i gaudiu de la música!</translation>
+        <translation>Šis grojaraštis kol kas tuščias. Pridėkite takelių ir mėgaukitės muzika!</translation>
     </message>
 </context>
 <context>
@@ -1012,59 +1012,58 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/ProxyDialog.ui" line="17"/>
         <source>Proxy Settings</source>
-        <translation>Paràmetres del proxy</translation>
+        <translation>Proxy nuostatos</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
-        <translation>Nom del proxy</translation>
+        <translation>Proxy serverio vardas</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="44"/>
         <source>Host</source>
-        <translation>Ordinador central</translation>
+        <translation>Serveris</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="51"/>
         <source>Port</source>
-        <translation>Port</translation>
+        <translation>Prievadas</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
-        <translation>Dades d&apos;inici de sessió del proxy</translation>
+        <translation>Proxy prisijungimas</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="78"/>
         <source>User</source>
-        <translation>Usuari</translation>
+        <translation>Vartotojas</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="85"/>
         <source>Password</source>
-        <translation>Contrasenya</translation>
+        <translation>Slaptažodis</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
-        <translation>Contrasenya del proxy</translation>
+        <translation>Proxy slaptažodis</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation>Cap proxy:
-(Sobreescriu el proxy del sistema)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
-        <translation>localhost *.exemple.com (separats per espais)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
-        <translation>Voleu emprar un proxy per cercar les DNS?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1072,82 +1071,82 @@ connect and stream from you?</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="233"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>fa %n any</numerusform><numerusform>fa %n anys</numerusform></translation>
+        <translation><numerusform>prieš %n metus</numerusform><numerusform>prieš %n metus</numerusform><numerusform>prieš %n metų</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="235"/>
         <source>%n year(s)</source>
-        <translation><numerusform>%n any</numerusform><numerusform>%n anys</numerusform></translation>
+        <translation><numerusform>%n metai</numerusform><numerusform>%n metai</numerusform><numerusform>%n metų</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
         <source>%n month(s) ago</source>
-        <translation><numerusform>fa %n mes</numerusform><numerusform>fa %n mesos</numerusform></translation>
+        <translation><numerusform>prieš %n mėnesį</numerusform><numerusform>prieš %n mėnesius</numerusform><numerusform>prieš %n mėnesių</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
         <source>%n month(s)</source>
-        <translation><numerusform>%n mes</numerusform><numerusform>%n mesos</numerusform></translation>
+        <translation><numerusform>%n mėnuo</numerusform><numerusform>%n mėnesiai</numerusform><numerusform>%n mėnesių</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
         <source>%n week(s) ago</source>
-        <translation><numerusform>fa %n setmana</numerusform><numerusform>fa %n setmanes</numerusform></translation>
+        <translation><numerusform>prieš %n savaitę</numerusform><numerusform>prieš %n savaites</numerusform><numerusform>prieš %n savaičių</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
         <source>%n week(s)</source>
-        <translation><numerusform>%n setmana</numerusform><numerusform>%n setmanes</numerusform></translation>
+        <translation><numerusform>%n savaitė</numerusform><numerusform>%n savaitės</numerusform><numerusform>%n savaičių</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>fa %n dia</numerusform><numerusform>fa %n dies</numerusform></translation>
+        <translation><numerusform>prieš %n dieną</numerusform><numerusform>prieš %n dienas</numerusform><numerusform>prieš %n dienų</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
         <source>%n day(s)</source>
-        <translation><numerusform>%n dia</numerusform><numerusform>%n dies</numerusform></translation>
+        <translation><numerusform>%n diena</numerusform><numerusform>%n dienos</numerusform><numerusform>%n dienų</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
         <source>%n hour(s) ago</source>
-        <translation><numerusform>fa %n hora</numerusform><numerusform>fa %n hores</numerusform></translation>
+        <translation><numerusform>prieš %n valandą</numerusform><numerusform>prieš %n valandas</numerusform><numerusform>prieš %n valandų</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
         <source>%n hour(s)</source>
-        <translation><numerusform>%n hora</numerusform><numerusform>%n hores</numerusform></translation>
+        <translation><numerusform>%n valanda</numerusform><numerusform>%n valandos</numerusform><numerusform>%n valandų</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
         <source>%1 minutes ago</source>
-        <translation>fa %1 minut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="275"/>
         <source>%1 minutes</source>
-        <translation>%1 minuts</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="279"/>
         <source>just now</source>
-        <translation>ara mateix</translation>
+        <translation>ką tik</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
         <source>Friend Finders</source>
-        <translation>Cercadors d&apos;Amics</translation>
+        <translation>Draugų ieškyklės</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Music Finders</source>
-        <translation>Cercadors de Música</translation>
+        <translation>Muzikos ieškyklės</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
         <source>Status Updaters</source>
-        <translation>Actualitzadors d&apos;Estat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1155,7 +1154,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/thirdparty/quazip/quazip/quazipfile.cpp" line="172"/>
         <source>ZIP/UNZIP API error %1</source>
-        <translation>Error %1 de l&apos;API ZIP/UNZIP</translation>
+        <translation>ZIP/UNZIP API klaida %1</translation>
     </message>
 </context>
 <context>
@@ -1163,23 +1162,23 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="26"/>
         <source>InfoBar</source>
-        <translation>Barra d&apos;Informació</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
         <source>Open Queue</source>
-        <translation>Obre la cua</translation>
+        <translation>Atverti eilę</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
-        <translation><numerusform>Obre la cua - %n element</numerusform><numerusform>Obre la cua - %n elements</numerusform></translation>
+        <translation><numerusform>Atverti eilę - %n elementas</numerusform><numerusform>Atverti eilę - %n elementai</numerusform><numerusform>Atverti eilę - %n elementų</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
         <source>Close Queue</source>
-        <translation>Tanca la cua</translation>
+        <translation>Užverti eilę</translation>
     </message>
 </context>
 <context>
@@ -1187,7 +1186,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/RelatedArtistsContext.h" line="47"/>
         <source>Related Artists</source>
-        <translation>Artistes Relacionats</translation>
+        <translation>Susiję atlikėjai</translation>
     </message>
 </context>
 <context>
@@ -1195,12 +1194,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/ResolverConfigDelegate.cpp" line="110"/>
         <source>Not found: %1</source>
-        <translation>No trobades: %1</translation>
+        <translation>Nerasta: %1</translation>
     </message>
     <message>
         <location filename="../src/ResolverConfigDelegate.cpp" line="113"/>
         <source>Failed to load: %1</source>
-        <translation>Fallades a carregar: %1</translation>
+        <translation>Nepavyko įkelti: %1</translation>
     </message>
 </context>
 <context>
@@ -1208,7 +1207,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/SearchLineEdit.cpp" line="58"/>
         <source>Search</source>
-        <translation>Cerca</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1216,12 +1215,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="53"/>
         <source>Search: %1</source>
-        <translation>Cerca: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="54"/>
         <source>Results for &apos;%1&apos;</source>
-        <translation>Resultats per &apos;%1&apos;</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1229,17 +1228,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="310"/>
         <source>Collection</source>
-        <translation>Col·lecció</translation>
+        <translation>Kolekcija</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="319"/>
         <source>Advanced</source>
-        <translation>Avançat</translation>
+        <translation>Išplėstinės</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="166"/>
         <source>All</source>
-        <translation>Tot</translation>
+        <translation>Visi</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="90"/>
@@ -1249,12 +1248,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation>Alguns paràmetres no tindran efecte fins que no reinicieu Tomahawk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="300"/>
         <source>Services</source>
-        <translation>Serveis</translation>
+        <translation>Paslaugos</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="303"/>
@@ -1274,7 +1273,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="478"/>
         <source>Install resolver from file</source>
-        <translation>Instal·la un Resolver des d&apos;un fitxer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="525"/>
@@ -1289,7 +1288,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="254"/>
         <source>Information</source>
-        <translation>Informació</translation>
+        <translation>Informacija</translation>
     </message>
 </context>
 <context>
@@ -1297,17 +1296,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="34"/>
         <source>Popular New Albums From Your Friends</source>
-        <translation>Àlbums Populars dels Vostres Amics</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="48"/>
         <source>Most Played Playlists</source>
-        <translation>Llistes de Reproducció Més Escoltades</translation>
+        <translation>Dažniausiai grojami grojaraščiai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="63"/>
         <source>Most Played Tracks You Don&apos;t Have</source>
-        <translation>Cançons Més Escoltades que encara no heu Reproduït</translation>
+        <translation>Dažniausiai groti takeliai, kurių Jūs neturite</translation>
     </message>
 </context>
 <context>
@@ -1315,7 +1314,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="31"/>
@@ -1330,12 +1329,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.ui" line="67"/>
         <source>Cover</source>
-        <translation>Cover</translation>
+        <translation>Viršelis</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.ui" line="101"/>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation>Teksto etiketė</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="59"/>
@@ -1345,17 +1344,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.cpp" line="207"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
-        <translation>Escoltant &quot;%1&quot; de %2. %3</translation>
+        <translation>Klausosi &quot;%1&quot;, atliekamą %2. %3</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="209"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation>Escoltant &quot;%1&quot; de %2 de &quot;%3&quot;. %4</translation>
+        <translation>Klausosi &quot;%1&quot;, atliekamą %2 iš albumo &quot;%3&quot;. %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="230"/>
         <source>%1 characters left</source>
-        <translation>%1 caràcters restants</translation>
+        <translation>Liko simbolių: %1</translation>
     </message>
 </context>
 <context>
@@ -1363,22 +1362,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="55"/>
         <source>Track</source>
-        <translation>Cançó</translation>
+        <translation>Takelis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="56"/>
         <source>Album</source>
-        <translation>Àlbum</translation>
+        <translation>Albumas</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="57"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>Atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="58"/>
         <source>Local</source>
-        <translation>Local</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="59"/>
@@ -1388,19 +1387,19 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="202"/>
         <source>All available tracks</source>
-        <translation>Totes les cançons disponibles</translation>
+        <translation>Visi prieinami takeliai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="295"/>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="336"/>
         <source>Show</source>
-        <translation>Mostra</translation>
+        <translation>Rodyti</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="297"/>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="338"/>
         <source>Hide</source>
-        <translation>Amaga</translation>
+        <translation>Slėpti</translation>
     </message>
 </context>
 <context>
@@ -1408,32 +1407,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation>Àlbums Recents</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation>Cançons Recents</translation>
+        <translation>Naujai pridėta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Neseniai klausyti takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
         <source>New Additions</source>
-        <translation>Novetats</translation>
+        <translation>Naujai pridėta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
         <source>My recent activity</source>
-        <translation>La meva activitat recent</translation>
+        <translation>Paskiausia mano veikla</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="77"/>
         <source>Recent activity from %1</source>
-        <translation>Activitat recent de %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1441,58 +1440,58 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="64"/>
         <source>Collection</source>
-        <translation>Col·lecció</translation>
+        <translation>Kolekcija</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="515"/>
         <source>Latest Additions</source>
-        <translation>Darreres Novetats</translation>
+        <translation>Neseniai pridėta</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
         <source>Recently Played</source>
-        <translation>Escoltades Recentment</translation>
+        <translation>Neseniai grota</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="141"/>
         <source>SuperCollection</source>
-        <translation>SuperCol·lecció</translation>
+        <translation>Super Kolekcija</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="518"/>
         <source>Latest additions to your collection</source>
-        <translation>Darreres novetats a la vostra col·lecció</translation>
+        <translation>Neseniai pridėta prie Jūsų kolekcijos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="520"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Darreres novetats a la col·lecció de %1</translation>
+        <translation>Neseniai pridėta prie %1 kolekcijos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="529"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome nieko, kas pridėta neseniai!</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="556"/>
         <source>Recently Played Tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="559"/>
         <source>Your recently played tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Jūsų neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="561"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>Cançons Escoltades Recentment per %1</translation>
+        <translation>%1 neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių neseniai grotų takelių!</translation>
     </message>
 </context>
 <context>
@@ -1500,68 +1499,68 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="194"/>
         <source>&amp;Copy Link</source>
-        <translation>&amp;Copia l&apos;Enllaç</translation>
+        <translation>&amp;Kopijuoti nuorodą</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="202"/>
         <source>&amp;Delete %1</source>
-        <translation>&amp;Esborra %1</translation>
+        <translation>Paša&amp;linti %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
         <source>Add to my Playlists</source>
-        <translation>Afegeix a les meves Llistes</translation>
+        <translation>Pridėti prie mano grojaraščių</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>Add to my Automatic Playlists</source>
-        <translation>Afegeix a les meves Llistes Automàtiques</translation>
+        <translation>Pridėti prie mano automatinių grojaraščių</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="210"/>
         <source>Add to my Stations</source>
-        <translation>Afegeix a les meves Emissores</translation>
+        <translation>Pridėti prie mano stočių</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="198"/>
         <source>&amp;Export Playlist</source>
-        <translation>E&amp;xporta la Llista de Reproducció</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="352"/>
         <source>playlist</source>
-        <translation>llista</translation>
+        <translation>grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="356"/>
         <source>automatic playlist</source>
-        <translation>llista automàtica</translation>
+        <translation>automatinis grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
         <source>station</source>
-        <translation>emissora</translation>
+        <translation>stotis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="383"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation>Voleu esborrar %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
+        <translation>Ar norite pašalinti %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="385"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="465"/>
         <source>Save XSPF</source>
-        <translation>Desa com XSPF</translation>
+        <translation>Išsaugoti XSPF</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="466"/>
         <source>Playlists (*.xspf)</source>
-        <translation>Llistes de reproducció (*.xspf)</translation>
+        <translation>Grojaraščiai (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -1569,72 +1568,72 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="79"/>
         <source>Group</source>
-        <translation>Grup</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="82"/>
         <source>Collection</source>
-        <translation>Col·lecció</translation>
+        <translation>Kolekcija</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="85"/>
         <source>Playlist</source>
-        <translation>Llista de Reproducció</translation>
+        <translation>Grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="88"/>
         <source>Automatic Playlist</source>
-        <translation>Llista de Reproducció Automàtica</translation>
+        <translation>Automatinis grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="91"/>
         <source>Station</source>
-        <translation>Emissora</translation>
+        <translation>Stotis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
         <source>Browse</source>
-        <translation>Cerca</translation>
+        <translation>Naršyti</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
         <source>Search History</source>
-        <translation>Historial de Cerca</translation>
+        <translation>Paieškos istorija</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
         <source>My Music</source>
-        <translation>La Meva Música</translation>
+        <translation>Mano muzika</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
         <source>SuperCollection</source>
-        <translation>SuperCol·lecció</translation>
+        <translation>Super Kolekcija</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
         <source>Dashboard</source>
-        <translation>Presentació</translation>
+        <translation>Skydelis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Recently Played</source>
-        <translation>Escoltades Recentment</translation>
+        <translation>Neseniai klausyta</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Charts</source>
-        <translation>Llistes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
         <source>New Releases</source>
-        <translation>Nous Llançaments</translation>
+        <translation>Nauji leidimai</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Friends</source>
-        <translation>Amics</translation>
+        <translation>Draugai</translation>
     </message>
 </context>
 <context>
@@ -1642,52 +1641,52 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="20"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation>Configureu el compte Spotify</translation>
+        <translation>Konfigūruoti Jūsų Spotify paskyrą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
         <source>Username or Facebook Email</source>
-        <translation>Nom d&apos;usuari o adreça de Facebook</translation>
+        <translation>Vartotojo vardas arba Facebook elektroninis paštas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation>Inicia Sessió</translation>
+        <translation>Prisijungti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation>Feu click dret a qualsevol llista de reproducció de Tomahawk per sincronitzar-la amb Spotify.</translation>
+        <translation>Dešiniu pelės klavišu spustelėkite ant bet kurio Tomahawk grojaraščio, jei norite sinchronizuoti jį su Spotify.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
         <source>High Quality Streams</source>
-        <translation>Fluxos d&apos;Alta Qualitat</translation>
+        <translation>Aukštos kokybės srautai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation>Llistes de reproducció de Spotify per mantenir sincronitzades:</translation>
+        <translation>Sinchronizuojami Spotify grojaraščiai:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation>Esborra les llistes de Tomahawk quan es tregui la sincronització</translation>
+        <translation>Ištrinti Tomahawk grojaraštį kai panaikinamas sinchronizavimas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
         <source>Username:</source>
-        <translation>Usuari:</translation>
+        <translation>Vartotojo vardas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="96"/>
         <source>Password:</source>
-        <translation>Contrasenya:</translation>
+        <translation>Slaptažodis:</translation>
     </message>
 </context>
 <context>
@@ -1695,7 +1694,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="285"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti susietą Spotify grojaraštį?</translation>
     </message>
 </context>
 <context>
@@ -1703,12 +1702,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="14"/>
         <source>Tomahawk Settings</source>
-        <translation>Paràmetres de Tomahawk</translation>
+        <translation>Tomahawk nuostatos</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="112"/>
         <source>Path to scan for music files:</source>
-        <translation>Camí als fitxers de música:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="126"/>
@@ -1716,60 +1715,57 @@ connect and stream from you?</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation>L&apos;ajuda The Echo Nest llegeix les metadades de la vostra col·lecció
-i les utilitza per fer emissores de ràdio personalitzades. Si activeu
-aquesta opció podreu crear llistes de reproducció automàtiques
-i emissores de ràdio basades en el vostre gust musical.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="132"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation>Carrega la llista de la col·lecció a The Echo Nest per activar la radio d&apos;usuari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="145"/>
         <source>Watch for changes</source>
-        <translation>Monitoritza els canvis</translation>
+        <translation>Sekti pokyčius</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="154"/>
         <source>Time between scans, in seconds:</source>
-        <translation>Temps entre escanejos, en segons:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="206"/>
         <source>Remote Peer Connection Method</source>
-        <translation>Mètode de connexió remota entre iguals</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="212"/>
         <source>None (outgoing connections only)</source>
-        <translation>Cap (només connexions cap a l&apos;exterior)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="219"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation>Utiliza UPnP per establir el redireccionament de ports (recomanat)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="226"/>
         <source>Use static external IP address/host name and port</source>
-        <translation>Utilitza l&apos;adreça IP estàtica externa/nom de l&apos;ordinador i el port</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="239"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation>Ajusteu aquest paràmetre amb la vostra adreça IP o el nom de l&apos;ordinador. Assegure-vos que redireccioneu el port a aquest ordinador!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="311"/>
         <source>SOCKS Proxy</source>
-        <translation>Proxys SOCKS</translation>
+        <translation>SOCKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="317"/>
         <source>Use SOCKS Proxy</source>
-        <translation>Utilitza un proxy SOCKS</translation>
+        <translation>Naudoti SOCKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="397"/>
@@ -1779,42 +1775,42 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="49"/>
         <source>Install from file...</source>
-        <translation>Instal·la des d&apos;un fitxer...</translation>
+        <translation>Įdiegti iš failo...</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="69"/>
         <source>Filter by capability:</source>
-        <translation>Filtra per capacitats:</translation>
+        <translation>Filtruoti pagal gebėjimą:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="257"/>
         <source>Static Host Name:</source>
-        <translation>Nom de l&apos;ordinador estàtic:</translation>
+        <translation>Statinis serverio vardas:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="273"/>
         <source>Static Port:</source>
-        <translation>Port estàtic:</translation>
+        <translation>Statinis prievadas:</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="324"/>
         <source>Proxy Settings...</source>
-        <translation>Paràmetres del proxy...</translation>
+        <translation>Proxy nuostatos...</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="350"/>
         <source>Other Settings</source>
-        <translation>Altres Paràmetres</translation>
+        <translation>Kitos nuostatos</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="372"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation>Envia informació de les fallades de Tomahawk</translation>
+        <translation>Siųsti ataskaitas apie Tomahawk strigtis</translation>
     </message>
     <message>
         <location filename="../src/StackedSettingsDialog.ui" line="359"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation>Permet que els navegadors web interactuin amb Tomahawk (recomanat)</translation>
+        <translation>Leisti žiniatinklio naršyklėms sąveikauti su Tomahawk (rekomenduojama)</translation>
     </message>
 </context>
 <context>
@@ -1822,17 +1818,17 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="51"/>
         <source>Copy Artist Link</source>
-        <translation>Copia l&apos;enllaç de l&apos;artista</translation>
+        <translation>Kopijuoti atlikėjo nuorodą</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="58"/>
         <source>Copy Album Link</source>
-        <translation>Copia l&apos;enllaç de l&apos;àlbum</translation>
+        <translation>Kopijuoti albumo nuorodą</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="65"/>
         <source>Copy Track Link</source>
-        <translation>Copia l&apos;enllaç de la cançó</translation>
+        <translation>Kopijuoti takelio nuorodą</translation>
     </message>
 </context>
 <context>
@@ -1840,32 +1836,32 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="224"/>
         <source>Add Account</source>
-        <translation>Afegeix un compte</translation>
+        <translation>Pridėti paskyrą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="274"/>
         <source>Remove</source>
-        <translation>Esborra</translation>
+        <translation>Pašalinti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="387"/>
         <source>%1 downloads</source>
-        <translation>%1 descàrregues</translation>
+        <translation>%1 atsisiuntimų</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="570"/>
         <source>Online</source>
-        <translation>En Línia</translation>
+        <translation>Prisijungęs</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="575"/>
         <source>Connecting...</source>
-        <translation>Connectant-se...</translation>
+        <translation>Jungiamasi...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="580"/>
         <source>Offline</source>
-        <translation>Fora de Línia</translation>
+        <translation>Atsijungęs</translation>
     </message>
 </context>
 <context>
@@ -1873,7 +1869,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="529"/>
         <source>Manual Install Required</source>
-        <translation>Es requereix una instal·lació manual</translation>
+        <translation>Reikalingas rankinis įdiegimas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="532"/>
@@ -1886,22 +1882,22 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="82"/>
         <source>Configure this Google Account</source>
-        <translation>Configura el Compte de Google</translation>
+        <translation>Konfigūruoti šią Google paskyrą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="83"/>
         <source>Google Address</source>
-        <translation>Adreça de correu de Google</translation>
+        <translation>Google adresas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="84"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation>Introduïu les dades d&apos;inici de sessió de Google i conecteu-vos amb els amics mitjançant Tomahawk!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="85"/>
         <source>username@gmail.com</source>
-        <translation>usuari@gmail.com</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1909,7 +1905,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation>Connecteu-vos a Google Talsk per trobar els amics</translation>
+        <translation>Prisijungti prie Google Talk tam, kad rasti draugų</translation>
     </message>
 </context>
 <context>
@@ -1917,12 +1913,12 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="61"/>
         <source>Add Friend</source>
-        <translation>Afegeix un Amic</translation>
+        <translation>Pridėti draugą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="62"/>
         <source>Enter Google Address:</source>
-        <translation>Introduïu l&apos;adreça de Google:</translation>
+        <translation>Įveskite Google adresą:</translation>
     </message>
 </context>
 <context>
@@ -1930,7 +1926,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="49"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation>Fes scrobbling de les cançons a last.fm, i cerca cançons descarregables gratuïtament per escoltar-les</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1938,49 +1934,49 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="91"/>
         <source>Testing...</source>
-        <translation>S&apos;està comprovant...</translation>
+        <translation>Bandoma...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="113"/>
         <source>Test Login</source>
-        <translation>Comprova l&apos;inici de sessió</translation>
+        <translation>Išbandyti prisijungimą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="123"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation>S&apos;està important %1</translation>
+        <translation>Įkeliama %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing History...</source>
-        <translation>S&apos;està important l&apos;historial...</translation>
+        <translation>Įkeliama istorija...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="194"/>
         <source>History Incomplete. Resume</source>
-        <translation>Historial incomplet... Reprèn</translation>
+        <translation>Istorija nepilna. Tęskite</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="199"/>
         <source>Playback History Imported</source>
-        <translation>S&apos;ha importat l&apos;historial de reproducció</translation>
+        <translation>Klausymosi istorija įkelta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="222"/>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="238"/>
         <source>Failed</source>
-        <translation>Error</translation>
+        <translation>Nepavyko</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="227"/>
         <source>Success</source>
-        <translation>Èxit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="244"/>
         <source>Could not contact server</source>
-        <translation>No s&apos;ha pogut contactar amb el servidor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
@@ -1998,37 +1994,37 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="475"/>
         <source>Sync with Spotify</source>
-        <translation>Sincronitza amb Spotify</translation>
+        <translation>Sinchronizuoti su Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="479"/>
         <source>Re-enable syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Iš naujo įjungti sinchronizavimą su Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="487"/>
         <source>Create local copy</source>
-        <translation type="unfinished"/>
+        <translation>Sukurti vietinę kopiją</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="503"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>Sekti grojaraščio pokyčius</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="507"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>Sekti grojarašio atnaujinimus iš naujo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="511"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Nebesekti grojaraščio pokyčių</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="489"/>
         <source>Stop syncing with Spotify</source>
-        <translation>Atura la sincronització amb Spotify</translation>
+        <translation>Stabdyti sinchronizavimą su Spotify</translation>
     </message>
 </context>
 <context>
@@ -2036,28 +2032,28 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="153"/>
         <source>Logging in...</source>
-        <translation>Iniciant sessió...</translation>
+        <translation>Prisijungiama...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="190"/>
         <source>Failed: %1</source>
-        <translation>Error: %1</translation>
+        <translation>Nepavyko: %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="213"/>
         <source>Logged in as %1</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungta kaip %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="215"/>
         <source>Log Out</source>
-        <translation type="unfinished"/>
+        <translation>Atsijungti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="231"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="241"/>
         <source>Log In</source>
-        <translation>Incia Sessió</translation>
+        <translation>Prisijungti</translation>
     </message>
 </context>
 <context>
@@ -2065,7 +2061,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="70"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
-        <translation>Reprodueix música i sincronitza les llistes de reproducció amb Spotify Premium</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2073,7 +2069,7 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Connect to your Twitter followers.</source>
-        <translation>Connecteu-vos als seguidors de Twitter.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2083,32 +2079,32 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="143"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="191"/>
         <source>Tweet!</source>
-        <translation>Twitteja!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="169"/>
         <source>Status: No saved credentials</source>
-        <translation>Estat: no hi ha credencials desades</translation>
+        <translation>Būsena: Nėra išsaugotų prisijungimo duomenų</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="94"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
         <source>Authenticate</source>
-        <translation>Autentifica</translation>
+        <translation>Nustatyti tapatybę</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="138"/>
         <source>Status: Credentials saved for %1</source>
-        <translation>Estat: Credencials desades per %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
         <source>De-authenticate</source>
-        <translation>Des-autentifica</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="124"/>
@@ -2119,90 +2115,87 @@ i emissores de ràdio basades en el vostre gust musical.</translation>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="282"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="292"/>
         <source>Tweetin&apos; Error</source>
-        <translation>Error en Twittejar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="124"/>
         <source>The credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation>Les crendencials no s&apos;han pogut verificar
-Torneu a autenticar-vos.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="154"/>
         <source>Status: Error validating credentials</source>
-        <translation>Estat: Error en validar les credencials</translation>
+        <translation>Būsena: Klaida tikrinant prisijungimo duomenis</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="181"/>
         <source>Global Tweet</source>
-        <translation>Tweet Global</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="186"/>
         <source>Direct Message</source>
-        <translation>Missatge Directe</translation>
+        <translation>Tiesioginė žinutė</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
         <source>Send Message!</source>
-        <translation>Envia el Missatge!</translation>
+        <translation>Siųsti žinutę!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
         <source>@Mention</source>
-        <translation>@Menció</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
         <source>Send Mention!</source>
-        <translation>Envia la Menció!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="202"/>
         <source>You must enter a user name for this type of tweet.</source>
-        <translation>Heu d&apos;introduir un nom d&apos;usuari per aquest tipus de tweet.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="213"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
-        <translation>Les credencials desades no s&apos;han pogut carregar.
-Torneu a autenticar-vos.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="231"/>
         <source>Your saved credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation>Les credencials desades no s&apos;han pogut verificar.
-Torneu a autenticar-vos.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="273"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="292"/>
         <source>There was an error posting your status -- sorry!</source>
-        <translation>S&apos;ha produït un error publicant l&apos;estat!</translation>
+        <translation>Įvyko klaida siunčiant Jūsų būseną -- atsiprašome!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="275"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="284"/>
         <source>Tweeted!</source>
-        <translation>Twitejat!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="275"/>
         <source>Your tweet has been posted!</source>
-        <translation>El tweet s&apos;ha publicat!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="282"/>
         <source>There was an error posting your direct message -- sorry!</source>
-        <translation>S&apos;ha produït un error publicant el missatge directe!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="284"/>
         <source>Your message has been posted!</source>
-        <translation>El missatge s&apos;ha publicat!</translation>
+        <translation>Jūsų žinutė sėkmingai išsiųsta!</translation>
     </message>
 </context>
 <context>
@@ -2210,7 +2203,7 @@ Torneu a autenticar-vos.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="51"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
-        <translation>Inicieu sessió al vostre compte Jabber/XMPP per conectar-vos amb els amics</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2218,7 +2211,7 @@ Torneu a autenticar-vos.</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation>Connecta&apos;t automàticament a altres Tomahawks de la xarxa local</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2226,80 +2219,80 @@ Torneu a autenticar-vos.</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="84"/>
         <source>&amp;Play</source>
-        <translation>&amp;Reprodueix</translation>
+        <translation>&amp;Groti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="87"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="165"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="207"/>
         <source>Add to &amp;Queue</source>
-        <translation>&amp;Afegeix a la Cua</translation>
+        <translation>Pridėti į &amp;eilę</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="92"/>
         <source>Continue Playback after this &amp;Track</source>
-        <translation type="unfinished"/>
+        <translation>Tęsti grojimą po šio &amp;takelio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="94"/>
         <source>Stop Playback after this &amp;Track</source>
-        <translation type="unfinished"/>
+        <translation>Sustabdyti grojimą po šio &amp;takelio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="101"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="346"/>
         <source>&amp;Love</source>
-        <translation>&amp;M&apos;encanta</translation>
+        <translation>My&amp;liu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="109"/>
         <source>&amp;Copy Track Link</source>
-        <translation>&amp;Copia l&apos;Enllaç de la Cançó</translation>
+        <translation>&amp;Kopijuoti takelio nuorodą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="175"/>
         <source>Copy Album &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Kopijuoti albumo &amp;nuorodą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="217"/>
         <source>Copy Artist &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>Kopijuoti atlikėjo &amp;nuorodą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="341"/>
         <source>Un-&amp;Love</source>
-        <translation>&amp;Treu de les preferides</translation>
+        <translation>Nemy&amp;liu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>&amp;Delete Items</source>
-        <translation>&amp;Elimina els Ítems</translation>
+        <translation>Iš&amp;trinti elementus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="112"/>
         <source>&amp;Show Track Page</source>
-        <translation>&amp;Mostra la pàgina de la cançó</translation>
+        <translation>&amp;Rodyti takelio puslapį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="125"/>
         <source>Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Savybės...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>&amp;Delete Item</source>
-        <translation>&amp;Elimina l&apos;Ítem</translation>
+        <translation>Iš&amp;trinti elementą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="168"/>
         <source>&amp;Show Album Page</source>
-        <translation>&amp;Mostra la pàgina de l&apos;àlbum</translation>
+        <translation>&amp;Rodyti albumo puslapį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="210"/>
         <source>&amp;Show Artist Page</source>
-        <translation>&amp;Mostra la pàgina de l&apos;artista</translation>
+        <translation>&amp;Rodyti atlikėjo puslapį</translation>
     </message>
 </context>
 <context>
@@ -2307,32 +2300,32 @@ Torneu a autenticar-vos.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="72"/>
         <source>playlist</source>
-        <translation>llista</translation>
+        <translation>grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="75"/>
         <source>artist</source>
-        <translation>artista</translation>
+        <translation>atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="78"/>
         <source>track</source>
-        <translation>número</translation>
+        <translation>takelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="81"/>
         <source>album</source>
-        <translation>àlbum</translation>
+        <translation>albumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="104"/>
         <source>Fetching %1 from database</source>
-        <translation>Cercant %1 a la base de dades</translation>
+        <translation>Gaunama %1 iš duomenų bazės</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="108"/>
         <source>Parsing %1 %2</source>
-        <translation>Analitzant %1 %2</translation>
+        <translation>Nagrinėjama %1 %2</translation>
     </message>
 </context>
 <context>
@@ -2340,7 +2333,7 @@ Torneu a autenticar-vos.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="83"/>
         <source>Click to collapse</source>
-        <translation>Cliqueu per reduir</translation>
+        <translation>Spustelėkite, kad suskleisti</translation>
     </message>
 </context>
 <context>
@@ -2351,14 +2344,12 @@ Torneu a autenticar-vos.</translation>
         <source>Could not find a playable track.
 
 Please change the filters or try again.</source>
-        <translation>No s&apos;ha trobat cap cançó reproduïble
-
-Canvieu els filtres o intenteu-ho de nou.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicModel.cpp" line="230"/>
         <source>Failed to generate preview with the desired filters</source>
-        <translation>S&apos;ha produït un error en generar la previsualització amb els filtres</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2366,12 +2357,12 @@ Canvieu els filtres o intenteu-ho de nou.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicSetupWidget.cpp" line="53"/>
         <source>Type:</source>
-        <translation>Tipus:</translation>
+        <translation>Tipas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicSetupWidget.cpp" line="67"/>
         <source>Generate</source>
-        <translation>Genera</translation>
+        <translation>Kurti</translation>
     </message>
 </context>
 <context>
@@ -2379,17 +2370,17 @@ Canvieu els filtres o intenteu-ho de nou.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="139"/>
         <source>Add some filters above to seed this station!</source>
-        <translation>Afegeiu slguns filtres per omplir aquesta emissora!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="144"/>
         <source>Press Generate to get started!</source>
-        <translation>Premeu Genera per començar!</translation>
+        <translation>Spauskite &quot;Kurti&quot;, kad pradėti!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="146"/>
         <source>Add some filters above, and press Generate to get started!</source>
-        <translation>Afegeiu alguns filtres i premeu Genera per començar!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2399,9 +2390,7 @@ Canvieu els filtres o intenteu-ho de nou.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>L&apos;emissora s&apos;ha quedat sense cançons!
-
-Intenteu ajustar els filtres per reproduir noves cançons.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2414,23 +2403,23 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="360"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="425"/>
         <source>is</source>
-        <translation>és</translation>
+        <translation>yra</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="207"/>
         <source>from user</source>
-        <translation>de l&apos;usuari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="216"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="584"/>
         <source>No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings</source>
-        <translation>No hi ha usuaris amb els catàlegs de Echo Nest activats. Activeu l&apos;opció en els paràmetres de la Col·lecció</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="235"/>
         <source>similar to</source>
-        <translation>semblant a</translation>
+        <translation>panašus į</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="256"/>
@@ -2441,7 +2430,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="323"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>Less</source>
-        <translation>Menys</translation>
+        <translation>Mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="256"/>
@@ -2452,27 +2441,27 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="323"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>More</source>
-        <translation>Més</translation>
+        <translation>Daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>0 BPM</source>
-        <translation>0 BPM</translation>
+        <translation>0 taktų per minutę</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
         <source>500 BPM</source>
-        <translation>500 BPM</translation>
+        <translation>500 taktų per minutę</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>0 secs</source>
-        <translation>0 segs</translation>
+        <translation>0 sekundžių</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="302"/>
         <source>3600 secs</source>
-        <translation>3600 segs</translation>
+        <translation>3600 sekundžių</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
@@ -2482,228 +2471,228 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="306"/>
         <source>100 dB</source>
-        <translation>100 dB</translation>
+        <translation>-100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="343"/>
         <source>Major</source>
-        <translation>Major</translation>
+        <translation>Mažorinis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="344"/>
         <source>Minor</source>
-        <translation>Menor</translation>
+        <translation>Minorinis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="363"/>
         <source>C Sharp</source>
-        <translation>DO Sostingut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="365"/>
         <source>E Flat</source>
-        <translation>Mi Bemoll</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="366"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="368"/>
         <source>F Sharp</source>
-        <translation>Fa Sostingut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="370"/>
         <source>A Flat</source>
-        <translation>La Bemoll</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="372"/>
         <source>B Flat</source>
-        <translation>Si Bemoll</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="373"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="390"/>
         <source>Ascending</source>
-        <translation>Ascendent</translation>
+        <translation>Didėjančiai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="391"/>
         <source>Descending</source>
-        <translation>Descendent</translation>
+        <translation>Mažėjančiai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="394"/>
         <source>Tempo</source>
-        <translation>Temps</translation>
+        <translation>Tempas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="395"/>
         <source>Duration</source>
-        <translation>Durada</translation>
+        <translation>Trukmė</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="396"/>
         <source>Loudness</source>
-        <translation>Volum</translation>
+        <translation>Garsumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="397"/>
         <source>Artist Familiarity</source>
-        <translation>Semblança amb l&apos;artista</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="398"/>
         <source>Artist Hotttnesss</source>
-        <translation>Rellevància d&apos;Artista</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="399"/>
         <source>Song Hotttnesss</source>
-        <translation>Rellevància de Cançó</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="400"/>
         <source>Latitude</source>
-        <translation>Latitut</translation>
+        <translation>Platuma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="401"/>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation>Ilguma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="402"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>Key</source>
-        <translation>Clau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
         <source>Energy</source>
-        <translation>Energia</translation>
+        <translation>Energija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="405"/>
         <source>Danceability</source>
-        <translation>Ballabilitat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="744"/>
         <source>only by ~%1</source>
-        <translation>només per ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="746"/>
         <source>similar to ~%1</source>
-        <translation>semblant a ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="748"/>
         <source>with genre ~%1</source>
-        <translation>amb el gènere ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="754"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="766"/>
         <source>from no one</source>
-        <translation>de ningú</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="758"/>
         <source>My Collection</source>
-        <translation>La Meva Col·lecció</translation>
+        <translation>Mano kolekcija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="762"/>
         <source>from %1 radio</source>
-        <translation>de la ràdio %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="785"/>
         <source>with %1 %2</source>
-        <translation>amb %1 %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="787"/>
         <source>about %1 BPM</source>
-        <translation>sobre %1 BPM</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="789"/>
         <source>about %n minute(s) long</source>
-        <translation><numerusform>sobre %n minut de durada</numerusform><numerusform>sobre %n minuts de durada</numerusform></translation>
+        <translation><numerusform>apytikriai %n minutės ilgio</numerusform><numerusform>apytikriai %n minučių ilgio</numerusform><numerusform>apytikriai %n minučių ilgio</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="791"/>
         <source>about %1 dB</source>
-        <translation>sobre %1 dB</translation>
+        <translation>apie %1 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
         <source>at around %1%2 %3</source>
-        <translation>sobre %1%2 %3</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="798"/>
         <source>in %1</source>
-        <translation>en %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="803"/>
         <source>in a %1 key</source>
-        <translation>en clau de %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="813"/>
         <source>sorted in %1 %2 order</source>
-        <translation>ordenades en %1 %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="818"/>
         <source>with a %1 mood</source>
-        <translation>amb l&apos;humor %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="823"/>
         <source>in a %1 style</source>
-        <translation>amb l&apos;estil %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2711,97 +2700,97 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="58"/>
         <source>Steer this station:</source>
-        <translation>Dirigeix aquesta emissora:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="81"/>
         <source>Much less</source>
-        <translation>Molt més</translation>
+        <translation>Žymiai mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Less</source>
-        <translation>Menys</translation>
+        <translation>Mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>A bit less</source>
-        <translation>Una mica menys</translation>
+        <translation>Šiek tiek mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>Keep at current</source>
-        <translation>Mantingues a l&apos;actual</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>A bit more</source>
-        <translation>Una mica més</translation>
+        <translation>Šiek tiek daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>More</source>
-        <translation>Més</translation>
+        <translation>Daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>Much more</source>
-        <translation>Molt més</translation>
+        <translation>Žymiai daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="90"/>
         <source>Tempo</source>
-        <translation>Temps</translation>
+        <translation>Tempas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Loudness</source>
-        <translation>Volum</translation>
+        <translation>Garsumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Danceability</source>
-        <translation>Ballabilitat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
         <source>Energy</source>
-        <translation>Energia</translation>
+        <translation>Energija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Song Hotttnesss</source>
-        <translation>Rellevància de Cançó</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Artist Hotttnesss</source>
-        <translation>Rellevància d&apos;Artista</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Artist Familiarity</source>
-        <translation>Semblança amb l&apos;artista</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>By Description</source>
-        <translation>Per Descripció</translation>
+        <translation>Pagal apibūdinimą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="105"/>
         <source>Enter a description</source>
-        <translation>Introduïu una descripció</translation>
+        <translation>Įveskite apibūdinimą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="112"/>
         <source>Apply steering command</source>
-        <translation>Aplica la comanda de control</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="118"/>
         <source>Reset all steering commands</source>
-        <translation>Restaura totes les comandes de control</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2809,7 +2798,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="256"/>
         <source>Error fetching Grooveshark information from the network!</source>
-        <translation>Error en cercar la informació de Grooveshark a través de la xarxa!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2817,22 +2806,22 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="373"/>
         <source>Top Overall</source>
-        <translation>Top General</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="462"/>
         <source>Artists</source>
-        <translation>Artistes</translation>
+        <translation>Atlikėjai</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="464"/>
         <source>Albums</source>
-        <translation>Àlbums</translation>
+        <translation>Albumai</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="466"/>
         <source>Tracks</source>
-        <translation>Cançons</translation>
+        <translation>Takeliai</translation>
     </message>
 </context>
 <context>
@@ -2840,12 +2829,12 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="140"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk està reproduint &quot;%1&quot; de %2%3.</translation>
+        <translation>Tomahawk groja &quot;%1&quot; atliekamą %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="143"/>
         <source>on &quot;%1&quot;</source>
-        <translation>a &quot;%1&quot;</translation>
+        <translation>iš albumo &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -2853,27 +2842,27 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="456"/>
         <source>Top Tracks</source>
-        <translation>Top Cançons Musicals</translation>
+        <translation>Populiariausi takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
-        <translation>Cançons Preferides</translation>
+        <translation>Mylimi takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
         <source>Hyped Tracks</source>
-        <translation>Cançons en alça</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="468"/>
         <source>Top Artists</source>
-        <translation>Top Artistes</translation>
+        <translation>Populiariausi atlikėjai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="471"/>
         <source>Hyped Artists</source>
-        <translation>Artistes en alça</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2881,7 +2870,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="337"/>
         <source>Albums</source>
-        <translation>Àlbums</translation>
+        <translation>Albumai</translation>
     </message>
 </context>
 <context>
@@ -2889,7 +2878,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>Estic escoltant &quot;%1&quot; de &quot;%2&quot; i m&apos;encanta! %3</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2897,7 +2886,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="175"/>
         <source>Error fetching iTunes information from the network!</source>
-        <translation>Error en cercar la informació d&apos;iTunes a través de la xarxa!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2905,27 +2894,27 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="144"/>
         <source>New Playlist</source>
-        <translation>Nova llista de reproducció</translation>
+        <translation>Naujas grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Failed to save tracks</source>
-        <translation>Error en desar les cançons</translation>
+        <translation>Nepavyko išsaugoti dainų</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Algunes cançons de la llista no contenen ni artista ni titol i s&apos;han ignorat.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
         <source>XSPF Error</source>
-        <translation>Error XSPF</translation>
+        <translation>XSPF klaida</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation>No és una llista XSPF vàlida.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2933,13 +2922,13 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="86"/>
         <source>&amp;Catch Up</source>
-        <translation>&amp;Atrapa</translation>
+        <translation>&amp;Pasivyti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="144"/>
         <source>&amp;Listen Along</source>
-        <translation>&amp;Escolta a la vegada</translation>
+        <translation>K&amp;lausytis kartu</translation>
     </message>
 </context>
 <context>
@@ -2948,12 +2937,12 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <location filename="../src/libtomahawk/Playlist.cpp" line="344"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>Ar norite pašalinti grojaraštį &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Playlist.cpp" line="346"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti</translation>
     </message>
 </context>
 <context>
@@ -2961,37 +2950,37 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="743"/>
         <source> and </source>
-        <translation>i</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="751"/>
         <source>You</source>
-        <translation>Jo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="753"/>
         <source>you</source>
-        <translation>jo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>and</source>
-        <translation>i</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>%n other(s)</source>
-        <translation><numerusform>%n més</numerusform><numerusform>%n més</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>%1 people</source>
-        <translation>%1 persones</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="767"/>
         <source>loved this track</source>
-        <translation>els ha encantat aquesta cançó</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2999,7 +2988,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="200"/>
         <source>Error fetching Rdio information from the network!</source>
-        <translation>Error en cercar la informació de Rdio a través de la xarxa!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3007,7 +2996,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="99"/>
         <source>Network error parsing shortened link!</source>
-        <translation>Error de la xarxa en analitzar l&apos;enllaç escurçat!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3016,42 +3005,42 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <location filename="../src/libtomahawk/Source.cpp" line="286"/>
         <location filename="../src/libtomahawk/Source.cpp" line="335"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation>Escanejant (%L1 cançons)</translation>
+        <translation>Peržvelgiama (%L1 takeliai)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="288"/>
         <source>Scanning</source>
-        <translation>Escanejant</translation>
+        <translation>Peržvelgiama</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="320"/>
         <source>Checking</source>
-        <translation>Comprovant</translation>
+        <translation>Tikrinama</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="325"/>
         <source>Syncing</source>
-        <translation>S&apos;està sincronitzant</translation>
+        <translation>Sinchronizuojama</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="330"/>
         <source>Importing</source>
-        <translation>S&apos;està important</translation>
+        <translation>Įkeliama</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="472"/>
         <source>Saving (%1%)</source>
-        <translation>Desant (%1%)</translation>
+        <translation>Išsaugoma (%1%)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="553"/>
         <source>Online</source>
-        <translation>En línia</translation>
+        <translation>Prisijungęs</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="557"/>
         <source>Offline</source>
-        <translation>Fora de línia</translation>
+        <translation>Atsijungęs</translation>
     </message>
 </context>
 <context>
@@ -3059,7 +3048,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="248"/>
         <source>Error fetching Spotify information from the network!</source>
-        <translation>Error en cercar la informació de Spotify a través de la xarxa!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3067,7 +3056,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
         <source>Automatically update from XSPF</source>
-        <translation>Actualitza automàticament des de XSPF</translation>
+        <translation>Automatiškai atnaujinti iš XSPF</translation>
     </message>
 </context>
 <context>
@@ -3075,7 +3064,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/TomahawkApp.cpp" line="603"/>
         <source>My Collection</source>
-        <translation>La meva Col·lecció</translation>
+        <translation>Mano kolekcija</translation>
     </message>
 </context>
 <context>
@@ -3083,14 +3072,13 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
-        <translation>PIN de Twitter</translation>
+        <translation>Twitter PIN</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>After authenticating on Twitter's web site,
 enter the displayed PIN number here:</source>
-        <translation>Després d&apos;autenticar-vos a la pàgina de Twitter,
-introduïu el PIN aquí:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3098,48 +3086,48 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="181"/>
         <source>&amp;Stop Playback after current Track</source>
-        <translation>&amp;Atura la Reproducció després d&apos;aquesta Cançó</translation>
+        <translation>Sta&amp;bdyti grojimą po dabartinio takelio</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="76"/>
         <location filename="../src/TomahawkTrayIcon.cpp" line="115"/>
         <source>Hide Tomahawk Window</source>
-        <translation>Amaga la finestra de Tomahawk</translation>
+        <translation>Slėpti Tomahawk langą</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="120"/>
         <source>Show Tomahawk Window</source>
-        <translation>Mostra la finestra de Tomahawk</translation>
+        <translation>Rodyti Tomahawk langą</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="201"/>
         <source>Currently not playing.</source>
-        <translation>No s&apos;està reproduint res.</translation>
+        <translation>Šiuo metu negrojama.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="262"/>
         <source>Play</source>
-        <translation>Reprodueix</translation>
+        <translation>Groti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="290"/>
         <source>Pause</source>
-        <translation>Pausa</translation>
+        <translation>Pristabdyti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="320"/>
         <source>&amp;Love</source>
-        <translation>&amp;M&apos;encanta</translation>
+        <translation>&amp;Myliu</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="328"/>
         <source>Un-&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nemyliu</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="179"/>
         <source>&amp;Continue Playback after current Track</source>
-        <translation>&amp;Continua la reproducció després d&apos;aquesta Cançó</translation>
+        <translation>&amp;Tęsti grojimą po dabartinio takelio</translation>
     </message>
 </context>
 <context>
@@ -3152,32 +3140,32 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="75"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Paràmetres</translation>
+        <translation>&amp;Nuostatos</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="81"/>
         <source>&amp;Controls</source>
-        <translation>&amp;Controls</translation>
+        <translation>&amp;Valdymas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="100"/>
         <source>&amp;Network</source>
-        <translation>&amp;Xarxa</translation>
+        <translation>Ti&amp;nklas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="107"/>
         <source>&amp;Window</source>
-        <translation>&amp;Finestra</translation>
+        <translation>&amp;Langas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="114"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ajuda</translation>
+        <translation>Ž&amp;inynas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="129"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Surt</translation>
+        <translation>&amp;Baigti darbą</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="132"/>
@@ -3187,67 +3175,67 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="140"/>
         <source>Go &amp;Online</source>
-        <translation>&amp;Connecta&apos;t</translation>
+        <translation>Prisi&amp;jungti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="145"/>
         <source>Add &amp;Friend...</source>
-        <translation>Afegeix un &amp;Amic...</translation>
+        <translation>Pridėti &amp;draugą...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="150"/>
         <source>U&amp;pdate Collection</source>
-        <translation>Act&amp;ualitza la Col·lecció</translation>
+        <translation>At&amp;naujinti kolekciją</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="153"/>
         <source>Update Collection</source>
-        <translation>Actualitza la Col·lecció</translation>
+        <translation>Atnaujinti kolekciją</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="158"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation>&amp;Configura Tomahawk...</translation>
+        <translation>&amp;Konfigūruoti Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="166"/>
         <source>Load &amp;XSPF...</source>
-        <translation>Carrega una llista &amp;XSPF...</translation>
+        <translation>Įkelti &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="171"/>
         <source>Create &amp;New Playlist...</source>
-        <translation>Crea una &amp;nova llista de reproducció...</translation>
+        <translation>Sukurti naują &amp;grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="176"/>
         <source>About &amp;Tomahawk...</source>
-        <translation>Quant a &amp;Tomahawk...</translation>
+        <translation>Apie &amp;Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="184"/>
         <source>Create New &amp;Automatic Playlist</source>
-        <translation>Crea una Llista de Reproducció &amp;Automàtica</translation>
+        <translation>Sukurti naują &amp;automatinį grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="189"/>
         <source>Create New &amp;Station</source>
-        <translation>Crea una Nova &amp;Emissora</translation>
+        <translation>Sukurti naują &amp;stotį</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="197"/>
         <source>Show Offline Sources</source>
-        <translation>Mostra les fonts fora de línia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="202"/>
         <source>Hide Offline Sources</source>
-        <translation>Amaga les fonts fora de línia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="207"/>
         <source>Minimize</source>
-        <translation>Minimitza</translation>
+        <translation>Sumažinti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="210"/>
@@ -3257,198 +3245,198 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="215"/>
         <source>Zoom</source>
-        <translation>Zoom</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="218"/>
         <source>Meta+Ctrl+Z</source>
-        <translation>Meta+Ctrl+Z</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="223"/>
         <source>&amp;Legal Info...</source>
-        <translation>Informació &amp;legal</translation>
+        <translation>&amp;Teisinė informacija...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="231"/>
         <source>Diagnostics...</source>
-        <translation>Diagnòstics...</translation>
+        <translation>Diagnostika...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="239"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>&amp;Reescaneja la Col·lecció completament</translation>
+        <translation>Pilnai pe&amp;ržvelgti kolekciją</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="242"/>
         <source>Fully Rescan Collection</source>
-        <translation>Reescaneja la Col·lecció completament</translation>
+        <translation>Pilnai peržvelgti kolekciją</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="247"/>
         <location filename="../src/TomahawkWindow.cpp" line="1051"/>
         <source>Play</source>
-        <translation>Reprodueix</translation>
+        <translation>Groti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="250"/>
         <source>Space</source>
-        <translation>Espai</translation>
+        <translation>Tarpas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="255"/>
         <source>Previous</source>
-        <translation>Anterior</translation>
+        <translation>Ankstesnis</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="260"/>
         <source>Next</source>
-        <translation>Següent</translation>
+        <translation>Kitas</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="233"/>
         <source>Back</source>
-        <translation>Enrere</translation>
+        <translation>Atgal</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="234"/>
         <source>Go back one page</source>
-        <translation>Retrocedeix una pàgina</translation>
+        <translation>Grįžti vienu puslapiu atgal</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="235"/>
         <source>Forward</source>
-        <translation>Endavant</translation>
+        <translation>Pirmyn</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="236"/>
         <source>Go forward one page</source>
-        <translation>Avança una pàgina</translation>
+        <translation>Eiti vienu puslapiu pirmyn</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="243"/>
         <source>Global Search...</source>
-        <translation>Cerca Global...</translation>
+        <translation>Globali paieška...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="310"/>
         <location filename="../src/TomahawkWindow.cpp" line="327"/>
         <source>Check For Updates...</source>
-        <translation>Comprova les actualitzacions...</translation>
+        <translation>Tikrinti, ar yra atnaujinimų...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="745"/>
         <location filename="../src/TomahawkWindow.cpp" line="752"/>
         <location filename="../src/TomahawkWindow.cpp" line="760"/>
         <source>Connect To Peer</source>
-        <translation>Connexió Remota</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="746"/>
         <source>Enter peer address:</source>
-        <translation>Introduïu l&apos;adreça remota:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="753"/>
         <source>Enter peer port:</source>
-        <translation>Introduïu el port remot:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="761"/>
         <source>Enter peer key:</source>
-        <translation>Introduïu la clau remota:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="871"/>
         <source>XSPF Error</source>
-        <translation>Error XSPF</translation>
+        <translation>XSPF klaida</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="871"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation>No és una llista XSPF vàlida.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>Failed to save tracks</source>
-        <translation>Error en desar les cançons</translation>
+        <translation>Nepavyko išsaugoti takelių</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="875"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Algunes cançons de la llista no contenen ni artista ni titol i s&apos;han ignorat.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="889"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
-        <translation>Hi ha un problema per accedir al dispositiu de so o a la cançó. La cançó actual s&apos;ha saltat. Assegureu-vos que teniu un back.end de Phonon adequant i els plugins necessaris instal·lats.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="891"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
-        <translation>Hi ha un problema per accedir al dispositiu de so o a la cançó, la cançó actual s&apos;ha saltat.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="923"/>
         <source>Station</source>
-        <translation>Emissora</translation>
+        <translation>Stotis</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="925"/>
         <source>Create New Station</source>
-        <translation>Crea una Nova Emissora</translation>
+        <translation>Sukurti naują stotį</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="925"/>
         <source>Name:</source>
-        <translation>Nom:</translation>
+        <translation>Pavadinimas:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="988"/>
         <source>Playlist</source>
-        <translation>Llista</translation>
+        <translation>Grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1010"/>
         <source>Automatic Playlist</source>
-        <translation>Llista Automàtica</translation>
+        <translation>Automatinis grojaraštis</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1031"/>
         <source>Pause</source>
-        <translation>Pausa</translation>
+        <translation>Pristabdyti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1077"/>
         <source>Go &amp;offline</source>
-        <translation>&amp;Desconnecta&apos;t</translation>
+        <translation>&amp;Atsijungti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1084"/>
         <source>Go &amp;online</source>
-        <translation>&amp;Connecta&apos;t</translation>
+        <translation>&amp;Prisijungti</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1107"/>
         <source>Authentication Error</source>
-        <translation>Error d&apos;autentificació</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1108"/>
         <source>Error connecting to SIP: Authentication failed!</source>
-        <translation>S&apos;ha produït un error connectant-se a SIP: Ha fallat autentificant! </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1122"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
-        <translation>%1 de %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1123"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
-        <translation>%1 - %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1134"/>
@@ -3463,17 +3451,17 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1142"/>
         <source>Copyright 2010 - 2012</source>
-        <translation>Copyright 2010 - 2012</translation>
+        <translation>Autorinės teisės 2010 - 2012</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1143"/>
         <source>Thanks to:</source>
-        <translation>Gràcies a:</translation>
+        <translation>Dėkojame:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1150"/>
         <source>About Tomahawk</source>
-        <translation>Quant a Tomahawk</translation>
+        <translation>Apie Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -3481,7 +3469,7 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
         <source>Top Hits</source>
-        <translation>Grans Èxits</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3489,67 +3477,67 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="164"/>
         <source>Cover</source>
-        <translation>Cover</translation>
+        <translation>Viršelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="198"/>
         <source>Track</source>
-        <translation>Cançó</translation>
+        <translation>Takelis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="216"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>Atlikėjas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="236"/>
         <source>Album</source>
-        <translation>Àlbum</translation>
+        <translation>Albumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="266"/>
         <source>Statistics</source>
-        <translation>Estadístiques</translation>
+        <translation>Statistika</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="89"/>
         <source>Similar Tracks</source>
-        <translation>Cançons Semblants</translation>
+        <translation>Panašūs takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, neradome jokių į šią dainą panašių takelių!</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>Heu escoltat aquesta cançó %n cop.</numerusform><numerusform>Heu escoltat aquesta cançó %n cops.</numerusform></translation>
+        <translation><numerusform>Jūs klausėtės šio takelio %n kartą.</numerusform><numerusform>Jūs klausėtės šio takelio %n kartus.</numerusform><numerusform>Jūs klausėtės šio takelio %n kartų.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation>No heu escoltat mai aquesta cançó abans.</translation>
+        <translation>Jūs niekad anksčiau nesiklausėte šio takelio.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
         <source>You first listened to it on %1.</source>
-        <translation>Vau escoltar aquesta cançó per primer cop el %1.</translation>
+        <translation>Pirmąkart klausėtės jo %1.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="244"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation><numerusform>Heu escoltat %1 %n cop.</numerusform><numerusform>Heu escoltat %1 %n cops.</numerusform></translation>
+        <translation><numerusform>Jūs klausėtės %1 %n kartą.</numerusform><numerusform>Jūs klausėtės %1 %n kartus.</numerusform><numerusform>Jūs klausėtės %1 %n kartų.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation>No heu escoltat mai %1 abans.</translation>
+        <translation>Jūs niekada anksčiau nesiklausėte %1.</translation>
     </message>
 </context>
 <context>
@@ -3557,7 +3545,7 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="508"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>El filtre &apos;%1&apos; no ha obtingut cap resultat.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3580,7 +3568,7 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="148"/>
         <source>Unknown</source>
-        <translation>Desconegut</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3588,19 +3576,19 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="149"/>
         <source>All Artists</source>
-        <translation>Tots els Artistes</translation>
+        <translation>Visi atlikėjai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="267"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="292"/>
         <source>My Collection</source>
-        <translation>La meva Col·lecció</translation>
+        <translation>Mano kolekcija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="269"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="294"/>
         <source>Collection of %1</source>
-        <translation>Col·lecció de %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3608,7 +3596,7 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="297"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, Jūsų užklausa &apos;%1&apos; neatitiko jokių rezultatų.</translation>
     </message>
 </context>
 <context>
@@ -3616,27 +3604,27 @@ introduïu el PIN aquí:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation>Configura el Compte de Twitter</translation>
+        <translation>Konfigūruoti šią Twitter paskyrą</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>El plugin de Twitter permet descobrir i reproduir música dels seguidors de Twitter que utilitzen Tomahawk i publicar missatges al vostre compte.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
         <source>Status: No saved credentials</source>
-        <translation>Estat: no hi ha credencials desades</translation>
+        <translation>Būsena: Nėra išsaugotų prisijungimo duomenų</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
         <source>Authenticate with Twitter</source>
-        <translation>Autentifica amb Twitter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
         <source>Twitter Connections</source>
-        <translation>Connexions de Twitter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
@@ -3646,42 +3634,37 @@ If you only want to post tweets, you're done.
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation>
-Si només voleu publicar tweets, ja esteu llestos.
-
-SI voleu connectar Tomahawk als vostres seguidors de Twitter, escolliu el tipus de Tweet i premeu el botó de sota per enviar un missatge de sincronisme. Tots dos us heu d&apos;estar seguint atès que s&apos;empren Missatges Directes. Aleshores, tingueu (molta) paciència -- pot trigar diversos minuts!
-
-Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant un altre tweet fent servir el botó.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>Escolliu el tipus de tweet que us agradaria, després premeu el botó per publicar-lo:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
-        <translation>Tweet Global</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
-        <translation>@Menció</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
-        <translation>Missatge Directe</translation>
+        <translation>Tiesioginė žinutė</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
         <source>e.g. @tomahawk</source>
-        <translation>e.g. @tomahawk</translation>
+        <translation>pvz. @tomahawk</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
-        <translation>Envia el Missatge</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3689,32 +3672,32 @@ Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="280"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Peržvelgus Jūsų muzikos kolekciją, savo takelius galėsite rasti čia akimirksniu.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Ši kolekcija yra tuščia.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
         <source>SuperCollection</source>
-        <translation>SuperCol·lecció</translation>
+        <translation>Super kolekcija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>Biblioteques combinades de tots els amis en línia</translation>
+        <translation>Jungtinė visų Jūsų prisijungusių draugų kolekcija</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Recently Played Tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="397"/>
         <source>Recently played tracks from all your friends</source>
-        <translation>Cançons escoltades recentment pels amics</translation>
+        <translation>Visų Jūsų draugų neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
@@ -3727,27 +3710,27 @@ Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="34"/>
         <source>Recent Additions</source>
-        <translation>Darreres Novetats</translation>
+        <translation>Neseniai pridėta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Darreres Emissores i Llistes</translation>
+        <translation>Naujausios stotys ir grojaraščiai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
         <source>Recently Played Tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Neseniai groti takeliai</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
         <source>No recently created playlists in your network.</source>
-        <translation>No hi ha cançons escoltades recentment a la xarxa.</translation>
+        <translation>Jūsų tinkle nėra neseniai sukurtų grojaraščių.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
         <source>Welcome to Tomahawk</source>
-        <translation>Us donem la benvinguda a Tomahawk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3755,7 +3738,7 @@ Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant
     <message>
         <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="69"/>
         <source>Charts</source>
-        <translation>Llistes</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3763,7 +3746,7 @@ Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation>Viquipèdia</translation>
+        <translation>Vikipedija</translation>
     </message>
 </context>
 <context>
@@ -3773,28 +3756,26 @@ Podeu reenviar un missatge de sincronisme en qualsevol moment simplement enviant
         <source>
 Terms for %1:
 </source>
-        <translation>
-Termes per %1:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="317"/>
         <source>No terms found, sorry.</source>
-        <translation>No s&apos;han trobat termes.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="350"/>
         <source>
 Hotttness for %1: %2
 </source>
-        <translation>
-Rellevància per %1: %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="366"/>
         <source>
 Familiarity for %1: %2
 </source>
-        <translation>Semblança per %1: %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="384"/>
@@ -3803,11 +3784,7 @@ Lyrics for &quot;%1&quot; by %2:
 
 %3
 </source>
-        <translation>
-Lletres de la cancó &quot;%1&quot; de %2:
-
-%3
-</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3815,22 +3792,22 @@ Lletres de la cancó &quot;%1&quot; de %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
         <source>Failed to parse contents of XSPF playlist</source>
-        <translation>Error en analitzar els continguts de la llista XSPF</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
-        <translation>Algunes entrades de la llista no disposaven d&apos;informació d&apos;artista ni de nom de cançó, s&apos;han omès</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
-        <translation>Error en cercar la llista a la xarxa. Pot ser no existeix el fitxer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
         <source>New Playlist</source>
-        <translation>Nova llista de reproducció</translation>
+        <translation>Naujas grojaraštis</translation>
     </message>
 </context>
 <context>
@@ -3838,78 +3815,78 @@ Lletres de la cancó &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="14"/>
         <source>Xml stream console</source>
-        <translation>Consola de flux XML</translation>
+        <translation>Xml srauto pultas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation>Filtra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
         <source>Save log</source>
-        <translation>Desa el log</translation>
+        <translation>Išsaugoti žurnalą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="62"/>
         <source>Disabled</source>
-        <translation>Desactivat</translation>
+        <translation>Išjungta</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="65"/>
         <source>By JID</source>
-        <translation>Per JID</translation>
+        <translation>Pagal JID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
         <source>By namespace uri</source>
-        <translation>Per namespace uri</translation>
+        <translation>Pagal vardų erdvės uri</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
         <source>By all attributes</source>
-        <translation>Per atributs</translation>
+        <translation>Pagal visus požymius</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation>Instàncies visibles</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
         <source>Information query</source>
-        <translation>Petició d&apos;informació</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
-        <translation>Missatge</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
         <source>Presence</source>
-        <translation>Presència</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
         <source>Custom</source>
-        <translation>Personalitzat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
-        <translation>Tanca</translation>
+        <translation>Užverti</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>Save XMPP log to file</source>
-        <translation>Desa el log XMPP en un fitxer</translation>
+        <translation>Išsaugoti XMPP žurnalą į failą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
-        <translation>Format OpenDocument (*.odf);;fitxer HTML (*.html);;Text Pla (*.txt)</translation>
+        <translation>OpenDocument formatas (*.odf);;HTML failas (*.html);;Paprastas tekstas (*.txt)</translation>
     </message>
 </context>
 <context>
@@ -3917,72 +3894,72 @@ Lletres de la cancó &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="14"/>
         <source>Xmpp Configuration</source>
-        <translation>Configuració XMPP</translation>
+        <translation>Xmpp konfigūracija</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="52"/>
         <source>Configure this Xmpp account</source>
-        <translation>Configura aquest compte XMPP</translation>
+        <translation>Konfigūruoti šią Xmpp paskyrą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="89"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation>Introduiu les dades d&apos;inici de sessió de XMPP per connectar-vos amb els amics que fan servir Tomahawk!</translation>
+        <translation>Įveskite savo Xmpp prisijungimo duomenis, jei norite prisijungti prie savo draugų, besinaudojančių Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="111"/>
         <source>Login Information</source>
-        <translation>Informació d&apos;inici de sessió</translation>
+        <translation>Prisijungimo informacija</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
         <source>Xmpp ID:</source>
-        <translation>ID XMPP:</translation>
+        <translation>Xmpp ID:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
         <source>e.g. user@example.com</source>
-        <translation>e.g. usuari@exemple.com</translation>
+        <translation>pvz. user@example.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="160"/>
         <source>Password:</source>
-        <translation>Contrasenya:</translation>
+        <translation>Slaptažodis:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="188"/>
         <source>An account with this name already exists!</source>
-        <translation>Ja existeix un compte amb aquest nom!</translation>
+        <translation>Paskyra šiuo vardu jau yra!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="210"/>
         <source>Advanced Xmpp Settings</source>
-        <translation>Paràmetres avançats de XMPP</translation>
+        <translation>Išplėstinės Xmpp nuostatos</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
         <source>Server:</source>
-        <translation>Servidor:</translation>
+        <translation>Serveris:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation>Prievadas:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
-        <translation>Molts servidors no suporten aquesta opció (e.g. GTalk, jabber.org)</translation>
+        <translation>Daugybė serverių to nepalaiko (pvz. GTalk, jabber.org)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
         <source>Publish currently playing track</source>
-        <translation>Publica la cançó que s&apos;estigui reproduint al moment</translation>
+        <translation>Viešinti šiuo metu grojamą takelį</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="309"/>
         <source>Enforce secure connection</source>
-        <translation>Força una connexió segura</translation>
+        <translation>Priverstinai naudoti saugų prisijungimą</translation>
     </message>
 </context>
 <context>
@@ -3990,107 +3967,107 @@ Lletres de la cancó &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="372"/>
         <source>User Interaction</source>
-        <translation>Interacció d&apos;usuari</translation>
+        <translation>Vartotojo sąveika</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="375"/>
         <source>Host is unknown</source>
-        <translation>El nom de l&apos;ordinador és desconegut</translation>
+        <translation>Serveris nežinomas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="378"/>
         <source>Item not found</source>
-        <translation>No s&apos;ha trobat l&apos;element</translation>
+        <translation>Elementas nerastas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="381"/>
         <source>Authorization Error</source>
-        <translation>Error d&apos;autorització</translation>
+        <translation>Tapatybės patvirtinimo klaida</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="384"/>
         <source>Remote Stream Error</source>
-        <translation>Error de flux remot</translation>
+        <translation>Nuotolinio srauto klaida</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="387"/>
         <source>Remote Connection failed</source>
-        <translation>Ha fallat la connexió remota</translation>
+        <translation>Nuotolinis prisijungimas nepavyko</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="390"/>
         <source>Internal Server Error</source>
-        <translation>Error del servidor intern</translation>
+        <translation>Vidinė serverio klaida</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="393"/>
         <source>System shutdown</source>
-        <translation>Sistema apagat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="396"/>
         <source>Conflict</source>
-        <translation>Conflicte</translation>
+        <translation>Konfliktas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>Unknown</source>
-        <translation>Desconegut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite pridėti &lt;b&gt;%1&lt;/b&gt; prie savo draugų sąrašo?</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="399"/>
         <source>No Compression Support</source>
-        <translation>Compressió no suportada</translation>
+        <translation>Nėra  glaudinimo palaikymo</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="402"/>
         <source>No Encryption Support</source>
-        <translation>Encriptació no suportada</translation>
+        <translation>Nėra užšifravimo palaikymo</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="405"/>
         <source>No Authorization Support</source>
-        <translation>Autorització no suportada</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>No Supported Feature</source>
-        <translation>Característica no suportada</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="475"/>
         <source>Add Friend</source>
-        <translation>Afegeix un Amic</translation>
+        <translation>Pridėti draugą</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="476"/>
         <source>Enter Xmpp ID:</source>
-        <translation>Introduiu la ID XMPP:</translation>
+        <translation>Įveskite Xmpp ID:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="632"/>
         <source>Add Friend...</source>
-        <translation>Afegeix un Amic...</translation>
+        <translation>Pridėti draugą...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="637"/>
         <source>XML Console...</source>
-        <translation>Consola XML...</translation>
+        <translation>XML pultas...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="685"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation>Sóc una presència automàtica emprada pel Reproductor Tomahawk. (http://gettomahawk.com. Si rebeu aquest missatge, la persona amb qui intenteu contactar probablement no està en línia, intenteu-ho més tard!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="779"/>
         <source>Authorize User</source>
-        <translation>Autorització d&apos;Usuari</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4098,22 +4075,22 @@ Lletres de la cancó &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Formulari</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
         <source>Local Network configuration</source>
-        <translation>Configuració de la Xarxa Local</translation>
+        <translation>Vietinio tinklo konfigūracija</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running Tomahawk on your local network</source>
-        <translation>Aquest plugin troba automàticament altres usuaris que fan servir Tomahawk a la vostra Xarxa Local</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when Tomahawk starts</source>
-        <translation>Connecta-t&apos;hi automàticament quan Tomahawk arrenqui</translation>
+        <translation>Prisijungti automatiškai kai Tomahawk paleidžiamas</translation>
     </message>
 </context>
 </TS>

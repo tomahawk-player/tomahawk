@@ -50,8 +50,10 @@ private slots:
     void onTrackLoved();
     void loadTracks();
 
+    void tracksLoaded( QList<Tomahawk::query_ptr> );
 private:
     Tomahawk::source_ptr m_source;
+    QTimer* m_smoothingTimer;
     unsigned int m_limit;
 };
 

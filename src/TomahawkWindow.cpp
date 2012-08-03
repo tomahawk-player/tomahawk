@@ -202,11 +202,7 @@ TomahawkWindow::saveSettings()
 void
 TomahawkWindow::applyPlatformTweaks()
 {
-    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
-    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
-    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
-    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
-        qApp->setStyle( new ProxyStyle() );
+    qApp->setStyle( new ProxyStyle() );
 
 #ifdef Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac( true );

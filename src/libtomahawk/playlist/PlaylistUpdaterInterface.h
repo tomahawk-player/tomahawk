@@ -89,7 +89,7 @@ public:
     // as setQuestionResults is called with all questions from all updaters.
     virtual bool hasCustomDeleter() const { return false; }
     virtual PlaylistDeleteQuestions deleteQuestions() const { return PlaylistDeleteQuestions(); }
-    virtual void setQuestionResults( const QMap< int, bool > results ) {}
+    virtual void setQuestionResults( const QMap< int, bool > ) {}
 
 signals:
     void changed();

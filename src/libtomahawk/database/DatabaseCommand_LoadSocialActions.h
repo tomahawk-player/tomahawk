@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2011, Christopher Reichert <creichert07@gmail.com>
+ *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -45,6 +46,7 @@ class DLLEXPORT DatabaseCommand_LoadSocialActions : public DatabaseCommand
 Q_OBJECT
 
 public:
+    typedef QMap<Tomahawk::query_ptr,Tomahawk::SocialAction> TrackActions;
     /**
      * \brief Default constructor for DatabaseCommand_LoadSocialActions.
      *
@@ -67,6 +69,16 @@ public:
         setSource( SourceList::instance()->getLocal() );
         setArtist( query->artist() );
         setTrack( query->track() );
+    }
+
+    /**
+     * Load all tracks with a specific social action
+     */
+    explicit DatabaseCommand_LoadSocialActions( const QString& action, const Tomahawk::source_ptr& source, QObject* parent = 0 )
+        : DatabaseCommand( parent ), m_actionOnly( action )
+    {
+        setSource( source );
+        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialAction::TrackActions" );
     }
 
     /**
@@ -114,21 +126,22 @@ public:
      */
     void setTrack( const QString& s ) { m_track = s; }
 
+    virtual bool doesMutates() const { return false; }
 signals:
-
     /**
-     * \brief Emitted when the database command has finished the Query successfully
-     *
-     * \param QList of all social actions
-     * \see QList
+     * All loaded social actions for each track found, for queries that generate all tracks
+     * with matching actions.
      */
-    void done( QList< Tomahawk::SocialAction >& allSocialActions );
+    void done( DatabaseCommand_LoadSocialActions::TrackActions actionsForTracks );
 
 private:
     Tomahawk::query_ptr m_query;
     QString m_artist;
     QString m_track;
+    QString m_actionOnly;
 
 };
+
+Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
 
 #endif // DATABASECOMMAND_LOADSOCIALACTIONS_H
