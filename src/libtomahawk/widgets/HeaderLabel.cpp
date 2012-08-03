@@ -26,7 +26,7 @@
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 
-static const int s_defaultFontSize = 10;
+static const int s_defaultFontSize = 9;
 
 
 HeaderLabel::HeaderLabel( QWidget* parent )

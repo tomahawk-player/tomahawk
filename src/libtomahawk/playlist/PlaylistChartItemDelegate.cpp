@@ -157,19 +157,19 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }
 
         QFont figureFont = opt.font;
-        figureFont.setPointSize( 16 );
+        figureFont.setPointSize( 17 );
         figureFont.setWeight( 99 );
 
         QFont boldFont = opt.font;
-        boldFont.setPointSize( 13 );
+        boldFont.setPointSize( 12 );
         boldFont.setWeight( 99 );
 
         QFont smallBoldFont = opt.font;
-        smallBoldFont.setPointSize( 10 );
+        smallBoldFont.setPointSize( 9 );
         smallBoldFont.setWeight( 60 );
 
         QFont durationFont = opt.font;
-        durationFont.setPointSize( 10 );
+        durationFont.setPointSize( 9 );
         durationFont.setWeight( 80 );
         QFontMetrics durationFontMetrics( durationFont );
 
@@ -183,18 +183,18 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         {
             figureFont.setPointSize( 28 );
             boldFont.setPointSize( 20 );
-            smallBoldFont.setPointSize( 16 );
+            smallBoldFont.setPointSize( 15 );
         }
         else if ( index.row() == 2 )
         {
             figureFont.setPointSize( 20 );
-            boldFont.setPointSize( 16 );
-            smallBoldFont.setPointSize( 12 );
+            boldFont.setPointSize( 15 );
+            smallBoldFont.setPointSize( 11 );
         }
         else if ( index.row() >= 10 )
         {
-            boldFont.setPointSize( 10 );
-            smallBoldFont.setPointSize( 9 );
+            boldFont.setPointSize( 9 );
+            smallBoldFont.setPointSize( 8 );
         }
 
         QRect figureRect = r.adjusted( 0, 0, -option.rect.width() + 60 - 6 + r.left(), 0 );

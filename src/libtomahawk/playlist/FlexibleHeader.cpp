@@ -51,11 +51,11 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     ui->descLabel->setPalette( pal );
 
     QFont font = ui->captionLabel->font();
-    font.setPointSize( 14 );
+    font.setPointSize( 13 );
     font.setBold( true );
     ui->captionLabel->setFont( font );
 
-    font.setPointSize( 9 );
+    font.setPointSize( 8 );
     ui->descLabel->setFont( font );
 
     ui->radioNormal->setFocusPolicy( Qt::NoFocus );

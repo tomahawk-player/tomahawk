@@ -69,7 +69,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setContentsMargins( 0, 0, 0, 0 );
 
     QFont dummyFont;
-    dummyFont.setPointSize( 10 );
+    dummyFont.setPointSize( 9 );
     QFontMetrics fm( dummyFont );
     // This is sort of the longest string in there. With translations
     // we will never get it right so setting it to something reasonable for the average case
