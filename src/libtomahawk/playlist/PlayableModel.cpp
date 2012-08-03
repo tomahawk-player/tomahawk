@@ -729,7 +729,6 @@ PlayableModel::finishLoading()
 PlayableItem*
 PlayableModel::itemFromIndex( const QModelIndex& index ) const
 {
-    Q_ASSERT(index.isValid());
     if ( index.isValid() )
     {
         return static_cast<PlayableItem*>( index.internalPointer() );
