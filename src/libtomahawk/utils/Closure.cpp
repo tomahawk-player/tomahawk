@@ -1,5 +1,6 @@
 /* This file is part of Clementine.
    Copyright 2011, David Sansome <me@davidsansome.com>
+   Copyright 2012, Leo Franchi <lfranchi@kde.org>
 
    Clementine is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,8 +17,14 @@
 */
 
 #include "Closure.h"
+#include <QApplication>
 
 namespace _detail {
+
+static bool on_this_thread(QObject* obj)
+{
+    return QCoreApplication::instance()->thread() == obj->thread();
+}
 
 Closure::Closure(QObject* sender,
                  const char* signal,
@@ -27,9 +34,10 @@ Closure::Closure(QObject* sender,
                  const ClosureArgumentWrapper* val1,
                  const ClosureArgumentWrapper* val2,
                  const ClosureArgumentWrapper* val3)
-    : QObject(receiver),
+    : QObject(on_this_thread(receiver) ? receiver : 0),
       callback_(NULL),
-      autoDelete_( true ),
+      autoDelete_(true),
+      outOfThreadReceiver_(on_this_thread(receiver) ? 0 : receiver ),
       val0_(val0),
       val1_(val1),
       val2_(val2),
@@ -77,7 +85,7 @@ void Closure::Invoked() {
     callback_();
   } else {
     slot_.invoke(
-        parent(),
+        parent() ? parent() : outOfThreadReceiver_,
         val0_ ? val0_->arg() : QGenericArgument(),
         val1_ ? val1_->arg() : QGenericArgument(),
         val2_ ? val2_->arg() : QGenericArgument(),

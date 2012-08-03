@@ -37,7 +37,9 @@ public:
         // DisplayRole is main col
         RightColumnRole = Qt::UserRole + 1,
         AllowMultiLineRole = Qt::UserRole + 2,
-        JobDataRole = Qt::UserRole + 3
+        JobDataRole = Qt::UserRole + 3,
+        SortRole = Qt::UserRole + 4,
+        AgeRole = Qt::UserRole + 5
     };
 
     explicit JobStatusModel( QObject* parent = 0 );

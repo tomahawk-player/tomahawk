@@ -123,7 +123,7 @@ public:
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
 
-    bool equals( const Tomahawk::query_ptr& other ) const;
+    bool equals( const Tomahawk::query_ptr& other, bool ignoreCase = false ) const;
 
     QVariant toVariant() const;
     QString toString() const;

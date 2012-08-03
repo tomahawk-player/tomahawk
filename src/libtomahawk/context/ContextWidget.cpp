@@ -84,6 +84,7 @@ ContextWidget::ContextWidget( QWidget* parent )
     QPalette whitePal = ui->toggleButton->palette();
     whitePal.setColor( QPalette::Foreground, Qt::white );
     ui->toggleButton->setPalette( whitePal );
+    ui->toggleButton->setCursor( Qt::PointingHandCursor );
 
     QFont boldFont = ui->toggleButton->font();
     boldFont.setPixelSize( 12 );

@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QSizeGrip>
+#include <QtGui/QToolBar>
 
 #include "AtticaManager.h"
 #include "AclRegistry.h"
@@ -39,7 +41,6 @@
 #include "ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/GuiHelpers.h"
-#include "SettingsListDelegate.h"
 #include "accounts/AccountDelegate.h"
 #include "database/Database.h"
 #include "network/Servent.h"
@@ -72,11 +73,23 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     TomahawkUtils::unmarginLayout( layout() );
-    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
 
+#ifdef Q_WS_X11
+    ui->stackedWidget->setContentsMargins( 4, 4, 4, 4 );
+#else
+    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
+#endif
     ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
 
+    QFrame *sepLine = new QFrame( this );
+    sepLine->setFrameShape( QFrame::HLine );
+    sepLine->setFrameShadow( QFrame::Sunken );
+    ui->horizontalLayout->insertWidget( 0, sepLine );
+
+    m_toolBar = new QToolBar( tr( "Tomahawk Settings" ), this );
+    ui->horizontalLayout->insertWidget( 0, m_toolBar );
+    m_toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
     //Network settings
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
@@ -102,15 +115,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     createIcons();
 #ifdef Q_WS_X11
-    ui->listWidget->setFrameShape( QFrame::StyledPanel );
-    ui->listWidget->setFrameShadow( QFrame::Sunken );
     setContentsMargins( 4, 4, 4, 4 );
 #else
     setContentsMargins( 0, 4, 4, 4 );
-#endif
-
-#ifdef Q_WS_MAC
-    ui->listWidget->setFixedWidth( 83 );
 #endif
 
 #ifdef Q_WS_MAC
@@ -118,13 +125,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
-
-    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer );
-    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_2 );
-    ui->groupBoxNetworkAdvanced->layout()->removeItem( ui->verticalSpacer_4 );
-    delete ui->verticalSpacer;
-    delete ui->verticalSpacer_2;
-    delete ui->verticalSpacer_4;
 #endif
 
     // Accounts
@@ -193,6 +193,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     {
         ui->dirTree->checkPath( dir, Qt::Checked );
     }
+    ui->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
+
+    int buttonsWidth = qMax( ui->proxyButton->sizeHint().width(),
+                             ui->aclEntryClearButton->sizeHint().width() );
+    ui->proxyButton->setFixedWidth( buttonsWidth );
+    ui->aclEntryClearButton->setFixedWidth( buttonsWidth );
+
 
     // NOW PLAYING
 // #ifdef Q_WS_MAC
@@ -210,9 +217,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
     connect( ui->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
     connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
-
-    ui->listWidget->setCurrentRow( 0 );
-    ui->listWidget->setItemDelegate(new SettingsListDelegate());
 }
 
 
@@ -280,56 +284,67 @@ SettingsDialog::serventReady()
 void
 SettingsDialog::createIcons()
 {
-    /// Not fun but QListWidget sucks. Do our max-width calculation manually
-    /// so the icons arre lined up.
-    // Resolvers is the longest string... in english. fml.
-
     ensurePolished();
 
-    int maxlen = 0;
-    QFontMetrics fm( font() );
-    QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
-    accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    accountsButton->setText( tr( "Services" ) );
-    accountsButton->setTextAlignment( Qt::AlignHCenter );
-    accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = fm.width( accountsButton->text() );
+    m_settingsGroup = new QActionGroup( m_toolBar );
 
-    QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
-    musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
-    musicButton->setText( tr( "Collection" ) );
-    musicButton->setTextAlignment( Qt::AlignHCenter );
-    musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( musicButton->text() ), maxlen );
+    QWidget *leftSpacer = new QWidget( m_toolBar );
+    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_toolBar->addWidget( leftSpacer );
 
-    QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
-    advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
-    advancedButton->setText( tr( "Advanced" ) );
-    advancedButton->setTextAlignment( Qt::AlignHCenter );
-    advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-    maxlen = qMax( fm.width( advancedButton->text() ), maxlen );
+    QAction *accountsAction = new QAction( QIcon( RESPATH "images/account-settings.png" ),
+                                           tr( "Services" ),
+                                           m_toolBar );
+    accountsAction->setCheckable( true );
+    accountsAction->setToolTip( tr( "<b>Services</b><br>"
+                                    "Configure the accounts and services used by Tomahawk "
+                                    "to search and retrieve music, find your friends and "
+                                    "update your status." ) );
+    m_settingsGroup->addAction( accountsAction );
 
-    maxlen += 15; // padding
-    accountsButton->setSizeHint( QSize( maxlen, 60 ) );
-    musicButton->setSizeHint( QSize( maxlen, 60 ) );
-    advancedButton->setSizeHint( QSize( maxlen, 60 ) );
+    QAction *musicAction = new QAction( QIcon( RESPATH "images/music-settings.png" ),
+                                        tr( "Collection" ),
+                                        m_toolBar );
+    musicAction->setCheckable( true );
+    musicAction->setToolTip( tr( "<b>Collection</b><br>"
+                                 "Manage how Tomahawk finds music on your computer." ) );
+    m_settingsGroup->addAction( musicAction );
 
-#ifndef Q_WS_MAC
-    // doesn't listen to sizehint...
-    ui->listWidget->setFixedWidth( maxlen + 8 );
-#endif
 
-    connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
+    QAction *advancedAction = new QAction( QIcon( RESPATH "images/advanced-settings.png" ),
+                                           tr( "Advanced" ),
+                                           m_toolBar );
+    advancedAction->setCheckable( true );
+    advancedAction->setToolTip( tr( "<b>Advanced</b><br>"
+                                    "Configure Tomahawk's advanced settings, including "
+                                    "network connectivity settings, browser interaction "
+                                    "and more." ) );
+    m_settingsGroup->addAction( advancedAction );
+
+    m_settingsGroup->setExclusive( true );
+
+    m_toolBar->addActions( m_settingsGroup->actions() );
+
+    QWidget *rightSpacer = new QWidget( m_toolBar );
+    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_toolBar->addWidget( rightSpacer );
+
+    connect( m_settingsGroup, SIGNAL( triggered( QAction * ) ),
+             this, SLOT( changePage( QAction * ) ) );
+
+    accountsAction->setChecked( true );
+    changePage( accountsAction );
 }
 
 
 void
-SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
+SettingsDialog::changePage( QAction *action )
 {
-    if ( !current )
-        current = previous;
-
-    ui->stackedWidget->setCurrentIndex( ui->listWidget->row(current) );
+    int index = m_settingsGroup->actions().indexOf( action );
+    if( ui->stackedWidget->currentIndex() != index )
+    {
+        ui->stackedWidget->setCurrentIndex( index );
+    }
 }
 
 

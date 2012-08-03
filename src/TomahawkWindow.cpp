@@ -104,7 +104,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
 
 #ifdef Q_OS_WIN
-    connect(AudioEngine::instance(),SIGNAL(stateChanged(AudioState,AudioState)),this,SLOT(audioStateChanged(AudioState,AudioState)));
+    connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState) ), SLOT( audioStateChanged( AudioState, AudioState) ) );
 #endif
     ui->setupUi( this );
 
@@ -202,11 +202,7 @@ TomahawkWindow::saveSettings()
 void
 TomahawkWindow::applyPlatformTweaks()
 {
-    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
-    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
-    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
-    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
-        qApp->setStyle( new ProxyStyle() );
+    qApp->setStyle( new ProxyStyle() );
 
 #ifdef Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac( true );
@@ -412,6 +408,7 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( finished(Tomahawk::result_ptr) ), SLOT( audioFinished() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
@@ -600,20 +597,7 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
                 if ( !AudioEngine::instance()->currentTrack().isNull() )
                 {
                     AudioEngine::instance()->currentTrack()->toQuery()->setLoved( !AudioEngine::instance()->currentTrack()->toQuery()->loved() );
-                    if ( AudioEngine::instance()->currentTrack()->toQuery()->loved())
-                    {
-                        QPixmap loved( RESPATH "images/loved.png" );
-                        m_thumbButtons[TP_LOVE].hIcon = loved.toWinHICON();
-                        m_thumbButtons[TP_LOVE].szTip[ tr( "Unlove" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
-
-                    }
-                    else
-                    {
-                        QPixmap not_loved( RESPATH "images/not-loved.png" );
-                        m_thumbButtons[TP_LOVE].hIcon = not_loved.toWinHICON();
-                        m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
-                    }
-                    m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+                    updateWindowsLoveButton();
                 }
                 break;
             }
@@ -642,20 +626,8 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
             QPixmap pause( RESPATH "images/pause-rest.png" );
             m_thumbButtons[TP_PLAY_PAUSE].hIcon = pause.toWinHICON();
             m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Pause" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
+            updateWindowsLoveButton();
 
-            if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
-            {
-                QPixmap loved( RESPATH "images/loved.png" );
-                m_thumbButtons[TP_LOVE].hIcon = loved.toWinHICON();
-                m_thumbButtons[TP_LOVE].szTip[ tr( "Unlove" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
-            }
-            else
-            {
-                QPixmap not_loved( RESPATH "images/not-loved.png" );
-                m_thumbButtons[TP_LOVE].hIcon = not_loved.toWinHICON();
-                m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
-            }
-            m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
         }
         break;
 
@@ -669,6 +641,10 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 
         case AudioEngine::Stopped:
         {
+            if ( !AudioEngine::instance()->currentTrack().isNull() )
+            {
+                disconnect(AudioEngine::instance()->currentTrack()->toQuery().data(),SIGNAL(socialActionsLoaded()),this,SLOT(updateWindowsLoveButton()));
+            }
             QPixmap play( RESPATH "images/play-rest.png" );
             m_thumbButtons[TP_PLAY_PAUSE].hIcon = play.toWinHICON();
             m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Play" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
@@ -685,6 +661,26 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 }
+
+void
+TomahawkWindow::updateWindowsLoveButton()
+{
+    if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
+    {
+        QPixmap loved( RESPATH "images/loved.png" );
+        m_thumbButtons[TP_LOVE].hIcon = loved.toWinHICON();
+        m_thumbButtons[TP_LOVE].szTip[ tr( "Unlove" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
+    }
+    else
+    {
+        QPixmap not_loved( RESPATH "images/not-loved.png" );
+        m_thumbButtons[TP_LOVE].hIcon = not_loved.toWinHICON();
+        m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
+    }
+    m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
+    m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+}
+
 #endif
 
 
@@ -1034,6 +1030,18 @@ TomahawkWindow::audioStarted()
 
     ui->actionPlay->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
+
+#ifdef Q_OS_WIN
+    connect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
+#endif
+}
+
+void
+TomahawkWindow::audioFinished()
+{
+#ifdef Q_OS_WIN
+    disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
+#endif
 }
 
 

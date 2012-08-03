@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
- * 
+ *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -23,6 +23,7 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Closure.h"
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QQueue>
 #include <QVariant>
@@ -55,10 +56,17 @@ public:
     bool sync() const;
     void setSync( bool sync );
     bool subscribed() const;
+    // actually change the subscribed value in spotify
     void setSubscribed( bool subscribed );
+    // Just set the subscribed flag
+    void setSubscribedStatus( bool subscribed );
     bool canSubscribe() const;
     void setCanSubscribe( bool canSub );
     QString spotifyId() const { return m_spotifyId; }
+
+    virtual bool hasCustomDeleter() const { return true; }
+    virtual Tomahawk::PlaylistDeleteQuestions deleteQuestions() const;
+    virtual void setQuestionResults( const QMap< int, bool > results );
 
     void remove( bool askToDeletePlaylist = true );
 public slots:
@@ -73,15 +81,13 @@ public slots:
     void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
     void tomahawkPlaylistRenamed( const QString&, const QString& );
 
-    void aboutToDelete();
-    
 private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void onTracksMovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
-    void checkDeleteDialog() const;
+    void unsyncOrDelete( bool toDelete );
 
     void playlistRevisionLoaded();
 private:

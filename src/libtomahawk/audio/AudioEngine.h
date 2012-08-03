@@ -86,11 +86,11 @@ public slots:
     void seek( qint64 ms );
     void seek( int ms ); // for compatibility with seekbar in audiocontrols
     void setVolume( int percentage );
-    void lowerVolume(); 
+    void lowerVolume();
     void raiseVolume();
     void mute();
 
-    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result );
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery = Tomahawk::query_ptr() );
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
     void playItem( const Tomahawk::artist_ptr& artist );
     void playItem( const Tomahawk::album_ptr& album );

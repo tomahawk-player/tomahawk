@@ -459,6 +459,8 @@ GridItemDelegate::onPlaybackFinished()
     foreach ( ImageButton* button, m_pauseButton )
         button->deleteLater();
     m_pauseButton.clear();
+
+    emit stoppedPlaying( QModelIndex() );
 }
 
 
@@ -501,6 +503,8 @@ GridItemDelegate::onPlaylistChanged( const QPersistentModelIndex& index )
                 m_spinner[ index ]->deleteLater();
                 m_spinner.remove( index );
             }
+
+            emit stoppedPlaying( index );
         }
     }
 }
@@ -532,6 +536,8 @@ GridItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
     connect( button, SIGNAL( clicked( bool ) ), AudioEngine::instance(), SLOT( playPause() ) );
 
     m_pauseButton[ index ] = button;
+
+    emit startedPlaying( index );
 }
 
 

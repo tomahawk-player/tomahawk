@@ -148,6 +148,8 @@
         <file>data/images/jump-link.png</file>
         <file>data/images/scrollbar-vertical-handle.png</file>
         <file>data/images/scrollbar-horizontal-handle.png</file>
+        <file>data/images/subscribe-on.png</file>
+        <file>data/images/subscribe-off.png</file>
         <file>data/qml/ArtistInfoScene.qml</file>
         <file>data/qml/StationScene.qml</file>
         <file>data/qml/CoverImage.qml</file>

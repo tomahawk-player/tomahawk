@@ -29,11 +29,11 @@
 
 #include <QObject>
 
-class MetaPlaylistInterface : public Tomahawk::PlaylistInterface
+class MetaArtistInfoInterface : public Tomahawk::PlaylistInterface
 {
     Q_OBJECT
 public:
-    explicit MetaPlaylistInterface( ArtistInfoWidget* w )
+    explicit MetaArtistInfoInterface( ArtistInfoWidget* w )
         : PlaylistInterface()
         , m_w( w )
     {
@@ -51,7 +51,7 @@ public:
         connect( m_w->ui->topHits->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SLOT( anyShuffleChanged( bool ) ) );
     }
-    virtual ~MetaPlaylistInterface() {}
+    virtual ~MetaArtistInfoInterface() {}
 
 
     // Any one is fine, we keep them all synched
@@ -70,7 +70,9 @@ public:
     {
         return ( m_w->ui->albums->playlistInterface() == other ) ||
                ( m_w->ui->relatedArtists->playlistInterface() == other ) ||
-               ( m_w->ui->topHits->playlistInterface() == other );
+               ( m_w->ui->topHits->playlistInterface() == other ) ||
+               ( m_w->ui->albums->playlistInterface()->hasChildInterface( other ) ) ||
+               ( m_w->ui->relatedArtists->playlistInterface()->hasChildInterface( other ) );
     }
 
 public slots:

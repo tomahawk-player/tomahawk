@@ -42,6 +42,7 @@
 #include "jobview/ErrorStatusMessage.h"
 
 #include "utils/Logger.h"
+#include "SingleTrackPlaylistInterface.h"
 
 using namespace Tomahawk;
 
@@ -574,7 +575,7 @@ AudioEngine::loadNextTrack()
 
 
 void
-AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
@@ -582,7 +583,11 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist;
+
+    if ( playlist.isNull() && !fromQuery.isNull() )
+        m_currentTrackPlaylist = playlistinterface_ptr( new SingleTrackPlaylistInterface( fromQuery ) );
+    else
+        m_currentTrackPlaylist = playlist;
 
     if ( !result.isNull() )
     {
@@ -606,7 +611,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     {
         if ( query->numResults() && query->results().first()->isOnline() )
         {
-            playItem( playlist, query->results().first() );
+            playItem( playlist, query->results().first(), query );
             return;
         }
 

@@ -48,7 +48,7 @@ namespace Ui
     class ArtistInfoWidget;
 }
 
-class MetaPlaylistInterface;
+class MetaArtistInfoInterface;
 
 class DLLEXPORT ArtistInfoWidget : public QDeclarativeView, public Tomahawk::ViewPage
 {
@@ -115,7 +115,7 @@ private:
     QString m_longDescription;
     QPixmap m_pixmap;
 
-    friend class MetaPlaylistInterface;
+    friend class ::MetaArtistInfoInterface;
 };
 
 #endif // ARTISTINFOWIDGET_H

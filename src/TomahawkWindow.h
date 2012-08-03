@@ -121,6 +121,7 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
     void audioStarted();
+    void audioFinished();
     void audioPaused();
     void audioStopped();
 
@@ -144,6 +145,7 @@ private slots:
 
 #ifdef Q_OS_WIN
     void audioStateChanged( AudioState newState, AudioState oldState );
+    void updateWindowsLoveButton();
 #endif
 
 private:

@@ -55,7 +55,7 @@ TransferStatusItem::mainText() const
         return QString( "%1" ).arg( QString( "%1 - %2" ).arg( m_stream.data()->track()->artist()->name() ).arg( m_stream.data()->track()->track() ) );
     else if ( !m_stream.data()->source().isNull() && !m_stream.data()->track().isNull() )
         return QString( "%1 %2 %3" ).arg( QString( "%1 - %2" ).arg( m_stream.data()->track()->artist()->name() ).arg( m_stream.data()->track()->track() ) )
-                                .arg( m_stream.data()->type() == StreamConnection::RECEIVING ? tr( "from" ) : tr( "to" ) )
+                                .arg( m_stream.data()->type() == StreamConnection::RECEIVING ? tr( "from", "streaming artist - track from friend" ) : tr( "to", "streaming artist - track to friend" ) )
                                 .arg( m_stream.data()->source()->friendlyName() );
     else
         return QString();
