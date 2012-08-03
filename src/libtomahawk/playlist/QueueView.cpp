@@ -42,7 +42,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
     setContentsMargins( 0, 0, 0, 0 );
 
     QFont f;
-    f.setPointSize( 9 );
+    f.setPointSize( 10 );
     QFontMetrics fm( f );
     setHiddenSize( QSize( 0,  fm.height() * 1.2 ) );
 

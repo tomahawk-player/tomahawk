@@ -91,9 +91,9 @@ ContextWidget::ContextWidget( QWidget* parent )
     ui->toggleButton->setFont( boldFont );
     QFontMetrics fm( boldFont );
 
-    m_minHeight = fm.height() * 1.1;
+    m_minHeight = fm.height() * 1.2;
 
-    ui->toggleButton->setMinimumHeight( fm.height() );
+    ui->toggleButton->setMinimumHeight( fm.height() * 1.2 );
 
     setAutoFillBackground( true );
     setFixedHeight( m_minHeight );

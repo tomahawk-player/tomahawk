@@ -41,7 +41,7 @@ HeaderLabel::HeaderLabel( QWidget* parent )
     QFontMetrics fm( f );
 
     setFont( f );
-    setFixedHeight( fm.height() * 1.2 );
+    setFixedHeight( fm.height() * 1.4 );
     setMouseTracking( true );
 }
 
