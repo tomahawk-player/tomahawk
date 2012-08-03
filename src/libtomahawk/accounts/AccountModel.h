@@ -100,6 +100,7 @@ signals:
     void errorInstalling( const QPersistentModelIndex& idx );
 
 private slots:
+    void atticaLoaded();
     void loadData();
 
     void accountAdded( Tomahawk::Accounts::Account* );
@@ -112,6 +113,7 @@ private slots:
 private:
     QModelIndex indexForAtticaId( const QString& resolverId ) const;
 
+    bool m_waitingForAtticaLoaded;
     QList< AccountModelNode* > m_accounts;
     QSet< QString > m_waitingForAtticaInstall;
 };
