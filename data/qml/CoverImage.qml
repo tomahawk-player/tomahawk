@@ -7,6 +7,8 @@ Item {
     property bool showLabels: true
     // Should the play button be painted on mouse hover?
     property bool showPlayButton: false
+    // Should the mirror be painted?
+    property bool showMirror: false
 
     // Labels & Cover
     property string artistName
@@ -95,7 +97,7 @@ Item {
 
     Loader {
         id: mirroredCover
-        sourceComponent: coverImage
+        sourceComponent: parent.showMirror ? coverImage : undefined
         anchors.fill: parent
         transform : [
             Rotation {

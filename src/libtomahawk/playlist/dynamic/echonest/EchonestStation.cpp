@@ -15,7 +15,7 @@ EchonestStation::EchonestStation( PlayableProxyModel *model, dynplaylist_ptr pla
     , m_model( model )
     , m_playlist( playlist )
 {
-
+    connect(m_playlist->generator().data(), SIGNAL(controlAdded(const dyncontrol_ptr&)), SLOT(controlsChanged()));
 }
 
 QString EchonestStation::name() const
@@ -69,14 +69,18 @@ void EchonestStation::playItem(int row)
     }
 }
 
-void EchonestStation::setMainControl(const QString &type)
+void EchonestStation::setMainControl( StationType type, const QString &value )
 {
-    dyncontrol_ptr control = m_playlist->generator()->createControl("echonest");
-    control->setSelectedType("Style");
-    control->setMatch("1");
-    control->setInput(type);
+    dyncontrol_ptr control = m_playlist->generator()->createControl( "echonest" );
+    if ( type == StationTypeStyle ) {
+        control->setSelectedType( "Style" );
+    } else if ( type == StationTypeArtist ) {
+        control->setSelectedType( "Artist" );
+    }
+    control->setMatch( "1" );
+    control->setInput( value );
     qDebug() << "created control" << control->type() << control->selectedType() << control->match();
-    m_playlist->generator()->generate(20);
+    m_playlist->generator()->generate( 20 );
 
     emit configurationChanged();
 }
@@ -114,6 +118,11 @@ dyncontrol_ptr EchonestStation::findControl(const QString &selectedType, const Q
         }
     }
     return dyncontrol_ptr();
+}
+
+void EchonestStation::controlsChanged()
+{
+    Q_ASSERT(false);
 }
 
 }
