@@ -95,13 +95,6 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuNetwork">
-    <property name="title">
-     <string>&amp;Network</string>
-    </property>
-    <addaction name="actionToggleConnect"/>
-    <addaction name="separator"/>
-   </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
      <string>&amp;Window</string>
@@ -118,7 +111,6 @@
     <addaction name="actionLegalInfo"/>
    </widget>
    <addaction name="menuApp"/>
-   <addaction name="menuNetwork"/>
    <addaction name="menuSettings"/>
    <addaction name="menuWindow"/>
    <addaction name="menu_Help"/>

@@ -35,6 +35,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QToolBar>
+#include <QToolButton>
 
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
@@ -116,6 +117,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
+    setupAccountsMenu();
     setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
@@ -235,9 +237,9 @@ TomahawkWindow::setupToolBar()
     m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAction->setToolTip( tr( "Go forward one page" ) );
 
-    QWidget* spacer = new QWidget( this );
-    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    toolbar->addWidget( spacer );
+    QWidget* leftSpacer = new QWidget( this );
+    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( leftSpacer );
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
@@ -246,6 +248,20 @@ TomahawkWindow::setupToolBar()
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
     toolbar->addWidget( m_searchWidget );
+
+    QWidget* rightSpacer = new QWidget( this );
+    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( rightSpacer );
+
+    QToolButton *accountsMenuButton = new QToolButton( toolbar );
+    accountsMenuButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
+    accountsMenuButton->setText( tr( "&Network" ) );
+    accountsMenuButton->setMenu( m_menuAccounts );
+    //TODO: when we decide if compressed menus go left or right, if they go right, make
+    //      them pop up *inside* the main window.
+    accountsMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    accountsMenuButton->setPopupMode( QToolButton::InstantPopup );
+    toolbar->addWidget( accountsMenuButton );
 }
 
 
@@ -418,7 +434,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ui->actionLegalInfo, SIGNAL( triggered() ), SLOT( legalInfo() ) );
-    connect( ui->actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
+    connect( m_actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
     connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -458,6 +474,16 @@ TomahawkWindow::setupSignals()
 
     connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
+}
+
+void
+TomahawkWindow::setupAccountsMenu()
+{
+    m_menuAccounts = new QMenu( this );
+    m_actionToggleConnect = new QAction( tr( "Go &Online" ),
+                                         m_menuAccounts );
+    m_menuAccounts->addAction( m_actionToggleConnect );
+    m_menuAccounts->addSeparator();
 }
 
 
@@ -771,18 +797,18 @@ TomahawkWindow::addPeerManually()
 void
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
-    ui->menuNetwork->addMenu( menu );
+    m_menuAccounts->addMenu( menu );
 }
 
 
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach ( QAction* action, ui->menuNetwork->actions() )
+    foreach ( QAction* action, m_menuAccounts->actions() )
     {
         if ( action->menu() == menu )
         {
-            ui->menuNetwork->removeAction( action );
+            m_menuAccounts->removeAction( action );
             return;
         }
     }
@@ -1074,14 +1100,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onAccountConnected()
 {
-    ui->actionToggleConnect->setText( tr( "Go &offline" ) );
+    m_actionToggleConnect->setText( tr( "Go &offline" ) );
 }
 
 
 void
 TomahawkWindow::onAccountDisconnected()
 {
-    ui->actionToggleConnect->setText( tr( "Go &online" ) );
+    m_actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
 

@@ -154,6 +154,7 @@ private:
 
     void applyPlatformTweaks();
     void setupSignals();
+    void setupAccountsMenu(); //must be called before setupToolBar
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
@@ -176,6 +177,10 @@ private:
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusSortModel* m_jobsModel;
+
+    // Menus and menu actions: Accounts menu
+    QMenu   *m_menuAccounts;
+    QAction *m_actionToggleConnect;
 
     QAction* m_backAction;
     QAction* m_forwardAction;
