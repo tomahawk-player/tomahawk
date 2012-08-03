@@ -195,6 +195,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     }
     ui->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
 
+    int buttonsWidth = qMax( ui->proxyButton->sizeHint().width(),
+                             ui->aclEntryClearButton->sizeHint().width() );
+    ui->proxyButton->setFixedWidth( buttonsWidth );
+    ui->aclEntryClearButton->setFixedWidth( buttonsWidth );
+
+
     // NOW PLAYING
 // #ifdef Q_WS_MAC
 //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
