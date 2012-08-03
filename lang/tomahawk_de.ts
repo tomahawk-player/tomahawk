@@ -374,12 +374,12 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
         <translation>Footnotes einblenden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
         <translation>Footnotes ausblenden</translation>
     </message>
@@ -514,7 +514,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Infoleiste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="90"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="103"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
     </message>
@@ -906,12 +906,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="157"/>
         <source>played %1 by you</source>
         <translation>angehört %1 von dir</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="156"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="159"/>
         <source>played %1 by %2</source>
         <translation>angehört %1 von %2</translation>
     </message>
@@ -1168,17 +1168,17 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="191"/>
         <source>Open Queue</source>
         <translation>Warteschlange öffnen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="189"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>Warteschlange öffnen - Ein Lied</numerusform><numerusform>Warteschlange öffnen - %n Lieder</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="195"/>
         <source>Close Queue</source>
         <translation>Warteschlange schliessen</translation>
     </message>
@@ -1228,17 +1228,17 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="310"/>
+        <location filename="../src/SettingsDialog.cpp" line="306"/>
         <source>Collection</source>
         <translation>Sammlung</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="319"/>
+        <location filename="../src/SettingsDialog.cpp" line="315"/>
         <source>Advanced</source>
         <translation>Erweitert</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="166"/>
+        <location filename="../src/SettingsDialog.cpp" line="155"/>
         <source>All</source>
         <translation>Alle</translation>
     </message>
@@ -1248,47 +1248,47 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Einige geänderte Einstellungen haben keinen Effekt bis zum nächsten Neustart</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="300"/>
+        <location filename="../src/SettingsDialog.cpp" line="296"/>
         <source>Services</source>
         <translation>Dienste</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="303"/>
+        <location filename="../src/SettingsDialog.cpp" line="299"/>
         <source>&lt;b&gt;Services&lt;/b&gt;&lt;br&gt;Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="313"/>
+        <location filename="../src/SettingsDialog.cpp" line="309"/>
         <source>&lt;b&gt;Collection&lt;/b&gt;&lt;br&gt;Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="322"/>
+        <location filename="../src/SettingsDialog.cpp" line="318"/>
         <source>&lt;b&gt;Advanced&lt;/b&gt;&lt;br&gt;Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="478"/>
+        <location filename="../src/SettingsDialog.cpp" line="474"/>
         <source>Install resolver from file</source>
         <translation>Installiere Resolver Datei</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="525"/>
+        <location filename="../src/SettingsDialog.cpp" line="521"/>
         <source>Delete all Access Control entries?</source>
         <translation>Alle erteilten Zugriffsrechte löschen?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="526"/>
+        <location filename="../src/SettingsDialog.cpp" line="522"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Willst du wirklich alle Zugriffseinstellungen zurücksetzen? Du wirst für alle Verbindungen erneut nach Zugriffseinstellungen gefragt werden.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
@@ -1387,19 +1387,19 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="205"/>
         <source>All available tracks</source>
         <translation>Alle verfügbaren Stücke</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="295"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="336"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="298"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="339"/>
         <source>Show</source>
         <translation>Einblenden</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="297"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="338"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="341"/>
         <source>Hide</source>
         <translation>Verstecken</translation>
     </message>
@@ -1499,68 +1499,68 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="194"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopiere Link</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Lösche %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
         <source>Add to my Playlists</source>
         <translation>Zu meinen Playlisten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Zu meinen Automatischen Playlisten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="210"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Stations</source>
         <translation>Zu meinen Stationen hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="198"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
         <source>&amp;Export Playlist</source>
         <translation>Playlist &amp;exportieren</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="352"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
         <source>playlist</source>
         <translation>Playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="356"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>automatic playlist</source>
         <translation>Automatische Playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="383"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="389"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Möchtest du die %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt; löschen?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="391"/>
         <source>Delete</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="465"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="471"/>
         <source>Save XSPF</source>
         <translation>XSPF speichern</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="466"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="472"/>
         <source>Playlists (*.xspf)</source>
         <translation>Playlisten (*.xspf)</translation>
     </message>
@@ -1770,7 +1770,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>SOCKS Proxy verwenden</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="397"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="422"/>
         <source>Clear All Access Control Entries</source>
         <translation>Alle erteilten Zugriffsrechte löschen</translation>
     </message>
@@ -1795,22 +1795,22 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Statischer Port:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="324"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="346"/>
         <source>Proxy Settings...</source>
         <translation>Proxy-Einstellungen…</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="350"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
         <source>Other Settings</source>
         <translation>Andere Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="394"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Übermittlung von Fehlerberichten nach Tomahawk Absturz</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="359"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="381"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>Erlaube Web Browser mit Tomahawk zu interagieren (empfohlen)</translation>
     </message>
@@ -1869,12 +1869,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="529"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="539"/>
         <source>Manual Install Required</source>
         <translation>Manuelle Installation benötigt</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="532"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="542"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Leider ist die automatische Installation dieses Resolvers nicht auf deinem System möglich.&lt;br/&gt;&lt;br/&gt;Bitte benutze &quot;Installiere Datei&quot; und installiere ihn manuell. Weitere Informationen findest du hier:&lt;br/&gt;&lt;br/&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -3731,7 +3731,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
+        <source>Recently played tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
         <source>No recently created playlists in your network.</source>
         <translation>Es gibt keine kürzlich erstellten Playlisten in deinem Netzwerk.</translation>
     </message>

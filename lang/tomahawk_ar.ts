@@ -374,12 +374,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
         <translation>أظهر الحاشية</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
         <translation>إخفي الحاشية</translation>
     </message>
@@ -487,7 +487,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="73"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>مرشح...</translation>
     </message>
 </context>
 <context>
@@ -514,7 +514,7 @@ connect and stream from you?</source>
         <translation>InfoBar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="90"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="103"/>
         <source>Filter...</source>
         <translation>مرشح...</translation>
     </message>
@@ -554,7 +554,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="90"/>
         <source>Synchronize Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>مزامنة الأغاني المحبوبة</translation>
     </message>
 </context>
 <context>
@@ -632,7 +632,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>أفضل الأغاني المحبوبة</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
@@ -642,17 +642,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>أفضل الأغاني المحبوبة من جميع أصدقائك</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>جميع أغانيك المحبوبة</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>جميع أغاني &quot;%1&quot; المحبوبة</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
@@ -883,35 +883,35 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="26"/>
         <source>InfoBar</source>
-        <translation type="unfinished"/>
+        <translation>InfoBar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="96"/>
         <source>Caption</source>
-        <translation type="unfinished"/>
+        <translation>شرح</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="106"/>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>وصف</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="190"/>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="197"/>
         <location filename="../src/libtomahawk/playlist/PlaylistHeader.ui" line="204"/>
         <source>RadioButton</source>
-        <translation type="unfinished"/>
+        <translation>RadioButton</translation>
     </message>
 </context>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="157"/>
         <source>played %1 by you</source>
         <translation>سمعت %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="156"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="159"/>
         <source>played %1 by %2</source>
         <translation>%2 سمع %1</translation>
     </message>
@@ -1169,17 +1169,17 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="191"/>
         <source>Open Queue</source>
         <translation>إفتح قائمة الإنتظار</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="189"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>إفتح قائمة الإنتظار - %n بند</numerusform><numerusform>إفتح قائمة الإنتظار - بند %n</numerusform><numerusform>إفتح قائمة الإنتظار - بندين %n</numerusform><numerusform>إفتح قائمة الإنتظار - %n بنود</numerusform><numerusform>إفتح قائمة الإنتظار - %n بنود</numerusform><numerusform>إفتح قائمة الإنتظار - %n بنود</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="195"/>
         <source>Close Queue</source>
         <translation>أغلق قائمة الإنتظار</translation>
     </message>
@@ -1229,67 +1229,67 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="310"/>
+        <location filename="../src/SettingsDialog.cpp" line="306"/>
         <source>Collection</source>
         <translation>مجموعة</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="319"/>
+        <location filename="../src/SettingsDialog.cpp" line="315"/>
         <source>Advanced</source>
         <translation>متقدمة</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="166"/>
+        <location filename="../src/SettingsDialog.cpp" line="155"/>
         <source>All</source>
         <translation>الكل</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="90"/>
         <source>Tomahawk Settings</source>
-        <translation type="unfinished"/>
+        <translation>إعدادات توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>بعض الإعدادات التي تم تغييرها لن تصبح نافذة المفعول حتى يتم إعادة تشغيل توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="300"/>
+        <location filename="../src/SettingsDialog.cpp" line="296"/>
         <source>Services</source>
         <translation>خدمات</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="303"/>
+        <location filename="../src/SettingsDialog.cpp" line="299"/>
         <source>&lt;b&gt;Services&lt;/b&gt;&lt;br&gt;Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;الخدمات&lt;/b&gt;&lt;br&gt;تكوين الحسابات والخدمات التي يستخدمها توماهوك للبحث واسترجاع الموسيقى والعثور على أصدقائك وتحديث حالتك.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="313"/>
+        <location filename="../src/SettingsDialog.cpp" line="309"/>
         <source>&lt;b&gt;Collection&lt;/b&gt;&lt;br&gt;Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;مجموعة&lt;/b&gt;&lt;br&gt;إدارة كيفية توماهوك يجد الموسيقى على جهاز الكمبيوتر الخاص بك.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="322"/>
+        <location filename="../src/SettingsDialog.cpp" line="318"/>
         <source>&lt;b&gt;Advanced&lt;/b&gt;&lt;br&gt;Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;تكوينات متقدمة&lt;/b&gt;&lt;br&gt;تكوين إعدادات توماهوك المتقدمة، بما في ذلك إعدادات شبكة الاتصال، وتفاعل المتصفح وما إلى ذلك.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="478"/>
+        <location filename="../src/SettingsDialog.cpp" line="474"/>
         <source>Install resolver from file</source>
         <translation>تثبيت محلل من ملف</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="525"/>
+        <location filename="../src/SettingsDialog.cpp" line="521"/>
         <source>Delete all Access Control entries?</source>
         <translation>حذف كافة بيانات التحكم بالوصول؟</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="526"/>
+        <location filename="../src/SettingsDialog.cpp" line="522"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>هل فعلا تريد حذف جميع بيانات التحكم بالوصول؟ سوف يطلب منك اتخاذ القرار مجددا لكل ند على اتصال به.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Information</source>
         <translation>معلومات</translation>
     </message>
@@ -1388,19 +1388,19 @@ connect and stream from you?</source>
         <translation>توب ١٠</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="205"/>
         <source>All available tracks</source>
         <translation>جميع الأغاني المتاحة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="295"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="336"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="298"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="339"/>
         <source>Show</source>
         <translation>أظهر</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="297"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="338"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="341"/>
         <source>Hide</source>
         <translation>إخفي</translation>
     </message>
@@ -1500,68 +1500,68 @@ connect and stream from you?</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="194"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;نسخ الرابط</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;أحذف  %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
         <source>Add to my Playlists</source>
         <translation>أضف إلى لوائحي للأغاني</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
         <source>Add to my Automatic Playlists</source>
         <translation>أضف إلى لوائحي الأوتوماتيكية للأغاني</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="210"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Stations</source>
         <translation>أضف إلى إذاعاتي</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="198"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;تصدير قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="352"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
         <source>playlist</source>
         <translation>قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="356"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>automatic playlist</source>
         <translation>قائمة أغاني أوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>station</source>
         <translation>إذاعة</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="383"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="389"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>هل ترغب في حذف %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;؟</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="391"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>احذف</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="465"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="471"/>
         <source>Save XSPF</source>
         <translation>حفظ XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="466"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="472"/>
         <source>Playlists (*.xspf)</source>
         <translation>قوائم أغاني (*.xspf)</translation>
     </message>
@@ -1697,7 +1697,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="285"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>حذف قوائم الأغاني المرتبطة بسبوتيفي (Spotify)؟</translation>
     </message>
 </context>
 <context>
@@ -1773,7 +1773,7 @@ connect and stream from you?</source>
         <translation>استخدم سوكس الوكيل</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="397"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="422"/>
         <source>Clear All Access Control Entries</source>
         <translation>حذف كافة بيانات التحكم بالوصول</translation>
     </message>
@@ -1798,22 +1798,22 @@ connect and stream from you?</source>
         <translation>بوابة ثابتة:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="324"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="346"/>
         <source>Proxy Settings...</source>
         <translation>إعدادات الوسيط...</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="350"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
         <source>Other Settings</source>
         <translation>إعدادات أخرى</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="394"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>أرسل تقارير بعد فشل توماهوك</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="359"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="381"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>السماح لمحرك البحث بالتفاعل مع توماهوك (موصى به)</translation>
     </message>
@@ -1872,12 +1872,12 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="529"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="539"/>
         <source>Manual Install Required</source>
         <translation>مطلوب تثبيت يدوي</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="532"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="542"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>لسوء الحظ، التثبيت التلقائي لهذا المحلل لم يتوفر بعد على منصتك. &lt;br /&gt;&lt;br /&gt; الرجاء إستخدام &quot; التثبيت من الملف&quot; أعلاه، بواسطة جلبه من توزيعتك أو تجميعه بنفسك. ويمكن الاطلاع على مزيد من التعليمات هنا: &lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -1986,12 +1986,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
         <source>Synchronizing...</source>
-        <translation type="unfinished"/>
+        <translation>مزامنة...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="411"/>
         <source>Synchronization Finished</source>
-        <translation type="unfinished"/>
+        <translation>المزامنة إنتهت</translation>
     </message>
 </context>
 <context>
@@ -2009,22 +2009,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="487"/>
         <source>Create local copy</source>
-        <translation type="unfinished"/>
+        <translation>إنشاء نسخة محلية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="503"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>الاشتراك في تغييرات قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="507"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>إعادة تمكين الإشتراك في تغييرات قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="511"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>توقيف الإشتراك في التغييرات</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="489"/>
@@ -2066,7 +2066,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="70"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
-        <translation>إسمع موسيقى و زامن قوائم تشغيلك مع سبوتيفي بريميوم (Spotify Premium)</translation>
+        <translation>إسمع موسيقى و زامن قوائم أغانيك مع سبوتيفي بريميوم (Spotify Premium)</translation>
     </message>
 </context>
 <context>
@@ -2916,7 +2916,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>بعض الأغاني في قائمة التشغيل لا تحتوي على إسم الفنان أو إسم الأغنية. هذه الأغاني سوف تتجاهل.</translation>
+        <translation>بعض الأغاني في قائمة الأغاني لا تحتوي على إسم الفنان أو إسم الأغنية. هذه الأغاني سوف تتجاهل.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
@@ -2949,12 +2949,12 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Playlist.cpp" line="344"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>هل ترغب في حذف قائمة الأغاني &lt;b&gt;&quot;%2&quot;&lt;/b&gt;؟</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Playlist.cpp" line="346"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>احذف</translation>
     </message>
 </context>
 <context>
@@ -3567,13 +3567,13 @@ enter the displayed PIN number here:</source>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
-        <translation type="unfinished"/>
+        <translation>من</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
-        <translation type="unfinished"/>
+        <translation>إلى</translation>
     </message>
 </context>
 <context>
@@ -3720,7 +3720,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>نعتذر، لم نستطيع إيجاد أغاني مسموعة مؤخرا!</translation>
     </message>
 </context>
 <context>
@@ -3741,7 +3741,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
+        <source>Recently played tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
         <source>No recently created playlists in your network.</source>
         <translation>لا قوائم أغاني جديدة أنشئت مؤخرا على شبكتك.</translation>
     </message>

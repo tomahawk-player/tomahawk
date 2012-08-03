@@ -373,12 +373,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="344"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
         <translation>Rodyti išnašas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="338"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
         <translation>Slėpti išnašas</translation>
     </message>
@@ -513,7 +513,7 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="90"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="103"/>
         <source>Filter...</source>
         <translation>Filtruoti...</translation>
     </message>
@@ -905,12 +905,12 @@ connect and stream from you?</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="157"/>
         <source>played %1 by you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="156"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="159"/>
         <source>played %1 by %2</source>
         <translation type="unfinished"/>
     </message>
@@ -1166,17 +1166,17 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="191"/>
         <source>Open Queue</source>
         <translation>Atverti eilę</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="189"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>Atverti eilę - %n elementas</numerusform><numerusform>Atverti eilę - %n elementai</numerusform><numerusform>Atverti eilę - %n elementų</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="195"/>
         <source>Close Queue</source>
         <translation>Užverti eilę</translation>
     </message>
@@ -1226,17 +1226,17 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="310"/>
+        <location filename="../src/SettingsDialog.cpp" line="306"/>
         <source>Collection</source>
         <translation>Kolekcija</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="319"/>
+        <location filename="../src/SettingsDialog.cpp" line="315"/>
         <source>Advanced</source>
         <translation>Išplėstinės</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="166"/>
+        <location filename="../src/SettingsDialog.cpp" line="155"/>
         <source>All</source>
         <translation>Visi</translation>
     </message>
@@ -1246,47 +1246,47 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="300"/>
+        <location filename="../src/SettingsDialog.cpp" line="296"/>
         <source>Services</source>
         <translation>Paslaugos</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="303"/>
+        <location filename="../src/SettingsDialog.cpp" line="299"/>
         <source>&lt;b&gt;Services&lt;/b&gt;&lt;br&gt;Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="313"/>
+        <location filename="../src/SettingsDialog.cpp" line="309"/>
         <source>&lt;b&gt;Collection&lt;/b&gt;&lt;br&gt;Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="322"/>
+        <location filename="../src/SettingsDialog.cpp" line="318"/>
         <source>&lt;b&gt;Advanced&lt;/b&gt;&lt;br&gt;Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="478"/>
+        <location filename="../src/SettingsDialog.cpp" line="474"/>
         <source>Install resolver from file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="525"/>
+        <location filename="../src/SettingsDialog.cpp" line="521"/>
         <source>Delete all Access Control entries?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="526"/>
+        <location filename="../src/SettingsDialog.cpp" line="522"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="254"/>
+        <location filename="../src/SettingsDialog.cpp" line="250"/>
         <source>Information</source>
         <translation>Informacija</translation>
     </message>
@@ -1385,19 +1385,19 @@ connect and stream from you?</source>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="205"/>
         <source>All available tracks</source>
         <translation>Visi prieinami takeliai</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="295"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="336"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="298"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="339"/>
         <source>Show</source>
         <translation>Rodyti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="297"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="338"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="341"/>
         <source>Hide</source>
         <translation>Slėpti</translation>
     </message>
@@ -1497,68 +1497,68 @@ connect and stream from you?</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="194"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopijuoti nuorodą</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>&amp;Delete %1</source>
         <translation>Paša&amp;linti %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
         <source>Add to my Playlists</source>
         <translation>Pridėti prie mano grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Pridėti prie mano automatinių grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="210"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Stations</source>
         <translation>Pridėti prie mano stočių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="198"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
         <source>&amp;Export Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="352"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
         <source>playlist</source>
         <translation>grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="356"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>automatic playlist</source>
         <translation>automatinis grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>station</source>
         <translation>stotis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="383"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="389"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Ar norite pašalinti %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="391"/>
         <source>Delete</source>
         <translation>Pašalinti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="465"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="471"/>
         <source>Save XSPF</source>
         <translation>Išsaugoti XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="466"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="472"/>
         <source>Playlists (*.xspf)</source>
         <translation>Grojaraščiai (*.xspf)</translation>
     </message>
@@ -1768,7 +1768,7 @@ connect and stream from you?</source>
         <translation>Naudoti SOCKS Proxy</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="397"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="422"/>
         <source>Clear All Access Control Entries</source>
         <translation type="unfinished"/>
     </message>
@@ -1793,22 +1793,22 @@ connect and stream from you?</source>
         <translation>Statinis prievadas:</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="324"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="346"/>
         <source>Proxy Settings...</source>
         <translation>Proxy nuostatos...</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="350"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
         <source>Other Settings</source>
         <translation>Kitos nuostatos</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="372"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="394"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Siųsti ataskaitas apie Tomahawk strigtis</translation>
     </message>
     <message>
-        <location filename="../src/StackedSettingsDialog.ui" line="359"/>
+        <location filename="../src/StackedSettingsDialog.ui" line="381"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>Leisti žiniatinklio naršyklėms sąveikauti su Tomahawk (rekomenduojama)</translation>
     </message>
@@ -1867,12 +1867,12 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="529"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="539"/>
         <source>Manual Install Required</source>
         <translation>Reikalingas rankinis įdiegimas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="532"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="542"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation type="unfinished"/>
     </message>
@@ -3723,7 +3723,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Neseniai groti takeliai</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="209"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
+        <source>Recently played tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
         <source>No recently created playlists in your network.</source>
         <translation>Jūsų tinkle nėra neseniai sukurtų grojaraščių.</translation>
     </message>
