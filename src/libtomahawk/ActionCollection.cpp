@@ -71,10 +71,10 @@ ActionCollection::initActions()
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
     m_actionCollection[ "loadPlaylist" ] =   new QAction( tr( "&Load Playlist" ), this );
-    m_actionCollection[ "loadPlaylist" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
     m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
+    m_actionCollection[ "playPause" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
     m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
     m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
@@ -97,10 +97,15 @@ ActionCollection::initActions()
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
     m_actionCollection[ "preferences" ] =        new QAction( tr( "&Configure Tomahawk..." ), this );
     m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
+#ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] =           new QAction( tr( "Minimize" ), this );
     m_actionCollection[ "minimize" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
     m_actionCollection[ "zoom" ] =               new QAction( tr( "Zoom" ), this );
     m_actionCollection[ "zoom" ]->setShortcut( QKeySequence( "Meta+Ctrl+Z" ) );
+#else
+    m_actionCollection[ "toggleMenuBar" ] =     new QAction( tr( "Hide Menu Bar" ), this );
+    m_actionCollection[ "toggleMenuBar" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
+#endif
     m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "aboutTomahawk" ] =      new QAction( tr( "About &Tomahawk..." ), this );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
@@ -132,11 +137,10 @@ ActionCollection::createMenuBar( QWidget *parent )
     controlsMenu->addAction( m_actionCollection[ "quit" ] );
 
     QMenu *settingsMenu = new QMenu( tr( "&Settings" ), menuBar );
+#ifndef Q_OS_MAC
+    settingsMenu->addAction( m_actionCollection[ "toggleMenuBar" ] );
+#endif
     settingsMenu->addAction( m_actionCollection[ "preferences" ] );
-
-    QMenu *windowMenu = new QMenu( tr( "&Window" ), menuBar );
-    windowMenu->addAction( m_actionCollection[ "minimize" ] );
-    windowMenu->addAction( m_actionCollection[ "zoom" ] );
 
     QMenu *helpMenu = new QMenu( tr( "&Help" ), menuBar );
     helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
@@ -163,6 +167,10 @@ ActionCollection::createMenuBar( QWidget *parent )
     menuBar->addMenu( controlsMenu );
     menuBar->addMenu( settingsMenu );
 #if defined( Q_OS_MAC )
+    QMenu *windowMenu = new QMenu( tr( "&Window" ), menuBar );
+    windowMenu->addAction( m_actionCollection[ "minimize" ] );
+    windowMenu->addAction( m_actionCollection[ "zoom" ] );
+
     menuBar->addMenu( windowMenu );
 #endif
     menuBar->addMenu( helpMenu );
@@ -170,9 +178,55 @@ ActionCollection::createMenuBar( QWidget *parent )
 }
 
 QMenu *
-ActionCollection::createCompressedMenu( QWidget *parent )
+ActionCollection::createCompactMenu( QWidget *parent )
 {
+    QMenu *compactMenu = new QMenu( tr( "Main Menu" ), parent );
 
+    compactMenu->addAction( m_actionCollection[ "playPause" ] );
+    compactMenu->addAction( m_actionCollection[ "previousTrack" ] );
+    compactMenu->addAction( m_actionCollection[ "nextTrack" ] );
+    compactMenu->addSeparator();
+    compactMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
+    compactMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
+    compactMenu->addSeparator();
+    compactMenu->addAction( m_actionCollection[ "loadXSPF" ] );
+    compactMenu->addAction( m_actionCollection[ "updateCollection" ] );
+    compactMenu->addAction( m_actionCollection[ "rescanCollection" ] );
+    compactMenu->addSeparator();
+
+#ifdef Q_OS_MAC // This should never happen anyway
+    compactMenu->addAction( m_actionCollection[ "minimize" ] );
+    compactMenu->addAction( m_actionCollection[ "zoom" ] );
+#else
+    compactMenu->addAction( m_actionCollection[ "toggleMenuBar" ] );
+#endif
+    compactMenu->addAction( m_actionCollection[ "preferences" ] );
+    compactMenu->addSeparator();
+
+    compactMenu->addAction( m_actionCollection[ "diagnostics" ] );
+    compactMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
+    compactMenu->addAction( m_actionCollection[ "legalInfo" ] );
+
+    // Setup update check
+#ifndef Q_OS_MAC
+    compactMenu->insertSeparator( m_actionCollection[ "aboutTomahawk" ] );
+#endif
+
+#if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
+    compactMenu->addAction( m_actionCollection[ "checkForUpdates" ] );
+#elif defined( Q_WS_WIN )
+    compactMenu->addSeparator();
+    compactMenu->addAction( m_actionCollection[ "checkForUpdates" ] );
+#endif
+    if ( qApp->arguments().contains( "--debug" ) )
+    {
+        compactMenu->addSeparator();
+        compactMenu->addAction( m_actionCollection[ "crashNow" ] );
+    }
+    compactMenu->addSeparator();
+    compactMenu->addAction( m_actionCollection[ "quit" ] );
+
+    return compactMenu;
 }
 
 

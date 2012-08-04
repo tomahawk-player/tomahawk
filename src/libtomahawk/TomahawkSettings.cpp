@@ -901,6 +901,24 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+bool
+TomahawkSettings::menuBarVisible() const
+{
+#ifndef Q_OS_MAC
+    return value( "ui/mainwindow/menuBarVisible", true ).toBool();
+#else
+    return true;
+#endif
+}
+
+void
+TomahawkSettings::setMenuBarVisible( bool visible )
+{
+#ifndef Q_OS_MAC
+    setValue( "ui/mainwindow/menuBarVisible", visible );
+#endif
+}
+
 
 bool
 TomahawkSettings::showOfflineSources() const

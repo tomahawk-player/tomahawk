@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -114,7 +115,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
-    setMenuBar( ActionCollection::instance()->createMenuBar( this ) );
+    setupMenuBar();
     setupAccountsMenu();
     setupToolBar();
     setupSideBar();
@@ -186,6 +187,14 @@ TomahawkWindow::loadSettings()
        setWindowOpacity( 1 );
      }
 #endif
+
+#ifndef Q_OS_MAC
+    bool mbVisible = s->menuBarVisible();
+    menuBar()->setVisible( mbVisible );
+    m_compactMenuAction->setVisible( !mbVisible );
+    ActionCollection::instance()->getAction( "toggleMenuBar" )
+            ->setText( mbVisible ? tr( "Hide Menu Bar" ) : tr( "Show Menu Bar" ) );
+#endif
 }
 
 
@@ -196,6 +205,7 @@ TomahawkWindow::saveSettings()
     s->setMainWindowGeometry( saveGeometry() );
     s->setMainWindowState( saveState() );
     s->setMainWindowSplitterState( ui->splitter->saveState() );
+    s->setMenuBarVisible( menuBar()->isVisible() );
 }
 
 
@@ -218,7 +228,7 @@ TomahawkWindow::applyPlatformTweaks()
 void
 TomahawkWindow::setupToolBar()
 {
-    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    QToolBar *toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
@@ -260,6 +270,16 @@ TomahawkWindow::setupToolBar()
     accountsMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
     accountsMenuButton->setPopupMode( QToolButton::InstantPopup );
     toolbar->addWidget( accountsMenuButton );
+
+#ifndef Q_OS_MAC
+    QToolButton *compactMenuButton = new QToolButton( toolbar );
+    compactMenuButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
+    compactMenuButton->setText( tr( "&Main Menu" ) );
+    compactMenuButton->setMenu( m_compactMainMenu );
+    compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    compactMenuButton->setPopupMode( QToolButton::InstantPopup );
+    m_compactMenuAction = toolbar->addWidget( compactMenuButton );
+#endif
 }
 
 
@@ -439,6 +459,8 @@ TomahawkWindow::setupSignals()
 #if defined( Q_OS_MAC )
     connect( ac->getAction( "minimize" ), SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ac->getAction( "zoom" ), SIGNAL( triggered() ), SLOT( maximize() ) );
+#else
+    connect( ac->getAction( "toggleMenuBar" ), SIGNAL( triggered() ), SLOT( toggleMenuBar() ) );
 #endif
 
     // <AccountHandler>
@@ -471,6 +493,16 @@ TomahawkWindow::setupAccountsMenu()
     m_menuAccounts->addSeparator();
 }
 
+void
+TomahawkWindow::setupMenuBar()
+{
+    // Always create a menubar, but only create a compactMenu on Windows and X11
+    m_menuBar = ActionCollection::instance()->createMenuBar( this );
+    setMenuBar( m_menuBar );
+#ifndef Q_OS_MAC
+    m_compactMainMenu = ActionCollection::instance()->createCompactMenu( this );
+#endif
+}
 
 void
 TomahawkWindow::changeEvent( QEvent* e )
@@ -1249,4 +1281,24 @@ void
 TomahawkWindow::crashNow()
 {
     TomahawkUtils::crash();
+}
+
+void
+TomahawkWindow::toggleMenuBar() //SLOT
+{
+#ifndef Q_OS_MAC
+    if( menuBar()->isVisible() )
+    {
+        menuBar()->setVisible( false );
+        ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Show Menu Bar" ) );
+        m_compactMenuAction->setVisible( true );
+    }
+    else
+    {
+        m_compactMenuAction->setVisible( false );
+        ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Hide Menu Bar" ) );
+        menuBar()->setVisible( true );
+    }
+    saveSettings();
+#endif
 }
