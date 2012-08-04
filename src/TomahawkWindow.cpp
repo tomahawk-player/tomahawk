@@ -273,7 +273,7 @@ TomahawkWindow::setupToolBar()
 
 #ifndef Q_OS_MAC
     QToolButton *compactMenuButton = new QToolButton( toolbar );
-    compactMenuButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
+    compactMenuButton->setIcon( QIcon( RESPATH "images/configure.png" ) );
     compactMenuButton->setText( tr( "&Main Menu" ) );
     compactMenuButton->setMenu( m_compactMainMenu );
     compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
