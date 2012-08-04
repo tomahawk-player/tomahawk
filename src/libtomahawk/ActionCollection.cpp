@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Leo Franchi   <lfranchi@kde.org>
+ *   Copyright 2012,      Teo Mrnjavac   <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -69,14 +70,17 @@ ActionCollection::initActions()
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
-    m_actionCollection[ "loadPlaylist" ] = new QAction( tr( "&Load Playlist" ), this );
+    m_actionCollection[ "loadPlaylist" ] =   new QAction( tr( "&Load Playlist" ), this );
+    m_actionCollection[ "loadPlaylist" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
-    m_actionCollection[ "copyPlaylist" ] = new QAction( tr( "&Copy Playlist Link" ), this );
-    m_actionCollection[ "playPause" ] = new QAction( tr( "&Play" ), this );
-    m_actionCollection[ "stop" ] = new QAction( tr( "&Stop" ), this );
-    m_actionCollection[ "previousTrack" ] = new QAction( tr( "&Previous Track" ), this );
-    m_actionCollection[ "nextTrack" ] = new QAction( tr( "&Next Track" ), this );
-    m_actionCollection[ "quit" ] = new QAction( tr( "&Quit" ), this );
+    m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
+    m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
+    m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
+    m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
+    m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
+    m_actionCollection[ "quit" ] =           new QAction( tr( "&Quit" ), this );
+    m_actionCollection[ "quit" ]->setShortcut( QKeySequence::Quit );
+    m_actionCollection[ "quit" ]->setMenuRole( QAction::QuitRole );
 
     // connect actions to AudioEngine
     AudioEngine *ae = AudioEngine::instance();
@@ -84,6 +88,91 @@ ActionCollection::initActions()
     connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),      Qt::UniqueConnection );
     connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),  Qt::UniqueConnection );
     connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
+
+    // main menu actions
+    m_actionCollection[ "loadXSPF" ] =           new QAction( tr( "Load &XSPF..." ), this );
+    m_actionCollection[ "updateCollection" ] =   new QAction( tr( "U&pdate Collection" ), this );
+    m_actionCollection[ "rescanCollection" ] =   new QAction( tr( "Fully &Rescan Collection" ), this );
+    m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Sources" ), this );
+    m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
+    m_actionCollection[ "preferences" ] =        new QAction( tr( "&Configure Tomahawk..." ), this );
+    m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
+    m_actionCollection[ "minimize" ] =           new QAction( tr( "Minimize" ), this );
+    m_actionCollection[ "minimize" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
+    m_actionCollection[ "zoom" ] =               new QAction( tr( "Zoom" ), this );
+    m_actionCollection[ "zoom" ]->setShortcut( QKeySequence( "Meta+Ctrl+Z" ) );
+    m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
+    m_actionCollection[ "aboutTomahawk" ] =      new QAction( tr( "About &Tomahawk..." ), this );
+    m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
+    m_actionCollection[ "legalInfo" ] =          new QAction( tr( "&Legal Information..." ), this );
+#if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE ) || defined( Q_WS_WIN )
+    m_actionCollection[ "checkForUpdates" ] =    new QAction( tr( "Check For Updates..." ), this );
+    m_actionCollection[ "checkForUpdates" ]->setMenuRole( QAction::ApplicationSpecificRole );
+#endif
+    m_actionCollection[ "crashNow" ] =           new QAction( "Crash now...", this );
+}
+
+QMenuBar *
+ActionCollection::createMenuBar( QWidget *parent )
+{
+    QMenuBar *menuBar = new QMenuBar( parent );
+
+    QMenu *controlsMenu = new QMenu( tr( "&Controls" ), menuBar );
+    controlsMenu->addAction( m_actionCollection[ "playPause" ] );
+    controlsMenu->addAction( m_actionCollection[ "previousTrack" ] );
+    controlsMenu->addAction( m_actionCollection[ "nextTrack" ] );
+    controlsMenu->addSeparator();
+    controlsMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
+    controlsMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
+    controlsMenu->addSeparator();
+    controlsMenu->addAction( m_actionCollection[ "loadXSPF" ] );
+    controlsMenu->addAction( m_actionCollection[ "updateCollection" ] );
+    controlsMenu->addAction( m_actionCollection[ "rescanCollection" ] );
+    controlsMenu->addSeparator();
+    controlsMenu->addAction( m_actionCollection[ "quit" ] );
+
+    QMenu *settingsMenu = new QMenu( tr( "&Settings" ), menuBar );
+    settingsMenu->addAction( m_actionCollection[ "preferences" ] );
+
+    QMenu *windowMenu = new QMenu( tr( "&Window" ), menuBar );
+    windowMenu->addAction( m_actionCollection[ "minimize" ] );
+    windowMenu->addAction( m_actionCollection[ "zoom" ] );
+
+    QMenu *helpMenu = new QMenu( tr( "&Help" ), menuBar );
+    helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
+    helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
+    helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
+
+    // Setup update check
+#ifndef Q_OS_MAC
+    helpMenu->insertSeparator( m_actionCollection[ "aboutTomahawk" ] );
+#endif
+
+#if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
+    helpMenu->addAction( m_actionCollection[ "checkForUpdates" ] );
+#elif defined( Q_WS_WIN )
+    helpMenu->addSeparator();
+    helpMenu->addAction( m_actionCollection[ "checkForUpdates" ] );
+#endif
+    if ( qApp->arguments().contains( "--debug" ) )
+    {
+        helpMenu->addSeparator();
+        helpMenu->addAction( m_actionCollection[ "crashNow" ] );
+    }
+
+    menuBar->addMenu( controlsMenu );
+    menuBar->addMenu( settingsMenu );
+#if defined( Q_OS_MAC )
+    menuBar->addMenu( windowMenu );
+#endif
+    menuBar->addMenu( helpMenu );
+    return menuBar;
+}
+
+QMenu *
+ActionCollection::createCompressedMenu( QWidget *parent )
+{
+
 }
 
 

@@ -24,6 +24,7 @@
 #include "DllMacro.h"
 
 #include <QtGui/QAction>
+#include <QtGui/QMenuBar>
 
 class DLLEXPORT ActionCollection : public QObject
 {
@@ -42,6 +43,9 @@ public:
     ~ActionCollection();
 
     void initActions();
+
+    QMenuBar *createMenuBar( QWidget *parent );
+    QMenu *createCompressedMenu( QWidget *parent );
 
     QAction* getAction( const QString& name );
     QList< QAction* > getAction( ActionDestination category );
