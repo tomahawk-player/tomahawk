@@ -107,9 +107,11 @@ ActionCollection::initActions()
     m_actionCollection[ "toggleMenuBar" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
 #endif
     m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
+    m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "aboutTomahawk" ] =      new QAction( tr( "About &Tomahawk..." ), this );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
     m_actionCollection[ "legalInfo" ] =          new QAction( tr( "&Legal Information..." ), this );
+    m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE ) || defined( Q_WS_WIN )
     m_actionCollection[ "checkForUpdates" ] =    new QAction( tr( "Check For Updates..." ), this );
     m_actionCollection[ "checkForUpdates" ]->setMenuRole( QAction::ApplicationSpecificRole );
