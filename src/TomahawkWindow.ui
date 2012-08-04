@@ -61,68 +61,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1000</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>&amp;Settings</string>
-    </property>
-    <addaction name="actionPreferences"/>
-   </widget>
-   <widget class="QMenu" name="menuApp">
-    <property name="title">
-     <string>&amp;Controls</string>
-    </property>
-    <addaction name="actionPlay"/>
-    <addaction name="actionPrevious"/>
-    <addaction name="actionNext"/>
-    <addaction name="separator"/>
-    <addaction name="actionCreatePlaylist"/>
-    <addaction name="actionCreate_New_Station"/>
-    <addaction name="actionLoadXSPF"/>
-    <addaction name="separator"/>
-    <addaction name="actionUpdateCollection"/>
-    <addaction name="actionRescanCollection"/>
-    <addaction name="separator"/>
-    <addaction name="actionShowOfflineSources"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
-   <widget class="QMenu" name="menuNetwork">
-    <property name="title">
-     <string>&amp;Network</string>
-    </property>
-    <addaction name="actionToggleConnect"/>
-    <addaction name="separator"/>
-   </widget>
-   <widget class="QMenu" name="menuWindow">
-    <property name="title">
-     <string>&amp;Window</string>
-    </property>
-    <addaction name="actionMinimize"/>
-    <addaction name="actionZoom"/>
-   </widget>
-   <widget class="QMenu" name="menu_Help">
-    <property name="title">
-     <string>&amp;Help</string>
-    </property>
-    <addaction name="actionDiagnostics"/>
-    <addaction name="actionAboutTomahawk"/>
-    <addaction name="actionLegalInfo"/>
-   </widget>
-   <addaction name="menuApp"/>
-   <addaction name="menuNetwork"/>
-   <addaction name="menuSettings"/>
-   <addaction name="menuWindow"/>
-   <addaction name="menu_Help"/>
-  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">

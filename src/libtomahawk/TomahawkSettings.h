@@ -76,6 +76,9 @@ public:
     bool verboseNotifications() const;
     void setVerboseNotifications( bool notifications );
 
+    bool menuBarVisible() const;
+    void setMenuBarVisible( bool visible );
+
     // Collection Stuff
     bool showOfflineSources() const;
     void setShowOfflineSources( bool show );

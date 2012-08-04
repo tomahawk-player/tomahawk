@@ -24,6 +24,7 @@
 #include "DllMacro.h"
 
 #include <QtGui/QAction>
+#include <QtGui/QMenuBar>
 
 class DLLEXPORT ActionCollection : public QObject
 {
@@ -42,6 +43,19 @@ public:
     ~ActionCollection();
 
     void initActions();
+
+    /**
+     * This method returns a main menu bar, suitable for Windows, Mac and X11.
+     */
+    QMenuBar *createMenuBar( QWidget *parent );
+
+    /**
+     * Returns a QMenu with all the entries that would normally be in the main menu,
+     * arranged in a sensible way. The compressed menu makes absolutely no sense on Mac,
+     * and fairly little sense on Unity and other X11 desktop configurations which pull
+     * out the menu bar from the window.
+     */
+    QMenu *createCompactMenu( QWidget *parent );
 
     QAction* getAction( const QString& name );
     QList< QAction* > getAction( ActionDestination category );

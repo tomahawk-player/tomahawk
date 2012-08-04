@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,6 +36,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QToolBar>
+#include <QToolButton>
 
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
@@ -70,6 +72,7 @@
 #include "libtomahawk/filemetadata/ScanManager.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
+#include "ContainedMenuButton.h"
 
 #ifdef Q_OS_WIN
     #include <qtsparkle/Updater>
@@ -108,14 +111,13 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
     ui->setupUi( this );
 
-    ui->menuApp->insertAction( ui->actionCreatePlaylist, ActionCollection::instance()->getAction( "togglePrivacy" ) );
-    ui->menuApp->insertSeparator( ui->actionCreatePlaylist );
-
     applyPlatformTweaks();
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
+    setupMenuBar();
+    setupAccountsMenu();
     setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
@@ -126,8 +128,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     if ( qApp->arguments().contains( "--debug" ) )
     {
-        ui->menu_Help->addSeparator();
-        ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
+        connect( ActionCollection::instance()->getAction( "crashNow" ), SIGNAL( triggered() ),
+                 this, SLOT( crashNow() ) );
     }
 
     // set initial state
@@ -186,6 +188,14 @@ TomahawkWindow::loadSettings()
        setWindowOpacity( 1 );
      }
 #endif
+
+#ifndef Q_OS_MAC
+    bool mbVisible = s->menuBarVisible();
+    menuBar()->setVisible( mbVisible );
+    m_compactMenuAction->setVisible( !mbVisible );
+    ActionCollection::instance()->getAction( "toggleMenuBar" )
+            ->setText( mbVisible ? tr( "Hide Menu Bar" ) : tr( "Show Menu Bar" ) );
+#endif
 }
 
 
@@ -196,6 +206,7 @@ TomahawkWindow::saveSettings()
     s->setMainWindowGeometry( saveGeometry() );
     s->setMainWindowState( saveState() );
     s->setMainWindowSplitterState( ui->splitter->saveState() );
+    s->setMenuBarVisible( menuBar()->isVisible() );
 }
 
 
@@ -218,7 +229,7 @@ TomahawkWindow::applyPlatformTweaks()
 void
 TomahawkWindow::setupToolBar()
 {
-    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    QToolBar *toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
@@ -235,9 +246,9 @@ TomahawkWindow::setupToolBar()
     m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAction->setToolTip( tr( "Go forward one page" ) );
 
-    QWidget* spacer = new QWidget( this );
-    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    toolbar->addWidget( spacer );
+    QWidget* leftSpacer = new QWidget( this );
+    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( leftSpacer );
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
@@ -246,6 +257,31 @@ TomahawkWindow::setupToolBar()
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
     toolbar->addWidget( m_searchWidget );
+
+    QWidget* rightSpacer = new QWidget( this );
+    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    toolbar->addWidget( rightSpacer );
+
+    ContainedMenuButton *accountsMenuButton = new ContainedMenuButton( toolbar );
+    accountsMenuButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
+    accountsMenuButton->setText( tr( "&Network" ) );
+    accountsMenuButton->setMenu( m_menuAccounts );
+    accountsMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    toolbar->addWidget( accountsMenuButton );
+
+#ifndef Q_OS_MAC
+    ContainedMenuButton *compactMenuButton = new ContainedMenuButton( toolbar );
+    compactMenuButton->setIcon( QIcon( RESPATH "images/configure.png" ) );
+    compactMenuButton->setText( tr( "&Main Menu" ) );
+    compactMenuButton->setMenu( m_compactMainMenu );
+    compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    m_compactMenuAction = toolbar->addWidget( compactMenuButton );
+    //HACK: adding the toggle action to the window, otherwise the shortcut keys
+    //      won't be picked up when the menu is hidden.
+    //      This must be done for all menu bar actions that have shortcut keys :(
+    //      Does not apply to Mac which always shows the menu bar.
+    addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
+#endif
 }
 
 
@@ -295,21 +331,17 @@ TomahawkWindow::setupSideBar()
     ui->splitter->addWidget( ViewManager::instance()->widget() );
     ui->splitter->setCollapsible( 1, false );
 
-    ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
+    ActionCollection::instance()->getAction( "showOfflineSources" )
+            ->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }
 
 
 void
 TomahawkWindow::setupUpdateCheck()
 {
-#ifndef Q_OS_MAC
-    ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
-#endif
-
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
-    checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
-    connect( checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+    connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered( bool ) ),
+             SLOT( checkForUpdates() ) );
 #elif defined( Q_WS_WIN )
     QUrl updaterUrl;
 
@@ -323,9 +355,8 @@ TomahawkWindow::setupUpdateCheck()
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
     updater->SetVersion( TomahawkUtils::appFriendlyVersion() );
 
-    ui->menu_Help->addSeparator();
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
-    connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
+    connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered() ),
+             updater, SLOT( CheckNow() ) );
 #endif
 }
 
@@ -414,30 +445,24 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
     // <Menu Items>
+    ActionCollection *ac = ActionCollection::instance();
     //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
-    connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
-    connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
-    connect( ui->actionLegalInfo, SIGNAL( triggered() ), SLOT( legalInfo() ) );
-    connect( ui->actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
-    connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
-    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
-    connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
-    connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
-    connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
-    connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
-    connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
-    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
-
-    connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
-    connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
-    connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
+    connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
+    connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
+    connect( m_actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
+    connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
+    connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
+    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
+    connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
+    connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
+    connect( ac->getAction( "showOfflineSources" ), SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
 
 #if defined( Q_OS_MAC )
-    connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
-    connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
+    connect( ac->getAction( "minimize" ), SIGNAL( triggered() ), SLOT( minimize() ) );
+    connect( ac->getAction( "zoom" ), SIGNAL( triggered() ), SLOT( maximize() ) );
 #else
-    ui->menuWindow->clear();
-    ui->menuWindow->menuAction()->setVisible( false );
+    connect( ac->getAction( "toggleMenuBar" ), SIGNAL( triggered() ), SLOT( toggleMenuBar() ) );
 #endif
 
     // <AccountHandler>
@@ -460,6 +485,26 @@ TomahawkWindow::setupSignals()
     connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
+void
+TomahawkWindow::setupAccountsMenu()
+{
+    m_menuAccounts = new QMenu( this );
+    m_actionToggleConnect = new QAction( tr( "Go &Online" ),
+                                         m_menuAccounts );
+    m_menuAccounts->addAction( m_actionToggleConnect );
+    m_menuAccounts->addSeparator();
+}
+
+void
+TomahawkWindow::setupMenuBar()
+{
+    // Always create a menubar, but only create a compactMenu on Windows and X11
+    m_menuBar = ActionCollection::instance()->createMenuBar( this );
+    setMenuBar( m_menuBar );
+#ifndef Q_OS_MAC
+    m_compactMainMenu = ActionCollection::instance()->createCompactMenu( this );
+#endif
+}
 
 void
 TomahawkWindow::changeEvent( QEvent* e )
@@ -502,8 +547,8 @@ TomahawkWindow::showEvent( QShowEvent* e )
     QMainWindow::showEvent( e );
 
 #if defined( Q_OS_MAC )
-    ui->actionMinimize->setDisabled( false );
-    ui->actionZoom->setDisabled( false );
+    ActionCollection::instance()->getAction( "minimize" )->setDisabled( false );
+    ActionCollection::instance()->getAction( "zoom" )->setDisabled( false );
 #endif
 }
 
@@ -514,8 +559,8 @@ TomahawkWindow::hideEvent( QHideEvent* e )
     QMainWindow::hideEvent( e );
 
 #if defined( Q_OS_MAC )
-    ui->actionMinimize->setDisabled( true );
-    ui->actionZoom->setDisabled( true );
+    ActionCollection::instance()->getAction( "minimize" )->setDisabled( true );
+    ActionCollection::instance()->getAction( "zoom" )->setDisabled( true );
 #endif
 }
 
@@ -771,18 +816,18 @@ TomahawkWindow::addPeerManually()
 void
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
-    ui->menuNetwork->addMenu( menu );
+    m_menuAccounts->addMenu( menu );
 }
 
 
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach ( QAction* action, ui->menuNetwork->actions() )
+    foreach ( QAction* action, m_menuAccounts->actions() )
     {
         if ( action->menu() == menu )
         {
-            ui->menuNetwork->removeAction( action );
+            m_menuAccounts->removeAction( action );
             return;
         }
     }
@@ -792,8 +837,10 @@ TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 void
 TomahawkWindow::showOfflineSources()
 {
-    m_sourcetree->showOfflineSources( ui->actionShowOfflineSources->isChecked() );
-    TomahawkSettings::instance()->setShowOfflineSources( ui->actionShowOfflineSources->isChecked() );
+    m_sourcetree->showOfflineSources( ActionCollection::instance()
+                                      ->getAction( "showOfflineSources" )->isChecked() );
+    TomahawkSettings::instance()->setShowOfflineSources( ActionCollection::instance()
+                                                         ->getAction( "showOfflineSources" )->isChecked() );
 }
 
 
@@ -1028,7 +1075,7 @@ TomahawkWindow::audioStarted()
 {
     m_audioRetryCounter = 0;
 
-    ui->actionPlay->setText( tr( "Pause" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
 
 #ifdef Q_OS_WIN
@@ -1048,7 +1095,7 @@ TomahawkWindow::audioFinished()
 void
 TomahawkWindow::audioPaused()
 {
-    ui->actionPlay->setText( tr( "Play" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setText( tr( "&Play" ) );
 }
 
 
@@ -1074,14 +1121,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onAccountConnected()
 {
-    ui->actionToggleConnect->setText( tr( "Go &offline" ) );
+    m_actionToggleConnect->setText( tr( "Go &offline" ) );
 }
 
 
 void
 TomahawkWindow::onAccountDisconnected()
 {
-    ui->actionToggleConnect->setText( tr( "Go &online" ) );
+    m_actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
 
@@ -1236,4 +1283,24 @@ void
 TomahawkWindow::crashNow()
 {
     TomahawkUtils::crash();
+}
+
+void
+TomahawkWindow::toggleMenuBar() //SLOT
+{
+#ifndef Q_OS_MAC
+    if( menuBar()->isVisible() )
+    {
+        menuBar()->setVisible( false );
+        ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Show Menu Bar" ) );
+        m_compactMenuAction->setVisible( true );
+    }
+    else
+    {
+        m_compactMenuAction->setVisible( false );
+        ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Hide Menu Bar" ) );
+        menuBar()->setVisible( true );
+    }
+    saveSettings();
+#endif
 }

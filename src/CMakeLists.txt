@@ -73,6 +73,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      TomahawkWindow.cpp
      LoadXSPFDialog.cpp
      SocialWidget.cpp
+     ContainedMenuButton.cpp
 )
 
 IF( WITH_BREAKPAD )
