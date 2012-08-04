@@ -65,71 +65,156 @@ connect and stream from you?</source>
 <context>
     <name>ActionCollection</name>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="54"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="55"/>
         <source>&amp;Listen Along</source>
         <translation>共有聴取</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="57"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="58"/>
         <source>Stop &amp;Listening Along</source>
         <translation>共有聴取を中止</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="61"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="62"/>
         <source>&amp;Follow in real-time</source>
         <translation>実時間にフォロー</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="66"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="67"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="300"/>
         <source>&amp;Listen Privately</source>
         <translation>非公開で聴く</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="66"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="67"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="300"/>
         <source>&amp;Listen Publicly</source>
         <translation>公開で聴く</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>&amp;Load Playlist</source>
         <translation>プレイリストを読み込み</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
         <source>&amp;Rename Playlist</source>
         <translation>プレイリスト名を変更</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="74"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>プレイリストリンクをコピー</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
         <source>&amp;Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
         <source>&amp;Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Previous Track</source>
         <translation>前のトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
         <source>&amp;Next Track</source>
         <translation>次のトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
         <source>&amp;Quit</source>
         <translation>終了</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
+        <source>Load &amp;XSPF...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="96"/>
+        <source>U&amp;pdate Collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
+        <source>Fully &amp;Rescan Collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
+        <source>Show Offline Sources</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
+        <source>&amp;Configure Tomahawk...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
+        <source>Minimize</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
+        <source>Zoom</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="108"/>
+        <source>Hide Menu Bar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
+        <source>Diagnostics...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
+        <source>About &amp;Tomahawk...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
+        <source>&amp;Legal Information...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
+        <source>Check For Updates...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
+        <source>&amp;Controls</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="175"/>
+        <source>&amp;Window</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
+        <source>Main Menu</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1228,67 +1313,67 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="306"/>
+        <location filename="../src/SettingsDialog.cpp" line="309"/>
         <source>Collection</source>
         <translation>コレクション</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="315"/>
+        <location filename="../src/SettingsDialog.cpp" line="318"/>
         <source>Advanced</source>
         <translation>詳細</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="155"/>
+        <location filename="../src/SettingsDialog.cpp" line="158"/>
         <source>All</source>
         <translation>すべて</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="90"/>
+        <location filename="../src/SettingsDialog.cpp" line="91"/>
         <source>Tomahawk Settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="250"/>
+        <location filename="../src/SettingsDialog.cpp" line="253"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Tomahawkを再起動すると設定変更が反映されます</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/SettingsDialog.cpp" line="299"/>
         <source>Services</source>
         <translation>サービス</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="299"/>
+        <location filename="../src/SettingsDialog.cpp" line="302"/>
         <source>&lt;b&gt;Services&lt;/b&gt;&lt;br&gt;Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="309"/>
+        <location filename="../src/SettingsDialog.cpp" line="312"/>
         <source>&lt;b&gt;Collection&lt;/b&gt;&lt;br&gt;Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="318"/>
+        <location filename="../src/SettingsDialog.cpp" line="321"/>
         <source>&lt;b&gt;Advanced&lt;/b&gt;&lt;br&gt;Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="474"/>
+        <location filename="../src/SettingsDialog.cpp" line="477"/>
         <source>Install resolver from file</source>
         <translation>ファイルからリゾルバをインストールする</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="521"/>
+        <location filename="../src/SettingsDialog.cpp" line="524"/>
         <source>Delete all Access Control entries?</source>
         <translation>全てのアクセス制御のエントリーを削除しますか?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="522"/>
+        <location filename="../src/SettingsDialog.cpp" line="525"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>本当に全てのアクセス制御のエントリーを削除しますか？ピア接続に対して、改めて同意を求めます。</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="250"/>
+        <location filename="../src/SettingsDialog.cpp" line="253"/>
         <source>Information</source>
         <translation>情報</translation>
     </message>
@@ -3143,329 +3228,325 @@ enter the displayed PIN number here:</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="75"/>
-        <source>&amp;Settings</source>
-        <translation>設定</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="81"/>
-        <source>&amp;Controls</source>
-        <translation>&amp;制御</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="100"/>
+        <location filename="../src/TomahawkWindow.cpp" line="267"/>
         <source>&amp;Network</source>
         <translation>ネットワーク</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="107"/>
-        <source>&amp;Window</source>
-        <translation>ウインドウ</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="114"/>
-        <source>&amp;Help</source>
-        <translation>ヘルプ</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="129"/>
+        <location filename="../src/TomahawkWindow.ui" line="67"/>
         <source>&amp;Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="132"/>
+        <location filename="../src/TomahawkWindow.ui" line="70"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="140"/>
+        <location filename="../src/TomahawkWindow.ui" line="78"/>
+        <location filename="../src/TomahawkWindow.cpp" line="493"/>
         <source>Go &amp;Online</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="145"/>
+        <location filename="../src/TomahawkWindow.ui" line="83"/>
         <source>Add &amp;Friend...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="150"/>
+        <location filename="../src/TomahawkWindow.ui" line="88"/>
         <source>U&amp;pdate Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="153"/>
+        <location filename="../src/TomahawkWindow.ui" line="91"/>
         <source>Update Collection</source>
         <translation>コレクションを更新</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="158"/>
+        <location filename="../src/TomahawkWindow.ui" line="96"/>
         <source>&amp;Configure Tomahawk...</source>
         <translation>Tomahawkを設定...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="166"/>
+        <location filename="../src/TomahawkWindow.ui" line="104"/>
         <source>Load &amp;XSPF...</source>
         <translation>XSPFを読み込み...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="171"/>
+        <location filename="../src/TomahawkWindow.ui" line="109"/>
         <source>Create &amp;New Playlist...</source>
         <translation>新規プレイリストを作成...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="176"/>
+        <location filename="../src/TomahawkWindow.ui" line="114"/>
         <source>About &amp;Tomahawk...</source>
         <translation>Tomahawk について...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="184"/>
+        <location filename="../src/TomahawkWindow.ui" line="122"/>
         <source>Create New &amp;Automatic Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="189"/>
+        <location filename="../src/TomahawkWindow.ui" line="127"/>
         <source>Create New &amp;Station</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="197"/>
+        <location filename="../src/TomahawkWindow.ui" line="135"/>
         <source>Show Offline Sources</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="202"/>
+        <location filename="../src/TomahawkWindow.ui" line="140"/>
         <source>Hide Offline Sources</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="207"/>
+        <location filename="../src/TomahawkWindow.ui" line="145"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="210"/>
+        <location filename="../src/TomahawkWindow.ui" line="148"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="215"/>
+        <location filename="../src/TomahawkWindow.ui" line="153"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="218"/>
+        <location filename="../src/TomahawkWindow.ui" line="156"/>
         <source>Meta+Ctrl+Z</source>
         <translation>
 Meta+Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="223"/>
+        <location filename="../src/TomahawkWindow.ui" line="161"/>
         <source>&amp;Legal Info...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="231"/>
+        <location filename="../src/TomahawkWindow.ui" line="169"/>
         <source>Diagnostics...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="239"/>
+        <location filename="../src/TomahawkWindow.ui" line="177"/>
         <source>Fully &amp;Rescan Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="242"/>
+        <location filename="../src/TomahawkWindow.ui" line="180"/>
         <source>Fully Rescan Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="247"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1051"/>
+        <location filename="../src/TomahawkWindow.ui" line="185"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="250"/>
+        <location filename="../src/TomahawkWindow.ui" line="188"/>
         <source>Space</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="255"/>
+        <location filename="../src/TomahawkWindow.ui" line="193"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="260"/>
+        <location filename="../src/TomahawkWindow.ui" line="198"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="233"/>
+        <location filename="../src/TomahawkWindow.cpp" line="244"/>
         <source>Back</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="234"/>
+        <location filename="../src/TomahawkWindow.cpp" line="245"/>
         <source>Go back one page</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="235"/>
+        <location filename="../src/TomahawkWindow.cpp" line="246"/>
         <source>Forward</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="236"/>
+        <location filename="../src/TomahawkWindow.cpp" line="247"/>
         <source>Go forward one page</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="243"/>
+        <location filename="../src/TomahawkWindow.cpp" line="254"/>
         <source>Global Search...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="310"/>
-        <location filename="../src/TomahawkWindow.cpp" line="327"/>
-        <source>Check For Updates...</source>
+        <location filename="../src/TomahawkWindow.cpp" line="197"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1302"/>
+        <source>Hide Menu Bar</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="745"/>
-        <location filename="../src/TomahawkWindow.cpp" line="752"/>
-        <location filename="../src/TomahawkWindow.cpp" line="760"/>
+        <location filename="../src/TomahawkWindow.cpp" line="197"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1296"/>
+        <source>Show Menu Bar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/TomahawkWindow.cpp" line="275"/>
+        <source>&amp;Main Menu</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/TomahawkWindow.cpp" line="791"/>
+        <location filename="../src/TomahawkWindow.cpp" line="798"/>
+        <location filename="../src/TomahawkWindow.cpp" line="806"/>
         <source>Connect To Peer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="746"/>
+        <location filename="../src/TomahawkWindow.cpp" line="792"/>
         <source>Enter peer address:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="753"/>
+        <location filename="../src/TomahawkWindow.cpp" line="799"/>
         <source>Enter peer port:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="761"/>
+        <location filename="../src/TomahawkWindow.cpp" line="807"/>
         <source>Enter peer key:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="871"/>
+        <location filename="../src/TomahawkWindow.cpp" line="919"/>
         <source>XSPF Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="871"/>
+        <location filename="../src/TomahawkWindow.cpp" line="919"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="875"/>
+        <location filename="../src/TomahawkWindow.cpp" line="923"/>
         <source>Failed to save tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="875"/>
+        <location filename="../src/TomahawkWindow.cpp" line="923"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="889"/>
+        <location filename="../src/TomahawkWindow.cpp" line="937"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="891"/>
+        <location filename="../src/TomahawkWindow.cpp" line="939"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="923"/>
+        <location filename="../src/TomahawkWindow.cpp" line="971"/>
         <source>Station</source>
         <translation>ステーション</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="925"/>
+        <location filename="../src/TomahawkWindow.cpp" line="973"/>
         <source>Create New Station</source>
         <translation>新規ステーションを作成</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="925"/>
+        <location filename="../src/TomahawkWindow.cpp" line="973"/>
         <source>Name:</source>
         <translation>名前:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="988"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1036"/>
         <source>Playlist</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1010"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1058"/>
         <source>Automatic Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1031"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1079"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1077"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1099"/>
+        <source>&amp;Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/TomahawkWindow.cpp" line="1125"/>
         <source>Go &amp;offline</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1084"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1132"/>
         <source>Go &amp;online</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1107"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1155"/>
         <source>Authentication Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1108"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1156"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1122"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1170"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 by %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1123"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1171"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1134"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1182"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1138"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1186"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1142"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1190"/>
         <source>Copyright 2010 - 2012</source>
         <translation>Copyright 2010 - 2012</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1143"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1191"/>
         <source>Thanks to:</source>
         <translation>Thanks to:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1150"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1198"/>
         <source>About Tomahawk</source>
         <translation>Tomahawkについて</translation>
     </message>
