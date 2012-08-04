@@ -73,6 +73,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
 
 #ifdef Q_WS_X11
     ui->stackedWidget->setContentsMargins( 4, 4, 4, 4 );
@@ -116,6 +117,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     createIcons();
 #ifdef Q_WS_X11
     setContentsMargins( 4, 4, 4, 4 );
+#elif defined( Q_OS_MAC )
+    setContentsMargins( 0, 0, 0, 4 );
 #else
     setContentsMargins( 0, 4, 4, 4 );
 #endif
