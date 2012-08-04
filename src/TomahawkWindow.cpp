@@ -72,6 +72,7 @@
 #include "libtomahawk/filemetadata/ScanManager.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
+#include "ContainedMenuButton.h"
 
 #ifdef Q_OS_WIN
     #include <qtsparkle/Updater>
@@ -261,23 +262,19 @@ TomahawkWindow::setupToolBar()
     rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
     toolbar->addWidget( rightSpacer );
 
-    QToolButton *accountsMenuButton = new QToolButton( toolbar );
+    ContainedMenuButton *accountsMenuButton = new ContainedMenuButton( toolbar );
     accountsMenuButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
     accountsMenuButton->setText( tr( "&Network" ) );
     accountsMenuButton->setMenu( m_menuAccounts );
-    //TODO: when we decide if compressed menus go left or right, if they go right, make
-    //      them pop up *inside* the main window.
     accountsMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    accountsMenuButton->setPopupMode( QToolButton::InstantPopup );
     toolbar->addWidget( accountsMenuButton );
 
 #ifndef Q_OS_MAC
-    QToolButton *compactMenuButton = new QToolButton( toolbar );
+    ContainedMenuButton *compactMenuButton = new ContainedMenuButton( toolbar );
     compactMenuButton->setIcon( QIcon( RESPATH "images/configure.png" ) );
     compactMenuButton->setText( tr( "&Main Menu" ) );
     compactMenuButton->setMenu( m_compactMainMenu );
     compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    compactMenuButton->setPopupMode( QToolButton::InstantPopup );
     m_compactMenuAction = toolbar->addWidget( compactMenuButton );
 #endif
 }
