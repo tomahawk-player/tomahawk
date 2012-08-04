@@ -75,11 +75,13 @@ ActionCollection::initActions()
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
     m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
     m_actionCollection[ "playPause" ]->setShortcut( Qt::Key_Space );
+    m_actionCollection[ "playPause" ]->setShortcutContext( Qt::ApplicationShortcut );
     m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
     m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
     m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
     m_actionCollection[ "quit" ] =           new QAction( tr( "&Quit" ), this );
     m_actionCollection[ "quit" ]->setShortcut( QKeySequence::Quit );
+    m_actionCollection[ "quit" ]->setShortcutContext( Qt::ApplicationShortcut );
     m_actionCollection[ "quit" ]->setMenuRole( QAction::QuitRole );
 
     // connect actions to AudioEngine
@@ -105,6 +107,7 @@ ActionCollection::initActions()
 #else
     m_actionCollection[ "toggleMenuBar" ] =     new QAction( tr( "Hide Menu Bar" ), this );
     m_actionCollection[ "toggleMenuBar" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
+    m_actionCollection[ "toggleMenuBar" ]->setShortcutContext( Qt::ApplicationShortcut );
 #endif
     m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );

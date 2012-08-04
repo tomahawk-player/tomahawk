@@ -276,6 +276,11 @@ TomahawkWindow::setupToolBar()
     compactMenuButton->setMenu( m_compactMainMenu );
     compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
     m_compactMenuAction = toolbar->addWidget( compactMenuButton );
+    //HACK: adding the toggle action to the window, otherwise the shortcut keys
+    //      won't be picked up when the menu is hidden.
+    //      This must be done for all menu bar actions that have shortcut keys :(
+    //      Does not apply to Mac which always shows the menu bar.
+    addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
 #endif
 }
 
