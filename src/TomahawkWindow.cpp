@@ -865,7 +865,11 @@ TomahawkWindow::pluginMenuAdded( QMenu* menu )
         button->setText( menu->title() );
         button->setMenu( menu );
         button->setToolButtonStyle( Qt::ToolButtonIconOnly );
+#ifdef Q_OS_MAC
+        QAction *action = m_toolbar->addWidget( button );
+#else
         QAction *action = m_toolbar->insertWidget( m_compactMenuAction, button );
+#endif
         action->setProperty( "id", plugin->account()->accountId() );
         balanceToolbar();
     }
