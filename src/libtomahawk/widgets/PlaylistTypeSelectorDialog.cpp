@@ -38,7 +38,7 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
     ui->verticalLayout->setContentsMargins( 4, 0, 4, 4 );
 
     setSizeGripEnabled( false );
-    resize( width(), 150 );
+    resize( width(), 180 );
     setMinimumSize( size() );
     setMaximumSize( size() ); // to remove the resize grip on osx this is the only way
     setContentsMargins( 12, 12, 12, 12 );
@@ -46,7 +46,7 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
     ui->verticalLayout->setContentsMargins( 9, 0, 9, 9 );
 #endif
 
-    ui->line->setMaximumHeight( ui->label->height() );
+    ui->line->setMaximumHeight( ui->label->sizeHint().height() );
     ui->line->setContentsMargins( 0, 0, 0, 0 );
     m_isAutoPlaylist = false;
 
