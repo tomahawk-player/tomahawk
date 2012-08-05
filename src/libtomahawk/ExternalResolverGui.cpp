@@ -91,7 +91,7 @@ Tomahawk::ExternalResolverGui::widgetFromData( QByteArray& data, QWidget* parent
     QBuffer b( &data );
     QWidget* w = l.load( &b, parent );
 #ifdef Q_OS_MAC
-    w->setContentsMargins( 8, 8, 8, 8 );
+    w->setContentsMargins( 12, 12, 12, 12 );
 #else
     w->setContentsMargins( 6, 6, 6, 6 );
 #endif
