@@ -54,7 +54,8 @@ DelegateConfigWrapper::DelegateConfigWrapper( QWidget* conf, QWidget* aboutWidge
 
     QHBoxLayout* h = new QHBoxLayout( this );
     h->addWidget( m_buttons );
-    h->setContentsMargins( m_widget->layout()->contentsMargins() );
+    if( m_widget && m_widget->layout() )
+        h->setContentsMargins( m_widget->layout()->contentsMargins() );
     v->addLayout( h );
 
     setLayout( v );
