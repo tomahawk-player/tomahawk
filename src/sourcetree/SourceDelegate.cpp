@@ -165,7 +165,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QFont figFont = bold;
     figFont.setFamily( "Arial Bold" );
     figFont.setWeight( QFont::Black );
-    figFont.setPointSize( 7 );
+    figFont.setPointSize( 10 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -281,6 +281,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 void
 SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    painter->save();
+
+    QFont font = painter->font();
+    font.setPointSize( 9 );
+    painter->setFont( font );
+
     QTextOption to( Qt::AlignVCenter );
 
     painter->setPen( option.palette.color( QPalette::Base ) );
@@ -299,8 +305,6 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        QFont font = painter->font();
-        font.setPointSize( 8 );
         font.setBold( true );
         painter->setFont( font );
         QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
@@ -311,6 +315,8 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
         painter->setPen( QColor( 99, 113, 128 ) );
         painter->drawText( option.rect.translated( -4, 0 ), text, to );
     }
+
+    painter->restore();
 }
 
 
@@ -318,7 +324,7 @@ void
 SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QFont font = painter->font();
-    font.setPointSize( 9 );
+    font.setPointSize( 10 );
     font.setBold( true );
     painter->setFont( font );
 
@@ -364,7 +370,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->save();
 
     QFont font = painter->font();
-    font.setPointSize( 8 );
+    font.setPointSize( 10 );
     painter->setFont( font );
     o.font = font;
     o3.font = font;
@@ -464,7 +470,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QFont font = painter->font();
 
-        font.setPointSize( 7 );
+        font.setPointSize( 8 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );
