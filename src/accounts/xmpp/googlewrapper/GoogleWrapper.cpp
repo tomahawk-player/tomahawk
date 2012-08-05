@@ -80,7 +80,7 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
 {
     XmppConfigWidget* config = static_cast< XmppConfigWidget* >( m_configWidget.data() );
     config->m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
-    config->m_ui->emailLabel->setText( tr( "Google Address" ) );
+    config->m_ui->emailLabel->setText( tr( "Google Address:" ) );
     config->m_ui->xmppBlurb->setText( tr( "Enter your Google login to connect with your friends using Tomahawk!" ) );
     config->m_ui->xmppUsername->setPlaceholderText( tr( "username@gmail.com" ) );
     config->m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
