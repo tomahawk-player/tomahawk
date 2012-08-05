@@ -57,6 +57,7 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
+#include "sip/SipPlugin.h"
 
 #include "Playlist.h"
 #include "Query.h"
@@ -117,7 +118,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
     setupMenuBar();
-    setupAccountsMenu();
     setupToolBar();
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
@@ -229,53 +229,56 @@ TomahawkWindow::applyPlatformTweaks()
 void
 TomahawkWindow::setupToolBar()
 {
-    QToolBar *toolbar = addToolBar( "TomahawkToolbar" );
-    toolbar->setObjectName( "TomahawkToolbar" );
-    toolbar->setMovable( false );
-    toolbar->setFloatable( false );
-    toolbar->setIconSize( QSize( 22, 22 ) );
-    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    toolbar->setStyleSheet( "border-bottom: 0px" );
+    m_toolbar = addToolBar( "TomahawkToolbar" );
+    m_toolbar->setObjectName( "TomahawkToolbar" );
+    m_toolbar->setMovable( false );
+    m_toolbar->setFloatable( false );
+    m_toolbar->setIconSize( QSize( 22, 22 ) );
+    m_toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    m_toolbar->setStyleSheet( "border-bottom: 0px" );
 
 #ifdef Q_OS_MAC
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+    m_toolbar->installEventFilter( new WidgetDragFilter( m_toolbar ) );
 #endif
 
-    m_backAction = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAction = m_toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
     m_backAction->setToolTip( tr( "Go back one page" ) );
-    m_forwardAction = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAction = m_toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAction->setToolTip( tr( "Go forward one page" ) );
 
-    QWidget* leftSpacer = new QWidget( this );
-    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    toolbar->addWidget( leftSpacer );
+    m_toolbarLeftBalancer = new QWidget( this );
+    m_toolbarLeftBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+    m_toolbarLeftBalancer->setFixedWidth( 0 );
+    m_toolbar->addWidget( m_toolbarLeftBalancer )->setProperty( "kind", QString( "spacer" ) );
+
+    QWidget* toolbarLeftSpacer = new QWidget( this );
+    toolbarLeftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_toolbar->addWidget( toolbarLeftSpacer )->setProperty( "kind", QString( "spacer" ) );
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
-    m_searchWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    m_searchWidget->setMaximumWidth( 340 );
+    m_searchWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+    m_searchWidget->setFixedWidth( 340 );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
-    toolbar->addWidget( m_searchWidget );
+    m_toolbar->addWidget( m_searchWidget )->setProperty( "kind", QString( "search" ) );
 
     QWidget* rightSpacer = new QWidget( this );
     rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    toolbar->addWidget( rightSpacer );
+    m_toolbar->addWidget( rightSpacer )->setProperty( "kind", QString( "spacer" ) );
 
-    ContainedMenuButton *accountsMenuButton = new ContainedMenuButton( toolbar );
-    accountsMenuButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    accountsMenuButton->setText( tr( "&Network" ) );
-    accountsMenuButton->setMenu( m_menuAccounts );
-    accountsMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    toolbar->addWidget( accountsMenuButton );
+    m_toolbarRightBalancer = new QWidget( this );
+    m_toolbarRightBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+    m_toolbarRightBalancer->setFixedWidth( 0 );
+    m_toolbar->addWidget( m_toolbarRightBalancer )->setProperty( "kind", QString( "spacer" ) );
 
 #ifndef Q_OS_MAC
-    ContainedMenuButton *compactMenuButton = new ContainedMenuButton( toolbar );
+    ContainedMenuButton* compactMenuButton = new ContainedMenuButton( m_toolbar );
     compactMenuButton->setIcon( QIcon( RESPATH "images/configure.png" ) );
     compactMenuButton->setText( tr( "&Main Menu" ) );
     compactMenuButton->setMenu( m_compactMainMenu );
     compactMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    m_compactMenuAction = toolbar->addWidget( compactMenuButton );
+    m_compactMenuAction = m_toolbar->addWidget( compactMenuButton );
     //HACK: adding the toggle action to the window, otherwise the shortcut keys
     //      won't be picked up when the menu is hidden.
     //      This must be done for all menu bar actions that have shortcut keys :(
@@ -283,6 +286,51 @@ TomahawkWindow::setupToolBar()
     addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
     addAction( ActionCollection::instance()->getAction( "quit" ) );
 #endif
+    balanceToolbar();
+}
+
+
+void
+TomahawkWindow::balanceToolbar()
+{
+    int leftActionsWidth = 0;
+    int rightActionsWidth = 0;
+    bool flip = false;
+    foreach ( QAction* action, m_toolbar->actions() )
+    {
+        if ( action->property( "kind" ) == QString( "spacer" ) ||
+            !action->isVisible() )
+            continue;
+        else if ( action->property( "kind" ) == QString( "search" ) )
+        {
+            flip = true;
+            continue;
+        }
+
+        QWidget* widget = m_toolbar->widgetForAction( action );
+
+        if ( !flip ) //we accumulate on the left
+        {
+            leftActionsWidth += widget->sizeHint().width()
+                             +  m_toolbar->layout()->spacing();
+        }
+        else //then, on the right
+        {
+            rightActionsWidth += widget->sizeHint().width()
+                              +  m_toolbar->layout()->spacing();
+        }
+    }
+
+    if ( leftActionsWidth > rightActionsWidth )
+    {
+        m_toolbarLeftBalancer->setFixedWidth( 0 );
+        m_toolbarRightBalancer->setFixedWidth( leftActionsWidth - rightActionsWidth );
+    }
+    else
+    {
+        m_toolbarLeftBalancer->setFixedWidth( rightActionsWidth - leftActionsWidth );
+        m_toolbarRightBalancer->setFixedWidth( 0 );
+    }
 }
 
 
@@ -451,7 +499,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
-    connect( m_actionToggleConnect, SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
+    connect( ac->getAction( "toggleOnline" ), SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -473,6 +521,7 @@ TomahawkWindow::setupSignals()
 
     // Menus for accounts that support them
     connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
+
     foreach ( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
     {
         if ( !account || !account->sipPlugin() )
@@ -486,15 +535,6 @@ TomahawkWindow::setupSignals()
     connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
-void
-TomahawkWindow::setupAccountsMenu()
-{
-    m_menuAccounts = new QMenu( this );
-    m_actionToggleConnect = new QAction( tr( "Go &Online" ),
-                                         m_menuAccounts );
-    m_menuAccounts->addAction( m_actionToggleConnect );
-    m_menuAccounts->addSeparator();
-}
 
 void
 TomahawkWindow::setupMenuBar()
@@ -817,20 +857,36 @@ TomahawkWindow::addPeerManually()
 void
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
-    m_menuAccounts->addMenu( menu );
+    SipPlugin* plugin = qobject_cast< SipPlugin* >( sender() );
+    if ( plugin )
+    {
+        ContainedMenuButton *button = new ContainedMenuButton( m_toolbar );
+        button->setIcon( plugin->account()->icon() );
+        button->setText( menu->title() );
+        button->setMenu( menu );
+        button->setToolButtonStyle( Qt::ToolButtonIconOnly );
+        QAction *action = m_toolbar->insertWidget( m_compactMenuAction, button );
+        action->setProperty( "id", plugin->account()->accountId() );
+        balanceToolbar();
+    }
 }
 
 
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
-    foreach ( QAction* action, m_menuAccounts->actions() )
+    SipPlugin* plugin = qobject_cast< SipPlugin* >( sender() );
+    if ( plugin )
     {
-        if ( action->menu() == menu )
+        foreach ( QAction* action, m_toolbar->actions() )
         {
-            m_menuAccounts->removeAction( action );
-            return;
+            if ( action->property( "id" ) == plugin->account()->accountId() )
+            {
+                m_toolbar->removeAction( action );
+                return;
+            }
         }
+        balanceToolbar();
     }
 }
 
@@ -1122,14 +1178,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onAccountConnected()
 {
-    m_actionToggleConnect->setText( tr( "Go &offline" ) );
+    ActionCollection::instance()->getAction( "toggleOnline" )->setText( tr( "Go &Offline" ) );
 }
 
 
 void
 TomahawkWindow::onAccountDisconnected()
 {
-    m_actionToggleConnect->setText( tr( "Go &online" ) );
+    ActionCollection::instance()->getAction( "toggleOnline" )->setText( tr( "Go &Online" ) );
 }
 
 
@@ -1302,6 +1358,7 @@ TomahawkWindow::toggleMenuBar() //SLOT
         ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Hide Menu Bar" ) );
         menuBar()->setVisible( true );
     }
+    balanceToolbar();
     saveSettings();
 #endif
 }

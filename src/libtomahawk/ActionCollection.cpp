@@ -70,6 +70,8 @@ ActionCollection::initActions()
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
+    m_actionCollection[ "toggleOnline" ] = new QAction( tr( "Go &Online" ), this );
+
     m_actionCollection[ "loadPlaylist" ] =   new QAction( tr( "&Load Playlist" ), this );
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
@@ -134,6 +136,7 @@ ActionCollection::createMenuBar( QWidget *parent )
     controlsMenu->addSeparator();
     controlsMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
     controlsMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
+    controlsMenu->addAction( m_actionCollection[ "toggleOnline" ] );
     controlsMenu->addSeparator();
     controlsMenu->addAction( m_actionCollection[ "loadXSPF" ] );
     controlsMenu->addAction( m_actionCollection[ "updateCollection" ] );
@@ -193,6 +196,7 @@ ActionCollection::createCompactMenu( QWidget *parent )
     compactMenu->addSeparator();
     compactMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
     compactMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
+    compactMenu->addAction( m_actionCollection[ "toggleOnline" ] );
     compactMenu->addSeparator();
     compactMenu->addAction( m_actionCollection[ "loadXSPF" ] );
     compactMenu->addAction( m_actionCollection[ "updateCollection" ] );

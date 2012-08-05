@@ -158,11 +158,11 @@ private:
 
     void applyPlatformTweaks();
     void setupSignals();
-    void setupAccountsMenu(); //must be called before setupToolBar
     void setupMenuBar();
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
+    void balanceToolbar();
 
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
@@ -184,13 +184,14 @@ private:
     JobStatusSortModel* m_jobsModel;
 
     // Menus and menu actions: Accounts menu
-    QMenu       *m_menuAccounts;
-    QAction     *m_actionToggleConnect;
     QMenuBar    *m_menuBar;
 #ifndef Q_OS_MAC
     QAction     *m_compactMenuAction;
     QMenu       *m_compactMainMenu;
 #endif
+    QToolBar *m_toolbar;
+    QWidget *m_toolbarLeftBalancer;
+    QWidget *m_toolbarRightBalancer;
 
     QAction* m_backAction;
     QAction* m_forwardAction;
