@@ -41,6 +41,7 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
     resize( width(), 150 );
     setMinimumSize( size() );
     setMaximumSize( size() ); // to remove the resize grip on osx this is the only way
+    setContentsMargins( 12, 12, 12, 12 );
 #else
     ui->verticalLayout->setContentsMargins( 9, 0, 9, 9 );
 #endif
