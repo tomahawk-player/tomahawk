@@ -16,6 +16,7 @@
 #cmakedefine SNOW_LEOPARD
 #cmakedefine LEOPARD
 #cmakedefine HAVE_SPARKLE
+#cmakedefine HAVE_THUMBBUTTON
 
 #cmakedefine WITH_BREAKPAD
 #cmakedefine WITH_CRASHREPORTER

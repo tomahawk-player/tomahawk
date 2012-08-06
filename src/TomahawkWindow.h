@@ -167,8 +167,10 @@ private:
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;
+# ifdef HAVE_THUMBBUTTON
     ITaskbarList3 *m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
+# endif
     enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2,TP_LOVE = 4 };
 #endif
 
