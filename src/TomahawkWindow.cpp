@@ -891,6 +891,7 @@ TomahawkWindow::pluginMenuAdded( QMenu* menu )
 void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
+    Q_UNUSED( menu )
     SipPlugin* plugin = qobject_cast< SipPlugin* >( sender() );
     if ( plugin )
     {
