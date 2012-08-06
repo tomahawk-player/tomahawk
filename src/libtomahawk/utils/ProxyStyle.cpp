@@ -30,15 +30,15 @@
 #define ARROW_HEIGHT 7
 
 
-ProxyStyle::ProxyStyle( bool isQtCurve )
-    : m_isQtCurve( isQtCurve )
+ProxyStyle::ProxyStyle( bool interceptPolish )
+    : m_interceptPolish( interceptPolish )
 {
 }
 
 void
 ProxyStyle::polish( QPalette& pal )
 {
-    if( !m_isQtCurve )
+    if( !m_interceptPolish )
         QProxyStyle::polish( pal );
 }
 

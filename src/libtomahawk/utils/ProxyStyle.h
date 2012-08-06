@@ -27,7 +27,7 @@
 class DLLEXPORT ProxyStyle : public QProxyStyle
 {
 public:
-    ProxyStyle( bool isQtCurve = false );
+    ProxyStyle( bool interceptPolish = false );
 
     virtual void polish( QApplication *a ) { QProxyStyle::polish( a ); }
     virtual void polish( QPalette& pal );
@@ -38,7 +38,7 @@ public:
     virtual QSize sizeFromContents( ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const;
 
 private:
-    bool m_isQtCurve;
+    bool m_interceptPolish;
 };
 
 #endif // PROXYSTYLE_H
