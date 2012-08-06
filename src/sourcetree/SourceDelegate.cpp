@@ -89,7 +89,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
     if ( type == SourcesModel::Collection )
     {
-        return QSize( option.rect.width(), option.fontMetrics.height() * 2.8 );
+        return QSize( option.rect.width(), option.fontMetrics.height() * 3.0 );
     }
     else if ( type == SourcesModel::Divider )
     {
@@ -114,7 +114,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
         return m_expandedMap.value( index )->size();
     }
     else
-        return QSize( option.rect.width(), option.fontMetrics.height() * 1.2 ); //QStyledItemDelegate::sizeHint( option, index ) );
+        return QSize( option.rect.width(), option.fontMetrics.height() * 1.4 ); //QStyledItemDelegate::sizeHint( option, index ) );
 }
 
 
