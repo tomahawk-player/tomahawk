@@ -30,6 +30,18 @@
 #define ARROW_HEIGHT 7
 
 
+ProxyStyle::ProxyStyle( bool isQtCurve )
+    : m_isQtCurve( isQtCurve )
+{
+}
+
+void
+ProxyStyle::polish( QPalette& pal )
+{
+    if( !m_isQtCurve )
+        QProxyStyle::polish( pal );
+}
+
 void
 ProxyStyle::drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainter* p, const QWidget* w ) const
 {

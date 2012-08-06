@@ -27,11 +27,18 @@
 class DLLEXPORT ProxyStyle : public QProxyStyle
 {
 public:
-    ProxyStyle() {}
+    ProxyStyle( bool isQtCurve = false );
+
+    virtual void polish( QApplication *a ) { QProxyStyle::polish( a ); }
+    virtual void polish( QPalette& pal );
+    virtual void polish( QWidget *w ) { QProxyStyle::polish( w ); }
 
     virtual void drawPrimitive( PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
     virtual void drawControl( ControlElement ce, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
     virtual QSize sizeFromContents( ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const;
+
+private:
+    bool m_isQtCurve;
 };
 
 #endif // PROXYSTYLE_H
