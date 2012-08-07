@@ -115,6 +115,7 @@ M3uLoader::parseM3u( const QString& fileLink )
          QByteArray line = file.readLine();
          /// If anyone wants to take on the regex for parsing EXT, go ahead
          /// But the notion that users does not tag by a common rule. that seems hard
+         /// So ignore that for now
          if ( line.contains( "EXT" ) )
              continue;
 
@@ -124,7 +125,8 @@ M3uLoader::parseM3u( const QString& fileLink )
              getTags( tmpFile );
          else
          {
-             QFileInfo tmpFile( QUrl::fromUserInput( QString( fileInfo.canonicalPath() + "/" + line.simplified() ) ).toLocalFile() );
+             QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo(file).canonicalPath() + "/" + line.simplified() ) );
+             QFileInfo tmpFile( fileUrl.toLocalFile() );
              if ( tmpFile.exists() )
                 getTags( tmpFile );
          }
